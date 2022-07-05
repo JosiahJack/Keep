@@ -58,26 +58,26 @@ $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
 
 // ben - 08/04/03 - a champion knight  always strides into battle - never runs.
-void()	hknight_stride1	=[	$walk1,	hknight_stride2	] {monster_idle_sound();ai_run(2);};
-void()	hknight_stride2	=[	$walk2,	hknight_stride3	] {ai_run(5);};
-void()	hknight_stride3	=[	$walk3,	hknight_stride4	] {ai_run(5);};
-void()	hknight_stride4	=[	$walk4,	hknight_stride5	] {ai_run(4);};
-void()	hknight_stride5	=[	$walk5,	hknight_stride6	] {ai_run(4);};
-void()	hknight_stride6	=[	$walk6,	hknight_stride7	] {ai_run(2);};
-void()	hknight_stride7	=[	$walk7,	hknight_stride8	] {ai_run(2);};
-void()	hknight_stride8	=[	$walk8,	hknight_stride9	] {ai_run(3);};
-void()	hknight_stride9	=[	$walk9,	hknight_stride10	] {ai_run(3);};
-void()	hknight_stride10	=[	$walk10,	hknight_stride11	] {ai_run(4);};
-void()	hknight_stride11	=[	$walk11,	hknight_stride12	] {ai_run(3);};
-void()	hknight_stride12	=[	$walk12,	hknight_stride13	] {ai_run(4);};
-void()	hknight_stride13	=[	$walk13,	hknight_stride14	] {ai_run(6);};
-void()	hknight_stride14	=[	$walk14,	hknight_stride15	] {ai_run(2);};
-void()	hknight_stride15	=[	$walk15,	hknight_stride16	] {ai_run(2);};
-void()	hknight_stride16	=[	$walk16,	hknight_stride17	] {ai_run(4);};
-void()	hknight_stride17	=[	$walk17,	hknight_stride18	] {ai_run(3);};
-void()	hknight_stride18	=[	$walk18,	hknight_stride19	] {ai_run(3);};
-void()	hknight_stride19	=[	$walk19,	hknight_stride20	] {ai_run(3);};
-void()	hknight_stride20	=[	$walk20,	hknight_stride1	] {ai_run(2);};
+void()	hknight_stride1	= [	$walk1,	hknight_stride2	] { monster_idle_sound();ai_run(2); };
+void()	hknight_stride2	= [	$walk2,	hknight_stride3	] { ai_run(5); };
+void()	hknight_stride3	= [	$walk3,	hknight_stride4	] { ai_run(5); };
+void()	hknight_stride4	= [	$walk4,	hknight_stride5	] { ai_run(4); };
+void()	hknight_stride5	= [	$walk5,	hknight_stride6	] { ai_run(4); };
+void()	hknight_stride6	= [	$walk6,	hknight_stride7	] { ai_run(2); };
+void()	hknight_stride7	= [	$walk7,	hknight_stride8	] { ai_run(2); };
+void()	hknight_stride8	= [	$walk8,	hknight_stride9	] { ai_run(3); };
+void()	hknight_stride9	= [	$walk9,	hknight_stride10	] { ai_run(3); };
+void()	hknight_stride10	= [	$walk10,	hknight_stride11	] { ai_run(4); };
+void()	hknight_stride11	= [	$walk11,	hknight_stride12	] { ai_run(3); };
+void()	hknight_stride12	= [	$walk12,	hknight_stride13	] { ai_run(4); };
+void()	hknight_stride13	= [	$walk13,	hknight_stride14	] { ai_run(6); };
+void()	hknight_stride14	= [	$walk14,	hknight_stride15	] { ai_run(2); };
+void()	hknight_stride15	= [	$walk15,	hknight_stride16	] { ai_run(2); };
+void()	hknight_stride16	= [	$walk16,	hknight_stride17	] { ai_run(4); };
+void()	hknight_stride17	= [	$walk17,	hknight_stride18	] { ai_run(3); };
+void()	hknight_stride18	= [	$walk18,	hknight_stride19	] { ai_run(3); };
+void()	hknight_stride19	= [	$walk19,	hknight_stride20	] { ai_run(3); };
+void()	hknight_stride20	= [	$walk20,	hknight_stride1	] { ai_run(2); };
 
 // A champion has a choice of two missile attacks - a faster version of the standard attack, and a vore-style homing missile. eventually he will be able to teleport.
 void() hknight_champion_magic = {

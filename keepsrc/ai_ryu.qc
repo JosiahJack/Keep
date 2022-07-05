@@ -112,8 +112,8 @@ void() ryu_untilt = {
 void(float left, float dist) ryu_tilt = {
     local float hi;
 
-    if (dist > 20) {dist = 10; hi = 30;}// Fast -- Running
-    else {dist = 5; hi = 20;}    		// Slow -- Walking
+    if (dist > 20) { dist = 10; hi = 30;}// Fast -- Running
+    else { dist = 5; hi = 20;}    		// Slow -- Walking
 
     if (left) { 
         hi = 0 - hi;
@@ -239,9 +239,9 @@ void(float newyaw, float dist, entity threat) Ryu_Dodge = {
         tz = targ.origin_z;
         sz = self.origin_z + self.view_ofs_z;
         if (tz < sz)
-            {if (sz < threat.origin_z)  return;}
+            { if (sz < threat.origin_z)  return;}
         else if (tz > sz)
-            {if (sz > threat.origin_z)  return;}
+            { if (sz > threat.origin_z)  return;}
     }
     Ryu_VerticalSlide(dist,targ);
 };
@@ -365,7 +365,7 @@ float(float dist) Ryu_DetectDanger = {
         }
         head = head.chain;
     }
-    if (head) {Ryu_FindBestPath (dist, head); return TRUE;} // Got one!
+    if (head) { Ryu_FindBestPath (dist, head); return TRUE;} // Got one!
     return FALSE;   // Nothing dangerous was found.
 };
 
@@ -394,7 +394,7 @@ float(entity ent) Ryu_NoShot = {
 
 // This checks if the dragon should strafe. Returns true if should strafe.
 float() Ryu_DoStrafe = {
-    if (ImmuneToDamage (self)) return FALSE; // No need to circle-strafe if invulnerable.
+    if (Indestructable(self)) return FALSE; // No need to circle-strafe if invulnerable.
     if (self.inpain >= time) return TRUE; // Always strafe if it wants to, especially after flinching from pain.
     if (self.enemy.xfl & XFL_ZOMBIE) return FALSE; // Always approach zombies, unless panicked. Reason is only melee attacks can hurt them.
 
@@ -423,7 +423,7 @@ float(float melee) ryu_step = {
     local float evade, r, dist;
 
     ai_face();
-    if (!ImmuneToDamage (self)) {
+    if (!Indestructable(self)) {
         evade = TRUE;
         if (melee) {   // Disable evasion if attempting a melee with nearby opponent.
             r = (self.maxs_x + self.enemy.maxs_x) * 1.4142 + 30;
@@ -506,7 +506,7 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     move_box.watertype  = self.watertype;
     swap = self;
     self = move_box;
-    if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;} // Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.
+    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;} // Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.
 
     flat = FALSE;
     up = self.origin_z; // Remember this!  All movement must have the same elevation.
@@ -522,19 +522,19 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     add_x = lo;
     add_y = hi;
     setorigin (self, org + add);
-    if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
     if (self.origin_z != up) flat = TRUE;
 	
 	// Check NE corner.
     add_x = hi;
     setorigin (self, org + add);
-    if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
     if (self.origin_z != up) flat = TRUE;
 	
 	// Check SE corner.
     add_y = lo;
     setorigin (self, org + add);
-    if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
     if (self.origin_z != up) flat = TRUE;
 	
 	// If the dragon is larger than a 128x128 area, areas between the corners must be checked too.  Otherwise, we are done.
@@ -542,99 +542,99 @@ float(float yaw, float dist) Wyrm_WalkMove = {
 		// Check S face.
         add_x = 32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_x = -32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check N face.
         add_y = hi;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_x = 32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check W face.
         add_x = lo;
         add_y = 32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_y = -32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check E face.
         add_x = hi;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_y = 32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check the middle.  Yes, we need to do this too to prevent the dragon for clipping things directly above or below it, such as the tops of pyramids or obelisks.
         add_x = 32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_x = -32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_y = -32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
         add_x = 32;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
     } else if (swap.maxs_x > 64) { // 3x3 -- Safe up to 192x192.
 		// Check S face.
         add_x = 0;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check N face.
         add_y = hi;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check W face.
         add_x = lo;
         add_y = 0;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check E face.
         add_x = hi;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
 		
 		// Check the middle.  Yes, we need to do this too to prevent the dragon for clipping things directly above or below it, such as the tops of pyramids or obelisks.
         add_x = 0;
         setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
         if (self.origin_z != up) flat = TRUE;
     }
 

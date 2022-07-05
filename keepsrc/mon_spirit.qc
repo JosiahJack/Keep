@@ -122,55 +122,54 @@ void() spirit_remove_glow = {
 	}
 };
 
-//============================================================================
-void() spirit_alphacontrol =
-{
+
+void() spirit_alphacontrol = {
 	if (self.alpha < 1) { 
 		self.alpha = self.alpha + 0.5;
 	}
 };
 
-//============================================================================
-void()	spirit_laugh1	=[	$laugh1,	spirit_laugh2	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh2	=[	$laugh2,	spirit_laugh3	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh3	=[	$laugh3,	spirit_laugh4	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh4	=[	$laugh4,	spirit_laugh5	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh5	=[	$laugh5,	spirit_laugh6	] {ai_stand(); spirit_glow();
+
+void()	spirit_laugh1	= [	$laugh1,	spirit_laugh2	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh2	= [	$laugh2,	spirit_laugh3	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh3	= [	$laugh3,	spirit_laugh4	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh4	= [	$laugh4,	spirit_laugh5	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh5	= [	$laugh5,	spirit_laugh6	] { ai_stand(); spirit_glow();
 	sound (self, CHAN_VOICE, "redfield/spirit/idle_laugh.wav", 1, ATTN_NORM);
 };
-void()	spirit_laugh6	=[	$laugh6,	spirit_laugh7	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh7	=[	$laugh7,	spirit_laugh8	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh8	=[	$laugh8,	spirit_laugh9	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh9	=[	$laugh9,	spirit_laugh10	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh10	=[	$laugh10,	spirit_laugh11	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh11	=[	$laugh11,	spirit_laugh12	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh12	=[	$laugh12,	spirit_laugh13	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh13	=[	$laugh13,	spirit_laugh14	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh14	=[	$laugh14,	spirit_laugh15	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh15	=[	$laugh15,	spirit_laugh16	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh16	=[	$laugh16,	spirit_laugh17	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh17	=[	$laugh17,	spirit_laugh18	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh18	=[	$laugh18,	spirit_laugh19	] {ai_stand(); spirit_glow();};
-void()	spirit_laugh19	=[	$laugh19,	spirit_stand1	] {ai_stand(); spirit_glow();};
+void()	spirit_laugh6	= [	$laugh6,	spirit_laugh7	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh7	= [	$laugh7,	spirit_laugh8	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh8	= [	$laugh8,	spirit_laugh9	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh9	= [	$laugh9,	spirit_laugh10	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh10	= [	$laugh10,	spirit_laugh11	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh11	= [	$laugh11,	spirit_laugh12	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh12	= [	$laugh12,	spirit_laugh13	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh13	= [	$laugh13,	spirit_laugh14	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh14	= [	$laugh14,	spirit_laugh15	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh15	= [	$laugh15,	spirit_laugh16	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh16	= [	$laugh16,	spirit_laugh17	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh17	= [	$laugh17,	spirit_laugh18	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh18	= [	$laugh18,	spirit_laugh19	] { ai_stand(); spirit_glow(); };
+void()	spirit_laugh19	= [	$laugh19,	spirit_stand1	] { ai_stand(); spirit_glow(); };
 
-//============================================================================
-void()	spirit_stand1	=[	$stand1,	spirit_stand2	] {ai_stand(); 
+
+void()	spirit_stand1	= [	$stand1,	spirit_stand2	] { ai_stand(); 
 spirit_alphacontrol();
 self.skin = 0;
 spirit_glow();
 };
-void()	spirit_stand2	=[	$stand2,	spirit_stand3	] {ai_stand();
+void()	spirit_stand2	= [	$stand2,	spirit_stand3	] { ai_stand();
 spirit_alphacontrol();
 spirit_glow();
 };
-void()	spirit_stand3	=[	$stand3,	spirit_stand4	] {ai_stand(); spirit_glow();};
-void()	spirit_stand4	=[	$stand4,	spirit_stand5	] {ai_stand(); spirit_glow();};
-void()	spirit_stand5	=[	$stand5,	spirit_stand6	] {ai_stand(); spirit_glow();};
-void()	spirit_stand6	=[	$stand6,	spirit_stand7	] {ai_stand(); spirit_glow();};
-void()	spirit_stand7	=[	$stand7,	spirit_stand8	] {ai_stand(); spirit_glow();};
-void()	spirit_stand8	=[	$stand8,	spirit_stand9	] {ai_stand(); spirit_glow();};
-void()	spirit_stand9	=[	$stand9,	spirit_stand10	] {ai_stand(); spirit_glow();};
-void()	spirit_stand10	=[	$stand10,	spirit_stand1	] {ai_stand(); spirit_glow();
+void()	spirit_stand3	= [	$stand3,	spirit_stand4	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand4	= [	$stand4,	spirit_stand5	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand5	= [	$stand5,	spirit_stand6	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand6	= [	$stand6,	spirit_stand7	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand7	= [	$stand7,	spirit_stand8	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand8	= [	$stand8,	spirit_stand9	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand9	= [	$stand9,	spirit_stand10	] { ai_stand(); spirit_glow(); };
+void()	spirit_stand10	= [	$stand10,	spirit_stand1	] { ai_stand(); spirit_glow();
 self.idlebusy = FALSE;
 	if (random() < MON_IDLE_ANIMATION) {
 		self.idlebusy = TRUE; 
@@ -178,39 +177,39 @@ self.idlebusy = FALSE;
 	}
 };
 
-//============================================================================
-void()	spirit_walk1	=[	$walk1,		spirit_walk2	] {self.skin = 0; ai_walk(4);
+
+void()	spirit_walk1	= [	$walk1,		spirit_walk2	] { self.skin = 0; ai_walk(4);
 spirit_glow();
 monster_idle_sound();
 };
-void()	spirit_walk2	=[	$walk2,		spirit_walk3	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk3	=[	$walk3,		spirit_walk4	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk4	=[	$walk4,		spirit_walk5	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk5	=[	$walk5,		spirit_walk6	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk6	=[	$walk6,		spirit_walk7	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk7	=[	$walk7,		spirit_walk8	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk8	=[	$walk8,		spirit_walk9	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk9	=[	$walk9,		spirit_walk10	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk10	=[	$walk10,	spirit_walk11	] {ai_walk(4); spirit_glow();};
-void()	spirit_walk11	=[	$walk11,	spirit_walk1	] {ai_walk(4); spirit_glow();};
+void()	spirit_walk2	= [	$walk2,		spirit_walk3	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk3	= [	$walk3,		spirit_walk4	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk4	= [	$walk4,		spirit_walk5	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk5	= [	$walk5,		spirit_walk6	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk6	= [	$walk6,		spirit_walk7	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk7	= [	$walk7,		spirit_walk8	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk8	= [	$walk8,		spirit_walk9	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk9	= [	$walk9,		spirit_walk10	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk10	= [	$walk10,	spirit_walk11	] { ai_walk(4); spirit_glow(); };
+void()	spirit_walk11	= [	$walk11,	spirit_walk1	] { ai_walk(4); spirit_glow(); };
 
-//============================================================================
-void()	spirit_run1	=[	$run1,		spirit_run2	] {ai_run(18);
+
+void()	spirit_run1	= [	$run1,		spirit_run2	] { ai_run(18);
 spirit_alphacontrol();
 spirit_glow(); 
 monster_idle_sound();
 };
-void()	spirit_run2	=[	$run2,		spirit_run3	] {ai_run(18);
+void()	spirit_run2	= [	$run2,		spirit_run3	] { ai_run(18);
 spirit_alphacontrol();
 spirit_glow(); 
 };
-void()	spirit_run3	=[	$run3,		spirit_run4	] {ai_run(18); spirit_glow();};
-void()	spirit_run4	=[	$run4,		spirit_run5	] {ai_run(18); spirit_glow();};
-void()	spirit_run5	=[	$run5,		spirit_run6	] {ai_run(18); spirit_glow();};
-void()	spirit_run6	=[	$run6,		spirit_run7	] {ai_run(18); spirit_glow();};
-void()	spirit_run7	=[	$run7,		spirit_run8	] {ai_run(18); spirit_glow();};
-void()	spirit_run8	=[	$run8,		spirit_run9	] {ai_run(18); spirit_glow();};
-void()	spirit_run9	=[	$run9,		spirit_run1	] {ai_run(18); spirit_glow();};
+void()	spirit_run3	= [	$run3,		spirit_run4	] { ai_run(18); spirit_glow(); };
+void()	spirit_run4	= [	$run4,		spirit_run5	] { ai_run(18); spirit_glow(); };
+void()	spirit_run5	= [	$run5,		spirit_run6	] { ai_run(18); spirit_glow(); };
+void()	spirit_run6	= [	$run6,		spirit_run7	] { ai_run(18); spirit_glow(); };
+void()	spirit_run7	= [	$run7,		spirit_run8	] { ai_run(18); spirit_glow(); };
+void()	spirit_run8	= [	$run8,		spirit_run9	] { ai_run(18); spirit_glow(); };
+void()	spirit_run9	= [	$run9,		spirit_run1	] { ai_run(18); spirit_glow(); };
 
 // Range - Fade to invisible and charge
 void() spirit_ifin1 = {
@@ -348,27 +347,27 @@ void() spirit_checkfadelist = {
 };
 
 // spin and fade to invisible
-void() spirit_spin1	=[ $spin1,	spirit_spin2    ] {
+void() spirit_spin1	= [$spin1,	spirit_spin2    ] {
 	self.pain_finished = time + 1.2;			// no pain during teleportation
 	self.attack_finished = 2 + random();			// pause before next attack
 	sound (self, CHAN_VOICE, "redfield/spirit/fadeout.wav", 1, ATTN_NORM);
 	spirit_glow();
 };
-void() spirit_spin2	=[  $spin2,	spirit_spin3 ] {spirit_glow();};
-void() spirit_spin3	=[  $spin3,	spirit_spin4 ] {
+void() spirit_spin2	= [  $spin2,	spirit_spin3 ] { spirit_glow(); };
+void() spirit_spin3	= [  $spin3,	spirit_spin4 ] {
 	self.takedamage = DAMAGE_NO;	// No damage or impact, phasing out
 	self.solid = SOLID_NOT;
 	self.bodyphased = MONAI_SPIRITINVIS;
 	particle_explode(self.origin, 100, 1, PARTICLE_BURST_WHITE, PARTICLE_BURST_UPWARD);
 	spirit_glow();
 };
-void() spirit_spin4	=[  $spin4,	spirit_spin5 ] {spirit_glow();};
-void() spirit_spin5	=[  $spin5,	spirit_spin6 ] {spirit_glow();};
-void() spirit_spin6	=[  $spin6,	spirit_spin8 ] {spirit_glow();};
-void() spirit_spin7	=[  $spin7,	spirit_spin8 ] {spirit_glow();};
-void() spirit_spin8	=[  $spin8,	spirit_spin9 ] {self.alpha = 0.8; spirit_glow();};
-void() spirit_spin9	=[  $spin9,	spirit_spin10 ] {self.alpha = 0.4; spirit_glow();};
-void() spirit_spin10	=[  $spin10,	spirit_spin11 ] {self.alpha = 0.2; spirit_glow();};
+void() spirit_spin4	= [  $spin4,	spirit_spin5 ] { spirit_glow(); };
+void() spirit_spin5	= [  $spin5,	spirit_spin6 ] { spirit_glow(); };
+void() spirit_spin6	= [  $spin6,	spirit_spin8 ] { spirit_glow(); };
+void() spirit_spin7	= [  $spin7,	spirit_spin8 ] { spirit_glow(); };
+void() spirit_spin8	= [  $spin8,	spirit_spin9 ] { self.alpha = 0.8; spirit_glow(); };
+void() spirit_spin9	= [  $spin9,	spirit_spin10 ] { self.alpha = 0.4; spirit_glow(); };
+void() spirit_spin10	= [  $spin10,	spirit_spin11 ] { self.alpha = 0.2; spirit_glow(); };
 void() spirit_spin11	= {
 	setmodel(self,"");
 	spirit_glow();
@@ -378,66 +377,65 @@ void() spirit_spin11	= {
 	else spirit_fade();
 };
 
-//============================================================================
+
 // Melee Sword Attacks
-//============================================================================
+
 
 //Slash A
 //----------------------------------------------------------------------
-void()	spirit_slasha1	=[	$slasha1,	spirit_slasha2	] {ai_charge(20); spirit_alphacontrol(); spirit_glow();};
-void()	spirit_slasha2	=[	$slasha2,	spirit_slasha3	] {ai_charge(16); spirit_alphacontrol(); spirit_glow();};
-void()	spirit_slasha3	=[	$slasha3,	spirit_slasha4	] {ai_charge_side(); self.skin = 0; spirit_glow();};
-void()	spirit_slasha4	=[	$slasha4,	spirit_slasha5	] {ai_charge_side(); spirit_glow();};
-void()	spirit_slasha5	=[	$slasha5,	spirit_slasha6	] {ai_charge_side();
+void()	spirit_slasha1	= [	$slasha1,	spirit_slasha2	] { ai_charge(20); spirit_alphacontrol(); spirit_glow(); };
+void()	spirit_slasha2	= [	$slasha2,	spirit_slasha3	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
+void()	spirit_slasha3	= [	$slasha3,	spirit_slasha4	] { ai_charge_side(); self.skin = 0; spirit_glow(); };
+void()	spirit_slasha4	= [	$slasha4,	spirit_slasha5	] { ai_charge_side(); spirit_glow(); };
+void()	spirit_slasha5	= [	$slasha5,	spirit_slasha6	] { ai_charge_side();
 spirit_sword_sound();
 spirit_glow();
 };
-void()	spirit_slasha6	=[	$slasha6,	spirit_slasha7	] {ai_melee_side(); spirit_glow();};
-void()	spirit_slasha7	=[	$slasha7,	spirit_slasha8	] {ai_melee_side(); spirit_glow();};
-void()	spirit_slasha8	=[	$slasha8,	spirit_slasha9	] {ai_charge_side(); spirit_glow();};
-void()	spirit_slasha9	=[	$slasha9,	spirit_run1	] {ai_charge(12); spirit_glow();
+void()	spirit_slasha6	= [	$slasha6,	spirit_slasha7	] { ai_melee_side(); spirit_glow(); };
+void()	spirit_slasha7	= [	$slasha7,	spirit_slasha8	] { ai_melee_side(); spirit_glow(); };
+void()	spirit_slasha8	= [	$slasha8,	spirit_slasha9	] { ai_charge_side(); spirit_glow(); };
+void()	spirit_slasha9	= [	$slasha9,	spirit_run1	] { ai_charge(12); spirit_glow();
 if (random() < 0.35) spirit_spin1();
 };
 
 //Slash B
 //----------------------------------------------------------------------
-void()	spirit_slashb1	=[	$slashb1,	spirit_slashb2	] {ai_charge(20); spirit_alphacontrol();
+void()	spirit_slashb1	= [	$slashb1,	spirit_slashb2	] { ai_charge(20); spirit_alphacontrol();
 spirit_glow();
 };
-void()	spirit_slashb2	=[	$slashb2,	spirit_slashb3	] {ai_charge(14); spirit_alphacontrol(); spirit_glow();};
-void()	spirit_slashb3	=[	$slashb3,	spirit_slashb4	] {ai_charge_side(); self.skin = 0; spirit_glow();};
-void()	spirit_slashb4	=[	$slashb4,	spirit_slashb5	] {spirit_sword_sound(); ai_melee_side(); spirit_glow();};
-void()	spirit_slashb5	=[	$slashb5,	spirit_slashb6	] {ai_melee_side(); spirit_glow();};
-void()	spirit_slashb6	=[	$slashb6,	spirit_slashb7	] {ai_melee_side(); spirit_glow();};
-void()	spirit_slashb7	=[	$slashb7,	spirit_slashb8	] {ai_charge_side(); spirit_glow();};
-void()	spirit_slashb8	=[	$slashb8,	spirit_slashb9	] {ai_charge(8); spirit_glow();};
-void()	spirit_slashb9	=[	$slashb9,	spirit_slashb10	] {ai_charge(12); spirit_glow();};
-void()	spirit_slashb10	=[	$slashb10,	spirit_run1	] {ai_charge(16); spirit_glow();
+void()	spirit_slashb2	= [	$slashb2,	spirit_slashb3	] { ai_charge(14); spirit_alphacontrol(); spirit_glow(); };
+void()	spirit_slashb3	= [	$slashb3,	spirit_slashb4	] { ai_charge_side(); self.skin = 0; spirit_glow(); };
+void()	spirit_slashb4	= [	$slashb4,	spirit_slashb5	] { spirit_sword_sound(); ai_melee_side(); spirit_glow(); };
+void()	spirit_slashb5	= [	$slashb5,	spirit_slashb6	] { ai_melee_side(); spirit_glow(); };
+void()	spirit_slashb6	= [	$slashb6,	spirit_slashb7	] { ai_melee_side(); spirit_glow(); };
+void()	spirit_slashb7	= [	$slashb7,	spirit_slashb8	] { ai_charge_side(); spirit_glow(); };
+void()	spirit_slashb8	= [	$slashb8,	spirit_slashb9	] { ai_charge(8); spirit_glow(); };
+void()	spirit_slashb9	= [	$slashb9,	spirit_slashb10	] { ai_charge(12); spirit_glow(); };
+void()	spirit_slashb10	= [	$slashb10,	spirit_run1	] { ai_charge(16); spirit_glow();
 if (random() < 0.3) spirit_spin1();
 };
 	
 //Stab
 //----------------------------------------------------------------------
-void()	spirit_stab1	=[	$stab1,		spirit_stab2	] {ai_charge(16); spirit_alphacontrol(); spirit_glow();};
-void()	spirit_stab2	=[	$stab2,		spirit_stab3	] {ai_charge(12); spirit_alphacontrol(); spirit_glow();};
-void()	spirit_stab3	=[	$stab3,		spirit_stab4	] {ai_charge(10); self.skin = 0; spirit_glow();};
-void()	spirit_stab4	=[	$stab4,		spirit_stab5	] {ai_charge(8); spirit_glow();};
-void()	spirit_stab5	=[	$stab5,		spirit_stab6	] {ai_charge(8); spirit_glow();};
-void()	spirit_stab6	=[	$stab6,		spirit_stab7	] {ai_charge(1); spirit_sword_sound();
+void()	spirit_stab1	= [	$stab1,		spirit_stab2	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
+void()	spirit_stab2	= [	$stab2,		spirit_stab3	] { ai_charge(12); spirit_alphacontrol(); spirit_glow(); };
+void()	spirit_stab3	= [	$stab3,		spirit_stab4	] { ai_charge(10); self.skin = 0; spirit_glow(); };
+void()	spirit_stab4	= [	$stab4,		spirit_stab5	] { ai_charge(8); spirit_glow(); };
+void()	spirit_stab5	= [	$stab5,		spirit_stab6	] { ai_charge(8); spirit_glow(); };
+void()	spirit_stab6	= [	$stab6,		spirit_stab7	] { ai_charge(1); spirit_sword_sound();
 spirit_glow();
 ai_melee();
 };
-void()	spirit_stab7	=[	$stab7,		spirit_stab8	] {ai_charge(0); spirit_glow(); ai_melee();};
-void()	spirit_stab8	=[	$stab8,		spirit_stab9	] {ai_charge(0); spirit_glow(); ai_melee();};
-void()	spirit_stab9	=[	$stab9,		spirit_stab10	] {ai_charge(0); spirit_glow();};
-void()	spirit_stab10	=[	$stab10,	spirit_run1	] {ai_charge(8); spirit_glow();
+void()	spirit_stab7	= [	$stab7,		spirit_stab8	] { ai_charge(0); spirit_glow(); ai_melee(); };
+void()	spirit_stab8	= [	$stab8,		spirit_stab9	] { ai_charge(0); spirit_glow(); ai_melee(); };
+void()	spirit_stab9	= [	$stab9,		spirit_stab10	] { ai_charge(0); spirit_glow(); };
+void()	spirit_stab10	= [	$stab10,	spirit_run1	] { ai_charge(8); spirit_glow();
 if (random() < 0.25) spirit_spin1();
 };
 
 // Buildup particles for scream
 //----------------------------------------------------------------------
-void(vector leftofsb, vector rightofsb) spirit_charge =
-{	
+void(vector leftofsb, vector rightofsb) spirit_charge = {	
 	if (self.health < 1) return;
 
 	// Work out each hand position
@@ -451,28 +449,28 @@ void(vector leftofsb, vector rightofsb) spirit_charge =
 };
 
 //Scream
-void()	spirit_scream1	=[	$scream1,	spirit_scream2	] {ai_charge(18); spirit_alphacontrol();
+void()	spirit_scream1	= [	$scream1,	spirit_scream2	] { ai_charge(18); spirit_alphacontrol();
 	// Cannot be interrupted
 	self.pain_finished = time + 2;
 	if (self.health > 0) sound (self, CHAN_WEAPON, "redfield/spirit/scream.wav", 1, ATTN_NORM);
 	spirit_glow();
 };
-void()	spirit_scream2	=[	$scream2,	spirit_scream3	] {ai_charge(16); spirit_alphacontrol(); spirit_glow();};
-void()	spirit_scream3	=[	$scream3,	spirit_scream4	] {ai_charge(14); spirit_glow();};
-void()	spirit_scream4	=[	$scream4,	spirit_scream5	] {ai_charge(12); self.skin = 0; spirit_glow();};
-void()	spirit_scream5	=[	$scream5,	spirit_scream6	] {ai_charge(12); spirit_charge('8 -11 4','8 11 4');
+void()	spirit_scream2	= [	$scream2,	spirit_scream3	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
+void()	spirit_scream3	= [	$scream3,	spirit_scream4	] { ai_charge(14); spirit_glow(); };
+void()	spirit_scream4	= [	$scream4,	spirit_scream5	] { ai_charge(12); self.skin = 0; spirit_glow(); };
+void()	spirit_scream5	= [	$scream5,	spirit_scream6	] { ai_charge(12); spirit_charge('8 -11 4','8 11 4');
 	spirit_glow();
 };
-void()	spirit_scream6	=[	$scream6,	spirit_scream7	] {ai_charge(10); spirit_charge('9 -11 5','9 11 5');
+void()	spirit_scream6	= [	$scream6,	spirit_scream7	] { ai_charge(10); spirit_charge('9 -11 5','9 11 5');
 	spirit_glow();
 };
-void()	spirit_scream7	=[	$scream7,	spirit_scream8	] {ai_charge(10); spirit_charge('12 -10 8','12 10 8');
+void()	spirit_scream7	= [	$scream7,	spirit_scream8	] { ai_charge(10); spirit_charge('12 -10 8','12 10 8');
 	spirit_glow();
 };
-void()	spirit_scream8	=[	$scream8,	spirit_scream9	] {ai_charge(4); spirit_charge('13 -10 9','13 10 9');
+void()	spirit_scream8	= [	$scream8,	spirit_scream9	] { ai_charge(4); spirit_charge('13 -10 9','13 10 9');
 	spirit_glow();
 };
-void()	spirit_scream9	=[	$scream9,	spirit_scream10	] {ai_chargenoturn(2); spirit_glow(); 
+void()	spirit_scream9	= [	$scream9,	spirit_scream10	] { ai_chargenoturn(2); spirit_glow(); 
 	local entity sb;
 
 	self.owner = spawn();
@@ -486,28 +484,28 @@ void()	spirit_scream9	=[	$scream9,	spirit_scream10	] {ai_chargenoturn(2); spirit
 	sb.think = SUB_Remove;
 	ai_shockwave(MONAI_SPIRITIMPACT, MONAI_SPIRITDAMAGE, MONAI_SPIRITRADIUS, MONAI_SPIRITFORWARD, MONAI_SPIRITUP);
 };
-void()	spirit_scream10	=[	$scream10,	spirit_scream11	] {ai_chargenoturn(0); spirit_glow();
+void()	spirit_scream10	= [	$scream10,	spirit_scream11	] { ai_chargenoturn(0); spirit_glow();
 	self.owner.frame = 1;
 	self.owner.alpha = 0.3;
 };
-void()	spirit_scream11 =[	$scream11,	spirit_scream12	] {ai_chargenoturn(0); spirit_glow();
+void()	spirit_scream11 = [	$scream11,	spirit_scream12	] { ai_chargenoturn(0); spirit_glow();
 	self.owner.frame = 2;
 	self.owner.alpha = 0.2;
 };
-void()	spirit_scream12	=[	$scream12,	spirit_scream13	] {ai_chargenoturn(0); spirit_glow();
+void()	spirit_scream12	= [	$scream12,	spirit_scream13	] { ai_chargenoturn(0); spirit_glow();
 	self.owner.frame = 3;
 	self.owner.alpha = 0.1;
 };
-void()	spirit_scream13	=[	$scream13,	spirit_scream14	] {ai_chargenoturn(0); spirit_glow();
+void()	spirit_scream13	= [	$scream13,	spirit_scream14	] { ai_chargenoturn(0); spirit_glow();
 	self.owner.frame = 4;
 	self.owner.alpha = 0.05;
 };
-void()	spirit_scream14	=[	$scream14,	spirit_scream15	] {ai_chargenoturn(0); spirit_glow();};
-void()	spirit_scream15	=[	$scream15,	spirit_scream16	] {ai_chargenoturn(0); spirit_glow();};
-void()	spirit_scream16	=[	$scream16,	spirit_scream17	] {ai_charge(4); spirit_glow();};
-void()	spirit_scream17	=[	$scream17,	spirit_scream18	] {ai_charge(8); spirit_glow();};
-void()	spirit_scream18	=[	$scream18,	spirit_scream19	] {ai_charge(12); spirit_glow();};
-void()	spirit_scream19	=[	$scream19,	spirit_run1	] {ai_charge(16); spirit_glow();};
+void()	spirit_scream14	= [	$scream14,	spirit_scream15	] { ai_chargenoturn(0); spirit_glow(); };
+void()	spirit_scream15	= [	$scream15,	spirit_scream16	] { ai_chargenoturn(0); spirit_glow(); };
+void()	spirit_scream16	= [	$scream16,	spirit_scream17	] { ai_charge(4); spirit_glow(); };
+void()	spirit_scream17	= [	$scream17,	spirit_scream18	] { ai_charge(8); spirit_glow(); };
+void()	spirit_scream18	= [	$scream18,	spirit_scream19	] { ai_charge(12); spirit_glow(); };
+void()	spirit_scream19	= [	$scream19,	spirit_run1	] { ai_charge(16); spirit_glow(); };
 
 void() spirit_chooseatk = {
 	if (!ai_checkmelee(MONAI_MELEESPIRIT,FALSE)) return;		// Too far away
@@ -538,8 +536,7 @@ void() spirit_phased = {
 };
 
 //----------------------------------------------------------------------
-void() spirit_wakeup =
-{
+void() spirit_wakeup = {
 	// Reset all monster state functions back to default
 	self.th_stand = spirit_stand1;
 	self.th_walk = spirit_walk1;
@@ -564,25 +561,24 @@ void() spirit_wakeup =
 	else spirit_ifin1();
 };
 
-//============================================================================
-void()	spirit_pain1	=[	$pain1,		spirit_pain2	] {sound (self, CHAN_VOICE, "redfield/spirit/pain.wav", 1, ATTN_NORM);
+
+void()	spirit_pain1	= [	$pain1,		spirit_pain2	] { sound (self, CHAN_VOICE, "redfield/spirit/pain.wav", 1, ATTN_NORM);
 spirit_glow();
 };
-void()	spirit_pain2	=[	$pain2,		spirit_pain3	] {ai_back(2); spirit_glow();};
-void()	spirit_pain3	=[	$pain3,		spirit_pain4	] {ai_back(4); spirit_glow();};
-void()	spirit_pain4	=[	$pain4,		spirit_pain5	] {spirit_glow();};
-void()	spirit_pain5	=[	$pain5,		spirit_pain6	] {spirit_glow();};
-void()	spirit_pain6	=[	$pain6,		spirit_pain7	] {spirit_glow();};
-void()	spirit_pain7	=[	$pain7,		spirit_pain8	] {spirit_glow();};
-void()	spirit_pain8	=[	$pain8,		spirit_pain9	] {spirit_glow();};
-void()	spirit_pain9	=[	$pain9,		spirit_pain10	] {spirit_glow();};
-void()	spirit_pain10	=[	$pain10,	spirit_run1	] {spirit_glow();
+void()	spirit_pain2	= [	$pain2,		spirit_pain3	] { ai_back(2); spirit_glow(); };
+void()	spirit_pain3	= [	$pain3,		spirit_pain4	] { ai_back(4); spirit_glow(); };
+void()	spirit_pain4	= [	$pain4,		spirit_pain5	] { spirit_glow(); };
+void()	spirit_pain5	= [	$pain5,		spirit_pain6	] { spirit_glow(); };
+void()	spirit_pain6	= [	$pain6,		spirit_pain7	] { spirit_glow(); };
+void()	spirit_pain7	= [	$pain7,		spirit_pain8	] { spirit_glow(); };
+void()	spirit_pain8	= [	$pain8,		spirit_pain9	] { spirit_glow(); };
+void()	spirit_pain9	= [	$pain9,		spirit_pain10	] { spirit_glow(); };
+void()	spirit_pain10	= [	$pain10,	spirit_run1	] { spirit_glow();
 if (random() < 0.75) spirit_spin1();
 };
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) spirit_pain =
-{
+void(entity inflictor, entity attacker, float damage) spirit_pain = {
 	
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -601,20 +597,20 @@ void(entity inflictor, entity attacker, float damage) spirit_pain =
 };
 
 //----------------------------------------------------------------------
-void()	spirit_death1	=[	$death1,	spirit_death2	] {self.skin = 0; spirit_glow();
+void()	spirit_death1	= [	$death1,	spirit_death2	] { self.skin = 0; spirit_glow();
 	sound (self, CHAN_VOICE, "redfield/spirit/death.wav", 1, ATTN_NORM);
 };
-void()	spirit_death2	=[	$death2,	spirit_death3	] {spirit_glow();};
-void()	spirit_death3	=[	$death3,	spirit_death4	] {self.solid = SOLID_NOT; spirit_glow();};
-void()	spirit_death4	=[	$death4,	spirit_death5	] {spirit_glow();};
-void()	spirit_death5	=[	$death5,	spirit_death6	] {spirit_glow();};
-void()	spirit_death6	=[	$death6,	spirit_death7	] {spirit_glow();};
-void()	spirit_death7	=[	$death7,	spirit_death8	] {spirit_glow();};
-void()	spirit_death8	=[	$death8,	spirit_death9	] {spirit_glow();};
-void()	spirit_death9	=[	$death9,	spirit_death10	] {self.alpha = 0.8; spirit_glow();};
-void()	spirit_death10	=[	$death10,	spirit_death11	] {self.alpha = 0.4; spirit_glow();};
-void()	spirit_death11	=[	$death11,	spirit_death12	] {self.alpha = 0.2; spirit_glow();};
-void()	spirit_death12	=[	$death12,	spirit_death12	] {
+void()	spirit_death2	= [	$death2,	spirit_death3	] { spirit_glow(); };
+void()	spirit_death3	= [	$death3,	spirit_death4	] { self.solid = SOLID_NOT; spirit_glow(); };
+void()	spirit_death4	= [	$death4,	spirit_death5	] { spirit_glow(); };
+void()	spirit_death5	= [	$death5,	spirit_death6	] { spirit_glow(); };
+void()	spirit_death6	= [	$death6,	spirit_death7	] { spirit_glow(); };
+void()	spirit_death7	= [	$death7,	spirit_death8	] { spirit_glow(); };
+void()	spirit_death8	= [	$death8,	spirit_death9	] { spirit_glow(); };
+void()	spirit_death9	= [	$death9,	spirit_death10	] { self.alpha = 0.8; spirit_glow(); };
+void()	spirit_death10	= [	$death10,	spirit_death11	] { self.alpha = 0.4; spirit_glow(); };
+void()	spirit_death11	= [	$death11,	spirit_death12	] { self.alpha = 0.2; spirit_glow(); };
+void()	spirit_death12	= [	$death12,	spirit_death12	] {
 // Stop thinking and hide entity (prevent spirit_death12 loop)
 spirit_glow_off();
 spirit_remove_glow();
@@ -624,8 +620,7 @@ entity_hide(self);
 };
 
 //----------------------------------------------------------------------
-void() spirit_die =
-{
+void() spirit_die = {
 	
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
@@ -659,7 +654,7 @@ void() spirit_die =
 	}
 };
 
-void() spirit_sword_sound ={
+void() spirit_sword_sound = {
 	self.weaponstate = random();
 	if (self.weaponstate < 0.35) sound (self, CHAN_WEAPON, "redfield/spirit/slash1.wav", 1, ATTN_NORM);
 	else if (self.weaponstate < 0.65) sound (self, CHAN_WEAPON, "redfield/spirit/slash2.wav", 1, ATTN_NORM);

@@ -61,8 +61,6 @@ void() FuryBossSpawnTouch;
 void() FuryBossMissileTouch;
 void() FuryBossSpikeTouch;
 void() FuryBossHome;
-void() dfury_boss_char_a1;
-void() dfury_boss_run1;
 void() dfury_boss_random_magic;		// adds random magic attack animation
 void()	dfury_boss_JumpTouch; // in original ID1, only "dfury_magiccxx" is used
 
@@ -216,83 +214,60 @@ void() FuryBossSpikeTouch = {
 	T_RadiusDamage (self, self.owner, 5, world, DAMAGEALL);	
 };
 
-// check for mad charge
-void() CheckForCharge_boss = {
-	if (!enemy_vis) return; 
-	if (time < self.attack_finished) return;	
-	if ( fabs(self.origin_z - self.enemy.origin_z) > 20) return;		// too much height change
-	if ( vlen (self.origin - self.enemy.origin) < 80) return;		// use regular attack
-
-	SUB_AttackFinished (2);
-	dfury_boss_char_a1(); 	// charge!	
-};
-
-void() CheckContinueCharge_boss = {
-	if (time > self.attack_finished) {
-		SUB_AttackFinished (3);
-		dfury_boss_run1();
-		return;		// done charging
-	}
-	if (random() > 0.5)
-		sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-	else
-		sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-};
-
 void(float loudness) dfury_boss_footsteps = {
 	if (random() < 0.5) return; // minimize footstep frequency
 
 	sound(self, CHAN_AUTO, "q15/dfury/dfuryboss_walk.wav", loudness, ATTN_IDLE);
 };
 
-void()	dfury_boss_stand1	=[	$stand1,	dfury_boss_stand2	] {ai_stand();self.colormod = '1 1 1';};
-void()	dfury_boss_stand2	=[	$stand2,	dfury_boss_stand3	] {ai_stand();};
-void()	dfury_boss_stand3	=[	$stand3,	dfury_boss_stand4	] {ai_stand();};
-void()	dfury_boss_stand4	=[	$stand4,	dfury_boss_stand5	] {ai_stand();};
-void()	dfury_boss_stand5	=[	$stand5,	dfury_boss_stand6	] {ai_stand();};
-void()	dfury_boss_stand6	=[	$stand6,	dfury_boss_stand7	] {ai_stand();};
-void()	dfury_boss_stand7	=[	$stand7,	dfury_boss_stand8	] {ai_stand();};
-void()	dfury_boss_stand8	=[	$stand8,	dfury_boss_stand9	] {ai_stand();};
-void()	dfury_boss_stand9	=[	$stand9,	dfury_boss_stand1	] {ai_stand();};
+void()	dfury_boss_stand1	= [	$stand1,	dfury_boss_stand2	] { ai_stand();self.colormod = '1 1 1';};
+void()	dfury_boss_stand2	= [	$stand2,	dfury_boss_stand3	] { ai_stand(); };
+void()	dfury_boss_stand3	= [	$stand3,	dfury_boss_stand4	] { ai_stand(); };
+void()	dfury_boss_stand4	= [	$stand4,	dfury_boss_stand5	] { ai_stand(); };
+void()	dfury_boss_stand5	= [	$stand5,	dfury_boss_stand6	] { ai_stand(); };
+void()	dfury_boss_stand6	= [	$stand6,	dfury_boss_stand7	] { ai_stand(); };
+void()	dfury_boss_stand7	= [	$stand7,	dfury_boss_stand8	] { ai_stand(); };
+void()	dfury_boss_stand8	= [	$stand8,	dfury_boss_stand9	] { ai_stand(); };
+void()	dfury_boss_stand9	= [	$stand9,	dfury_boss_stand1	] { ai_stand(); };
 
-void()	dfury_boss_walk1	=[	$walk1,		dfury_boss_walk2	] {df_idle_sound(); ai_walk(2);self.colormod = '1 1 1'; dfury_boss_footsteps (0.8);};
-void()	dfury_boss_walk2	=[	$walk2,		dfury_boss_walk3	] {ai_walk(5);};
-void()	dfury_boss_walk3	=[	$walk3,		dfury_boss_walk4	] {ai_walk(5);};
-void()	dfury_boss_walk4	=[	$walk4,		dfury_boss_walk5	] {ai_walk(4);};
-void()	dfury_boss_walk5	=[	$walk5,		dfury_boss_walk6	] {ai_walk(4);};
-void()	dfury_boss_walk6	=[	$walk6,		dfury_boss_walk7	] {ai_walk(2);};
-void()	dfury_boss_walk7	=[	$walk7,		dfury_boss_walk8	] {ai_walk(2);};
-void()	dfury_boss_walk8	=[	$walk8,		dfury_boss_walk9	] {ai_walk(3);};
-void()	dfury_boss_walk9	=[	$walk9,		dfury_boss_walk10	] {ai_walk(3);};
-void()	dfury_boss_walk10	=[	$walk10,	dfury_boss_walk11	] {ai_walk(4);};
-void()	dfury_boss_walk11	=[	$walk11,	dfury_boss_walk12	] {ai_walk(3); dfury_boss_footsteps (1);};
-void()	dfury_boss_walk12	=[	$walk12,	dfury_boss_walk13	] {ai_walk(4);};
-void()	dfury_boss_walk13	=[	$walk13,	dfury_boss_walk14	] {ai_walk(6);};
-void()	dfury_boss_walk14	=[	$walk14,	dfury_boss_walk1	] {ai_walk(2);};
+void()	dfury_boss_walk1	= [	$walk1,		dfury_boss_walk2	] { df_idle_sound(); ai_walk(2);self.colormod = '1 1 1'; dfury_boss_footsteps (0.8); };
+void()	dfury_boss_walk2	= [	$walk2,		dfury_boss_walk3	] { ai_walk(5); };
+void()	dfury_boss_walk3	= [	$walk3,		dfury_boss_walk4	] { ai_walk(5); };
+void()	dfury_boss_walk4	= [	$walk4,		dfury_boss_walk5	] { ai_walk(4); };
+void()	dfury_boss_walk5	= [	$walk5,		dfury_boss_walk6	] { ai_walk(4); };
+void()	dfury_boss_walk6	= [	$walk6,		dfury_boss_walk7	] { ai_walk(2); };
+void()	dfury_boss_walk7	= [	$walk7,		dfury_boss_walk8	] { ai_walk(2); };
+void()	dfury_boss_walk8	= [	$walk8,		dfury_boss_walk9	] { ai_walk(3); };
+void()	dfury_boss_walk9	= [	$walk9,		dfury_boss_walk10	] { ai_walk(3); };
+void()	dfury_boss_walk10	= [	$walk10,	dfury_boss_walk11	] { ai_walk(4); };
+void()	dfury_boss_walk11	= [	$walk11,	dfury_boss_walk12	] { ai_walk(3); dfury_boss_footsteps (1); };
+void()	dfury_boss_walk12	= [	$walk12,	dfury_boss_walk13	] { ai_walk(4); };
+void()	dfury_boss_walk13	= [	$walk13,	dfury_boss_walk14	] { ai_walk(6); };
+void()	dfury_boss_walk14	= [	$walk14,	dfury_boss_walk1	] { ai_walk(2); };
 
-void()	dfury_boss_run1	=[	$run1,		dfury_boss_run2	] {df_idle_sound(); ai_run (55); CheckForCharge_boss(); self.colormod = '1 1 1';shambler_walking_quake();dfury_boss_footsteps (1);};
-void()	dfury_boss_run2	=[	$run2,		dfury_boss_run3	] {ai_run(60);};
-void()	dfury_boss_run3	=[	$run3,		dfury_boss_run4	] {shambler_walking_quake();dfury_boss_footsteps (1);ai_run(43);};
-void()	dfury_boss_run4	=[	$run4,		dfury_boss_run5	] {ai_run(61);};
-void()	dfury_boss_run5	=[	$run5,		dfury_boss_run6	] {shambler_walking_quake();dfury_boss_footsteps (1);ai_run(39);};
-void()	dfury_boss_run6	=[	$run6,		dfury_boss_run1	] {ai_run(58);};
+void()	dfury_boss_run1	= [	$run1,		dfury_boss_run2	] { df_idle_sound(); ai_run (55); CheckForCharge_boss(); self.colormod = '1 1 1';shambler_walking_quake();dfury_boss_footsteps (1); };
+void()	dfury_boss_run2	= [	$run2,		dfury_boss_run3	] { ai_run(60); };
+void()	dfury_boss_run3	= [	$run3,		dfury_boss_run4	] { shambler_walking_quake();dfury_boss_footsteps (1);ai_run(43); };
+void()	dfury_boss_run4	= [	$run4,		dfury_boss_run5	] { ai_run(61); };
+void()	dfury_boss_run5	= [	$run5,		dfury_boss_run6	] { shambler_walking_quake();dfury_boss_footsteps (1);ai_run(39); };
+void()	dfury_boss_run6	= [	$run6,		dfury_boss_run1	] { ai_run(58); };
 
-void()	dfury_boss_pain1	=[	$pain1,		dfury_boss_pain2	] {sound (self, CHAN_VOICE, "q15/dfury/pain1.wav", 1, ATTN_NORM);self.colormod = '1 1 1';};
-void()	dfury_boss_pain2	=[	$pain2,		dfury_boss_pain3	] {};
-void()	dfury_boss_pain3	=[	$pain3,		dfury_boss_pain4	] {};
-void()	dfury_boss_pain4	=[	$pain4,		dfury_boss_pain5	] {};
-void()	dfury_boss_pain5	=[	$pain5,		dfury_boss_run1	] {};
+void()	dfury_boss_pain1	= [	$pain1,		dfury_boss_pain2	] { sound (self, CHAN_VOICE, "q15/dfury/pain1.wav", 1, ATTN_NORM);self.colormod = '1 1 1';};
+void()	dfury_boss_pain2	= [	$pain2,		dfury_boss_pain3	] {};
+void()	dfury_boss_pain3	= [	$pain3,		dfury_boss_pain4	] {};
+void()	dfury_boss_pain4	= [	$pain4,		dfury_boss_pain5	] {};
+void()	dfury_boss_pain5	= [	$pain5,		dfury_boss_run1	] {};
 
-void()	dfury_boss_jump1	=[	$lunge1,		dfury_boss_jump2	] {
+void()	dfury_boss_jump1	= [	$lunge1,		dfury_boss_jump2	] {
 	self.nextthink = (time + 0.1);
 	ai_face();
 	// self.tail_visible = 0;
 	shambler_walking_quake();
 	dfury_boss_footsteps (1);
 };
-void()	dfury_boss_jump2	=[	$lunge2,		dfury_boss_jump3	] {self.nextthink = (time + 0.1);ai_face();shambler_walking_quake();dfury_boss_footsteps (1);};
-void()	dfury_boss_jump3	=[	$lunge3,		dfury_boss_jump4	] {self.nextthink = (time + 0.1);ai_face();};
-void()	dfury_boss_jump4	=[	$lunge4,		dfury_boss_jump5	] {self.nextthink = (time + 0.1); ai_face();
+void()	dfury_boss_jump2	= [	$lunge2,		dfury_boss_jump3	] { self.nextthink = (time + 0.1);ai_face();shambler_walking_quake();dfury_boss_footsteps (1); };
+void()	dfury_boss_jump3	= [	$lunge3,		dfury_boss_jump4	] { self.nextthink = (time + 0.1);ai_face(); };
+void()	dfury_boss_jump4	= [	$lunge4,		dfury_boss_jump5	] { self.nextthink = (time + 0.1); ai_face();
 	// self.tail_visible = 1;
 	self.touch = dfury_boss_JumpTouch;
 	makevectors(self.angles);
@@ -300,19 +275,19 @@ void()	dfury_boss_jump4	=[	$lunge4,		dfury_boss_jump5	] {self.nextthink = (time 
 	self.velocity = v_forward * 800 + '0 0 250';
 	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
 };
-void()	dfury_boss_jump5	=[	$lunge5,		dfury_boss_jump6	] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_jump6	=[	$lunge6,		dfury_boss_jump7	] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_jump7	=[	$lunge7,		dfury_boss_jump8	] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_jump8	=[ 	$lunge8,		dfury_boss_jump9	] {self.nextthink = (time + 0.1);dfury_boss_footsteps (1);};
-void()	dfury_boss_jump9	=[ 	$lunge9,		dfury_boss_jump10	] {self.nextthink = (time + 0.1);dfury_boss_footsteps (1);};
-void()	dfury_boss_jump10	=[ 	$lunge10,	dfury_boss_jump1	] 	  {self.nextthink = (time + 0.7);}; // if 0.7 second pass, assume dfury is stuck and jump again
-void()	dfury_boss_jump11	=[ 	$lunge11,	dfury_boss_jump12	] 	  {
+void()	dfury_boss_jump5	= [	$lunge5,		dfury_boss_jump6	] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_jump6	= [	$lunge6,		dfury_boss_jump7	] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_jump7	= [	$lunge7,		dfury_boss_jump8	] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_jump8	= [ 	$lunge8,		dfury_boss_jump9	] { self.nextthink = (time + 0.1);dfury_boss_footsteps (1); };
+void()	dfury_boss_jump9	= [ 	$lunge9,		dfury_boss_jump10	] { self.nextthink = (time + 0.1);dfury_boss_footsteps (1); };
+void()	dfury_boss_jump10	= [ 	$lunge10,	dfury_boss_jump1	] 	  { self.nextthink = (time + 0.7); }; // if 0.7 second pass, assume dfury is stuck and jump again
+void()	dfury_boss_jump11	= [ 	$lunge11,	dfury_boss_jump12	] 	  {
 	self.nextthink = (time + 0.1);
 	// self.tail_visible = 0;
 	shambler_walking_quake();
 	dfury_boss_footsteps (1);
 };
-void()	dfury_boss_jump12	=[ 	$lunge12,	dfury_boss_run1	] {
+void()	dfury_boss_jump12	= [ 	$lunge12,	dfury_boss_run1	] {
 	self.nextthink = (time + 0.1);
 	shambler_walking_quake();
 	Monster_Animation_EarthQuake (20, 377);
@@ -338,8 +313,8 @@ void() bossdeath_2 = {
 	remove(self);
 }
 
-void()	dfury_boss_loop1	=[	$death8,	dfury_boss_loop2 ] {};
-void()	dfury_boss_loop2	=[	$death9,	dfury_boss_loop1 ] {};
+void()	dfury_boss_loop1	= [	$death8,	dfury_boss_loop2 ] {};
+void()	dfury_boss_loop2	= [	$death9,	dfury_boss_loop1 ] {};
 
 void() Genocide = {
 	local entity head;
@@ -385,38 +360,38 @@ void() bossdeath_ef = {
 	self.nextthink = time;
 };
 
-void()	dfury_boss_die1		=[	$death1,	dfury_boss_die2	] {ai_forward(10);self.colormod = '1 1 1';};
-void()	dfury_boss_die2		=[	$death2,	dfury_boss_die3	] {ai_forward(8);};
-void()	dfury_boss_die3		=[	$death3,	dfury_boss_die4	] {self.solid = SOLID_NOT; ai_forward(7);};
-void()	dfury_boss_die4		=[	$death4,	dfury_boss_die5	] {};
-void()	dfury_boss_die5		=[	$death5,	dfury_boss_die6	] {};
-void()	dfury_boss_die6		=[	$death6,	dfury_boss_die7	] {};
-void()	dfury_boss_die7		=[	$death7,	dfury_boss_die8	] {};
-void()	dfury_boss_die8		=[	$death8,	dfury_boss_die9	] {ai_forward(10);};
-void()	dfury_boss_die9		=[	$death9,	dfury_boss_die10] {ai_forward(11); self.think = bossdeath_ef;self.nextthink = time;};
-void()	dfury_boss_die10	=[	$death10,	dfury_boss_die11] {};
-void()	dfury_boss_die11	=[	$death11,	dfury_boss_die12] {};
-void()	dfury_boss_die12	=[	$death12,	dfury_boss_die13] {};
-void()	dfury_boss_die13	=[	$death13,	dfury_boss_die14] {};
-void()	dfury_boss_die14	=[	$death14,	dfury_boss_die15] {sound (self, CHAN_AUTO, "q15/dfury/fall.wav", 1, ATTN_IDLE);};
-void()	dfury_boss_die15	=[	$death15,	dfury_boss_die16] {};
-void()	dfury_boss_die16	=[	$death16,	dfury_boss_die17] {};
-void()	dfury_boss_die17	=[	$death17,	dfury_boss_die17] {};
+void()	dfury_boss_die1		= [	$death1,	dfury_boss_die2	] { ai_forward(10);self.colormod = '1 1 1';};
+void()	dfury_boss_die2		= [	$death2,	dfury_boss_die3	] { ai_forward(8); };
+void()	dfury_boss_die3		= [	$death3,	dfury_boss_die4	] { self.solid = SOLID_NOT; ai_forward(7); };
+void()	dfury_boss_die4		= [	$death4,	dfury_boss_die5	] {};
+void()	dfury_boss_die5		= [	$death5,	dfury_boss_die6	] {};
+void()	dfury_boss_die6		= [	$death6,	dfury_boss_die7	] {};
+void()	dfury_boss_die7		= [	$death7,	dfury_boss_die8	] {};
+void()	dfury_boss_die8		= [	$death8,	dfury_boss_die9	] { ai_forward(10); };
+void()	dfury_boss_die9		= [	$death9,	dfury_boss_die10] { ai_forward(11); self.think = bossdeath_ef;self.nextthink = time;};
+void()	dfury_boss_die10	= [	$death10,	dfury_boss_die11] {};
+void()	dfury_boss_die11	= [	$death11,	dfury_boss_die12] {};
+void()	dfury_boss_die12	= [	$death12,	dfury_boss_die13] {};
+void()	dfury_boss_die13	= [	$death13,	dfury_boss_die14] {};
+void()	dfury_boss_die14	= [	$death14,	dfury_boss_die15] { sound (self, CHAN_AUTO, "q15/dfury/fall.wav", 1, ATTN_IDLE); };
+void()	dfury_boss_die15	= [	$death15,	dfury_boss_die16] {};
+void()	dfury_boss_die16	= [	$death16,	dfury_boss_die17] {};
+void()	dfury_boss_die17	= [	$death17,	dfury_boss_die17] {};
 
-// void()	dfury_boss_dieb1	=[	$deathb1,	dfury_boss_dieb2	] {self.colormod = '1 1 1';};
-// void()	dfury_boss_dieb2	=[	$deathb2,	dfury_boss_dieb3	] {};
-// void()	dfury_boss_dieb3	=[	$deathb3,	dfury_boss_dieb4	] {self.solid = SOLID_NOT;};
-// void()	dfury_boss_dieb4	=[	$deathb4,	dfury_boss_dieb5	] {};
-// void()	dfury_boss_dieb5	=[	$deathb5,	dfury_boss_dieb6	] {};
-// void()	dfury_boss_dieb6	=[	$deathb6,	dfury_boss_dieb7	] {sound (self, CHAN_AUTO, "q15/dfury/fall.wav", 1, ATTN_IDLE);};
-// void()	dfury_boss_dieb7	=[	$deathb7,	dfury_boss_dieb8	] {};
-// void()	dfury_boss_dieb8	=[	$deathb8,	dfury_boss_dieb9	] {Monster_Animation_EarthQuake (20, 377);};
-// void()	dfury_boss_dieb9	=[	$deathb9,	dfury_boss_dieb10	] {};
-// void()	dfury_boss_dieb10	=[	$deathb10,	dfury_boss_dieb11	] {};
-// void()	dfury_boss_dieb11	=[	$deathb11,	dfury_boss_dieb12	] {};
-// void()	dfury_boss_dieb12	=[	$deathb12,	dfury_boss_dieb13	] {};
-// void()	dfury_boss_dieb13	=[	$deathb13,	dfury_boss_dieb14	] {};
-// void()	dfury_boss_dieb14	=[	$deathb14,	dfury_boss_dieb14	] {};
+// void()	dfury_boss_dieb1	= [	$deathb1,	dfury_boss_dieb2	] { self.colormod = '1 1 1';};
+// void()	dfury_boss_dieb2	= [	$deathb2,	dfury_boss_dieb3	] {};
+// void()	dfury_boss_dieb3	= [	$deathb3,	dfury_boss_dieb4	] { self.solid = SOLID_NOT;};
+// void()	dfury_boss_dieb4	= [	$deathb4,	dfury_boss_dieb5	] {};
+// void()	dfury_boss_dieb5	= [	$deathb5,	dfury_boss_dieb6	] {};
+// void()	dfury_boss_dieb6	= [	$deathb6,	dfury_boss_dieb7	] { sound (self, CHAN_AUTO, "q15/dfury/fall.wav", 1, ATTN_IDLE); };
+// void()	dfury_boss_dieb7	= [	$deathb7,	dfury_boss_dieb8	] {};
+// void()	dfury_boss_dieb8	= [	$deathb8,	dfury_boss_dieb9	] { Monster_Animation_EarthQuake (20, 377); };
+// void()	dfury_boss_dieb9	= [	$deathb9,	dfury_boss_dieb10	] {};
+// void()	dfury_boss_dieb10	= [	$deathb10,	dfury_boss_dieb11	] {};
+// void()	dfury_boss_dieb11	= [	$deathb11,	dfury_boss_dieb12	] {};
+// void()	dfury_boss_dieb12	= [	$deathb12,	dfury_boss_dieb13	] {};
+// void()	dfury_boss_dieb13	= [	$deathb13,	dfury_boss_dieb14	] {};
+// void()	dfury_boss_dieb14	= [	$deathb14,	dfury_boss_dieb14	] {};
 
 // creates as many gib-sets as defined in cvar 'gibsmultiplier'
 void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{
@@ -448,132 +423,132 @@ void() dfury_boss_die = {
 	dfury_boss_die1();
 };
 
-void()	dfury_boss_magica1 =[	$magica1,	dfury_boss_magica2	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
-void()	dfury_boss_magica2 =[	$magica2,	dfury_boss_magica3	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
-void()	dfury_boss_magica3 =[	$magica3,	dfury_boss_magica4	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
-void()	dfury_boss_magica4 =[	$magica4,	dfury_boss_magica5	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
-void()	dfury_boss_magica5 =[	$magica5,	dfury_boss_magica6	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
-void()	dfury_boss_magica6 =[	$magica6,	dfury_boss_magica7	] {self.nextthink = (time + 0.1);ai_face();};
-void()	dfury_boss_magica7 =[	$magica7,	dfury_boss_magica8	] {self.nextthink = (time + 0.1);dfury_boss_shot2(-2);};
-void()	dfury_boss_magica8 =[	$magica8,	dfury_boss_magica9	] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_magica9 =[	$magica9,	dfury_boss_magica10] {self.nextthink = (time + 0.1);dfury_boss_shot2(0);};
-void()	dfury_boss_magica10 =[	$magica10,	dfury_boss_magica11] {self.nextthink = (time + 0.1);dfury_boss_shot2(1);};
-void()	dfury_boss_magica11 =[	$magica11,	dfury_boss_magica12] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_magica12 =[	$magica12,	dfury_boss_magica13] {self.nextthink = (time + 0.1);dfury_boss_shot2(3);self.colormod = '3 1 1';};
-void()	dfury_boss_magica13 =[	$magica13,	dfury_boss_magica14] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
-void()	dfury_boss_magica14 =[	$magica14,	dfury_boss_run1	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '1 1 1';dfury_boss_random_magic();};
+void()	dfury_boss_magica1 = [	$magica1,	dfury_boss_magica2	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
+void()	dfury_boss_magica2 = [	$magica2,	dfury_boss_magica3	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
+void()	dfury_boss_magica3 = [	$magica3,	dfury_boss_magica4	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
+void()	dfury_boss_magica4 = [	$magica4,	dfury_boss_magica5	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
+void()	dfury_boss_magica5 = [	$magica5,	dfury_boss_magica6	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
+void()	dfury_boss_magica6 = [	$magica6,	dfury_boss_magica7	] { self.nextthink = (time + 0.1);ai_face(); };
+void()	dfury_boss_magica7 = [	$magica7,	dfury_boss_magica8	] { self.nextthink = (time + 0.1);dfury_boss_shot2(-2); };
+void()	dfury_boss_magica8 = [	$magica8,	dfury_boss_magica9	] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_magica9 = [	$magica9,	dfury_boss_magica10] { self.nextthink = (time + 0.1);dfury_boss_shot2(0); };
+void()	dfury_boss_magica10 = [	$magica10,	dfury_boss_magica11] { self.nextthink = (time + 0.1);dfury_boss_shot2(1); };
+void()	dfury_boss_magica11 = [	$magica11,	dfury_boss_magica12] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_magica12 = [	$magica12,	dfury_boss_magica13] { self.nextthink = (time + 0.1);dfury_boss_shot2(3);self.colormod = '3 1 1';};
+void()	dfury_boss_magica13 = [	$magica13,	dfury_boss_magica14] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
+void()	dfury_boss_magica14 = [	$magica14,	dfury_boss_run1	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '1 1 1';dfury_boss_random_magic(); };
 
-void()	dfury_boss_magicb1 =[	$magicb1,	dfury_boss_magicb2]  {self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
-void()	dfury_boss_magicb2 =[	$magicb2,	dfury_boss_magicb3]  {self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
-void()	dfury_boss_magicb3 =[	$magicb3,	dfury_boss_magicb4]  {self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
-void()	dfury_boss_magicb4 =[	$magicb4,	dfury_boss_magicb5]  {self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
-void()	dfury_boss_magicb5 =[	$magicb5,	dfury_boss_magicb6]  {self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
-void()	dfury_boss_magicb6 =[	$magicb6,	dfury_boss_magicb7]  {self.nextthink = (time + 0.1);ai_face();};
-void()	dfury_boss_magicb7 =[	$magicb7,	dfury_boss_magicb8]  {self.nextthink = (time + 0.1);dfury_boss_shot(-2);};
-void()	dfury_boss_magicb8 =[	$magicb8,	dfury_boss_magicb9]  {self.nextthink = (time + 0.1);dfury_boss_shot(-1);};
-void()	dfury_boss_magicb9 =[	$magicb9,	dfury_boss_magicb10] {self.nextthink = (time + 0.1);dfury_boss_shot(0);};
-void()	dfury_boss_magicb10 =[	$magicb10,	dfury_boss_magicb11] {self.nextthink = (time + 0.1);dfury_boss_shot(1);};
-void()	dfury_boss_magicb11 =[	$magicb11,	dfury_boss_magicb12] {self.nextthink = (time + 0.1);dfury_boss_shot(2);};
-void()	dfury_boss_magicb12 =[	$magicb12,	dfury_boss_magicb13] {self.nextthink = (time + 0.1);dfury_boss_shot(3);self.colormod = '2 1 1';};
-void()	dfury_boss_magicb13 =[	$magicb13,	dfury_boss_run1]	 {self.nextthink = (time + 0.1);ai_face();self.colormod = '1 1 1';dfury_boss_random_magic();};
+void()	dfury_boss_magicb1 = [	$magicb1,	dfury_boss_magicb2]  { self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
+void()	dfury_boss_magicb2 = [	$magicb2,	dfury_boss_magicb3]  { self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
+void()	dfury_boss_magicb3 = [	$magicb3,	dfury_boss_magicb4]  { self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
+void()	dfury_boss_magicb4 = [	$magicb4,	dfury_boss_magicb5]  { self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
+void()	dfury_boss_magicb5 = [	$magicb5,	dfury_boss_magicb6]  { self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
+void()	dfury_boss_magicb6 = [	$magicb6,	dfury_boss_magicb7]  { self.nextthink = (time + 0.1);ai_face(); };
+void()	dfury_boss_magicb7 = [	$magicb7,	dfury_boss_magicb8]  { self.nextthink = (time + 0.1);dfury_boss_shot(-2); };
+void()	dfury_boss_magicb8 = [	$magicb8,	dfury_boss_magicb9]  { self.nextthink = (time + 0.1);dfury_boss_shot(-1); };
+void()	dfury_boss_magicb9 = [	$magicb9,	dfury_boss_magicb10] { self.nextthink = (time + 0.1);dfury_boss_shot(0); };
+void()	dfury_boss_magicb10 = [	$magicb10,	dfury_boss_magicb11] { self.nextthink = (time + 0.1);dfury_boss_shot(1); };
+void()	dfury_boss_magicb11 = [	$magicb11,	dfury_boss_magicb12] { self.nextthink = (time + 0.1);dfury_boss_shot(2); };
+void()	dfury_boss_magicb12 = [	$magicb12,	dfury_boss_magicb13] { self.nextthink = (time + 0.1);dfury_boss_shot(3);self.colormod = '2 1 1';};
+void()	dfury_boss_magicb13 = [	$magicb13,	dfury_boss_run1]	 { self.nextthink = (time + 0.1);ai_face();self.colormod = '1 1 1';dfury_boss_random_magic(); };
 
-void()	dfury_boss_magicc1 =[	$magicc1,	dfury_boss_magicc2	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
-void()	dfury_boss_magicc2 =[	$magicc2,	dfury_boss_magicc3	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
-void()	dfury_boss_magicc3 =[	$magicc3,	dfury_boss_magicc4	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
-void()	dfury_boss_magicc4 =[	$magicc4,	dfury_boss_magicc5	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
-void()	dfury_boss_magicc5 =[	$magicc5,	dfury_boss_magicc6	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
-void()	dfury_boss_magicc6 =[	$magicc6,	dfury_boss_magicc7	] {self.nextthink = (time + 0.1);dfury_boss_shot(-3);};
-void()	dfury_boss_magicc7 =[	$magicc7,	dfury_boss_magicc8	] {self.nextthink = (time + 0.1);dfury_boss_shot(-1);};
-void()	dfury_boss_magicc8 =[	$magicc8,	dfury_boss_magicc9	] {self.nextthink = (time + 0.1);dfury_boss_shot(0);};
-void()	dfury_boss_magicc9 =[	$magicc9,	dfury_boss_magicc10]  {self.nextthink = (time + 0.1);dfury_boss_shot(1);};
-void()	dfury_boss_magicc10 =[	$magicc10,	dfury_boss_magicc11]  {self.nextthink = (time + 0.1);dfury_boss_shot(3);self.colormod = '2 1 1';};
-void()	dfury_boss_magicc11 =[	$magicc11,	dfury_boss_run1] 	  {self.nextthink = (time + 0.1);dfury_boss_shot(4);self.colormod = '1 1 1';dfury_boss_random_magic();};
+void()	dfury_boss_magicc1 = [	$magicc1,	dfury_boss_magicc2	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
+void()	dfury_boss_magicc2 = [	$magicc2,	dfury_boss_magicc3	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
+void()	dfury_boss_magicc3 = [	$magicc3,	dfury_boss_magicc4	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
+void()	dfury_boss_magicc4 = [	$magicc4,	dfury_boss_magicc5	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
+void()	dfury_boss_magicc5 = [	$magicc5,	dfury_boss_magicc6	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
+void()	dfury_boss_magicc6 = [	$magicc6,	dfury_boss_magicc7	] { self.nextthink = (time + 0.1);dfury_boss_shot(-3); };
+void()	dfury_boss_magicc7 = [	$magicc7,	dfury_boss_magicc8	] { self.nextthink = (time + 0.1);dfury_boss_shot(-1); };
+void()	dfury_boss_magicc8 = [	$magicc8,	dfury_boss_magicc9	] { self.nextthink = (time + 0.1);dfury_boss_shot(0); };
+void()	dfury_boss_magicc9 = [	$magicc9,	dfury_boss_magicc10]  { self.nextthink = (time + 0.1);dfury_boss_shot(1); };
+void()	dfury_boss_magicc10 = [	$magicc10,	dfury_boss_magicc11]  { self.nextthink = (time + 0.1);dfury_boss_shot(3);self.colormod = '2 1 1';};
+void()	dfury_boss_magicc11 = [	$magicc11,	dfury_boss_run1] 	  { self.nextthink = (time + 0.1);dfury_boss_shot(4);self.colormod = '1 1 1';dfury_boss_random_magic(); };
 
-void()	dfury_boss_spawn1 =[	$magicb1,	dfury_boss_spawn2	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
-void()	dfury_boss_spawn2 =[	$magicb2,	dfury_boss_spawn3	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
-void()	dfury_boss_spawn3 =[	$magicb3,	dfury_boss_spawn4	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
-void()	dfury_boss_spawn4 =[	$magicb4,	dfury_boss_spawn5	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
-void()	dfury_boss_spawn5 =[	$magicb5,	dfury_boss_spawn6	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
-void()	dfury_boss_spawn6 =[	$magicb6,	dfury_boss_spawn7	] {self.nextthink = (time + 0.1);ai_face();};
-void()	dfury_boss_spawn7 =[	$magicb7,	dfury_boss_spawn8	] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_spawn8 =[	$magicb8,	dfury_boss_spawn9	] {self.nextthink = (time + 0.1);};
-void()	dfury_boss_spawn9 =[	$magicb9,	dfury_boss_spawn10]   {self.nextthink = (time + 0.1);};
-void()	dfury_boss_spawn10 =[	$magicb10,	dfury_boss_spawn11]   {self.nextthink = (time + 0.1);dfury_boss_spawner();};
-void()	dfury_boss_spawn11 =[	$magicb11,	dfury_boss_spawn12]   {self.nextthink = (time + 0.1);};
-void()	dfury_boss_spawn12 =[	$magicb12,	dfury_boss_spawn13]   {self.nextthink = (time + 0.1);dfury_boss_spawner();self.colormod = '2 1 1';};
-void()	dfury_boss_spawn13 =[	$magicb13,	dfury_boss_run1]	  {self.nextthink = (time + 0.1);ai_face();self.colormod = '1 1 1';dfury_boss_random_magic();};
+void()	dfury_boss_spawn1 = [	$magicb1,	dfury_boss_spawn2	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
+void()	dfury_boss_spawn2 = [	$magicb2,	dfury_boss_spawn3	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2 1 1';};
+void()	dfury_boss_spawn3 = [	$magicb3,	dfury_boss_spawn4	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '2.5 1 1';};
+void()	dfury_boss_spawn4 = [	$magicb4,	dfury_boss_spawn5	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '3 1 1';};
+void()	dfury_boss_spawn5 = [	$magicb5,	dfury_boss_spawn6	] { self.nextthink = (time + 0.1);ai_face();self.colormod = '3.5 1 1';};
+void()	dfury_boss_spawn6 = [	$magicb6,	dfury_boss_spawn7	] { self.nextthink = (time + 0.1);ai_face(); };
+void()	dfury_boss_spawn7 = [	$magicb7,	dfury_boss_spawn8	] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_spawn8 = [	$magicb8,	dfury_boss_spawn9	] { self.nextthink = (time + 0.1); };
+void()	dfury_boss_spawn9 = [	$magicb9,	dfury_boss_spawn10]   { self.nextthink = (time + 0.1); };
+void()	dfury_boss_spawn10 = [	$magicb10,	dfury_boss_spawn11]   { self.nextthink = (time + 0.1);dfury_boss_spawner(); };
+void()	dfury_boss_spawn11 = [	$magicb11,	dfury_boss_spawn12]   { self.nextthink = (time + 0.1); };
+void()	dfury_boss_spawn12 = [	$magicb12,	dfury_boss_spawn13]   { self.nextthink = (time + 0.1);dfury_boss_spawner();self.colormod = '2 1 1';};
+void()	dfury_boss_spawn13 = [	$magicb13,	dfury_boss_run1]	  { self.nextthink = (time + 0.1);ai_face();self.colormod = '1 1 1';dfury_boss_random_magic(); };
 
-void()	dfury_boss_char_a1	=[	$char_a1,	dfury_boss_char_a2	] {ai_charge(76);self.colormod = '1 1 1';dfury_boss_footsteps (1);};
-void()	dfury_boss_char_a2	=[	$char_a2,	dfury_boss_char_a3	] {ai_charge(70); dfury_boss_footsteps (0.9);dfury_boss_footsteps (1);};
-void()	dfury_boss_char_a3	=[	$char_a3,	dfury_boss_char_a4	] {dfury_boss_footsteps (1);ai_charge(78);if (random() > .3) dfury_boss_jump1();};
-void()	dfury_boss_char_a4	=[	$char_a4,	dfury_boss_char_a5	] {ai_charge(76);dfury_boss_footsteps (1);};
-void()	dfury_boss_char_a5	=[	$char_a5,	dfury_boss_char_a6	] {ai_charge(74);dfury_boss_footsteps (1);};
-void()	dfury_boss_char_a6	=[	$char_a6,	dfury_boss_char_a7	] {dfury_boss_footsteps (1);ai_charge(70); ai_melee_dfury_boss();};
-void()	dfury_boss_char_a7	=[	$char_a7,	dfury_boss_char_a8	] {dfury_boss_footsteps (1);ai_charge(71); ai_melee_dfury_boss();};
-void()	dfury_boss_char_a8	=[	$char_a8,	dfury_boss_char_a9	] {dfury_boss_footsteps (1);ai_charge(73); ai_melee_dfury_boss();};
-void()	dfury_boss_char_a9	=[	$char_a9,	dfury_boss_char_a10	] {dfury_boss_footsteps (1);ai_charge(70); ai_melee_dfury_boss();};
-void()	dfury_boss_char_a10=[	$char_a10,	dfury_boss_char_a11	] {dfury_boss_footsteps (1);ai_charge(70); ai_melee_dfury_boss();};
-void()	dfury_boss_char_a11=[	$char_a11,	dfury_boss_char_a12	] {dfury_boss_footsteps (1);ai_charge(78); ai_melee_dfury_boss();};
-void()	dfury_boss_char_a12=[	$char_a12,	dfury_boss_char_a13	] {dfury_boss_footsteps (1);ai_charge(76);};
-void()	dfury_boss_char_a13=[	$char_a13,	dfury_boss_char_a14	] {ai_charge(74); dfury_boss_footsteps (0.9);};
-void()	dfury_boss_char_a14=[	$char_a14,	dfury_boss_char_a15	] {dfury_boss_footsteps (1);ai_charge(75);};
-void()	dfury_boss_char_a15=[	$char_a15,	dfury_boss_char_a16	] {dfury_boss_footsteps (1);ai_charge(71);};
-void()	dfury_boss_char_a16=[	$char_a16,	dfury_boss_run1	] 	  {dfury_boss_footsteps (1);ai_charge(73);};
+void()	dfury_boss_char_a1	= [	$char_a1,	dfury_boss_char_a2	] { ai_charge(76);self.colormod = '1 1 1';dfury_boss_footsteps (1); };
+void()	dfury_boss_char_a2	= [	$char_a2,	dfury_boss_char_a3	] { ai_charge(70); dfury_boss_footsteps (0.9);dfury_boss_footsteps (1); };
+void()	dfury_boss_char_a3	= [	$char_a3,	dfury_boss_char_a4	] { dfury_boss_footsteps (1);ai_charge(78);if (random() > .3) dfury_boss_jump1(); };
+void()	dfury_boss_char_a4	= [	$char_a4,	dfury_boss_char_a5	] { ai_charge(76);dfury_boss_footsteps (1); };
+void()	dfury_boss_char_a5	= [	$char_a5,	dfury_boss_char_a6	] { ai_charge(74);dfury_boss_footsteps (1); };
+void()	dfury_boss_char_a6	= [	$char_a6,	dfury_boss_char_a7	] { dfury_boss_footsteps (1);ai_charge(70); ai_melee_dfury_boss(); };
+void()	dfury_boss_char_a7	= [	$char_a7,	dfury_boss_char_a8	] { dfury_boss_footsteps (1);ai_charge(71); ai_melee_dfury_boss(); };
+void()	dfury_boss_char_a8	= [	$char_a8,	dfury_boss_char_a9	] { dfury_boss_footsteps (1);ai_charge(73); ai_melee_dfury_boss(); };
+void()	dfury_boss_char_a9	= [	$char_a9,	dfury_boss_char_a10	] { dfury_boss_footsteps (1);ai_charge(70); ai_melee_dfury_boss(); };
+void()	dfury_boss_char_a10= [	$char_a10,	dfury_boss_char_a11	] { dfury_boss_footsteps (1);ai_charge(70); ai_melee_dfury_boss(); };
+void()	dfury_boss_char_a11= [	$char_a11,	dfury_boss_char_a12	] { dfury_boss_footsteps (1);ai_charge(78); ai_melee_dfury_boss(); };
+void()	dfury_boss_char_a12= [	$char_a12,	dfury_boss_char_a13	] { dfury_boss_footsteps (1);ai_charge(76); };
+void()	dfury_boss_char_a13= [	$char_a13,	dfury_boss_char_a14	] { ai_charge(74); dfury_boss_footsteps (0.9); };
+void()	dfury_boss_char_a14= [	$char_a14,	dfury_boss_char_a15	] { dfury_boss_footsteps (1);ai_charge(75); };
+void()	dfury_boss_char_a15= [	$char_a15,	dfury_boss_char_a16	] { dfury_boss_footsteps (1);ai_charge(71); };
+void()	dfury_boss_char_a16= [	$char_a16,	dfury_boss_run1	] 	  { dfury_boss_footsteps (1);ai_charge(73); };
 
-void()	dfury_boss_char_b1	=[	$char_b1,	dfury_boss_char_b2	] {CheckContinueCharge_boss(); ai_charge(23); ai_melee_dfury_boss();self.colormod = '1 1 1';};
-void()	dfury_boss_char_b2	=[	$char_b2,	dfury_boss_char_b3	] {ai_charge(72); ai_melee_dfury_boss();dfury_boss_footsteps (1);};
-void()	dfury_boss_char_b3	=[	$char_b3,	dfury_boss_char_b4	] {ai_charge(72); ai_melee_dfury_boss();dfury_boss_footsteps (1);};
-void()	dfury_boss_char_b4	=[	$char_b4,	dfury_boss_char_b5	] {ai_charge(72); ai_melee_dfury_boss(); dfury_boss_footsteps (0.9);};
-void()	dfury_boss_char_b5	=[	$char_b5,	dfury_boss_char_b6	] {ai_charge(78); ai_melee_dfury_boss();dfury_boss_footsteps (1);};
-void()	dfury_boss_char_b6	=[	$char_b6,	dfury_boss_char_b1	] {ai_charge(78); ai_melee_dfury_boss();dfury_boss_footsteps (1);};
+void()	dfury_boss_char_b1	= [	$char_b1,	dfury_boss_char_b2	] { CheckContinueCharge_boss(); ai_charge(23); ai_melee_dfury_boss();self.colormod = '1 1 1';};
+void()	dfury_boss_char_b2	= [	$char_b2,	dfury_boss_char_b3	] { ai_charge(72); ai_melee_dfury_boss();dfury_boss_footsteps (1); };
+void()	dfury_boss_char_b3	= [	$char_b3,	dfury_boss_char_b4	] { ai_charge(72); ai_melee_dfury_boss();dfury_boss_footsteps (1); };
+void()	dfury_boss_char_b4	= [	$char_b4,	dfury_boss_char_b5	] { ai_charge(72); ai_melee_dfury_boss(); dfury_boss_footsteps (0.9); };
+void()	dfury_boss_char_b5	= [	$char_b5,	dfury_boss_char_b6	] { ai_charge(78); ai_melee_dfury_boss();dfury_boss_footsteps (1); };
+void()	dfury_boss_char_b6	= [	$char_b6,	dfury_boss_char_b1	] { ai_charge(78); ai_melee_dfury_boss();dfury_boss_footsteps (1); };
 
-void()	dfury_boss_slice1	=[	$slice1,	dfury_boss_slice2	] {ai_charge(79);self.colormod = '1 1 1';};
-void()	dfury_boss_slice2	=[	$slice2,	dfury_boss_slice3	] {ai_charge(76);};
-void()	dfury_boss_slice3	=[	$slice3,	dfury_boss_slice4	] {ai_charge(73); dfury_boss_footsteps (0.8);};
-void()	dfury_boss_slice4	=[	$slice4,	dfury_boss_slice5	] {ai_charge(74);};
-void()	dfury_boss_slice5	=[	$slice5,	dfury_boss_slice6	] {ai_charge(77); ai_melee_dfury_boss();};
-void()	dfury_boss_slice6	=[	$slice6,	dfury_boss_slice7	] {ai_charge(75); ai_melee_dfury_boss();};
-void()	dfury_boss_slice7	=[	$slice7,	dfury_boss_slice8	] {ai_charge(78); ai_melee_dfury_boss(); dfury_boss_footsteps (0.8);};
-void()	dfury_boss_slice8	=[	$slice8,	dfury_boss_slice9	] {ai_charge(72); ai_melee_dfury_boss();};
-void()	dfury_boss_slice9	=[	$slice9,	dfury_boss_slice10	] {ai_melee_dfury_boss();};
-void()	dfury_boss_slice10	=[	$slice10,	dfury_boss_slice11	] {ai_charge(64);ai_melee_dfury_boss();dfury_boss_footsteps (1);};
-void()	dfury_boss_slice11	=[	$slice11,	dfury_boss_slice12	] {ai_charge(64);ai_melee_dfury_boss();};
-void()	dfury_boss_slice12	=[	$slice12,	dfury_boss_slice13	] {ai_charge(64);ai_melee_dfury_boss();};
-void()	dfury_boss_slice13	=[	$slice13,	dfury_boss_slice14	] {ai_charge(64);ai_melee_dfury_boss();dfury_boss_footsteps (1);};
-void()	dfury_boss_slice14	=[	$slice14,	dfury_boss_run1	]	  {ai_charge(53);};
+void()	dfury_boss_slice1	= [	$slice1,	dfury_boss_slice2	] { ai_charge(79);self.colormod = '1 1 1';};
+void()	dfury_boss_slice2	= [	$slice2,	dfury_boss_slice3	] { ai_charge(76); };
+void()	dfury_boss_slice3	= [	$slice3,	dfury_boss_slice4	] { ai_charge(73); dfury_boss_footsteps (0.8); };
+void()	dfury_boss_slice4	= [	$slice4,	dfury_boss_slice5	] { ai_charge(74); };
+void()	dfury_boss_slice5	= [	$slice5,	dfury_boss_slice6	] { ai_charge(77); ai_melee_dfury_boss(); };
+void()	dfury_boss_slice6	= [	$slice6,	dfury_boss_slice7	] { ai_charge(75); ai_melee_dfury_boss(); };
+void()	dfury_boss_slice7	= [	$slice7,	dfury_boss_slice8	] { ai_charge(78); ai_melee_dfury_boss(); dfury_boss_footsteps (0.8); };
+void()	dfury_boss_slice8	= [	$slice8,	dfury_boss_slice9	] { ai_charge(72); ai_melee_dfury_boss(); };
+void()	dfury_boss_slice9	= [	$slice9,	dfury_boss_slice10	] { ai_melee_dfury_boss(); };
+void()	dfury_boss_slice10	= [	$slice10,	dfury_boss_slice11	] { ai_charge(64);ai_melee_dfury_boss();dfury_boss_footsteps (1); };
+void()	dfury_boss_slice11	= [	$slice11,	dfury_boss_slice12	] { ai_charge(64);ai_melee_dfury_boss(); };
+void()	dfury_boss_slice12	= [	$slice12,	dfury_boss_slice13	] { ai_charge(64);ai_melee_dfury_boss(); };
+void()	dfury_boss_slice13	= [	$slice13,	dfury_boss_slice14	] { ai_charge(64);ai_melee_dfury_boss();dfury_boss_footsteps (1); };
+void()	dfury_boss_slice14	= [	$slice14,	dfury_boss_run1	]	  { ai_charge(53); };
 
-void()	dfury_boss_smash1	=[	$smash1,	dfury_boss_smash2	] {ai_charge(1);self.colormod = '1 1 1';};
-void()	dfury_boss_smash2	=[	$smash2,	dfury_boss_smash3	] {ai_charge(48);};
-void()	dfury_boss_smash3	=[	$smash3,	dfury_boss_smash4	] {ai_charge(9);};
-void()	dfury_boss_smash4	=[	$smash4,	dfury_boss_smash5	] {ai_charge(51); dfury_boss_footsteps (0.8);};
-void()	dfury_boss_smash5	=[	$smash5,	dfury_boss_smash6	] {ai_charge(40); ai_melee_dfury_boss();};
-void()	dfury_boss_smash6	=[	$smash6,	dfury_boss_smash7	] {ai_charge(7); ai_melee_dfury_boss();};
-void()	dfury_boss_smash7	=[	$smash7,	dfury_boss_smash8	] {ai_charge(42); ai_melee_dfury_boss();};
-void()	dfury_boss_smash8	=[	$smash8,	dfury_boss_smash9	] {ai_charge(42); ai_melee_dfury_boss();Monster_Animation_EarthQuake (20, 377);dfury_boss_footsteps (1);};
-void()	dfury_boss_smash9	=[	$smash9,	dfury_boss_smash10	] {ai_charge(3); ai_melee_dfury_boss();Monster_Animation_EarthQuake (20, 377);};
-void()	dfury_boss_smash10	=[	$smash10,	dfury_boss_smash11	] {ai_charge(0);Monster_Animation_EarthQuake (20, 377);};
-void()	dfury_boss_smash11	=[	$smash11,	dfury_boss_smash12	] {ai_charge(0);};
-void()	dfury_boss_smash12	=[	$smash12,	dfury_boss_smash13	] {ai_charge(0);};
-void()	dfury_boss_smash13	=[	$smash13,	dfury_boss_smash14	] {ai_charge(0);};
-void()	dfury_boss_smash14	=[	$smash14,	dfury_boss_smash15	] {ai_charge(0);dfury_boss_footsteps (1);};
-void()	dfury_boss_smash15	=[	$smash15,	dfury_boss_run1	] {ai_charge(0);};
+void()	dfury_boss_smash1	= [	$smash1,	dfury_boss_smash2	] { ai_charge(1);self.colormod = '1 1 1';};
+void()	dfury_boss_smash2	= [	$smash2,	dfury_boss_smash3	] { ai_charge(48); };
+void()	dfury_boss_smash3	= [	$smash3,	dfury_boss_smash4	] { ai_charge(9); };
+void()	dfury_boss_smash4	= [	$smash4,	dfury_boss_smash5	] { ai_charge(51); dfury_boss_footsteps (0.8); };
+void()	dfury_boss_smash5	= [	$smash5,	dfury_boss_smash6	] { ai_charge(40); ai_melee_dfury_boss(); };
+void()	dfury_boss_smash6	= [	$smash6,	dfury_boss_smash7	] { ai_charge(7); ai_melee_dfury_boss(); };
+void()	dfury_boss_smash7	= [	$smash7,	dfury_boss_smash8	] { ai_charge(42); ai_melee_dfury_boss(); };
+void()	dfury_boss_smash8	= [	$smash8,	dfury_boss_smash9	] { ai_charge(42); ai_melee_dfury_boss();Monster_Animation_EarthQuake (20, 377);dfury_boss_footsteps (1); };
+void()	dfury_boss_smash9	= [	$smash9,	dfury_boss_smash10	] { ai_charge(3); ai_melee_dfury_boss();Monster_Animation_EarthQuake (20, 377); };
+void()	dfury_boss_smash10	= [	$smash10,	dfury_boss_smash11	] { ai_charge(0);Monster_Animation_EarthQuake (20, 377); };
+void()	dfury_boss_smash11	= [	$smash11,	dfury_boss_smash12	] { ai_charge(0); };
+void()	dfury_boss_smash12	= [	$smash12,	dfury_boss_smash13	] { ai_charge(0); };
+void()	dfury_boss_smash13	= [	$smash13,	dfury_boss_smash14	] { ai_charge(0); };
+void()	dfury_boss_smash14	= [	$smash14,	dfury_boss_smash15	] { ai_charge(0);dfury_boss_footsteps (1); };
+void()	dfury_boss_smash15	= [	$smash15,	dfury_boss_run1	] { ai_charge(0); };
 
-void()	dfury_boss_watk1	=[	$w_attack1,	dfury_boss_watk2	] 	  {ai_charge(8);self.colormod = '1 1 1';};
-void()	dfury_boss_watk2	=[	$w_attack2,	dfury_boss_watk3	]	  {ai_charge(0);};
-void()	dfury_boss_watk3	=[	$w_attack3,	dfury_boss_watk4	]	  {ai_charge(0);};
-void()	dfury_boss_watk4	=[	$w_attack4,	dfury_boss_watk5	]	  {ai_melee_dfury_boss();};
-void()	dfury_boss_watk5	=[	$w_attack5,	dfury_boss_watk6	]	  {ai_melee_dfury_boss();};
-void()	dfury_boss_watk6	=[	$w_attack6,	dfury_boss_watk7	] 	  {ai_melee_dfury_boss();};
-void()	dfury_boss_watk7	=[	$w_attack7,	dfury_boss_watk8	] 	  {ai_charge(24);ai_melee_dfury_boss();};
-void()	dfury_boss_watk8	=[	$w_attack8,	dfury_boss_watk9	] 	  {ai_charge(30);ai_melee_dfury_boss();};
-void()	dfury_boss_watk9	=[	$w_attack9,	dfury_boss_watk10	]	  {ai_charge(32);};
-void()	dfury_boss_watk10	=[	$w_attack10,	dfury_boss_watk11	] {ai_charge(16); ai_melee_dfury_boss();};
-void()	dfury_boss_watk11	=[	$w_attack11,	dfury_boss_watk12	] {ai_charge(15); ai_melee_dfury_boss(); dfury_boss_footsteps (0.8);};
-void()	dfury_boss_watk12	=[	$w_attack12,	dfury_boss_watk13	] {ai_charge(15); ai_melee_dfury_boss();};
-void()	dfury_boss_watk13	=[	$w_attack13,	dfury_boss_watk14	] {ai_charge(0);};
-void()	dfury_boss_watk14	=[	$w_attack14,	dfury_boss_watk15	] {ai_charge(0);ai_melee_dfury_boss();};
-void()	dfury_boss_watk15	=[	$w_attack15,	dfury_boss_watk16	] {ai_charge(0);ai_melee_dfury_boss();};
-void()	dfury_boss_watk16	=[	$w_attack16,	dfury_boss_run1	] 	  {ai_charge(13); dfury_boss_footsteps (0.8);};
+void()	dfury_boss_watk1	= [	$w_attack1,	dfury_boss_watk2	] 	  { ai_charge(8);self.colormod = '1 1 1';};
+void()	dfury_boss_watk2	= [	$w_attack2,	dfury_boss_watk3	]	  { ai_charge(0); };
+void()	dfury_boss_watk3	= [	$w_attack3,	dfury_boss_watk4	]	  { ai_charge(0); };
+void()	dfury_boss_watk4	= [	$w_attack4,	dfury_boss_watk5	]	  { ai_melee_dfury_boss(); };
+void()	dfury_boss_watk5	= [	$w_attack5,	dfury_boss_watk6	]	  { ai_melee_dfury_boss(); };
+void()	dfury_boss_watk6	= [	$w_attack6,	dfury_boss_watk7	] 	  { ai_melee_dfury_boss(); };
+void()	dfury_boss_watk7	= [	$w_attack7,	dfury_boss_watk8	] 	  { ai_charge(24);ai_melee_dfury_boss(); };
+void()	dfury_boss_watk8	= [	$w_attack8,	dfury_boss_watk9	] 	  { ai_charge(30);ai_melee_dfury_boss(); };
+void()	dfury_boss_watk9	= [	$w_attack9,	dfury_boss_watk10	]	  { ai_charge(32); };
+void()	dfury_boss_watk10	= [	$w_attack10,	dfury_boss_watk11	] { ai_charge(16); ai_melee_dfury_boss(); };
+void()	dfury_boss_watk11	= [	$w_attack11,	dfury_boss_watk12	] { ai_charge(15); ai_melee_dfury_boss(); dfury_boss_footsteps (0.8); };
+void()	dfury_boss_watk12	= [	$w_attack12,	dfury_boss_watk13	] { ai_charge(15); ai_melee_dfury_boss(); };
+void()	dfury_boss_watk13	= [	$w_attack13,	dfury_boss_watk14	] { ai_charge(0); };
+void()	dfury_boss_watk14	= [	$w_attack14,	dfury_boss_watk15	] { ai_charge(0);ai_melee_dfury_boss(); };
+void()	dfury_boss_watk15	= [	$w_attack15,	dfury_boss_watk16	] { ai_charge(0);ai_melee_dfury_boss(); };
+void()	dfury_boss_watk16	= [	$w_attack16,	dfury_boss_run1	] 	  { ai_charge(13); dfury_boss_footsteps (0.8); };
 
 void() dfury_boss_idle_sound = {
 	if (random() < 0.2) sound (self, CHAN_VOICE, "q15/dfury/idle.wav", 1, ATTN_NORM);
@@ -751,7 +726,7 @@ void() monster_dfury_boss = {
 	self.classtype = CT_MONDFURYBOSS;
 	self.classmove = MON_MOVEWALK;	
 	self.classgroup = CG_DEMON;	// Don't fight my minions!  Sorry knights
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_gargoyle";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

@@ -67,7 +67,7 @@ void() deathguard_slowcharge4 = [115, deathguard_slowcharge5] { ai_charge(17); }
 void() deathguard_slowcharge5 = [116, deathguard_slowcharge6] { ai_charge(12); dg_slice(2); };
 void() deathguard_slowcharge6 = [117, deathguard_slowcharge7] { ai_charge(8); dg_slice(4); };
 void() deathguard_slowcharge7 = [118, deathguard_slowcharge8] { ai_charge(10); dg_slice(2); monster_footstep(FALSE); };
-void() deathguard_slowcharge8 = [119, deathguard_slowcharge9] { ai_charge(6);};
+void() deathguard_slowcharge8 = [119, deathguard_slowcharge9] { ai_charge(6); };
 void() deathguard_slowcharge9 = [120, deathguard_slowcharge10] { ai_charge(3); };
 void() deathguard_slowcharge10 = [121, deathguard_run1] { ai_charge(2); };
 
@@ -183,9 +183,9 @@ void() deathguard_run6 = [34, deathguard_run7] { ai_run(29); };
 void() deathguard_run7 = [35, deathguard_run8] { ai_run(25); };
 void() deathguard_run8 = [36, deathguard_run1] { ai_run(17); };
 void() deathguard_pain1 = [37, deathguard_pain2] { sound(self, CHAN_VOICE, "quoth/dguard/pain1.wav", 1, ATTN_NORM); };
-void() deathguard_pain2 = [38, deathguard_pain3]{monster_footstep(FALSE);};
-void() deathguard_pain3 = [39, deathguard_pain4]{};
-void() deathguard_pain4 = [40, deathguard_pain5]{};
+void() deathguard_pain2 = [38, deathguard_pain3] { monster_footstep(FALSE); };
+void() deathguard_pain3 = [39, deathguard_pain4] {};
+void() deathguard_pain4 = [40, deathguard_pain5] {};
 void() deathguard_pain5 = [41, deathguard_run1] {};
 
 void() deathguard_die1 = [42, deathguard_die2] { ai_forward(10); sound(self, CHAN_VOICE, "quoth/dguard/death2.wav", 1, ATTN_NORM); };
@@ -198,7 +198,7 @@ void() deathguard_die7 = [48, deathguard_die8] { self.nextthink = time + 0.2; };
 void() deathguard_die8 = [49, deathguard_die9] { ai_forward(10); };
 void() deathguard_die9 = [50, deathguard_die10] { ai_forward(11); };
 void() deathguard_die10 = [51, deathguard_die11] {};
-void() deathguard_die11 = [52, deathguard_die12] {monster_death_postcheck();};
+void() deathguard_die11 = [52, deathguard_die12] { monster_death_postcheck(); };
 void() deathguard_die12 = [53, deathguard_die12] { self.nextthink = time + 0.1; };
 
 void() deathguard_dieb1 = [54, deathguard_dieb2] { sound(self, CHAN_VOICE, "quoth/dguard/death1.wav", 1, ATTN_NORM); };
@@ -208,7 +208,7 @@ void() deathguard_dieb4 = [57, deathguard_dieb5] { self.solid = SOLID_NOT;};
 void() deathguard_dieb5 = [58, deathguard_dieb6] {};
 void() deathguard_dieb6 = [59, deathguard_dieb7] {};
 void() deathguard_dieb7 = [60, deathguard_dieb8] {};
-void() deathguard_dieb8 = [61, deathguard_dieb9] {monster_death_postcheck(); };
+void() deathguard_dieb8 = [61, deathguard_dieb9] { monster_death_postcheck(); };
 void() deathguard_dieb9 = [62, deathguard_dieb9] { self.nextthink = time + 0.1; };
 
 void() deathguard_die = {

@@ -125,7 +125,7 @@ void() func_particlefield = { // [ENTITY]
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_NONE;
    setmodel (self,self.model);
-   self.model = string_null;
+   self.model = "";
    self.origin = ((self.mins + self.maxs) * 0.500);
    setorigin (self,self.origin);
    self.dest = ((self.maxs - self.mins) - '16.000 16.000 16.000');

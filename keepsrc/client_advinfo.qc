@@ -1163,7 +1163,7 @@ void() FinishSecretCamera = {
 	secloc_cam.flags = 0; // Clear secret camera settings
 	secloc_cam.view_ofs = '0 0 0';
 	secloc_cam.angles = secloc_cam.v_angle = '0 0 0';
-	secloc_cam.weaponmodel = string_null;
+	secloc_cam.weaponmodel = "";
 	secloc_cam.weaponframe = 0;
 	secloc_running = FALSE;	// Restore pre/post player functions
 	self.impulse = self.button0 = self.button1 = self.button2 = 0; // flush keyboard buffers
@@ -1235,7 +1235,7 @@ void() display_secretlocs = {
 	self.takedamage = DAMAGE_NO;		// no more damage
 	setmodel(self, MODEL_EMPTY);		// Hide player model
 	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
-	self.weaponmodel = string_null;		// No vmodel updates
+	self.weaponmodel = "";		// No vmodel updates
 	self.frame = self.weaponframe = 0;	// reset all frames
 	
 	NextSecretCamera(); // Display first camera

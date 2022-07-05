@@ -69,10 +69,9 @@ void() acolyte_fire = {
 // the fireball may bounce up to the nemesant standard of three times without
 // exploding.  What 'hits' does is change the bounces to 3 - hits.
 void(float hits) sorcerer_fire =
-    {M_FireSmart ('8 -5 12');  newmis.count = hits;};
+    { M_FireSmart ('8 -5 12');  newmis.count = hits;};
 
-void(vector st) warlock_fire =
-{
+void(vector st) warlock_fire = {
     local   vector  org, dir, vec;
     local   entity  targ;       // Lead shots toward this target.
 
@@ -111,8 +110,7 @@ void(vector st) warlock_fire =
 //=============================================================================
 
 // STAND - - - - - - - - - - - - - - - -
-void() necro_idlesound =
-{
+void() necro_idlesound = {
 // PM:  Replaced fwiz code with nemesants'.  This is due to replaced sounds.
     if (self.waitmin < time)
     {
@@ -129,86 +127,86 @@ void() necro_idlesound =
 };
 
 // CoE Acolyte
-void() necro1_stand1  =[ $Siwait1,  necro1_stand2  ] {necro_idlesound(); ai_stand();};
-void() necro1_stand2  =[ $Siwait2,  necro1_stand3  ] {ai_stand();};
-void() necro1_stand3  =[ $Siwait3,  necro1_stand4  ] {ai_stand();};
-void() necro1_stand4  =[ $Siwait4,  necro1_stand5  ] {ai_stand();};
-void() necro1_stand5  =[ $Siwait5,  necro1_stand6  ] {ai_stand();};
-void() necro1_stand6  =[ $Siwait6,  necro1_stand7  ] {ai_stand();};
-void() necro1_stand7  =[ $Siwait7,  necro1_stand8  ] {ai_stand();};
-void() necro1_stand8  =[ $Siwait8,  necro1_stand9  ] {ai_stand();};
-void() necro1_stand9  =[ $Siwait9,  necro1_stand10 ] {ai_stand();};
-void() necro1_stand10 =[ $Siwait10, necro1_stand11 ] {ai_stand();};
-void() necro1_stand11 =[ $Siwait11, necro1_stand12 ] {ai_stand();};
-void() necro1_stand12 =[ $Siwait12, necro1_stand1  ] {ai_stand();};
+void() necro1_stand1  = [$Siwait1,  necro1_stand2  ] { necro_idlesound(); ai_stand(); };
+void() necro1_stand2  = [$Siwait2,  necro1_stand3  ] { ai_stand(); };
+void() necro1_stand3  = [$Siwait3,  necro1_stand4  ] { ai_stand(); };
+void() necro1_stand4  = [$Siwait4,  necro1_stand5  ] { ai_stand(); };
+void() necro1_stand5  = [$Siwait5,  necro1_stand6  ] { ai_stand(); };
+void() necro1_stand6  = [$Siwait6,  necro1_stand7  ] { ai_stand(); };
+void() necro1_stand7  = [$Siwait7,  necro1_stand8  ] { ai_stand(); };
+void() necro1_stand8  = [$Siwait8,  necro1_stand9  ] { ai_stand(); };
+void() necro1_stand9  = [$Siwait9,  necro1_stand10 ] { ai_stand(); };
+void() necro1_stand10 = [$Siwait10, necro1_stand11 ] { ai_stand(); };
+void() necro1_stand11 = [$Siwait11, necro1_stand12 ] { ai_stand(); };
+void() necro1_stand12 = [$Siwait12, necro1_stand1  ] { ai_stand(); };
 
 // CoE Sorcerer
-void() necro2_stand1  =[ $Stwait1,  necro2_stand2  ] {necro_idlesound(); ai_stand();};
-void() necro2_stand2  =[ $Stwait2,  necro2_stand3  ] {ai_stand();};
-void() necro2_stand3  =[ $Stwait3,  necro2_stand4  ] {ai_stand();};
-void() necro2_stand4  =[ $Stwait4,  necro2_stand5  ] {ai_stand();};
-void() necro2_stand5  =[ $Stwait5,  necro2_stand6  ] {ai_stand();};
-void() necro2_stand6  =[ $Stwait6,  necro2_stand7  ] {ai_stand();};
-void() necro2_stand7  =[ $Stwait7,  necro2_stand8  ] {ai_stand();};
-void() necro2_stand8  =[ $Stwait8,  necro2_stand9  ] {ai_stand();};
-void() necro2_stand9  =[ $Stwait9,  necro2_stand10 ] {ai_stand();};
-void() necro2_stand10 =[ $Stwait10, necro2_stand11 ] {ai_stand();};
-void() necro2_stand11 =[ $Stwait11, necro2_stand12 ] {ai_stand();};
-void() necro2_stand12 =[ $Stwait12, necro2_stand1  ] {ai_stand();};
+void() necro2_stand1  = [$Stwait1,  necro2_stand2  ] { necro_idlesound(); ai_stand(); };
+void() necro2_stand2  = [$Stwait2,  necro2_stand3  ] { ai_stand(); };
+void() necro2_stand3  = [$Stwait3,  necro2_stand4  ] { ai_stand(); };
+void() necro2_stand4  = [$Stwait4,  necro2_stand5  ] { ai_stand(); };
+void() necro2_stand5  = [$Stwait5,  necro2_stand6  ] { ai_stand(); };
+void() necro2_stand6  = [$Stwait6,  necro2_stand7  ] { ai_stand(); };
+void() necro2_stand7  = [$Stwait7,  necro2_stand8  ] { ai_stand(); };
+void() necro2_stand8  = [$Stwait8,  necro2_stand9  ] { ai_stand(); };
+void() necro2_stand9  = [$Stwait9,  necro2_stand10 ] { ai_stand(); };
+void() necro2_stand10 = [$Stwait10, necro2_stand11 ] { ai_stand(); };
+void() necro2_stand11 = [$Stwait11, necro2_stand12 ] { ai_stand(); };
+void() necro2_stand12 = [$Stwait12, necro2_stand1  ] { ai_stand(); };
 
 // CoE Warlock
-void() necro3_stand1  =[ $Hwait1,  necro3_stand2  ] {necro_idlesound(); ai_stand();};
-void() necro3_stand2  =[ $Hwait2,  necro3_stand3  ] {ai_stand();};
-void() necro3_stand3  =[ $Hwait3,  necro3_stand4  ] {ai_stand();};
-void() necro3_stand4  =[ $Hwait4,  necro3_stand5  ] {ai_stand();};
-void() necro3_stand5  =[ $Hwait5,  necro3_stand6  ] {ai_stand();};
-void() necro3_stand6  =[ $Hwait6,  necro3_stand7  ] {ai_stand();};
-void() necro3_stand7  =[ $Hwait7,  necro3_stand8  ] {ai_stand();};
-void() necro3_stand8  =[ $Hwait8,  necro3_stand9  ] {ai_stand();};
-void() necro3_stand9  =[ $Hwait9,  necro3_stand10 ] {ai_stand();};
-void() necro3_stand10 =[ $Hwait10, necro3_stand11 ] {ai_stand();};
-void() necro3_stand11 =[ $Hwait11, necro3_stand12 ] {ai_stand();};
-void() necro3_stand12 =[ $Hwait12, necro3_stand1  ] {ai_stand();};
+void() necro3_stand1  = [$Hwait1,  necro3_stand2  ] { necro_idlesound(); ai_stand(); };
+void() necro3_stand2  = [$Hwait2,  necro3_stand3  ] { ai_stand(); };
+void() necro3_stand3  = [$Hwait3,  necro3_stand4  ] { ai_stand(); };
+void() necro3_stand4  = [$Hwait4,  necro3_stand5  ] { ai_stand(); };
+void() necro3_stand5  = [$Hwait5,  necro3_stand6  ] { ai_stand(); };
+void() necro3_stand6  = [$Hwait6,  necro3_stand7  ] { ai_stand(); };
+void() necro3_stand7  = [$Hwait7,  necro3_stand8  ] { ai_stand(); };
+void() necro3_stand8  = [$Hwait8,  necro3_stand9  ] { ai_stand(); };
+void() necro3_stand9  = [$Hwait9,  necro3_stand10 ] { ai_stand(); };
+void() necro3_stand10 = [$Hwait10, necro3_stand11 ] { ai_stand(); };
+void() necro3_stand11 = [$Hwait11, necro3_stand12 ] { ai_stand(); };
+void() necro3_stand12 = [$Hwait12, necro3_stand1  ] { ai_stand(); };
 
 // WALK - - - - - - - - - - - - - - - -
-void() necro1_walk1  =[ $Sirun1,  necro1_walk2  ] {necro_idlesound(); monster_footstep(FALSE); ai_walk(8);};
-void() necro1_walk2  =[ $Sirun2,  necro1_walk3  ] {ai_walk(8);};
-void() necro1_walk3  =[ $Sirun3,  necro1_walk4  ] {ai_walk(8);};
-void() necro1_walk4  =[ $Sirun4,  necro1_walk5  ] {ai_walk(8);};
-void() necro1_walk5  =[ $Sirun5,  necro1_walk6  ] {ai_walk(8);};
-void() necro1_walk6  =[ $Sirun6,  necro1_walk7  ] {ai_walk(8);};
-void() necro1_walk7  =[ $Sirun7,  necro1_walk8  ] {monster_footstep(FALSE); ai_walk(8);};
-void() necro1_walk8  =[ $Sirun8,  necro1_walk9  ] {ai_walk(8);};
-void() necro1_walk9  =[ $Sirun9,  necro1_walk10 ] {ai_walk(8);};
-void() necro1_walk10 =[ $Sirun10, necro1_walk11 ] {ai_walk(8);};
-void() necro1_walk11 =[ $Sirun11, necro1_walk12 ] {ai_walk(8);};
-void() necro1_walk12 =[ $Sirun12, necro1_walk1  ] {ai_walk(8);};
+void() necro1_walk1  = [$Sirun1,  necro1_walk2  ] { necro_idlesound(); monster_footstep(FALSE); ai_walk(8); };
+void() necro1_walk2  = [$Sirun2,  necro1_walk3  ] { ai_walk(8); };
+void() necro1_walk3  = [$Sirun3,  necro1_walk4  ] { ai_walk(8); };
+void() necro1_walk4  = [$Sirun4,  necro1_walk5  ] { ai_walk(8); };
+void() necro1_walk5  = [$Sirun5,  necro1_walk6  ] { ai_walk(8); };
+void() necro1_walk6  = [$Sirun6,  necro1_walk7  ] { ai_walk(8); };
+void() necro1_walk7  = [$Sirun7,  necro1_walk8  ] { monster_footstep(FALSE); ai_walk(8); };
+void() necro1_walk8  = [$Sirun8,  necro1_walk9  ] { ai_walk(8); };
+void() necro1_walk9  = [$Sirun9,  necro1_walk10 ] { ai_walk(8); };
+void() necro1_walk10 = [$Sirun10, necro1_walk11 ] { ai_walk(8); };
+void() necro1_walk11 = [$Sirun11, necro1_walk12 ] { ai_walk(8); };
+void() necro1_walk12 = [$Sirun12, necro1_walk1  ] { ai_walk(8); };
 
-void() necro2_walk1  =[ $Strun1,  necro2_walk2  ] {necro_idlesound(); monster_footstep(FALSE); ai_walk(8);};
-void() necro2_walk2  =[ $Strun2,  necro2_walk3  ] {ai_walk(8);};
-void() necro2_walk3  =[ $Strun3,  necro2_walk4  ] {ai_walk(8);};
-void() necro2_walk4  =[ $Strun4,  necro2_walk5  ] {ai_walk(8);};
-void() necro2_walk5  =[ $Strun5,  necro2_walk6  ] {ai_walk(8);};
-void() necro2_walk6  =[ $Strun6,  necro2_walk7  ] {ai_walk(8);};
-void() necro2_walk7  =[ $Strun7,  necro2_walk8  ] {monster_footstep(FALSE); ai_walk(8);};
-void() necro2_walk8  =[ $Strun8,  necro2_walk9  ] {ai_walk(8);};
-void() necro2_walk9  =[ $Strun9,  necro2_walk10 ] {ai_walk(8);};
-void() necro2_walk10 =[ $Strun10, necro2_walk11 ] {ai_walk(8);};
-void() necro2_walk11 =[ $Strun11, necro2_walk12 ] {ai_walk(8);};
-void() necro2_walk12 =[ $Strun12, necro2_walk1  ] {ai_walk(8);};
+void() necro2_walk1  = [$Strun1,  necro2_walk2  ] { necro_idlesound(); monster_footstep(FALSE); ai_walk(8); };
+void() necro2_walk2  = [$Strun2,  necro2_walk3  ] { ai_walk(8); };
+void() necro2_walk3  = [$Strun3,  necro2_walk4  ] { ai_walk(8); };
+void() necro2_walk4  = [$Strun4,  necro2_walk5  ] { ai_walk(8); };
+void() necro2_walk5  = [$Strun5,  necro2_walk6  ] { ai_walk(8); };
+void() necro2_walk6  = [$Strun6,  necro2_walk7  ] { ai_walk(8); };
+void() necro2_walk7  = [$Strun7,  necro2_walk8  ] { monster_footstep(FALSE); ai_walk(8); };
+void() necro2_walk8  = [$Strun8,  necro2_walk9  ] { ai_walk(8); };
+void() necro2_walk9  = [$Strun9,  necro2_walk10 ] { ai_walk(8); };
+void() necro2_walk10 = [$Strun10, necro2_walk11 ] { ai_walk(8); };
+void() necro2_walk11 = [$Strun11, necro2_walk12 ] { ai_walk(8); };
+void() necro2_walk12 = [$Strun12, necro2_walk1  ] { ai_walk(8); };
 
-void() necro3_walk1  =[ $Hrun1,  necro3_walk2  ] {necro_idlesound(); monster_footstep(FALSE); ai_walk(8);};
-void() necro3_walk2  =[ $Hrun2,  necro3_walk3  ] {ai_walk(8);};
-void() necro3_walk3  =[ $Hrun3,  necro3_walk4  ] {ai_walk(8);};
-void() necro3_walk4  =[ $Hrun4,  necro3_walk5  ] {ai_walk(8);};
-void() necro3_walk5  =[ $Hrun5,  necro3_walk6  ] {ai_walk(8);};
-void() necro3_walk6  =[ $Hrun6,  necro3_walk7  ] {ai_walk(8);};
-void() necro3_walk7  =[ $Hrun7,  necro3_walk8  ] {monster_footstep(FALSE); ai_walk(8);};
-void() necro3_walk8  =[ $Hrun8,  necro3_walk9  ] {ai_walk(8);};
-void() necro3_walk9  =[ $Hrun9,  necro3_walk10 ] {ai_walk(8);};
-void() necro3_walk10 =[ $Hrun10, necro3_walk11 ] {ai_walk(8);};
-void() necro3_walk11 =[ $Hrun11, necro3_walk12 ] {ai_walk(8);};
-void() necro3_walk12 =[ $Hrun12, necro3_walk1  ] {ai_walk(8);};
+void() necro3_walk1  = [$Hrun1,  necro3_walk2  ] { necro_idlesound(); monster_footstep(FALSE); ai_walk(8); };
+void() necro3_walk2  = [$Hrun2,  necro3_walk3  ] { ai_walk(8); };
+void() necro3_walk3  = [$Hrun3,  necro3_walk4  ] { ai_walk(8); };
+void() necro3_walk4  = [$Hrun4,  necro3_walk5  ] { ai_walk(8); };
+void() necro3_walk5  = [$Hrun5,  necro3_walk6  ] { ai_walk(8); };
+void() necro3_walk6  = [$Hrun6,  necro3_walk7  ] { ai_walk(8); };
+void() necro3_walk7  = [$Hrun7,  necro3_walk8  ] { monster_footstep(FALSE); ai_walk(8); };
+void() necro3_walk8  = [$Hrun8,  necro3_walk9  ] { ai_walk(8); };
+void() necro3_walk9  = [$Hrun9,  necro3_walk10 ] { ai_walk(8); };
+void() necro3_walk10 = [$Hrun10, necro3_walk11 ] { ai_walk(8); };
+void() necro3_walk11 = [$Hrun11, necro3_walk12 ] { ai_walk(8); };
+void() necro3_walk12 = [$Hrun12, necro3_walk1  ] { ai_walk(8); };
 
 // RUN - - - - - - - - - - - - - - - -
 // Casting scenes are used when necro uses special abilities such as
@@ -226,26 +224,25 @@ void() necro_face = {
 
 void() necro_activate_special;
 
-void() necro1_cast1  =[ $Siatak1,  necro1_cast2  ] {ai_face();};
-void() necro1_cast2  =[ $Siatak5,  necro1_cast3  ] {ai_face();};
-void() necro1_cast3  =[ $Siatak6,  necro1_cast4  ] {ai_face(); self.nextthink = time + 0.2;};
-void() necro1_cast4  =[ $Siatak11, necro1_cast5  ] {ai_face(); necro_activate_special();};
-void() necro1_cast5  =[ $Siatak12, necro1_run1   ] {ai_face();};
+void() necro1_cast1  = [$Siatak1,  necro1_cast2  ] { ai_face(); };
+void() necro1_cast2  = [$Siatak5,  necro1_cast3  ] { ai_face(); };
+void() necro1_cast3  = [$Siatak6,  necro1_cast4  ] { ai_face(); self.nextthink = time + 0.2;};
+void() necro1_cast4  = [$Siatak11, necro1_cast5  ] { ai_face(); necro_activate_special(); };
+void() necro1_cast5  = [$Siatak12, necro1_run1   ] { ai_face(); };
 
-void() necro2_cast1  =[ $Statak1,  necro2_cast2  ] {ai_face();};
-void() necro2_cast2  =[ $Statak2,  necro2_cast3  ] {ai_face();};
-void() necro2_cast3  =[ $Statak5,  necro2_cast4  ] {ai_face();};
-void() necro2_cast4  =[ $Statak6,  necro2_cast5  ] {ai_face();};
-void() necro2_cast5  =[ $Statak7,  necro2_cast6  ] {ai_face(); necro_activate_special();};
-void() necro2_cast6  =[ $Statak8,  necro2_run1   ] {ai_face();};
+void() necro2_cast1  = [$Statak1,  necro2_cast2  ] { ai_face(); };
+void() necro2_cast2  = [$Statak2,  necro2_cast3  ] { ai_face(); };
+void() necro2_cast3  = [$Statak5,  necro2_cast4  ] { ai_face(); };
+void() necro2_cast4  = [$Statak6,  necro2_cast5  ] { ai_face(); };
+void() necro2_cast5  = [$Statak7,  necro2_cast6  ] { ai_face(); necro_activate_special(); };
+void() necro2_cast6  = [$Statak8,  necro2_run1   ] { ai_face(); };
 
-void() necro3_cast1  =[ $Hatak1,   necro3_cast2  ] {ai_face();};
-void() necro3_cast2  =[ $Hatak2,   necro3_cast3  ] {ai_face();};
-void() necro3_cast3  =[ $Hatak7,   necro3_cast4  ] {ai_face();};
-void() necro3_cast4  =[ $Hatak8,   necro3_run1   ] {ai_face(); necro_activate_special();};
+void() necro3_cast1  = [$Hatak1,   necro3_cast2  ] { ai_face(); };
+void() necro3_cast2  = [$Hatak2,   necro3_cast3  ] { ai_face(); };
+void() necro3_cast3  = [$Hatak7,   necro3_cast4  ] { ai_face(); };
+void() necro3_cast4  = [$Hatak8,   necro3_run1   ] { ai_face(); necro_activate_special(); };
 
-void() necro_cast =
-{
+void() necro_cast = {
     if (self.height == NECRO_ACOLYTE)
         necro1_cast1();
     else if (self.height == NECRO_SORCERER)
@@ -318,8 +315,7 @@ float() necro_teledef = {
 
 // Look for enemy missiles infront of the necro.  We don't care which
 // missile is found, just whether or not any are found, so return T or F.
-float() necro_find =
-{
+float() necro_find = {
     if (self.enemy)
     {
         local   entity  head;
@@ -409,26 +405,26 @@ void() necro_run = {
 };
 
 // Update:  Acolytes use necro_run() instead of ai_run(16) since the necro boss uses all three necro modes.
-void() necro1_run1  =[ $Sirun1,  necro1_run2  ] {necro_idlesound(); monster_footstep(FALSE); necro_run();};
-void() necro1_run2  =[ $Sirun3,  necro1_run3  ] {necro_run();};
-void() necro1_run3  =[ $Sirun5,  necro1_run4  ] {necro_run();};
-void() necro1_run4  =[ $Sirun7,  necro1_run5  ] {monster_footstep(FALSE); necro_run();};
-void() necro1_run5  =[ $Sirun9,  necro1_run6  ] {necro_run();};
-void() necro1_run6  =[ $Sirun11, necro1_run1  ] {necro_run();};
+void() necro1_run1  = [$Sirun1,  necro1_run2  ] { necro_idlesound(); monster_footstep(FALSE); necro_run(); };
+void() necro1_run2  = [$Sirun3,  necro1_run3  ] { necro_run(); };
+void() necro1_run3  = [$Sirun5,  necro1_run4  ] { necro_run(); };
+void() necro1_run4  = [$Sirun7,  necro1_run5  ] { monster_footstep(FALSE); necro_run(); };
+void() necro1_run5  = [$Sirun9,  necro1_run6  ] { necro_run(); };
+void() necro1_run6  = [$Sirun11, necro1_run1  ] { necro_run(); };
 
-void() necro2_run1  =[ $Strun1,  necro2_run2  ] {necro_idlesound(); monster_footstep(FALSE); necro_run();};
-void() necro2_run2  =[ $Strun3,  necro2_run3  ] {necro_run();};
-void() necro2_run3  =[ $Strun5,  necro2_run4  ] {necro_run();};
-void() necro2_run4  =[ $Strun7,  necro2_run5  ] {monster_footstep(FALSE); necro_run();};
-void() necro2_run5  =[ $Strun9,  necro2_run6  ] {necro_run();};
-void() necro2_run6  =[ $Strun11, necro2_run1  ] {necro_run();};
+void() necro2_run1  = [$Strun1,  necro2_run2  ] { necro_idlesound(); monster_footstep(FALSE); necro_run(); };
+void() necro2_run2  = [$Strun3,  necro2_run3  ] { necro_run(); };
+void() necro2_run3  = [$Strun5,  necro2_run4  ] { necro_run(); };
+void() necro2_run4  = [$Strun7,  necro2_run5  ] { monster_footstep(FALSE); necro_run(); };
+void() necro2_run5  = [$Strun9,  necro2_run6  ] { necro_run(); };
+void() necro2_run6  = [$Strun11, necro2_run1  ] { necro_run(); };
 
-void() necro3_run1  =[ $Hrun1,  necro3_run2  ] {necro_idlesound(); monster_footstep(FALSE); necro_run();};
-void() necro3_run2  =[ $Hrun3,  necro3_run3  ] {necro_run();};
-void() necro3_run3  =[ $Hrun5,  necro3_run4  ] {necro_run();};
-void() necro3_run4  =[ $Hrun7,  necro3_run5  ] {monster_footstep(FALSE); necro_run();};
-void() necro3_run5  =[ $Hrun9,  necro3_run6  ] {necro_run();};
-void() necro3_run6  =[ $Hrun11, necro3_run1  ] {necro_run();};
+void() necro3_run1  = [$Hrun1,  necro3_run2  ] { necro_idlesound(); monster_footstep(FALSE); necro_run(); };
+void() necro3_run2  = [$Hrun3,  necro3_run3  ] { necro_run(); };
+void() necro3_run3  = [$Hrun5,  necro3_run4  ] { necro_run(); };
+void() necro3_run4  = [$Hrun7,  necro3_run5  ] { monster_footstep(FALSE); necro_run(); };
+void() necro3_run5  = [$Hrun9,  necro3_run6  ] { necro_run(); };
+void() necro3_run6  = [$Hrun11, necro3_run1  ] { necro_run(); };
 
 // ATTACK - - - - - - - - - - - - - - -
 void() ai_repel;    // In 'nemesant.qc'.
@@ -452,18 +448,18 @@ void() necro_run_check = {
 
 // PM:  Sped up acolyte's swings due to frame rate differences between
 // Quake and Hexen2.
-void() necro1_melee1 =[ $Siatak2,  necro1_melee2 ] {ai_charge(3);
+void() necro1_melee1 = [$Siatak2,  necro1_melee2 ] { ai_charge(3);
     if (self.classtype == CT_MONNECRO)
         self.cnt = 2;   // Extra swings.
     else
         self.cnt = 0;
 };
-void() necro1_melee2 =[ $Siatak4,  necro1_melee3 ] {
+void() necro1_melee2 = [$Siatak4,  necro1_melee3 ] {
     sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
     ai_charge(0); ai_melee();
 };
-void() necro1_melee3 =[ $Siatak6,  necro1_melee4 ] {ai_charge(3); ai_melee();};
-void() necro1_melee4 =[ $Siatak8,  necro1_melee5 ] {ai_charge(2); ai_melee();
+void() necro1_melee3 = [$Siatak6,  necro1_melee4 ] { ai_charge(3); ai_melee(); };
+void() necro1_melee4 = [$Siatak8,  necro1_melee5 ] { ai_charge(2); ai_melee();
     if (self.enemy.health > 0)
     if (self.cnt > 0)
     if (InMeleeRange (80))
@@ -474,10 +470,9 @@ void() necro1_melee4 =[ $Siatak8,  necro1_melee5 ] {ai_charge(2); ai_melee();
     }
     self.cnt = 0;
 };
-void() necro1_melee5 =[ $Siatak10, necro1_melee6 ] {ai_charge(1);};
-void() necro1_melee6 =[ $Siatak12, necro1_run1   ] {ai_charge(0); necro_run_check();};
-void() necro1_melee =
-{
+void() necro1_melee5 = [$Siatak10, necro1_melee6 ] { ai_charge(1); };
+void() necro1_melee6 = [$Siatak12, necro1_run1   ] { ai_charge(0); necro_run_check(); };
+void() necro1_melee = {
     if (InMeleeRange (80))
         necro1_melee1();
     else
@@ -493,9 +488,9 @@ void() necro1_melee =
     }
 };
 
-void() necro1_attack1  =[ $Siatak1,  necro1_attack2  ] {ai_face();};
-void() necro1_attack2  =[ $Siatak5,  necro1_attack3  ] {ai_face(); self.cnt = 0;};
-void() necro1_attack3  =[ $Siatak6,  necro1_attack4  ] {ai_face();
+void() necro1_attack1  = [$Siatak1,  necro1_attack2  ] { ai_face(); };
+void() necro1_attack2  = [$Siatak5,  necro1_attack3  ] { ai_face(); self.cnt = 0;};
+void() necro1_attack3  = [$Siatak6,  necro1_attack4  ] { ai_face();
     if (!self.cnt)
     {   // Set refire count.
         if (self.classtype == CT_MONNECRO)
@@ -513,7 +508,7 @@ void() necro1_attack3  =[ $Siatak6,  necro1_attack4  ] {ai_face();
     org = self.origin + v_forward*14 - v_right*8 + v_up*12;
     MakeFancy (org, X32_CLOUD_GREEN + 1, 3);
 };
-void() necro1_attack4  =[ $Siatak6,  necro1_attack5  ] {ai_face();
+void() necro1_attack4  = [$Siatak6,  necro1_attack5  ] { ai_face();
     if (self.cnt)
     {
         acolyte_fire();
@@ -522,11 +517,10 @@ void() necro1_attack4  =[ $Siatak6,  necro1_attack5  ] {ai_face();
             self.think = necro1_attack3;
     }
 };
-void() necro1_attack5  =[ $Siatak11, necro1_attack6  ] {ai_face(); acolyte_fire();};
-void() necro1_attack6  =[ $Siatak12, necro1_run1     ] {ai_face();};
+void() necro1_attack5  = [$Siatak11, necro1_attack6  ] { ai_face(); acolyte_fire(); };
+void() necro1_attack6  = [$Siatak12, necro1_run1     ] { ai_face(); };
 
-float() sorcerer_tele =
-{
+float() sorcerer_tele = {
 //- - - - - - - - -
 //  The main purpose of this teleportation check is to increase distance
 //  between the enemy and the necro.  Otherwise, enemies that reach the
@@ -534,23 +528,22 @@ float() sorcerer_tele =
 //- - - - - - - - -
     return necro_teleport (self.enemy, self.origin, 2);
 };
-void() necro2_attack1  =[ $Statak1,  necro2_attack2  ] {ai_face();};
-void() necro2_attack2  =[ $Statak2,  necro2_attack3  ] {ai_face();};
-void() necro2_attack3  =[ $Statak3,  necro2_attack4  ] {ai_face();
+void() necro2_attack1  = [$Statak1,  necro2_attack2  ] { ai_face(); };
+void() necro2_attack2  = [$Statak2,  necro2_attack3  ] { ai_face(); };
+void() necro2_attack3  = [$Statak3,  necro2_attack4  ] { ai_face();
     if (!sorcerer_tele ())
         sorcerer_fire(2);
 };
-void() necro2_attack4  =[ $Statak4,  necro2_attack5  ] {ai_face();};
-void() necro2_attack5  =[ $Statak5,  necro2_attack6  ] {ai_face();
+void() necro2_attack4  = [$Statak4,  necro2_attack5  ] { ai_face(); };
+void() necro2_attack5  = [$Statak5,  necro2_attack6  ] { ai_face();
     if (necro_encore ())
         sorcerer_fire(3);
 };
-void() necro2_attack6  =[ $Statak6,  necro2_attack7  ] {ai_face();};
-void() necro2_attack7  =[ $Statak7,  necro2_attack8  ] {ai_face();};
-void() necro2_attack8  =[ $Statak8,  necro2_run1     ] {ai_face();};
+void() necro2_attack6  = [$Statak6,  necro2_attack7  ] { ai_face(); };
+void() necro2_attack7  = [$Statak7,  necro2_attack8  ] { ai_face(); };
+void() necro2_attack8  = [$Statak8,  necro2_run1     ] { ai_face(); };
 
-float() necro4_gangup =
-{
+float() necro4_gangup = {
     local   entity  head;
 
     head = findradius (self.origin, 120);
@@ -564,9 +557,9 @@ float() necro4_gangup =
     }
     return FALSE;
 };
-void() necro3_attack1  =[ $Hatak1,  necro3_attack2  ] {ai_face();};
-void() necro3_attack2  =[ $Hatak2,  necro3_attack3  ] {ai_face();};
-void() necro3_attack3  =[ $Hatak4,  necro3_attack4  ] {ai_face();
+void() necro3_attack1  = [$Hatak1,  necro3_attack2  ] { ai_face(); };
+void() necro3_attack2  = [$Hatak2,  necro3_attack3  ] { ai_face(); };
+void() necro3_attack3  = [$Hatak4,  necro3_attack4  ] { ai_face();
     if (InMeleeRange (80))
         if (!(self.enemy.flags & (FL_FLY | FL_SWIM))) {
             if (self.classtype == CT_MONNECRO) { // Boss escapes instead if ganged-up by more enemies.
@@ -584,19 +577,18 @@ void() necro3_attack3  =[ $Hatak4,  necro3_attack4  ] {ai_face();
     }
     warlock_fire('12 9 27');
 };
-void() necro3_attack4  =[ $Hatak6,  necro3_attack5  ] {ai_face();};
-void() necro3_attack5  =[ $Hatak8,  necro3_run1     ] {ai_face();
+void() necro3_attack4  = [$Hatak6,  necro3_attack5  ] { ai_face(); };
+void() necro3_attack5  = [$Hatak8,  necro3_run1     ] { ai_face();
     if (necro_encore ())
         warlock_fire('14 8 27');
 };
-void() necro3_melee =
-{
+void() necro3_melee = {
 // If necro is not close enough to repel target, he will zap the enemy
 // continuously with bolts, which is a bit overkill.  Instead, charge
 // most of the time.
     if (!InMeleeRange (80))
         if (random() < 0.6)     // 40% chance per frame to attack.
-            {ai_charge (16);  return;}
+            { ai_charge (16);  return;}
     necro3_attack1();
 };
 
@@ -809,7 +801,7 @@ void() necro4_attack = {
 };
 
 // PAIN
-void(void() skip) necro_skip = {if (random() < 0.5) skip();};
+void(void() skip) necro_skip = { if (random() < 0.5) skip(); };
 
 // Check for an escape during pain.
 void() necro_telepain = {
@@ -820,34 +812,33 @@ void() necro_telepain = {
     }
 };
 
-void() necro1_pain1  =[ $Sipain1,  necro1_pain2  ] {necro_skip(necro1_pain2);};
-void() necro1_pain2  =[ $Sipain2,  necro1_pain3  ] {};
-void() necro1_pain3  =[ $Sipain3,  necro1_pain4  ] {};
-void() necro1_pain4  =[ $Sipain4,  necro1_pain5  ] {};
-void() necro1_pain5  =[ $Sipain5,  necro1_pain6  ] {necro_skip(necro1_pain6);};
-void() necro1_pain6  =[ $Sipain6,  necro1_pain7  ] {};
-void() necro1_pain7  =[ $Sipain7,  necro1_pain8  ] {};
-void() necro1_pain8  =[ $Sipain8,  necro1_run1   ] {necro_run_check();};
+void() necro1_pain1  = [$Sipain1,  necro1_pain2  ] { necro_skip(necro1_pain2); };
+void() necro1_pain2  = [$Sipain2,  necro1_pain3  ] {};
+void() necro1_pain3  = [$Sipain3,  necro1_pain4  ] {};
+void() necro1_pain4  = [$Sipain4,  necro1_pain5  ] {};
+void() necro1_pain5  = [$Sipain5,  necro1_pain6  ] { necro_skip(necro1_pain6); };
+void() necro1_pain6  = [$Sipain6,  necro1_pain7  ] {};
+void() necro1_pain7  = [$Sipain7,  necro1_pain8  ] {};
+void() necro1_pain8  = [$Sipain8,  necro1_run1   ] { necro_run_check(); };
 
-void() necro2_pain1  =[ $Stpain1,  necro2_pain2  ] {necro_skip(necro2_pain2);};
-void() necro2_pain2  =[ $Stpain2,  necro2_pain3  ] {};
-void() necro2_pain3  =[ $Stpain3,  necro2_pain4  ] {necro_skip(necro2_pain4);};
-void() necro2_pain4  =[ $Stpain4,  necro2_pain5  ] {};
-void() necro2_pain5  =[ $Stpain5,  necro2_pain6  ] {necro_skip(necro2_pain6);};
-void() necro2_pain6  =[ $Stpain6,  necro2_pain7  ] {};
-void() necro2_pain7  =[ $Stpain7,  necro2_pain8  ] {necro_skip(necro2_pain8);};
-void() necro2_pain8  =[ $Stpain8,  necro2_run1   ] {necro_telepain();};
+void() necro2_pain1  = [$Stpain1,  necro2_pain2  ] { necro_skip(necro2_pain2); };
+void() necro2_pain2  = [$Stpain2,  necro2_pain3  ] {};
+void() necro2_pain3  = [$Stpain3,  necro2_pain4  ] { necro_skip(necro2_pain4); };
+void() necro2_pain4  = [$Stpain4,  necro2_pain5  ] {};
+void() necro2_pain5  = [$Stpain5,  necro2_pain6  ] { necro_skip(necro2_pain6); };
+void() necro2_pain6  = [$Stpain6,  necro2_pain7  ] {};
+void() necro2_pain7  = [$Stpain7,  necro2_pain8  ] { necro_skip(necro2_pain8); };
+void() necro2_pain8  = [$Stpain8,  necro2_run1   ] { necro_telepain(); };
 
-void() necro3_pain1  =[ $Hpain2,  necro3_pain2  ] {};
-void() necro3_pain2  =[ $Hpain3,  necro3_pain3  ] {necro_skip(necro3_pain3);};
-void() necro3_pain3  =[ $Hpain4,  necro3_pain4  ] {};
-void() necro3_pain4  =[ $Hpain6,  necro3_pain5  ] {};
-void() necro3_pain5  =[ $Hpain7,  necro3_pain6  ] {necro_skip(necro3_pain6);};
-void() necro3_pain6  =[ $Hpain8,  necro3_run1   ] {necro_telepain();};
+void() necro3_pain1  = [$Hpain2,  necro3_pain2  ] {};
+void() necro3_pain2  = [$Hpain3,  necro3_pain3  ] { necro_skip(necro3_pain3); };
+void() necro3_pain3  = [$Hpain4,  necro3_pain4  ] {};
+void() necro3_pain4  = [$Hpain6,  necro3_pain5  ] {};
+void() necro3_pain5  = [$Hpain7,  necro3_pain6  ] { necro_skip(necro3_pain6); };
+void() necro3_pain6  = [$Hpain8,  necro3_run1   ] { necro_telepain(); };
 
 // Named (foo)switch as C's switch.
-void() necro_painswitch =
-{
+void() necro_painswitch = {
     if (self.height == NECRO_ACOLYTE)
         necro1_pain1();
 //    else if (( self.frame >= $Siatak1 ) && ( self.frame <= $Siwait12 ))
@@ -960,23 +951,23 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
 };
 
 // Standard death functions.
-void() necro_die1  =[ $deathA2,  necro_die2  ] {
+void() necro_die1  = [$deathA2,  necro_die2  ] {
 	self.reviveframestart = $deathA20;
 	self.reviveframeend = $deathA2;
 };
-void() necro_die2  =[ $deathA4,  necro_die3  ] {monster_check_gib();};
-void() necro_die3  =[ $deathA6,  necro_die4  ] {monster_check_gib();};
-void() necro_die4  =[ $deathA8,  necro_die5  ] {};
-void() necro_die5  =[ $deathA10, necro_die6  ] {};
-void() necro_die6  =[ $deathA12, necro_die7  ] {};
-void() necro_die7  =[ $deathA14, necro_die8  ] {};
-void() necro_die8  =[ $deathA16, necro_die9  ] {ai_forward(4);};
-void() necro_die9  =[ $deathA18, necro_die10 ] {ai_forward(4);};
-void() necro_die10 =[ $deathA19, necro_die11 ] {ai_forward(1);monster_death_postcheck();};
-void() necro_die11 =[ $deathA20, necro_die11 ] {ai_forward(1);monster_deadbody_check();};
+void() necro_die2  = [$deathA4,  necro_die3  ] { monster_check_gib(); };
+void() necro_die3  = [$deathA6,  necro_die4  ] { monster_check_gib(); };
+void() necro_die4  = [$deathA8,  necro_die5  ] {};
+void() necro_die5  = [$deathA10, necro_die6  ] {};
+void() necro_die6  = [$deathA12, necro_die7  ] {};
+void() necro_die7  = [$deathA14, necro_die8  ] {};
+void() necro_die8  = [$deathA16, necro_die9  ] { ai_forward(4); };
+void() necro_die9  = [$deathA18, necro_die10 ] { ai_forward(4); };
+void() necro_die10 = [$deathA19, necro_die11 ] { ai_forward(1);monster_death_postcheck(); };
+void() necro_die11 = [$deathA20, necro_die11 ] { ai_forward(1);monster_deadbody_check(); };
 
 void() necro_die = {
-	self.gib1mdl = self.gib2mdl = self.gib3mdl = string_null; // Don't drop more wands!
+	self.gib1mdl = self.gib2mdl = self.gib3mdl = ""; // Don't drop more wands!
 
 	// Wand is usable weapon so don't let the sorcerer drop his wand.
 	monster_death_precheck();
@@ -1085,7 +1076,7 @@ void() monster_necromancer = {
 		if (self.health < 1) self.health = 1800;
 	}
 
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
         self.minion_name = "monster_gargoyle";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }
@@ -1178,5 +1169,5 @@ void() monster_sorcerer = { self.classtype = CT_MONSORCERER; monster_necromancer
 void() monster_warlock = { self.classtype = CT_MONWARLOCK; monster_necromancer(); };
 
 // Coven of Ebony entities.
-void() monster_fragwiz = {monster_acolyte();};
-void() monster_sorceror = {monster_sorcerer();};// PM:  Spelled 'sorcerer' NOT 'sorceror'.
+void() monster_fragwiz = { monster_acolyte(); };
+void() monster_sorceror = { monster_sorcerer(); };// PM:  Spelled 'sorcerer' NOT 'sorceror'.

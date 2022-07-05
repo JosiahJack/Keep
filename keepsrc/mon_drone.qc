@@ -260,7 +260,7 @@ void() drn_runb5 = [22, drn_runb6] { ai_run_slide(13); if (crandom() > 0.5) soun
 void() drn_runb6 = [23, drn_runb7] { ai_run_slide(13); };
 void() drn_runb7 = [24, drn_runb8] { ai_run_slide(13); };
 void() drn_runb8 = [25, drn_runb9] { ai_run_slide(13); };
-void() drn_runb9 = [26, drn_runb10]{ ai_run_slide(13); };
+void() drn_runb9 = [26, drn_runb10] { ai_run_slide(13); };
 void() drn_runb10 = [18, drn_run]  { ai_run_slide(13); if (crandom() > 0.5) sound(self, CHAN_VOICE, "drake/drone/drnhunt.wav", 1, ATTN_NORM); };
 
 void() drn_run = {
@@ -288,7 +288,7 @@ void() drn_atta15 = [9, drn_atta16] { ai_face(); };
 void() drn_atta16 = [10, drn_atta17] { ai_face(); };
 void() drn_atta17 = [10, drn_atta18] { ai_face(); };
 
-void() drn_atta18 = [10, drn_run] {ai_face();};
+void() drn_atta18 = [10, drn_run] { ai_face(); };
 void() drn_paina1 = [28, drn_paina2] {};
 void() drn_paina2 = [29, drn_paina3] {};
 void() drn_paina3 = [30, drn_paina4] {};
@@ -383,7 +383,7 @@ void() monster_drone =  {
 	self.gib1mdl = "progs/drake/drngib2.mdl";
 	self.gib2mdl = "progs/drake/drngib3.mdl";
 	self.gib3mdl = "progs/drake/spike.mdl";
-	if (random() < 0.5) self.gib2mdl = string_null;
+	if (random() < 0.5) self.gib2mdl = "";
 	self.gib1sound = GIB_IMPACT_METALA;
 	self.idle_sound = "drake/drone/drnidle2.wav";
 	self.idle_sound2 = "drake/drone/drnidle.wav";

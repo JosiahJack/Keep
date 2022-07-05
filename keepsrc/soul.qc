@@ -202,7 +202,7 @@ float() Wraith_FindSoul = { // [FUNCTION]
         if (head.classtype == CT_SOUL) {
 			if (!head.owner || (head.owner == self)) {
 				d = vlen(head.origin - self.origin);
-				if (d < dist) {targ = head;  dist = d;}
+				if (d < dist) { targ = head;  dist = d;}
 			}
 		}
         head = head.chain;

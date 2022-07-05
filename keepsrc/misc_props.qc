@@ -23,8 +23,7 @@ MDL files that can be setup with specific frame/skin and animate groups
 ======================================================================*/
 float MISC_STATIC = 1;
 
-void() misc_model_loop =
-{
+void() misc_model_loop = {
 	if (self.estate & ESTATE_BLOCK) return;
 	
 	self.height = self.height + self.lip;
@@ -37,8 +36,7 @@ void() misc_model_loop =
 };
 
 //----------------------------------------------------------------------
-void() misc_model_on =
-{
+void() misc_model_on = {
 	// Check if there is any spawn/on delay setup
 	// Useful for delay spawning models on to platform/doors
 	if (self.delay > 0) {
@@ -102,11 +100,10 @@ void() misc_model_on =
 };
 
 //----------------------------------------------------------------------
-void() misc_model_off =
-{
+void() misc_model_off = {
 	// Turn off model/world interaction
 	self.estate = ESTATE_OFF;
-	self.model = string_null;
+	self.model = "";
 	self.solid = SOLID_NOT;
 };
 

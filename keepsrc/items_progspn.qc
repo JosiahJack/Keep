@@ -198,7 +198,7 @@ void() item_progspawn_touch = { // [FUNCTION]
 	// SELF.OWNER.MOVETARGET = Entity of NEXT item
 	// SELF.OWNER.TARGET2 = Targetname of all spawn marker(s)	
 
-	if (self.touchedvoid) {entity_hide(self); return;} // Duplicate of item_touch functionality
+	if (self.touchedvoid) { entity_hide(self); return;} // Duplicate of item_touch functionality
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
 	if (self.state == STATE_OFF) return; // Has been used ONCE already or disabled?

@@ -168,8 +168,8 @@ void() misc_dknight = { // [ENTITY]
 	precache_model (self.gib3mdl);
 	precache_model (self.gib1mdl);
 	self.gib1sound = GIB_IMPACT_METALA;
-	if (random() < 0.5) self.gib2mdl = string_null;
-	if (random() < 0.5) self.gib3mdl = string_null;
+	if (random() < 0.5) self.gib2mdl = "";
+	if (random() < 0.5) self.gib3mdl = "";
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL; // Setup bounding box based on presets
 	monster_bbox();
 	if (self.frame < 0) self.frame = 0; // Default pose for dead death knights

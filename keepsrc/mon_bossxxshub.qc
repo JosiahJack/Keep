@@ -95,7 +95,7 @@ void() xxshub_idleframe = {
 	}	
 };
 
-void() xxshub_idle ={ self.walkframe = 0; xxshub_idleframe(); };
+void() xxshub_idle = { self.walkframe = 0; xxshub_idleframe(); };
 
 // Attack 1 : Fire Shub Homing Missile
 void() xxshub_attack1 = {
@@ -179,11 +179,11 @@ void() xxshub_attack2 = {
 // PAIN (ignored, just keeps on firing)
 void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 	// Shub been hit, wakeup and start attacking
-	if (self.style == SHUB_PHASE1) {self.use(); return;}
+	if (self.style == SHUB_PHASE1) { self.use(); return;}
 	self.pain_finished = time + 2 + random()*2;
 
 	// Check for boss wave trigger events
-	if (xxshub_WaveCheck() == TRUE) {self.th_missile(); return;}
+	if (xxshub_WaveCheck() == TRUE) { self.th_missile(); return;}
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -262,8 +262,7 @@ void() xxshub_die = {
 //----------------------------------------------------------------------
 // Switch Shub into a fighting stance
 //----------------------------------------------------------------------
-void() xxshub_wakeup =
-{
+void() xxshub_wakeup = {
 	// Time to fight!
 	self.use = SUB_Null;			// No more triggers
 	self.style = SHUB_PHASE2;		// Start fighting
@@ -410,7 +409,7 @@ void() monster_shub = {
 		self.think = xxshub_start;
 	} else {
 		self.use = xxshub_start;
-		if (self.targetname == string_null) self.use();
+		if (self.targetname == "") self.use();
 	}
 };
 

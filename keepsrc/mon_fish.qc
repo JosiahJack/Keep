@@ -48,8 +48,8 @@ void() f_swim = {
 	else ai_fish_movement("ai_run",self.move_state_z);
 };
 
-void() f_stand1 = [ $swim1, f_swim ] { ai_stand();};
-void() f_standS1 = [ $swimS1, f_swim ] { ai_stand(); };
+void() f_stand1 = [$swim1, f_swim ] { ai_stand(); };
+void() f_standS1 = [$swimS1, f_swim ] { ai_stand(); };
 
 void() f_stand = { 
 	self.walkframe = 0; self.state = FISH_STAND; 
@@ -57,8 +57,8 @@ void() f_stand = {
 	else f_stand1();
 };
 
-void() f_walk1 = [ $swim1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y);};
-void() f_walkS1 = [ $swimS1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y);};
+void() f_walk1 = [$swim1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y); };
+void() f_walkS1 = [$swimS1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y); };
 
 void() f_walk = {
 	self.walkframe = 0; self.state = FISH_WALK; 
@@ -66,8 +66,8 @@ void() f_walk = {
 	else f_walk1();
 };
 
-void() f_run1 = [ $swim1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z);};
-void() f_runS1 = [ $swimS1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z);};
+void() f_run1 = [$swim1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z); };
+void() f_runS1 = [$swimS1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z); };
 
 void() f_run = {
 	self.walkframe = 0; self.state = FISH_RUN; 
@@ -109,8 +109,8 @@ void() f_attack2 = {
 	else ai_fish_movement("ai_charge",self.move_state_y);
 };
 
-void() f_attack1 = [ $attack1, f_attack2 ] {};
-void() f_attackS1 = [ $attackS1, f_attack2 ] {};
+void() f_attack1 = [$attack1, f_attack2 ] {};
+void() f_attackS1 = [$attackS1, f_attack2 ] {};
 
 void() f_attack = {
 	self.walkframe = 0;
@@ -132,8 +132,8 @@ void() f_pain2 = {
 	if (self.walkframe > 1) ai_fish_movement("ai_pain",self.move_state_y/2);	
 };
 
-void() f_pain1 = [ $pain1, f_pain2 ] {};
-void() f_painS1 = [ $painS1, f_pain2 ] {};
+void() f_pain1 = [$pain1, f_pain2 ] {};
+void() f_painS1 = [$painS1, f_pain2 ] {};
 
 void(entity inflictor, entity attacker, float damage) fish_pain = {
 	if (self.health < 1) return;
@@ -158,8 +158,8 @@ void() f_death2 = {
 	if (self.walkframe > 19) f_deathend();
 };
 
-void() f_death1 = [ $death1, f_death2 ] {};
-void() f_deathS1 = [ $deathS1, f_death2 ] {};
+void() f_death1 = [$death1, f_death2 ] {};
+void() f_deathS1 = [$deathS1, f_death2 ] {};
 
 void() fish_die = {
 	if (pointcontents(self.origin) == CONTENT_WATER) self.gravity = 0.25; // If fish in water, reduce self gravity to pretend to slowly sink

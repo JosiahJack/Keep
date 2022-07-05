@@ -5,8 +5,7 @@ void(float reload) W_Reload;
 
 //   SPHERE #techdebt to remove it when no longer necessary
 
-void() SphereFrames = 
-{
+void() SphereFrames = {
 	self.frame = self.frame + 1;
 	if (self.frame > 5)
 		self.frame = 0;
@@ -18,8 +17,7 @@ void() SphereFrames =
 	
 };
 
-void() MakeSphere =
-{
+void() MakeSphere = {
 	local entity sphere;
 	
 	sphere = spawn();
@@ -62,8 +60,8 @@ void() RyanscissorhandsChecks = //called to ensure that the proper player model 
 void(float projectileNumber) SwordMagic;
 void(float attackNumber) SwordSwing;
 
-void() sword1Attack1 = [32, sword1Attack2] {self.weaponframe = 1;};
-void() sword1Attack2 = [33, sword1Attack3] {self.weaponframe = 2;};
+void() sword1Attack1 = [32, sword1Attack2] { self.weaponframe = 1;};
+void() sword1Attack2 = [33, sword1Attack3] { self.weaponframe = 2;};
 void() sword1Attack3 = [34, sword1Attack4]
 {
 	self.weaponframe = 3;SwordSwing(1);
@@ -74,7 +72,7 @@ void() sword1Attack3 = [34, sword1Attack4]
 	}
 };
 
-void() sword1Attack4 = [35, sword1Attack5] {self.weaponframe = 4;};
+void() sword1Attack4 = [35, sword1Attack5] { self.weaponframe = 4;};
 void() sword1Attack5 = [36, sword2Attack1]
 {
 	self.weaponframe = 5;
@@ -86,8 +84,8 @@ void() sword1Attack5 = [36, sword2Attack1]
 	W_Reload(0.6);
 };
 
-void() sword2Attack1 = [37, sword2Attack2] {self.weaponframe = 7;sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);};
-void() sword2Attack2 = [38, sword2Attack3] {self.weaponframe = 8;};
+void() sword2Attack1 = [37, sword2Attack2] { self.weaponframe = 7;sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM); };
+void() sword2Attack2 = [38, sword2Attack3] { self.weaponframe = 8;};
 void() sword2Attack3 = [39, sword2Attack4]
 {
 	self.weaponframe = 9;
@@ -98,8 +96,8 @@ void() sword2Attack3 = [39, sword2Attack4]
 		sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 	}
 };
-void() sword2Attack4 = [40, sword2Attack5] {self.weaponframe = 10;};
-void() sword2Attack5 = [41, sword2Attack6] {self.weaponframe = 11;};
+void() sword2Attack4 = [40, sword2Attack5] { self.weaponframe = 10;};
+void() sword2Attack5 = [41, sword2Attack6] { self.weaponframe = 11;};
 void() sword2Attack6 = [42, sword3Attack1]
 {
 	self.weaponframe = 12;
@@ -117,14 +115,14 @@ void() sword3Attack1 = [43, sword3Attack3]
 	
 
 };
-void() sword3Attack3 = [45, sword3Attack5] {self.weaponframe = 15;};
+void() sword3Attack3 = [45, sword3Attack5] { self.weaponframe = 15;};
 void() sword3Attack5 = [47, sword3Attack6]
 {
 	self.weaponframe = 17;
 	SwordSwing(3);
 	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
-void() sword3Attack6 = [0, sword3Attack7] {self.weaponframe = 18;};
+void() sword3Attack6 = [0, sword3Attack7] { self.weaponframe = 18;};
 void() sword3Attack7 = [1, sword3Attack8]
 {
 	self.weaponframe = 19;
@@ -138,7 +136,7 @@ void() sword3Attack7 = [1, sword3Attack8]
 	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
 
-void() sword3Attack8 = [2, player_run] {self.weaponframe = 20;};
+void() sword3Attack8 = [2, player_run] { self.weaponframe = 20;};
 
 void(entity inflictor, entity attacker, float damage, float radius, entity ignore, float checkclass) T_RadiusDamageAOA = // radius and damage are now independent arguments with falloff damage being mostly linear, and doesn't hurt attacker. I might extend it further to pass "damage_attacker" boolean "float"
 {
@@ -162,7 +160,7 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 			// This is used mostly for wraiths so when they die they don't
 			// kill each other, can't get the code logic to work so its
 			// setup as a dead exception path
-			if (checkclass == IGNORECLASS && head.classtype == ignore.classtype) { }
+			if (checkclass == IGNORECLASS && head.classtype == ignore.classtype) {}
 			else {
 				// Check for breakable/pushable monster immunity
 				// Do nothing, radius damage has no miss effect
@@ -237,8 +235,7 @@ void() W_FireScimitar = //the first attack in the scimitar's combo
 	sword1Attack1();
 };
 	
-void(float attackNumber) SwordSwing = 
-{
+void(float attackNumber) SwordSwing = {
 	
 	local vector org, dir;
 	local float damage, hitsTarget;
@@ -297,8 +294,7 @@ void(float attackNumber) SwordSwing =
 	}
 };
 
-void() GlowTouch =
-{
+void() GlowTouch = {
 	if (other.classgroup == CG_ZOMBIE)
 	{
 		T_Damage(other, self, self.owner, 150, NOARMOR);//bonus damage on direct zombie hit
@@ -309,8 +305,7 @@ void() GlowTouch =
 	remove(self);
 };
 
-void(float projectileNumber) SwordMagic =
-{
+void(float projectileNumber) SwordMagic = {
 	local entity glow;
 	local vector org;
 	
@@ -350,13 +345,13 @@ void(float damage) GhostRapierAttack;
 void(vector org, float radius) FindEnemy;
 void() rapierParticle;
 
-void() GhostRapierAnimation1 = [1, GhostRapierAnimation2] {SwordSwipeSound();FindEnemy(self.origin, 75);}; //this is the Projectile rapier's animation sequence
-void() GhostRapierAnimation2 = [2, GhostRapierAnimation3] {GhostRapierAttack(20);};
-void() GhostRapierAnimation3 = [3, GhostRapierAnimation4] {SwordSwipeSound();FindEnemy(self.origin, 75);};
-void() GhostRapierAnimation4 = [4, GhostRapierAnimation5] {GhostRapierAttack(25);};
-void() GhostRapierAnimation5 = [5, GhostRapierAnimation6] {FindEnemy(self.origin, 75);};
-void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] {SwordSwipeSound();FindEnemy(self.origin, 75);};
-void() GhostRapierAnimation7 = [7, GhostRapierAnimation8] {GhostRapierAttack(30);};
+void() GhostRapierAnimation1 = [1, GhostRapierAnimation2] { SwordSwipeSound();FindEnemy(self.origin, 75); }; //this is the Projectile rapier's animation sequence
+void() GhostRapierAnimation2 = [2, GhostRapierAnimation3] { GhostRapierAttack(20); };
+void() GhostRapierAnimation3 = [3, GhostRapierAnimation4] { SwordSwipeSound();FindEnemy(self.origin, 75); };
+void() GhostRapierAnimation4 = [4, GhostRapierAnimation5] { GhostRapierAttack(25); };
+void() GhostRapierAnimation5 = [5, GhostRapierAnimation6] { FindEnemy(self.origin, 75); };
+void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] { SwordSwipeSound();FindEnemy(self.origin, 75); };
+void() GhostRapierAnimation7 = [7, GhostRapierAnimation8] { GhostRapierAttack(30); };
 void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
 {
 	if (!self.owner.tome_finished) //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
@@ -367,20 +362,20 @@ void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
 };
 void() GhostRapierAnimation9 = [9, GhostRapierAnimation10] {};
 void() GhostRapierAnimation10 = [10, GhostRapierAnimation11] {};
-void() GhostRapierAnimation11 = [11, GhostRapierAnimation12] {sound(self, CHAN_AUTO, "aoa/radius.wav", 1, ATTN_NORM);};
-void() GhostRapierAnimation12 = [12, GhostRapierAnimation13] {RapierSpinAttack();};
+void() GhostRapierAnimation11 = [11, GhostRapierAnimation12] { sound(self, CHAN_AUTO, "aoa/radius.wav", 1, ATTN_NORM); };
+void() GhostRapierAnimation12 = [12, GhostRapierAnimation13] { RapierSpinAttack(); };
 void() GhostRapierAnimation13 = [13, GhostRapierAnimation14] {};
-void() GhostRapierAnimation14 = [14, GhostRapierAnimation14] {remove(self);};
+void() GhostRapierAnimation14 = [14, GhostRapierAnimation14] { remove(self); };
 
 
-void() RapierAnimation1 = [33, RapierAnimation2] {self.weaponframe = 1;SwordSwipeSound();}; //this is the player's attack sequence
-void() RapierAnimation2 = [34, RapierAnimation3] {self.weaponframe = 2;RapierAttack();};
-void() RapierAnimation3 = [33, RapierAnimation4] {self.weaponframe = 3;SwordSwipeSound();};
-void() RapierAnimation4 = [34, RapierAnimation5] {self.weaponframe = 4;RapierAttack();};
-void() RapierAnimation5 = [36, RapierAnimation6] {self.weaponframe = 5;};
-void() RapierAnimation6 = [32, RapierAnimation7] {self.weaponframe = 6;SwordSwipeSound();};
-void() RapierAnimation7 = [34, RapierAnimation8] {self.weaponframe = 7;RapierAttack();};
-void() RapierAnimation8 = [0, RapierAnimation9] {self.weaponframe = 8;};
+void() RapierAnimation1 = [33, RapierAnimation2] { self.weaponframe = 1;SwordSwipeSound(); }; //this is the player's attack sequence
+void() RapierAnimation2 = [34, RapierAnimation3] { self.weaponframe = 2;RapierAttack(); };
+void() RapierAnimation3 = [33, RapierAnimation4] { self.weaponframe = 3;SwordSwipeSound(); };
+void() RapierAnimation4 = [34, RapierAnimation5] { self.weaponframe = 4;RapierAttack(); };
+void() RapierAnimation5 = [36, RapierAnimation6] { self.weaponframe = 5;};
+void() RapierAnimation6 = [32, RapierAnimation7] { self.weaponframe = 6;SwordSwipeSound(); };
+void() RapierAnimation7 = [34, RapierAnimation8] { self.weaponframe = 7;RapierAttack(); };
+void() RapierAnimation8 = [0, RapierAnimation9] { self.weaponframe = 8;};
 void() RapierAnimation9 = [1, RapierAnimation10]
 {
 	self.weaponframe = 9;
@@ -394,14 +389,13 @@ void() RapierAnimation9 = [1, RapierAnimation10]
 		W_Reload(0.8);
 	}
 };
-void() RapierAnimation10 = [2, RapierAnimation11] {self.weaponframe = 10;};
-void() RapierAnimation11 = [3, RapierAnimation12] {self.weaponframe = 11;};
-void() RapierAnimation12 = [4, RapierAnimation13] {self.weaponframe = 12;};
-void() RapierAnimation13 = [5, RapierAnimation14] {self.weaponframe = 13;};
-void() RapierAnimation14 = [0, player_run] {self.weaponframe = 14;};
+void() RapierAnimation10 = [2, RapierAnimation11] { self.weaponframe = 10;};
+void() RapierAnimation11 = [3, RapierAnimation12] { self.weaponframe = 11;};
+void() RapierAnimation12 = [4, RapierAnimation13] { self.weaponframe = 12;};
+void() RapierAnimation13 = [5, RapierAnimation14] { self.weaponframe = 13;};
+void() RapierAnimation14 = [0, player_run] { self.weaponframe = 14;};
 
-void() rapierParticle =
-{
+void() rapierParticle = {
 	self.nextthink = time + 0.05;
 	self.think = rapierParticle;
 	particle(self.origin, self.velocity*(-1) + '0 0 15', 245, 3);
@@ -482,8 +476,7 @@ void(float damage) GhostRapierAttack = //the projected sword does this attack th
 	}
 };
 
-void() RapierSpinAttack =
-{
+void() RapierSpinAttack = {
 	local entity target;
 	local float hitTarget;
 	
@@ -505,8 +498,7 @@ void() RapierSpinAttack =
 	}
 };
 
-void(vector org, float radius) FindEnemy =
-{
+void(vector org, float radius) FindEnemy = {
 	local entity target;
 	target = findradius(org, radius);
 	while (target && self.enemy == world)
@@ -523,8 +515,7 @@ void(vector org, float radius) FindEnemy =
 	}
 };
 
-void() ghostRapierTouch =
-{
+void() ghostRapierTouch = {
 	local vector displacement;
 	displacement = self.origin + normalize(self.velocity)*-8;
 	setorigin (self, displacement);
@@ -537,8 +528,7 @@ void() ghostRapierTouch =
 		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
 };
-void() W_FireRapier =
-{
+void() W_FireRapier = {
 	W_Reload(1);
 	RapierAnimation1();
 	
@@ -580,25 +570,25 @@ Ice Storm by ryanscissorhands		#ice #chain #ryanscissorhands //#ice1
 void() W_FireChainLightning;
 void() IceProjectiles;
 
-void() ChainLightningAnimation1 = [0, ChainLightningAnimation2] {self.frame = 1;};
-void() ChainLightningAnimation2 = [0, ChainLightningAnimation3] {self.frame = 2;};
-void() ChainLightningAnimation3 = [0, ChainLightningAnimation4] {self.frame = 3;};
-void() ChainLightningAnimation4 = [0, ChainLightningAnimation5] {self.frame = 4;};
-void() ChainLightningAnimation5 = [0, ChainLightningAnimation6] {self.frame = 5;};
-void() ChainLightningAnimation6 = [0, ChainLightningAnimation7] {self.frame = 6;};
-void() ChainLightningAnimation7 = [0, ChainLightningAnimation8] {self.frame = 7;};
-void() ChainLightningAnimation8 = [0, ChainLightningAnimation9] {self.frame = 8;};
-void() ChainLightningAnimation9 = [0, ChainLightningAnimation10] {self.frame = 9;};
-void() ChainLightningAnimation10 = [0, ChainLightningAnimation11] {self.frame = 10;};
-void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] {self.frame = 11;};
-void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] {self.frame = 12;};
-void() ChainLightningAnimation13 = [0, player_run] {self.frame = 13;};
+void() ChainLightningAnimation1 = [0, ChainLightningAnimation2] { self.frame = 1;};
+void() ChainLightningAnimation2 = [0, ChainLightningAnimation3] { self.frame = 2;};
+void() ChainLightningAnimation3 = [0, ChainLightningAnimation4] { self.frame = 3;};
+void() ChainLightningAnimation4 = [0, ChainLightningAnimation5] { self.frame = 4;};
+void() ChainLightningAnimation5 = [0, ChainLightningAnimation6] { self.frame = 5;};
+void() ChainLightningAnimation6 = [0, ChainLightningAnimation7] { self.frame = 6;};
+void() ChainLightningAnimation7 = [0, ChainLightningAnimation8] { self.frame = 7;};
+void() ChainLightningAnimation8 = [0, ChainLightningAnimation9] { self.frame = 8;};
+void() ChainLightningAnimation9 = [0, ChainLightningAnimation10] { self.frame = 9;};
+void() ChainLightningAnimation10 = [0, ChainLightningAnimation11] { self.frame = 10;};
+void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] { self.frame = 11;};
+void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] { self.frame = 12;};
+void() ChainLightningAnimation13 = [0, player_run] { self.frame = 13;};
 
-void() IceAttack1 =	[107, IceAttack2] {if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();W_Reload(0.8);};
-void() IceAttack2 =	[108, IceAttack3] {self.weaponframe = 1;};
-void() IceAttack3 =	[109, IceAttack4] {self.weaponframe = 2;};
-void() IceAttack4 =	[110, IceAttack5] {self.weaponframe = 3;};
-void() IceAttack5 =	[111, IceAttack6] {self.weaponframe = 4;};
+void() IceAttack1 =	[107, IceAttack2] { if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();W_Reload(0.8); };
+void() IceAttack2 =	[108, IceAttack3] { self.weaponframe = 1;};
+void() IceAttack3 =	[109, IceAttack4] { self.weaponframe = 2;};
+void() IceAttack4 =	[110, IceAttack5] { self.weaponframe = 3;};
+void() IceAttack5 =	[111, IceAttack6] { self.weaponframe = 4;};
 void() IceAttack6 =	[112, IceAttack7]
 {
 	self.weaponframe = 3;
@@ -610,10 +600,10 @@ void() IceAttack6 =	[112, IceAttack7]
 	W_Reload(0.8);
 };
 
-void() IceAttack7 =	[113, IceAttack8] {self.weaponframe = 2;};
-void() IceAttack8 =	[114, IceAttack9] {self.weaponframe = 1;W_FireChainLightning();};
-void() IceAttack9 =	[115, IceAttack10] {self.weaponframe = 2;};
-void() IceAttack10 =	[116, IceAttack11] {self.weaponframe = 3;};
+void() IceAttack7 =	[113, IceAttack8] { self.weaponframe = 2;};
+void() IceAttack8 =	[114, IceAttack9] { self.weaponframe = 1;W_FireChainLightning(); };
+void() IceAttack9 =	[115, IceAttack10] { self.weaponframe = 2;};
+void() IceAttack10 =	[116, IceAttack11] { self.weaponframe = 3;};
 void() IceAttack11 =	[117, IceAttack12]
 {
 	self.weaponframe = 4;
@@ -625,14 +615,13 @@ void() IceAttack11 =	[117, IceAttack12]
 	W_Reload(1);
 };
 
-void() IceAttack12 = [113, IceAttack13] {self.weaponframe = 3;};
-void() IceAttack13 = [114, IceAttack14] {self.weaponframe = 2;};
-void() IceAttack14 = [115, IceAttack15] {self.weaponframe = 1;};
-void() IceAttack15 = [116, IceAttack16] {self.weaponframe = 2;LaunchBoulder();};
-void() IceAttack16 = [117, player_run] {self.weaponframe = 3;};
+void() IceAttack12 = [113, IceAttack13] { self.weaponframe = 3;};
+void() IceAttack13 = [114, IceAttack14] { self.weaponframe = 2;};
+void() IceAttack14 = [115, IceAttack15] { self.weaponframe = 1;};
+void() IceAttack15 = [116, IceAttack16] { self.weaponframe = 2;LaunchBoulder(); };
+void() IceAttack16 = [117, player_run] { self.weaponframe = 3;};
 
-void() T_BoulderTouch =
-{	
+void() T_BoulderTouch = {	
 	local float speed;
 		
 	speed = vlen(self.velocity);
@@ -668,8 +657,7 @@ void() T_BoulderTouch =
 
 };
 
-void() LaunchBoulder =
-{
+void() LaunchBoulder = {
 	local entity boulder;
 	local vector org;
 	
@@ -732,8 +720,7 @@ void(entity target) LightningTarget = //called once per target of the storm, up 
 	setorigin (cloud, self.origin);
 };
 
-void() StormFindTargets =
-{
+void() StormFindTargets = {
 	local entity nearbyTargets;
 	local float targets;
 
@@ -801,8 +788,7 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	sound (self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
 };
 	
-void() IceSpikeTouch =
-{
+void() IceSpikeTouch = {
 	if (!self.owner.attack_finished)
 		self.dmg = self.dmg *1.5;
 	if (other != self.owner && other.takedamage)
@@ -815,8 +801,7 @@ void() IceSpikeTouch =
 	remove(self);
 };
 	
-void(float vertical, float horizontal) IceSpikeProjectile = 
-{
+void(float vertical, float horizontal) IceSpikeProjectile = {
 	local entity IceSpike;
 
 	makevectors(self.v_angle);
@@ -837,8 +822,7 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 	IceSpike.nextthink = time + 1.2;
 	IceSpike.think = SUB_Remove;
 };
-void(float offset) IceSpread =
-{
+void(float offset) IceSpread = {
 	IceSpikeProjectile (offset*0.9, offset*0.9);
 	IceSpikeProjectile (offset*0.9, -offset*0.9);
 	IceSpikeProjectile (-offset*0.9, offset*0.9);
@@ -849,15 +833,13 @@ void(float offset) IceSpread =
 	IceSpikeProjectile (-offset*1.2, 0);	
 };
 
-void() W_FireIce = 
-{
+void() W_FireIce = {
 	IceAttack1(); //trigger animation
 	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1; 	//consume ammo
 	//trigger sound sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 0.7, ATTN_NORM);
 };
 
-void() IceProjectiles =
-{
+void() IceProjectiles = {
 	W_Reload(0.9);
 	
 	sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
@@ -882,29 +864,29 @@ Void Staff 		#voidstaff	#staff	#ryanscissorhands
 void() 	DetonateVoidShards;
 void() StaffDetonate1;
 
-void()	embers1	=[		0,	embers2	] 	{};
-void()	embers2	=[		1,	embers3	] 	{};
-void()	embers3	=[		2,	embers4	] 	{};
-void()	embers4	=[		3,	embers5	] 	{};
-void()	embers5	=[		4,	embers6	] 	{};
-void()	embers6	=[		5,	embers7	] 	{};
-void()	embers7	=[		6,	embers8	] 	{};
-void()	embers8	=[		7,	embers9	] 	{};
-void()	embers9	=[		8,	embers10	] {};
-void()	embers10	=[	9,	embers11	] {};
-void()	embers11	=[	10,	embers12	] {};
-void()	embers12	=[	11,	embers13	] {};
-void()	embers13	=[	12,	embers14	] {};
-void()	embers14	=[	13,	embers15	] {};
-void()	embers15	=[	14,	embers16	] {};
-void()	embers16	=[	15,	embers16	] {remove(self);};
+void()	embers1	= [		0,	embers2	] 	{};
+void()	embers2	= [		1,	embers3	] 	{};
+void()	embers3	= [		2,	embers4	] 	{};
+void()	embers4	= [		3,	embers5	] 	{};
+void()	embers5	= [		4,	embers6	] 	{};
+void()	embers6	= [		5,	embers7	] 	{};
+void()	embers7	= [		6,	embers8	] 	{};
+void()	embers8	= [		7,	embers9	] 	{};
+void()	embers9	= [		8,	embers10	] {};
+void()	embers10	= [	9,	embers11	] {};
+void()	embers11	= [	10,	embers12	] {};
+void()	embers12	= [	11,	embers13	] {};
+void()	embers13	= [	12,	embers14	] {};
+void()	embers14	= [	13,	embers15	] {};
+void()	embers15	= [	14,	embers16	] {};
+void()	embers16	= [	15,	embers16	] { remove(self); };
 
 
-void() StaffShot1 = [113, StaffShot2] {self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9);};
-void() StaffShot2 = [114, StaffShot3] {self.weaponframe =2;};
-void() StaffShot3 = [115, StaffShot4] {self.weaponframe =3;};
-void() StaffShot4 = [116, StaffShot5] {self.weaponframe =4;};
-void() StaffShot5 = [117, StaffShot6] {self.weaponframe =5;};
+void() StaffShot1 = [113, StaffShot2] { self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9); };
+void() StaffShot2 = [114, StaffShot3] { self.weaponframe =2;};
+void() StaffShot3 = [115, StaffShot4] { self.weaponframe =3;};
+void() StaffShot4 = [116, StaffShot5] { self.weaponframe =4;};
+void() StaffShot5 = [117, StaffShot6] { self.weaponframe =5;};
 void() StaffShot6 = [118, StaffShot7]
 {
 	self.weaponframe = 6;
@@ -914,11 +896,11 @@ void() StaffShot6 = [118, StaffShot7]
 		return;
 	}
 };
-void() StaffShot7 = [113, StaffShot8] {self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9);};
-void() StaffShot8 = [114, StaffShot9] {self.weaponframe =2;};
-void() StaffShot9 = [115, StaffShot10] {self.weaponframe =3;};
-void() StaffShot10 = [116, StaffShot11] {self.weaponframe =4;};
-void() StaffShot11 = [117, StaffWait1] {self.weaponframe =5;};
+void() StaffShot7 = [113, StaffShot8] { self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9); };
+void() StaffShot8 = [114, StaffShot9] { self.weaponframe =2;};
+void() StaffShot9 = [115, StaffShot10] { self.weaponframe =3;};
+void() StaffShot10 = [116, StaffShot11] { self.weaponframe =4;};
+void() StaffShot11 = [117, StaffWait1] { self.weaponframe =5;};
 
 void() StaffWait1 = [7, StaffWait2] 
 {
@@ -986,13 +968,12 @@ void() StaffWait6 = [12, player_run]
 	
 };
 
-void() StaffDetonate1 = [107, StaffDetonate3] {self.weaponframe =9;};
-void() StaffDetonate2 = [109, StaffDetonate3] {self.weaponframe =10;};
-void() StaffDetonate3 = [111, StaffDetonate4] {self.weaponframe =11;};
-void() StaffDetonate4 = [112, player_run] {self.weaponframe =12;};
+void() StaffDetonate1 = [107, StaffDetonate3] { self.weaponframe =9;};
+void() StaffDetonate2 = [109, StaffDetonate3] { self.weaponframe =10;};
+void() StaffDetonate3 = [111, StaffDetonate4] { self.weaponframe =11;};
+void() StaffDetonate4 = [112, player_run] { self.weaponframe =12;};
 
-void() VoidExplosion = 
-{
+void() VoidExplosion = {
 
 	sound (self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	local entity GreenEmbers, GreenEmbers2, GreenEmbers3;
@@ -1037,8 +1018,7 @@ void() VoidExplosion =
 	remove(self);
 };
 
-void() BlueExplosion =
-{
+void() BlueExplosion = {
 	local float loops;
 	loops = 25;
 	while (loops> 0)
@@ -1048,8 +1028,7 @@ void() BlueExplosion =
 	}
 };
 
-void() GreenExplosion =
-{
+void() GreenExplosion = {
 	local float loops;
 	loops = 40;
 	while (loops> 0)
@@ -1060,8 +1039,7 @@ void() GreenExplosion =
 	}	
 };
 
-void() DetonateVoidShards = 
-{
+void() DetonateVoidShards = {
 	if (self.ammo_voidshards < 4)
 	{
 		centerprint(self, "Not enough ammo to detonate.");
@@ -1092,8 +1070,7 @@ void() DetonateVoidShards =
 	}
 };
 
-void() VoidShardTouch =
-{
+void() VoidShardTouch = {
 	// trigger sound
 	// sound (self, CHAN_AUTO, "aoa/staffhit.wav", 1, ATTN_NORM); #techdebt
 	GreenExplosion();
@@ -1122,8 +1099,7 @@ void() VoidShardTouch =
 	self.touch = SUB_Null;
 };
 
-void() VoidShardTrace =
-{
+void() VoidShardTrace = {
 	particle(self.origin,normalize(-self.velocity) + '0 0 1', 184 + random()*7, 5);
 	if (random() > 0.5)
 		particle(self.origin,normalize(-self.velocity) + '0 0 1', 135, 5);
@@ -1143,8 +1119,7 @@ void() VoidShardTrace =
 	//#techdebt #tomeflag. Check for Tome of Power, and explode as it travels. Explosion might need a flag for deletion to handle this well.
 };
 
-void() VoidStaffProjectile = 
-{
+void() VoidStaffProjectile = {
 	if (self.currentammo < 1) return;
 
 	sound(self, CHAN_WEAPON, "aoa/staffshot.wav", 1, ATTN_NORM);
@@ -1184,8 +1159,7 @@ void() VoidStaffProjectile =
 	VoidShard.think = VoidShardTrace;
 };
 
-void() W_FireVoidStaff =
-{
+void() W_FireVoidStaff = {
 	//consume ammo. #techdebt
 	//trigger sound #techdebt
 	StaffShot1(); //this triggers the animation, which will in turn trigger projectiles
@@ -1205,7 +1179,7 @@ Flak Cannon		#flak	#ryanscissorhands
 void() LaunchFlakShell;
 void() DetonateFlakShell;
 
-void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;sound(self, CHAN_WEAPON, "aoa/flakshot.wav", 1.0, ATTN_NORM);};
+void() ShrapnelShot1 = [0, ShrapnelShot2] { self.weaponframe = 1;sound(self, CHAN_WEAPON, "aoa/flakshot.wav", 1.0, ATTN_NORM); };
 void() ShrapnelShot2 = [0, ShrapnelShot3]
 {
 	self.weaponframe = 2;
@@ -1215,14 +1189,13 @@ void() ShrapnelShot2 = [0, ShrapnelShot3]
 		LaunchFlakShell();
 
 };
-void() ShrapnelShot3 = [0, ShrapnelShot4] {self.weaponframe = 3;};
-void() ShrapnelShot4 = [0, ShrapnelShot5] {self.weaponframe = 4;};
-void() ShrapnelShot5 = [0, ShrapnelShot6] {self.weaponframe = 5;};
-void() ShrapnelShot6 = [0, ShrapnelShot7] {self.weaponframe = 6;};
-void() ShrapnelShot7 = [0, player_run] {self.weaponframe = 0;};
+void() ShrapnelShot3 = [0, ShrapnelShot4] { self.weaponframe = 3;};
+void() ShrapnelShot4 = [0, ShrapnelShot5] { self.weaponframe = 4;};
+void() ShrapnelShot5 = [0, ShrapnelShot6] { self.weaponframe = 5;};
+void() ShrapnelShot6 = [0, ShrapnelShot7] { self.weaponframe = 6;};
+void() ShrapnelShot7 = [0, player_run] { self.weaponframe = 0;};
 
-void() ShrapnelTouch =
-{
+void() ShrapnelTouch = {
 	local float soundVariance;
 	local string soundFile;
 	if (pointcontents(self.origin) <-2)// all liquids and sky
@@ -1254,8 +1227,7 @@ void() ShrapnelTouch =
 	
 };
 
-void(vector direction) FlakShrapnel =
-{
+void(vector direction) FlakShrapnel = {
 	local entity shrapnel;
 	
 	shrapnel = spawn();
@@ -1278,8 +1250,7 @@ void(vector direction) FlakShrapnel =
 	shrapnel.think = SUB_Remove;
 };
 
-void() FlakExplode =
-{
+void() FlakExplode = {
 	T_RadiusDamage(self, self.owner, 125, world, DAMAGEALL);
 	//trigger sound #techdebt
 	FlakShrapnel('1 0 0.1'); //
@@ -1307,8 +1278,7 @@ void() FlakExplode =
 	BecomeExplosion();
 };
 
-void() DetonateFlakShell =
-{
+void() DetonateFlakShell = {
 	local vector org;
 	local entity explosion;
 	
@@ -1327,8 +1297,7 @@ void() DetonateFlakShell =
 		
 };
 
-void() W_FireFlak =
-{
+void() W_FireFlak = {
 	//trigger animation
 	if (time <self.attack_finished)
 		return;
@@ -1348,8 +1317,7 @@ void() W_FireFlak =
 	ShrapnelShot1();
 };
 
-void() LaunchFlakShell =
-{
+void() LaunchFlakShell = {
 	local entity flak;
 	
 	flak = spawn();
@@ -1388,10 +1356,10 @@ void() MaceSwing;
 
 void() CastDrainHealth;
 
-void() MaceSwing1 =	[	119,	MaceSwing2	] {self.weaponframe=1;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.6);}; //th
-void() MaceSwing2 =	[	120,	MaceSwing3	] {self.weaponframe=2;};
-void() MaceSwing3 =	[	121,	MaceSwing4	] {self.weaponframe=3; MaceSwing(); };
-void() MaceSwing4 =	[	122,	MaceSwing5	] {self.weaponframe=4;};
+void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.6); }; //th
+void() MaceSwing2 =	[	120,	MaceSwing3	] { self.weaponframe=2;};
+void() MaceSwing3 =	[	121,	MaceSwing4	] { self.weaponframe=3; MaceSwing(); };
+void() MaceSwing4 =	[	122,	MaceSwing5	] { self.weaponframe=4;};
 void() MaceSwing5 =	[	123,	MaceBackhand1	]
 {
 	self.weaponframe=5;
@@ -1402,11 +1370,11 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 	}
 };
 
-void() MaceBackhand1 =	[	125,	MaceBackhand2	] {self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.7);};
-void() MaceBackhand2 =	[	126,	MaceBackhand3	] {self.weaponframe=7;MaceSwing();};
-void() MaceBackhand3 =	[	127,	MaceBackhand4	] {self.weaponframe=8;};
-void() MaceBackhand4 =	[	128,	MaceBackhand5	] {self.weaponframe=9;};
-void() MaceBackhand5 =	[	129,	MaceBackhand6	] {self.weaponframe=0;};
+void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.7); };
+void() MaceBackhand2 =	[	126,	MaceBackhand3	] { self.weaponframe=7;MaceSwing(); };
+void() MaceBackhand3 =	[	127,	MaceBackhand4	] { self.weaponframe=8;};
+void() MaceBackhand4 =	[	128,	MaceBackhand5	] { self.weaponframe=9;};
+void() MaceBackhand5 =	[	129,	MaceBackhand6	] { self.weaponframe=0;};
 void() MaceBackhand6 =	[	0,	DrainHealth1	]
 {
 	self.weaponframe=0;
@@ -1417,13 +1385,12 @@ void() MaceBackhand6 =	[	0,	DrainHealth1	]
 	}
 };
 
-void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 10;W_Reload(1.2);};  
-void() DrainHealth2 =	[115, DrainHealth3]	{self.weaponframe = 11;}; 
-void() DrainHealth3 =	[118, DrainHealth4]	{self.weaponframe = 12;}; 
-void() DrainHealth4 =	[118, player_run]	{self.weaponframe = 13;CastDrainHealth();}; 
+void() DrainHealth1 =	[112, DrainHealth2]	{ self.weaponframe = 10;W_Reload(1.2); };  
+void() DrainHealth2 =	[115, DrainHealth3]	{ self.weaponframe = 11;}; 
+void() DrainHealth3 =	[118, DrainHealth4]	{ self.weaponframe = 12;}; 
+void() DrainHealth4 =	[118, player_run]	{ self.weaponframe = 13;CastDrainHealth(); }; 
 
-void() drain1Frames =
-{
+void() drain1Frames = {
 	self.frame = self.frame + 1;
 	if (self.frame >17)
 		remove(self);
@@ -1432,8 +1399,7 @@ void() drain1Frames =
 };
 
 
-void() drain2Frames =
-{
+void() drain2Frames = {
 	self.frame = self.frame + 1;
 	if (self.frame >9)
 		remove(self);
@@ -1441,8 +1407,7 @@ void() drain2Frames =
 	self.think = drain2Frames;
 };
 
-void(vector location) DrainHealthEffect =
-{
+void(vector location) DrainHealthEffect = {
 	local entity FX, FX2;
 	
 	FX = spawn();
@@ -1484,8 +1449,7 @@ void(entity victim, entity attacker) DrainHealth
 	SpawnBlood(victim, victim.origin + '0 0 45', '0 0 100' + spread('100 100 100'), 20,0);
 };
 
-void() CastDrainHealth =
-{
+void() CastDrainHealth = {
 	local entity NearbyEnemies;
 
 	makevectors(self.v_angle);
@@ -1507,8 +1471,7 @@ void() CastDrainHealth =
 };
 
 
-void() MaceLungeTouch = 
-{
+void() MaceLungeTouch = {
 	if (other.takedamage && !(self.flags & FL_ONGROUND))
 	{
 		T_Damage(other, self, self, 25, DAMARMOR);
@@ -1518,8 +1481,7 @@ void() MaceLungeTouch =
 	self.touch = SUB_Null;
 };
 
-void() W_FireMace =
-{
+void() W_FireMace = {
 	local vector lunge;
 	MaceSwing1(); 	//trigger animation
 
@@ -1546,8 +1508,7 @@ void() W_FireMace =
 	self.velocity = lunge;
 };
 
-void(vector org, entity victim) MaceSwingHits =
-{
+void(vector org, entity victim) MaceSwingHits = {
 	local float damage;
 	
 	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
@@ -1627,11 +1588,11 @@ void()	GungnirAttack1 = 	[144, GungnirAttack2		]
 	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
 	W_Reload(0.9);
 };
-void()	GungnirAttack2 = 	[145, GungnirAttack3		]	{self.weaponframe = 2;GungnirPrimary();};
-void()	GungnirAttack3 = 	[146, GungnirAttack4		]	{self.weaponframe = 3;};
-void()	GungnirAttack4 = 	[147, GungnirAttack5		]	{self.weaponframe = 0;};
-void()	GungnirAttack5 = 	[7, GungnirAttack6		]	{self.weaponframe = 0;};
-void()	GungnirAttack6 = 	[8, GungnirAttack7		]	{self.weaponframe = 0;};
+void()	GungnirAttack2 = 	[145, GungnirAttack3		]	{ self.weaponframe = 2;GungnirPrimary(); };
+void()	GungnirAttack3 = 	[146, GungnirAttack4		]	{ self.weaponframe = 3;};
+void()	GungnirAttack4 = 	[147, GungnirAttack5		]	{ self.weaponframe = 0;};
+void()	GungnirAttack5 = 	[7, GungnirAttack6		]	{ self.weaponframe = 0;};
+void()	GungnirAttack6 = 	[8, GungnirAttack7		]	{ self.weaponframe = 0;};
 void()	GungnirAttack7 = 	[9, GungnirJump1]
 {
 	self.weaponframe = 0;
@@ -1645,12 +1606,12 @@ void()	GungnirAttack7 = 	[9, GungnirJump1]
 };
 
 //Launch Vortex
-void()	GungnirVortex1 = 	[145, GungnirVortex2		]	{self.weaponframe = 1;};
-void()	GungnirVortex2 = 	[146, GungnirVortex3		]	{self.weaponframe = 1;};
-void()	GungnirVortex3 = 	[147, GungnirVortex4		]	{self.weaponframe = 5;};
-void()	GungnirVortex4 = 	[146, GungnirVortex5		]	{self.weaponframe = 6;};
-void()	GungnirVortex5 = 	[146, GungnirVortex6		]	{self.weaponframe = 7;};
-void()	GungnirVortex6 = 	[148, player_run]	{self.weaponframe = 8;LaunchVortex();};
+void()	GungnirVortex1 = 	[145, GungnirVortex2		]	{ self.weaponframe = 1;};
+void()	GungnirVortex2 = 	[146, GungnirVortex3		]	{ self.weaponframe = 1;};
+void()	GungnirVortex3 = 	[147, GungnirVortex4		]	{ self.weaponframe = 5;};
+void()	GungnirVortex4 = 	[146, GungnirVortex5		]	{ self.weaponframe = 6;};
+void()	GungnirVortex5 = 	[146, GungnirVortex6		]	{ self.weaponframe = 7;};
+void()	GungnirVortex6 = 	[148, player_run]	{ self.weaponframe = 8;LaunchVortex(); };
 
 void() DiveTargetFollow = //this loop ensures that the reticle is where the player is aiming, and is ultimately going to dive
 {
@@ -1705,15 +1666,15 @@ void()	GungnirJump1 = 	[143, GungnirJump2		]
 	}
 	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
 };
-void() GungnirJump2 = [143, GungnirJump3] {self.weaponframe = 4;GungnirPrimary();SpawnDiveTarget();};
-void() GungnirJump3 = [143, GungnirJump4] {self.weaponframe = 4;};
-void() GungnirJump4 = [143, GungnirJump5] {self.weaponframe = 4;};
-void() GungnirJump5 = [143, GungnirDive1] {self.weaponframe = 4;};
+void() GungnirJump2 = [143, GungnirJump3] { self.weaponframe = 4;GungnirPrimary();SpawnDiveTarget(); };
+void() GungnirJump3 = [143, GungnirJump4] { self.weaponframe = 4;};
+void() GungnirJump4 = [143, GungnirJump5] { self.weaponframe = 4;};
+void() GungnirJump5 = [143, GungnirDive1] { self.weaponframe = 4;};
 
 //dive attack
-void() GungnirDive1 = [143, GungnirDive2] {self.weaponframe = 6;GungnirDive();};
-void() GungnirDive2 = [143, GungnirDive3] {self.weaponframe = 6;};
-void() GungnirDive3 = [143, GungnirDive4] {self.weaponframe = 6;};
+void() GungnirDive1 = [143, GungnirDive2] { self.weaponframe = 6;GungnirDive(); };
+void() GungnirDive2 = [143, GungnirDive3] { self.weaponframe = 6;};
+void() GungnirDive3 = [143, GungnirDive4] { self.weaponframe = 6;};
 void() GungnirDive4 = [143, player_run]
 {
 	self.weaponframe = 0;
@@ -1724,8 +1685,7 @@ void() GungnirDive4 = [143, player_run]
 	}
 };
 
-void() impactFrames =
-{
+void() impactFrames = {
 	if (self.frame == 9)
 	{
 		remove(self);
@@ -1736,8 +1696,7 @@ void() impactFrames =
 	self.think = impactFrames;
 };
 
-void() ImpaleTouch = 
-{
+void() ImpaleTouch = {
 	local entity enemies, impact;
 	local vector explosionCenter;
 	local float armorResist;
@@ -1807,8 +1766,7 @@ void() ImpaleTouch =
 	}
 };
 
-void() GungnirDive =
-{
+void() GungnirDive = {
 	local vector org, dest;	
 	
 	if (self.ammo_voidshards < 3)
@@ -1839,8 +1797,7 @@ void() GungnirDive =
 };
 
 
-void() VortexTouch =
-{
+void() VortexTouch = {
 	if (other.takedamage)
 	{	
 		T_Damage(other, self, self.owner, 50, DAMARMOR);
@@ -1850,8 +1807,7 @@ void() VortexTouch =
 };
 
 
-void(entity victim) ZapEnemy =
-{	
+void(entity victim) ZapEnemy = {	
 	if (random() > 0.65)
 		sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 	traceline(self.origin, victim.origin, FALSE, self);
@@ -1869,8 +1825,7 @@ void(entity victim) ZapEnemy =
 	LightningDamage(self.origin, trace_endpos, self.owner, 15);	
 };
 
-void() VortexThink =
-{	
+void() VortexThink = {	
 	local entity victims;
 	local vector gravity;
 	
@@ -1944,8 +1899,7 @@ void() LaunchVortex = //#EyeOfOdin
 };
 
 
-void() W_FireGungnir =
-{
+void() W_FireGungnir = {
 	if (time < self.attack_finished)
 	{
 		return;
@@ -1954,8 +1908,7 @@ void() W_FireGungnir =
 	GungnirAttack1();	//trigger animation, delegate attack method and sound triggers
 };
 
-void() SparkTouch =
-{
+void() SparkTouch = {
 	if (other.takedamage)
 	{
 		SpawnBlood (other, self.origin, spread('100 100 100'), 25,0);
@@ -1972,8 +1925,7 @@ void() SparkTouch =
 	remove(self);
 };
 
-void() GungnirPrimary = 
-{
+void() GungnirPrimary = {
 	local	vector	source, org, swim;
 	local float usedAmmo;
 	local entity spark;
@@ -2049,16 +2001,16 @@ void() GauntletBloodReturn;
 void() BloodTornadoSeek;
 void() AttackWithGreyOrbs;
 
-void()	RGaunt1 =[		115,		RGaunt2	]	
+void()	RGaunt1 = [		115,		RGaunt2	]	
 {
 	self.weaponframe=1;
 	GauntletBeam(15); //right beam
 	AttackWithGreyOrbs(); //any orbs generated with tome are now projectiles.
 	W_Reload(0.4);
 };
-void()	RGaunt2 =[		117,		RGaunt3	] { self.weaponframe=2;};
+void()	RGaunt2 = [		117,		RGaunt3	] { self.weaponframe=2;};
 
-void()	RGaunt3 =[		118,		LGaunt1	]
+void()	RGaunt3 = [		118,		LGaunt1	]
 {
 	self.weaponframe=2;
 	if (!self.button0) //if player isn't holding attack, then stop attacking; otherwise, do left attack
@@ -2068,7 +2020,7 @@ void()	RGaunt3 =[		118,		LGaunt1	]
 	}
 };
 
-void()	LGaunt1 =[		115,		LGaunt2	]	
+void()	LGaunt1 = [		115,		LGaunt2	]	
 {
 	self.weaponframe=3;
 	GauntletBeam(-15); //left beam
@@ -2076,9 +2028,9 @@ void()	LGaunt1 =[		115,		LGaunt2	]
 	W_Reload(0.4);
 };
 
-void() LGaunt2 = [117, LGaunt3]{self.weaponframe=4;};
+void() LGaunt2 = [117, LGaunt3] { self.weaponframe=4;};
 
-void()	LGaunt3 =[		118,		RGaunt1	]
+void()	LGaunt3 = [		118,		RGaunt1	]
 {
 	self.weaponframe=4;
 	if (!self.button0 || self.currentammo < 2) //if player isn't holding attack, then stop attacking; otherwise, do right attack
@@ -2088,8 +2040,7 @@ void()	LGaunt3 =[		118,		RGaunt1	]
 	}
 };
 
-void() GauntletOrbTouch =
-{
+void() GauntletOrbTouch = {
 	if (other == self.owner)
 		return;	
 	
@@ -2119,8 +2070,7 @@ void() GreyOrbTouch = //Tome of Power blood orb projectiles
 	}
 };
 
-void() CountGreyOrbs =
-{
+void() CountGreyOrbs = {
 	local float orbCount;
 	local entity orbs;
 	
@@ -2151,7 +2101,8 @@ entity (entity first, entity second, entity reference) ClosestEntity = //returns
 		return second;
 };
 
-void() AttackWithGreyOrbs = // self == Player
+// self == Player
+void() AttackWithGreyOrbs = 
 {
 	//dprint("attempting to attack with orb.\n"); //useful for debugging
 	//CountGreyOrbs(); //useful for debugging
@@ -2249,8 +2200,7 @@ void() BloodTornadoSeek = //converts blood orbs into grey blood orbs, in prepara
 	}
 };
 
-void() TurnIntoArmor =
-{
+void() TurnIntoArmor = {
 	if (self.owner.armorvalue < 199)
 		self.owner.armorvalue = self.owner.armorvalue + 2;
 	if (self.owner.armortype < 0.5)

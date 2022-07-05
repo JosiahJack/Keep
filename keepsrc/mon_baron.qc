@@ -53,51 +53,51 @@ float() baron_sword_drawn = {
 };
 
 // PM:  Unsheath sound is loud, so keep the volume down.
-void() baron_draw_sound = {sound (self, CHAN_WEAPON, "drake/weapons/unsheath.wav", 0.5, ATTN_IDLE);};
+void() baron_draw_sound = { sound (self, CHAN_WEAPON, "drake/weapons/unsheath.wav", 0.5, ATTN_IDLE); };
 
-void() baron_idle1  =[ $draw5,  baron_idle2  ] {ai_stand();};
-void() baron_idle2  =[ $draw4,  baron_idle3  ] {ai_stand();};
-void() baron_idle3  =[ $draw3,  baron_idle4  ] {sound (self, CHAN_WEAPON, "drake/weapons/sheath.wav", 0.5, ATTN_IDLE); ai_stand();};
-void() baron_idle4  =[ $draw2,  baron_idle5  ] {ai_stand();};
-void() baron_idle5  =[ $draw1,  baron_idle6  ] {ai_stand();};
-void() baron_idle6  =[ $idle1,  baron_idle7  ] {ai_stand();};
-void() baron_idle7  =[ $idle2,  baron_idle8  ] {ai_stand();};
-void() baron_idle8  =[ $idle3,  baron_idle9  ] {ai_stand();};
-void() baron_idle9  =[ $idle4,  baron_idle10 ] {ai_stand();};
-void() baron_idle10 =[ $idle5,  baron_idle11 ] {ai_stand();};
-void() baron_idle11 =[ $idle6,  baron_idle12 ] {ai_stand();};
-void() baron_idle12 =[ $idle7,  baron_idle13 ] {ai_stand();};
-void() baron_idle13 =[ $idle8,  baron_idle14 ] {ai_stand();};
-void() baron_idle14 =[ $idle9,  baron_idle15 ] {ai_stand();};
-void() baron_idle15 =[ $idle10, baron_idle16 ] {ai_stand();};
-void() baron_idle16 =[ $idle11, baron_idle17 ] {monster_idle_sound(); ai_stand();};
-void() baron_idle17 =[ $idle12, baron_idle18 ] {ai_stand();};
-void() baron_idle18 =[ $idle13, baron_idle19 ] {ai_stand();};
-void() baron_idle19 =[ $idle14, baron_idle20 ] {ai_stand();};
-void() baron_idle20 =[ $idle15, baron_idle21 ] {ai_stand();};
-void() baron_idle21 =[ $idle16, baron_idle22 ] {ai_stand();};
-void() baron_idle22 =[ $idle17, baron_idle23 ] {ai_stand();};
-void() baron_idle23 =[ $idle18, baron_idle24 ] {ai_stand();};
-void() baron_idle24 =[ $idle19, baron_idle25 ] {ai_stand();};
-void() baron_idle25 =[ $idle20, baron_idle26 ] {ai_stand();};
-void() baron_idle26 =[ $idle19, baron_idle27 ] {ai_stand();};
-void() baron_idle27 =[ $idle18, baron_idle28 ] {ai_stand();};
-void() baron_idle28 =[ $idle17, baron_idle29 ] {ai_stand();};
-void() baron_idle29 =[ $idle16, baron_idle30 ] {ai_stand();};
-void() baron_idle30 =[ $idle15, baron_idle31 ] {ai_stand();};
-void() baron_idle31 =[ $idle14, baron_idle32 ] {ai_stand();};
-void() baron_idle32 =[ $idle13, baron_idle33 ] {ai_stand();};
-void() baron_idle33 =[ $idle12, baron_idle34 ] {ai_stand();};
-void() baron_idle34 =[ $idle11, baron_idle35 ] {monster_idle_sound(); ai_stand();};
-void() baron_idle35 =[ $idle10, baron_idle36 ] {ai_stand();};
-void() baron_idle36 =[ $idle9,  baron_idle37 ] {ai_stand();};
-void() baron_idle37 =[ $idle8,  baron_idle38 ] {ai_stand();};
-void() baron_idle38 =[ $idle7,  baron_idle39 ] {ai_stand();};
-void() baron_idle39 =[ $idle6,  baron_idle40 ] {ai_stand();};
-void() baron_idle40 =[ $idle5,  baron_idle41 ] {ai_stand();};
-void() baron_idle41 =[ $idle4,  baron_idle42 ] {ai_stand();};
-void() baron_idle42 =[ $idle3,  baron_idle43 ] {ai_stand();};
-void() baron_idle43 =[ $idle2,  baron_idle6  ] {ai_stand();};
+void() baron_idle1  = [$draw5,  baron_idle2  ] { ai_stand(); };
+void() baron_idle2  = [$draw4,  baron_idle3  ] { ai_stand(); };
+void() baron_idle3  = [$draw3,  baron_idle4  ] { sound (self, CHAN_WEAPON, "drake/weapons/sheath.wav", 0.5, ATTN_IDLE); ai_stand(); };
+void() baron_idle4  = [$draw2,  baron_idle5  ] { ai_stand(); };
+void() baron_idle5  = [$draw1,  baron_idle6  ] { ai_stand(); };
+void() baron_idle6  = [$idle1,  baron_idle7  ] { ai_stand(); };
+void() baron_idle7  = [$idle2,  baron_idle8  ] { ai_stand(); };
+void() baron_idle8  = [$idle3,  baron_idle9  ] { ai_stand(); };
+void() baron_idle9  = [$idle4,  baron_idle10 ] { ai_stand(); };
+void() baron_idle10 = [$idle5,  baron_idle11 ] { ai_stand(); };
+void() baron_idle11 = [$idle6,  baron_idle12 ] { ai_stand(); };
+void() baron_idle12 = [$idle7,  baron_idle13 ] { ai_stand(); };
+void() baron_idle13 = [$idle8,  baron_idle14 ] { ai_stand(); };
+void() baron_idle14 = [$idle9,  baron_idle15 ] { ai_stand(); };
+void() baron_idle15 = [$idle10, baron_idle16 ] { ai_stand(); };
+void() baron_idle16 = [$idle11, baron_idle17 ] { monster_idle_sound(); ai_stand(); };
+void() baron_idle17 = [$idle12, baron_idle18 ] { ai_stand(); };
+void() baron_idle18 = [$idle13, baron_idle19 ] { ai_stand(); };
+void() baron_idle19 = [$idle14, baron_idle20 ] { ai_stand(); };
+void() baron_idle20 = [$idle15, baron_idle21 ] { ai_stand(); };
+void() baron_idle21 = [$idle16, baron_idle22 ] { ai_stand(); };
+void() baron_idle22 = [$idle17, baron_idle23 ] { ai_stand(); };
+void() baron_idle23 = [$idle18, baron_idle24 ] { ai_stand(); };
+void() baron_idle24 = [$idle19, baron_idle25 ] { ai_stand(); };
+void() baron_idle25 = [$idle20, baron_idle26 ] { ai_stand(); };
+void() baron_idle26 = [$idle19, baron_idle27 ] { ai_stand(); };
+void() baron_idle27 = [$idle18, baron_idle28 ] { ai_stand(); };
+void() baron_idle28 = [$idle17, baron_idle29 ] { ai_stand(); };
+void() baron_idle29 = [$idle16, baron_idle30 ] { ai_stand(); };
+void() baron_idle30 = [$idle15, baron_idle31 ] { ai_stand(); };
+void() baron_idle31 = [$idle14, baron_idle32 ] { ai_stand(); };
+void() baron_idle32 = [$idle13, baron_idle33 ] { ai_stand(); };
+void() baron_idle33 = [$idle12, baron_idle34 ] { ai_stand(); };
+void() baron_idle34 = [$idle11, baron_idle35 ] { monster_idle_sound(); ai_stand(); };
+void() baron_idle35 = [$idle10, baron_idle36 ] { ai_stand(); };
+void() baron_idle36 = [$idle9,  baron_idle37 ] { ai_stand(); };
+void() baron_idle37 = [$idle8,  baron_idle38 ] { ai_stand(); };
+void() baron_idle38 = [$idle7,  baron_idle39 ] { ai_stand(); };
+void() baron_idle39 = [$idle6,  baron_idle40 ] { ai_stand(); };
+void() baron_idle40 = [$idle5,  baron_idle41 ] { ai_stand(); };
+void() baron_idle41 = [$idle4,  baron_idle42 ] { ai_stand(); };
+void() baron_idle42 = [$idle3,  baron_idle43 ] { ai_stand(); };
+void() baron_idle43 = [$idle2,  baron_idle6  ] { ai_stand(); };
 
 void() baron_stand = {
     if (baron_sword_drawn ()) baron_idle1(); // Put sword away.
@@ -105,23 +105,23 @@ void() baron_stand = {
 };
 
 // Since baron model does not have a proper walk scene, animate the run scene at half speed.
-void() baron_walk1  =[ $draw1, baron_walk2  ] {baron_draw_sound(); ai_turn();};
-void() baron_walk2  =[ $draw2, baron_walk3  ] {ai_turn();};
-void() baron_walk3  =[ $draw3, baron_walk4  ] {ai_turn();};
-void() baron_walk4  =[ $draw4, baron_walk5  ] {ai_turn();};
-void() baron_walk5  =[ $draw5, baron_walk6  ] {ai_turn();};
-void() baron_walk6  =[ $run1,  baron_walk7  ] {monster_footstep(FALSE); ai_walk(6);};
-void() baron_walk7  =[ $run1,  baron_walk8  ] {ai_walk(6);};
-void() baron_walk8  =[ $run2,  baron_walk9  ] {ai_walk(6);};
-void() baron_walk9  =[ $run2,  baron_walk10 ] {ai_walk(6);};
-void() baron_walk10 =[ $run3,  baron_walk11 ] {ai_walk(6);};
-void() baron_walk11 =[ $run3,  baron_walk12 ] {ai_walk(6);};
-void() baron_walk12 =[ $run4,  baron_walk13 ] {monster_footstep(FALSE); ai_walk(6);};
-void() baron_walk13 =[ $run4,  baron_walk14 ] {ai_walk(6);};
-void() baron_walk14 =[ $run5,  baron_walk15 ] {ai_walk(6);};
-void() baron_walk15 =[ $run5,  baron_walk16 ] {ai_walk(6);};
-void() baron_walk16 =[ $run6,  baron_walk17 ] {ai_walk(6);};
-void() baron_walk17 =[ $run6,  baron_walk6  ] {ai_walk(6);};
+void() baron_walk1  = [$draw1, baron_walk2  ] { baron_draw_sound(); ai_turn(); };
+void() baron_walk2  = [$draw2, baron_walk3  ] { ai_turn(); };
+void() baron_walk3  = [$draw3, baron_walk4  ] { ai_turn(); };
+void() baron_walk4  = [$draw4, baron_walk5  ] { ai_turn(); };
+void() baron_walk5  = [$draw5, baron_walk6  ] { ai_turn(); };
+void() baron_walk6  = [$run1,  baron_walk7  ] { monster_footstep(FALSE); ai_walk(6); };
+void() baron_walk7  = [$run1,  baron_walk8  ] { ai_walk(6); };
+void() baron_walk8  = [$run2,  baron_walk9  ] { ai_walk(6); };
+void() baron_walk9  = [$run2,  baron_walk10 ] { ai_walk(6); };
+void() baron_walk10 = [$run3,  baron_walk11 ] { ai_walk(6); };
+void() baron_walk11 = [$run3,  baron_walk12 ] { ai_walk(6); };
+void() baron_walk12 = [$run4,  baron_walk13 ] { monster_footstep(FALSE); ai_walk(6); };
+void() baron_walk13 = [$run4,  baron_walk14 ] { ai_walk(6); };
+void() baron_walk14 = [$run5,  baron_walk15 ] { ai_walk(6); };
+void() baron_walk15 = [$run5,  baron_walk16 ] { ai_walk(6); };
+void() baron_walk16 = [$run6,  baron_walk17 ] { ai_walk(6); };
+void() baron_walk17 = [$run6,  baron_walk6  ] { ai_walk(6); };
 
 void() baron_walk = {
     if (baron_sword_drawn ()) baron_walk6(); // Start jogging.
@@ -129,7 +129,7 @@ void() baron_walk = {
 };
 
 //  Victory
-void() baron_look6  =[ $crstand1,  baron_look6  ] {
+void() baron_look6  = [$crstand1,  baron_look6  ] {
     WalkFrame_Add ( $crstand1, 1, 18 );
     if (self.walkframe == 18) {
 		if (self.movetarget || self.charmer) self.think = self.th_walk;
@@ -138,7 +138,7 @@ void() baron_look6  =[ $crstand1,  baron_look6  ] {
     ai_stand();
 };
 
-void() baron_owned1  =[ $point1,  baron_owned1  ] {
+void() baron_owned1  = [$point1,  baron_owned1  ] {
     WalkFrame_Add ( $point1, 1, 10 );
     if (self.walkframe == 10) {
 		if (self.movetarget || self.charmer) self.think = self.th_walk;
@@ -168,17 +168,17 @@ void() baron_win = {
     else self.th_stand();
 };
 
-void() baron_run1  =[ $draw1, baron_run2  ] {baron_draw_sound(); ai_face();};
-void() baron_run2  =[ $draw2, baron_run3  ] {ai_face();};
-void() baron_run3  =[ $draw3, baron_run4  ] {ai_face();};
-void() baron_run4  =[ $draw4, baron_run5  ] {ai_face();};
-void() baron_run5  =[ $draw5, baron_run6  ] {ai_face();};
-void() baron_run6  =[ $run1,  baron_run7  ] {monster_footstep(FALSE); ai_run(BARON_SPEED);};
-void() baron_run7  =[ $run2,  baron_run8  ] {ai_run(BARON_SPEED);};
-void() baron_run8  =[ $run3,  baron_run9  ] {ai_run(BARON_SPEED);};
-void() baron_run9  =[ $run4,  baron_run10 ] {monster_footstep(FALSE); ai_run(BARON_SPEED);};
-void() baron_run10 =[ $run5,  baron_run11 ] {ai_run(BARON_SPEED);};
-void() baron_run11 =[ $run6,  baron_run6  ] {ai_run(BARON_SPEED);};
+void() baron_run1  = [$draw1, baron_run2  ] { baron_draw_sound(); ai_face(); };
+void() baron_run2  = [$draw2, baron_run3  ] { ai_face(); };
+void() baron_run3  = [$draw3, baron_run4  ] { ai_face(); };
+void() baron_run4  = [$draw4, baron_run5  ] { ai_face(); };
+void() baron_run5  = [$draw5, baron_run6  ] { ai_face(); };
+void() baron_run6  = [$run1,  baron_run7  ] { monster_footstep(FALSE); ai_run(BARON_SPEED); };
+void() baron_run7  = [$run2,  baron_run8  ] { ai_run(BARON_SPEED); };
+void() baron_run8  = [$run3,  baron_run9  ] { ai_run(BARON_SPEED); };
+void() baron_run9  = [$run4,  baron_run10 ] { monster_footstep(FALSE); ai_run(BARON_SPEED); };
+void() baron_run10 = [$run5,  baron_run11 ] { ai_run(BARON_SPEED); };
+void() baron_run11 = [$run6,  baron_run6  ] { ai_run(BARON_SPEED); };
 
 void() baron_run = {
     if (baron_sword_drawn ()) baron_run6(); // Start running.
@@ -204,21 +204,21 @@ void() baron_sword = {
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
 };
 
-void() baron_skip1  =[ $blam4,  baron_blam5  ] {ai_charge(6);};
-void() baron_skip2  =[ $blam4,  baron_blam10 ] {ai_charge(6);};
+void() baron_skip1  = [$blam4,  baron_blam5  ] { ai_charge(6); };
+void() baron_skip2  = [$blam4,  baron_blam10 ] { ai_charge(6); };
 
 // Update:  Nehahra used ai_charge(3).  My guess of 2 was close, but wrong.
-void() baron_blam1  =[ $blam1,  baron_blam2  ] {ai_charge(3);};
-void() baron_blam2  =[ $blam2,  baron_blam3  ] {ai_charge(3); if (self.level) self.think = baron_skip1;};
-void() baron_blam3  =[ $blam3,  baron_blam4  ] {ai_charge(3);};
-void() baron_blam4  =[ $blam4,  baron_blam5  ] {ai_charge(3);};
-void() baron_blam5  =[ $blam5,  baron_blam6  ] {ai_charge(3); baron_sword();};
-void() baron_blam6  =[ $blam6,  baron_blam7  ] {ai_charge(3); baron_sword();};
-void() baron_blam7  =[ $blam5,  baron_blam8  ] {ai_charge(3); if (self.level) self.think = baron_skip2;};
-void() baron_blam8  =[ $blam4,  baron_blam9  ] {ai_charge(3);};
-void() baron_blam9  =[ $blam3,  baron_blam10 ] {ai_charge(3);};
-void() baron_blam10 =[ $blam2,  baron_blam11 ] {ai_charge(3); baron_sword();};
-void() baron_blam11 =[ $blam1,  baron_run    ] {ai_charge(3); baron_sword();};
+void() baron_blam1  = [$blam1,  baron_blam2  ] { ai_charge(3); };
+void() baron_blam2  = [$blam2,  baron_blam3  ] { ai_charge(3); if (self.level) self.think = baron_skip1;};
+void() baron_blam3  = [$blam3,  baron_blam4  ] { ai_charge(3); };
+void() baron_blam4  = [$blam4,  baron_blam5  ] { ai_charge(3); };
+void() baron_blam5  = [$blam5,  baron_blam6  ] { ai_charge(3); baron_sword(); };
+void() baron_blam6  = [$blam6,  baron_blam7  ] { ai_charge(3); baron_sword(); };
+void() baron_blam7  = [$blam5,  baron_blam8  ] { ai_charge(3); if (self.level) self.think = baron_skip2;};
+void() baron_blam8  = [$blam4,  baron_blam9  ] { ai_charge(3); };
+void() baron_blam9  = [$blam3,  baron_blam10 ] { ai_charge(3); };
+void() baron_blam10 = [$blam2,  baron_blam11 ] { ai_charge(3); baron_sword(); };
+void() baron_blam11 = [$blam1,  baron_run    ] { ai_charge(3); baron_sword(); };
 
 void() baron_fist = {
     local vector delta, dir;
@@ -261,36 +261,36 @@ void() baron_fist = {
 	SpawnMeatSpray(self, self.enemy,crandom() * 150);
 };
 
-void() baron_throw1  =[ $smack11, baron_throw2  ] {ai_face();};
-void() baron_throw2  =[ $smack12, baron_throw3  ] {ai_face();};
-void() baron_throw3  =[ $smack11, baron_throw4  ] {ai_face();};
-void() baron_throw4  =[ $smack10, baron_throw5  ] {ai_face();};
-void() baron_throw5  =[ $smack9,  baron_throw6  ] {ai_face();};
-void() baron_throw6  =[ $smack8,  baron_throw7  ] {ai_face();};
-void() baron_throw7  =[ $smack7,  baron_throw8  ] {ai_face();};
-void() baron_throw8  =[ $smack6,  baron_throw9  ] {ai_face();};
-void() baron_throw9  =[ $smack5,  baron_throw10 ] {ai_face();};
-void() baron_throw10 =[ $smack4,  baron_throw11 ] {ai_face();};
-void() baron_throw11 =[ $smack3,  baron_throw12 ] {ai_face();};
-void() baron_throw12 =[ $smack2,  baron_throw13 ] {ai_face();};
-void() baron_throw13 =[ $smack1,  baron_run     ] {ai_face();};
+void() baron_throw1  = [$smack11, baron_throw2  ] { ai_face(); };
+void() baron_throw2  = [$smack12, baron_throw3  ] { ai_face(); };
+void() baron_throw3  = [$smack11, baron_throw4  ] { ai_face(); };
+void() baron_throw4  = [$smack10, baron_throw5  ] { ai_face(); };
+void() baron_throw5  = [$smack9,  baron_throw6  ] { ai_face(); };
+void() baron_throw6  = [$smack8,  baron_throw7  ] { ai_face(); };
+void() baron_throw7  = [$smack7,  baron_throw8  ] { ai_face(); };
+void() baron_throw8  = [$smack6,  baron_throw9  ] { ai_face(); };
+void() baron_throw9  = [$smack5,  baron_throw10 ] { ai_face(); };
+void() baron_throw10 = [$smack4,  baron_throw11 ] { ai_face(); };
+void() baron_throw11 = [$smack3,  baron_throw12 ] { ai_face(); };
+void() baron_throw12 = [$smack2,  baron_throw13 ] { ai_face(); };
+void() baron_throw13 = [$smack1,  baron_run     ] { ai_face(); };
 
-void() baron_smack1  =[ $smack1,  baron_smack2  ] {ai_charge(2);};
-void() baron_smack2  =[ $smack2,  baron_smack3  ] {ai_charge(2);};
-void() baron_smack3  =[ $smack3,  baron_smack4  ] {ai_charge(2);};
-void() baron_smack4  =[ $smack4,  baron_smack5  ] {ai_charge(2);};
-void() baron_smack5  =[ $smack5,  baron_smack6  ] {ai_charge(2);};
-void() baron_smack6  =[ $smack6,  baron_smack7  ] {ai_charge(2);};
-void() baron_smack7  =[ $smack7,  baron_smack8  ] {ai_charge(2);};
-void() baron_smack8  =[ $smack8,  baron_smack9  ] {ai_charge(2);};
-void() baron_smack9  =[ $smack9,  baron_smack10 ] {ai_charge(12); baron_fist();};
-void() baron_smack10 =[ $smack10, baron_smack11 ] {ai_charge(2);};
-void() baron_smack11 =[ $smack11, baron_smack12 ] {ai_charge(2);};
-void() baron_smack12 =[ $smack12, baron_run     ] {ai_charge(2);};
+void() baron_smack1  = [$smack1,  baron_smack2  ] { ai_charge(2); };
+void() baron_smack2  = [$smack2,  baron_smack3  ] { ai_charge(2); };
+void() baron_smack3  = [$smack3,  baron_smack4  ] { ai_charge(2); };
+void() baron_smack4  = [$smack4,  baron_smack5  ] { ai_charge(2); };
+void() baron_smack5  = [$smack5,  baron_smack6  ] { ai_charge(2); };
+void() baron_smack6  = [$smack6,  baron_smack7  ] { ai_charge(2); };
+void() baron_smack7  = [$smack7,  baron_smack8  ] { ai_charge(2); };
+void() baron_smack8  = [$smack8,  baron_smack9  ] { ai_charge(2); };
+void() baron_smack9  = [$smack9,  baron_smack10 ] { ai_charge(12); baron_fist(); };
+void() baron_smack10 = [$smack10, baron_smack11 ] { ai_charge(2); };
+void() baron_smack11 = [$smack11, baron_smack12 ] { ai_charge(2); };
+void() baron_smack12 = [$smack12, baron_run     ] { ai_charge(2); };
 
-void() baron_fasts1  =[ $smack1,  baron_fasts2  ] {ai_charge(6);};
-void() baron_fasts2  =[ $smack3,  baron_fasts3  ] {ai_charge(4);};
-void() baron_fasts3  =[ $smack6,  baron_smack7  ] {ai_charge(2);};
+void() baron_fasts1  = [$smack1,  baron_fasts2  ] { ai_charge(6); };
+void() baron_fasts2  = [$smack3,  baron_fasts3  ] { ai_charge(4); };
+void() baron_fasts3  = [$smack6,  baron_smack7  ] { ai_charge(2); };
 
 void() baron_melee = {
     if (self.state) {
@@ -309,7 +309,7 @@ void() baron_melee = {
 
 
 // Returns TRUE if baron can summon an earth elemental.  This only checks if summoning is allowed; nothing gets spawned here.
-float() BaronGolem_Check = {return (self.minion_count < ceil(skill / 2) + 1);};
+float() BaronGolem_Check = { return (self.minion_count < ceil(skill / 2) + 1); };
 
 void(vector start, vector dir, float sped) Baron_Ice_Launch = {
     Ice_Launch (start, dir, sped);
@@ -566,24 +566,24 @@ void() baron_slam = {
     }
 };
 
-void() baron_slam1  =[ $smack1,  baron_slam2  ] {sound (self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin;};
-void() baron_slam2  =[ $smack2,  baron_slam3  ] {ai_charge(2);};
-void() baron_slam3  =[ $smack3,  baron_slam4  ] {ai_charge(2);};
-void() baron_slam4  =[ $smack4,  baron_slam5  ] {ai_charge(2);};
-void() baron_slam5  =[ $smack5,  baron_slam6  ] {ai_charge(2);};
-void() baron_slam6  =[ $smack6,  baron_slam7  ] {ai_charge(2);};
-void() baron_slam7  =[ $smack7,  baron_slam8  ] {ai_charge(2);};
-void() baron_slam8  =[ $smack8,  baron_slam9  ] {ai_charge(2);};
-void() baron_slam9  =[ $smack9,  baron_slam10 ] {ai_charge(12); baron_slam();};
-void() baron_slam10 =[ $smack10, baron_slam11 ] {ai_charge(2);};
-void() baron_slam11 =[ $smack11, baron_slam12 ] {ai_charge(2);};
-void() baron_slam12 =[ $smack12, baron_run    ] {ai_charge(2);};
+void() baron_slam1  = [$smack1,  baron_slam2  ] { sound (self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin;};
+void() baron_slam2  = [$smack2,  baron_slam3  ] { ai_charge(2); };
+void() baron_slam3  = [$smack3,  baron_slam4  ] { ai_charge(2); };
+void() baron_slam4  = [$smack4,  baron_slam5  ] { ai_charge(2); };
+void() baron_slam5  = [$smack5,  baron_slam6  ] { ai_charge(2); };
+void() baron_slam6  = [$smack6,  baron_slam7  ] { ai_charge(2); };
+void() baron_slam7  = [$smack7,  baron_slam8  ] { ai_charge(2); };
+void() baron_slam8  = [$smack8,  baron_slam9  ] { ai_charge(2); };
+void() baron_slam9  = [$smack9,  baron_slam10 ] { ai_charge(12); baron_slam(); };
+void() baron_slam10 = [$smack10, baron_slam11 ] { ai_charge(2); };
+void() baron_slam11 = [$smack11, baron_slam12 ] { ai_charge(2); };
+void() baron_slam12 = [$smack12, baron_run    ] { ai_charge(2); };
 
-void() baron_cast1  =[ $magica7,  baron_cast2  ] {sound (self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM); ai_face(); self.dest = self.enemy.origin;};
-void() baron_cast2  =[ $magica6,  baron_cast3  ] {ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
-void() baron_cast3  =[ $magica5,  baron_cast4  ] {ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
-void() baron_cast4  =[ $magica4,  baron_cast5  ] {ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
-void() baron_cast5  =[ $magica3,  baron_cast6  ] {ai_face();
+void() baron_cast1  = [$magica7,  baron_cast2  ] { sound (self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM); ai_face(); self.dest = self.enemy.origin;};
+void() baron_cast2  = [$magica6,  baron_cast3  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
+void() baron_cast3  = [$magica5,  baron_cast4  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
+void() baron_cast4  = [$magica4,  baron_cast5  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
+void() baron_cast5  = [$magica3,  baron_cast6  ] { ai_face();
     if (self.level == BARON_WATER) RainStorm();
     else if (self.level == BARON_FIRE) BaronFireworks();
     else if (self.level == BARON_EARTH) {
@@ -598,10 +598,10 @@ void() baron_cast5  =[ $magica3,  baron_cast6  ] {ai_face();
     }
     self.dest = self.enemy.origin;
 };
-void() baron_cast6  =[ $magica2,  baron_cast7  ] {ai_face();};
-void() baron_cast7  =[ $magica1,  baron_run    ] {ai_face();};
+void() baron_cast6  = [$magica2,  baron_cast7  ] { ai_face(); };
+void() baron_cast7  = [$magica1,  baron_run    ] { ai_face(); };
 
-void() baron_point1  =[ $point1,  baron_point2  ] {ai_face();
+void() baron_point1  = [$point1,  baron_point2  ] { ai_face();
 	// Set fireball counter.
     if (self.level) { // Rapture/Unforgiven elemental bosses.
         if (self.level == BARON_FIRE)   // 8/24/10:  Emulate the cyberdemon.
@@ -611,11 +611,11 @@ void() baron_point1  =[ $point1,  baron_point2  ] {ai_face();
     } else self.shots_max = random() * (skill + 1) / 2; // Nehahra/Drake version.  1 on Easy/Normal, 1-2 on Hard/NM.
     self.shots_left = self.shots_max = ceil(self.shots_max);
 };
-void() baron_point2  =[ $point2,  baron_point3  ] {ai_face();};
-void() baron_point3  =[ $point3,  baron_point4  ] {ai_face();};
-void() baron_point4  =[ $point4,  baron_point5  ] {ai_face();};
-void() baron_point5  =[ $point5,  baron_point6  ] {ai_face(); if (self.level == BARON_AIR) sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM); };
-void() baron_point6  =[ $point6,  baron_point7  ] {ai_face();
+void() baron_point2  = [$point2,  baron_point3  ] { ai_face(); };
+void() baron_point3  = [$point3,  baron_point4  ] { ai_face(); };
+void() baron_point4  = [$point4,  baron_point5  ] { ai_face(); };
+void() baron_point5  = [$point5,  baron_point6  ] { ai_face(); if (self.level == BARON_AIR) sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM); };
+void() baron_point6  = [$point6,  baron_point7  ] { ai_face();
     if (self.level == BARON_EARTH)
         Baron_Earth();  //'16 2 20');
     else if (self.level == BARON_AIR)
@@ -634,11 +634,11 @@ void() baron_point6  =[ $point6,  baron_point7  ] {ai_face();
             }
     self.shots_left = self.shots_max = 0;   // Done firing.
 };
-void() baron_point7  =[ $point7,  baron_point8  ] {ai_face();};
-void() baron_point8  =[ $point8,  baron_point9  ] {ai_face();};
-void() baron_point9  =[ $point9,  baron_point10 ] {ai_face();};
-void() baron_point10 =[ $point10, baron_point11 ] {ai_face();};
-void() baron_point11 =[ $point11, baron_run     ] {ai_face();};
+void() baron_point7  = [$point7,  baron_point8  ] { ai_face(); };
+void() baron_point8  = [$point8,  baron_point9  ] { ai_face(); };
+void() baron_point9  = [$point9,  baron_point10 ] { ai_face(); };
+void() baron_point10 = [$point10, baron_point11 ] { ai_face(); };
+void() baron_point11 = [$point11, baron_run     ] { ai_face(); };
 
 //- - - - - - - - -
 //void(float offset) hknight_shot;
@@ -675,28 +675,28 @@ void(float offset) baron_shot = {
     }
 };
 
-void() baron_air1  =[ $magica4,  baron_air2     ] {ai_face();
+void() baron_air1  = [$magica4,  baron_air2     ] { ai_face();
     Baron_Air();
     self.waitmax = time + 1;    // To prevent unfair lightning strike combo.
 };
-void() baron_air2  =[ $magica5,  baron_air3     ] {ai_face();};
-void() baron_air3  =[ $magica6,  baron_magica7  ] {ai_face();};
+void() baron_air2  = [$magica5,  baron_air3     ] { ai_face(); };
+void() baron_air3  = [$magica6,  baron_magica7  ] { ai_face(); };
 
 // Use triangle pattern instead of Nehahra's off-center one.
 // Me: 0, -1 1, -2 0 2.  Neh: 0, -1 -2, 0 1.
-void() baron_magica1  =[ $magica1,  baron_magica2  ] {ai_face();};
-void() baron_magica2  =[ $magica2,  baron_magica3  ] {ai_face();};
-void() baron_magica3  =[ $magica3,  baron_magica4  ] {ai_face();
+void() baron_magica1  = [$magica1,  baron_magica2  ] { ai_face(); };
+void() baron_magica2  = [$magica2,  baron_magica3  ] { ai_face(); };
+void() baron_magica3  = [$magica3,  baron_magica4  ] { ai_face();
     if (self.level == BARON_AIR)
         self.think = baron_air1;
 };
-void() baron_magica4  =[ $magica4,  baron_magica5  ] {ai_face(); baron_shot(0);};
-void() baron_magica5  =[ $magica5,  baron_magica6  ] {ai_face(); baron_shot(-1); baron_shot(1);};
-void() baron_magica6  =[ $magica6,  baron_magica7  ] {ai_face(); baron_shot(-2); baron_shot(2);
+void() baron_magica4  = [$magica4,  baron_magica5  ] { ai_face(); baron_shot(0); };
+void() baron_magica5  = [$magica5,  baron_magica6  ] { ai_face(); baron_shot(-1); baron_shot(1); };
+void() baron_magica6  = [$magica6,  baron_magica7  ] { ai_face(); baron_shot(-2); baron_shot(2);
     if (self.level)
         baron_shot(0);  // Extra shot for boss.
 };
-void() baron_magica7  =[ $magica7,  baron_run      ] {ai_face();};
+void() baron_magica7  = [$magica7,  baron_run      ] { ai_face(); };
 
 void() baron_magic = {
     if (self.level) {
@@ -714,13 +714,13 @@ void() baron_magic = {
             if (!super_active)
                 if (self.waitmax < time)    // Don't combo from gust.
                     if (random() < 0.5) //0.33)
-                        {baron_slam1();  return;}
+                        { baron_slam1();  return;}
 
             if (self.waitmax < time)
                 if (UpIsSky (self.enemy.origin,self.enemy))
                     opt = opt + 1;
             if (self.waterlevel < 2)
-                {add = 0;  opt = opt + 1;  yes = 1;}
+                { add = 0;  opt = opt + 1;  yes = 1;}
 
             r = random() * opt + add;
             if ((r <= 1) && yes)
@@ -751,7 +751,7 @@ void() baron_magic = {
             if (self.waitmax < time) {
                 if (!super_active)
                     if (random() < 0.5) //0.33)
-                        if ((self.level != BARON_EARTH) || BaronGolem_Check ()) {baron_cast1();  return;}
+                        if ((self.level != BARON_EARTH) || BaronGolem_Check ()) { baron_cast1();  return;}
                 if (self.level == BARON_EARTH) {
                     if (QuakeHurts(self.enemy)) opt = opt + 1; // Enemy hurt by quake?
                 } else {
@@ -786,9 +786,9 @@ void() baron_magic = {
 // sequence as a bit different than Nehahra.
 void() baron_jumptouch;
 
-void() baron_jump1  =[ $jump6,  baron_jump2  ] {ai_face(); self.waitmin = 5;};
-void() baron_jump2  =[ $jump5,  baron_jump3  ] {ai_face();};
-void() baron_jump3  =[ $jump4,  baron_jump4  ] {
+void() baron_jump1  = [$jump6,  baron_jump2  ] { ai_face(); self.waitmin = 5;};
+void() baron_jump2  = [$jump5,  baron_jump3  ] { ai_face(); };
+void() baron_jump3  = [$jump4,  baron_jump4  ] {
     ai_face();
 // Not in Nehahra, but I like it so it stays.
     if (range(self.enemy) == RANGE_MELEE) {
@@ -802,7 +802,7 @@ void() baron_jump3  =[ $jump4,  baron_jump4  ] {
             self.think = baron_magic;     // Abort jump and fling some magic.
     }
 };
-void() baron_jump4  =[ $jump3,  baron_jump5  ] {
+void() baron_jump4  = [$jump3,  baron_jump5  ] {
     local   float   sped, up;
 
 	// Update:  Use Nehahra's values.
@@ -821,16 +821,16 @@ void() baron_jump4  =[ $jump3,  baron_jump5  ] {
     self.flags = self.flags - (self.flags & FL_ONGROUND);
     self.nextthink = time + 0.2;
 };
-void() baron_jump5  =[ $jump2,  baron_jump6  ] {self.nextthink = time + 0.2;};
-void() baron_jump6  =[ $jump1,  baron_jump7  ] {self.nextthink = time + 3;};
-void() baron_jump7  =[ $jump4,  baron_jump4  ] {};
+void() baron_jump5  = [$jump2,  baron_jump6  ] { self.nextthink = time + 0.2;};
+void() baron_jump6  = [$jump1,  baron_jump7  ] { self.nextthink = time + 3;};
+void() baron_jump7  = [$jump4,  baron_jump4  ] {};
 
-void() baron_land1  =[ $jump4,  baron_land2  ] {};
-void() baron_land2  =[ $jump5,  baron_land3  ] {};
-void() baron_land3  =[ $jump6,  baron_run    ] {};
+void() baron_land1  = [$jump4,  baron_land2  ] {};
+void() baron_land2  = [$jump5,  baron_land3  ] {};
+void() baron_land3  = [$jump6,  baron_run    ] {};
 
 // Jump initiated by trigger.
-void() baron_tjump  =[ $jump3,  baron_jump5  ] {
+void() baron_tjump  = [$jump3,  baron_jump5  ] {
     self.touch = baron_jumptouch;
     // velocity and onground assumed to be set by jump trigger.
     self.nextthink = time + 0.2;
@@ -921,19 +921,19 @@ void() baron_missile = {
     if (!(self.spawnflags & BSF_NO_JUMP))
         if (range(self.enemy) != RANGE_MELEE)   // range check not in Nehahra.
             if (random() < 0.3)     // Me: 0.2, Nehahra/Rapture: 0.3.
-                if (baron_tracejump (self.angles, 400, '0 0 300')) {baron_jump1();  return;}
+                if (baron_tracejump (self.angles, 400, '0 0 300')) { baron_jump1();  return;}
 
     baron_magic();
 };
 
-void() baron_paina1  =[ $paina3,  baron_paina2  ] {};
-void() baron_paina2  =[ $paina2,  baron_paina3  ] {};
-void() baron_paina3  =[ $paina1,  baron_run     ] {};
+void() baron_paina1  = [$paina3,  baron_paina2  ] {};
+void() baron_paina2  = [$paina2,  baron_paina3  ] {};
+void() baron_paina3  = [$paina1,  baron_run     ] {};
 
-void() baron_painb1  =[ $painb1,  baron_painb2  ] {};
-void() baron_painb2  =[ $painb2,  baron_painb3  ] {};
-void() baron_painb3  =[ $painb3,  baron_painb4  ] {};
-void() baron_painb4  =[ $painb4,  baron_run     ] {};
+void() baron_painb1  = [$painb1,  baron_painb2  ] {};
+void() baron_painb2  = [$painb2,  baron_painb3  ] {};
+void() baron_painb3  = [$painb3,  baron_painb4  ] {};
+void() baron_painb4  = [$painb4,  baron_run     ] {};
 
 void(entity inflictor, entity attacker, float damage) baron_pain = {
     if (self.pain_finished > time)
@@ -956,25 +956,25 @@ void(entity inflictor, entity attacker, float damage) baron_pain = {
     attacker = attacker;    // Appease FrikQcc.
 };
 
-void() baron_diea1  =[ $diea1,  baron_diea2  ] {
+void() baron_diea1  = [$diea1,  baron_diea2  ] {
 	self.reviveframestart = $diea6;
 	self.reviveframeend = $diea1;
 };
-void() baron_diea2  =[ $diea2,  baron_diea3  ] {ai_forward(2); monster_check_gib(); self.solid = SOLID_NOT;};
-void() baron_diea3  =[ $diea3,  baron_diea4  ] {ai_back(2); monster_check_gib();};
-void() baron_diea4  =[ $diea4,  baron_diea5  ] {ai_back(6);};
-void() baron_diea5  =[ $diea5,  baron_diea6  ] {ai_back(2); monster_death_postcheck();};
-void() baron_diea6  =[ $diea6,  baron_diea6  ] {ai_back(8); monster_deadbody_check();};
+void() baron_diea2  = [$diea2,  baron_diea3  ] { ai_forward(2); monster_check_gib(); self.solid = SOLID_NOT;};
+void() baron_diea3  = [$diea3,  baron_diea4  ] { ai_back(2); monster_check_gib(); };
+void() baron_diea4  = [$diea4,  baron_diea5  ] { ai_back(6); };
+void() baron_diea5  = [$diea5,  baron_diea6  ] { ai_back(2); monster_death_postcheck(); };
+void() baron_diea6  = [$diea6,  baron_diea6  ] { ai_back(8); monster_deadbody_check(); };
 
-void() baron_dieb1  =[ $dieb1,  baron_dieb2  ] {
+void() baron_dieb1  = [$dieb1,  baron_dieb2  ] {
 	self.reviveframestart = $dieb6;
 	self.reviveframeend = $dieb1;
 };
-void() baron_dieb2  =[ $dieb2,  baron_dieb3  ] {monster_check_gib(); self.solid = SOLID_NOT;};
-void() baron_dieb3  =[ $dieb3,  baron_dieb4  ] {ai_forward(7); monster_check_gib();};
-void() baron_dieb4  =[ $dieb4,  baron_dieb5  ] {};
-void() baron_dieb5  =[ $dieb5,  baron_dieb6  ] {ai_forward(20); monster_death_postcheck();};
-void() baron_dieb6  =[ $dieb6,  baron_dieb6  ] {ai_forward(2); monster_deadbody_check();};
+void() baron_dieb2  = [$dieb2,  baron_dieb3  ] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() baron_dieb3  = [$dieb3,  baron_dieb4  ] { ai_forward(7); monster_check_gib(); };
+void() baron_dieb4  = [$dieb4,  baron_dieb5  ] {};
+void() baron_dieb5  = [$dieb5,  baron_dieb6  ] { ai_forward(20); monster_death_postcheck(); };
+void() baron_dieb6  = [$dieb6,  baron_dieb6  ] { ai_forward(2); monster_deadbody_check(); };
 
 void() baron_die = {
     monster_death_precheck();
@@ -1055,7 +1055,7 @@ void() monster_baron = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
         self.minion_name = "monster_golem";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

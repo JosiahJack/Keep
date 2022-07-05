@@ -55,25 +55,25 @@ $frame death1 death2 death3 death4 death5 death6 // fall over and die
 $frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 // body flies up and then back to the ground
 $frame base1 base2 // Not used, modelling templates
 
-void()	voreling_idle1	=[	$idle1,	voreling_idle2	] {monster_idle_sound();ai_stand();};
-void()	voreling_idle2	=[	$idle2,	voreling_idle3	] {ai_stand();};
-void()	voreling_idle3	=[	$idle3,	voreling_idle4	] {ai_stand();};
-void()	voreling_idle4	=[	$idle4,	voreling_idle5	] {ai_stand();};
-void()	voreling_idle5	=[	$idle5,	voreling_idle6	] {ai_stand();};
-void()	voreling_idle6	=[	$idle6,	voreling_idle7	] {ai_stand();};
-void()	voreling_idle7	=[	$idle7,	voreling_idle8	] {ai_stand();};
-void()	voreling_idle8	=[	$idle8,	voreling_idle9	] {ai_stand();};
-void()	voreling_idle9	=[	$idle9,	voreling_idle10	] {ai_stand();};
-void()	voreling_idle10	=[	$idle10,voreling_idle11	] {ai_stand();};
-void()	voreling_idle11	=[	$idle11,voreling_idle12	] {ai_stand();};
-void()	voreling_idle12	=[	$idle12,voreling_idle13	] {ai_stand();};
-void()	voreling_idle13	=[	$idle13,voreling_idle1	] {ai_stand();};
+void()	voreling_idle1	= [	$idle1,	voreling_idle2	] { monster_idle_sound();ai_stand(); };
+void()	voreling_idle2	= [	$idle2,	voreling_idle3	] { ai_stand(); };
+void()	voreling_idle3	= [	$idle3,	voreling_idle4	] { ai_stand(); };
+void()	voreling_idle4	= [	$idle4,	voreling_idle5	] { ai_stand(); };
+void()	voreling_idle5	= [	$idle5,	voreling_idle6	] { ai_stand(); };
+void()	voreling_idle6	= [	$idle6,	voreling_idle7	] { ai_stand(); };
+void()	voreling_idle7	= [	$idle7,	voreling_idle8	] { ai_stand(); };
+void()	voreling_idle8	= [	$idle8,	voreling_idle9	] { ai_stand(); };
+void()	voreling_idle9	= [	$idle9,	voreling_idle10	] { ai_stand(); };
+void()	voreling_idle10	= [	$idle10,voreling_idle11	] { ai_stand(); };
+void()	voreling_idle11	= [	$idle11,voreling_idle12	] { ai_stand(); };
+void()	voreling_idle12	= [	$idle12,voreling_idle13	] { ai_stand(); };
+void()	voreling_idle13	= [	$idle13,voreling_idle1	] { ai_stand(); };
 
-void()	voreling_walk1	=[	$walk1,	voreling_walk2	] {monster_idle_sound();ai_walk(4);};
-void()	voreling_walk2	=[	$walk2,	voreling_walk3	] {monster_footstep(FALSE); ai_walk(3);};
-void()	voreling_walk3	=[	$walk3,	voreling_walk4	] {ai_walk(4);};
-void()	voreling_walk4	=[	$walk4,	voreling_walk5	] {ai_walk(5);};
-void()	voreling_walk5	=[	$walk5,	voreling_walk1	] {ai_walk(5);};
+void()	voreling_walk1	= [	$walk1,	voreling_walk2	] { monster_idle_sound();ai_walk(4); };
+void()	voreling_walk2	= [	$walk2,	voreling_walk3	] { monster_footstep(FALSE); ai_walk(3); };
+void()	voreling_walk3	= [	$walk3,	voreling_walk4	] { ai_walk(4); };
+void()	voreling_walk4	= [	$walk4,	voreling_walk5	] { ai_walk(5); };
+void()	voreling_walk5	= [	$walk5,	voreling_walk1	] { ai_walk(5); };
 
 void() voreling_runpause = {
 	if (!self.enemy) return; // Do nothing is not to fight or dead
@@ -84,19 +84,19 @@ void() voreling_runpause = {
 	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
 };
 
-void()	voreling_runp1	=[	$idle1,	voreling_runp2	] {voreling_runpause();};
-void()	voreling_runp2	=[	$idle2,	voreling_runp3	] {voreling_runpause();};
-void()	voreling_runp3	=[	$idle3,	voreling_runp4	] {voreling_runpause();};
-void()	voreling_runp4	=[	$idle4,	voreling_runp5	] {voreling_runpause();};
-void()	voreling_runp5	=[	$idle5,	voreling_runp6	] {voreling_runpause();};
-void()	voreling_runp6	=[	$idle6,	voreling_runp7	] {voreling_runpause();};
-void()	voreling_runp7	=[	$idle7,	voreling_runp8	] {voreling_runpause();};
-void()	voreling_runp8	=[	$idle8,	voreling_runp9	] {voreling_runpause();};
-void()	voreling_runp9	=[	$idle9,	voreling_runp10	] {voreling_runpause();};
-void()	voreling_runp10	=[	$idle10,voreling_runp11	] {voreling_runpause();};
-void()	voreling_runp11	=[	$idle11,voreling_runp12	] {voreling_runpause();};
-void()	voreling_runp12	=[	$idle12,voreling_runp13	] {voreling_runpause();};
-void()	voreling_runp13	=[	$idle13,voreling_runp1	] {voreling_runpause();};
+void()	voreling_runp1	= [	$idle1,	voreling_runp2	] { voreling_runpause(); };
+void()	voreling_runp2	= [	$idle2,	voreling_runp3	] { voreling_runpause(); };
+void()	voreling_runp3	= [	$idle3,	voreling_runp4	] { voreling_runpause(); };
+void()	voreling_runp4	= [	$idle4,	voreling_runp5	] { voreling_runpause(); };
+void()	voreling_runp5	= [	$idle5,	voreling_runp6	] { voreling_runpause(); };
+void()	voreling_runp6	= [	$idle6,	voreling_runp7	] { voreling_runpause(); };
+void()	voreling_runp7	= [	$idle7,	voreling_runp8	] { voreling_runpause(); };
+void()	voreling_runp8	= [	$idle8,	voreling_runp9	] { voreling_runpause(); };
+void()	voreling_runp9	= [	$idle9,	voreling_runp10	] { voreling_runpause(); };
+void()	voreling_runp10	= [	$idle10,voreling_runp11	] { voreling_runpause(); };
+void()	voreling_runp11	= [	$idle11,voreling_runp12	] { voreling_runpause(); };
+void()	voreling_runp12	= [	$idle12,voreling_runp13	] { voreling_runpause(); };
+void()	voreling_runp13	= [	$idle13,voreling_runp1	] { voreling_runpause(); };
 
 void(float dist) voreling_checkpause = {
 	if (!self.enemy) return; // Do nothing is not to fight or dead
@@ -115,26 +115,26 @@ void(float dist) voreling_checkpause = {
 	}
 };
 
-void()	voreling_run1 =[ $run1, voreling_run2 ] {self.movespeed = 0;
+void()	voreling_run1 = [$run1, voreling_run2 ] { self.movespeed = 0;
 	monster_idle_sound();
 	voreling_checkpause(8);
 	// Vorelings have constant problems with weird angles (X/Z)
 	// Just keep resetting them so they move normally
 	ai_resetangles();
 };
-void()	voreling_run2 =[ $run2, voreling_run3 ] {monster_footstep(FALSE); voreling_checkpause(6);};
-void()	voreling_run3 =[ $run3, voreling_run4 ] {voreling_checkpause(8);};
-void()	voreling_run4 =[ $run4, voreling_run5 ] {voreling_checkpause(10);};
-void()	voreling_run5 =[ $run1, voreling_run6 ] {voreling_checkpause(8);};
-void()	voreling_run6 =[ $run2, voreling_run7 ] {monster_footstep(FALSE); voreling_checkpause(6);};
-void()	voreling_run7 =[ $run3, voreling_run8 ] {voreling_checkpause(8);};
-void()	voreling_run8 =[ $run4, voreling_run1 ] {voreling_checkpause(10);};
+void()	voreling_run2 = [$run2, voreling_run3 ] { monster_footstep(FALSE); voreling_checkpause(6); };
+void()	voreling_run3 = [$run3, voreling_run4 ] { voreling_checkpause(8); };
+void()	voreling_run4 = [$run4, voreling_run5 ] { voreling_checkpause(10); };
+void()	voreling_run5 = [$run1, voreling_run6 ] { voreling_checkpause(8); };
+void()	voreling_run6 = [$run2, voreling_run7 ] { monster_footstep(FALSE); voreling_checkpause(6); };
+void()	voreling_run7 = [$run3, voreling_run8 ] { voreling_checkpause(8); };
+void()	voreling_run8 = [$run4, voreling_run1 ] { voreling_checkpause(10); };
 
-void()	voreling_slide1	=[	$walk1,		voreling_slide2	] {ai_run_slide(6); monster_idle_sound();};
-void()	voreling_slide2	=[	$walk2,		voreling_slide3	] {ai_run_slide(4);};
-void()	voreling_slide3	=[	$walk3,		voreling_slide4	] {ai_run_slide(6);};
-void()	voreling_slide4	=[	$walk4,		voreling_slide5	] {ai_run_slide(4);};
-void()	voreling_slide5	=[	$walk5,		voreling_run1	] {ai_run(4);};
+void()	voreling_slide1	= [	$walk1,		voreling_slide2	] { ai_run_slide(6); monster_idle_sound(); };
+void()	voreling_slide2	= [	$walk2,		voreling_slide3	] { ai_run_slide(4); };
+void()	voreling_slide3	= [	$walk3,		voreling_slide4	] { ai_run_slide(6); };
+void()	voreling_slide4	= [	$walk4,		voreling_slide5	] { ai_run_slide(4); };
+void()	voreling_slide5	= [	$walk5,		voreling_run1	] { ai_run(4); };
 
 // VORELING 2 - PURPLE SPIT FUNCTIONS (range)
 void(float sideang) voreling_spitacid = {
@@ -159,15 +159,15 @@ void(float sideang) voreling_spitacid = {
 	launch_projectile(org,dir,avel,CT_PROJ_VORE,1);
 };
 
-void()	voreling_spit1 = [ $pain1, voreling_spit2 ] {ai_face();self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_VORELING); };
-void()	voreling_spit2 = [ $pain2, voreling_spit3 ] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
-void()	voreling_spit3 = [ $bite1, voreling_spit4 ] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
-void()	voreling_spit4 = [ $bite2, voreling_spit5 ] {voreling_spitacid(-0.1);};
-void()	voreling_spit5 = [ $bite3, voreling_spit6 ] {voreling_spitacid(0);};
-void()	voreling_spit6 = [ $bite4, voreling_spit7 ] {voreling_spitacid(0.1);};
-void()	voreling_spit7 = [ $bite5, voreling_spit8 ] {};
-void()	voreling_spit8 = [ $bite6, voreling_spit9 ] {};
-void()	voreling_spit9 = [ $bite7, voreling_run1 ] {};
+void()	voreling_spit1 = [$pain1, voreling_spit2 ] { ai_face();self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_VORELING); };
+void()	voreling_spit2 = [$pain2, voreling_spit3 ] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
+void()	voreling_spit3 = [$bite1, voreling_spit4 ] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
+void()	voreling_spit4 = [$bite2, voreling_spit5 ] { voreling_spitacid(-0.1); };
+void()	voreling_spit5 = [$bite3, voreling_spit6 ] { voreling_spitacid(0); };
+void()	voreling_spit6 = [$bite4, voreling_spit7 ] { voreling_spitacid(0.1); };
+void()	voreling_spit7 = [$bite5, voreling_spit8 ] {};
+void()	voreling_spit8 = [$bite6, voreling_spit9 ] {};
+void()	voreling_spit9 = [$bite7, voreling_run1 ] {};
 
 // BITE
 void() voreling_melee = {
@@ -193,14 +193,14 @@ void() voreling_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-void()	voreling_bite1	=[	$bite1, voreling_bite2	] {ai_face();}; // Start bite attack loop
-void()	voreling_bite2	=[	$bite2, voreling_bite3 ] {ai_face();}; 
-void()	voreling_bite3	=[	$bite3, voreling_bite4 ] {ai_face();};
-void()	voreling_bite4 = [	$bite4, voreling_bite5 ] {voreling_melee();};
+void()	voreling_bite1	= [	$bite1, voreling_bite2	] { ai_face(); }; // Start bite attack loop
+void()	voreling_bite2	= [	$bite2, voreling_bite3 ] { ai_face(); }; 
+void()	voreling_bite3	= [	$bite3, voreling_bite4 ] { ai_face(); };
+void()	voreling_bite4 = [	$bite4, voreling_bite5 ] { voreling_melee(); };
 void()	voreling_bite5 = [	$bite5, voreling_bite6 ] {};
-void()	voreling_bite6 =[	$bite6, voreling_bite7 ] {
+void()	voreling_bite6 = [	$bite6, voreling_bite7 ] {
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = voreling_bite2;}; // Exit bite attack loop
-void()	voreling_bite7	=[	$bite7, voreling_run1	] {};
+void()	voreling_bite7	= [	$bite7, voreling_run1	] {};
 
 void()	Voreling_JumpTouch = {
 	local float ldmg;
@@ -238,12 +238,12 @@ void()	Voreling_JumpTouch = {
 };
 
 //----------------------------------------------------------------------------
-void() voreling_leap1	=[	$jump1, voreling_leap2	] {ai_face();
+void() voreling_leap1	= [	$jump1, voreling_leap2	] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	monster_idle_sound();
 };
-void() voreling_leap2	=[	$jump2, voreling_leap3	] {ai_face();};
-void() voreling_leap3	=[	$jump3, voreling_leap4	] {
+void() voreling_leap2	= [	$jump2, voreling_leap3	] { ai_face(); };
+void() voreling_leap3	= [	$jump3, voreling_leap4	] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Voreling_JumpTouch;
@@ -255,9 +255,9 @@ void() voreling_leap3	=[	$jump3, voreling_leap4	] {
 };
 
 // Flying through the air waiting to touch something!
-void() voreling_leap4	=[	$jump4, voreling_leap5	] {};
-void() voreling_leap5	=[	$jump5, voreling_leap6 ] {};	
-void() voreling_leap6	=[	$jump6, voreling_leap7	] {
+void() voreling_leap4	= [	$jump4, voreling_leap5	] {};
+void() voreling_leap5	= [	$jump5, voreling_leap6 ] {};	
+void() voreling_leap6	= [	$jump6, voreling_leap7	] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -266,23 +266,22 @@ void() voreling_leap6	=[	$jump6, voreling_leap7	] {
 	self.oldorigin = self.origin;
 };
 //----------------------------------------------------------------------
-void() voreling_leap7 =[ $jump3, voreling_leap8 ] {monster_footstep(FALSE);};
-void() voreling_leap8 =[ $jump2, voreling_leap9 ] {monster_footstep(FALSE);};
-void() voreling_leap9 =[ $jump1, voreling_run1	] {ai_resetangles();};
+void() voreling_leap7 = [$jump3, voreling_leap8 ] { monster_footstep(FALSE); };
+void() voreling_leap8 = [$jump2, voreling_leap9 ] { monster_footstep(FALSE); };
+void() voreling_leap9 = [$jump1, voreling_run1	] { ai_resetangles(); };
 
-//======================================================================
+
 // CEILING VORELINGS - Idle/Drop/Touch/Land functions
-//======================================================================
-void()	voreling_idleup1 =[ $idleup1, voreling_idleup2] {monster_idle_sound();ai_stand();};
-void()	voreling_idleup2 =[ $idleup2, voreling_idleup3] {ai_stand();};
-void()	voreling_idleup3 =[ $idleup3, voreling_idleup4] {ai_stand();};
-void()	voreling_idleup4 =[ $idleup4, voreling_idleup5] {ai_stand();};
-void()	voreling_idleup5 =[ $idleup5, voreling_idleup6] {ai_stand();};
-void()	voreling_idleup6 =[ $idleup6, voreling_idleup1] {ai_stand();};
+
+void()	voreling_idleup1 = [$idleup1, voreling_idleup2] { monster_idle_sound();ai_stand(); };
+void()	voreling_idleup2 = [$idleup2, voreling_idleup3] { ai_stand(); };
+void()	voreling_idleup3 = [$idleup3, voreling_idleup4] { ai_stand(); };
+void()	voreling_idleup4 = [$idleup4, voreling_idleup5] { ai_stand(); };
+void()	voreling_idleup5 = [$idleup5, voreling_idleup6] { ai_stand(); };
+void()	voreling_idleup6 = [$idleup6, voreling_idleup1] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void() voreling_droptouch =
-{
+void() voreling_droptouch = {
 	// Check if landed on something that is not the ground?
 	if (!checkbottom(self)) {
 		// Is the voreling standing on something?
@@ -325,11 +324,11 @@ void() voreling_droptouch =
 	self.nextthink = time + 0.1;
 };
 
-void()	voreling_drop1	=[	$drop1,	voreling_drop2	] {};
-void()	voreling_drop2	=[	$drop2,	voreling_drop3	] {};
-void()	voreling_drop3	=[	$drop3,	voreling_drop4	] {};
-void()	voreling_drop4	=[	$drop4,	voreling_drop5	] {};
-void()	voreling_drop5	=[	$drop5,	voreling_drop5	] {
+void()	voreling_drop1	= [	$drop1,	voreling_drop2	] {};
+void()	voreling_drop2	= [	$drop2,	voreling_drop3	] {};
+void()	voreling_drop3	= [	$drop3,	voreling_drop4	] {};
+void()	voreling_drop4	= [	$drop4,	voreling_drop5	] {};
+void()	voreling_drop5	= [	$drop5,	voreling_drop5	] {
 	if (self.attack_timer < time || self.velocity_z == 0) voreling_droptouch();
 };
 
@@ -367,17 +366,17 @@ void() voreling_wakeup = {
 };
 
 // MINION - Grow and spin up from nothing
-void() voreling_growangle = {self.angles_y = self.angles_y + self.lefty;};
-void() voreling_grow1 = [ $grow1, voreling_grow2 ] {};
-void() voreling_grow2 = [ $grow2, voreling_grow3 ] {voreling_growangle();};
-void() voreling_grow3 = [ $grow3, voreling_grow4 ] {voreling_growangle();};
-void() voreling_grow4 = [ $grow4, voreling_grow5 ] {voreling_growangle();};
-void() voreling_grow5 = [ $grow5, voreling_grow6 ] {voreling_growangle();};
-void() voreling_grow6 = [ $grow6, voreling_grow7 ] {voreling_growangle();};
-void() voreling_grow7 = [ $grow7, voreling_grow8 ] {voreling_growangle();};
-void() voreling_grow8 = [ $grow8, voreling_grow9 ] {voreling_growangle();};
-void() voreling_grow9 = [ $grow9, voreling_grow10] {voreling_growangle();};
-void() voreling_grow10= [ $grow10, voreling_run1 ] {
+void() voreling_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() voreling_grow1 = [$grow1, voreling_grow2 ] {};
+void() voreling_grow2 = [$grow2, voreling_grow3 ] { voreling_growangle(); };
+void() voreling_grow3 = [$grow3, voreling_grow4 ] { voreling_growangle(); };
+void() voreling_grow4 = [$grow4, voreling_grow5 ] { voreling_growangle(); };
+void() voreling_grow5 = [$grow5, voreling_grow6 ] { voreling_growangle(); };
+void() voreling_grow6 = [$grow6, voreling_grow7 ] { voreling_growangle(); };
+void() voreling_grow7 = [$grow7, voreling_grow8 ] { voreling_growangle(); };
+void() voreling_grow8 = [$grow8, voreling_grow9 ] { voreling_growangle(); };
+void() voreling_grow9 = [$grow9, voreling_grow10] { voreling_growangle(); };
+void() voreling_grow10= [$grow10, voreling_run1 ] {
 	// Is the voreling stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
 		// Time to die!
@@ -413,8 +412,8 @@ void() voreling_grow = {
 	voreling_grow1();
 };
 
-void() voreling_pain1	=[	$pain1,	voreling_pain2	] {};
-void() voreling_pain2	=[	$pain2,	voreling_run1	] {};
+void() voreling_pain1	= [	$pain1,	voreling_pain2	] {};
+void() voreling_pain2	= [	$pain2,	voreling_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) voreling_pain = {
 	// Has the voreling been hit while on the ceiling?
@@ -442,20 +441,20 @@ void(entity inflictor, entity attacker, float damage) voreling_pain = {
 	}
 };
 
-void() voreling_die1 =[	$death1, voreling_die2	] {};
-void() voreling_die2 =[	$death2, voreling_die3	] {monster_check_gib();};
-void() voreling_die3 =[	$death3, voreling_die4	] {monster_check_gib();self.solid = SOLID_NOT;};
-void() voreling_die4 =[	$death4, voreling_die5	] {};
-void() voreling_die5 =[	$death5, voreling_die6	] {monster_death_postcheck();};
-void() voreling_die6 =[	$death6, voreling_die6	] {monster_deadbody_check();};
+void() voreling_die1 = [	$death1, voreling_die2	] {};
+void() voreling_die2 = [	$death2, voreling_die3	] { monster_check_gib(); };
+void() voreling_die3 = [	$death3, voreling_die4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void() voreling_die4 = [	$death4, voreling_die5	] {};
+void() voreling_die5 = [	$death5, voreling_die6	] { monster_death_postcheck(); };
+void() voreling_die6 = [	$death6, voreling_die6	] { monster_deadbody_check(); };
 
-void() voreling_dieB1 =[	$deathB1, voreling_dieB2	] {};
-void() voreling_dieB2 =[	$deathB2, voreling_dieB3	] {monster_check_gib();};
-void() voreling_dieB3 =[	$deathB3, voreling_dieB4	] {monster_check_gib();self.solid = SOLID_NOT;};
-void() voreling_dieB4 =[	$deathB4, voreling_dieB5	] {};
-void() voreling_dieB5 =[	$deathB5, voreling_dieB6	] {};
-void() voreling_dieB6 =[	$deathB6, voreling_dieB7	] {monster_death_postcheck();};
-void() voreling_dieB7 =[	$deathB7, voreling_dieB7	] {monster_deadbody_check();};
+void() voreling_dieB1 = [	$deathB1, voreling_dieB2	] {};
+void() voreling_dieB2 = [	$deathB2, voreling_dieB3	] { monster_check_gib(); };
+void() voreling_dieB3 = [	$deathB3, voreling_dieB4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void() voreling_dieB4 = [	$deathB4, voreling_dieB5	] {};
+void() voreling_dieB5 = [	$deathB5, voreling_dieB6	] {};
+void() voreling_dieB6 = [	$deathB6, voreling_dieB7	] { monster_death_postcheck(); };
+void() voreling_dieB7 = [	$deathB7, voreling_dieB7	] { monster_deadbody_check(); };
 
 void() voreling_die = {
 	self.max_health = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far

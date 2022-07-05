@@ -46,7 +46,7 @@ void() BounceShot_Seek;
 
 void() Touch_Bullet = { // [FUNCTION]
 	if (self.touchedvoid) return;				// Marked for removal already
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 	if (self.waitmin > time) return;			// bullet touch has been disabled
@@ -90,7 +90,7 @@ void() Touch_Projectile = { // [FUNCTION]
 	local float proj_type, proj_speed, old_armortype, old_armorvalue, old_armormask, olddmg;
 	local entity tself, newent, stemp;
 
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}	
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}	
 	if (self.touchedvoid) return;				// Marked for removal
 	if (other == self.owner || other == self.master) return; // No touching launcher.
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
@@ -486,7 +486,7 @@ void() Touch_Projectile = { // [FUNCTION]
 };
 
 void() Touch_HomingMissile = { // [FUNCTION]
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 	if (self.touchedvoid) return;				// Marked for removal
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
@@ -566,7 +566,7 @@ void() Touch_Missile = { // [FUNCTION]
 	local float lavadmg;
 
 	if (self.touchedvoid) return;				// Marked for removal
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 	if (self.oldenemy && other.classtype == self.oldenemy.classtype) return; // Stop packs of owners killing each other
@@ -673,7 +673,7 @@ void() T_MissileTouch = { Touch_Missile(); }; // [FUNCTION], re-direct any map h
 
 void() Touch_Grenade = { // [FUNCTION]
 	if (self.touchedvoid) return;				// Marked for removal
-	if (entity_pcontent(self.origin)) {remove(self); return;}
+	if (entity_pcontent(self.origin)) { remove(self); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
@@ -707,7 +707,7 @@ void() GrenadeTouch = { maphack_grenade(); }; // [FUNCTION]
 // Ejecting Shell Casing for Shotguns
 void() Touch_ShellCasing = { // [FUNCTION]
 	if (self.touchedvoid) return;				// Marked for removal
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 	if (other == self.owner || other == self.master) return;
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
@@ -772,8 +772,7 @@ void() HIP_LaserTouch = { // [FUNCTION]
 void() ProximityGrenadeTouch = { // [FUNCTION]
 	if (other == self) return;
 	if (other.classname == self.classname) return;
-	if (other.flags & FL_NOTARGET) return;
-    if (other.items & IT_INVISIBILITY) return;
+    if (Invisible(other)) return;
 
 	self.lastvictim = other;
 	if (self.state) return;
@@ -789,7 +788,7 @@ void() ProximityGrenadeTouch = { // [FUNCTION]
 // AreaBlaster = Fireballs that tear through and grind targets for a while before exploding.  Similar to the AreaBlaster special from the NES game
 // The Guardian Legend.  For a more recent example, the ghosts from Hexen's priest weapon Wraithverge.
 void() AreaBlaster_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
     if (Reflected()) return;
 
     if (other.takedamage) T_Damage (other, self, self.master, self.cnt, IGNORECLASS);
@@ -801,7 +800,7 @@ void() AreaBlaster_Touch = { // [FUNCTION]
 // Called when a MIRV slams into something before releasing its payload.
 void() Mirv_Touch = { // [FUNCTION]
     Mirv_Reset(); // Turn off control.
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
     if (Reflected_Damage (COURAGE_DAMAGE)) return;
 
     Mirv_Payload(); // Unleash AreaBlaster payload.
@@ -1063,7 +1062,7 @@ void() AkArrow_Magic_Touch = { // [FUNCTION]
 void() AkArrow_Wood_Touch = { // [FUNCTION]
     local vector org;
 
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
     if (Reflected ()) return;
 
     self.touch = SUB_Null; // Stack overflow prevention.
@@ -1100,14 +1099,14 @@ void() AkArrow_Wood_Touch = { // [FUNCTION]
 };
 
 void() RyuPlasma_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self);  return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self);  return;}
 
     self.enemy = other;
     RyuPlasma_Explode();
 };
 
 void() Acidball_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
 
     self.touch = SUB_Null;
     self.enemy = other;
@@ -1121,7 +1120,7 @@ void() Acidball_Touch = { // [FUNCTION]
 
 //  Meat -- Used by zombie and nightshade (wraith dragon).
 void() Meat_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove(self); return; }
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
     if (Reflected()) return;
 
     if (other.takedamage) {
@@ -1141,7 +1140,7 @@ void() Ice_Touch = { // [FUNCTION]
     local float chunks, damage;
     local vector spot;
 
-    if (pointcontents(self.origin) <= CONTENT_LAVA) {remove(self);  return;} // Lava or sky.
+    if (pointcontents(self.origin) <= CONTENT_LAVA) { remove(self);  return;} // Lava or sky.
     if (Reflected ()) return;
 
     self.touch = SUB_Null;      // Stack overflow prevention.
@@ -1164,7 +1163,7 @@ void() Ice_Touch = { // [FUNCTION]
 	// In case of standard engines, just display a ring topside only.
     spot = self.origin;
     traceline (spot, spot + self.velocity, TRUE, world); // Ignore creatures.
-    if (trace_fraction >= 1.0) {remove (self);  return;} // Too far from a solid surface.
+    if (trace_fraction >= 1.0) { remove (self);  return;} // Too far from a solid surface.
 	
     spot = trace_endpos + trace_plane_normal * 2;
     self.angles = vectoangles(trace_plane_normal);
@@ -1186,7 +1185,7 @@ void() IceMineTrigger_Touch = { // [FUNCTION]
     local   entity  ice, swap;
 
     ice = self.owner;
-    if (!ice || (ice == self)) {remove (self);  return;}
+    if (!ice || (ice == self)) { remove (self);  return;}
     if (!(other.flags & FL_MONSTER)) return; // Other things should be able touch the iceball itself.
     if (other == ice.master) return; // Iceball owner is immune.
     if (!(ice.flags & FL_ONGROUND) || (ice.velocity != '0 0 0')) return; // Anything can touch iceball if it's moving.
@@ -1220,7 +1219,7 @@ void() NecroSnake_Touch = { // [FUNCTION]
 void() NecroBolt_Touch = { // [FUNCTION]
     local float damage;
 
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove(self);  return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove(self);  return;}
     if (Reflected_Damage (COURAGE_DAMAGE)) return;
 
     self.touch = SUB_Null; // Stack overflow prevention.
@@ -1337,7 +1336,7 @@ void() Frozen_Touch = { // [FUNCTION]
 
 // Called when an arrow hits something.
 void() Buriza_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
     if (Reflected()) return;
 
     if (other) {
@@ -1349,7 +1348,7 @@ void() Buriza_Touch = { // [FUNCTION]
 		T_Slow (other, self.master, 5); // Knock off some hp, and slow for 5 seconds.
 		particle (self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
 		particle (self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
-        if (other.solid != SOLID_BSP) {self.oldenemy = other;  return;}   // Pierce the target.
+        if (other.solid != SOLID_BSP) { self.oldenemy = other;  return;}   // Pierce the target.
 
         self.owner = world; // Arrow will shatter, so set owner to the world so that targets hiding behind 'other' aren't hit by T_RadiusDamage.
     }
@@ -1365,7 +1364,7 @@ void() Buriza_Touch = { // [FUNCTION]
 
 // Called when fireball impacts.  On impact, it explodes and inflicts damage.
 void() Fireball_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;} // If it is in the sky, disappear.
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;} // If it is in the sky, disappear.
 
     self.velocity = normalize(self.velocity);
     if (Fireball_InWater (self)) return; // If the flame is in water, dissolve into steam.
@@ -1386,8 +1385,8 @@ void() Fireball_Touch = { // [FUNCTION]
 
 // The large fireball explodes on contact and inflicts severe damage within a radius.
 void() Meteor_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;} // Destroy fireball if it has no power or if it touches the sky.
-    if (self.dmg <= 0) {Meteor_Fizzle(self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;} // Destroy fireball if it has no power or if it touches the sky.
+    if (self.dmg <= 0) { Meteor_Fizzle(self); return;}
     if (Reflected_Damage (COURAGE_DAMAGE)) return; // NEW:  Rebound if impacting a reflective surface.
 
     self.touch = SUB_Null; // Stack overflow prevention.
@@ -1484,7 +1483,7 @@ void() faSpellTouch = { // [FUNCTION]
 };
 
 void() WandSpark_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
     if (Reflected()) return;
 
     self.touch = SUB_Null; // Stack overflow prevention.
@@ -1599,7 +1598,7 @@ void() pyroflame_touch = {
 };
 
 void() SmartBall_Touch = { // [FUNCTION]
-    if (InSky(self.origin)) {remove(self); return;}     // Disappeared into space.
+    if (InSky(self.origin)) { remove(self); return;}     // Disappeared into space.
     if (Reflected_Damage (COURAGE_DAMAGE)) return;     // Bounced off reflective shield.
     if (other.takedamage || (self.count >= 3) || (self.enemy.health <= 0)) { Touch_Missile(); return; } // Go BOOM!
 

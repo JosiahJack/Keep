@@ -71,8 +71,7 @@ void() monster_spawned_use = {
 	self.nextthink = time + 0.2 + random()*0.1;	//increase delay before moving to give teledeaths a chance to dissapear.	
 };
 
-void(float mtype, vector morg, string mtarget, float mdelay, float mflags, float mangles) BDW_SpawnGroupMonster =
-{
+void(float mtype, vector morg, string mtarget, float mdelay, float mflags, float mangles) BDW_SpawnGroupMonster = {
 	local entity monster, oldself;
 
 	monster = spawn();
@@ -93,8 +92,7 @@ void(float mtype, vector morg, string mtarget, float mdelay, float mflags, float
 	self = oldself;		//remember to always change self back at the end of the function!
 };	
 
-void() monster_group_use =
-{
+void() monster_group_use = {
 	local float n;
 
 	BDW_SpawnGroupMonster(self.count, self.origin, self.target, self.delay, self.spawnflags, self.angles_y);
@@ -140,8 +138,7 @@ void() monster_group_use =
 };
 
 
-float(entity mgroup, float id) AddMonsterToGroup =
-{
+float(entity mgroup, float id) AddMonsterToGroup = {
 	if (!mgroup.count1)
 	{
 		mgroup.count1 	= id;
@@ -196,8 +193,7 @@ float(entity mgroup, float id) AddMonsterToGroup =
 	return FALSE;	//group is full
 };
 
-void(float id) BecomeMonsterGroup =
-{
+void(float id) BecomeMonsterGroup = {
 	self.classname = "monster_group";
 	self.count = id;
 	self.use = monster_group_use;	
@@ -419,8 +415,7 @@ float() BDW_CountMonsterTypes = {
 	return n;
 };
 
-float(float mtype, float mnum, float share) BDW_CheckNextMonster =
-{
+float(float mtype, float mnum, float share) BDW_CheckNextMonster = {
 	local float c;
 
 	if (mtype == 1)
@@ -443,8 +438,7 @@ float(float mtype, float mnum, float share) BDW_CheckNextMonster =
 	return FALSE;
 };
 
-void() BDW_GangMonsterSpawnerUse =
-{
+void() BDW_GangMonsterSpawnerUse = {
 	local vector newpos;		//work out where to place next baddie
 	local float n, r, c, mtype, mnum, share;
 	local float beastie, next;

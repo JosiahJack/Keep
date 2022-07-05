@@ -224,7 +224,7 @@ void() dlord_die5 = [46, dlord_die6] {};
 void() dlord_die6 = [47, dlord_die7] {};
 void() dlord_die7 = [48, dlord_die8] {};
 void() dlord_die8 = [49, dlord_die9] { ai_forward(10); };
-void() dlord_die9 = [50, dlord_die10]{ ai_forward(11); };
+void() dlord_die9 = [50, dlord_die10] { ai_forward(11); };
 void() dlord_die10 = [51, dlord_die11] {};
 void() dlord_die11 = [52, dlord_die12] { monster_death_postcheck(); };
 void() dlord_die12 = [53, dlord_die12] {};
@@ -236,7 +236,7 @@ void() dlord_dieb4 = [57, dlord_dieb5] {};
 void() dlord_dieb5 = [58, dlord_dieb6] {};
 void() dlord_dieb6 = [59, dlord_dieb7] {};
 void() dlord_dieb7 = [60, dlord_dieb8] {};
-void() dlord_dieb8 = [61, dlord_dieb9] { monster_death_postcheck();};
+void() dlord_dieb8 = [61, dlord_dieb9] { monster_death_postcheck(); };
 void() dlord_dieb9 = [62, dlord_dieb9] {};
 
 void() dlord_die = {
@@ -246,7 +246,7 @@ void() dlord_die = {
 	self.effects = 0;
 	if (!self.gibbed) {
 		sound(self, CHAN_VOICE, "quoth/dlord/death.wav", 1, ATTN_NORM);
-		if (random() > 0.5) {dlord_die1();
+		if (random() > 0.5) { dlord_die1();
 		} else { dlord_dieb1();}
 	}
 };

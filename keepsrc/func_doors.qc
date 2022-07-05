@@ -249,7 +249,7 @@ void() func_door_fire = { // [FUNCTION]
 	}
 
 	if (self.items) sound (self, CHAN_VOICE, self.noise4, self.volume, ATTN_NORM); // play use key sound
-	self.message = string_null;		// no more message
+	self.message = "";		// no more message
 	if (self.spawnflags & DOOR_TOGGLE) {
 		if (self.state == STATE_UP || self.state == STATE_TOP) {
 			starte = self; // Reset
@@ -279,9 +279,9 @@ void() func_door_use = { // [FUNCTION]
 	else {
 		if (self.estate & ESTATE_BLOCK) return; // Block USE functionality if state wrong
 		
-		self.message = string_null;	// Door messages are for touch functionality ONLY		
-		self.owner.message = string_null;	
-		self.enemy.message = string_null;
+		self.message = "";	// Door messages are for touch functionality ONLY		
+		self.owner.message = "";	
+		self.enemy.message = "";
 		oself = self;
 		self = self.owner; // Switch to master door
 		func_door_fire();

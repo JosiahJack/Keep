@@ -74,7 +74,7 @@ void() ai_stand = {
 		return;
 	}
 
-	if (FindTarget ()) return; // Found a player?
+	if (FindTarget ()) return; // Found an enemy?
 
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
 	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
@@ -212,7 +212,7 @@ void(float dist) ai_run = {
 					self.think = self.th_walk;
 				} else self.think = self.th_stand;
 			}
-			if (winner && self.th_win) {self.th_win(); return;}   // We have a winner!
+			if (winner && self.th_win) { self.th_win(); return;}   // We have a winner!
 
 			if (self.movetarget || self.charmer)
 				self.th_walk();
@@ -329,8 +329,8 @@ void(float dist) ai_run = {
 			if (enemy_vis) Shade_CheckAttack();
 		} else {
 			if (enemy_vis) DragonCheckAttack(); // Hunt mode.
-			if (!ImmuneToDamage (self))
-				if (Ryu_DetectDanger (self.speed)) return; // Avoid projectiles or other threats.
+			if (!Indestructable(self))
+				if (Ryu_DetectDanger(self.speed)) return; // Avoid projectiles or other threats.
 
 			ryu_untilt(); // Undo any angle changes due to evasion.
 			if (Ryu_HatesWater() && self.waterlevel && Ryu_LeaveWater(self.speed)) return; // If a dragon hates and is in water, this makes dragon rise out of it.

@@ -1,48 +1,48 @@
 // MANTICORE - by MadFox.
 
-void() mcorn_stand1	=[	0,	mcorn_stand2	] {ai_stand();monster_idle_sound();};
-void() mcorn_stand2	=[	1,	mcorn_stand3	] {ai_stand();};
-void() mcorn_stand3	=[	2,	mcorn_stand4	] {ai_stand();};
-void() mcorn_stand4	=[	3,	mcorn_stand5	] {ai_stand();};
-void() mcorn_stand5	=[	4,	mcorn_stand6	] {ai_stand();};
-void() mcorn_stand6	=[	5,	mcorn_stand7	] {ai_stand();};
-void() mcorn_stand7	=[	6,	mcorn_stand8	] {ai_stand();};
-void() mcorn_stand8	=[	7,	mcorn_stand9	] {ai_stand();};
-void() mcorn_stand9	=[	8,	mcorn_stand10	] {ai_stand();};
-void() mcorn_stand10=[	9,	mcorn_stand11	] {ai_stand();};
-void() mcorn_stand11=[ 10,	mcorn_stand12	] {ai_stand();};
-void() mcorn_stand12=[ 11,	mcorn_stand13	] {ai_stand();};
-void() mcorn_stand13=[ 12,	mcorn_stand14	] {ai_stand();};
-void() mcorn_stand14=[ 13,	mcorn_stand15	] {ai_stand();};
-void() mcorn_stand15=[ 14,	mcorn_stand16	] {ai_stand();};
-void() mcorn_stand16=[ 15,	mcorn_stand17	] {ai_stand();};
-void() mcorn_stand17=[ 16,	mcorn_stand1	] {ai_stand();};
+void() mcorn_stand1	= [	0,	mcorn_stand2	] { ai_stand();monster_idle_sound(); };
+void() mcorn_stand2	= [	1,	mcorn_stand3	] { ai_stand(); };
+void() mcorn_stand3	= [	2,	mcorn_stand4	] { ai_stand(); };
+void() mcorn_stand4	= [	3,	mcorn_stand5	] { ai_stand(); };
+void() mcorn_stand5	= [	4,	mcorn_stand6	] { ai_stand(); };
+void() mcorn_stand6	= [	5,	mcorn_stand7	] { ai_stand(); };
+void() mcorn_stand7	= [	6,	mcorn_stand8	] { ai_stand(); };
+void() mcorn_stand8	= [	7,	mcorn_stand9	] { ai_stand(); };
+void() mcorn_stand9	= [	8,	mcorn_stand10	] { ai_stand(); };
+void() mcorn_stand10= [	9,	mcorn_stand11	] { ai_stand(); };
+void() mcorn_stand11= [ 10,	mcorn_stand12	] { ai_stand(); };
+void() mcorn_stand12= [ 11,	mcorn_stand13	] { ai_stand(); };
+void() mcorn_stand13= [ 12,	mcorn_stand14	] { ai_stand(); };
+void() mcorn_stand14= [ 13,	mcorn_stand15	] { ai_stand(); };
+void() mcorn_stand15= [ 14,	mcorn_stand16	] { ai_stand(); };
+void() mcorn_stand16= [ 15,	mcorn_stand17	] { ai_stand(); };
+void() mcorn_stand17= [ 16,	mcorn_stand1	] { ai_stand(); };
 
-void() mcorn_walk1	=[	17, mcorn_walk2	] {ai_walk(8);};
-void() mcorn_walk2	=[	18, mcorn_walk3	] {ai_walk(8);};
-void() mcorn_walk3	=[	19, mcorn_walk4	] {ai_walk(8);};
-void() mcorn_walk4	=[	20, mcorn_walk5	] {ai_walk(8);};
-void() mcorn_walk5	=[	21, mcorn_walk6	] {ai_walk(8);monster_footstep(FALSE);monster_idle_sound();};
-void() mcorn_walk6	=[	22, mcorn_walk7	] {ai_walk(8);};
-void() mcorn_walk7	=[	23, mcorn_walk8	] {ai_walk(8);};
-void() mcorn_walk8	=[	24, mcorn_walk9	] {ai_walk(8);};
-void() mcorn_walk9	=[	25, mcorn_walk10] {ai_walk(8);};
-void() mcorn_walk10	=[	26,	mcorn_walk11] {ai_walk(8);};
-void() mcorn_walk11	=[	27,	mcorn_walk12] {ai_walk(8);};
-void() mcorn_walk12	=[	28,	mcorn_walk13] {ai_walk(8);};
-void() mcorn_walk13	=[	29,	mcorn_walk14] {ai_walk(8);monster_footstep(FALSE);};
-void() mcorn_walk14	=[	30,	mcorn_walk15] {ai_walk(8);};
-void() mcorn_walk15	=[	31,	mcorn_walk16] {ai_walk(8);};
-void() mcorn_walk16	=[	32,	mcorn_walk1 ] {ai_walk(8);};
+void() mcorn_walk1	= [	17, mcorn_walk2	] { ai_walk(8); };
+void() mcorn_walk2	= [	18, mcorn_walk3	] { ai_walk(8); };
+void() mcorn_walk3	= [	19, mcorn_walk4	] { ai_walk(8); };
+void() mcorn_walk4	= [	20, mcorn_walk5	] { ai_walk(8); };
+void() mcorn_walk5	= [	21, mcorn_walk6	] { ai_walk(8);monster_footstep(FALSE);monster_idle_sound(); };
+void() mcorn_walk6	= [	22, mcorn_walk7	] { ai_walk(8); };
+void() mcorn_walk7	= [	23, mcorn_walk8	] { ai_walk(8); };
+void() mcorn_walk8	= [	24, mcorn_walk9	] { ai_walk(8); };
+void() mcorn_walk9	= [	25, mcorn_walk10] { ai_walk(8); };
+void() mcorn_walk10	= [	26,	mcorn_walk11] { ai_walk(8); };
+void() mcorn_walk11	= [	27,	mcorn_walk12] { ai_walk(8); };
+void() mcorn_walk12	= [	28,	mcorn_walk13] { ai_walk(8); };
+void() mcorn_walk13	= [	29,	mcorn_walk14] { ai_walk(8);monster_footstep(FALSE); };
+void() mcorn_walk14	= [	30,	mcorn_walk15] { ai_walk(8); };
+void() mcorn_walk15	= [	31,	mcorn_walk16] { ai_walk(8); };
+void() mcorn_walk16	= [	32,	mcorn_walk1 ] { ai_walk(8); };
 
-void() mcorn_run1		=[	34  ,	mcorn_run2	] {ai_run(16);monster_idle_sound();};
-void() mcorn_run2		=[	35  ,	mcorn_run3	] {ai_run(32);};
-void() mcorn_run3		=[	36  ,	mcorn_run4	] {ai_run(32);monster_footstep(FALSE);};
-void() mcorn_run4		=[	37  ,	mcorn_run5	] {ai_run(20);};
-void() mcorn_run5		=[	38  ,	mcorn_run6	] {ai_run(64);};
-void() mcorn_run6		=[	39  ,	mcorn_run7	] {ai_run(32);};
-void() mcorn_run7		=[	40  ,	mcorn_run8	] {ai_run(16);};
-void() mcorn_run8		=[	41  ,	mcorn_run1	] {ai_run(32);};
+void() mcorn_run1		= [	34  ,	mcorn_run2	] { ai_run(16);monster_idle_sound(); };
+void() mcorn_run2		= [	35  ,	mcorn_run3	] { ai_run(32); };
+void() mcorn_run3		= [	36  ,	mcorn_run4	] { ai_run(32);monster_footstep(FALSE); };
+void() mcorn_run4		= [	37  ,	mcorn_run5	] { ai_run(20); };
+void() mcorn_run5		= [	38  ,	mcorn_run6	] { ai_run(64); };
+void() mcorn_run6		= [	39  ,	mcorn_run7	] { ai_run(32); };
+void() mcorn_run7		= [	40  ,	mcorn_run8	] { ai_run(16); };
+void() mcorn_run8		= [	41  ,	mcorn_run1	] { ai_run(32); };
 
 // Melee tail swipe
 void() mcorn_tailswipe = {
@@ -151,44 +151,44 @@ void() mcorn_projectiles = {
 };
 
 // Projectile spit attack
-void() mcorn_atk1	=[	56,	mcorn_atk2	] {ai_face();};
-void() mcorn_atk2	=[	57,	mcorn_atk3	] {ai_face();};
-void() mcorn_atk3	=[	58,	mcorn_atk4	] {ai_face();sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack1.wav", 1, ATTN_NORM);};
-void() mcorn_atk4	=[	59,	mcorn_atk5	] {ai_face();};
-void() mcorn_atk5	=[	60,	mcorn_atk6	] {};
-void() mcorn_atk6	=[	61,	mcorn_atk7	] {mcorn_fire();};
-void() mcorn_atk7	=[	65,	mcorn_atk8	] {}; // Skipped a few frames to keep it snappy and prevent overlap of actual projectile with manticore model's projectile.
-void() mcorn_atk8	=[	66,	mcorn_run1	] {};
+void() mcorn_atk1	= [	56,	mcorn_atk2	] { ai_face(); };
+void() mcorn_atk2	= [	57,	mcorn_atk3	] { ai_face(); };
+void() mcorn_atk3	= [	58,	mcorn_atk4	] { ai_face();sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack1.wav", 1, ATTN_NORM); };
+void() mcorn_atk4	= [	59,	mcorn_atk5	] { ai_face(); };
+void() mcorn_atk5	= [	60,	mcorn_atk6	] {};
+void() mcorn_atk6	= [	61,	mcorn_atk7	] { mcorn_fire(); };
+void() mcorn_atk7	= [	65,	mcorn_atk8	] {}; // Skipped a few frames to keep it snappy and prevent overlap of actual projectile with manticore model's projectile.
+void() mcorn_atk8	= [	66,	mcorn_run1	] {};
 
 // Tail swipe!
-void() mcorn_atka1	=[	67,	mcorn_atka2	] {ai_face();};
-void() mcorn_atka2	=[	68,	mcorn_atka3	] {ai_face();};
-void() mcorn_atka3	=[	69,	mcorn_atka4	] {ai_charge(2);};
-void() mcorn_atka4	=[	70,	mcorn_atka5	] {
+void() mcorn_atka1	= [	67,	mcorn_atka2	] { ai_face(); };
+void() mcorn_atka2	= [	68,	mcorn_atka3	] { ai_face(); };
+void() mcorn_atka3	= [	69,	mcorn_atka4	] { ai_charge(2); };
+void() mcorn_atka4	= [	70,	mcorn_atka5	] {
 	ai_charge(4);
 	if (random() < 0.5) sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
 };
-void() mcorn_atka5	=[	71,	mcorn_atka6	] {mcorn_tailswipe();ai_charge(2);};
-void() mcorn_atka6	=[	72,	mcorn_atka7	] {ai_face();};
-void() mcorn_atka7	=[	73,	mcorn_atka8	] {ai_face();};
-void() mcorn_atka8	=[	74,	mcorn_atka9	] {ai_face();};
-void() mcorn_atka9	=[	75,	mcorn_atka10] {ai_face();};
-void() mcorn_atka10	=[	76,	mcorn_atka11] {ai_face();};
-void() mcorn_atka11	=[	77,	mcorn_atka12] {ai_face();};
-void() mcorn_atka12	=[	78,	mcorn_atka13] {ai_face();};
-void() mcorn_atka13	=[	79,	mcorn_run1	] {ai_face();};
+void() mcorn_atka5	= [	71,	mcorn_atka6	] { mcorn_tailswipe();ai_charge(2); };
+void() mcorn_atka6	= [	72,	mcorn_atka7	] { ai_face(); };
+void() mcorn_atka7	= [	73,	mcorn_atka8	] { ai_face(); };
+void() mcorn_atka8	= [	74,	mcorn_atka9	] { ai_face(); };
+void() mcorn_atka9	= [	75,	mcorn_atka10] { ai_face(); };
+void() mcorn_atka10	= [	76,	mcorn_atka11] { ai_face(); };
+void() mcorn_atka11	= [	77,	mcorn_atka12] { ai_face(); };
+void() mcorn_atka12	= [	78,	mcorn_atka13] { ai_face(); };
+void() mcorn_atka13	= [	79,	mcorn_run1	] { ai_face(); };
 
 // Spike barrage - either when player is unseen or behind
-void() mcorn_atkb1	=[	80,	mcorn_atkb2	] {};
-void() mcorn_atkb2	=[	81,	mcorn_atkb3	] {};
-void() mcorn_atkb3	=[	82,	mcorn_atkb4	] {};
-void() mcorn_atkb4	=[	83,	mcorn_atkb5	] {sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack4.wav", 1, ATTN_NORM);};
-void() mcorn_atkb5	=[	84,	mcorn_atkb6	] {mcorn_barrage();};
-void() mcorn_atkb6	=[	85,	mcorn_atkb7	] {};
-void() mcorn_atkb7	=[	86,	mcorn_run1	] {ai_face();};
+void() mcorn_atkb1	= [	80,	mcorn_atkb2	] {};
+void() mcorn_atkb2	= [	81,	mcorn_atkb3	] {};
+void() mcorn_atkb3	= [	82,	mcorn_atkb4	] {};
+void() mcorn_atkb4	= [	83,	mcorn_atkb5	] { sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack4.wav", 1, ATTN_NORM); };
+void() mcorn_atkb5	= [	84,	mcorn_atkb6	] { mcorn_barrage(); };
+void() mcorn_atkb6	= [	85,	mcorn_atkb7	] {};
+void() mcorn_atkb7	= [	86,	mcorn_run1	] { ai_face(); };
 
-void() mcorn_leap1	=[  80, mcorn_leap2	] {
+void() mcorn_leap1	= [  80, mcorn_leap2	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
 	if (self.skin == 1) sound (self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
@@ -197,11 +197,11 @@ void() mcorn_leap1	=[  80, mcorn_leap2	] {
 		else				sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
 	}
 };
-void() mcorn_leap2	=[  81, mcorn_leap3	] {ai_face();monster_footstep(FALSE);};
-void() mcorn_leap3	=[  82, mcorn_leap4	] {ai_face();};
-void() mcorn_leap4	=[  83, mcorn_leap5	] {ai_face();};
-void() mcorn_leap5	=[  84, mcorn_leap6	] {ai_face();};
-void() mcorn_leap6	=[  85, mcorn_leap7	] {
+void() mcorn_leap2	= [  81, mcorn_leap3	] { ai_face();monster_footstep(FALSE); };
+void() mcorn_leap3	= [  82, mcorn_leap4	] { ai_face(); };
+void() mcorn_leap4	= [  83, mcorn_leap5	] { ai_face(); };
+void() mcorn_leap5	= [  84, mcorn_leap6	] { ai_face(); };
+void() mcorn_leap6	= [  85, mcorn_leap7	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
 	self.attack_finished = time + 0.6; // similar to fiend but we don't have extra jump frames for the flight
@@ -211,7 +211,7 @@ void() mcorn_leap6	=[  85, mcorn_leap7	] {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
 };
-void() mcorn_leap7	=[  85, mcorn_leap7	] {
+void() mcorn_leap7	= [  85, mcorn_leap7	] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -219,24 +219,24 @@ void() mcorn_leap7	=[  85, mcorn_leap7	] {
 	}
 	self.oldorigin = self.origin;
 };
-void() mcorn_leap8	=[  86, mcorn_leap9	] {monster_footstep(FALSE);};
-void() mcorn_leap9	=[  80, mcorn_run1	] {ai_resetangles();};
+void() mcorn_leap8	= [  86, mcorn_leap9	] { monster_footstep(FALSE); };
+void() mcorn_leap9	= [  80, mcorn_run1	] { ai_resetangles(); };
 
-void() mcorn_pain1	=[	42 ,	mcorn_pain2	] {};
-void() mcorn_pain2	=[	43 ,	mcorn_pain3	] {};
-void() mcorn_pain3	=[	44 ,	mcorn_pain4	] {};
-void() mcorn_pain4	=[	45 ,	mcorn_pain5	] {};
-void() mcorn_pain5	=[	46 ,	mcorn_pain6	] {};
-void() mcorn_pain6	=[	47 ,	mcorn_pain7	] {};
-void() mcorn_pain7	=[	48 ,	mcorn_pain8	] {};
-void() mcorn_pain8	=[	49 ,	mcorn_run1	] {};
+void() mcorn_pain1	= [	42 ,	mcorn_pain2	] {};
+void() mcorn_pain2	= [	43 ,	mcorn_pain3	] {};
+void() mcorn_pain3	= [	44 ,	mcorn_pain4	] {};
+void() mcorn_pain4	= [	45 ,	mcorn_pain5	] {};
+void() mcorn_pain5	= [	46 ,	mcorn_pain6	] {};
+void() mcorn_pain6	= [	47 ,	mcorn_pain7	] {};
+void() mcorn_pain7	= [	48 ,	mcorn_pain8	] {};
+void() mcorn_pain8	= [	49 ,	mcorn_run1	] {};
 
-void() mcorn_paina1	=[	50 ,	mcorn_paina2] {};
-void() mcorn_paina2	=[	51 ,	mcorn_paina3] {};
-void() mcorn_paina3	=[	52 ,	mcorn_paina4] {};
-void() mcorn_paina4	=[	53 ,	mcorn_paina5] {};
-void() mcorn_paina5	=[	54 ,	mcorn_paina6] {};
-void() mcorn_paina6	=[	55 ,	mcorn_run1	] {};
+void() mcorn_paina1	= [	50 ,	mcorn_paina2] {};
+void() mcorn_paina2	= [	51 ,	mcorn_paina3] {};
+void() mcorn_paina3	= [	52 ,	mcorn_paina4] {};
+void() mcorn_paina4	= [	53 ,	mcorn_paina5] {};
+void() mcorn_paina5	= [	54 ,	mcorn_paina6] {};
+void() mcorn_paina6	= [	55 ,	mcorn_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) mcorn_pain = {
 	local float r;
@@ -254,30 +254,30 @@ void(entity inflictor, entity attacker, float damage) mcorn_pain = {
 	else mcorn_pain1();
 };
 
-void() mcorn_die1	=[	87,	mcorn_die2	] {};
-void() mcorn_die2	=[	88,	mcorn_die3	] {monster_check_gib();};
-void() mcorn_die3	=[	89,	mcorn_die4	] {monster_check_gib();};
-void() mcorn_die4	=[	90,	mcorn_die5	] {};
-void() mcorn_die5	=[	91,	mcorn_die6	] {};
-void() mcorn_die6	=[	92,	mcorn_die7	] {};
-void() mcorn_die7	=[	93,	mcorn_die8	] {};
-void() mcorn_die8	=[	94,	mcorn_die9	] {};
-void() mcorn_die9	=[	95,	mcorn_die10 ] {};
-void() mcorn_die10	=[	96,	mcorn_die11	] {};
-void() mcorn_die11	=[	97,	mcorn_die12	] {};
-void() mcorn_die12	=[	98,	mcorn_die13	] {};
-void() mcorn_die13	=[	99,	mcorn_die14	] {};
-void() mcorn_die14	=[	100,mcorn_die15	] {};
-void() mcorn_die15	=[	101,mcorn_die16	] {};
-void() mcorn_die16	=[	102,mcorn_die17	] {self.solid = SOLID_NOT;};
-void() mcorn_die17	=[	103,mcorn_die18	] {};
-void() mcorn_die18	=[	104,mcorn_die19	] {};
-void() mcorn_die19	=[	105,mcorn_die20 ] {};
-void() mcorn_die20	=[	106,mcorn_die21	] {};
-void() mcorn_die21	=[	107,mcorn_die22	] {};
-void() mcorn_die22	=[	108,mcorn_die23	] {};
-void() mcorn_die23	=[	109,mcorn_die24	] {monster_death_postcheck();};
-void() mcorn_die24	=[	110,mcorn_die24	] {monster_deadbody_check();sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_ghostcall1.wav", 1, ATTN_NORM);};
+void() mcorn_die1	= [	87,	mcorn_die2	] {};
+void() mcorn_die2	= [	88,	mcorn_die3	] { monster_check_gib(); };
+void() mcorn_die3	= [	89,	mcorn_die4	] { monster_check_gib(); };
+void() mcorn_die4	= [	90,	mcorn_die5	] {};
+void() mcorn_die5	= [	91,	mcorn_die6	] {};
+void() mcorn_die6	= [	92,	mcorn_die7	] {};
+void() mcorn_die7	= [	93,	mcorn_die8	] {};
+void() mcorn_die8	= [	94,	mcorn_die9	] {};
+void() mcorn_die9	= [	95,	mcorn_die10 ] {};
+void() mcorn_die10	= [	96,	mcorn_die11	] {};
+void() mcorn_die11	= [	97,	mcorn_die12	] {};
+void() mcorn_die12	= [	98,	mcorn_die13	] {};
+void() mcorn_die13	= [	99,	mcorn_die14	] {};
+void() mcorn_die14	= [	100,mcorn_die15	] {};
+void() mcorn_die15	= [	101,mcorn_die16	] {};
+void() mcorn_die16	= [	102,mcorn_die17	] { self.solid = SOLID_NOT;};
+void() mcorn_die17	= [	103,mcorn_die18	] {};
+void() mcorn_die18	= [	104,mcorn_die19	] {};
+void() mcorn_die19	= [	105,mcorn_die20 ] {};
+void() mcorn_die20	= [	106,mcorn_die21	] {};
+void() mcorn_die21	= [	107,mcorn_die22	] {};
+void() mcorn_die22	= [	108,mcorn_die23	] {};
+void() mcorn_die23	= [	109,mcorn_die24	] { monster_death_postcheck(); };
+void() mcorn_die24	= [	110,mcorn_die24	] { monster_deadbody_check();sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_ghostcall1.wav", 1, ATTN_NORM); };
 
 // Invisible ghost that makes noises after death.  Is it dead?  IS IT???
 void() mcorn_ghostthink = {
@@ -408,5 +408,5 @@ void() monster_manticore = {
 	monster_start();
 };
 
-void() monster_mcorn = {self.classname = "monster_manticore"; monster_manticore();};
-void() monster_lichfiend = {self.exactskin = 1; self.skin = 1; monster_manticore();};
+void() monster_mcorn = { self.classname = "monster_manticore"; monster_manticore(); };
+void() monster_lichfiend = { self.exactskin = 1; self.skin = 1; monster_manticore(); };

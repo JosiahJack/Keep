@@ -34,49 +34,49 @@ $frame paind17 paind18 paind19
 
 float ENFORCER_LAVANG = 8192;
 
-//============================================================================
-void()	enf_stand1	=[	$stand1,	enf_stand2	] {monster_idle_sound(); ai_stand();};
-void()	enf_stand2	=[	$stand2,	enf_stand3	] {ai_stand();};
-void()	enf_stand3	=[	$stand3,	enf_stand4	] {ai_stand();};
-void()	enf_stand4	=[	$stand4,	enf_stand5	] {ai_stand();};
-void()	enf_stand5	=[	$stand5,	enf_stand6	] {ai_stand();};
-void()	enf_stand6	=[	$stand6,	enf_stand7	] {ai_stand();};
-void()	enf_stand7	=[	$stand7,	enf_stand1	] {ai_stand();};
 
-//============================================================================
-void()	enf_walk1	=[	$walk1,		enf_walk2	] {monster_idle_sound(); ai_walk(2);};
-void()	enf_walk2	=[	$walk2,		enf_walk3	] {monster_footstep(FALSE); ai_walk(4);};
-void()	enf_walk3	=[	$walk3,		enf_walk4	] {ai_walk(4);};
-void()	enf_walk4	=[	$walk4,		enf_walk5	] {ai_walk(3);};
-void()	enf_walk5	=[	$walk5,		enf_walk6	] {ai_walk(1);};
-void()	enf_walk6	=[	$walk6,		enf_walk7	] {ai_walk(2);};
-void()	enf_walk7	=[	$walk7,		enf_walk8	] {ai_walk(2);};
-void()	enf_walk8	=[	$walk8,		enf_walk9	] {ai_walk(1);};
-void()	enf_walk9	=[	$walk9,		enf_walk10	] {ai_walk(2);};
-void()	enf_walk10	=[	$walk10,	enf_walk11	] {monster_footstep(FALSE); ai_walk(4);};
-void()	enf_walk11	=[	$walk11,	enf_walk12	] {ai_walk(4);};
-void()	enf_walk12	=[	$walk12,	enf_walk13	] {ai_walk(1);};
-void()	enf_walk13	=[	$walk13,	enf_walk14	] {ai_walk(2);};
-void()	enf_walk14	=[	$walk14,	enf_walk15	] {ai_walk(3);};
-void()	enf_walk15	=[	$walk15,	enf_walk16	] {ai_walk(4);};
-void()	enf_walk16	=[	$walk16,	enf_walk1	] {ai_walk(2);};
+void()	enf_stand1	= [	$stand1,	enf_stand2	] { monster_idle_sound(); ai_stand(); };
+void()	enf_stand2	= [	$stand2,	enf_stand3	] { ai_stand(); };
+void()	enf_stand3	= [	$stand3,	enf_stand4	] { ai_stand(); };
+void()	enf_stand4	= [	$stand4,	enf_stand5	] { ai_stand(); };
+void()	enf_stand5	= [	$stand5,	enf_stand6	] { ai_stand(); };
+void()	enf_stand6	= [	$stand6,	enf_stand7	] { ai_stand(); };
+void()	enf_stand7	= [	$stand7,	enf_stand1	] { ai_stand(); };
 
-void()	lth_walk1	=[	$walk1 ,	lth_walk2	] {monster_idle_sound(); ai_walk(2);};
-void()	lth_walk2	=[	$walk2 ,	lth_walk3	] {ai_walk(4);};
-void()	lth_walk3	=[	$walk3 ,	lth_walk4	] {ai_walk(4);};
-void()	lth_walk4	=[	$walk4 ,	lth_walk5	] {ai_walk(3);};
-void()	lth_walk5	=[	$walk5 ,	lth_walk6	] {ai_walk(1);};
-void()	lth_walk6	=[	$walk6 ,	lth_walk7	] {ai_walk(2);};
-void()	lth_walk7	=[	$walk7 ,	lth_walk8	] {ai_walk(2);};
-void()	lth_walk8	=[	$walk8 ,	lth_walk9	] {ai_walk(1);};
-void()	lth_walk9	=[	$walk9 ,	lth_walk10	] {ai_walk(2);};
-void()	lth_walk10	=[	$walk10,	lth_walk11	] {ai_walk(4);};
-void()	lth_walk11	=[	$walk11,	lth_walk12	] {ai_walk(4);};
-void()	lth_walk12	=[	$walk12,	lth_walk13	] {ai_walk(1);};
-void()	lth_walk13	=[	$walk13,	lth_walk14	] {ai_walk(2);};
-void()	lth_walk14	=[	$walk14,	lth_walk15	] {ai_walk(3);};
-void()	lth_walk15	=[	$walk15,	lth_walk16	] {ai_walk(4);};
-void()	lth_walk16	=[	$walk16,	lth_walk1	] {ai_walk(2);};
+
+void()	enf_walk1	= [	$walk1,		enf_walk2	] { monster_idle_sound(); ai_walk(2); };
+void()	enf_walk2	= [	$walk2,		enf_walk3	] { monster_footstep(FALSE); ai_walk(4); };
+void()	enf_walk3	= [	$walk3,		enf_walk4	] { ai_walk(4); };
+void()	enf_walk4	= [	$walk4,		enf_walk5	] { ai_walk(3); };
+void()	enf_walk5	= [	$walk5,		enf_walk6	] { ai_walk(1); };
+void()	enf_walk6	= [	$walk6,		enf_walk7	] { ai_walk(2); };
+void()	enf_walk7	= [	$walk7,		enf_walk8	] { ai_walk(2); };
+void()	enf_walk8	= [	$walk8,		enf_walk9	] { ai_walk(1); };
+void()	enf_walk9	= [	$walk9,		enf_walk10	] { ai_walk(2); };
+void()	enf_walk10	= [	$walk10,	enf_walk11	] { monster_footstep(FALSE); ai_walk(4); };
+void()	enf_walk11	= [	$walk11,	enf_walk12	] { ai_walk(4); };
+void()	enf_walk12	= [	$walk12,	enf_walk13	] { ai_walk(1); };
+void()	enf_walk13	= [	$walk13,	enf_walk14	] { ai_walk(2); };
+void()	enf_walk14	= [	$walk14,	enf_walk15	] { ai_walk(3); };
+void()	enf_walk15	= [	$walk15,	enf_walk16	] { ai_walk(4); };
+void()	enf_walk16	= [	$walk16,	enf_walk1	] { ai_walk(2); };
+
+void()	lth_walk1	= [	$walk1 ,	lth_walk2	] { monster_idle_sound(); ai_walk(2); };
+void()	lth_walk2	= [	$walk2 ,	lth_walk3	] { ai_walk(4); };
+void()	lth_walk3	= [	$walk3 ,	lth_walk4	] { ai_walk(4); };
+void()	lth_walk4	= [	$walk4 ,	lth_walk5	] { ai_walk(3); };
+void()	lth_walk5	= [	$walk5 ,	lth_walk6	] { ai_walk(1); };
+void()	lth_walk6	= [	$walk6 ,	lth_walk7	] { ai_walk(2); };
+void()	lth_walk7	= [	$walk7 ,	lth_walk8	] { ai_walk(2); };
+void()	lth_walk8	= [	$walk8 ,	lth_walk9	] { ai_walk(1); };
+void()	lth_walk9	= [	$walk9 ,	lth_walk10	] { ai_walk(2); };
+void()	lth_walk10	= [	$walk10,	lth_walk11	] { ai_walk(4); };
+void()	lth_walk11	= [	$walk11,	lth_walk12	] { ai_walk(4); };
+void()	lth_walk12	= [	$walk12,	lth_walk13	] { ai_walk(1); };
+void()	lth_walk13	= [	$walk13,	lth_walk14	] { ai_walk(2); };
+void()	lth_walk14	= [	$walk14,	lth_walk15	] { ai_walk(3); };
+void()	lth_walk15	= [	$walk15,	lth_walk16	] { ai_walk(4); };
+void()	lth_walk16	= [	$walk16,	lth_walk1	] { ai_walk(2); };
 
 float MEGA_ENF = 2;
 float ULTRA_ENF = 4;
@@ -87,15 +87,15 @@ void menf_gatk1();
 void menf_atk1();
 void enf_atk1();
 
-//============================================================================
-void()	enf_run1	=[	$run1,		enf_run2	] {monster_idle_sound(); ai_run(18); };
-void()	enf_run2	=[	$run2,		enf_run3	] {ai_run(14); enforcer_updateshield(); };
-void()	enf_run3	=[	$run3,		enf_run4	] {monster_footstep(FALSE); ai_run(7); enforcer_updateshield(); };
-void()	enf_run4	=[	$run4,		enf_run5	] {ai_run(12); enforcer_updateshield(); };
-void()	enf_run5	=[	$run5,		enf_run6	] {ai_run(14); enforcer_updateshield(); };
-void()	enf_run6	=[	$run6,		enf_run7	] {ai_run(14); enforcer_updateshield(); };
-void()	enf_run7	=[	$run7,		enf_run8	] {monster_footstep(FALSE); ai_run(7); enforcer_updateshield(); };
-void()	enf_run8	=[	$run8,		enf_run1	] {ai_run(11); enforcer_updateshield(); };
+
+void()	enf_run1	= [	$run1,		enf_run2	] { monster_idle_sound(); ai_run(18); };
+void()	enf_run2	= [	$run2,		enf_run3	] { ai_run(14); enforcer_updateshield(); };
+void()	enf_run3	= [	$run3,		enf_run4	] { monster_footstep(FALSE); ai_run(7); enforcer_updateshield(); };
+void()	enf_run4	= [	$run4,		enf_run5	] { ai_run(12); enforcer_updateshield(); };
+void()	enf_run5	= [	$run5,		enf_run6	] { ai_run(14); enforcer_updateshield(); };
+void()	enf_run6	= [	$run6,		enf_run7	] { ai_run(14); enforcer_updateshield(); };
+void()	enf_run7	= [	$run7,		enf_run8	] { monster_footstep(FALSE); ai_run(7); enforcer_updateshield(); };
+void()	enf_run8	= [	$run8,		enf_run1	] { ai_run(11); enforcer_updateshield(); };
 
 void() enforcer_attack = {
 	local float edist;
@@ -129,20 +129,20 @@ void() enforcer_fire = {
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 };
 
-void()	enf_atk1	=[	$attack1,	enf_atk2	] {};
-void()	enf_atk2	=[	$attack2,	enf_atk3	] {monster_footstep(FALSE);ai_face();};
-void()	enf_atk3	=[	$attack3,	enf_atk4	] {ai_face();};
-void()	enf_atk4	=[	$attack4,	enf_atk5	] {ai_face();};
-void()	enf_atk5	=[	$attack5,	enf_atk6	] {ai_face();};
-void()	enf_atk6	=[	$attack6,	enf_atk7	] { if (self.health > 0) enforcer_fire(); };
-void()	enf_atk7	=[	$attack7,	enf_atk8	] {};
-void()	enf_atk8	=[	$attack8,	enf_atk9	] {};
-void()	enf_atk9	=[	$attack5,	enf_atk10	] {ai_face();};
-void()	enf_atk10	=[	$attack6,	enf_atk11	] {ai_face(); if (self.health > 0) enforcer_fire(); };
-void()	enf_atk11	=[	$attack7,	enf_atk12	] {};
-void()	enf_atk12	=[	$attack8,	enf_atk13	] {};
-void()	enf_atk13	=[	$attack9,	enf_atk14	] {ai_face();};
-void()	enf_atk14	=[	$attack10,	enf_run1	] {ai_face();SUB_CheckRefire (enf_atk1);};
+void()	enf_atk1	= [	$attack1,	enf_atk2	] {};
+void()	enf_atk2	= [	$attack2,	enf_atk3	] { monster_footstep(FALSE);ai_face(); };
+void()	enf_atk3	= [	$attack3,	enf_atk4	] { ai_face(); };
+void()	enf_atk4	= [	$attack4,	enf_atk5	] { ai_face(); };
+void()	enf_atk5	= [	$attack5,	enf_atk6	] { ai_face(); };
+void()	enf_atk6	= [	$attack6,	enf_atk7	] { if (self.health > 0) enforcer_fire(); };
+void()	enf_atk7	= [	$attack7,	enf_atk8	] {};
+void()	enf_atk8	= [	$attack8,	enf_atk9	] {};
+void()	enf_atk9	= [	$attack5,	enf_atk10	] { ai_face(); };
+void()	enf_atk10	= [	$attack6,	enf_atk11	] { ai_face(); if (self.health > 0) enforcer_fire(); };
+void()	enf_atk11	= [	$attack7,	enf_atk12	] {};
+void()	enf_atk12	= [	$attack8,	enf_atk13	] {};
+void()	enf_atk13	= [	$attack9,	enf_atk14	] { ai_face(); };
+void()	enf_atk14	= [	$attack10,	enf_run1	] { ai_face();SUB_CheckRefire (enf_atk1); };
 
 // - Defender enforcer (ssg/gl attack)
 void() defender_ssg = {
@@ -161,34 +161,34 @@ void() defender_ssg = {
 	}
 };
 
-void()	def_atkssg1	=[	$attack1,	def_atkssg2	] {sound (self, CHAN_WEAPON, "quoth/defender/ssgcock.wav", 1, ATTN_NORM);};
-void()	def_atkssg2	=[	$attack2,	def_atkssg3	] {monster_footstep(FALSE);ai_face();};
-void()	def_atkssg3	=[	$attack3,	def_atkssg4	] {ai_face();};
-void()	def_atkssg4	=[	$attack4,	def_atkssg5	] {ai_face();};
-void()	def_atkssg5	=[	$attack5,	def_atkssg6	] {ai_face();};
-void()	def_atkssg6	=[	$attack6,	def_atkssg7	] {ai_face();
-	if (self.health > 0) defender_ssg();};
-void()	def_atkssg7	=[	$attack7,	def_atkssg8	] {};
-void()	def_atkssg8	=[	$attack8,	def_atkssg9	] {};
-void()	def_atkssg9	=[	$attack9,	def_atkssg10] {ai_face();};
-void()	def_atkssg10=[	$attack10,	enf_run1	] {SUB_CheckRefire (def_atkssg1);};
+void()	def_atkssg1	= [	$attack1,	def_atkssg2	] { sound (self, CHAN_WEAPON, "quoth/defender/ssgcock.wav", 1, ATTN_NORM); };
+void()	def_atkssg2	= [	$attack2,	def_atkssg3	] { monster_footstep(FALSE);ai_face(); };
+void()	def_atkssg3	= [	$attack3,	def_atkssg4	] { ai_face(); };
+void()	def_atkssg4	= [	$attack4,	def_atkssg5	] { ai_face(); };
+void()	def_atkssg5	= [	$attack5,	def_atkssg6	] { ai_face(); };
+void()	def_atkssg6	= [	$attack6,	def_atkssg7	] { ai_face();
+	if (self.health > 0) defender_ssg(); };
+void()	def_atkssg7	= [	$attack7,	def_atkssg8	] {};
+void()	def_atkssg8	= [	$attack8,	def_atkssg9	] {};
+void()	def_atkssg9	= [	$attack9,	def_atkssg10] { ai_face(); };
+void()	def_atkssg10= [	$attack10,	enf_run1	] { SUB_CheckRefire (def_atkssg1); };
 
-void()	def_atkgl1	=[	$attack1,	def_atkgl2	] {ai_face();};
-void()	def_atkgl2	=[	$attack2,	def_atkgl3	] {monster_footstep(FALSE);ai_face();};
-void()	def_atkgl3	=[	$attack3,	def_atkgl4	] {ai_face();
+void()	def_atkgl1	= [	$attack1,	def_atkgl2	] { ai_face(); };
+void()	def_atkgl2	= [	$attack2,	def_atkgl3	] { monster_footstep(FALSE);ai_face(); };
+void()	def_atkgl3	= [	$attack3,	def_atkgl4	] { ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl4	=[	$attack4,	def_atkgl5	] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl5	=[	$attack5,	def_atkgl6	] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl6	=[	$attack6,	def_atkgl7	] {ai_face();
+void()	def_atkgl4	= [	$attack4,	def_atkgl5	] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	def_atkgl5	= [	$attack5,	def_atkgl6	] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	def_atkgl6	= [	$attack6,	def_atkgl7	] { ai_face();
 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector(self.attack_offset);
 	MonsterFireGrenade(self.pos1, self.enemy.origin);
 };
-void()	def_atkgl7	=[	$attack7,	def_atkgl8	] {};
-void()	def_atkgl8	=[	$attack8,	def_atkgl9	] {};
-void()	def_atkgl9	=[	$attack9,	def_atkgl10] {ai_face();};
-void()	def_atkgl10=[	$attack10,	enf_run1	]{ai_face();};
+void()	def_atkgl7	= [	$attack7,	def_atkgl8	] {};
+void()	def_atkgl8	= [	$attack8,	def_atkgl9	] {};
+void()	def_atkgl9	= [	$attack9,	def_atkgl10] { ai_face(); };
+void()	def_atkgl10= [	$attack10,	enf_run1	] { ai_face(); };
 
 // - Eliminator enforcer (plasma attack)
 void() eliminator_fire = {
@@ -204,68 +204,68 @@ void() eliminator_fire = {
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
-void()	elim_atk1	=[	$attack1,	elim_atk2	] {
-	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
-void()	elim_atk2	=[	$attack2,	elim_atk3	] {monster_footstep(FALSE);ai_face();};
-void()	elim_atk3	=[	$attack3,	elim_atk4	] {ai_face();};
-void()	elim_atk4	=[	$attack4,	elim_atk5	] {ai_face();};
-void()	elim_atk5	=[	$attack5,	elim_atk6	] {ai_face();};
-void()	elim_atk6	=[	$attack6,	elim_atk7	] {ai_face();
-	if (self.health > 0) eliminator_fire();};
-void()	elim_atk7	=[	$attack7,	elim_atk8	] {};
-void()	elim_atk8	=[	$attack8,	elim_atk9	] {};
-void()	elim_atk9	=[	$attack5,	elim_atk10	] {ai_face();};
-void()	elim_atk10	=[	$attack6,	elim_atk11	] {ai_face();
-	if (self.health > 0) eliminator_fire();};
-void()	elim_atk11	=[	$attack7,	elim_atk12	] {};
-void()	elim_atk12	=[	$attack8,	elim_atk13	] {};
-void()	elim_atk13	=[	$attack9,	elim_atk14	] {ai_face();};
-void()	elim_atk14	=[	$attack10,	enf_run1	] {ai_face();SUB_CheckRefire (elim_atk1);};
+void()	elim_atk1	= [	$attack1,	elim_atk2	] {
+	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+void()	elim_atk2	= [	$attack2,	elim_atk3	] { monster_footstep(FALSE);ai_face(); };
+void()	elim_atk3	= [	$attack3,	elim_atk4	] { ai_face(); };
+void()	elim_atk4	= [	$attack4,	elim_atk5	] { ai_face(); };
+void()	elim_atk5	= [	$attack5,	elim_atk6	] { ai_face(); };
+void()	elim_atk6	= [	$attack6,	elim_atk7	] { ai_face();
+	if (self.health > 0) eliminator_fire(); };
+void()	elim_atk7	= [	$attack7,	elim_atk8	] {};
+void()	elim_atk8	= [	$attack8,	elim_atk9	] {};
+void()	elim_atk9	= [	$attack5,	elim_atk10	] { ai_face(); };
+void()	elim_atk10	= [	$attack6,	elim_atk11	] { ai_face();
+	if (self.health > 0) eliminator_fire(); };
+void()	elim_atk11	= [	$attack7,	elim_atk12	] {};
+void()	elim_atk12	= [	$attack8,	elim_atk13	] {};
+void()	elim_atk13	= [	$attack9,	elim_atk14	] { ai_face(); };
+void()	elim_atk14	= [	$attack10,	enf_run1	] { ai_face();SUB_CheckRefire (elim_atk1); };
 
-void()	enf_paina1	=[	$paina1,	enf_paina2	] {};
-void()	enf_paina2	=[	$paina2,	enf_paina3	] {};
-void()	enf_paina3	=[	$paina3,	enf_paina4	] {};
-void()	enf_paina4	=[	$paina4,	enf_run1	] {};
+void()	enf_paina1	= [	$paina1,	enf_paina2	] {};
+void()	enf_paina2	= [	$paina2,	enf_paina3	] {};
+void()	enf_paina3	= [	$paina3,	enf_paina4	] {};
+void()	enf_paina4	= [	$paina4,	enf_run1	] {};
 
-void()	enf_painb1	=[	$painb1,	enf_painb2	] {};
-void()	enf_painb2	=[	$painb2,	enf_painb3	] {};
-void()	enf_painb3	=[	$painb3,	enf_painb4	] {};
-void()	enf_painb4	=[	$painb4,	enf_painb5	] {};
-void()	enf_painb5	=[	$painb5,	enf_run1	] { enforcer_updateshield(); };
+void()	enf_painb1	= [	$painb1,	enf_painb2	] {};
+void()	enf_painb2	= [	$painb2,	enf_painb3	] {};
+void()	enf_painb3	= [	$painb3,	enf_painb4	] {};
+void()	enf_painb4	= [	$painb4,	enf_painb5	] {};
+void()	enf_painb5	= [	$painb5,	enf_run1	] { enforcer_updateshield(); };
 
-void()	enf_painc1	=[	$painc1,	enf_painc2	] {};
-void()	enf_painc2	=[	$painc2,	enf_painc3	] {monster_footstep(FALSE);};
-void()	enf_painc3	=[	$painc3,	enf_painc4	] {};
-void()	enf_painc4	=[	$painc4,	enf_painc5	] {};
-void()	enf_painc5	=[	$painc5,	enf_painc6	] { enforcer_updateshield(); };
-void()	enf_painc6	=[	$painc6,	enf_painc7	] { enforcer_updateshield(); };
-void()	enf_painc7	=[	$painc7,	enf_painc8	] { enforcer_updateshield(); };
-void()	enf_painc8	=[	$painc8,	enf_run1	] { enforcer_updateshield(); };
+void()	enf_painc1	= [	$painc1,	enf_painc2	] {};
+void()	enf_painc2	= [	$painc2,	enf_painc3	] { monster_footstep(FALSE); };
+void()	enf_painc3	= [	$painc3,	enf_painc4	] {};
+void()	enf_painc4	= [	$painc4,	enf_painc5	] {};
+void()	enf_painc5	= [	$painc5,	enf_painc6	] { enforcer_updateshield(); };
+void()	enf_painc6	= [	$painc6,	enf_painc7	] { enforcer_updateshield(); };
+void()	enf_painc7	= [	$painc7,	enf_painc8	] { enforcer_updateshield(); };
+void()	enf_painc8	= [	$painc8,	enf_run1	] { enforcer_updateshield(); };
 
-void()	enf_paind1	=[	$paind1,	enf_paind2	] {};
-void()	enf_paind2	=[	$paind2,	enf_paind3	] {};
-void()	enf_paind3	=[	$paind3,	enf_paind4	] {monster_footstep(FALSE);};
-void()	enf_paind4	=[	$paind4,	enf_paind5	] {ai_painforward(2);};
-void()	enf_paind5	=[	$paind5,	enf_paind6	] {ai_painforward(1);};
-void()	enf_paind6	=[	$paind6,	enf_paind7	] {};
-void()	enf_paind7	=[	$paind7,	enf_paind8	] {};
-void()	enf_paind8	=[	$paind8,	enf_paind9	] {};
-void()	enf_paind9	=[	$paind9,	enf_paind10	] {};
-void()	enf_paind10	=[	$paind10,	enf_paind11	] { enforcer_updateshield(); };
-void()	enf_paind11	=[	$paind11,	enf_paind12	] {ai_painforward(1); enforcer_updateshield(); };
-void()	enf_paind12	=[	$paind12,	enf_paind13	] {ai_painforward(1); enforcer_updateshield(); };
-void()	enf_paind13	=[	$paind13,	enf_paind14	] {ai_painforward(1); enforcer_updateshield(); };
-void()	enf_paind14	=[	$paind14,	enf_paind15	] { enforcer_updateshield(); };
-void()	enf_paind15	=[	$paind15,	enf_paind16	] { enforcer_updateshield(); };
-void()	enf_paind16	=[	$paind16,	enf_paind17	] {ai_pain(1); enforcer_updateshield(); };
-void()	enf_paind17	=[	$paind17,	enf_paind18	] {ai_pain(1); enforcer_updateshield(); };
-void()	enf_paind18	=[	$paind18,	enf_paind19	] { enforcer_updateshield(); };
-void()	enf_paind19	=[	$paind19,	enf_run1	] { enforcer_updateshield(); };
+void()	enf_paind1	= [	$paind1,	enf_paind2	] {};
+void()	enf_paind2	= [	$paind2,	enf_paind3	] {};
+void()	enf_paind3	= [	$paind3,	enf_paind4	] { monster_footstep(FALSE); };
+void()	enf_paind4	= [	$paind4,	enf_paind5	] { ai_painforward(2); };
+void()	enf_paind5	= [	$paind5,	enf_paind6	] { ai_painforward(1); };
+void()	enf_paind6	= [	$paind6,	enf_paind7	] {};
+void()	enf_paind7	= [	$paind7,	enf_paind8	] {};
+void()	enf_paind8	= [	$paind8,	enf_paind9	] {};
+void()	enf_paind9	= [	$paind9,	enf_paind10	] {};
+void()	enf_paind10	= [	$paind10,	enf_paind11	] { enforcer_updateshield(); };
+void()	enf_paind11	= [	$paind11,	enf_paind12	] { ai_painforward(1); enforcer_updateshield(); };
+void()	enf_paind12	= [	$paind12,	enf_paind13	] { ai_painforward(1); enforcer_updateshield(); };
+void()	enf_paind13	= [	$paind13,	enf_paind14	] { ai_painforward(1); enforcer_updateshield(); };
+void()	enf_paind14	= [	$paind14,	enf_paind15	] { enforcer_updateshield(); };
+void()	enf_paind15	= [	$paind15,	enf_paind16	] { enforcer_updateshield(); };
+void()	enf_paind16	= [	$paind16,	enf_paind17	] { ai_pain(1); enforcer_updateshield(); };
+void()	enf_paind17	= [	$paind17,	enf_paind18	] { ai_pain(1); enforcer_updateshield(); };
+void()	enf_paind18	= [	$paind18,	enf_paind19	] { enforcer_updateshield(); };
+void()	enf_paind19	= [	$paind19,	enf_run1	] { enforcer_updateshield(); };
 
-void()	lth_paina1	=[	50,	lth_paina2	] {};
-void()	lth_paina2	=[	51,	lth_paina3	] {};
-void()	lth_paina3	=[	52,	lth_paina4	] {};
-void()	lth_paina4	=[	53,	enf_run1	] {};
+void()	lth_paina1	= [	50,	lth_paina2	] {};
+void()	lth_paina2	= [	51,	lth_paina3	] {};
+void()	lth_paina3	= [	52,	lth_paina4	] {};
+void()	lth_paina4	= [	53,	enf_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) enf_pain = {
 	// Check all pain conditions and set up what to do next
@@ -301,33 +301,33 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 	}
 };
 
-void()	enf_die1	=[	$death1,	enf_die2	] {};
-void()	enf_die2	=[	$death2,	enf_die3	] {monster_check_gib();};
-void()	enf_die3	=[	$death3,	enf_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
-void()	enf_die4	=[	$death4,	enf_die5	] {ai_forward(14);};
-void()	enf_die5	=[	$death5,	enf_die6	] {ai_forward(2);};
-void()	enf_die6	=[	$death6,	enf_die7	] {};
-void()	enf_die7	=[	$death7,	enf_die8	] {};
-void()	enf_die8	=[	$death8,	enf_die9	] {};
-void()	enf_die9	=[	$death9,	enf_die10	] {ai_forward(3);};
-void()	enf_die10	=[	$death10,	enf_die11	] {ai_forward(5);};
-void()	enf_die11	=[	$death11,	enf_die12	] {ai_forward(5);};
-void()	enf_die12	=[	$death12,	enf_die13	] {ai_forward(5);};
-void()	enf_die13	=[	$death13,	enf_die14	] {monster_death_postcheck();};
-void()	enf_die14	=[	$death14,	enf_die14	] {monster_deadbody_check();};
+void()	enf_die1	= [	$death1,	enf_die2	] {};
+void()	enf_die2	= [	$death2,	enf_die3	] { monster_check_gib(); };
+void()	enf_die3	= [	$death3,	enf_die4	] { monster_check_gib();
+	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	enf_die4	= [	$death4,	enf_die5	] { ai_forward(14); };
+void()	enf_die5	= [	$death5,	enf_die6	] { ai_forward(2); };
+void()	enf_die6	= [	$death6,	enf_die7	] {};
+void()	enf_die7	= [	$death7,	enf_die8	] {};
+void()	enf_die8	= [	$death8,	enf_die9	] {};
+void()	enf_die9	= [	$death9,	enf_die10	] { ai_forward(3); };
+void()	enf_die10	= [	$death10,	enf_die11	] { ai_forward(5); };
+void()	enf_die11	= [	$death11,	enf_die12	] { ai_forward(5); };
+void()	enf_die12	= [	$death12,	enf_die13	] { ai_forward(5); };
+void()	enf_die13	= [	$death13,	enf_die14	] { monster_death_postcheck(); };
+void()	enf_die14	= [	$death14,	enf_die14	] { monster_deadbody_check(); };
 
-void()	enf_fdie1	=[	$fdeath1,	enf_fdie2	] {};
-void()	enf_fdie2	=[	$fdeath2,	enf_fdie3	] {monster_check_gib();};
-void()	enf_fdie3	=[	$fdeath3,	enf_fdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
-void()	enf_fdie4	=[	$fdeath4,	enf_fdie5	] {};
-void()	enf_fdie5	=[	$fdeath5,	enf_fdie6	] {};
-void()	enf_fdie6	=[	$fdeath6,	enf_fdie7	] {};
-void()	enf_fdie7	=[	$fdeath7,	enf_fdie8	] {};
-void()	enf_fdie8	=[	$fdeath8,	enf_fdie9	] {};
-void()	enf_fdie9	=[	$fdeath9,	enf_fdie10	] {};
-void()	enf_fdie10	=[	$fdeath10,	enf_fdie11	] {monster_death_postcheck();};
-void()	enf_fdie11	=[	$fdeath11,	enf_fdie11	] {monster_deadbody_check();};
+void()	enf_fdie1	= [	$fdeath1,	enf_fdie2	] {};
+void()	enf_fdie2	= [	$fdeath2,	enf_fdie3	] { monster_check_gib(); };
+void()	enf_fdie3	= [	$fdeath3,	enf_fdie4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	enf_fdie4	= [	$fdeath4,	enf_fdie5	] {};
+void()	enf_fdie5	= [	$fdeath5,	enf_fdie6	] {};
+void()	enf_fdie6	= [	$fdeath6,	enf_fdie7	] {};
+void()	enf_fdie7	= [	$fdeath7,	enf_fdie8	] {};
+void()	enf_fdie8	= [	$fdeath8,	enf_fdie9	] {};
+void()	enf_fdie9	= [	$fdeath9,	enf_fdie10	] {};
+void()	enf_fdie10	= [	$fdeath10,	enf_fdie11	] { monster_death_postcheck(); };
+void()	enf_fdie11	= [	$fdeath11,	enf_fdie11	] { monster_deadbody_check(); };
 
 void()	lth_fdie1;
 
@@ -474,9 +474,9 @@ void() monster_base_enforcer = {
 	if (!self.steptype) self.steptype = FS_TYPEHEAVY;		// heavy player
 	if (CheckZeroVector(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
 	Resist_ChangeType(self,-1);// Always reset Ammo Resistance to be consistent
-	if (self.classtype == CT_MONELIMATOR) {self.resist_cells = 0.5;self.resist_plasma = 0.5;}
-	if (self.classtype == CT_MONDEFENDER) {self.resist_rockets = 0.5;self.resist_multi_rockets = 0.5;}
-	if (self.classtype == CT_MONENF_MEGA) {self.resist_cells = 0.75;self.resist_plasma = 0.75;}
+	if (self.classtype == CT_MONELIMATOR) { self.resist_cells = 0.5;self.resist_plasma = 0.5;}
+	if (self.classtype == CT_MONDEFENDER) { self.resist_rockets = 0.5;self.resist_multi_rockets = 0.5;}
+	if (self.classtype == CT_MONENF_MEGA) { self.resist_cells = 0.75;self.resist_plasma = 0.75;}
 	if (!self.th_stand) self.th_stand = enf_stand1;
 	if (!self.th_walk) self.th_walk = enf_walk1;
 	if (!self.th_run) self.th_run = enf_run1;
@@ -560,8 +560,8 @@ void() gunner_chaingun = {
 };
 
 // Chaingun, Doom2 style
-void() gunner_gun1  =[ $attack6,  gunner_gun2  ] {ai_face(); gunner_chaingun();};
-void() gunner_gun2  =[ $attack4,  gunner_gun1  ] {ai_face(); gunner_chaingun(); M_Break(enf_run1);};
+void() gunner_gun1  = [$attack6,  gunner_gun2  ] { ai_face(); gunner_chaingun(); };
+void() gunner_gun2  = [$attack4,  gunner_gun1  ] { ai_face(); gunner_chaingun(); M_Break(enf_run1); };
 
 // QUAKED monster_gunner (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_gunner = {
@@ -625,49 +625,49 @@ void() super_enforcer_fire = {
 	army_nailfire();
 };
 
-void()	lth_run1	=[	$run1  ,	lth_run2	] {
+void()	lth_run1	= [	$run1  ,	lth_run2	] {
 if (random() < 0.2) sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
-ai_run(18);};
-void()	lth_run2	=[	$run2  ,	lth_run3	] {ai_run(14);};
-void()	lth_run3	=[	$run3  ,	lth_run4	] {ai_run(7);};
-void()	lth_run4	=[	$run4  ,	lth_run5	] {ai_run(12);};
-void()	lth_run5	=[	$run5  ,	lth_run6	] {ai_run(14);};
-void()	lth_run6	=[	$run6  ,	lth_run7	] {ai_run(14);};
-void()	lth_run7	=[	$run7  ,	lth_run8	] {ai_run(7);};
-void()	lth_run8	=[	$run8  ,	lth_run1	] {ai_run(11);};
+ai_run(18); };
+void()	lth_run2	= [	$run2  ,	lth_run3	] { ai_run(14); };
+void()	lth_run3	= [	$run3  ,	lth_run4	] { ai_run(7); };
+void()	lth_run4	= [	$run4  ,	lth_run5	] { ai_run(12); };
+void()	lth_run5	= [	$run5  ,	lth_run6	] { ai_run(14); };
+void()	lth_run6	= [	$run6  ,	lth_run7	] { ai_run(14); };
+void()	lth_run7	= [	$run7  ,	lth_run8	] { ai_run(7); };
+void()	lth_run8	= [	$run8  ,	lth_run1	] { ai_run(11); };
 
-void()	lth_atk1	=[	$attack1,	lth_atk2	] {ai_face();};
-void()	lth_atk2	=[	$attack2,	lth_atk3	] {ai_face();};
-void()	lth_atk3	=[	$attack3,	lth_atk4	] {ai_face();};
-void()	lth_atk4	=[	$attack4,	lth_atk5	] {ai_face();};
-void()	lth_atk5	=[	$attack5,	lth_atk6	] {ai_face();};
-void()	lth_atk6	=[	$attack6,	lth_atk7	] {
+void()	lth_atk1	= [	$attack1,	lth_atk2	] { ai_face(); };
+void()	lth_atk2	= [	$attack2,	lth_atk3	] { ai_face(); };
+void()	lth_atk3	= [	$attack3,	lth_atk4	] { ai_face(); };
+void()	lth_atk4	= [	$attack4,	lth_atk5	] { ai_face(); };
+void()	lth_atk5	= [	$attack5,	lth_atk6	] { ai_face(); };
+void()	lth_atk6	= [	$attack6,	lth_atk7	] {
 	super_enforcer_fire();
 	self.effects = self.effects | EF_MUZZLEFLASH;
 };
-void()	lth_atk7	=[	$attack7,	lth_atk8	] {
+void()	lth_atk7	= [	$attack7,	lth_atk8	] {
 	super_enforcer_fire();
 	if (random() < 0.9) {
 		self.think = lth_atk6;
 		self.nextthink = time + 0.1;
 	}
 };
-void()	lth_atk8	=[	$attack8,	lth_atk9	] {};
-void()	lth_atk9	=[	$attack3,	lth_atk10	] {};
-void()	lth_atk10	=[	$attack2,	lth_atk11	] {};
-void()	lth_atk11	=[	$attack1,	lth_run1	] {};
+void()	lth_atk8	= [	$attack8,	lth_atk9	] {};
+void()	lth_atk9	= [	$attack3,	lth_atk10	] {};
+void()	lth_atk10	= [	$attack2,	lth_atk11	] {};
+void()	lth_atk11	= [	$attack1,	lth_run1	] {};
 
-void()	lth_fdie1	=[	39,	lth_fdie2	] {};
-void()	lth_fdie2	=[	40,	lth_fdie3	] {monster_check_gib();};
-void()	lth_fdie3	=[	41,	lth_fdie4	] {monster_check_gib();};
-void()	lth_fdie4	=[	42,	lth_fdie5	] {self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
-void()	lth_fdie5	=[	43,	lth_fdie6	] {};
-void()	lth_fdie6	=[	44,	lth_fdie7	] {};
-void()	lth_fdie7	=[	45,	lth_fdie8	] {};
-void()	lth_fdie8	=[	46,	lth_fdie9	] {};
-void()	lth_fdie9	=[	47,	lth_fdie10	] {};
-void()	lth_fdie10	=[	48,	lth_fdie11	] {monster_death_postcheck();};
-void()	lth_fdie11	=[	49,	lth_fdie11	] {monster_deadbody_check();};
+void()	lth_fdie1	= [	39,	lth_fdie2	] {};
+void()	lth_fdie2	= [	40,	lth_fdie3	] { monster_check_gib(); };
+void()	lth_fdie3	= [	41,	lth_fdie4	] { monster_check_gib(); };
+void()	lth_fdie4	= [	42,	lth_fdie5	] { self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	lth_fdie5	= [	43,	lth_fdie6	] {};
+void()	lth_fdie6	= [	44,	lth_fdie7	] {};
+void()	lth_fdie7	= [	45,	lth_fdie8	] {};
+void()	lth_fdie8	= [	46,	lth_fdie9	] {};
+void()	lth_fdie9	= [	47,	lth_fdie10	] {};
+void()	lth_fdie10	= [	48,	lth_fdie11	] { monster_death_postcheck(); };
+void()	lth_fdie11	= [	49,	lth_fdie11	] { monster_deadbody_check(); };
 
 // Lieutant Enforcer from back2forwards by the Lieutenant
 void() monster_super_enforcer = {

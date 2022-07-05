@@ -107,9 +107,9 @@ void() item_treasure = { // [ENTITY]
 		self.spawnflags = self.spawnflags | 1;
 
     self.classname = "item_treasure";
-    if (self.spawnflags & 1) {self.frame = 0;  self.healamount = 5;}
-    else if (self.spawnflags & 2) {self.frame = 2;  self.healamount = 20;}
-    else {self.frame = 1;  self.healamount = 10;}
+    if (self.spawnflags & 1) { self.frame = 0;  self.healamount = 5;}
+    else if (self.spawnflags & 2) { self.frame = 2;  self.healamount = 20;}
+    else { self.frame = 1;  self.healamount = 10;}
     if (self.healtype) {
         if (self.worldtype) self.th_win = gem_pulse;
         self.netname = "a gem";

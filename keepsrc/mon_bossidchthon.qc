@@ -41,37 +41,37 @@ void() idchthon_tracking = {
 	if (self.enemy) self.th_missile();
 };
 
-void() idchthon_idle1	=[	$walk1, idchthon_idle2 ] {idchthon_tracking();};
-void() idchthon_idle2	=[	$walk2, idchthon_idle3 ] {};
-void() idchthon_idle3	=[	$walk3, idchthon_idle4 ] {};
-void() idchthon_idle4	=[	$walk4, idchthon_idle5 ] {};
-void() idchthon_idle5	=[	$walk5, idchthon_idle6 ] {};
-void() idchthon_idle6	=[	$walk6, idchthon_idle7 ] {};
-void() idchthon_idle7	=[	$walk7, idchthon_idle8 ] {};
-void() idchthon_idle8	=[	$walk8, idchthon_idle9 ] {};
-void() idchthon_idle9	=[	$walk9, idchthon_idle10 ] {};
-void() idchthon_idle10	=[	$walk10, idchthon_idle11 ] {idchthon_tracking();};
-void() idchthon_idle11	=[	$walk11, idchthon_idle12 ] {};
-void() idchthon_idle12	=[	$walk12, idchthon_idle13 ] {};
-void() idchthon_idle13	=[	$walk13, idchthon_idle14 ] {};
-void() idchthon_idle14	=[	$walk14, idchthon_idle15 ] {};
-void() idchthon_idle15	=[	$walk15, idchthon_idle16 ] {};
-void() idchthon_idle16	=[	$walk16, idchthon_idle17 ] {};
-void() idchthon_idle17	=[	$walk17, idchthon_idle18 ] {};
-void() idchthon_idle18	=[	$walk18, idchthon_idle19 ] {};
-void() idchthon_idle19	=[	$walk19, idchthon_idle20 ] {};
-void() idchthon_idle20	=[	$walk20, idchthon_idle21 ] {};
-void() idchthon_idle21	=[	$walk21, idchthon_idle22 ] {idchthon_tracking();};
-void() idchthon_idle22	=[	$walk22, idchthon_idle23 ] {};
-void() idchthon_idle23	=[	$walk23, idchthon_idle24 ] {};
-void() idchthon_idle24	=[	$walk24, idchthon_idle25 ] {};
-void() idchthon_idle25	=[	$walk25, idchthon_idle26 ] {};
-void() idchthon_idle26	=[	$walk26, idchthon_idle27 ] {};
-void() idchthon_idle27	=[	$walk27, idchthon_idle28 ] {};
-void() idchthon_idle28	=[	$walk28, idchthon_idle29 ] {};
-void() idchthon_idle29	=[	$walk29, idchthon_idle30 ] {};
-void() idchthon_idle30	=[	$walk30, idchthon_idle31 ] {};
-void() idchthon_idle31	=[	$walk31, idchthon_idle1 ] {idchthon_tracking();};
+void() idchthon_idle1	= [	$walk1, idchthon_idle2 ] { idchthon_tracking(); };
+void() idchthon_idle2	= [	$walk2, idchthon_idle3 ] {};
+void() idchthon_idle3	= [	$walk3, idchthon_idle4 ] {};
+void() idchthon_idle4	= [	$walk4, idchthon_idle5 ] {};
+void() idchthon_idle5	= [	$walk5, idchthon_idle6 ] {};
+void() idchthon_idle6	= [	$walk6, idchthon_idle7 ] {};
+void() idchthon_idle7	= [	$walk7, idchthon_idle8 ] {};
+void() idchthon_idle8	= [	$walk8, idchthon_idle9 ] {};
+void() idchthon_idle9	= [	$walk9, idchthon_idle10 ] {};
+void() idchthon_idle10	= [	$walk10, idchthon_idle11 ] { idchthon_tracking(); };
+void() idchthon_idle11	= [	$walk11, idchthon_idle12 ] {};
+void() idchthon_idle12	= [	$walk12, idchthon_idle13 ] {};
+void() idchthon_idle13	= [	$walk13, idchthon_idle14 ] {};
+void() idchthon_idle14	= [	$walk14, idchthon_idle15 ] {};
+void() idchthon_idle15	= [	$walk15, idchthon_idle16 ] {};
+void() idchthon_idle16	= [	$walk16, idchthon_idle17 ] {};
+void() idchthon_idle17	= [	$walk17, idchthon_idle18 ] {};
+void() idchthon_idle18	= [	$walk18, idchthon_idle19 ] {};
+void() idchthon_idle19	= [	$walk19, idchthon_idle20 ] {};
+void() idchthon_idle20	= [	$walk20, idchthon_idle21 ] {};
+void() idchthon_idle21	= [	$walk21, idchthon_idle22 ] { idchthon_tracking(); };
+void() idchthon_idle22	= [	$walk22, idchthon_idle23 ] {};
+void() idchthon_idle23	= [	$walk23, idchthon_idle24 ] {};
+void() idchthon_idle24	= [	$walk24, idchthon_idle25 ] {};
+void() idchthon_idle25	= [	$walk25, idchthon_idle26 ] {};
+void() idchthon_idle26	= [	$walk26, idchthon_idle27 ] {};
+void() idchthon_idle27	= [	$walk27, idchthon_idle28 ] {};
+void() idchthon_idle28	= [	$walk28, idchthon_idle29 ] {};
+void() idchthon_idle29	= [	$walk29, idchthon_idle30 ] {};
+void() idchthon_idle30	= [	$walk30, idchthon_idle31 ] {};
+void() idchthon_idle31	= [	$walk31, idchthon_idle1 ] { idchthon_tracking(); };
 
 void(vector orgofs) idchthon_missile = {
 	local vector offang, org, vec, dir, mdest, avel;
@@ -122,47 +122,47 @@ void() idchthon_face = {
 	if (self.enemy) ai_face();
 };
 
-void() idchthon_missile1	=[	$attack1, idchthon_missile2 ] {idchthon_face();};
-void() idchthon_missile2	=[	$attack2, idchthon_missile3 ] {idchthon_face();};
-void() idchthon_missile3	=[	$attack3, idchthon_missile4 ] {idchthon_face();};
-void() idchthon_missile4	=[	$attack4, idchthon_missile5 ] {idchthon_face();};
-void() idchthon_missile5	=[	$attack5, idchthon_missile6 ] {idchthon_face();};
-void() idchthon_missile6	=[	$attack6, idchthon_missile7 ] {idchthon_face();};
-void() idchthon_missile7	=[	$attack7, idchthon_missile8 ] {idchthon_face();};
-void() idchthon_missile8	=[	$attack8, idchthon_missile9 ] {idchthon_face();};
-void() idchthon_missile9	=[	$attack9, idchthon_missile10 ] {idchthon_missile('100 100 200');};
-void() idchthon_missile10	=[	$attack10, idchthon_missile11 ] {idchthon_face();};
-void() idchthon_missile11	=[	$attack11, idchthon_missile12 ] {idchthon_face();};
-void() idchthon_missile12	=[	$attack12, idchthon_missile13 ] {idchthon_face();};
-void() idchthon_missile13	=[	$attack13, idchthon_missile14 ] {idchthon_face();};
-void() idchthon_missile14	=[	$attack14, idchthon_missile15 ] {idchthon_face();};
-void() idchthon_missile15	=[	$attack15, idchthon_missile16 ] {idchthon_face();};
-void() idchthon_missile16	=[	$attack16, idchthon_missile17 ] {idchthon_face();};
-void() idchthon_missile17	=[	$attack17, idchthon_missile18 ] {idchthon_face();};
-void() idchthon_missile18	=[	$attack18, idchthon_missile19 ] {idchthon_face();};
-void() idchthon_missile19	=[	$attack19, idchthon_missile20 ] {idchthon_face();};
-void() idchthon_missile20	=[	$attack20, idchthon_missile21 ] {idchthon_missile('100 -100 200');};
-void() idchthon_missile21	=[	$attack21, idchthon_missile22 ] {idchthon_face();};
-void() idchthon_missile22	=[	$attack22, idchthon_missile23 ] {idchthon_face();};
-void() idchthon_missile23	=[	$attack23, idchthon_missile1 ] {idchthon_face();};
+void() idchthon_missile1	= [	$attack1, idchthon_missile2 ] { idchthon_face(); };
+void() idchthon_missile2	= [	$attack2, idchthon_missile3 ] { idchthon_face(); };
+void() idchthon_missile3	= [	$attack3, idchthon_missile4 ] { idchthon_face(); };
+void() idchthon_missile4	= [	$attack4, idchthon_missile5 ] { idchthon_face(); };
+void() idchthon_missile5	= [	$attack5, idchthon_missile6 ] { idchthon_face(); };
+void() idchthon_missile6	= [	$attack6, idchthon_missile7 ] { idchthon_face(); };
+void() idchthon_missile7	= [	$attack7, idchthon_missile8 ] { idchthon_face(); };
+void() idchthon_missile8	= [	$attack8, idchthon_missile9 ] { idchthon_face(); };
+void() idchthon_missile9	= [	$attack9, idchthon_missile10 ] { idchthon_missile('100 100 200'); };
+void() idchthon_missile10	= [	$attack10, idchthon_missile11 ] { idchthon_face(); };
+void() idchthon_missile11	= [	$attack11, idchthon_missile12 ] { idchthon_face(); };
+void() idchthon_missile12	= [	$attack12, idchthon_missile13 ] { idchthon_face(); };
+void() idchthon_missile13	= [	$attack13, idchthon_missile14 ] { idchthon_face(); };
+void() idchthon_missile14	= [	$attack14, idchthon_missile15 ] { idchthon_face(); };
+void() idchthon_missile15	= [	$attack15, idchthon_missile16 ] { idchthon_face(); };
+void() idchthon_missile16	= [	$attack16, idchthon_missile17 ] { idchthon_face(); };
+void() idchthon_missile17	= [	$attack17, idchthon_missile18 ] { idchthon_face(); };
+void() idchthon_missile18	= [	$attack18, idchthon_missile19 ] { idchthon_face(); };
+void() idchthon_missile19	= [	$attack19, idchthon_missile20 ] { idchthon_face(); };
+void() idchthon_missile20	= [	$attack20, idchthon_missile21 ] { idchthon_missile('100 -100 200'); };
+void() idchthon_missile21	= [	$attack21, idchthon_missile22 ] { idchthon_face(); };
+void() idchthon_missile22	= [	$attack22, idchthon_missile23 ] { idchthon_face(); };
+void() idchthon_missile23	= [	$attack23, idchthon_missile1 ] { idchthon_face(); };
 
-void() idchthon_rise1	=[	$rise1, idchthon_rise2 ] {};
-void() idchthon_rise2	=[	$rise2, idchthon_rise3 ] {sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
-void() idchthon_rise3	=[	$rise3, idchthon_rise4 ] {};
-void() idchthon_rise4	=[	$rise4, idchthon_rise5 ] {ai_face();};
-void() idchthon_rise5	=[	$rise5, idchthon_rise6 ] {};
-void() idchthon_rise6	=[	$rise6, idchthon_rise7 ] {ai_face();};
-void() idchthon_rise7	=[	$rise7, idchthon_rise8 ] {};
-void() idchthon_rise8	=[	$rise8, idchthon_rise9 ] {ai_face();};
-void() idchthon_rise9	=[	$rise9, idchthon_rise10 ] {};
-void() idchthon_rise10	=[	$rise10, idchthon_rise11 ] {ai_face();};
-void() idchthon_rise11	=[	$rise11, idchthon_rise12 ] {};
-void() idchthon_rise12	=[	$rise12, idchthon_rise13 ] {ai_face();};
-void() idchthon_rise13	=[	$rise13, idchthon_rise14 ] {};
-void() idchthon_rise14	=[	$rise14, idchthon_rise15 ] {ai_face();};
-void() idchthon_rise15	=[	$rise15, idchthon_rise16 ] {};
-void() idchthon_rise16	=[	$rise16, idchthon_rise17 ] {ai_face();};
-void() idchthon_rise17	=[	$rise17, idchthon_missile1 ] {};
+void() idchthon_rise1	= [	$rise1, idchthon_rise2 ] {};
+void() idchthon_rise2	= [	$rise2, idchthon_rise3 ] { sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
+void() idchthon_rise3	= [	$rise3, idchthon_rise4 ] {};
+void() idchthon_rise4	= [	$rise4, idchthon_rise5 ] { ai_face(); };
+void() idchthon_rise5	= [	$rise5, idchthon_rise6 ] {};
+void() idchthon_rise6	= [	$rise6, idchthon_rise7 ] { ai_face(); };
+void() idchthon_rise7	= [	$rise7, idchthon_rise8 ] {};
+void() idchthon_rise8	= [	$rise8, idchthon_rise9 ] { ai_face(); };
+void() idchthon_rise9	= [	$rise9, idchthon_rise10 ] {};
+void() idchthon_rise10	= [	$rise10, idchthon_rise11 ] { ai_face(); };
+void() idchthon_rise11	= [	$rise11, idchthon_rise12 ] {};
+void() idchthon_rise12	= [	$rise12, idchthon_rise13 ] { ai_face(); };
+void() idchthon_rise13	= [	$rise13, idchthon_rise14 ] {};
+void() idchthon_rise14	= [	$rise14, idchthon_rise15 ] { ai_face(); };
+void() idchthon_rise15	= [	$rise15, idchthon_rise16 ] {};
+void() idchthon_rise16	= [	$rise16, idchthon_rise17 ] { ai_face(); };
+void() idchthon_rise17	= [	$rise17, idchthon_missile1 ] {};
 
 void() idchthon_awake = {
 	self.solid = SOLID_SLIDEBOX;
@@ -191,44 +191,43 @@ void() idchthon_awake = {
 	idchthon_rise1();
 };
 
-void() idchthon_shocka1 =[	$shocka1, idchthon_shocka2 ] {};
-void() idchthon_shocka2 =[	$shocka2, idchthon_shocka3 ] {};
-void() idchthon_shocka3 =[	$shocka3, idchthon_shocka4 ] {};
-void() idchthon_shocka4 =[	$shocka4, idchthon_shocka5 ] {};
-void() idchthon_shocka5 =[	$shocka5, idchthon_shocka6 ] {};
-void() idchthon_shocka6 =[	$shocka6, idchthon_shocka7 ] {};
-void() idchthon_shocka7 =[	$shocka7, idchthon_shocka8 ] {};
-void() idchthon_shocka8 =[	$shocka8, idchthon_shocka9 ] {};
-void() idchthon_shocka9 =[	$shocka9, idchthon_shocka10 ] {};
-void() idchthon_shocka10 =[	$shocka10, idchthon_missile1 ] {};
+void() idchthon_shocka1 = [	$shocka1, idchthon_shocka2 ] {};
+void() idchthon_shocka2 = [	$shocka2, idchthon_shocka3 ] {};
+void() idchthon_shocka3 = [	$shocka3, idchthon_shocka4 ] {};
+void() idchthon_shocka4 = [	$shocka4, idchthon_shocka5 ] {};
+void() idchthon_shocka5 = [	$shocka5, idchthon_shocka6 ] {};
+void() idchthon_shocka6 = [	$shocka6, idchthon_shocka7 ] {};
+void() idchthon_shocka7 = [	$shocka7, idchthon_shocka8 ] {};
+void() idchthon_shocka8 = [	$shocka8, idchthon_shocka9 ] {};
+void() idchthon_shocka9 = [	$shocka9, idchthon_shocka10 ] {};
+void() idchthon_shocka10 = [	$shocka10, idchthon_missile1 ] {};
 
 //----------------------------------------------------------------------
-void() idchthon_shockb1 =[	$shockb1, idchthon_shockb2 ] {};
-void() idchthon_shockb2 =[	$shockb2, idchthon_shockb3 ] {};
-void() idchthon_shockb3 =[	$shockb3, idchthon_shockb4 ] {};
-void() idchthon_shockb4 =[	$shockb4, idchthon_shockb5 ] {};
-void() idchthon_shockb5 =[	$shockb5, idchthon_shockb6 ] {};
-void() idchthon_shockb6 =[	$shockb6, idchthon_shockb7 ] {};
-void() idchthon_shockb7 =[	$shockb1, idchthon_shockb8 ] {};
-void() idchthon_shockb8 =[	$shockb2, idchthon_shockb9 ] {};
-void() idchthon_shockb9 =[	$shockb3, idchthon_shockb10 ] {};
-void() idchthon_shockb10 =[	$shockb4, idchthon_missile1 ] {};
+void() idchthon_shockb1 = [	$shockb1, idchthon_shockb2 ] {};
+void() idchthon_shockb2 = [	$shockb2, idchthon_shockb3 ] {};
+void() idchthon_shockb3 = [	$shockb3, idchthon_shockb4 ] {};
+void() idchthon_shockb4 = [	$shockb4, idchthon_shockb5 ] {};
+void() idchthon_shockb5 = [	$shockb5, idchthon_shockb6 ] {};
+void() idchthon_shockb6 = [	$shockb6, idchthon_shockb7 ] {};
+void() idchthon_shockb7 = [	$shockb1, idchthon_shockb8 ] {};
+void() idchthon_shockb8 = [	$shockb2, idchthon_shockb9 ] {};
+void() idchthon_shockb9 = [	$shockb3, idchthon_shockb10 ] {};
+void() idchthon_shockb10 = [	$shockb4, idchthon_missile1 ] {};
 
 //----------------------------------------------------------------------
-void() idchthon_shockc1 =[	$shockc1, idchthon_shockc2 ] {};
-void() idchthon_shockc2 =[	$shockc2, idchthon_shockc3 ] {};
-void() idchthon_shockc3 =[	$shockc3, idchthon_shockc4 ] {};
-void() idchthon_shockc4 =[	$shockc4, idchthon_shockc5 ] {};
-void() idchthon_shockc5 =[	$shockc5, idchthon_shockc6 ] {};
-void() idchthon_shockc6 =[	$shockc6, idchthon_shockc7 ] {};
-void() idchthon_shockc7 =[	$shockc7, idchthon_shockc8 ] {};
-void() idchthon_shockc8 =[	$shockc8, idchthon_shockc9 ] {};
-void() idchthon_shockc9 =[	$shockc9, idchthon_shockc10 ] {};
-void() idchthon_shockc10 =[	$shockc10, idchthon_death1 ] {};
+void() idchthon_shockc1 = [	$shockc1, idchthon_shockc2 ] {};
+void() idchthon_shockc2 = [	$shockc2, idchthon_shockc3 ] {};
+void() idchthon_shockc3 = [	$shockc3, idchthon_shockc4 ] {};
+void() idchthon_shockc4 = [	$shockc4, idchthon_shockc5 ] {};
+void() idchthon_shockc5 = [	$shockc5, idchthon_shockc6 ] {};
+void() idchthon_shockc6 = [	$shockc6, idchthon_shockc7 ] {};
+void() idchthon_shockc7 = [	$shockc7, idchthon_shockc8 ] {};
+void() idchthon_shockc8 = [	$shockc8, idchthon_shockc9 ] {};
+void() idchthon_shockc9 = [	$shockc9, idchthon_shockc10 ] {};
+void() idchthon_shockc10 = [	$shockc10, idchthon_death1 ] {};
 
 //----------------------------------------------------------------------
-void() lightning_fire =
-{
+void() lightning_fire = {
 	local vector p1, p2;
 	
 	// done here, put the terminals back up
@@ -298,7 +297,7 @@ void() lightning_use = {
 };
 
 void() idchthon_death1 = [$death1, idchthon_death2] {
-sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);};
+sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM); };
 void() idchthon_death2 = [$death2, idchthon_death3] {};
 void() idchthon_death3 = [$death3, idchthon_death4] {};
 void() idchthon_death4 = [$death4, idchthon_death5] {};

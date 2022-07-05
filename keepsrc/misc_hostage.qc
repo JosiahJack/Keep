@@ -82,12 +82,12 @@ void() actor_run;
 
 void() sf64_teledeath = { spawn_tdeath(self.origin,self.owner); remove(self); }; // [FUNCTION]
 
-void() actor_pain1 =[ $pain1,  actor_pain2  ] {PainSound();}; // [FUNCTION]
-void() actor_pain2 =[ $pain2,  actor_pain3  ] {}; // [FUNCTION]
-void() actor_pain3 =[ $pain3,  actor_pain4  ] {}; // [FUNCTION]
-void() actor_pain4 =[ $pain4,  actor_pain5  ] {}; // [FUNCTION]
-void() actor_pain5 =[ $pain5,  actor_pain6  ] {}; // [FUNCTION]
-void() actor_pain6 =[ $pain6,  actor_run    ] { // [FUNCTION]
+void() actor_pain1 = [$pain1,  actor_pain2  ] { PainSound(); }; // [FUNCTION]
+void() actor_pain2 = [$pain2,  actor_pain3  ] {}; // [FUNCTION]
+void() actor_pain3 = [$pain3,  actor_pain4  ] {}; // [FUNCTION]
+void() actor_pain4 = [$pain4,  actor_pain5  ] {}; // [FUNCTION]
+void() actor_pain5 = [$pain5,  actor_pain6  ] {}; // [FUNCTION]
+void() actor_pain6 = [$pain6,  actor_run    ] { // [FUNCTION]
     if (self.count == 1 && self.enemy != world) ai_run(10);
 };
 
@@ -99,12 +99,12 @@ void(entity inflictor, entity attacker, float take) actor_pain = { // [FUNCTION]
     actor_pain1();
 };
 
-void() actor_shot1 =[ $shotatt1,  actor_shot2  ] {self.effects = self.effects | EF_MUZZLEFLASH;}; // [FUNCTION]
-void() actor_shot2 =[ $shotatt2,  actor_shot3  ] {}; // [FUNCTION]
-void() actor_shot3 =[ $shotatt3,  actor_shot4  ] {}; // [FUNCTION]
-void() actor_shot4 =[ $shotatt4,  actor_shot5  ] {}; // [FUNCTION]
-void() actor_shot5 =[ $shotatt5,  actor_shot6  ] {}; // [FUNCTION]
-void() actor_shot6 =[ $shotatt6,  actor_run    ] {}; // [FUNCTION]
+void() actor_shot1 = [$shotatt1,  actor_shot2  ] { self.effects = self.effects | EF_MUZZLEFLASH;}; // [FUNCTION]
+void() actor_shot2 = [$shotatt2,  actor_shot3  ] {}; // [FUNCTION]
+void() actor_shot3 = [$shotatt3,  actor_shot4  ] {}; // [FUNCTION]
+void() actor_shot4 = [$shotatt4,  actor_shot5  ] {}; // [FUNCTION]
+void() actor_shot5 = [$shotatt5,  actor_shot6  ] {}; // [FUNCTION]
+void() actor_shot6 = [$shotatt6,  actor_run    ] {}; // [FUNCTION]
 
 void() Actor_use = { // [FUNCTION]
     if (self.spawnflags & HOSTAGE_DEAD) {
@@ -146,15 +146,15 @@ void() ActorDie = { // [FUNCTION]
     else player_diee1();
 };
 
-void() actor_stand1 =[ $stand1, actor_stand1 ] { // [FUNCTION]
-    if (self.pausetime < time) {actor_run(); return;}
+void() actor_stand1 = [$stand1, actor_stand1 ] { // [FUNCTION]
+    if (self.pausetime < time) { actor_run(); return;}
 
     if (self.walkframe >= 5) self.walkframe = 0;
     self.frame = $stand1 + self.walkframe;
     self.walkframe = self.walkframe + 1;    
 };
 
-void() actor_run =[ $rockrun1, actor_run ] { // [FUNCTION]
+void() actor_run = [$rockrun1, actor_run ] { // [FUNCTION]
 	// hack for zer1m2 scene
     if (self.dmg == 69) { // Freeze the actor shortly after falling into the (meat) trap.
         if (time > 55) {
@@ -303,7 +303,7 @@ void() actor_sf64start = { // [FUNCTION]
 // ACTOR_DEAD(1) makes the actor a non-living entity until triggered.  It will affect monster-count, and will attack the player after it has been triggered.  (specially made for 'da*ned')
 // TRIGGER_SPAWN(64) causes the actor to not spawn until it is triggered.  If "style" is set for the actor it will cause a teleport-splash when it spawns.
 void() misc_hostage = { // [ENTITY]
-    if (deathmatch || coop) {remove (self); return;}
+    if (deathmatch || coop) { remove (self); return;}
 
     self.origin             = self.origin + '0 0 56';
     self.classname          = self.netname  = "actor";

@@ -96,7 +96,7 @@ void(float dist) ai_back = {
 void(float dist) ai_backface = { ai_face(); ai_back(dist); }; // faces then moves back.  Should be ai_faceback??
 
 // ai_pain (just uses ai_back, at some point a randomized backwards stagger vector was planned, but I'm not going to change expected behavior -Qmaster)
-void(float dist) ai_pain ={ai_back (dist);};
+void(float dist) ai_pain = { ai_back (dist); };
 
 void(float dist) ai_painforward = {
 	MonsterDeBuff();
@@ -676,7 +676,7 @@ float(float dist) ai_up = {
     return (self.origin != spot);
 };
 
-float(float dist) ai_down = {return ai_up (0 - dist);};
+float(float dist) ai_down = { return ai_up (0 - dist); };
 
 // Custom strafing AI for Dragons!
 // Move to the side of ideal_yaw.  Set ideal_yaw prior to a call to this function.  While similar to 'ai_run_slide', this function has two important differences.
@@ -715,7 +715,7 @@ void(float dist) ai_run_side = {
 // PM:  Renamed to 'ai_run_strafe', and added float argument 'dist'.
 //
 // For guaranteed circle-strafing, do the following:
-//  {ai_face(); ai_run_side(dist); ai_face();}
+//  { ai_face(); ai_run_side(dist); ai_face();}
 //
 // The above description, which describes circle-strafing, is only true if enemy_yaw updates each frame, which is true only if this is called from
 // ai_run.  If called directly, enemy_yaw probably will not be set, and the monster will simply move to the side.

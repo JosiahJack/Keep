@@ -314,7 +314,7 @@ void() ClientDeBuff = {
 			self.debuff_sound = -1;		// Reset
 
 			// Sound exception for god/pentagram mode
-			if (self.flags & FL_GODMODE || self.invincible_finished >= time) {
+			if (Indestructable(self)) {
 				PlayPentagramSound(self);
 			}
 			else {
@@ -373,8 +373,8 @@ void(entity targ) BleedDeBuff = {
 	
 	if (!(targ.flags & FL_CLIENT)) return; // Sanity check!
 	if (targ.health <= DEBUFF_BLEED_MIN) return; // Check for bleeding and minimum amount of health for debuff
-	if (targ.bleeding == TRUE) { T_Damage (targ, self, self, DEBUFF_BLEED_MIN, DAMARMOR); return; } // Do minimum damage, checked min does not kill before
-	if (targ.items & (IT_INVULNERABILITY | IT_SUIT) || targ.flags & FL_GODMODE) { T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
+	if (targ.bleeding == TRUE) { T_Damage(targ,self,self,DEBUFF_BLEED_MIN,DAMARMOR); return; } // Do minimum damage, checked min does not kill before
+	if (targ.items & IT_SUIT || Indestructable(targ)) { T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
 
 	targ.bleeding = TRUE; // Starting bleeding!
 	targ.bleeding_time = time + map_bleedingdmg_z; // Pause before bleeding Healing starts (def=1s)

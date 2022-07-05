@@ -365,7 +365,7 @@ void() misc_fan_reset = { // [FUNCTION]
 
 void() misc_fan_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF; // Completely invisible
-	self.model = string_null;				// hide bmodel surface
+	self.model = "";				// hide bmodel surface
 	self.think = misc_fan_idle;
 	self.nextthink = 0;
 };

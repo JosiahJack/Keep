@@ -315,7 +315,7 @@ void() func_togglewall_on = { // [FUNCTION]
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel (self, self.mdl);
-	self.model = string_null; // Make bmodel surface invisible
+	self.model = ""; // Make bmodel surface invisible
 	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 };
 
@@ -446,7 +446,7 @@ void() func_bossgate_use = { // [FUNCTION]
 	else self.estate_on();
 };
 
-void() func_bossgate_aframe = { }; // [FUNCTION]
+void() func_bossgate_aframe = {}; // [FUNCTION]
 
 // QUAKED func_bossgate (0 .5 .8) ? x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM
 // -------- KEYS --------

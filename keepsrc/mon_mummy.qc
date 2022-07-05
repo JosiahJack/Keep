@@ -119,9 +119,9 @@ void() mummy_atta6 = [ 57.000, mummy_atta7 ] { ai_face(); };
 void() mummy_atta7 = [ 58.000, mummy_atta8 ] { ai_face(); };
 void() mummy_atta8 = [ 59.000, mummy_atta9 ] { ai_face(); };
 void() mummy_atta9 = [ 60.000, mummy_atta10 ] { ai_face(); };
-void() mummy_atta10 = [ 61.000, mummy_atta11 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
-void() mummy_atta11 = [ 62.000, mummy_atta12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
-void() mummy_atta12 = [ 63.000, mummy_atta13 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
+void() mummy_atta10 = [ 61.000, mummy_atta11 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_atta11 = [ 62.000, mummy_atta12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_atta12 = [ 63.000, mummy_atta13 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() mummy_atta13 = [ 64.000, mummy_run1 ] {
    ai_face();
    mummyFireGrenade ('-10.000 -22.000 30.000');
@@ -137,7 +137,7 @@ void() mummy_attb7 = [ 71.000, mummy_attb8 ] { ai_face(); };
 void() mummy_attb8 = [ 72.000, mummy_attb9 ] { ai_face(); };
 void() mummy_attb9 = [ 73.000, mummy_attb10 ] { ai_face(); };
 void() mummy_attb10 = [ 74.000, mummy_attb11 ] { ai_face(); };
-void() mummy_attb11 = [ 75.000, mummy_attb12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
+void() mummy_attb11 = [ 75.000, mummy_attb12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() mummy_attb12 = [ 76.000, mummy_attb13 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() mummy_attb13 = [ 77.000, mummy_attb14 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() mummy_attb14 = [ 77.000, mummy_run1 ] {

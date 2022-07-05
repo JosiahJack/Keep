@@ -59,7 +59,7 @@ float STATE_ROUTE3 = 3;		// Route 3 is the priority (backward)
 float STATE_EXACT = 4;		// Switch to exact route selection
 float STATE_RANDOM = 5;		// Switch to random route selection
 
-//======================================================================
+
 /*QUAKED path_corner (0.5 0.3 0) (-8 -8 -24) (8 8 48) EXACT INSTANT REVERSE NOPAUSE
 Node based path routing system
 -------- KEYS --------
@@ -381,7 +381,7 @@ void(entity mon, entity obj) give_monster_object = {
 };
 
 void(entity mon) take_monster_object = {
-	mon.hasobject = string_null;
+	mon.hasobject = "";
 	mon.entattachment = world;
 };
 

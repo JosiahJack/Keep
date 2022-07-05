@@ -32,12 +32,11 @@ $frame painc9 painc10 painc11 painc12 painc13 painc14
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 
-//======================================================================
+
 void() floyd_sleep = [$idle1, floyd_sleep] {};
 
-//======================================================================
-void() floyd_standframe =
-{
+
+void() floyd_standframe = {
 	// Make sure alive
 	if (self.health < 0) return;
 	
@@ -57,13 +56,12 @@ void() floyd_standframe =
 };
 
 //----------------------------------------------------------------------
-void()	floyd_stand1 =[ $idle1, floyd_stand1 ] {
+void()	floyd_stand1 = [$idle1, floyd_stand1 ] {
 	self.walkframe = 0; floyd_standframe();
 };
 
-//======================================================================
-void() floyd_walkframe =
-{
+
+void() floyd_walkframe = {
 	// Make sure alive
 	if (self.health < 0) return;
 	
@@ -85,13 +83,12 @@ void() floyd_walkframe =
 };
 
 //----------------------------------------------------------------------
-void()	floyd_walk1 =[ $walk1, floyd_walk1 ] {
+void()	floyd_walk1 = [$walk1, floyd_walk1 ] {
 	self.walkframe = 0; floyd_walkframe();
 };
 
-//======================================================================
-void() floyd_runframe =
-{
+
+void() floyd_runframe = {
 	// Make sure alive
 	if (self.health < 0) return;
 	
@@ -113,10 +110,10 @@ void() floyd_runframe =
 };
 
 //----------------------------------------------------------------------
-void()	floyd_run1 =[ $run1, floyd_run1 ] {
+void()	floyd_run1 = [$run1, floyd_run1 ] {
 	self.walkframe = 0; floyd_runframe();
 };
-void()	floyd_run5 =[ $run5, floyd_run5 ] {
+void()	floyd_run5 = [$run5, floyd_run5 ] {
 	self.walkframe = 4; floyd_runframe();
 };
 
@@ -139,29 +136,29 @@ void(float muzzle) floyd_fire = {
 	launch_projectile(org,dir,NO_SPIN,CT_MONFLOYD,self.attack_speed);
 };
 
-void()	floyd_ready1 =[$run1, floyd_ready2] {ai_face();};
-void()	floyd_ready2 =[$run2, floyd_ready3] {ai_face();};
-void()	floyd_ready3 =[$run3, floyd_ready4] {ai_face();};
-void()	floyd_ready4 =[$run4, floyd_attack1] {
+void()	floyd_ready1 = [$run1, floyd_ready2] { ai_face(); };
+void()	floyd_ready2 = [$run2, floyd_ready3] { ai_face(); };
+void()	floyd_ready3 = [$run3, floyd_ready4] { ai_face(); };
+void()	floyd_ready4 = [$run4, floyd_attack1] {
 	ai_face();
 	// Check if sightline is broken by monster/world
 	if (visblocked_wide(self.enemy, self.attack_offset, '0 0 0'))
 		self.think = floyd_run5;
 };
-void()	floyd_attack1 =[$attack1, floyd_attack2] {floyd_fire(6);};
-void()	floyd_attack2 =[$attack2, floyd_attack3] {ai_face();};
-void()	floyd_attack3 =[$attack3, floyd_attack4] {ai_face();};
-void()	floyd_attack4 =[$attack4, floyd_attack5] {floyd_fire(0);};
-void()	floyd_attack5 =[$attack5, floyd_attack6] {ai_face();};
-void()	floyd_attack6 =[$attack6, floyd_attack7] {ai_face();};
-void()	floyd_attack7 =[$attack7, floyd_attack8] {floyd_fire(-6);};
-void()	floyd_attack8 =[$attack8, floyd_attack9] {ai_face();};
-void()	floyd_attack9 =[$attack9, floyd_run1] {ai_face();
+void()	floyd_attack1 = [$attack1, floyd_attack2] { floyd_fire(6); };
+void()	floyd_attack2 = [$attack2, floyd_attack3] { ai_face(); };
+void()	floyd_attack3 = [$attack3, floyd_attack4] { ai_face(); };
+void()	floyd_attack4 = [$attack4, floyd_attack5] { floyd_fire(0); };
+void()	floyd_attack5 = [$attack5, floyd_attack6] { ai_face(); };
+void()	floyd_attack6 = [$attack6, floyd_attack7] { ai_face(); };
+void()	floyd_attack7 = [$attack7, floyd_attack8] { floyd_fire(-6); };
+void()	floyd_attack8 = [$attack8, floyd_attack9] { ai_face(); };
+void()	floyd_attack9 = [$attack9, floyd_run1] { ai_face();
 	// Special double fire mode (used by soliders/enforcers)
 	SUB_CheckRefire (floyd_attack1);
 };
 
-//======================================================================
+
 // A = Short pain animation
 void() floyd_paina1 = [$paina1, floyd_paina2] {};
 void() floyd_paina2 = [$paina2, floyd_paina3] {};
@@ -191,18 +188,17 @@ void() floyd_painc3 =  [$painc3,  floyd_painc4]  {};
 void() floyd_painc4 =  [$painc4,  floyd_painc5]  {};
 void() floyd_painc5 =  [$painc5,  floyd_painc6]  {};
 void() floyd_painc6 =  [$painc6,  floyd_painc7]  {};
-void() floyd_painc7 =  [$painc7,  floyd_painc8]  {ai_painforward(1.25);};
-void() floyd_painc8 =  [$painc8,  floyd_painc9]  {ai_painforward(1.25);};
-void() floyd_painc9 =  [$painc9,  floyd_painc10] {ai_painforward(1.25);};
-void() floyd_painc10 = [$painc10, floyd_painc11] {ai_painforward(1.25);};
-void() floyd_painc11 = [$painc11, floyd_painc12] {ai_painforward(1.25);};
-void() floyd_painc12 = [$painc12, floyd_painc13] {ai_painforward(1.25);};
-void() floyd_painc13 = [$painc13, floyd_painc14] {ai_painforward(1.25);};
-void() floyd_painc14 = [$painc14, floyd_run1]    {ai_painforward(1.25);};
+void() floyd_painc7 =  [$painc7,  floyd_painc8]  { ai_painforward(1.25); };
+void() floyd_painc8 =  [$painc8,  floyd_painc9]  { ai_painforward(1.25); };
+void() floyd_painc9 =  [$painc9,  floyd_painc10] { ai_painforward(1.25); };
+void() floyd_painc10 = [$painc10, floyd_painc11] { ai_painforward(1.25); };
+void() floyd_painc11 = [$painc11, floyd_painc12] { ai_painforward(1.25); };
+void() floyd_painc12 = [$painc12, floyd_painc13] { ai_painforward(1.25); };
+void() floyd_painc13 = [$painc13, floyd_painc14] { ai_painforward(1.25); };
+void() floyd_painc14 = [$painc14, floyd_run1]    { ai_painforward(1.25); };
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) floyd_pain =
-{
+void(entity inflictor, entity attacker, float damage) floyd_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -238,9 +234,8 @@ void(entity inflictor, entity attacker, float damage) floyd_pain =
 	}
 };
 
-//======================================================================
-void() floyd_explode =
-{
+
+void() floyd_explode = {
 	// no more FLOYD!
 	entity_hide (self);
 	// Make sure gibs go flying up
@@ -272,24 +267,23 @@ void() floyd_explode =
 
 //----------------------------------------------------------------------
 //skip $death1, which is the idle frame
-void() floyd_death2 = [ $death2, floyd_death3 ] {ai_painforward(-3.33);};
-void() floyd_death3 = [ $death3, floyd_death4 ] {ai_painforward(-3.34);};
-void() floyd_death4 = [ $death4, floyd_death5 ] {ai_painforward(-3.33);};
-void() floyd_death5 = [ $death5, floyd_death6 ] {ai_painforward(-5);};
-void() floyd_death6 = [ $death6, floyd_death7 ] {ai_painforward(-5);};
-void() floyd_death7 = [ $death7, floyd_death8 ] {ai_painforward(-8);};
-void() floyd_death8 = [ $death8, floyd_death9 ] {ai_painforward(-8);};
-void() floyd_death9 = [ $death9, floyd_death10 ] {ai_painforward(-8);};
-void() floyd_death10 = [ $death10, floyd_death11 ] {ai_painforward(-8);};
-void() floyd_death11 = [ $death11, floyd_death12 ] {};
-void() floyd_death12 = [ $death12, floyd_death13 ] {};
-void() floyd_death13 = [ $death13, floyd_death14 ] {};
-void() floyd_death14 = [ $death14, floyd_death15 ] {};
-void() floyd_death15 = [ $death15, floyd_explode ] {};
+void() floyd_death2 = [$death2, floyd_death3 ] { ai_painforward(-3.33); };
+void() floyd_death3 = [$death3, floyd_death4 ] { ai_painforward(-3.34); };
+void() floyd_death4 = [$death4, floyd_death5 ] { ai_painforward(-3.33); };
+void() floyd_death5 = [$death5, floyd_death6 ] { ai_painforward(-5); };
+void() floyd_death6 = [$death6, floyd_death7 ] { ai_painforward(-5); };
+void() floyd_death7 = [$death7, floyd_death8 ] { ai_painforward(-8); };
+void() floyd_death8 = [$death8, floyd_death9 ] { ai_painforward(-8); };
+void() floyd_death9 = [$death9, floyd_death10 ] { ai_painforward(-8); };
+void() floyd_death10 = [$death10, floyd_death11 ] { ai_painforward(-8); };
+void() floyd_death11 = [$death11, floyd_death12 ] {};
+void() floyd_death12 = [$death12, floyd_death13 ] {};
+void() floyd_death13 = [$death13, floyd_death14 ] {};
+void() floyd_death14 = [$death14, floyd_death15 ] {};
+void() floyd_death15 = [$death15, floyd_explode ] {};
 
 //----------------------------------------------------------------------
-void() floyd_die =
-{
+void() floyd_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -309,11 +303,10 @@ void() floyd_die =
 	}
 };
 
-//======================================================================
+
 // Floyd ASLEEP functions
-//======================================================================
-void() floyd_default_state =
-{
+
+void() floyd_default_state = {
 	// Setup default pain parameters
 	self.pain_timeout = 1.5;
 	self.pain_flinch = 150;
@@ -327,8 +320,7 @@ void() floyd_default_state =
 };
 
 //----------------------------------------------------------------------
-void() floyd_awake =
-{
+void() floyd_awake = {
 	// Cannot be woken up if dead
 	if (self.health < 1) return;
 	
@@ -340,8 +332,7 @@ void() floyd_awake =
 };
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) floyd_painawake =
-{
+void(entity inflictor, entity attacker, float damage) floyd_painawake = {
 	// Cannot be attacked by other robots or woken up if dead
 	if (attacker.classgroup == CG_ROBOT) return;
 	if (self.health < 1) return;
@@ -354,9 +345,9 @@ void(entity inflictor, entity attacker, float damage) floyd_painawake =
 	self.pain_finished = time + 2;	// no more pain for a while
 };
 
-//======================================================================
+
 // Floyd ROLLING functions
-//======================================================================
+
 void() floyd_roll = {
 	self.frame = self.frame + 1;
 	
@@ -374,8 +365,7 @@ void() floyd_roll = {
 // Personally I would have created a maximum bbox radius of the floyd model
 // but this system is much better and unfortunately more complex (maths)
 //----------------------------------------------------------------------
-vector (vector testmoos, float testang, float testradius, float minmax) test_moos_angle =
-{
+vector (vector testmoos, float testang, float testradius, float minmax) test_moos_angle = {
 	local vector testangs, floyd_moos;
 	floyd_moos = testmoos;
 	testangs = '0 0 0';

@@ -305,7 +305,7 @@ void() breakable_particle = { // [FUNCTION]
 };
 
 void() breakable_touch = { // [FUNCTION]
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 	if (self.touchedvoid) { entity_remove(self,0.1); return; }
 	if (other.classtype == CT_FUNCBREAKOBJ) return;	// Ignore other breakables
 	if (other.solid == SOLID_TRIGGER) return;		// Ignore trigger fields

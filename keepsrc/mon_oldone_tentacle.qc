@@ -51,19 +51,19 @@ $frame death14 death15 death16 death17
 
 void() oldone_atta1;
 
-void() oldone_stand1	=[	$idle1, 	oldone_stand2	] {ai_stand();};
-void() oldone_stand2	=[	$idle2, 	oldone_stand3	] {ai_stand();};
-void() oldone_stand3	=[	$idle3, 	oldone_stand4	] {ai_stand();};
-void() oldone_stand4	=[	$idle4, 	oldone_stand5	] {ai_stand();};
-void() oldone_stand5	=[	$idle5, 	oldone_stand6	] {ai_stand();};
-void() oldone_stand6	=[	$idle6, 	oldone_stand1	] {ai_stand();};
+void() oldone_stand1	= [	$idle1, 	oldone_stand2	] { ai_stand(); };
+void() oldone_stand2	= [	$idle2, 	oldone_stand3	] { ai_stand(); };
+void() oldone_stand3	= [	$idle3, 	oldone_stand4	] { ai_stand(); };
+void() oldone_stand4	= [	$idle4, 	oldone_stand5	] { ai_stand(); };
+void() oldone_stand5	= [	$idle5, 	oldone_stand6	] { ai_stand(); };
+void() oldone_stand6	= [	$idle6, 	oldone_stand1	] { ai_stand(); };
 
-void() oldone_aim1	=[	$idle1, 	oldone_aim2	] { if (random() < 0.4) oldone_atta1();};
-void() oldone_aim2	=[	$idle2, 	oldone_aim3	] {};
-void() oldone_aim3	=[	$idle3, 	oldone_aim4	] {};
-void() oldone_aim4	=[	$idle4, 	oldone_aim5	] {};
-void() oldone_aim5	=[	$idle5, 	oldone_aim6	] {};
-void() oldone_aim6	=[	$idle6, 	oldone_aim1	] {};
+void() oldone_aim1	= [	$idle1, 	oldone_aim2	] { if (random() < 0.4) oldone_atta1(); };
+void() oldone_aim2	= [	$idle2, 	oldone_aim3	] {};
+void() oldone_aim3	= [	$idle3, 	oldone_aim4	] {};
+void() oldone_aim4	= [	$idle4, 	oldone_aim5	] {};
+void() oldone_aim5	= [	$idle5, 	oldone_aim6	] {};
+void() oldone_aim6	= [	$idle6, 	oldone_aim1	] {};
 
 void() groundSmash = {
 	local entity shake;
@@ -94,45 +94,45 @@ void(vector org, vector vec) oldone_attack = {
 	newmis.touch = groundSmash;
 };
 
-void() oldone_atta1	=[	$attack1,	oldone_atta2	] {ai_face();};
-void() oldone_atta2	=[	$attack2,	oldone_atta3	] {ai_face();};
-void() oldone_atta3	=[	$attack3,	oldone_atta4	] {ai_face();};
-void() oldone_atta4	=[	$attack4,	oldone_atta5	] {ai_face();};
-void() oldone_atta5	=[	$attack5,	oldone_atta6	] {ai_face();};
-void() oldone_atta6	=[	$attack6,	oldone_atta7	] {ai_face();};
-void() oldone_atta7	=[	$attack7,	oldone_atta8	] {ai_face();};
-void() oldone_atta8	=[	$attack8,	oldone_atta9	] {ai_face();};
-void() oldone_atta9	=[	$attack9,	oldone_atta10	] {ai_face();};
-void() oldone_atta10	=[	$attack10,	oldone_atta11	] {ai_face();};
-void() oldone_atta11	=[	$attack11,	oldone_atta12	] {ai_face();};
-void() oldone_atta12	=[	$attack12,	oldone_atta13	] {ai_face();};
-void() oldone_atta13	=[	$attack13,	oldone_atta14	] {ai_face();};
-void() oldone_atta14	=[	$attack14,	oldone_atta15	] {ai_face();};
-void() oldone_atta15	=[	$attack15,	oldone_atta16	] {self.solid = SOLID_NOT;};
-void() oldone_atta16	=[	$attack16,	oldone_atta17	] {oldone_attack(self.origin, self.enemy.origin - self.origin);};
-void() oldone_atta17	=[	$attack17,	oldone_atta18	] {};
-void() oldone_atta18	=[	$attack18,	oldone_atta19	] {ai_face();};
-void() oldone_atta19	=[	$attack19,	oldone_atta20	] {ai_face();};
-void() oldone_atta20	=[	$attack20,	oldone_atta21	] {ai_face();self.solid = SOLID_BBOX;};
-void() oldone_atta21	=[	$attack21,	oldone_aim1	] {ai_face();};
+void() oldone_atta1	= [	$attack1,	oldone_atta2	] { ai_face(); };
+void() oldone_atta2	= [	$attack2,	oldone_atta3	] { ai_face(); };
+void() oldone_atta3	= [	$attack3,	oldone_atta4	] { ai_face(); };
+void() oldone_atta4	= [	$attack4,	oldone_atta5	] { ai_face(); };
+void() oldone_atta5	= [	$attack5,	oldone_atta6	] { ai_face(); };
+void() oldone_atta6	= [	$attack6,	oldone_atta7	] { ai_face(); };
+void() oldone_atta7	= [	$attack7,	oldone_atta8	] { ai_face(); };
+void() oldone_atta8	= [	$attack8,	oldone_atta9	] { ai_face(); };
+void() oldone_atta9	= [	$attack9,	oldone_atta10	] { ai_face(); };
+void() oldone_atta10	= [	$attack10,	oldone_atta11	] { ai_face(); };
+void() oldone_atta11	= [	$attack11,	oldone_atta12	] { ai_face(); };
+void() oldone_atta12	= [	$attack12,	oldone_atta13	] { ai_face(); };
+void() oldone_atta13	= [	$attack13,	oldone_atta14	] { ai_face(); };
+void() oldone_atta14	= [	$attack14,	oldone_atta15	] { ai_face(); };
+void() oldone_atta15	= [	$attack15,	oldone_atta16	] { self.solid = SOLID_NOT;};
+void() oldone_atta16	= [	$attack16,	oldone_atta17	] { oldone_attack(self.origin, self.enemy.origin - self.origin); };
+void() oldone_atta17	= [	$attack17,	oldone_atta18	] {};
+void() oldone_atta18	= [	$attack18,	oldone_atta19	] { ai_face(); };
+void() oldone_atta19	= [	$attack19,	oldone_atta20	] { ai_face(); };
+void() oldone_atta20	= [	$attack20,	oldone_atta21	] { ai_face();self.solid = SOLID_BBOX;};
+void() oldone_atta21	= [	$attack21,	oldone_aim1	] { ai_face(); };
 
-void() oldone_die1		=[	$death1,	oldone_die2	] {};
-void() oldone_die2		=[	$death2,	oldone_die3	] {monster_check_gib();};
-void() oldone_die3		=[	$death3,	oldone_die4	] {monster_check_gib();};
-void() oldone_die4		=[	$death4,	oldone_die5	] {self.solid = SOLID_NOT;};
-void() oldone_die5		=[	$death5,	oldone_die6	] {};
-void() oldone_die6		=[	$death6,	oldone_die7	] {};
-void() oldone_die7		=[	$death7,	oldone_die8	] {};
-void() oldone_die8		=[	$death8,	oldone_die9	] {};
-void() oldone_die9		=[	$death9,	oldone_die10	] {};
-void() oldone_die10		=[	$death10,	oldone_die11	] {};
-void() oldone_die11		=[	$death11,	oldone_die12	] {};
-void() oldone_die12		=[	$death12,	oldone_die13	] {};
-void() oldone_die13		=[	$death13,	oldone_die14	] {};
-void() oldone_die14		=[	$death14,	oldone_die15	] {};
-void() oldone_die15		=[	$death15,	oldone_die16	] {};
-void() oldone_die16		=[	$death16,	oldone_die17	] {monster_death_postcheck();};
-void() oldone_die17		=[	$death17,	oldone_die17	] {monster_deadbody_check();};
+void() oldone_die1		= [	$death1,	oldone_die2	] {};
+void() oldone_die2		= [	$death2,	oldone_die3	] { monster_check_gib(); };
+void() oldone_die3		= [	$death3,	oldone_die4	] { monster_check_gib(); };
+void() oldone_die4		= [	$death4,	oldone_die5	] { self.solid = SOLID_NOT;};
+void() oldone_die5		= [	$death5,	oldone_die6	] {};
+void() oldone_die6		= [	$death6,	oldone_die7	] {};
+void() oldone_die7		= [	$death7,	oldone_die8	] {};
+void() oldone_die8		= [	$death8,	oldone_die9	] {};
+void() oldone_die9		= [	$death9,	oldone_die10	] {};
+void() oldone_die10		= [	$death10,	oldone_die11	] {};
+void() oldone_die11		= [	$death11,	oldone_die12	] {};
+void() oldone_die12		= [	$death12,	oldone_die13	] {};
+void() oldone_die13		= [	$death13,	oldone_die14	] {};
+void() oldone_die14		= [	$death14,	oldone_die15	] {};
+void() oldone_die15		= [	$death15,	oldone_die16	] {};
+void() oldone_die16		= [	$death16,	oldone_die17	] { monster_death_postcheck(); };
+void() oldone_die17		= [	$death17,	oldone_die17	] { monster_deadbody_check(); };
 
 void(entity inflictor, entity attacker, float damage) oldone_pain = { sound (self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM); };
 
@@ -156,12 +156,12 @@ float()	CheckoldoneMelee = {
 	return FALSE;
 };
 
-void() oldone_rise1		=[	$death17,	oldone_rise2	] {self.solid = SOLID_BBOX;};
-void() oldone_rise2		=[	$death16,	oldone_rise3	] {};
-void() oldone_rise3		=[	$death15,	oldone_rise4	] {};
-void() oldone_rise4		=[	$death14,	oldone_rise5	] {};
-void() oldone_rise5		=[	$death13,	oldone_rise6	] {};
-void() oldone_rise6		=[	$death12,	oldone_aim1	] {	oldone_stand1(); };
+void() oldone_rise1		= [	$death17,	oldone_rise2	] { self.solid = SOLID_BBOX;};
+void() oldone_rise2		= [	$death16,	oldone_rise3	] {};
+void() oldone_rise3		= [	$death15,	oldone_rise4	] {};
+void() oldone_rise4		= [	$death14,	oldone_rise5	] {};
+void() oldone_rise5		= [	$death13,	oldone_rise6	] {};
+void() oldone_rise6		= [	$death12,	oldone_aim1	] {	oldone_stand1(); };
 
 void() monster_oldone_tentacle_precache = {
 	precache_model ("progs/q15/oldone_tent.mdl");

@@ -190,8 +190,7 @@ void() judge_WaveSetupHP = {
 //----------------------------------------------------------------------
 // Check if HP has reached next boss wave trigger event
 //----------------------------------------------------------------------
-float() judge_WaveCheck =
-{
+float() judge_WaveCheck = {
 	// Should be in summon code, double check
 	if (self.style == JUDGE_PHASE3) return TRUE;
 	// Check for boss wave boundary event
@@ -320,8 +319,7 @@ void() judge_standframe = {
 };
 
 //----------------------------------------------------------------------
-void() judge_tauntframe =
-{
+void() judge_tauntframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -350,8 +348,7 @@ void() judge_tauntframe =
 };
 
 //----------------------------------------------------------------------
-void() judge_idleCframe =
-{
+void() judge_idleCframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -378,8 +375,7 @@ void() judge_idleCframe =
 };
 
 //----------------------------------------------------------------------
-void() judge_idleDframe =
-{
+void() judge_idleDframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -410,8 +406,7 @@ void() judge_idleDframe =
 };
 
 //----------------------------------------------------------------------
-void() judge_walkframe =
-{
+void() judge_walkframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -447,7 +442,7 @@ void() judge_runframe = {
 	
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -485,7 +480,7 @@ void() judge_fistframe = {
 	if (self.classtype == CT_MONJUSTICE) return;
 	
 	// Check for summoning condition?
-	if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+	if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 
 	self.nextthink = time + 0.1;
 	self.think = judge_fistframe; // Keep looping
@@ -558,15 +553,14 @@ void() judge_chargeframe = {
 };
 
 //----------------------------------------------------------------------
-void() judge_swingframe =
-{
+void() judge_swingframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -607,7 +601,7 @@ void() judge_smashframe = {
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -704,11 +698,10 @@ void() judge_magicAframe = {
 	self.walkframe = self.walkframe + 1;
 };
 
-//======================================================================
+
 // (JUSTICE only) FLAMES PATTERN 1 - wall arc infront (at players feet)
-//======================================================================
-void(float fire_explode) judge_fireflamewall =
-{
+
+void(float fire_explode) judge_fireflamewall = {
 	local vector org, eorg, torg, dir, ang;
 	local float expl_type, targetang, fire_life;
 
@@ -900,7 +893,7 @@ void() judge_magicBframe = {
 	// Boss ONLY attack, make sure no Justice
 	if (self.classtype == CT_MONJUSTICE) return;
 
-	if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+	if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 
 	// Keep looping
 	self.nextthink = time + 0.1;
@@ -937,7 +930,7 @@ void() judge_flameline = {
 	if (self.classtype == CT_MONJUSTICE) return;
 
 	// Check for boss wave trigger events
-	if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+	if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 
 	// Keep looping
 	self.nextthink = time + 0.1;
@@ -1009,8 +1002,8 @@ void() judge_JumpTouch = {
 	else self.th_jumpexit();
 };
 
-void() judge_jump1 = [ $jump1, judge_jump2 ] {ai_face();};
-void() judge_jump2 = [ $jump2, judge_jump3 ] {
+void() judge_jump1 = [$jump1, judge_jump2 ] { ai_face(); };
+void() judge_jump2 = [$jump2, judge_jump3 ] {
 	ai_face();
 	// Same for Judge and Justice
 	self.touch = judge_JumpTouch;
@@ -1026,9 +1019,9 @@ void() judge_jump2 = [ $jump2, judge_jump3 ] {
 	self.oldorigin = self.origin;
 };
 
-void() judge_jump3 = [ $jump3, judge_jump4 ] {};
-void() judge_jump4 = [ $jump4, judge_jump5 ] {};
-void() judge_jump5 = [ $jump5, judge_jump5 ] {
+void() judge_jump3 = [$jump3, judge_jump4 ] {};
+void() judge_jump4 = [$jump4, judge_jump5 ] {};
+void() judge_jump5 = [$jump5, judge_jump5 ] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; 	//random jump angle
@@ -1038,8 +1031,8 @@ void() judge_jump5 = [ $jump5, judge_jump5 ] {
 };
 
 // Landed with a thud
-void()	judge_jump6 = [ $jump6, judge_jump7 ] {monster_footstep(FALSE);};
-void()	judge_jump7 = [ $jump7, judge_run ] {
+void()	judge_jump6 = [$jump6, judge_jump7 ] { monster_footstep(FALSE); };
+void()	judge_jump7 = [$jump7, judge_run ] {
 	// Make sure attack state is reset (can then decide melee or range)
 	self.attack_state = AS_STRAIGHT; ai_resetangles(); ai_face(); };
 
@@ -1052,7 +1045,7 @@ void() judge_jump = {
 	
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	self.state = JUDGE_JUMP;
@@ -1061,7 +1054,7 @@ void() judge_jump = {
 	judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
 };
 
-//======================================================================
+
 // Entry point for Stand, Walk and Run monster states
 // All have to cope with sword out/on back blend animations
 //----------------------------------------------------------------------
@@ -1090,8 +1083,7 @@ void() judge_walk =  {
 };
 
 //----------------------------------------------------------------------
-void() judge_run =
-{
+void() judge_run = {
 	// Don't start combat with a jump!
 	if (!self.attack_active) self.jump_flag = time + 2;
 	// Entered combat once
@@ -1101,7 +1093,7 @@ void() judge_run =
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	self.state = JUDGE_RUN; 
@@ -1109,8 +1101,7 @@ void() judge_run =
 };
 
 //----------------------------------------------------------------------
-void() judge_melee =
-{
+void() judge_melee = {
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Reset jump attack decision branch
@@ -1120,7 +1111,7 @@ void() judge_melee =
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	self.state = JUDGE_MELEE; 
@@ -1130,8 +1121,7 @@ void() judge_melee =
 };
 
 //----------------------------------------------------------------------
-void() judge_range =
-{
+void() judge_range = {
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Hide any glowing/sprite attachments
@@ -1139,7 +1129,7 @@ void() judge_range =
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	//------------------------------------------------------------------
@@ -1199,12 +1189,11 @@ void() judge_range =
 	judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
 };
 
-//======================================================================
+
 // Sword position blending, checked by all functions
 // Blend animations ( Back / Shoulder / Hand )
 //----------------------------------------------------------------------
-void() judge_finishsword =
-{
+void() judge_finishsword = {
 	self.walkframe = self.attack_chance = 0;
 	// Where to go next?
 	if (self.state == JUDGE_STAND) judge_standframe();
@@ -1241,7 +1230,7 @@ void() judge_finishsword =
 void() judge_movesword = {
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -1356,11 +1345,10 @@ void(float finalstate, float soundtype) judge_checksword = {
 	}
 };
 
-//======================================================================
+
 // BOSS ONLY - summon a bunch of gaunts
 //----------------------------------------------------------------------
-void() Spawn_judgeMinFX =
-{
+void() Spawn_judgeMinFX = {
 	// Randomly pick from teleport sounds
 	self.lip = random() * 5;
 	if (self.lip < 1) self.noise = "misc/r_tele1.wav";
@@ -1542,13 +1530,13 @@ void() judge_summon = {
 	judge_summonframe();
 };
 
-//======================================================================
+
 // Pain, Death and Taxes!
 //----------------------------------------------------------------------
-void()	judge_painA1 =[ $painA1, judge_painA2 ] {};
-void()	judge_painA2 =[ $painA2, judge_painA3 ] {};
-void()	judge_painA3 =[ $painA3, judge_painA4 ] {};
-void()	judge_painA4 =[ $painA4, judge_run ] {};
+void()	judge_painA1 = [$painA1, judge_painA2 ] {};
+void()	judge_painA2 = [$painA2, judge_painA3 ] {};
+void()	judge_painA3 = [$painA3, judge_painA4 ] {};
+void()	judge_painA4 = [$painA4, judge_run ] {};
 
 //----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) judge_pain = {
@@ -1557,7 +1545,7 @@ void(entity inflictor, entity attacker, float damage) judge_pain = {
 
 	if (self.classtype == CT_MONJUDGE) {
 		// Check for boss wave trigger events
-		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	// No pain animations if jumping
@@ -1576,34 +1564,33 @@ void(entity inflictor, entity attacker, float damage) judge_pain = {
 	}
 };
 
-//======================================================================
-void() judge_dieA1 =[ $deathA1, judge_dieA2 ] {};
-void() judge_dieA2 =[ $deathA2, judge_dieA3 ] {monster_check_gib();};
-void() judge_dieA3 =[ $deathA3, judge_dieA4 ] {monster_check_gib();self.solid = SOLID_NOT;};
-void() judge_dieA4 =[ $deathA4, judge_dieA5 ] {};
-void() judge_dieA5 =[ $deathA5, judge_dieA6 ] {};
-void() judge_dieA6 =[ $deathA6, judge_dieA7 ] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);};
-void() judge_dieA7 =[ $deathA7, judge_dieA8 ] {};
-void() judge_dieA8 =[ $deathA8, judge_dieA9 ] {};
-void() judge_dieA9 =[ $deathA9, judge_dieA10 ] {monster_death_postcheck();};
-void() judge_dieA10 =[ $deathA10, judge_dieA10 ] {monster_deadbody_check();};
+
+void() judge_dieA1 = [$deathA1, judge_dieA2 ] {};
+void() judge_dieA2 = [$deathA2, judge_dieA3 ] { monster_check_gib(); };
+void() judge_dieA3 = [$deathA3, judge_dieA4 ] { monster_check_gib();self.solid = SOLID_NOT;};
+void() judge_dieA4 = [$deathA4, judge_dieA5 ] {};
+void() judge_dieA5 = [$deathA5, judge_dieA6 ] {};
+void() judge_dieA6 = [$deathA6, judge_dieA7 ] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+void() judge_dieA7 = [$deathA7, judge_dieA8 ] {};
+void() judge_dieA8 = [$deathA8, judge_dieA9 ] {};
+void() judge_dieA9 = [$deathA9, judge_dieA10 ] { monster_death_postcheck(); };
+void() judge_dieA10 = [$deathA10, judge_dieA10 ] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() judge_dieB1 =[ $deathB1, judge_dieB2 ] {};
-void() judge_dieB2 =[ $deathB2, judge_dieB3 ] {monster_check_gib();};
-void() judge_dieB3 =[ $deathB3, judge_dieB4 ] {monster_check_gib();self.solid = SOLID_NOT;};
-void() judge_dieB4 =[ $deathB4, judge_dieB5 ] {};
-void() judge_dieB5 =[ $deathB5, judge_dieB6 ] {};
-void() judge_dieB6 =[ $deathB6, judge_dieB7 ] {};
-void() judge_dieB7 =[ $deathB7, judge_dieB8 ] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);};
-void() judge_dieB8 =[ $deathB8, judge_dieB9 ] {monster_death_postcheck();};
-void() judge_dieB9 =[ $deathB9, judge_dieB9 ] {monster_deadbody_check();};
+void() judge_dieB1 = [$deathB1, judge_dieB2 ] {};
+void() judge_dieB2 = [$deathB2, judge_dieB3 ] { monster_check_gib(); };
+void() judge_dieB3 = [$deathB3, judge_dieB4 ] { monster_check_gib();self.solid = SOLID_NOT;};
+void() judge_dieB4 = [$deathB4, judge_dieB5 ] {};
+void() judge_dieB5 = [$deathB5, judge_dieB6 ] {};
+void() judge_dieB6 = [$deathB6, judge_dieB7 ] {};
+void() judge_dieB7 = [$deathB7, judge_dieB8 ] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+void() judge_dieB8 = [$deathB8, judge_dieB9 ] { monster_death_postcheck(); };
+void() judge_dieB9 = [$deathB9, judge_dieB9 ] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() judge_die =
-{
+void() judge_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	
@@ -1664,8 +1651,7 @@ float() judge_minionsetup = {
 	else return TRUE;
 };
 
-void() judge_spawntether =
-{
+void() judge_spawntether = {
 	// temporary tether point
 	self.movelast = spawn();
 	self.movelast.owner = self;
@@ -1676,11 +1662,10 @@ void() judge_spawntether =
 	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
 };
 
-//======================================================================
+
 // INTRO PHASE (??)
-//======================================================================
-void() judge_readyframe =
-{
+
+void() judge_readyframe = {
 	self.takedamage = DAMAGE_AIM;	// Can take damage
 	self.style = JUDGE_PHASE2;		// Time to fight!
 	Resist_ChangeType(self,FALSE);	// restore resistance
@@ -1693,9 +1678,9 @@ void() judge_readyframe =
 	//else self.th_stand();			// Wait for the player
 };
 
-//======================================================================
+
 // Setup BOSS Judicator after trigger event
-//======================================================================
+
 void() judge_awake = {
 	// make sure boss mode selected
 	if (self.classtype == CT_MONJUSTICE) return;
@@ -1867,7 +1852,7 @@ void() monster_judicator = {
 	self.attack_offset2 = '48 0 0';		// Fireline starting point
 	self.attack_offset3 = '24 8 112';	// Hilt of summon sword
 	self.attack_offset4 = '-16 -12 32';	// Movement vector along sword
-	if (self.deathstring == string_null) self.deathstring = " was judged unworthy by The Judicator\n";
+	if (self.deathstring == "") self.deathstring = " was judged unworthy by The Judicator\n";
 	self.attack_count = self.attack_timer = 0; // Setup default timer/counters for flame attacks
 	self.part_exitpuff = self.part_exitsound = TRUE;
 	self.part_exitfade = self.part_exitbusy = FALSE;
@@ -1907,7 +1892,7 @@ void() monster_judicator = {
 	self.reflectaxe = TRUE;			// Prevent axe damage
 	self.frame = 0;
 	self.exactskin = self.skin; // Devmarker function changes skins, save for later
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_gaunt";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

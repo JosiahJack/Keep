@@ -40,7 +40,7 @@
 
 void() polyp_float1;
 void(entity inflictor, entity attacker, float damage) polyp_wake1;
-void() polyp_wake1_prethink = {local entity blank; local float blankf; polyp_wake1(blank,blank,blankf); };
+void() polyp_wake1_prethink = { local entity blank; local float blankf; polyp_wake1(blank,blank,blankf); };
 void(entity inflictor, entity attacker, float damage) polyp_pain;
 void() polyp_walkfly1;
 void() polyp_visible1;
@@ -110,31 +110,31 @@ void() polyp_stand0 = [10, polyp_stand1] {
 	self.origin_z = self.origin_z + 1;
 	droptofloor();
 };
-void() polyp_stand1 = [0, polyp_stand2] {ai_stand();};
-void() polyp_stand2 = [1, polyp_stand3] {ai_stand();};
-void() polyp_stand3 = [2, polyp_stand4] {ai_stand();};
-void() polyp_stand4 = [3, polyp_stand5] {ai_stand();};
-void() polyp_stand5 = [4, polyp_stand6] {ai_stand();};
-void() polyp_stand6 = [5, polyp_stand7] {ai_stand();};
-void() polyp_stand7 = [6, polyp_stand8] {ai_stand();};
-void() polyp_stand8 = [7, polyp_stand9] {ai_stand();};
-void() polyp_stand9 = [8, polyp_stand10] {ai_stand();};
-void() polyp_stand10 = [9, polyp_stand11] {ai_stand();};
-void() polyp_stand11 = [10, polyp_stand1] {ai_stand();};
+void() polyp_stand1 = [0, polyp_stand2] { ai_stand(); };
+void() polyp_stand2 = [1, polyp_stand3] { ai_stand(); };
+void() polyp_stand3 = [2, polyp_stand4] { ai_stand(); };
+void() polyp_stand4 = [3, polyp_stand5] { ai_stand(); };
+void() polyp_stand5 = [4, polyp_stand6] { ai_stand(); };
+void() polyp_stand6 = [5, polyp_stand7] { ai_stand(); };
+void() polyp_stand7 = [6, polyp_stand8] { ai_stand(); };
+void() polyp_stand8 = [7, polyp_stand9] { ai_stand(); };
+void() polyp_stand9 = [8, polyp_stand10] { ai_stand(); };
+void() polyp_stand10 = [9, polyp_stand11] { ai_stand(); };
+void() polyp_stand11 = [10, polyp_stand1] { ai_stand(); };
 
-void(entity inflictor, entity attacker, float damage) polyp_wake1 = [133, polyp_wake2] {self.th_pain = polyp_pain;};
+void(entity inflictor, entity attacker, float damage) polyp_wake1 = [133, polyp_wake2] { self.th_pain = polyp_pain;};
 void() polyp_wake2 = [134, polyp_wake3] {};
 void() polyp_wake3 = [135, polyp_wake4] {};
 void() polyp_wake4 = [136, polyp_wake5] {};
 void() polyp_wake5 = [137, polyp_wake6] {};
-void() polyp_wake6 = [138, polyp_wake7] {self.movetype = MOVETYPE_FLY;self.flags = self.flags - (self.flags & FL_ONGROUND);self.velocity = '0 0 25';};
-void() polyp_wake7 = [139, polyp_wake8] {self.velocity = '0 0 50';};
-void() polyp_wake8 = [140, polyp_wake9] {self.velocity = '0 0 175';};
-void() polyp_wake9 = [141, polyp_wake10] {self.velocity = '0 0 125';};
-void() polyp_wake10 = [142, polyp_wake11] {self.velocity = '0 0 75';};
-void() polyp_wake11 = [143, polyp_wake12] {self.velocity = '0 0 50';};
-void() polyp_wake12 = [144, polyp_wake13] {self.velocity = '0 0 25';};
-void() polyp_wake13 = [145, polyp_wake14] {self.velocity = '0 0 15';};
+void() polyp_wake6 = [138, polyp_wake7] { self.movetype = MOVETYPE_FLY;self.flags = self.flags - (self.flags & FL_ONGROUND);self.velocity = '0 0 25';};
+void() polyp_wake7 = [139, polyp_wake8] { self.velocity = '0 0 50';};
+void() polyp_wake8 = [140, polyp_wake9] { self.velocity = '0 0 175';};
+void() polyp_wake9 = [141, polyp_wake10] { self.velocity = '0 0 125';};
+void() polyp_wake10 = [142, polyp_wake11] { self.velocity = '0 0 75';};
+void() polyp_wake11 = [143, polyp_wake12] { self.velocity = '0 0 50';};
+void() polyp_wake12 = [144, polyp_wake13] { self.velocity = '0 0 25';};
+void() polyp_wake13 = [145, polyp_wake14] { self.velocity = '0 0 15';};
 void() polyp_wake14 = [146, polyp_hover1] {
 	self.count = time + 2 + 1 * random();
 	self.movetype = MOVETYPE_STEP;
@@ -153,9 +153,9 @@ void() polyp_float1 = [153, polyp_float2] {
 	if (random() < 0.05)
 		sound(self, CHAN_VOICE, "quoth/polyp/idle.wav", 1, AS_MELEE);
 };
-void() polyp_float2 = [154, polyp_float3] {self.count = time + 2 + 1 * random();ai_stand();};
-void() polyp_float3 = [155, polyp_float4] {self.count = time + 2 + 1 * random();ai_stand();};
-void() polyp_float4 = [156, polyp_float1] {self.count = time + 2 + 1 * random();ai_stand();};
+void() polyp_float2 = [154, polyp_float3] { self.count = time + 2 + 1 * random();ai_stand(); };
+void() polyp_float3 = [155, polyp_float4] { self.count = time + 2 + 1 * random();ai_stand(); };
+void() polyp_float4 = [156, polyp_float1] { self.count = time + 2 + 1 * random();ai_stand(); };
 
 void() polyp_walk1 = [11, polyp_walk2] {
 	self.velocity = VEC_ORIGIN;
@@ -178,15 +178,15 @@ void() polyp_walk11 = [21, polyp_walk12] { ai_chargenoturn(2); };
 void() polyp_walk12 = [22, polyp_walk13] { ai_chargenoturn(2); };
 void() polyp_walk13 = [23, polyp_walk14] { ai_chargenoturn(2); };
 void() polyp_walk14 = [24, polyp_walk15] { ai_chargenoturn(2); };
-void() polyp_walk15 = [25, polyp_walk16]{ ai_chargenoturn(2); };
-void() polyp_walk16 = [26, polyp_walk17]{ ai_chargenoturn(2); };
-void() polyp_walk17 = [27, polyp_walk18]{ ai_chargenoturn(2); };
-void() polyp_walk18 = [28, polyp_walk19]{ ai_chargenoturn(2); };
-void() polyp_walk19 = [29, polyp_walk20]{ ai_chargenoturn(2); };
-void() polyp_walk20 = [30, polyp_walk21]{ ai_chargenoturn(2); };
-void() polyp_walk21 = [31, polyp_walk22]{ ai_chargenoturn(2); };
-void() polyp_walk22 = [32, polyp_walk23]{ ai_chargenoturn(2); };
-void() polyp_walk23 = [33, polyp_walk24]{ ai_chargenoturn(2); };
+void() polyp_walk15 = [25, polyp_walk16] { ai_chargenoturn(2); };
+void() polyp_walk16 = [26, polyp_walk17] { ai_chargenoturn(2); };
+void() polyp_walk17 = [27, polyp_walk18] { ai_chargenoturn(2); };
+void() polyp_walk18 = [28, polyp_walk19] { ai_chargenoturn(2); };
+void() polyp_walk19 = [29, polyp_walk20] { ai_chargenoturn(2); };
+void() polyp_walk20 = [30, polyp_walk21] { ai_chargenoturn(2); };
+void() polyp_walk21 = [31, polyp_walk22] { ai_chargenoturn(2); };
+void() polyp_walk22 = [32, polyp_walk23] { ai_chargenoturn(2); };
+void() polyp_walk23 = [33, polyp_walk24] { ai_chargenoturn(2); };
 void() polyp_walk24 = [34, polyp_walk25] { ai_chargenoturn(2); };
 void() polyp_walk25 = [35, polyp_walk1] { ai_chargenoturn(2); };
 
@@ -219,9 +219,9 @@ void() polyp_ihover1 = [0, polyp_ihover2] {
 	if (self.count < time)
 		self.think = polyp_visible1;
 };
-void() polyp_ihover2 = [0, polyp_ihover3] {polypcheckdist();polyp_invisible_sound();};
-void() polyp_ihover3 = [0, polyp_ihover4] {polypcheckdist();polyp_invisible_sound();};
-void() polyp_ihover4 = [0, polyp_ihover1]{polypcheckdist();polyp_invisible_sound();};
+void() polyp_ihover2 = [0, polyp_ihover3] { polypcheckdist();polyp_invisible_sound(); };
+void() polyp_ihover3 = [0, polyp_ihover4] { polypcheckdist();polyp_invisible_sound(); };
+void() polyp_ihover4 = [0, polyp_ihover1] { polypcheckdist();polyp_invisible_sound(); };
 
 void() polyp_visible1 = [0, polyp_visible2] {
 	local vector org;
@@ -237,8 +237,8 @@ void() polyp_visible1 = [0, polyp_visible2] {
 	self.th_die = polyp_die1;
 	self.th_run = polyp_hover1;
 };
-void() polyp_visible2 = [0, polyp_visible3] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
-void() polyp_visible3 = [0, polyp_hover0a]{	self.frame = 0; setmodel(self, "progs/quoth/polyp_t1.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_visible2 = [0, polyp_visible3] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX); };
+void() polyp_visible3 = [0, polyp_hover0a] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t1.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX); };
 
 void() polyp_invisible = [0, polyp_invisible2] {
 	local vector org;
@@ -254,8 +254,8 @@ void() polyp_invisible = [0, polyp_invisible2] {
 	self.th_die = polyp_idie1;
 	self.count = time + 2 + 2 * random();
 };
-void() polyp_invisible2 = [0, polyp_invisible3]{	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
-void() polyp_invisible3 = [0, polyp_ihover0]{	self.frame = 0; setmodel(self, "progs/quoth/polyp_t3.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_invisible2 = [0, polyp_invisible3] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX); };
+void() polyp_invisible3 = [0, polyp_ihover0] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t3.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX); };
 
 void() polyp_hover0 = [156, polyp_hover1] {
 	local vector dist;
@@ -340,10 +340,10 @@ void() polyp_air1 = [153, polyp_air2] {
 	polyp_air();
 	sound(self, CHAN_WEAPON, "quoth/polyp/blast.wav", 1, ATTN_NORM);
 };
-void() polyp_air2 = [154, polyp_air3] {ai_face();polyp_air();};
-void() polyp_air3 = [155, polyp_air4] {ai_face();polyp_air();};
-void() polyp_air4 = [156, polyp_air5] {ai_face();polyp_air();};
-void() polyp_air5 = [155, polyp_hover1] {ai_face();polyp_air();};
+void() polyp_air2 = [154, polyp_air3] { ai_face();polyp_air(); };
+void() polyp_air3 = [155, polyp_air4] { ai_face();polyp_air(); };
+void() polyp_air4 = [156, polyp_air5] { ai_face();polyp_air(); };
+void() polyp_air5 = [155, polyp_hover1] { ai_face();polyp_air(); };
 
 void() polyp_fly1 = [153, polyp_fly2] {};
 void() polyp_fly2 = [154, polyp_fly3] {};
@@ -353,10 +353,10 @@ void() polyp_fly4 = [156, polyp_fly1] {
 	if (self.cnt == SECRET_1ST_DOWN) polyp_jump5();
 };
 
-void() polyp_jump1 = [147, polyp_jump2] {ai_face();};
-void() polyp_jump2 = [148, polyp_jump3] {ai_face();};
-void() polyp_jump3 = [149, polyp_jump4]{ai_face();};
-void() polyp_jump4 = [150, polyp_jump5]{ai_face();};
+void() polyp_jump1 = [147, polyp_jump2] { ai_face(); };
+void() polyp_jump2 = [148, polyp_jump3] { ai_face(); };
+void() polyp_jump3 = [149, polyp_jump4] { ai_face(); };
+void() polyp_jump4 = [150, polyp_jump5] { ai_face(); };
 void() polyp_jump5 = [151, polyp_jump6] {
 	self.movetype = MOVETYPE_BOUNCE;
 	self.touch = Tar_JumpTouch;

@@ -16,11 +16,10 @@ $frame drink34 drink35 drink36 drink37
 
 void() huntressmodel_drink1;
 
-//============================================================================
+
 // Attachment management (create, finish and delete the Chalice)
-//============================================================================
-void() huntress_create_attachment =
-{
+
+void() huntress_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment2) {
 		self.attachment2 = spawn();
@@ -34,8 +33,7 @@ void() huntress_create_attachment =
 };
 
 //----------------------------------------------------------------------
-void() huntress_update_attachment =
-{
+void() huntress_update_attachment = {
 	self.attachment2.frame = self.frame;
 };
 
@@ -92,105 +90,103 @@ void(float dist) huntressmodel_walk = {
 
 
 //===========================================================================
-void()	huntressmodel_walk1	=[	$walk1,		huntressmodel_walk2	] {create_rakuyo(); huntressmodel_walk(4); self.skin = 0; huntressmodel_rakuyo();};
-void()	huntressmodel_walk2	=[	$walk2,		huntressmodel_walk3	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk3	=[	$walk3,		huntressmodel_walk4	] {monster_footstep(FALSE); huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk4	=[	$walk4,		huntressmodel_walk5	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk5	=[	$walk5,		huntressmodel_walk6	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk6	=[	$walk6,		huntressmodel_walk7	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk7	=[	$walk7,		huntressmodel_walk8	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk8	=[	$walk8,		huntressmodel_walk9	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk9	=[	$walk9,		huntressmodel_walk10	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk10	=[	$walk10,	huntressmodel_walk11	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk11	=[	$walk11,	huntressmodel_walk12	] {monster_footstep(FALSE); huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk12	=[	$walk12,	huntressmodel_walk13	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk13	=[	$walk13,	huntressmodel_walk14	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk14	=[	$walk14,	huntressmodel_walk15	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk15	=[	$walk15,	huntressmodel_walk16	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
-void()	huntressmodel_walk16	=[	$walk16,	huntressmodel_walk1	] {huntressmodel_walk(4); huntressmodel_rakuyo();};
+void()	huntressmodel_walk1	= [	$walk1,		huntressmodel_walk2	] { create_rakuyo(); huntressmodel_walk(4); self.skin = 0; huntressmodel_rakuyo(); };
+void()	huntressmodel_walk2	= [	$walk2,		huntressmodel_walk3	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk3	= [	$walk3,		huntressmodel_walk4	] { monster_footstep(FALSE); huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk4	= [	$walk4,		huntressmodel_walk5	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk5	= [	$walk5,		huntressmodel_walk6	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk6	= [	$walk6,		huntressmodel_walk7	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk7	= [	$walk7,		huntressmodel_walk8	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk8	= [	$walk8,		huntressmodel_walk9	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk9	= [	$walk9,		huntressmodel_walk10	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk10	= [	$walk10,	huntressmodel_walk11	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk11	= [	$walk11,	huntressmodel_walk12	] { monster_footstep(FALSE); huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk12	= [	$walk12,	huntressmodel_walk13	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk13	= [	$walk13,	huntressmodel_walk14	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk14	= [	$walk14,	huntressmodel_walk15	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk15	= [	$walk15,	huntressmodel_walk16	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
+void()	huntressmodel_walk16	= [	$walk16,	huntressmodel_walk1	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
 
 
 //----------------------------------------------------------------------
-void()	huntressmodel_pain =
-{
+void()	huntressmodel_pain = {
 	 return;
 };
 
 float idle_speech;
 
-void() idle_checktime =
-{
+void() idle_checktime = {
 	if (idle_speech >= 3)
 	huntressmodel_drink1();
 };
 
 //----------------------------------------------------------------------
-void()	huntressmodel_idle1 = [ $drink37,	huntressmodel_idle2 	] {huntress_create_attachment(); huntress_update_attachment(); huntressmodel_stand(); 
+void()	huntressmodel_idle1 = [$drink37,	huntressmodel_idle2 	] { huntress_create_attachment(); huntress_update_attachment(); huntressmodel_stand(); 
 self.skin = 0; huntressmodel_rakuyo(); particle_explode(self.origin + '-12 4 8', 8, 0.3+random()*0.5, PARTICLE_BURST_WHITE, PARTICLE_BURST_CENTER);
 	sound(self, CHAN_VOICE, "redfield/huntress/dialogue2.wav", 1, ATTN_NORM); };
-void()	huntressmodel_idle2 = [ $drink36,	huntressmodel_idle3 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_idle3 = [ $drink35,	huntressmodel_idle4 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_idle4 = [ $drink34,	huntressmodel_idle5 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_idle5 = [ $drink33,	huntressmodel_idle6 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_idle6 = [ $drink32,	huntressmodel_idle7 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_idle7 = [ $drink31,	huntressmodel_idle8 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle8 = [	$idle1,		huntressmodel_idle9	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
+void()	huntressmodel_idle2 = [$drink36,	huntressmodel_idle3 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_idle3 = [$drink35,	huntressmodel_idle4 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_idle4 = [$drink34,	huntressmodel_idle5 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_idle5 = [$drink33,	huntressmodel_idle6 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_idle6 = [$drink32,	huntressmodel_idle7 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_idle7 = [$drink31,	huntressmodel_idle8 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle8 = [	$idle1,		huntressmodel_idle9	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
 idle_speech = idle_speech + 1;};
-void() 	huntressmodel_idle9 = [	$idle2,		huntressmodel_idle10	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle10 = [ $idle3,	huntressmodel_idle11	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle11 = [ $idle4,	huntressmodel_idle12	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle12 = [ $idle5,	huntressmodel_idle13	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle13 = [ $idle6,	huntressmodel_idle14	] {huntress_update_attachment(); self.skin = 1; huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle14 = [ $idle7,	huntressmodel_idle15	] {huntress_update_attachment(); self.skin = 0; huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle15 = [ $idle8,	huntressmodel_idle16	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle16 = [ $idle9,	huntressmodel_idle17 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle17 = [ $idle10,	huntressmodel_idle18 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_idle18 = [ $idle11,	huntressmodel_idle8	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
-idle_checktime();};
+void() 	huntressmodel_idle9 = [	$idle2,		huntressmodel_idle10	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle10 = [$idle3,	huntressmodel_idle11	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle11 = [$idle4,	huntressmodel_idle12	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle12 = [$idle5,	huntressmodel_idle13	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle13 = [$idle6,	huntressmodel_idle14	] { huntress_update_attachment(); self.skin = 1; huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle14 = [$idle7,	huntressmodel_idle15	] { huntress_update_attachment(); self.skin = 0; huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle15 = [$idle8,	huntressmodel_idle16	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle16 = [$idle9,	huntressmodel_idle17 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle17 = [$idle10,	huntressmodel_idle18 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_idle18 = [$idle11,	huntressmodel_idle8	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
+idle_checktime(); };
 
 
 //----------------------------------------------------------------------
-void() 	huntressmodel_drink1 = [	$drink1,		huntressmodel_drink2	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink2 = [	$drink2,		huntressmodel_drink3	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink3 = [	$drink3,		huntressmodel_drink4	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink4 = [	$drink4,		huntressmodel_drink5	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink5 = [	$drink5,		huntressmodel_drink6	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink6 = [	$drink6,		huntressmodel_drink7	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink7 = [	$drink7,		huntressmodel_drink8	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink8 = [	$drink8,		huntressmodel_drink9	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink9 = [	$drink9,		huntressmodel_drink10 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink10 = [	$drink10,		huntressmodel_drink11 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
+void() 	huntressmodel_drink1 = [	$drink1,		huntressmodel_drink2	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink2 = [	$drink2,		huntressmodel_drink3	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink3 = [	$drink3,		huntressmodel_drink4	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink4 = [	$drink4,		huntressmodel_drink5	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink5 = [	$drink5,		huntressmodel_drink6	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink6 = [	$drink6,		huntressmodel_drink7	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink7 = [	$drink7,		huntressmodel_drink8	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink8 = [	$drink8,		huntressmodel_drink9	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink9 = [	$drink9,		huntressmodel_drink10 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink10 = [	$drink10,		huntressmodel_drink11 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
 self.skin = 1;};
-void() 	huntressmodel_drink11 = [	$drink11,		huntressmodel_drink12 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink12 = [	$drink12,		huntressmodel_drink13 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink13 = [	$drink13,		huntressmodel_drink14 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink14 = [	$drink14,		huntressmodel_drink15 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink15 = [	$drink15,		huntressmodel_drink16 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink16 = [	$drink16,		huntressmodel_drink17 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink17 = [	$drink17,		huntressmodel_drink18 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink18 = [	$drink18,		huntressmodel_drink19 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink19 = [	$drink19,		huntressmodel_drink20 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
+void() 	huntressmodel_drink11 = [	$drink11,		huntressmodel_drink12 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink12 = [	$drink12,		huntressmodel_drink13 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink13 = [	$drink13,		huntressmodel_drink14 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink14 = [	$drink14,		huntressmodel_drink15 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink15 = [	$drink15,		huntressmodel_drink16 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink16 = [	$drink16,		huntressmodel_drink17 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink17 = [	$drink17,		huntressmodel_drink18 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink18 = [	$drink18,		huntressmodel_drink19 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink19 = [	$drink19,		huntressmodel_drink20 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
 self.skin = 0;};
-void() 	huntressmodel_drink20 = [	$drink20,		huntressmodel_drink21 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink21 = [	$drink21,		huntressmodel_drink22 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink22 = [	$drink22,		huntressmodel_drink23 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink23 = [	$drink23,		huntressmodel_drink24 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink24 = [	$drink24,		huntressmodel_drink25 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink25 = [	$drink25,		huntressmodel_drink26 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink26 = [	$drink26,		huntressmodel_drink27 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void() 	huntressmodel_drink27 = [	$drink27,		huntressmodel_drink28 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink28 = [	$drink28,		huntressmodel_drink29 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
+void() 	huntressmodel_drink20 = [	$drink20,		huntressmodel_drink21 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink21 = [	$drink21,		huntressmodel_drink22 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink22 = [	$drink22,		huntressmodel_drink23 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink23 = [	$drink23,		huntressmodel_drink24 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink24 = [	$drink24,		huntressmodel_drink25 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink25 = [	$drink25,		huntressmodel_drink26 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink26 = [	$drink26,		huntressmodel_drink27 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void() 	huntressmodel_drink27 = [	$drink27,		huntressmodel_drink28 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink28 = [	$drink28,		huntressmodel_drink29 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
 self.skin = 1;};
-void()	huntressmodel_drink29 = [	$drink29,		huntressmodel_drink30 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
+void()	huntressmodel_drink29 = [	$drink29,		huntressmodel_drink30 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
 self.skin = 0;};
-void()	huntressmodel_drink30 = [	$drink30,		huntressmodel_drink31 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink31 = [	$drink31,		huntressmodel_drink32 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink32 = [	$drink32,		huntressmodel_drink33 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink33 = [	$drink33,		huntressmodel_drink34 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink34 = [	$drink34,		huntressmodel_drink35 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink35 = [	$drink35,		huntressmodel_drink36 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink36 = [	$drink36,		huntressmodel_drink37 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
-void()	huntressmodel_drink37 = [	$drink37,		huntressmodel_drink37 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
+void()	huntressmodel_drink30 = [	$drink30,		huntressmodel_drink31 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink31 = [	$drink31,		huntressmodel_drink32 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink32 = [	$drink32,		huntressmodel_drink33 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink33 = [	$drink33,		huntressmodel_drink34 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink34 = [	$drink34,		huntressmodel_drink35 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink35 = [	$drink35,		huntressmodel_drink36 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink36 = [	$drink36,		huntressmodel_drink37 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
+void()	huntressmodel_drink37 = [	$drink37,		huntressmodel_drink37 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 
 //----------------------------------------------------------------------
 // The use function is for triggering the model to move

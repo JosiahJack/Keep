@@ -488,8 +488,7 @@ void() CreateVehicleEntities = {
 	}
 };
 
-void(vector source, float right, float forward, float up) CalcVehPosition = 
-{
+void(vector source, float right, float forward, float up) CalcVehPosition = {
 	local vector vect_offset_fwd;
 	local vector vect_offset_side;
 	local vector vect_offset_up;
@@ -510,15 +509,13 @@ void(vector source, float right, float forward, float up) CalcVehPosition =
 	return temp_x;
 };
 
-void(entity source, entity w, float right, float forward, float up) SetVehPosition = 
-{
+void(entity source, entity w, float right, float forward, float up) SetVehPosition = {
 	local vector newpos;
 	newpos = CalcVehPosition(source.origin, right, forward, up);
 	setorigin(w, newpos);
 };
 
-float(float s_angle, float e_angle, float rate) MoveToAngle = 
-{
+float(float s_angle, float e_angle, float rate) MoveToAngle = {
 	local float result;
 	if (s_angle > e_angle && s_angle - e_angle > 180)
 	{
@@ -558,8 +555,7 @@ float(float s_angle, float e_angle, float rate) MoveToAngle =
 	return result;
 };
 
-void() BodyRoll = 
-{
+void() BodyRoll = {
 	if (self.angles_z < 5 && self.angles_z > -5)
 	{
 		self.avelocity_z = 0;
@@ -572,8 +568,7 @@ void() BodyRoll =
 	}
 };
 
-void() CheckCultCars = 
-{
+void() CheckCultCars = {
 	local string str;
 	if (!challenge)
 	{
@@ -600,8 +595,7 @@ void() CheckCultCars =
 	}
 };
 
-void(float right, float forward) SpawnDeathWheel = 
-{
+void(float right, float forward) SpawnDeathWheel = {
 	local entity part;
 	makevectors(self.owner.veh_body.angles);
 	part = spawn();
@@ -701,8 +695,7 @@ void() DestroyVehicle = {
 	}
 };
 
-float() GetAveragePrevRoll = 
-{
+float() GetAveragePrevRoll = {
 	local float ave_roll;
 	ave_roll = angle_diff(self.prev_surfangle1, self.prev_surfangle5) / 4;
 	if (ave_roll < -10)
@@ -719,8 +712,7 @@ float() GetAveragePrevRoll =
 	return ave_roll;
 };
 
-void() CarAirborne = 
-{
+void() CarAirborne = {
 	local float vspeed;
 	local vector tail_angle;
 	local string str;
@@ -871,8 +863,7 @@ void() dirt14 = [0, dirt14]
 	remove(self);
 };
 
-void(entity own, vector org, vector vel, vector ang) SpawnDirt = 
-{
+void(entity own, vector org, vector vel, vector ang) SpawnDirt = {
 	local entity dirt;
 	local vector vang;
 	local vector vunit;
@@ -889,8 +880,7 @@ void(entity own, vector org, vector vel, vector ang) SpawnDirt =
 	dirt.nextthink = time + 0.05;
 };
 
-float() MoveTail = 
-{
+float() MoveTail = {
 	local vector tail_vect;
 	local vector tail_angles;
 	local vector veh_angles;
@@ -1334,8 +1324,7 @@ float() MoveTail =
 	return 1;
 };
 
-void() MoveWheels = 
-{
+void() MoveWheels = {
 	local vector heading;
 	local entity w;
 	local float dist;
@@ -1416,15 +1405,13 @@ void() MoveWheels =
 	}
 };
 
-void(entity e, float ratio) ReduceVelocity = 
-{
+void(entity e, float ratio) ReduceVelocity = {
 	local float new_length;
 	new_length = vlen(e.velocity) * (1 - ratio);
 	e.velocity = normalize(e.velocity) * new_length;
 };
 
-void(float newangle) SetPrevSurfAngle = 
-{
+void(float newangle) SetPrevSurfAngle = {
 	self.prev_surfangle5 = self.prev_surfangle4;
 	self.prev_surfangle4 = self.prev_surfangle3;
 	self.prev_surfangle3 = self.prev_surfangle2;
@@ -1433,8 +1420,7 @@ void(float newangle) SetPrevSurfAngle =
 	self.prev_surfangle1 = newangle;
 };
 
-void() SetSurfaceAngle = 
-{
+void() SetSurfaceAngle = {
 	local vector left;
 	local vector right;
 	local vector spos;
@@ -1608,16 +1594,14 @@ void() SetSurfaceAngle =
 	return 1;
 };
 
-void() checkHealth = 
-{
+void() checkHealth = {
 	if (self.health <= 2)
 	{
 		DestroyVehicle();
 	}
 };
 
-void(entity veh1, entity veh2) CarCollision = 
-{
+void(entity veh1, entity veh2) CarCollision = {
 	local vector veh1_to_veh2;
 	local float veh1_speed;
 	local float veh2_speed;
@@ -1669,8 +1653,7 @@ void(entity veh1, entity veh2) CarCollision =
 	T_Damage(veh2, veh1, veh1, impact / 10);
 };
 
-void(vector pos, vector vel) CarGib = 
-{
+void(vector pos, vector vel) CarGib = {
 	local entity gib;
 	local float f;
 	if (deathmatch == 10)
@@ -1692,8 +1675,7 @@ void(vector pos, vector vel) CarGib =
 	gib.nextthink = time + 0.75;
 };
 
-void(vector pos, vector vel, float dam) CarGibs = 
-{
+void(vector pos, vector vel, float dam) CarGibs = {
 	local float num_gibs;
 	local vector randvect;
 	num_gibs = floor(dam * 2);
@@ -1708,8 +1690,7 @@ void(vector pos, vector vel, float dam) CarGibs =
 	}
 };
 
-void(float vel_speed) CheckForCollision = 
-{
+void(float vel_speed) CheckForCollision = {
 	local vector dir;
 	local vector pos;
 	local float vol;
@@ -2005,8 +1986,7 @@ void(float vel_speed) CheckForCollision =
 	}
 };
 
-void(float vel_speed) DoEngineNoises = 
-{
+void(float vel_speed) DoEngineNoises = {
 	local float speed_ratio;
 	local float vol;
 	local float snd_delay;
@@ -3009,8 +2989,7 @@ void() MoveVehicle = {
 	self.back_vel = self.velocity;
 };
 
-void() checkSteering = 
-{
+void() checkSteering = {
 	local float head_diff;
 	local float ftemp;
 	local vector veh_angles;
@@ -3069,8 +3048,7 @@ void() checkSteering =
 	}
 };
 
-void(float index) SteerChange = 
-{
+void(float index) SteerChange = {
 	local float real_index;
 	real_index = index;
 	if (fabs(self.owner.weaponframe - index) > 1)
@@ -3107,8 +3085,7 @@ void(float index) SteerChange =
 	self.owner.last_steerchange = time;
 };
 
-void() calc_steering_controls = 
-{
+void() calc_steering_controls = {
 	local float steer;
 	local float before;
 	local float after;
@@ -3614,8 +3591,7 @@ void() PreRaceMsg = {
 	}
 };
 
-void() CheckFirstStartFinish = 
-{
+void() CheckFirstStartFinish = {
 	if (first_startfinish_flag)
 	{
 		if (rally_type_index < 3)
@@ -3633,8 +3609,7 @@ void() CheckFirstStartFinish =
 	}
 };
 
-void() finish_think = 
-{
+void() finish_think = {
 	self.frame = self.frame + 1;
 	if (self.frame > 11)
 	{
@@ -3643,8 +3618,7 @@ void() finish_think =
 	self.nextthink = time + 0.05;
 };
 
-void() spawn_finish_model = 
-{
+void() spawn_finish_model = {
 	local entity flag;
 	local entity oself;
 	if (rally_type_index > 2)
@@ -3670,8 +3644,7 @@ void() spawn_finish_model =
 	remove(self);
 };
 
-void() rally_startfinish = 
-{
+void() rally_startfinish = {
 	local vector min;
 	local vector max;
 	local float first;
@@ -3710,8 +3683,7 @@ void() rally_startfinish =
 	StartRallyItem();
 };
 
-void() rally_startfinish_brush = 
-{
+void() rally_startfinish_brush = {
 	CheckFirstStartFinish();
 	self.touch = startfinish_touch;
 	self.solid = SOLID_TRIGGER;
@@ -3733,27 +3705,23 @@ void() rally_startfinish_brush =
 	self.classname = "rally_startfinish";
 };
 
-void() rally_startfinish_flag = 
-{
+void() rally_startfinish_flag = {
 	setsize(self, '-4 -4 0', '4 4 16');
 	droptofloor();
 	spawn_finish_model();
 };
 
-void() StartNextRace = 
-{
+void() StartNextRace = {
 	execute_changelevel();
 	remove(self);
 };
 
-void(float pos) GetDriverAtPos = 
-{
+void(float pos) GetDriverAtPos = {
 	local entity plyr;
 	plyr = find(world, classname, "player");
 };
 
-void() ShowRaceResults = 
-{
+void() ShowRaceResults = {
 	local entity plyr;
 	local entity trav;
 	local float pos;
@@ -3765,8 +3733,7 @@ void() ShowRaceResults =
 	}
 };
 
-void() RaceOverMsg = 
-{
+void() RaceOverMsg = {
 	local entity plyr;
 	if (race_finish_time > time)
 	{
@@ -3783,8 +3750,7 @@ void() RaceOverMsg =
 	self.think = StartNextRace;
 };
 
-void() CheckLaps = 
-{
+void() CheckLaps = {
 	local entity plyr;
 	local string stemp;
 	local float ftemp;
@@ -3858,8 +3824,7 @@ void() CheckLaps =
 	}
 };
 
-void() CheckFastestLap = 
-{
+void() CheckFastestLap = {
 	local string lap_time_str;
 	lap_time_str = ftos(time - other.last_lap_time);
 	if (other.classname == "player")
@@ -3890,8 +3855,7 @@ void() CheckFastestLap =
 	}
 };
 
-void() startfinish_touch = 
-{
+void() startfinish_touch = {
 	local string laps_left;
 	if (!(other.classname == "player" || other.classname == "rally_bot"))
 	{
@@ -3938,8 +3902,7 @@ void() startfinish_touch =
 	setorigin(self, self.origin);
 };
 
-void() flag_think = 
-{
+void() flag_think = {
 	self.frame = self.frame + 1;
 	if (self.frame > 9) {
 		self.frame = 0;
@@ -3980,8 +3943,7 @@ void() rally_marker = {
 	self.think = spawn_marker_flag;
 };
 
-void() rally_marker_brush = 
-{
+void() rally_marker_brush = {
 	self.classname = "rally_marker";
 };
 

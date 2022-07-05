@@ -90,10 +90,10 @@ float SEEKER_FIRE = 2;
 float SEEKER_DIE = 3;
 
 // Spark effect from missing arm joint.  Low chance out of combat (idle state).
-void()	seek_sparks_fade1 = [0, seek_sparks_fade2] {self.alpha = 0.8; self.nextthink = time + 0.05;};
-void()	seek_sparks_fade2 = [0, seek_sparks_fade3] {self.alpha = 0.6; self.nextthink = time + 0.05;};
-void()	seek_sparks_fade3 = [0, seek_sparks_fade4] {self.alpha = 0.4; self.nextthink = time + 0.05;};
-void()	seek_sparks_fade4 = [0, SUB_Remove] {self.alpha = 0.2; self.nextthink = time + 0.05;};
+void()	seek_sparks_fade1 = [0, seek_sparks_fade2] { self.alpha = 0.8; self.nextthink = time + 0.05;};
+void()	seek_sparks_fade2 = [0, seek_sparks_fade3] { self.alpha = 0.6; self.nextthink = time + 0.05;};
+void()	seek_sparks_fade3 = [0, seek_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05;};
+void()	seek_sparks_fade4 = [0, SUB_Remove] { self.alpha = 0.2; self.nextthink = time + 0.05;};
 
 void() seek_spark = {
 	local float loopvar;
@@ -147,11 +147,10 @@ void() seek_spark = {
 	}
 };
 
-//============================================================================
+
 // Attachment management (create, finish and delete)
-//============================================================================
-void() seek_create_attachment =
-{
+
+void() seek_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -161,8 +160,7 @@ void() seek_create_attachment =
 };
 
 //----------------------------------------------------------------------
-void() seek_finish_attachment =
-{
+void() seek_finish_attachment = {
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 		self.attachment.state = STATE_OFF;
@@ -170,8 +168,7 @@ void() seek_finish_attachment =
 };
 
 //----------------------------------------------------------------------
-void() seek_remove_attachment =
-{
+void() seek_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
@@ -179,8 +176,7 @@ void() seek_remove_attachment =
 }
 
 //----------------------------------------------------------------------
-void() seek_setup_attachment = 
-{
+void() seek_setup_attachment = {
 	// Check if attachment has been setup yet
 	if (!self.attachment) seek_create_attachment();
 	self.attachment.state = STATE_ON;
@@ -189,17 +185,15 @@ void() seek_setup_attachment =
 }
 
 //----------------------------------------------------------------------
-void() seek_update_attachment =
-{
+void() seek_update_attachment = {
 	setorigin(self.attachment, self.origin);
 	self.attachment.angles = self.angles;
 	self.attachment.frame = self.frame;
 	self.attachment.alpha = 0.3 + random()*0.7;
 };
 
-//============================================================================
-void() seek_standframe =
-{
+
+void() seek_standframe = {
 	// type of animation state
 	self.attack_timer = SEEKER_IDLE;
 
@@ -229,9 +223,8 @@ void() seek_stand = {
 	seek_standframe();
 };
 
-//============================================================================
-void() seek_walkframe =
-{
+
+void() seek_walkframe = {
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -285,9 +278,9 @@ void() seek_walkframe =
 void() seek_walk = { self.walkframe = 0; self.lefty = FALSE; seek_walkframe(); };
 void() seek_run = { self.walkframe = 0; self.lefty = TRUE; seek_walkframe(); };
 
-//============================================================================
+
 // Melee attack
-//============================================================================
+
 void() seek_punch = {
 	local float ldmg;
 	
@@ -305,18 +298,18 @@ void() seek_punch = {
 	SpawnMeatSpray (self, self.enemy, -150);
 };
 
-void() seek_melee1 = [ $punch1, seek_melee2 ] {ai_face();
+void() seek_melee1 = [$punch1, seek_melee2 ] { ai_face();
 	self.pain_finished = time + 1;	// Block pain animation
-	sound (self, CHAN_VOICE, "ad171/seeker/melee1.wav", 1, ATTN_NORM);};
-void() seek_melee2 = [ $punch2, seek_melee3 ] {ai_charge(15);};
-void() seek_melee3 = [ $punch3, seek_melee4 ] {ai_charge(20);};
-void() seek_melee4 = [ $punch4, seek_melee5 ] {ai_charge(25);};
-void() seek_melee5 = [ $punch5, seek_melee6 ] {ai_charge(30);};
-void() seek_melee6 = [ $punch6, seek_melee7 ] {ai_charge(30);};
-void() seek_melee7 = [ $punch7, seek_melee8 ] {ai_charge(30);seek_punch();};
-void() seek_melee8 = [ $punch8, seek_melee9 ] {};
-void() seek_melee9 = [ $punch9, seek_melee10 ] {};
-void() seek_melee10 = [ $punch10, seek_run ] {};
+	sound (self, CHAN_VOICE, "ad171/seeker/melee1.wav", 1, ATTN_NORM); };
+void() seek_melee2 = [$punch2, seek_melee3 ] { ai_charge(15); };
+void() seek_melee3 = [$punch3, seek_melee4 ] { ai_charge(20); };
+void() seek_melee4 = [$punch4, seek_melee5 ] { ai_charge(25); };
+void() seek_melee5 = [$punch5, seek_melee6 ] { ai_charge(30); };
+void() seek_melee6 = [$punch6, seek_melee7 ] { ai_charge(30); };
+void() seek_melee7 = [$punch7, seek_melee8 ] { ai_charge(30);seek_punch(); };
+void() seek_melee8 = [$punch8, seek_melee9 ] {};
+void() seek_melee9 = [$punch9, seek_melee10 ] {};
+void() seek_melee10 = [$punch10, seek_run ] {};
 
 // Range attack - 3 rockets from each arm
 void(vector leftofs, vector rightofs) seek_attack = {

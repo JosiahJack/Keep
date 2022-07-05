@@ -43,44 +43,44 @@ $frame run1 run2 run3 run4 run5 run6 run7 run8 // (015 - 022) Running/Charge att
 $frame altar1 // (023 - 023) Static death pose - on altar (need skin 1)
 $frame base1 base2 // (024 - 025) Misc modelling stuff
 
-void() raind_idlefeet1 = [ $idlefeet1, raind_idlefeet2 ] {monster_footstep(FALSE);ai_stand();};
-void() raind_idlefeet2 = [ $idlefeet2, raind_idlefeet3 ] {ai_stand();};
-void() raind_idlefeet3 = [ $idlefeet3, raind_idlefeet4 ] {monster_footstep(FALSE);ai_stand();};
-void() raind_idlefeet4 = [ $idlefeet4, raind_idlefeet5 ] {ai_stand();};
-void() raind_idlefeet5 = [ $idlefeet5, raind_idlefeet6 ] {ai_stand();};
-void() raind_idlefeet6 = [ $idlefeet6, raind_idlefeet7 ] {ai_stand();};
-void() raind_idlefeet7 = [ $idlefeet7, raind_stand1 ] {ai_stand();};
+void() raind_idlefeet1 = [$idlefeet1, raind_idlefeet2 ] { monster_footstep(FALSE);ai_stand(); };
+void() raind_idlefeet2 = [$idlefeet2, raind_idlefeet3 ] { ai_stand(); };
+void() raind_idlefeet3 = [$idlefeet3, raind_idlefeet4 ] { monster_footstep(FALSE);ai_stand(); };
+void() raind_idlefeet4 = [$idlefeet4, raind_idlefeet5 ] { ai_stand(); };
+void() raind_idlefeet5 = [$idlefeet5, raind_idlefeet6 ] { ai_stand(); };
+void() raind_idlefeet6 = [$idlefeet6, raind_idlefeet7 ] { ai_stand(); };
+void() raind_idlefeet7 = [$idlefeet7, raind_stand1 ] { ai_stand(); };
 
-void() raind_stand1 = [ $stand1, raind_stand2 ] { monster_idle_sound();ai_stand();};
-void() raind_stand2 = [ $stand1, raind_stand3 ] {ai_stand();};
-void() raind_stand3 = [ $stand2, raind_stand4 ] {ai_stand();};
-void() raind_stand4 = [ $stand2, raind_stand5 ] {ai_stand();};
-void() raind_stand5 = [ $stand3, raind_stand6 ] {ai_stand();};
-void() raind_stand6 = [ $stand3, raind_stand7 ] {ai_stand();};
-void() raind_stand7 = [ $stand4, raind_stand8 ] {ai_stand();};
-void() raind_stand8 = [ $stand4, raind_stand1 ] {
+void() raind_stand1 = [$stand1, raind_stand2 ] { monster_idle_sound();ai_stand(); };
+void() raind_stand2 = [$stand1, raind_stand3 ] { ai_stand(); };
+void() raind_stand3 = [$stand2, raind_stand4 ] { ai_stand(); };
+void() raind_stand4 = [$stand2, raind_stand5 ] { ai_stand(); };
+void() raind_stand5 = [$stand3, raind_stand6 ] { ai_stand(); };
+void() raind_stand6 = [$stand3, raind_stand7 ] { ai_stand(); };
+void() raind_stand7 = [$stand4, raind_stand8 ] { ai_stand(); };
+void() raind_stand8 = [$stand4, raind_stand1 ] {
 	self.idlebusy = FALSE; 
 	if (random() < MON_IDLE_ANIMATION) self.think = raind_idlefeet1;
 };
 
-//======================================================================
-void() raind_walk1 = [ $run5, raind_walk2 ] {monster_idle_sound();ai_walk(8);};
-void() raind_walk2 = [ $run6, raind_walk3 ] {ai_walk(5);};
-void() raind_walk3 = [ $run7, raind_walk4 ] {ai_walk(10);};
-void() raind_walk4 = [ $run8, raind_walk5 ] {monster_footstep(FALSE);ai_walk(5);};
-void() raind_walk5 = [ $run1, raind_walk6 ] {ai_walk(8);};
-void() raind_walk6 = [ $run2, raind_walk7 ] {ai_walk(13);};
-void() raind_walk7 = [ $run3, raind_walk8 ] {ai_walk(5);};
-void() raind_walk8 = [ $run4, raind_walk1 ] {monster_footstep(FALSE);ai_walk(8);};
 
-void() raind_run1 = [ $run5, raind_run2 ] {monster_idle_sound();ai_run(15);};
-void() raind_run2 = [ $run6, raind_run3 ] {ai_run(10);};
-void() raind_run3 = [ $run7, raind_run4 ] {ai_run(20);};
-void() raind_run4 = [ $run8, raind_run5 ] {monster_footstep(FALSE);ai_run(10);};
-void() raind_run5 = [ $run1, raind_run6 ] {ai_run(15);};
-void() raind_run6 = [ $run2, raind_run7 ] {ai_run(25);};
-void() raind_run7 = [ $run3, raind_run8 ] {ai_run(10);};
-void() raind_run8 = [ $run4, raind_run1 ] {monster_footstep(FALSE);ai_run(15);};
+void() raind_walk1 = [$run5, raind_walk2 ] { monster_idle_sound();ai_walk(8); };
+void() raind_walk2 = [$run6, raind_walk3 ] { ai_walk(5); };
+void() raind_walk3 = [$run7, raind_walk4 ] { ai_walk(10); };
+void() raind_walk4 = [$run8, raind_walk5 ] { monster_footstep(FALSE);ai_walk(5); };
+void() raind_walk5 = [$run1, raind_walk6 ] { ai_walk(8); };
+void() raind_walk6 = [$run2, raind_walk7 ] { ai_walk(13); };
+void() raind_walk7 = [$run3, raind_walk8 ] { ai_walk(5); };
+void() raind_walk8 = [$run4, raind_walk1 ] { monster_footstep(FALSE);ai_walk(8); };
+
+void() raind_run1 = [$run5, raind_run2 ] { monster_idle_sound();ai_run(15); };
+void() raind_run2 = [$run6, raind_run3 ] { ai_run(10); };
+void() raind_run3 = [$run7, raind_run4 ] { ai_run(20); };
+void() raind_run4 = [$run8, raind_run5 ] { monster_footstep(FALSE);ai_run(10); };
+void() raind_run5 = [$run1, raind_run6 ] { ai_run(15); };
+void() raind_run6 = [$run2, raind_run7 ] { ai_run(25); };
+void() raind_run7 = [$run3, raind_run8 ] { ai_run(10); };
+void() raind_run8 = [$run4, raind_run1 ] { monster_footstep(FALSE);ai_run(15); };
 
 // MELEE : Antler attack
 void() raind_melee = {
@@ -107,10 +107,10 @@ void() raind_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-void() raind_ram1 = [ $rattack1, raind_ram2 ] {ai_charge(10);};
-void() raind_ram2 = [ $rattack2, raind_ram3 ] {raind_melee();};
-void() raind_ram3 = [ $rattack3, raind_ram4 ] {ai_charge(5);};
-void() raind_ram4 = [ $rattack4, raind_run1 ] {
+void() raind_ram1 = [$rattack1, raind_ram2 ] { ai_charge(10); };
+void() raind_ram2 = [$rattack2, raind_ram3 ] { raind_melee(); };
+void() raind_ram3 = [$rattack3, raind_ram4 ] { ai_charge(5); };
+void() raind_ram4 = [$rattack4, raind_run1 ] {
 	// Check if raindeer is within range to attack again
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = raind_ram1;
@@ -144,10 +144,10 @@ void(vector sideofs) raind_attack = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_RAINDEER,self.attack_speed);
 };
 
-void() raind_shoot1 = [ $rattack1, raind_shoot2 ] {ai_face();};
-void() raind_shoot2 = [ $rattack2, raind_shoot3 ] {};
-void() raind_shoot3 = [ $rattack3, raind_shoot4 ] {ai_face();};
-void() raind_shoot4 = [ $rattack4, raind_shoot5 ] {
+void() raind_shoot1 = [$rattack1, raind_shoot2 ] { ai_face(); };
+void() raind_shoot2 = [$rattack2, raind_shoot3 ] {};
+void() raind_shoot3 = [$rattack3, raind_shoot4 ] { ai_face(); };
+void() raind_shoot4 = [$rattack4, raind_shoot5 ] {
 	// Skills - EASY/NORMAL = 1 rocket, HARD/NM = 2 rockets
 	if (skill < SKILL_HARD) {
 		self.think = raind_run1;
@@ -157,24 +157,23 @@ void() raind_shoot4 = [ $rattack4, raind_shoot5 ] {
 	}
 	else raind_attack('-2 -12 12');
 };
-void() raind_shoot5 = [ $rattack1, raind_shoot6 ] {ai_face();};
-void() raind_shoot6 = [ $rattack2, raind_shoot7 ] {};
-void() raind_shoot7 = [ $rattack3, raind_shoot8 ] {ai_face();};
-void() raind_shoot8 = [ $rattack4, raind_run1 ] {
+void() raind_shoot5 = [$rattack1, raind_shoot6 ] { ai_face(); };
+void() raind_shoot6 = [$rattack2, raind_shoot7 ] {};
+void() raind_shoot7 = [$rattack3, raind_shoot8 ] { ai_face(); };
+void() raind_shoot8 = [$rattack4, raind_run1 ] {
 	raind_attack('-2 12 12');
 };
 
-//======================================================================
+
 // PAIN : quick reflection
-//======================================================================
-void() raind_pain1 = [ $rattack1, raind_pain2 ] {};
-void() raind_pain2 = [ $rattack2, raind_pain3 ] {ai_pain(4);};
-void() raind_pain3 = [ $rattack3, raind_pain4 ] {};
-void() raind_pain4 = [ $rattack4, raind_run1 ] {};
+
+void() raind_pain1 = [$rattack1, raind_pain2 ] {};
+void() raind_pain2 = [$rattack2, raind_pain3 ] { ai_pain(4); };
+void() raind_pain3 = [$rattack3, raind_pain4 ] {};
+void() raind_pain4 = [$rattack4, raind_run1 ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) raind_pain =
-{
+void(entity inflictor, entity attacker, float damage) raind_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -191,11 +190,10 @@ void(entity inflictor, entity attacker, float damage) raind_pain =
 	}
 };
 
-//======================================================================
+
 // DEATH : Its raining raindeer tonight!
-//======================================================================
-void() raind_explode =
-{
+
+void() raind_explode = {
 	// no more raindeer!
 	entity_hide (self);
 	// Make sure gibs go flying up

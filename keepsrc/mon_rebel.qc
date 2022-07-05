@@ -71,15 +71,15 @@ void() rebel_fire = { // [FUNCTION]
     AkArrow_Launch (org, dir, 0);
 };
 
-void() rebel_atk1  =[ $attack1,  rebel_atk2  ] {ai_face(); self.shots_left = 2;}; // [FUNCTION]
-void() rebel_atk2  =[ $attack2,  rebel_atk3  ] {ai_face();}; // [FUNCTION]
-void() rebel_atk3  =[ $attack3,  rebel_atk4  ] {ai_face();}; // [FUNCTION]
-void() rebel_atk4  =[ $attack4,  rebel_atk6  ] {ai_face();}; // [FUNCTION]
-void() rebel_atk6  =[ $attack6,  rebel_atk7  ] {rebel_fire();}; // [FUNCTION]
-void() rebel_atk7  =[ $attack7,  rebel_atk8  ] {ai_face();}; // [FUNCTION]
-void() rebel_atk8  =[ $attack8,  rebel_atk13 ] {ai_face();}; // [FUNCTION]
-void() rebel_atk13 =[ $attack9,  rebel_atk14 ] {ai_face();}; // [FUNCTION]
-void() rebel_atk14 =[ $attack10, enf_run1    ] {ai_face(); // [FUNCTION]
+void() rebel_atk1  = [$attack1,  rebel_atk2  ] { ai_face(); self.shots_left = 2;}; // [FUNCTION]
+void() rebel_atk2  = [$attack2,  rebel_atk3  ] { ai_face(); }; // [FUNCTION]
+void() rebel_atk3  = [$attack3,  rebel_atk4  ] { ai_face(); }; // [FUNCTION]
+void() rebel_atk4  = [$attack4,  rebel_atk6  ] { ai_face(); }; // [FUNCTION]
+void() rebel_atk6  = [$attack6,  rebel_atk7  ] { rebel_fire(); }; // [FUNCTION]
+void() rebel_atk7  = [$attack7,  rebel_atk8  ] { ai_face(); }; // [FUNCTION]
+void() rebel_atk8  = [$attack8,  rebel_atk13 ] { ai_face(); }; // [FUNCTION]
+void() rebel_atk13 = [$attack9,  rebel_atk14 ] { ai_face(); }; // [FUNCTION]
+void() rebel_atk14 = [$attack10, enf_run1    ] { ai_face(); // [FUNCTION]
     if (self.shots_left > 0) self.think = rebel_atk6;
     else SUB_CheckRefire (rebel_atk1);
 };

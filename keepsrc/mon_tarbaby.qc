@@ -72,7 +72,7 @@ void() tbaby_standframe = {
 
 void() tbaby_stand1 = { self.walkframe = 0; tbaby_standframe(); }
 // Can't find where this is being used, probably an old idea in id code
-void() tbaby_hang1 =[$walk1, tbaby_hang1] {ai_stand();};
+void() tbaby_hang1 = [$walk1, tbaby_hang1] { ai_stand(); };
 
 // The classic slow turning/walk animation
 void() tbaby_walkframe = {
@@ -160,19 +160,19 @@ void()	Tar_JumpTouch = {
 	self.nextthink = time + 0.1;
 };
 
-void() tbaby_fly1 =[$fly1, tbaby_fly2] {};
-void() tbaby_fly2 =[$fly2, tbaby_fly3] {};
-void() tbaby_fly3 =[$fly3, tbaby_fly4] {};
-void() tbaby_fly4 =[$fly4, tbaby_fly1] { 
+void() tbaby_fly1 = [$fly1, tbaby_fly2] {};
+void() tbaby_fly2 = [$fly2, tbaby_fly3] {};
+void() tbaby_fly3 = [$fly3, tbaby_fly4] {};
+void() tbaby_fly4 = [$fly4, tbaby_fly1] { 
 	self.cnt = self.cnt + 1;
 	if (self.cnt == 4) self.th_jumpexit();
 };
 
-void() tbaby_jump1 =[$jump1, tbaby_jump2] {ai_face();};
-void() tbaby_jump2 =[$jump2, tbaby_jump3] {ai_face();};
-void() tbaby_jump3 =[$jump3, tbaby_jump4] {ai_face();};
-void() tbaby_jump4 =[$jump4, tbaby_jump5] {ai_face();};
-void() tbaby_jump5 =[$jump5, tbaby_jump6] {	
+void() tbaby_jump1 = [$jump1, tbaby_jump2] { ai_face(); };
+void() tbaby_jump2 = [$jump2, tbaby_jump3] { ai_face(); };
+void() tbaby_jump3 = [$jump3, tbaby_jump4] { ai_face(); };
+void() tbaby_jump4 = [$jump4, tbaby_jump5] { ai_face(); };
+void() tbaby_jump5 = [$jump5, tbaby_jump6] {	
 	self.movetype = MOVETYPE_BOUNCE;
 	self.touch = Tar_JumpTouch;
 	makevectors(self.angles);
@@ -182,7 +182,7 @@ void() tbaby_jump5 =[$jump5, tbaby_jump6] {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.cnt = 0;
 };
-void() tbaby_jump6 =[$jump6, tbaby_fly1] {};
+void() tbaby_jump6 = [$jump6, tbaby_fly1] {};
 
 // There is no pain animation, just the chance of pain sounds
 void(entity inflictor, entity attacker, float damage) tbaby_pain = {
@@ -271,7 +271,7 @@ void() monster_tarbaby = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/qmaster/mon_tarbaby.mdl";
-	self.headmdl = string_null;
+	self.headmdl = "";
 	self.idle_sound = "blob/sight1.wav";
 	self.sight_sound = self.idle_sound;
 	self.pain_sound = self.idle_sound;

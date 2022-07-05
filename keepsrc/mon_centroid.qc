@@ -81,7 +81,7 @@ void() ai_turn_in_place = {
 
 void() scourge_stand1 = [ 0.000, scourge_stand2 ] { ai_stand(); scourge_think(); self.spawnsilent = FALSE;};
 void() scourge_stand2 = [ 1.000, scourge_stand3 ] { ai_stand(); scourge_think(); };
-void() scourge_stand3 = [ 2.000, scourge_stand4 ] { ai_stand(); scourge_think();};
+void() scourge_stand3 = [ 2.000, scourge_stand4 ] { ai_stand(); scourge_think(); };
 void() scourge_stand4 = [ 3.000, scourge_stand5 ] { ai_stand(); scourge_think(); };
 void() scourge_stand5 = [ 4.000, scourge_stand6 ] { ai_stand(); scourge_think(); };
 void() scourge_stand6 = [ 5.000, scourge_stand7 ] { ai_stand(); scourge_think(); };
@@ -102,8 +102,8 @@ void() scourge_walk1 = [ 12.000, scourge_walk2 ] {
 };
 void() scourge_walk2 = [ 13.000, scourge_walk3 ] { ai_walk (8); };
 void() scourge_walk3 = [ 14.000, scourge_walk4 ] { ai_walk (8); };
-void() scourge_walk4 = [ 15.000, scourge_walk5 ] { ai_walk (8);};
-void() scourge_walk5 = [ 16.000, scourge_walk6 ] { ai_walk (8);};
+void() scourge_walk4 = [ 15.000, scourge_walk5 ] { ai_walk (8); };
+void() scourge_walk5 = [ 16.000, scourge_walk6 ] { ai_walk (8); };
 void() scourge_walk6 = [ 17.000, scourge_walk1 ] { ai_walk (8); };
 
 void() scourge_run1 = [ 12.000, scourge_run2 ] {

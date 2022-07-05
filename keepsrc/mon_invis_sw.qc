@@ -127,90 +127,90 @@ void() sword_dieb10 = [ 38.000, sword_dieb11 ] { monster_death_postcheck(); };
 void() sword_dieb11 = [ 39.000, sword_dieb11 ] {};
 
 // Run Refield run
-void() swordredfield_run1 = [ $run1, swordredfield_run2 ] {
+void() swordredfield_run1 = [$run1, swordredfield_run2 ] {
    self.alpha = 0.4;
    self.effects = EF_DIMLIGHT;
    sword_eyecheck();
    ai_run (14);
 };
-void() swordredfield_run2 = [ $run2, swordredfield_run3 ] { ai_run (14); sword_eyecheck();};
-void() swordredfield_run3 = [ $run3, swordredfield_run4 ] { ai_run (14); sword_eyecheck();};
-void() swordredfield_run4 = [ $run4, swordredfield_run5 ] { ai_run (14); sword_eyecheck(); sword_sound(); };
-void() swordredfield_run5 = [ $run5, swordredfield_run6 ] { ai_run (14); sword_eyecheck();};
-void() swordredfield_run6 = [ $run6, swordredfield_run7 ] { ai_run (14); sword_eyecheck();};
-void() swordredfield_run7 = [ $run7, swordredfield_run8 ] { ai_run (14); sword_eyecheck();};
-void() swordredfield_run8 = [ $run8, swordredfield_run1 ] { ai_run (14); sword_eyecheck();};
+void() swordredfield_run2 = [$run2, swordredfield_run3 ] { ai_run (14); sword_eyecheck(); };
+void() swordredfield_run3 = [$run3, swordredfield_run4 ] { ai_run (14); sword_eyecheck(); };
+void() swordredfield_run4 = [$run4, swordredfield_run5 ] { ai_run (14); sword_eyecheck(); sword_sound(); };
+void() swordredfield_run5 = [$run5, swordredfield_run6 ] { ai_run (14); sword_eyecheck(); };
+void() swordredfield_run6 = [$run6, swordredfield_run7 ] { ai_run (14); sword_eyecheck(); };
+void() swordredfield_run7 = [$run7, swordredfield_run8 ] { ai_run (14); sword_eyecheck(); };
+void() swordredfield_run8 = [$run8, swordredfield_run1 ] { ai_run (14); sword_eyecheck(); };
 
 // Refield attack
-void() swordredfield_atk1 = [ $atk1, sword_atk2 ] {
+void() swordredfield_atk1 = [$atk1, sword_atk2 ] {
    sound (self,FALSE,"knight/sword1.wav",TRUE,TRUE);
    ai_charge (14);
    sword_eyecheck();
 };
-void() swordredfield_atk2 = [ $atk2, swordredfield_atk3 ] { ai_charge (14); sword_eyecheck();};
-void() swordredfield_atk3 = [ $atk3, swordredfield_atk4 ] { ai_charge (14); sword_eyecheck();};
-void() swordredfield_atk4 = [ $atk4, swordredfield_atk5 ] { ai_charge (14); sword_eyecheck();};
-void() swordredfield_atk5 = [ $atk5, swordredfield_atk6 ] { ai_melee(); sword_eyecheck();};
-void() swordredfield_atk6 = [ $atk6, swordredfield_atk7 ] { ai_melee(); sword_eyecheck();};
-void() swordredfield_atk7 = [ $atk7, swordredfield_atk8 ] { ai_melee(); sword_eyecheck();};
-void() swordredfield_atk8 = [ $atk8, swordredfield_atk9 ] { ai_charge (14); sword_eyecheck();};
-void() swordredfield_atk9 = [ $atk9, swordredfield_atk10 ] { ai_charge (14); sword_eyecheck();};
-void() swordredfield_atk10 = [ $atk10, swordredfield_run1 ] { ai_charge (14); sword_eyecheck();};
+void() swordredfield_atk2 = [$atk2, swordredfield_atk3 ] { ai_charge (14); sword_eyecheck(); };
+void() swordredfield_atk3 = [$atk3, swordredfield_atk4 ] { ai_charge (14); sword_eyecheck(); };
+void() swordredfield_atk4 = [$atk4, swordredfield_atk5 ] { ai_charge (14); sword_eyecheck(); };
+void() swordredfield_atk5 = [$atk5, swordredfield_atk6 ] { ai_melee(); sword_eyecheck(); };
+void() swordredfield_atk6 = [$atk6, swordredfield_atk7 ] { ai_melee(); sword_eyecheck(); };
+void() swordredfield_atk7 = [$atk7, swordredfield_atk8 ] { ai_melee(); sword_eyecheck(); };
+void() swordredfield_atk8 = [$atk8, swordredfield_atk9 ] { ai_charge (14); sword_eyecheck(); };
+void() swordredfield_atk9 = [$atk9, swordredfield_atk10 ] { ai_charge (14); sword_eyecheck(); };
+void() swordredfield_atk10 = [$atk10, swordredfield_run1 ] { ai_charge (14); sword_eyecheck(); };
 
 // Refield die, the sword, not him/her ;)
-void() swordredfield_die1 = [ $death1, swordredfield_die2 ] { sword_eyecheck(); };
-void() swordredfield_die2 = [ $death2, swordredfield_die3 ] { sword_eyecheck(); };
-void() swordredfield_die3 = [ $death3, swordredfield_die4 ] { sword_eyecheck(); 
+void() swordredfield_die1 = [$death1, swordredfield_die2 ] { sword_eyecheck(); };
+void() swordredfield_die2 = [$death2, swordredfield_die3 ] { sword_eyecheck(); };
+void() swordredfield_die3 = [$death3, swordredfield_die4 ] { sword_eyecheck(); 
 self.solid = SOLID_NOT; monster_check_gib(); };
-void() swordredfield_die4 = [ $death4, swordredfield_die5 ] { sword_eyecheck(); };
-void() swordredfield_die5 = [ $death5, swordredfield_die6 ] { sword_eyecheck(); };
-void() swordredfield_die6 = [ $death6, swordredfield_die7 ] { sword_eyecheck(); };
-void() swordredfield_die7 = [ $death7, swordredfield_die8 ] {sword_finish_attachment(); sword_remove_attachment(); 
+void() swordredfield_die4 = [$death4, swordredfield_die5 ] { sword_eyecheck(); };
+void() swordredfield_die5 = [$death5, swordredfield_die6 ] { sword_eyecheck(); };
+void() swordredfield_die6 = [$death6, swordredfield_die7 ] { sword_eyecheck(); };
+void() swordredfield_die7 = [$death7, swordredfield_die8 ] { sword_finish_attachment(); sword_remove_attachment(); 
 sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
-void() swordredfield_die8 = [ $death8, swordredfield_die9 ] { self.alpha = 1; };
-void() swordredfield_die9 = [ $death9, swordredfield_die10 ] { monster_death_postcheck(); };
-void() swordredfield_die10 = [ $death10, swordredfield_die10 ] { monster_deadbody_check(); };
+void() swordredfield_die8 = [$death8, swordredfield_die9 ] { self.alpha = 1; };
+void() swordredfield_die9 = [$death9, swordredfield_die10 ] { monster_death_postcheck(); };
+void() swordredfield_die10 = [$death10, swordredfield_die10 ] { monster_deadbody_check(); };
 
 // Refield dieb
-void() swordredfield_dieb1 = [ $deathb1, swordredfield_dieb2 ] { sword_eyecheck(); };
-void() swordredfield_dieb2 = [ $deathb2, swordredfield_dieb3 ] { sword_eyecheck(); };
-void() swordredfield_dieb3 = [ $deathb3, swordredfield_dieb4 ] { sword_eyecheck(); self.solid = SOLID_NOT; monster_check_gib(); };
-void() swordredfield_dieb4 = [ $deathb4, swordredfield_dieb5 ] { sword_eyecheck(); };
-void() swordredfield_dieb5 = [ $deathb5, swordredfield_dieb6 ] { sword_eyecheck(); };
-void() swordredfield_dieb6 = [ $deathb6, swordredfield_dieb7 ] { sword_eyecheck(); };
-void() swordredfield_dieb7 = [ $deathb7, swordredfield_dieb8 ] { sword_finish_attachment(); sword_remove_attachment(); 
+void() swordredfield_dieb1 = [$deathb1, swordredfield_dieb2 ] { sword_eyecheck(); };
+void() swordredfield_dieb2 = [$deathb2, swordredfield_dieb3 ] { sword_eyecheck(); };
+void() swordredfield_dieb3 = [$deathb3, swordredfield_dieb4 ] { sword_eyecheck(); self.solid = SOLID_NOT; monster_check_gib(); };
+void() swordredfield_dieb4 = [$deathb4, swordredfield_dieb5 ] { sword_eyecheck(); };
+void() swordredfield_dieb5 = [$deathb5, swordredfield_dieb6 ] { sword_eyecheck(); };
+void() swordredfield_dieb6 = [$deathb6, swordredfield_dieb7 ] { sword_eyecheck(); };
+void() swordredfield_dieb7 = [$deathb7, swordredfield_dieb8 ] { sword_finish_attachment(); sword_remove_attachment(); 
 sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
-void() swordredfield_dieb8 = [ $deathb8, swordredfield_dieb9 ] {};
-void() swordredfield_dieb9 = [ $deathb9, swordredfield_dieb10 ] { self.alpha = 1; };
-void() swordredfield_dieb10 = [ $deathb10, swordredfield_dieb11 ] { monster_death_postcheck(); };
-void() swordredfield_dieb11 = [ $deathb11, swordredfield_dieb11 ] { monster_deadbody_check(); };
+void() swordredfield_dieb8 = [$deathb8, swordredfield_dieb9 ] {};
+void() swordredfield_dieb9 = [$deathb9, swordredfield_dieb10 ] { self.alpha = 1; };
+void() swordredfield_dieb10 = [$deathb10, swordredfield_dieb11 ] { monster_death_postcheck(); };
+void() swordredfield_dieb11 = [$deathb11, swordredfield_dieb11 ] { monster_deadbody_check(); };
 
 // Refield lean
-void() sword_lean1 = [ $lean1, sword_lean1 ] { ai_stand(); };
+void() sword_lean1 = [$lean1, sword_lean1 ] { ai_stand(); };
 
 // Refield idle float bobbing
-void() sword_idle1 = [ $idle1, sword_idle2 ] { ai_stand(); };
-void() sword_idle2 = [ $idle2, sword_idle3 ] { ai_stand(); };
-void() sword_idle3 = [ $idle3, sword_idle4 ] { ai_stand(); };
-void() sword_idle4 = [ $idle4, sword_idle5 ] { ai_stand(); };
-void() sword_idle5 = [ $idle5, sword_idle6 ] { ai_stand(); };
-void() sword_idle6 = [ $idle6, sword_idle7 ] { ai_stand(); };
-void() sword_idle7 = [ $idle7, sword_idle8 ] { ai_stand(); };
-void() sword_idle8 = [ $idle8, sword_idle9 ] { ai_stand(); };
-void() sword_idle9 = [ $idle9, sword_idle10 ] { ai_stand(); };
-void() sword_idle10 = [ $idle10, sword_idle1 ] { ai_stand(); };
+void() sword_idle1 = [$idle1, sword_idle2 ] { ai_stand(); };
+void() sword_idle2 = [$idle2, sword_idle3 ] { ai_stand(); };
+void() sword_idle3 = [$idle3, sword_idle4 ] { ai_stand(); };
+void() sword_idle4 = [$idle4, sword_idle5 ] { ai_stand(); };
+void() sword_idle5 = [$idle5, sword_idle6 ] { ai_stand(); };
+void() sword_idle6 = [$idle6, sword_idle7 ] { ai_stand(); };
+void() sword_idle7 = [$idle7, sword_idle8 ] { ai_stand(); };
+void() sword_idle8 = [$idle8, sword_idle9 ] { ai_stand(); };
+void() sword_idle9 = [$idle9, sword_idle10 ] { ai_stand(); };
+void() sword_idle10 = [$idle10, sword_idle1 ] { ai_stand(); };
 
 // Refield walk
-void() sword_walk1 = [ $idle1, sword_walk2 ] { ai_walk(6); };
-void() sword_walk2 = [ $idle2, sword_walk3 ] { ai_walk(6); };
-void() sword_walk3 = [ $idle3, sword_walk4 ] { ai_walk(6); };
-void() sword_walk4 = [ $idle4, sword_walk5 ] { ai_walk(6); };
-void() sword_walk5 = [ $idle5, sword_walk6 ] { ai_walk(6); };
-void() sword_walk6 = [ $idle6, sword_walk7 ] { ai_walk(6); };
-void() sword_walk7 = [ $idle7, sword_walk8 ] { ai_walk(6); };
-void() sword_walk8 = [ $idle8, sword_walk9 ] { ai_walk(6); };
-void() sword_walk9 = [ $idle9, sword_walk10 ] { ai_walk(6); };
-void() sword_walk10 = [ $idle10, sword_walk1 ] { ai_walk(6); };
+void() sword_walk1 = [$idle1, sword_walk2 ] { ai_walk(6); };
+void() sword_walk2 = [$idle2, sword_walk3 ] { ai_walk(6); };
+void() sword_walk3 = [$idle3, sword_walk4 ] { ai_walk(6); };
+void() sword_walk4 = [$idle4, sword_walk5 ] { ai_walk(6); };
+void() sword_walk5 = [$idle5, sword_walk6 ] { ai_walk(6); };
+void() sword_walk6 = [$idle6, sword_walk7 ] { ai_walk(6); };
+void() sword_walk7 = [$idle7, sword_walk8 ] { ai_walk(6); };
+void() sword_walk8 = [$idle8, sword_walk9 ] { ai_walk(6); };
+void() sword_walk9 = [$idle9, sword_walk10 ] { ai_walk(6); };
+void() sword_walk10 = [$idle10, sword_walk1 ] { ai_walk(6); };
 
 void() sword_idlechoose = {
 	if (self.spawnflags & MON_SWORD_LEAN) {

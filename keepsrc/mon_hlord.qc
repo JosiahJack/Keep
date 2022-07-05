@@ -82,12 +82,12 @@ void() bane_gray = {
 
 // Taking a hint from the axeman...
 // Update:  Removed 'ai_forward(6);' from first frame to stop stack overflow.
-void() bane_pain1 =[ $pain1, bane_pain2   ] {};
-void() bane_pain2 =[ $pain2, bane_pain3   ] {ai_forward(8);};
-void() bane_pain3 =[ $pain4, bane_pain4   ] {ai_forward(4);};
-void() bane_pain4 =[ $pain5, hknight_run1 ] {ai_forward(2);};
+void() bane_pain1 = [$pain1, bane_pain2   ] {};
+void() bane_pain2 = [$pain2, bane_pain3   ] { ai_forward(8); };
+void() bane_pain3 = [$pain4, bane_pain4   ] { ai_forward(4); };
+void() bane_pain4 = [$pain5, hknight_run1 ] { ai_forward(2); };
 
-void() bane_painb1=[ $pain1, bane_pain3   ] {};
+void() bane_painb1= [$pain1, bane_pain3   ] {};
 
 // Shadows
 // Trailing shadowy copies of bane, like Johnny Cage shadow kick, or Akuma teleport...or mouse cursor trails in 1998.
@@ -124,7 +124,7 @@ void() bane_shadow = { // [FUNCTION]
 
 // This pain makes the Bane pull the log trick from Naruto,
 // only leave behind a fading image of the Bane instead of a log.
-void() bane_painc1=[ $pain1, bane_magice9 ] {
+void() bane_painc1= [$pain1, bane_magice9 ] {
     bane_gray();
     bane_shadow();
     self.nextthink  = time + 0.5;
@@ -132,7 +132,7 @@ void() bane_painc1=[ $pain1, bane_magice9 ] {
     EntryPoint_Spawn (self, self.enemy, self.enemy.origin, EntryPoint_Random);
 };
 
-void() hkfast_pain1    =[ $pain1, hknight_pain4 ] {};
+void() hkfast_pain1    = [$pain1, hknight_pain4 ] {};
 
 float   BANE_CHAT       = 1;
 float   BANE_RAGE       = 2;
@@ -168,11 +168,11 @@ void() Bane_JumpTouch;
 void(float d) hk_charge;
 
 // We need these first three jump frame functions in case the Bane needs to jump again without selecting other random attacks.
-void() bane_jump1   =[ $char_a1,  bane_jump2 ] {hk_charge(20); sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM); };
-void() bane_jump2   =[ $char_a2,  bane_jump3 ] {hk_charge(18);};
-void() bane_jump3   =[ $char_a3,  bane_jump4 ] {hk_charge(16);};
-void() bane_jump4   =[ $char_a4,  bane_jump5 ] {
-    if (self.health <= 0) {self.touch = SUB_Null;  self.think = hknight_die1;  return;}
+void() bane_jump1   = [$char_a1,  bane_jump2 ] { hk_charge(20); sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM); };
+void() bane_jump2   = [$char_a2,  bane_jump3 ] { hk_charge(18); };
+void() bane_jump3   = [$char_a3,  bane_jump4 ] { hk_charge(16); };
+void() bane_jump4   = [$char_a4,  bane_jump5 ] {
+    if (self.health <= 0) { self.touch = SUB_Null;  self.think = hknight_die1;  return;}
     ai_face();
     self.touch = Bane_JumpTouch; // Bane is a bbeg, so don't bother with invisibility shenanigans.  Ditto for the dark lord.
     makevectors(self.angles);
@@ -180,10 +180,10 @@ void() bane_jump4   =[ $char_a4,  bane_jump5 ] {
     self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 // Standard demon jumps reach level ground in about 0.5 sec in normal g.
-void() bane_jump5   =[ $char_a5,  bane_jump6 ] {self.nextthink = time + 0.5;};
+void() bane_jump5   = [$char_a5,  bane_jump6 ] { self.nextthink = time + 0.5;};
 // If three seconds pass, assume stuck then jump again.
-void() bane_jump6   =[ $char_a6,  bane_jump1 ] {self.nextthink = time + 3;};
-void() bane_jump7   =[ $char_a8,  hknight_char_a10 ] {};
+void() bane_jump6   = [$char_a6,  bane_jump1 ] { self.nextthink = time + 3;};
+void() bane_jump7   = [$char_a8,  hknight_char_a10 ] {};
 
 void() Bane_JumpTouch = {
     local   float   ldmg;
@@ -240,7 +240,7 @@ void() bane_strafe = {
 	ai_run_strafe (20);     // Player walk speed.
 };
 
-void() hk_face = {ai_face();  bane_strafe();};
+void() hk_face = { ai_face();  bane_strafe(); };
 
 // ATTACK #1 (Modified for Lightning Airstrike)
 // Here for incidental damage in case enemy runs up to melee range while the sword is coming down during the magica animation.
@@ -274,12 +274,12 @@ void() bane_storm_end = { // [FUNCTION]
     SUB_Remove();
 };
 
-void() bane_storm1  =[ 0, bane_storm2  ] {self.nextthink = time + 0.3;}; // [FUNCTION]
-void() bane_storm2  =[ 0, bane_storm3  ] {self.nextthink = time + 0.4; self.dest = self.enemy.origin;}; // [FUNCTION]
-void() bane_storm3  =[ 0, bane_storm4  ] { // [FUNCTION]
+void() bane_storm1  = [ 0, bane_storm2  ] { self.nextthink = time + 0.3;}; // [FUNCTION]
+void() bane_storm2  = [ 0, bane_storm3  ] { self.nextthink = time + 0.4; self.dest = self.enemy.origin;}; // [FUNCTION]
+void() bane_storm3  = [ 0, bane_storm4  ] { // [FUNCTION]
     if (self.owner.frame <= self.waitmin || self.owner.frame >= self.waitmax) { self.think = bane_storm_end; return; } // Abort if spellcasting was interrupted.
 };
-void() bane_storm4  =[ 0, bane_storm5  ] { // [FUNCTION]
+void() bane_storm4  = [ 0, bane_storm5  ] { // [FUNCTION]
     local float zot, loop;
     local vector p1, p2;
 
@@ -334,8 +334,8 @@ void() bane_storm4  =[ 0, bane_storm5  ] { // [FUNCTION]
     bane_storm_target();
     self.attack_finished = time + self.delay;
 };
-void() bane_storm5 =[ 0, bane_storm6    ] {LightZero_Set (12, self.delay, -4); self.nextthink = self.attack_finished;}; // [FUNCTION]
-void() bane_storm6 =[ 0, bane_storm_end ] { // [FUNCTION]
+void() bane_storm5 = [ 0, bane_storm6    ] { LightZero_Set (12, self.delay, -4); self.nextthink = self.attack_finished;}; // [FUNCTION]
+void() bane_storm6 = [ 0, bane_storm_end ] { // [FUNCTION]
     if (self.owner.deadflag >= DEAD_DEAD) return; // Spell is broken.
 
     if (self.cnt > 0) {
@@ -375,58 +375,58 @@ void(float frmin, float frmax) bane_storm = { // [FUNCTION]
 };
 
 // Bane summons a thunderstorm.
-void() bane_magica1  =[ $magica1,  bane_magica2  ] {bane_storm( $magica1, $magica13 ); hk_face();};
-void() bane_magica2  =[ $magica2,  bane_magica3  ] {hk_face();};
-void() bane_magica3  =[ $magica3,  bane_magica4  ] {hk_face();};
-void() bane_magica4  =[ $magica4,  bane_magica5  ] {hk_face();};
-void() bane_magica5  =[ $magica5,  bane_magica6  ] {hk_face();};
-void() bane_magica6  =[ $magica6,  bane_magica7  ] {hk_face();};
-void() bane_magica7  =[ $magica7,  bane_magica8  ] {hk_face();};
-void() bane_magica8  =[ $magica8,  bane_magica9  ] {hk_face();};
-void() bane_magica9  =[ $magica9,  bane_magica10 ] {hk_face(); magica_sword_chop();};
-void() bane_magica10 =[ $magica10, hknight_magica11 ] {hk_face();};
-//void() bane_magica10 =[ $magica10, bane_magica11 ] {hk_face();};
-//void() bane_magica11 =[ $magica11, bane_magica12 ] {hk_face();};
-//void() bane_magica12 =[ $magica12, bane_magica13 ] {hk_face();};
-//void() bane_magica13 =[ $magica13, bane_magica14 ] {hk_face();};
-//void() bane_magica14 =[ $magica14, hknight_run1  ] {hk_face();};
+void() bane_magica1  = [$magica1,  bane_magica2  ] { bane_storm( $magica1, $magica13 ); hk_face(); };
+void() bane_magica2  = [$magica2,  bane_magica3  ] { hk_face(); };
+void() bane_magica3  = [$magica3,  bane_magica4  ] { hk_face(); };
+void() bane_magica4  = [$magica4,  bane_magica5  ] { hk_face(); };
+void() bane_magica5  = [$magica5,  bane_magica6  ] { hk_face(); };
+void() bane_magica6  = [$magica6,  bane_magica7  ] { hk_face(); };
+void() bane_magica7  = [$magica7,  bane_magica8  ] { hk_face(); };
+void() bane_magica8  = [$magica8,  bane_magica9  ] { hk_face(); };
+void() bane_magica9  = [$magica9,  bane_magica10 ] { hk_face(); magica_sword_chop(); };
+void() bane_magica10 = [$magica10, hknight_magica11 ] { hk_face(); };
+//void() bane_magica10 = [$magica10, bane_magica11 ] { hk_face(); };
+//void() bane_magica11 = [$magica11, bane_magica12 ] { hk_face(); };
+//void() bane_magica12 = [$magica12, bane_magica13 ] { hk_face(); };
+//void() bane_magica13 = [$magica13, bane_magica14 ] { hk_face(); };
+//void() bane_magica14 = [$magica14, hknight_run1  ] { hk_face(); };
 
-void() darklord_magica1  =[ $magica1,  darklord_magica2  ] {hk_face();};
-void() darklord_magica2  =[ $magica2,  darklord_magica3  ] {hk_face();};
-void() darklord_magica3  =[ $magica3,  darklord_magica4  ] {hk_face();};
-void() darklord_magica4  =[ $magica4,  darklord_magica5  ] {hk_face();};
-void() darklord_magica5  =[ $magica5,  darklord_magica6  ] {hk_face();
+void() darklord_magica1  = [$magica1,  darklord_magica2  ] { hk_face(); };
+void() darklord_magica2  = [$magica2,  darklord_magica3  ] { hk_face(); };
+void() darklord_magica3  = [$magica3,  darklord_magica4  ] { hk_face(); };
+void() darklord_magica4  = [$magica4,  darklord_magica5  ] { hk_face(); };
+void() darklord_magica5  = [$magica5,  darklord_magica6  ] { hk_face();
     ReflectorShield (self);
     sound(self, 6, "items/protect.wav", 1, ATTN_NORM);
     self.pain_finished = time + 1;      // Uninterruptable by this point.
 };
-void() darklord_magica6  =[ $magica6,  darklord_magica7  ] {hk_face();};
-void() darklord_magica7  =[ $magica7,  darklord_magica8  ] {hk_face();};
-void() darklord_magica8  =[ $magica8,  darklord_magica9  ] {hk_face();};
-void() darklord_magica9  =[ $magica9,  darklord_magica10 ] {hk_face(); magica_sword_chop();};
-void() darklord_magica10 =[ $magica10, hknight_magica11  ] {hk_face();
+void() darklord_magica6  = [$magica6,  darklord_magica7  ] { hk_face(); };
+void() darklord_magica7  = [$magica7,  darklord_magica8  ] { hk_face(); };
+void() darklord_magica8  = [$magica8,  darklord_magica9  ] { hk_face(); };
+void() darklord_magica9  = [$magica9,  darklord_magica10 ] { hk_face(); magica_sword_chop(); };
+void() darklord_magica10 = [$magica10, hknight_magica11  ] { hk_face();
     makevectors(self.angles);
     M_Slam (self.origin + v_forward*46);
     self.waitmin = time + 5;
 };
 
 // Hell Lords rain meteors down.
-void() lord_magica7  =[ $magica7,  lord_magica8     ] {hk_face(); boss_meteor('50 0 100',300);};
-void() lord_magica8  =[ $magica8,  lord_magica9     ] {hk_face(); if (skill >= 3) boss_meteor('50 0 100',300);};
-void() lord_magica9  =[ $magica9,  lord_magica10    ] {hk_face(); magica_sword_chop();};
-void() lord_magica10 =[ $magica10, hknight_magica11 ] {hk_face();};
+void() lord_magica7  = [$magica7,  lord_magica8     ] { hk_face(); boss_meteor('50 0 100',300); };
+void() lord_magica8  = [$magica8,  lord_magica9     ] { hk_face(); if (skill >= 3) boss_meteor('50 0 100',300); };
+void() lord_magica9  = [$magica9,  lord_magica10    ] { hk_face(); magica_sword_chop(); };
+void() lord_magica10 = [$magica10, hknight_magica11 ] { hk_face(); };
 
 // ATTACK #2 (Modified for Fireball)
 // Hell Lords launches more magic missiles.  Bane launches more fireballs.
-void() lord_magicb6  =[ $magicb6,  lord_magicb7     ] {hknight_shot(0); bane_strafe();};
-void() lord_magicb7  =[ $magicb7,  lord_magicb8     ] {hknight_shot(-1); bane_strafe();};
-void() lord_magicb8  =[ $magicb8,  lord_magicb9     ] {hknight_shot(0); bane_strafe();};
-void() lord_magicb9  =[ $magicb9,  lord_magicb10    ] {hknight_shot(1); bane_strafe();};
-void() lord_magicb10 =[ $magicb10, hknight_magicb11 ] {hknight_shot(0); bane_strafe();};
+void() lord_magicb6  = [$magicb6,  lord_magicb7     ] { hknight_shot(0); bane_strafe(); };
+void() lord_magicb7  = [$magicb7,  lord_magicb8     ] { hknight_shot(-1); bane_strafe(); };
+void() lord_magicb8  = [$magicb8,  lord_magicb9     ] { hknight_shot(0); bane_strafe(); };
+void() lord_magicb9  = [$magicb9,  lord_magicb10    ] { hknight_shot(1); bane_strafe(); };
+void() lord_magicb10 = [$magicb10, hknight_magicb11 ] { hknight_shot(0); bane_strafe(); };
 
-void() darklord_magicb6  =[ $magicb6,  darklord_magicb7  ] {hk_face();};
-void() darklord_magicb7  =[ $magicb7,  darklord_magicb8  ] {hk_face();};
-void() darklord_magicb8  =[ $magicb8,  darklord_magicb9  ] {hk_face(); hknight_shot(0);
+void() darklord_magicb6  = [$magicb6,  darklord_magicb7  ] { hk_face(); };
+void() darklord_magicb7  = [$magicb7,  darklord_magicb8  ] { hk_face(); };
+void() darklord_magicb8  = [$magicb8,  darklord_magicb9  ] { hk_face(); hknight_shot(0);
     local   vector  org;
 
     makevectors(self.angles);
@@ -437,51 +437,51 @@ void() darklord_magicb8  =[ $magicb8,  darklord_magicb9  ] {hk_face(); hknight_s
 //    SUB_AttackFinished (3);
     M_Reload (3);   // Three second delay before next salvo in non-NM.
 };
-void() darklord_magicb9  =[ $magicb9,  darklord_magicb10 ] {hk_face(); hknight_shot(-1);};
-void() darklord_magicb10 =[ $magicb10, hknight_magicb11  ] {hk_face(); hknight_shot(1);};
+void() darklord_magicb9  = [$magicb9,  darklord_magicb10 ] { hk_face(); hknight_shot(-1); };
+void() darklord_magicb10 = [$magicb10, hknight_magicb11  ] { hk_face(); hknight_shot(1); };
 
 // ATTACK #4 (Firewall -- Used by Hell Lords)
-void() hknight_magicd1  =[ $magica1,  hknight_magicd2  ] {hk_face();};
-void() hknight_magicd2  =[ $magica14, hknight_magicd3  ] {hk_face();};
-void() hknight_magicd3  =[ $magica13, hknight_magicd4  ] {hk_face();};
-void() hknight_magicd4  =[ $magica12, hknight_magicd5  ] {hk_face();};
-void() hknight_magicd5  =[ $magica11, hknight_magicd6  ] {hk_face(); sound (self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM);};
-void() hknight_magicd6  =[ $magica10, hknight_magicd7  ] {hk_face();};
-void() hknight_magicd7  =[ $magica9,  hknight_magicd8  ] {hk_face(); M_Firewall();};
-void() hknight_magicd8  =[ $magica8,  hknight_magicd9  ] {hk_face();};
-void() hknight_magicd9  =[ $magica4,  hknight_magicd10 ] {hk_face();};
-void() hknight_magicd10 =[ $magica3,  hknight_magicd11 ] {hk_face();};
-void() hknight_magicd11 =[ $magica2,  hknight_magicd12 ] {hk_face();};
-void() hknight_magicd12 =[ $magica1,  hknight_run1     ] {hk_face();};
+void() hknight_magicd1  = [$magica1,  hknight_magicd2  ] { hk_face(); };
+void() hknight_magicd2  = [$magica14, hknight_magicd3  ] { hk_face(); };
+void() hknight_magicd3  = [$magica13, hknight_magicd4  ] { hk_face(); };
+void() hknight_magicd4  = [$magica12, hknight_magicd5  ] { hk_face(); };
+void() hknight_magicd5  = [$magica11, hknight_magicd6  ] { hk_face(); sound (self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM); };
+void() hknight_magicd6  = [$magica10, hknight_magicd7  ] { hk_face(); };
+void() hknight_magicd7  = [$magica9,  hknight_magicd8  ] { hk_face(); M_Firewall(); };
+void() hknight_magicd8  = [$magica8,  hknight_magicd9  ] { hk_face(); };
+void() hknight_magicd9  = [$magica4,  hknight_magicd10 ] { hk_face(); };
+void() hknight_magicd10 = [$magica3,  hknight_magicd11 ] { hk_face(); };
+void() hknight_magicd11 = [$magica2,  hknight_magicd12 ] { hk_face(); };
+void() hknight_magicd12 = [$magica1,  hknight_run1     ] { hk_face(); };
 
-//============================================================================
+
 // ATTACK #5 (Wrath Summoning -- Used by Dark Lords)
 // FIXME:  Wrath summoning uses old code that needs updating.
 void() dk_shield;
-void() darklord_magicd1  =[ $magica1,  darklord_magicd2  ] {hk_face();};
-void() darklord_magicd2  =[ $magica14, darklord_magicd3  ] {hk_face();};
-void() darklord_magicd3  =[ $magica13, darklord_magicd4  ] {hk_face();};
-void() darklord_magicd4  =[ $magica12, darklord_magicd5  ] {hk_face();};
-void() darklord_magicd5  =[ $magica11, darklord_magicd6  ] {hk_face();};
-void() darklord_magicd6  =[ $magica10, darklord_magicd7  ] {hk_face();};
-void() darklord_magicd7  =[ $magica9,  hknight_magicd8   ] {hk_face(); /*SpawnMonster_Horde(ID_MP2_WRATH, 3);*/ dk_shield();};
+void() darklord_magicd1  = [$magica1,  darklord_magicd2  ] { hk_face(); };
+void() darklord_magicd2  = [$magica14, darklord_magicd3  ] { hk_face(); };
+void() darklord_magicd3  = [$magica13, darklord_magicd4  ] { hk_face(); };
+void() darklord_magicd4  = [$magica12, darklord_magicd5  ] { hk_face(); };
+void() darklord_magicd5  = [$magica11, darklord_magicd6  ] { hk_face(); };
+void() darklord_magicd6  = [$magica10, darklord_magicd7  ] { hk_face(); };
+void() darklord_magicd7  = [$magica9,  hknight_magicd8   ] { hk_face(); /*SpawnMonster_Horde(ID_MP2_WRATH, 3);*/ dk_shield(); };
 
 // ATTACK #6 (Monster Resurrection -- Bane exclusive)
-void() bane_magicd1  =[ $magica1,  bane_magicd2  ] {ai_ritual();};
-void() bane_magicd2  =[ $magica14, bane_magicd3  ] {ai_ritual();};
-void() bane_magicd3  =[ $magica13, bane_magicd4  ] {ai_ritual();};
-void() bane_magicd4  =[ $magica12, bane_magicd5  ] {ai_ritual();};
-void() bane_magicd5  =[ $magica11, bane_magicd6  ] {ai_ritual();};
-void() bane_magicd6  =[ $magica10, bane_magicd7  ] {ai_ritual();};
-void() bane_magicd7  =[ $magica9,  bane_magicd8  ] {ai_ritual();};
-void() bane_magicd8  =[ $magica8,  bane_magicd12 ] {ai_ritual(); self.fallen = world;};
-//void() bane_magicd9  =[ $magica7,  bane_magicd10  ] {};
-//void() bane_magicd10 =[ $magica6,  bane_magicd11 ] {};
-//void() bane_magicd11 =[ $magica5,  bane_magicd12 ] {};
-void() bane_magicd12 =[ $magica4,  bane_magicd13 ] {};
-void() bane_magicd13 =[ $magica3,  bane_magicd14 ] {};
-void() bane_magicd14 =[ $magica2,  bane_magicd15 ] {};
-void() bane_magicd15 =[ $magica1,  hknight_run1  ] {};
+void() bane_magicd1  = [$magica1,  bane_magicd2  ] { ai_ritual(); };
+void() bane_magicd2  = [$magica14, bane_magicd3  ] { ai_ritual(); };
+void() bane_magicd3  = [$magica13, bane_magicd4  ] { ai_ritual(); };
+void() bane_magicd4  = [$magica12, bane_magicd5  ] { ai_ritual(); };
+void() bane_magicd5  = [$magica11, bane_magicd6  ] { ai_ritual(); };
+void() bane_magicd6  = [$magica10, bane_magicd7  ] { ai_ritual(); };
+void() bane_magicd7  = [$magica9,  bane_magicd8  ] { ai_ritual(); };
+void() bane_magicd8  = [$magica8,  bane_magicd12 ] { ai_ritual(); self.fallen = world;};
+//void() bane_magicd9  = [$magica7,  bane_magicd10  ] {};
+//void() bane_magicd10 = [$magica6,  bane_magicd11 ] {};
+//void() bane_magicd11 = [$magica5,  bane_magicd12 ] {};
+void() bane_magicd12 = [$magica4,  bane_magicd13 ] {};
+void() bane_magicd13 = [$magica3,  bane_magicd14 ] {};
+void() bane_magicd14 = [$magica2,  bane_magicd15 ] {};
+void() bane_magicd15 = [$magica1,  hknight_run1  ] {};
 
 //  Clones
 void() clone_die = {
@@ -506,24 +506,24 @@ void() clone_spawn = {
     copyentity (self, kage);
     setorigin (kage, self.origin);
     EntryPoint_Spawn (kage, self, self.origin, EntryPoint_Random);
-    kage.targetname = kage.killtarget = kage.target = kage.target2 = string_null;
+    kage.targetname = kage.killtarget = kage.target = kage.target2 = "";
     kage.spawned    = TRUE;
     kage.th_die     = clone_die;
     kage.owner     = self;
     kage.xfl        = kage.xfl - (kage.xfl & XFL_ADD_TO_KILL); // Clones automatically vanish when their owner dies, so don't count them.  One for all and all for one.
 };
 
-//============================================================================
+
 // ATTACK #7 (Teleportation and Cloning -- also Bane exclusive)
 
-void() bane_magice1  =[ $magicb1,  bane_magice2  ] {bane_gray(); hk_face();};
-void() bane_magice2  =[ $magicb2,  bane_magice3  ] {hk_face();};
-void() bane_magice3  =[ $magicb3,  bane_magice4  ] {hk_face();};
-void() bane_magice4  =[ $magicb4,  bane_magice5  ] {hk_face();};
-void() bane_magice5  =[ $magicb5,  bane_magice6  ] {hk_face();};
-void() bane_magice6  =[ $magicb6,  bane_magice7  ] {hk_face();};
-void() bane_magice7  =[ $magicb7,  bane_magice8  ] {hk_face();};
-void() bane_magice8  =[ $magicb8,  bane_magice9  ] {hk_face();
+void() bane_magice1  = [$magicb1,  bane_magice2  ] { bane_gray(); hk_face(); };
+void() bane_magice2  = [$magicb2,  bane_magice3  ] { hk_face(); };
+void() bane_magice3  = [$magicb3,  bane_magice4  ] { hk_face(); };
+void() bane_magice4  = [$magicb4,  bane_magice5  ] { hk_face(); };
+void() bane_magice5  = [$magicb5,  bane_magice6  ] { hk_face(); };
+void() bane_magice6  = [$magicb6,  bane_magice7  ] { hk_face(); };
+void() bane_magice7  = [$magicb7,  bane_magice8  ] { hk_face(); };
+void() bane_magice8  = [$magicb8,  bane_magice9  ] { hk_face();
 // Disappear then teleport.
     self.nextthink  = time + 1;
     self.modelindex = 0;
@@ -534,7 +534,7 @@ void() bane_magice8  =[ $magicb8,  bane_magice9  ] {hk_face();
             EntryPoint_Spawn (self, self, self.origin, EntryPoint_Random);
     }
 };
-void() bane_magice9  =[ $magicb8,  bane_magice10 ] {self.alpha = 0.2;
+void() bane_magice9  = [$magicb8,  bane_magice10 ] { self.alpha = 0.2;
     self.modelindex = self.mindex2;
     hk_face();
     if (self.cnt > 0) {
@@ -544,10 +544,10 @@ void() bane_magice9  =[ $magicb8,  bane_magice10 ] {self.alpha = 0.2;
             clone_spawn();      // Only the master can clone himself.
     }
 };
-void() bane_magice10 =[ $magicb8,  bane_magice11 ] {self.alpha = 0.4; hk_face();};
-void() bane_magice11 =[ $magicb9,  bane_magice12 ] {self.alpha = 0.6; hk_face();};
-void() bane_magice12 =[ $magicb10, bane_magice13 ] {self.alpha = 0.8; hk_face();};
-void() bane_magice13 =[ $magicb11, bane_magice14 ] {self.alpha = 0; hk_face();
+void() bane_magice10 = [$magicb8,  bane_magice11 ] { self.alpha = 0.4; hk_face(); };
+void() bane_magice11 = [$magicb9,  bane_magice12 ] { self.alpha = 0.6; hk_face(); };
+void() bane_magice12 = [$magicb10, bane_magice13 ] { self.alpha = 0.8; hk_face(); };
+void() bane_magice13 = [$magicb11, bane_magice14 ] { self.alpha = 0; hk_face();
     if (self.cnt < 1) {
 		if (walkmove (0, 0)) {
             self.takedamage = DAMAGE_AIM;
@@ -577,8 +577,8 @@ void() bane_magice13 =[ $magicb11, bane_magice14 ] {self.alpha = 0; hk_face();
     self.think = bane_magice8;
 };
 
-void() bane_magice14 =[ $magicb12, bane_magice15 ] {hk_face();};
-void() bane_magice15 =[ $magicb13, hknight_run1  ] {hk_face();};
+void() bane_magice14 = [$magicb12, bane_magice15 ] { hk_face(); };
+void() bane_magice15 = [$magicb13, hknight_run1  ] { hk_face(); };
 
 void() lord_magic = {
     local float r, add, opt;
@@ -586,7 +586,7 @@ void() lord_magic = {
     add = 1;
     opt = 2;
     if (M_FirewallCheck()) opt = opt + 1;
-    if (M_MeteorCheck ('50 0 112')) {add = 0;  opt = opt + 1;} // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
+    if (M_MeteorCheck ('50 0 112')) { add = 0;  opt = opt + 1;} // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
     r = random() * opt + add;
     if (r <= 1)
         hknight_magica1();     // Meteor
@@ -608,12 +608,12 @@ void() darklord_magic = {
 	//    if (self.minion_count < skill)
 	//        if (random() < 0.1)
 	//    if (random() < (skill - self.minion_count) * 0.1)
-    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) {darklord_magicd1();  return;}
+    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) { darklord_magicd1();  return;}
 
 	// Attacking...
     dist = vlen(self.enemy.origin - self.origin);
     if (dist <= DARKLORD_NEAR) {
-        if (self.waitmin < time) {darklord_magica1();  return;} // Thor's hand.
+        if (self.waitmin < time) { darklord_magica1();  return;} // Thor's hand.
 
         CheckForCharge();
         if (self.frame == $char_a1 || self.frame == $char_b1) return;
@@ -641,12 +641,12 @@ void() hkboss_magic = {
 void() bane_magic = {
     if (random() < 0.25) {
         if (CheckBaneJump ()) { // PM:  Jumping done at charge anim.  However, if enemy is low enough that CheckForCharge would abort, then we can check for jumping.
-            if (self.origin_z - self.enemy.origin_z > 20) {bane_jump1();  return;} // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
-            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) {bane_magice1();  return;} // If enemy is above and using new AI, try to teleport to higher ground occasionally.
+            if (self.origin_z - self.enemy.origin_z > 20) { bane_jump1();  return;} // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
+            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) { bane_magice1();  return;} // If enemy is above and using new AI, try to teleport to higher ground occasionally.
         }
 	}
 
-    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin,self.enemy)) {bane_magica1(); return;} // Start a thunderstorm!
+    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin,self.enemy)) { bane_magica1(); return;} // Start a thunderstorm!
 
 	// Spray some fireballs.
     if (random() <= 0.5)
@@ -682,37 +682,37 @@ void(float d) hk_charge = {
     ai_charge (d);
 };
 
-void() bane_slice1  =[ $slice1,  bane_slice2  ] {hk_charge(9);};
-void() bane_slice2  =[ $slice3,  bane_slice3  ] {monster_footstep(FALSE); hk_charge(19);};
-void() bane_slice3  =[ $slice5,  bane_slice4  ] {hk_charge(11); bane_melee(-200); ai_melee();};
-void() bane_slice4  =[ $slice6,  bane_slice5  ] {hk_charge(15); ai_melee();};
-void() bane_slice5  =[ $slice7,  bane_slice6  ] {monster_footstep(FALSE); hk_charge(8); ai_melee();};
-void() bane_slice6  =[ $slice9,  bane_slice7  ] {hk_charge(2); ai_melee();};
-void() bane_slice7  =[ $slice10, hknight_run1 ] {hk_charge(3);};
+void() bane_slice1  = [$slice1,  bane_slice2  ] { hk_charge(9); };
+void() bane_slice2  = [$slice3,  bane_slice3  ] { monster_footstep(FALSE); hk_charge(19); };
+void() bane_slice3  = [$slice5,  bane_slice4  ] { hk_charge(11); bane_melee(-200); ai_melee(); };
+void() bane_slice4  = [$slice6,  bane_slice5  ] { hk_charge(15); ai_melee(); };
+void() bane_slice5  = [$slice7,  bane_slice6  ] { monster_footstep(FALSE); hk_charge(8); ai_melee(); };
+void() bane_slice6  = [$slice9,  bane_slice7  ] { hk_charge(2); ai_melee(); };
+void() bane_slice7  = [$slice10, hknight_run1 ] { hk_charge(3); };
 
-void() bane_smash1  =[ $smash2,  bane_smash2  ] {hk_charge(14);};
-void() bane_smash2  =[ $smash4,  bane_smash3  ] {monster_footstep(FALSE); hk_charge(20);};
-void() bane_smash3  =[ $smash5,  bane_smash4  ] {hk_charge(10); bane_melee(0); ai_melee();};
-void() bane_smash4  =[ $smash6,  bane_smash5  ] {hk_charge(7); ai_melee();};
-void() bane_smash5  =[ $smash7,  bane_smash6  ] {hk_charge(12); ai_melee();};
-void() bane_smash6  =[ $smash8,  bane_smash7  ] {hk_charge(2); ai_melee();};
-void() bane_smash7  =[ $smash9,  bane_smash8  ] {monster_footstep(FALSE); hk_charge(3); ai_melee();};
-void() bane_smash8  =[ $smash11, hknight_run1 ] {hk_charge(0);};
+void() bane_smash1  = [$smash2,  bane_smash2  ] { hk_charge(14); };
+void() bane_smash2  = [$smash4,  bane_smash3  ] { monster_footstep(FALSE); hk_charge(20); };
+void() bane_smash3  = [$smash5,  bane_smash4  ] { hk_charge(10); bane_melee(0); ai_melee(); };
+void() bane_smash4  = [$smash6,  bane_smash5  ] { hk_charge(7); ai_melee(); };
+void() bane_smash5  = [$smash7,  bane_smash6  ] { hk_charge(12); ai_melee(); };
+void() bane_smash6  = [$smash8,  bane_smash7  ] { hk_charge(2); ai_melee(); };
+void() bane_smash7  = [$smash9,  bane_smash8  ] { monster_footstep(FALSE); hk_charge(3); ai_melee(); };
+void() bane_smash8  = [$smash11, hknight_run1 ] { hk_charge(0); };
 
-void() bane_watk1  =[ $w_attack1,  bane_watk2  ] {hk_charge(2);};
-void() bane_watk2  =[ $w_attack5,  bane_watk3  ] {bane_melee(0); ai_melee();};
-void() bane_watk3  =[ $w_attack7,  bane_watk4  ] {hk_charge(1);};
-void() bane_watk4  =[ $w_attack8,  bane_watk5  ] {hk_charge(4);};
-void() bane_watk5  =[ $w_attack9,  bane_watk6  ] {hk_charge(5);};
-void() bane_watk6  =[ $w_attack10, bane_watk7  ] {hk_charge(3); ai_melee();};
-void() bane_watk7  =[ $w_attack11, bane_watk8  ] {monster_footstep(FALSE); hk_charge(2); ai_melee();};
-void() bane_watk8  =[ $w_attack13, bane_watk9  ] {hk_charge(2); ai_melee();};
-void() bane_watk9  =[ $w_attack14, bane_watk10 ] {hk_charge(0);};
-void() bane_watk10 =[ $w_attack16, bane_watk11 ] {hk_charge(1);sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);};
-void() bane_watk11 =[ $w_attack18, bane_watk12 ] {hk_charge(4); bane_melee(200); ai_melee();};
-void() bane_watk12 =[ $w_attack19, bane_watk13 ] {hk_charge(4); ai_melee();};
-void() bane_watk13 =[ $w_attack20, bane_watk14 ] {hk_charge(6);};
-void() bane_watk14 =[ $w_attack22, hknight_run1] {hk_charge(10);};
+void() bane_watk1  = [$w_attack1,  bane_watk2  ] { hk_charge(2); };
+void() bane_watk2  = [$w_attack5,  bane_watk3  ] { bane_melee(0); ai_melee(); };
+void() bane_watk3  = [$w_attack7,  bane_watk4  ] { hk_charge(1); };
+void() bane_watk4  = [$w_attack8,  bane_watk5  ] { hk_charge(4); };
+void() bane_watk5  = [$w_attack9,  bane_watk6  ] { hk_charge(5); };
+void() bane_watk6  = [$w_attack10, bane_watk7  ] { hk_charge(3); ai_melee(); };
+void() bane_watk7  = [$w_attack11, bane_watk8  ] { monster_footstep(FALSE); hk_charge(2); ai_melee(); };
+void() bane_watk8  = [$w_attack13, bane_watk9  ] { hk_charge(2); ai_melee(); };
+void() bane_watk9  = [$w_attack14, bane_watk10 ] { hk_charge(0); };
+void() bane_watk10 = [$w_attack16, bane_watk11 ] { hk_charge(1);sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM); };
+void() bane_watk11 = [$w_attack18, bane_watk12 ] { hk_charge(4); bane_melee(200); ai_melee(); };
+void() bane_watk12 = [$w_attack19, bane_watk13 ] { hk_charge(4); ai_melee(); };
+void() bane_watk13 = [$w_attack20, bane_watk14 ] { hk_charge(6); };
+void() bane_watk14 = [$w_attack22, hknight_run1] { hk_charge(10); };
 
 void(entity inflictor, entity attacker, float damage) bane_pain = {
 	// Shadow clone magic check.
@@ -747,9 +747,9 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
     if ((!self.waitmax) && (self.enemy)) {
 		if (walkmove (0, 0)) {
 			if (self.liquidbase <= CONTENT_SLIME) { // If caught in deadly environment, warp out!
-				if (!attacker) {bane_painc1(); return;} // Attacker is world when damaged by slime/lava.
+				if (!attacker) { bane_painc1(); return;} // Attacker is world when damaged by slime/lava.
 			}
-			if (random() < 0.1) {bane_painc1();  return;} // Warp occasionally.
+			if (random() < 0.1) { bane_painc1();  return;} // Warp occasionally.
 		}
 	}
 
@@ -815,8 +815,8 @@ void() monster_hell_lord_precache = {
     precache_sound ("drake/weapons/fwalltap.wav");
 };
 
-void() monster_hell_lord = {monster_hell_knight();};
-void() monster_lord = {self.classname = "monster_hell_lord";  monster_hell_knight();};
+void() monster_hell_lord = { monster_hell_knight(); };
+void() monster_lord = { self.classname = "monster_hell_lord";  monster_hell_knight(); };
 
 // For Rapture's hkboss.
 void() monster_hkboss_precache = {
@@ -839,7 +839,7 @@ void() monster_hkboss_precache = {
     precache_sound ("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
 
-void() monster_hkboss = {monster_hell_knight();}; // For Rapture.
+void() monster_hkboss = { monster_hell_knight(); }; // For Rapture.
 
 // In case Bane gets aggravated during teleportation...
 void() bane_run = {
@@ -894,13 +894,13 @@ void() monster_bane = {
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
 	self.gib1sound = GIB_IMPACT_METALA;
-	if (random() < 0.5) self.gib2mdl = string_null;
-	if (random() < 0.5) self.gib3mdl = string_null;
+	if (random() < 0.5) self.gib2mdl = "";
+	if (random() < 0.5) self.gib3mdl = "";
 	self.idle_sound = "hknight/idle.wav";
 	self.pain_sound = "drake/bane/pain.wav";
 	self.death_sound = "drake/bane/death.wav";
 	self.sight_sound = "drake/bane/sight.wav";
-	self.hello_sound = string_null; 
+	self.hello_sound = ""; 
     self.mass = MASS_MEDIUM;
     self.skin = SKIN_BANE;
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -949,45 +949,43 @@ void() monster_bane = {
 void(float d) dk_slow;
 void(float d) dk_fast;
 
-void() darklord_run1  =[ $walk1,  darklord_run2  ] {dk_slow(2);};
-void() darklord_run2  =[ $walk2,  darklord_run3  ] {monster_footstep(FALSE); dk_slow(5);};
-void() darklord_run3  =[ $walk3,  darklord_run4  ] {dk_slow(5);};
-void() darklord_run4  =[ $walk4,  darklord_run5  ] {dk_slow(4);};
-void() darklord_run5  =[ $walk5,  darklord_run6  ] {dk_slow(4);};
-void() darklord_run6  =[ $walk6,  darklord_run7  ] {dk_slow(2);};
-void() darklord_run7  =[ $walk7,  darklord_run8  ] {dk_slow(2);};
-void() darklord_run8  =[ $walk8,  darklord_run9  ] {dk_slow(3);};
-void() darklord_run9  =[ $walk9,  darklord_run10 ] {dk_slow(3);};
-void() darklord_run10 =[ $walk10, darklord_run11 ] {dk_slow(4);};
-void() darklord_run11 =[ $walk11, darklord_run12 ] {dk_slow(3);};
-void() darklord_run12 =[ $walk12, darklord_run13 ] {monster_footstep(FALSE); dk_slow(4);};
-void() darklord_run13 =[ $walk13, darklord_run14 ] {dk_slow(6);};
-void() darklord_run14 =[ $walk14, darklord_run15 ] {dk_slow(2);};
-void() darklord_run15 =[ $walk15, darklord_run16 ] {dk_slow(2);};
-void() darklord_run16 =[ $walk16, darklord_run17 ] {dk_slow(4);};
-void() darklord_run17 =[ $walk17, darklord_run18 ] {dk_slow(3);};
-void() darklord_run18 =[ $walk18, darklord_run19 ] {dk_slow(3);};
-void() darklord_run19 =[ $walk19, darklord_run20 ] {dk_slow(3);};
-void() darklord_run20 =[ $walk20, darklord_run1  ] {dk_slow(2);};
+void() darklord_run1  = [$walk1,  darklord_run2  ] { dk_slow(2); };
+void() darklord_run2  = [$walk2,  darklord_run3  ] { monster_footstep(FALSE); dk_slow(5); };
+void() darklord_run3  = [$walk3,  darklord_run4  ] { dk_slow(5); };
+void() darklord_run4  = [$walk4,  darklord_run5  ] { dk_slow(4); };
+void() darklord_run5  = [$walk5,  darklord_run6  ] { dk_slow(4); };
+void() darklord_run6  = [$walk6,  darklord_run7  ] { dk_slow(2); };
+void() darklord_run7  = [$walk7,  darklord_run8  ] { dk_slow(2); };
+void() darklord_run8  = [$walk8,  darklord_run9  ] { dk_slow(3); };
+void() darklord_run9  = [$walk9,  darklord_run10 ] { dk_slow(3); };
+void() darklord_run10 = [$walk10, darklord_run11 ] { dk_slow(4); };
+void() darklord_run11 = [$walk11, darklord_run12 ] { dk_slow(3); };
+void() darklord_run12 = [$walk12, darklord_run13 ] { monster_footstep(FALSE); dk_slow(4); };
+void() darklord_run13 = [$walk13, darklord_run14 ] { dk_slow(6); };
+void() darklord_run14 = [$walk14, darklord_run15 ] { dk_slow(2); };
+void() darklord_run15 = [$walk15, darklord_run16 ] { dk_slow(2); };
+void() darklord_run16 = [$walk16, darklord_run17 ] { dk_slow(4); };
+void() darklord_run17 = [$walk17, darklord_run18 ] { dk_slow(3); };
+void() darklord_run18 = [$walk18, darklord_run19 ] { dk_slow(3); };
+void() darklord_run19 = [$walk19, darklord_run20 ] { dk_slow(3); };
+void() darklord_run20 = [$walk20, darklord_run1  ] { dk_slow(2); };
 
-void() darklord_fast1 =[ $run1, darklord_fast2 ] {monster_idle_sound(); dk_fast(20);};
-void() darklord_fast2 =[ $run2, darklord_fast3 ] {monster_footstep(FALSE); dk_fast(25);};
-void() darklord_fast3 =[ $run3, darklord_fast4 ] {dk_fast(18);};
-void() darklord_fast4 =[ $run4, darklord_fast5 ] {dk_fast(16);};
-void() darklord_fast5 =[ $run5, darklord_fast6 ] {dk_fast(14);};
-void() darklord_fast6 =[ $run6, darklord_fast7 ] {monster_footstep(FALSE); dk_fast(25);};
-void() darklord_fast7 =[ $run7, darklord_fast8 ] {dk_fast(21);};
-void() darklord_fast8 =[ $run8, darklord_fast1 ] {dk_fast(13);};
+void() darklord_fast1 = [$run1, darklord_fast2 ] { monster_idle_sound(); dk_fast(20); };
+void() darklord_fast2 = [$run2, darklord_fast3 ] { monster_footstep(FALSE); dk_fast(25); };
+void() darklord_fast3 = [$run3, darklord_fast4 ] { dk_fast(18); };
+void() darklord_fast4 = [$run4, darklord_fast5 ] { dk_fast(16); };
+void() darklord_fast5 = [$run5, darklord_fast6 ] { dk_fast(14); };
+void() darklord_fast6 = [$run6, darklord_fast7 ] { monster_footstep(FALSE); dk_fast(25); };
+void() darklord_fast7 = [$run7, darklord_fast8 ] { dk_fast(21); };
+void() darklord_fast8 = [$run8, darklord_fast1 ] { dk_fast(13); };
 
 void() dk_shield = {
-    if (self.minion_count < 1)  // FIXME:  Check for wraths.
-    {
+    if (self.minion_count < 1) {
         if (self.flags & FL_GODMODE) {
             self.flags = self.flags - FL_GODMODE;   //(self.flags & FL_GODMODE);
             self.waitmax = time + 10;   // Give player time to attack.
         }
-        if (!self.mirror_finished)
-            self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
+        if (!self.mirror_finished) self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
     } else {
         if (!(self.flags & FL_GODMODE)) {
             self.flags = self.flags | FL_GODMODE;
@@ -998,15 +996,15 @@ void() dk_shield = {
 };
 
 void(float d) dk_slow = {
-    if (!self.enemy) {darklord_fast1();  return;}
-    if (!visible (self.enemy)) {darklord_fast1();  return;}
+    if (!self.enemy) { darklord_fast1();  return;}
+    if (!visible (self.enemy)) { darklord_fast1();  return;}
     dk_shield();
     ai_run(d);
 };
 
 void(float d) dk_fast = {
 	if (self.enemy)
-		if (visible (self.enemy)) {darklord_run1();  return;}
+		if (visible (self.enemy)) { darklord_run1();  return;}
     dk_shield();
     ai_run(d);
 };
@@ -1014,42 +1012,42 @@ void(float d) dk_fast = {
 void(float d) dk_charge = { hk_charge(d*2); };
 void() dk_idle_sound = { if (random() < 0.2) sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM); };
 
-void() darklord_slice1  =[ $slice1,  darklord_slice2  ] {dk_idle_sound(); dk_charge(9);};
-void() darklord_slice2  =[ $slice3,  darklord_slice3  ] {monster_footstep(FALSE); dk_charge(19);};
-void() darklord_slice3  =[ $slice5,  darklord_slice4  ] {dk_charge(11); bane_melee(-200); ai_melee();};
-void() darklord_slice4  =[ $slice6,  darklord_slice5  ] {dk_charge(15); ai_melee();};
-void() darklord_slice5  =[ $slice7,  darklord_slice6  ] {monster_footstep(FALSE); dk_charge(8); ai_melee();};
-void() darklord_slice6  =[ $slice9,  darklord_slice7  ] {dk_charge(2); ai_melee();};
-void() darklord_slice7  =[ $slice10, hknight_run1 ] {dk_charge(3);};
+void() darklord_slice1  = [$slice1,  darklord_slice2  ] { dk_idle_sound(); dk_charge(9); };
+void() darklord_slice2  = [$slice3,  darklord_slice3  ] { monster_footstep(FALSE); dk_charge(19); };
+void() darklord_slice3  = [$slice5,  darklord_slice4  ] { dk_charge(11); bane_melee(-200); ai_melee(); };
+void() darklord_slice4  = [$slice6,  darklord_slice5  ] { dk_charge(15); ai_melee(); };
+void() darklord_slice5  = [$slice7,  darklord_slice6  ] { monster_footstep(FALSE); dk_charge(8); ai_melee(); };
+void() darklord_slice6  = [$slice9,  darklord_slice7  ] { dk_charge(2); ai_melee(); };
+void() darklord_slice7  = [$slice10, hknight_run1 ] { dk_charge(3); };
 
-void() darklord_smash1  =[ $smash2,  darklord_smash2  ] {dk_idle_sound(); dk_charge(14);};
-void() darklord_smash2  =[ $smash4,  darklord_smash3  ] {monster_footstep(FALSE); dk_charge(20);};
-void() darklord_smash3  =[ $smash5,  darklord_smash4  ] {dk_charge(10); bane_melee(0); ai_melee();};
-void() darklord_smash4  =[ $smash6,  darklord_smash5  ] {dk_charge(7); ai_melee();};
-void() darklord_smash5  =[ $smash7,  darklord_smash6  ] {dk_charge(12); ai_melee();};
-void() darklord_smash6  =[ $smash8,  darklord_smash7  ] {dk_charge(2); ai_melee();};
-void() darklord_smash7  =[ $smash9,  darklord_smash8  ] {monster_footstep(FALSE); dk_charge(3); ai_melee();};
-void() darklord_smash8  =[ $smash11, hknight_run1 ] {dk_charge(0);};
+void() darklord_smash1  = [$smash2,  darklord_smash2  ] { dk_idle_sound(); dk_charge(14); };
+void() darklord_smash2  = [$smash4,  darklord_smash3  ] { monster_footstep(FALSE); dk_charge(20); };
+void() darklord_smash3  = [$smash5,  darklord_smash4  ] { dk_charge(10); bane_melee(0); ai_melee(); };
+void() darklord_smash4  = [$smash6,  darklord_smash5  ] { dk_charge(7); ai_melee(); };
+void() darklord_smash5  = [$smash7,  darklord_smash6  ] { dk_charge(12); ai_melee(); };
+void() darklord_smash6  = [$smash8,  darklord_smash7  ] { dk_charge(2); ai_melee(); };
+void() darklord_smash7  = [$smash9,  darklord_smash8  ] { monster_footstep(FALSE); dk_charge(3); ai_melee(); };
+void() darklord_smash8  = [$smash11, hknight_run1 ] { dk_charge(0); };
 
-void() darklord_watk1  =[ $w_attack1,  darklord_watk2  ] {dk_idle_sound(); dk_charge(2);};
-void() darklord_watk2  =[ $w_attack5,  darklord_watk3  ] {bane_melee(0); ai_melee();};
-void() darklord_watk3  =[ $w_attack7,  darklord_watk4  ] {dk_charge(1);};
-void() darklord_watk4  =[ $w_attack8,  darklord_watk5  ] {dk_charge(4);};
-void() darklord_watk5  =[ $w_attack9,  darklord_watk6  ] {dk_charge(5);};
-void() darklord_watk6  =[ $w_attack10, darklord_watk7  ] {dk_charge(3); ai_melee();};
-void() darklord_watk7  =[ $w_attack11, darklord_watk8  ] {monster_footstep(FALSE); dk_charge(2); ai_melee();};
-void() darklord_watk8  =[ $w_attack13, darklord_watk9  ] {dk_charge(2); ai_melee();};
-void() darklord_watk9  =[ $w_attack14, darklord_watk10 ] {dk_charge(0);};
-void() darklord_watk10 =[ $w_attack16, darklord_watk11 ] {dk_charge(1);
+void() darklord_watk1  = [$w_attack1,  darklord_watk2  ] { dk_idle_sound(); dk_charge(2); };
+void() darklord_watk2  = [$w_attack5,  darklord_watk3  ] { bane_melee(0); ai_melee(); };
+void() darklord_watk3  = [$w_attack7,  darklord_watk4  ] { dk_charge(1); };
+void() darklord_watk4  = [$w_attack8,  darklord_watk5  ] { dk_charge(4); };
+void() darklord_watk5  = [$w_attack9,  darklord_watk6  ] { dk_charge(5); };
+void() darklord_watk6  = [$w_attack10, darklord_watk7  ] { dk_charge(3); ai_melee(); };
+void() darklord_watk7  = [$w_attack11, darklord_watk8  ] { monster_footstep(FALSE); dk_charge(2); ai_melee(); };
+void() darklord_watk8  = [$w_attack13, darklord_watk9  ] { dk_charge(2); ai_melee(); };
+void() darklord_watk9  = [$w_attack14, darklord_watk10 ] { dk_charge(0); };
+void() darklord_watk10 = [$w_attack16, darklord_watk11 ] { dk_charge(1);
     sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 };
-void() darklord_watk11 =[ $w_attack18, darklord_watk12 ] {dk_charge(4); bane_melee(200); ai_melee();};
-void() darklord_watk12 =[ $w_attack19, darklord_watk13 ] {dk_charge(4); ai_melee();};
-void() darklord_watk13 =[ $w_attack20, darklord_watk14 ] {dk_charge(6);};
-void() darklord_watk14 =[ $w_attack22, hknight_run1] {dk_charge(10);};
+void() darklord_watk11 = [$w_attack18, darklord_watk12 ] { dk_charge(4); bane_melee(200); ai_melee(); };
+void() darklord_watk12 = [$w_attack19, darklord_watk13 ] { dk_charge(4); ai_melee(); };
+void() darklord_watk13 = [$w_attack20, darklord_watk14 ] { dk_charge(6); };
+void() darklord_watk14 = [$w_attack22, hknight_run1] { dk_charge(10); };
 
 void() darklord_melee = {
-    if (self.waitmin < time) {darklord_magica1(); return;}
+    if (self.waitmin < time) { darklord_magica1(); return;}
 
     self.meleeattack = self.meleeattack + 1;
 
@@ -1066,18 +1064,18 @@ void() darklord_melee = {
 
 void() darklord_thebeast;   // Look in 'dragon.qc'.
 
-void() darklord_fall1  =[ $stand1,  darklord_fall2  ] {ai_forward(10);};
-void() darklord_fall2  =[ $stand2,  darklord_fall3  ] {ai_forward(8);};
-void() darklord_fall3  =[ $stand3,  darklord_fall4  ] {ai_forward(7);};
-void() darklord_fall4  =[ $stand4,  darklord_fall5  ] {};
-void() darklord_fall5  =[ $stand5,  darklord_fall6  ] {};
-void() darklord_fall6  =[ $stand6,  darklord_fall7  ] {};
-void() darklord_fall7  =[ $stand7,  darklord_fall8  ] {};
-void() darklord_fall8  =[ $stand8,  darklord_fall9  ] {ai_forward(10);};
-void() darklord_fall9  =[ $stand9,  darklord_fall10 ] {ai_forward(11);};
-void() darklord_fall10 =[ $stand1, darklord_fall11 ] {};
-void() darklord_fall11 =[ $stand2, darklord_fall12 ] {};
-void() darklord_fall12 =[ $stand3, darklord_thebeast ] { Quake_Spawn(self,0,0,self.origin,FALSE,5,VEC_QUAKE); self.nextthink = time + 3; }; // Shake entire level.
+void() darklord_fall1  = [$stand1,  darklord_fall2  ] { ai_forward(10); };
+void() darklord_fall2  = [$stand2,  darklord_fall3  ] { ai_forward(8); };
+void() darklord_fall3  = [$stand3,  darklord_fall4  ] { ai_forward(7); };
+void() darklord_fall4  = [$stand4,  darklord_fall5  ] {};
+void() darklord_fall5  = [$stand5,  darklord_fall6  ] {};
+void() darklord_fall6  = [$stand6,  darklord_fall7  ] {};
+void() darklord_fall7  = [$stand7,  darklord_fall8  ] {};
+void() darklord_fall8  = [$stand8,  darklord_fall9  ] { ai_forward(10); };
+void() darklord_fall9  = [$stand9,  darklord_fall10 ] { ai_forward(11); };
+void() darklord_fall10 = [$stand1, darklord_fall11 ] {};
+void() darklord_fall11 = [$stand2, darklord_fall12 ] {};
+void() darklord_fall12 = [$stand3, darklord_thebeast ] { Quake_Spawn(self,0,0,self.origin,FALSE,5,VEC_QUAKE); self.nextthink = time + 3; }; // Shake entire level.
 
 void(entity inflictor, entity attacker, float damage) darklord_pain = {
     if (self.max_health - self.health >= 1000) {
@@ -1110,28 +1108,28 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
 };
 
 // Note:  The dark lord's helmet explodes when destroyed.
-void() darklord_die1  =[ $death1,  darklord_die2  ] {ai_forward(10);};
-void() darklord_die2  =[ $death2,  darklord_die3  ] {ai_forward(8);};
-void() darklord_die3  =[ $death3,  darklord_die4  ] {ai_forward(7);};
-void() darklord_die4  =[ $death4,  darklord_die5  ] {};
-void() darklord_die5  =[ $death5,  darklord_die6  ] {};
-void() darklord_die6  =[ $death6,  darklord_die7  ] {};
-void() darklord_die7  =[ $death7,  darklord_die8  ] {};
-void() darklord_die8  =[ $death8,  darklord_die9  ] {ai_forward(10);};
-void() darklord_die9  =[ $death9,  darklord_die10 ] {ai_forward(11);};
-void() darklord_die10 =[ $death10, darklord_die11 ] {};
-void() darklord_die11 =[ $death11, darklord_die12 ] {};
-void() darklord_die12 =[ $death12, darklord_die12 ] {};
+void() darklord_die1  = [$death1,  darklord_die2  ] { ai_forward(10); };
+void() darklord_die2  = [$death2,  darklord_die3  ] { ai_forward(8); };
+void() darklord_die3  = [$death3,  darklord_die4  ] { ai_forward(7); };
+void() darklord_die4  = [$death4,  darklord_die5  ] {};
+void() darklord_die5  = [$death5,  darklord_die6  ] {};
+void() darklord_die6  = [$death6,  darklord_die7  ] {};
+void() darklord_die7  = [$death7,  darklord_die8  ] {};
+void() darklord_die8  = [$death8,  darklord_die9  ] { ai_forward(10); };
+void() darklord_die9  = [$death9,  darklord_die10 ] { ai_forward(11); };
+void() darklord_die10 = [$death10, darklord_die11 ] {};
+void() darklord_die11 = [$death11, darklord_die12 ] {};
+void() darklord_die12 = [$death12, darklord_die12 ] {};
 
-void() darklord_dieb1 =[ $deathb1, darklord_dieb2 ] {};
-void() darklord_dieb2 =[ $deathb2, darklord_dieb3 ] {};
-void() darklord_dieb3 =[ $deathb3, darklord_dieb4 ] {};
-void() darklord_dieb4 =[ $deathb4, darklord_dieb5 ] {};
-void() darklord_dieb5 =[ $deathb5, darklord_dieb6 ] {};
-void() darklord_dieb6 =[ $deathb6, darklord_dieb7 ] {};
-void() darklord_dieb7 =[ $deathb7, darklord_dieb8 ] {};
-void() darklord_dieb8 =[ $deathb8, darklord_dieb9 ] {};
-void() darklord_dieb9 =[ $deathb9, darklord_dieb9   ] {};
+void() darklord_dieb1 = [$deathb1, darklord_dieb2 ] {};
+void() darklord_dieb2 = [$deathb2, darklord_dieb3 ] {};
+void() darklord_dieb3 = [$deathb3, darklord_dieb4 ] {};
+void() darklord_dieb4 = [$deathb4, darklord_dieb5 ] {};
+void() darklord_dieb5 = [$deathb5, darklord_dieb6 ] {};
+void() darklord_dieb6 = [$deathb6, darklord_dieb7 ] {};
+void() darklord_dieb7 = [$deathb7, darklord_dieb8 ] {};
+void() darklord_dieb8 = [$deathb8, darklord_dieb9 ] {};
+void() darklord_dieb9 = [$deathb9, darklord_dieb9   ] {};
 
 void() darklord_die = {
 // check for gib
@@ -1144,9 +1142,9 @@ void() darklord_die = {
     sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
 
     if (random() > 0.5)
-        {st = '-2 0 28'; darklord_die1();}
+        { st = '-2 0 28'; darklord_die1();}
     else
-        {st = '-3 0 33'; darklord_dieb1();}
+        { st = '-3 0 33'; darklord_dieb1();}
     makevectors(self.angles);
     st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     Rocket_Explosion2 (st, 32, 5);
@@ -1234,8 +1232,8 @@ void() monster_dark_lord = {
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
 	self.gib1sound = GIB_IMPACT_METALA;
-	if (random() < 0.5) self.gib2mdl = string_null;
-	if (random() < 0.5) self.gib3mdl = string_null;
+	if (random() < 0.5) self.gib2mdl = "";
+	if (random() < 0.5) self.gib3mdl = "";
 	self.idle_sound = "drake/darklord/idle1.wav";
 	self.pain_sound = "drake/darklord/pain.wav";
 	self.death_sound = "drake/darklord/death.wav";
@@ -1252,7 +1250,7 @@ void() monster_dark_lord = {
 	self.steptype = FS_TYPEHEAVY;
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.th_die = hknight_die;				// Face meets floor
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
         self.minion_name = "monster_wrath";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

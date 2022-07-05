@@ -138,11 +138,11 @@ $frame pend_frame1 pend_frame2 pend_frame3 pend_frame4 pend_frame5 pend_frame6 p
 $frame pend_frame8 pend_frame9 pend_frame10 pend_frame11 pend_frame12 pend_frame13
 
 // Stationary idle for beginning and ending
-void() pend_idle1 =[ $pend_frame1, pend_idle1 ] {}; // [FUNCTION]
-void() pend_idle21 =[ $pend_frame13, pend_idle21 ] {}; // [FUNCTION]
+void() pend_idle1 = [$pend_frame1, pend_idle1 ] {}; // [FUNCTION]
+void() pend_idle21 = [$pend_frame13, pend_idle21 ] {}; // [FUNCTION]
 
 // Pendulum Swing (one cycle is 26 frames)
-void() pend_swing1 =[ $pend_frame1, pend_swing2 ] { // [FUNCTION]
+void() pend_swing1 = [$pend_frame1, pend_swing2 ] { // [FUNCTION]
 	// Stop the pendulum if state is OFF / DISABLED
 	if (self.estate & ESTATE_BLOCK) self.think = pend_idle1;
 	else if (self.state == STATE_OFF) self.think = pend_idle1;
@@ -158,20 +158,20 @@ void() pend_swing1 =[ $pend_frame1, pend_swing2 ] { // [FUNCTION]
 		}
 	}
 };
-void() pend_swing2 =[ $pend_frame2, pend_swing3 ] { trap_pendsize(1);self.aflag = 0.1;	}; // [FUNCTION]
-void() pend_swing3 =[ $pend_frame3, pend_swing4 ] { trap_pendsize(2);self.aflag = 0.2;	};  // [FUNCTION]
-void() pend_swing4 =[ $pend_frame4, pend_swing5 ] {trap_pendsize(3); self.aflag = 0.3; sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM);}; // [FUNCTION]
-void() pend_swing5 =[ $pend_frame5,		pend_swing6 ] {trap_pendsize(4);self.aflag = 0.4;	}; // [FUNCTION]
-void() pend_swing6 =[ $pend_frame6,		pend_swing7 ] {trap_pendsize(5);self.aflag = 0.5;	}; // [FUNCTION]
-void() pend_swing7 =[ $pend_frame7,		pend_swing8 ] {trap_pendsize(6); self.aflag = 0.6;}; // [FUNCTION], straight up and down
-void() pend_swing8 =[ $pend_frame8,		pend_swing9 ] {trap_pendsize(7);self.aflag = 0.7;	}; // [FUNCTION]
-void() pend_swing9 =[ $pend_frame9,		pend_swing10 ] {trap_pendsize(8);self.aflag = 0.8;	}; // [FUNCTION]
-void() pend_swing10 =[ $pend_frame10,	pend_swing11 ] {trap_pendsize(9);self.aflag = 1.0;	}; // [FUNCTION]
-void() pend_swing11 =[ $pend_frame11,	pend_swing12 ] {trap_pendsize(10);self.aflag = 0.8;	}; // [FUNCTION]
-void() pend_swing12 =[ $pend_frame12,	pend_swing13 ] {trap_pendsize(11);self.aflag = 0;	}; // [FUNCTION]
-void() pend_swing13 =[ $pend_frame13,	pend_swing21 ] {trap_pendsize(12);self.aflag = 0;}; // [FUNCTION], One extra frame pause at end of sequence
+void() pend_swing2 = [$pend_frame2, pend_swing3 ] { trap_pendsize(1);self.aflag = 0.1;	}; // [FUNCTION]
+void() pend_swing3 = [$pend_frame3, pend_swing4 ] { trap_pendsize(2);self.aflag = 0.2;	};  // [FUNCTION]
+void() pend_swing4 = [$pend_frame4, pend_swing5 ] { trap_pendsize(3); self.aflag = 0.3; sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM); }; // [FUNCTION]
+void() pend_swing5 = [$pend_frame5,		pend_swing6 ] { trap_pendsize(4);self.aflag = 0.4;	}; // [FUNCTION]
+void() pend_swing6 = [$pend_frame6,		pend_swing7 ] { trap_pendsize(5);self.aflag = 0.5;	}; // [FUNCTION]
+void() pend_swing7 = [$pend_frame7,		pend_swing8 ] { trap_pendsize(6); self.aflag = 0.6;}; // [FUNCTION], straight up and down
+void() pend_swing8 = [$pend_frame8,		pend_swing9 ] { trap_pendsize(7);self.aflag = 0.7;	}; // [FUNCTION]
+void() pend_swing9 = [$pend_frame9,		pend_swing10 ] { trap_pendsize(8);self.aflag = 0.8;	}; // [FUNCTION]
+void() pend_swing10 = [$pend_frame10,	pend_swing11 ] { trap_pendsize(9);self.aflag = 1.0;	}; // [FUNCTION]
+void() pend_swing11 = [$pend_frame11,	pend_swing12 ] { trap_pendsize(10);self.aflag = 0.8;	}; // [FUNCTION]
+void() pend_swing12 = [$pend_frame12,	pend_swing13 ] { trap_pendsize(11);self.aflag = 0;	}; // [FUNCTION]
+void() pend_swing13 = [$pend_frame13,	pend_swing21 ] { trap_pendsize(12);self.aflag = 0;}; // [FUNCTION], One extra frame pause at end of sequence
 
-void() pend_swing21 =[ $pend_frame13,	pend_swing22 ] { // [FUNCTION]
+void() pend_swing21 = [$pend_frame13,	pend_swing22 ] { // [FUNCTION]
 	// Stop the pendulum if state is OFF / DISABLED
 	if (self.estate & ESTATE_BLOCK) self.think = pend_idle21;
 	else if (self.state == STATE_OFF) self.think = pend_idle21;
@@ -187,18 +187,18 @@ void() pend_swing21 =[ $pend_frame13,	pend_swing22 ] { // [FUNCTION]
 		}
 	}
 };
-void() pend_swing22 =[ $pend_frame12,	pend_swing23 ] {trap_pendsize(11);self.aflag = -0.1;	}; // [FUNCTION]
-void() pend_swing23 =[ $pend_frame11,	pend_swing24 ] {trap_pendsize(10);self.aflag = -0.2;	}; // [FUNCTION]
-void() pend_swing24 =[ $pend_frame10,	pend_swing25 ] {trap_pendsize(9); self.aflag = -0.3; sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM);}; // [FUNCTION], I heard a whoosh!
-void() pend_swing25 =[ $pend_frame9,	pend_swing26 ] {trap_pendsize(8);self.aflag = -0.4;	}; // [FUNCTION]
-void() pend_swing26 =[ $pend_frame8,	pend_swing27 ] {trap_pendsize(7);self.aflag = -0.5;	}; // [FUNCTION]
-void() pend_swing27 =[ $pend_frame7,	pend_swing28 ] {trap_pendsize(6);self.aflag = -0.6;	};  // [FUNCTION], straight up and down
-void() pend_swing28 =[ $pend_frame6,	pend_swing29 ] {trap_pendsize(5);self.aflag = -0.7;	}; // [FUNCTION]
-void() pend_swing29 =[ $pend_frame5,	pend_swing30 ] {trap_pendsize(4);self.aflag = -0.8;	}; // [FUNCTION]
-void() pend_swing30 =[ $pend_frame4,	pend_swing31 ] {trap_pendsize(3);self.aflag = -1;	}; // [FUNCTION]
-void() pend_swing31 =[ $pend_frame3,	pend_swing32 ] {trap_pendsize(2);self.aflag = -0.8;	}; // [FUNCTION]
-void() pend_swing32 =[ $pend_frame2,	pend_swing33 ] {trap_pendsize(1);self.aflag = 0;	}; // [FUNCTION]
-void() pend_swing33 =[ $pend_frame1,	pend_swing1 ] {trap_pendsize(0);self.aflag = 0;}; // [FUNCTION], One extra frame pause at end of sequence
+void() pend_swing22 = [$pend_frame12,	pend_swing23 ] { trap_pendsize(11);self.aflag = -0.1;	}; // [FUNCTION]
+void() pend_swing23 = [$pend_frame11,	pend_swing24 ] { trap_pendsize(10);self.aflag = -0.2;	}; // [FUNCTION]
+void() pend_swing24 = [$pend_frame10,	pend_swing25 ] { trap_pendsize(9); self.aflag = -0.3; sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM); }; // [FUNCTION], I heard a whoosh!
+void() pend_swing25 = [$pend_frame9,	pend_swing26 ] { trap_pendsize(8);self.aflag = -0.4;	}; // [FUNCTION]
+void() pend_swing26 = [$pend_frame8,	pend_swing27 ] { trap_pendsize(7);self.aflag = -0.5;	}; // [FUNCTION]
+void() pend_swing27 = [$pend_frame7,	pend_swing28 ] { trap_pendsize(6);self.aflag = -0.6;	};  // [FUNCTION], straight up and down
+void() pend_swing28 = [$pend_frame6,	pend_swing29 ] { trap_pendsize(5);self.aflag = -0.7;	}; // [FUNCTION]
+void() pend_swing29 = [$pend_frame5,	pend_swing30 ] { trap_pendsize(4);self.aflag = -0.8;	}; // [FUNCTION]
+void() pend_swing30 = [$pend_frame4,	pend_swing31 ] { trap_pendsize(3);self.aflag = -1;	}; // [FUNCTION]
+void() pend_swing31 = [$pend_frame3,	pend_swing32 ] { trap_pendsize(2);self.aflag = -0.8;	}; // [FUNCTION]
+void() pend_swing32 = [$pend_frame2,	pend_swing33 ] { trap_pendsize(1);self.aflag = 0;	}; // [FUNCTION]
+void() pend_swing33 = [$pend_frame1,	pend_swing1 ] { trap_pendsize(0);self.aflag = 0;}; // [FUNCTION], One extra frame pause at end of sequence
 
 // If something has touched the pendulum, damage and bounce away.  Very useful ;) -Qmaster
 void() trap_pendulum_touch = { // [FUNCTION]

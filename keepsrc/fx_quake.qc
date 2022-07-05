@@ -178,8 +178,8 @@ void(entity who) tq_go = { // [FUNCTION]
 	SUB_Remove();
 };
 
-void() tq_use = {tq_go(activator);}; // [FUNCTION]
-void() tq_touch = {tq_go(other);}; // [FUNCTION]
+void() tq_use = { tq_go(activator); }; // [FUNCTION]
+void() tq_touch = { tq_go(other); }; // [FUNCTION]
 
 // Update 6/4/09:  Imported Zerstorer's earthquake trigger entity for use in Tronyn's map, toum.bsp.
 // Starts an earthquake.  Players view will shake for amount of time you put in "wait".  Place the richter scale of the quake in the "dmg" field.

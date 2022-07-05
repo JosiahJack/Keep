@@ -102,27 +102,27 @@ void(vector st, float up) M_FireAkArrow = {
     AkArrow_Launch (org, dir, type);
 };
 
-void() archer_stand1  =[ $waitA1,  archer_stand2  ] {ai_stand();};
-void() archer_stand2  =[ $waitA2,  archer_stand3  ] {ai_stand();};
-void() archer_stand3  =[ $waitA3,  archer_stand4  ] {ai_stand();};
-void() archer_stand4  =[ $waitA4,  archer_stand5  ] {ai_stand();};
-void() archer_stand5  =[ $waitA5,  archer_stand6  ] {ai_stand();};
-void() archer_stand6  =[ $waitA6,  archer_stand7  ] {ai_stand();};
-void() archer_stand7  =[ $waitA7,  archer_stand8  ] {ai_stand();};
-void() archer_stand8  =[ $waitA8,  archer_stand9  ] {ai_stand();};
-void() archer_stand9  =[ $waitA9,  archer_stand10 ] {ai_stand();};
-void() archer_stand10 =[ $waitA10, archer_stand11 ] {ai_stand();};
-void() archer_stand11 =[ $waitA11, archer_stand12 ] {ai_stand();};
-void() archer_stand12 =[ $waitA12, archer_stand13 ] {ai_stand();};
-void() archer_stand13 =[ $waitA13, archer_stand14 ] {ai_stand();};
-void() archer_stand14 =[ $waitA14, archer_stand15 ] {ai_stand();};
-void() archer_stand15 =[ $waitA15, archer_stand16 ] {ai_stand();};
-void() archer_stand16 =[ $waitA16, archer_stand17 ] {ai_stand();};
-void() archer_stand17 =[ $waitA17, archer_stand18 ] {ai_stand();};
-void() archer_stand18 =[ $waitA18, archer_stand1  ] {ai_stand();};
+void() archer_stand1  = [$waitA1,  archer_stand2  ] { ai_stand(); };
+void() archer_stand2  = [$waitA2,  archer_stand3  ] { ai_stand(); };
+void() archer_stand3  = [$waitA3,  archer_stand4  ] { ai_stand(); };
+void() archer_stand4  = [$waitA4,  archer_stand5  ] { ai_stand(); };
+void() archer_stand5  = [$waitA5,  archer_stand6  ] { ai_stand(); };
+void() archer_stand6  = [$waitA6,  archer_stand7  ] { ai_stand(); };
+void() archer_stand7  = [$waitA7,  archer_stand8  ] { ai_stand(); };
+void() archer_stand8  = [$waitA8,  archer_stand9  ] { ai_stand(); };
+void() archer_stand9  = [$waitA9,  archer_stand10 ] { ai_stand(); };
+void() archer_stand10 = [$waitA10, archer_stand11 ] { ai_stand(); };
+void() archer_stand11 = [$waitA11, archer_stand12 ] { ai_stand(); };
+void() archer_stand12 = [$waitA12, archer_stand13 ] { ai_stand(); };
+void() archer_stand13 = [$waitA13, archer_stand14 ] { ai_stand(); };
+void() archer_stand14 = [$waitA14, archer_stand15 ] { ai_stand(); };
+void() archer_stand15 = [$waitA15, archer_stand16 ] { ai_stand(); };
+void() archer_stand16 = [$waitA16, archer_stand17 ] { ai_stand(); };
+void() archer_stand17 = [$waitA17, archer_stand18 ] { ai_stand(); };
+void() archer_stand18 = [$waitA18, archer_stand1  ] { ai_stand(); };
 
 // WALK
-void() archer_draw = {sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM);};
+void() archer_draw = { sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
 
 void() archer_growl = {
     if (random() < 0.1) {
@@ -135,26 +135,26 @@ void() archer_growl = {
     }
 };
 
-void() archer_walk1  =[ $patrol2,  archer_walk2  ] {archer_growl(); ai_walk(2);};
-void() archer_walk2  =[ $patrol4,  archer_walk3  ] {ai_walk(3);};
-void() archer_walk3  =[ $patrol6,  archer_walk4  ] {ai_walk(6);};
-void() archer_walk4  =[ $patrol8,  archer_walk5  ] {ai_walk(6);};
-void() archer_walk5  =[ $patrol10, archer_walk6  ] {monster_footstep(FALSE); ai_walk(4);};
-void() archer_walk6  =[ $patrol12, archer_walk7  ] {ai_walk(1);};
-void() archer_walk7  =[ $patrol14, archer_walk8  ] {ai_walk(3);};
-void() archer_walk8  =[ $patrol16, archer_walk9  ] {ai_walk(4);};
-void() archer_walk9  =[ $patrol18, archer_walk10 ] {ai_walk(4);};
-void() archer_walk10 =[ $patrol20, archer_walk11 ] {ai_walk(4);};
-void() archer_walk11 =[ $patrol22, archer_walk1  ] {monster_footstep(FALSE); ai_walk(2);};
+void() archer_walk1  = [$patrol2,  archer_walk2  ] { archer_growl(); ai_walk(2); };
+void() archer_walk2  = [$patrol4,  archer_walk3  ] { ai_walk(3); };
+void() archer_walk3  = [$patrol6,  archer_walk4  ] { ai_walk(6); };
+void() archer_walk4  = [$patrol8,  archer_walk5  ] { ai_walk(6); };
+void() archer_walk5  = [$patrol10, archer_walk6  ] { monster_footstep(FALSE); ai_walk(4); };
+void() archer_walk6  = [$patrol12, archer_walk7  ] { ai_walk(1); };
+void() archer_walk7  = [$patrol14, archer_walk8  ] { ai_walk(3); };
+void() archer_walk8  = [$patrol16, archer_walk9  ] { ai_walk(4); };
+void() archer_walk9  = [$patrol18, archer_walk10 ] { ai_walk(4); };
+void() archer_walk10 = [$patrol20, archer_walk11 ] { ai_walk(4); };
+void() archer_walk11 = [$patrol22, archer_walk1  ] { monster_footstep(FALSE); ai_walk(2); };
 
-void() archer_run1  =[ $walk2,  archer_run2  ] {archer_growl(); ai_run(4);};
-void() archer_run2  =[ $walk4,  archer_run3  ] {ai_run(8);};
-void() archer_run3  =[ $walk6,  archer_run4  ] {ai_run(10);};
-void() archer_run4  =[ $walk8,  archer_run5  ] {monster_footstep(FALSE); ai_run(9);};
-void() archer_run5  =[ $walk10, archer_run6  ] {ai_run(4);};
-void() archer_run6  =[ $walk12, archer_run7  ] {ai_run(8);};
-void() archer_run7  =[ $walk14, archer_run8  ] {ai_run(10);};
-void() archer_run8  =[ $walk16, archer_run1  ] {monster_footstep(FALSE); ai_run(9);};
+void() archer_run1  = [$walk2,  archer_run2  ] { archer_growl(); ai_run(4); };
+void() archer_run2  = [$walk4,  archer_run3  ] { ai_run(8); };
+void() archer_run3  = [$walk6,  archer_run4  ] { ai_run(10); };
+void() archer_run4  = [$walk8,  archer_run5  ] { monster_footstep(FALSE); ai_run(9); };
+void() archer_run5  = [$walk10, archer_run6  ] { ai_run(4); };
+void() archer_run6  = [$walk12, archer_run7  ] { ai_run(8); };
+void() archer_run7  = [$walk14, archer_run8  ] { ai_run(10); };
+void() archer_run8  = [$walk16, archer_run1  ] { monster_footstep(FALSE); ai_run(9); };
 
 // ATTACK
 float   ARCHER_CLOSE    = 200;
@@ -164,8 +164,8 @@ void() archer_fire1;
 
 // Emulate Hexen2 behavior.
 float() archer_face = {
-    if (visible (self.enemy)) {ai_face();  return TRUE;}
-    else {self.think = archer_run1;  return FALSE;}
+    if (visible (self.enemy)) { ai_face();  return TRUE;}
+    else { self.think = archer_run1;  return FALSE;}
 };
 
 // Animate the archer bowstring pull and hold.
@@ -178,50 +178,50 @@ void() archer_hold = {
     if ( chance && ((dist <= ARCHER_CLOSE) || (dist > ARCHER_FAR)) ) {
         if (dist <= ARCHER_CLOSE) { // Enemy too close -- backup.
             if ( self.frame == $backup1 )
-                {self.frame = $backup2; ai_back(1);}
+                { self.frame = $backup2; ai_back(1);}
             else if ( self.frame == $backup2 )
-                {self.frame = $backup3; ai_back(1);}
+                { self.frame = $backup3; ai_back(1);}
             else if ( self.frame == $backup3 )
-                {self.frame = $backup4; ai_back(2);}
+                { self.frame = $backup4; ai_back(2);}
             else if ( self.frame == $backup4 )
-                {self.frame = $backup5; ai_back(1);}
+                { self.frame = $backup5; ai_back(1);}
             else if ( self.frame == $backup5 )
-                {self.frame = $backup6; ai_back(2);}
+                { self.frame = $backup6; ai_back(2);}
             else if ( self.frame == $backup6 )
-                {self.frame = $backup7; ai_back(4);}
+                { self.frame = $backup7; ai_back(4);}
             else if ( self.frame == $backup7 )
-                {self.frame = $backup8; ai_back(4); r = 0;}
+                { self.frame = $backup8; ai_back(4); r = 0;}
             else
-                {self.frame = $backup1; ai_back(2);}
+                { self.frame = $backup1; ai_back(2);}
         } else { // Enemy should be closer -- advance.
             if ( self.frame == $backup8 )
-                {self.frame = $backup7; ai_forward(4);}
+                { self.frame = $backup7; ai_forward(4);}
             else if ( self.frame == $backup7 )
-                {self.frame = $backup6; ai_forward(4);}
+                { self.frame = $backup6; ai_forward(4);}
             else if ( self.frame == $backup6 )
-                {self.frame = $backup5; ai_forward(2);}
+                { self.frame = $backup5; ai_forward(2);}
             else if ( self.frame == $backup5 )
-                {self.frame = $backup4; ai_forward(1);}
+                { self.frame = $backup4; ai_forward(1);}
             else if ( self.frame == $backup4 )
-                {self.frame = $backup3; ai_forward(2);}
+                { self.frame = $backup3; ai_forward(2);}
             else if ( self.frame == $backup3 )
-                {self.frame = $backup2; ai_forward(2);}
+                { self.frame = $backup2; ai_forward(2);}
             else if ( self.frame == $backup2 )
-                {self.frame = $backup1; ai_forward(1); r = 0;}
+                { self.frame = $backup1; ai_forward(1); r = 0;}
             else
-                {self.frame = $backup8; ai_forward(2);}
+                { self.frame = $backup8; ai_forward(2);}
         }
     } else { // Enemy is either within ideal distance or behind archer -- stay.
         if ( ( self.frame >= $waitB2 ) && ( self.frame <= $waitB10 ) )
             self.frame = self.frame + 2;
         else
-            {self.frame = $waitB2; r = 0;}
+            { self.frame = $waitB2; r = 0;}
     }
     self.nextthink = time + 0.1;
     self.think = archer_hold;
 
 	// Don't shoot blindly if enemy is confirmed to be dead.  Doing so might hit other monsters (behind target) we'd rather not anger.
-    if ((self.enemy.health <= 0) && (self.enemy.deadflag >= DEAD_DEAD)) {self.think = archer_run1;  return;}
+    if ((self.enemy.health <= 0) && (self.enemy.deadflag >= DEAD_DEAD)) { self.think = archer_run1;  return;}
     if (!archer_face ()) return; // Thinking set to th_run by call to function.
 
 	// Borrowing v_forward from the prior call to makevectors in 'infront'...
@@ -272,41 +272,40 @@ void() archer_hold = {
     archer_fire1();
 };
 
-void() archer_redraw1  =[ $redraw2,  archer_redraw2  ] {archer_face();};
-void() archer_redraw2  =[ $redraw4,  archer_redraw3  ] {archer_face();};
-void() archer_redraw3  =[ $redraw6,  archer_redraw4  ] {archer_face();};
-void() archer_redraw4  =[ $redraw8,  archer_redraw5  ] {archer_face(); archer_draw();};
-void() archer_redraw5  =[ $redraw10, archer_redraw6  ] {archer_face();};
-void() archer_redraw6  =[ $redraw11, archer_redraw7  ] {archer_face();};
-void() archer_redraw7  =[ $redraw12, archer_hold     ] {archer_face();};
+void() archer_redraw1  = [$redraw2,  archer_redraw2  ] { archer_face(); };
+void() archer_redraw2  = [$redraw4,  archer_redraw3  ] { archer_face(); };
+void() archer_redraw3  = [$redraw6,  archer_redraw4  ] { archer_face(); };
+void() archer_redraw4  = [$redraw8,  archer_redraw5  ] { archer_face(); archer_draw(); };
+void() archer_redraw5  = [$redraw10, archer_redraw6  ] { archer_face(); };
+void() archer_redraw6  = [$redraw11, archer_redraw7  ] { archer_face(); };
+void() archer_redraw7  = [$redraw12, archer_hold     ] { archer_face(); };
 
 // Advancing attack
-void() archer_attack1  =[ $tranA2,  archer_attack2  ] {archer_face(); ai_forward(8);};
-void() archer_attack2  =[ $tranA4,  archer_attack3  ] {archer_face(); ai_forward(7);};
-void() archer_attack3  =[ $tranA6,  archer_attack4  ] {archer_face(); ai_forward(6); archer_draw();};
-void() archer_attack4  =[ $tranA8,  archer_attack5  ] {archer_face(); ai_forward(4);};
-void() archer_attack5  =[ $tranA10, archer_attack6  ] {archer_face(); monster_footstep(FALSE); ai_forward(5);};
-void() archer_attack6  =[ $tranA12, archer_attack7  ] {archer_face();};
-void() archer_attack7  =[ $tranA13, archer_hold     ] {archer_face();};
+void() archer_attack1  = [$tranA2,  archer_attack2  ] { archer_face(); ai_forward(8); };
+void() archer_attack2  = [$tranA4,  archer_attack3  ] { archer_face(); ai_forward(7); };
+void() archer_attack3  = [$tranA6,  archer_attack4  ] { archer_face(); ai_forward(6); archer_draw(); };
+void() archer_attack4  = [$tranA8,  archer_attack5  ] { archer_face(); ai_forward(4); };
+void() archer_attack5  = [$tranA10, archer_attack6  ] { archer_face(); monster_footstep(FALSE); ai_forward(5); };
+void() archer_attack6  = [$tranA12, archer_attack7  ] { archer_face(); };
+void() archer_attack7  = [$tranA13, archer_hold     ] { archer_face(); };
 
 // Retreating attack
-void() archer_attackb1 =[ $draw2,  archer_attackb2  ] {archer_face();};
-void() archer_attackb2 =[ $draw4,  archer_attackb3  ] {archer_face(); ai_back(4);};
-void() archer_attackb3 =[ $draw6,  archer_attackb4  ] {archer_face(); ai_back(6);};
-void() archer_attackb4 =[ $draw8,  archer_attackb5  ] {archer_face(); ai_back(7); archer_draw();};
-void() archer_attackb5 =[ $draw10, archer_attackb6  ] {archer_face(); ai_back(8);};
-void() archer_attackb6 =[ $draw12, archer_attackb7  ] {archer_face(); monster_footstep(FALSE); ai_back(4);};
-void() archer_attackb7 =[ $draw13, archer_hold      ] {archer_face();};
+void() archer_attackb1 = [$draw2,  archer_attackb2  ] { archer_face(); };
+void() archer_attackb2 = [$draw4,  archer_attackb3  ] { archer_face(); ai_back(4); };
+void() archer_attackb3 = [$draw6,  archer_attackb4  ] { archer_face(); ai_back(6); };
+void() archer_attackb4 = [$draw8,  archer_attackb5  ] { archer_face(); ai_back(7); archer_draw(); };
+void() archer_attackb5 = [$draw10, archer_attackb6  ] { archer_face(); ai_back(8); };
+void() archer_attackb6 = [$draw12, archer_attackb7  ] { archer_face(); monster_footstep(FALSE); ai_back(4); };
+void() archer_attackb7 = [$draw13, archer_hold      ] { archer_face(); };
 
-void() archer_attack =
-{
+void() archer_attack = {
     if (enemy_range < RANGE_MID)    // Range set by CheckAttack.
         archer_attackb1();     // Step back.
     else
         archer_attack1();      // Step forward.
 };
 
-void() archer_fire1    =[ $fire2,  archer_fire2    ] {ai_face();
+void() archer_fire1    = [$fire2,  archer_fire2    ] { ai_face();
     local   float   chance, up;
 
     // Check for upgrade chance.
@@ -332,21 +331,20 @@ void() archer_fire1    =[ $fire2,  archer_fire2    ] {ai_face();
     else
         SUB_CheckRefire (archer_redraw5);
 };
-void() archer_fire2    =[ $fire4,  archer_fire3    ] {ai_face();};
+void() archer_fire2    = [$fire4,  archer_fire3    ] { ai_face(); };
 // The rest is a transition scene from fire to run.
-void() archer_fire3    =[ $tranB2,  archer_fire4   ] {ai_run(3);};
-void() archer_fire4    =[ $tranB4,  archer_fire5   ] {ai_run(10);};
-void() archer_fire5    =[ $tranB6,  archer_fire6   ] {ai_run(12);};
-void() archer_fire6    =[ $tranB8,  archer_fire7   ] {ai_run(8);};
-void() archer_fire7    =[ $tranB10, archer_fire8   ] {monster_footstep(FALSE); ai_run(3);};
-void() archer_fire8    =[ $tranB12, archer_fire9   ] {ai_run(8);};
-void() archer_fire9    =[ $tranB14, archer_fire10  ] {ai_run(11);};
-void() archer_fire10   =[ $tranB16, archer_run1    ] {ai_run(8);};
+void() archer_fire3    = [$tranB2,  archer_fire4   ] { ai_run(3); };
+void() archer_fire4    = [$tranB4,  archer_fire5   ] { ai_run(10); };
+void() archer_fire5    = [$tranB6,  archer_fire6   ] { ai_run(12); };
+void() archer_fire6    = [$tranB8,  archer_fire7   ] { ai_run(8); };
+void() archer_fire7    = [$tranB10, archer_fire8   ] { monster_footstep(FALSE); ai_run(3); };
+void() archer_fire8    = [$tranB12, archer_fire9   ] { ai_run(8); };
+void() archer_fire9    = [$tranB14, archer_fire10  ] { ai_run(11); };
+void() archer_fire10   = [$tranB16, archer_run1    ] { ai_run(8); };
 
 // PAIN - - - - - - - - - - - - - - - -
 // Counter means counterattack here.  Use at end of pain anims.
-void() archer_counter =
-{
+void() archer_counter = {
     if (self.enemy)
         if (visible (self.enemy))
             if (infront (self.enemy))
@@ -355,32 +353,32 @@ void() archer_counter =
 };
 
 // This first pain anim is Quake-style flinching.  Not found in Hexen2.
-void() archer_pain1  =[ $pain1,  archer_pain2  ] {};
-void() archer_pain2  =[ $pain2,  archer_pain3  ] {};
-void() archer_pain3  =[ $pain3,  archer_pain4  ] {};
-void() archer_pain4  =[ $pain2,  archer_pain5  ] {};
-void() archer_pain5  =[ $pain1,  archer_run1   ] {};
+void() archer_pain1  = [$pain1,  archer_pain2  ] {};
+void() archer_pain2  = [$pain2,  archer_pain3  ] {};
+void() archer_pain3  = [$pain3,  archer_pain4  ] {};
+void() archer_pain4  = [$pain2,  archer_pain5  ] {};
+void() archer_pain5  = [$pain1,  archer_run1   ] {};
 
 // The rest are redraw pain anims as per Hexen2.
-void() archer_painb1 =[ $pain2,  archer_painb2 ] {};
-void() archer_painb2 =[ $pain4,  archer_painb3 ] {};
-void() archer_painb3 =[ $pain6,  archer_painb4 ] {};
-void() archer_painb4 =[ $pain8,  archer_painb5 ] {};
-void() archer_painb5 =[ $pain10, archer_painb6 ] {monster_footstep(FALSE);};
-void() archer_painb6 =[ $pain12, archer_painb7 ] {ai_face(); archer_draw();};
-void() archer_painb7 =[ $pain14, archer_painb8 ] {ai_face();};
-void() archer_painb8 =[ $pain16, archer_hold   ] {ai_face(); archer_counter();};
+void() archer_painb1 = [$pain2,  archer_painb2 ] {};
+void() archer_painb2 = [$pain4,  archer_painb3 ] {};
+void() archer_painb3 = [$pain6,  archer_painb4 ] {};
+void() archer_painb4 = [$pain8,  archer_painb5 ] {};
+void() archer_painb5 = [$pain10, archer_painb6 ] { monster_footstep(FALSE); };
+void() archer_painb6 = [$pain12, archer_painb7 ] { ai_face(); archer_draw(); };
+void() archer_painb7 = [$pain14, archer_painb8 ] { ai_face(); };
+void() archer_painb8 = [$pain16, archer_hold   ] { ai_face(); archer_counter(); };
 
 // Note:  Do not use redraw functions as a pain anim because the archer can
 // short-curcuit the anim if no enemy is seen, and we don't want to let him.
 // Update:  Use redraw sequence after the second frame.
-void() archer_painc1  =[ $redraw2,  archer_painc2  ] {};
-void() archer_painc2  =[ $redraw4,  archer_redraw3 ] {};
-//void() archer_painc3  =[ $redraw6,  archer_painc4  ] {ai_face();};
-//void() archer_painc4  =[ $redraw8,  archer_painc5  ] {ai_face(); archer_draw();};
-//void() archer_painc5  =[ $redraw10, archer_painc6  ] {ai_face();};
-//void() archer_painc6  =[ $redraw11, archer_painc7  ] {ai_face();};
-//void() archer_painc7  =[ $redraw12, archer_hold    ] {ai_face(); archer_counter();};
+void() archer_painc1  = [$redraw2,  archer_painc2  ] {};
+void() archer_painc2  = [$redraw4,  archer_redraw3 ] {};
+//void() archer_painc3  = [$redraw6,  archer_painc4  ] { ai_face(); };
+//void() archer_painc4  = [$redraw8,  archer_painc5  ] { ai_face(); archer_draw(); };
+//void() archer_painc5  = [$redraw10, archer_painc6  ] { ai_face(); };
+//void() archer_painc6  = [$redraw11, archer_painc7  ] { ai_face(); };
+//void() archer_painc7  = [$redraw12, archer_hold    ] { ai_face(); archer_counter(); };
 
 void(entity inflictor, entity attacker, float damage) archer_pain = {
     // don't make multiple pain sounds right after each other
@@ -415,24 +413,24 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
-void() archer_die1  =[ $deathA2,  archer_die2  ] {
+void() archer_die1  = [$deathA2,  archer_die2  ] {
 	ai_back(3);
 	self.reviveframestart = $deathA22;
 	self.reviveframeend = $deathA2;
 };
-void() archer_die2  =[ $deathA4,  archer_die3  ] {ai_back(2);};
-void() archer_die3  =[ $deathA6,  archer_die4  ] {ai_back(2); self.solid = SOLID_NOT; DropBackpack(); };
-void() archer_die4  =[ $deathA8,  archer_die5  ] {ai_back(4);};
-void() archer_die5  =[ $deathA10, archer_die6  ] {ai_back(1);};
-void() archer_die6  =[ $deathA12, archer_die7  ] {};
-void() archer_die7  =[ $deathA14, archer_die8  ] {};
-void() archer_die8  =[ $deathA16, archer_die9  ] {};
-void() archer_die9  =[ $deathA18, archer_die10 ] {};
-void() archer_die10 =[ $deathA20, archer_die11 ] {
+void() archer_die2  = [$deathA4,  archer_die3  ] { ai_back(2); };
+void() archer_die3  = [$deathA6,  archer_die4  ] { ai_back(2); self.solid = SOLID_NOT; DropBackpack(); };
+void() archer_die4  = [$deathA8,  archer_die5  ] { ai_back(4); };
+void() archer_die5  = [$deathA10, archer_die6  ] { ai_back(1); };
+void() archer_die6  = [$deathA12, archer_die7  ] {};
+void() archer_die7  = [$deathA14, archer_die8  ] {};
+void() archer_die8  = [$deathA16, archer_die9  ] {};
+void() archer_die9  = [$deathA18, archer_die10 ] {};
+void() archer_die10 = [$deathA20, archer_die11 ] {
 // PM:  Archer death sound split into two files.  Play part 2.
     if ((self.flags & FL_ONGROUND) && (self.classtype != CT_MONARCHERLORD)) sound (self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
 };
-void() archer_die11 =[ $deathA22, archer_die11  ] {};
+void() archer_die11 = [$deathA22, archer_die11  ] {};
 
 void() archer_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities

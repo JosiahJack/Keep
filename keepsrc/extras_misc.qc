@@ -150,7 +150,7 @@ void() func_nodraw = { // [ENTITY]
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel (self, self.model);
-	if (!(self.spawnflags & 1)) self.model = string_null;
+	if (!(self.spawnflags & 1)) self.model = "";
 };
 
 

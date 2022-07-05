@@ -985,7 +985,7 @@ float(float minimum, float val, float maximum) bound = #96;
 //builtin definitions:
 //vector() randomvec = #91;
 //description:
-//returns a vector of length < 1, much quicker version of this QC: do {v_x = random()*2-1;v_y = random()*2-1;v_z = random()*2-1;} while(vlen(v) > 1)
+//returns a vector of length < 1, much quicker version of this QC: do { v_x = random()*2-1;v_y = random()*2-1;v_z = random()*2-1;} while(vlen(v) > 1)
 
 //DP_QC_SINCOSSQRTPOW
 //idea: id Software, LordHavoc
@@ -1441,9 +1441,9 @@ float(entity clent) clienttype = #455; // returns one of the CLIENTTYPE_* consta
 //it is a good idea to return FALSE early in the function if possible to reduce cpu usage, because this function may be called many thousands of times per frame if there are many customized entities on a 64+ player server.
 //you are free to change anything in self, but please do not change any other entities (the results may be very inconsistent).
 //example ideas for use of this extension:
-//making icons over teammates' heads which are only visible to teammates.  for exasmple: float() playericon_customizeentityforclient = {return self.owner.team == other.team;};
-//making cloaked players more visible to their teammates than their enemies.  for example: float() player_customizeentityforclient = {if (self.items & IT_CLOAKING) {if (self.team == other.team) self.alpha = 0.6;else self.alpha = 0.1;} return TRUE;};
-//making explosion models that face the viewer (does not work well with chase_active).  for example: float() explosion_customizeentityforclient = {self.angles = vectoangles(other.origin + other.view_ofs - self.origin);self.angles_x = 0 - self.angles_x;};
+//making icons over teammates' heads which are only visible to teammates.  for exasmple: float() playericon_customizeentityforclient = { return self.owner.team == other.team;};
+//making cloaked players more visible to their teammates than their enemies.  for example: float() player_customizeentityforclient = { if (self.items & IT_CLOAKING) { if (self.team == other.team) self.alpha = 0.6;else self.alpha = 0.1;} return TRUE;};
+//making explosion models that face the viewer (does not work well with chase_active).  for example: float() explosion_customizeentityforclient = { self.angles = vectoangles(other.origin + other.view_ofs - self.origin);self.angles_x = 0 - self.angles_x;};
 //implementation notes:
 //entity customization is done before per-client culling (visibility for instance) because the entity may be doing setorigin to display itself in different locations on different clients, may be altering its .modelindex, .effects and other fields important to culling, so customized entities increase cpu usage (non-customized entities can use all the early culling they want however, as they are not changing on a per client basis).
 
@@ -2299,11 +2299,11 @@ void(float pause) setpause = #531;
 //idea: divVerent
 //darkplaces implementation: divVerent
 //field definitions: (SVQC)
-.string crypto_keyfp; // fingerprint of CA key the player used to authenticate, or string_null if not verified
-.string crypto_mykeyfp; // fingerprint of CA key the server used to authenticate to the player, or string_null if not verified
-.string crypto_idfp; // fingerprint of ID used by the player entity, or string_null if not identified
-.string crypto_encryptmethod; // the string "AES128" if encrypting, and string_null if plaintext
-.string crypto_signmethod; // the string "HMAC-SHA256" if signing, and string_null if plaintext
+.string crypto_keyfp; // fingerprint of CA key the player used to authenticate, or "" if not verified
+.string crypto_mykeyfp; // fingerprint of CA key the server used to authenticate to the player, or "" if not verified
+.string crypto_idfp; // fingerprint of ID used by the player entity, or "" if not identified
+.string crypto_encryptmethod; // the string "AES128" if encrypting, and "" if plaintext
+.string crypto_signmethod; // the string "HMAC-SHA256" if signing, and "" if plaintext
 // there is no field crypto_myidfp, as that info contains no additional information the QC may have a use for
 //builtin definitions: (SVQC)
 float(string url, float id, string content_type, string delim, float buf, float keyid) crypto_uri_postbuf = #513;

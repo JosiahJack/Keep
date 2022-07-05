@@ -41,74 +41,37 @@ void() morph_minionspawn;
 void() morph_use;
 void() morph_phased;
 
-entity() morph_find_dest = {
-   local entity furthestDest, bestDest, curDest, thePlayer;
-   local float theDist, curDist, dot;
-   local vector curVector;
+void() morph_stand1 = [$mfstand1, morph_stand1 ] { ai_stand(); };
 
-   furthestDest = world;
-   bestDest = world;
-   theDist = FALSE;
-   thePlayer = find (world,classname,"player");
-   curDest = world;
-   makevectors(thePlayer.angles);
-   while ( TRUE ) {
-      curDest = find (curDest,classname,"info_morph_destination");
-      if ( (curDest == world) ) {
-         if ( (bestDest != world) )
-            return ( bestDest );
+void() morph_walk1  = [$mfwlk01, morph_walk2  ] { ai_walk(3); };
+void() morph_walk2  = [$mfwlk02, morph_walk3  ] { ai_walk(2); };
+void() morph_walk3  = [$mfwlk03, morph_walk4  ] { ai_walk(4); };
+void() morph_walk4  = [$mfwlk04, morph_walk5  ] { ai_walk(5); };
+void() morph_walk5  = [$mfwlk05, morph_walk6  ] { ai_walk(5); };
+void() morph_walk6  = [$mfwlk06, morph_walk7  ] { ai_walk(4); };
 
-         return ( furthestDest );
-      }
-      if ( isSpawnPointEmpty (curDest) ) {
-         curVector = (curDest.origin - thePlayer.origin);
-         curDist = vlen (curVector);
-         curVector = normalize (curVector);
-         dot = (curVector * v_forward);
-         if ( (dot > 0.600) ) {
-            if ( (curDist > 150.000) )
-               bestDest = curDest;
-         }
-         if ( (curDist > theDist) ) {
-            furthestDest = curDest;
-            theDist = curDist;
-         }
-      }
-   }
-   return ( world );
-};
+void() morph_walk7  = [$mfwlk07, morph_walk8  ] { ai_walk(2); };
+void() morph_walk8  = [$mfwlk08, morph_walk9  ] { ai_walk(3); };
+void() morph_walk9  = [$mfwlk09, morph_walk10 ] { ai_walk(4); };
+void() morph_walk10 = [$mfwlk10, morph_walk11 ] { ai_walk(5); };
+void() morph_walk11 = [$mfwlk11, morph_walk12 ] { ai_walk(5); };
+void() morph_walk12 = [$mfwlk12, morph_walk13 ] { ai_walk(4); };
+void() morph_walk13 = [$mfwlk13, morph_walk1  ] { ai_walk(3); };
 
-void() morph_stand1 = [ $mfstand1, morph_stand1 ] { ai_stand(); };
+void() morph_run1 = [$mfrun01, morph_run2 ] { ai_run( 7); };
+void() morph_run2 = [$mfrun02, morph_run3 ] { ai_run(11); };
+void() morph_run3 = [$mfrun03, morph_run4 ] { ai_run(16); };
+void() morph_run4 = [$mfrun04, morph_run5 ] { ai_run(16); };
+void() morph_run5 = [$mfrun05, morph_run6 ] { ai_run(11); };
+void() morph_run6 = [$mfrun06, morph_run7 ] { ai_run( 7); };
 
-void() morph_walk1  = [ $mfwlk01, morph_walk2  ] { ai_walk(3); };
-void() morph_walk2  = [ $mfwlk02, morph_walk3  ] { ai_walk(2); };
-void() morph_walk3  = [ $mfwlk03, morph_walk4  ] { ai_walk(4); };
-void() morph_walk4  = [ $mfwlk04, morph_walk5  ] { ai_walk(5); };
-void() morph_walk5  = [ $mfwlk05, morph_walk6  ] { ai_walk(5); };
-void() morph_walk6  = [ $mfwlk06, morph_walk7  ] { ai_walk(4); };
+void() morph_run7 = [$mfrun07, morph_run8 ] { ai_run(11); };
+void() morph_run8 = [$mfrun08, morph_run9 ] { ai_run(15); };
 
-void() morph_walk7  = [ $mfwlk07, morph_walk8  ] { ai_walk(2); };
-void() morph_walk8  = [ $mfwlk08, morph_walk9  ] { ai_walk(3); };
-void() morph_walk9  = [ $mfwlk09, morph_walk10 ] { ai_walk(4); };
-void() morph_walk10 = [ $mfwlk10, morph_walk11 ] { ai_walk(5); };
-void() morph_walk11 = [ $mfwlk11, morph_walk12 ] { ai_walk(5); };
-void() morph_walk12 = [ $mfwlk12, morph_walk13 ] { ai_walk(4); };
-void() morph_walk13 = [ $mfwlk13, morph_walk1  ] { ai_walk(3); };
+void() morph_run9 = [$mfrun09, morph_run10 ] { ai_run(19); };
+void() morph_run10 = [$mfrun10, morph_run11 ] { ai_run(15); };
 
-void() morph_run1 = [ $mfrun01, morph_run2 ] { ai_run( 7); };
-void() morph_run2 = [ $mfrun02, morph_run3 ] { ai_run(11); };
-void() morph_run3 = [ $mfrun03, morph_run4 ] { ai_run(16); };
-void() morph_run4 = [ $mfrun04, morph_run5 ] { ai_run(16); };
-void() morph_run5 = [ $mfrun05, morph_run6 ] { ai_run(11); };
-void() morph_run6 = [ $mfrun06, morph_run7 ] { ai_run( 7); };
-
-void() morph_run7 = [ $mfrun07, morph_run8 ] { ai_run(11); };
-void() morph_run8 = [ $mfrun08, morph_run9 ] { ai_run(15); };
-
-void() morph_run9 = [ $mfrun09, morph_run10 ] { ai_run(19); };
-void() morph_run10 =[ $mfrun10, morph_run11 ] { ai_run(15); };
-
-void() morph_run11 =[ $mfrun11, morph_run1 ] { ai_run(11); };
+void() morph_run11 = [$mfrun11, morph_run1 ] { ai_run(11); };
 
 void() morph_stab2 = {
 	local float dist, attackDamage;
@@ -141,36 +104,36 @@ void() morph_stab2 = {
 	}
 };
 
-void() morph_attack01 = [ $mfatb01, morph_attack02 ] {ai_face();};
-void() morph_attack02 = [ $mfatb02, morph_attack03 ] {ai_face();};
-void() morph_attack03 = [ $mfatb03, morph_attack04 ] {ai_face();};
-void() morph_attack04 = [ $mfatb04, morph_attack05 ] {ai_face();};
-void() morph_attack05 = [ $mfatb05, morph_attack06 ] {ai_face();};
-void() morph_attack06 = [ $mfatb06, morph_attack07 ] {ai_face();};
-void() morph_attack07 = [ $mfatb07, morph_attack08 ] {morph_stab2();};
-void() morph_attack08 = [ $mfatb08, morph_attack09 ] {ai_face();};
-void() morph_attack09 = [ $mfatb09, morph_attack10 ] {ai_face();};
-void() morph_attack10 = [ $mfatb10, morph_attack11 ] {ai_face();};
-void() morph_attack11 = [ $mfatb11, morph_attack12 ] {ai_face();};
-void() morph_attack12 = [ $mfatb01, morph_run1     ] {ai_face();};
+void() morph_attack01 = [$mfatb01, morph_attack02 ] { ai_face(); };
+void() morph_attack02 = [$mfatb02, morph_attack03 ] { ai_face(); };
+void() morph_attack03 = [$mfatb03, morph_attack04 ] { ai_face(); };
+void() morph_attack04 = [$mfatb04, morph_attack05 ] { ai_face(); };
+void() morph_attack05 = [$mfatb05, morph_attack06 ] { ai_face(); };
+void() morph_attack06 = [$mfatb06, morph_attack07 ] { ai_face(); };
+void() morph_attack07 = [$mfatb07, morph_attack08 ] { morph_stab2(); };
+void() morph_attack08 = [$mfatb08, morph_attack09 ] { ai_face(); };
+void() morph_attack09 = [$mfatb09, morph_attack10 ] { ai_face(); };
+void() morph_attack10 = [$mfatb10, morph_attack11 ] { ai_face(); };
+void() morph_attack11 = [$mfatb11, morph_attack12 ] { ai_face(); };
+void() morph_attack12 = [$mfatb01, morph_run1     ] { ai_face(); };
 
-void() morph_bigattack01 = [ $mfatc01, morph_bigattack02 ] { ai_face(); };
-void() morph_bigattack02 = [ $mfatc02, morph_bigattack03 ] { ai_face(); };
-void() morph_bigattack03 = [ $mfatc03, morph_bigattack04 ] { ai_face(); };
-void() morph_bigattack04 = [ $mfatc04, morph_bigattack05 ] { ai_face(); };
-void() morph_bigattack05 = [ $mfatc05, morph_bigattack06 ] { ai_face(); };
-void() morph_bigattack06 = [ $mfatc06, morph_bigattack07 ] { ai_face(); };
-void() morph_bigattack07 = [ $mfatc07, morph_bigattack08 ] { ai_face(); };
-void() morph_bigattack08 = [ $mfatc08, morph_bigattack09 ] { ai_face(); };
-void() morph_bigattack09 = [ $mfatc09, morph_bigattack10 ] { ai_face(); };
-void() morph_bigattack10 = [ $mfatc10, morph_bigattack11 ] { morph_stab2(); };
-void() morph_bigattack11 = [ $mfatc11, morph_bigattack12 ] { ai_face(); };
-void() morph_bigattack12 = [ $mfatc12, morph_bigattack13 ] { ai_face(); };
-void() morph_bigattack13 = [ $mfatc13, morph_bigattack14 ] { ai_face(); };
-void() morph_bigattack14 = [ $mfatc14, morph_bigattack15 ] { ai_face(); };
-void() morph_bigattack15 = [ $mfatc15, morph_bigattack16 ] { ai_face(); };
-void() morph_bigattack16 = [ $mfatc16, morph_bigattack17 ] { ai_face(); };
-void() morph_bigattack17 = [ $mfatc01, morph_run1        ] { ai_face(); };
+void() morph_bigattack01 = [$mfatc01, morph_bigattack02 ] { ai_face(); };
+void() morph_bigattack02 = [$mfatc02, morph_bigattack03 ] { ai_face(); };
+void() morph_bigattack03 = [$mfatc03, morph_bigattack04 ] { ai_face(); };
+void() morph_bigattack04 = [$mfatc04, morph_bigattack05 ] { ai_face(); };
+void() morph_bigattack05 = [$mfatc05, morph_bigattack06 ] { ai_face(); };
+void() morph_bigattack06 = [$mfatc06, morph_bigattack07 ] { ai_face(); };
+void() morph_bigattack07 = [$mfatc07, morph_bigattack08 ] { ai_face(); };
+void() morph_bigattack08 = [$mfatc08, morph_bigattack09 ] { ai_face(); };
+void() morph_bigattack09 = [$mfatc09, morph_bigattack10 ] { ai_face(); };
+void() morph_bigattack10 = [$mfatc10, morph_bigattack11 ] { morph_stab2(); };
+void() morph_bigattack11 = [$mfatc11, morph_bigattack12 ] { ai_face(); };
+void() morph_bigattack12 = [$mfatc12, morph_bigattack13 ] { ai_face(); };
+void() morph_bigattack13 = [$mfatc13, morph_bigattack14 ] { ai_face(); };
+void() morph_bigattack14 = [$mfatc14, morph_bigattack15 ] { ai_face(); };
+void() morph_bigattack15 = [$mfatc15, morph_bigattack16 ] { ai_face(); };
+void() morph_bigattack16 = [$mfatc16, morph_bigattack17 ] { ai_face(); };
+void() morph_bigattack17 = [$mfatc01, morph_run1        ] { ai_face(); };
 
 void() morph_smack = {
 	local vector delta;
@@ -189,18 +152,18 @@ void() morph_smack = {
 	self.enemy.velocity = v_forward * 100 + '0 0 100';
 };
 
-void() morph_knockback01 = [ $mfknck01, morph_knockback02 ] { ai_face(); };
-void() morph_knockback02 = [ $mfknck02, morph_knockback03 ] { ai_face(); };
-void() morph_knockback03 = [ $mfknck03, morph_knockback04 ] { ai_face(); };
-void() morph_knockback04 = [ $mfknck04, morph_knockback05 ] { ai_face(); };
-void() morph_knockback05 = [ $mfknck05, morph_knockback06 ] { ai_face(); };
-void() morph_knockback06 = [ $mfknck06, morph_knockback07 ] { ai_face(); };
-void() morph_knockback07 = [ $mfknck07, morph_knockback08 ] { ai_face(); };
-void() morph_knockback08 = [ $mfknck08, morph_knockback09 ] { ai_face(); };
-void() morph_knockback09 = [ $mfknck09, morph_knockback10 ] { morph_smack(); };
-void() morph_knockback10 = [ $mfknck10, morph_knockback11 ] { ai_face(); };
-void() morph_knockback11 = [ $mfknck11, morph_knockback12 ] { ai_face(); };
-void() morph_knockback12 = [ $mfknck12, morph_run1        ] { ai_face(); };
+void() morph_knockback01 = [$mfknck01, morph_knockback02 ] { ai_face(); };
+void() morph_knockback02 = [$mfknck02, morph_knockback03 ] { ai_face(); };
+void() morph_knockback03 = [$mfknck03, morph_knockback04 ] { ai_face(); };
+void() morph_knockback04 = [$mfknck04, morph_knockback05 ] { ai_face(); };
+void() morph_knockback05 = [$mfknck05, morph_knockback06 ] { ai_face(); };
+void() morph_knockback06 = [$mfknck06, morph_knockback07 ] { ai_face(); };
+void() morph_knockback07 = [$mfknck07, morph_knockback08 ] { ai_face(); };
+void() morph_knockback08 = [$mfknck08, morph_knockback09 ] { ai_face(); };
+void() morph_knockback09 = [$mfknck09, morph_knockback10 ] { morph_smack(); };
+void() morph_knockback10 = [$mfknck10, morph_knockback11 ] { ai_face(); };
+void() morph_knockback11 = [$mfknck11, morph_knockback12 ] { ai_face(); };
+void() morph_knockback12 = [$mfknck12, morph_run1        ] { ai_face(); };
 
 void() morph_attack = {
 	local float attackChoice;
@@ -230,35 +193,35 @@ void() morph_fire = {
 
 };
 
-void() morph_fire1 = [ $mfata01, morph_fire2 ] {ai_face();};
-void() morph_fire2 = [ $mfata02, morph_fire3 ] {ai_face();};
-void() morph_fire3 = [ $mfata03, morph_fire4 ] {ai_face();};
-void() morph_fire4 = [ $mfata04, morph_fire5 ] {morph_fire();};
-void() morph_fire5 = [ $mfata05, morph_fire6 ] {ai_face();};
-void() morph_fire6 = [ $mfata06, morph_fire7 ] {ai_face();};
-void() morph_fire7 = [ $mfata07, morph_fire8 ] {ai_face();};
-void() morph_fire8 = [ $mfata08, morph_fire9] {ai_face();};
-void() morph_fire9 = [ $mfata09, morph_run1 ] {ai_face();};
+void() morph_fire1 = [$mfata01, morph_fire2 ] { ai_face(); };
+void() morph_fire2 = [$mfata02, morph_fire3 ] { ai_face(); };
+void() morph_fire3 = [$mfata03, morph_fire4 ] { ai_face(); };
+void() morph_fire4 = [$mfata04, morph_fire5 ] { morph_fire(); };
+void() morph_fire5 = [$mfata05, morph_fire6 ] { ai_face(); };
+void() morph_fire6 = [$mfata06, morph_fire7 ] { ai_face(); };
+void() morph_fire7 = [$mfata07, morph_fire8 ] { ai_face(); };
+void() morph_fire8 = [$mfata08, morph_fire9] { ai_face(); };
+void() morph_fire9 = [$mfata09, morph_run1 ] { ai_face(); };
 
-void() morph_painA1 = [ $mfpain01, morph_painA2 ] {};
-void() morph_painA2 = [ $mfpain02, morph_painA3 ] {};
-void() morph_painA3 = [ $mfpain03, morph_painA4 ] {};
-void() morph_painA4 = [ $mfpain04, morph_painA5 ] {};
-void() morph_painA5 = [ $mfpain05, morph_painA6 ] {};
-void() morph_painA6 = [ $mfpain06, morph_painA7 ] {};
-void() morph_painA7 = [ $mfpain07, morph_painA8 ] {};
-void() morph_painA8 = [ $mfpain08, morph_painA9 ] {};
-void() morph_painA9 = [ $mfpain09, morph_painA10 ] {};
-void() morph_painA10 = [ $mfpain10, morph_run1 ] { morph_minionspawn(); };
+void() morph_painA1 = [$mfpain01, morph_painA2 ] {};
+void() morph_painA2 = [$mfpain02, morph_painA3 ] {};
+void() morph_painA3 = [$mfpain03, morph_painA4 ] {};
+void() morph_painA4 = [$mfpain04, morph_painA5 ] {};
+void() morph_painA5 = [$mfpain05, morph_painA6 ] {};
+void() morph_painA6 = [$mfpain06, morph_painA7 ] {};
+void() morph_painA7 = [$mfpain07, morph_painA8 ] {};
+void() morph_painA8 = [$mfpain08, morph_painA9 ] {};
+void() morph_painA9 = [$mfpain09, morph_painA10 ] {};
+void() morph_painA10 = [$mfpain10, morph_run1 ] { morph_minionspawn(); };
 
 
-void() morph_painB1 = [ $mfpbin01, morph_painB2 ] {};
-void() morph_painB2 = [ $mfpbin02, morph_painB3 ] {};
-void() morph_painB3 = [ $mfpbin03, morph_painB4 ] {};
-void() morph_painB4 = [ $mfpbin04, morph_painB5 ] {};
-void() morph_painB5 = [ $mfpbin05, morph_painB6 ] {};
-void() morph_painB6 = [ $mfpbin06, morph_painB7 ] {};
-void() morph_painB7 = [ $mfpbin07, morph_run1 ] { morph_minionspawn(); };
+void() morph_painB1 = [$mfpbin01, morph_painB2 ] {};
+void() morph_painB2 = [$mfpbin02, morph_painB3 ] {};
+void() morph_painB3 = [$mfpbin03, morph_painB4 ] {};
+void() morph_painB4 = [$mfpbin04, morph_painB5 ] {};
+void() morph_painB5 = [$mfpbin05, morph_painB6 ] {};
+void() morph_painB6 = [$mfpbin06, morph_painB7 ] {};
+void() morph_painB7 = [$mfpbin07, morph_run1 ] { morph_minionspawn(); };
 
 void(entity inflictor, entity attacker, float damage) morph_pain = {
 	local float painChoice;
@@ -277,27 +240,27 @@ void(entity inflictor, entity attacker, float damage) morph_pain = {
 
 };
 
-void() morph_die1 = [ $mfdth01, morph_die2 ] {};
-void() morph_die2 = [ $mfdth02, morph_die3 ] {};
-void() morph_die3 = [ $mfdth03, morph_die4 ] {};
-void() morph_die4 = [ $mfdth04, morph_die5 ] {};
-void() morph_die5 = [ $mfdth05, morph_die6 ] {};
-void() morph_die6 = [ $mfdth06, morph_die7 ] {};
-void() morph_die7 = [ $mfdth07, morph_die8 ] {};
-void() morph_die8 = [ $mfdth08, morph_die9 ] {};
-void() morph_die9 = [ $mfdth09, morph_die10 ] { self.skin = self.skin + 1; };
-void() morph_die10 = [ $mfdth10, morph_die11 ] {};
-void() morph_die11 = [ $mfdth11, morph_die12 ] {};
-void() morph_die12 = [ $mfdth12, morph_die13 ] {};
-void() morph_die13 = [ $mfdth13, morph_die14 ] {};
-void() morph_die14 = [ $mfdth14, morph_die15 ] {};
-void() morph_die15 = [ $mfdth15, morph_die16 ] {};
-void() morph_die16 = [ $mfdth16, morph_die17 ] {};
-void() morph_die17 = [ $mfdth17, morph_die18 ] {};
-void() morph_die18 = [ $mfdth18, morph_die19 ] {};
-void() morph_die19 = [ $mfdth19, morph_die20 ] {};
-void() morph_die20 = [ $mfdth20, morph_die21 ] {};
-void() morph_die21 = [ $mfdth21, morph_die21 ] { remove(self); };
+void() morph_die1 = [$mfdth01, morph_die2 ] {};
+void() morph_die2 = [$mfdth02, morph_die3 ] {};
+void() morph_die3 = [$mfdth03, morph_die4 ] {};
+void() morph_die4 = [$mfdth04, morph_die5 ] {};
+void() morph_die5 = [$mfdth05, morph_die6 ] {};
+void() morph_die6 = [$mfdth06, morph_die7 ] {};
+void() morph_die7 = [$mfdth07, morph_die8 ] {};
+void() morph_die8 = [$mfdth08, morph_die9 ] {};
+void() morph_die9 = [$mfdth09, morph_die10 ] { self.skin = self.skin + 1; };
+void() morph_die10 = [$mfdth10, morph_die11 ] {};
+void() morph_die11 = [$mfdth11, morph_die12 ] {};
+void() morph_die12 = [$mfdth12, morph_die13 ] {};
+void() morph_die13 = [$mfdth13, morph_die14 ] {};
+void() morph_die14 = [$mfdth14, morph_die15 ] {};
+void() morph_die15 = [$mfdth15, morph_die16 ] {};
+void() morph_die16 = [$mfdth16, morph_die17 ] {};
+void() morph_die17 = [$mfdth17, morph_die18 ] {};
+void() morph_die18 = [$mfdth18, morph_die19 ] {};
+void() morph_die19 = [$mfdth19, morph_die20 ] {};
+void() morph_die20 = [$mfdth20, morph_die21 ] {};
+void() morph_die21 = [$mfdth21, morph_die21 ] { remove(self); };
 
 void() morph_die = {
 	sound(self,CHAN_VOICE,"rogue/guard/death.wav",1,ATTN_NORM);
@@ -306,38 +269,38 @@ void() morph_die = {
 	self.nextthink = time + 0.1;
 };
 
-void() morph_wake1 = [ $start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM ); };
-void() morph_wake2 = [ $start02, morph_wake3 ] {};
-void() morph_wake3 = [ $start03, morph_wake4 ] {};
-void() morph_wake4 = [ $start04, morph_wake5 ] {};
-void() morph_wake5 = [ $start05, morph_wake6 ] {};
-void() morph_wake6 = [ $start06, morph_wake7 ] {};
-void() morph_wake7 = [ $start07, morph_wake8 ] {};
-void() morph_wake8 = [ $start08, morph_wake9 ] {};
-void() morph_wake9 = [ $start09, morph_wake10 ] {};
-void() morph_wake10 = [ $start10, morph_wake11 ] {};
-void() morph_wake11 = [ $start11, morph_wake12 ] {};
-void() morph_wake12 = [ $start12, morph_wake13 ] {};
-void() morph_wake13 = [ $start13, morph_wake14 ] {};
-void() morph_wake14 = [ $start14, morph_wake15 ] {};
-void() morph_wake15 = [ $start15, morph_wake16 ] { self.skin = 1; };
-void() morph_wake16 = [ $start16, morph_wake17 ] {};
-void() morph_wake17 = [ $start17, morph_wake18 ] {};
-void() morph_wake18 = [ $start18, morph_wake20 ] {};
-//void() morph_wake18 = [ $start18, morph_wake19 ] {};
-//void() morph_wake19 = [ $start19, morph_wake20 ] {};
-void() morph_wake20 = [ $start20, morph_wake21 ] {};
-void() morph_wake21 = [ $start21, morph_wake22 ] {};
-void() morph_wake22 = [ $start22, morph_wake23 ] {};
-void() morph_wake23 = [ $start23, morph_wake24 ] {};
-void() morph_wake24 = [ $start24, morph_wake25 ] {};
-void() morph_wake25 = [ $start25, morph_wake26 ] {};
-void() morph_wake26 = [ $start26, morph_wake27 ] {};
-void() morph_wake27 = [ $start27, morph_wake28 ] {};
-void() morph_wake28 = [ $start28, morph_wake29 ] {};
-void() morph_wake29 = [ $start29, morph_wake30 ] {};
-void() morph_wake30 = [ $start30, morph_wake31 ] {};
-void() morph_wake31 = [ $start31, morph_stand1 ] {
+void() morph_wake1 = [$start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM ); };
+void() morph_wake2 = [$start02, morph_wake3 ] {};
+void() morph_wake3 = [$start03, morph_wake4 ] {};
+void() morph_wake4 = [$start04, morph_wake5 ] {};
+void() morph_wake5 = [$start05, morph_wake6 ] {};
+void() morph_wake6 = [$start06, morph_wake7 ] {};
+void() morph_wake7 = [$start07, morph_wake8 ] {};
+void() morph_wake8 = [$start08, morph_wake9 ] {};
+void() morph_wake9 = [$start09, morph_wake10 ] {};
+void() morph_wake10 = [$start10, morph_wake11 ] {};
+void() morph_wake11 = [$start11, morph_wake12 ] {};
+void() morph_wake12 = [$start12, morph_wake13 ] {};
+void() morph_wake13 = [$start13, morph_wake14 ] {};
+void() morph_wake14 = [$start14, morph_wake15 ] {};
+void() morph_wake15 = [$start15, morph_wake16 ] { self.skin = 1; };
+void() morph_wake16 = [$start16, morph_wake17 ] {};
+void() morph_wake17 = [$start17, morph_wake18 ] {};
+void() morph_wake18 = [$start18, morph_wake20 ] {};
+//void() morph_wake18 = [$start18, morph_wake19 ] {};
+//void() morph_wake19 = [$start19, morph_wake20 ] {};
+void() morph_wake20 = [$start20, morph_wake21 ] {};
+void() morph_wake21 = [$start21, morph_wake22 ] {};
+void() morph_wake22 = [$start22, morph_wake23 ] {};
+void() morph_wake23 = [$start23, morph_wake24 ] {};
+void() morph_wake24 = [$start24, morph_wake25 ] {};
+void() morph_wake25 = [$start25, morph_wake26 ] {};
+void() morph_wake26 = [$start26, morph_wake27 ] {};
+void() morph_wake27 = [$start27, morph_wake28 ] {};
+void() morph_wake28 = [$start28, morph_wake29 ] {};
+void() morph_wake29 = [$start29, morph_wake30 ] {};
+void() morph_wake30 = [$start30, morph_wake31 ] {};
+void() morph_wake31 = [$start31, morph_stand1 ] {
 	self.solid = SOLID_SLIDEBOX;
 	self.takedamage = DAMAGE_AIM;
 	self.skin = self.skin - 1;
@@ -443,7 +406,7 @@ void() morph_minionspawn = {
 	if (self.owner) return;
 	if (self.childrenSpawned > self.minion_maxcount) return;
 
-	theDest = morph_find_dest();
+	theDest = SUB_FindTeleportDestinationEntity();
 	if (theDest == world) return;
 
 	theChild = spawn();
@@ -481,7 +444,7 @@ void() monster_morph_precache = {
 void() monster_morph = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_morph";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

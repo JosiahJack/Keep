@@ -106,7 +106,7 @@ void() eidolon_idle = {
 	ai_stand();
 };
 
-void() eidolon_stand1 = [ $stand1, eidolon_idle ] {self.walkframe = 0;};
+void() eidolon_stand1 = [$stand1, eidolon_idle ] { self.walkframe = 0;};
 
 // There is only one set of animations for walk and run and
 // the only different is the final AI state (walk/run) 
@@ -155,12 +155,12 @@ void(float fstate) eidolon_move = {
 };
 
 //----------------------------------------------------------------------
-void() eidolon_walk1 = [ $walk1, eidolon_walk1 ] {eidolon_move(EIDOLON_WALK);};
-void() eidolon_run1 = [ $walk1, eidolon_run1 ] {eidolon_move(EIDOLON_RUN);};
+void() eidolon_walk1 = [$walk1, eidolon_walk1 ] { eidolon_move(EIDOLON_WALK); };
+void() eidolon_run1 = [$walk1, eidolon_run1 ] { eidolon_move(EIDOLON_RUN); };
 
-//============================================================================
+
 // Attachment management (create, finish and delete)
-//============================================================================
+
 void() eidolon_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
@@ -262,7 +262,7 @@ void() eidolon_attackA2 = {
 	else if (self.frame == $spell13) Fire_attackA('73 18 112');
 };
 
-void() eidolon_attackA1 = [ $spell1, eidolon_attackA2 ] {ai_face();
+void() eidolon_attackA1 = [$spell1, eidolon_attackA2 ] { ai_face();
 	self.pain_finished = time + 1.5;
 	self.walkframe = 0;
 };
@@ -311,7 +311,7 @@ void() eidolon_attackC2 = {
 		Fire_attackC('56 0 44');
 };
 
-void() eidolon_attackC1 = [ $breath1, eidolon_attackC2 ] {ai_face();
+void() eidolon_attackC1 = [$breath1, eidolon_attackC2 ] { ai_face();
 	self.pain_finished = time + 2;
 	self.walkframe = 0;
 };
@@ -396,7 +396,7 @@ void() eidolon_attackE_firing = {
 	else if (self.frame == $power13) Setup_attackE('80 16 104',7);
 }
 
-void() eidolon_attackE2 = [ $power1, eidolon_attackE_firing ] { self.walkframe = 0; };
+void() eidolon_attackE2 = [$power1, eidolon_attackE_firing ] { self.walkframe = 0; };
 
 void() eidolon_attackE_turning = {
 	self.nextthink = time + 0.05;
@@ -422,7 +422,7 @@ void() eidolon_attackE_turning = {
 	else walkmove (self.ideal_yaw - 180, 3);
 };
 
-void() eidolon_attackE1 = [ $walk1, eidolon_attackE_turning ] {
+void() eidolon_attackE1 = [$walk1, eidolon_attackE_turning ] {
 	Resist_ChangeType(self, TRUE);
 	self.takedamage = DAMAGE_NO;
 	self.goalentity = self.attachment2;
@@ -466,8 +466,8 @@ void() eidolon_painB2 = {
 };
 
 //----------------------------------------------------------------------
-void() eidolon_painA1 = [ $painA1, eidolon_painA2 ] {self.walkframe = 0;};
-void() eidolon_painB1 = [ $painB1, eidolon_painB2 ] {self.walkframe = 0;};
+void() eidolon_painA1 = [$painA1, eidolon_painA2 ] { self.walkframe = 0;};
+void() eidolon_painB1 = [$painB1, eidolon_painB2 ] { self.walkframe = 0;};
 
 //----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) eidolon_pain = {
@@ -568,7 +568,7 @@ void() eidolon_die2 = {
 	}
 };
 
-void() eidolon_die1 = [ $crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0; };
+void() eidolon_die1 = [$crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0; };
 
 void() eidolon_die = {
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
@@ -598,7 +598,7 @@ void() eidolon_free2 = {
 	self.frame = $howl1 + self.walkframe;
 };
 
-void() eidolon_free1 = [ $howl1, eidolon_free2 ] {
+void() eidolon_free1 = [$howl1, eidolon_free2 ] {
 	self.takedamage = DAMAGE_YES;		// Enable resistance effects
 	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	self.walkframe = 0;
@@ -676,7 +676,7 @@ void() eidolon_start = {
 	// Wait for trigger event to be free from cage
 	self.think = self.th_stand;
 	self.nextthink = time + 0.1;
-	if (self.targetname != string_null) {
+	if (self.targetname != "") {
 		self.use = eidolon_wakeup;
 	} else {
 		self.use = SUB_Null; // Suppress further trigger events, if we were targetted
@@ -767,7 +767,7 @@ void() monster_eidolon = {
 	}
 };
 
-//======================================================================
+
 /*QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
 Target for boss lightning wave event
 -------- KEYS --------

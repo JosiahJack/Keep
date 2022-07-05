@@ -55,48 +55,48 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8 // (094 - 107) DE
 $frame death9 death10 death11 death12 death13 death14
 $frame base1 base2 // (108 - 109) Misc modelling stuff
 
-void() elf_stand1 = [ $stand1, elf_stand2 ] {monster_idle_sound();ai_stand();};
-void() elf_stand2 = [ $stand2, elf_stand3 ] {ai_stand();};
-void() elf_stand3 = [ $stand3, elf_stand4 ] {ai_stand();};
-void() elf_stand4 = [ $stand4, elf_stand5 ] {ai_stand();};
-void() elf_stand5 = [ $stand5, elf_stand6 ] {ai_stand();};
-void() elf_stand6 = [ $stand6, elf_stand7 ] {ai_stand();};
-void() elf_stand7 = [ $stand7, elf_stand8 ] {ai_stand();};
-void() elf_stand8 = [ $stand8, elf_stand1 ] {ai_stand();};
+void() elf_stand1 = [$stand1, elf_stand2 ] { monster_idle_sound();ai_stand(); };
+void() elf_stand2 = [$stand2, elf_stand3 ] { ai_stand(); };
+void() elf_stand3 = [$stand3, elf_stand4 ] { ai_stand(); };
+void() elf_stand4 = [$stand4, elf_stand5 ] { ai_stand(); };
+void() elf_stand5 = [$stand5, elf_stand6 ] { ai_stand(); };
+void() elf_stand6 = [$stand6, elf_stand7 ] { ai_stand(); };
+void() elf_stand7 = [$stand7, elf_stand8 ] { ai_stand(); };
+void() elf_stand8 = [$stand8, elf_stand1 ] { ai_stand(); };
 
-void() elf_walk1 = [ $walk1, elf_walk2 ] {monster_idle_sound();ai_walk(10);};
-void() elf_walk2 = [ $walk2, elf_walk3 ] {ai_walk(6);};
-void() elf_walk3 = [ $walk3, elf_walk4 ] {monster_footstep(FALSE);ai_walk(4);};
-void() elf_walk4 = [ $walk4, elf_walk5 ] {ai_walk(0);};
-void() elf_walk5 = [ $walk5, elf_walk6 ] {ai_walk(2);};
-void() elf_walk6 = [ $walk6, elf_walk7 ] {ai_walk(3);};
+void() elf_walk1 = [$walk1, elf_walk2 ] { monster_idle_sound();ai_walk(10); };
+void() elf_walk2 = [$walk2, elf_walk3 ] { ai_walk(6); };
+void() elf_walk3 = [$walk3, elf_walk4 ] { monster_footstep(FALSE);ai_walk(4); };
+void() elf_walk4 = [$walk4, elf_walk5 ] { ai_walk(0); };
+void() elf_walk5 = [$walk5, elf_walk6 ] { ai_walk(2); };
+void() elf_walk6 = [$walk6, elf_walk7 ] { ai_walk(3); };
 
-void() elf_walk7 = [ $walk7, elf_walk8 ] {ai_walk(10);};
-void() elf_walk8 = [ $walk8, elf_walk9 ] {ai_walk(6);};
-void() elf_walk9 = [ $walk9, elf_walk10 ] {monster_footstep(FALSE);ai_walk(4);};
-void() elf_walk10 = [ $walk10, elf_walk11 ] {ai_walk(0);};
-void() elf_walk11 = [ $walk11, elf_walk12 ] {ai_walk(2);};
-void() elf_walk12 = [ $walk12, elf_walk1 ] {ai_walk(3);};
+void() elf_walk7 = [$walk7, elf_walk8 ] { ai_walk(10); };
+void() elf_walk8 = [$walk8, elf_walk9 ] { ai_walk(6); };
+void() elf_walk9 = [$walk9, elf_walk10 ] { monster_footstep(FALSE);ai_walk(4); };
+void() elf_walk10 = [$walk10, elf_walk11 ] { ai_walk(0); };
+void() elf_walk11 = [$walk11, elf_walk12 ] { ai_walk(2); };
+void() elf_walk12 = [$walk12, elf_walk1 ] { ai_walk(3); };
 
-void() elf_run1 = [ $skip1, elf_run2 ] {monster_idle_sound();ai_run(1);};
-void() elf_run2 = [ $skip2, elf_run3 ] {ai_run(6);};
-void() elf_run3 = [ $skip3, elf_run4 ] {ai_run(20);};
-void() elf_run4 = [ $skip4, elf_run5 ] {monster_footstep(FALSE);ai_run(12);};
-void() elf_run5 = [ $skip5, elf_run6 ] {ai_run(8);};
+void() elf_run1 = [$skip1, elf_run2 ] { monster_idle_sound();ai_run(1); };
+void() elf_run2 = [$skip2, elf_run3 ] { ai_run(6); };
+void() elf_run3 = [$skip3, elf_run4 ] { ai_run(20); };
+void() elf_run4 = [$skip4, elf_run5 ] { monster_footstep(FALSE);ai_run(12); };
+void() elf_run5 = [$skip5, elf_run6 ] { ai_run(8); };
 
-void() elf_run6 = [ $skip6, elf_run7 ] {ai_run(1);};
-void() elf_run7 = [ $skip7, elf_run8 ] {ai_run(6);};
-void() elf_run8 = [ $skip8, elf_run9 ] {ai_run(20);};
-void() elf_run9 = [ $skip9, elf_run10 ] {monster_footstep(FALSE);ai_run(12);};
-void() elf_run10 = [ $skip10, elf_run1 ] {ai_run(8);};
+void() elf_run6 = [$skip6, elf_run7 ] { ai_run(1); };
+void() elf_run7 = [$skip7, elf_run8 ] { ai_run(6); };
+void() elf_run8 = [$skip8, elf_run9 ] { ai_run(20); };
+void() elf_run9 = [$skip9, elf_run10 ] { monster_footstep(FALSE);ai_run(12); };
+void() elf_run10 = [$skip10, elf_run1 ] { ai_run(8); };
 
-void() elf_slide1 = [ $surprise1, elf_slide2 ] {ai_run_slide(2);monster_idle_sound();};
-void() elf_slide2 = [ $surprise2, elf_slide3 ] {ai_run_slide(4);};
-void() elf_slide3 = [ $surprise3, elf_slide4 ] {ai_run_slide(6);};
-void() elf_slide4 = [ $surprise4, elf_slide5 ] {ai_run_slide(6);};
-void() elf_slide5 = [ $surprise5, elf_slide6 ] {ai_run_slide(4);};
-void() elf_slide6 = [ $surprise6, elf_slide7 ] {ai_run_slide(3);};
-void() elf_slide7 = [ $surprise7, elf_run1 ] {ai_run(2);};
+void() elf_slide1 = [$surprise1, elf_slide2 ] { ai_run_slide(2);monster_idle_sound(); };
+void() elf_slide2 = [$surprise2, elf_slide3 ] { ai_run_slide(4); };
+void() elf_slide3 = [$surprise3, elf_slide4 ] { ai_run_slide(6); };
+void() elf_slide4 = [$surprise4, elf_slide5 ] { ai_run_slide(6); };
+void() elf_slide5 = [$surprise5, elf_slide6 ] { ai_run_slide(4); };
+void() elf_slide6 = [$surprise6, elf_slide7 ] { ai_run_slide(3); };
+void() elf_slide7 = [$surprise7, elf_run1 ] { ai_run(2); };
 
 // ELF 2 - SPRAY MAGIC (Range)
 void(float sideang) elf_shot = {
@@ -121,21 +121,21 @@ void(float sideang) elf_shot = {
 	launch_projectile(org, dir, avel, CT_PROJ_ELF,1);
 };
 
-void() elf_magic1 = [ $magic12, elf_magic2 ] {sound(self, CHAN_WEAPON, "xmas/elf/magic.wav", 1, ATTN_NORM);};
-void() elf_magic2 = [ $magic11, elf_magic3 ] {ai_face();};
-void() elf_magic3 = [ $magic10, elf_magic4 ] {ai_face();};
-void() elf_magic4 = [ $magic9, elf_magic5 ] {ai_face();};
-void() elf_magic5 = [ $magic8, elf_magic6 ] {ai_face();
+void() elf_magic1 = [$magic12, elf_magic2 ] { sound(self, CHAN_WEAPON, "xmas/elf/magic.wav", 1, ATTN_NORM); };
+void() elf_magic2 = [$magic11, elf_magic3 ] { ai_face(); };
+void() elf_magic3 = [$magic10, elf_magic4 ] { ai_face(); };
+void() elf_magic4 = [$magic9, elf_magic5 ] { ai_face(); };
+void() elf_magic5 = [$magic8, elf_magic6 ] { ai_face();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ELF); };
-void() elf_magic6 = [ $magic7, elf_magic7 ] {ai_face();
+void() elf_magic6 = [$magic7, elf_magic7 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_ELF); };
-void() elf_magic7 = [ $magic6, elf_magic8 ] {ai_face();
+void() elf_magic7 = [$magic6, elf_magic8 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_ELF); };
-void() elf_magic8 = [ $magic5, elf_magic9 ] {elf_shot(-0.1);};
-void() elf_magic9 = [ $magic4, elf_magic10 ] {elf_shot(0);};
-void() elf_magic10 = [ $magic3, elf_magic11 ] {elf_shot(0.1);};
-void() elf_magic11 = [ $magic2, elf_magic12 ] {};
-void() elf_magic12 = [ $magic1, elf_run1 ] {};
+void() elf_magic8 = [$magic5, elf_magic9 ] { elf_shot(-0.1); };
+void() elf_magic9 = [$magic4, elf_magic10 ] { elf_shot(0); };
+void() elf_magic10 = [$magic3, elf_magic11 ] { elf_shot(0.1); };
+void() elf_magic11 = [$magic2, elf_magic12 ] {};
+void() elf_magic12 = [$magic1, elf_run1 ] {};
 
 // ELF 1 - SWING CANE - Both elf types can swing cane if within range
 void() elf_melee = {
@@ -163,14 +163,14 @@ void() elf_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*3);
 }
 
-void() elf_cane1 = [ $attack1, elf_cane2 ] {ai_charge(5);
+void() elf_cane1 = [$attack1, elf_cane2 ] { ai_charge(5);
 	if (random() < 0.5) sound(self, CHAN_WEAPON, "xmas/elf/cane_swipe1.wav", 1, ATTN_NORM);
 	else sound(self, CHAN_WEAPON, "xmas/elf/cane_swipe2.wav", 1, ATTN_NORM);	
 };
-void() elf_cane2 = [ $attack2, elf_cane3 ] {ai_charge(5);};
-void() elf_cane3 = [ $attack3, elf_cane4 ] {elf_melee();};
-void() elf_cane4 = [ $attack4, elf_cane5 ] {};
-void() elf_cane5 = [ $attack5, elf_run1 ] {
+void() elf_cane2 = [$attack2, elf_cane3 ] { ai_charge(5); };
+void() elf_cane3 = [$attack3, elf_cane4 ] { elf_melee(); };
+void() elf_cane4 = [$attack4, elf_cane5 ] {};
+void() elf_cane5 = [$attack5, elf_run1 ] {
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = elf_cane1;
 	}
@@ -212,13 +212,13 @@ void()	Elf_JumpTouch = {
 	self.nextthink = time + 0.1;
 };
 
-void() elf_leap1 =[ $jump1, elf_leap2 ] {ai_face();
+void() elf_leap1 = [$jump1, elf_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	if (random() < 0.5) sound(self, CHAN_WEAPON, "xmas/elf/jump1.wav", 1, ATTN_NORM);
 	else sound(self, CHAN_WEAPON, "xmas/elf/jump2.wav", 1, ATTN_NORM);
 };
-void() elf_leap2 =[ $jump2, elf_leap3 ] {ai_face();};
-void() elf_leap3 =[ $jump3, elf_leap4 ] {
+void() elf_leap2 = [$jump2, elf_leap3 ] { ai_face(); };
+void() elf_leap3 = [$jump3, elf_leap4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Elf_JumpTouch;
@@ -228,9 +228,9 @@ void() elf_leap3 =[ $jump3, elf_leap4 ] {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
 };
-void() elf_leap4 =[ $jump4, elf_leap5 ] {};
-void() elf_leap5 =[ $jump5, elf_leap6 ] {};
-void() elf_leap6 =[ $jump6, elf_leap7 ] {
+void() elf_leap4 = [$jump4, elf_leap5 ] {};
+void() elf_leap5 = [$jump5, elf_leap6 ] {};
+void() elf_leap6 = [$jump6, elf_leap7 ] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -240,21 +240,20 @@ void() elf_leap6 =[ $jump6, elf_leap7 ] {
 };
 
 //----------------------------------------------------------------------
-void() elf_leap7 =[ $jump7, elf_leap8] {monster_footstep(FALSE);};
-void() elf_leap8 =[ $jump8, elf_run1] {ai_resetangles();};
+void() elf_leap7 = [$jump7, elf_leap8] { monster_footstep(FALSE); };
+void() elf_leap8 = [$jump8, elf_run1] { ai_resetangles(); };
 
-//======================================================================
+
 // Elven Pain!
-//======================================================================
-void() elf_pain1 = [ $pain1, elf_pain2 ] {};
-void() elf_pain2 = [ $pain2, elf_pain3 ] {};
-void() elf_pain3 = [ $pain3, elf_pain4 ] {};
-void() elf_pain4 = [ $pain4, elf_pain5 ] {};
-void() elf_pain5 = [ $pain5, elf_run1 ] {};
+
+void() elf_pain1 = [$pain1, elf_pain2 ] {};
+void() elf_pain2 = [$pain2, elf_pain3 ] {};
+void() elf_pain3 = [$pain3, elf_pain4 ] {};
+void() elf_pain4 = [$pain4, elf_pain5 ] {};
+void() elf_pain5 = [$pain5, elf_run1 ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) elf_pain =
-{
+void(entity inflictor, entity attacker, float damage) elf_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -271,38 +270,37 @@ void(entity inflictor, entity attacker, float damage) elf_pain =
 	}
 };
 
-//======================================================================
+
 // Typical forward/backward death animation
-//======================================================================
-void() elf_die1 =[ $death1, elf_die2] {};
-void() elf_die2 =[ $death2, elf_die3] {monster_check_gib();};
-void() elf_die3 =[ $death3, elf_die4] {monster_check_gib();
+
+void() elf_die1 = [$death1, elf_die2] {};
+void() elf_die2 = [$death2, elf_die3] { monster_check_gib(); };
+void() elf_die3 = [$death3, elf_die4] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() elf_die4 =[ $death4, elf_die5] {};
-void() elf_die5 =[ $death5, elf_die6] {};
-void() elf_die6 =[ $death6, elf_die7] {
+void() elf_die4 = [$death4, elf_die5] {};
+void() elf_die5 = [$death5, elf_die6] {};
+void() elf_die6 = [$death6, elf_die7] {
 	// Drop metal cane sound
 	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);
 };
-void() elf_die7 =[ $death7, elf_die8] {};
-void() elf_die8 =[ $death8, elf_die9] {monster_death_postcheck();};
-void() elf_die9 =[ $death9, elf_die9] {monster_deadbody_check();};
+void() elf_die7 = [$death7, elf_die8] {};
+void() elf_die8 = [$death8, elf_die9] { monster_death_postcheck(); };
+void() elf_die9 = [$death9, elf_die9] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() elf_dieb1 =[ $bdeath1, elf_dieb2] {};
-void() elf_dieb2 =[ $bdeath2, elf_dieb3] {monster_check_gib();};
-void() elf_dieb3 =[ $bdeath3, elf_dieb4] {monster_check_gib();
+void() elf_dieb1 = [$bdeath1, elf_dieb2] {};
+void() elf_dieb2 = [$bdeath2, elf_dieb3] { monster_check_gib(); };
+void() elf_dieb3 = [$bdeath3, elf_dieb4] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() elf_dieb4 =[ $bdeath4, elf_dieb5] {};
-void() elf_dieb5 =[ $bdeath5, elf_dieb6] {};
-void() elf_dieb6 =[ $bdeath6, elf_dieb7] {};
-void() elf_dieb7 =[ $bdeath7, elf_dieb8] {};
-void() elf_dieb8 =[ $bdeath8, elf_dieb9] {ai_back(4);monster_death_postcheck();};
-void() elf_dieb9 =[ $bdeath9, elf_dieb9] {monster_deadbody_check();};
+void() elf_dieb4 = [$bdeath4, elf_dieb5] {};
+void() elf_dieb5 = [$bdeath5, elf_dieb6] {};
+void() elf_dieb6 = [$bdeath6, elf_dieb7] {};
+void() elf_dieb7 = [$bdeath7, elf_dieb8] {};
+void() elf_dieb8 = [$bdeath8, elf_dieb9] { ai_back(4);monster_death_postcheck(); };
+void() elf_dieb9 = [$bdeath9, elf_dieb9] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() elf_die =
-{
+void() elf_die = {
 	// Sync cane to elf skin
 	self.gib1skin = self.exactskin;
 

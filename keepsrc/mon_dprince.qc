@@ -77,105 +77,105 @@ $frame deathb17 deathb18 deathb19 deathb20
 
 // magica and magicb missing
 
-void()	dprince_standA1	=[	$standA1,	dprince_standA2	] {ai_stand();};
-void()	dprince_standA2	=[	$standA2,	dprince_standA3	] {ai_stand();};
-void()	dprince_standA3	=[	$standA3,	dprince_standA4	] {ai_stand();};
-void()	dprince_standA4	=[	$standA4,	dprince_standA5	] {ai_stand();};
-void()	dprince_standA5	=[	$standA5,	dprince_standA6	] {ai_stand();};
-void()	dprince_standA6	=[	$standA6,	dprince_standA7	] {ai_stand();};
-void()	dprince_standA7	=[	$standA7,	dprince_standA8	] {ai_stand();};
-void()	dprince_standA8	=[	$standA8,	dprince_standA9	] {ai_stand();};
-void()	dprince_standA9	=[	$standA9,	dprince_standA10] {ai_stand();};
-void()	dprince_standA10=[	$standA10,	dprince_standA11] {ai_stand();};
-void()	dprince_standA11=[	$standA11,	dprince_standA12] {ai_stand();};
-void()	dprince_standA12=[	$standA12,	dprince_stand1	] {ai_stand();};
+void()	dprince_standA1	= [	$standA1,	dprince_standA2	] { ai_stand(); };
+void()	dprince_standA2	= [	$standA2,	dprince_standA3	] { ai_stand(); };
+void()	dprince_standA3	= [	$standA3,	dprince_standA4	] { ai_stand(); };
+void()	dprince_standA4	= [	$standA4,	dprince_standA5	] { ai_stand(); };
+void()	dprince_standA5	= [	$standA5,	dprince_standA6	] { ai_stand(); };
+void()	dprince_standA6	= [	$standA6,	dprince_standA7	] { ai_stand(); };
+void()	dprince_standA7	= [	$standA7,	dprince_standA8	] { ai_stand(); };
+void()	dprince_standA8	= [	$standA8,	dprince_standA9	] { ai_stand(); };
+void()	dprince_standA9	= [	$standA9,	dprince_standA10] { ai_stand(); };
+void()	dprince_standA10= [	$standA10,	dprince_standA11] { ai_stand(); };
+void()	dprince_standA11= [	$standA11,	dprince_standA12] { ai_stand(); };
+void()	dprince_standA12= [	$standA12,	dprince_stand1	] { ai_stand(); };
 
-void()	dprince_standB1	=[	$standB1,	dprince_standB2	] {ai_stand();};
-void()	dprince_standB2	=[	$standB2,	dprince_standB3	] {ai_stand();};
-void()	dprince_standB3	=[	$standB3,	dprince_standB4	] {ai_stand();};
-void()	dprince_standB4	=[	$standB4,	dprince_standB5	] {ai_stand();};
-void()	dprince_standB5	=[	$standB5,	dprince_standB6	] {ai_stand();};
-void()	dprince_standB6	=[	$standB6,	dprince_standB7	] {ai_stand();};
-void()	dprince_standB7	=[	$standB7,	dprince_standB8	] {ai_stand();};
-void()	dprince_standB8	=[	$standB8,	dprince_standB9	] {ai_stand();};
-void()	dprince_standB9	=[	$standB9,	dprince_standB10] {ai_stand();};
-void()	dprince_standB10=[	$standB10,	dprince_standB11] {ai_stand();};
-void()	dprince_standB11=[	$standB11,	dprince_standB12] {ai_stand();};
-void()	dprince_standB12=[	$standB12,	dprince_standB13] {ai_stand();};
-void()	dprince_standB13=[	$standB13,	dprince_standB14] {ai_stand();};
-void()	dprince_standB14=[	$standB14,	dprince_standB15] {ai_stand();};
-void()	dprince_standB15=[	$standB15,	dprince_standB16] {ai_stand();};
-void()	dprince_standB16=[	$standB16,	dprince_standB17] {ai_stand();};
-void()	dprince_standB17=[	$standB17,	dprince_standB18] {ai_stand();};
-void()	dprince_standB18=[	$standB18,	dprince_standB19] {ai_stand();};
-void()	dprince_standB19=[	$standB19,	dprince_standB20] {ai_stand();};
-void()	dprince_standB20=[	$standB20,	dprince_standB21] {ai_stand();};
-void()	dprince_standB21=[	$standB21,	dprince_standB22] {ai_stand();};
-void()	dprince_standB22=[	$standB22,	dprince_standB23] {ai_stand();};
-void()	dprince_standB23=[	$standB23,	dprince_standB24] {ai_stand();};
-void()	dprince_standB24=[	$standB24,	dprince_stand1	] {ai_stand();};
-
-//----------------------------------------------------------------------
-void()	dprince_standC1	=[	$standC1,	dprince_standC2	] {ai_stand();};
-void()	dprince_standC2	=[	$standC2,	dprince_standC3	] {ai_stand();};
-void()	dprince_standC3	=[	$standC3,	dprince_standC4	] {ai_stand();};
-void()	dprince_standC4	=[	$standC4,	dprince_standC5	] {ai_stand();};
-void()	dprince_standC5	=[	$standC5,	dprince_standC6	] {ai_stand();};
-void()	dprince_standC6	=[	$standC6,	dprince_standC7	] {ai_stand();};
-void()	dprince_standC7	=[	$standC7,	dprince_standC8	] {ai_stand();};
-void()	dprince_standC8	=[	$standC8,	dprince_standC9	] {ai_stand();};
-void()	dprince_standC9	=[	$standC9,	dprince_standC10] {ai_stand();};
-void()	dprince_standC10=[	$standC10,	dprince_standC11] {ai_stand();};
-void()	dprince_standC11=[	$standC11,	dprince_standC12] {ai_stand();};
-void()	dprince_standC12=[	$standC12,	dprince_standC13] {ai_stand();};
-void()	dprince_standC13=[	$standC13,	dprince_standC14] {ai_stand();};
-void()	dprince_standC14=[	$standC14,	dprince_standC15] {ai_stand();};
-void()	dprince_standC15=[	$standC15,	dprince_standC16] {ai_stand();};
-void()	dprince_standC16=[	$standC16,	dprince_standC17] {ai_stand();};
-void()	dprince_standC17=[	$standC17,	dprince_standC18] {ai_stand();};
-void()	dprince_standC18=[	$standC18,	dprince_standC19] {ai_stand();};
-void()	dprince_standC19=[	$standC19,	dprince_standC20] {ai_stand();};
-void()	dprince_standC20=[	$standC20,	dprince_standC21] {ai_stand();};
-void()	dprince_standC21=[	$standC21,	dprince_standC22] {ai_stand();};
-void()	dprince_standC22=[	$standC22,	dprince_standC23] {ai_stand();};
-void()	dprince_standC23=[	$standC23,	dprince_standC24] {ai_stand();};
-void()	dprince_standC24=[	$standC24,	dprince_stand1	] {ai_stand();};
+void()	dprince_standB1	= [	$standB1,	dprince_standB2	] { ai_stand(); };
+void()	dprince_standB2	= [	$standB2,	dprince_standB3	] { ai_stand(); };
+void()	dprince_standB3	= [	$standB3,	dprince_standB4	] { ai_stand(); };
+void()	dprince_standB4	= [	$standB4,	dprince_standB5	] { ai_stand(); };
+void()	dprince_standB5	= [	$standB5,	dprince_standB6	] { ai_stand(); };
+void()	dprince_standB6	= [	$standB6,	dprince_standB7	] { ai_stand(); };
+void()	dprince_standB7	= [	$standB7,	dprince_standB8	] { ai_stand(); };
+void()	dprince_standB8	= [	$standB8,	dprince_standB9	] { ai_stand(); };
+void()	dprince_standB9	= [	$standB9,	dprince_standB10] { ai_stand(); };
+void()	dprince_standB10= [	$standB10,	dprince_standB11] { ai_stand(); };
+void()	dprince_standB11= [	$standB11,	dprince_standB12] { ai_stand(); };
+void()	dprince_standB12= [	$standB12,	dprince_standB13] { ai_stand(); };
+void()	dprince_standB13= [	$standB13,	dprince_standB14] { ai_stand(); };
+void()	dprince_standB14= [	$standB14,	dprince_standB15] { ai_stand(); };
+void()	dprince_standB15= [	$standB15,	dprince_standB16] { ai_stand(); };
+void()	dprince_standB16= [	$standB16,	dprince_standB17] { ai_stand(); };
+void()	dprince_standB17= [	$standB17,	dprince_standB18] { ai_stand(); };
+void()	dprince_standB18= [	$standB18,	dprince_standB19] { ai_stand(); };
+void()	dprince_standB19= [	$standB19,	dprince_standB20] { ai_stand(); };
+void()	dprince_standB20= [	$standB20,	dprince_standB21] { ai_stand(); };
+void()	dprince_standB21= [	$standB21,	dprince_standB22] { ai_stand(); };
+void()	dprince_standB22= [	$standB22,	dprince_standB23] { ai_stand(); };
+void()	dprince_standB23= [	$standB23,	dprince_standB24] { ai_stand(); };
+void()	dprince_standB24= [	$standB24,	dprince_stand1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dprince_standD1	=[	$standD1,	dprince_standD2	] {ai_stand();};
-void()	dprince_standD2	=[	$standD2,	dprince_standD3	] {ai_stand();};
-void()	dprince_standD3	=[	$standD3,	dprince_standD4	] {ai_stand();};
-void()	dprince_standD4	=[	$standD4,	dprince_standD5	] {ai_stand();};
-void()	dprince_standD5	=[	$standD5,	dprince_standD6	] {ai_stand();};
-void()	dprince_standD6	=[	$standD6,	dprince_standD7	] {ai_stand();};
-void()	dprince_standD7	=[	$standD7,	dprince_standD8	] {ai_stand();};
-void()	dprince_standD8	=[	$standD8,	dprince_standD9	] {ai_stand();};
-void()	dprince_standD9	=[	$standD9,	dprince_standD10] {ai_stand();};
-void()	dprince_standD10=[	$standD10,	dprince_standD11] {ai_stand();};
-void()	dprince_standD11=[	$standD11,	dprince_standD12] {ai_stand();};
-void()	dprince_standD12=[	$standD12,	dprince_standD13] {ai_stand();};
-void()	dprince_standD13=[	$standD13,	dprince_standD14] {ai_stand();};
-void()	dprince_standD14=[	$standD14,	dprince_standD15] {ai_stand();};
-void()	dprince_standD15=[	$standD15,	dprince_standD16] {ai_stand();};
-void()	dprince_standD16=[	$standD16,	dprince_standD17] {ai_stand();};
-void()	dprince_standD17=[	$standD17,	dprince_standD18] {ai_stand();};
-void()	dprince_standD18=[	$standD18,	dprince_standD19] {ai_stand();};
-void()	dprince_standD19=[	$standD19,	dprince_standD20] {ai_stand();};
-void()	dprince_standD20=[	$standD20,	dprince_stand1	] {ai_stand();};
+void()	dprince_standC1	= [	$standC1,	dprince_standC2	] { ai_stand(); };
+void()	dprince_standC2	= [	$standC2,	dprince_standC3	] { ai_stand(); };
+void()	dprince_standC3	= [	$standC3,	dprince_standC4	] { ai_stand(); };
+void()	dprince_standC4	= [	$standC4,	dprince_standC5	] { ai_stand(); };
+void()	dprince_standC5	= [	$standC5,	dprince_standC6	] { ai_stand(); };
+void()	dprince_standC6	= [	$standC6,	dprince_standC7	] { ai_stand(); };
+void()	dprince_standC7	= [	$standC7,	dprince_standC8	] { ai_stand(); };
+void()	dprince_standC8	= [	$standC8,	dprince_standC9	] { ai_stand(); };
+void()	dprince_standC9	= [	$standC9,	dprince_standC10] { ai_stand(); };
+void()	dprince_standC10= [	$standC10,	dprince_standC11] { ai_stand(); };
+void()	dprince_standC11= [	$standC11,	dprince_standC12] { ai_stand(); };
+void()	dprince_standC12= [	$standC12,	dprince_standC13] { ai_stand(); };
+void()	dprince_standC13= [	$standC13,	dprince_standC14] { ai_stand(); };
+void()	dprince_standC14= [	$standC14,	dprince_standC15] { ai_stand(); };
+void()	dprince_standC15= [	$standC15,	dprince_standC16] { ai_stand(); };
+void()	dprince_standC16= [	$standC16,	dprince_standC17] { ai_stand(); };
+void()	dprince_standC17= [	$standC17,	dprince_standC18] { ai_stand(); };
+void()	dprince_standC18= [	$standC18,	dprince_standC19] { ai_stand(); };
+void()	dprince_standC19= [	$standC19,	dprince_standC20] { ai_stand(); };
+void()	dprince_standC20= [	$standC20,	dprince_standC21] { ai_stand(); };
+void()	dprince_standC21= [	$standC21,	dprince_standC22] { ai_stand(); };
+void()	dprince_standC22= [	$standC22,	dprince_standC23] { ai_stand(); };
+void()	dprince_standC23= [	$standC23,	dprince_standC24] { ai_stand(); };
+void()	dprince_standC24= [	$standC24,	dprince_stand1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dprince_stand1	=[	$stand1,	dprince_stand2	] {monster_idle_sound();ai_stand();};
-void()	dprince_stand2	=[	$stand2,	dprince_stand3	] {ai_stand();};
-void()	dprince_stand3	=[	$stand3,	dprince_stand4	] {ai_stand();};
-void()	dprince_stand4	=[	$stand4,	dprince_stand5	] {ai_stand();};
-void()	dprince_stand5	=[	$stand5,	dprince_stand6	] {ai_stand();};
-void()	dprince_stand6	=[	$stand6,	dprince_stand7	] {ai_stand();};
-void()	dprince_stand7	=[	$stand7,	dprince_stand8	] {ai_stand();};
-void()	dprince_stand8	=[	$stand8,	dprince_stand9	] {ai_stand();};
-void()	dprince_stand9	=[	$stand9,	dprince_stand10	] {ai_stand();};
-void()	dprince_stand10	=[	$stand10,	dprince_stand11	] {ai_stand();};
-void()	dprince_stand11	=[	$stand11,	dprince_stand12	] {ai_stand();};
-void()	dprince_stand12	=[	$stand12,	dprince_stand1	] {
+void()	dprince_standD1	= [	$standD1,	dprince_standD2	] { ai_stand(); };
+void()	dprince_standD2	= [	$standD2,	dprince_standD3	] { ai_stand(); };
+void()	dprince_standD3	= [	$standD3,	dprince_standD4	] { ai_stand(); };
+void()	dprince_standD4	= [	$standD4,	dprince_standD5	] { ai_stand(); };
+void()	dprince_standD5	= [	$standD5,	dprince_standD6	] { ai_stand(); };
+void()	dprince_standD6	= [	$standD6,	dprince_standD7	] { ai_stand(); };
+void()	dprince_standD7	= [	$standD7,	dprince_standD8	] { ai_stand(); };
+void()	dprince_standD8	= [	$standD8,	dprince_standD9	] { ai_stand(); };
+void()	dprince_standD9	= [	$standD9,	dprince_standD10] { ai_stand(); };
+void()	dprince_standD10= [	$standD10,	dprince_standD11] { ai_stand(); };
+void()	dprince_standD11= [	$standD11,	dprince_standD12] { ai_stand(); };
+void()	dprince_standD12= [	$standD12,	dprince_standD13] { ai_stand(); };
+void()	dprince_standD13= [	$standD13,	dprince_standD14] { ai_stand(); };
+void()	dprince_standD14= [	$standD14,	dprince_standD15] { ai_stand(); };
+void()	dprince_standD15= [	$standD15,	dprince_standD16] { ai_stand(); };
+void()	dprince_standD16= [	$standD16,	dprince_standD17] { ai_stand(); };
+void()	dprince_standD17= [	$standD17,	dprince_standD18] { ai_stand(); };
+void()	dprince_standD18= [	$standD18,	dprince_standD19] { ai_stand(); };
+void()	dprince_standD19= [	$standD19,	dprince_standD20] { ai_stand(); };
+void()	dprince_standD20= [	$standD20,	dprince_stand1	] { ai_stand(); };
+
+//----------------------------------------------------------------------
+void()	dprince_stand1	= [	$stand1,	dprince_stand2	] { monster_idle_sound();ai_stand(); };
+void()	dprince_stand2	= [	$stand2,	dprince_stand3	] { ai_stand(); };
+void()	dprince_stand3	= [	$stand3,	dprince_stand4	] { ai_stand(); };
+void()	dprince_stand4	= [	$stand4,	dprince_stand5	] { ai_stand(); };
+void()	dprince_stand5	= [	$stand5,	dprince_stand6	] { ai_stand(); };
+void()	dprince_stand6	= [	$stand6,	dprince_stand7	] { ai_stand(); };
+void()	dprince_stand7	= [	$stand7,	dprince_stand8	] { ai_stand(); };
+void()	dprince_stand8	= [	$stand8,	dprince_stand9	] { ai_stand(); };
+void()	dprince_stand9	= [	$stand9,	dprince_stand10	] { ai_stand(); };
+void()	dprince_stand10	= [	$stand10,	dprince_stand11	] { ai_stand(); };
+void()	dprince_stand11	= [	$stand11,	dprince_stand12	] { ai_stand(); };
+void()	dprince_stand12	= [	$stand12,	dprince_stand1	] {
 	self.idlebusy = FALSE; 
 	if (random() < MON_IDLE_ANIMATION) {
 		self.idlebusy = TRUE; 
@@ -191,32 +191,32 @@ void()	dprince_stand12	=[	$stand12,	dprince_stand1	] {
 };
 
 //===========================================================================
-void()	dprince_walk1	=[	$walk1,		dprince_walk2	] {
-	self.idlebusy = FALSE; monster_idle_sound(); ai_walk(2);};
-void()	dprince_walk2	=[	$walk2,		dprince_walk3	] {
-	monster_footstep(FALSE);ai_walk(5);};
-void()	dprince_walk3	=[	$walk3,		dprince_walk4	] {ai_walk(5);};
-void()	dprince_walk4	=[	$walk4,		dprince_walk5	] {ai_walk(4);};
-void()	dprince_walk5	=[	$walk5,		dprince_walk6	] {ai_walk(4);};
-void()	dprince_walk6	=[	$walk6,		dprince_walk7	] {ai_walk(2);};
-void()	dprince_walk7	=[	$walk7,		dprince_walk8	] {ai_walk(2);};
-void()	dprince_walk8	=[	$walk8,		dprince_walk9	] {
-	monster_footstep(FALSE); ai_walk(3);};
-void()	dprince_walk9	=[	$walk9,		dprince_walk10	] {ai_walk(3);};
-void()	dprince_walk10	=[	$walk10,	dprince_walk11	] {ai_walk(4);};
-void()	dprince_walk11	=[	$walk11,	dprince_walk12	] {ai_walk(3);};
-void()	dprince_walk12	=[	$walk12,	dprince_walk13	] {ai_walk(4);};
-void()	dprince_walk13	=[	$walk13,	dprince_walk14	] {ai_walk(6);};
-void()	dprince_walk14	=[	$walk14,	dprince_walk1	] {ai_walk(2);};
+void()	dprince_walk1	= [	$walk1,		dprince_walk2	] {
+	self.idlebusy = FALSE; monster_idle_sound(); ai_walk(2); };
+void()	dprince_walk2	= [	$walk2,		dprince_walk3	] {
+	monster_footstep(FALSE);ai_walk(5); };
+void()	dprince_walk3	= [	$walk3,		dprince_walk4	] { ai_walk(5); };
+void()	dprince_walk4	= [	$walk4,		dprince_walk5	] { ai_walk(4); };
+void()	dprince_walk5	= [	$walk5,		dprince_walk6	] { ai_walk(4); };
+void()	dprince_walk6	= [	$walk6,		dprince_walk7	] { ai_walk(2); };
+void()	dprince_walk7	= [	$walk7,		dprince_walk8	] { ai_walk(2); };
+void()	dprince_walk8	= [	$walk8,		dprince_walk9	] {
+	monster_footstep(FALSE); ai_walk(3); };
+void()	dprince_walk9	= [	$walk9,		dprince_walk10	] { ai_walk(3); };
+void()	dprince_walk10	= [	$walk10,	dprince_walk11	] { ai_walk(4); };
+void()	dprince_walk11	= [	$walk11,	dprince_walk12	] { ai_walk(3); };
+void()	dprince_walk12	= [	$walk12,	dprince_walk13	] { ai_walk(4); };
+void()	dprince_walk13	= [	$walk13,	dprince_walk14	] { ai_walk(6); };
+void()	dprince_walk14	= [	$walk14,	dprince_walk1	] { ai_walk(2); };
 
 //===========================================================================
-void()	dprince_run1	=[	$run1,	dprince_run2	] {monster_idle_sound(); 
+void()	dprince_run1	= [	$run1,	dprince_run2	] { monster_idle_sound(); 
 	self.idlebusy = FALSE; ai_run (20); CheckForCharge(); };
-void()	dprince_run2	=[	$run2,	dprince_run3	] {monster_footstep(FALSE); ai_run(25);};
-void()	dprince_run3	=[	$run3,	dprince_run4	] {ai_run(16);};
-void()	dprince_run4	=[	$run4,	dprince_run5	] {ai_run(14);};
-void()	dprince_run5	=[	$run5,	dprince_run6	] {monster_footstep(FALSE); ai_run(25);};
-void()	dprince_run6	=[	$run6,	dprince_run1	] {ai_run(13);};
+void()	dprince_run2	= [	$run2,	dprince_run3	] { monster_footstep(FALSE); ai_run(25); };
+void()	dprince_run3	= [	$run3,	dprince_run4	] { ai_run(16); };
+void()	dprince_run4	= [	$run4,	dprince_run5	] { ai_run(14); };
+void()	dprince_run5	= [	$run5,	dprince_run6	] { monster_footstep(FALSE); ai_run(25); };
+void()	dprince_run6	= [	$run6,	dprince_run1	] { ai_run(13); };
 
 //===========================================================================
 // Charging attack A - swinging sword left to right infront
@@ -224,90 +224,90 @@ void()	dprince_run6	=[	$run6,	dprince_run1	] {ai_run(13);};
 // Death Knight is faster (-4 frames will cycle damage frames quicker)
 // Damage Frames - Hell Knight (6-11, Total 6) Death Knight (6-10, Total 5)
 
-void()	dprince_char_a1	=[	$char_a1,	dprince_char_a2	] {ai_charge(20); SwordSwipeSound();};
-void()	dprince_char_a2	=[	$char_a2,	dprince_char_a3	] {monster_footstep(FALSE); ai_charge(25);ai_melee(); };
-void()	dprince_char_a3	=[	$char_a3,	dprince_char_a4	] {ai_charge(18);ai_melee(); };
-void()	dprince_char_a4	=[	$char_a4,	dprince_char_a5	] {ai_charge(16);};
-void()	dprince_char_a5	=[	$char_a5,	dprince_char_a6	] {monster_footstep(FALSE); ai_charge(14);};
-void()	dprince_char_a6	=[	$char_a6,	dprince_char_a7	] {ai_charge(20); ai_melee();};
-void()	dprince_char_a7	=[	$char_a7,	dprince_char_a8	] {ai_charge(21); ai_melee(); SwordSwipeSound();};
-void()	dprince_char_a8	=[	$char_a8,	dprince_char_a9	] {monster_footstep(FALSE); ai_charge(13); ai_melee();};
-void()	dprince_char_a9	=[	$char_a9,	dprince_char_a10] {ai_charge(20); ai_melee();};
-void()	dprince_char_a10=[	$char_a10,	dprince_char_a11] {ai_charge(20); ai_melee();};
-void()	dprince_char_a11=[	$char_a11,	dprince_char_a12] {monster_footstep(FALSE); ai_charge(18);};
-void()	dprince_char_a12=[	$char_a12,	dprince_run1	] {ai_charge(16);};
+void()	dprince_char_a1	= [	$char_a1,	dprince_char_a2	] { ai_charge(20); SwordSwipeSound(); };
+void()	dprince_char_a2	= [	$char_a2,	dprince_char_a3	] { monster_footstep(FALSE); ai_charge(25);ai_melee(); };
+void()	dprince_char_a3	= [	$char_a3,	dprince_char_a4	] { ai_charge(18);ai_melee(); };
+void()	dprince_char_a4	= [	$char_a4,	dprince_char_a5	] { ai_charge(16); };
+void()	dprince_char_a5	= [	$char_a5,	dprince_char_a6	] { monster_footstep(FALSE); ai_charge(14); };
+void()	dprince_char_a6	= [	$char_a6,	dprince_char_a7	] { ai_charge(20); ai_melee(); };
+void()	dprince_char_a7	= [	$char_a7,	dprince_char_a8	] { ai_charge(21); ai_melee(); SwordSwipeSound(); };
+void()	dprince_char_a8	= [	$char_a8,	dprince_char_a9	] { monster_footstep(FALSE); ai_charge(13); ai_melee(); };
+void()	dprince_char_a9	= [	$char_a9,	dprince_char_a10] { ai_charge(20); ai_melee(); };
+void()	dprince_char_a10= [	$char_a10,	dprince_char_a11] { ai_charge(20); ai_melee(); };
+void()	dprince_char_a11= [	$char_a11,	dprince_char_a12] { monster_footstep(FALSE); ai_charge(18); };
+void()	dprince_char_a12= [	$char_a12,	dprince_run1	] { ai_charge(16); };
 
 //----------------------------------------------------------------------
 // Identical frame set (Hell Knight / Death Knight)
 
-void()	dprince_char_b1	=[	$char_b1,	dprince_char_b2	] {
-	CheckContinueCharge(); ai_charge(23); ai_melee(); SwordSwipeSound();};
-void()	dprince_char_b2	=[	$char_b2,	dprince_char_b3	] {monster_footstep(FALSE); ai_charge(17); ai_melee();};
-void()	dprince_char_b3	=[	$char_b3,	dprince_char_b4	] {ai_charge(12); ai_melee();};
-void()	dprince_char_b4	=[	$char_b4,	dprince_char_b5	] {ai_charge(22); ai_melee();};
-void()	dprince_char_b5	=[	$char_b5,	dprince_char_b6	] {monster_footstep(FALSE); ai_charge(18); ai_melee();};
-void()	dprince_char_b6	=[	$char_b6,	dprince_char_b1	] {ai_charge(8); ai_melee();};
+void()	dprince_char_b1	= [	$char_b1,	dprince_char_b2	] {
+	CheckContinueCharge(); ai_charge(23); ai_melee(); SwordSwipeSound(); };
+void()	dprince_char_b2	= [	$char_b2,	dprince_char_b3	] { monster_footstep(FALSE); ai_charge(17); ai_melee(); };
+void()	dprince_char_b3	= [	$char_b3,	dprince_char_b4	] { ai_charge(12); ai_melee(); };
+void()	dprince_char_b4	= [	$char_b4,	dprince_char_b5	] { ai_charge(22); ai_melee(); };
+void()	dprince_char_b5	= [	$char_b5,	dprince_char_b6	] { monster_footstep(FALSE); ai_charge(18); ai_melee(); };
+void()	dprince_char_b6	= [	$char_b6,	dprince_char_b1	] { ai_charge(8); ai_melee(); };
 
 //===========================================================================
 // Melee Attack 1 - Slice (one hand slashing run attack)
 // Hell Knight - 10 frames / Death Knight - 15 frames (skipped 1, 3, 12, 15)
 // Death Knight - trimmed frames so melee attack 1 and 2 the same
 
-void()	dprince_slice1	=[	$slice2,	dprince_slice2	] {ai_charge(9);};
-void()	dprince_slice2	=[	$slice4,	dprince_slice3	] {monster_footstep(FALSE); ai_charge(6);};
-void()	dprince_slice3	=[	$slice5,	dprince_slice4	] {ai_charge(13);};
-void()	dprince_slice4	=[	$slice6,	dprince_slice5	] {ai_charge(4); SwordSwipeSound();};
-void()	dprince_slice5	=[	$slice7,	dprince_slice6	] {monster_footstep(FALSE); ai_charge(7); ai_melee();};
-void()	dprince_slice6	=[	$slice8,	dprince_slice7	] {ai_charge(15); ai_melee();};
-void()	dprince_slice7	=[	$slice9,	dprince_slice8	] {ai_charge(8); ai_melee();};
-void()	dprince_slice8	=[	$slice10,	dprince_slice9	] {monster_footstep(FALSE); ai_charge(2); ai_melee();};
-void()	dprince_slice9	=[	$slice11,	dprince_slice10	] {ai_melee();};
-void()	dprince_slice10	=[	$slice13,	dprince_slice11	] {monster_footstep(FALSE); ai_charge(0);};
-void()	dprince_slice11	=[	$slice14,	dprince_run1	] {ai_charge(3);};
+void()	dprince_slice1	= [	$slice2,	dprince_slice2	] { ai_charge(9); };
+void()	dprince_slice2	= [	$slice4,	dprince_slice3	] { monster_footstep(FALSE); ai_charge(6); };
+void()	dprince_slice3	= [	$slice5,	dprince_slice4	] { ai_charge(13); };
+void()	dprince_slice4	= [	$slice6,	dprince_slice5	] { ai_charge(4); SwordSwipeSound(); };
+void()	dprince_slice5	= [	$slice7,	dprince_slice6	] { monster_footstep(FALSE); ai_charge(7); ai_melee(); };
+void()	dprince_slice6	= [	$slice8,	dprince_slice7	] { ai_charge(15); ai_melee(); };
+void()	dprince_slice7	= [	$slice9,	dprince_slice8	] { ai_charge(8); ai_melee(); };
+void()	dprince_slice8	= [	$slice10,	dprince_slice9	] { monster_footstep(FALSE); ai_charge(2); ai_melee(); };
+void()	dprince_slice9	= [	$slice11,	dprince_slice10	] { ai_melee(); };
+void()	dprince_slice10	= [	$slice13,	dprince_slice11	] { monster_footstep(FALSE); ai_charge(0); };
+void()	dprince_slice11	= [	$slice14,	dprince_run1	] { ai_charge(3); };
 
 //----------------------------------------------------------------------
 // Melee Attack 2 - Smash (chop overhead to ground)
 // Hell Knight - 11 frames / Death Knight - 15 frames (skipped (1, 11, 14, 15)
 // Death Knight frames trimmed down to match Hell Knight (damage ratio)
 
-void()	dprince_smash1	=[	$smash2,	dprince_smash2	] {ai_charge(1);};
-void()	dprince_smash2	=[	$smash3,	dprince_smash3	] {ai_charge(13);};
-void()	dprince_smash3	=[	$smash4,	dprince_smash4	] {monster_footstep(FALSE); ai_charge(9);};
-void()	dprince_smash4	=[	$smash5,	dprince_smash5	] {ai_charge(11);SwordSwipeSound();};
-void()	dprince_smash5	=[	$smash6,	dprince_smash6	] {ai_charge(10);};
-void()	dprince_smash6	=[	$smash7,	dprince_smash7	] {ai_charge(7); self.meleecontact = TRUE; ai_meleesmash(40);};
-void()	dprince_smash7	=[	$smash8,	dprince_smash8	] {monster_footstep(FALSE);ai_charge(12);ai_melee();};
-void()	dprince_smash8	=[	$smash9,	dprince_smash9	] {ai_charge(2);self.meleecontact = FALSE;ai_melee();};
-void()	dprince_smash9	=[	$smash10,	dprince_smash10	] {ai_charge(3);ai_melee();};
-void()	dprince_smash10	=[	$smash12,	dprince_smash11	] {ai_charge(0);ai_melee();};
-void()	dprince_smash11	=[	$smash13,	dprince_run1	] {ai_charge(0);};
+void()	dprince_smash1	= [	$smash2,	dprince_smash2	] { ai_charge(1); };
+void()	dprince_smash2	= [	$smash3,	dprince_smash3	] { ai_charge(13); };
+void()	dprince_smash3	= [	$smash4,	dprince_smash4	] { monster_footstep(FALSE); ai_charge(9); };
+void()	dprince_smash4	= [	$smash5,	dprince_smash5	] { ai_charge(11);SwordSwipeSound(); };
+void()	dprince_smash5	= [	$smash6,	dprince_smash6	] { ai_charge(10); };
+void()	dprince_smash6	= [	$smash7,	dprince_smash7	] { ai_charge(7); self.meleecontact = TRUE; ai_meleesmash(40); };
+void()	dprince_smash7	= [	$smash8,	dprince_smash8	] { monster_footstep(FALSE);ai_charge(12);ai_melee(); };
+void()	dprince_smash8	= [	$smash9,	dprince_smash9	] { ai_charge(2);self.meleecontact = FALSE;ai_melee(); };
+void()	dprince_smash9	= [	$smash10,	dprince_smash10	] { ai_charge(3);ai_melee(); };
+void()	dprince_smash10	= [	$smash12,	dprince_smash11	] { ai_charge(0);ai_melee(); };
+void()	dprince_smash11	= [	$smash13,	dprince_run1	] { ai_charge(0); };
 
 //----------------------------------------------------------------------
 // Melee Attack 3 - W_Attack (two handed slashing attack)
 // Identical frame set (Hell Knight / Death Knight)
 
-void()	dprince_watk1	=[	$w_attack1,	dprince_watk2	] {ai_charge(2);};
-void()	dprince_watk2	=[	$w_attack2,	dprince_watk3	] {monster_footstep(FALSE); ai_charge(0);};
-void()	dprince_watk3	=[	$w_attack3,	dprince_watk4	] {ai_charge(0);};
-void()	dprince_watk4	=[	$w_attack4,	dprince_watk5	] {ai_charge(0); SwordSwipeSound();};
-void()	dprince_watk5	=[	$w_attack5,	dprince_watk6	] {ai_melee();};
-void()	dprince_watk6	=[	$w_attack6,	dprince_watk7	] {ai_melee();};
-void()	dprince_watk7	=[	$w_attack7,	dprince_watk8	] {monster_footstep(FALSE); ai_charge(1);};
-void()	dprince_watk8	=[	$w_attack8,	dprince_watk9	] {ai_charge(4);};
-void()	dprince_watk9	=[	$w_attack9,	dprince_watk10	] {ai_charge(5);};
-void()	dprince_watk10	=[	$w_attack10,dprince_watk11	] {ai_charge(3); ai_melee();};
-void()	dprince_watk11	=[	$w_attack11,dprince_watk12	] {ai_charge(2); ai_melee();};
-void()	dprince_watk12	=[	$w_attack12,dprince_watk13	] {ai_charge(2); ai_melee();};
-void()	dprince_watk13	=[	$w_attack13,dprince_watk14	] {ai_charge(0);};
-void()	dprince_watk14	=[	$w_attack14,dprince_watk15	] {ai_charge(0);};
-void()	dprince_watk15	=[	$w_attack15,dprince_watk16	] {ai_charge(0); SwordSwipeSound();};
-void()	dprince_watk16	=[	$w_attack16,dprince_watk17	] {ai_charge(1);};
-void()	dprince_watk17	=[	$w_attack17,dprince_watk18	] {monster_footstep(FALSE); ai_charge(1); ai_melee();};
-void()	dprince_watk18	=[	$w_attack18,dprince_watk19	] {ai_charge(3); ai_melee();};
-void()	dprince_watk19	=[	$w_attack19,dprince_watk20	] {ai_charge(4); ai_melee();};
-void()	dprince_watk20	=[	$w_attack20,dprince_watk21	] {ai_charge(6);};
-void()	dprince_watk21	=[	$w_attack21,dprince_watk22	] {ai_charge(7);};
-void()	dprince_watk22	=[	$w_attack22,dprince_run1	] {ai_charge(3);};
+void()	dprince_watk1	= [	$w_attack1,	dprince_watk2	] { ai_charge(2); };
+void()	dprince_watk2	= [	$w_attack2,	dprince_watk3	] { monster_footstep(FALSE); ai_charge(0); };
+void()	dprince_watk3	= [	$w_attack3,	dprince_watk4	] { ai_charge(0); };
+void()	dprince_watk4	= [	$w_attack4,	dprince_watk5	] { ai_charge(0); SwordSwipeSound(); };
+void()	dprince_watk5	= [	$w_attack5,	dprince_watk6	] { ai_melee(); };
+void()	dprince_watk6	= [	$w_attack6,	dprince_watk7	] { ai_melee(); };
+void()	dprince_watk7	= [	$w_attack7,	dprince_watk8	] { monster_footstep(FALSE); ai_charge(1); };
+void()	dprince_watk8	= [	$w_attack8,	dprince_watk9	] { ai_charge(4); };
+void()	dprince_watk9	= [	$w_attack9,	dprince_watk10	] { ai_charge(5); };
+void()	dprince_watk10	= [	$w_attack10,dprince_watk11	] { ai_charge(3); ai_melee(); };
+void()	dprince_watk11	= [	$w_attack11,dprince_watk12	] { ai_charge(2); ai_melee(); };
+void()	dprince_watk12	= [	$w_attack12,dprince_watk13	] { ai_charge(2); ai_melee(); };
+void()	dprince_watk13	= [	$w_attack13,dprince_watk14	] { ai_charge(0); };
+void()	dprince_watk14	= [	$w_attack14,dprince_watk15	] { ai_charge(0); };
+void()	dprince_watk15	= [	$w_attack15,dprince_watk16	] { ai_charge(0); SwordSwipeSound(); };
+void()	dprince_watk16	= [	$w_attack16,dprince_watk17	] { ai_charge(1); };
+void()	dprince_watk17	= [	$w_attack17,dprince_watk18	] { monster_footstep(FALSE); ai_charge(1); ai_melee(); };
+void()	dprince_watk18	= [	$w_attack18,dprince_watk19	] { ai_charge(3); ai_melee(); };
+void()	dprince_watk19	= [	$w_attack19,dprince_watk20	] { ai_charge(4); ai_melee(); };
+void()	dprince_watk20	= [	$w_attack20,dprince_watk21	] { ai_charge(6); };
+void()	dprince_watk21	= [	$w_attack21,dprince_watk22	] { ai_charge(7); };
+void()	dprince_watk22	= [	$w_attack22,dprince_run1	] { ai_charge(3); };
 
 // Cycle between 3 melee attacks
 // Attack 1 - Slice (one hand slashing run attack)
@@ -399,25 +399,25 @@ void() dprince_magicframe = {
 	if (self.walkframe > 10) self.th_run();
 };
 
-void() dprince_range = { self.walkframe = 0; dprince_magicframe();};
+void() dprince_range = { self.walkframe = 0; dprince_magicframe(); };
 
-void()	dprince_painA1	=[	$painA1, dprince_painA2	] {};
-void()	dprince_painA2	=[	$painA2, dprince_painA3	] {};
-void()	dprince_painA3	=[	$painA3, dprince_painA4	] {};
-void()	dprince_painA4	=[	$painA4, dprince_painA5	] {};
-void()	dprince_painA5	=[	$painA5, dprince_run1	] {};
+void()	dprince_painA1	= [	$painA1, dprince_painA2	] {};
+void()	dprince_painA2	= [	$painA2, dprince_painA3	] {};
+void()	dprince_painA3	= [	$painA3, dprince_painA4	] {};
+void()	dprince_painA4	= [	$painA4, dprince_painA5	] {};
+void()	dprince_painA5	= [	$painA5, dprince_run1	] {};
 
-void()	dprince_painD1	=[	$painD1, dprince_painD2	] {};
-void()	dprince_painD2	=[	$painD2, dprince_painD3	] {};
-void()	dprince_painD3	=[	$painD3, dprince_painD4	] {};
-void()	dprince_painD4	=[	$painD4, dprince_painD5	] {monster_footstep(FALSE); };
-void()	dprince_painD5	=[	$painD5, dprince_painD6	] {};
-void()	dprince_painD6	=[	$painD6, dprince_painD7	] {};
-void()	dprince_painD7	=[	$painD7, dprince_painD8	] {};
-void()	dprince_painD8	=[	$painD8, dprince_painD9	] {monster_footstep(FALSE); };
-void()	dprince_painD9	=[	$painD9, dprince_painD10	] {};
-void()	dprince_painD10	=[	$painD10, dprince_painD11	] {};
-void()	dprince_painD11	=[	$painD11, dprince_run1	] {};
+void()	dprince_painD1	= [	$painD1, dprince_painD2	] {};
+void()	dprince_painD2	= [	$painD2, dprince_painD3	] {};
+void()	dprince_painD3	= [	$painD3, dprince_painD4	] {};
+void()	dprince_painD4	= [	$painD4, dprince_painD5	] { monster_footstep(FALSE); };
+void()	dprince_painD5	= [	$painD5, dprince_painD6	] {};
+void()	dprince_painD6	= [	$painD6, dprince_painD7	] {};
+void()	dprince_painD7	= [	$painD7, dprince_painD8	] {};
+void()	dprince_painD8	= [	$painD8, dprince_painD9	] { monster_footstep(FALSE); };
+void()	dprince_painD9	= [	$painD9, dprince_painD10	] {};
+void()	dprince_painD10	= [	$painD10, dprince_painD11	] {};
+void()	dprince_painD11	= [	$painD11, dprince_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) dprince_pain = {
 	if (self.spawnflags & MON_GHOST_ONLY) return;
@@ -445,44 +445,44 @@ void(entity inflictor, entity attacker, float damage) dprince_pain = {
 	}
 };
 
-void()	dprince_die1	=[	$death1,	dprince_die2	] {ai_forward(10);};
-void()	dprince_die2	=[	$death2,	dprince_die3	] {monster_check_gib();ai_forward(8);};
-void()	dprince_die3	=[	$death3,	dprince_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT; ai_forward(7);};
-void()	dprince_die4	=[	$death4,	dprince_die5	] {};
-void()	dprince_die5	=[	$death5,	dprince_die6	] {};
-void()	dprince_die6	=[	$death6,	dprince_die7	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);};
-void()	dprince_die7	=[	$death7,	dprince_die8	] {};
-void()	dprince_die8	=[	$death8,	dprince_die9	] {ai_forward(10);};
-void()	dprince_die9	=[	$death9,	dprince_die10	] {ai_forward(11);};
-void()	dprince_die10	=[	$death10,	dprince_die11	] {};
-void()	dprince_die11	=[	$death11,	dprince_die12	] {monster_death_postcheck();};
-void()	dprince_die12	=[	$death12,	dprince_die12	] {monster_deadbody_check();};
+void()	dprince_die1	= [	$death1,	dprince_die2	] { ai_forward(10); };
+void()	dprince_die2	= [	$death2,	dprince_die3	] { monster_check_gib();ai_forward(8); };
+void()	dprince_die3	= [	$death3,	dprince_die4	] { monster_check_gib();
+	self.solid = SOLID_NOT; ai_forward(7); };
+void()	dprince_die4	= [	$death4,	dprince_die5	] {};
+void()	dprince_die5	= [	$death5,	dprince_die6	] {};
+void()	dprince_die6	= [	$death6,	dprince_die7	] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+void()	dprince_die7	= [	$death7,	dprince_die8	] {};
+void()	dprince_die8	= [	$death8,	dprince_die9	] { ai_forward(10); };
+void()	dprince_die9	= [	$death9,	dprince_die10	] { ai_forward(11); };
+void()	dprince_die10	= [	$death10,	dprince_die11	] {};
+void()	dprince_die11	= [	$death11,	dprince_die12	] { monster_death_postcheck(); };
+void()	dprince_die12	= [	$death12,	dprince_die12	] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void()	dprince_dieb1	=[	$deathb1,	dprince_dieb2	] {};
-void()	dprince_dieb2	=[	$deathb2,	dprince_dieb3	] {monster_check_gib();};
-void()	dprince_dieb3	=[	$deathb3,	dprince_dieb4	] {monster_check_gib();
+void()	dprince_dieb1	= [	$deathb1,	dprince_dieb2	] {};
+void()	dprince_dieb2	= [	$deathb2,	dprince_dieb3	] { monster_check_gib(); };
+void()	dprince_dieb3	= [	$deathb3,	dprince_dieb4	] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void()	dprince_dieb4	=[	$deathb4,	dprince_dieb5	] {};
-void()	dprince_dieb5	=[	$deathb5,	dprince_dieb6	] {};
-void()	dprince_dieb6	=[	$deathb6,	dprince_dieb7	] {};
-void()	dprince_dieb7	=[	$deathb7,	dprince_dieb8	] {};
-void()	dprince_dieb8	=[	$deathb8,	dprince_dieb9	] {};
-void()	dprince_dieb9	=[	$deathb9,	dprince_dieb10	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM);};
-void()	dprince_dieb10	=[	$deathb10,	dprince_dieb11	] {};
-void()	dprince_dieb11	=[	$deathb11,	dprince_dieb12	] {};
-void()	dprince_dieb12	=[	$deathb12,	dprince_dieb13	] {};
-void()	dprince_dieb13	=[	$deathb13,	dprince_dieb14	] {};
-void()	dprince_dieb14	=[	$deathb14,	dprince_dieb15	] {};
-void()	dprince_dieb15	=[	$deathb15,	dprince_dieb16	] {};
-void()	dprince_dieb16	=[	$deathb16,	dprince_dieb17	] {};
-void()	dprince_dieb17	=[	$deathb17,	dprince_dieb18	] {};
-void()	dprince_dieb18	=[	$deathb18,	dprince_dieb19	] {};
-void()	dprince_dieb19	=[	$deathb19,	dprince_dieb20	] {monster_death_postcheck();};
-void()	dprince_dieb20	=[	$deathb20,	dprince_dieb20	] {monster_deadbody_check();};
+void()	dprince_dieb4	= [	$deathb4,	dprince_dieb5	] {};
+void()	dprince_dieb5	= [	$deathb5,	dprince_dieb6	] {};
+void()	dprince_dieb6	= [	$deathb6,	dprince_dieb7	] {};
+void()	dprince_dieb7	= [	$deathb7,	dprince_dieb8	] {};
+void()	dprince_dieb8	= [	$deathb8,	dprince_dieb9	] {};
+void()	dprince_dieb9	= [	$deathb9,	dprince_dieb10	] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+void()	dprince_dieb10	= [	$deathb10,	dprince_dieb11	] {};
+void()	dprince_dieb11	= [	$deathb11,	dprince_dieb12	] {};
+void()	dprince_dieb12	= [	$deathb12,	dprince_dieb13	] {};
+void()	dprince_dieb13	= [	$deathb13,	dprince_dieb14	] {};
+void()	dprince_dieb14	= [	$deathb14,	dprince_dieb15	] {};
+void()	dprince_dieb15	= [	$deathb15,	dprince_dieb16	] {};
+void()	dprince_dieb16	= [	$deathb16,	dprince_dieb17	] {};
+void()	dprince_dieb17	= [	$deathb17,	dprince_dieb18	] {};
+void()	dprince_dieb18	= [	$deathb18,	dprince_dieb19	] {};
+void()	dprince_dieb19	= [	$deathb19,	dprince_dieb20	] { monster_death_postcheck(); };
+void()	dprince_dieb20	= [	$deathb20,	dprince_dieb20	] { monster_deadbody_check(); };
 
 void() dprince_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities

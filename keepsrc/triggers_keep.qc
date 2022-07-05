@@ -332,13 +332,13 @@ void() trigger_jump_spawn = { // [FUNCTION]
     if (!self.cnt) self.cnt = -1; // Hipnotic's cnt stuff
 };
 
-void() trigger_jump = {InitTrigger(); trigger_jump_spawn();}; // [ENTITY]
+void() trigger_jump = { InitTrigger(); trigger_jump_spawn(); }; // [ENTITY]
 
-void() trigger_jump_point = {InitPointTrigger(); trigger_jump_spawn();}; // [ENTITY]
+void() trigger_jump_point = { InitPointTrigger(); trigger_jump_spawn(); }; // [ENTITY]
 
-void() trigger_superjump = {InitTrigger(); self.spawnflags = self.spawnflags | PUSH_JUMP_ONLY; trigger_jump_spawn();}; // [ENTITY]
+void() trigger_superjump = { InitTrigger(); self.spawnflags = self.spawnflags | PUSH_JUMP_ONLY; trigger_jump_spawn(); }; // [ENTITY]
 
-void() trigger_superjump_point = {InitPointTrigger(); self.spawnflags = self.spawnflags | PUSH_JUMP_ONLY; trigger_jump_spawn();}; // [ENTITY]
+void() trigger_superjump_point = { InitPointTrigger(); self.spawnflags = self.spawnflags | PUSH_JUMP_ONLY; trigger_jump_spawn(); }; // [ENTITY]
 
 void() play_tfog = { spawn_tfog(self.origin); } // [FUNCTION], thanks Khreathor -- dumptruck_ds.  Exists since it is used as a think. -Qmaster
 
@@ -394,12 +394,12 @@ void() trigger_dive_spawn = { // [FUNCTION]
     precache_sound("ambience/windfly.wav");
     self.touch = trigger_dive_touch;
     if (!self.speed) self.speed = -500;
-    if (self.targetname) {self.solid = SOLID_NOT; self.use = push_use2;}
+    if (self.targetname) { self.solid = SOLID_NOT; self.use = push_use2;}
 };
 
-void() trigger_dive = {InitTrigger();  trigger_dive_spawn();}; // [ENTITY]
+void() trigger_dive = { InitTrigger();  trigger_dive_spawn(); }; // [ENTITY]
 
-void() trigger_dive_point = {InitPointTrigger();  trigger_dive_spawn();}; // [ENTITY]
+void() trigger_dive_point = { InitPointTrigger();  trigger_dive_spawn(); }; // [ENTITY]
 
 void() keytrigger_use = { // [FUNCTION]
    if (!(activator.flags & FL_CLIENT)) return;
@@ -473,7 +473,7 @@ void() hipkeytrigger_use = { // [FUNCTION]
 	self.use = SUB_Null;
 	self.nextthink = (time + 0.100);
 	self.think = SUB_Remove;
-	self.message = string_null;
+	self.message = "";
 	sound(self,CHAN_VOICE,self.noise4,TRUE,ATTN_NORM);
 	SUB_UseTargets();
 };

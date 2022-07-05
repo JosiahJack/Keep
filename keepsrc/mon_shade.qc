@@ -145,7 +145,7 @@ void() Shade_MeatSummon = {
 //  is removed.  Otherwise, it remains for a few seconds before it is
 //  removed permanently or it becomes a zombie.
 void() Shade_MeatMiss = {
-    if (!(self.flags & FL_ONGROUND)) {remove (self); return;}    // Didn't touch ground, remove it.
+    if (!(self.flags & FL_ONGROUND)) { remove (self); return;}    // Didn't touch ground, remove it.
 
 	// Let the missile's blood trail fade before spawning a monster.
     self.avelocity = '0 0 0';     // On the ground -- stop spinning.
@@ -159,7 +159,7 @@ void() Shade_MeatMiss = {
 //  A gib inflicts damage on contact.  If the gib misses, it may
 //  form into a zombie later.
 void() Shade_MeatTouch = {
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
     if (Reflected ()) return;
     
     // hit something that bleeds
@@ -271,20 +271,20 @@ void(float in) shadow_phase = {
 
 void() shade_stand = {
     if (self.spawnflags & SPAWN_SOUL) {
-        if (Wraith_FindSoul()) {self.th_run();  return;}
+        if (Wraith_FindSoul()) { self.th_run();  return;}
 	}
 
     ai_stand();
 };
-void()  shadow_stand1 =[ $form7,  shadow_stand2  ] {self.alpha = 0.7; shade_stand();};
-void()  shadow_stand2 =[ $form6,  shadow_stand3  ] {self.alpha = 0.6; shade_stand();};
-void()  shadow_stand3 =[ $form5,  shadow_stand4  ] {self.alpha = 0.5; shade_stand();};
-void()  shadow_stand4 =[ $form4,  shadow_stand5  ] {self.alpha = 0.4; shade_stand();};
-void()  shadow_stand5 =[ $form3,  shadow_stand6  ] {self.alpha = 0.3; shade_stand();};
-void()  shadow_stand6 =[ $form2,  shadow_stand7  ] {self.alpha = 0.2; shade_stand();};
-void()  shadow_stand7 =[ $form1,  shadow_stand8  ] {self.alpha = 0.1; shade_stand();};
-void()  shadow_stand8 =[ $form1,  shadow_stand9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_stand();};
-void()  shadow_stand9 =[ $form1,  shadow_stand9  ] {shade_stand();};
+void()  shadow_stand1 = [$form7,  shadow_stand2  ] { self.alpha = 0.7; shade_stand(); };
+void()  shadow_stand2 = [$form6,  shadow_stand3  ] { self.alpha = 0.6; shade_stand(); };
+void()  shadow_stand3 = [$form5,  shadow_stand4  ] { self.alpha = 0.5; shade_stand(); };
+void()  shadow_stand4 = [$form4,  shadow_stand5  ] { self.alpha = 0.4; shade_stand(); };
+void()  shadow_stand5 = [$form3,  shadow_stand6  ] { self.alpha = 0.3; shade_stand(); };
+void()  shadow_stand6 = [$form2,  shadow_stand7  ] { self.alpha = 0.2; shade_stand(); };
+void()  shadow_stand7 = [$form1,  shadow_stand8  ] { self.alpha = 0.1; shade_stand(); };
+void()  shadow_stand8 = [$form1,  shadow_stand9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_stand(); };
+void()  shadow_stand9 = [$form1,  shadow_stand9  ] { shade_stand(); };
 
 void()  shadow_stand = {
     if (self.takedamage) shadow_stand1();
@@ -294,19 +294,19 @@ void()  shadow_stand = {
 //  The nightshade phases out and moves along its path.
 void(float d) shade_walk = {
     if (self.spawnflags & SPAWN_SOUL) {
-        if (Wraith_FindSoul ()) {self.th_run();  return;}
+        if (Wraith_FindSoul ()) { self.th_run();  return;}
 	}
     ai_walk(d);
 };
-void()  shadow_walk1  =[ $form7,  shadow_walk2  ] {self.alpha = 0.7; shade_walk(8);};
-void()  shadow_walk2  =[ $form6,  shadow_walk3  ] {self.alpha = 0.6; shade_walk(8);};
-void()  shadow_walk3  =[ $form5,  shadow_walk4  ] {self.alpha = 0.5; shade_walk(8);};
-void()  shadow_walk4  =[ $form4,  shadow_walk5  ] {self.alpha = 0.4; shade_walk(8);};
-void()  shadow_walk5  =[ $form3,  shadow_walk6  ] {self.alpha = 0.3; shade_walk(8);};
-void()  shadow_walk6  =[ $form2,  shadow_walk7  ] {self.alpha = 0.2; shade_walk(8);};
-void()  shadow_walk7  =[ $form1,  shadow_walk8  ] {self.alpha = 0.1; shade_walk(8);};
-void()  shadow_walk8  =[ $form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_walk(8);};
-void()  shadow_walk9  =[ $form1,  shadow_walk9  ] {shade_walk(8); shade_sfx_idle();};
+void()  shadow_walk1  = [$form7,  shadow_walk2  ] { self.alpha = 0.7; shade_walk(8); };
+void()  shadow_walk2  = [$form6,  shadow_walk3  ] { self.alpha = 0.6; shade_walk(8); };
+void()  shadow_walk3  = [$form5,  shadow_walk4  ] { self.alpha = 0.5; shade_walk(8); };
+void()  shadow_walk4  = [$form4,  shadow_walk5  ] { self.alpha = 0.4; shade_walk(8); };
+void()  shadow_walk5  = [$form3,  shadow_walk6  ] { self.alpha = 0.3; shade_walk(8); };
+void()  shadow_walk6  = [$form2,  shadow_walk7  ] { self.alpha = 0.2; shade_walk(8); };
+void()  shadow_walk7  = [$form1,  shadow_walk8  ] { self.alpha = 0.1; shade_walk(8); };
+void()  shadow_walk8  = [$form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_walk(8); };
+void()  shadow_walk9  = [$form1,  shadow_walk9  ] { shade_walk(8); shade_sfx_idle(); };
 
 void()  shadow_walk = {
     if (self.takedamage) shadow_walk1();
@@ -321,27 +321,27 @@ void() shade_sfx_fly = {
     }
 }; 
 
-void()  shadow_form1  =[ $form1, shadow_form2  ] {shadow_phase (TRUE); self.alpha = 0.1; ai_run(self.speed);};
-void()  shadow_form2  =[ $form2, shadow_form3  ] {self.alpha = 0.2; ai_run(self.speed);};
-void()  shadow_form3  =[ $form3, shadow_form4  ] {self.alpha = 0.3; ai_run(self.speed);};
-void()  shadow_form4  =[ $form4, shadow_form5  ] {self.alpha = 0.4; ai_run(self.speed);};
-void()  shadow_form5  =[ $form5, shadow_form6  ] {self.alpha = 0.5; ai_run(self.speed);};
-void()  shadow_form6  =[ $form6, shadow_form7  ] {self.alpha = 0.6; ai_run(self.speed);};
-void()  shadow_form7  =[ $form7, shadow_run1   ] {self.alpha = 0.7; ai_run(self.speed);};
-void()  shadow_run1   =[ $fly1,  shadow_run2   ] {self.alpha = 0.7; shadow_speed(); ai_run(self.speed);};
-void()  shadow_run2   =[ $fly2,  shadow_run3   ] {ai_run(self.speed);};
-void()  shadow_run3   =[ $fly3,  shadow_run4   ] {ai_run(self.speed);};
-void()  shadow_run4   =[ $fly4,  shadow_run5   ] {ai_run(self.speed);};
-void()  shadow_run5   =[ $fly5,  shadow_run6   ] {ai_run(self.speed);};
-void()  shadow_run6   =[ $fly6,  shadow_run7   ] {ai_run(self.speed);};
-void()  shadow_run7   =[ $fly7,  shadow_run8   ] {ai_run(self.speed);};
-void()  shadow_run8   =[ $fly8,  shadow_run9   ] {shade_sfx_fly();  ai_run(self.speed);};
-void()  shadow_run9   =[ $fly7,  shadow_run10  ] {ai_run(self.speed);};
-void()  shadow_run10  =[ $fly6,  shadow_run11  ] {ai_run(self.speed);};
-void()  shadow_run11  =[ $fly5,  shadow_run12  ] {ai_run(self.speed);};
-void()  shadow_run12  =[ $fly4,  shadow_run13  ] {ai_run(self.speed);};
-void()  shadow_run13  =[ $fly3,  shadow_run14  ] {ai_run(self.speed);};
-void()  shadow_run14  =[ $fly2,  shadow_run1   ] {ai_run(self.speed);};
+void()  shadow_form1  = [$form1, shadow_form2  ] { shadow_phase (TRUE); self.alpha = 0.1; ai_run(self.speed); };
+void()  shadow_form2  = [$form2, shadow_form3  ] { self.alpha = 0.2; ai_run(self.speed); };
+void()  shadow_form3  = [$form3, shadow_form4  ] { self.alpha = 0.3; ai_run(self.speed); };
+void()  shadow_form4  = [$form4, shadow_form5  ] { self.alpha = 0.4; ai_run(self.speed); };
+void()  shadow_form5  = [$form5, shadow_form6  ] { self.alpha = 0.5; ai_run(self.speed); };
+void()  shadow_form6  = [$form6, shadow_form7  ] { self.alpha = 0.6; ai_run(self.speed); };
+void()  shadow_form7  = [$form7, shadow_run1   ] { self.alpha = 0.7; ai_run(self.speed); };
+void()  shadow_run1   = [$fly1,  shadow_run2   ] { self.alpha = 0.7; shadow_speed(); ai_run(self.speed); };
+void()  shadow_run2   = [$fly2,  shadow_run3   ] { ai_run(self.speed); };
+void()  shadow_run3   = [$fly3,  shadow_run4   ] { ai_run(self.speed); };
+void()  shadow_run4   = [$fly4,  shadow_run5   ] { ai_run(self.speed); };
+void()  shadow_run5   = [$fly5,  shadow_run6   ] { ai_run(self.speed); };
+void()  shadow_run6   = [$fly6,  shadow_run7   ] { ai_run(self.speed); };
+void()  shadow_run7   = [$fly7,  shadow_run8   ] { ai_run(self.speed); };
+void()  shadow_run8   = [$fly8,  shadow_run9   ] { shade_sfx_fly();  ai_run(self.speed); };
+void()  shadow_run9   = [$fly7,  shadow_run10  ] { ai_run(self.speed); };
+void()  shadow_run10  = [$fly6,  shadow_run11  ] { ai_run(self.speed); };
+void()  shadow_run11  = [$fly5,  shadow_run12  ] { ai_run(self.speed); };
+void()  shadow_run12  = [$fly4,  shadow_run13  ] { ai_run(self.speed); };
+void()  shadow_run13  = [$fly3,  shadow_run14  ] { ai_run(self.speed); };
+void()  shadow_run14  = [$fly2,  shadow_run1   ] { ai_run(self.speed); };
 
 void()  shadow_form = {
     if (self.takedamage) shadow_run1();      // Already phased in.
@@ -349,82 +349,82 @@ void()  shadow_form = {
 };
 
 //  Melee attacks!
-void()  shadow_bite1  =[ $attack1,  shadow_bite2  ] {dark_melee();};
-void()  shadow_bite2  =[ $attack2,  shadow_bite3  ] {dark_melee();};
-void()  shadow_bite3  =[ $attack3,  shadow_bite4  ] {dark_melee();};
-void()  shadow_bite4  =[ $attack4,  shadow_bite5  ] {dark_melee();};
-void()  shadow_bite5  =[ $attack5,  shadow_bite6  ] {dark_melee();};
-void()  shadow_bite6  =[ $attack6,  shadow_bite7  ] {dark_melee();};
-void()  shadow_bite7  =[ $attack7,  shadow_bite8  ] {dark_melee();};
-void()  shadow_bite8  =[ $attack8,  shadow_bite9  ] {dark_melee();};
-void()  shadow_bite9  =[ $attack9,  shadow_bite10 ] {shade_sfx_fly(); dark_melee();Ryu_Bite();};
-void()  shadow_bite10 =[ $attack8,  shadow_bite11 ] {dark_melee();};
-void()  shadow_bite11 =[ $attack7,  shadow_bite12 ] {dark_melee();};
-void()  shadow_bite12 =[ $attack6,  shadow_bite13 ] {dark_melee();};
-void()  shadow_bite13 =[ $attack5,  shadow_bite14 ] {dark_melee();};
-void()  shadow_bite14 =[ $attack4,  shadow_bite15 ] {dark_melee();};
-void()  shadow_bite15 =[ $attack3,  shadow_bite16 ] {dark_melee();};
-void()  shadow_bite16 =[ $attack2,  shadow_bite17 ] {dark_melee(); Ryu_Bite();};
-void()  shadow_bite17 =[ $attack1,  shadow_run1   ] {dark_melee(); self.attack_state = AS_STRAIGHT;};
+void()  shadow_bite1  = [$attack1,  shadow_bite2  ] { dark_melee(); };
+void()  shadow_bite2  = [$attack2,  shadow_bite3  ] { dark_melee(); };
+void()  shadow_bite3  = [$attack3,  shadow_bite4  ] { dark_melee(); };
+void()  shadow_bite4  = [$attack4,  shadow_bite5  ] { dark_melee(); };
+void()  shadow_bite5  = [$attack5,  shadow_bite6  ] { dark_melee(); };
+void()  shadow_bite6  = [$attack6,  shadow_bite7  ] { dark_melee(); };
+void()  shadow_bite7  = [$attack7,  shadow_bite8  ] { dark_melee(); };
+void()  shadow_bite8  = [$attack8,  shadow_bite9  ] { dark_melee(); };
+void()  shadow_bite9  = [$attack9,  shadow_bite10 ] { shade_sfx_fly(); dark_melee();Ryu_Bite(); };
+void()  shadow_bite10 = [$attack8,  shadow_bite11 ] { dark_melee(); };
+void()  shadow_bite11 = [$attack7,  shadow_bite12 ] { dark_melee(); };
+void()  shadow_bite12 = [$attack6,  shadow_bite13 ] { dark_melee(); };
+void()  shadow_bite13 = [$attack5,  shadow_bite14 ] { dark_melee(); };
+void()  shadow_bite14 = [$attack4,  shadow_bite15 ] { dark_melee(); };
+void()  shadow_bite15 = [$attack3,  shadow_bite16 ] { dark_melee(); };
+void()  shadow_bite16 = [$attack2,  shadow_bite17 ] { dark_melee(); Ryu_Bite(); };
+void()  shadow_bite17 = [$attack1,  shadow_run1   ] { dark_melee(); self.attack_state = AS_STRAIGHT;};
 
 void() shadow_strike = {
     self.alpha = 0.7;
     self.attack_state = AS_STRAIGHT;    // Nightshade does not strafe.
     traceline(self.origin, self.enemy.origin, TRUE, self); // If path crosses contents, use only the bite.
     if (trace_inopen)
-        if (trace_inwater) {shadow_bite1();  return;}
+        if (trace_inwater) { shadow_bite1();  return;}
 
     // If close enough, it may bite or shoot.
     if (random() < 0.8)
-        if (InMeleeRange (120)) {shadow_bite1();  return;}
+        if (InMeleeRange (120)) { shadow_bite1();  return;}
 
     self.th_missile(); // Fire away instead.
 };
 
 //  Missile attacks!
-void() shadow_missile1  =[ $attack1,  shadow_missile2  ] {
+void() shadow_missile1  = [$attack1,  shadow_missile2  ] {
     if (!self.takedamage) shadow_phase (TRUE);    // Fire command hack!
     self.alpha = 0.7;
     self.attack_state = AS_STRAIGHT;    // Never strafe  
     dark_missile();
 };
-void() shadow_missile2  =[ $attack2,  shadow_missile3  ] {dark_missile();};
-void() shadow_missile3  =[ $attack3,  shadow_missile4  ] {dark_missile();};
-void() shadow_missile4  =[ $attack4,  shadow_missile5  ] {dark_missile();};
-void() shadow_missile5  =[ $attack5,  shadow_missile6  ] {dark_missile();};
-void() shadow_missile6  =[ $attack6,  shadow_missile7  ] {dark_missile();};
-void() shadow_missile7  =[ $attack7,  shadow_missile8  ] {dark_missile();};
-void() shadow_missile8  =[ $attack8,  shadow_missile9  ] {dark_missile();};
-void() shadow_missile9  =[ $attack9,  shadow_missile10 ] {dark_missile();shade_sfx_fly();Shade_Meat();};
-void() shadow_missile10 =[ $attack8,  shadow_missile11 ] {dark_missile();};
-void() shadow_missile11 =[ $attack7,  shadow_missile12 ] {dark_missile();};
-void() shadow_missile12 =[ $attack6,  shadow_missile13 ] {dark_missile();};
-void() shadow_missile13 =[ $attack5,  shadow_missile14 ] {dark_missile();};
-void() shadow_missile14 =[ $attack4,  shadow_missile15 ] {dark_missile();};
-void() shadow_missile15 =[ $attack3,  shadow_missile16 ] {dark_missile();};
-void() shadow_missile16 =[ $attack2,  shadow_missile17 ] {dark_missile();};
-void() shadow_missile17 =[ $attack1,  shadow_run1      ] {dark_missile();};
+void() shadow_missile2  = [$attack2,  shadow_missile3  ] { dark_missile(); };
+void() shadow_missile3  = [$attack3,  shadow_missile4  ] { dark_missile(); };
+void() shadow_missile4  = [$attack4,  shadow_missile5  ] { dark_missile(); };
+void() shadow_missile5  = [$attack5,  shadow_missile6  ] { dark_missile(); };
+void() shadow_missile6  = [$attack6,  shadow_missile7  ] { dark_missile(); };
+void() shadow_missile7  = [$attack7,  shadow_missile8  ] { dark_missile(); };
+void() shadow_missile8  = [$attack8,  shadow_missile9  ] { dark_missile(); };
+void() shadow_missile9  = [$attack9,  shadow_missile10 ] { dark_missile();shade_sfx_fly();Shade_Meat(); };
+void() shadow_missile10 = [$attack8,  shadow_missile11 ] { dark_missile(); };
+void() shadow_missile11 = [$attack7,  shadow_missile12 ] { dark_missile(); };
+void() shadow_missile12 = [$attack6,  shadow_missile13 ] { dark_missile(); };
+void() shadow_missile13 = [$attack5,  shadow_missile14 ] { dark_missile(); };
+void() shadow_missile14 = [$attack4,  shadow_missile15 ] { dark_missile(); };
+void() shadow_missile15 = [$attack3,  shadow_missile16 ] { dark_missile(); };
+void() shadow_missile16 = [$attack2,  shadow_missile17 ] { dark_missile(); };
+void() shadow_missile17 = [$attack1,  shadow_run1      ] { dark_missile(); };
 
-void() shadow_pain1  =[ $pain1,   shadow_pain2  ] {};
-void() shadow_pain2  =[ $pain2,   shadow_pain3  ] {};
-void() shadow_pain3  =[ $pain3,   shadow_pain4  ] {};
-void() shadow_pain4  =[ $pain4,   shadow_pain5  ] {};
-void() shadow_pain5  =[ $pain5,   shadow_pain6  ] {};
-void() shadow_pain6  =[ $pain6,   shadow_run1   ] {};
+void() shadow_pain1  = [$pain1,   shadow_pain2  ] {};
+void() shadow_pain2  = [$pain2,   shadow_pain3  ] {};
+void() shadow_pain3  = [$pain3,   shadow_pain4  ] {};
+void() shadow_pain4  = [$pain4,   shadow_pain5  ] {};
+void() shadow_pain5  = [$pain5,   shadow_pain6  ] {};
+void() shadow_pain6  = [$pain6,   shadow_run1   ] {};
 
-void() shadow_painb1 =[ $painb1,  shadow_painb2 ] {};
-void() shadow_painb2 =[ $painb2,  shadow_painb3 ] {};
-void() shadow_painb3 =[ $painb3,  shadow_painb4 ] {};
-void() shadow_painb4 =[ $painb4,  shadow_painb5 ] {};
-void() shadow_painb5 =[ $painb5,  shadow_painb6 ] {};
-void() shadow_painb6 =[ $painb6,  shadow_run1   ] {};
+void() shadow_painb1 = [$painb1,  shadow_painb2 ] {};
+void() shadow_painb2 = [$painb2,  shadow_painb3 ] {};
+void() shadow_painb3 = [$painb3,  shadow_painb4 ] {};
+void() shadow_painb4 = [$painb4,  shadow_painb5 ] {};
+void() shadow_painb5 = [$painb5,  shadow_painb6 ] {};
+void() shadow_painb6 = [$painb6,  shadow_run1   ] {};
 
-void() shadow_painc1 =[ $painc1,  shadow_painc2 ] {};
-void() shadow_painc2 =[ $painc2,  shadow_painc3 ] {};
-void() shadow_painc3 =[ $painc3,  shadow_painc4 ] {};
-void() shadow_painc4 =[ $painc4,  shadow_painc5 ] {};
-void() shadow_painc5 =[ $painc5,  shadow_painc6 ] {};
-void() shadow_painc6 =[ $painc6,  shadow_run1   ] {};
+void() shadow_painc1 = [$painc1,  shadow_painc2 ] {};
+void() shadow_painc2 = [$painc2,  shadow_painc3 ] {};
+void() shadow_painc3 = [$painc3,  shadow_painc4 ] {};
+void() shadow_painc4 = [$painc4,  shadow_painc5 ] {};
+void() shadow_painc5 = [$painc5,  shadow_painc6 ] {};
+void() shadow_painc6 = [$painc6,  shadow_run1   ] {};
 
 void(entity inflictor, entity attacker, float damage) shadow_pain = {
     local   float   r, r1, r2;
@@ -467,24 +467,24 @@ void() shadow_boom = {
     T_RadiusDamage (self, self, 100, world, DAMAGEALL);    // wrath=80, tarbaby=120.
     Rocket_Explosion2 (self.origin, 32, 5);
 };
-void() shadow_die1  =[ $nova1,  shadow_die2  ] {};
-void() shadow_die2  =[ $nova2,  shadow_die3  ] {};
-void() shadow_die3  =[ $nova3,  shadow_die4  ] {};
-void() shadow_die4  =[ $nova4,  shadow_die5  ] {};
-void() shadow_die5  =[ $nova5,  shadow_die6  ] {};
-void() shadow_die6  =[ $nova6,  shadow_die7  ] {};
-void() shadow_die7  =[ $nova7,  shadow_die8  ] {};
-void() shadow_die8  =[ $nova8,  shadow_die10 ] {};
+void() shadow_die1  = [$nova1,  shadow_die2  ] {};
+void() shadow_die2  = [$nova2,  shadow_die3  ] {};
+void() shadow_die3  = [$nova3,  shadow_die4  ] {};
+void() shadow_die4  = [$nova4,  shadow_die5  ] {};
+void() shadow_die5  = [$nova5,  shadow_die6  ] {};
+void() shadow_die6  = [$nova6,  shadow_die7  ] {};
+void() shadow_die7  = [$nova7,  shadow_die8  ] {};
+void() shadow_die8  = [$nova8,  shadow_die10 ] {};
 // Skip frame $nova9.
-void() shadow_die10 =[ $nova10, shadow_die11 ] {};
-void() shadow_die11 =[ $nova11, shadow_die12 ] {};
-void() shadow_die12 =[ $nova12, shadow_die13 ] {};
-void() shadow_die13 =[ $nova13, shadow_die14 ] {};
-void() shadow_die14 =[ $nova14, shadow_die15 ] {};
-void() shadow_die15 =[ $nova15, shadow_die16 ] {};
-void() shadow_die16 =[ $nova16, shadow_die17 ] {};
-void() shadow_die17 =[ $nova17, shadow_die18 ] {shadow_boom();};
-void() shadow_die18 =[ $nova18, shadow_die18  ] {entity_hide (self);};
+void() shadow_die10 = [$nova10, shadow_die11 ] {};
+void() shadow_die11 = [$nova11, shadow_die12 ] {};
+void() shadow_die12 = [$nova12, shadow_die13 ] {};
+void() shadow_die13 = [$nova13, shadow_die14 ] {};
+void() shadow_die14 = [$nova14, shadow_die15 ] {};
+void() shadow_die15 = [$nova15, shadow_die16 ] {};
+void() shadow_die16 = [$nova16, shadow_die17 ] {};
+void() shadow_die17 = [$nova17, shadow_die18 ] { shadow_boom(); };
+void() shadow_die18 = [$nova18, shadow_die18  ] { entity_hide (self); };
 
 void() shadow_die_delayed = {
     // If nightshade is invisible, Quake may not reveal it after movetype gets

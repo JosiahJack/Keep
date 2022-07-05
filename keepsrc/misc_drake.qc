@@ -101,7 +101,7 @@ void() misc_gibft = { // [ENTITY]
 // should be heard much further away than a distance of 1000, yet shouldn't be heard at full volume everywhere.  Armagon uses attenuation of 0.5,
 // which lets him be heard up to a distance of 2000.  Since the bell should be heard up to at least 4000, use 0.25.  For up to 8000, use 0.125.
 // This animates the bell.  Hexen2 bell frames:  <ringA: 0-30>, <ringB: 31-51>.
-void() bell_ring =[ 0, bell_ring ] { // [FUNCTION]
+void() bell_ring = [ 0, bell_ring ] { // [FUNCTION]
     self.walkframe = self.walkframe + 1;
     if (self.walkframe >= self.waitmax) { // Done ringing and animating.
         self.frame = self.walkframe = 0;
@@ -279,7 +279,7 @@ void() misc_statue = { // [ENTITY]
 };
 
 // A statue of Hexen2's praying angel.  For Arcanum.
-void() misc_statue_angel = {misc_statue();}; // [ENTITY]
+void() misc_statue_angel = { misc_statue(); }; // [ENTITY]
 
 void(entity inflictor, entity attacker, float damage) tree_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;

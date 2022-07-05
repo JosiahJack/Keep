@@ -220,7 +220,7 @@ void() nemes_track = {
     local vector vec;
     local float up, old, delta;
 
-    if (self.delay <= time) {remove (self); return;}
+    if (self.delay <= time) { remove (self); return;}
 
     up = (self.cnt & 7) * 45;
     up = SUB_sin(up) * 5;       // Other sidewinder code uses cosine.
@@ -276,7 +276,7 @@ void() Nemesant_Missiles = {
 
 // Lobs its trademark bouncing seeker fireball.
 // In Drake, more monsters copy and use this attack.
-void() Nemesant_FireBall = {M_FireSmart ('16 12 45');};
+void() Nemesant_FireBall = { M_FireSmart ('16 12 45'); };
 
 
 //  Movement and Teleportation
@@ -304,16 +304,12 @@ void() tele_attack = {
         if (!EntryPoint_Spawn (self, self.enemy, enor + delta, EntryPoint_One))
             if (!EntryPoint_Spawn (self, self.enemy, enor - delta, EntryPoint_One))
                 return;
+    } else { // Custom -- teleport to random spot within range_near.
+        if (!EntryPoint_Spawn (self, self, org, EntryPoint_Random)) return;
     }
-    else
-    {   // Custom -- teleport to random spot within range_near.
-        if (!EntryPoint_Spawn (self, self, org, EntryPoint_Random))
-            return;
-    }
-// Teleport is a success.
+    // Teleport is a success.
     self.angles_y = vectoyaw(self.enemy.origin - self.origin);
-    if (!self.invisible_finished)
-    {   // Fog only if visible.
+    if (!Invisible(self)) { // Fog only if visible.
         spawn_tfog (org);           // Before
         spawn_tfog (self.origin);   // After
     }
@@ -324,42 +320,29 @@ void() tele_attack = {
     self.attack_finished = 0;   // PM:  This lets mage attack now.
 };
 
-void() check_tele =
-{
-local   entity  head;
+void() check_tele = {
+    local entity head;
 
-    if (!self.enemy)
-        return;
-    if (self.enemy.health <= 0)
-        return;
-    if (self.waitmax > time)
-        return;
+    if (!self.enemy) return;
+    if (self.enemy.health <= 0) return;
+    if (self.waitmax > time) return;
 
     head = findradius(self.origin, 150);
-    while (head)
-    {
-//- - - - - - - - -
+    while (head) {
         // Update:  Drake uses self.master for true ownership, since
         // reflection code changes owner when used.
-        if (head.master == self.enemy)
-            if (IsMissile (head))
-                {tele_attack(); return;}
-//- - - - - - - - -
+        if (head.master == self.enemy) {
+            if (IsMissile (head)) { tele_attack(); return;}
+        }
         head = head.chain;
     }
 };
 
+void() nemes_idlesound = {
+    local float wr;
 
-//==========================================================================
-//  Frames
-
-void() nemes_idlesound =
-{
-    if (self.waitmin < time)
-    {
-        local   float   wr;
-
-    // Use voice channel instead of auto -- don't want slain magi talking.
+    if (self.waitmin < time) {
+        // Use voice channel instead of auto -- don't want slain magi talking.
         wr = random();
         if (wr > 0.7) 
             sound (self, CHAN_VOICE, "zerstorer/trog/tidle1.wav", 1, ATTN_NORM);
@@ -369,60 +352,57 @@ void() nemes_idlesound =
     }
 };
 
-// STAND - - - - - - - - - - - - - - - -
-void() nemes_stand1  =[ $float1,  nemes_stand2  ] {ai_stand();
-    if (!(self.spawnflags & 1))     // Chant ominously if not in ambush mode.
-        nemes_idlesound();
+void() nemes_stand1  = [$float1,  nemes_stand2  ] { ai_stand();
+    if (!(self.spawnflags & 1)) nemes_idlesound(); // Chant ominously if not in ambush mode.
 };
-void() nemes_stand2  =[ $float2,  nemes_stand3  ] {ai_stand();};
-void() nemes_stand3  =[ $float3,  nemes_stand4  ] {ai_stand();};
-void() nemes_stand4  =[ $float4,  nemes_stand5  ] {ai_stand();};
-void() nemes_stand5  =[ $float5,  nemes_stand6  ] {ai_stand();};
-void() nemes_stand6  =[ $float6,  nemes_stand7  ] {ai_stand();};
-void() nemes_stand7  =[ $float7,  nemes_stand1  ] {ai_stand();};
+void() nemes_stand2  = [$float2,  nemes_stand3  ] { ai_stand(); };
+void() nemes_stand3  = [$float3,  nemes_stand4  ] { ai_stand(); };
+void() nemes_stand4  = [$float4,  nemes_stand5  ] { ai_stand(); };
+void() nemes_stand5  = [$float5,  nemes_stand6  ] { ai_stand(); };
+void() nemes_stand6  = [$float6,  nemes_stand7  ] { ai_stand(); };
+void() nemes_stand7  = [$float7,  nemes_stand1  ] { ai_stand(); };
 
 // WALK - - - - - - - - - - - - - - - -
-void() nemes_walk1  =[ $float1,  nemes_walk2  ] {ai_walk(8); nemes_idlesound();};
-void() nemes_walk2  =[ $float2,  nemes_walk3  ] {ai_walk(8);};
-void() nemes_walk3  =[ $float3,  nemes_walk4  ] {ai_walk(8);};
-void() nemes_walk4  =[ $float4,  nemes_walk5  ] {ai_walk(8);};
-void() nemes_walk5  =[ $float5,  nemes_walk6  ] {ai_walk(8);};
-void() nemes_walk6  =[ $float6,  nemes_walk7  ] {ai_walk(8);};
-void() nemes_walk7  =[ $float7,  nemes_walk1  ] {ai_walk(8);};
+void() nemes_walk1  = [$float1,  nemes_walk2  ] { ai_walk(8); nemes_idlesound(); };
+void() nemes_walk2  = [$float2,  nemes_walk3  ] { ai_walk(8); };
+void() nemes_walk3  = [$float3,  nemes_walk4  ] { ai_walk(8); };
+void() nemes_walk4  = [$float4,  nemes_walk5  ] { ai_walk(8); };
+void() nemes_walk5  = [$float5,  nemes_walk6  ] { ai_walk(8); };
+void() nemes_walk6  = [$float6,  nemes_walk7  ] { ai_walk(8); };
+void() nemes_walk7  = [$float7,  nemes_walk1  ] { ai_walk(8); };
 
 // RUN - - - - - - - - - - - - - - - - -
-void() nemes_side1  =[ $float1,  nemes_side2  ] {ai_run(8); nemes_idlesound(); check_tele();};
-void() nemes_side2  =[ $float2,  nemes_side3  ] {ai_run(8);};
-void() nemes_side3  =[ $float3,  nemes_side4  ] {ai_run(8); check_tele();};
-void() nemes_side4  =[ $float4,  nemes_side5  ] {ai_run(8);};
-void() nemes_side5  =[ $float5,  nemes_side6  ] {ai_run(8); check_tele();};
-void() nemes_side6  =[ $float6,  nemes_side7  ] {ai_run(8);};
-void() nemes_side7  =[ $float7,  nemes_side1  ] {ai_run(8); check_tele();};
+void() nemes_side1  = [$float1,  nemes_side2  ] { ai_run(8); nemes_idlesound(); check_tele(); };
+void() nemes_side2  = [$float2,  nemes_side3  ] { ai_run(8); };
+void() nemes_side3  = [$float3,  nemes_side4  ] { ai_run(8); check_tele(); };
+void() nemes_side4  = [$float4,  nemes_side5  ] { ai_run(8); };
+void() nemes_side5  = [$float5,  nemes_side6  ] { ai_run(8); check_tele(); };
+void() nemes_side6  = [$float6,  nemes_side7  ] { ai_run(8); };
+void() nemes_side7  = [$float7,  nemes_side1  ] { ai_run(8); check_tele(); };
 
-void() nemes_run1  =[ $float1,  nemes_run2  ] {ai_run(16); nemes_idlesound(); check_tele();};
-void() nemes_run2  =[ $float2,  nemes_run3  ] {ai_run(16);};
-void() nemes_run3  =[ $float3,  nemes_run4  ] {ai_run(16); check_tele();};
-void() nemes_run4  =[ $float4,  nemes_run5  ] {ai_run(16);};
-void() nemes_run5  =[ $float5,  nemes_run6  ] {ai_run(16); check_tele();};
-void() nemes_run6  =[ $float6,  nemes_run7  ] {ai_run(16);};
-void() nemes_run7  =[ $float7,  nemes_run1  ] {ai_run(16); check_tele();};
+void() nemes_run1  = [$float1,  nemes_run2  ] { ai_run(16); nemes_idlesound(); check_tele(); };
+void() nemes_run2  = [$float2,  nemes_run3  ] { ai_run(16); };
+void() nemes_run3  = [$float3,  nemes_run4  ] { ai_run(16); check_tele(); };
+void() nemes_run4  = [$float4,  nemes_run5  ] { ai_run(16); };
+void() nemes_run5  = [$float5,  nemes_run6  ] { ai_run(16); check_tele(); };
+void() nemes_run6  = [$float6,  nemes_run7  ] { ai_run(16); };
+void() nemes_run7  = [$float7,  nemes_run1  ] { ai_run(16); check_tele(); };
 
 // ATTACK - - - - - - - - - - - - - - -
-void() TrogAttackFinished =
-{
+void() TrogAttackFinished = {
     if (self.attack_finished)   // Repel hack -- set at zero bypasses delay.
         SUB_AttackFinished (2);
     if (enemy_range >= RANGE_MID || !enemy_vis)
-        {self.attack_state = AS_STRAIGHT; self.think = nemes_run1;}
+        { self.attack_state = AS_STRAIGHT; self.think = nemes_run1;}
     else
-        {self.attack_state = AS_SLIDING; self.think = nemes_side1;}
+        { self.attack_state = AS_SLIDING; self.think = nemes_side1;}
 };
 
-void() nemes_fast1  =[ $attackb1,  nemes_fast2  ] {ai_face();};
-void() nemes_fast2  =[ $attackb2,  nemes_fast3  ] {ai_face();};
-void() nemes_fast3  =[ $attackb3,  nemes_fast4  ] {ai_face();};
-void() nemes_fast4  =[ $attackb4,  nemes_fast5  ] {ai_face();};
-void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
+void() nemes_fast1  = [$attackb1,  nemes_fast2  ] { ai_face(); };
+void() nemes_fast2  = [$attackb2,  nemes_fast3  ] { ai_face(); };
+void() nemes_fast3  = [$attackb3,  nemes_fast4  ] { ai_face(); };
+void() nemes_fast4  = [$attackb4,  nemes_fast5  ] { ai_face(); };
+void() nemes_fast5  = [$attackb5,  nemes_fast6  ] {
     local   float   dist, boss, mask, zot;
 
     ai_face();
@@ -473,13 +453,11 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
 		}
 	}
 };
-void() nemes_fast6  =[ $attackb6,  nemes_fast7  ] {ai_face();};
-void() nemes_fast7  =[ $attackb2,  nemes_fast8  ] {ai_face();};
-void() nemes_fast8  =[ $attackb1,  nemes_run1   ] {ai_face(); TrogAttackFinished();};
+void() nemes_fast6  = [$attackb6,  nemes_fast7  ] { ai_face(); };
+void() nemes_fast7  = [$attackb2,  nemes_fast8  ] { ai_face(); };
+void() nemes_fast8  = [$attackb1,  nemes_run1   ] { ai_face(); TrogAttackFinished(); };
 
-// FIXME:  Merge spark functions.  Possibly with the yakmens' too.
-void(vector st) nemes_sparks =
-{
+void(vector st) nemes_sparks = {
     local   vector  side;
 
     makevectors(self.angles);
@@ -488,13 +466,13 @@ void(vector st) nemes_sparks =
     particle (st + side, '0 0 50', 145, 10);
     particle (st - side, '0 0 50', 145, 10);
 };
-void() nemes_summon1  =[ $attack1,  nemes_summon2  ] {ai_face(); nemes_sparks('0 35 22');};
-void() nemes_summon2  =[ $attack3,  nemes_summon3  ] {ai_face(); nemes_sparks('-2 31 15');};
-void() nemes_summon3  =[ $attack5,  nemes_summon4  ] {ai_face(); nemes_sparks('-14 30 15');};
-void() nemes_summon4  =[ $attack7,  nemes_summon5  ] {ai_face(); nemes_sparks('-15 32 25');};
-void() nemes_summon5  =[ $attack9,  nemes_summon6  ] {ai_face(); nemes_sparks('-15 31 28');};
-void() nemes_summon6  =[ $attack10, nemes_summon7  ] {ai_face(); nemes_sparks('12 27 30');};
-void() nemes_summon7  =[ $attack11, nemes_summon8  ] {ai_face(); nemes_sparks('22 3 30');
+void() nemes_summon1  = [$attack1,  nemes_summon2  ] { ai_face(); nemes_sparks('0 35 22'); };
+void() nemes_summon2  = [$attack3,  nemes_summon3  ] { ai_face(); nemes_sparks('-2 31 15'); };
+void() nemes_summon3  = [$attack5,  nemes_summon4  ] { ai_face(); nemes_sparks('-14 30 15'); };
+void() nemes_summon4  = [$attack7,  nemes_summon5  ] { ai_face(); nemes_sparks('-15 32 25'); };
+void() nemes_summon5  = [$attack9,  nemes_summon6  ] { ai_face(); nemes_sparks('-15 31 28'); };
+void() nemes_summon6  = [$attack10, nemes_summon7  ] { ai_face(); nemes_sparks('12 27 30'); };
+void() nemes_summon7  = [$attack11, nemes_summon8  ] { ai_face(); nemes_sparks('22 3 30');
 // DISABLED -- Vores as part of this boss fight is harsh.
 //    if (!self.pets)
 //    if (random() < 0.5)
@@ -507,12 +485,11 @@ void() nemes_summon7  =[ $attack11, nemes_summon8  ] {ai_face(); nemes_sparks('2
     //else
         //SpawnMonster_Horde (CT_MONWIZARD, 2);
 };
-void() nemes_summon8  =[ $attack13, nemes_summon9  ] {ai_face();};
-void() nemes_summon9  =[ $attack14, nemes_summon10 ] {ai_face();};
-void() nemes_summon10 =[ $attack15, nemes_run1     ] {ai_face(); TrogAttackFinished();};
+void() nemes_summon8  = [$attack13, nemes_summon9  ] { ai_face(); };
+void() nemes_summon9  = [$attack14, nemes_summon10 ] { ai_face(); };
+void() nemes_summon10 = [$attack15, nemes_run1     ] { ai_face(); TrogAttackFinished(); };
 
-void(vector st) nemes_sparks2 =
-{
+void(vector st) nemes_sparks2 = {
     local   vector  side;
 
     makevectors(self.angles);
@@ -521,46 +498,51 @@ void(vector st) nemes_sparks2 =
     particle (st + side, '0 0 50', 241, 10);
     particle (st - side, '0 0 50', 241, 10);
 };
-void() nemes_inviso1  =[ $attack1,  nemes_inviso2  ] {ai_face(); nemes_sparks2('0 35 22');};
-void() nemes_inviso2  =[ $attack3,  nemes_inviso3  ] {ai_face(); nemes_sparks2('-2 31 15');};
-void() nemes_inviso3  =[ $attack5,  nemes_inviso4  ] {ai_face(); nemes_sparks2('-14 30 15');};
-void() nemes_inviso4  =[ $attack7,  nemes_inviso5  ] {ai_face(); nemes_sparks2('-15 32 25');};
-void() nemes_inviso5  =[ $attack9,  nemes_inviso6  ] {ai_face(); nemes_sparks2('-15 31 28');};
-void() nemes_inviso6  =[ $attack10, nemes_inviso7  ] {ai_face(); nemes_sparks2('12 27 30');};
-void() nemes_inviso7  =[ $attack11, nemes_inviso8  ] {ai_face(); nemes_sparks2('22 3 30');
+void() nemes_inviso1  = [$attack1,  nemes_inviso2  ] { ai_face(); nemes_sparks2('0 35 22'); };
+void() nemes_inviso2  = [$attack3,  nemes_inviso3  ] { ai_face(); nemes_sparks2('-2 31 15'); };
+void() nemes_inviso3  = [$attack5,  nemes_inviso4  ] { ai_face(); nemes_sparks2('-14 30 15'); };
+void() nemes_inviso4  = [$attack7,  nemes_inviso5  ] { ai_face(); nemes_sparks2('-15 32 25'); };
+void() nemes_inviso5  = [$attack9,  nemes_inviso6  ] { ai_face(); nemes_sparks2('-15 31 28'); };
+void() nemes_inviso6  = [$attack10, nemes_inviso7  ] { ai_face(); nemes_sparks2('12 27 30'); };
+void() nemes_inviso7  = [$attack11, nemes_inviso8  ] { ai_face(); nemes_sparks2('22 3 30');
     sound (self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
     spawn_tfog (self.origin);
     self.invisible_finished = time + 10;
 };
-void() nemes_inviso8  =[ $attack13, nemes_inviso9  ] {ai_face();};
-void() nemes_inviso9  =[ $attack14, nemes_inviso10 ] {ai_face();};
-void() nemes_inviso10 =[ $attack15, nemes_run1     ] {ai_face(); TrogAttackFinished();};
+void() nemes_inviso8  = [$attack13, nemes_inviso9  ] { ai_face(); };
+void() nemes_inviso9  = [$attack14, nemes_inviso10 ] { ai_face(); };
+void() nemes_inviso10 = [$attack15, nemes_run1     ] { ai_face(); TrogAttackFinished(); };
 
-void() nemes_sboom1  =[ $attack1,  nemes_sboom2  ] {ai_face();};
-void() nemes_sboom2  =[ $attack2,  nemes_sboom3  ] {ai_face();};
-void() nemes_sboom3  =[ $attack3,  nemes_sboom4  ] {ai_face();};
-void() nemes_sboom4  =[ $attack4,  nemes_sboom5  ] {ai_face();
-    if (super_active) {self.think = nemes_fast1;  return;} // Someone else started it first -- use alt. instead.
+void() nemes_sboom1  = [$attack1,  nemes_sboom2  ] { ai_face(); };
+void() nemes_sboom2  = [$attack2,  nemes_sboom3  ] { ai_face(); };
+void() nemes_sboom3  = [$attack3,  nemes_sboom4  ] { ai_face(); };
+void() nemes_sboom4  = [$attack4,  nemes_sboom5  ] { ai_face();
+    if (super_active) { self.think = nemes_fast1;  return;} // Someone else started it first -- use alt. instead.
     StartTrogMagic();
 };
-void() nemes_sboom5  =[ $attack5,  nemes_sboom6  ] {ai_face();};
-void() nemes_sboom6  =[ $attack6,  nemes_sboom7  ] {ai_face();};
-void() nemes_sboom7  =[ $attack7,  nemes_sboom8  ] {ai_face();};
-void() nemes_sboom8  =[ $attack8,  nemes_sboom9  ] {ai_face();};
-void() nemes_sboom9  =[ $attack9,  nemes_sboom10 ] {ai_face();};
-void() nemes_sboom10 =[ $attack10, nemes_sboom11 ] {ai_face();};
-void() nemes_sboom11 =[ $attack11, nemes_sboom12 ] {ai_face();};
-void() nemes_sboom12 =[ $attack12, nemes_sboom13 ] {ai_face();};
-void() nemes_sboom13 =[ $attack13, nemes_sboom14 ] {ai_face();};
-void() nemes_sboom14 =[ $attack14, nemes_sboom15 ] {ai_face();};
-void() nemes_sboom15 =[ $attack15, nemes_run1    ] {ai_face(); TrogAttackFinished();};
+void() nemes_sboom5  = [$attack5,  nemes_sboom6  ] { ai_face(); };
+void() nemes_sboom6  = [$attack6,  nemes_sboom7  ] { ai_face(); };
+void() nemes_sboom7  = [$attack7,  nemes_sboom8  ] { ai_face(); };
+void() nemes_sboom8  = [$attack8,  nemes_sboom9  ] { ai_face(); };
+void() nemes_sboom9  = [$attack9,  nemes_sboom10 ] { ai_face(); };
+void() nemes_sboom10 = [$attack10, nemes_sboom11 ] { ai_face(); };
+void() nemes_sboom11 = [$attack11, nemes_sboom12 ] { ai_face(); };
+void() nemes_sboom12 = [$attack12, nemes_sboom13 ] { ai_face(); };
+void() nemes_sboom13 = [$attack13, nemes_sboom14 ] { ai_face(); };
+void() nemes_sboom14 = [$attack14, nemes_sboom15 ] { ai_face(); };
+void() nemes_sboom15 = [$attack15, nemes_run1    ] { ai_face(); TrogAttackFinished(); };
 
 void() Nemesant_Attack = {
 	local float fast;
 
-    if (self.bossflag && random() < 0.5) { // Boss version has other tricks it can use half the time.
-        if (!self.invisible_finished && (self.health <= (self.max_health / 2)) && random() < 0.5) { nemes_inviso1(); return; } // If hurt badly enough, cast invisibility sometimes.
-        if (self.count <= 1) {nemes_summon1();  return;} // Summon monsters to fight.
+    // Boss version has other tricks it can use half the time.
+    if (self.classtype == CT_MONNEMESANTBOSS && random() < 0.5) {
+        if (!self.invisible_finished && (self.health <= (self.max_health / 2))
+            && random() < 0.5) { 
+            nemes_inviso1(); // If hurt badly enough, cast invisibility sometimes.
+            return;
+        }
+        if (self.count <= 1) { nemes_summon1();  return;} // Summon monsters to fight.
     }
 
 	// Use quick attack instead of super attack if...
@@ -575,7 +557,8 @@ void() Nemesant_Attack = {
 	// Assuming no special conditions, chances of attack paths are as follows.
 	//  70% chance of A -- fast magic
 	//  30% chance of B -- super magic
-    if ((random() < 0.7) || !(self.enemy.flags & FL_ONGROUND) || super_active || (self.enemy.items & IT_INVISIBILITY) || self.enemy.invisible_finished) {
+    if ((random() < 0.7) || !(self.enemy.flags & FL_ONGROUND) || super_active
+        || Invisible(self.enemy)) {
         fast = 1;
         // Allow exceptions if nothing else is effective.
         if (!super_active) {
@@ -589,12 +572,12 @@ void() Nemesant_Attack = {
 };
 
 // PAIN
-void() nemes_pain1  =[ $pain1,  nemes_pain2  ] {};
-void() nemes_pain2  =[ $pain2,  nemes_pain3  ] {};
-void() nemes_pain3  =[ $pain3,  nemes_pain4  ] {};
-void() nemes_pain4  =[ $pain4,  nemes_pain5  ] {};
-void() nemes_pain5  =[ $pain5,  nemes_pain6  ] {};
-void() nemes_pain6  =[ $pain6,  nemes_run1   ] {};
+void() nemes_pain1  = [$pain1,  nemes_pain2  ] {};
+void() nemes_pain2  = [$pain2,  nemes_pain3  ] {};
+void() nemes_pain3  = [$pain3,  nemes_pain4  ] {};
+void() nemes_pain4  = [$pain4,  nemes_pain5  ] {};
+void() nemes_pain5  = [$pain5,  nemes_pain6  ] {};
+void() nemes_pain6  = [$pain6,  nemes_run1   ] {};
 
 void(entity inflictor, entity attacker, float damage) nemes_pain = {
     if (self.pain_finished > time) return;
@@ -615,23 +598,23 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
-void() nemes_death1  =[ $death1,  nemes_death2  ] {};
-void() nemes_death2  =[ $death2,  nemes_death3  ] {};
-void() nemes_death3  =[ $death3,  nemes_death4  ] { DropCoin(4);};
-void() nemes_death4  =[ $death4,  nemes_death5  ] {};
-void() nemes_death5  =[ $death5,  nemes_death6  ] {};
-void() nemes_death6  =[ $death6,  nemes_death7  ] {};
-void() nemes_death7  =[ $death7,  nemes_death8  ] {};
-void() nemes_death8  =[ $death8,  nemes_death9  ] {};
-void() nemes_death9  =[ $death9,  nemes_death10 ] {};
-void() nemes_death10 =[ $death10, nemes_death11 ] {};
-void() nemes_death11 =[ $death11, nemes_death12 ] {};
-void() nemes_death12 =[ $death12, nemes_death13 ] {};
-void() nemes_death13 =[ $death13, nemes_death14 ] {};
-void() nemes_death14 =[ $death14, nemes_death15 ] {};
-void() nemes_death15 =[ $death15, nemes_death16 ] {};
-void() nemes_death16 =[ $death16, nemes_death17 ] {};
-void() nemes_death17 =[ $death17, nemes_death17 ] {};
+void() nemes_death1  = [$death1,  nemes_death2  ] {};
+void() nemes_death2  = [$death2,  nemes_death3  ] {};
+void() nemes_death3  = [$death3,  nemes_death4  ] { DropCoin(4); };
+void() nemes_death4  = [$death4,  nemes_death5  ] {};
+void() nemes_death5  = [$death5,  nemes_death6  ] {};
+void() nemes_death6  = [$death6,  nemes_death7  ] {};
+void() nemes_death7  = [$death7,  nemes_death8  ] {};
+void() nemes_death8  = [$death8,  nemes_death9  ] {};
+void() nemes_death9  = [$death9,  nemes_death10 ] {};
+void() nemes_death10 = [$death10, nemes_death11 ] {};
+void() nemes_death11 = [$death11, nemes_death12 ] {};
+void() nemes_death12 = [$death12, nemes_death13 ] {};
+void() nemes_death13 = [$death13, nemes_death14 ] {};
+void() nemes_death14 = [$death14, nemes_death15 ] {};
+void() nemes_death15 = [$death15, nemes_death16 ] {};
+void() nemes_death16 = [$death16, nemes_death17 ] {};
+void() nemes_death17 = [$death17, nemes_death17 ] {};
 
 void() nemes_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -701,7 +684,7 @@ void() monster_nemesant = { // [ENTITY]
     self.solid = SOLID_NOT;		// No interaction with world
     self.movetype = MOVETYPE_NONE;	// Static item, no movement
     if (self.health < 1) self.health = 280;
-    self.gibhealth = -40;
+    if (self.gibhealth >= 0) self.gibhealth = -40;
     self.mass       = MASS_HEAVY;
     self.th_stand   = nemes_stand1;
     self.th_walk    = nemes_walk1;
@@ -712,7 +695,7 @@ void() monster_nemesant = { // [ENTITY]
     self.th_spawn   = monster_nemesant;
     self.waitmin = time + 5;     // Wait for idle sounds
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.classtype = CT_MONNEMESANT;
+	if (!self.classtype) self.classtype = CT_MONNEMESANT;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
 	if (random() < 0.5) {
@@ -727,9 +710,12 @@ void() monster_nemesant = { // [ENTITY]
 // SoE entity.
 void() monster_trogboss = { // [ENTITY]
     self.lip = 0;
-    if (self.skin != 2) self.skin = 1;
-    if (!self.health) self.health = 1600;
+    if (self.exactskin) self.skin = self.exactskin;
+    else if (self.skin != 2) self.skin = self.exactskin = 1;
+    if (self.health < 1) self.health = 1600;
+    if (self.gibhealth >= 0) self.gibhealth = -60;
 	self.bossflag = TRUE;
+    self.classtype = CT_MONNEMESANTBOSS;
 	if (self.deathstring == "") self.deathstring = " failed to impress the Master Nemesant\n";
     monster_nemesant();
 };

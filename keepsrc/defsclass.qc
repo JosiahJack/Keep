@@ -224,7 +224,7 @@ float CT_MONINQUISITOR = 199;	// Inquisitor boss for Twilight of the Idols
 float CT_MONDGUARD = 200;		// HD Knight (Guard)
 float CT_MONANACONDACOIL = 201;	// Anaconda coils
 float CT_MONSPELLMAS = 202;		// Baseboss from madfox's Phantom Pholly map (very similar but not the same as Virtus boss)
-
+float CT_MONNEMESANTBOSS = 203;	// Zerstorer Nemesant Boss from Drake
 
 float CT_MONDCROSS = 205;		// HD Knight (Crossbow)
 float CT_MONDFURY = 210;		// HD Knight (Fury)

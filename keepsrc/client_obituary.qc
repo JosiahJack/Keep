@@ -367,19 +367,19 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 			else if (targ.poisoned) bprint (" was poisoned\n");
 			else if (targ.bleeding) bprint (" bled to death\n");
 			else if (targ.deathtype == "loadingevil") { // Special blocking of evil skill savegames
-				targ.deathtype = string_null;
+				targ.deathtype = "";
 				bprint (" is too EVIL to live again!\n");
 			} else if (targ.deathtype == "falling") { // fell to their death?
-				targ.deathtype = string_null;
+				targ.deathtype = "";
 				bprint (" fell to his death\n");
 			} else if (targ.deathtype == "fire") {
-				targ.deathtype = string_null;
+				targ.deathtype = "";
 				bprint (" was scorched by fire\n");
 			} else if (targ.deathtype == "lightning") {
-				targ.deathtype = string_null;
+				targ.deathtype = "";
 				bprint (" was struck by lightning!\n");
 			} else if (targ.touchedvoid) {
-				targ.deathtype = string_null;
+				targ.deathtype = "";
 				bprint (" touched the void\n");
 			} else bprint (" is dead Jim!\n"); // heck if I know; he's just dead!!!
 		}

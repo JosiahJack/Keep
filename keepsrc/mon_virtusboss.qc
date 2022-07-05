@@ -68,8 +68,7 @@ entity() FindNewBossSpot = {
 	return self;
 };
 
-void() newboss_face = 
-{
+void() newboss_face = {
 	if (self.enemy.health <= 0 || random() < 0.020000)
 	{
 		self.enemy = find(self.enemy, classname, "player");
@@ -126,10 +125,9 @@ void() newboss_rise8 = [8, newboss_missile1]
 	self.th_stand();
 };
 
-void() newboss_newplace = 
-{
+void() newboss_newplace = {
 	local entity newspot;
-	self.model = string_null;
+	self.model = "";
 	self.nextthink = time + 1;
 	self.think = newboss_rise1;
 	newspot = FindNewBossSpot();
@@ -249,7 +247,7 @@ void() newboss_missile9 = [8, newboss_idle1]
 	newboss_face();
 };
 
-void() newboss_hurt1 = [17, newboss_hurt2] {self.passive_state = FALSE;};
+void() newboss_hurt1 = [17, newboss_hurt2] { self.passive_state = FALSE;};
 void() newboss_hurt2 = [18, newboss_hurt3] {};
 void() newboss_hurt3 = [19, newboss_hurt4] {};
 void() newboss_hurt4 = [20, newboss_idle1] {};
@@ -298,8 +296,8 @@ void() newboss_finale = {
 	local entity pos, pl;
 
 	AddToKills(self,self.enemy);
-	self.model = string_null;
-	self.mdl = string_null;
+	self.model = "";
+	self.mdl = "";
 	if (self.spawnflags & ANAC_INTERMISSION) {
 		intermission_exittime = time + 10000000;
 		intermission_running = 1;
@@ -335,17 +333,17 @@ void() newboss_finale = {
 	self.think = newboss_finale2;
 };
 
-void() newboss_death1 = [17, newboss_death2] {sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);};
-void() newboss_death2 = [18, newboss_death3]{};
-void() newboss_death3 = [19, newboss_death4]{};
-void() newboss_death4 = [20, newboss_death5]{};
-void() newboss_death5 = [21, newboss_death6]{};
-void() newboss_death6 = [22, newboss_death7]{};
-void() newboss_death7 = [23, newboss_death8]{};
-void() newboss_death8 = [24, newboss_death9]{};
-void() newboss_death9 = [25, newboss_death10]{};
-void() newboss_death10 = [26, newboss_death11]{};
-void() newboss_death11 = [27, newboss_death12]{};
+void() newboss_death1 = [17, newboss_death2] { sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM); };
+void() newboss_death2 = [18, newboss_death3] {};
+void() newboss_death3 = [19, newboss_death4] {};
+void() newboss_death4 = [20, newboss_death5] {};
+void() newboss_death5 = [21, newboss_death6] {};
+void() newboss_death6 = [22, newboss_death7] {};
+void() newboss_death7 = [23, newboss_death8] {};
+void() newboss_death8 = [24, newboss_death9] {};
+void() newboss_death9 = [25, newboss_death10] {};
+void() newboss_death10 = [26, newboss_death11] {};
+void() newboss_death11 = [27, newboss_death12] {};
 void() newboss_death12 = [28, newboss_death12] {
 	local float z;
 	z = self.origin_z - 50;
@@ -362,8 +360,7 @@ void() newboss_death12 = [28, newboss_death12] {
 	self.think = newboss_finale;
 };
 
-void(vector p) newboss_missile = 
-{
+void(vector p) newboss_missile = {
 	if (self.passive_state) return;
 	local vector offang;
 	local vector org;

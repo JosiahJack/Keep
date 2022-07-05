@@ -105,109 +105,109 @@ $frame idled9 idled10 idled11 idled12 idled13 idled14 idled15
 void(float type) zombiek_sound;
 void() zombiek_knockdown;
 
-void() zombiek_standB1	=[	$idleb1,		zombiek_standB2	] {ai_stand();};
-void() zombiek_standB2	=[	$idleb2,		zombiek_standB3	] {ai_stand();};
-void() zombiek_standB3	=[	$idleb3,		zombiek_standB4	] {ai_stand();};
-void() zombiek_standB4	=[	$idleb4,		zombiek_standB5	] {ai_stand();};
-void() zombiek_standB5	=[	$idleb5,		zombiek_standB6	] {ai_stand();};
-void() zombiek_standB6	=[	$idleb6,		zombiek_standB7	] {ai_stand();};
-void() zombiek_standB7	=[	$idleb7,		zombiek_standB8	] {ai_stand();};
-void() zombiek_standB8	=[	$idleb8,		zombiek_standB9	] {ai_stand();};
-void() zombiek_standB9	=[	$idleb9,		zombiek_standB10	] {ai_stand();};
-void() zombiek_standB10	=[	$idleb10,		zombiek_standB11	] {ai_stand();};
-void() zombiek_standB11	=[	$idleb11,		zombiek_standB12	] {ai_stand();};
-void() zombiek_standB12	=[	$idleb12,		zombiek_standB13	] {ai_stand();};
-void() zombiek_standB13	=[	$idleb13,		zombiek_standB14	] {ai_stand();};
-void() zombiek_standB14	=[	$idleb14,		zombiek_standB15	] {ai_stand();};
-void() zombiek_standB15	=[	$idleb15,		zombiek_standB16	] {ai_stand();};
-void() zombiek_standB16	=[	$idleb16,		zombiek_standB17	] {ai_stand();};
-void() zombiek_standB17	=[	$idleb17,		zombiek_standB18	] {ai_stand();};
-void() zombiek_standB18	=[	$idleb18,		zombiek_standB19	] {ai_stand();};
-void() zombiek_standB19	=[	$idleb19,		zombiek_standB20	] {ai_stand();};
-void() zombiek_standB20	=[	$idleb20,		zombiek_stand1	] {ai_stand();};
+void() zombiek_standB1	= [	$idleb1,		zombiek_standB2	] { ai_stand(); };
+void() zombiek_standB2	= [	$idleb2,		zombiek_standB3	] { ai_stand(); };
+void() zombiek_standB3	= [	$idleb3,		zombiek_standB4	] { ai_stand(); };
+void() zombiek_standB4	= [	$idleb4,		zombiek_standB5	] { ai_stand(); };
+void() zombiek_standB5	= [	$idleb5,		zombiek_standB6	] { ai_stand(); };
+void() zombiek_standB6	= [	$idleb6,		zombiek_standB7	] { ai_stand(); };
+void() zombiek_standB7	= [	$idleb7,		zombiek_standB8	] { ai_stand(); };
+void() zombiek_standB8	= [	$idleb8,		zombiek_standB9	] { ai_stand(); };
+void() zombiek_standB9	= [	$idleb9,		zombiek_standB10	] { ai_stand(); };
+void() zombiek_standB10	= [	$idleb10,		zombiek_standB11	] { ai_stand(); };
+void() zombiek_standB11	= [	$idleb11,		zombiek_standB12	] { ai_stand(); };
+void() zombiek_standB12	= [	$idleb12,		zombiek_standB13	] { ai_stand(); };
+void() zombiek_standB13	= [	$idleb13,		zombiek_standB14	] { ai_stand(); };
+void() zombiek_standB14	= [	$idleb14,		zombiek_standB15	] { ai_stand(); };
+void() zombiek_standB15	= [	$idleb15,		zombiek_standB16	] { ai_stand(); };
+void() zombiek_standB16	= [	$idleb16,		zombiek_standB17	] { ai_stand(); };
+void() zombiek_standB17	= [	$idleb17,		zombiek_standB18	] { ai_stand(); };
+void() zombiek_standB18	= [	$idleb18,		zombiek_standB19	] { ai_stand(); };
+void() zombiek_standB19	= [	$idleb19,		zombiek_standB20	] { ai_stand(); };
+void() zombiek_standB20	= [	$idleb20,		zombiek_stand1	] { ai_stand(); };
 
 //=============================================================================
-void() zombiek_standC1	=[	$idlec1,		zombiek_standC2	] {ai_stand();};
-void() zombiek_standC2	=[	$idlec2,		zombiek_standC3	] {ai_stand();};
-void() zombiek_standC3	=[	$idlec3,		zombiek_standC4	] {ai_stand();};
-void() zombiek_standC4	=[	$idlec4,		zombiek_standC5	] {ai_stand();};
-void() zombiek_standC5	=[	$idlec5,		zombiek_standC6	] {ai_stand();};
-void() zombiek_standC6	=[	$idlec6,		zombiek_standC7	] {ai_stand();};
-void() zombiek_standC7	=[	$idlec7,		zombiek_standC8	] {ai_stand();};
-void() zombiek_standC8	=[	$idlec8,		zombiek_standC9	] {ai_stand();};
-void() zombiek_standC9	=[	$idlec9,		zombiek_standC10	] {ai_stand();};
-void() zombiek_standC10	=[	$idlec10,		zombiek_standC11	] {ai_stand();};
-void() zombiek_standC11	=[	$idlec11,		zombiek_standC12	] {ai_stand();};
-void() zombiek_standC12	=[	$idlec12,		zombiek_standC13	] {ai_stand();};
-void() zombiek_standC13	=[	$idlec13,		zombiek_standC14	] {ai_stand();};
-void() zombiek_standC14	=[	$idlec14,		zombiek_standC15	] {ai_stand();};
-void() zombiek_standC15	=[	$idlec15,		zombiek_stand1	] {ai_stand();};
+void() zombiek_standC1	= [	$idlec1,		zombiek_standC2	] { ai_stand(); };
+void() zombiek_standC2	= [	$idlec2,		zombiek_standC3	] { ai_stand(); };
+void() zombiek_standC3	= [	$idlec3,		zombiek_standC4	] { ai_stand(); };
+void() zombiek_standC4	= [	$idlec4,		zombiek_standC5	] { ai_stand(); };
+void() zombiek_standC5	= [	$idlec5,		zombiek_standC6	] { ai_stand(); };
+void() zombiek_standC6	= [	$idlec6,		zombiek_standC7	] { ai_stand(); };
+void() zombiek_standC7	= [	$idlec7,		zombiek_standC8	] { ai_stand(); };
+void() zombiek_standC8	= [	$idlec8,		zombiek_standC9	] { ai_stand(); };
+void() zombiek_standC9	= [	$idlec9,		zombiek_standC10	] { ai_stand(); };
+void() zombiek_standC10	= [	$idlec10,		zombiek_standC11	] { ai_stand(); };
+void() zombiek_standC11	= [	$idlec11,		zombiek_standC12	] { ai_stand(); };
+void() zombiek_standC12	= [	$idlec12,		zombiek_standC13	] { ai_stand(); };
+void() zombiek_standC13	= [	$idlec13,		zombiek_standC14	] { ai_stand(); };
+void() zombiek_standC14	= [	$idlec14,		zombiek_standC15	] { ai_stand(); };
+void() zombiek_standC15	= [	$idlec15,		zombiek_stand1	] { ai_stand(); };
 
 //=============================================================================
-void() zombiek_standD1	=[	$idled1,		zombiek_standD2	] {ai_stand();};
-void() zombiek_standD2	=[	$idled2,		zombiek_standD3	] {ai_stand();};
-void() zombiek_standD3	=[	$idled3,		zombiek_standD4	] {ai_stand();};
-void() zombiek_standD4	=[	$idled4,		zombiek_standD5	] {ai_stand();};
-void() zombiek_standD5	=[	$idled5,		zombiek_standD6	] {ai_stand();};
-void() zombiek_standD6	=[	$idled6,		zombiek_standD7	] {ai_stand();};
-void() zombiek_standD7	=[	$idled7,		zombiek_standD8	] {ai_stand();};
-void() zombiek_standD8	=[	$idled8,		zombiek_standD9	] {ai_stand();};
-void() zombiek_standD9	=[	$idled9,		zombiek_standD10	] {ai_stand();};
-void() zombiek_standD10	=[	$idled10,		zombiek_standD11	] {ai_stand();};
-void() zombiek_standD11	=[	$idled11,		zombiek_standD12	] {ai_stand();};
-void() zombiek_standD12	=[	$idled12,		zombiek_standD13	] {ai_stand();};
-void() zombiek_standD13	=[	$idled13,		zombiek_standD14	] {ai_stand();};
-void() zombiek_standD14	=[	$idled14,		zombiek_standD15	] {ai_stand();};
-void() zombiek_standD15	=[	$idled15,		zombiek_stand1	] {ai_stand();};
+void() zombiek_standD1	= [	$idled1,		zombiek_standD2	] { ai_stand(); };
+void() zombiek_standD2	= [	$idled2,		zombiek_standD3	] { ai_stand(); };
+void() zombiek_standD3	= [	$idled3,		zombiek_standD4	] { ai_stand(); };
+void() zombiek_standD4	= [	$idled4,		zombiek_standD5	] { ai_stand(); };
+void() zombiek_standD5	= [	$idled5,		zombiek_standD6	] { ai_stand(); };
+void() zombiek_standD6	= [	$idled6,		zombiek_standD7	] { ai_stand(); };
+void() zombiek_standD7	= [	$idled7,		zombiek_standD8	] { ai_stand(); };
+void() zombiek_standD8	= [	$idled8,		zombiek_standD9	] { ai_stand(); };
+void() zombiek_standD9	= [	$idled9,		zombiek_standD10	] { ai_stand(); };
+void() zombiek_standD10	= [	$idled10,		zombiek_standD11	] { ai_stand(); };
+void() zombiek_standD11	= [	$idled11,		zombiek_standD12	] { ai_stand(); };
+void() zombiek_standD12	= [	$idled12,		zombiek_standD13	] { ai_stand(); };
+void() zombiek_standD13	= [	$idled13,		zombiek_standD14	] { ai_stand(); };
+void() zombiek_standD14	= [	$idled14,		zombiek_standD15	] { ai_stand(); };
+void() zombiek_standD15	= [	$idled15,		zombiek_stand1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void() zombiek_standE1	=[	$idlec1,		zombiek_standE2	] {ai_stand();};
-void() zombiek_standE2	=[	$idlec2,		zombiek_standE3	] {ai_stand();};
-void() zombiek_standE3	=[	$idlec3,		zombiek_standE4	] {ai_stand();};
-void() zombiek_standE4	=[	$idlec4,		zombiek_standE5	] {ai_stand();};
-void() zombiek_standE5	=[	$idlec5,		zombiek_standE6	] {ai_stand();};
-void() zombiek_standE6	=[	$idlec6,		zombiek_standE7	] {ai_stand();};
-void() zombiek_standE7	=[	$idlec7,		zombiek_standE8	] {ai_stand();};
-void() zombiek_standE8	=[	$idlec8,		zombiek_standE9	] {ai_stand();};
-void() zombiek_standE9	=[	$idlec9,		zombiek_standE10	] {ai_stand();};
-void() zombiek_standE10	=[	$idlec10,		zombiek_standE11	] {ai_stand();};
-void() zombiek_standE11	=[	$idlec11,		zombiek_standE12	] {ai_stand();};
-void() zombiek_standE12	=[	$idlec12,		zombiek_standE13	] {ai_stand();};
-void() zombiek_standE13	=[	$idlec13,		zombiek_standE14	] {ai_stand();};
-void() zombiek_standE14	=[	$idlec14,		zombiek_standE15	] {ai_stand();};
-void() zombiek_standE15	=[	$idlec15,		zombiek_standE16	] {ai_stand();};
-void() zombiek_standE16	=[	$idled1,		zombiek_standE17	] {ai_stand();};
-void() zombiek_standE17	=[	$idled2,		zombiek_standE18	] {ai_stand();};
-void() zombiek_standE18	=[	$idled3,		zombiek_standE19	] {ai_stand();};
-void() zombiek_standE19	=[	$idled4,		zombiek_standE20	] {ai_stand();};
-void() zombiek_standE20	=[	$idled5,		zombiek_standE21	] {ai_stand();};
-void() zombiek_standE21	=[	$idled6,		zombiek_standE22	] {ai_stand();};
-void() zombiek_standE22	=[	$idled7,		zombiek_standE23	] {ai_stand();};
-void() zombiek_standE23	=[	$idled8,		zombiek_standE24	] {ai_stand();};
-void() zombiek_standE24	=[	$idled9,		zombiek_standE25	] {ai_stand();};
-void() zombiek_standE25	=[	$idled10,		zombiek_standE26	] {ai_stand();};
-void() zombiek_standE26	=[	$idled11,		zombiek_standE27	] {ai_stand();};
-void() zombiek_standE27	=[	$idled12,		zombiek_standE28	] {ai_stand();};
-void() zombiek_standE28	=[	$idled13,		zombiek_standE29	] {ai_stand();};
-void() zombiek_standE29	=[	$idled14,		zombiek_standE30	] {ai_stand();};
-void() zombiek_standE30	=[	$idled15,		zombiek_stand1	] {ai_stand();};
+void() zombiek_standE1	= [	$idlec1,		zombiek_standE2	] { ai_stand(); };
+void() zombiek_standE2	= [	$idlec2,		zombiek_standE3	] { ai_stand(); };
+void() zombiek_standE3	= [	$idlec3,		zombiek_standE4	] { ai_stand(); };
+void() zombiek_standE4	= [	$idlec4,		zombiek_standE5	] { ai_stand(); };
+void() zombiek_standE5	= [	$idlec5,		zombiek_standE6	] { ai_stand(); };
+void() zombiek_standE6	= [	$idlec6,		zombiek_standE7	] { ai_stand(); };
+void() zombiek_standE7	= [	$idlec7,		zombiek_standE8	] { ai_stand(); };
+void() zombiek_standE8	= [	$idlec8,		zombiek_standE9	] { ai_stand(); };
+void() zombiek_standE9	= [	$idlec9,		zombiek_standE10	] { ai_stand(); };
+void() zombiek_standE10	= [	$idlec10,		zombiek_standE11	] { ai_stand(); };
+void() zombiek_standE11	= [	$idlec11,		zombiek_standE12	] { ai_stand(); };
+void() zombiek_standE12	= [	$idlec12,		zombiek_standE13	] { ai_stand(); };
+void() zombiek_standE13	= [	$idlec13,		zombiek_standE14	] { ai_stand(); };
+void() zombiek_standE14	= [	$idlec14,		zombiek_standE15	] { ai_stand(); };
+void() zombiek_standE15	= [	$idlec15,		zombiek_standE16	] { ai_stand(); };
+void() zombiek_standE16	= [	$idled1,		zombiek_standE17	] { ai_stand(); };
+void() zombiek_standE17	= [	$idled2,		zombiek_standE18	] { ai_stand(); };
+void() zombiek_standE18	= [	$idled3,		zombiek_standE19	] { ai_stand(); };
+void() zombiek_standE19	= [	$idled4,		zombiek_standE20	] { ai_stand(); };
+void() zombiek_standE20	= [	$idled5,		zombiek_standE21	] { ai_stand(); };
+void() zombiek_standE21	= [	$idled6,		zombiek_standE22	] { ai_stand(); };
+void() zombiek_standE22	= [	$idled7,		zombiek_standE23	] { ai_stand(); };
+void() zombiek_standE23	= [	$idled8,		zombiek_standE24	] { ai_stand(); };
+void() zombiek_standE24	= [	$idled9,		zombiek_standE25	] { ai_stand(); };
+void() zombiek_standE25	= [	$idled10,		zombiek_standE26	] { ai_stand(); };
+void() zombiek_standE26	= [	$idled11,		zombiek_standE27	] { ai_stand(); };
+void() zombiek_standE27	= [	$idled12,		zombiek_standE28	] { ai_stand(); };
+void() zombiek_standE28	= [	$idled13,		zombiek_standE29	] { ai_stand(); };
+void() zombiek_standE29	= [	$idled14,		zombiek_standE30	] { ai_stand(); };
+void() zombiek_standE30	= [	$idled15,		zombiek_stand1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void() zombiek_stand1	=[	$stand1,		zombiek_stand2	] {ai_stand();};
-void() zombiek_stand2	=[	$stand2,		zombiek_stand3	] {ai_stand();};
-void() zombiek_stand3	=[	$stand3,		zombiek_stand4	] {ai_stand();};
-void() zombiek_stand4	=[	$stand4,		zombiek_stand5	] {ai_stand();};
-void() zombiek_stand5	=[	$stand5,		zombiek_stand6	] {ai_stand();};
-void() zombiek_stand6	=[	$stand6,		zombiek_stand7	] {ai_stand();};
-void() zombiek_stand7	=[	$stand7,		zombiek_stand8	] {ai_stand();};
-void() zombiek_stand8	=[	$stand8,		zombiek_stand9	] {ai_stand();};
-void() zombiek_stand9	=[	$stand9,		zombiek_stand10	] {ai_stand();};
-void() zombiek_stand10	=[	$stand10,		zombiek_stand11	] {ai_stand();};
-void() zombiek_stand11	=[	$stand11,		zombiek_stand12	] {ai_stand();};
-void() zombiek_stand12	=[	$stand12,		zombiek_stand13	] {ai_stand();};
-void() zombiek_stand13	=[	$stand13,		zombiek_stand14	] {ai_stand();};
-void() zombiek_stand14	=[	$stand14,		zombiek_stand15	] {ai_stand();};
-void() zombiek_stand15	=[	$stand15,		zombiek_stand1	] {
+void() zombiek_stand1	= [	$stand1,		zombiek_stand2	] { ai_stand(); };
+void() zombiek_stand2	= [	$stand2,		zombiek_stand3	] { ai_stand(); };
+void() zombiek_stand3	= [	$stand3,		zombiek_stand4	] { ai_stand(); };
+void() zombiek_stand4	= [	$stand4,		zombiek_stand5	] { ai_stand(); };
+void() zombiek_stand5	= [	$stand5,		zombiek_stand6	] { ai_stand(); };
+void() zombiek_stand6	= [	$stand6,		zombiek_stand7	] { ai_stand(); };
+void() zombiek_stand7	= [	$stand7,		zombiek_stand8	] { ai_stand(); };
+void() zombiek_stand8	= [	$stand8,		zombiek_stand9	] { ai_stand(); };
+void() zombiek_stand9	= [	$stand9,		zombiek_stand10	] { ai_stand(); };
+void() zombiek_stand10	= [	$stand10,		zombiek_stand11	] { ai_stand(); };
+void() zombiek_stand11	= [	$stand11,		zombiek_stand12	] { ai_stand(); };
+void() zombiek_stand12	= [	$stand12,		zombiek_stand13	] { ai_stand(); };
+void() zombiek_stand13	= [	$stand13,		zombiek_stand14	] { ai_stand(); };
+void() zombiek_stand14	= [	$stand14,		zombiek_stand15	] { ai_stand(); };
+void() zombiek_stand15	= [	$stand15,		zombiek_stand1	] {
 	self.idlebusy = FALSE;
 	self.solid = SOLID_SLIDEBOX;
 	if (random() < MON_IDLE_ANIMATION) {
@@ -224,36 +224,36 @@ void() zombiek_stand15	=[	$stand15,		zombiek_stand1	] {
 	ai_stand();
 };
 
-//============================================================================
-void() zombiek_walk1	=[	$walk1,		zombiek_walk2	] {
-	self.inpain = 0; self.solid = SOLID_SLIDEBOX; ai_walk(1);};
-void() zombiek_walk2	=[	$walk2,		zombiek_walk3	] {ai_walk(1);};
-void() zombiek_walk3	=[	$walk3,		zombiek_walk4	] {ai_walk(4);};
-void() zombiek_walk4	=[	$walk4,		zombiek_walk5	] {ai_walk(4);};
-void() zombiek_walk5	=[	$walk5,		zombiek_walk6	] {ai_walk(2);};
-void() zombiek_walk6	=[	$walk6,		zombiek_walk7	] {ai_walk(1);};
-void() zombiek_walk7	=[	$walk7,		zombiek_walk8	] {ai_walk(1);};
-void() zombiek_walk8	=[	$walk8,		zombiek_walk9	] {ai_walk(1);monster_footstep(FALSE);};
-void() zombiek_walk9	=[	$walk9,		zombiek_walk10] {ai_walk(1);};
-void() zombiek_walk10	=[	$walk10,	zombiek_walk11] {ai_walk(1);};
-void() zombiek_walk11	=[	$walk11,	zombiek_walk12] {ai_walk(1);};
-void() zombiek_walk12	=[	$walk12,	zombiek_walk13] {ai_walk(1);monster_footstep(TRUE);};	// Scrapping Clubfoot
-void() zombiek_walk13	=[	$walk13,	zombiek_walk14] {ai_walk(1);};
-void() zombiek_walk14	=[	$walk14,	zombiek_walk1	] {zombiek_sound(2);ai_walk(1);};
 
-//============================================================================
-void() zombiek_run1		=[	$run1,		zombiek_run2	] {
-	self.inpain = 0; self.solid = SOLID_SLIDEBOX; ai_run(12);};
-void() zombiek_run2		=[	$run2,		zombiek_run3	] {ai_run(12);};
-void() zombiek_run3		=[	$run3,		zombiek_run4	] {ai_run(13);};
-void() zombiek_run4		=[	$run4,		zombiek_run5	] {ai_run(12);};
-void() zombiek_run5		=[	$run5,		zombiek_run6	] {ai_run(12);monster_footstep(FALSE);};
-void() zombiek_run6		=[	$run6,		zombiek_run7	] {ai_run(12);};
-void() zombiek_run7		=[	$run7,		zombiek_run8	] {ai_run(12);};
-void() zombiek_run8		=[	$run8,		zombiek_run9	] {ai_run(11);};
-void() zombiek_run9		=[	$run9,		zombiek_run10	] {ai_run(14);};
-void() zombiek_run10	=[	$run10,		zombiek_run11	] {ai_run(13);};
-void() zombiek_run11	=[	$run11,		zombiek_run1	] {ai_run(11); 
+void() zombiek_walk1	= [	$walk1,		zombiek_walk2	] {
+	self.inpain = 0; self.solid = SOLID_SLIDEBOX; ai_walk(1); };
+void() zombiek_walk2	= [	$walk2,		zombiek_walk3	] { ai_walk(1); };
+void() zombiek_walk3	= [	$walk3,		zombiek_walk4	] { ai_walk(4); };
+void() zombiek_walk4	= [	$walk4,		zombiek_walk5	] { ai_walk(4); };
+void() zombiek_walk5	= [	$walk5,		zombiek_walk6	] { ai_walk(2); };
+void() zombiek_walk6	= [	$walk6,		zombiek_walk7	] { ai_walk(1); };
+void() zombiek_walk7	= [	$walk7,		zombiek_walk8	] { ai_walk(1); };
+void() zombiek_walk8	= [	$walk8,		zombiek_walk9	] { ai_walk(1);monster_footstep(FALSE); };
+void() zombiek_walk9	= [	$walk9,		zombiek_walk10] { ai_walk(1); };
+void() zombiek_walk10	= [	$walk10,	zombiek_walk11] { ai_walk(1); };
+void() zombiek_walk11	= [	$walk11,	zombiek_walk12] { ai_walk(1); };
+void() zombiek_walk12	= [	$walk12,	zombiek_walk13] { ai_walk(1);monster_footstep(TRUE); };	// Scrapping Clubfoot
+void() zombiek_walk13	= [	$walk13,	zombiek_walk14] { ai_walk(1); };
+void() zombiek_walk14	= [	$walk14,	zombiek_walk1	] { zombiek_sound(2);ai_walk(1); };
+
+
+void() zombiek_run1		= [	$run1,		zombiek_run2	] {
+	self.inpain = 0; self.solid = SOLID_SLIDEBOX; ai_run(12); };
+void() zombiek_run2		= [	$run2,		zombiek_run3	] { ai_run(12); };
+void() zombiek_run3		= [	$run3,		zombiek_run4	] { ai_run(13); };
+void() zombiek_run4		= [	$run4,		zombiek_run5	] { ai_run(12); };
+void() zombiek_run5		= [	$run5,		zombiek_run6	] { ai_run(12);monster_footstep(FALSE); };
+void() zombiek_run6		= [	$run6,		zombiek_run7	] { ai_run(12); };
+void() zombiek_run7		= [	$run7,		zombiek_run8	] { ai_run(12); };
+void() zombiek_run8		= [	$run8,		zombiek_run9	] { ai_run(11); };
+void() zombiek_run9		= [	$run9,		zombiek_run10	] { ai_run(14); };
+void() zombiek_run10	= [	$run10,		zombiek_run11	] { ai_run(13); };
+void() zombiek_run11	= [	$run11,		zombiek_run1	] { ai_run(11); 
 	self.steptype = FS_TYPEHEAVY;		// Heavy clubfoot
 	monster_footstep(FALSE);
 	self.steptype = FS_TYPESLOW;		// Normal zombie foot
@@ -262,38 +262,37 @@ void() zombiek_run11	=[	$run11,		zombiek_run1	] {ai_run(11);
 //===========================================================================
 // Melee Attack 2 - Stationary over arm swing (17->12 frames)
 // Removed frames 1,3,4,5,7
-void()	zombiek_attb1	=[	$attb2,		zombiek_attb6 ] {ai_face();};
-void()	zombiek_attb6	=[	$attb6,		zombiek_attb8	] {ai_face();};
-void()	zombiek_attb8	=[	$attb8,		zombiek_attb9	] {ai_face();zombiek_sound(7);};
-void()	zombiek_attb9	=[	$attb9,		zombiek_attb10] {ai_face();};
-void()	zombiek_attb10=[	$attb10,	zombiek_attb11] {ai_face();ai_melee();};
-void()	zombiek_attb11=[	$attb11,	zombiek_attb12] {ai_melee();};
-void()	zombiek_attb12=[	$attb12,	zombiek_attb13] {ai_melee();};
-void()	zombiek_attb13=[	$attb13,	zombiek_attb14] {};
-void()	zombiek_attb14=[	$attb14,	zombiek_attb15] {};
-void()	zombiek_attb15=[	$attb15,	zombiek_attb16] {};
-void()	zombiek_attb16=[	$attb16,	zombiek_attb17] {};
-void()	zombiek_attb17=[	$attb17,	zombiek_run1	] {};
+void()	zombiek_attb1	= [	$attb2,		zombiek_attb6 ] { ai_face(); };
+void()	zombiek_attb6	= [	$attb6,		zombiek_attb8	] { ai_face(); };
+void()	zombiek_attb8	= [	$attb8,		zombiek_attb9	] { ai_face();zombiek_sound(7); };
+void()	zombiek_attb9	= [	$attb9,		zombiek_attb10] { ai_face(); };
+void()	zombiek_attb10= [	$attb10,	zombiek_attb11] { ai_face();ai_melee(); };
+void()	zombiek_attb11= [	$attb11,	zombiek_attb12] { ai_melee(); };
+void()	zombiek_attb12= [	$attb12,	zombiek_attb13] { ai_melee(); };
+void()	zombiek_attb13= [	$attb13,	zombiek_attb14] {};
+void()	zombiek_attb14= [	$attb14,	zombiek_attb15] {};
+void()	zombiek_attb15= [	$attb15,	zombiek_attb16] {};
+void()	zombiek_attb16= [	$attb16,	zombiek_attb17] {};
+void()	zombiek_attb17= [	$attb17,	zombiek_run1	] {};
 
 //----------------------------------------------------------------------
 // Melee Attack 3 - Stationary sideways swing (15->12 frames)
 // Removed frames 1,3,15
-void()	zombiek_attc1	=[	$attc2,		zombiek_attc4	] {ai_face();};
-void()	zombiek_attc4	=[	$attc4,		zombiek_attc5	] {ai_face();};
-void()	zombiek_attc5	=[	$attc5,		zombiek_attc6	] {zombiek_sound(7); ai_face();};
-void()	zombiek_attc6	=[	$attc6,		zombiek_attc7	] {ai_face();};
-void()	zombiek_attc7	=[	$attc7,		zombiek_attc8	] {ai_face();ai_melee();};
-void()	zombiek_attc8	=[	$attc8,		zombiek_attc9	] {ai_melee();};
-void()	zombiek_attc9	=[	$attc9,		zombiek_attc10] {ai_melee();};
-void()	zombiek_attc10=[	$attc10,	zombiek_attc11] {};
-void()	zombiek_attc11=[	$attc11,	zombiek_attc12] {};
-void()	zombiek_attc12=[	$attc12,	zombiek_attc13] {};
-void()	zombiek_attc13=[	$attc13,	zombiek_attc14] {};
-void()	zombiek_attc14=[	$attc14,	zombiek_run1	] {};
+void()	zombiek_attc1	= [	$attc2,		zombiek_attc4	] { ai_face(); };
+void()	zombiek_attc4	= [	$attc4,		zombiek_attc5	] { ai_face(); };
+void()	zombiek_attc5	= [	$attc5,		zombiek_attc6	] { zombiek_sound(7); ai_face(); };
+void()	zombiek_attc6	= [	$attc6,		zombiek_attc7	] { ai_face(); };
+void()	zombiek_attc7	= [	$attc7,		zombiek_attc8	] { ai_face();ai_melee(); };
+void()	zombiek_attc8	= [	$attc8,		zombiek_attc9	] { ai_melee(); };
+void()	zombiek_attc9	= [	$attc9,		zombiek_attc10] { ai_melee(); };
+void()	zombiek_attc10= [	$attc10,	zombiek_attc11] {};
+void()	zombiek_attc11= [	$attc11,	zombiek_attc12] {};
+void()	zombiek_attc12= [	$attc12,	zombiek_attc13] {};
+void()	zombiek_attc13= [	$attc13,	zombiek_attc14] {};
+void()	zombiek_attc14= [	$attc14,	zombiek_run1	] {};
 
 //----------------------------------------------------------------------
-void() zombiek_melee =
-{
+void() zombiek_melee = {
 	ai_face();		// Turn towards enemy target
 	walkmove (self.ideal_yaw, 20);
 
@@ -302,10 +301,10 @@ void() zombiek_melee =
 	else zombiek_attc1();					// Stationary sideways swing
 };
 
-//============================================================================
+
 // Jump + melee attack
 // Melee Attack 1 - Smash, chop overhead to ground (19->10/11 frames)
-//============================================================================
+
 void()	zombiek_JumpTouch = {
 	local float ldmg;
 	
@@ -338,12 +337,12 @@ void()	zombiek_JumpTouch = {
 };
 
 //----------------------------------------------------------------------
-void()	zombiek_jump1	=[	$atta1,		zombiek_jump2 ] {ai_charge(12);
+void()	zombiek_jump1	= [	$atta1,		zombiek_jump2 ] { ai_charge(12);
 	self.jump_flag = time + MONAI_JUMPZOMBTIME;
 	zombiek_sound(3);	// Moan about jumping forward
 };
-void()	zombiek_jump2	=[	$atta2,		zombiek_jump3 ] {ai_charge(16);};
-void()	zombiek_jump3	=[	$atta3,		zombiek_jump4 ] {
+void()	zombiek_jump2	= [	$atta2,		zombiek_jump3 ] { ai_charge(16); };
+void()	zombiek_jump3	= [	$atta3,		zombiek_jump4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPZOMBTIME;
 	self.touch = zombiek_JumpTouch;
@@ -355,11 +354,11 @@ void()	zombiek_jump3	=[	$atta3,		zombiek_jump4 ] {
 };
 
 // Flying through the air waiting to touch something!
-void()	zombiek_jump4	=[	$atta4,		zombiek_jump5 ] {ai_face();};
-void()	zombiek_jump5	=[	$atta5,		zombiek_jump6	] {ai_face();};
-void()	zombiek_jump6	=[	$atta6,		zombiek_jump6	] {ai_face();};
-void()	zombiek_jump7	=[	$atta7,		zombiek_jump7	] {ai_face();};
-void()	zombiek_jump8	=[	$atta8,		zombiek_jump9	] {ai_face();
+void()	zombiek_jump4	= [	$atta4,		zombiek_jump5 ] { ai_face(); };
+void()	zombiek_jump5	= [	$atta5,		zombiek_jump6	] { ai_face(); };
+void()	zombiek_jump6	= [	$atta6,		zombiek_jump6	] { ai_face(); };
+void()	zombiek_jump7	= [	$atta7,		zombiek_jump7	] { ai_face(); };
+void()	zombiek_jump8	= [	$atta8,		zombiek_jump9	] { ai_face();
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		if (!checkbottom(self)) {
@@ -372,125 +371,125 @@ void()	zombiek_jump8	=[	$atta8,		zombiek_jump9	] {ai_face();
 
 //----------------------------------------------------------------------
 void() zombiek_jump15;		// Chance of quick animation exit
-void()	zombiek_jump9	=[	$atta9,		zombiek_jump10] {ai_melee();};
-void()	zombiek_jump10=[	$atta10,	zombiek_jump11] {ai_melee();};
-void()	zombiek_jump11=[	$atta11,	zombiek_jump12] {};
-void()	zombiek_jump12=[	$atta12,	zombiek_jump13] {
+void()	zombiek_jump9	= [	$atta9,		zombiek_jump10] { ai_melee(); };
+void()	zombiek_jump10= [	$atta10,	zombiek_jump11] { ai_melee(); };
+void()	zombiek_jump11= [	$atta11,	zombiek_jump12] {};
+void()	zombiek_jump12= [	$atta12,	zombiek_jump13] {
 	if (random() < 0.5) self.think = zombiek_jump15;};	// quick recovery
-void()	zombiek_jump13=[	$atta13,	zombiek_jump14] {};
-void()	zombiek_jump14=[	$atta14,	zombiek_jump16] {};
-void()	zombiek_jump15=[	$atta15,	zombiek_jump16] {};
-void()	zombiek_jump16=[	$atta16,	zombiek_jump18] {};
-void()	zombiek_jump18=[	$atta18,	zombiek_run1 ] {ai_resetangles();};
+void()	zombiek_jump13= [	$atta13,	zombiek_jump14] {};
+void()	zombiek_jump14= [	$atta14,	zombiek_jump16] {};
+void()	zombiek_jump15= [	$atta15,	zombiek_jump16] {};
+void()	zombiek_jump16= [	$atta16,	zombiek_jump18] {};
+void()	zombiek_jump18= [	$atta18,	zombiek_run1 ] { ai_resetangles(); };
 
 /*======================================================================
   PAIN
 ========================================================================*/
-void()	zombiek_paina1	=[	$paina1,		zombiek_paina2	] {ai_painforward(8);};
-void()	zombiek_paina2	=[	$paina2,		zombiek_paina3	] {ai_painforward(3);};
-void()	zombiek_paina3	=[	$paina3,		zombiek_paina4	] {ai_painforward(3);};
-void()	zombiek_paina4	=[	$paina4,		zombiek_paina5	] {ai_painforward(3);monster_footstep(FALSE);};
-void()	zombiek_paina5	=[	$paina5,		zombiek_paina6	] {ai_painforward(3);};
-void()	zombiek_paina6	=[	$paina6,		zombiek_paina7	] {ai_painforward(3);};
-void()	zombiek_paina7	=[	$paina7,		zombiek_paina8	] {ai_painforward(3);};
-void()	zombiek_paina8	=[	$paina8,		zombiek_paina9	] {ai_painforward(3);};
-void()	zombiek_paina9	=[	$paina9,		zombiek_paina10	] {ai_painforward(2);monster_footstep(FALSE);};
-void()	zombiek_paina10	=[	$paina10,		zombiek_paina11	] {ai_painforward(1);};
-void()	zombiek_paina11	=[	$paina11,		zombiek_paina12	] {ai_painforward(2);};
-void()	zombiek_paina12	=[	$paina12,		zombiek_run1	] {ai_painforward(1);self.inpain = 0;};
+void()	zombiek_paina1	= [	$paina1,		zombiek_paina2	] { ai_painforward(8); };
+void()	zombiek_paina2	= [	$paina2,		zombiek_paina3	] { ai_painforward(3); };
+void()	zombiek_paina3	= [	$paina3,		zombiek_paina4	] { ai_painforward(3); };
+void()	zombiek_paina4	= [	$paina4,		zombiek_paina5	] { ai_painforward(3);monster_footstep(FALSE); };
+void()	zombiek_paina5	= [	$paina5,		zombiek_paina6	] { ai_painforward(3); };
+void()	zombiek_paina6	= [	$paina6,		zombiek_paina7	] { ai_painforward(3); };
+void()	zombiek_paina7	= [	$paina7,		zombiek_paina8	] { ai_painforward(3); };
+void()	zombiek_paina8	= [	$paina8,		zombiek_paina9	] { ai_painforward(3); };
+void()	zombiek_paina9	= [	$paina9,		zombiek_paina10	] { ai_painforward(2);monster_footstep(FALSE); };
+void()	zombiek_paina10	= [	$paina10,		zombiek_paina11	] { ai_painforward(1); };
+void()	zombiek_paina11	= [	$paina11,		zombiek_paina12	] { ai_painforward(2); };
+void()	zombiek_paina12	= [	$paina12,		zombiek_run1	] { ai_painforward(1);self.inpain = 0;};
 
 //----------------------------------------------------------------------
-void()	zombiek_painb1	=[	$painb1,		zombiek_painb2	] {ai_painforward(8);};
-void()	zombiek_painb2	=[	$painb2,		zombiek_painb3	] {ai_pain(1);};
-void()	zombiek_painb3	=[	$painb3,		zombiek_painb4	] {ai_pain(1);};
-void()	zombiek_painb4	=[	$painb4,		zombiek_painb5	] {ai_pain(1);};
-void()	zombiek_painb5	=[	$painb5,		zombiek_painb6	] {ai_pain(1);};
-void()	zombiek_painb6	=[	$painb6,		zombiek_painb7	] {ai_pain(2);};
-void()	zombiek_painb7	=[	$painb7,		zombiek_painb8	] {ai_pain(2);};
-void()	zombiek_painb8	=[	$painb8,		zombiek_painb9	] {ai_pain(4);};
-void()	zombiek_painb9	=[	$painb9,		zombiek_painb10	] {ai_pain(4);};
-void()	zombiek_painb10	=[	$painb10,		zombiek_painb11	] {ai_pain(4);};
-void()	zombiek_painb11	=[	$painb11,		zombiek_painb12	] {ai_pain(2);monster_footstep(FALSE);};
-void()	zombiek_painb12	=[	$painb12,		zombiek_painb13	] {ai_pain(2);};
-void()	zombiek_painb13	=[	$painb13,		zombiek_painb14	] {ai_pain(3);};
-void()	zombiek_painb14	=[	$painb14,		zombiek_painb15	] {};
-void()	zombiek_painb15	=[	$painb15,		zombiek_painb16	] {};
-void()	zombiek_painb16	=[	$painb16,		zombiek_painb17	] {};
-void()	zombiek_painb17	=[	$painb17,		zombiek_painb18	] {};
-void()	zombiek_painb18	=[	$painb18,		zombiek_painb19	] {ai_painforward(3);};
-void()	zombiek_painb19	=[	$painb19,		zombiek_painb20	] {ai_painforward(3);};
-void()	zombiek_painb20	=[	$painb20,		zombiek_painb21	] {ai_painforward(3);};
-void()	zombiek_painb21	=[	$painb21,		zombiek_painb22	] {ai_painforward(3);};
-void()	zombiek_painb22	=[	$painb22,		zombiek_painb23	] {ai_painforward(3);};
-void()	zombiek_painb23	=[	$painb23,		zombiek_painb24	] {ai_painforward(3);};
-void()	zombiek_painb24	=[	$painb24,		zombiek_painb25	] {ai_painforward(3);};
-void()	zombiek_painb25	=[	$painb25,		zombiek_run1	] {ai_painforward(3);};
+void()	zombiek_painb1	= [	$painb1,		zombiek_painb2	] { ai_painforward(8); };
+void()	zombiek_painb2	= [	$painb2,		zombiek_painb3	] { ai_pain(1); };
+void()	zombiek_painb3	= [	$painb3,		zombiek_painb4	] { ai_pain(1); };
+void()	zombiek_painb4	= [	$painb4,		zombiek_painb5	] { ai_pain(1); };
+void()	zombiek_painb5	= [	$painb5,		zombiek_painb6	] { ai_pain(1); };
+void()	zombiek_painb6	= [	$painb6,		zombiek_painb7	] { ai_pain(2); };
+void()	zombiek_painb7	= [	$painb7,		zombiek_painb8	] { ai_pain(2); };
+void()	zombiek_painb8	= [	$painb8,		zombiek_painb9	] { ai_pain(4); };
+void()	zombiek_painb9	= [	$painb9,		zombiek_painb10	] { ai_pain(4); };
+void()	zombiek_painb10	= [	$painb10,		zombiek_painb11	] { ai_pain(4); };
+void()	zombiek_painb11	= [	$painb11,		zombiek_painb12	] { ai_pain(2);monster_footstep(FALSE); };
+void()	zombiek_painb12	= [	$painb12,		zombiek_painb13	] { ai_pain(2); };
+void()	zombiek_painb13	= [	$painb13,		zombiek_painb14	] { ai_pain(3); };
+void()	zombiek_painb14	= [	$painb14,		zombiek_painb15	] {};
+void()	zombiek_painb15	= [	$painb15,		zombiek_painb16	] {};
+void()	zombiek_painb16	= [	$painb16,		zombiek_painb17	] {};
+void()	zombiek_painb17	= [	$painb17,		zombiek_painb18	] {};
+void()	zombiek_painb18	= [	$painb18,		zombiek_painb19	] { ai_painforward(3); };
+void()	zombiek_painb19	= [	$painb19,		zombiek_painb20	] { ai_painforward(3); };
+void()	zombiek_painb20	= [	$painb20,		zombiek_painb21	] { ai_painforward(3); };
+void()	zombiek_painb21	= [	$painb21,		zombiek_painb22	] { ai_painforward(3); };
+void()	zombiek_painb22	= [	$painb22,		zombiek_painb23	] { ai_painforward(3); };
+void()	zombiek_painb23	= [	$painb23,		zombiek_painb24	] { ai_painforward(3); };
+void()	zombiek_painb24	= [	$painb24,		zombiek_painb25	] { ai_painforward(3); };
+void()	zombiek_painb25	= [	$painb25,		zombiek_run1	] { ai_painforward(3); };
 
 //----------------------------------------------------------------------
-void()	zombiek_painc1	=[	$painc1,		zombiek_painc2	] {ai_painforward(8);};
-void()	zombiek_painc2	=[	$painc2,		zombiek_painc3	] {ai_painforward(6);};
-void()	zombiek_painc3	=[	$painc3,		zombiek_painc4	] {ai_painforward(5);};
-void()	zombiek_painc4	=[	$painc4,		zombiek_painc5	] {ai_painforward(7);zombiek_sound(5);};
-void()	zombiek_painc5	=[	$painc5,		zombiek_painc6	] {ai_painforward(6);};
-void()	zombiek_painc6	=[	$painc6,		zombiek_painc7	] {ai_painforward(3);};
-void()	zombiek_painc7	=[	$painc7,		zombiek_painc8	] {ai_painforward(3);};
-void()	zombiek_painc8	=[	$painc8,		zombiek_painc9	] {};
-void()	zombiek_painc9	=[	$painc9,		zombiek_painc10	] {};
+void()	zombiek_painc1	= [	$painc1,		zombiek_painc2	] { ai_painforward(8); };
+void()	zombiek_painc2	= [	$painc2,		zombiek_painc3	] { ai_painforward(6); };
+void()	zombiek_painc3	= [	$painc3,		zombiek_painc4	] { ai_painforward(5); };
+void()	zombiek_painc4	= [	$painc4,		zombiek_painc5	] { ai_painforward(7);zombiek_sound(5); };
+void()	zombiek_painc5	= [	$painc5,		zombiek_painc6	] { ai_painforward(6); };
+void()	zombiek_painc6	= [	$painc6,		zombiek_painc7	] { ai_painforward(3); };
+void()	zombiek_painc7	= [	$painc7,		zombiek_painc8	] { ai_painforward(3); };
+void()	zombiek_painc8	= [	$painc8,		zombiek_painc9	] {};
+void()	zombiek_painc9	= [	$painc9,		zombiek_painc10	] {};
 
 // Re-entry point for painD wakeup animation
-void()	zombiek_painc10	=[	$painc10,		zombiek_painc11	] {};
-void()	zombiek_painc11	=[	$painc11,		zombiek_painc12	] {};
-void()	zombiek_painc12	=[	$painc12,		zombiek_painc13	] {};
-void()	zombiek_painc13	=[	$painc13,		zombiek_painc14	] {};
-void()	zombiek_painc14	=[	$painc14,		zombiek_painc15	] {};
-void()	zombiek_painc15	=[	$painc15,		zombiek_painc16	] {};
-void()	zombiek_painc16	=[	$painc16,		zombiek_painc17	] {};
-void()	zombiek_painc17	=[	$painc17,		zombiek_painc18	] {};
-void()	zombiek_painc18	=[	$painc18,		zombiek_painc19	] {};
-void()	zombiek_painc19	=[	$painc19,		zombiek_painc20	] {monster_footstep(FALSE);};
-void()	zombiek_painc20	=[	$painc20,		zombiek_painc21	] {};
-void()	zombiek_painc21	=[	$painc21,		zombiek_run1	] {};
+void()	zombiek_painc10	= [	$painc10,		zombiek_painc11	] {};
+void()	zombiek_painc11	= [	$painc11,		zombiek_painc12	] {};
+void()	zombiek_painc12	= [	$painc12,		zombiek_painc13	] {};
+void()	zombiek_painc13	= [	$painc13,		zombiek_painc14	] {};
+void()	zombiek_painc14	= [	$painc14,		zombiek_painc15	] {};
+void()	zombiek_painc15	= [	$painc15,		zombiek_painc16	] {};
+void()	zombiek_painc16	= [	$painc16,		zombiek_painc17	] {};
+void()	zombiek_painc17	= [	$painc17,		zombiek_painc18	] {};
+void()	zombiek_painc18	= [	$painc18,		zombiek_painc19	] {};
+void()	zombiek_painc19	= [	$painc19,		zombiek_painc20	] { monster_footstep(FALSE); };
+void()	zombiek_painc20	= [	$painc20,		zombiek_painc21	] {};
+void()	zombiek_painc21	= [	$painc21,		zombiek_run1	] {};
 
 //----------------------------------------------------------------------
-void()	zombiek_paind1	=[	$paind1,		zombiek_paind2	] {self.inpain = 2; ai_painforward(8);};
-void()	zombiek_paind2	=[	$paind2,		zombiek_paind3	] {ai_painforward(4);};
-void()	zombiek_paind3	=[	$paind3,		zombiek_paind4	] {ai_painforward(4);};
-void()	zombiek_paind4	=[	$paind4,		zombiek_paind5	] {ai_painforward(4);};
-void()	zombiek_paind5	=[	$paind5,		zombiek_paind6	] {ai_painforward(3);};
-void()	zombiek_paind6	=[	$paind6,		zombiek_paind7	] {ai_painforward(2);};
-void()	zombiek_paind7	=[	$paind7,		zombiek_paind8	] {ai_painforward(2);};
-void()	zombiek_paind8	=[	$paind8,		zombiek_paind9	] {};
-void()	zombiek_paind9	=[	$paind9,		zombiek_paind10	] {};
-void()	zombiek_paind10	=[	$paind10,		zombiek_paind11	] {zombiek_sound(5);};
-void()	zombiek_paind11	=[	$paind11,		zombiek_paind12	] {self.solid = SOLID_NOT;};
-void()	zombiek_paind12	=[	$paind12,		zombiek_paind12	] {zombiek_onground(MONAI_ZOMBIEUPD);};
+void()	zombiek_paind1	= [	$paind1,		zombiek_paind2	] { self.inpain = 2; ai_painforward(8); };
+void()	zombiek_paind2	= [	$paind2,		zombiek_paind3	] { ai_painforward(4); };
+void()	zombiek_paind3	= [	$paind3,		zombiek_paind4	] { ai_painforward(4); };
+void()	zombiek_paind4	= [	$paind4,		zombiek_paind5	] { ai_painforward(4); };
+void()	zombiek_paind5	= [	$paind5,		zombiek_paind6	] { ai_painforward(3); };
+void()	zombiek_paind6	= [	$paind6,		zombiek_paind7	] { ai_painforward(2); };
+void()	zombiek_paind7	= [	$paind7,		zombiek_paind8	] { ai_painforward(2); };
+void()	zombiek_paind8	= [	$paind8,		zombiek_paind9	] {};
+void()	zombiek_paind9	= [	$paind9,		zombiek_paind10	] {};
+void()	zombiek_paind10	= [	$paind10,		zombiek_paind11	] { zombiek_sound(5); };
+void()	zombiek_paind11	= [	$paind11,		zombiek_paind12	] { self.solid = SOLID_NOT;};
+void()	zombiek_paind12	= [	$paind12,		zombiek_paind12	] { zombiek_onground(MONAI_ZOMBIEUPD); };
 
 // Start of get up sequence
-void()	zombiek_paind13	=[	$paind13,		zombiek_paind14	] {};
-void()	zombiek_paind14	=[	$paind14,		zombiek_paind15	] {};
-void()	zombiek_paind15	=[	$paind15,		zombiek_paind16	] {};
-void()	zombiek_paind16	=[	$paind16,		zombiek_paind17	] {};
-void()	zombiek_paind17	=[	$paind17,		zombiek_paind18	] {
-	monster_footstep(TRUE);ai_pain(1);};		// Scrapping feet sound while standing up
-void()	zombiek_paind18	=[	$paind18,		zombiek_paind19	] {ai_pain(1);};
-void()	zombiek_paind19	=[	$paind19,		zombiek_paind20	] {ai_pain(1);};
-void()	zombiek_paind20	=[	$paind20,		zombiek_paind21	] {ai_pain(1);};
-void()	zombiek_paind21	=[	$paind21,		zombiek_paind22	] {ai_pain(1);};
-void()	zombiek_paind22	=[	$paind22,		zombiek_paind23	] {ai_pain(2);};
-void()	zombiek_paind23	=[	$paind23,		zombiek_painw10	] {ai_pain(2);};
+void()	zombiek_paind13	= [	$paind13,		zombiek_paind14	] {};
+void()	zombiek_paind14	= [	$paind14,		zombiek_paind15	] {};
+void()	zombiek_paind15	= [	$paind15,		zombiek_paind16	] {};
+void()	zombiek_paind16	= [	$paind16,		zombiek_paind17	] {};
+void()	zombiek_paind17	= [	$paind17,		zombiek_paind18	] {
+	monster_footstep(TRUE);ai_pain(1); };		// Scrapping feet sound while standing up
+void()	zombiek_paind18	= [	$paind18,		zombiek_paind19	] { ai_pain(1); };
+void()	zombiek_paind19	= [	$paind19,		zombiek_paind20	] { ai_pain(1); };
+void()	zombiek_paind20	= [	$paind20,		zombiek_paind21	] { ai_pain(1); };
+void()	zombiek_paind21	= [	$paind21,		zombiek_paind22	] { ai_pain(1); };
+void()	zombiek_paind22	= [	$paind22,		zombiek_paind23	] { ai_pain(2); };
+void()	zombiek_paind23	= [	$paind23,		zombiek_painw10	] { ai_pain(2); };
 // Originally re-entry to C, need onfloor check
-void()	zombiek_painw10	=[	$painc10,		zombiek_painw11	] {};
-void()	zombiek_painw11	=[	$painc11,		zombiek_painw12	] {};
-void()	zombiek_painw12	=[	$painc12,		zombiek_painw13	] {};
-void()	zombiek_painw13	=[	$painc13,		zombiek_painw14	] {};
-void()	zombiek_painw14	=[	$painc14,		zombiek_painw15	] {};
-void()	zombiek_painw15	=[	$painc15,		zombiek_painw16	] {};
-void()	zombiek_painw16	=[	$painc16,		zombiek_painw17	] {};
-void()	zombiek_painw17	=[	$painc17,		zombiek_painw18	] {};
-void()	zombiek_painw18	=[	$painc18,		zombiek_painw19	] {};
-void()	zombiek_painw19	=[	$painc19,		zombiek_painw20	] {monster_footstep(FALSE);};
-void()	zombiek_painw20	=[	$painc20,		zombiek_painw21	] {};
-void()	zombiek_painw21	=[	$painc21,		zombiek_run1	] {
+void()	zombiek_painw10	= [	$painc10,		zombiek_painw11	] {};
+void()	zombiek_painw11	= [	$painc11,		zombiek_painw12	] {};
+void()	zombiek_painw12	= [	$painc12,		zombiek_painw13	] {};
+void()	zombiek_painw13	= [	$painc13,		zombiek_painw14	] {};
+void()	zombiek_painw14	= [	$painc14,		zombiek_painw15	] {};
+void()	zombiek_painw15	= [	$painc15,		zombiek_painw16	] {};
+void()	zombiek_painw16	= [	$painc16,		zombiek_painw17	] {};
+void()	zombiek_painw17	= [	$painc17,		zombiek_painw18	] {};
+void()	zombiek_painw18	= [	$painc18,		zombiek_painw19	] {};
+void()	zombiek_painw19	= [	$painc19,		zombiek_painw20	] { monster_footstep(FALSE); };
+void()	zombiek_painw20	= [	$painc20,		zombiek_painw21	] {};
+void()	zombiek_painw21	= [	$painc21,		zombiek_run1	] {
 	// If getting up for the first time (onfloor) check for targets
 	if (self.spawnflags & MON_ONFLOOR) {
 		self.spawnflags = self.spawnflags - MON_ONFLOOR;
@@ -499,45 +498,45 @@ void()	zombiek_painw21	=[	$painc21,		zombiek_run1	] {
 };
 
 //----------------------------------------------------------------------
-void()	zombiek_paine1	=[	$paine1,		zombiek_paine2	] {self.inpain = 2; ai_pain(8);};
-void()	zombiek_paine2	=[	$paine2,		zombiek_paine3	] {ai_pain(4);};
-void()	zombiek_paine3	=[	$paine3,		zombiek_paine4	] {ai_pain(3);};
-void()	zombiek_paine4	=[	$paine4,		zombiek_paine5	] {ai_pain(3);};
-void()	zombiek_paine5	=[	$paine5,		zombiek_paine6	] {ai_pain(3);};
-void()	zombiek_paine6	=[	$paine6,		zombiek_paine7	] {ai_pain(2);};
-void()	zombiek_paine7	=[	$paine7,		zombiek_paine8	] {ai_pain(2);};
-void()	zombiek_paine8	=[	$paine8,		zombiek_paine9	] {};
-void()	zombiek_paine9	=[	$paine9,		zombiek_paine10	] {};
-void()	zombiek_paine10	=[	$paine10,		zombiek_paine11	] {self.solid = SOLID_NOT;};
-void()	zombiek_paine11	=[	$paine11,		zombiek_paine12	] {zombiek_sound(5);};
-void()	zombiek_paine12	=[	$paine12,		zombiek_paine12	] {zombiek_onground(MONAI_ZOMBIEUPE);};
+void()	zombiek_paine1	= [	$paine1,		zombiek_paine2	] { self.inpain = 2; ai_pain(8); };
+void()	zombiek_paine2	= [	$paine2,		zombiek_paine3	] { ai_pain(4); };
+void()	zombiek_paine3	= [	$paine3,		zombiek_paine4	] { ai_pain(3); };
+void()	zombiek_paine4	= [	$paine4,		zombiek_paine5	] { ai_pain(3); };
+void()	zombiek_paine5	= [	$paine5,		zombiek_paine6	] { ai_pain(3); };
+void()	zombiek_paine6	= [	$paine6,		zombiek_paine7	] { ai_pain(2); };
+void()	zombiek_paine7	= [	$paine7,		zombiek_paine8	] { ai_pain(2); };
+void()	zombiek_paine8	= [	$paine8,		zombiek_paine9	] {};
+void()	zombiek_paine9	= [	$paine9,		zombiek_paine10	] {};
+void()	zombiek_paine10	= [	$paine10,		zombiek_paine11	] { self.solid = SOLID_NOT;};
+void()	zombiek_paine11	= [	$paine11,		zombiek_paine12	] { zombiek_sound(5); };
+void()	zombiek_paine12	= [	$paine12,		zombiek_paine12	] { zombiek_onground(MONAI_ZOMBIEUPE); };
 
 // Start of get up sequence
-void()	zombiek_paine13	=[	$paine13,		zombiek_paine14	] {
+void()	zombiek_paine13	= [	$paine13,		zombiek_paine14	] {
 	monster_footstep(TRUE);		// Scrapping feet sound while standing up
 };
-void()	zombiek_paine14	=[	$paine14,		zombiek_paine15	] {};
-void()	zombiek_paine15	=[	$paine15,		zombiek_paine16	] {};
-void()	zombiek_paine16	=[	$paine16,		zombiek_paine17	] {};
-void()	zombiek_paine17	=[	$paine18,		zombiek_paine18	] {};
-void()	zombiek_paine18	=[	$paine17,		zombiek_paine19	] {};
-void()	zombiek_paine19	=[	$paine19,		zombiek_paine20	] {
+void()	zombiek_paine14	= [	$paine14,		zombiek_paine15	] {};
+void()	zombiek_paine15	= [	$paine15,		zombiek_paine16	] {};
+void()	zombiek_paine16	= [	$paine16,		zombiek_paine17	] {};
+void()	zombiek_paine17	= [	$paine18,		zombiek_paine18	] {};
+void()	zombiek_paine18	= [	$paine17,		zombiek_paine19	] {};
+void()	zombiek_paine19	= [	$paine19,		zombiek_paine20	] {
 	self.steptype = FS_TYPEHEAVY;		// Heavy clubfoot
 	monster_footstep(FALSE);
 	self.steptype = FS_TYPESLOW;		// Normal zombie foot
 };
-void()	zombiek_paine20	=[	$paine20,		zombiek_paine21	] {};
-void()	zombiek_paine21	=[	$paine21,		zombiek_paine22	] {};
-void()	zombiek_paine22	=[	$paine22,		zombiek_paine23	] {};
-void()	zombiek_paine23	=[	$paine23,		zombiek_paine24	] {};
-void()	zombiek_paine24	=[	$paine24,		zombiek_paine25	] {};
-void()	zombiek_paine25	=[	$paine25,		zombiek_paine26	] {};
-void()	zombiek_paine26	=[	$paine26,		zombiek_paine27	] {};
-void()	zombiek_paine27	=[	$paine27,		zombiek_paine28	] {ai_painforward(3);};
-void()	zombiek_paine28	=[	$paine28,		zombiek_paine29	] {ai_painforward(3);};
-void()	zombiek_paine29	=[	$paine29,		zombiek_paine30	] {ai_painforward(3);};
-void()	zombiek_paine30	=[	$paine30,		zombiek_paine31	] {ai_painforward(3);};
-void()	zombiek_paine31	=[	$paine31,		zombiek_run1	] {ai_painforward(3);
+void()	zombiek_paine20	= [	$paine20,		zombiek_paine21	] {};
+void()	zombiek_paine21	= [	$paine21,		zombiek_paine22	] {};
+void()	zombiek_paine22	= [	$paine22,		zombiek_paine23	] {};
+void()	zombiek_paine23	= [	$paine23,		zombiek_paine24	] {};
+void()	zombiek_paine24	= [	$paine24,		zombiek_paine25	] {};
+void()	zombiek_paine25	= [	$paine25,		zombiek_paine26	] {};
+void()	zombiek_paine26	= [	$paine26,		zombiek_paine27	] {};
+void()	zombiek_paine27	= [	$paine27,		zombiek_paine28	] { ai_painforward(3); };
+void()	zombiek_paine28	= [	$paine28,		zombiek_paine29	] { ai_painforward(3); };
+void()	zombiek_paine29	= [	$paine29,		zombiek_paine30	] { ai_painforward(3); };
+void()	zombiek_paine30	= [	$paine30,		zombiek_paine31	] { ai_painforward(3); };
+void()	zombiek_paine31	= [	$paine31,		zombiek_run1	] { ai_painforward(3);
 	// If getting up for the first time (onfloor) check for targets
 	if (self.spawnflags & MON_ONFLOOR) {
 		self.spawnflags = self.spawnflags - MON_ONFLOOR;
@@ -551,8 +550,7 @@ void()	zombiek_paine31	=[	$paine31,		zombiek_run1	] {ai_painforward(3);
  * Be careful blocking zombie pain function with pain_finished
  * zombies react in 2 ways, minor pain (a,c,d) and full knockdown (b,e)
 ======================================================================*/
-void(entity inflictor, entity attacker, float take) zombiek_pain =
-{
+void(entity inflictor, entity attacker, float take) zombiek_pain = {
 	self.health = self.max_health;				// always reset health	
 	if (take < MONAI_ZOMBIELOW_DAM) return;		// totally ignore
 	if (self.inpain > 0) return;				// in pain animation, do nothing
@@ -606,7 +604,7 @@ void() zombiek_wakeup	= {
 		}
 	}
 	else {
-		self.bodyonflr = string_null;	// Body is chop proof!
+		self.bodyonflr = "";	// Body is chop proof!
 		self.inpain = 1;				// Animation not finished
 		zombiek_sound(6);				// Wake up sound
 		self.nextthink = time + 0.1;

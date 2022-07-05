@@ -173,7 +173,7 @@ void(entity source, entity targ, float damage) spawn_touchblood = { // [FUNCTION
 void() MeatSprayThink = { // [FUNCTION]
     local   vector  dir;
 
-    if (self.delay <= time) {remove(self); return;}
+    if (self.delay <= time) { remove(self); return;}
 
     dir = normalize (self.velocity);
     particle (self.origin, dir, self.bloodtype, 10);
@@ -189,7 +189,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 	local vector org;
     local string text;
 
-	text = string_null;
+	text = "";
 	btype = targ.bloodtype;
 	if (targ.bloodtype <= 0) btype = BLOOD_RED;
     if (btype == BLOOD_RED) text = "progs/q15/zom_gib.mdl";
@@ -221,7 +221,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 			newmis.avelocity   = '3000 1000 2000';
 		}
 
-		if (text != string_null)
+		if (text != "")
 			setmodel (newmis, text); // Oh hey we actually have substance!
 		else
 			newmis.modelindex  = 0; // Invisible blood dripper
@@ -261,10 +261,10 @@ void() Shattered = { // [FUNCTION]
 // 'waitmin' = slow color, 'waitmax' = fast color.
 void(entity shot, float rgb) Laser_Color = { // [FUNCTION]
     shot.skin = rgb;
-    if (rgb == 3) {shot.waitmin = 9;  shot.waitmax = 41;} // Blue
-    else if (rgb == 2) {shot.waitmin = 105;  shot.waitmax = 193;} // Yellow
-    else if (rgb == 1) {shot.waitmin = 73;  shot.waitmax = 225;} // Red
-    else {shot.skin = 0;  shot.waitmin = 97;  shot.waitmax = 233;} // Orange.  Replaced 225 with 97 to stop blood in some ports.
+    if (rgb == 3) { shot.waitmin = 9;  shot.waitmax = 41;} // Blue
+    else if (rgb == 2) { shot.waitmin = 105;  shot.waitmax = 193;} // Yellow
+    else if (rgb == 1) { shot.waitmin = 73;  shot.waitmax = 225;} // Red
+    else { shot.skin = 0;  shot.waitmin = 97;  shot.waitmax = 233;} // Orange.  Replaced 225 with 97 to stop blood in some ports.
 };
 
 // PM:  Moved circle drawing code from Zerstorer's misc.qc to here.
@@ -354,7 +354,7 @@ void() env_sprite_loop = { // [FUNCTION]
 
 // Added by Qmaster
 void() env_sprite_hide = { // [FUNCTION]
-	self.alpha = 0.0001;
+	self.alpha = 0.001;
 	self.spritestarted = FALSE;
 	self.frame = self.pos1_x;	//reset
 	self.effects = 0;
@@ -574,14 +574,14 @@ void() misc_raincloud = { // [ENTITY]
 	spawn_raincloud();
 };
 
-void() skyl_stand1	=[  0,	skyl_stand2  ]{self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
-void() skyl_stand2	=[  1,	skyl_stand3  ]{}; // [FUNCTION]
-void() skyl_stand3	=[  2,	skyl_stand4  ]{self.effects = 0;}; // [FUNCTION]
-void() skyl_stand4	=[  3,	skyl_stand5  ]{self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
-void() skyl_stand5	=[  4,	skyl_stand6  ]{}; // [FUNCTION]
-void() skyl_stand6	=[  5,	skyl_stand7  ]{}; // [FUNCTION]
-void() skyl_stand7	=[  6,	skyl_stand8  ]{if (!(self.spawnflags & 2)) { sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); } }; // [FUNCTION]
-void() skyl_stand8	=[  7,	skyl_stand1  ]{self.effects = 0; self.nextthink = time + self.wait + (random() * self.waitmax);}; //time  lightning appears time + your time, [FUNCTION]
+void() skyl_stand1	= [  0,	skyl_stand2  ] { self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
+void() skyl_stand2	= [  1,	skyl_stand3  ] {}; // [FUNCTION]
+void() skyl_stand3	= [  2,	skyl_stand4  ] { self.effects = 0;}; // [FUNCTION]
+void() skyl_stand4	= [  3,	skyl_stand5  ] { self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
+void() skyl_stand5	= [  4,	skyl_stand6  ] {}; // [FUNCTION]
+void() skyl_stand6	= [  5,	skyl_stand7  ] {}; // [FUNCTION]
+void() skyl_stand7	= [  6,	skyl_stand8  ] { if (!(self.spawnflags & 2)) { sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); } }; // [FUNCTION]
+void() skyl_stand8	= [  7,	skyl_stand1  ] { self.effects = 0; self.nextthink = time + self.wait + (random() * self.waitmax); }; //time  lightning appears time + your time, [FUNCTION]
 
 void() model_skylight = { // [ENTITY]
 	precache_model ("progs/madfox/skylight.spr");

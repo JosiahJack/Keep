@@ -242,7 +242,7 @@ void(vector tdest, float tspeed, entity cam) DHM_CalcMove = { // [FUNCTION]
 
 // Zerstorer-only cutscene code.
 void() wait_camera = { // [FUNCTION]
-    if (!self.wait) {move_camera(); return;}
+    if (!self.wait) { move_camera(); return;}
     
     self.nextthink = time + self.wait;
     self.think = move_camera;
@@ -250,11 +250,11 @@ void() wait_camera = { // [FUNCTION]
 
 // After moving, set origin to exact final destination.
 void() DHM_CalcMoveDone = { // [FUNCTION]
-    if (!cutscene) {remove(self); return;}
+    if (!cutscene) { remove(self); return;}
 
     setorigin(self.enemy, self.finaldest);
     self.enemy.velocity = self.enemy.mangle = '0 0 0';
-    if (self.cnt == -1) {remove (self); return;}
+    if (self.cnt == -1) { remove (self); return;}
 
     self.nextthink = time + 0.01;
     self.think = wait_camera;
@@ -264,7 +264,7 @@ void() move_camera = { // [FUNCTION]
 	local entity cpt, fpt;
 	local vector looky;
 
-    if (!cutscene) {remove (self); return;}
+    if (!cutscene) { remove (self); return;}
 
     cpt = find (world, targetname, self.target);
     if (!cpt.target) { // If this is the end of the line, stop camera.
@@ -356,8 +356,8 @@ void() go_camera = { // [FUNCTION]
     Safe_stuffcmd (self, "sizedown\nsizeup\n");   //hack-fix for GLquake
     setorigin (self, self.enemy.origin);
 
-	// PM:  Space invasion prevention.
-	// Make the dummy solid to prevent monsters or other junk from occupying
+    // Space claim.
+	// PM: Make the dummy solid to prevent monsters or other junk from occupying
 	// the space where the player stood before the cutscene started.
 	// After all, the player will be placed back when the cutscene ends,
 	// and we don't want him stuck inside a monster or something.
@@ -422,7 +422,7 @@ void() camera_touch = { // [FUNCTION]
 
     camera_activate(other);
 };
-void() camera_point_touch = {camera_activate(other);}; // [FUNCTION]
+void() camera_point_touch = { camera_activate(other); }; // [FUNCTION]
 
 void() imc_touch = { // [FUNCTION]
 	local string temps;
@@ -467,7 +467,7 @@ void() gocam_use = { // [FUNCTION]
     self.think = SUB_Remove;
 };
 
-void() trigger_gocamera = {self.use = gocam_use;}; // [ENTITY]
+void() trigger_gocamera = { self.use = gocam_use;}; // [ENTITY]
 
 // This is the point that the camera will face.  It should have a "targetname" field with the same value as a camera-trigger's "focal_point" field.
 // PM:  This entity is kept only for map compatibility reasons, otherwise, this entity is redundant.  Use 'info_notnull' instead.
@@ -475,7 +475,7 @@ void() info_focal_point = {}; // Just holds a spot for the focal point, [ENTITY]
 
 void(float pt) trigger_camera_spawn = { // [FUNCTION]
 	// Update:  Don't let dm or coop muck up cutscenes and vice versa.
-    if (deathmatch || coop) {remove (self);  return;}   // PM:  Fix -- abort if removed.
+    if (deathmatch || coop) { remove (self);  return;}   // PM:  Fix -- abort if removed.
 
     if (pt) { // PM:  The new way, this is for you Tronyn.
         InitPointTrigger();
@@ -496,9 +496,9 @@ void(float pt) trigger_camera_spawn = { // [FUNCTION]
 // key gives a starting script number, and the "script_delay" key is the
 // amount of time(seconds) to stay on the first script page.
 // If the trigger_camera has a targetname, it will only enter camera mode after it has been fired.
-void() trigger_camera = {trigger_camera_spawn(FALSE);}; // [ENTITY]
+void() trigger_camera = { trigger_camera_spawn(FALSE); }; // [ENTITY]
 
-void() trigger_camera_point = {trigger_camera_spawn(TRUE);}; // [ENTITY]
+void() trigger_camera_point = { trigger_camera_spawn(TRUE); }; // [ENTITY]
 
 // Scripting function - dhm
 // The original timing idea for scripts was inspired by Zoid.  Study the code for Zoid's CTF, it is an excellent example of good Quake-C coding.
@@ -514,7 +514,7 @@ void() Script_play = { // [FUNCTION]
 		temp = self;
 		self = scrpt;
 		SUB_UseTargets(); // If script has a target...
-		self.target = string_null; // ...trigger it once.
+		self.target = ""; // ...trigger it once.
 		self = temp;
 	} 
     self.script_delay = scrpt.script_delay;

@@ -62,20 +62,15 @@ void() hlorddragon_check_attack = {
     local   float   dot;
 
     if (self.dragonAttacking == TRUE) return;
-    if (self.enemy.health < 1)
-    {
+    if (self.enemy.health < 1) {
         self.enemy = self.oldenemy;
         self.oldenemy = world;
         if (self.enemy.health < 1)
             self.enemy = world;
     }
-    if (self.th_missile == SUB_Null)
-        return;
-    if (self.attack_finished > time)
-        return;
-// PM:  Moved enemy check up.
-    if (self.enemy.flags & FL_NOTARGET)
-        return;
+    if (self.th_missile == SUB_Null) return;
+    if (self.attack_finished > time) return;
+    if (Invisible(self.enemy)) return; // PM:  Moved enemy check up.
     
     if (self.enemy == world)
         FindTarget();
@@ -107,8 +102,7 @@ void() hlorddragon_check_attack = {
 // ===================================
 // dragon_untilt (Added by PM)
 // ===================================
-void() hlorddragon_untilt =
-{
+void() hlorddragon_untilt = {
     if (self.angles_z != 0)
     {
         if (self.angles_z < -5)
@@ -139,10 +133,10 @@ void(float dist) hlorddragon_move = {
         if (self.enemy.health < 1)
             targ = world;
         else
-            {targ = self.enemy; onpath = FALSE;}
+            { targ = self.enemy; onpath = FALSE;}
     }
     else if (self.master)
-        {targ = self.master; onpath = FALSE;}
+        { targ = self.master; onpath = FALSE;}
     else if (onpath)
         targ = self.movetarget;
     else
@@ -247,63 +241,63 @@ void(float dist) hlorddragon_move = {
 };
 
 // attack A: start - walk1  stop - walk 5
-void() hlorddragon_atk_a1=[$drgfix1a, hlorddragon_atk_a2 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_a2=[$drgfix1b, hlorddragon_atk_a3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_a3=[$drgfix1c, hlorddragon_walk5  ] {hlorddragon_move(17);dragon_stop_attack();};
+void() hlorddragon_atk_a1= [$drgfix1a, hlorddragon_atk_a2 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_a2= [$drgfix1b, hlorddragon_atk_a3 ] { hlorddragon_move(17);hlorddragon_fireball(); };
+void() hlorddragon_atk_a3= [$drgfix1c, hlorddragon_walk5  ] { hlorddragon_move(17);dragon_stop_attack(); };
 
 // attack B: start - walk3  stop - walk7
-void() hlorddragon_atk_b1=[$drgfix2a, hlorddragon_atk_b2 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_b2=[$drgfix2b, hlorddragon_atk_b3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_b3=[$drgfix2c, hlorddragon_walk7  ] {hlorddragon_move(17);dragon_stop_attack();};
+void() hlorddragon_atk_b1= [$drgfix2a, hlorddragon_atk_b2 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_b2= [$drgfix2b, hlorddragon_atk_b3 ] { hlorddragon_move(17);hlorddragon_fireball(); };
+void() hlorddragon_atk_b3= [$drgfix2c, hlorddragon_walk7  ] { hlorddragon_move(17);dragon_stop_attack(); };
 
 // attack C: start - walk5  stop - walk9
-void() hlorddragon_atk_c1=[$drgfix3a, hlorddragon_atk_c2 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_c2=[$drgfix3b, hlorddragon_atk_c3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_c3=[$drgfix3c, hlorddragon_walk9  ] {hlorddragon_move(17);dragon_stop_attack();};
+void() hlorddragon_atk_c1= [$drgfix3a, hlorddragon_atk_c2 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_c2= [$drgfix3b, hlorddragon_atk_c3 ] { hlorddragon_move(17);hlorddragon_fireball(); };
+void() hlorddragon_atk_c3= [$drgfix3c, hlorddragon_walk9  ] { hlorddragon_move(17);dragon_stop_attack(); };
 
 // attack d: start - walk7  stop - walk11
 // ================
-void() hlorddragon_atk_d1=[$drgfix4a, hlorddragon_atk_d2 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_d2=[$drgfix4b, hlorddragon_atk_d3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_d3=[$drgfix4c, hlorddragon_walk11 ] {hlorddragon_move(17);dragon_stop_attack();};
+void() hlorddragon_atk_d1= [$drgfix4a, hlorddragon_atk_d2 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_d2= [$drgfix4b, hlorddragon_atk_d3 ] { hlorddragon_move(17);hlorddragon_fireball(); };
+void() hlorddragon_atk_d3= [$drgfix4c, hlorddragon_walk11 ] { hlorddragon_move(17);dragon_stop_attack(); };
 
 // attack E: start - walk9  stop - walk13
 // ================
-void() hlorddragon_atk_e1=[$drgfix5a, hlorddragon_atk_e2 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_e2=[$drgfix5b, hlorddragon_atk_e3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_e3=[$drgfix5c, hlorddragon_walk13 ] {hlorddragon_move(17);dragon_stop_attack();};
+void() hlorddragon_atk_e1= [$drgfix5a, hlorddragon_atk_e2 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_e2= [$drgfix5b, hlorddragon_atk_e3 ] { hlorddragon_move(17);hlorddragon_fireball(); };
+void() hlorddragon_atk_e3= [$drgfix5c, hlorddragon_walk13 ] { hlorddragon_move(17);dragon_stop_attack(); };
 
 // attack F: start - walk11  stop - walk3
 // ================
-void() hlorddragon_atk_f1=[$drgfix6a, hlorddragon_atk_f2 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_f2=[$drgfix6b, hlorddragon_atk_f3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_f3=[$drgfix6c, hlorddragon_atk_f4 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_f4=[$drgfix6c, hlorddragon_walk3  ] {hlorddragon_move(17);dragon_stop_attack();};
+void() hlorddragon_atk_f1= [$drgfix6a, hlorddragon_atk_f2 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_f2= [$drgfix6b, hlorddragon_atk_f3 ] { hlorddragon_move(17);hlorddragon_fireball(); };
+void() hlorddragon_atk_f3= [$drgfix6c, hlorddragon_atk_f4 ] { hlorddragon_move(17); };
+void() hlorddragon_atk_f4= [$drgfix6c, hlorddragon_walk3  ] { hlorddragon_move(17);dragon_stop_attack(); };
 
-void() hlorddragon_walk1 =[ $drgfly01, hlorddragon_walk2 ] {
+void() hlorddragon_walk1 = [$drgfly01, hlorddragon_walk2 ] {
     if (self.dragonAttacking) dragon_stop_attack();          
     self.th_missile=dragon_atk_a1;
     self.hlorddragonPainSequence=1;
     hlorddragon_move(17);
     if (random() < 0.2) sound (self, CHAN_VOICE, "rogue/dragon/active.wav", 0.6, ATTN_IDLE);
 };
-void() hlorddragon_walk2 =[ $drgfly02, hlorddragon_walk3 ] {self.th_missile=SUB_Null; dragon_move(17);};
-void() hlorddragon_walk3 =[ $drgfly03, hlorddragon_walk4 ] { 
+void() hlorddragon_walk2 = [$drgfly02, hlorddragon_walk3 ] { self.th_missile=SUB_Null; dragon_move(17); };
+void() hlorddragon_walk3 = [$drgfly03, hlorddragon_walk4 ] { 
     self.th_missile=hlorddragon_atk_b1; hlorddragon_move(17);
     self.hlorddragonPainSequence=2;
 };
-void() hlorddragon_walk4 =[ $drgfly04, hlorddragon_walk5 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
-void() hlorddragon_walk5 =[ $drgfly05, hlorddragon_walk6 ] { 
+void() hlorddragon_walk4 = [$drgfly04, hlorddragon_walk5 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
+void() hlorddragon_walk5 = [$drgfly05, hlorddragon_walk6 ] { 
     self.th_missile=dragon_atk_c1; hlorddragon_move(17);
     self.hlorddragonPainSequence=3;
 };
-void() hlorddragon_walk6 =[ $drgfly06, hlorddragon_walk7 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
-void() hlorddragon_walk7 =[ $drgfly07, hlorddragon_walk8 ] {
+void() hlorddragon_walk6 = [$drgfly06, hlorddragon_walk7 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
+void() hlorddragon_walk7 = [$drgfly07, hlorddragon_walk8 ] {
     self.th_missile=dragon_atk_d1; hlorddragon_move(17);
     self.hlorddragonPainSequence=4;
 };
-void() hlorddragon_walk8 =[ $drgfly08, hlorddragon_walk9 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
-void() hlorddragon_walk9 =[ $drgfly09, hlorddragon_walk10 ] {
+void() hlorddragon_walk8 = [$drgfly08, hlorddragon_walk9 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
+void() hlorddragon_walk9 = [$drgfly09, hlorddragon_walk10 ] {
     if (self.waterlevel <= 1) // Not while in water.
         sound (self, CHAN_BODY, "drake/dragon/fly1.wav", 1, ATTN_NORM);
     else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME))
@@ -311,15 +305,15 @@ void() hlorddragon_walk9 =[ $drgfly09, hlorddragon_walk10 ] {
     self.th_missile=dragon_atk_e1; dragon_move(17);
     self.dragonPainSequence=5;
 };
-void() hlorddragon_walk10 =[ $drgfly10, hlorddragon_walk11 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
-void() hlorddragon_walk11 =[ $drgfly11, hlorddragon_walk12 ] {
+void() hlorddragon_walk10 = [$drgfly10, hlorddragon_walk11 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
+void() hlorddragon_walk11 = [$drgfly11, hlorddragon_walk12 ] {
     self.th_missile=hlorddragon_atk_f1; hlorddragon_move(17);
     self.hlorddragonPainSequence=6;
 };
-void() hlorddragon_walk12 =[ $drgfly12, hlorddragon_walk13 ]
-    {self.th_missile=SUB_Null; hlorddragon_move(17);};
-void() hlorddragon_walk13 =[ $drgfly13, hlorddragon_walk1 ]
-    {self.th_missile=SUB_Null; hlorddragon_move(17); self.hlorddragonPainSequence=1;};
+void() hlorddragon_walk12 = [$drgfly12, hlorddragon_walk13 ]
+    { self.th_missile=SUB_Null; hlorddragon_move(17); };
+void() hlorddragon_walk13 = [$drgfly13, hlorddragon_walk1 ]
+    { self.th_missile=SUB_Null; hlorddragon_move(17); self.hlorddragonPainSequence=1;};
 
 // ===========================================
 // dragon_fireball
@@ -409,46 +403,46 @@ void() hlorddragon_tail = {
     dragon_stop_attack();
 };
 
-void() hlorddragon_melee1  =[$drgslh01, hlorddragon_melee2 ] {hlorddragon_move(12);};
-void() hlorddragon_melee2  =[$drgslh02, hlorddragon_melee3 ] {hlorddragon_move(12);};
-void() hlorddragon_melee3  =[$drgslh03, hlorddragon_melee4 ] {hlorddragon_move(12);};
-void() hlorddragon_melee4  =[$drgslh04, hlorddragon_melee5 ] {hlorddragon_move(12);};
-void() hlorddragon_melee5  =[$drgslh05, hlorddragon_melee6 ] {hlorddragon_move(12);};
-void() hlorddragon_melee6  =[$drgslh06, hlorddragon_melee7 ] {hlorddragon_move(12);};
-void() hlorddragon_melee7  =[$drgslh07, hlorddragon_melee8 ] {hlorddragon_move(12);};
-void() hlorddragon_melee8  =[$drgslh08, hlorddragon_melee9 ] {hlorddragon_move(12);};
-void() hlorddragon_melee9  =[$drgslh09, hlorddragon_melee10] {hlorddragon_move(12);};
-void() hlorddragon_melee10 =[$drgslh10, hlorddragon_melee11] {hlorddragon_tail();};
-void() hlorddragon_melee11 =[$drgslh11, hlorddragon_melee12] {hlorddragon_move(10);};
-void() hlorddragon_melee12 =[$drgslh12, hlorddragon_melee13] {hlorddragon_move(10);};
-void() hlorddragon_melee13 =[$drgslh13, hlorddragon_walk1  ] {hlorddragon_move(10);};
+void() hlorddragon_melee1  = [$drgslh01, hlorddragon_melee2 ] { hlorddragon_move(12); };
+void() hlorddragon_melee2  = [$drgslh02, hlorddragon_melee3 ] { hlorddragon_move(12); };
+void() hlorddragon_melee3  = [$drgslh03, hlorddragon_melee4 ] { hlorddragon_move(12); };
+void() hlorddragon_melee4  = [$drgslh04, hlorddragon_melee5 ] { hlorddragon_move(12); };
+void() hlorddragon_melee5  = [$drgslh05, hlorddragon_melee6 ] { hlorddragon_move(12); };
+void() hlorddragon_melee6  = [$drgslh06, hlorddragon_melee7 ] { hlorddragon_move(12); };
+void() hlorddragon_melee7  = [$drgslh07, hlorddragon_melee8 ] { hlorddragon_move(12); };
+void() hlorddragon_melee8  = [$drgslh08, hlorddragon_melee9 ] { hlorddragon_move(12); };
+void() hlorddragon_melee9  = [$drgslh09, hlorddragon_melee10] { hlorddragon_move(12); };
+void() hlorddragon_melee10 = [$drgslh10, hlorddragon_melee11] { hlorddragon_tail(); };
+void() hlorddragon_melee11 = [$drgslh11, hlorddragon_melee12] { hlorddragon_move(10); };
+void() hlorddragon_melee12 = [$drgslh12, hlorddragon_melee13] { hlorddragon_move(10); };
+void() hlorddragon_melee13 = [$drgslh13, hlorddragon_walk1  ] { hlorddragon_move(10); };
 
 // ===================================
 // pain
 // ===================================
-void() hlorddragon_painA1 =[ $drgpan1a, hlorddragon_painA2 ] {hlorddragon_move(12);};
-void() hlorddragon_painA2 =[ $drgpan1b, hlorddragon_painA3 ] {hlorddragon_move(12);};
-void() hlorddragon_painA3 =[ $drgpan1c, hlorddragon_walk5  ] {hlorddragon_move(12);};
+void() hlorddragon_painA1 = [$drgpan1a, hlorddragon_painA2 ] { hlorddragon_move(12); };
+void() hlorddragon_painA2 = [$drgpan1b, hlorddragon_painA3 ] { hlorddragon_move(12); };
+void() hlorddragon_painA3 = [$drgpan1c, hlorddragon_walk5  ] { hlorddragon_move(12); };
 
-void() hlorddragon_painB1 =[ $drgpan2a, hlorddragon_painB2 ] {hlorddragon_move(12);};
-void() hlorddragon_painB2 =[ $drgpan2b, hlorddragon_painB3 ] {hlorddragon_move(12);};
-void() hlorddragon_painB3 =[ $drgpan2c, hlorddragon_walk7  ] {hlorddragon_move(12);};
+void() hlorddragon_painB1 = [$drgpan2a, hlorddragon_painB2 ] { hlorddragon_move(12); };
+void() hlorddragon_painB2 = [$drgpan2b, hlorddragon_painB3 ] { hlorddragon_move(12); };
+void() hlorddragon_painB3 = [$drgpan2c, hlorddragon_walk7  ] { hlorddragon_move(12); };
 
-void() hlorddragon_painC1 =[ $drgpan3a, hlorddragon_painC2 ] {hlorddragon_move(12);};
-void() hlorddragon_painC2 =[ $drgpan3b, hlorddragon_painC3 ] {hlorddragon_move(12);};
-void() hlorddragon_painC3 =[ $drgpan3c, hlorddragon_walk9  ] {hlorddragon_move(12);};
+void() hlorddragon_painC1 = [$drgpan3a, hlorddragon_painC2 ] { hlorddragon_move(12); };
+void() hlorddragon_painC2 = [$drgpan3b, hlorddragon_painC3 ] { hlorddragon_move(12); };
+void() hlorddragon_painC3 = [$drgpan3c, hlorddragon_walk9  ] { hlorddragon_move(12); };
 
-void() hlorddragon_painD1 =[ $drgpan4a, hlorddragon_painD2 ] {hlorddragon_move(12);};
-void() hlorddragon_painD2 =[ $drgpan4b, hlorddragon_painD3 ] {hlorddragon_move(12);};
-void() hlorddragon_painD3 =[ $drgpan4c, hlorddragon_walk11 ] {hlorddragon_move(12);};
+void() hlorddragon_painD1 = [$drgpan4a, hlorddragon_painD2 ] { hlorddragon_move(12); };
+void() hlorddragon_painD2 = [$drgpan4b, hlorddragon_painD3 ] { hlorddragon_move(12); };
+void() hlorddragon_painD3 = [$drgpan4c, hlorddragon_walk11 ] { hlorddragon_move(12); };
 
-void() hlorddragon_painE1 =[ $drgpan5a, hlorddragon_painE2 ] {hlorddragon_move(12);};
-void() hlorddragon_painE2 =[ $drgpan5b, hlorddragon_painE3 ] {hlorddragon_move(12);};
-void() hlorddragon_painE3 =[ $drgpan5c, hlorddragon_walk13 ] {hlorddragon_move(12);};
+void() hlorddragon_painE1 = [$drgpan5a, hlorddragon_painE2 ] { hlorddragon_move(12); };
+void() hlorddragon_painE2 = [$drgpan5b, hlorddragon_painE3 ] { hlorddragon_move(12); };
+void() hlorddragon_painE3 = [$drgpan5c, hlorddragon_walk13 ] { hlorddragon_move(12); };
 
-void() hlorddragon_painF1 =[ $drgpan6a, hlorddragon_painF2 ] {hlorddragon_move(12);};
-void() hlorddragon_painF2 =[ $drgpan6b, hlorddragon_painF3 ] {hlorddragon_move(12);};
-void() hlorddragon_painF3 =[ $drgpan6c, hlorddragon_walk2  ] {hlorddragon_move(12);};
+void() hlorddragon_painF1 = [$drgpan6a, hlorddragon_painF2 ] { hlorddragon_move(12); };
+void() hlorddragon_painF2 = [$drgpan6b, hlorddragon_painF3 ] { hlorddragon_move(12); };
+void() hlorddragon_painF3 = [$drgpan6c, hlorddragon_walk2  ] { hlorddragon_move(12); };
 
 void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
     if (self.pain_finished > time)
@@ -535,7 +529,7 @@ void() hlorddragon_squish = {
         T_Damage (other, self, self, 200, DAMARMOR);
 };
 
-void() hlorddragon_death1  =[ $drgdth01, hlorddragon_death2  ] {
+void() hlorddragon_death1  = [$drgdth01, hlorddragon_death2  ] {
     self.use      = SUB_Null;
     makevectors(self.angles);
     self.velocity = 300 * v_forward - 40 * v_up;
@@ -545,26 +539,26 @@ void() hlorddragon_death1  =[ $drgdth01, hlorddragon_death2  ] {
     sound (self, CHAN_VOICE, "rogue/dragon/death.wav", 1, ATTN_NONE);
     self.dragonAttacking = FALSE;
 };
-void() hlorddragon_death2  =[ $drgdth02, hlorddragon_death3  ] {hlorddragon_explode();};
-void() hlorddragon_death3  =[ $drgdth03, hlorddragon_death4  ] {hlorddragon_explode();};
-void() hlorddragon_death4  =[ $drgdth04, hlorddragon_death5  ] {hlorddragon_explode();};
-void() hlorddragon_death5  =[ $drgdth05, hlorddragon_death6  ] {hlorddragon_explode();};
-void() hlorddragon_death6  =[ $drgdth06, hlorddragon_death7  ] {hlorddragon_explode();};
-void() hlorddragon_death7  =[ $drgdth07, hlorddragon_death8  ] {hlorddragon_explode();};
-void() hlorddragon_death8  =[ $drgdth08, hlorddragon_death9  ] {hlorddragon_explode();};
-void() hlorddragon_death9  =[ $drgdth09, hlorddragon_death10 ] {hlorddragon_explode();};
-void() hlorddragon_death10 =[ $drgdth10, hlorddragon_death11 ] {hlorddragon_explode();};
-void() hlorddragon_death11 =[ $drgdth11, hlorddragon_death12 ] {hlorddragon_explode();};
-void() hlorddragon_death12 =[ $drgdth12, hlorddragon_death13 ] {hlorddragon_explode();};
-void() hlorddragon_death13 =[ $drgdth13, hlorddragon_death14 ] {hlorddragon_explode();};
-void() hlorddragon_death14 =[ $drgdth14, hlorddragon_death15 ] {hlorddragon_explode();};
-void() hlorddragon_death15 =[ $drgdth15, hlorddragon_death16 ] {hlorddragon_explode();};
-void() hlorddragon_death16 =[ $drgdth16, hlorddragon_death17 ] {hlorddragon_explode();};
-void() hlorddragon_death17 =[ $drgdth17, hlorddragon_death18 ] {hlorddragon_explode();};
-void() hlorddragon_death18 =[ $drgdth18, hlorddragon_death19 ] {hlorddragon_explode();};
-void() hlorddragon_death19 =[ $drgdth19, hlorddragon_death20 ] {hlorddragon_explode();};
-void() hlorddragon_death20 =[ $drgdth20, hlorddragon_death21 ] {hlorddragon_explode();};
-void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
+void() hlorddragon_death2  = [$drgdth02, hlorddragon_death3  ] { hlorddragon_explode(); };
+void() hlorddragon_death3  = [$drgdth03, hlorddragon_death4  ] { hlorddragon_explode(); };
+void() hlorddragon_death4  = [$drgdth04, hlorddragon_death5  ] { hlorddragon_explode(); };
+void() hlorddragon_death5  = [$drgdth05, hlorddragon_death6  ] { hlorddragon_explode(); };
+void() hlorddragon_death6  = [$drgdth06, hlorddragon_death7  ] { hlorddragon_explode(); };
+void() hlorddragon_death7  = [$drgdth07, hlorddragon_death8  ] { hlorddragon_explode(); };
+void() hlorddragon_death8  = [$drgdth08, hlorddragon_death9  ] { hlorddragon_explode(); };
+void() hlorddragon_death9  = [$drgdth09, hlorddragon_death10 ] { hlorddragon_explode(); };
+void() hlorddragon_death10 = [$drgdth10, hlorddragon_death11 ] { hlorddragon_explode(); };
+void() hlorddragon_death11 = [$drgdth11, hlorddragon_death12 ] { hlorddragon_explode(); };
+void() hlorddragon_death12 = [$drgdth12, hlorddragon_death13 ] { hlorddragon_explode(); };
+void() hlorddragon_death13 = [$drgdth13, hlorddragon_death14 ] { hlorddragon_explode(); };
+void() hlorddragon_death14 = [$drgdth14, hlorddragon_death15 ] { hlorddragon_explode(); };
+void() hlorddragon_death15 = [$drgdth15, hlorddragon_death16 ] { hlorddragon_explode(); };
+void() hlorddragon_death16 = [$drgdth16, hlorddragon_death17 ] { hlorddragon_explode(); };
+void() hlorddragon_death17 = [$drgdth17, hlorddragon_death18 ] { hlorddragon_explode(); };
+void() hlorddragon_death18 = [$drgdth18, hlorddragon_death19 ] { hlorddragon_explode(); };
+void() hlorddragon_death19 = [$drgdth19, hlorddragon_death20 ] { hlorddragon_explode(); };
+void() hlorddragon_death20 = [$drgdth20, hlorddragon_death21 ] { hlorddragon_explode(); };
+void() hlorddragon_death21 = [$drgdth21, SUB_Null       ] {
     hlorddragon_parts(); // PM: Added explosion and other gibs.
     hlorddragon_nuke();
 	Quake_Spawn(self,600,0,self.origin,FALSE,1,VEC_QUAKE);
@@ -576,7 +570,7 @@ void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
     remove(self);
 };
 
-// Morphs the dark lord into the beast.  See 'hknight.qc' for dark lord.
+// Morphs the dark lord into the beast.  See hknight for dark lord.
 void() darklord_thebeast = {
     hlorddragon_nuke();     // Spawn a big explosion.
 
@@ -622,7 +616,7 @@ void() darklord_thebeast = {
     self.th_pain    = hlorddragon_pain;
     self.th_die     = hlorddragon_death1;
     self.sight_sound = "rogue/dragon/see.wav";
-	self.hello_sound = string_null; // no hello
+	self.hello_sound = ""; // no hello
     self.hlorddragonPainSequence=1;
     self.yaw_speed = 10;    // Hardwire this now!
     self.mass = 0;          // Now it's a huge massive dragon!

@@ -74,7 +74,7 @@ void() zm_idle_sound;
 float() zmaster_find_easy_victim;
 float(entity testent) corpse_status;
 
-void()	zmaster_stand1	=[	$stand1,	zmaster_stand2	] {
+void()	zmaster_stand1	= [	$stand1,	zmaster_stand2	] {
 	zmaster_find_easy_victim();
 	if (self.effects != 0) {
 		sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
@@ -83,16 +83,16 @@ void()	zmaster_stand1	=[	$stand1,	zmaster_stand2	] {
 	if (random() < 0.2) zm_idle_sound();
 	ai_stand();
 };
-void()	zmaster_stand2	=[	$stand2,	zmaster_stand3	] {ai_stand();};
-void()	zmaster_stand3	=[	$stand3,	zmaster_stand4	] {ai_stand();};
-void()	zmaster_stand4	=[	$stand4,	zmaster_stand5	] {ai_stand();};
-void()	zmaster_stand5	=[	$stand5,	zmaster_stand6	] {ai_stand();};
-void()	zmaster_stand6	=[	$stand6,	zmaster_stand7	] {ai_stand();};
-void()	zmaster_stand7	=[	$stand7,	zmaster_stand8	] {ai_stand();};
-void()	zmaster_stand8	=[	$stand8,	zmaster_stand9	] {ai_stand();};
-void()	zmaster_stand9	=[	$stand9,	zmaster_stand1	] {ai_stand();};
+void()	zmaster_stand2	= [	$stand2,	zmaster_stand3	] { ai_stand(); };
+void()	zmaster_stand3	= [	$stand3,	zmaster_stand4	] { ai_stand(); };
+void()	zmaster_stand4	= [	$stand4,	zmaster_stand5	] { ai_stand(); };
+void()	zmaster_stand5	= [	$stand5,	zmaster_stand6	] { ai_stand(); };
+void()	zmaster_stand6	= [	$stand6,	zmaster_stand7	] { ai_stand(); };
+void()	zmaster_stand7	= [	$stand7,	zmaster_stand8	] { ai_stand(); };
+void()	zmaster_stand8	= [	$stand8,	zmaster_stand9	] { ai_stand(); };
+void()	zmaster_stand9	= [	$stand9,	zmaster_stand1	] { ai_stand(); };
 
-void()	zmaster_walk1	=[	$walk1,		zmaster_walk2	] {
+void()	zmaster_walk1	= [	$walk1,		zmaster_walk2	] {
 	if (self.effects != 0) {
 		sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 		self.effects = 0;
@@ -101,55 +101,55 @@ void()	zmaster_walk1	=[	$walk1,		zmaster_walk2	] {
 	FootFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);
 	ai_walk(2);
 };
-void()	zmaster_walk2	=[	$walk2,		zmaster_walk3	] {ai_walk(5);};
-void()	zmaster_walk3	=[	$walk3,		zmaster_walk4	] {ai_walk(5);};
-void()	zmaster_walk4	=[	$walk4,		zmaster_walk5	] {ai_walk(4);};
-void()	zmaster_walk5	=[	$walk5,		zmaster_walk6	] {ai_walk(4);};
-void()	zmaster_walk6	=[	$walk6,		zmaster_walk7	] {ai_walk(2);};
-void()	zmaster_walk7	=[	$walk7,		zmaster_walk8	] {ai_walk(2);};
-void()	zmaster_walk8	=[	$walk8,		zmaster_walk9	] {ai_walk(3);};
-void()	zmaster_walk9	=[	$walk9,		zmaster_walk10	] {ai_walk(3);};
-void()	zmaster_walk10	=[	$walk10,	zmaster_walk11	] {ai_walk(4);};
-void()	zmaster_walk11	=[	$walk11,	zmaster_walk12	] {FootFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);ai_walk(3);};
-void()	zmaster_walk12	=[	$walk12,	zmaster_walk13	] {ai_walk(4);};
-void()	zmaster_walk13	=[	$walk13,	zmaster_walk14	] {ai_walk(6);};
-void()	zmaster_walk14	=[	$walk14,	zmaster_walk15	] {ai_walk(2);};
-void()	zmaster_walk15	=[	$walk15,	zmaster_walk16	] {ai_walk(2);};
-void()	zmaster_walk16	=[	$walk16,	zmaster_walk17	] {ai_walk(4);};
-void()	zmaster_walk17	=[	$walk17,	zmaster_walk18	] {ai_walk(3);};
-void()	zmaster_walk18	=[	$walk18,	zmaster_walk19	] {ai_walk(3);};
-void()	zmaster_walk19	=[	$walk19,	zmaster_walk20	] {ai_walk(3);};
-void()	zmaster_walk20	=[	$walk20,	zmaster_walk1	] {ai_walk(2);};
+void()	zmaster_walk2	= [	$walk2,		zmaster_walk3	] { ai_walk(5); };
+void()	zmaster_walk3	= [	$walk3,		zmaster_walk4	] { ai_walk(5); };
+void()	zmaster_walk4	= [	$walk4,		zmaster_walk5	] { ai_walk(4); };
+void()	zmaster_walk5	= [	$walk5,		zmaster_walk6	] { ai_walk(4); };
+void()	zmaster_walk6	= [	$walk6,		zmaster_walk7	] { ai_walk(2); };
+void()	zmaster_walk7	= [	$walk7,		zmaster_walk8	] { ai_walk(2); };
+void()	zmaster_walk8	= [	$walk8,		zmaster_walk9	] { ai_walk(3); };
+void()	zmaster_walk9	= [	$walk9,		zmaster_walk10	] { ai_walk(3); };
+void()	zmaster_walk10	= [	$walk10,	zmaster_walk11	] { ai_walk(4); };
+void()	zmaster_walk11	= [	$walk11,	zmaster_walk12	] { footFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);ai_walk(3); };
+void()	zmaster_walk12	= [	$walk12,	zmaster_walk13	] { ai_walk(4); };
+void()	zmaster_walk13	= [	$walk13,	zmaster_walk14	] { ai_walk(6); };
+void()	zmaster_walk14	= [	$walk14,	zmaster_walk15	] { ai_walk(2); };
+void()	zmaster_walk15	= [	$walk15,	zmaster_walk16	] { ai_walk(2); };
+void()	zmaster_walk16	= [	$walk16,	zmaster_walk17	] { ai_walk(4); };
+void()	zmaster_walk17	= [	$walk17,	zmaster_walk18	] { ai_walk(3); };
+void()	zmaster_walk18	= [	$walk18,	zmaster_walk19	] { ai_walk(3); };
+void()	zmaster_walk19	= [	$walk19,	zmaster_walk20	] { ai_walk(3); };
+void()	zmaster_walk20	= [	$walk20,	zmaster_walk1	] { ai_walk(2); };
 
-void()	zmaster_pain1	=[	$pain1,		zmaster_pain2	] { sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM); };
-void()	zmaster_pain2	=[	$pain2,		zmaster_pain3	] {};
-void()	zmaster_pain3	=[	$pain3,		zmaster_pain4	] {};
-void()	zmaster_pain4	=[	$pain4,		zmaster_pain5	] {};
-void()	zmaster_pain5	=[	$pain5,		zmaster_run1	] {};
+void()	zmaster_pain1	= [	$pain1,		zmaster_pain2	] { sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM); };
+void()	zmaster_pain2	= [	$pain2,		zmaster_pain3	] {};
+void()	zmaster_pain3	= [	$pain3,		zmaster_pain4	] {};
+void()	zmaster_pain4	= [	$pain4,		zmaster_pain5	] {};
+void()	zmaster_pain5	= [	$pain5,		zmaster_run1	] {};
 
-void()	zmaster_die1	=[	$death1,	zmaster_die2	] {ai_forward(10);};
-void()	zmaster_die2	=[	$death2,	zmaster_die3	] {ai_forward(8);};
-void()	zmaster_die3	=[	$death3,	zmaster_die4	]
-{self.solid = SOLID_NOT;ai_forward(7);};
-void()	zmaster_die4	=[	$death4,	zmaster_die5	] {};
-void()	zmaster_die5	=[	$death5,	zmaster_die6	] {};
-void()	zmaster_die6	=[	$death6,	zmaster_die7	] {};
-void()	zmaster_die7	=[	$death7,	zmaster_die8	] {};
-void()	zmaster_die8	=[	$death8,	zmaster_die9	] {ai_forward(10);};
-void()	zmaster_die9	=[	$death9,	zmaster_die10	] {ai_forward(11);};
-void()	zmaster_die10	=[	$death10,	zmaster_die11	] {};
-void()	zmaster_die11	=[	$death11,	zmaster_die12	] {};
-void()	zmaster_die12	=[	$death12,	zmaster_die12	] {};
+void()	zmaster_die1	= [	$death1,	zmaster_die2	] { ai_forward(10); };
+void()	zmaster_die2	= [	$death2,	zmaster_die3	] { ai_forward(8); };
+void()	zmaster_die3	= [	$death3,	zmaster_die4	]
+{ self.solid = SOLID_NOT;ai_forward(7); };
+void()	zmaster_die4	= [	$death4,	zmaster_die5	] {};
+void()	zmaster_die5	= [	$death5,	zmaster_die6	] {};
+void()	zmaster_die6	= [	$death6,	zmaster_die7	] {};
+void()	zmaster_die7	= [	$death7,	zmaster_die8	] {};
+void()	zmaster_die8	= [	$death8,	zmaster_die9	] { ai_forward(10); };
+void()	zmaster_die9	= [	$death9,	zmaster_die10	] { ai_forward(11); };
+void()	zmaster_die10	= [	$death10,	zmaster_die11	] {};
+void()	zmaster_die11	= [	$death11,	zmaster_die12	] {};
+void()	zmaster_die12	= [	$death12,	zmaster_die12	] {};
 
-void()	zmaster_dieb1	=[	$deathb1,	zmaster_dieb2	] {};
-void()	zmaster_dieb2	=[	$deathb2,	zmaster_dieb3	] {self.solid = SOLID_NOT;};
-void()	zmaster_dieb3	=[	$deathb3,	zmaster_dieb4	] {};
-void()	zmaster_dieb4	=[	$deathb4,	zmaster_dieb5	] {};
-void()	zmaster_dieb5	=[	$deathb5,	zmaster_dieb6	] {};
-void()	zmaster_dieb6	=[	$deathb6,	zmaster_dieb7	] {};
-void()	zmaster_dieb7	=[	$deathb7,	zmaster_dieb8	] {};
-void()	zmaster_dieb8	=[	$deathb8,	zmaster_dieb9	] {};
-void()	zmaster_dieb9	=[	$deathb9,	zmaster_dieb9	] {};
+void()	zmaster_dieb1	= [	$deathb1,	zmaster_dieb2	] {};
+void()	zmaster_dieb2	= [	$deathb2,	zmaster_dieb3	] { self.solid = SOLID_NOT;};
+void()	zmaster_dieb3	= [	$deathb3,	zmaster_dieb4	] {};
+void()	zmaster_dieb4	= [	$deathb4,	zmaster_dieb5	] {};
+void()	zmaster_dieb5	= [	$deathb5,	zmaster_dieb6	] {};
+void()	zmaster_dieb6	= [	$deathb6,	zmaster_dieb7	] {};
+void()	zmaster_dieb7	= [	$deathb7,	zmaster_dieb8	] {};
+void()	zmaster_dieb8	= [	$deathb8,	zmaster_dieb9	] {};
+void()	zmaster_dieb9	= [	$deathb9,	zmaster_dieb9	] {};
 
 void() zmaster_die = {
 	// check for gib
@@ -254,27 +254,27 @@ float() zmaster_find_easy_victim = {
 	return found_one;
 };
 
-void()	zmaster_run1	=[	$walk1,		zmaster_run2	]
-{zm_idle_sound();FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(2);};
-void()	zmaster_run2	=[	$walk2,	zmaster_run3	] {zmaster_run(5);};
-void()	zmaster_run3	=[	$walk3,	zmaster_run4	] {zmaster_run(5);};
-void()	zmaster_run4	=[	$walk4,	zmaster_run5	] {zmaster_run(4);};
-void()	zmaster_run5	=[	$walk5,	zmaster_run6	] {zmaster_run(4);};
-void()	zmaster_run6	=[	$walk6,	zmaster_run7	] {zmaster_run(2);};
-void()	zmaster_run7	=[	$walk7,	zmaster_run8	] {zmaster_run(2);};
-void()	zmaster_run8	=[	$walk8,	zmaster_run9	] {zmaster_run(3);};
-void()	zmaster_run9	=[	$walk9,	zmaster_run10	] {zmaster_run(3);};
-void()	zmaster_run10	=[	$walk10,	zmaster_run11	] {zmaster_run(4);};
-void()	zmaster_run11	=[	$walk11,	zmaster_run12	] {FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(3);};
-void()	zmaster_run12	=[	$walk12,	zmaster_run13	] {zmaster_run(4);};
-void()	zmaster_run13	=[	$walk13,	zmaster_run14	] {zmaster_run(6);};
-void()	zmaster_run14	=[	$walk14,	zmaster_run15	] {zmaster_run(2);};
-void()	zmaster_run15	=[	$walk15,	zmaster_run16	] {zmaster_run(2);};
-void()	zmaster_run16	=[	$walk16,	zmaster_run17	] {zmaster_run(4);};
-void()	zmaster_run17	=[	$walk17,	zmaster_run18	] {zmaster_run(3);};
-void()	zmaster_run18	=[	$walk18,	zmaster_run19	] {zmaster_run(3);};
-void()	zmaster_run19	=[	$walk19,	zmaster_run20	] {zmaster_run(3);};
-void()	zmaster_run20	=[	$walk20,	zmaster_run1	] {zmaster_run(2);};
+void()	zmaster_run1	= [	$walk1,		zmaster_run2	]
+{ zm_idle_sound();FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(2); };
+void()	zmaster_run2	= [	$walk2,	zmaster_run3	] { zmaster_run(5); };
+void()	zmaster_run3	= [	$walk3,	zmaster_run4	] { zmaster_run(5); };
+void()	zmaster_run4	= [	$walk4,	zmaster_run5	] { zmaster_run(4); };
+void()	zmaster_run5	= [	$walk5,	zmaster_run6	] { zmaster_run(4); };
+void()	zmaster_run6	= [	$walk6,	zmaster_run7	] { zmaster_run(2); };
+void()	zmaster_run7	= [	$walk7,	zmaster_run8	] { zmaster_run(2); };
+void()	zmaster_run8	= [	$walk8,	zmaster_run9	] { zmaster_run(3); };
+void()	zmaster_run9	= [	$walk9,	zmaster_run10	] { zmaster_run(3); };
+void()	zmaster_run10	= [	$walk10,	zmaster_run11	] { zmaster_run(4); };
+void()	zmaster_run11	= [	$walk11,	zmaster_run12	] { footFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(3); };
+void()	zmaster_run12	= [	$walk12,	zmaster_run13	] { zmaster_run(4); };
+void()	zmaster_run13	= [	$walk13,	zmaster_run14	] { zmaster_run(6); };
+void()	zmaster_run14	= [	$walk14,	zmaster_run15	] { zmaster_run(2); };
+void()	zmaster_run15	= [	$walk15,	zmaster_run16	] { zmaster_run(2); };
+void()	zmaster_run16	= [	$walk16,	zmaster_run17	] { zmaster_run(4); };
+void()	zmaster_run17	= [	$walk17,	zmaster_run18	] { zmaster_run(3); };
+void()	zmaster_run18	= [	$walk18,	zmaster_run19	] { zmaster_run(3); };
+void()	zmaster_run19	= [	$walk19,	zmaster_run20	] { zmaster_run(3); };
+void()	zmaster_run20	= [	$walk20,	zmaster_run1	] { zmaster_run(2); };
 
 // Turns the current enemy into a controlled zombie
 void() zmaster_zombify = {
@@ -342,35 +342,35 @@ void() zmaster_zombify = {
 	self.wait = time + 3 + random()*3;
 };
 
-void()	zmaster_magica1 =[	$magica1,	zmaster_magica2	] {
+void()	zmaster_magica1 = [	$magica1,	zmaster_magica2	] {
 	ai_face();
 	if (self.effects != EF_BRIGHTFIELD)
 		sound (self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
 };
-void()	zmaster_magica2 =[	$magica1,	zmaster_magica3	] {
+void()	zmaster_magica2 = [	$magica1,	zmaster_magica3	] {
 	ai_face();
 	self.effects = EF_BRIGHTFIELD;
 	self.nextthink = time + 0.25;
 };
-void()	zmaster_magica3 =[	$magica1,	zmaster_magica4	] {self.nextthink = time + 0.5;ai_face();};
-void()	zmaster_magica4 =[	$magica2,	zmaster_magica5	] {self.nextthink = time + 0.15;ai_face();};
-void()	zmaster_magica5 =[	$magica3,	zmaster_magica6	] {self.nextthink = time + 0.15;ai_face();};
-void()	zmaster_magica6 =[	$magica4,	zmaster_magica7	] {self.nextthink = time + 0.15;ai_face();};
-void()	zmaster_magica7 =[	$magica5,	zmaster_magica8	] {
+void()	zmaster_magica3 = [	$magica1,	zmaster_magica4	] { self.nextthink = time + 0.5;ai_face(); };
+void()	zmaster_magica4 = [	$magica2,	zmaster_magica5	] { self.nextthink = time + 0.15;ai_face(); };
+void()	zmaster_magica5 = [	$magica3,	zmaster_magica6	] { self.nextthink = time + 0.15;ai_face(); };
+void()	zmaster_magica6 = [	$magica4,	zmaster_magica7	] { self.nextthink = time + 0.15;ai_face(); };
+void()	zmaster_magica7 = [	$magica5,	zmaster_magica8	] {
 	sound (self, CHAN_VOICE, "custents/zmaster/energize.wav", 1, ATTN_NORM);
 	self.nextthink = time + 0.15;
 	ai_face();
 	self.effects = self.effects | EF_DIMLIGHT;
 };
-void()	zmaster_magica8 =[	$magica6,	zmaster_magica9	] {
+void()	zmaster_magica8 = [	$magica6,	zmaster_magica9	] {
 	self.nextthink = time + 1;
 	ai_face();
 };
-void()	zmaster_magica9 =[	$magica7,	zmaster_magica10	] {ai_face();};
-void()	zmaster_magica10 =[	$magica8,	zmaster_magica11	] {ai_face();};
-void()	zmaster_magica11 =[	$magica9,	zmaster_magica12	] {ai_face();};
-void()	zmaster_magica12 =[	$magica10,	zmaster_magica13	] {ai_face();};
-void()	zmaster_magica13 =[	$magica11,	zmaster_magica14	] {
+void()	zmaster_magica9 = [	$magica7,	zmaster_magica10	] { ai_face(); };
+void()	zmaster_magica10 = [	$magica8,	zmaster_magica11	] { ai_face(); };
+void()	zmaster_magica11 = [	$magica9,	zmaster_magica12	] { ai_face(); };
+void()	zmaster_magica12 = [	$magica10,	zmaster_magica13	] { ai_face(); };
+void()	zmaster_magica13 = [	$magica11,	zmaster_magica14	] {
 	ai_face();
 
 	// when gorging != 0, attacking a living creature
@@ -399,29 +399,29 @@ void()	zmaster_magica13 =[	$magica11,	zmaster_magica14	] {
 	WriteCoord (MSG_BROADCAST, self.enemy.origin_y);
 	WriteCoord (MSG_BROADCAST, self.enemy.origin_z);
 };
-void()	zmaster_magica14 =[	$magica11,	zmaster_magica15	] {};
-void()	zmaster_magica15 =[	$magica11,	zmaster_magica16	] { self.effects = EF_DIMLIGHT + EF_BRIGHTFIELD; };
-void()	zmaster_magica16 =[	$magica11,	zmaster_magica17	] { self.nextthink = time + 0.75; }; // Slower than 0.1 think on an enemy?? That's a new one. -Qmaster
-void()	zmaster_magica17 =[	$magica12,	zmaster_magica18	] { self.effects = self.effects - EF_DIMLIGHT; self.nextthink = time + self.endtime; };
-void()	zmaster_magica18 =[	$magica13,	zmaster_magica19	] {self.nextthink = time + self.endtime;};
-void()	zmaster_magica19 =[	$magica14,	zmaster_magica20	] {self.nextthink = time + self.endtime;};
-void()	zmaster_magica20 =[	$magica1,	zmaster_magica21	] {self.nextthink = time + self.endtime;};
-void()	zmaster_magica21 =[	$pain5,	zmaster_run1	] {
+void()	zmaster_magica14 = [	$magica11,	zmaster_magica15	] {};
+void()	zmaster_magica15 = [	$magica11,	zmaster_magica16	] { self.effects = EF_DIMLIGHT + EF_BRIGHTFIELD; };
+void()	zmaster_magica16 = [	$magica11,	zmaster_magica17	] { self.nextthink = time + 0.75; }; // Slower than 0.1 think on an enemy?? That's a new one. -Qmaster
+void()	zmaster_magica17 = [	$magica12,	zmaster_magica18	] { self.effects = self.effects - EF_DIMLIGHT; self.nextthink = time + self.endtime; };
+void()	zmaster_magica18 = [	$magica13,	zmaster_magica19	] { self.nextthink = time + self.endtime;};
+void()	zmaster_magica19 = [	$magica14,	zmaster_magica20	] { self.nextthink = time + self.endtime;};
+void()	zmaster_magica20 = [	$magica1,	zmaster_magica21	] { self.nextthink = time + self.endtime;};
+void()	zmaster_magica21 = [	$pain5,	zmaster_run1	] {
 	if (self.endtime == 0.2)
 		self.nextthink =time + 1;
 	else
 		self.nextthink =time + 0.3;
 };
 
-void()	zmaster_magicb1 =[	$magicb1,	zmaster_magicb2	] {ai_face();};
-void()	zmaster_magicb2 =[	$magicb2,	zmaster_magicb3	] {ai_face();};
-void()	zmaster_magicb3 =[	$magicb3,	zmaster_magicb4	] {ai_face();};
-void()	zmaster_magicb4 =[	$magicb4,	zmaster_magicb5	] {ai_face();};
-void()	zmaster_magicb5 =[	$magicb5,	zmaster_magicb6	] {ai_face();};
-void()	zmaster_magicb6 =[	$magicb6,	zmaster_magicb7	] {ai_face();};
-void()	zmaster_magicb7 =[	$magicb7,	zmaster_magicb8	] {ai_face();};
-void()	zmaster_magicb8 =[	$magicb8,	zmaster_magicb9	] {ai_face();};
-void()	zmaster_magicb9 =[	$magicb9,	zmaster_magicb10] {
+void()	zmaster_magicb1 = [	$magicb1,	zmaster_magicb2	] { ai_face(); };
+void()	zmaster_magicb2 = [	$magicb2,	zmaster_magicb3	] { ai_face(); };
+void()	zmaster_magicb3 = [	$magicb3,	zmaster_magicb4	] { ai_face(); };
+void()	zmaster_magicb4 = [	$magicb4,	zmaster_magicb5	] { ai_face(); };
+void()	zmaster_magicb5 = [	$magicb5,	zmaster_magicb6	] { ai_face(); };
+void()	zmaster_magicb6 = [	$magicb6,	zmaster_magicb7	] { ai_face(); };
+void()	zmaster_magicb7 = [	$magicb7,	zmaster_magicb8	] { ai_face(); };
+void()	zmaster_magicb8 = [	$magicb8,	zmaster_magicb9	] { ai_face(); };
+void()	zmaster_magicb9 = [	$magicb9,	zmaster_magicb10] {
 	zmaster_shot(0,16);
 	zmaster_shot(80,16);
 	zmaster_shot(-80,16);
@@ -432,10 +432,10 @@ void()	zmaster_magicb9 =[	$magicb9,	zmaster_magicb10] {
 	zmaster_shot(50,-35);
 	zmaster_shot(-50,-35);
 };
-void()	zmaster_magicb10 =[	$magicb10,	zmaster_magicb11] {ai_face();};
-void()	zmaster_magicb11 =[	$magicb11,	zmaster_magicb12] {ai_face();};
-void()	zmaster_magicb12 =[	$magicb12,	zmaster_magicb13] {ai_face();};
-void()	zmaster_magicb13 =[	$magicb13,	zmaster_run1] {ai_face();};
+void()	zmaster_magicb10 = [	$magicb10,	zmaster_magicb11] { ai_face(); };
+void()	zmaster_magicb11 = [	$magicb11,	zmaster_magicb12] { ai_face(); };
+void()	zmaster_magicb12 = [	$magicb12,	zmaster_magicb13] { ai_face(); };
+void()	zmaster_magicb13 = [	$magicb13,	zmaster_run1] { ai_face(); };
 
 void() zm_idle_sound = {
 	if (random() < 0.2 && self.currentammo < time) {

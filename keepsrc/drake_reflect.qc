@@ -65,21 +65,21 @@
 
 // Checks if entity has reflection from shield or armor.  Return values: 0 = none, 1 = shield, 2 = courage armor.
 float(entity ent, vector spot, float damage) HasReflection = {
-    if (!ent) return FALSE;
-    if (ent.mirror_finished) return TRUE; // Check for artifact because it toggles particle field off and on during the three second warning.
+    if (!ent) return 0;
+    if (ent.mirror_finished) return 1; // Check for artifact because it toggles particle field off and on during the three second warning.
 
 	// Update: Entity can reflect frontal attacks if wearing courage armor.
     if (ent.armorvalue >= damage) {
-		if (UseCourage(ent, spot)) {
+		if (UseCourage(ent, spot)) { // Does stuff.
 			if (damage)     // Mess with hud only if there is damage.
 			if (ent.takedamage)
-			if ( !((ent.flags & FL_GODMODE) || ent.invincible_finished) ) { // Degrade armor only if vulnerable to damage.
+			if (!Indestructable(ent)) { // Degrade armor only if vulnerable to damage.
 				if (ent.armorvalue > damage) ent.armorvalue = ent.armorvalue - damage;
 			}
 			return 2; // In case we need a non-zero value other than TRUE.
 		}
 	}
-    return FALSE; // No reflection.
+    return 0; // No reflection.
 };
 
 void(entity ent, entity shot, float straightup) ReflectMissile = {
@@ -163,7 +163,7 @@ float(float damage) Reflected_Damage = {
     return FALSE; // Missile was not reflected, so proceed as normal.
 };
 
-float() Reflected = {return Reflected_Damage(self.dmg);};
+float() Reflected = { return Reflected_Damage(self.dmg); };
 
 // Turns on a particle field for 'ent' then repels missiles within the field.  Note: EF_BRIGHTFIELD has a radius of 80, centered on entity's origin.
 void(entity ent) ReflectorShield = {

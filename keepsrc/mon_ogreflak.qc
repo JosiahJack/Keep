@@ -91,7 +91,7 @@ void() FlakTouch = {
 		self.velocity = '0 0 0'; // stick around for a little while...
 		self.solid = SOLID_NOT;
 		self.touch = SUB_Null;
-		self.model = string_null;
+		self.model = "";
 		self.oldorigin = self.origin - other.origin; // displacement from enemy origin (its gonna move next frame)
 		self.oldenemy = other;		
 		self.think = FlakDoDamage;
@@ -165,13 +165,13 @@ void() BDW_OgreFireFlak = {
 };	
 
 // Range - Flak (uses nails)
-void() ogre_nail1	=[	$shoot1,		ogre_nail2	] {ai_face();};
-void() ogre_nail2	=[	$shoot2,		ogre_nail3	] {ai_face();};
-void() ogre_nail3	=[	$shoot2,		ogre_nail4	] {ai_face();};
-void() ogre_nail4	=[	$shoot3,		ogre_nail5	] {ai_face();BDW_OgreFireFlak();};
-void() ogre_nail5	=[	$shoot4,		ogre_nail6	] {ai_face();};
-void() ogre_nail6	=[	$shoot5,		ogre_nail7	] {ai_face();};
-void() ogre_nail7	=[	$shoot6,		ogre_run1	] {ai_face();};
+void() ogre_nail1	= [	$shoot1,		ogre_nail2	] { ai_face(); };
+void() ogre_nail2	= [	$shoot2,		ogre_nail3	] { ai_face(); };
+void() ogre_nail3	= [	$shoot2,		ogre_nail4	] { ai_face(); };
+void() ogre_nail4	= [	$shoot3,		ogre_nail5	] { ai_face();BDW_OgreFireFlak(); };
+void() ogre_nail5	= [	$shoot4,		ogre_nail6	] { ai_face(); };
+void() ogre_nail6	= [	$shoot5,		ogre_nail7	] { ai_face(); };
+void() ogre_nail7	= [	$shoot6,		ogre_run1	] { ai_face(); };
 
 void() monster_ogre_spikeshooter_precache = {
 	precache_model ("progs/ad171/mon_ogre.mdl");

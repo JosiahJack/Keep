@@ -967,7 +967,7 @@ void() item_flashlight_touch = {
 	if (other.health < 1) return;
 
 	self.solid = SOLID_NOT;
-	self.model = string_null;
+	self.model = "";
 	sprint(other,"You got the ");
 	sprint(other,self.netname);
 	sprint(other,"\n");
@@ -993,7 +993,7 @@ void() item_secrethunter_touch = {
 	if (other.health < 1) return;
 
 	self.solid = SOLID_NOT;
-	self.model = string_null;
+	self.model = "";
 	sprint(other,"You got the ");
 	sprint(other,self.netname);
 	sprint(other,"\n");
@@ -1023,7 +1023,7 @@ void() horn_touch = { // [FUNCTION]
 	if (other.health < 1) return;
 
 	self.solid = SOLID_NOT;
-	self.model = string_null;
+	self.model = "";
 	sprint(other,"You got the ");
 	sprint(other,self.netname);
 	sprint(other,"\n");
@@ -1107,7 +1107,7 @@ void() item_artifact_levitation = { // [ENTITY]
 };
 
 // Original classname in Zerstorer.  Replaced Zerstorer's Dark-Angel Wings with Boots of Levitation.
-void() item_wings = {self.classname = "item_artifact_levitation"; item_artifact_levitation(); }; // [ENTITY]
+void() item_wings = { self.classname = "item_artifact_levitation"; item_artifact_levitation(); }; // [ENTITY]
 
 // Shotguns fire faster -- permanently.  Also fills shells to the maximum.
 void() item_artifact_optimizer = { // [ENTITY]

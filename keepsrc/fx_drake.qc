@@ -117,7 +117,7 @@ void(float lite, float add, float rate) LightZero_Set = { // [FUNCTION]
 // collide with the ceiling sooner and disappear.
 void() glitter_think = { // [FUNCTION]
     if (self.frame >= self.waitmax) {
-        if (self.cnt > 5) {remove (self);  return;} // 5 rewinds give 3 sec. life -- long enough.
+        if (self.cnt > 5) { remove (self);  return;} // 5 rewinds give 3 sec. life -- long enough.
 		
         self.cnt = self.cnt + 1;
         self.frame = self.waitmin;

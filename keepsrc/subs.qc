@@ -46,7 +46,7 @@ void(string text, string noise, entity act) Mass_Centerprint;
 void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
 
 void() SUB_Null = {}; // [FUNCTION]
-void() SUB_Remove = {remove(self);}; // [FUNCTION]
+void() SUB_Remove = { remove(self); }; // [FUNCTION]
 void(entity inflictor, entity attacker, float damage) SUB_Null_pain = {}; // [FUNCTION]
 
 // To determine if an entity is still active this function generates an unique number that can be checked/shared between linked entities.
@@ -261,7 +261,7 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = { // [FUNCTION]
 
 // After moving, set origin to exact final destination rather than last value that is very very close but not quite.
 void()  SUB_CalcMoveDone = { // [FUNCTION]
-	if (self.classname == "fliquid") self.fmover = string_null; // Update for moving liquids - from extras_r4/r5
+	if (self.classname == "fliquid") self.fmover = ""; // Update for moving liquids - from extras_r4/r5
 	self.velocity = '0 0 0';
 	setorigin(self, self.finaldest);
 	self.nextthink = -1;
@@ -287,12 +287,12 @@ float(entity t) HasTargets = { // [FUNCTION]
 
 // Clear all target strings
 void(entity t) clear_trigstrs = { // [FUNCTION]
-	t.killtarget = string_null;
-	t.killtarget2 = string_null;
-	t.target = string_null;
-	t.target2 = string_null;
-	t.target3 = string_null;
-	t.target4 = string_null;
+	t.killtarget = "";
+	t.killtarget2 = "";
+	t.target = "";
+	t.target2 = "";
+	t.target3 = "";
+	t.target4 = "";
 };
 
 // sock: I really do hate this function because there is hardly any checks on

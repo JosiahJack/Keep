@@ -915,7 +915,7 @@ void() light_candle = { // [ENTITY]
 	else if (self.t_width == 0 || self.t_width > 3) self.t_width = 1;
 
 	self.modelindex = 0;
-	self.model = string_null;				// hide bmodel surface
+	self.model = "";				// hide bmodel surface
 	self.frame = 1 + (self.t_width-1)*2;	// Def = on state
 	self.movetype = MOVETYPE_NONE;			// Create baseline
 	self.solid = SOLID_NOT;

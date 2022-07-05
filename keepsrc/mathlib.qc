@@ -501,7 +501,7 @@ float(float s1, float s2, float s3) encode = {
 
 // generic encode
 // s1 is value
-// bits are max value - 1, 3, 7, 15, 31...255...65535...{n} - a series of 1 bits
+// bits are max value - 1, 3, 7, 15, 31...255...65535...{ n} - a series of 1 bits
 // pos is the position in the parm* variable
 // - position will be the next bit value above the previous bits
 // - i.e. for 3 value bits at position 1, the next position is 4
@@ -549,7 +549,7 @@ float(float parmval, float which) decode = {
 
 // generic decode - extract data from generic encode above
 // parmval is the parm* variable data
-// bits are max value - 1, 3, 7, 15, 31...255...65535...{n} - a series of 1 bits
+// bits are max value - 1, 3, 7, 15, 31...255...65535...{ n} - a series of 1 bits
 // pos is the position in the parm* variable
 // this uses the same bits & pos to extract any generic encoded data, see notes under g_encode for more details
 float(float parmval, float bits, float pos) g_decode = {
@@ -576,7 +576,7 @@ vector(entity e, vector a) Anypoint = {
 };
 
 // Returns the center of the entity 'e'.
-vector(entity e) Midpoint = {return e.origin + (e.mins + e.maxs)*0.5;};
+vector(entity e) Midpoint = { return e.origin + (e.mins + e.maxs)*0.5;};
 
 // Returns upper-mid point of a creature, or center of an object.
 // Used for aiming by NPCs.
@@ -695,10 +695,10 @@ vector(vector dir, float ang) Dir_Randomize = {
 };
 
 // Emulate 'P_Random' from Doom/Heretic source.  Returns an integer from 0 to 255.
-float() prandom = {return (random() * 256) & 255;};
+float() prandom = { return (random() * 256) & 255;};
 
 // Damage when hit by a rocket directly.  Emulates 100-120 when d = 120.  Does 83.333% to 100% damage
-float(float d) SUB_RandomDamage = {return d / 6 * (5 + random());};
+float(float d) SUB_RandomDamage = { return d / 6 * (5 + random()); };
 
 // Damage when hit by melee attack.  Typical amount is the sum of three
 // random calls multiplied by a given number.

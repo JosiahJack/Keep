@@ -72,7 +72,7 @@ void() hip_train_next = {
       self.message = self.goalentity.message;
       SUB_UseTargets();
       self.target = temp;
-      self.message = string_null;
+      self.message = "";
 
    }
    self.goalentity = targ;

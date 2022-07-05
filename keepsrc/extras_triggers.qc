@@ -242,7 +242,7 @@ void() trigger_enemy = { // [ENTITY]
 	if (!self.targetname) objerror("trigger_enemy without name");
 	if (!self.target) objerror("trigger_enemy without a target");
 	setorigin (self, self.origin);
-	setmodel (self, string_null);
+	setmodel (self, "");
 	self.health = 100;	
 	self.use = enemy_anger;
 };

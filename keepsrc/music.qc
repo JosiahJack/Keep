@@ -113,7 +113,7 @@ void() SpawnStereo = { // [FUNCTION]
 };
 
 // Function for non-looped music.
-void() ReplayMusic = {PlayMusic (self.noise, self.wait);}; // [FUNCTION]
+void() ReplayMusic = { PlayMusic (self.noise, self.wait); }; // [FUNCTION]
 
 // Note:  The sound played should be looped.
 // 'dur' - Looped sounds should use 0.  Unlooped sounds should use non-zero.
@@ -177,9 +177,9 @@ void() InitMusic = { // [FUNCTION]
     music2 = world.noise2;
 
     music3 = world.noise3;
-    if (music1 != "") {abort = FALSE;  precache_sound (music1);}
-    if (music2 != "") {abort = FALSE;  precache_sound (music2);}
-    if (music3 != "") {abort = FALSE;  precache_sound (music3);}
+    if (music1 != "") { abort = FALSE;  precache_sound (music1);}
+    if (music2 != "") { abort = FALSE;  precache_sound (music2);}
+    if (music3 != "") { abort = FALSE;  precache_sound (music3);}
     if (abort) return; // No music to play.
 
     SpawnStereo();
@@ -242,13 +242,13 @@ void() tmusic_touch = { // [FUNCTION]
 };
 
 void() trigger_music_spawn = { // [FUNCTION]
-    if (!self.noise) {remove (self);  return;}
+    if (!self.noise) { remove (self);  return;}
 
     precache_sound (self.noise);
     if (self.targetname) self.use = tmusic_use;
     else self.touch = tmusic_touch;
 };
 
-void() trigger_music = {InitTrigger();  trigger_music_spawn();}; // [ENTITY]
+void() trigger_music = { InitTrigger();  trigger_music_spawn(); }; // [ENTITY]
 
-void() trigger_music_point = {InitPointTrigger();  trigger_music_spawn();}; // [ENTITY]
+void() trigger_music_point = { InitPointTrigger();  trigger_music_spawn(); }; // [ENTITY]

@@ -343,7 +343,7 @@ void() misc_model_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;				// Switch off entity
 	self.state = STATE_OFF;					// Switch off animations
 	misc_model_loopreset();					// Reset loop counter
-	self.model = string_null;				// hide bmodel surface
+	self.model = "";				// hide bmodel surface
 	self.movetype = MOVETYPE_NONE;			// Create baseline
 	self.solid = SOLID_NOT;
 	self.nextthink = 0;

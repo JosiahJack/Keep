@@ -79,12 +79,12 @@ void() GrappleTrack = { // [FUNCTION]
     local vector spray;
 	local float save, d;
 
-    if (self != self.master.hook) {remove(self);  return;} // PM:  Not using this hook.
-    if (!self.state || self.master.health <= 0 || !self.modelindex) {GrappleReset();  return;} // Drop the hook if owner is dead or has released the button.  Update 7/11/09:  ...or has left the level.
-    if (frame_pause() && (self.master.flags & FL_CLIENT)) {GrappleReset();  return;} // Player always drop the hook during a cutscene or intermission.
-    if (GrappleCutCheck ()) {GrappleReset(); return;} // PM:  Must have a clear path between hook and source.  Do this here instead of the grapple check because this is called only 10/sec while the other is called more often than that.
-	if (self.state != 2 && self.enemy.solid <= SOLID_TRIGGER) {GrappleReset();  return;} // Release insubstantial targets.
-	if (self.state != 2 && self.enemy.teleport_time > time) {GrappleReset();  return;} // Player teleported away from the grapple.
+    if (self != self.master.hook) { remove(self);  return;} // PM:  Not using this hook.
+    if (!self.state || self.master.health <= 0 || !self.modelindex) { GrappleReset();  return;} // Drop the hook if owner is dead or has released the button.  Update 7/11/09:  ...or has left the level.
+    if (frame_pause() && (self.master.flags & FL_CLIENT)) { GrappleReset();  return;} // Player always drop the hook during a cutscene or intermission.
+    if (GrappleCutCheck ()) { GrappleReset(); return;} // PM:  Must have a clear path between hook and source.  Do this here instead of the grapple check because this is called only 10/sec while the other is called more often than that.
+	if (self.state != 2 && self.enemy.solid <= SOLID_TRIGGER) { GrappleReset();  return;} // Release insubstantial targets.
+	if (self.state != 2 && self.enemy.teleport_time > time) { GrappleReset();  return;} // Player teleported away from the grapple.
 
     if (self.state != 2) {
         self.velocity = '0 0 0';
@@ -114,7 +114,7 @@ void() GrappleAnchor = { // [FUNCTION]
     local vector org;
     local string sfx;
 
-    if (InSky(self.origin)) {GrappleReset(); return;}
+    if (InSky(self.origin)) { GrappleReset(); return;}
     if (Reflected_Damage (self.dmg)) return;
 
     if (!self.dmg) self.dmg = 10;
@@ -163,7 +163,7 @@ void() GrappleAnchor = { // [FUNCTION]
 };
 
 void() Grapple_Think = { // [FUNCTION]
-    if (self.delay < time) {GrappleReset(); return;}
+    if (self.delay < time) { GrappleReset(); return;}
 
     if (GrappleCutCheck()) {
         GrappleSever (self);

@@ -700,7 +700,7 @@ void() monster_ThrowGib = {
 	}				
 
 	// Throw head last because all previous gibs rely on the origin
-	if (self.headmdl != string_null) {
+	if (self.headmdl != "") {
 		if (self.max_health == MON_NOGIBVELOCITY) ThrowGib(4, rint(random()*4)); // If monster set for low velocity throw extra gibs instead
 		else ThrowGib(25, 1); // Throw a head gib instead of switch to one
 	}
@@ -764,7 +764,7 @@ float() Gib_Eaten = {
 
     if ((!(other.xfl & XFL_HUNGRY)) && leave) return FALSE;
 
-    if (self.headmdl != string_null) { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
+    if (self.headmdl != "") { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
     	// The big crunch when eating a head!
         sound (other, CHAN_ITEM, "zerstorer/cube/bc_gulp.wav", 1, ATTN_NORM);
         gibs = 3;
@@ -798,7 +798,7 @@ void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	
 	if (onflr.classgroup == CG_HARMLESS) return;
 
-	onflr.bodyonflr = string_null;	// no more body gibbing
+	onflr.bodyonflr = "";	// no more body gibbing
 	tself = self; tother = other;	// save self/other
 	self = onflr; other = tself;	// switch around
 	if (onflr.classgroup == CG_ZOMBIE && (onflr.classtype != CT_MONMUMMY || self.tome_finished)) { // Mummy's are too powerful for this without tome.

@@ -271,31 +271,21 @@ void() ballista_track = {
     }
 };
 
-void() ballista_hunt = {
-    local entity targ;
-    local float checklooped, bestdist, lastdist;
-
-    targ = world;
-    self.enemy = world;
-    bestdist = 16384;
-    targ = find (targ, classname, "player");
-    while (targ) {
-        if (visible(targ) && (targ.health > 0) && !(targ.items & IT_INVISIBILITY) && !(targ.items & IT_INVULNERABILITY)) {
-            lastdist = vlen(targ.origin - self.origin);
-            if (lastdist < bestdist) {
-                bestdist = lastdist;
-                self.enemy = targ;
-            }
-        }
-        targ = find(targ, classname, "player");
-    }
-};
-
 void() ballista_think = {
     if (self.spawnflags & SPAWNFLAG_BALLISTA_TRACK && !self.tethered) {
-        if ((!self.enemy || !visible(self.enemy) || self.enemy.health <= 0)
-            && !(self.enemy.items & IT_INVISIBILITY) && !(self.enemy.items & IT_INVULNERABILITY) ) {
-            ballista_hunt();
+        if (self.enemy) {
+            if (self.enemy.health < 1) {
+                FindTarget();
+            } else if (self.enemy.alignment == self.alignment) {
+                self.enemy = world;
+                FindTarget();
+            } else if (Invisible(self.enemy)) { // Just checking states.
+                FindTarget();
+            } else if(!visible(self.enemy)) { // Trace check last for performance.
+                FindTarget();
+            }
+        } else {
+            FindTarget();
         }
     }
 

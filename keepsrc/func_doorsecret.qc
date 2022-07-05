@@ -130,7 +130,7 @@ void() func_door_secret_use = { // [FUNCTION]
 		self.state = STATE_UP;
 		self.takedamage = DAMAGE_NO;
 		self.velocity = '0 0 0';
-		self.message = string_null; // no more touch message and fire targets
+		self.message = ""; // no more touch message and fire targets
 		SUB_UseTargets();
 		sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Make a sound, wait a little...
 		self.nextthink = self.ltime + 0.1;

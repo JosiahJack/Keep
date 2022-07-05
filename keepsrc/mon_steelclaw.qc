@@ -58,28 +58,28 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8 // roll over deat
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20
 
-void() steelc_idle1 =[ $idle1, steelc_idle2] {monster_idle_sound();ai_stand();};
-void() steelc_idle2 =[ $idle2, steelc_idle3] {ai_stand();};
-void() steelc_idle3 =[ $idle3, steelc_idle4] {ai_stand();};
-void() steelc_idle4 =[ $idle4, steelc_idle5] {ai_stand();};
-void() steelc_idle5 =[ $idle5, steelc_idle6] {ai_stand();};
-void() steelc_idle6 =[ $idle6, steelc_idle7] {ai_stand();};
-void() steelc_idle7 =[ $idle7, steelc_idle8] {ai_stand();};
-void() steelc_idle8 =[ $idle8, steelc_idle9] {ai_stand();};
-void() steelc_idle9 =[ $idle9, steelc_idle10] {ai_stand();};
-void() steelc_idle10 =[ $idle10, steelc_idle11] {ai_stand();};
-void() steelc_idle11 =[ $idle11, steelc_idle12] {ai_stand();};
-void() steelc_idle12 =[ $idle12, steelc_idle13] {ai_stand();};
-void() steelc_idle13 =[ $idle13, steelc_idle1] {ai_stand();};
+void() steelc_idle1 = [$idle1, steelc_idle2] { monster_idle_sound();ai_stand(); };
+void() steelc_idle2 = [$idle2, steelc_idle3] { ai_stand(); };
+void() steelc_idle3 = [$idle3, steelc_idle4] { ai_stand(); };
+void() steelc_idle4 = [$idle4, steelc_idle5] { ai_stand(); };
+void() steelc_idle5 = [$idle5, steelc_idle6] { ai_stand(); };
+void() steelc_idle6 = [$idle6, steelc_idle7] { ai_stand(); };
+void() steelc_idle7 = [$idle7, steelc_idle8] { ai_stand(); };
+void() steelc_idle8 = [$idle8, steelc_idle9] { ai_stand(); };
+void() steelc_idle9 = [$idle9, steelc_idle10] { ai_stand(); };
+void() steelc_idle10 = [$idle10, steelc_idle11] { ai_stand(); };
+void() steelc_idle11 = [$idle11, steelc_idle12] { ai_stand(); };
+void() steelc_idle12 = [$idle12, steelc_idle13] { ai_stand(); };
+void() steelc_idle13 = [$idle13, steelc_idle1] { ai_stand(); };
 
-void() steelc_walk1 =[ $walk1, steelc_walk2] {monster_idle_sound();ai_walk(4);};
-void() steelc_walk2 =[ $walk3, steelc_walk3] {monster_footstep(FALSE); ai_walk(3);};
-void() steelc_walk3 =[ $walk5, steelc_walk4] {ai_walk(4);};
-void() steelc_walk4 =[ $walk7, steelc_walk5] {ai_walk(5);};
-void() steelc_walk5 =[ $walk9, steelc_walk6] {ai_walk(4);};
-void() steelc_walk6 =[ $walk11, steelc_walk7] {monster_footstep(FALSE); ai_walk(3);};
-void() steelc_walk7 =[ $walk13, steelc_walk8] {ai_walk(4);};
-void() steelc_walk8 =[ $walk15, steelc_walk1] {ai_walk(5);};
+void() steelc_walk1 = [$walk1, steelc_walk2] { monster_idle_sound();ai_walk(4); };
+void() steelc_walk2 = [$walk3, steelc_walk3] { monster_footstep(FALSE); ai_walk(3); };
+void() steelc_walk3 = [$walk5, steelc_walk4] { ai_walk(4); };
+void() steelc_walk4 = [$walk7, steelc_walk5] { ai_walk(5); };
+void() steelc_walk5 = [$walk9, steelc_walk6] { ai_walk(4); };
+void() steelc_walk6 = [$walk11, steelc_walk7] { monster_footstep(FALSE); ai_walk(3); };
+void() steelc_walk7 = [$walk13, steelc_walk8] { ai_walk(4); };
+void() steelc_walk8 = [$walk15, steelc_walk1] { ai_walk(5); };
 
 void() steelc_runpause = {
 	// Do nothing is not to fight or dead
@@ -92,19 +92,19 @@ void() steelc_runpause = {
 	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
 };
 
-void()	steelc_runp1	=[	$idle1,	steelc_runp2	] {steelc_runpause();};
-void()	steelc_runp2	=[	$idle2,	steelc_runp3	] {steelc_runpause();};
-void()	steelc_runp3	=[	$idle3,	steelc_runp4	] {steelc_runpause();};
-void()	steelc_runp4	=[	$idle4,	steelc_runp5	] {steelc_runpause();};
-void()	steelc_runp5	=[	$idle5,	steelc_runp6	] {steelc_runpause();};
-void()	steelc_runp6	=[	$idle6,	steelc_runp7	] {steelc_runpause();};
-void()	steelc_runp7	=[	$idle7,	steelc_runp8	] {steelc_runpause();};
-void()	steelc_runp8	=[	$idle8,	steelc_runp9	] {steelc_runpause();};
-void()	steelc_runp9	=[	$idle9,	steelc_runp10	] {steelc_runpause();};
-void()	steelc_runp10	=[	$idle10,steelc_runp11	] {steelc_runpause();};
-void()	steelc_runp11	=[	$idle11,steelc_runp12	] {steelc_runpause();};
-void()	steelc_runp12	=[	$idle12,steelc_runp13	] {steelc_runpause();};
-void()	steelc_runp13	=[	$idle13,steelc_runp1	] {steelc_runpause();};
+void()	steelc_runp1	= [	$idle1,	steelc_runp2	] { steelc_runpause(); };
+void()	steelc_runp2	= [	$idle2,	steelc_runp3	] { steelc_runpause(); };
+void()	steelc_runp3	= [	$idle3,	steelc_runp4	] { steelc_runpause(); };
+void()	steelc_runp4	= [	$idle4,	steelc_runp5	] { steelc_runpause(); };
+void()	steelc_runp5	= [	$idle5,	steelc_runp6	] { steelc_runpause(); };
+void()	steelc_runp6	= [	$idle6,	steelc_runp7	] { steelc_runpause(); };
+void()	steelc_runp7	= [	$idle7,	steelc_runp8	] { steelc_runpause(); };
+void()	steelc_runp8	= [	$idle8,	steelc_runp9	] { steelc_runpause(); };
+void()	steelc_runp9	= [	$idle9,	steelc_runp10	] { steelc_runpause(); };
+void()	steelc_runp10	= [	$idle10,steelc_runp11	] { steelc_runpause(); };
+void()	steelc_runp11	= [	$idle11,steelc_runp12	] { steelc_runpause(); };
+void()	steelc_runp12	= [	$idle12,steelc_runp13	] { steelc_runpause(); };
+void()	steelc_runp13	= [	$idle13,steelc_runp1	] { steelc_runpause(); };
 
 void(float dist) steelc_checkpause = {
 	// Do nothing is not to fight or dead
@@ -125,23 +125,23 @@ void(float dist) steelc_checkpause = {
 	}
 };
 
-void()	steelc_run1 =[ $walk1, steelc_run2 ] {self.movespeed = 0; monster_idle_sound();steelc_checkpause(8);};
-void()	steelc_run2 =[ $walk3, steelc_run3 ] {monster_footstep(FALSE); steelc_checkpause(6);};
-void()	steelc_run3 =[ $walk5, steelc_run4 ] {steelc_checkpause(8);};
-void()	steelc_run4 =[ $walk7, steelc_run5 ] {steelc_checkpause(10);};
-void()	steelc_run5 =[ $walk9, steelc_run6 ] {steelc_checkpause(8);};
-void()	steelc_run6 =[ $walk11, steelc_run7 ] {monster_footstep(FALSE); steelc_checkpause(6);};
-void()	steelc_run7 =[ $walk13, steelc_run8 ] {steelc_checkpause(8);};
-void()	steelc_run8 =[ $walk15, steelc_run1 ] {steelc_checkpause(10);};
+void()	steelc_run1 = [$walk1, steelc_run2 ] { self.movespeed = 0; monster_idle_sound();steelc_checkpause(8); };
+void()	steelc_run2 = [$walk3, steelc_run3 ] { monster_footstep(FALSE); steelc_checkpause(6); };
+void()	steelc_run3 = [$walk5, steelc_run4 ] { steelc_checkpause(8); };
+void()	steelc_run4 = [$walk7, steelc_run5 ] { steelc_checkpause(10); };
+void()	steelc_run5 = [$walk9, steelc_run6 ] { steelc_checkpause(8); };
+void()	steelc_run6 = [$walk11, steelc_run7 ] { monster_footstep(FALSE); steelc_checkpause(6); };
+void()	steelc_run7 = [$walk13, steelc_run8 ] { steelc_checkpause(8); };
+void()	steelc_run8 = [$walk15, steelc_run1 ] { steelc_checkpause(10); };
 
-void()	steelc_slide1 =[ $walk1, steelc_slide2 ] {ai_run_slide(6); monster_idle_sound();};
-void()	steelc_slide2 =[ $walk3, steelc_slide3 ] {ai_run_slide(4);};
-void()	steelc_slide3 =[ $walk5, steelc_slide4 ] {ai_run_slide(6);};
-void()	steelc_slide4 =[ $walk7, steelc_slide5 ] {ai_run_slide(4);};
-void()	steelc_slide5 =[ $walk9, steelc_slide6 ] {ai_run_slide(6);};
-void()	steelc_slide6 =[ $walk11, steelc_slide7 ] {ai_run_slide(4);};
-void()	steelc_slide7 =[ $walk13, steelc_slide8 ] {ai_run_slide(6);};
-void()	steelc_slide8 =[ $walk15, steelc_run1 ] {ai_run(4);};
+void()	steelc_slide1 = [$walk1, steelc_slide2 ] { ai_run_slide(6); monster_idle_sound(); };
+void()	steelc_slide2 = [$walk3, steelc_slide3 ] { ai_run_slide(4); };
+void()	steelc_slide3 = [$walk5, steelc_slide4 ] { ai_run_slide(6); };
+void()	steelc_slide4 = [$walk7, steelc_slide5 ] { ai_run_slide(4); };
+void()	steelc_slide5 = [$walk9, steelc_slide6 ] { ai_run_slide(6); };
+void()	steelc_slide6 = [$walk11, steelc_slide7 ] { ai_run_slide(4); };
+void()	steelc_slide7 = [$walk13, steelc_slide8 ] { ai_run_slide(6); };
+void()	steelc_slide8 = [$walk15, steelc_run1 ] { ai_run(4); };
 
 // BITE - bleed attack or simple bite
 void() steelc_melee = {
@@ -170,16 +170,16 @@ void() steelc_melee = {
 };
 
 void() steelc_bite9;
-void() steelc_bite1 = [ $atkup1, steelc_bite2 ] {ai_face();};
-void() steelc_bite2 = [ $atkup5, steelc_bite3 ] {ai_face();};
-void() steelc_bite3 = [ $atkup7, steelc_bite4 ] {ai_face();
+void() steelc_bite1 = [$atkup1, steelc_bite2 ] { ai_face(); };
+void() steelc_bite2 = [$atkup5, steelc_bite3 ] { ai_face(); };
+void() steelc_bite3 = [$atkup7, steelc_bite4 ] { ai_face();
 	if (!ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.health > 0) self.think = steelc_bite9;};
-void() steelc_bite4 = [ $atkloop1, steelc_bite5 ] {ai_face();};
-void() steelc_bite5 = [ $atkloop3, steelc_bite6 ] {ai_face();};
-void() steelc_bite6 = [ $atkloop5, steelc_bite7 ] {steelc_melee();};
-void() steelc_bite7 = [ $atkloop7, steelc_bite8 ] {};
-void() steelc_bite8 = [ $atkup7, steelc_bite9 ] {};
-void() steelc_bite9 = [ $atkup3, steelc_run1 ] {};
+void() steelc_bite4 = [$atkloop1, steelc_bite5 ] { ai_face(); };
+void() steelc_bite5 = [$atkloop3, steelc_bite6 ] { ai_face(); };
+void() steelc_bite6 = [$atkloop5, steelc_bite7 ] { steelc_melee(); };
+void() steelc_bite7 = [$atkloop7, steelc_bite8 ] {};
+void() steelc_bite8 = [$atkup7, steelc_bite9 ] {};
+void() steelc_bite9 = [$atkup3, steelc_run1 ] {};
 
 // JUMP FUNCTION (range)
 void() steelc_JumpTouch = {
@@ -210,7 +210,7 @@ void() steelc_JumpTouch = {
 	self.nextthink = time + 0.1;
 };
 
-void() steelc_leap1 =[ $jump1, steelc_leap2 ] {ai_face();
+void() steelc_leap1 = [$jump1, steelc_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much
 	if (random() > 0.5) {
 		self.volume = 0.5 + (random()*0.5);
@@ -219,8 +219,8 @@ void() steelc_leap1 =[ $jump1, steelc_leap2 ] {ai_face();
 		self.lefty = 1 - self.lefty;
 	}
 };
-void() steelc_leap2 =[ $jump3, steelc_leap3 ] {ai_face();};
-void() steelc_leap3 =[ $jump5, steelc_leap4 ] {ai_face();
+void() steelc_leap2 = [$jump3, steelc_leap3 ] { ai_face(); };
+void() steelc_leap3 = [$jump5, steelc_leap4 ] { ai_face();
 	// Throw the steelclaw like a grenade!
 	self.attack_speed = self.jumpdist_x + (random()*self.jumpdist_z);
 	// Aiming at the players head (+24 z axis)
@@ -236,10 +236,10 @@ void() steelc_leap3 =[ $jump5, steelc_leap4 ] {ai_face();
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
 };
-void() steelc_leap4 =[ $jump7, steelc_leap5 ] {};
-void() steelc_leap5 =[ $jump8, steelc_leap6 ] {};	
-void() steelc_leap6 =[ $jump9, steelc_leap7 ] {};
-void() steelc_leap7 =[ $jump10, steelc_leap8 ] {
+void() steelc_leap4 = [$jump7, steelc_leap5 ] {};
+void() steelc_leap5 = [$jump8, steelc_leap6 ] {};	
+void() steelc_leap6 = [$jump9, steelc_leap7 ] {};
+void() steelc_leap7 = [$jump10, steelc_leap8 ] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -248,21 +248,21 @@ void() steelc_leap7 =[ $jump10, steelc_leap8 ] {
 	self.oldorigin = self.origin;
 };
 
-void() steelc_leap8 =[ $jump11, steelc_leap9] {monster_footstep(FALSE);};
-void() steelc_leap9 =[ $jump13, steelc_leap10] {monster_footstep(FALSE);};
-void() steelc_leap10 =[ $jump15, steelc_run1] {ai_resetangles();};
+void() steelc_leap8 = [$jump11, steelc_leap9] { monster_footstep(FALSE); };
+void() steelc_leap9 = [$jump13, steelc_leap10] { monster_footstep(FALSE); };
+void() steelc_leap10 = [$jump15, steelc_run1] { ai_resetangles(); };
 
-void() steelc_paind1 =[$paindown1, steelc_paind2] {};
-void() steelc_paind2 =[$paindown3, steelc_paind3] {};
-void() steelc_paind3 =[$paindown5, steelc_paind4] {};
-void() steelc_paind4 =[$paindown7, steelc_paind5] {};
-void() steelc_paind5 =[$paindown9, steelc_run1] {};
+void() steelc_paind1 = [$paindown1, steelc_paind2] {};
+void() steelc_paind2 = [$paindown3, steelc_paind3] {};
+void() steelc_paind3 = [$paindown5, steelc_paind4] {};
+void() steelc_paind4 = [$paindown7, steelc_paind5] {};
+void() steelc_paind5 = [$paindown9, steelc_run1] {};
 
 // Front legs up (in melee or missile attack)
-void() steelc_painu1 =[$painup1, steelc_painu2] {};
-void() steelc_painu2 =[$painup3, steelc_painu3] {};
-void() steelc_painu3 =[$painup5, steelc_painu4] {};
-void() steelc_painu4 =[$painup6, steelc_run1] {};
+void() steelc_painu1 = [$painup1, steelc_painu2] {};
+void() steelc_painu2 = [$painup3, steelc_painu3] {};
+void() steelc_painu3 = [$painup5, steelc_painu4] {};
+void() steelc_painu4 = [$painup6, steelc_run1] {};
 
 void(entity inflictor, entity attacker, float damage) steelc_pain = {
 	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
@@ -286,16 +286,16 @@ void(entity inflictor, entity attacker, float damage) steelc_pain = {
 	}
 };
 
-void() steelc_die1 =[$death1, steelc_die2] {};
-void() steelc_die2 =[$death3, steelc_die3] {monster_check_gib();};
-void() steelc_die3 =[$death5, steelc_die4] {monster_check_gib();self.solid = SOLID_NOT;};
-void() steelc_die4 =[$death7, steelc_die5] {};
-void() steelc_die5 =[$death9, steelc_die6] {};
-void() steelc_die6 =[$death11, steelc_die7] {};
-void() steelc_die7 =[$death13, steelc_die8] {};
-void() steelc_die8 =[$death15, steelc_die9] {};
-void() steelc_die9 =[$death17, steelc_die10] {monster_death_postcheck();};
-void() steelc_die10 =[$death19, steelc_die10] {monster_deadbody_check();};
+void() steelc_die1 = [$death1, steelc_die2] {};
+void() steelc_die2 = [$death3, steelc_die3] { monster_check_gib(); };
+void() steelc_die3 = [$death5, steelc_die4] { monster_check_gib();self.solid = SOLID_NOT;};
+void() steelc_die4 = [$death7, steelc_die5] {};
+void() steelc_die5 = [$death9, steelc_die6] {};
+void() steelc_die6 = [$death11, steelc_die7] {};
+void() steelc_die7 = [$death13, steelc_die8] {};
+void() steelc_die8 = [$death15, steelc_die9] {};
+void() steelc_die9 = [$death17, steelc_die10] { monster_death_postcheck(); };
+void() steelc_die10 = [$death19, steelc_die10] { monster_deadbody_check(); };
 
 void() steelc_die = {
 	self.max_health = MON_NOGIBVELOCITY; // Gibs don't bounce far

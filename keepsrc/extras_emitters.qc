@@ -113,7 +113,7 @@ void() effector_destroy = { // [FUNCTION]
 		if (other.trigger_field == self) return;// Already affected by this trigger
 		if (random() < self.count) {
 			self = other;
-			if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+			if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 			if (self.touchedvoid) return;				// Marked for removal
 			if (other == self.owner) return;			// no touching self
 
@@ -228,7 +228,7 @@ void() t_effector_friction = { // [ENTITY]
 	self.count = self.count*0.01;
 	self.speed = self.speed/100.0;
 	if (self.speed > 1.0) self.speed = 1.0;
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) self.state = FALSE;// off
 	else self.state = TRUE;// on
 		
 	self.use = effector_use;
@@ -259,7 +259,7 @@ void() t_effector_attract = { // [ENTITY]
 	self.dest_y = (self.mins_y + self.maxs_y)*0.5;
 	self.dest_z = (self.mins_z + self.maxs_z)*0.5;
 
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) self.state = FALSE;// off
 	else self.state = TRUE;// on
 		
 	self.use = effector_use;
@@ -287,7 +287,7 @@ void() t_effector_trubulence = { // [ENTITY]
 	if (self.cnt>100) self.cnt = 100;
 	self.cnt = self.cnt*0.01;
 	self.speed = fabs(self.speed);
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) self.state = FALSE;// off
 	else self.state = TRUE;// on
 		
 	self.use = effector_use;
@@ -306,7 +306,7 @@ void() t_effector_gravity = { // [ENTITY]
 	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) self.state = FALSE;// off
 	else self.state = TRUE;// on
 		
 	self.use = effector_use;
@@ -329,7 +329,7 @@ void() t_effector_push = { // [ENTITY]
 	if (self.cnt<0) self.cnt = 0;
 	if (self.cnt>100) self.cnt = 100;
 	self.cnt = self.cnt*0.01;
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) self.state = FALSE;// off
 	else self.state = TRUE;// on
 		
 	self.use = effector_use;
@@ -346,7 +346,7 @@ void() t_effector_destroy = { // [ENTITY]
 	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) self.state = FALSE;// off
 	else self.state = TRUE;// on
 		
 	self.use = effector_use;
@@ -475,7 +475,7 @@ void() emitter_emit = { // [FUNCTION]
 	local entity p;
 	local vector dir;
 	
-	if (self.noise != string_null && self.count == 1) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
+	if (self.noise != "" && self.count == 1) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
 		
 	// Emit a particle
 	p = spawn();
@@ -561,7 +561,7 @@ void() emitter_find = { // [FUNCTION]
 	if (self.target) train_ext_linkchild(); // Check for a parent train
 
 	self.think = emitter_emit; // Start it up
-	if (self.targetname != string_null && !(self.spawnflags & START_ON)) emitter_pause();
+	if (self.targetname != "" && !(self.spawnflags & START_ON)) emitter_pause();
 	else emitter_start();
 };
 

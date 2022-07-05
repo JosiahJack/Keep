@@ -184,7 +184,7 @@ void(entity targ, float targstate) change_passivestate = {
 	}
 };
 
-//======================================================================
+
 /*QUAKED trigger_monsterpassivestate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x
 Change the monster passive state
 -------- KEYS --------
@@ -202,10 +202,8 @@ void() trigger_monsterpassivestate_use = {
 	// Loop around target(s) and update move speed
 	self.enemy = find (world, targetname, self.target);
 	while(self.enemy) {
-		// All error checks in function
-		change_passivestate(self.enemy, self.state);
-		// Are there anymore targets left in the list?
-		self.enemy = find (self.enemy, targetname, self.target);
+		change_passivestate(self.enemy, self.state); // All error checks in function
+		self.enemy = find (self.enemy, targetname, self.target); // Are there anymore targets left in the list?
 	} 
 	
 	// Trigger once functionality?

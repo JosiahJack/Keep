@@ -47,33 +47,33 @@ $frame base1 base2
 // Standing / idle animation
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 
-//============================================================================
-void() fred_stand1 =[ $stand1, fred_stand2 ] {monster_idle_sound(); ai_stand();};
-void() fred_stand2 =[ $stand2, fred_stand3 ] {ai_stand();};
-void() fred_stand3 =[ $stand3, fred_stand4 ] {ai_stand();};
-void() fred_stand4 =[ $stand4, fred_stand5 ] {ai_stand();};
-void() fred_stand5 =[ $stand5, fred_stand6 ] {ai_stand();};
-void() fred_stand6 =[ $stand6, fred_stand7 ] {ai_stand();};
-void() fred_stand7 =[ $stand7, fred_stand8 ] {ai_stand();};
-void() fred_stand8 =[ $stand8, fred_stand1 ] {ai_stand();};
 
-//============================================================================
-void() fred_walk1 = [ $run1, fred_walk2 ] {monster_idle_sound(); ai_walk(20);};
-void() fred_walk2 = [ $run2, fred_walk3 ] {monster_footstep(FALSE);ai_walk(16);};
-void() fred_walk3 = [ $run3, fred_walk4 ] {ai_walk(1);};
-void() fred_walk4 = [ $run4, fred_walk5 ] {ai_walk(2);};
-void() fred_walk5 = [ $run5, fred_walk6 ] {ai_walk(4);};
-void() fred_walk6 = [ $run6, fred_walk7 ] {ai_walk(8);};
-void() fred_walk7 = [ $run7, fred_walk8 ] {ai_walk(4);};
-void() fred_walk8 = [ $run8, fred_walk9 ] {ai_walk(16);};
-void() fred_walk9 = [ $run9, fred_walk10 ] {ai_walk(20);};
-void() fred_walk10 = [ $run10, fred_walk11 ] {monster_footstep(FALSE);ai_walk(16);};
-void() fred_walk11 = [ $run11, fred_walk12 ] {ai_walk(1);};
-void() fred_walk12 = [ $run12, fred_walk13 ] {ai_walk(2);};
-void() fred_walk13 = [ $run13, fred_walk14 ] {ai_walk(4);};
-void() fred_walk14 = [ $run14, fred_walk15 ] {ai_walk(8);};
-void() fred_walk15 = [ $run15, fred_walk16 ] {ai_walk(4);};
-void() fred_walk16 = [ $run16, fred_walk1 ] {ai_walk(16);};
+void() fred_stand1 = [$stand1, fred_stand2 ] { monster_idle_sound(); ai_stand(); };
+void() fred_stand2 = [$stand2, fred_stand3 ] { ai_stand(); };
+void() fred_stand3 = [$stand3, fred_stand4 ] { ai_stand(); };
+void() fred_stand4 = [$stand4, fred_stand5 ] { ai_stand(); };
+void() fred_stand5 = [$stand5, fred_stand6 ] { ai_stand(); };
+void() fred_stand6 = [$stand6, fred_stand7 ] { ai_stand(); };
+void() fred_stand7 = [$stand7, fred_stand8 ] { ai_stand(); };
+void() fred_stand8 = [$stand8, fred_stand1 ] { ai_stand(); };
+
+
+void() fred_walk1 = [$run1, fred_walk2 ] { monster_idle_sound(); ai_walk(20); };
+void() fred_walk2 = [$run2, fred_walk3 ] { monster_footstep(FALSE);ai_walk(16); };
+void() fred_walk3 = [$run3, fred_walk4 ] { ai_walk(1); };
+void() fred_walk4 = [$run4, fred_walk5 ] { ai_walk(2); };
+void() fred_walk5 = [$run5, fred_walk6 ] { ai_walk(4); };
+void() fred_walk6 = [$run6, fred_walk7 ] { ai_walk(8); };
+void() fred_walk7 = [$run7, fred_walk8 ] { ai_walk(4); };
+void() fred_walk8 = [$run8, fred_walk9 ] { ai_walk(16); };
+void() fred_walk9 = [$run9, fred_walk10 ] { ai_walk(20); };
+void() fred_walk10 = [$run10, fred_walk11 ] { monster_footstep(FALSE);ai_walk(16); };
+void() fred_walk11 = [$run11, fred_walk12 ] { ai_walk(1); };
+void() fred_walk12 = [$run12, fred_walk13 ] { ai_walk(2); };
+void() fred_walk13 = [$run13, fred_walk14 ] { ai_walk(4); };
+void() fred_walk14 = [$run14, fred_walk15 ] { ai_walk(8); };
+void() fred_walk15 = [$run15, fred_walk16 ] { ai_walk(4); };
+void() fred_walk16 = [$run16, fred_walk1 ] { ai_walk(16); };
 
 // RANGE ATTACK - Fires spikes or laser bolts
 void(vector weapofs) fred_fireweapon = {
@@ -113,16 +113,16 @@ void(vector weapofs) fred_fireweapon = {
 };
 
 // Start the initial wind up of the weapon first
-void() fred_sfire1 = [ $sfire1, fred_sfire2 ] {ai_face();
+void() fred_sfire1 = [$sfire1, fred_sfire2 ] { ai_face();
 	self.pain_finished = time + 0.5 + (skill*0.5);
-	sound (self, CHAN_WEAPON, "quoth/edie/stfire.wav", 1, ATTN_NORM);};
-void() fred_sfire2 = [ $sfire2, fred_sfire3 ] {ai_face();};
-void() fred_sfire3 = [ $sfire3, fred_sfire4 ] {ai_face();};
-void() fred_sfire4 = [ $sfire4, fred_sfire5 ] {ai_face();};
-void() fred_sfire5 = [ $sfire5, fred_sfire6 ] {ai_face();monster_footstep(FALSE);};
-void() fred_sfire6 = [ $sfire6, fred_sfire7 ] {ai_face();};
-void() fred_sfire7 = [ $sfire7, fred_sfire8 ] {ai_face();};
-void() fred_sfire8 = [ $sfire8, fred_sfire9 ] {ai_face();
+	sound (self, CHAN_WEAPON, "quoth/edie/stfire.wav", 1, ATTN_NORM); };
+void() fred_sfire2 = [$sfire2, fred_sfire3 ] { ai_face(); };
+void() fred_sfire3 = [$sfire3, fred_sfire4 ] { ai_face(); };
+void() fred_sfire4 = [$sfire4, fred_sfire5 ] { ai_face(); };
+void() fred_sfire5 = [$sfire5, fred_sfire6 ] { ai_face();monster_footstep(FALSE); };
+void() fred_sfire6 = [$sfire6, fred_sfire7 ] { ai_face(); };
+void() fred_sfire7 = [$sfire7, fred_sfire8 ] { ai_face(); };
+void() fred_sfire8 = [$sfire8, fred_sfire9 ] { ai_face();
 	self.cnt = 0;
 	// Vary bullet burst based on skill
 	self.attack_chance = 4 + skill*2;
@@ -152,38 +152,37 @@ void(vector weapofs) fred_standfire = {
 // Cycle through barrel firing
 // Easy = 7 shots, Normal = 11 shots, Hard/NM = 15 shots
 //----------------------------------------------------------------------
-void() fred_sfire9 = [ $sfire9, fred_sfire10 ] {fred_standfire('45 -10 20');};
-void() fred_sfire10 = [ $sfire10, fred_sfire11 ] {fred_standfire('45 -10 20');};
-void() fred_sfire11 = [ $sfire11, fred_sfire12 ] {fred_standfire('45 -10 22');};
-void() fred_sfire12 = [ $sfire12, fred_sfire13 ] {fred_standfire('45 -10 22');};
-void() fred_sfire13 = [ $sfire13, fred_sfire14 ] {fred_standfire('45 -12 23');};
-void() fred_sfire14 = [ $sfire14, fred_sfire15 ] {fred_standfire('42 -12 25');};
-void() fred_sfire15 = [ $sfire15, fred_sfire16 ] {fred_standfire('42 -14 23');
+void() fred_sfire9 = [$sfire9, fred_sfire10 ] { fred_standfire('45 -10 20'); };
+void() fred_sfire10 = [$sfire10, fred_sfire11 ] { fred_standfire('45 -10 20'); };
+void() fred_sfire11 = [$sfire11, fred_sfire12 ] { fred_standfire('45 -10 22'); };
+void() fred_sfire12 = [$sfire12, fred_sfire13 ] { fred_standfire('45 -10 22'); };
+void() fred_sfire13 = [$sfire13, fred_sfire14 ] { fred_standfire('45 -12 23'); };
+void() fred_sfire14 = [$sfire14, fred_sfire15 ] { fred_standfire('42 -12 25'); };
+void() fred_sfire15 = [$sfire15, fred_sfire16 ] { fred_standfire('42 -14 23');
 	// Always double check health before changing think
 	if (self.health > 0 && skill == SKILL_EASY) self.think = self.th_charge;};
-void() fred_sfire16 = [ $sfire16, fred_sfire17 ] {fred_standfire('38 -14 27');};
-void() fred_sfire17 = [ $sfire17, fred_sfire18 ] {fred_standfire('38 -17 26');};
-void() fred_sfire18 = [ $sfire18, fred_sfire19 ] {fred_standfire('36 -17 28');};
-void() fred_sfire19 = [ $sfire19, fred_sfire20 ] {fred_standfire('36 -17 26');
+void() fred_sfire16 = [$sfire16, fred_sfire17 ] { fred_standfire('38 -14 27'); };
+void() fred_sfire17 = [$sfire17, fred_sfire18 ] { fred_standfire('38 -17 26'); };
+void() fred_sfire18 = [$sfire18, fred_sfire19 ] { fred_standfire('36 -17 28'); };
+void() fred_sfire19 = [$sfire19, fred_sfire20 ] { fred_standfire('36 -17 26');
 	// Always double check health before changing think
 	if (self.health > 0 && skill == SKILL_NORMAL) self.think = self.th_charge;};
-void() fred_sfire20 = [ $sfire20, fred_sfire21 ] {fred_standfire('30 -17 28');};
-void() fred_sfire21 = [ $sfire21, fred_sfire22 ] {fred_standfire('30 -18 25');};
-void() fred_sfire22 = [ $sfire22, fred_sfire23 ] {fred_standfire('25 -18 27');};
-void() fred_sfire23 = [ $sfire23, fred_sfire24 ] {fred_standfire('25 -18 27');};
+void() fred_sfire20 = [$sfire20, fred_sfire21 ] { fred_standfire('30 -17 28'); };
+void() fred_sfire21 = [$sfire21, fred_sfire22 ] { fred_standfire('30 -18 25'); };
+void() fred_sfire22 = [$sfire22, fred_sfire23 ] { fred_standfire('25 -18 27'); };
+void() fred_sfire23 = [$sfire23, fred_sfire24 ] { fred_standfire('25 -18 27'); };
 
 // Finish the wind down of weapon
-void() fred_sfire24 = [ $sfire24, fred_sfire25 ] {};
-void() fred_sfire25 = [ $sfire25, fred_sfire26 ] {};
-void() fred_sfire26 = [ $sfire26, fred_sfire27 ] {};
-void() fred_sfire27 = [ $sfire27, fred_run ] {};
+void() fred_sfire24 = [$sfire24, fred_sfire25 ] {};
+void() fred_sfire25 = [$sfire25, fred_sfire26 ] {};
+void() fred_sfire26 = [$sfire26, fred_sfire27 ] {};
+void() fred_sfire27 = [$sfire27, fred_run ] {};
 
-//============================================================================
+
 // freddie has a run while firing and can switch seamless
 // between the two if the player is within sight
-//============================================================================
-void() fred_runframe =
-{
+
+void() fred_runframe = {
 	// If dead, no more updates
 	if (self.health < 1) return;
 	// If enemy is dead or missing no firing
@@ -197,22 +196,22 @@ void() fred_runframe =
 	else if (self.walkframe == 1) monster_footstep(FALSE);
 	else if (self.walkframe == 10) monster_footstep(FALSE);
 
-	if (self.walkframe == 0) {self.distance = 24;self.attack_offset = '50 -20 32';}
-	else if (self.walkframe == 1) {self.distance = 19;self.attack_offset = '43 -18 33';}
-	else if (self.walkframe == 2) {self.distance = 1;self.attack_offset = '53 -20 27';}
-	else if (self.walkframe == 3) {self.distance = 2;self.attack_offset = '47 -19 31';}
-	else if (self.walkframe == 4) {self.distance = 5;self.attack_offset = '54 -17 29';}
-	else if (self.walkframe == 5) {self.distance = 10;self.attack_offset = '47 -17 35';}
-	else if (self.walkframe == 6) {self.distance = 5;self.attack_offset = '53 -15 32';}
-	else if (self.walkframe == 7) {self.distance = 5;self.attack_offset = '47 -15 36';}
-	else if (self.walkframe == 8) {self.distance = 24;self.attack_offset = '50 -13 32';}
-	else if (self.walkframe == 9) {self.distance = 19;self.attack_offset = '46 -15 33';}
-	else if (self.walkframe == 10) {self.distance = 1;self.attack_offset = '51 -14 33';}
-	else if (self.walkframe == 11) {self.distance = 2;self.attack_offset = '47 -14 32';}
-	else if (self.walkframe == 12) {self.distance = 5;self.attack_offset = '52 -14 33';}
-	else if (self.walkframe == 13) {self.distance = 10;self.attack_offset = '47 -14 36';}
-	else if (self.walkframe == 14) {self.distance = 5;self.attack_offset = '49 -14 35';}
-	else if (self.walkframe == 15) {self.distance = 5;self.attack_offset = '45 -15 34';}
+	if (self.walkframe == 0) { self.distance = 24;self.attack_offset = '50 -20 32';}
+	else if (self.walkframe == 1) { self.distance = 19;self.attack_offset = '43 -18 33';}
+	else if (self.walkframe == 2) { self.distance = 1;self.attack_offset = '53 -20 27';}
+	else if (self.walkframe == 3) { self.distance = 2;self.attack_offset = '47 -19 31';}
+	else if (self.walkframe == 4) { self.distance = 5;self.attack_offset = '54 -17 29';}
+	else if (self.walkframe == 5) { self.distance = 10;self.attack_offset = '47 -17 35';}
+	else if (self.walkframe == 6) { self.distance = 5;self.attack_offset = '53 -15 32';}
+	else if (self.walkframe == 7) { self.distance = 5;self.attack_offset = '47 -15 36';}
+	else if (self.walkframe == 8) { self.distance = 24;self.attack_offset = '50 -13 32';}
+	else if (self.walkframe == 9) { self.distance = 19;self.attack_offset = '46 -15 33';}
+	else if (self.walkframe == 10) { self.distance = 1;self.attack_offset = '51 -14 33';}
+	else if (self.walkframe == 11) { self.distance = 2;self.attack_offset = '47 -14 32';}
+	else if (self.walkframe == 12) { self.distance = 5;self.attack_offset = '52 -14 33';}
+	else if (self.walkframe == 13) { self.distance = 10;self.attack_offset = '47 -14 36';}
+	else if (self.walkframe == 14) { self.distance = 5;self.attack_offset = '49 -14 35';}
+	else if (self.walkframe == 15) { self.distance = 5;self.attack_offset = '45 -15 34';}
 
 	// Run + Fire time?
 	if (self.attack_timer) {
@@ -239,8 +238,7 @@ void() fred_run = { self.walkframe = 0; fred_runframe(); };
 //===========================================================================
 // MELEE ATTACK - Various back and forth blade arm attacks
 //===========================================================================
-void(float side) fred_blade =
-{
+void(float side) fred_blade = {
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -261,42 +259,42 @@ void(float side) fred_blade =
 
 // Alternative ending of melee attack (chance of extra damage)
 //----------------------------------------------------------------------
-void() fred_bswing1 = [ $bswing1, fred_bswing2 ] {ai_faceforward(20);
-	sound (self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM);};
-void() fred_bswing2 = [ $bswing2, fred_bswing3 ] {ai_faceforward(12);};
-void() fred_bswing3 = [ $bswing3, fred_bswing4 ] {ai_faceforward(4);};
-void() fred_bswing4 = [ $bswing4, fred_bswing5 ] {ai_faceforward(2);monster_footstep(FALSE);};
-void() fred_bswing5 = [ $bswing5, fred_bswing6 ] {ai_faceforward(6);fred_blade(200);};
-void() fred_bswing6 = [ $bswing6, fred_bswing7 ] {ai_faceforward(4);};
-void() fred_bswing7 = [ $bswing7, fred_bswing8 ] {ai_faceforward(4);};
-void() fred_bswing8 = [ $bswing8, fred_bswing9 ] {ai_faceforward(8);};
-void() fred_bswing9 = [ $bswing9, fred_bswing10 ] {ai_faceforward(8);monster_footstep(FALSE);};
-void() fred_bswing10 = [ $bswing10, fred_bswing11 ] {ai_faceforward(8);};
-void() fred_bswing11 = [ $bswing11, fred_bswing12 ] {ai_faceforward(8);};
-void() fred_bswing12 = [ $bswing12, fred_bswing13 ] {ai_faceforward(12);};
-void() fred_bswing13 = [ $bswing13, fred_bswing14 ] {ai_faceforward(10);};
-void() fred_bswing14 = [ $bswing14, fred_run ] {ai_faceforward(10);};
+void() fred_bswing1 = [$bswing1, fred_bswing2 ] { ai_faceforward(20);
+	sound (self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM); };
+void() fred_bswing2 = [$bswing2, fred_bswing3 ] { ai_faceforward(12); };
+void() fred_bswing3 = [$bswing3, fred_bswing4 ] { ai_faceforward(4); };
+void() fred_bswing4 = [$bswing4, fred_bswing5 ] { ai_faceforward(2);monster_footstep(FALSE); };
+void() fred_bswing5 = [$bswing5, fred_bswing6 ] { ai_faceforward(6);fred_blade(200); };
+void() fred_bswing6 = [$bswing6, fred_bswing7 ] { ai_faceforward(4); };
+void() fred_bswing7 = [$bswing7, fred_bswing8 ] { ai_faceforward(4); };
+void() fred_bswing8 = [$bswing8, fred_bswing9 ] { ai_faceforward(8); };
+void() fred_bswing9 = [$bswing9, fred_bswing10 ] { ai_faceforward(8);monster_footstep(FALSE); };
+void() fred_bswing10 = [$bswing10, fred_bswing11 ] { ai_faceforward(8); };
+void() fred_bswing11 = [$bswing11, fred_bswing12 ] { ai_faceforward(8); };
+void() fred_bswing12 = [$bswing12, fred_bswing13 ] { ai_faceforward(12); };
+void() fred_bswing13 = [$bswing13, fred_bswing14 ] { ai_faceforward(10); };
+void() fred_bswing14 = [$bswing14, fred_run ] { ai_faceforward(10); };
 
 // Start of melee attack
 //----------------------------------------------------------------------
-void() fred_fswing1 = [ $fswing1, fred_fswing2 ] {ai_faceforward(8);
-	sound (self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM);};
-void() fred_fswing2 = [ $fswing2, fred_fswing3 ] {ai_faceforward(16); monster_footstep(FALSE);};
-void() fred_fswing3 = [ $fswing3, fred_fswing4 ] {ai_faceforward(10);
+void() fred_fswing1 = [$fswing1, fred_fswing2 ] { ai_faceforward(8);
+	sound (self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM); };
+void() fred_fswing2 = [$fswing2, fred_fswing3 ] { ai_faceforward(16); monster_footstep(FALSE); };
+void() fred_fswing3 = [$fswing3, fred_fswing4 ] { ai_faceforward(10);
 		self.nextthink = time + 0.09;};
-void() fred_fswing4 = [ $fswing4, fred_fswing5 ] {ai_faceforward(4);
-		self.nextthink = time + 0.08; monster_footstep(FALSE);};
-void() fred_fswing5 = [ $fswing5, fred_fswing6 ] {ai_faceforward(2);
+void() fred_fswing4 = [$fswing4, fred_fswing5 ] { ai_faceforward(4);
+		self.nextthink = time + 0.08; monster_footstep(FALSE); };
+void() fred_fswing5 = [$fswing5, fred_fswing6 ] { ai_faceforward(2);
 		self.nextthink = time + 0.07;};
-void() fred_fswing6 = [ $fswing6, fred_fswing7 ] {ai_faceforward(1);
+void() fred_fswing6 = [$fswing6, fred_fswing7 ] { ai_faceforward(1);
 		self.nextthink = time + 0.07;};
-void() fred_fswing7 = [ $fswing7, fred_fswing8 ] {ai_faceforward(1);
+void() fred_fswing7 = [$fswing7, fred_fswing8 ] { ai_faceforward(1);
 		self.nextthink = time + 0.06;};
-void() fred_fswing8 = [ $fswing8, fred_fswing9 ] {ai_faceforward(2);fred_blade(-200);
+void() fred_fswing8 = [$fswing8, fred_fswing9 ] { ai_faceforward(2);fred_blade(-200);
 		self.nextthink = time + 0.05;};
-void() fred_fswing9 = [ $fswing9, fred_fswing10 ] {ai_faceforward(2);};
-void() fred_fswing10 = [ $fswing10, fred_fswing11 ] {ai_faceforward(2);};
-void() fred_fswing11 = [ $fswing11, fred_fswinge1 ] {
+void() fred_fswing9 = [$fswing9, fred_fswing10 ] { ai_faceforward(2); };
+void() fred_fswing10 = [$fswing10, fred_fswing11 ] { ai_faceforward(2); };
+void() fred_fswing11 = [$fswing11, fred_fswinge1 ] {
 	// Always check for enemy and health before changing think
 	if (self.enemy && self.enemy.health > 1 && self.health > 0) {
 		// Check if within range to do a second (back) swing attack
@@ -306,42 +304,41 @@ void() fred_fswing11 = [ $fswing11, fred_fswinge1 ] {
 
 // End of melee attack
 //----------------------------------------------------------------------
-void() fred_fswinge1 = [ $fswinge1, fred_fswinge2 ] {ai_faceforward(2);};
-void() fred_fswinge2 = [ $fswinge2, fred_fswinge3 ] {ai_faceforward(2);};
-void() fred_fswinge3 = [ $fswinge3, fred_fswinge4 ] {ai_faceforward(3);};
-void() fred_fswinge4 = [ $fswinge4, fred_fswinge5 ] {ai_faceforward(4);};
-void() fred_fswinge5 = [ $fswinge5, fred_fswinge6 ] {ai_faceforward(8);};
-void() fred_fswinge6 = [ $fswinge6, fred_fswinge7 ] {ai_faceforward(12);};
-void() fred_fswinge7 = [ $fswinge7, fred_fswinge8 ] {ai_faceforward(16);};
-void() fred_fswinge8 = [ $fswinge8, fred_fswinge9 ] {ai_faceforward(12);};
-void() fred_fswinge9 = [ $fswinge9, fred_fswinge10 ] {ai_faceforward(16);};
-void() fred_fswinge10 = [ $fswinge10, fred_run ] {
-	ai_faceforward(16);monster_footstep(FALSE);};
+void() fred_fswinge1 = [$fswinge1, fred_fswinge2 ] { ai_faceforward(2); };
+void() fred_fswinge2 = [$fswinge2, fred_fswinge3 ] { ai_faceforward(2); };
+void() fred_fswinge3 = [$fswinge3, fred_fswinge4 ] { ai_faceforward(3); };
+void() fred_fswinge4 = [$fswinge4, fred_fswinge5 ] { ai_faceforward(4); };
+void() fred_fswinge5 = [$fswinge5, fred_fswinge6 ] { ai_faceforward(8); };
+void() fred_fswinge6 = [$fswinge6, fred_fswinge7 ] { ai_faceforward(12); };
+void() fred_fswinge7 = [$fswinge7, fred_fswinge8 ] { ai_faceforward(16); };
+void() fred_fswinge8 = [$fswinge8, fred_fswinge9 ] { ai_faceforward(12); };
+void() fred_fswinge9 = [$fswinge9, fred_fswinge10 ] { ai_faceforward(16); };
+void() fred_fswinge10 = [$fswinge10, fred_run ] {
+	ai_faceforward(16);monster_footstep(FALSE); };
 
-//============================================================================
-void() fred_pain1 = [ $pain1, fred_pain2 ] {};
-void() fred_pain2 = [ $pain2, fred_pain3 ] {ai_pain(10);};
-void() fred_pain3 = [ $pain3, fred_pain4 ] {ai_pain(9);};
-void() fred_pain4 = [ $pain4, fred_pain5 ] {ai_pain(4);};
-void() fred_pain5 = [ $pain5, fred_pain6 ] {};
-void() fred_pain6 = [ $pain6, fred_pain7 ] {};
-void() fred_pain7 = [ $pain7, fred_pain8 ] {};
-void() fred_pain8 = [ $pain8, fred_pain9 ] {};
-void() fred_pain9 = [ $pain9, fred_pain10 ] {};
-void() fred_pain10 = [ $pain10, fred_pain11 ] {};
-void() fred_pain11 = [ $pain11, fred_pain12 ] {};
-void() fred_pain12 = [ $pain12, fred_run ] {};
 
-//----------------------------------------------------------------------
-void() fred_painb1 = [ $painb1, fred_painb2 ] {};
-void() fred_painb2 = [ $painb2, fred_painb3 ] {};
-void() fred_painb3 = [ $painb3, fred_painb4 ] {};
-void() fred_painb4 = [ $painb4, fred_painb5 ] {};
-void() fred_painb5 = [ $painb5, fred_run ] {};
+void() fred_pain1 = [$pain1, fred_pain2 ] {};
+void() fred_pain2 = [$pain2, fred_pain3 ] { ai_pain(10); };
+void() fred_pain3 = [$pain3, fred_pain4 ] { ai_pain(9); };
+void() fred_pain4 = [$pain4, fred_pain5 ] { ai_pain(4); };
+void() fred_pain5 = [$pain5, fred_pain6 ] {};
+void() fred_pain6 = [$pain6, fred_pain7 ] {};
+void() fred_pain7 = [$pain7, fred_pain8 ] {};
+void() fred_pain8 = [$pain8, fred_pain9 ] {};
+void() fred_pain9 = [$pain9, fred_pain10 ] {};
+void() fred_pain10 = [$pain10, fred_pain11 ] {};
+void() fred_pain11 = [$pain11, fred_pain12 ] {};
+void() fred_pain12 = [$pain12, fred_run ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) fred_pain =
-{
+void() fred_painb1 = [$painb1, fred_painb2 ] {};
+void() fred_painb2 = [$painb2, fred_painb3 ] {};
+void() fred_painb3 = [$painb3, fred_painb4 ] {};
+void() fred_painb4 = [$painb4, fred_painb5 ] {};
+void() fred_painb5 = [$painb5, fred_run ] {};
+
+//----------------------------------------------------------------------
+void(entity inflictor, entity attacker, float damage) fred_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -360,47 +357,46 @@ void(entity inflictor, entity attacker, float damage) fred_pain =
 	}
 };
 
-//============================================================================
-void() fred_death1 = [ $death1, fred_death2 ] {};
-void() fred_death2 = [ $death2, fred_death3 ] {monster_check_gib();};
-void() fred_death3 = [ $death3, fred_death4 ] {monster_check_gib();
+
+void() fred_death1 = [$death1, fred_death2 ] {};
+void() fred_death2 = [$death2, fred_death3 ] { monster_check_gib(); };
+void() fred_death3 = [$death3, fred_death4 ] { monster_check_gib();
 self.solid = SOLID_NOT;};
-void() fred_death4 = [ $death4, fred_death5 ] {};
-void() fred_death5 = [ $death5, fred_death6 ] {};
-void() fred_death6 = [ $death6, fred_death7 ] {};
-void() fred_death7 = [ $death7, fred_death8 ] {};
-void() fred_death8 = [ $death8, fred_death9 ] {};
-void() fred_death9 = [ $death9, fred_death10 ] {};
-void() fred_death10 = [ $death10, fred_death11 ] {};
-void() fred_death11 = [ $death11, fred_death12 ] {};
-void() fred_death12 = [ $death12, fred_death13 ] {};
-void() fred_death13 = [ $death13, fred_death14 ] {};
-void() fred_death14 = [ $death14, fred_death15 ] {};
-void() fred_death15 = [ $death15, fred_death16 ] {};
-void() fred_death16 = [ $death16, fred_death17 ] {};
-void() fred_death17 = [ $death17, fred_death18 ] {};
-void() fred_death18 = [ $death18, fred_death19 ] {};
-void() fred_death19 = [ $death19, fred_death20 ] {};
-void() fred_death20 = [ $death20, fred_death21 ] {};
-void() fred_death21 = [ $death21, fred_death22 ] {};
-void() fred_death22 = [ $death22, fred_death23 ] {};
-void() fred_death23 = [ $death23, fred_death24 ] {};
-void() fred_death24 = [ $death24, fred_death25 ] {};
-void() fred_death25 = [ $death25, fred_death26 ] {};
-void() fred_death26 = [ $death26, fred_death27 ] {};
-void() fred_death27 = [ $death27, fred_death28 ] {};
-void() fred_death28 = [ $death28, fred_death29 ] {};
-void() fred_death29 = [ $death29, fred_death30 ] {};
-void() fred_death30 = [ $death30, fred_death31 ] {};
-void() fred_death31 = [ $death31, fred_death32 ] {};
-void() fred_death32 = [ $death32, fred_death33 ] {};
-void() fred_death33 = [ $death33, fred_death34 ] {};
-void() fred_death34 = [ $death34, fred_death35 ] {monster_death_postcheck();};
-void() fred_death35 = [ $death35, fred_death35 ] {monster_deadbody_check();};
+void() fred_death4 = [$death4, fred_death5 ] {};
+void() fred_death5 = [$death5, fred_death6 ] {};
+void() fred_death6 = [$death6, fred_death7 ] {};
+void() fred_death7 = [$death7, fred_death8 ] {};
+void() fred_death8 = [$death8, fred_death9 ] {};
+void() fred_death9 = [$death9, fred_death10 ] {};
+void() fred_death10 = [$death10, fred_death11 ] {};
+void() fred_death11 = [$death11, fred_death12 ] {};
+void() fred_death12 = [$death12, fred_death13 ] {};
+void() fred_death13 = [$death13, fred_death14 ] {};
+void() fred_death14 = [$death14, fred_death15 ] {};
+void() fred_death15 = [$death15, fred_death16 ] {};
+void() fred_death16 = [$death16, fred_death17 ] {};
+void() fred_death17 = [$death17, fred_death18 ] {};
+void() fred_death18 = [$death18, fred_death19 ] {};
+void() fred_death19 = [$death19, fred_death20 ] {};
+void() fred_death20 = [$death20, fred_death21 ] {};
+void() fred_death21 = [$death21, fred_death22 ] {};
+void() fred_death22 = [$death22, fred_death23 ] {};
+void() fred_death23 = [$death23, fred_death24 ] {};
+void() fred_death24 = [$death24, fred_death25 ] {};
+void() fred_death25 = [$death25, fred_death26 ] {};
+void() fred_death26 = [$death26, fred_death27 ] {};
+void() fred_death27 = [$death27, fred_death28 ] {};
+void() fred_death28 = [$death28, fred_death29 ] {};
+void() fred_death29 = [$death29, fred_death30 ] {};
+void() fred_death30 = [$death30, fred_death31 ] {};
+void() fred_death31 = [$death31, fred_death32 ] {};
+void() fred_death32 = [$death32, fred_death33 ] {};
+void() fred_death33 = [$death33, fred_death34 ] {};
+void() fred_death34 = [$death34, fred_death35 ] { monster_death_postcheck(); };
+void() fred_death35 = [$death35, fred_death35 ] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() fred_explode =
-{
+void() fred_explode = {
 	// no more FREDDIE!
 	entity_hide (self);
 	// Make sure gibs go flying up

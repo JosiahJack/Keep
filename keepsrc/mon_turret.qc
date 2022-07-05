@@ -101,8 +101,7 @@ float() CheckTurretAttack = {
 	return FALSE;
 };
 
-void() turret_face =
-{
+void() turret_face = {
 	local vector tmpvec;
 	local float idealframe;
 
@@ -137,14 +136,14 @@ void() turret_face =
 void() turret_active;
 void() turret_ret2;
 
-void() turret_still =	[ $tilt0, turret_still]
+void() turret_still =	[$tilt0, turret_still]
 {
 	self.frame = turret_frame(self.rotate_type);
 
 	FindTarget();
 };
 
-void() turret_ret1 =	[ $retract1, turret_ret1]
+void() turret_ret1 =	[$retract1, turret_ret1]
 {
 	if (self.frame >= 15)
 	{
@@ -155,28 +154,28 @@ void() turret_ret1 =	[ $retract1, turret_ret1]
 	self.frame = self.frame + 1;
 	self.nextthink = time + 0.05;
 };
-void() turret_ret2 =	[ $retract1, turret_ret3] {self.nextthink = time + 0.05;};
-void() turret_ret3 =	[ $retract2, turret_ret4] {self.nextthink = time + 0.05;};
-void() turret_ret4 =	[ $retract3, turret_ret5] {self.nextthink = time + 0.05;};
-void() turret_ret5 =	[ $retract4, turret_ret6]
-{self.solid = SOLID_NOT;self.nextthink = time + 0.05;};
-void() turret_ret6 =	[ $retract5, turret_ret7] {self.nextthink = time + 0.05;};
-void() turret_ret7 =	[ $retract6, turret_ret8] {self.nextthink = time + 0.05;};
-void() turret_ret8 =	[ $retract7, turret_retracted]
-{if (!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05;};
+void() turret_ret2 =	[$retract1, turret_ret3] { self.nextthink = time + 0.05;};
+void() turret_ret3 =	[$retract2, turret_ret4] { self.nextthink = time + 0.05;};
+void() turret_ret4 =	[$retract3, turret_ret5] { self.nextthink = time + 0.05;};
+void() turret_ret5 =	[$retract4, turret_ret6]
+{ self.solid = SOLID_NOT;self.nextthink = time + 0.05;};
+void() turret_ret6 =	[$retract5, turret_ret7] { self.nextthink = time + 0.05;};
+void() turret_ret7 =	[$retract6, turret_ret8] { self.nextthink = time + 0.05;};
+void() turret_ret8 =	[$retract7, turret_retracted]
+{ if (!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05;};
 
-void() turret_unret1 =	[ $retract6, turret_unret2] {self.nextthink = time + 0.05;};
-void() turret_unret2 =	[ $retract5, turret_unret3] {self.nextthink = time + 0.05;};
-void() turret_unret3 =	[ $retract4, turret_unret4] {self.nextthink = time + 0.05;};
-void() turret_unret4 =	[ $retract3, turret_unret5]
+void() turret_unret1 =	[$retract6, turret_unret2] { self.nextthink = time + 0.05;};
+void() turret_unret2 =	[$retract5, turret_unret3] { self.nextthink = time + 0.05;};
+void() turret_unret3 =	[$retract4, turret_unret4] { self.nextthink = time + 0.05;};
+void() turret_unret4 =	[$retract3, turret_unret5]
 {
 	self.solid = SOLID_SLIDEBOX;
 	setmodel (self, "progs/custents/turret.mdl");
 	self.nextthink = time + 0.05;
 };
-void() turret_unret5 =	[ $retract2, turret_unret6] {self.nextthink = time + 0.05;};
-void() turret_unret6 =	[ $retract1, turret_unret7] {self.nextthink = time + 0.05;};
-void() turret_unret7 =	[ $tilt0, turret_unret7]
+void() turret_unret5 =	[$retract2, turret_unret6] { self.nextthink = time + 0.05;};
+void() turret_unret6 =	[$retract1, turret_unret7] { self.nextthink = time + 0.05;};
+void() turret_unret7 =	[$tilt0, turret_unret7]
 {
 	if (self.frame > (turret_frame(self.rotate_type) + 1))
 		self.frame = self.frame - 2;
@@ -187,13 +186,13 @@ void() turret_unret7 =	[ $tilt0, turret_unret7]
 	}
 };
 
-void() turret_retracted =	[ $retract7, turret_retracted]
+void() turret_retracted =	[$retract7, turret_retracted]
 {
 	if (FindTarget ())
 		turret_unret1();
 };
 
-void() turret_active =	[ $tilt0, turret_active]
+void() turret_active =	[$tilt0, turret_active]
 {
 	enemy_infront = infront(self.enemy);
 	enemy_range = range(self.enemy);
@@ -245,7 +244,7 @@ void() turret_active =	[ $tilt0, turret_active]
 	CheckTurretAttack();
 };
 
-void() turret_bullet1 = [ $tilt0, turret_bullet2] {
+void() turret_bullet1 = [$tilt0, turret_bullet2] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
 	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
@@ -254,17 +253,17 @@ void() turret_bullet1 = [ $tilt0, turret_bullet2] {
 	dir = normalize (dir - self.origin);
 	FireBullets (2, '0 0 0');
 };
-void() turret_bullet2 = [ $tilt0, turret_bullet3]
-{turret_face();self.nextthink = time + 0.05;};
-void() turret_bullet3 = [ $tilt0, turret_bullet4] {
+void() turret_bullet2 = [$tilt0, turret_bullet3]
+{ turret_face();self.nextthink = time + 0.05;};
+void() turret_bullet3 = [$tilt0, turret_bullet4] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
 	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	FireBullets (2, '0 0 0');
 };
-void() turret_bullet4 = [ $tilt0, turret_bullet5] {turret_face();self.nextthink = time + 0.05;};
-void() turret_bullet5 = [ $tilt0, turret_active] {
+void() turret_bullet4 = [$tilt0, turret_bullet5] { turret_face();self.nextthink = time + 0.05;};
+void() turret_bullet5 = [$tilt0, turret_active] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
 	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
@@ -272,7 +271,7 @@ void() turret_bullet5 = [ $tilt0, turret_active] {
 	FireBullets (2, '0 0 0');
 };
 
-void() turret_laser1 =[ $tilt0, turret_laser2]
+void() turret_laser1 = [$tilt0, turret_laser2]
 {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
@@ -283,10 +282,10 @@ void() turret_laser1 =[ $tilt0, turret_laser2]
 	newmis = launch_missile("progs/laser.mdl", self.origin, '600 0 0');
 	target_missile(newmis, self.enemy.origin, 1);
 };
-void() turret_laser2 =[ $tilt0, turret_laser3] {turret_face();};
-void() turret_laser3 =[ $tilt0, turret_laser4] {turret_face();};
-void() turret_laser4 =[ $tilt0, turret_laser5] {turret_face();};
-void() turret_laser5 =[ $tilt0, turret_active]
+void() turret_laser2 = [$tilt0, turret_laser3] { turret_face(); };
+void() turret_laser3 = [$tilt0, turret_laser4] { turret_face(); };
+void() turret_laser4 = [$tilt0, turret_laser5] { turret_face(); };
+void() turret_laser5 = [$tilt0, turret_active]
 {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
@@ -298,7 +297,7 @@ void() turret_laser5 =[ $tilt0, turret_active]
 	target_missile(newmis, self.enemy.origin, 1);
 };
 
-void() turret_rocket1 =[ $tilt0, turret_active]
+void() turret_rocket1 = [$tilt0, turret_active]
 {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
@@ -311,25 +310,25 @@ void() turret_rocket1 =[ $tilt0, turret_active]
 	setdmg_missile(newmis, 15, 15);
 };
 
-void() turret_beam1 = [ $tilt0, turret_beam2]
+void() turret_beam1 = [$tilt0, turret_beam2]
 {
 	turret_face();
 	sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	self.nextthink = time + 0.2;
 };
-void() turret_beam2 = [ $tilt0, turret_beam3]
+void() turret_beam2 = [$tilt0, turret_beam3]
 {
 	sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	turret_face();
 	self.nextthink = time + 0.2;
 };
-void() turret_beam3 = [ $tilt0, turret_beam4]
+void() turret_beam3 = [$tilt0, turret_beam4]
 {
 	sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	turret_face();
 	self.nextthink = time + 0.2;
 };
-void() turret_beam4 = [ $tilt0, turret_beam5]
+void() turret_beam4 = [$tilt0, turret_beam5]
 {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
@@ -350,12 +349,12 @@ void() turret_beam4 = [ $tilt0, turret_beam5]
 	newmis.think = beam_generate;
 	newmis.nextthink = time + 0.05;
 };
-void() turret_beam5 = [ $tilt0, turret_beam6] {turret_face();};
-void() turret_beam6 = [ $tilt0, turret_beam7] {turret_face();};
-void() turret_beam7 = [ $tilt0, turret_active] {turret_face();};
+void() turret_beam5 = [$tilt0, turret_beam6] { turret_face(); };
+void() turret_beam6 = [$tilt0, turret_beam7] { turret_face(); };
+void() turret_beam7 = [$tilt0, turret_active] { turret_face(); };
 
 void() turret_fire2;
-void() turret_fire1 =	[ $tilt0, turret_fire2]
+void() turret_fire1 =	[$tilt0, turret_fire2]
 {
 	turret_face();
 
@@ -363,17 +362,17 @@ void() turret_fire1 =	[ $tilt0, turret_fire2]
 		self.think = turret_fire2;
 	self.nextthink = time + 0.05;
 };
-void() turret_fire2 =	[ $tilt0, turret_fire3]
+void() turret_fire2 =	[$tilt0, turret_fire3]
 {
 	turret_face();
 	self.nextthink = time + 0.05;
 };
-void() turret_fire3 =	[ $tilt0, turret_fire4]
+void() turret_fire3 =	[$tilt0, turret_fire4]
 {
 	turret_face();
 	self.nextthink = time + 0.05;
 };
-void() turret_fire4 =	[ $tilt0, turret_fire4]
+void() turret_fire4 =	[$tilt0, turret_fire4]
 {
 	turret_face();
 

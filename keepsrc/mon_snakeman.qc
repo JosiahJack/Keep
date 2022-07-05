@@ -192,16 +192,16 @@ void() snake_pain7 = [32, snake_run1]
 {
 };
 
-void() snake_bpain1 = [52, snake_bpain2]{};
-void() snake_bpain2 = [53, snake_bpain3]{};
-void() snake_bpain3 = [54, snake_bpain4]{};
-void() snake_bpain4 = [55, snake_bpain5]{};
-void() snake_bpain5 = [56, snake_bpain6]{};
-void() snake_bpain6 = [57, snake_bpain7]{};
-void() snake_bpain7 = [58, snake_run1]{};
+void() snake_bpain1 = [52, snake_bpain2] {};
+void() snake_bpain2 = [53, snake_bpain3] {};
+void() snake_bpain3 = [54, snake_bpain4] {};
+void() snake_bpain4 = [55, snake_bpain5] {};
+void() snake_bpain5 = [56, snake_bpain6] {};
+void() snake_bpain6 = [57, snake_bpain7] {};
+void() snake_bpain7 = [58, snake_run1] {};
 
 void() snake_death1 = [36, snake_death3] {};
-void() snake_death3 = [37, snake_death4] {monster_check_gib();};
+void() snake_death3 = [37, snake_death4] { monster_check_gib(); };
 void() snake_death4 = [38, snake_death5] {
 	monster_check_gib();
 	self.solid = SOLID_NOT;
@@ -210,19 +210,19 @@ void() snake_death5 = [39, snake_death6] {};
 void() snake_death6 = [40, snake_death7] {};
 void() snake_death7 = [41, snake_death8] {};
 void() snake_death8 = [42, snake_death9] {};
-void() snake_death9 = [43, snake_death10] { self.ammo_nails = 15; DropBackpack();};
+void() snake_death9 = [43, snake_death10] { self.ammo_nails = 15; DropBackpack(); };
 void() snake_death10 = [44, snake_death11] {};
-void() snake_death11 = [45, snake_death12] {monster_death_postcheck();};
+void() snake_death11 = [45, snake_death12] { monster_death_postcheck(); };
 void() snake_death12 = [45, snake_death12] { monster_deadbody_check(); };
 
-void() snake_dead1 = [46, snake_dead2]{};
-void() snake_dead2 = [47, snake_dead3] {monster_check_gib();};
+void() snake_dead1 = [46, snake_dead2] {};
+void() snake_dead2 = [47, snake_dead3] { monster_check_gib(); };
 void() snake_dead3 = [48, snake_dead4] {
 	monster_check_gib();
 	self.solid = SOLID_NOT;
 };
 void() snake_dead4 = [49, snake_dead5] { self.ammo_nails = 15; DropBackpack(); };
-void() snake_dead5 = [50, snake_dead6] {monster_death_postcheck();};
+void() snake_dead5 = [50, snake_dead6] { monster_death_postcheck(); };
 void() snake_dead6 = [51, snake_dead6] { monster_deadbody_check(); };
 
 void(entity inflictor, entity attacker, float damage) snake_pain = {

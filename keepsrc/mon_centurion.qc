@@ -34,41 +34,41 @@ void() centurionhover = {
 	}
 };
 
-void()	cent_stand1	=[	$stand1,	cent_stand2	] {centurionhover();monster_idle_sound();ai_stand();};
-void()	cent_stand2	=[	$stand2,	cent_stand3	] {ai_stand();};
-void()	cent_stand3	=[	$stand3,	cent_stand4	] {ai_stand();};
-void()	cent_stand4	=[	$stand4,	cent_stand5	] {ai_stand();};
-void()	cent_stand5	=[	$stand5,	cent_stand6	] {ai_stand();};
-void()	cent_stand6	=[	$stand6,	cent_stand7	] {ai_stand();};
-void()	cent_stand7	=[	$stand7,	cent_stand8	] {ai_stand();};
-void()	cent_stand8	=[	$stand8,	cent_stand1	] {ai_stand();};
+void()	cent_stand1	= [	$stand1,	cent_stand2	] { centurionhover();monster_idle_sound();ai_stand(); };
+void()	cent_stand2	= [	$stand2,	cent_stand3	] { ai_stand(); };
+void()	cent_stand3	= [	$stand3,	cent_stand4	] { ai_stand(); };
+void()	cent_stand4	= [	$stand4,	cent_stand5	] { ai_stand(); };
+void()	cent_stand5	= [	$stand5,	cent_stand6	] { ai_stand(); };
+void()	cent_stand6	= [	$stand6,	cent_stand7	] { ai_stand(); };
+void()	cent_stand7	= [	$stand7,	cent_stand8	] { ai_stand(); };
+void()	cent_stand8	= [	$stand8,	cent_stand1	] { ai_stand(); };
 
-//============================================================================
-void()	cent_walk1	=[	$stand1,	cent_walk2	] {
-	centurionhover();monster_idle_sound();ai_walk(4);};
-void()	cent_walk2	=[	$stand2,	cent_walk3	] {ai_walk(4);};
-void()	cent_walk3	=[	$stand3,	cent_walk4	] {ai_walk(4);};
-void()	cent_walk4	=[	$stand4,	cent_walk5	] {ai_walk(4);};
-void()	cent_walk5	=[	$stand5,	cent_walk6	] {ai_walk(4);};
-void()	cent_walk6	=[	$stand6,	cent_walk7	] {ai_walk(4);};
-void()	cent_walk7	=[	$stand7,	cent_walk8	] {ai_walk(4);};
-void()	cent_walk8	=[	$stand8,	cent_walk1	] {ai_walk(4);};
 
-//============================================================================
-void()	cent_run1	=[	$stand1,	cent_run2	] {
+void()	cent_walk1	= [	$stand1,	cent_walk2	] {
+	centurionhover();monster_idle_sound();ai_walk(4); };
+void()	cent_walk2	= [	$stand2,	cent_walk3	] { ai_walk(4); };
+void()	cent_walk3	= [	$stand3,	cent_walk4	] { ai_walk(4); };
+void()	cent_walk4	= [	$stand4,	cent_walk5	] { ai_walk(4); };
+void()	cent_walk5	= [	$stand5,	cent_walk6	] { ai_walk(4); };
+void()	cent_walk6	= [	$stand6,	cent_walk7	] { ai_walk(4); };
+void()	cent_walk7	= [	$stand7,	cent_walk8	] { ai_walk(4); };
+void()	cent_walk8	= [	$stand8,	cent_walk1	] { ai_walk(4); };
+
+
+void()	cent_run1	= [	$stand1,	cent_run2	] {
 	centurionhover();monster_idle_sound(); 
 	if (self.meleeattack < time) {
 		self.meleeattack = time + 4 + (random() + random() + random() * 4);
 		self.lefty = rint(1 - self.lefty);
 	}
-	ai_run(8);};
-void()	cent_run2	=[	$stand2,	cent_run3	] {ai_run(8);};
-void()	cent_run3	=[	$stand3,	cent_run4	] {ai_run(8);};
-void()	cent_run4	=[	$stand4, 	cent_run5	] {ai_run(8);};
-void()	cent_run5	=[	$stand5,	cent_run6	] {ai_run(8);};
-void()	cent_run6	=[	$stand6,	cent_run7	] {ai_run(8);};
-void()	cent_run7	=[	$stand7,	cent_run8	] {ai_run(8);};
-void()	cent_run8	=[	$stand8,	cent_run1	] {ai_run(8);};
+	ai_run(8); };
+void()	cent_run2	= [	$stand2,	cent_run3	] { ai_run(8); };
+void()	cent_run3	= [	$stand3,	cent_run4	] { ai_run(8); };
+void()	cent_run4	= [	$stand4, 	cent_run5	] { ai_run(8); };
+void()	cent_run5	= [	$stand5,	cent_run6	] { ai_run(8); };
+void()	cent_run6	= [	$stand6,	cent_run7	] { ai_run(8); };
+void()	cent_run7	= [	$stand7,	cent_run8	] { ai_run(8); };
+void()	cent_run8	= [	$stand8,	cent_run1	] { ai_run(8); };
 
 void() cent_fire = {
 	local vector org, vec;
@@ -83,62 +83,62 @@ void() cent_fire = {
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
-void()	cent_atk1	=[	$attack1,	cent_atk2	] {sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
-void()	cent_atk2	=[	$attack2,	cent_atk3	] {ai_face();};
-void()	cent_atk3	=[	$attack3,	cent_atk4	] {ai_face();};
-void()	cent_atk4	=[	$attack4,	cent_atk5	] {ai_face();};
-void()	cent_atk5	=[	$attack5,	cent_atk6	] {ai_face();};
-void()	cent_atk6	=[	$attack6,	cent_atk7	] {ai_face();
-	if (self.health > 0) cent_fire();};
-void()	cent_atk7	=[	$attack7,	cent_atk8	] {};
-void()	cent_atk8	=[	$attack8,	cent_atk9	] {};
-void()	cent_atk9	=[	$attack5,	cent_atk10	] {ai_face();};
-void()	cent_atk10	=[	$attack6,	cent_atk11	] {ai_face();
-	if (self.health > 0) cent_fire();};
-void()	cent_atk11	=[	$attack7,	cent_atk12	] {};
-void()	cent_atk12	=[	$attack8,	cent_atk13	] {};
-void()	cent_atk13	=[	$attack9,	cent_atk14	] {ai_face();};
-void()	cent_atk14	=[	$attack10,	cent_run1	] {ai_face();SUB_CheckRefire (cent_atk1);};
+void()	cent_atk1	= [	$attack1,	cent_atk2	] { sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+void()	cent_atk2	= [	$attack2,	cent_atk3	] { ai_face(); };
+void()	cent_atk3	= [	$attack3,	cent_atk4	] { ai_face(); };
+void()	cent_atk4	= [	$attack4,	cent_atk5	] { ai_face(); };
+void()	cent_atk5	= [	$attack5,	cent_atk6	] { ai_face(); };
+void()	cent_atk6	= [	$attack6,	cent_atk7	] { ai_face();
+	if (self.health > 0) cent_fire(); };
+void()	cent_atk7	= [	$attack7,	cent_atk8	] {};
+void()	cent_atk8	= [	$attack8,	cent_atk9	] {};
+void()	cent_atk9	= [	$attack5,	cent_atk10	] { ai_face(); };
+void()	cent_atk10	= [	$attack6,	cent_atk11	] { ai_face();
+	if (self.health > 0) cent_fire(); };
+void()	cent_atk11	= [	$attack7,	cent_atk12	] {};
+void()	cent_atk12	= [	$attack8,	cent_atk13	] {};
+void()	cent_atk13	= [	$attack9,	cent_atk14	] { ai_face(); };
+void()	cent_atk14	= [	$attack10,	cent_run1	] { ai_face();SUB_CheckRefire (cent_atk1); };
 
-void()	cent_paina1	=[	$paina1,	cent_paina2	] {};
-void()	cent_paina2	=[	$paina2,	cent_paina3	] {};
-void()	cent_paina3	=[	$paina3,	cent_paina4	] {};
-void()	cent_paina4	=[	$paina4,	cent_run1	] {};
+void()	cent_paina1	= [	$paina1,	cent_paina2	] {};
+void()	cent_paina2	= [	$paina2,	cent_paina3	] {};
+void()	cent_paina3	= [	$paina3,	cent_paina4	] {};
+void()	cent_paina4	= [	$paina4,	cent_run1	] {};
 
-void()	cent_painb1	=[	$painb1,	cent_painb2	] {};
-void()	cent_painb2	=[	$painb2,	cent_painb3	] {};
-void()	cent_painb3	=[	$painb3,	cent_painb4	] {};
-void()	cent_painb4	=[	$painb4,	cent_painb5	] {};
-void()	cent_painb5	=[	$painb5,	cent_run1	] {};
+void()	cent_painb1	= [	$painb1,	cent_painb2	] {};
+void()	cent_painb2	= [	$painb2,	cent_painb3	] {};
+void()	cent_painb3	= [	$painb3,	cent_painb4	] {};
+void()	cent_painb4	= [	$painb4,	cent_painb5	] {};
+void()	cent_painb5	= [	$painb5,	cent_run1	] {};
 
-void()	cent_painc1	=[	$painc1,	cent_painc2	] {};
-void()	cent_painc2	=[	$painc2,	cent_painc3	] {};
-void()	cent_painc3	=[	$painc3,	cent_painc4	] {};
-void()	cent_painc4	=[	$painc4,	cent_painc5	] {};
-void()	cent_painc5	=[	$painc5,	cent_painc6	] {};
-void()	cent_painc6	=[	$painc6,	cent_painc7	] {};
-void()	cent_painc7	=[	$painc7,	cent_painc8	] {};
-void()	cent_painc8	=[	$painc8,	cent_run1	] {};
+void()	cent_painc1	= [	$painc1,	cent_painc2	] {};
+void()	cent_painc2	= [	$painc2,	cent_painc3	] {};
+void()	cent_painc3	= [	$painc3,	cent_painc4	] {};
+void()	cent_painc4	= [	$painc4,	cent_painc5	] {};
+void()	cent_painc5	= [	$painc5,	cent_painc6	] {};
+void()	cent_painc6	= [	$painc6,	cent_painc7	] {};
+void()	cent_painc7	= [	$painc7,	cent_painc8	] {};
+void()	cent_painc8	= [	$painc8,	cent_run1	] {};
 
-void()	cent_paind1	=[	$paind1,	cent_paind2	] {};
-void()	cent_paind2	=[	$paind2,	cent_paind3	] {};
-void()	cent_paind3	=[	$paind3,	cent_paind4	] {};
-void()	cent_paind4	=[	$paind4,	cent_paind5	] {ai_painforward(2);};
-void()	cent_paind5	=[	$paind5,	cent_paind6	] {ai_painforward(1);};
-void()	cent_paind6	=[	$paind6,	cent_paind7	] {};
-void()	cent_paind7	=[	$paind7,	cent_paind8	] {};
-void()	cent_paind8	=[	$paind8,	cent_paind9	] {};
-void()	cent_paind9	=[	$paind9,	cent_paind10 ] {};
-void()	cent_paind10=[	$paind10,	cent_paind11 ] {};
-void()	cent_paind11=[	$paind11,	cent_paind12 ] {ai_painforward(1);};
-void()	cent_paind12=[	$paind12,	cent_paind13 ] {ai_painforward(1);};
-void()	cent_paind13=[	$paind13,	cent_paind14 ] {ai_painforward(1);};
-void()	cent_paind14=[	$paind14,	cent_paind15 ] {};
-void()	cent_paind15=[	$paind15,	cent_paind16 ] {};
-void()	cent_paind16=[	$paind16,	cent_paind17 ] {ai_pain(1);};
-void()	cent_paind17=[	$paind17,	cent_paind18 ] {ai_pain(1);};
-void()	cent_paind18=[	$paind18,	cent_paind19 ] {};
-void()	cent_paind19=[	$paind19,	cent_run1	 ] {};
+void()	cent_paind1	= [	$paind1,	cent_paind2	] {};
+void()	cent_paind2	= [	$paind2,	cent_paind3	] {};
+void()	cent_paind3	= [	$paind3,	cent_paind4	] {};
+void()	cent_paind4	= [	$paind4,	cent_paind5	] { ai_painforward(2); };
+void()	cent_paind5	= [	$paind5,	cent_paind6	] { ai_painforward(1); };
+void()	cent_paind6	= [	$paind6,	cent_paind7	] {};
+void()	cent_paind7	= [	$paind7,	cent_paind8	] {};
+void()	cent_paind8	= [	$paind8,	cent_paind9	] {};
+void()	cent_paind9	= [	$paind9,	cent_paind10 ] {};
+void()	cent_paind10= [	$paind10,	cent_paind11 ] {};
+void()	cent_paind11= [	$paind11,	cent_paind12 ] { ai_painforward(1); };
+void()	cent_paind12= [	$paind12,	cent_paind13 ] { ai_painforward(1); };
+void()	cent_paind13= [	$paind13,	cent_paind14 ] { ai_painforward(1); };
+void()	cent_paind14= [	$paind14,	cent_paind15 ] {};
+void()	cent_paind15= [	$paind15,	cent_paind16 ] {};
+void()	cent_paind16= [	$paind16,	cent_paind17 ] { ai_pain(1); };
+void()	cent_paind17= [	$paind17,	cent_paind18 ] { ai_pain(1); };
+void()	cent_paind18= [	$paind18,	cent_paind19 ] {};
+void()	cent_paind19= [	$paind19,	cent_run1	 ] {};
 
 void(entity inflictor, entity attacker, float damage) cent_pain = {
 	// Check all pain conditions and set up what to do next
@@ -177,32 +177,32 @@ void() cent_crash = {
 	}
 };
 
-void()	cent_die1	=[	$death1,	cent_die2	] {cent_crash();};
-void()	cent_die2	=[	$death2,	cent_die3	] {monster_check_gib();cent_crash();};
-void()	cent_die3	=[	$death3,	cent_die4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash();};
-void()	cent_die4	=[	$death4,	cent_die5	] {cent_crash();};
-void()	cent_die5	=[	$death5,	cent_die6	] {cent_crash();};
-void()	cent_die6	=[	$death6,	cent_die7	] {cent_crash();};
-void()	cent_die7	=[	$death7,	cent_die8	] {cent_crash();};
-void()	cent_die8	=[	$death8,	cent_die9	] {cent_crash();};
-void()	cent_die9	=[	$death9,	cent_die10	] {cent_crash();};
-void()	cent_die10	=[	$death10,	cent_die11	] {cent_crash();};
-void()	cent_die11	=[	$death11,	cent_die12	] {cent_crash();};
-void()	cent_die12	=[	$death12,	cent_die13	] {cent_crash();};
-void()	cent_die13	=[	$death13,	cent_die14	] {monster_death_postcheck();cent_crash();};
-void()	cent_die14	=[	$death14,	cent_die14	] {monster_deadbody_check();};
+void()	cent_die1	= [	$death1,	cent_die2	] { cent_crash(); };
+void()	cent_die2	= [	$death2,	cent_die3	] { monster_check_gib();cent_crash(); };
+void()	cent_die3	= [	$death3,	cent_die4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash(); };
+void()	cent_die4	= [	$death4,	cent_die5	] { cent_crash(); };
+void()	cent_die5	= [	$death5,	cent_die6	] { cent_crash(); };
+void()	cent_die6	= [	$death6,	cent_die7	] { cent_crash(); };
+void()	cent_die7	= [	$death7,	cent_die8	] { cent_crash(); };
+void()	cent_die8	= [	$death8,	cent_die9	] { cent_crash(); };
+void()	cent_die9	= [	$death9,	cent_die10	] { cent_crash(); };
+void()	cent_die10	= [	$death10,	cent_die11	] { cent_crash(); };
+void()	cent_die11	= [	$death11,	cent_die12	] { cent_crash(); };
+void()	cent_die12	= [	$death12,	cent_die13	] { cent_crash(); };
+void()	cent_die13	= [	$death13,	cent_die14	] { monster_death_postcheck();cent_crash(); };
+void()	cent_die14	= [	$death14,	cent_die14	] { monster_deadbody_check(); };
 
-void()	cent_fdie1	=[	$fdeath1,	cent_fdie2	] {cent_crash();};
-void()	cent_fdie2	=[	$fdeath2,	cent_fdie3	] {monster_check_gib();cent_crash();};
-void()	cent_fdie3	=[	$fdeath3,	cent_fdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash();};
-void()	cent_fdie4	=[	$fdeath4,	cent_fdie5	] {cent_crash();};
-void()	cent_fdie5	=[	$fdeath5,	cent_fdie6	] {cent_crash();};
-void()	cent_fdie6	=[	$fdeath6,	cent_fdie7	] {cent_crash();};
-void()	cent_fdie7	=[	$fdeath7,	cent_fdie8	] {cent_crash();};
-void()	cent_fdie8	=[	$fdeath8,	cent_fdie9	] {cent_crash();};
-void()	cent_fdie9	=[	$fdeath9,	cent_fdie10	] {cent_crash();};
-void()	cent_fdie10	=[	$fdeath10,	cent_fdie11	] {monster_death_postcheck();cent_crash();};
-void()	cent_fdie11	=[	$fdeath11,	cent_fdie11	] {monster_deadbody_check();};
+void()	cent_fdie1	= [	$fdeath1,	cent_fdie2	] { cent_crash(); };
+void()	cent_fdie2	= [	$fdeath2,	cent_fdie3	] { monster_check_gib();cent_crash(); };
+void()	cent_fdie3	= [	$fdeath3,	cent_fdie4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash(); };
+void()	cent_fdie4	= [	$fdeath4,	cent_fdie5	] { cent_crash(); };
+void()	cent_fdie5	= [	$fdeath5,	cent_fdie6	] { cent_crash(); };
+void()	cent_fdie6	= [	$fdeath6,	cent_fdie7	] { cent_crash(); };
+void()	cent_fdie7	= [	$fdeath7,	cent_fdie8	] { cent_crash(); };
+void()	cent_fdie8	= [	$fdeath8,	cent_fdie9	] { cent_crash(); };
+void()	cent_fdie9	= [	$fdeath9,	cent_fdie10	] { cent_crash(); };
+void()	cent_fdie10	= [	$fdeath10,	cent_fdie11	] { monster_death_postcheck();cent_crash(); };
+void()	cent_fdie11	= [	$fdeath11,	cent_fdie11	] { monster_deadbody_check(); };
 
 void() cent_die = {
 	// Pre-check routine to tidy up extra entities

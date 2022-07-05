@@ -86,15 +86,6 @@ void(entity targ) display_tethersystem = {
 void() setup_tethersystem = {
 	// Check if the tether system be setup already
 	if (self.tethertarget != "") {
-		// Check for range attack, cannot tether if no range
-		// if (!self.th_missile) {
-			// dprint("\b[TETHER]\b No range attack for ");
-			// dprint(self.tethertarget);
-			// dprint("\n");
-			// self.tethertarget = "";
-			// return;
-		// }
-	
 		// Find the tether point (has to be path corner)
 		self.tethertarg = find(world, targetname, self.tethertarget);
 		if (self.tethertarg != world) {

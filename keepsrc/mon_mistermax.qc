@@ -2099,33 +2099,31 @@ void() becomeearthquake = {
 };
 
 void() comment_waiting = {
-{
   if (!(self.regen & FL_MONSTER)) {
     self.regen = self.regen | FL_MONSTER;
     self.noise = "nehahra/max/allday.wav";
-    } else {
+  } else {
     if (!(self.regen & FL_GODMODE)) {
       self.regen = self.regen | FL_GODMODE;
       self.noise = "nehahra/max/taketime.wav";
-      } else {
+    } else {
       if (!(self.regen & FL_NOTARGET)) {
         self.regen = self.regen | FL_NOTARGET;
         self.noise = "nehahra/max/suspense.wav";
-        }
       }
     }
+  }
+
   if (self.noise == "NO") {
     if (random() < 0.5) {
       if (random() < 0.3) {
         self.noise = "nehahra/max/laugh.wav";
-        } else {
+      } else {
         self.noise = "nehahra/max/laugh2.wav";
-        }
       }
     }
-  if (self.noise != "NO") {
-    make_comment();
-    }
+  }
+  if (self.noise != "NO") make_comment();
 };
 
 void() comment_blunder = {

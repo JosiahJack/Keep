@@ -68,34 +68,34 @@ $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
 
 float TAILOFFSET = 8;
 
-void()	pinch_idle1	=[	$ready6,	pinch_idle2 ] {monster_idle_sound();ai_stand();};
-void()	pinch_idle2	=[	$ready7,	pinch_idle3 ] {ai_stand();};
-void()	pinch_idle3	=[	$ready8,	pinch_idle4 ] {ai_stand();};
-void()	pinch_idle4	=[	$ready9,	pinch_idle5 ] {ai_stand();};
-void()	pinch_idle5	=[	$ready10,	pinch_idle6 ] {ai_stand();};
-void()	pinch_idle6	=[	$ready11,	pinch_idle7 ] {ai_stand();};
-void()	pinch_idle7	=[	$ready10,	pinch_idle8 ] {ai_stand();};
-void()	pinch_idle8	=[	$ready9,	pinch_idle9 ] {ai_stand();};
-void()	pinch_idle9	=[	$ready8,	pinch_idle10 ] {ai_stand();};
-void()	pinch_idle10=[	$ready7,	pinch_idle1 ] {ai_stand();};
+void()	pinch_idle1	= [	$ready6,	pinch_idle2 ] { monster_idle_sound();ai_stand(); };
+void()	pinch_idle2	= [	$ready7,	pinch_idle3 ] { ai_stand(); };
+void()	pinch_idle3	= [	$ready8,	pinch_idle4 ] { ai_stand(); };
+void()	pinch_idle4	= [	$ready9,	pinch_idle5 ] { ai_stand(); };
+void()	pinch_idle5	= [	$ready10,	pinch_idle6 ] { ai_stand(); };
+void()	pinch_idle6	= [	$ready11,	pinch_idle7 ] { ai_stand(); };
+void()	pinch_idle7	= [	$ready10,	pinch_idle8 ] { ai_stand(); };
+void()	pinch_idle8	= [	$ready9,	pinch_idle9 ] { ai_stand(); };
+void()	pinch_idle9	= [	$ready8,	pinch_idle10 ] { ai_stand(); };
+void()	pinch_idle10= [	$ready7,	pinch_idle1 ] { ai_stand(); };
 
-void()	pinch_walk1	=[	$walk2,		pinch_walk2	] {monster_idle_sound();ai_walk(3);};
-void()	pinch_walk2	=[	$walk4,		pinch_walk3	] {monster_footstep(FALSE); ai_walk(2);};
-void()	pinch_walk3	=[	$walk6,		pinch_walk4	] {ai_walk(3);};
-void()	pinch_walk4	=[	$walk8,		pinch_walk5	] {ai_walk(4);};
-void()	pinch_walk5	=[	$walk10,	pinch_walk6	] {ai_walk(3);};
-void()	pinch_walk6	=[	$walk12,	pinch_walk7	] {monster_footstep(FALSE); ai_walk(2);};
-void()	pinch_walk7	=[	$walk14,	pinch_walk8	] {ai_walk(3);};
-void()	pinch_walk8	=[	$walk16,	pinch_walk1	] {ai_walk(4);};
+void()	pinch_walk1	= [	$walk2,		pinch_walk2	] { monster_idle_sound();ai_walk(3); };
+void()	pinch_walk2	= [	$walk4,		pinch_walk3	] { monster_footstep(FALSE); ai_walk(2); };
+void()	pinch_walk3	= [	$walk6,		pinch_walk4	] { ai_walk(3); };
+void()	pinch_walk4	= [	$walk8,		pinch_walk5	] { ai_walk(4); };
+void()	pinch_walk5	= [	$walk10,	pinch_walk6	] { ai_walk(3); };
+void()	pinch_walk6	= [	$walk12,	pinch_walk7	] { monster_footstep(FALSE); ai_walk(2); };
+void()	pinch_walk7	= [	$walk14,	pinch_walk8	] { ai_walk(3); };
+void()	pinch_walk8	= [	$walk16,	pinch_walk1	] { ai_walk(4); };
 
-void()	pinch_run1	=[	$walk1,		pinch_run2	] {monster_idle_sound();ai_run(5);};
-void()	pinch_run2	=[	$walk3,		pinch_run3	] {monster_footstep(FALSE); ai_run(4);};
-void()	pinch_run3	=[	$walk5,		pinch_run4	] {ai_run(5);};
-void()	pinch_run4	=[	$walk7,		pinch_run5	] {ai_run(6);};
-void()	pinch_run5	=[	$walk9,		pinch_run6	] {ai_run(5);};
-void()	pinch_run6	=[	$walk11,	pinch_run7	] {monster_footstep(FALSE); ai_run(4);};
-void()	pinch_run7	=[	$walk13,	pinch_run8	] {ai_run(5);};
-void()	pinch_run8	=[	$walk15,	pinch_run1	] {ai_run(6);};
+void()	pinch_run1	= [	$walk1,		pinch_run2	] { monster_idle_sound();ai_run(5); };
+void()	pinch_run2	= [	$walk3,		pinch_run3	] { monster_footstep(FALSE); ai_run(4); };
+void()	pinch_run3	= [	$walk5,		pinch_run4	] { ai_run(5); };
+void()	pinch_run4	= [	$walk7,		pinch_run5	] { ai_run(6); };
+void()	pinch_run5	= [	$walk9,		pinch_run6	] { ai_run(5); };
+void()	pinch_run6	= [	$walk11,	pinch_run7	] { monster_footstep(FALSE); ai_run(4); };
+void()	pinch_run7	= [	$walk13,	pinch_run8	] { ai_run(5); };
+void()	pinch_run8	= [	$walk15,	pinch_run1	] { ai_run(6); };
 
 // BITE Melee Range
 void(float side) pinch_melee = {
@@ -122,16 +122,16 @@ void(float side) pinch_melee = {
 	SpawnMeatSpray (self, self.enemy, side);
 };
 
-void()	pinch_claw1	=[	$attackB2,		pinch_claw2	] {ai_face();};
-void()	pinch_claw2	=[	$attackB4,		pinch_claw3	] {ai_face();};
-void()	pinch_claw3	=[	$attackB6,		pinch_claw4	] {ai_face();};
-void()	pinch_claw4	=[	$attackB8,		pinch_claw5 ] {pinch_melee(-100);};
-void()	pinch_claw5	=[	$attackB10,		pinch_claw6 ] {ai_face();};
-void()	pinch_claw6	=[	$attackB12,		pinch_claw7 ] {ai_face();};
-void()	pinch_claw7	=[	$attackB14,		pinch_claw8 ] {pinch_melee(100);};
+void()	pinch_claw1	= [	$attackB2,		pinch_claw2	] { ai_face(); };
+void()	pinch_claw2	= [	$attackB4,		pinch_claw3	] { ai_face(); };
+void()	pinch_claw3	= [	$attackB6,		pinch_claw4	] { ai_face(); };
+void()	pinch_claw4	= [	$attackB8,		pinch_claw5 ] { pinch_melee(-100); };
+void()	pinch_claw5	= [	$attackB10,		pinch_claw6 ] { ai_face(); };
+void()	pinch_claw6	= [	$attackB12,		pinch_claw7 ] { ai_face(); };
+void()	pinch_claw7	= [	$attackB14,		pinch_claw8 ] { pinch_melee(100); };
 void()	pinch_claw8 = [	$attackB16,		pinch_claw9 ] {};
 void()	pinch_claw9 = [	$attackB18,		pinch_claw10 ] {};
-void()	pinch_claw10 =[	$attackB20,		pinch_run1 ] {};
+void()	pinch_claw10 = [	$attackB20,		pinch_run1 ] {};
 
 // TAIL FUNCTION (range)
 void() pinch_tailsound = {
@@ -164,21 +164,21 @@ void(vector tailofs) pinch_tailspike = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_SCORP,self.attack_speed+random()*25);
 }
 
-void()	pinch_tail1	=[	$attackA2,		pinch_tail2	] {ai_face();
+void()	pinch_tail1	= [	$attackA2,		pinch_tail2	] { ai_face();
 	if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/tailattack1.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_VOICE, "ad171/scorpion/tailattack2.wav", 1, ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 };
-void()	pinch_tail2	=[	$attackA4,		pinch_tail3	] {ai_face();};
-void()	pinch_tail3	=[	$attackA6,		pinch_tail4	] {ai_face();};
-void()	pinch_tail4	=[	$attackA8,		pinch_tail5 ] {ai_face();};
-void()	pinch_tail5	=[	$attackA10,		pinch_tail6 ] {ai_face();};
-void()	pinch_tail6	=[	$attackA12,		pinch_tail7 ] {ai_face();pinch_tailsound();};
-void()	pinch_tail7	=[	$attackA14,		pinch_tail8 ] {pinch_tailspike('32 8 14');};
-void()	pinch_tail8 = [	$attackA16,		pinch_tail9 ] {pinch_tailsound();};
-void()	pinch_tail9 = [	$attackA18,		pinch_tail10 ] {ai_face();};
-void()	pinch_tail10 =[	$attackA20,		pinch_tail11 ] {};
-void()	pinch_tail11 =[	$attackA22,		pinch_run1 ] {ai_face();};
+void()	pinch_tail2	= [	$attackA4,		pinch_tail3	] { ai_face(); };
+void()	pinch_tail3	= [	$attackA6,		pinch_tail4	] { ai_face(); };
+void()	pinch_tail4	= [	$attackA8,		pinch_tail5 ] { ai_face(); };
+void()	pinch_tail5	= [	$attackA10,		pinch_tail6 ] { ai_face(); };
+void()	pinch_tail6	= [	$attackA12,		pinch_tail7 ] { ai_face();pinch_tailsound(); };
+void()	pinch_tail7	= [	$attackA14,		pinch_tail8 ] { pinch_tailspike('32 8 14'); };
+void()	pinch_tail8 = [	$attackA16,		pinch_tail9 ] { pinch_tailsound(); };
+void()	pinch_tail9 = [	$attackA18,		pinch_tail10 ] { ai_face(); };
+void()	pinch_tail10 = [	$attackA20,		pinch_tail11 ] {};
+void()	pinch_tail11 = [	$attackA22,		pinch_run1 ] { ai_face(); };
 
 // JUMP FUNCTION (range)
 void()	pinch_jumptouch = {
@@ -211,14 +211,14 @@ void()	pinch_jumptouch = {
 	self.nextthink = time + 0.1;
 };
 
-void() pinch_leap1	=[	$attackC1, pinch_leap2	] {ai_face();
+void() pinch_leap1	= [	$attackC1, pinch_leap2	] { ai_face();
 	self.jump_flag = time + MONAI_JUMPSCORPTIME;
 	if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", 1, ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 };
-void() pinch_leap2	=[	$attackC3, pinch_leap3	] {ai_face(); };
-void() pinch_leap3	=[	$attackC5, pinch_leap4	] {ai_face();
+void() pinch_leap2	= [	$attackC3, pinch_leap3	] { ai_face(); };
+void() pinch_leap3	= [	$attackC5, pinch_leap4	] { ai_face();
 	// This is a crazy idea, throw the scorpion like a grenade!
 	// Using the same logic as the ogre grenade zware system
 	self.attack_speed = self.jumpdist_x + (random()*self.jumpdist_z);
@@ -237,9 +237,9 @@ void() pinch_leap3	=[	$attackC5, pinch_leap4	] {ai_face();
 };
 
 // Flying through the air waiting to touch something!
-void() pinch_leap4	=[	$attackC7, pinch_leap5	] {ai_face();};
-void() pinch_leap5	=[	$attackC8, pinch_leap6 ] {ai_face();};	
-void() pinch_leap6	=[	$attackC9, pinch_leap8 ] {
+void() pinch_leap4	= [	$attackC7, pinch_leap5	] { ai_face(); };
+void() pinch_leap5	= [	$attackC8, pinch_leap6 ] { ai_face(); };	
+void() pinch_leap6	= [	$attackC9, pinch_leap8 ] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -247,29 +247,29 @@ void() pinch_leap6	=[	$attackC9, pinch_leap8 ] {
 	}
 	self.oldorigin = self.origin;
 };
-void() pinch_leap8	=[	$attackC10, pinch_leap9 ] {ai_charge(4);};
-void() pinch_leap9	=[	$attackC11, pinch_leap10] {ai_charge(4);};
-void() pinch_leap10	=[	$attackC12, pinch_leap11] {ai_charge(4);};
-void() pinch_leap11	=[	$attackC14, pinch_leap12] {ai_charge(4);};
-void() pinch_leap12	=[	$attackC16, pinch_leap13] {ai_charge(4);};
-void() pinch_leap13	=[	$attackC18, pinch_leap14] {
+void() pinch_leap8	= [	$attackC10, pinch_leap9 ] { ai_charge(4); };
+void() pinch_leap9	= [	$attackC11, pinch_leap10] { ai_charge(4); };
+void() pinch_leap10	= [	$attackC12, pinch_leap11] { ai_charge(4); };
+void() pinch_leap11	= [	$attackC14, pinch_leap12] { ai_charge(4); };
+void() pinch_leap12	= [	$attackC16, pinch_leap13] { ai_charge(4); };
+void() pinch_leap13	= [	$attackC18, pinch_leap14] {
 	if (ai_checkmelee(MONAI_MELEESCORPION,FALSE) && self.enemy.health > 0) 
 		self.think = pinch_claw2;
 };
-void() pinch_leap14	=[	$attackC20, pinch_run1 ] {};
+void() pinch_leap14	= [	$attackC20, pinch_run1 ] {};
 
 // MINION - Grow and spin up from nothing
-void() pinch_growangle = {self.angles_y = self.angles_y + self.lefty;};
-void() pinch_grow1 = [ $grow1, pinch_grow2 ] {};
-void() pinch_grow2 = [ $grow2, pinch_grow3 ] {pinch_growangle();};
-void() pinch_grow3 = [ $grow3, pinch_grow4 ] {pinch_growangle();};
-void() pinch_grow4 = [ $grow4, pinch_grow5 ] {pinch_growangle();};
-void() pinch_grow5 = [ $grow5, pinch_grow6 ] {pinch_growangle();};
-void() pinch_grow6 = [ $grow6, pinch_grow7 ] {pinch_growangle();};
-void() pinch_grow7 = [ $grow7, pinch_grow8 ] {pinch_growangle();};
-void() pinch_grow8 = [ $grow8, pinch_grow9 ] {pinch_growangle();};
-void() pinch_grow9 = [ $grow9, pinch_grow10] {pinch_growangle();};
-void() pinch_grow10= [ $grow10, pinch_run1 ] {
+void() pinch_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() pinch_grow1 = [$grow1, pinch_grow2 ] {};
+void() pinch_grow2 = [$grow2, pinch_grow3 ] { pinch_growangle(); };
+void() pinch_grow3 = [$grow3, pinch_grow4 ] { pinch_growangle(); };
+void() pinch_grow4 = [$grow4, pinch_grow5 ] { pinch_growangle(); };
+void() pinch_grow5 = [$grow5, pinch_grow6 ] { pinch_growangle(); };
+void() pinch_grow6 = [$grow6, pinch_grow7 ] { pinch_growangle(); };
+void() pinch_grow7 = [$grow7, pinch_grow8 ] { pinch_growangle(); };
+void() pinch_grow8 = [$grow8, pinch_grow9 ] { pinch_growangle(); };
+void() pinch_grow9 = [$grow9, pinch_grow10] { pinch_growangle(); };
+void() pinch_grow10= [$grow10, pinch_run1 ] {
 	if (pointcontents(self.origin) == CONTENT_SOLID) { // Is the scorpion stuck? cannot move?
 		self.health = self.gibhealth; // Time to die!
 		Killed(self, self);
@@ -293,17 +293,17 @@ void() pinch_grow = {
 	pinch_grow1();
 };
 
-void() pinch_painA1	=[	$pain1,	pinch_painA2	] {};
-void() pinch_painA2	=[	$pain3,	pinch_painA3	] {};
-void() pinch_painA3	=[	$pain5,	pinch_painA4	] {};
-void() pinch_painA4	=[	$pain7,	pinch_painA5	] {};
-void() pinch_painA5	=[	$pain9,	pinch_run1		] {};
+void() pinch_painA1	= [	$pain1,	pinch_painA2	] {};
+void() pinch_painA2	= [	$pain3,	pinch_painA3	] {};
+void() pinch_painA3	= [	$pain5,	pinch_painA4	] {};
+void() pinch_painA4	= [	$pain7,	pinch_painA5	] {};
+void() pinch_painA5	= [	$pain9,	pinch_run1		] {};
 
-void() pinch_painB1	=[	$pain2,	pinch_painB2	] {};
-void() pinch_painB2	=[	$pain4,	pinch_painB3	] {};
-void() pinch_painB3	=[	$pain6,	pinch_painB4	] {};
-void() pinch_painB4	=[	$pain8,	pinch_painB5	] {};
-void() pinch_painB5	=[	$pain10,pinch_run1		] {};
+void() pinch_painB1	= [	$pain2,	pinch_painB2	] {};
+void() pinch_painB2	= [	$pain4,	pinch_painB3	] {};
+void() pinch_painB3	= [	$pain6,	pinch_painB4	] {};
+void() pinch_painB4	= [	$pain8,	pinch_painB5	] {};
+void() pinch_painB5	= [	$pain10,pinch_run1		] {};
 
 void(entity inflictor, entity attacker, float damage) pinch_pain = {
 	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
@@ -322,17 +322,17 @@ void(entity inflictor, entity attacker, float damage) pinch_pain = {
 	}
 };
 
-void() pinch_die1		=[	$death1,	pinch_die2	] {};
-void() pinch_die2		=[	$death3,	pinch_die3	] {monster_check_gib();};
-void() pinch_die3		=[	$death5,	pinch_die4	] {monster_check_gib();self.solid = SOLID_NOT;};
-void() pinch_die4		=[	$death7,	pinch_die5	] {};
-void() pinch_die5		=[	$death9,	pinch_die6	] {};
-void() pinch_die6		=[	$death11,	pinch_die7	] {};
-void() pinch_die7		=[	$death13,	pinch_die8	] {};
-void() pinch_die8		=[	$death15,	pinch_die9	] {};
-void() pinch_die9		=[	$death17,	pinch_die10] {};
-void() pinch_die10		=[	$death19,	pinch_die11] {monster_death_postcheck();};
-void() pinch_die11		=[	$death21,	pinch_die11] {monster_deadbody_check();};
+void() pinch_die1		= [	$death1,	pinch_die2	] {};
+void() pinch_die2		= [	$death3,	pinch_die3	] { monster_check_gib(); };
+void() pinch_die3		= [	$death5,	pinch_die4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void() pinch_die4		= [	$death7,	pinch_die5	] {};
+void() pinch_die5		= [	$death9,	pinch_die6	] {};
+void() pinch_die6		= [	$death11,	pinch_die7	] {};
+void() pinch_die7		= [	$death13,	pinch_die8	] {};
+void() pinch_die8		= [	$death15,	pinch_die9	] {};
+void() pinch_die9		= [	$death17,	pinch_die10] {};
+void() pinch_die10		= [	$death19,	pinch_die11] { monster_death_postcheck(); };
+void() pinch_die11		= [	$death21,	pinch_die11] { monster_deadbody_check(); };
 
 void() pinch_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities

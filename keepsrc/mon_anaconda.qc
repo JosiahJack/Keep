@@ -69,7 +69,7 @@ void() coil_whuh = {
 
 void(entity inflictor, entity attacker, float damage) coil_pain01 = [9, coil_pain02] { ai_pain(ATTN_NORM); };
 void() coil_pain02 = [10, coil_pain03] { ai_pain(ATTN_NORM); };
-void() coil_pain03 = [11, coil_run]{ ai_pain(ATTN_NORM); };
+void() coil_pain03 = [11, coil_run] { ai_pain(ATTN_NORM); };
 
 void() coil_awake = {
 	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);

@@ -37,8 +37,7 @@
 //=============================================================================
 
 //precache all models and sounds for aoa weapons
-void() precache_aoa =
-{
+void() precache_aoa = {
 	//#aoa precache sounds
 	precache_sound ("aoa/melee_meat.wav");
 	precache_sound ("aoa/axhit3.wav");
@@ -134,8 +133,7 @@ void() precache_aoa =
 	//precache_model ("progs/aoa/tessla.mdl");
 };
 
-void(string a, string b, string c, string d) aoaprint =
-{
+void(string a, string b, string c, string d) aoaprint = {
 	bprint(a);
 	bprint(b);
 	bprint(c);
@@ -153,8 +151,7 @@ void(string playerModel) setPlayerModel = //sets the player model to the string 
 };
 
 //healing utility called by health-draining melee weapons like the Mace
-void(entity target, float hlth, float maxHealth) TriggerHeal =
-{
+void(entity target, float hlth, float maxHealth) TriggerHeal = {
 	
 	if (target.health > maxHealth)
 		return;
@@ -170,8 +167,7 @@ void(entity target, float hlth, float maxHealth) TriggerHeal =
 Mirror Player Model (for testing player animations)	#mirror
 =====================================================================
 */
-void() mirrorPlayerModel =
-{
+void() mirrorPlayerModel = {
 	if (time > self.attack_finished)
 	{
 		remove(self);
@@ -186,8 +182,7 @@ void() mirrorPlayerModel =
 
 };
 
-void() spawnPlayerModel =
-{
+void() spawnPlayerModel = {
 	local entity playerModel;
 	
 	playerModel = spawn();
@@ -204,8 +199,7 @@ void() spawnPlayerModel =
 //===========================END OF MIRROR PLAYER MODEL====================================
 
 
-void(float frames) LoopFrames =
-{
+void(float frames) LoopFrames = {
 	if (self.frame >= frames)
 		self.frame = 0;
 	else
@@ -218,8 +212,7 @@ Beam - for emulating lightning gun effect	#beam #ryanscissorhands
 =====================================================================
 */
 
-void() randomTwist =
-{
+void() randomTwist = {
 	if (time > self.attack_finished)
 	{
 		remove(self);
@@ -242,8 +235,7 @@ void() randomTwist =
 	self.think = randomTwist;
 };
 
-void(vector org, vector dir, string model, float duration) SpawnBeamSegment =
-{
+void(vector org, vector dir, string model, float duration) SpawnBeamSegment = {
 	local entity segment;
 	
 	makevectors(self.v_angle);
@@ -261,8 +253,7 @@ void(vector org, vector dir, string model, float duration) SpawnBeamSegment =
 	segment.think = randomTwist;
 };
 
-void(vector org, vector dest, string model, float duration) MakeBeam =
-{
+void(vector org, vector dest, string model, float duration) MakeBeam = {
 	local float span;
 	local vector nextSegment;
 	span = vlen(dest-org);
@@ -295,8 +286,7 @@ void(vector org) TestThisVector = //this function is designed to test locations 
 
 
 //Line of Sight methods
-float(entity targ, entity inflictor) HasLOS =
-{
+float(entity targ, entity inflictor) HasLOS = {
 	
 	traceline(inflictor.origin, targ.origin, TRUE, self);
 	if (trace_fraction == 1)
@@ -305,8 +295,7 @@ float(entity targ, entity inflictor) HasLOS =
 		return FALSE;
 };
 
-float(vector point1, vector point2) InLOS =
-{
+float(vector point1, vector point2) InLOS = {
 	
 	traceline(point1, point2, TRUE, self);
 	if (trace_fraction == 1)
@@ -324,8 +313,7 @@ vector ignoreVertical(vector bearing) = //returns a normalized vector with no ve
 	return upless;
 };
 
-void(string model, vector org) TestModel =
-{
+void(string model, vector org) TestModel = {
 	local entity ModelPreview;
 	
 	ModelPreview = spawn();
@@ -368,8 +356,7 @@ vector spread(vector variance) = //returns a randomized vector within +/-  the i
 	return result;
 };
 
-float(entity target) CountFlakAmmo =
-{
+float(entity target) CountFlakAmmo = {
 	local float nails, rockets;
 	
 	nails = target.ammo_nails /8;

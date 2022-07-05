@@ -121,7 +121,7 @@ void() fangel_init =  {
 		//self.drawflags |= MLS_POWERMODE;
 	}
 
-	fangel_find_spot ( );
+	fangel_find_spot ();
 };
 
 void  ()fangel_wait =  {
@@ -150,7 +150,7 @@ local float chance = 0.00000;
    retval = walkmove((self.angles_y + 90.00000), dist);
    if ( !retval ) {
       self.monster_stage = FANGEL_STAGE_FLY;
-      fangel_find_spot ( );
+      fangel_find_spot ();
       self.think = fangel_flyframes_check;
       self.nextthink = time;
       return ;
@@ -196,7 +196,7 @@ void  (float thrust)fangel_fly =  {
 		return;
 	}
 
-	if (!walkmove(self.angles_y,dist)) {fangel_find_spot(); return; }
+	if (!walkmove(self.angles_y,dist)) { fangel_find_spot(); return; }
 
 	dist = (self.origin_z - self.enemy.origin_z);
 	if ( (dist < -20.00000) ) {
@@ -214,7 +214,7 @@ void  (float thrust)fangel_fly =  {
 
 void()fangel_float =  {
    self.monster_duration = (self.monster_duration - 1.00000);
-   ai_face ( );
+   ai_face ();
    enemy_range = range ( self.enemy);
    if ( ((enemy_range <= RANGE_NEAR) && (random() < 0.25000)) ) {
       self.monster_duration = 0.00000;
@@ -223,7 +223,7 @@ void()fangel_float =  {
    }
    if ( (self.monster_duration <= 0.00000) ) {
       self.monster_stage = FANGEL_STAGE_FLY;
-      fangel_find_spot ( );
+      fangel_find_spot ();
    }
 };
 
@@ -287,12 +287,12 @@ void() fangel_blockthink = {
    }
 };
 
-void() fangel_block1 = [0, fangel_block2] {fangel_blockthink();};
-void() fangel_block2 = [1, fangel_block3] {fangel_blockthink();};
-void() fangel_block3 = [2, fangel_block4] {fangel_blockthink();};
-void() fangel_block4 = [3, fangel_block5] {fangel_blockthink();};
-void() fangel_block5 = [4, fangel_block6] {fangel_blockthink();};
-void() fangel_block6 = [5, fangel_block7] {fangel_blockthink();};
+void() fangel_block1 = [0, fangel_block2] { fangel_blockthink(); };
+void() fangel_block2 = [1, fangel_block3] { fangel_blockthink(); };
+void() fangel_block3 = [2, fangel_block4] { fangel_blockthink(); };
+void() fangel_block4 = [3, fangel_block5] { fangel_blockthink(); };
+void() fangel_block5 = [4, fangel_block6] { fangel_blockthink(); };
+void() fangel_block6 = [5, fangel_block7] { fangel_blockthink(); };
 void() fangel_block7 = [6, fangel_block8] {
 	fangel_blockthink();
 	self.takedamage = DAMAGE_NO;
@@ -303,19 +303,19 @@ void() fangel_block7 = [6, fangel_block8] {
 	self.reflectnails = TRUE;		// Reflect nail projectiles
 	self.reflectaxe = TRUE;			// Prevent axe damage
 };
-void() fangel_block8 = [7, fangel_block9] {fangel_blockthink();};
-void() fangel_block9 = [8, fangel_block10] {fangel_blockthink();};
-void() fangel_block10 = [9, fangel_block11] {fangel_blockthink();};
-void() fangel_block11 = [10, fangel_block12] {fangel_blockthink();};
-void() fangel_block12 = [11, fangel_block13] {fangel_blockthink();};
-void() fangel_block13 = [12, fangel_block14] {fangel_blockthink();};
-void() fangel_block14 = [13, fangel_block15] {fangel_blockthink();};
-void() fangel_block15 = [14, fangel_block16] {fangel_blockthink();};
-void() fangel_block16 = [15, fangel_block17] {fangel_blockthink();};
-void() fangel_block17 = [16, fangel_block18] {fangel_blockthink();};
-void() fangel_block18 = [17, fangel_block19] {fangel_blockthink();};
-void() fangel_block19 = [18, fangel_block20] {fangel_blockthink();};
-void() fangel_block20 = [19, fangel_block21] {fangel_blockthink();};
+void() fangel_block8 = [7, fangel_block9] { fangel_blockthink(); };
+void() fangel_block9 = [8, fangel_block10] { fangel_blockthink(); };
+void() fangel_block10 = [9, fangel_block11] { fangel_blockthink(); };
+void() fangel_block11 = [10, fangel_block12] { fangel_blockthink(); };
+void() fangel_block12 = [11, fangel_block13] { fangel_blockthink(); };
+void() fangel_block13 = [12, fangel_block14] { fangel_blockthink(); };
+void() fangel_block14 = [13, fangel_block15] { fangel_blockthink(); };
+void() fangel_block15 = [14, fangel_block16] { fangel_blockthink(); };
+void() fangel_block16 = [15, fangel_block17] { fangel_blockthink(); };
+void() fangel_block17 = [16, fangel_block18] { fangel_blockthink(); };
+void() fangel_block18 = [17, fangel_block19] { fangel_blockthink(); };
+void() fangel_block19 = [18, fangel_block20] { fangel_blockthink(); };
+void() fangel_block20 = [19, fangel_block21] { fangel_blockthink(); };
 void() fangel_block21 = [20, fangel_flyframes_check] {
 	local float chance;
 
@@ -346,35 +346,35 @@ void() fangel_death_effects = {
 	//}
 };
 
-void() fangel_death1 = [21, fangel_death2] {fangel_death_effects();};
-void() fangel_death2 = [22, fangel_death3] {fangel_death_effects();monster_check_gib();};
-void() fangel_death3 = [23, fangel_death4] {fangel_death_effects();monster_check_gib();};
-void() fangel_death4 = [24, fangel_death5] {fangel_death_effects();};
-void() fangel_death5 = [25, fangel_death6] {fangel_death_effects();};
-void() fangel_death6 = [26, fangel_death7] {fangel_death_effects();self.ring_water_time = (time + 0.25000);};
-void() fangel_death7 = [27, fangel_death8] {fangel_death_effects();};
-void() fangel_death8 = [28, fangel_death9] {fangel_death_effects();};
-void() fangel_death9 = [29, fangel_death10] {fangel_death_effects();};
-void() fangel_death10 = [30, fangel_death11] {fangel_death_effects();};
-void() fangel_death11 = [31, fangel_death12] {fangel_death_effects();};
-void() fangel_death12 = [32, fangel_death13] {fangel_death_effects();};
-void() fangel_death13 = [33, fangel_death14] {fangel_death_effects();};
-void() fangel_death14 = [34, fangel_death15] {fangel_death_effects();};
-void() fangel_death15 = [35, fangel_death16] {fangel_death_effects();};
-void() fangel_death16 = [36, fangel_death17] {fangel_death_effects();};
-void() fangel_death17 = [37, fangel_death18] {fangel_death_effects();};
-void() fangel_death18 = [38, fangel_death19] {fangel_death_effects();};
-void() fangel_death19 = [39, fangel_death20] {fangel_death_effects();};
-void() fangel_death20 = [40, fangel_death21] {fangel_death_effects();};
-void() fangel_death21 = [41, fangel_death22] {fangel_death_effects();self.movetype = MOVETYPE_STEP;};
-void() fangel_death22 = [42, fangel_death23] {fangel_death_effects();};
-void() fangel_death23 = [43, fangel_death24] {fangel_death_effects();};
-void() fangel_death24 = [44, fangel_death25] {fangel_death_effects();};
-void() fangel_death25 = [45, fangel_death26] {fangel_death_effects();};
-void() fangel_death26 = [46, fangel_death27] {fangel_death_effects();};
-void() fangel_death27 = [47, fangel_death28] {fangel_death_effects();};
-void() fangel_death28 = [48, fangel_death29] {fangel_death_effects();};
-void() fangel_death29 = [49, fangel_death30] {fangel_death_effects();};
+void() fangel_death1 = [21, fangel_death2] { fangel_death_effects(); };
+void() fangel_death2 = [22, fangel_death3] { fangel_death_effects();monster_check_gib(); };
+void() fangel_death3 = [23, fangel_death4] { fangel_death_effects();monster_check_gib(); };
+void() fangel_death4 = [24, fangel_death5] { fangel_death_effects(); };
+void() fangel_death5 = [25, fangel_death6] { fangel_death_effects(); };
+void() fangel_death6 = [26, fangel_death7] { fangel_death_effects();self.ring_water_time = (time + 0.25000); };
+void() fangel_death7 = [27, fangel_death8] { fangel_death_effects(); };
+void() fangel_death8 = [28, fangel_death9] { fangel_death_effects(); };
+void() fangel_death9 = [29, fangel_death10] { fangel_death_effects(); };
+void() fangel_death10 = [30, fangel_death11] { fangel_death_effects(); };
+void() fangel_death11 = [31, fangel_death12] { fangel_death_effects(); };
+void() fangel_death12 = [32, fangel_death13] { fangel_death_effects(); };
+void() fangel_death13 = [33, fangel_death14] { fangel_death_effects(); };
+void() fangel_death14 = [34, fangel_death15] { fangel_death_effects(); };
+void() fangel_death15 = [35, fangel_death16] { fangel_death_effects(); };
+void() fangel_death16 = [36, fangel_death17] { fangel_death_effects(); };
+void() fangel_death17 = [37, fangel_death18] { fangel_death_effects(); };
+void() fangel_death18 = [38, fangel_death19] { fangel_death_effects(); };
+void() fangel_death19 = [39, fangel_death20] { fangel_death_effects(); };
+void() fangel_death20 = [40, fangel_death21] { fangel_death_effects(); };
+void() fangel_death21 = [41, fangel_death22] { fangel_death_effects();self.movetype = MOVETYPE_STEP;};
+void() fangel_death22 = [42, fangel_death23] { fangel_death_effects(); };
+void() fangel_death23 = [43, fangel_death24] { fangel_death_effects(); };
+void() fangel_death24 = [44, fangel_death25] { fangel_death_effects(); };
+void() fangel_death25 = [45, fangel_death26] { fangel_death_effects(); };
+void() fangel_death26 = [46, fangel_death27] { fangel_death_effects(); };
+void() fangel_death27 = [47, fangel_death28] { fangel_death_effects(); };
+void() fangel_death28 = [48, fangel_death29] { fangel_death_effects(); };
+void() fangel_death29 = [49, fangel_death30] { fangel_death_effects(); };
 void() fangel_death30 = [50, fangel_death31] {
 	fangel_death_effects();
 	self.solid = SOLID_NOT;
@@ -384,16 +384,16 @@ void() fangel_death30 = [50, fangel_death31] {
 		sound ( self, CHAN_WEAPON, "hexen2/fangel/death2.wav", 1.00000, ATTN_NORM);
 	}
 };
-void() fangel_death31 = [51, fangel_death32] {fangel_death_effects();};
-void() fangel_death32 = [52, fangel_death33] {fangel_death_effects();};
-void() fangel_death33 = [53, fangel_death34] {fangel_death_effects();};
-void() fangel_death34 = [54, fangel_death35] {fangel_death_effects();};
-void() fangel_death35 = [55, fangel_death36] {fangel_death_effects();};
-void() fangel_death36 = [56, fangel_death37] {fangel_death_effects();};
-void() fangel_death37 = [57, fangel_death38] {fangel_death_effects();};
-void() fangel_death38 = [58, fangel_death39] {fangel_death_effects();};
-void() fangel_death39 = [59, fangel_death40] {fangel_death_effects();monster_death_postcheck();};
-void() fangel_death40 = [60, fangel_death40] {monster_deadbody_check();};
+void() fangel_death31 = [51, fangel_death32] { fangel_death_effects(); };
+void() fangel_death32 = [52, fangel_death33] { fangel_death_effects(); };
+void() fangel_death33 = [53, fangel_death34] { fangel_death_effects(); };
+void() fangel_death34 = [54, fangel_death35] { fangel_death_effects(); };
+void() fangel_death35 = [55, fangel_death36] { fangel_death_effects(); };
+void() fangel_death36 = [56, fangel_death37] { fangel_death_effects(); };
+void() fangel_death37 = [57, fangel_death38] { fangel_death_effects(); };
+void() fangel_death38 = [58, fangel_death39] { fangel_death_effects(); };
+void() fangel_death39 = [59, fangel_death40] { fangel_death_effects();monster_death_postcheck(); };
+void() fangel_death40 = [60, fangel_death40] { monster_deadbody_check(); };
 
 void() fangel_death = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -402,57 +402,57 @@ void() fangel_death = {
 	if (!self.gibbed) fangel_death1(); // regular death
 };
 
-void() fangel_flyforward1 = [113, fangel_flyforward2] {fangel_move(3 * 0);monster_idle_sound();};
-void() fangel_flyforward2 = [114, fangel_flyforward3] {fangel_move(3 * 0.1);};
-void() fangel_flyforward3 = [115, fangel_flyforward4] {fangel_move(3 * 0.2);};
-void() fangel_flyforward4 = [116, fangel_flyforward5] {fangel_move(3 * 0.3);};
-void() fangel_flyforward5 = [117, fangel_flyforward6] {fangel_move(3 * 0.4);};
-void() fangel_flyforward6 = [118, fangel_flyforward7] {fangel_move(3 * 0.5); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyforward7 = [119, fangel_flyforward8] {fangel_move(3 * 0.6); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyforward8 = [120, fangel_flyforward9] {fangel_move(3 * 0.7); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyforward9 = [121, fangel_flyforward10] {fangel_move(3 * 0.8);};
-void() fangel_flyforward10 = [122, fangel_flyforward11] {fangel_move(3 * 0.9);};
-void() fangel_flyforward11 = [123, fangel_flyforward12] {fangel_move(3 * 1);};
-void() fangel_flyforward12 = [124, fangel_flyforward13] {fangel_move(3 * 0.9);};
-void() fangel_flyforward13 = [125, fangel_flyforward14] {fangel_move(3 * 0.8);};
-void() fangel_flyforward14 = [126, fangel_flyforward15] {fangel_move(3 * 0.7);};
-void() fangel_flyforward15 = [127, fangel_flyforward16] {fangel_move(3 * 0.6);};
-void() fangel_flyforward16 = [128, fangel_flyforward17] {fangel_move(3 * 0.5);self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyforward17 = [129, fangel_flyforward18] {fangel_move(3 * 0.4);self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyforward18 = [130, fangel_flyforward19] {fangel_move(3 * 0.3);self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyforward19 = [131, fangel_flyforward20] {fangel_move(3 * 0.2);};
-void() fangel_flyforward20 = [132, fangel_flyframes_check] {fangel_move(3 * 0.1);};
+void() fangel_flyforward1 = [113, fangel_flyforward2] { fangel_move(3 * 0);monster_idle_sound(); };
+void() fangel_flyforward2 = [114, fangel_flyforward3] { fangel_move(3 * 0.1); };
+void() fangel_flyforward3 = [115, fangel_flyforward4] { fangel_move(3 * 0.2); };
+void() fangel_flyforward4 = [116, fangel_flyforward5] { fangel_move(3 * 0.3); };
+void() fangel_flyforward5 = [117, fangel_flyforward6] { fangel_move(3 * 0.4); };
+void() fangel_flyforward6 = [118, fangel_flyforward7] { fangel_move(3 * 0.5); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyforward7 = [119, fangel_flyforward8] { fangel_move(3 * 0.6); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyforward8 = [120, fangel_flyforward9] { fangel_move(3 * 0.7); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyforward9 = [121, fangel_flyforward10] { fangel_move(3 * 0.8); };
+void() fangel_flyforward10 = [122, fangel_flyforward11] { fangel_move(3 * 0.9); };
+void() fangel_flyforward11 = [123, fangel_flyforward12] { fangel_move(3 * 1); };
+void() fangel_flyforward12 = [124, fangel_flyforward13] { fangel_move(3 * 0.9); };
+void() fangel_flyforward13 = [125, fangel_flyforward14] { fangel_move(3 * 0.8); };
+void() fangel_flyforward14 = [126, fangel_flyforward15] { fangel_move(3 * 0.7); };
+void() fangel_flyforward15 = [127, fangel_flyforward16] { fangel_move(3 * 0.6); };
+void() fangel_flyforward16 = [128, fangel_flyforward17] { fangel_move(3 * 0.5);self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyforward17 = [129, fangel_flyforward18] { fangel_move(3 * 0.4);self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyforward18 = [130, fangel_flyforward19] { fangel_move(3 * 0.3);self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyforward19 = [131, fangel_flyforward20] { fangel_move(3 * 0.2); };
+void() fangel_flyforward20 = [132, fangel_flyframes_check] { fangel_move(3 * 0.1); };
 
-void() fangel_flyother1 = [61, fangel_flyother2] {fangel_move(3 * 0);monster_idle_sound();};
-void() fangel_flyother2 = [62, fangel_flyother3] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother3 = [63, fangel_flyother4] {fangel_move(3 * 0.2);monster_idle_sound();};
-void() fangel_flyother4 = [64, fangel_flyother5] {fangel_move(3 * 0.3);monster_idle_sound();};
-void() fangel_flyother5 = [65, fangel_flyother6] {fangel_move(3 * 0.4);monster_idle_sound();};
-void() fangel_flyother6 = [66, fangel_flyother7] {fangel_move(3 * 0.5);monster_idle_sound();};
-void() fangel_flyother7 = [67, fangel_flyother8] {fangel_move(3 * 0.6);monster_idle_sound();};
-void() fangel_flyother8 = [68, fangel_flyother9] {fangel_move(3 * 0.7);monster_idle_sound();};
-void() fangel_flyother9 = [69, fangel_flyother10] {fangel_move(3 * 0.8);monster_idle_sound();};
-void() fangel_flyother10 = [70, fangel_flyother11] {fangel_move(3 * 0.9);monster_idle_sound();};
-void() fangel_flyother11 = [71, fangel_flyother12] {fangel_move(3 * 1); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyother12 = [72, fangel_flyother13] {fangel_move(3 * 0.9); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyother13 = [73, fangel_flyother14] {fangel_move(3 * 0.8); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyother14 = [74, fangel_flyother15] {fangel_move(3 * 0.7);monster_idle_sound();};
-void() fangel_flyother15 = [75, fangel_flyother16] {fangel_move(3 * 0.6);monster_idle_sound();};
-void() fangel_flyother16 = [76, fangel_flyother17] {fangel_move(3 * 0.5);monster_idle_sound();};
-void() fangel_flyother17 = [77, fangel_flyother18] {fangel_move(3 * 0.4);monster_idle_sound();};
-void() fangel_flyother18 = [78, fangel_flyother19] {fangel_move(3 * 0.3);monster_idle_sound();};
-void() fangel_flyother19 = [79, fangel_flyother20] {fangel_move(3 * 0.2);monster_idle_sound();};
-void() fangel_flyother20 = [80, fangel_flyother21] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother21 = [81, fangel_flyother22] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother22 = [82, fangel_flyother23] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother23 = [83, fangel_flyother24] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother24 = [84, fangel_flyother25] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother25 = [85, fangel_flyother26] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother26 = [86, fangel_flyother27] {fangel_move(3 * 0.1); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyother27 = [87, fangel_flyother28] {fangel_move(3 * 0.1); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyother28 = [88, fangel_flyother29] {fangel_move(3 * 0.1); self.splash_time = self.frame; fangel_check_wing();};
-void() fangel_flyother29 = [89, fangel_flyother30] {fangel_move(3 * 0.1);monster_idle_sound();};
-void() fangel_flyother30 = [90, fangel_flyframes_check] {fangel_move(3 * 0.1);monster_idle_sound();};
+void() fangel_flyother1 = [61, fangel_flyother2] { fangel_move(3 * 0);monster_idle_sound(); };
+void() fangel_flyother2 = [62, fangel_flyother3] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother3 = [63, fangel_flyother4] { fangel_move(3 * 0.2);monster_idle_sound(); };
+void() fangel_flyother4 = [64, fangel_flyother5] { fangel_move(3 * 0.3);monster_idle_sound(); };
+void() fangel_flyother5 = [65, fangel_flyother6] { fangel_move(3 * 0.4);monster_idle_sound(); };
+void() fangel_flyother6 = [66, fangel_flyother7] { fangel_move(3 * 0.5);monster_idle_sound(); };
+void() fangel_flyother7 = [67, fangel_flyother8] { fangel_move(3 * 0.6);monster_idle_sound(); };
+void() fangel_flyother8 = [68, fangel_flyother9] { fangel_move(3 * 0.7);monster_idle_sound(); };
+void() fangel_flyother9 = [69, fangel_flyother10] { fangel_move(3 * 0.8);monster_idle_sound(); };
+void() fangel_flyother10 = [70, fangel_flyother11] { fangel_move(3 * 0.9);monster_idle_sound(); };
+void() fangel_flyother11 = [71, fangel_flyother12] { fangel_move(3 * 1); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyother12 = [72, fangel_flyother13] { fangel_move(3 * 0.9); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyother13 = [73, fangel_flyother14] { fangel_move(3 * 0.8); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyother14 = [74, fangel_flyother15] { fangel_move(3 * 0.7);monster_idle_sound(); };
+void() fangel_flyother15 = [75, fangel_flyother16] { fangel_move(3 * 0.6);monster_idle_sound(); };
+void() fangel_flyother16 = [76, fangel_flyother17] { fangel_move(3 * 0.5);monster_idle_sound(); };
+void() fangel_flyother17 = [77, fangel_flyother18] { fangel_move(3 * 0.4);monster_idle_sound(); };
+void() fangel_flyother18 = [78, fangel_flyother19] { fangel_move(3 * 0.3);monster_idle_sound(); };
+void() fangel_flyother19 = [79, fangel_flyother20] { fangel_move(3 * 0.2);monster_idle_sound(); };
+void() fangel_flyother20 = [80, fangel_flyother21] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother21 = [81, fangel_flyother22] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother22 = [82, fangel_flyother23] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother23 = [83, fangel_flyother24] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother24 = [84, fangel_flyother25] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother25 = [85, fangel_flyother26] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother26 = [86, fangel_flyother27] { fangel_move(3 * 0.1); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyother27 = [87, fangel_flyother28] { fangel_move(3 * 0.1); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyother28 = [88, fangel_flyother29] { fangel_move(3 * 0.1); self.splash_time = self.frame; fangel_check_wing(); };
+void() fangel_flyother29 = [89, fangel_flyother30] { fangel_move(3 * 0.1);monster_idle_sound(); };
+void() fangel_flyother30 = [90, fangel_flyframes_check] { fangel_move(3 * 0.1);monster_idle_sound(); };
 
 void() fangel_flyframes_check = {
 	fangel_check_incoming();
@@ -466,27 +466,27 @@ void() fangel_flyframes_check = {
 	else fangel_flyother1();
 };
 
-void() fangel_hand1 = [91, fangel_hand2] {fangel_check_incoming(); ai_face();};
-void() fangel_hand2 = [92, fangel_hand3] {fangel_check_incoming(); ai_face();};
-void() fangel_hand3 = [93, fangel_hand4] {fangel_check_incoming(); ai_face();};
-void() fangel_hand4 = [94, fangel_hand5] {fangel_check_incoming(); ai_face();};
-void() fangel_hand5 = [95, fangel_hand6] {fangel_check_incoming(); ai_face();};
-void() fangel_hand6 = [96, fangel_hand7] {fangel_check_incoming(); ai_face();};
-void() fangel_hand7 = [97, fangel_hand8] {fangel_check_incoming(); ai_face();};
-void() fangel_hand8 = [98, fangel_hand9] {fangel_check_incoming(); ai_face();};
-void() fangel_hand9 = [99, fangel_hand10] {fangel_check_incoming(); ai_face();};
-void() fangel_hand10 = [100, fangel_hand11] {fangel_check_incoming(); ai_face();};
-void() fangel_hand11 = [101, fangel_hand12] {fangel_check_incoming(); ai_face();};
-void() fangel_hand12 = [102, fangel_hand13] {fangel_check_incoming(); fangel_hand_fire();};
-void() fangel_hand13 = [103, fangel_hand14] {fangel_check_incoming(); ai_face();};
-void() fangel_hand14 = [104, fangel_hand15] {fangel_check_incoming(); ai_face();};
-void() fangel_hand15 = [105, fangel_hand16] {fangel_check_incoming(); ai_face();};
-void() fangel_hand16 = [106, fangel_hand17] {fangel_check_incoming(); ai_face();};
-void() fangel_hand17 = [107, fangel_hand18] {fangel_check_incoming(); ai_face();};
-void() fangel_hand18 = [108, fangel_hand19] {fangel_check_incoming(); ai_face();};
-void() fangel_hand19 = [109, fangel_hand20] {fangel_check_incoming(); ai_face();};
-void() fangel_hand20 = [110, fangel_hand21] {fangel_check_incoming(); ai_face();};
-void() fangel_hand21 = [111, fangel_hand22] {fangel_check_incoming(); ai_face();};
+void() fangel_hand1 = [91, fangel_hand2] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand2 = [92, fangel_hand3] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand3 = [93, fangel_hand4] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand4 = [94, fangel_hand5] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand5 = [95, fangel_hand6] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand6 = [96, fangel_hand7] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand7 = [97, fangel_hand8] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand8 = [98, fangel_hand9] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand9 = [99, fangel_hand10] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand10 = [100, fangel_hand11] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand11 = [101, fangel_hand12] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand12 = [102, fangel_hand13] { fangel_check_incoming(); fangel_hand_fire(); };
+void() fangel_hand13 = [103, fangel_hand14] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand14 = [104, fangel_hand15] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand15 = [105, fangel_hand16] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand16 = [106, fangel_hand17] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand17 = [107, fangel_hand18] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand18 = [108, fangel_hand19] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand19 = [109, fangel_hand20] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand20 = [110, fangel_hand21] { fangel_check_incoming(); ai_face(); };
+void() fangel_hand21 = [111, fangel_hand22] { fangel_check_incoming(); ai_face(); };
 void() fangel_hand22 = [112, fangel_flyframes_check] {
 	fangel_check_incoming();
 	ai_face();
@@ -510,38 +510,38 @@ void() fangel_paincheck = {
 	self.frame = self.splash_time;
 };
 
-void() fangel_painframes1 = [133, fangel_painframes2] {fangel_paincheck();sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);};
-void() fangel_painframes2 = [134, fangel_painframes3] {fangel_paincheck();};
-void() fangel_painframes3 = [135, fangel_painframes4] {fangel_paincheck();};
-void() fangel_painframes4 = [136, fangel_painframes5] {fangel_paincheck();};
-void() fangel_painframes5 = [137, fangel_painframes6] {fangel_paincheck();};
-void() fangel_painframes6 = [138, fangel_painframes7] {fangel_paincheck();};
-void() fangel_painframes7 = [139, fangel_painframes8] {fangel_paincheck();};
-void() fangel_painframes8 = [140, fangel_painframes9] {fangel_paincheck();};
-void() fangel_painframes9 = [141, fangel_painframes10] {fangel_paincheck();};
-void() fangel_painframes10 = [142, fangel_painframes11] {fangel_paincheck();};
-void() fangel_painframes11 = [143, fangel_painframes12] {fangel_paincheck();};
-void() fangel_painframes12 = [144, fangel_painframes1] {fangel_fly1();};
+void() fangel_painframes1 = [133, fangel_painframes2] { fangel_paincheck();sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM); };
+void() fangel_painframes2 = [134, fangel_painframes3] { fangel_paincheck(); };
+void() fangel_painframes3 = [135, fangel_painframes4] { fangel_paincheck(); };
+void() fangel_painframes4 = [136, fangel_painframes5] { fangel_paincheck(); };
+void() fangel_painframes5 = [137, fangel_painframes6] { fangel_paincheck(); };
+void() fangel_painframes6 = [138, fangel_painframes7] { fangel_paincheck(); };
+void() fangel_painframes7 = [139, fangel_painframes8] { fangel_paincheck(); };
+void() fangel_painframes8 = [140, fangel_painframes9] { fangel_paincheck(); };
+void() fangel_painframes9 = [141, fangel_painframes10] { fangel_paincheck(); };
+void() fangel_painframes10 = [142, fangel_painframes11] { fangel_paincheck(); };
+void() fangel_painframes11 = [143, fangel_painframes12] { fangel_paincheck(); };
+void() fangel_painframes12 = [144, fangel_painframes1] { fangel_fly1(); };
 
-void() fangel_fly1 = [185, fangel_fly2] {ai_face();};
-void() fangel_fly2 = [186, fangel_fly3] {ai_face();};
-void() fangel_fly3 = [187, fangel_fly4] {ai_face();};
-void() fangel_fly4 = [188, fangel_fly5] {ai_face();};
-void() fangel_fly5 = [189, fangel_fly6] {ai_face();};
-void() fangel_fly6 = [190, fangel_fly7] {ai_face();};
-void() fangel_fly7 = [191, fangel_fly8] {ai_face();};
-void() fangel_fly8 = [192, fangel_fly9] {ai_face();};
-void() fangel_fly9 = [193, fangel_fly10] {ai_face();};
-void() fangel_fly10 = [194, fangel_fly11] {ai_face();};
-void() fangel_fly11 = [195, fangel_fly12] {ai_face();};
-void() fangel_fly12 = [196, fangel_fly13] {ai_face();};
-void() fangel_fly13 = [197, fangel_fly14] {ai_face();};
-void() fangel_fly14 = [198, fangel_fly15] {ai_face();};
-void() fangel_fly15 = [199, fangel_fly16] {ai_face();};
-void() fangel_fly16 = [200, fangel_fly17] {ai_face();};
-void() fangel_fly17 = [201, fangel_fly18] {ai_face();};
-void() fangel_fly18 = [202, fangel_fly19] {ai_face();};
-void() fangel_fly19 = [203, fangel_fly20] {ai_face();};
+void() fangel_fly1 = [185, fangel_fly2] { ai_face(); };
+void() fangel_fly2 = [186, fangel_fly3] { ai_face(); };
+void() fangel_fly3 = [187, fangel_fly4] { ai_face(); };
+void() fangel_fly4 = [188, fangel_fly5] { ai_face(); };
+void() fangel_fly5 = [189, fangel_fly6] { ai_face(); };
+void() fangel_fly6 = [190, fangel_fly7] { ai_face(); };
+void() fangel_fly7 = [191, fangel_fly8] { ai_face(); };
+void() fangel_fly8 = [192, fangel_fly9] { ai_face(); };
+void() fangel_fly9 = [193, fangel_fly10] { ai_face(); };
+void() fangel_fly10 = [194, fangel_fly11] { ai_face(); };
+void() fangel_fly11 = [195, fangel_fly12] { ai_face(); };
+void() fangel_fly12 = [196, fangel_fly13] { ai_face(); };
+void() fangel_fly13 = [197, fangel_fly14] { ai_face(); };
+void() fangel_fly14 = [198, fangel_fly15] { ai_face(); };
+void() fangel_fly15 = [199, fangel_fly16] { ai_face(); };
+void() fangel_fly16 = [200, fangel_fly17] { ai_face(); };
+void() fangel_fly17 = [201, fangel_fly18] { ai_face(); };
+void() fangel_fly18 = [202, fangel_fly19] { ai_face(); };
+void() fangel_fly19 = [203, fangel_fly20] { ai_face(); };
 void() fangel_fly20 = [204, fangel_fly21] {
 	ai_face();
 	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
@@ -555,18 +555,18 @@ void() fangel_fly21 = [205, fangel_fly22] {
 	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
 	else gaunt_lightning(1);
 };
-void() fangel_fly22 = [206, fangel_fly23] {ai_face();
+void() fangel_fly22 = [206, fangel_fly23] { ai_face();
 	ai_face();
 	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
 	else gaunt_lightning(0);
 };
-void() fangel_fly23 = [207, fangel_fly24] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(1);}};
-void() fangel_fly24 = [208, fangel_fly25] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(0);}};
-void() fangel_fly25 = [209, fangel_fly26] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(1);}};
-void() fangel_fly26 = [210, fangel_fly27] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(0);}};
-void() fangel_fly27 = [211, fangel_fly28] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(1);}};
-void() fangel_fly28 = [212, fangel_fly29] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(0);}};
-void() fangel_fly29 = [213, fangel_fly30] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(1);}};
+void() fangel_fly23 = [207, fangel_fly24] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
+void() fangel_fly24 = [208, fangel_fly25] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0);}};
+void() fangel_fly25 = [209, fangel_fly26] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
+void() fangel_fly26 = [210, fangel_fly27] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0);}};
+void() fangel_fly27 = [211, fangel_fly28] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
+void() fangel_fly28 = [212, fangel_fly29] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0);}};
+void() fangel_fly29 = [213, fangel_fly30] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
 void() fangel_fly30 = [214, fangel_flyframes_check] {
 	ai_face();
 	if ( (random() < 0.25000) ) {

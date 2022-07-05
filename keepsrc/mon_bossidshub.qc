@@ -19,83 +19,82 @@ void() finale_4;
 entity	shub;
 
 //===========================================================================
-void() idshub_idle1 =[ $idle1, idshub_idle2 ] {};
-void() idshub_idle2 =[ $idle2, idshub_idle3 ] {};
-void() idshub_idle3 =[ $idle3, idshub_idle4 ] {};
-void() idshub_idle4 =[ $idle4, idshub_idle5 ] {};
-void() idshub_idle5 =[ $idle5, idshub_idle6 ] {};
-void() idshub_idle6 =[ $idle6, idshub_idle7 ] {};
-void() idshub_idle7 =[ $idle7, idshub_idle8 ] {};
-void() idshub_idle8 =[ $idle8, idshub_idle9 ] {};
-void() idshub_idle9 =[ $idle9, idshub_idle10 ] {};
-void() idshub_idle10 =[ $idle10, idshub_idle11 ] {};
-void() idshub_idle11 =[ $idle11, idshub_idle12 ] {};
-void() idshub_idle12 =[ $idle12, idshub_idle13 ] {};
-void() idshub_idle13 =[ $idle13, idshub_idle14 ] {};
-void() idshub_idle14 =[ $idle14, idshub_idle15 ] {};
-void() idshub_idle15 =[ $idle15, idshub_idle16 ] {};
-void() idshub_idle16 =[ $idle16, idshub_idle17 ] {};
-void() idshub_idle17 =[ $idle17, idshub_idle18 ] {};
-void() idshub_idle18 =[ $idle18, idshub_idle19 ] {};
-void() idshub_idle19 =[ $idle19, idshub_idle20 ] {};
-void() idshub_idle20 =[ $idle20, idshub_idle21 ] {};
-void() idshub_idle21 =[ $idle21, idshub_idle22 ] {};
-void() idshub_idle22 =[ $idle22, idshub_idle23 ] {};
-void() idshub_idle23 =[ $idle23, idshub_idle24 ] {};
-void() idshub_idle24 =[ $idle24, idshub_idle25 ] {};
-void() idshub_idle25 =[ $idle25, idshub_idle26 ] {};
-void() idshub_idle26 =[ $idle26, idshub_idle27 ] {};
-void() idshub_idle27 =[ $idle27, idshub_idle28 ] {};
-void() idshub_idle28 =[ $idle28, idshub_idle29 ] {};
-void() idshub_idle29 =[ $idle29, idshub_idle30 ] {};
-void() idshub_idle30 =[ $idle30, idshub_idle31 ] {};
-void() idshub_idle31 =[ $idle31, idshub_idle32 ] {};
-void() idshub_idle32 =[ $idle32, idshub_idle33 ] {};
-void() idshub_idle33 =[ $idle33, idshub_idle34 ] {};
-void() idshub_idle34 =[ $idle34, idshub_idle35 ] {};
-void() idshub_idle35 =[ $idle35, idshub_idle36 ] {};
-void() idshub_idle36 =[ $idle36, idshub_idle37 ] {};
-void() idshub_idle37 =[ $idle37, idshub_idle38 ] {};
-void() idshub_idle38 =[ $idle38, idshub_idle39 ] {};
-void() idshub_idle39 =[ $idle39, idshub_idle40 ] {};
-void() idshub_idle40 =[ $idle40, idshub_idle41 ] {};
-void() idshub_idle41 =[ $idle41, idshub_idle42 ] {};
-void() idshub_idle42 =[ $idle42, idshub_idle43 ] {};
-void() idshub_idle43 =[ $idle43, idshub_idle44 ] {};
-void() idshub_idle44 =[ $idle44, idshub_idle45 ] {};
-void() idshub_idle45 =[ $idle45, idshub_idle46 ] {};
-void() idshub_idle46 =[ $idle46, idshub_idle1 ] {};
+void() idshub_idle1 = [$idle1, idshub_idle2 ] {};
+void() idshub_idle2 = [$idle2, idshub_idle3 ] {};
+void() idshub_idle3 = [$idle3, idshub_idle4 ] {};
+void() idshub_idle4 = [$idle4, idshub_idle5 ] {};
+void() idshub_idle5 = [$idle5, idshub_idle6 ] {};
+void() idshub_idle6 = [$idle6, idshub_idle7 ] {};
+void() idshub_idle7 = [$idle7, idshub_idle8 ] {};
+void() idshub_idle8 = [$idle8, idshub_idle9 ] {};
+void() idshub_idle9 = [$idle9, idshub_idle10 ] {};
+void() idshub_idle10 = [$idle10, idshub_idle11 ] {};
+void() idshub_idle11 = [$idle11, idshub_idle12 ] {};
+void() idshub_idle12 = [$idle12, idshub_idle13 ] {};
+void() idshub_idle13 = [$idle13, idshub_idle14 ] {};
+void() idshub_idle14 = [$idle14, idshub_idle15 ] {};
+void() idshub_idle15 = [$idle15, idshub_idle16 ] {};
+void() idshub_idle16 = [$idle16, idshub_idle17 ] {};
+void() idshub_idle17 = [$idle17, idshub_idle18 ] {};
+void() idshub_idle18 = [$idle18, idshub_idle19 ] {};
+void() idshub_idle19 = [$idle19, idshub_idle20 ] {};
+void() idshub_idle20 = [$idle20, idshub_idle21 ] {};
+void() idshub_idle21 = [$idle21, idshub_idle22 ] {};
+void() idshub_idle22 = [$idle22, idshub_idle23 ] {};
+void() idshub_idle23 = [$idle23, idshub_idle24 ] {};
+void() idshub_idle24 = [$idle24, idshub_idle25 ] {};
+void() idshub_idle25 = [$idle25, idshub_idle26 ] {};
+void() idshub_idle26 = [$idle26, idshub_idle27 ] {};
+void() idshub_idle27 = [$idle27, idshub_idle28 ] {};
+void() idshub_idle28 = [$idle28, idshub_idle29 ] {};
+void() idshub_idle29 = [$idle29, idshub_idle30 ] {};
+void() idshub_idle30 = [$idle30, idshub_idle31 ] {};
+void() idshub_idle31 = [$idle31, idshub_idle32 ] {};
+void() idshub_idle32 = [$idle32, idshub_idle33 ] {};
+void() idshub_idle33 = [$idle33, idshub_idle34 ] {};
+void() idshub_idle34 = [$idle34, idshub_idle35 ] {};
+void() idshub_idle35 = [$idle35, idshub_idle36 ] {};
+void() idshub_idle36 = [$idle36, idshub_idle37 ] {};
+void() idshub_idle37 = [$idle37, idshub_idle38 ] {};
+void() idshub_idle38 = [$idle38, idshub_idle39 ] {};
+void() idshub_idle39 = [$idle39, idshub_idle40 ] {};
+void() idshub_idle40 = [$idle40, idshub_idle41 ] {};
+void() idshub_idle41 = [$idle41, idshub_idle42 ] {};
+void() idshub_idle42 = [$idle42, idshub_idle43 ] {};
+void() idshub_idle43 = [$idle43, idshub_idle44 ] {};
+void() idshub_idle44 = [$idle44, idshub_idle45 ] {};
+void() idshub_idle45 = [$idle45, idshub_idle46 ] {};
+void() idshub_idle46 = [$idle46, idshub_idle1 ] {};
 
 //===========================================================================
-void() idshub_pain1 = [ $shake1,  idshub_pain2 ] { lightstyle(0, "m");};
-void() idshub_pain2 = [ $shake2,  idshub_pain3 ] { lightstyle(0, "k");};
-void() idshub_pain3 = [ $shake3,  idshub_pain4 ] { lightstyle(0, "k");};
-void() idshub_pain4 = [ $shake4,  idshub_pain5 ] { lightstyle(0, "i");};
-void() idshub_pain5 = [ $shake5,  idshub_pain6 ] { lightstyle(0, "g");};
-void() idshub_pain6 = [ $shake6,  idshub_pain7 ] { lightstyle(0, "e");};
-void() idshub_pain7 = [ $shake7,  idshub_pain8 ] { lightstyle(0, "c");};
-void() idshub_pain8 = [ $shake8,  idshub_pain9 ] { lightstyle(0, "a");};
-void() idshub_pain9 = [ $shake9,  idshub_pain10 ] {lightstyle(0, "c");};
-void() idshub_pain10 =[ $shake10, idshub_pain11 ] {lightstyle(0, "e");};
+void() idshub_pain1 = [$shake1,  idshub_pain2 ] { lightstyle(0, "m"); };
+void() idshub_pain2 = [$shake2,  idshub_pain3 ] { lightstyle(0, "k"); };
+void() idshub_pain3 = [$shake3,  idshub_pain4 ] { lightstyle(0, "k"); };
+void() idshub_pain4 = [$shake4,  idshub_pain5 ] { lightstyle(0, "i"); };
+void() idshub_pain5 = [$shake5,  idshub_pain6 ] { lightstyle(0, "g"); };
+void() idshub_pain6 = [$shake6,  idshub_pain7 ] { lightstyle(0, "e"); };
+void() idshub_pain7 = [$shake7,  idshub_pain8 ] { lightstyle(0, "c"); };
+void() idshub_pain8 = [$shake8,  idshub_pain9 ] { lightstyle(0, "a"); };
+void() idshub_pain9 = [$shake9,  idshub_pain10 ] { lightstyle(0, "c"); };
+void() idshub_pain10 = [$shake10, idshub_pain11 ] { lightstyle(0, "e"); };
 
-void() idshub_pain11 =[ $shake11, idshub_pain12 ] {lightstyle(0, "g");};
-void() idshub_pain12 =[ $shake12, idshub_pain13 ] {lightstyle(0, "i");};
-void() idshub_pain13 =[ $shake13, idshub_pain14 ] {lightstyle(0, "k");};
-void() idshub_pain14 =[ $shake14, idshub_pain15 ] {lightstyle(0, "m");};
-void() idshub_pain15 =[ $shake15, idshub_pain16 ] {lightstyle(0, "m");
+void() idshub_pain11 = [$shake11, idshub_pain12 ] { lightstyle(0, "g"); };
+void() idshub_pain12 = [$shake12, idshub_pain13 ] { lightstyle(0, "i"); };
+void() idshub_pain13 = [$shake13, idshub_pain14 ] { lightstyle(0, "k"); };
+void() idshub_pain14 = [$shake14, idshub_pain15 ] { lightstyle(0, "m"); };
+void() idshub_pain15 = [$shake15, idshub_pain16 ] { lightstyle(0, "m");
 self.cnt = self.cnt + 1; if (self.cnt < 3) self.think = idshub_pain1; };
 
-void() idshub_pain16 =[ $shake16, idshub_pain17 ] {lightstyle(0, "g");};
-void() idshub_pain17 =[ $shake17, idshub_pain18 ] {lightstyle(0, "c");};
-void() idshub_pain18 =[ $shake18, idshub_pain19 ] {lightstyle(0, "b");};
-void() idshub_pain19 =[ $shake19, idshub_pain20 ] {lightstyle(0, "a");};
-void() idshub_pain20 =[ $shake20, idshub_pain20 ] {finale_4();};
+void() idshub_pain16 = [$shake16, idshub_pain17 ] { lightstyle(0, "g"); };
+void() idshub_pain17 = [$shake17, idshub_pain18 ] { lightstyle(0, "c"); };
+void() idshub_pain18 = [$shake18, idshub_pain19 ] { lightstyle(0, "b"); };
+void() idshub_pain19 = [$shake19, idshub_pain20 ] { lightstyle(0, "a"); };
+void() idshub_pain20 = [$shake20, idshub_pain20 ] { finale_4(); };
 
-//============================================================================
+
 // Final thrash, explosion and on screen text waffle
-//============================================================================
-void() finale_1 =
-{
+
+void() finale_1 = {
 	intermission_running = INTERMISSION_ENDGAME;	//End of the game!
 	intermission_exittime = time + 100000;			// never allow exit
 
@@ -135,8 +134,7 @@ void() finale_1 =
 //----------------------------------------------------------------------
 // Randomnly spawn 10 teleporter sparkle effects
 //----------------------------------------------------------------------
-void() finale_2 =
-{
+void() finale_2 = {
 	if (self.count < 0) finale_3();
 	else {
 		sound (self, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
@@ -159,8 +157,7 @@ void() finale_2 =
 };
 
 //----------------------------------------------------------------------
-void() finale_3 =
-{
+void() finale_3 = {
 	// start shub thrashing wildly
 	sound (self, CHAN_VOICE, "boss2/death.wav", 1, ATTN_NORM);
 	lightstyle(0, "abcdefghijklmlkjihgfedcb");	

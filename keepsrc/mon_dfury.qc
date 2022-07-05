@@ -95,79 +95,79 @@ float DFURY_SOUND_RUNSWING = 5;
 float DFURY_SOUND_OPTIONAL = 6;
 
 //----------------------------------------------------------------------
-void()	dfury_standB1	=[	$standB1,	dfury_standB2	] {ai_stand();};
-void()	dfury_standB2	=[	$standB2,	dfury_standB3	] {ai_stand();};
-void()	dfury_standB3	=[	$standB3,	dfury_standB4	] {ai_stand();};
-void()	dfury_standB4	=[	$standB4,	dfury_standB5	] {ai_stand();};
-void()	dfury_standB5	=[	$standB5,	dfury_standB6	] {ai_stand();};
-void()	dfury_standB6	=[	$standB6,	dfury_standB7	] {ai_stand();};
-void()	dfury_standB7	=[	$standB7,	dfury_standB8	] {ai_stand();};
-void()	dfury_standB8	=[	$standB8,	dfury_standB9	] {ai_stand();self.nextthink = self.nextthink + random()*0.2;};
-void()	dfury_standB9	=[	$standB9,	dfury_standB10	] {ai_stand();self.nextthink = self.nextthink + random()*0.2;};
-void()	dfury_standB10	=[	$standB10,	dfury_standB11	] {ai_stand();self.nextthink = self.nextthink + random()*0.2;};
-void()	dfury_standB11	=[	$standB11,	dfury_standB12	] {ai_stand();};
-void()	dfury_standB12	=[	$standB12,	dfury_standL1	] {ai_stand();};
+void()	dfury_standB1	= [	$standB1,	dfury_standB2	] { ai_stand(); };
+void()	dfury_standB2	= [	$standB2,	dfury_standB3	] { ai_stand(); };
+void()	dfury_standB3	= [	$standB3,	dfury_standB4	] { ai_stand(); };
+void()	dfury_standB4	= [	$standB4,	dfury_standB5	] { ai_stand(); };
+void()	dfury_standB5	= [	$standB5,	dfury_standB6	] { ai_stand(); };
+void()	dfury_standB6	= [	$standB6,	dfury_standB7	] { ai_stand(); };
+void()	dfury_standB7	= [	$standB7,	dfury_standB8	] { ai_stand(); };
+void()	dfury_standB8	= [	$standB8,	dfury_standB9	] { ai_stand();self.nextthink = self.nextthink + random()*0.2;};
+void()	dfury_standB9	= [	$standB9,	dfury_standB10	] { ai_stand();self.nextthink = self.nextthink + random()*0.2;};
+void()	dfury_standB10	= [	$standB10,	dfury_standB11	] { ai_stand();self.nextthink = self.nextthink + random()*0.2;};
+void()	dfury_standB11	= [	$standB11,	dfury_standB12	] { ai_stand(); };
+void()	dfury_standB12	= [	$standB12,	dfury_standL1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dfury_standC1	=[	$standC1,	dfury_standC2	] {ai_stand();};
-void()	dfury_standC2	=[	$standC2,	dfury_standC3	] {ai_stand();};
-void()	dfury_standC3	=[	$standC3,	dfury_standC4	] {ai_stand();};
-void()	dfury_standC4	=[	$standC4,	dfury_standC5	] {ai_stand();};
-void()	dfury_standC5	=[	$standC5,	dfury_standC6	] {ai_stand();};
-void()	dfury_standC6	=[	$standC6,	dfury_standC7	] {ai_stand();};
-void()	dfury_standC7	=[	$standC7,	dfury_standC8	] {ai_stand();};
-void()	dfury_standC8	=[	$standC8,	dfury_standC9	] {ai_stand();};
-void()	dfury_standC9	=[	$standC9,	dfury_standC10	] {ai_stand();};
-void()	dfury_standC10	=[	$standC10,	dfury_standC11	] {ai_stand();};
-void()	dfury_standC11	=[	$standC11,	dfury_standC12	] {ai_stand();};
-void()	dfury_standC12	=[	$standC12,	dfury_standC13	] {ai_stand();};
-void()	dfury_standC13	=[	$standC13,	dfury_standC14	] {ai_stand();};
-void()	dfury_standC14	=[	$standC14,	dfury_standC15	] {ai_stand();};
-void()	dfury_standC15	=[	$standC15,	dfury_standC16	] {ai_stand();};
-void()	dfury_standC16	=[	$standC16,	dfury_standC17	] {ai_stand();};
-void()	dfury_standC17	=[	$standC17,	dfury_standC18	] {ai_stand();};
-void()	dfury_standC18	=[	$standC18,	dfury_standC19	] {ai_stand();};
-void()	dfury_standC19	=[	$standC19,	dfury_standC20	] {ai_stand();};
-void()	dfury_standC20	=[	$standC20,	dfury_standL1	] {ai_stand();};
+void()	dfury_standC1	= [	$standC1,	dfury_standC2	] { ai_stand(); };
+void()	dfury_standC2	= [	$standC2,	dfury_standC3	] { ai_stand(); };
+void()	dfury_standC3	= [	$standC3,	dfury_standC4	] { ai_stand(); };
+void()	dfury_standC4	= [	$standC4,	dfury_standC5	] { ai_stand(); };
+void()	dfury_standC5	= [	$standC5,	dfury_standC6	] { ai_stand(); };
+void()	dfury_standC6	= [	$standC6,	dfury_standC7	] { ai_stand(); };
+void()	dfury_standC7	= [	$standC7,	dfury_standC8	] { ai_stand(); };
+void()	dfury_standC8	= [	$standC8,	dfury_standC9	] { ai_stand(); };
+void()	dfury_standC9	= [	$standC9,	dfury_standC10	] { ai_stand(); };
+void()	dfury_standC10	= [	$standC10,	dfury_standC11	] { ai_stand(); };
+void()	dfury_standC11	= [	$standC11,	dfury_standC12	] { ai_stand(); };
+void()	dfury_standC12	= [	$standC12,	dfury_standC13	] { ai_stand(); };
+void()	dfury_standC13	= [	$standC13,	dfury_standC14	] { ai_stand(); };
+void()	dfury_standC14	= [	$standC14,	dfury_standC15	] { ai_stand(); };
+void()	dfury_standC15	= [	$standC15,	dfury_standC16	] { ai_stand(); };
+void()	dfury_standC16	= [	$standC16,	dfury_standC17	] { ai_stand(); };
+void()	dfury_standC17	= [	$standC17,	dfury_standC18	] { ai_stand(); };
+void()	dfury_standC18	= [	$standC18,	dfury_standC19	] { ai_stand(); };
+void()	dfury_standC19	= [	$standC19,	dfury_standC20	] { ai_stand(); };
+void()	dfury_standC20	= [	$standC20,	dfury_standL1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dfury_standRL1	=[	$standRL1,	dfury_standRL2	] {ai_stand();};
-void()	dfury_standRL2	=[	$standRL2,	dfury_standRL3	] {ai_stand();};
-void()	dfury_standRL3	=[	$standRL3,	dfury_standRL4	] {ai_stand();};
-void()	dfury_standRL4	=[	$standRL4,	dfury_standRL5	] {ai_stand();};
-void()	dfury_standRL5	=[	$standRL5,	dfury_standRL6	] {ai_stand();};
-void()	dfury_standRL6	=[	$standRL6,	dfury_standRL7	] {ai_stand();};
-void()	dfury_standRL7	=[	$standRL7, dfury_standL1	] {ai_stand();};
+void()	dfury_standRL1	= [	$standRL1,	dfury_standRL2	] { ai_stand(); };
+void()	dfury_standRL2	= [	$standRL2,	dfury_standRL3	] { ai_stand(); };
+void()	dfury_standRL3	= [	$standRL3,	dfury_standRL4	] { ai_stand(); };
+void()	dfury_standRL4	= [	$standRL4,	dfury_standRL5	] { ai_stand(); };
+void()	dfury_standRL5	= [	$standRL5,	dfury_standRL6	] { ai_stand(); };
+void()	dfury_standRL6	= [	$standRL6,	dfury_standRL7	] { ai_stand(); };
+void()	dfury_standRL7	= [	$standRL7, dfury_standL1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dfury_standR1	=[	$standR1,	dfury_standR2	] {monster_idle_sound();
+void()	dfury_standR1	= [	$standR1,	dfury_standR2	] { monster_idle_sound();
 	if (random() < MON_IDLE_ANIMATION && self.weaponswitch < time) 
 		self.think = dfury_standRL1;	// Switch weapon stance
 	ai_stand();
 };
-void()	dfury_standR2	=[	$standR2,	dfury_standR3	] {ai_stand();};
-void()	dfury_standR3	=[	$standR3,	dfury_standR4	] {ai_stand();};
-void()	dfury_standR4	=[	$standR4,	dfury_standR5	] {ai_stand();};
-void()	dfury_standR5	=[	$standR5,	dfury_standR6	] {ai_stand();};
-void()	dfury_standR6	=[	$standR6,	dfury_standR7	] {monster_idle_sound(); ai_stand();};
-void()	dfury_standR7	=[	$standR7,	dfury_standR8	] {ai_stand();};
-void()	dfury_standR8	=[	$standR8,	dfury_standR9	] {ai_stand();};
-void()	dfury_standR9	=[	$standR9,	dfury_standR10	] {ai_stand();};
-void()	dfury_standR10=[	$standR10, dfury_standR11	] {ai_stand();};
-void()	dfury_standR11=[	$standR11, dfury_standR12	] {ai_stand();};
-void()	dfury_standR12=[	$standR12, dfury_standR1	] {ai_stand();};
+void()	dfury_standR2	= [	$standR2,	dfury_standR3	] { ai_stand(); };
+void()	dfury_standR3	= [	$standR3,	dfury_standR4	] { ai_stand(); };
+void()	dfury_standR4	= [	$standR4,	dfury_standR5	] { ai_stand(); };
+void()	dfury_standR5	= [	$standR5,	dfury_standR6	] { ai_stand(); };
+void()	dfury_standR6	= [	$standR6,	dfury_standR7	] { monster_idle_sound(); ai_stand(); };
+void()	dfury_standR7	= [	$standR7,	dfury_standR8	] { ai_stand(); };
+void()	dfury_standR8	= [	$standR8,	dfury_standR9	] { ai_stand(); };
+void()	dfury_standR9	= [	$standR9,	dfury_standR10	] { ai_stand(); };
+void()	dfury_standR10= [	$standR10, dfury_standR11	] { ai_stand(); };
+void()	dfury_standR11= [	$standR11, dfury_standR12	] { ai_stand(); };
+void()	dfury_standR12= [	$standR12, dfury_standR1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dfury_standLR1	=[	$standLR1,	dfury_standLR2	] {ai_stand();};
-void()	dfury_standLR2	=[	$standLR2,	dfury_standLR3	] {ai_stand();};
-void()	dfury_standLR3	=[	$standLR3,	dfury_standLR4	] {ai_stand();};
-void()	dfury_standLR4	=[	$standLR4,	dfury_standLR5	] {ai_stand();};
-void()	dfury_standLR5	=[	$standLR5,	dfury_standLR6	] {ai_stand();};
-void()	dfury_standLR6	=[	$standLR6,	dfury_standLR7	] {ai_stand();};
-void()	dfury_standLR7	=[	$standLR7, dfury_standR1	] {ai_stand();};
+void()	dfury_standLR1	= [	$standLR1,	dfury_standLR2	] { ai_stand(); };
+void()	dfury_standLR2	= [	$standLR2,	dfury_standLR3	] { ai_stand(); };
+void()	dfury_standLR3	= [	$standLR3,	dfury_standLR4	] { ai_stand(); };
+void()	dfury_standLR4	= [	$standLR4,	dfury_standLR5	] { ai_stand(); };
+void()	dfury_standLR5	= [	$standLR5,	dfury_standLR6	] { ai_stand(); };
+void()	dfury_standLR6	= [	$standLR6,	dfury_standLR7	] { ai_stand(); };
+void()	dfury_standLR7	= [	$standLR7, dfury_standR1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void()	dfury_standL1	=[	$standL1,	dfury_standL2	] {monster_idle_sound();
+void()	dfury_standL1	= [	$standL1,	dfury_standL2	] { monster_idle_sound();
 	self.idlebusy = FALSE;
 	if (random() < MON_IDLE_ANIMATION && self.weaponswitch < time) {
 		// Slow down the repeating of idle animations
@@ -185,102 +185,101 @@ void()	dfury_standL1	=[	$standL1,	dfury_standL2	] {monster_idle_sound();
 	}
 	ai_stand();
 };
-void()	dfury_standL2	=[	$standL2,	dfury_standL3	] {ai_stand();};
-void()	dfury_standL3	=[	$standL3,	dfury_standL4	] {ai_stand();};
-void()	dfury_standL4	=[	$standL4,	dfury_standL5	] {ai_stand();};
-void()	dfury_standL5	=[	$standL5,	dfury_standL6	] {ai_stand();};
-void()	dfury_standL6	=[	$standL6,	dfury_standL7	] {ai_stand();};
-void()	dfury_standL7	=[	$standL7,	dfury_standL8	] {ai_stand();};
-void()	dfury_standL8	=[	$standL8,	dfury_standL9	] {ai_stand();};
-void()	dfury_standL9	=[	$standL9,	dfury_standL10	] {ai_stand();};
-void()	dfury_standL10=[	$standL10, dfury_standL11	] {ai_stand();};
-void()	dfury_standL11=[	$standL11, dfury_standL12	] {ai_stand();};
-void()	dfury_standL12=[	$standL12, dfury_standL1	] {ai_stand();};
+void()	dfury_standL2	= [	$standL2,	dfury_standL3	] { ai_stand(); };
+void()	dfury_standL3	= [	$standL3,	dfury_standL4	] { ai_stand(); };
+void()	dfury_standL4	= [	$standL4,	dfury_standL5	] { ai_stand(); };
+void()	dfury_standL5	= [	$standL5,	dfury_standL6	] { ai_stand(); };
+void()	dfury_standL6	= [	$standL6,	dfury_standL7	] { ai_stand(); };
+void()	dfury_standL7	= [	$standL7,	dfury_standL8	] { ai_stand(); };
+void()	dfury_standL8	= [	$standL8,	dfury_standL9	] { ai_stand(); };
+void()	dfury_standL9	= [	$standL9,	dfury_standL10	] { ai_stand(); };
+void()	dfury_standL10= [	$standL10, dfury_standL11	] { ai_stand(); };
+void()	dfury_standL11= [	$standL11, dfury_standL12	] { ai_stand(); };
+void()	dfury_standL12= [	$standL12, dfury_standL1	] { ai_stand(); };
 
 //===========================================================================
-void()	dfury_walk1	=[	$walk1,		dfury_walk2	] { monster_idle_sound(); 
-	self.idlebusy = FALSE; ai_walk(2);};
-void()	dfury_walk2	=[	$walk2,		dfury_walk3	] {monster_footstep(FALSE);ai_walk(5);};
-void()	dfury_walk3	=[	$walk3,		dfury_walk4	] {ai_walk(5);};
-void()	dfury_walk4	=[	$walk4,		dfury_walk5	] {ai_walk(4);};
-void()	dfury_walk5	=[	$walk5,		dfury_walk6	] {ai_walk(4);};
-void()	dfury_walk6	=[	$walk6,		dfury_walk7	] {ai_walk(2);};
-void()	dfury_walk7	=[	$walk7,		dfury_walk8	] {ai_walk(2);};
-void()	dfury_walk8	=[	$walk8,		dfury_walk9	] {monster_footstep(FALSE); ai_walk(3);};
-void()	dfury_walk9	=[	$walk9,		dfury_walk10] {ai_walk(3);};
-void()	dfury_walk10=[	$walk10,	dfury_walk11] {ai_walk(4);};
-void()	dfury_walk11=[	$walk11,	dfury_walk12] {ai_walk(3);};
-void()	dfury_walk12=[	$walk12,	dfury_walk13] {ai_walk(4);};
-void()	dfury_walk13=[	$walk13,	dfury_walk14] {ai_walk(6);};
-void()	dfury_walk14=[	$walk14,	dfury_walk1	] {ai_walk(2);};
+void()	dfury_walk1	= [	$walk1,		dfury_walk2	] { monster_idle_sound(); 
+	self.idlebusy = FALSE; ai_walk(2); };
+void()	dfury_walk2	= [	$walk2,		dfury_walk3	] { monster_footstep(FALSE);ai_walk(5); };
+void()	dfury_walk3	= [	$walk3,		dfury_walk4	] { ai_walk(5); };
+void()	dfury_walk4	= [	$walk4,		dfury_walk5	] { ai_walk(4); };
+void()	dfury_walk5	= [	$walk5,		dfury_walk6	] { ai_walk(4); };
+void()	dfury_walk6	= [	$walk6,		dfury_walk7	] { ai_walk(2); };
+void()	dfury_walk7	= [	$walk7,		dfury_walk8	] { ai_walk(2); };
+void()	dfury_walk8	= [	$walk8,		dfury_walk9	] { monster_footstep(FALSE); ai_walk(3); };
+void()	dfury_walk9	= [	$walk9,		dfury_walk10] { ai_walk(3); };
+void()	dfury_walk10= [	$walk10,	dfury_walk11] { ai_walk(4); };
+void()	dfury_walk11= [	$walk11,	dfury_walk12] { ai_walk(3); };
+void()	dfury_walk12= [	$walk12,	dfury_walk13] { ai_walk(4); };
+void()	dfury_walk13= [	$walk13,	dfury_walk14] { ai_walk(6); };
+void()	dfury_walk14= [	$walk14,	dfury_walk1	] { ai_walk(2); };
 
 //===========================================================================
 // 6 frames instead of 8 frames (skipping 3rd/7th timing of original)
-void()	dfury_run1	=[	$run1,	dfury_run2	] {monster_idle_sound();
+void()	dfury_run1	= [	$run1,	dfury_run2	] { monster_idle_sound();
 	self.idlebusy = FALSE;ai_run (22); };
-void()	dfury_run2	=[	$run2,	dfury_run3	] {monster_footstep(FALSE); ai_run(27);};
-void()	dfury_run3	=[	$run3,	dfury_run4	] {ai_run(18);};
-void()	dfury_run4	=[	$run4,	dfury_run5	] {ai_run(16);};
-void()	dfury_run5	=[	$run5,	dfury_run6	] {monster_footstep(FALSE); ai_run(27);};
-void()	dfury_run6	=[	$run6,	dfury_run1	] {ai_run(15);};
+void()	dfury_run2	= [	$run2,	dfury_run3	] { monster_footstep(FALSE); ai_run(27); };
+void()	dfury_run3	= [	$run3,	dfury_run4	] { ai_run(18); };
+void()	dfury_run4	= [	$run4,	dfury_run5	] { ai_run(16); };
+void()	dfury_run5	= [	$run5,	dfury_run6	] { monster_footstep(FALSE); ai_run(27); };
+void()	dfury_run6	= [	$run6,	dfury_run1	] { ai_run(15); };
 
 //===========================================================================
 // Melee Attack 1 - Slice (bring swords together and pull apart)
-void()	dfury_slice1	=[	$slice2,	dfury_slice2	] {dfury_grunt_sound(DFURY_SOUND_PULLAPART);ai_charge(9);};
-void()	dfury_slice2	=[	$slice3,	dfury_slice3	] {ai_charge(10); SwordSwipeSound();};
-void()	dfury_slice3	=[	$slice4,	dfury_slice4	] {ai_charge(17);};
-void()	dfury_slice4	=[	$slice5,	dfury_slice5	] {monster_footstep(FALSE); ai_charge(4);};
-void()	dfury_slice5	=[	$slice6,	dfury_slice6	] {ai_charge(11); SwordSwipeSound(); ai_melee();};
-void()	dfury_slice6	=[	$slice7,	dfury_slice7	] {ai_charge(19); ai_melee();};
-void()	dfury_slice7	=[	$slice8,	dfury_slice8	] {ai_charge(12); ai_melee();};
-void()	dfury_slice8	=[	$slice9,	dfury_slice9	] {ai_charge(6); ai_melee();};
-void()	dfury_slice9	=[	$slice11,	dfury_slice10	] {monster_footstep(FALSE); ai_melee();};
-void()	dfury_slice10	=[	$slice13,	dfury_slice11	] {ai_charge(0);};
-void()	dfury_slice11	=[	$slice14,	dfury_run1	] {monster_footstep(FALSE); ai_charge(7);};
+void()	dfury_slice1	= [	$slice2,	dfury_slice2	] { dfury_grunt_sound(DFURY_SOUND_PULLAPART);ai_charge(9); };
+void()	dfury_slice2	= [	$slice3,	dfury_slice3	] { ai_charge(10); SwordSwipeSound(); };
+void()	dfury_slice3	= [	$slice4,	dfury_slice4	] { ai_charge(17); };
+void()	dfury_slice4	= [	$slice5,	dfury_slice5	] { monster_footstep(FALSE); ai_charge(4); };
+void()	dfury_slice5	= [	$slice6,	dfury_slice6	] { ai_charge(11); SwordSwipeSound(); ai_melee(); };
+void()	dfury_slice6	= [	$slice7,	dfury_slice7	] { ai_charge(19); ai_melee(); };
+void()	dfury_slice7	= [	$slice8,	dfury_slice8	] { ai_charge(12); ai_melee(); };
+void()	dfury_slice8	= [	$slice9,	dfury_slice9	] { ai_charge(6); ai_melee(); };
+void()	dfury_slice9	= [	$slice11,	dfury_slice10	] { monster_footstep(FALSE); ai_melee(); };
+void()	dfury_slice10	= [	$slice13,	dfury_slice11	] { ai_charge(0); };
+void()	dfury_slice11	= [	$slice14,	dfury_run1	] { monster_footstep(FALSE); ai_charge(7); };
 
 //----------------------------------------------------------------------
 // Melee Attack 2 - Smash (both swords chop overhead to ground)
-void()	dfury_smash1	=[	$smash2,	dfury_smash2	] {ai_charge(1);};
-void()	dfury_smash2	=[	$smash3,	dfury_smash3	] {ai_charge(13);};
-void()	dfury_smash3	=[	$smash4,	dfury_smash4	] {ai_charge(9); monster_footstep(FALSE);};
-void()	dfury_smash4	=[	$smash5,	dfury_smash5	] {ai_charge(11);};
-void()	dfury_smash5	=[	$smash6,	dfury_smash6	] {dfury_grunt_sound(DFURY_SOUND_OVERSMASH);ai_charge(10);};
-void()	dfury_smash6	=[	$smash7,	dfury_smash7	] {ai_charge(7); SwordSwipeSound();};
-void()	dfury_smash7	=[	$smash8,	dfury_smash8	] {ai_charge(12); monster_footstep(FALSE);};
-void()	dfury_smash8	=[	$smash9,	dfury_smash9	] {ai_charge(2);self.meleecontact = TRUE; ai_meleesmash(40);};
-void()	dfury_smash9	=[	$smash10,	dfury_smash10	] {ai_charge(3); ai_melee();self.meleecontact = FALSE;};
-void()	dfury_smash10	=[	$smash12,	dfury_smash11	] {ai_charge(0);};
-void()	dfury_smash11	=[	$smash13,	dfury_run1	] {ai_charge(0);};
+void()	dfury_smash1	= [	$smash2,	dfury_smash2	] { ai_charge(1); };
+void()	dfury_smash2	= [	$smash3,	dfury_smash3	] { ai_charge(13); };
+void()	dfury_smash3	= [	$smash4,	dfury_smash4	] { ai_charge(9); monster_footstep(FALSE); };
+void()	dfury_smash4	= [	$smash5,	dfury_smash5	] { ai_charge(11); };
+void()	dfury_smash5	= [	$smash6,	dfury_smash6	] { dfury_grunt_sound(DFURY_SOUND_OVERSMASH);ai_charge(10); };
+void()	dfury_smash6	= [	$smash7,	dfury_smash7	] { ai_charge(7); SwordSwipeSound(); };
+void()	dfury_smash7	= [	$smash8,	dfury_smash8	] { ai_charge(12); monster_footstep(FALSE); };
+void()	dfury_smash8	= [	$smash9,	dfury_smash9	] { ai_charge(2);self.meleecontact = TRUE; ai_meleesmash(40); };
+void()	dfury_smash9	= [	$smash10,	dfury_smash10	] { ai_charge(3); ai_melee();self.meleecontact = FALSE;};
+void()	dfury_smash10	= [	$smash12,	dfury_smash11	] { ai_charge(0); };
+void()	dfury_smash11	= [	$smash13,	dfury_run1	] { ai_charge(0); };
 
 //----------------------------------------------------------------------
 // Melee Attack 4a - Single Right Swing (fast attack)
 void()	dfury_lswing3;
-void()	dfury_rswing1	=[	$rswing2,	dfury_rswing3	] {ai_charge(2);};
-void()	dfury_rswing3	=[	$rswing3,	dfury_rswing4	] {dfury_grunt_sound(DFURY_SOUND_LRFURY);ai_charge(5);};
-void()	dfury_rswing4	=[	$rswing4,	dfury_rswing5	] {ai_charge(8);ai_melee();monster_footstep(FALSE);};
-void()	dfury_rswing5	=[	$rswing5,	dfury_rswing6	] {ai_charge(7);ai_melee();};
-void()	dfury_rswing6	=[	$rswing6,	dfury_rswing7	] {ai_charge(5);ai_melee(); SwordSwipeSound();};
-void()	dfury_rswing7	=[	$rswing7,	dfury_rswing8	] {ai_charge(2);monster_footstep(FALSE);};
-void()	dfury_rswing8	=[	$rswing8,	dfury_run1	] {ai_charge(1);
+void()	dfury_rswing1	= [	$rswing2,	dfury_rswing3	] { ai_charge(2); };
+void()	dfury_rswing3	= [	$rswing3,	dfury_rswing4	] { dfury_grunt_sound(DFURY_SOUND_LRFURY);ai_charge(5); };
+void()	dfury_rswing4	= [	$rswing4,	dfury_rswing5	] { ai_charge(8);ai_melee();monster_footstep(FALSE); };
+void()	dfury_rswing5	= [	$rswing5,	dfury_rswing6	] { ai_charge(7);ai_melee(); };
+void()	dfury_rswing6	= [	$rswing6,	dfury_rswing7	] { ai_charge(5);ai_melee(); SwordSwipeSound(); };
+void()	dfury_rswing7	= [	$rswing7,	dfury_rswing8	] { ai_charge(2);monster_footstep(FALSE); };
+void()	dfury_rswing8	= [	$rswing8,	dfury_run1	] { ai_charge(1);
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_lswing3;
 };
 
 //----------------------------------------------------------------------
 // Melee Attack 4a - Single Right Swing (fast attack)
-void()	dfury_lswing1	=[	$lswing2,	dfury_lswing3	] {ai_charge(2);};
-void()	dfury_lswing3	=[	$lswing3,	dfury_lswing4	] {dfury_grunt_sound(DFURY_SOUND_OPTIONAL);ai_charge(5);};
-void()	dfury_lswing4	=[	$lswing4,	dfury_lswing5	] {ai_charge(8);ai_melee();monster_footstep(FALSE);};
-void()	dfury_lswing5	=[	$lswing5,	dfury_lswing6	] {ai_charge(7);ai_melee();};
-void()	dfury_lswing6	=[	$lswing6,	dfury_lswing7	] {ai_charge(5);ai_melee(); SwordSwipeSound();};
-void()	dfury_lswing7	=[	$lswing7,	dfury_lswing8	] {ai_charge(2);monster_footstep(FALSE);};
-void()	dfury_lswing8	=[	$lswing8,	dfury_run1	] {ai_charge(1);
+void()	dfury_lswing1	= [	$lswing2,	dfury_lswing3	] { ai_charge(2); };
+void()	dfury_lswing3	= [	$lswing3,	dfury_lswing4	] { dfury_grunt_sound(DFURY_SOUND_OPTIONAL);ai_charge(5); };
+void()	dfury_lswing4	= [	$lswing4,	dfury_lswing5	] { ai_charge(8);ai_melee();monster_footstep(FALSE); };
+void()	dfury_lswing5	= [	$lswing5,	dfury_lswing6	] { ai_charge(7);ai_melee(); };
+void()	dfury_lswing6	= [	$lswing6,	dfury_lswing7	] { ai_charge(5);ai_melee(); SwordSwipeSound(); };
+void()	dfury_lswing7	= [	$lswing7,	dfury_lswing8	] { ai_charge(2);monster_footstep(FALSE); };
+void()	dfury_lswing8	= [	$lswing8,	dfury_run1	] { ai_charge(1);
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
 };
 
 //----------------------------------------------------------------------
 // Melee Attack 3 - Lunge forward (leaving ground) and do heavy damage
-void() dfury_JumpTouch =
-{
+void() dfury_JumpTouch = {
 	local float ldmg;
 	
 	if (self.health < 1) return;
@@ -312,13 +311,13 @@ void() dfury_JumpTouch =
 };
 
 //----------------------------------------------------------------------
-void()	dfury_lunge1	=[	$lunge1,	dfury_lunge2	] {ai_face();
+void()	dfury_lunge1	= [	$lunge1,	dfury_lunge2	] { ai_face();
 	self.jump_flag = time + MONAI_JUMPFURYTIME;
 	dfury_grunt_sound(DFURY_SOUND_JUMP);
 };
-void()	dfury_lunge2	=[	$lunge2,	dfury_lunge3	] {ai_face();};
-void()	dfury_lunge3	=[	$lunge3,	dfury_lunge4	] {ai_face();};
-void()	dfury_lunge4	=[	$lunge4,	dfury_lunge5	] {
+void()	dfury_lunge2	= [	$lunge2,	dfury_lunge3	] { ai_face(); };
+void()	dfury_lunge3	= [	$lunge3,	dfury_lunge4	] { ai_face(); };
+void()	dfury_lunge4	= [	$lunge4,	dfury_lunge5	] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPFURYTIME;
 	self.touch = dfury_JumpTouch;
@@ -328,10 +327,10 @@ void()	dfury_lunge4	=[	$lunge4,	dfury_lunge5	] {
 	self.oldorigin = self.origin;
 };
 
-void()	dfury_lunge5	=[	$lunge5,	dfury_lunge6	] {};
-void()	dfury_lunge6	=[	$lunge6,	dfury_lunge7	] {};
-void()	dfury_lunge7	=[	$lunge7,	dfury_lunge8	] {};
-void()	dfury_lunge8	=[	$lunge8,	dfury_lunge8	] {
+void()	dfury_lunge5	= [	$lunge5,	dfury_lunge6	] {};
+void()	dfury_lunge6	= [	$lunge6,	dfury_lunge7	] {};
+void()	dfury_lunge7	= [	$lunge7,	dfury_lunge8	] {};
+void()	dfury_lunge8	= [	$lunge8,	dfury_lunge8	] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; 	//random jump angle
@@ -342,13 +341,13 @@ void()	dfury_lunge8	=[	$lunge8,	dfury_lunge8	] {
 
 //----------------------------------------------------------------------
 // Landed with thrush attack
-void()	dfury_lunge9	=[	$lunge9,	dfury_lunge10	] {ai_melee();};
-void()	dfury_lunge10	=[	$lunge10,	dfury_lunge11	] {ai_charge(5);ai_melee();};
-void()	dfury_lunge11	=[	$lunge11,	dfury_lunge12	] {ai_charge(4);ai_melee();SwordSwipeSound();};
-void()	dfury_lunge12	=[	$lunge12,	dfury_lunge13	] {ai_charge(1);ai_melee();};
-void()	dfury_lunge13	=[	$lunge13,	dfury_lunge14	] {ai_charge(1);ai_melee();monster_footstep(FALSE);};
-void()	dfury_lunge14	=[	$lunge14,	dfury_lunge15	] {ai_charge(1);};
-void()	dfury_lunge15	=[	$lunge15,	dfury_run1	] {ai_resetangles();
+void()	dfury_lunge9	= [	$lunge9,	dfury_lunge10	] { ai_melee(); };
+void()	dfury_lunge10	= [	$lunge10,	dfury_lunge11	] { ai_charge(5);ai_melee(); };
+void()	dfury_lunge11	= [	$lunge11,	dfury_lunge12	] { ai_charge(4);ai_melee();SwordSwipeSound(); };
+void()	dfury_lunge12	= [	$lunge12,	dfury_lunge13	] { ai_charge(1);ai_melee(); };
+void()	dfury_lunge13	= [	$lunge13,	dfury_lunge14	] { ai_charge(1);ai_melee();monster_footstep(FALSE); };
+void()	dfury_lunge14	= [	$lunge14,	dfury_lunge15	] { ai_charge(1); };
+void()	dfury_lunge15	= [	$lunge15,	dfury_run1	] { ai_resetangles();
 	// If close enough starting swinging left+right ELSE return to run cycle
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
 };
@@ -358,27 +357,27 @@ void()	dfury_lunge15	=[	$lunge15,	dfury_run1	] {ai_resetangles();
 // Identical frame set (Hell Knight / Death Knight)
 // Speed boost (+16 charge) to all frames, fast charging attack!
 
-void()	dfury_watk1	=[	$w_attack2,	dfury_watk3	] {ai_charge(18);monster_footstep(FALSE);};
-void()	dfury_watk3	=[	$w_attack3,	dfury_watk4	] {ai_charge(18);};
-void()	dfury_watk4	=[	$w_attack4,	dfury_watk5	] {ai_charge(18);};
-void()	dfury_watk5	=[	$w_attack5,	dfury_watk6	] {ai_charge(18);dfury_grunt_sound(DFURY_SOUND_RUNSWING);};
-void()	dfury_watk6	=[	$w_attack6,	dfury_watk7	] {ai_charge(18);};
-void()	dfury_watk7	=[	$w_attack7,	dfury_watk8	] {ai_charge(19);monster_footstep(FALSE);};
-void()	dfury_watk8	=[	$w_attack8,	dfury_watk9	] {ai_charge(22);SwordSwipeSound();ai_melee();};
-void()	dfury_watk9	=[	$w_attack9,	dfury_watk10] {ai_charge(23);ai_melee(); };
-void()	dfury_watk10=[	$w_attack10,dfury_watk11] {ai_charge(21); ai_melee();};
-void()	dfury_watk11=[	$w_attack11,dfury_watk12] {ai_charge(19);};
-void()	dfury_watk12=[	$w_attack12,dfury_watk13] {ai_charge(19);};
-void()	dfury_watk13=[	$w_attack13,dfury_watk14] {ai_charge(18);};
-void()	dfury_watk14=[	$w_attack14,dfury_watk15] {ai_charge(18);dfury_grunt_sound(DFURY_SOUND_OPTIONAL);};
-void()	dfury_watk15=[	$w_attack15,dfury_watk16] {ai_charge(18);};
-void()	dfury_watk16=[	$w_attack16,dfury_watk17] {ai_charge(19);SwordSwipeSound();ai_melee();};
-void()	dfury_watk17=[	$w_attack17,dfury_watk18] {ai_charge(19); monster_footstep(FALSE); ai_melee();};
-void()	dfury_watk18=[	$w_attack18,dfury_watk19] {ai_charge(21); ai_melee();};
-void()	dfury_watk19=[	$w_attack19,dfury_watk20] {ai_charge(22);};
-void()	dfury_watk20=[	$w_attack20,dfury_watk21] {ai_charge(24);};
-void()	dfury_watk21=[	$w_attack21,dfury_watk22] {ai_charge(25);};
-void()	dfury_watk22=[	$w_attack22,dfury_run1	] {ai_charge(21);
+void()	dfury_watk1	= [	$w_attack2,	dfury_watk3	] { ai_charge(18);monster_footstep(FALSE); };
+void()	dfury_watk3	= [	$w_attack3,	dfury_watk4	] { ai_charge(18); };
+void()	dfury_watk4	= [	$w_attack4,	dfury_watk5	] { ai_charge(18); };
+void()	dfury_watk5	= [	$w_attack5,	dfury_watk6	] { ai_charge(18);dfury_grunt_sound(DFURY_SOUND_RUNSWING); };
+void()	dfury_watk6	= [	$w_attack6,	dfury_watk7	] { ai_charge(18); };
+void()	dfury_watk7	= [	$w_attack7,	dfury_watk8	] { ai_charge(19);monster_footstep(FALSE); };
+void()	dfury_watk8	= [	$w_attack8,	dfury_watk9	] { ai_charge(22);SwordSwipeSound();ai_melee(); };
+void()	dfury_watk9	= [	$w_attack9,	dfury_watk10] { ai_charge(23);ai_melee(); };
+void()	dfury_watk10= [	$w_attack10,dfury_watk11] { ai_charge(21); ai_melee(); };
+void()	dfury_watk11= [	$w_attack11,dfury_watk12] { ai_charge(19); };
+void()	dfury_watk12= [	$w_attack12,dfury_watk13] { ai_charge(19); };
+void()	dfury_watk13= [	$w_attack13,dfury_watk14] { ai_charge(18); };
+void()	dfury_watk14= [	$w_attack14,dfury_watk15] { ai_charge(18);dfury_grunt_sound(DFURY_SOUND_OPTIONAL); };
+void()	dfury_watk15= [	$w_attack15,dfury_watk16] { ai_charge(18); };
+void()	dfury_watk16= [	$w_attack16,dfury_watk17] { ai_charge(19);SwordSwipeSound();ai_melee(); };
+void()	dfury_watk17= [	$w_attack17,dfury_watk18] { ai_charge(19); monster_footstep(FALSE); ai_melee(); };
+void()	dfury_watk18= [	$w_attack18,dfury_watk19] { ai_charge(21); ai_melee(); };
+void()	dfury_watk19= [	$w_attack19,dfury_watk20] { ai_charge(22); };
+void()	dfury_watk20= [	$w_attack20,dfury_watk21] { ai_charge(24); };
+void()	dfury_watk21= [	$w_attack21,dfury_watk22] { ai_charge(25); };
+void()	dfury_watk22= [	$w_attack22,dfury_run1	] { ai_charge(21);
 	// this is a long animations set for chasing the player
 	// Quick check if within melee range, close melee range or random magic attack!
 	if (self.enemy.health > 0) {
@@ -389,8 +388,7 @@ void()	dfury_watk22=[	$w_attack22,dfury_run1	] {ai_charge(21);
 };
 
 //----------------------------------------------------------------------
-void() dfury_melee =
-{
+void() dfury_melee = {
 	// Use heavy overhead smash for monsters
 	if (self.enemy.flags & FL_MONSTER) dfury_smash1();
 	else {
@@ -518,45 +516,44 @@ void() dfury_attachment_update = {
 //----------------------------------------------------------------------
 // Magic Attack A - Spray of spikes from raised up swords
 // Block pain function from interrupting magic attack
-void()	dfury_magica1 =[	$magica2,	dfury_magica2	] {ai_face();self.pain_finished = time + 2;};
-void()	dfury_magica2 =[	$magica3,	dfury_magica3	] {ai_face();};
-void()	dfury_magica3 =[	$magica4,	dfury_magica4	] {ai_face();};
-void()	dfury_magica4 =[	$magica5,	dfury_magica5	] {ai_face();};
-void()	dfury_magica5 =[	$magica6,	dfury_magica6	] {ai_charge(2);dfury_attachment_setup(0);};
-void()	dfury_magica6 =[	$magica7,	dfury_magica7	] {ai_charge(2);dfury_attachment_update();};
-void()	dfury_magica7 =[	$magica8,	dfury_magica8	] {ai_charge(2);dfury_attachment_update();};
-void()	dfury_magica8 =[	$magica9,	dfury_magica9	] {ai_charge(2);dfury_attachment_update();};
-void()	dfury_magica9 =[	$magica10,	dfury_magica10] {ai_charge(2);dfury_attachment_update();};
-void()	dfury_magica10 =[	$magica11,	dfury_magica11] {dfury_attachment_update();dfury_magica_shot(-3);};
-void()	dfury_magica11 =[	$magica12,	dfury_magica12] {dfury_attachment_update();dfury_magica_shot(-1);};
-void()	dfury_magica12 =[	$magica13,	dfury_magica13] {dfury_attachment_update();dfury_magica_shot(0);};
-void()	dfury_magica13 =[	$magica14,	dfury_magica14] {dfury_attachment_update();dfury_magica_shot(1);};
-void()	dfury_magica14 =[	$magica15,	dfury_magica15] {dfury_attachment_update();dfury_magica_shot(2);};
-void()	dfury_magica15 =[	$magica16,	dfury_run1] {};
+void()	dfury_magica1 = [	$magica2,	dfury_magica2	] { ai_face();self.pain_finished = time + 2;};
+void()	dfury_magica2 = [	$magica3,	dfury_magica3	] { ai_face(); };
+void()	dfury_magica3 = [	$magica4,	dfury_magica4	] { ai_face(); };
+void()	dfury_magica4 = [	$magica5,	dfury_magica5	] { ai_face(); };
+void()	dfury_magica5 = [	$magica6,	dfury_magica6	] { ai_charge(2);dfury_attachment_setup(0); };
+void()	dfury_magica6 = [	$magica7,	dfury_magica7	] { ai_charge(2);dfury_attachment_update(); };
+void()	dfury_magica7 = [	$magica8,	dfury_magica8	] { ai_charge(2);dfury_attachment_update(); };
+void()	dfury_magica8 = [	$magica9,	dfury_magica9	] { ai_charge(2);dfury_attachment_update(); };
+void()	dfury_magica9 = [	$magica10,	dfury_magica10] { ai_charge(2);dfury_attachment_update(); };
+void()	dfury_magica10 = [	$magica11,	dfury_magica11] { dfury_attachment_update();dfury_magica_shot(-3); };
+void()	dfury_magica11 = [	$magica12,	dfury_magica12] { dfury_attachment_update();dfury_magica_shot(-1); };
+void()	dfury_magica12 = [	$magica13,	dfury_magica13] { dfury_attachment_update();dfury_magica_shot(0); };
+void()	dfury_magica13 = [	$magica14,	dfury_magica14] { dfury_attachment_update();dfury_magica_shot(1); };
+void()	dfury_magica14 = [	$magica15,	dfury_magica15] { dfury_attachment_update();dfury_magica_shot(2); };
+void()	dfury_magica15 = [	$magica16,	dfury_run1] {};
 
 //----------------------------------------------------------------------
 // Magic Attack B - 3 x rockets launched in an arc
 // Block pain function from interrupting magic attack
-void()	dfury_magicb1 =[	$magicb1,	dfury_magicb2	] {self.pain_finished = time + 2;};
-void()	dfury_magicb2 =[	$magicb2,	dfury_magicb3	] {ai_face();dfury_attachment_setup(1);};
-void()	dfury_magicb3 =[	$magicb3,	dfury_magicb4	] {ai_face();dfury_attachment_update();};
-void()	dfury_magicb4 =[	$magicb4,	dfury_magicb5	] {ai_face();dfury_attachment_update();};
-void()	dfury_magicb5 =[	$magicb5,	dfury_magicb6	] {ai_face();dfury_attachment_update();};
-void()	dfury_magicb6 =[	$magicb6,	dfury_magicb7	] {ai_face();dfury_attachment_update();};
-void()	dfury_magicb7 =[	$magicb7,	dfury_magicb8	] {ai_face();dfury_attachment_update();};
-void()	dfury_magicb8 =[	$magicb8,	dfury_magicb9	] {ai_face();dfury_attachment_update();};
-void()	dfury_magicb9 =[	$magicb9,	dfury_magicb10] {ai_face();dfury_attachment_update();dfury_magicb_shot();};
-void()	dfury_magicb10 =[	$magicb10,	dfury_magicb11] {dfury_attachment_update();};
-void()	dfury_magicb11 =[	$magicb11,	dfury_magicb12] {};
-void()	dfury_magicb12 =[	$magicb12,	dfury_magicb13] {};
-void()	dfury_magicb13 =[	$magica13,	dfury_run1] {};
+void()	dfury_magicb1 = [	$magicb1,	dfury_magicb2	] { self.pain_finished = time + 2;};
+void()	dfury_magicb2 = [	$magicb2,	dfury_magicb3	] { ai_face();dfury_attachment_setup(1); };
+void()	dfury_magicb3 = [	$magicb3,	dfury_magicb4	] { ai_face();dfury_attachment_update(); };
+void()	dfury_magicb4 = [	$magicb4,	dfury_magicb5	] { ai_face();dfury_attachment_update(); };
+void()	dfury_magicb5 = [	$magicb5,	dfury_magicb6	] { ai_face();dfury_attachment_update(); };
+void()	dfury_magicb6 = [	$magicb6,	dfury_magicb7	] { ai_face();dfury_attachment_update(); };
+void()	dfury_magicb7 = [	$magicb7,	dfury_magicb8	] { ai_face();dfury_attachment_update(); };
+void()	dfury_magicb8 = [	$magicb8,	dfury_magicb9	] { ai_face();dfury_attachment_update(); };
+void()	dfury_magicb9 = [	$magicb9,	dfury_magicb10] { ai_face();dfury_attachment_update();dfury_magicb_shot(); };
+void()	dfury_magicb10 = [	$magicb10,	dfury_magicb11] { dfury_attachment_update(); };
+void()	dfury_magicb11 = [	$magicb11,	dfury_magicb12] {};
+void()	dfury_magicb12 = [	$magicb12,	dfury_magicb13] {};
+void()	dfury_magicb13 = [	$magica13,	dfury_run1] {};
 
 //----------------------------------------------------------------------
 // MagicB is explosive so only use if there is range available
 // Otherwise randomly pick between the two types (spikes/rockets)
 //----------------------------------------------------------------------
-void() dfury_magic =
-{
+void() dfury_magic = {
 	SUB_AttackFinished (2 + random());
 	self.enemydist = range_distance(self.enemy, FALSE);
 	if (self.enemydist < MONAI_JUMPFURYNEAR) dfury_magica1();
@@ -566,29 +563,28 @@ void() dfury_magic =
 	}
 };
 
-//============================================================================
-void()	dfury_painA1	=[	$painA1,		dfury_painA2	] {};
-void()	dfury_painA2	=[	$painA2,		dfury_painA3	] {};
-void()	dfury_painA3	=[	$painA3,		dfury_painA4	] {};
-void()	dfury_painA4	=[	$painA4,		dfury_painA5	] {};
-void()	dfury_painA5	=[	$painA5,		dfury_run1	] {};
+
+void()	dfury_painA1	= [	$painA1,		dfury_painA2	] {};
+void()	dfury_painA2	= [	$painA2,		dfury_painA3	] {};
+void()	dfury_painA3	= [	$painA3,		dfury_painA4	] {};
+void()	dfury_painA4	= [	$painA4,		dfury_painA5	] {};
+void()	dfury_painA5	= [	$painA5,		dfury_run1	] {};
 
 //----------------------------------------------------------------------
-void()	dfury_painD1	=[	$painD1,		dfury_painD2	] {};
-void()	dfury_painD2	=[	$painD2,		dfury_painD3	] {};
-void()	dfury_painD3	=[	$painD3,		dfury_painD4	] {};
-void()	dfury_painD4	=[	$painD4,		dfury_painD5	] {monster_footstep(FALSE); };
-void()	dfury_painD5	=[	$painD5,		dfury_painD6	] {};
-void()	dfury_painD6	=[	$painD6,		dfury_painD7	] {};
-void()	dfury_painD7	=[	$painD7,		dfury_painD8	] {};
-void()	dfury_painD8	=[	$painD8,		dfury_painD9	] {monster_footstep(FALSE); };
-void()	dfury_painD9	=[	$painD9,		dfury_painD10	] {};
-void()	dfury_painD10	=[	$painD10,		dfury_painD11	] {};
-void()	dfury_painD11	=[	$painD11,		dfury_run1	] {};
+void()	dfury_painD1	= [	$painD1,		dfury_painD2	] {};
+void()	dfury_painD2	= [	$painD2,		dfury_painD3	] {};
+void()	dfury_painD3	= [	$painD3,		dfury_painD4	] {};
+void()	dfury_painD4	= [	$painD4,		dfury_painD5	] { monster_footstep(FALSE); };
+void()	dfury_painD5	= [	$painD5,		dfury_painD6	] {};
+void()	dfury_painD6	= [	$painD6,		dfury_painD7	] {};
+void()	dfury_painD7	= [	$painD7,		dfury_painD8	] {};
+void()	dfury_painD8	= [	$painD8,		dfury_painD9	] { monster_footstep(FALSE); };
+void()	dfury_painD9	= [	$painD9,		dfury_painD10	] {};
+void()	dfury_painD10	= [	$painD10,		dfury_painD11	] {};
+void()	dfury_painD11	= [	$painD11,		dfury_run1	] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage)	dfury_pain =
-{
+void(entity inflictor, entity attacker, float damage)	dfury_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 	
@@ -612,48 +608,47 @@ void(entity inflictor, entity attacker, float damage)	dfury_pain =
 	}
 };
 
-//============================================================================
-void()	dfury_die1	=[	$death2,	dfury_die2	] {ai_forward(10);};
-void()	dfury_die2	=[	$death3,	dfury_die3	] {monster_check_gib();ai_forward(8);};
-void()	dfury_die3	=[	$death4,	dfury_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT; ai_forward(7);};
-void()	dfury_die4	=[	$death5,	dfury_die5	] {};
-void()	dfury_die5	=[	$death6,	dfury_die6	] {};
-void()	dfury_die6	=[	$death7,	dfury_die7	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);};
-void()	dfury_die7	=[	$death8,	dfury_die8	] {};
-void()	dfury_die8	=[	$death9,	dfury_die9	] {ai_forward(10);};
-void()	dfury_die9	=[	$death10,	dfury_die10	] {ai_forward(11);};
-void()	dfury_die10	=[	$death11,	dfury_die11	] {};
-void()	dfury_die11	=[	$death12,	dfury_die12	] {};
-void()	dfury_die12	=[	$death13,	dfury_die13	] {};
-void()	dfury_die13	=[	$death14,	dfury_die14	] {};
-void()	dfury_die14	=[	$death15,	dfury_die15	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);};
-void()	dfury_die15	=[	$death16,	dfury_die16	] {monster_death_postcheck();};
-void()	dfury_die16	=[	$death17,	dfury_die16	] {monster_deadbody_check();};
+
+void()	dfury_die1	= [	$death2,	dfury_die2	] { ai_forward(10); };
+void()	dfury_die2	= [	$death3,	dfury_die3	] { monster_check_gib();ai_forward(8); };
+void()	dfury_die3	= [	$death4,	dfury_die4	] { monster_check_gib();
+	self.solid = SOLID_NOT; ai_forward(7); };
+void()	dfury_die4	= [	$death5,	dfury_die5	] {};
+void()	dfury_die5	= [	$death6,	dfury_die6	] {};
+void()	dfury_die6	= [	$death7,	dfury_die7	] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+void()	dfury_die7	= [	$death8,	dfury_die8	] {};
+void()	dfury_die8	= [	$death9,	dfury_die9	] { ai_forward(10); };
+void()	dfury_die9	= [	$death10,	dfury_die10	] { ai_forward(11); };
+void()	dfury_die10	= [	$death11,	dfury_die11	] {};
+void()	dfury_die11	= [	$death12,	dfury_die12	] {};
+void()	dfury_die12	= [	$death13,	dfury_die13	] {};
+void()	dfury_die13	= [	$death14,	dfury_die14	] {};
+void()	dfury_die14	= [	$death15,	dfury_die15	] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+void()	dfury_die15	= [	$death16,	dfury_die16	] { monster_death_postcheck(); };
+void()	dfury_die16	= [	$death17,	dfury_die16	] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void()	dfury_dieb1	=[	$deathb1,	dfury_dieb2	] {};
-void()	dfury_dieb2	=[	$deathb2,	dfury_dieb3	] {monster_check_gib();};
-void()	dfury_dieb3	=[	$deathb3,	dfury_dieb4	] {monster_check_gib();
+void()	dfury_dieb1	= [	$deathb1,	dfury_dieb2	] {};
+void()	dfury_dieb2	= [	$deathb2,	dfury_dieb3	] { monster_check_gib(); };
+void()	dfury_dieb3	= [	$deathb3,	dfury_dieb4	] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void()	dfury_dieb4	=[	$deathb4,	dfury_dieb5	] {};
-void()	dfury_dieb5	=[	$deathb5,	dfury_dieb6	] {};
-void()	dfury_dieb6	=[	$deathb6,	dfury_dieb7	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM);};
-void()	dfury_dieb7	=[	$deathb7,	dfury_dieb8	] {};
-void()	dfury_dieb8	=[	$deathb8,	dfury_dieb9	] {};
-void()	dfury_dieb9	=[	$deathb9,	dfury_dieb10] {};
-void()	dfury_dieb10=[	$deathb10,	dfury_dieb11] {};
-void()	dfury_dieb11=[	$deathb11,	dfury_dieb12] {};
-void()	dfury_dieb12=[	$deathb12,	dfury_dieb13] {};
-void()	dfury_dieb13=[	$deathb13,	dfury_dieb14] {monster_death_postcheck();};
-void()	dfury_dieb14=[	$deathb14,	dfury_dieb14] {monster_deadbody_check();};
+void()	dfury_dieb4	= [	$deathb4,	dfury_dieb5	] {};
+void()	dfury_dieb5	= [	$deathb5,	dfury_dieb6	] {};
+void()	dfury_dieb6	= [	$deathb6,	dfury_dieb7	] {
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+void()	dfury_dieb7	= [	$deathb7,	dfury_dieb8	] {};
+void()	dfury_dieb8	= [	$deathb8,	dfury_dieb9	] {};
+void()	dfury_dieb9	= [	$deathb9,	dfury_dieb10] {};
+void()	dfury_dieb10= [	$deathb10,	dfury_dieb11] {};
+void()	dfury_dieb11= [	$deathb11,	dfury_dieb12] {};
+void()	dfury_dieb12= [	$deathb12,	dfury_dieb13] {};
+void()	dfury_dieb13= [	$deathb13,	dfury_dieb14] { monster_death_postcheck(); };
+void()	dfury_dieb14= [	$deathb14,	dfury_dieb14] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() dfury_die =
-{
+void() dfury_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 

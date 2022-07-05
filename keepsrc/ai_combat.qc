@@ -372,7 +372,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	if (attacker.super_damage_finished > 0 && targ.classtype != CT_MONINQUISITOR) {
 		damage = ceil(damage * 4); // check for quad damage powerup on the attacker
-		if (self.dmg == 18 && self.buddy) {self.buddy.dmg = 0; dprint("Nerfed a buddy nail\n");} // Nerf double copper super nails, last one there is a rotten egg! Allows for both to start at 18 and get quadded up to gib a zombie.
+		if (self.dmg == 18 && self.buddy) { self.buddy.dmg = 0; dprint("Nerfed a buddy nail\n");} // Nerf double copper super nails, last one there is a rotten egg! Allows for both to start at 18 and get quadded up to gib a zombie.
 	}
 	if (attacker.curse_type == CURSE_WEAKEN) damage = damage * 0.5;
 	if (targ.spirit_blessed) damage = damage * 0.25; // 25% Protection of the Watchers from Spirit Shrine desecration
@@ -724,7 +724,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			// Demon, Shambler, Shalrath and Wizard all have high flinch values
 			if (self.pain_flinch > 40) flinch = 40;
 			else flinch = self.pain_flinch + 1;
-			if (self.dmgcombined < flinch) {self = oldself; return;}
+			if (self.dmgcombined < flinch) { self = oldself; return;}
 		}
 
 		self.pain_finished = time + self.pain_timeout; // Block pain re-trigger event

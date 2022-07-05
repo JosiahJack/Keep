@@ -727,7 +727,7 @@ float() FindTarget = { // [FUNCTION]
 		}
 	}
 	// The only two things that alert monsters when invisible besides damage: firing a weapon or bumping into a dog
-	if (client.items & IT_INVISIBILITY) {
+	if (Invisible(client)) {
 		if (self.classtype == CT_MONDOG && client.flags & FL_CLIENT) {
 			if (enemy_range != RANGE_MELEE) return FALSE; // Not close enough to sniff us out
 		} else if (client.show_hostile < time) {

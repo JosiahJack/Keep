@@ -294,9 +294,9 @@ void() wolfscene_animate = { // [FUNCTION]
 		ds.nextthink = time + 0.4;
 		ds.think = SUB_Remove;
 	}
-	if (self.frame == 49) {self.owner.alpha = 0.4; self.owner.frame = 1;}
-	if (self.frame == 50) {self.owner.alpha = 0.2; self.owner.frame = 2;}
-	if (self.frame == 51) {self.owner.alpha = 0.1; self.owner.frame = 3;}
+	if (self.frame == 49) { self.owner.alpha = 0.4; self.owner.frame = 1;}
+	if (self.frame == 50) { self.owner.alpha = 0.2; self.owner.frame = 2;}
+	if (self.frame == 51) { self.owner.alpha = 0.1; self.owner.frame = 3;}
 	if (self.frame > 55) self.frame = 52;
 	self.nextthink = time + 0.1;
 	self.think = wolfscene_animate;
@@ -720,10 +720,10 @@ void() ufo_animate = { // [FUNCTION]
 	if (self.frame == 59) ufo_setup_beam();
 	if (self.frame > 59 && self.frame < 69) ufo_update_beam();
 	if (self.frame == 74) check_beamTrig(); 
-	if (self.frame == 89) {self.skin = 3; self.attachment.frame = 7;}
-	if (self.frame == 90) {self.skin = 2; self.attachment.frame = 5;}
-	if (self.frame == 91) {self.skin = 1; self.attachment.frame = 2;}
-	if (self.frame == 92) {self.skin = 0; ufo_remove_beam();}
+	if (self.frame == 89) { self.skin = 3; self.attachment.frame = 7;}
+	if (self.frame == 90) { self.skin = 2; self.attachment.frame = 5;}
+	if (self.frame == 91) { self.skin = 1; self.attachment.frame = 2;}
+	if (self.frame == 92) { self.skin = 0; ufo_remove_beam();}
 	if (self.frame == 129) {
 		self.nextthink = time + 0.1;
 		self.think = ufo_flyaway;
@@ -763,7 +763,7 @@ void() misc_ufo = { // [ENTITY]
 
 void() misc_firefx_model =  { // [FUNCTION]
 	self.skin = self.skin + 1;
-	if (self.skin > 19) {self.skin = 0;}
+	if (self.skin > 19) { self.skin = 0;}
 	self.think = misc_firefx_model;
 	self.nextthink = time + 0.1;
 };
@@ -799,7 +799,7 @@ void() misc_firefx = { // [ENTITY]
 void() misc_grass_frame = { // [FUNCTION]
 	fgrasscount = fgrasscount + 1;
 	self.frame = self.frame + fgrasscount;
-	if (self.frame > 34) {self.frame = 0;}
+	if (self.frame > 34) { self.frame = 0;}
 	fgrasscount = 0;
 	self.think = misc_grass_frame;
 	self.nextthink = time + 0.1;
@@ -832,7 +832,7 @@ void() misc_grass = { // [ENTITY]
 
 void() bell_loop = { // [FUNCTION]
 	self.frame = self.frame + 1;
-	if (self.frame == 3) {sound (self, CHAN_EXTRA1, "redfield/misc/bell_toll.wav", 1, ATTN_NORM);}
+	if (self.frame == 3) { sound (self, CHAN_EXTRA1, "redfield/misc/bell_toll.wav", 1, ATTN_NORM);}
 	if (self.frame > 29) {
 		self.frame = 0;
 		return;
@@ -845,7 +845,7 @@ void(entity inflictor, entity attacker, float damage) misc_bell_toll = { // [FUN
 	if (self.pain_finished > time) return;
 
 	belltrig_count = belltrig_count + 1;
-	if (self.target != "") {trigger_strs(self.target, other);} // Check for any triggers
+	if (self.target != "") { trigger_strs(self.target, other);} // Check for any triggers
 	self.pain_finished = time + self.delay;
 	self.health = 9999;
 	bell_loop();
@@ -900,12 +900,12 @@ void() misc_vase_break = { // [FUNCTION]
 	self.estate_off(); // Switch off everything
 	
 	// Play breaking sound
-	if (random() < 0.2) {sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.35) {sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact2.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.5) {sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact3.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.65) {sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact4.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.8) {sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact5.wav", 1, ATTN_IDLE);}
-	else {sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact6.wav", 1, ATTN_IDLE);}
+	if (random() < 0.2) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.35) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact2.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.5) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact3.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.65) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact4.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.8) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact5.wav", 1, ATTN_IDLE);}
+	else { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact6.wav", 1, ATTN_IDLE);}
 
 	if (ext_dppart) pointparticles(particleeffectnum(DPP_TEBSMOKE), self.origin, '0 0 0', 1); //DP smoke effects
 	if (self.target != "") trigger_strs(self.target, other); // Check for any explosion triggers

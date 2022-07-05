@@ -53,91 +53,91 @@ $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8 pain9 pain10 pain11
 $frame die1 die2 die3 die4 die5 die6 die7 die8 die9 die10
 $frame die11 die12 die13 die14 die15 die16
 
-void() wolf_howl1	=[	$howl1,		wolf_howl2	] {
+void() wolf_howl1	= [	$howl1,		wolf_howl2	] {
 	self.pain_finished = time + 2;
 	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	ai_stand();
 };
-void() wolf_howl2	=[	$howl2,		wolf_howl3	] {ai_stand();};
-void() wolf_howl3	=[	$howl3,		wolf_howl4	] {ai_stand();};
-void() wolf_howl4	=[	$howl4,		wolf_howl5	] {ai_stand();};
-void() wolf_howl5	=[	$howl5,		wolf_howl6	] {ai_stand();};
-void() wolf_howl6	=[	$howl6,		wolf_howl7	] {ai_stand();};
-void() wolf_howl7	=[	$howl7,		wolf_howl8	] {ai_stand();};
-void() wolf_howl8	=[	$howl8,		wolf_howl9	] {ai_stand();};
-void() wolf_howl9	=[	$howl9,		wolf_howl10	] {ai_stand();};
-void() wolf_howl10	=[	$howl10,	wolf_howl11	] {ai_stand();};
-void() wolf_howl11	=[	$howl11,	wolf_howl12	] {ai_stand();};
-void() wolf_howl12	=[	$howl12,	wolf_howl13	] {ai_stand();};
-void() wolf_howl13	=[	$howl13,	wolf_howl14	] {ai_stand();};
-void() wolf_howl14	=[	$howl14,	wolf_howl15	] {ai_stand();};
-void() wolf_howl15	=[	$howl15,	wolf_howl16	] {ai_stand();};
-void() wolf_howl16	=[	$howl16,	wolf_howl17	] {ai_stand();};
-void() wolf_howl17	=[	$howl17,	wolf_stand1	] {ai_stand();};
+void() wolf_howl2	= [	$howl2,		wolf_howl3	] { ai_stand(); };
+void() wolf_howl3	= [	$howl3,		wolf_howl4	] { ai_stand(); };
+void() wolf_howl4	= [	$howl4,		wolf_howl5	] { ai_stand(); };
+void() wolf_howl5	= [	$howl5,		wolf_howl6	] { ai_stand(); };
+void() wolf_howl6	= [	$howl6,		wolf_howl7	] { ai_stand(); };
+void() wolf_howl7	= [	$howl7,		wolf_howl8	] { ai_stand(); };
+void() wolf_howl8	= [	$howl8,		wolf_howl9	] { ai_stand(); };
+void() wolf_howl9	= [	$howl9,		wolf_howl10	] { ai_stand(); };
+void() wolf_howl10	= [	$howl10,	wolf_howl11	] { ai_stand(); };
+void() wolf_howl11	= [	$howl11,	wolf_howl12	] { ai_stand(); };
+void() wolf_howl12	= [	$howl12,	wolf_howl13	] { ai_stand(); };
+void() wolf_howl13	= [	$howl13,	wolf_howl14	] { ai_stand(); };
+void() wolf_howl14	= [	$howl14,	wolf_howl15	] { ai_stand(); };
+void() wolf_howl15	= [	$howl15,	wolf_howl16	] { ai_stand(); };
+void() wolf_howl16	= [	$howl16,	wolf_howl17	] { ai_stand(); };
+void() wolf_howl17	= [	$howl17,	wolf_stand1	] { ai_stand(); };
 
-void() wolf_stand1	=[	$stand1,	wolf_stand2	] {ai_stand();};
-void() wolf_stand2	=[	$stand2,	wolf_stand3	] {ai_stand();};
-void() wolf_stand3	=[	$stand3,	wolf_stand4	] {ai_stand(); monster_idle_sound();};
-void() wolf_stand4	=[	$stand4,	wolf_stand5	] {ai_stand();};
-void() wolf_stand5	=[	$stand5,	wolf_stand6	] {ai_stand();};
-void() wolf_stand6	=[	$stand6,	wolf_stand7	] {ai_stand();};
-void() wolf_stand7	=[	$stand7,	wolf_stand8	] {ai_stand();};
-void() wolf_stand8	=[	$stand8,	wolf_stand9	] {ai_stand();};
-void() wolf_stand9	=[	$stand9,	wolf_stand10	] {ai_stand();};
-void() wolf_stand10	=[	$stand10,	wolf_stand11	] {ai_stand();};
-void() wolf_stand11	=[	$stand11,	wolf_stand12	] {ai_stand();};
-void() wolf_stand12	=[	$stand12,	wolf_stand13	] {ai_stand();};
-void() wolf_stand13	=[	$stand13,	wolf_stand1	] {
+void() wolf_stand1	= [	$stand1,	wolf_stand2	] { ai_stand(); };
+void() wolf_stand2	= [	$stand2,	wolf_stand3	] { ai_stand(); };
+void() wolf_stand3	= [	$stand3,	wolf_stand4	] { ai_stand(); monster_idle_sound(); };
+void() wolf_stand4	= [	$stand4,	wolf_stand5	] { ai_stand(); };
+void() wolf_stand5	= [	$stand5,	wolf_stand6	] { ai_stand(); };
+void() wolf_stand6	= [	$stand6,	wolf_stand7	] { ai_stand(); };
+void() wolf_stand7	= [	$stand7,	wolf_stand8	] { ai_stand(); };
+void() wolf_stand8	= [	$stand8,	wolf_stand9	] { ai_stand(); };
+void() wolf_stand9	= [	$stand9,	wolf_stand10	] { ai_stand(); };
+void() wolf_stand10	= [	$stand10,	wolf_stand11	] { ai_stand(); };
+void() wolf_stand11	= [	$stand11,	wolf_stand12	] { ai_stand(); };
+void() wolf_stand12	= [	$stand12,	wolf_stand13	] { ai_stand(); };
+void() wolf_stand13	= [	$stand13,	wolf_stand1	] {
 if (random() < 0.05) {
 		self.think = wolf_howl1;		// Howl
 	}
 	ai_stand();
 };
 
-void() wolf_walk1	=[	$walk1 ,	wolf_walk2	] {monster_footstep(FALSE); ai_walk(24);};
-void() wolf_walk2	=[	$walk2 ,	wolf_walk3	] {ai_walk(24);};
-void() wolf_walk3	=[	$walk3 ,	wolf_walk4	] {monster_footstep(FALSE); ai_walk(24);};
-void() wolf_walk4	=[	$walk4 ,	wolf_walk5	] {ai_walk(24);};
-void() wolf_walk5	=[	$walk5 ,	wolf_walk6	] {ai_walk(24);};
-void() wolf_walk6	=[	$walk6 ,	wolf_walk7	] {ai_walk(24);};
-void() wolf_walk7	=[	$walk7 ,	wolf_walk8	] {monster_footstep(FALSE); ai_walk(24);};
-void() wolf_walk8	=[	$walk8 ,	wolf_walk9	] {ai_walk(24);};
-void() wolf_walk9	=[	$walk9 ,	wolf_walk10	] {monster_footstep(FALSE); ai_walk(24);};
-void() wolf_walk10	=[	$walk10 ,	wolf_walk11	] {ai_walk(24);};
-void() wolf_walk11	=[	$walk11 ,	wolf_walk12	] {ai_walk(24);};
-void() wolf_walk12	=[	$walk12 ,	wolf_walk1	] {ai_walk(24);};
+void() wolf_walk1	= [	$walk1 ,	wolf_walk2	] { monster_footstep(FALSE); ai_walk(24); };
+void() wolf_walk2	= [	$walk2 ,	wolf_walk3	] { ai_walk(24); };
+void() wolf_walk3	= [	$walk3 ,	wolf_walk4	] { monster_footstep(FALSE); ai_walk(24); };
+void() wolf_walk4	= [	$walk4 ,	wolf_walk5	] { ai_walk(24); };
+void() wolf_walk5	= [	$walk5 ,	wolf_walk6	] { ai_walk(24); };
+void() wolf_walk6	= [	$walk6 ,	wolf_walk7	] { ai_walk(24); };
+void() wolf_walk7	= [	$walk7 ,	wolf_walk8	] { monster_footstep(FALSE); ai_walk(24); };
+void() wolf_walk8	= [	$walk8 ,	wolf_walk9	] { ai_walk(24); };
+void() wolf_walk9	= [	$walk9 ,	wolf_walk10	] { monster_footstep(FALSE); ai_walk(24); };
+void() wolf_walk10	= [	$walk10 ,	wolf_walk11	] { ai_walk(24); };
+void() wolf_walk11	= [	$walk11 ,	wolf_walk12	] { ai_walk(24); };
+void() wolf_walk12	= [	$walk12 ,	wolf_walk1	] { ai_walk(24); };
 
-void() wolf_run1	=[	$walk1  ,	wolf_run2	] {monster_footstep(FALSE); ai_run(34); self.skin = 0;};
-void() wolf_run2	=[	$walk2  ,	wolf_run3	] {ai_run(34);};
-void() wolf_run3	=[	$walk3  ,	wolf_run4	] {monster_footstep(FALSE); ai_run(34);};
-void() wolf_run4	=[	$walk4  ,	wolf_run5	] {ai_run(34);};
-void() wolf_run5	=[	$walk5  ,	wolf_run6	] {ai_run(34);};
-void() wolf_run6	=[	$walk6  ,	wolf_run7	] {ai_run(34);};
-void() wolf_run7	=[	$walk7  ,	wolf_run8	] {monster_footstep(FALSE); ai_run(34);};
-void() wolf_run8	=[	$walk8  ,	wolf_run9	] {ai_run(34);};
-void() wolf_run9	=[	$walk9  ,	wolf_run10	] {monster_footstep(FALSE); ai_run(34);};
-void() wolf_run10	=[	$walk10  ,	wolf_run11	] {ai_run(34);};
-void() wolf_run11	=[	$walk11  ,	wolf_run12	] {ai_run(34);};
-void() wolf_run12	=[	$walk12  ,	wolf_run1	] {ai_run(34);};
+void() wolf_run1	= [	$walk1  ,	wolf_run2	] { monster_footstep(FALSE); ai_run(34); self.skin = 0;};
+void() wolf_run2	= [	$walk2  ,	wolf_run3	] { ai_run(34); };
+void() wolf_run3	= [	$walk3  ,	wolf_run4	] { monster_footstep(FALSE); ai_run(34); };
+void() wolf_run4	= [	$walk4  ,	wolf_run5	] { ai_run(34); };
+void() wolf_run5	= [	$walk5  ,	wolf_run6	] { ai_run(34); };
+void() wolf_run6	= [	$walk6  ,	wolf_run7	] { ai_run(34); };
+void() wolf_run7	= [	$walk7  ,	wolf_run8	] { monster_footstep(FALSE); ai_run(34); };
+void() wolf_run8	= [	$walk8  ,	wolf_run9	] { ai_run(34); };
+void() wolf_run9	= [	$walk9  ,	wolf_run10	] { monster_footstep(FALSE); ai_run(34); };
+void() wolf_run10	= [	$walk10  ,	wolf_run11	] { ai_run(34); };
+void() wolf_run11	= [	$walk11  ,	wolf_run12	] { ai_run(34); };
+void() wolf_run12	= [	$walk12  ,	wolf_run1	] { ai_run(34); };
 
 // Alternate run sequence for howling start spawnflag
-void() wolf_wake1	=[	$howl1,		wolf_wake2	] {ai_stand();};
-void() wolf_wake2	=[	$howl2,		wolf_wake3	] {ai_stand();};
-void() wolf_wake3	=[	$howl3,		wolf_wake4	] {ai_stand();};
-void() wolf_wake4	=[	$howl4,		wolf_wake5	] {ai_stand();};
-void() wolf_wake5	=[	$howl5,		wolf_wake6	] {ai_stand();};
-void() wolf_wake6	=[	$howl6,		wolf_wake7	] {ai_stand();};
-void() wolf_wake7	=[	$howl7,		wolf_wake8	] {ai_stand();};
-void() wolf_wake8	=[	$howl8,		wolf_wake9	] {ai_stand();};
-void() wolf_wake9	=[	$howl9,		wolf_wake10	] {ai_stand();};
-void() wolf_wake10	=[	$howl10,	wolf_wake11	] {ai_stand();};
-void() wolf_wake11	=[	$howl11,	wolf_wake12	] {ai_stand();};
-void() wolf_wake12	=[	$howl12,	wolf_wake13	] {ai_stand();};
-void() wolf_wake13	=[	$howl13,	wolf_wake14	] {ai_stand();};
-void() wolf_wake14	=[	$howl14,	wolf_wake15	] {ai_stand();};
-void() wolf_wake15	=[	$howl15,	wolf_wake16	] {ai_stand();};
-void() wolf_wake16	=[	$howl16,	wolf_wake17	] {ai_stand();};
-void() wolf_wake17	=[	$howl17,	wolf_run1	] {ai_stand();};
+void() wolf_wake1	= [	$howl1,		wolf_wake2	] { ai_stand(); };
+void() wolf_wake2	= [	$howl2,		wolf_wake3	] { ai_stand(); };
+void() wolf_wake3	= [	$howl3,		wolf_wake4	] { ai_stand(); };
+void() wolf_wake4	= [	$howl4,		wolf_wake5	] { ai_stand(); };
+void() wolf_wake5	= [	$howl5,		wolf_wake6	] { ai_stand(); };
+void() wolf_wake6	= [	$howl6,		wolf_wake7	] { ai_stand(); };
+void() wolf_wake7	= [	$howl7,		wolf_wake8	] { ai_stand(); };
+void() wolf_wake8	= [	$howl8,		wolf_wake9	] { ai_stand(); };
+void() wolf_wake9	= [	$howl9,		wolf_wake10	] { ai_stand(); };
+void() wolf_wake10	= [	$howl10,	wolf_wake11	] { ai_stand(); };
+void() wolf_wake11	= [	$howl11,	wolf_wake12	] { ai_stand(); };
+void() wolf_wake12	= [	$howl12,	wolf_wake13	] { ai_stand(); };
+void() wolf_wake13	= [	$howl13,	wolf_wake14	] { ai_stand(); };
+void() wolf_wake14	= [	$howl14,	wolf_wake15	] { ai_stand(); };
+void() wolf_wake15	= [	$howl15,	wolf_wake16	] { ai_stand(); };
+void() wolf_wake16	= [	$howl16,	wolf_wake17	] { ai_stand(); };
+void() wolf_wake17	= [	$howl17,	wolf_run1	] { ai_stand(); };
 
 // Attachment management (create, finish and delete)
 void() wolf_create_attachment = {
@@ -224,42 +224,42 @@ void() wolf_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*4); // Spawn some touch blood (no explicit direction)
 };
 
-void() wolf_slash1	=[	$slash1,	wolf_slash2	] {ai_face(); wolf_reset_attachment();};
-void() wolf_slash2	=[	$slash2,	wolf_slash3	] {ai_face();};
-void() wolf_slash3	=[	$slash3,	wolf_slash4	] {ai_face();};
-void() wolf_slash4	=[	$slash4,	wolf_slash5	] {ai_chargenoturn(0); wolf_blur(10, 0.2); wolf_melee();
-sound (self, CHAN_WEAPON, "redfield/wolf/sword_slash.wav", 1, ATTN_NORM);};
-void() wolf_slash5	=[	$slash5,	wolf_slash6	] {ai_chargenoturn(0); wolf_blur(11, 0.2); wolf_melee();};
-void() wolf_slash6	=[	$slash6,	wolf_slash7	] {ai_chargenoturn(0); wolf_blur(12, 0.1); wolf_melee();};
-void() wolf_slash7	=[	$slash7,	wolf_slash8	] {ai_chargenoturn(0); wolf_reset_attachment();};
-void() wolf_slash8	=[	$slash8,	wolf_slash9	] {ai_chargenoturn(0);};
-void() wolf_slash9	=[	$slash9,	wolf_slash10	] {ai_chargenoturn(0);};
-void() wolf_slash10	=[	$slash10,	wolf_slash11	] {ai_chargenoturn(0); wolf_melee();};
-void() wolf_slash11	=[	$slash11,	wolf_slash12	] {ai_chargenoturn(0); wolf_blur(13, 0.2); wolf_melee();};
-void() wolf_slash12	=[	$slash12,	wolf_slash13	] {ai_chargenoturn(0); wolf_blur(14, 0.2); wolf_melee();};
-void() wolf_slash13	=[	$slash13,	wolf_slash14	] {ai_chargenoturn(0); wolf_blur(15, 0.1); wolf_melee();};
-void() wolf_slash14	=[	$slash14,	wolf_slash15	] {ai_chargenoturn(0); wolf_reset_attachment();};
-void() wolf_slash15	=[	$slash15,	wolf_slash16	] {ai_chargenoturn(0);};
-void() wolf_slash16	=[	$slash16,	wolf_slash17	] {ai_chargenoturn(0);};
-void() wolf_slash17	=[	$slash17,	wolf_run1	] {ai_chargenoturn(0);};
+void() wolf_slash1	= [	$slash1,	wolf_slash2	] { ai_face(); wolf_reset_attachment(); };
+void() wolf_slash2	= [	$slash2,	wolf_slash3	] { ai_face(); };
+void() wolf_slash3	= [	$slash3,	wolf_slash4	] { ai_face(); };
+void() wolf_slash4	= [	$slash4,	wolf_slash5	] { ai_chargenoturn(0); wolf_blur(10, 0.2); wolf_melee();
+sound (self, CHAN_WEAPON, "redfield/wolf/sword_slash.wav", 1, ATTN_NORM); };
+void() wolf_slash5	= [	$slash5,	wolf_slash6	] { ai_chargenoturn(0); wolf_blur(11, 0.2); wolf_melee(); };
+void() wolf_slash6	= [	$slash6,	wolf_slash7	] { ai_chargenoturn(0); wolf_blur(12, 0.1); wolf_melee(); };
+void() wolf_slash7	= [	$slash7,	wolf_slash8	] { ai_chargenoturn(0); wolf_reset_attachment(); };
+void() wolf_slash8	= [	$slash8,	wolf_slash9	] { ai_chargenoturn(0); };
+void() wolf_slash9	= [	$slash9,	wolf_slash10	] { ai_chargenoturn(0); };
+void() wolf_slash10	= [	$slash10,	wolf_slash11	] { ai_chargenoturn(0); wolf_melee(); };
+void() wolf_slash11	= [	$slash11,	wolf_slash12	] { ai_chargenoturn(0); wolf_blur(13, 0.2); wolf_melee(); };
+void() wolf_slash12	= [	$slash12,	wolf_slash13	] { ai_chargenoturn(0); wolf_blur(14, 0.2); wolf_melee(); };
+void() wolf_slash13	= [	$slash13,	wolf_slash14	] { ai_chargenoturn(0); wolf_blur(15, 0.1); wolf_melee(); };
+void() wolf_slash14	= [	$slash14,	wolf_slash15	] { ai_chargenoturn(0); wolf_reset_attachment(); };
+void() wolf_slash15	= [	$slash15,	wolf_slash16	] { ai_chargenoturn(0); };
+void() wolf_slash16	= [	$slash16,	wolf_slash17	] { ai_chargenoturn(0); };
+void() wolf_slash17	= [	$slash17,	wolf_run1	] { ai_chargenoturn(0); };
 
-void() wolf_spin1	=[	$spin1,		wolf_spin2	] {ai_chargenoturn(0); wolf_reset_attachment();};
-void() wolf_spin2	=[	$spin2,		wolf_spin3	] {ai_chargenoturn(0);
-sound (self, CHAN_WEAPON, "redfield/wolf/sword_spin.wav", 1, ATTN_NORM);};
-void() wolf_spin3	=[	$spin3,		wolf_spin4	] {ai_chargenoturn(0);};
-void() wolf_spin4	=[	$spin4,		wolf_spin5	] {ai_chargenoturn(0); wolf_melee();};
-void() wolf_spin5	=[	$spin5,		wolf_spin6	] {ai_chargenoturn(0);};
-void() wolf_spin6	=[	$spin6,		wolf_spin7	] {ai_chargenoturn(0);};
-void() wolf_spin7	=[	$spin7,		wolf_spin8	] {ai_charge(40); wolf_blur(0, 0.2); wolf_melee();};
-void() wolf_spin8	=[	$spin8,		wolf_spin9	] {ai_charge(40); wolf_blur(1, 0.2); wolf_melee();};
-void() wolf_spin9	=[	$spin9,		wolf_spin10	] {ai_charge(40); wolf_blur(2, 0.2); wolf_melee();};
-void() wolf_spin10	=[	$spin10,	wolf_spin11	] {ai_charge(40); wolf_blur(3, 0.2);};
-void() wolf_spin11	=[	$spin11,	wolf_spin12	] {ai_charge(40); wolf_blur(4, 0.2);};
-void() wolf_spin12	=[	$spin12,	wolf_spin13	] {ai_charge(40); wolf_blur(5, 0.2);};
-void() wolf_spin13	=[	$spin13,	wolf_spin14	] {ai_charge(40); wolf_blur(6, 0.2);};
-void() wolf_spin14	=[	$spin14,	wolf_spin15	] {ai_charge(40); wolf_blur(7, 0.2); wolf_melee();};
-void() wolf_spin15	=[	$spin15,	wolf_spin16	] {ai_chargenoturn(0); wolf_blur(8, 0.1); wolf_melee();};
-void() wolf_spin16	=[	$spin16,	wolf_run1	] {ai_chargenoturn(0); wolf_reset_attachment(); wolf_melee();
+void() wolf_spin1	= [	$spin1,		wolf_spin2	] { ai_chargenoturn(0); wolf_reset_attachment(); };
+void() wolf_spin2	= [	$spin2,		wolf_spin3	] { ai_chargenoturn(0);
+sound (self, CHAN_WEAPON, "redfield/wolf/sword_spin.wav", 1, ATTN_NORM); };
+void() wolf_spin3	= [	$spin3,		wolf_spin4	] { ai_chargenoturn(0); };
+void() wolf_spin4	= [	$spin4,		wolf_spin5	] { ai_chargenoturn(0); wolf_melee(); };
+void() wolf_spin5	= [	$spin5,		wolf_spin6	] { ai_chargenoturn(0); };
+void() wolf_spin6	= [	$spin6,		wolf_spin7	] { ai_chargenoturn(0); };
+void() wolf_spin7	= [	$spin7,		wolf_spin8	] { ai_charge(40); wolf_blur(0, 0.2); wolf_melee(); };
+void() wolf_spin8	= [	$spin8,		wolf_spin9	] { ai_charge(40); wolf_blur(1, 0.2); wolf_melee(); };
+void() wolf_spin9	= [	$spin9,		wolf_spin10	] { ai_charge(40); wolf_blur(2, 0.2); wolf_melee(); };
+void() wolf_spin10	= [	$spin10,	wolf_spin11	] { ai_charge(40); wolf_blur(3, 0.2); };
+void() wolf_spin11	= [	$spin11,	wolf_spin12	] { ai_charge(40); wolf_blur(4, 0.2); };
+void() wolf_spin12	= [	$spin12,	wolf_spin13	] { ai_charge(40); wolf_blur(5, 0.2); };
+void() wolf_spin13	= [	$spin13,	wolf_spin14	] { ai_charge(40); wolf_blur(6, 0.2); };
+void() wolf_spin14	= [	$spin14,	wolf_spin15	] { ai_charge(40); wolf_blur(7, 0.2); wolf_melee(); };
+void() wolf_spin15	= [	$spin15,	wolf_spin16	] { ai_chargenoturn(0); wolf_blur(8, 0.1); wolf_melee(); };
+void() wolf_spin16	= [	$spin16,	wolf_run1	] { ai_chargenoturn(0); wolf_reset_attachment(); wolf_melee();
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = wolf_slash1;
 };
 
@@ -290,17 +290,17 @@ void() wolf_moonsword = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_MOONSWORD,self.attack_speed);
 };
 
-void() wolf_shoot1	=[	$shoot1,	wolf_shoot2	] {ai_face();};
-void() wolf_shoot2	=[	$shoot2,	wolf_shoot3	] {ai_face();};
-void() wolf_shoot3	=[	$shoot3,	wolf_shoot4	] {ai_face(); moonsword_charge('16 -72 28','0 -116 32');
-sound (self, CHAN_WEAPON, "redfield/wolf/moonsword.wav", 1, ATTN_NORM);};
-void() wolf_shoot4	=[	$shoot4,	wolf_shoot5	] {ai_face(); moonsword_charge('0 -76 32','-24 -116 40'); self.skin = 1;};
-void() wolf_shoot5	=[	$shoot5,	wolf_shoot6	] {ai_face();};
-void() wolf_shoot6	=[	$shoot6,	wolf_shoot7	] {wolf_moonsword();};
-void() wolf_shoot7	=[	$shoot7,	wolf_shoot8	] {};
-void() wolf_shoot8	=[	$shoot8,	wolf_shoot9	] {};
-void() wolf_shoot9	=[	$shoot9,	wolf_shoot10	] {self.skin = 0;};
-void() wolf_shoot10	=[	$shoot10,	wolf_run1	] {};
+void() wolf_shoot1	= [	$shoot1,	wolf_shoot2	] { ai_face(); };
+void() wolf_shoot2	= [	$shoot2,	wolf_shoot3	] { ai_face(); };
+void() wolf_shoot3	= [	$shoot3,	wolf_shoot4	] { ai_face(); moonsword_charge('16 -72 28','0 -116 32');
+sound (self, CHAN_WEAPON, "redfield/wolf/moonsword.wav", 1, ATTN_NORM); };
+void() wolf_shoot4	= [	$shoot4,	wolf_shoot5	] { ai_face(); moonsword_charge('0 -76 32','-24 -116 40'); self.skin = 1;};
+void() wolf_shoot5	= [	$shoot5,	wolf_shoot6	] { ai_face(); };
+void() wolf_shoot6	= [	$shoot6,	wolf_shoot7	] { wolf_moonsword(); };
+void() wolf_shoot7	= [	$shoot7,	wolf_shoot8	] {};
+void() wolf_shoot8	= [	$shoot8,	wolf_shoot9	] {};
+void() wolf_shoot9	= [	$shoot9,	wolf_shoot10	] { self.skin = 0;};
+void() wolf_shoot10	= [	$shoot10,	wolf_run1	] {};
 
 // Only functions when monster spawns standing -- No walking / path corners.  Currently need solution to this problem so long as taunt animations are used
 void() wolf_wakeup = {
@@ -327,17 +327,17 @@ void() wolf_wakeup = {
 	wolf_wake1();
 };
 
-void() wolf_pain1	=[	$pain1,		wolf_pain2	] {self.skin = 0;};
-void() wolf_pain2	=[	$pain2,		wolf_pain3	] {};
-void() wolf_pain3	=[	$pain3,		wolf_pain4	] {ai_back(16);};
-void() wolf_pain4	=[	$pain4,		wolf_pain5	] {};
-void() wolf_pain5	=[	$pain5,		wolf_pain6	] {};
-void() wolf_pain6	=[	$pain6,		wolf_pain7	] {};
-void() wolf_pain7	=[	$pain7,		wolf_pain8	] {monster_footstep(FALSE);};
-void() wolf_pain8	=[	$pain8,		wolf_pain9	] {};
-void() wolf_pain9	=[	$pain9,		wolf_pain10	] {};
-void() wolf_pain10	=[	$pain10,	wolf_pain11	] {};
-void() wolf_pain11	=[	$pain11,	wolf_run1	] {};
+void() wolf_pain1	= [	$pain1,		wolf_pain2	] { self.skin = 0;};
+void() wolf_pain2	= [	$pain2,		wolf_pain3	] {};
+void() wolf_pain3	= [	$pain3,		wolf_pain4	] { ai_back(16); };
+void() wolf_pain4	= [	$pain4,		wolf_pain5	] {};
+void() wolf_pain5	= [	$pain5,		wolf_pain6	] {};
+void() wolf_pain6	= [	$pain6,		wolf_pain7	] {};
+void() wolf_pain7	= [	$pain7,		wolf_pain8	] { monster_footstep(FALSE); };
+void() wolf_pain8	= [	$pain8,		wolf_pain9	] {};
+void() wolf_pain9	= [	$pain9,		wolf_pain10	] {};
+void() wolf_pain10	= [	$pain10,	wolf_pain11	] {};
+void() wolf_pain11	= [	$pain11,	wolf_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) wolf_pain = {
 	//Reset blur attachment
@@ -359,26 +359,26 @@ void(entity inflictor, entity attacker, float damage) wolf_pain = {
 	}
 };
 
-void() wolf_die1	=[	$die1,		wolf_die2	] {};
-void() wolf_die2	=[	$die2,		wolf_die3	] {sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);};
-void() wolf_die3	=[	$die3,		wolf_die4	] {};
-void() wolf_die4	=[	$die4,		wolf_die5	] {};
-void() wolf_die5	=[	$die5,		wolf_die6	] {};
-void() wolf_die6	=[	$die6,		wolf_die7	] {};
-void() wolf_die7	=[	$die7,		wolf_die8	] {
+void() wolf_die1	= [	$die1,		wolf_die2	] {};
+void() wolf_die2	= [	$die2,		wolf_die3	] { sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM); };
+void() wolf_die3	= [	$die3,		wolf_die4	] {};
+void() wolf_die4	= [	$die4,		wolf_die5	] {};
+void() wolf_die5	= [	$die5,		wolf_die6	] {};
+void() wolf_die6	= [	$die6,		wolf_die7	] {};
+void() wolf_die7	= [	$die7,		wolf_die8	] {
 particle_explode(self.origin + '0 0 -8', 96, 0.5+random()*0.5, PARTICLE_BURST_DBLUE, PARTICLE_BURST_UPWARD); };
-void() wolf_die8	=[	$die8,		wolf_die9	] {self.solid = SOLID_NOT; self.skin = 2; self.alpha = 0.9;};
-void() wolf_die9	=[	$die9,		wolf_die10	] {self.alpha = 0.75;};
-void() wolf_die10	=[	$die10,		wolf_die11	] {self.alpha = 0.6;};
-void() wolf_die11	=[	$die11,		wolf_die12	] {self.skin = 3; self.alpha = 0.5;};
-void() wolf_die12	=[	$die12,		wolf_die13	] {self.alpha = 0.4;
+void() wolf_die8	= [	$die8,		wolf_die9	] { self.solid = SOLID_NOT; self.skin = 2; self.alpha = 0.9;};
+void() wolf_die9	= [	$die9,		wolf_die10	] { self.alpha = 0.75;};
+void() wolf_die10	= [	$die10,		wolf_die11	] { self.alpha = 0.6;};
+void() wolf_die11	= [	$die11,		wolf_die12	] { self.skin = 3; self.alpha = 0.5;};
+void() wolf_die12	= [	$die12,		wolf_die13	] { self.alpha = 0.4;
 particle_explode(self.origin + '0 0 48', 64, 1+random()*0.5, PARTICLE_BURST_DBLUE, PARTICLE_BURST_UPWARD); };
-void() wolf_die13	=[	$die13,		wolf_die14	] {self.alpha = 0.25;};
-void() wolf_die14	=[	$die14,		wolf_die15	] {self.skin = 4; self.alpha = 0.1;
+void() wolf_die13	= [	$die13,		wolf_die14	] { self.alpha = 0.25;};
+void() wolf_die14	= [	$die14,		wolf_die15	] { self.skin = 4; self.alpha = 0.1;
 self.effects = self.effects | EF_MUZZLEFLASH;};
-void() wolf_die15	=[	$die15,		wolf_die16	] {self.alpha = 0.05;
+void() wolf_die15	= [	$die15,		wolf_die16	] { self.alpha = 0.05;
 self.effects = self.effects | EF_MUZZLEFLASH;};
-void() wolf_die16	=[	$die16,		wolf_die16	] {
+void() wolf_die16	= [	$die16,		wolf_die16	] {
 // Stop thinking and hide entity (prevent wolf_death15 loop)
 self.nextthink = LARGE_TIMER;
 self.think = SUB_Null;

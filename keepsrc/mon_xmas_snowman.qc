@@ -41,32 +41,32 @@ $frame claw1 claw2 claw3 claw4 claw5 // (001 - 005) Fast Claw attack
 $frame attack1 attack2 attack3 // (006 - 008) Fast Nail Attack
 $frame base1 base2 // (009 - 010) Misc modelling stuff
 
-void() snowm_stand1 = [ $stand1, snowm_stand2 ] {monster_idle_sound();ai_stand();}
-void() snowm_stand2 = [ $stand1, snowm_stand3 ] {ai_stand();};
-void() snowm_stand3 = [ $stand1, snowm_stand4 ] {ai_stand();};
-void() snowm_stand4 = [ $stand1, snowm_stand5 ] {ai_stand();};
-void() snowm_stand5 = [ $stand1, snowm_stand6 ] {ai_stand();};
-void() snowm_stand6 = [ $stand1, snowm_stand7 ] {ai_stand();};
-void() snowm_stand7 = [ $stand1, snowm_stand8 ] {ai_stand();};
-void() snowm_stand8 = [ $stand1, snowm_stand1 ] {ai_stand();};
+void() snowm_stand1 = [$stand1, snowm_stand2 ] { monster_idle_sound();ai_stand();}
+void() snowm_stand2 = [$stand1, snowm_stand3 ] { ai_stand(); };
+void() snowm_stand3 = [$stand1, snowm_stand4 ] { ai_stand(); };
+void() snowm_stand4 = [$stand1, snowm_stand5 ] { ai_stand(); };
+void() snowm_stand5 = [$stand1, snowm_stand6 ] { ai_stand(); };
+void() snowm_stand6 = [$stand1, snowm_stand7 ] { ai_stand(); };
+void() snowm_stand7 = [$stand1, snowm_stand8 ] { ai_stand(); };
+void() snowm_stand8 = [$stand1, snowm_stand1 ] { ai_stand(); };
 
-void() snowm_walk1 = [ $stand1, snowm_walk2 ] {monster_idle_sound();ai_walk(0);}
-void() snowm_walk2 = [ $stand1, snowm_walk3 ] {ai_walk(0);};
-void() snowm_walk3 = [ $stand1, snowm_walk4 ] {ai_walk(0);};
-void() snowm_walk4 = [ $stand1, snowm_walk5 ] {ai_walk(0);};
-void() snowm_walk5 = [ $stand1, snowm_walk6 ] {ai_walk(0);};
-void() snowm_walk6 = [ $stand1, snowm_walk7 ] {ai_walk(0);};
-void() snowm_walk7 = [ $stand1, snowm_walk8 ] {ai_walk(0);};
-void() snowm_walk8 = [ $stand1, snowm_walk1 ] {ai_walk(0);};
+void() snowm_walk1 = [$stand1, snowm_walk2 ] { monster_idle_sound();ai_walk(0);}
+void() snowm_walk2 = [$stand1, snowm_walk3 ] { ai_walk(0); };
+void() snowm_walk3 = [$stand1, snowm_walk4 ] { ai_walk(0); };
+void() snowm_walk4 = [$stand1, snowm_walk5 ] { ai_walk(0); };
+void() snowm_walk5 = [$stand1, snowm_walk6 ] { ai_walk(0); };
+void() snowm_walk6 = [$stand1, snowm_walk7 ] { ai_walk(0); };
+void() snowm_walk7 = [$stand1, snowm_walk8 ] { ai_walk(0); };
+void() snowm_walk8 = [$stand1, snowm_walk1 ] { ai_walk(0); };
 
-void() snowm_run1 = [ $stand1, snowm_run2 ] {monster_idle_sound();ai_run(0);}
-void() snowm_run2 = [ $stand1, snowm_run3 ] {ai_run(0);};
-void() snowm_run3 = [ $stand1, snowm_run4 ] {ai_run(0);};
-void() snowm_run4 = [ $stand1, snowm_run5 ] {ai_run(0);};
-void() snowm_run5 = [ $stand1, snowm_run6 ] {ai_run(0);};
-void() snowm_run6 = [ $stand1, snowm_run7 ] {ai_run(0);};
-void() snowm_run7 = [ $stand1, snowm_run8 ] {ai_run(0);};
-void() snowm_run8 = [ $stand1, snowm_run1 ] {ai_run(0);};
+void() snowm_run1 = [$stand1, snowm_run2 ] { monster_idle_sound();ai_run(0);}
+void() snowm_run2 = [$stand1, snowm_run3 ] { ai_run(0); };
+void() snowm_run3 = [$stand1, snowm_run4 ] { ai_run(0); };
+void() snowm_run4 = [$stand1, snowm_run5 ] { ai_run(0); };
+void() snowm_run5 = [$stand1, snowm_run6 ] { ai_run(0); };
+void() snowm_run6 = [$stand1, snowm_run7 ] { ai_run(0); };
+void() snowm_run7 = [$stand1, snowm_run8 ] { ai_run(0); };
+void() snowm_run8 = [$stand1, snowm_run1 ] { ai_run(0); };
 
 // MELEE : Crows Claw
 void() SnowmMelee = {
@@ -86,11 +86,11 @@ void() SnowmMelee = {
 	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn blood at claw
 };
 
-void() snowm_claw1 = [ $claw1, snowm_claw2 ] {ai_face();};
-void() snowm_claw2 = [ $claw2, snowm_claw3 ] {ai_face();};
-void() snowm_claw3 = [ $claw3, snowm_claw4 ] {ai_face();SnowmMelee();};
-void() snowm_claw4 = [ $claw4, snowm_claw5 ] {};
-void() snowm_claw5 = [ $claw5, snowm_run1 ] {
+void() snowm_claw1 = [$claw1, snowm_claw2 ] { ai_face(); };
+void() snowm_claw2 = [$claw2, snowm_claw3 ] { ai_face(); };
+void() snowm_claw3 = [$claw3, snowm_claw4 ] { ai_face();SnowmMelee(); };
+void() snowm_claw4 = [$claw4, snowm_claw5 ] {};
+void() snowm_claw5 = [$claw5, snowm_run1 ] {
 	// Check if snowman is within range to attack again
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = snowm_claw1;
@@ -126,23 +126,22 @@ void() SnowmFireNails = {
 	}
 };
 
-void() snowm_nail1 = [ $attack1, snowm_nail2 ] {ai_face();};
-void() snowm_nail2 = [ $attack2, snowm_nail3 ] {ai_face();};
-void() snowm_nail3 = [ $attack3, snowm_nail4 ] {ai_face();SnowmFireNails();};
-void() snowm_nail4 = [ $attack2, snowm_nail5 ] {};
-void() snowm_nail5 = [ $attack1, snowm_run1 ] {ai_face();};
+void() snowm_nail1 = [$attack1, snowm_nail2 ] { ai_face(); };
+void() snowm_nail2 = [$attack2, snowm_nail3 ] { ai_face(); };
+void() snowm_nail3 = [$attack3, snowm_nail4 ] { ai_face();SnowmFireNails(); };
+void() snowm_nail4 = [$attack2, snowm_nail5 ] {};
+void() snowm_nail5 = [$attack1, snowm_run1 ] { ai_face(); };
 
-//======================================================================
+
 // PAIN : quick reflection
-//======================================================================
-void() snowm_pain1 = [ $claw4, snowm_pain2 ] {};
-void() snowm_pain2 = [ $claw3, snowm_pain3 ] {};
-void() snowm_pain3 = [ $claw2, snowm_pain4 ] {};
-void() snowm_pain4 = [ $claw1, snowm_run1 ] {};
+
+void() snowm_pain1 = [$claw4, snowm_pain2 ] {};
+void() snowm_pain2 = [$claw3, snowm_pain3 ] {};
+void() snowm_pain3 = [$claw2, snowm_pain4 ] {};
+void() snowm_pain4 = [$claw1, snowm_run1 ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) snowm_pain =
-{
+void(entity inflictor, entity attacker, float damage) snowm_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -160,11 +159,10 @@ void(entity inflictor, entity attacker, float damage) snowm_pain =
 	}
 };
 
-//======================================================================
+
 // Exploding snowball!
-//======================================================================
-void() snowm_explode =
-{
+
+void() snowm_explode = {
 	// no more raindeer!
 	entity_hide (self);
 	// Make sure gibs go flying up

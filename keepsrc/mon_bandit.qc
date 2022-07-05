@@ -67,14 +67,14 @@ void() bandit_short = {
 };
 
 // SoE:  Shoot scene modified from shooting a gun to drawing a bow.
-void() bandit_atk1  =[ $shoot1,   bandit_atk2    ] {ai_face();};
-void() bandit_atk2  =[ $shoot2,   bandit_atk3    ] {ai_face(); sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM);};
-void() bandit_atk3  =[ $shoot3,   bandit_atk4    ] {ai_face();};
-void() bandit_atk4  =[ $shoot4,   bandit_atk5    ] {ai_face();};
-void() bandit_atk5  =[ $shoot5,   bandit_atk6    ] {ai_face();};
-void() bandit_atk6  =[ $shoot5,   bandit_atk7    ] {ai_face();bandit_short();};
-void() bandit_atk7  =[ $shoot6,   bandit_atk8    ] {ai_face();bandit_fire();};
-void() bandit_atk8  =[ $shoot7,   army_run1      ] {
+void() bandit_atk1  = [$shoot1,   bandit_atk2    ] { ai_face(); };
+void() bandit_atk2  = [$shoot2,   bandit_atk3    ] { ai_face(); sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
+void() bandit_atk3  = [$shoot3,   bandit_atk4    ] { ai_face(); };
+void() bandit_atk4  = [$shoot4,   bandit_atk5    ] { ai_face(); };
+void() bandit_atk5  = [$shoot5,   bandit_atk6    ] { ai_face(); };
+void() bandit_atk6  = [$shoot5,   bandit_atk7    ] { ai_face();bandit_short(); };
+void() bandit_atk7  = [$shoot6,   bandit_atk8    ] { ai_face();bandit_fire(); };
+void() bandit_atk8  = [$shoot7,   army_run1      ] {
 	local vector p1, p2;
 
 	ai_face();
@@ -95,8 +95,8 @@ void() bandit_atk8  =[ $shoot7,   army_run1      ] {
         }
     } else SUB_CheckRefire (bandit_atk3);
 };
-//void() bandit_atk8  =[ $shoot8,   bandit_atk9    ] {ai_face();};
-//void() bandit_atk9  =[ $shoot9,   army_run1      ] {ai_face();};
+//void() bandit_atk8  = [$shoot8,   bandit_atk9    ] { ai_face(); };
+//void() bandit_atk9  = [$shoot9,   army_run1      ] { ai_face(); };
 
 // PAIN - - - - - - - - - - - - - - - -
 void(entity inflictor, entity attacker, float damage) bandit_pain = {
@@ -117,9 +117,9 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
     
     r = random();
     if (self.ryuflags & RYU_REBEL)
-        {p1 = 0.85; p2 = 0.925;}
+        { p1 = 0.85; p2 = 0.925;}
     else
-        {p1 = 0.2;  p2 = 0.6;}
+        { p1 = 0.2;  p2 = 0.6;}
 
     if ((r < p1) || (skill >= 3)) {
         self.pain_finished = time + 0.6;
@@ -246,7 +246,7 @@ void() monster_bandit = {
 
 	// SoE:  Modified stats for nsoe2 rebel fighters.
     if (!self.skin && self.alignment > EVIL && !self.spawned) { // HACK!
-        if (self.health < 100) {self.health = self.max_health = 100; }
+        if (self.health < 100) { self.health = self.max_health = 100; }
         self.ryuflags = RYU_ALERT | RYU_REBEL;
 		if (self.deathstring == "") {
 			self.deathstring = " was shot by a Rebel\n";
@@ -259,4 +259,4 @@ void() monster_bandit = {
     monster_start();
 };
 
-void() monster_goblin = {self.skin = self.exactskin = 1;  monster_bandit();};
+void() monster_goblin = { self.skin = self.exactskin = 1;  monster_bandit(); };

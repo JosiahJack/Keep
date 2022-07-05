@@ -54,12 +54,11 @@ float LOST_STATE_GUARD = 3;
 float LOST_STATE_RUN = 5;
 float LOST_STATE_PAIN = 6;
 
-//======================================================================
+
 // Update Lost Souls every frame with velocity movements and glow eyes!
 // fstate (see above for animation block details)
-//======================================================================
-void(float fstate) lost_update = 
-{
+
+void(float fstate) lost_update = {
 	// If Lost is dead, no more updates
 	if (self.health < 1) return;
 
@@ -215,8 +214,7 @@ void(float fstate) lost_update =
 };	
 
 //----------------------------------------------------------------------------
-void() lost_flymode =
-{
+void() lost_flymode = {
 	self.solid = SOLID_SLIDEBOX;	// Reset just in case
 	self.movetype = MOVETYPE_FLY;	// Turn body into projectile
 	// make sure onground is not set, cannot use velocity otherwise
@@ -224,8 +222,7 @@ void() lost_flymode =
 };
 
 //----------------------------------------------------------------------------
-void() lost_stepmode =
-{
+void() lost_stepmode = {
 	self.velocity = '0 0 0';			// Back to regular movement
 	self.avelocity = '0 0 0';			// Cancel any rotation velocity
 	self.angles_x = self.angles_z = 0;	// Reset any X/Y angles
@@ -233,11 +230,11 @@ void() lost_stepmode =
 	self.movetype = MOVETYPE_STEP;		// Back to discreet movement
 };
 
-//======================================================================
+
 // All stand, walk and run functions are condensed down to one entry
 // so that the lost souls can move dynamic and have skin updates
 //
-void()	lost_stand1 = [ $idle1, lost_stand1 ] {
+void()	lost_stand1 = [$idle1, lost_stand1 ] {
 	if (self.state != LOST_STATE_GUARD) self.state = LOST_STATE_STAND;	
 	lost_flymode();				// allow velocity updates
 	lost_update(LOST_IDLE);		// Update skin + velocity
@@ -245,24 +242,23 @@ void()	lost_stand1 = [ $idle1, lost_stand1 ] {
 };
 void()	lost_guard1 = { self.state = LOST_STATE_GUARD; lost_stand1(); };
 
-void()	lost_walk1 = [ $idle1, lost_walk1 ] {
+void()	lost_walk1 = [$idle1, lost_walk1 ] {
 	self.state = LOST_STATE_WALK;
 	lost_stepmode();			// back to discreet step mode
 	lost_update(LOST_IDLE); 	// Update skin
 	ai_walk(8);
 };
-void()	lost_run1 = [ $idle1, lost_run1 ] {
+void()	lost_run1 = [$idle1, lost_run1 ] {
 	self.state = LOST_STATE_RUN;
 	lost_stepmode();			// back to discreet step mode
 	lost_update(LOST_IDLE);		// Update skin
 	ai_run(8);
 };
 
-//============================================================================
+
 // Range Charge attack
-//============================================================================
-void() lost_charge_touch =
-{
+
+void() lost_charge_touch = {
 	// Stop anymore touching
 	self.touch = SUB_Null;
 	self.think = self.th_run;
@@ -305,8 +301,7 @@ void()	lost_charge1 = {
 };
 
 //----------------------------------------------------------------------------
-void() lost_charge2 =
-{
+void() lost_charge2 = {
 	if (self.health < 1) return;
 	lost_update(LOST_CHARGE);
 	self.nextthink = time + 0.1;
@@ -323,11 +318,10 @@ void() lost_charge2 =
 	}
 };
 
-//======================================================================
+
 // MELEE ATTACK - Biting
-//======================================================================
-void() lost_bite =
-{
+
+void() lost_bite = {
 	local float ldmg;
 	local entity enemy_targ;
 	
@@ -354,8 +348,7 @@ void() lost_bite =
 };
 
 //----------------------------------------------------------------------------
-void() lost_melee2 = 
-{
+void() lost_melee2 = {
 	if (self.health < 1) return;
 	lost_update(LOST_MELEE);	// Update skin
 	self.cnt = self.cnt + 1;	// Next frame
@@ -378,8 +371,7 @@ void() lost_melee2 =
 };
 
 //----------------------------------------------------------------------------
-void() lost_melee1 =
-{
+void() lost_melee1 = {
 	self.count = 0;				// reset start of animation block
 	self.cnt = 0;				// Reset bite frame counter
 	lost_flymode();				// stay in flymode just in case collison probs
@@ -389,20 +381,20 @@ void() lost_melee1 =
 	self.nextthink = time + 0.1;
 };
 
-//======================================================================
+
 // MINION - Grow and spin up from nothing
-//======================================================================
-void() lost_growangle = {self.angles_y = self.angles_y + self.lefty;};
-void() lost_grow1 = [ $grow1, lost_grow2 ] {};
-void() lost_grow2 = [ $grow2, lost_grow3 ] {lost_growangle();};
-void() lost_grow3 = [ $grow3, lost_grow4 ] {lost_growangle();};
-void() lost_grow4 = [ $grow4, lost_grow5 ] {lost_growangle();};
-void() lost_grow5 = [ $grow5, lost_grow6 ] {lost_growangle();};
-void() lost_grow6 = [ $grow6, lost_grow7 ] {lost_growangle();};
-void() lost_grow7 = [ $grow7, lost_grow8 ] {lost_growangle();};
-void() lost_grow8 = [ $grow8, lost_grow9 ] {lost_growangle();};
-void() lost_grow9 = [ $grow9, lost_grow10] {lost_growangle();};
-void() lost_grow10= [ $grow10, lost_run1 ] {
+
+void() lost_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() lost_grow1 = [$grow1, lost_grow2 ] {};
+void() lost_grow2 = [$grow2, lost_grow3 ] { lost_growangle(); };
+void() lost_grow3 = [$grow3, lost_grow4 ] { lost_growangle(); };
+void() lost_grow4 = [$grow4, lost_grow5 ] { lost_growangle(); };
+void() lost_grow5 = [$grow5, lost_grow6 ] { lost_growangle(); };
+void() lost_grow6 = [$grow6, lost_grow7 ] { lost_growangle(); };
+void() lost_grow7 = [$grow7, lost_grow8 ] { lost_growangle(); };
+void() lost_grow8 = [$grow8, lost_grow9 ] { lost_growangle(); };
+void() lost_grow9 = [$grow9, lost_grow10] { lost_growangle(); };
+void() lost_grow10= [$grow10, lost_run1 ] {
 	// Is the lost stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
 		// Time to die!
@@ -437,8 +429,7 @@ void() lost_grow10= [ $grow10, lost_run1 ] {
 };
 
 //----------------------------------------------------------------------------
-void() lost_grow =
-{
+void() lost_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -448,11 +439,10 @@ void() lost_grow =
 	lost_grow1();
 };
 
-//============================================================================
+
 // PAIN in the head!
-//============================================================================
-void() lost_inpain =
-{
+
+void() lost_inpain = {
 	// Update pain frame
 	lost_update(self.attack_rage);
 	
@@ -464,8 +454,7 @@ void() lost_inpain =
 };
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) lost_pain =
-{
+void(entity inflictor, entity attacker, float damage) lost_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -485,9 +474,9 @@ void(entity inflictor, entity attacker, float damage) lost_pain =
 	lost_inpain();
 };
 
-//============================================================================
-void() lost_die1 = [ $pain1, lost_die2 ] {};
-void() lost_die2 = [ $pain2, lost_die2 ] {
+
+void() lost_die1 = [$pain1, lost_die2 ] {};
+void() lost_die2 = [$pain2, lost_die2 ] {
 	// Lost souls explode when they die
 	T_RadiusDamage (self, self, DAMAGE_LOSTSOUL, world, DAMAGEALL);
 	if (random() < 0.5) self.lip = EXPLODE_SMALL;

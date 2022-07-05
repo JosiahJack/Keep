@@ -33,28 +33,28 @@ $frame axattb1 axattb2 axattb3 axattb4 axattb5 axattb6
 $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
 
-void()	axeg_stand1	=[	$axstnd1,	axeg_stand2	] {ai_stand();};
-void()	axeg_stand2	=[	$axstnd2,	axeg_stand3	] {ai_stand();};
-void()	axeg_stand3	=[	$axstnd3,	axeg_stand4	] {ai_stand();};
-void()	axeg_stand4	=[	$axstnd4,	axeg_stand5	] {ai_stand();};
-void()	axeg_stand5	=[	$axstnd5,	axeg_stand6	] {ai_stand();};
-void()	axeg_stand6	=[	$axstnd6,	axeg_stand7	] {ai_stand();};
-void()	axeg_stand7	=[	$axstnd7,	axeg_stand8	] {ai_stand();};
-void()	axeg_stand8	=[	$axstnd8,	axeg_stand9	] {ai_stand();};
-void()	axeg_stand9	=[	$axstnd9,	axeg_stand10] {ai_stand();};
-void()	axeg_stand10=[  $axstnd10,  axeg_stand11] {ai_stand();};
-void()	axeg_stand11=[	$axstnd11,	axeg_stand12] {ai_stand();};
-void()	axeg_stand12=[	$axstnd12,	axeg_stand1	] {ai_stand();};
+void()	axeg_stand1	= [	$axstnd1,	axeg_stand2	] { ai_stand(); };
+void()	axeg_stand2	= [	$axstnd2,	axeg_stand3	] { ai_stand(); };
+void()	axeg_stand3	= [	$axstnd3,	axeg_stand4	] { ai_stand(); };
+void()	axeg_stand4	= [	$axstnd4,	axeg_stand5	] { ai_stand(); };
+void()	axeg_stand5	= [	$axstnd5,	axeg_stand6	] { ai_stand(); };
+void()	axeg_stand6	= [	$axstnd6,	axeg_stand7	] { ai_stand(); };
+void()	axeg_stand7	= [	$axstnd7,	axeg_stand8	] { ai_stand(); };
+void()	axeg_stand8	= [	$axstnd8,	axeg_stand9	] { ai_stand(); };
+void()	axeg_stand9	= [	$axstnd9,	axeg_stand10] { ai_stand(); };
+void()	axeg_stand10= [  $axstnd10,  axeg_stand11] { ai_stand(); };
+void()	axeg_stand11= [	$axstnd11,	axeg_stand12] { ai_stand(); };
+void()	axeg_stand12= [	$axstnd12,	axeg_stand1	] { ai_stand(); };
 
-void()	axeg_run1	=[	$axrun1,		axeg_run2	] {
+void()	axeg_run1	= [	$axrun1,		axeg_run2	] {
 	if (random() < 0.2) sound (self, CHAN_VOICE, "knight/idle.wav", 1,  ATTN_IDLE);
 	ai_run(25);
 };
-void()	axeg_run2	=[	$axrun2,		axeg_run3	] {ai_run(18); monster_footstep(FALSE);};
-void()	axeg_run3	=[	$axrun3,		axeg_run4	] {ai_run(12);};
-void()	axeg_run4	=[	$axrun4,		axeg_run5	] {ai_run(25);};
-void()	axeg_run5	=[	$axrun5,		axeg_run6	] {ai_run(18);monster_footstep(FALSE);};
-void()	axeg_run6	=[	$axrun6,		axeg_run1	] {ai_run(12);};
+void()	axeg_run2	= [	$axrun2,		axeg_run3	] { ai_run(18); monster_footstep(FALSE); };
+void()	axeg_run3	= [	$axrun3,		axeg_run4	] { ai_run(12); };
+void()	axeg_run4	= [	$axrun4,		axeg_run5	] { ai_run(25); };
+void()	axeg_run5	= [	$axrun5,		axeg_run6	] { ai_run(18);monster_footstep(FALSE); };
+void()	axeg_run6	= [	$axrun6,		axeg_run1	] { ai_run(12); };
 
 void(vector dir ) axeg_chop = {
 	local vector	delta, toss;
@@ -78,49 +78,49 @@ void(vector dir ) axeg_chop = {
 	self.enemy.velocity = self.enemy.velocity + toss;
 };
 
-void()	axe_runatka1	=[	$axatt1,		axe_runatka2	] {
+void()	axe_runatka1	= [	$axatt1,		axe_runatka2	] {
 	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
 	ai_charge(30);
 };
-void()	axe_runatka2	=[	$axatt2,		axe_runatka3	] {ai_charge(20);};
-void()	axe_runatka3	=[	$axatt3,		axe_runatka4	] {ai_charge(10); axeg_chop('0 0 0');};
-void()	axe_runatka4	=[	$axatt4,		axe_runatka5	] {axeg_chop('50 -20 10');};
-void()	axe_runatka5	=[	$axatt5,		axe_runatka6	] {axeg_chop('100 -40 10');};
-void()	axe_runatka6	=[	$axatt6,		axeg_run1	] {ai_charge_side();};
+void()	axe_runatka2	= [	$axatt2,		axe_runatka3	] { ai_charge(20); };
+void()	axe_runatka3	= [	$axatt3,		axe_runatka4	] { ai_charge(10); axeg_chop('0 0 0'); };
+void()	axe_runatka4	= [	$axatt4,		axe_runatka5	] { axeg_chop('50 -20 10'); };
+void()	axe_runatka5	= [	$axatt5,		axe_runatka6	] { axeg_chop('100 -40 10'); };
+void()	axe_runatka6	= [	$axatt6,		axeg_run1	] { ai_charge_side(); };
 
-void()	axe_runatkb1	=[	$axattb1,		axe_runatkb2	] {
+void()	axe_runatkb1	= [	$axattb1,		axe_runatkb2	] {
 	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
 	ai_charge(30);
 };
-void()	axe_runatkb2	=[	$axattb2,		axe_runatkb3	] {ai_charge(20);};
-void()	axe_runatkb3	=[	$axattb3,		axe_runatkb4	] {ai_charge(10); axeg_chop('0 0 0');};
-void()	axe_runatkb4	=[	$axattb4,		axe_runatkb5	] {axeg_chop('40 75 10');};
-void()	axe_runatkb5	=[	$axattb5,		axe_runatkb6	] {axeg_chop('80 150 20');};
-void()	axe_runatkb6	=[	$axattb6,		axeg_run1	] {ai_charge_side();};
+void()	axe_runatkb2	= [	$axattb2,		axe_runatkb3	] { ai_charge(20); };
+void()	axe_runatkb3	= [	$axattb3,		axe_runatkb4	] { ai_charge(10); axeg_chop('0 0 0'); };
+void()	axe_runatkb4	= [	$axattb4,		axe_runatkb5	] { axeg_chop('40 75 10'); };
+void()	axe_runatkb5	= [	$axattb5,		axe_runatkb6	] { axeg_chop('80 150 20'); };
+void()	axe_runatkb6	= [	$axattb6,		axeg_run1	] { ai_charge_side(); };
 
-void()	axe_runatkc1	=[	$axattc1,		axe_runatkc2	] {
+void()	axe_runatkc1	= [	$axattc1,		axe_runatkc2	] {
 	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
 	ai_charge(30);
 };
-void()	axe_runatkc2	=[	$axattc2,		axe_runatkc3	] {ai_charge(20);};
-void()	axe_runatkc3	=[	$axattc3,		axe_runatkc4	] {ai_charge(10); axeg_chop('0 0 0');};
-void()	axe_runatkc4	=[	$axattc4,		axe_runatkc5	] {axeg_chop('60 0 10');};
-void()	axe_runatkc5	=[	$axattc5,		axe_runatkc6	] {axeg_chop('120 0 20');};
-void()	axe_runatkc6	=[	$axattc6,		axeg_run1	] {ai_charge_side();};
+void()	axe_runatkc2	= [	$axattc2,		axe_runatkc3	] { ai_charge(20); };
+void()	axe_runatkc3	= [	$axattc3,		axe_runatkc4	] { ai_charge(10); axeg_chop('0 0 0'); };
+void()	axe_runatkc4	= [	$axattc4,		axe_runatkc5	] { axeg_chop('60 0 10'); };
+void()	axe_runatkc5	= [	$axattc5,		axe_runatkc6	] { axeg_chop('120 0 20'); };
+void()	axe_runatkc6	= [	$axattc6,		axeg_run1	] { ai_charge_side(); };
 
-void()	axe_runatkd1	=[	$axattd1,		axe_runatkd2	] {
+void()	axe_runatkd1	= [	$axattd1,		axe_runatkd2	] {
 	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
 	ai_charge(30);
 };
-void()	axe_runatkd2	=[	$axattd2,		axe_runatkd3	] {ai_charge(20);};
-void()	axe_runatkd3	=[	$axattd3,		axe_runatkd4	] {ai_charge(10); axeg_chop('0 0 0');};
-void()	axe_runatkd4	=[	$axattd4,		axe_runatkd5	] {axeg_chop('30 -75 100');};
-void()	axe_runatkd5	=[	$axattd5,		axe_runatkd6	] {axeg_chop('60 -150 200');};
-void()	axe_runatkd6	=[	$axattd6,		axeg_run1	] {ai_charge_side();};
+void()	axe_runatkd2	= [	$axattd2,		axe_runatkd3	] { ai_charge(20); };
+void()	axe_runatkd3	= [	$axattd3,		axe_runatkd4	] { ai_charge(10); axeg_chop('0 0 0'); };
+void()	axe_runatkd4	= [	$axattd4,		axe_runatkd5	] { axeg_chop('30 -75 100'); };
+void()	axe_runatkd5	= [	$axattd5,		axe_runatkd6	] { axeg_chop('60 -150 200'); };
+void()	axe_runatkd6	= [	$axattd6,		axeg_run1	] { ai_charge_side(); };
 
 void()	axeg_atk = {
 	local float r;
@@ -138,12 +138,12 @@ void()	axeg_atk = {
 		axe_runatkd1();
 };
 
-void()	axeg_pain1	=[	$axpain1,	axeg_pain2	] {ai_painforward(0);};
-void()	axeg_pain2	=[	$axpain2,	axeg_pain3	] {ai_painforward(-1);};
-void()	axeg_pain3	=[	$axpain3,	axeg_pain4	] {ai_painforward(-2);};
-void()	axeg_pain4	=[	$axpain4,	axeg_pain5	] {};
-void()	axeg_pain5	=[	$axpain5,	axeg_pain6	] {};
-void()	axeg_pain6	=[	$axpain6,	axeg_run1	] {};
+void()	axeg_pain1	= [	$axpain1,	axeg_pain2	] { ai_painforward(0); };
+void()	axeg_pain2	= [	$axpain2,	axeg_pain3	] { ai_painforward(-1); };
+void()	axeg_pain3	= [	$axpain3,	axeg_pain4	] { ai_painforward(-2); };
+void()	axeg_pain4	= [	$axpain4,	axeg_pain5	] {};
+void()	axeg_pain5	= [	$axpain5,	axeg_pain6	] {};
+void()	axeg_pain6	= [	$axpain6,	axeg_run1	] {};
 
 void(entity inflictor, entity attacker, float damage)	axeg_pain = {
 	// Check all pain conditions and set up what to do next
@@ -157,18 +157,18 @@ void(entity inflictor, entity attacker, float damage)	axeg_pain = {
 	}
 };
 
-void()	axeg_die1	=[	$axdeth1,	axeg_die2	] {
+void()	axeg_die1	= [	$axdeth1,	axeg_die2	] {
 	self.reviveframestart = $axdeth9;
 	self.reviveframeend = $axdeth1;
 };
-void()	axeg_die2	=[	$axdeth2,	axeg_die3	] {monster_check_gib();};
-void()	axeg_die3	=[	$axdeth3,	axeg_die4	] {monster_check_gib(); self.solid = SOLID_NOT;};
-void()	axeg_die4	=[	$axdeth4,	axeg_die5	] {};
-void()	axeg_die5	=[	$axdeth5,	axeg_die6	] {};
-void()	axeg_die6	=[	$axdeth6,	axeg_die7	] {};
-void()	axeg_die7	=[	$axdeth7,	axeg_die8	] {};
-void()	axeg_die8	=[	$axdeth8,	axeg_die9	] {monster_death_postcheck();};
-void()	axeg_die9	=[	$axdeth9,	axeg_die9	] {monster_deadbody_check();};
+void()	axeg_die2	= [	$axdeth2,	axeg_die3	] { monster_check_gib(); };
+void()	axeg_die3	= [	$axdeth3,	axeg_die4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void()	axeg_die4	= [	$axdeth4,	axeg_die5	] {};
+void()	axeg_die5	= [	$axdeth5,	axeg_die6	] {};
+void()	axeg_die6	= [	$axdeth6,	axeg_die7	] {};
+void()	axeg_die7	= [	$axdeth7,	axeg_die8	] {};
+void()	axeg_die8	= [	$axdeth8,	axeg_die9	] { monster_death_postcheck(); };
+void()	axeg_die9	= [	$axdeth9,	axeg_die9	] { monster_deadbody_check(); };
 
 void() axeg_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities

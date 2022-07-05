@@ -41,37 +41,37 @@ void(float ftop_mode) ftop_track = {
 	particle_debuff(self.origin+v_forward*32, 96, rint(10+random()*40), PARTICLE_BURST_FIRE); // Update particle effect around base of Chthon
 };
 
-void() ftop_idle1	=[	$walk1, ftop_idle2 ] {ftop_track(TRUE);};
-void() ftop_idle2	=[	$walk2, ftop_idle3 ] {ftop_track(TRUE);};
-void() ftop_idle3	=[	$walk3, ftop_idle4 ] {ftop_track(TRUE);};
-void() ftop_idle4	=[	$walk4, ftop_idle5 ] {ftop_track(TRUE);};
-void() ftop_idle5	=[	$walk5, ftop_idle6 ] {ftop_track(TRUE);};
-void() ftop_idle6	=[	$walk6, ftop_idle7 ] {ftop_track(TRUE);};
-void() ftop_idle7	=[	$walk7, ftop_idle8 ] {ftop_track(TRUE);};
-void() ftop_idle8	=[	$walk8, ftop_idle9 ] {ftop_track(TRUE);};
-void() ftop_idle9	=[	$walk9, ftop_idle10 ] {ftop_track(TRUE);};
-void() ftop_idle10	=[	$walk10, ftop_idle11 ] {ftop_track(TRUE);};
-void() ftop_idle11	=[	$walk11, ftop_idle12 ] {ftop_track(TRUE);};
-void() ftop_idle12	=[	$walk12, ftop_idle13 ] {ftop_track(TRUE);};
-void() ftop_idle13	=[	$walk13, ftop_idle14 ] {ftop_track(TRUE);};
-void() ftop_idle14	=[	$walk14, ftop_idle15 ] {ftop_track(TRUE);};
-void() ftop_idle15	=[	$walk15, ftop_idle16 ] {ftop_track(TRUE);};
-void() ftop_idle16	=[	$walk16, ftop_idle17 ] {ftop_track(TRUE);};
-void() ftop_idle17	=[	$walk17, ftop_idle18 ] {ftop_track(TRUE);};
-void() ftop_idle18	=[	$walk18, ftop_idle19 ] {ftop_track(TRUE);};
-void() ftop_idle19	=[	$walk19, ftop_idle20 ] {ftop_track(TRUE);};
-void() ftop_idle20	=[	$walk20, ftop_idle21 ] {ftop_track(TRUE);};
-void() ftop_idle21	=[	$walk21, ftop_idle22 ] {ftop_track(TRUE);};
-void() ftop_idle22	=[	$walk22, ftop_idle23 ] {ftop_track(TRUE);};
-void() ftop_idle23	=[	$walk23, ftop_idle24 ] {ftop_track(TRUE);};
-void() ftop_idle24	=[	$walk24, ftop_idle25 ] {ftop_track(TRUE);};
-void() ftop_idle25	=[	$walk25, ftop_idle26 ] {ftop_track(TRUE);};
-void() ftop_idle26	=[	$walk26, ftop_idle27 ] {ftop_track(TRUE);};
-void() ftop_idle27	=[	$walk27, ftop_idle28 ] {ftop_track(TRUE);};
-void() ftop_idle28	=[	$walk28, ftop_idle29 ] {ftop_track(TRUE);};
-void() ftop_idle29	=[	$walk29, ftop_idle30 ] {ftop_track(TRUE);};
-void() ftop_idle30	=[	$walk30, ftop_idle31 ] {ftop_track(TRUE);};
-void() ftop_idle31	=[	$walk31, ftop_idle1 ] {ftop_track(TRUE);};
+void() ftop_idle1	= [	$walk1, ftop_idle2 ] { ftop_track(TRUE); };
+void() ftop_idle2	= [	$walk2, ftop_idle3 ] { ftop_track(TRUE); };
+void() ftop_idle3	= [	$walk3, ftop_idle4 ] { ftop_track(TRUE); };
+void() ftop_idle4	= [	$walk4, ftop_idle5 ] { ftop_track(TRUE); };
+void() ftop_idle5	= [	$walk5, ftop_idle6 ] { ftop_track(TRUE); };
+void() ftop_idle6	= [	$walk6, ftop_idle7 ] { ftop_track(TRUE); };
+void() ftop_idle7	= [	$walk7, ftop_idle8 ] { ftop_track(TRUE); };
+void() ftop_idle8	= [	$walk8, ftop_idle9 ] { ftop_track(TRUE); };
+void() ftop_idle9	= [	$walk9, ftop_idle10 ] { ftop_track(TRUE); };
+void() ftop_idle10	= [	$walk10, ftop_idle11 ] { ftop_track(TRUE); };
+void() ftop_idle11	= [	$walk11, ftop_idle12 ] { ftop_track(TRUE); };
+void() ftop_idle12	= [	$walk12, ftop_idle13 ] { ftop_track(TRUE); };
+void() ftop_idle13	= [	$walk13, ftop_idle14 ] { ftop_track(TRUE); };
+void() ftop_idle14	= [	$walk14, ftop_idle15 ] { ftop_track(TRUE); };
+void() ftop_idle15	= [	$walk15, ftop_idle16 ] { ftop_track(TRUE); };
+void() ftop_idle16	= [	$walk16, ftop_idle17 ] { ftop_track(TRUE); };
+void() ftop_idle17	= [	$walk17, ftop_idle18 ] { ftop_track(TRUE); };
+void() ftop_idle18	= [	$walk18, ftop_idle19 ] { ftop_track(TRUE); };
+void() ftop_idle19	= [	$walk19, ftop_idle20 ] { ftop_track(TRUE); };
+void() ftop_idle20	= [	$walk20, ftop_idle21 ] { ftop_track(TRUE); };
+void() ftop_idle21	= [	$walk21, ftop_idle22 ] { ftop_track(TRUE); };
+void() ftop_idle22	= [	$walk22, ftop_idle23 ] { ftop_track(TRUE); };
+void() ftop_idle23	= [	$walk23, ftop_idle24 ] { ftop_track(TRUE); };
+void() ftop_idle24	= [	$walk24, ftop_idle25 ] { ftop_track(TRUE); };
+void() ftop_idle25	= [	$walk25, ftop_idle26 ] { ftop_track(TRUE); };
+void() ftop_idle26	= [	$walk26, ftop_idle27 ] { ftop_track(TRUE); };
+void() ftop_idle27	= [	$walk27, ftop_idle28 ] { ftop_track(TRUE); };
+void() ftop_idle28	= [	$walk28, ftop_idle29 ] { ftop_track(TRUE); };
+void() ftop_idle29	= [	$walk29, ftop_idle30 ] { ftop_track(TRUE); };
+void() ftop_idle30	= [	$walk30, ftop_idle31 ] { ftop_track(TRUE); };
+void() ftop_idle31	= [	$walk31, ftop_idle1 ] { ftop_track(TRUE); };
 
 void(vector orgofs) ftop_fire = {
 	local vector offang, org, vec, dir, mdest, avel;
@@ -105,29 +105,29 @@ void(vector orgofs) ftop_fire = {
 	launch_projectile(org,dir,avel,CT_PROJ_FIRETOP,self.attack_speed);
 };
 
-void() ftop_attack1	=[	$attack1, ftop_attack2 ] {ftop_track(FALSE);};
-void() ftop_attack2	=[	$attack2, ftop_attack3 ] {ftop_track(FALSE);};
-void() ftop_attack3	=[	$attack3, ftop_attack4 ] {ftop_track(FALSE);};
-void() ftop_attack4	=[	$attack4, ftop_attack5 ] {ftop_track(FALSE);};
-void() ftop_attack5	=[	$attack5, ftop_attack6 ] {ftop_track(FALSE);};
-void() ftop_attack6	=[	$attack6, ftop_attack7 ] {ftop_track(FALSE);};
-void() ftop_attack7	=[	$attack7, ftop_attack8 ] {ftop_track(FALSE);};
-void() ftop_attack8	=[	$attack8, ftop_attack9 ] {ftop_fire('100 50 250');};
-void() ftop_attack9	=[	$attack9, ftop_attack10 ] {ftop_track(FALSE);};
-void() ftop_attack10=[	$attack10, ftop_attack11 ] {ftop_track(FALSE);};
-void() ftop_attack11=[	$attack11, ftop_attack12 ] {ftop_track(FALSE);};
-void() ftop_attack12=[	$attack12, ftop_attack13 ] {ftop_track(FALSE);};
-void() ftop_attack13=[	$attack13, ftop_attack14 ] {ftop_track(FALSE);};
-void() ftop_attack14=[	$attack14, ftop_attack15 ] {ftop_track(FALSE);};
-void() ftop_attack15=[	$attack15, ftop_attack16 ] {ftop_track(FALSE);};
-void() ftop_attack16=[	$attack16, ftop_attack17 ] {ftop_track(FALSE);};
-void() ftop_attack17=[	$attack17, ftop_attack18 ] {ftop_track(FALSE);};
-void() ftop_attack18=[	$attack18, ftop_attack19 ] {ftop_track(FALSE);};
-void() ftop_attack19=[	$attack19, ftop_attack20 ] {ftop_fire('100 -50 250');};
-void() ftop_attack20=[	$attack20, ftop_attack21 ] {ftop_track(FALSE);};
-void() ftop_attack21=[	$attack21, ftop_attack22 ] {ftop_track(FALSE);};
-void() ftop_attack22=[	$attack22, ftop_attack23 ] {ftop_track(FALSE);};
-void() ftop_attack23=[	$attack23, ftop_attack1 ] {
+void() ftop_attack1	= [	$attack1, ftop_attack2 ] { ftop_track(FALSE); };
+void() ftop_attack2	= [	$attack2, ftop_attack3 ] { ftop_track(FALSE); };
+void() ftop_attack3	= [	$attack3, ftop_attack4 ] { ftop_track(FALSE); };
+void() ftop_attack4	= [	$attack4, ftop_attack5 ] { ftop_track(FALSE); };
+void() ftop_attack5	= [	$attack5, ftop_attack6 ] { ftop_track(FALSE); };
+void() ftop_attack6	= [	$attack6, ftop_attack7 ] { ftop_track(FALSE); };
+void() ftop_attack7	= [	$attack7, ftop_attack8 ] { ftop_track(FALSE); };
+void() ftop_attack8	= [	$attack8, ftop_attack9 ] { ftop_fire('100 50 250'); };
+void() ftop_attack9	= [	$attack9, ftop_attack10 ] { ftop_track(FALSE); };
+void() ftop_attack10= [	$attack10, ftop_attack11 ] { ftop_track(FALSE); };
+void() ftop_attack11= [	$attack11, ftop_attack12 ] { ftop_track(FALSE); };
+void() ftop_attack12= [	$attack12, ftop_attack13 ] { ftop_track(FALSE); };
+void() ftop_attack13= [	$attack13, ftop_attack14 ] { ftop_track(FALSE); };
+void() ftop_attack14= [	$attack14, ftop_attack15 ] { ftop_track(FALSE); };
+void() ftop_attack15= [	$attack15, ftop_attack16 ] { ftop_track(FALSE); };
+void() ftop_attack16= [	$attack16, ftop_attack17 ] { ftop_track(FALSE); };
+void() ftop_attack17= [	$attack17, ftop_attack18 ] { ftop_track(FALSE); };
+void() ftop_attack18= [	$attack18, ftop_attack19 ] { ftop_track(FALSE); };
+void() ftop_attack19= [	$attack19, ftop_attack20 ] { ftop_fire('100 -50 250'); };
+void() ftop_attack20= [	$attack20, ftop_attack21 ] { ftop_track(FALSE); };
+void() ftop_attack21= [	$attack21, ftop_attack22 ] { ftop_track(FALSE); };
+void() ftop_attack22= [	$attack22, ftop_attack23 ] { ftop_track(FALSE); };
+void() ftop_attack23= [	$attack23, ftop_attack1 ] {
 	ftop_track(FALSE);
 	if (self.enemy == world) self.think = self.th_stand; // If no enemy go back to idling in a pool of lava!
 };
@@ -163,8 +163,8 @@ void() ftop_death1 = [$death1, ftop_death2] {
 	sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
 	if (self.noise3 != "") trigger_strs(self.noise3, self);
 };
-void() ftop_death2 = [$death2, ftop_death3] {ftop_lightning();};
-void() ftop_death3 = [$death3, ftop_death4] {ftop_lightning();};
+void() ftop_death2 = [$death2, ftop_death3] { ftop_lightning(); };
+void() ftop_death3 = [$death3, ftop_death4] { ftop_lightning(); };
 void() ftop_death4 = [$death4, ftop_death5] {};
 void() ftop_death5 = [$death5, ftop_death6] {};
 void() ftop_death6 = [$death6, ftop_death7] {};
@@ -184,44 +184,44 @@ void() ftop_death10 = [$death9, ftop_death11] {
 };
 void() ftop_death11 = { remove(self); };
 
-void() ftop_shocka1 =[	$shocka1, ftop_shocka2 ] {ftop_lightning();};
-void() ftop_shocka2 =[	$shocka2, ftop_shocka3 ] {ftop_lightning();};
-void() ftop_shocka3 =[	$shocka3, ftop_shocka4 ] {ftop_lightning();};
-void() ftop_shocka4 =[	$shocka4, ftop_shocka5 ] {ftop_lightning();};
-void() ftop_shocka5 =[	$shocka5, ftop_shocka6 ] {ftop_lightning();};
-void() ftop_shocka6 =[	$shocka6, ftop_shocka7 ] {ftop_lightning();};
-void() ftop_shocka7 =[	$shocka7, ftop_shocka8 ] {ftop_lightning();};
-void() ftop_shocka8 =[	$shocka8, ftop_shocka9 ] {ftop_lightning();};
-void() ftop_shocka9 =[	$shocka9, ftop_shocka10 ] {ftop_lightning();};
-void() ftop_shocka10 =[	$shocka10, ftop_death1 ] {
+void() ftop_shocka1 = [	$shocka1, ftop_shocka2 ] { ftop_lightning(); };
+void() ftop_shocka2 = [	$shocka2, ftop_shocka3 ] { ftop_lightning(); };
+void() ftop_shocka3 = [	$shocka3, ftop_shocka4 ] { ftop_lightning(); };
+void() ftop_shocka4 = [	$shocka4, ftop_shocka5 ] { ftop_lightning(); };
+void() ftop_shocka5 = [	$shocka5, ftop_shocka6 ] { ftop_lightning(); };
+void() ftop_shocka6 = [	$shocka6, ftop_shocka7 ] { ftop_lightning(); };
+void() ftop_shocka7 = [	$shocka7, ftop_shocka8 ] { ftop_lightning(); };
+void() ftop_shocka8 = [	$shocka8, ftop_shocka9 ] { ftop_lightning(); };
+void() ftop_shocka9 = [	$shocka9, ftop_shocka10 ] { ftop_lightning(); };
+void() ftop_shocka10 = [	$shocka10, ftop_death1 ] {
 	ftop_lightning();
 	if (self.attack_finished > time) self.think = ftop_shocka1;
 };
 
-void() ftop_shockb1 =[	$shockb1, ftop_shockb2 ] {ftop_lightning();};
-void() ftop_shockb2 =[	$shockb2, ftop_shockb3 ] {ftop_lightning();};
-void() ftop_shockb3 =[	$shockb3, ftop_shockb4 ] {ftop_lightning();};
-void() ftop_shockb4 =[	$shockb4, ftop_shockb5 ] {ftop_lightning();};
-void() ftop_shockb5 =[	$shockb5, ftop_shockb6 ] {ftop_lightning();};
-void() ftop_shockb6 =[	$shockb6, ftop_shockb7 ] {ftop_lightning();};
-void() ftop_shockb7 =[	$shockb1, ftop_shockb8 ] {ftop_lightning();};
-void() ftop_shockb8 =[	$shockb2, ftop_shockb9 ] {ftop_lightning();};
-void() ftop_shockb9 =[	$shockb3, ftop_shockb10 ] {ftop_lightning();};
-void() ftop_shockb10 =[	$shockb4, ftop_death1 ] {
+void() ftop_shockb1 = [	$shockb1, ftop_shockb2 ] { ftop_lightning(); };
+void() ftop_shockb2 = [	$shockb2, ftop_shockb3 ] { ftop_lightning(); };
+void() ftop_shockb3 = [	$shockb3, ftop_shockb4 ] { ftop_lightning(); };
+void() ftop_shockb4 = [	$shockb4, ftop_shockb5 ] { ftop_lightning(); };
+void() ftop_shockb5 = [	$shockb5, ftop_shockb6 ] { ftop_lightning(); };
+void() ftop_shockb6 = [	$shockb6, ftop_shockb7 ] { ftop_lightning(); };
+void() ftop_shockb7 = [	$shockb1, ftop_shockb8 ] { ftop_lightning(); };
+void() ftop_shockb8 = [	$shockb2, ftop_shockb9 ] { ftop_lightning(); };
+void() ftop_shockb9 = [	$shockb3, ftop_shockb10 ] { ftop_lightning(); };
+void() ftop_shockb10 = [	$shockb4, ftop_death1 ] {
 	ftop_lightning();
 	if (self.attack_finished > time) self.think = ftop_shockb1;
 };
 
-void() ftop_shockc1 =[	$shockc1, ftop_shockc2 ] {ftop_lightning();};
-void() ftop_shockc2 =[	$shockc2, ftop_shockc3 ] {ftop_lightning();};
-void() ftop_shockc3 =[	$shockc3, ftop_shockc4 ] {ftop_lightning();};
-void() ftop_shockc4 =[	$shockc4, ftop_shockc5 ] {ftop_lightning();};
-void() ftop_shockc5 =[	$shockc5, ftop_shockc6 ] {ftop_lightning();};
-void() ftop_shockc6 =[	$shockc6, ftop_shockc7 ] {ftop_lightning();};
-void() ftop_shockc7 =[	$shockc7, ftop_shockc8 ] {ftop_lightning();};
-void() ftop_shockc8 =[	$shockc8, ftop_shockc9 ] {ftop_lightning();};
-void() ftop_shockc9 =[	$shockc9, ftop_shockc10 ] {ftop_lightning();};
-void() ftop_shockc10 =[	$shockc10, ftop_death1 ] {ftop_lightning();
+void() ftop_shockc1 = [	$shockc1, ftop_shockc2 ] { ftop_lightning(); };
+void() ftop_shockc2 = [	$shockc2, ftop_shockc3 ] { ftop_lightning(); };
+void() ftop_shockc3 = [	$shockc3, ftop_shockc4 ] { ftop_lightning(); };
+void() ftop_shockc4 = [	$shockc4, ftop_shockc5 ] { ftop_lightning(); };
+void() ftop_shockc5 = [	$shockc5, ftop_shockc6 ] { ftop_lightning(); };
+void() ftop_shockc6 = [	$shockc6, ftop_shockc7 ] { ftop_lightning(); };
+void() ftop_shockc7 = [	$shockc7, ftop_shockc8 ] { ftop_lightning(); };
+void() ftop_shockc8 = [	$shockc8, ftop_shockc9 ] { ftop_lightning(); };
+void() ftop_shockc9 = [	$shockc9, ftop_shockc10 ] { ftop_lightning(); };
+void() ftop_shockc10 = [	$shockc10, ftop_death1 ] { ftop_lightning();
 	if (self.attack_finished > time) self.think = ftop_shockc1;};
 
 void() ftop_deathsequence = {
@@ -245,25 +245,25 @@ void() ftop_deathsequence = {
 	else ftop_shockc1();
 };
 
-void() ftop_rise1	=[	$rise1, ftop_rise2 ] {
-	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);};
-void() ftop_rise2	=[	$rise2, ftop_rise3 ] {
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
-void() ftop_rise3	=[	$rise3, ftop_rise4 ] {};
-void() ftop_rise4	=[	$rise4, ftop_rise5 ] {};
-void() ftop_rise5	=[	$rise5, ftop_rise6 ] {};
-void() ftop_rise6	=[	$rise6, ftop_rise7 ] {};
-void() ftop_rise7	=[	$rise7, ftop_rise8 ] {};
-void() ftop_rise8	=[	$rise8, ftop_rise9 ] {};
-void() ftop_rise9	=[	$rise9, ftop_rise10 ] {};
-void() ftop_rise10	=[	$rise10, ftop_rise11 ] {};
-void() ftop_rise11	=[	$rise11, ftop_rise12 ] {};
-void() ftop_rise12	=[	$rise12, ftop_rise13 ] {};
-void() ftop_rise13	=[	$rise13, ftop_rise14 ] {};
-void() ftop_rise14	=[	$rise14, ftop_rise15 ] {};
-void() ftop_rise15	=[	$rise15, ftop_rise16 ] {};
-void() ftop_rise16	=[	$rise16, ftop_rise17 ] {};
-void() ftop_rise17	=[	$rise17, ftop_attack1 ] {
+void() ftop_rise1	= [	$rise1, ftop_rise2 ] {
+	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM); };
+void() ftop_rise2	= [	$rise2, ftop_rise3 ] {
+	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
+void() ftop_rise3	= [	$rise3, ftop_rise4 ] {};
+void() ftop_rise4	= [	$rise4, ftop_rise5 ] {};
+void() ftop_rise5	= [	$rise5, ftop_rise6 ] {};
+void() ftop_rise6	= [	$rise6, ftop_rise7 ] {};
+void() ftop_rise7	= [	$rise7, ftop_rise8 ] {};
+void() ftop_rise8	= [	$rise8, ftop_rise9 ] {};
+void() ftop_rise9	= [	$rise9, ftop_rise10 ] {};
+void() ftop_rise10	= [	$rise10, ftop_rise11 ] {};
+void() ftop_rise11	= [	$rise11, ftop_rise12 ] {};
+void() ftop_rise12	= [	$rise12, ftop_rise13 ] {};
+void() ftop_rise13	= [	$rise13, ftop_rise14 ] {};
+void() ftop_rise14	= [	$rise14, ftop_rise15 ] {};
+void() ftop_rise15	= [	$rise15, ftop_rise16 ] {};
+void() ftop_rise16	= [	$rise16, ftop_rise17 ] {};
+void() ftop_rise17	= [	$rise17, ftop_attack1 ] {
 	self.takedamage = DAMAGE_YES;
 	self.th_stand = ftop_idle1;
 	self.th_run = ftop_attack1;
@@ -331,6 +331,6 @@ void() monster_firetopboss = {
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
 	monster_start();
-	if (self.targetname == "") {ftop_wakeup(); dprint("monster_firetopboss with no targetname! Spawning anyways but it cannot be killed without a targetname!\n");
+	if (self.targetname == "") { ftop_wakeup(); dprint("monster_firetopboss with no targetname! Spawning anyways but it cannot be killed without a targetname!\n");
 	} else self.use = ftop_wakeup;
 };

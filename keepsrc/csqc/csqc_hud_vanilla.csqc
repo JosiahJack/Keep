@@ -429,7 +429,7 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 			pos_y -= 24;
 			if (sitems & IT_INVULNERABILITY) Hud_DrawLargeValue(pos, 999, 25);
 			else Hud_DrawLargeValue(pos, getstatf(STAT_ARMOR), 25);
-			pos+=[3*24,0];
+			pos+= [3*24,0];
 			if (sitems & IT_INVULNERABILITY)	Hud_PicOrModel(pos, "gfx/disc", "progs/invulner.mdl", 0, 70);
 			else if (sitems2 & IT2_ARMOR3)		Hud_PicOrModel(pos, "gfx/sb_armor3", "progs/armor.mdl", 2, 70);
 			else if (sitems2 & IT2_ARMOR2)		Hud_PicOrModel(pos, "gfx/sb_armor2", "progs/armor.mdl", 1, 70);

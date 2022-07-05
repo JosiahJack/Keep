@@ -96,8 +96,7 @@ float() nour_WaveCheck = {
 //----------------------------------------------------------------------
 // Check the tether system
 //----------------------------------------------------------------------
-float() nour_CheckTether =
-{
+float() nour_CheckTether = {
 	local float currentdist;
 	
 	// Check for boss mode
@@ -115,43 +114,42 @@ float() nour_CheckTether =
 	}
 };
 
-//======================================================================
+
 // MONSTER STATES (stand, walk run, attack, pain and death!
-//======================================================================
-void() nour_stand1	=[	$idle1, nour_stand2] {monster_idle_sound();ai_stand();};
-void() nour_stand2	=[	$idle2, nour_stand3] {ai_stand();};
-void() nour_stand3	=[	$idle3, nour_stand4] {ai_stand();};
-void() nour_stand4	=[	$idle4, nour_stand5] {ai_stand();};
-void() nour_stand5	=[	$idle5, nour_stand6] {ai_stand();};
-void() nour_stand6	=[	$idle6, nour_stand7] {ai_stand();};
-void() nour_stand7	=[	$idle7, nour_stand8] {ai_stand();};
-void() nour_stand8	=[	$idle8, nour_stand9] {ai_stand();};
-void() nour_stand9	=[	$idle9, nour_stand10] {ai_stand();};
-void() nour_stand10	=[	$idle10, nour_stand11] {ai_stand();};
-void() nour_stand11	=[	$idle11, nour_stand1] {ai_stand();};
 
-//======================================================================
-void() nour_walk1	=[	$idle1, nour_walk2] {monster_idle_sound();ai_walk(8);};
-void() nour_walk2	=[	$idle2, nour_walk3] {ai_walk(8);};
-void() nour_walk3	=[	$idle3, nour_walk4] {ai_walk(8);};
-void() nour_walk4	=[	$idle4, nour_walk5] {ai_walk(8);};
-void() nour_walk5	=[	$idle5, nour_walk6] {ai_walk(8);};
-void() nour_walk6	=[	$idle6, nour_walk7] {ai_walk(8);};
-void() nour_walk7	=[	$idle7, nour_walk8] {ai_walk(8);};
-void() nour_walk8	=[	$idle8, nour_walk9] {ai_walk(8);};
-void() nour_walk9	=[	$idle9, nour_walk10] {ai_walk(8);};
-void() nour_walk10	=[	$idle10, nour_walk11] {ai_walk(8);};
-void() nour_walk11	=[	$idle11, nour_walk1] {ai_walk(8);};
+void() nour_stand1	= [	$idle1, nour_stand2] { monster_idle_sound();ai_stand(); };
+void() nour_stand2	= [	$idle2, nour_stand3] { ai_stand(); };
+void() nour_stand3	= [	$idle3, nour_stand4] { ai_stand(); };
+void() nour_stand4	= [	$idle4, nour_stand5] { ai_stand(); };
+void() nour_stand5	= [	$idle5, nour_stand6] { ai_stand(); };
+void() nour_stand6	= [	$idle6, nour_stand7] { ai_stand(); };
+void() nour_stand7	= [	$idle7, nour_stand8] { ai_stand(); };
+void() nour_stand8	= [	$idle8, nour_stand9] { ai_stand(); };
+void() nour_stand9	= [	$idle9, nour_stand10] { ai_stand(); };
+void() nour_stand10	= [	$idle10, nour_stand11] { ai_stand(); };
+void() nour_stand11	= [	$idle11, nour_stand1] { ai_stand(); };
 
-//======================================================================
-void() nour_slideframe =
-{
+
+void() nour_walk1	= [	$idle1, nour_walk2] { monster_idle_sound();ai_walk(8); };
+void() nour_walk2	= [	$idle2, nour_walk3] { ai_walk(8); };
+void() nour_walk3	= [	$idle3, nour_walk4] { ai_walk(8); };
+void() nour_walk4	= [	$idle4, nour_walk5] { ai_walk(8); };
+void() nour_walk5	= [	$idle5, nour_walk6] { ai_walk(8); };
+void() nour_walk6	= [	$idle6, nour_walk7] { ai_walk(8); };
+void() nour_walk7	= [	$idle7, nour_walk8] { ai_walk(8); };
+void() nour_walk8	= [	$idle8, nour_walk9] { ai_walk(8); };
+void() nour_walk9	= [	$idle9, nour_walk10] { ai_walk(8); };
+void() nour_walk10	= [	$idle10, nour_walk11] { ai_walk(8); };
+void() nour_walk11	= [	$idle11, nour_walk1] { ai_walk(8); };
+
+
+void() nour_slideframe = {
 	// Check for boss mode (phase and wave check)
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		if (self.style != NOUR_PHASE2) return;
 
 		// Check for boss wave trigger events
-		if (nour_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (nour_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 	
 	// Dead monster?
@@ -174,19 +172,18 @@ void() nour_slideframe =
 };
 
 //----------------------------------------------------------------------
-void() nour_slide1 = {self.walkframe = 0; nour_slideframe();};
+void() nour_slide1 = { self.walkframe = 0; nour_slideframe(); };
 
-//======================================================================
+
 // RUN state - chasing the player
-//======================================================================
-void() nour_runframe =
-{
+
+void() nour_runframe = {
 	// Check for boss mode (phase and wave check)
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		if (self.style != NOUR_PHASE2) return;
 
 		// Check for boss wave trigger events
-		if (nour_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (nour_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 	
 	if (self.health < 1) return;
@@ -207,7 +204,7 @@ void() nour_runframe =
 	else ai_run(16);
 };
 
-void() nour_run1 = {self.walkframe = 0; nour_runframe();};
+void() nour_run1 = { self.walkframe = 0; nour_runframe(); };
 
 // Attachment management (create, finish and delete)
 void() nour_create_attachment = {
@@ -221,10 +218,10 @@ void() nour_create_attachment = {
 	}
 };
 
-//======================================================================
+
 // ATTACK A - Fire multiple spit/spikes
 // Block pain function from interrupting magic attack
-//======================================================================
+
 void(vector offset) nour_spike = {
 	local vector dtarget, starget, ftarget, sorg, forg, dir;
 	
@@ -255,20 +252,20 @@ void(vector offset) nour_spike = {
 	launch_projectile(sorg,dir,NO_SPIN,CT_PROJ_NOUR1,self.attack_speed);
 };
 
-void() nour_atta1	=[	$shota1, nour_atta2] {ai_face();
+void() nour_atta1	= [	$shota1, nour_atta2] { ai_face();
 	self.pain_finished = time + 1;
 	sound (self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
 };
-void() nour_atta2	=[ $shota2, nour_atta3] {ai_face();};
-void() nour_atta3	=[ $shota3, nour_atta4] {ai_face();};
-void() nour_atta4	=[ $shota4, nour_atta5] {nour_spike('24,0,16');};
-void() nour_atta5	=[ $shota5, nour_atta6] {nour_spike('20 0 8');};
-void() nour_atta6	=[ $shota6, nour_atta7] {nour_spike('16 0 0');};
-void() nour_atta7	=[ $shota7, nour_atta8] {nour_spike('12 0 -8');};
-void() nour_atta8	=[ $shota8, nour_atta9] {nour_spike('8 0 -16');};
-void() nour_atta9	=[ $shota9, nour_atta10] {};
-void() nour_atta10	=[ $shota10, nour_atta11] {};
-void() nour_atta11	=[ $shota11, nour_run1] {};
+void() nour_atta2	= [$shota2, nour_atta3] { ai_face(); };
+void() nour_atta3	= [$shota3, nour_atta4] { ai_face(); };
+void() nour_atta4	= [$shota4, nour_atta5] { nour_spike('24,0,16'); };
+void() nour_atta5	= [$shota5, nour_atta6] { nour_spike('20 0 8'); };
+void() nour_atta6	= [$shota6, nour_atta7] { nour_spike('16 0 0'); };
+void() nour_atta7	= [$shota7, nour_atta8] { nour_spike('12 0 -8'); };
+void() nour_atta8	= [$shota8, nour_atta9] { nour_spike('8 0 -16'); };
+void() nour_atta9	= [$shota9, nour_atta10] {};
+void() nour_atta10	= [$shota10, nour_atta11] {};
+void() nour_atta11	= [$shota11, nour_run1] {};
 
 // ATTACK B - Fire one large blob (grenade) of spit
 void(vector bombofs) Fire_NourBomb = {
@@ -329,23 +326,23 @@ void(vector bombofs, float bombframe) Setup_NourBomb = {
 	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_YELLOW, 0);
 };
 
-void() nour_attb1	=[ $shotb1, nour_attb2] {ai_face();self.pain_finished = time + 1.5;};
-void() nour_attb2	=[ $shotb2, nour_attb3] {ai_face();};
-void() nour_attb3	=[ $shotb3, nour_attb4] {ai_face();};
-void() nour_attb4	=[ $shotb4, nour_attb5] {ai_face();};
-void() nour_attb5	=[ $shotb5, nour_attb6] {Setup_NourBomb('24 0 0',0);};
-void() nour_attb6	=[ $shotb6, nour_attb7] {Setup_NourBomb('24 0 -2',1);};
-void() nour_attb7	=[ $shotb7, nour_attb8] {Setup_NourBomb('24 0 -4',2);};
-void() nour_attb8	=[ $shotb8, nour_attb9] {Setup_NourBomb('24 0 -8',3);};
-void() nour_attb9	=[ $shotb9, nour_attb10] {Setup_NourBomb('24 0 -12',4);};
-void() nour_attb10	=[ $shotb10, nour_attb11] {Setup_NourBomb('24 0 -16',5);};
-void() nour_attb11	=[ $shotb11, nour_attb12] {Setup_NourBomb('24 0 -12',6);};
-void() nour_attb12	=[ $shotb12, nour_attb13] {Fire_NourBomb('24 0 -12');};
-void() nour_attb13	=[ $shotb13, nour_attb14] {};
-void() nour_attb14	=[ $shotb14, nour_attb15] {};
-void() nour_attb15	=[ $shotb15, nour_attb16] {};
-void() nour_attb16	=[ $shotb16, nour_attb17] {ai_face();};
-void() nour_attb17	=[ $shotb17, nour_run1] {ai_face();};
+void() nour_attb1	= [$shotb1, nour_attb2] { ai_face();self.pain_finished = time + 1.5;};
+void() nour_attb2	= [$shotb2, nour_attb3] { ai_face(); };
+void() nour_attb3	= [$shotb3, nour_attb4] { ai_face(); };
+void() nour_attb4	= [$shotb4, nour_attb5] { ai_face(); };
+void() nour_attb5	= [$shotb5, nour_attb6] { Setup_NourBomb('24 0 0',0); };
+void() nour_attb6	= [$shotb6, nour_attb7] { Setup_NourBomb('24 0 -2',1); };
+void() nour_attb7	= [$shotb7, nour_attb8] { Setup_NourBomb('24 0 -4',2); };
+void() nour_attb8	= [$shotb8, nour_attb9] { Setup_NourBomb('24 0 -8',3); };
+void() nour_attb9	= [$shotb9, nour_attb10] { Setup_NourBomb('24 0 -12',4); };
+void() nour_attb10	= [$shotb10, nour_attb11] { Setup_NourBomb('24 0 -16',5); };
+void() nour_attb11	= [$shotb11, nour_attb12] { Setup_NourBomb('24 0 -12',6); };
+void() nour_attb12	= [$shotb12, nour_attb13] { Fire_NourBomb('24 0 -12'); };
+void() nour_attb13	= [$shotb13, nour_attb14] {};
+void() nour_attb14	= [$shotb14, nour_attb15] {};
+void() nour_attb15	= [$shotb15, nour_attb16] {};
+void() nour_attb16	= [$shotb16, nour_attb17] { ai_face(); };
+void() nour_attb17	= [$shotb17, nour_run1] { ai_face(); };
 
 // ATTACK C - Summon wizards around boss
 void() Spawn_NourFog = {
@@ -469,7 +466,7 @@ void(vector minofs, float minframe) Setup_NourMin = {
 	Fire_NourPlasma(minofs);
 };
 
-void() nour_attc1	=[ $shotc1, nour_attc2] {ai_face();
+void() nour_attc1	= [$shotc1, nour_attc2] { ai_face();
 	// Make sure boss mode active for this attack
 	if (!(self.spawnflags & MON_NOUR_BOSS)) { self.think = self.th_run; return; }
 
@@ -502,49 +499,49 @@ void() nour_attc1	=[ $shotc1, nour_attc2] {ai_face();
 		self.lip = self.lip - 1;
 	}
 };
-void() nour_attc2	=[ $shotc2, nour_attc3] {ai_face();};
-void() nour_attc3	=[ $shotc3, nour_attc4] {ai_face();};
-void() nour_attc4	=[ $shotc4, nour_attc5] {Setup_NourMin('24 0 -24',0);};
-void() nour_attc5	=[ $shotc5, nour_attc6] {Setup_NourMin('24 0 -24',1);};
-void() nour_attc6	=[ $shotc6, nour_attc7] {Setup_NourMin('24 0 -22',2);};
-void() nour_attc7	=[ $shotc7, nour_attc8] {Setup_NourMin('24 0 -20',3);};
-void() nour_attc8	=[ $shotc8, nour_attc9] {Setup_NourMin('24 0 -16',4);};
-void() nour_attc9	=[ $shotc9, nour_attc10] {Setup_NourMin('24 0 -16',5);};
-void() nour_attc10	=[ $shotc10, nour_attc11] {Setup_NourMin('24 0 -12',6);};
-void() nour_attc11	=[ $shotc11, nour_attc12] {Setup_NourMin('24 0 -8',6);};
-void() nour_attc12	=[ $shotc12, nour_attc13] {Setup_NourMin('24 0 -4',7);};
-void() nour_attc13	=[ $shotc13, nour_attc14] {Setup_NourMin('24 0 -2',7);};
-void() nour_attc14	=[ $shotc14, nour_attc15] {Spawn_NourMin('24 0 0');};
-void() nour_attc15	=[ $shotc15, nour_attc16] {Fire_NourPlasma('24 0 0');};
-void() nour_attc16	=[ $shotc16, nour_attc17] {};
-void() nour_attc17	=[ $shotc17, nour_attc18] {};
-void() nour_attc18	=[ $shotc18, nour_attc19] {};
-void() nour_attc19	=[ $shotc19, nour_attc20] {};
-void() nour_attc20	=[ $shotc20, nour_attc21] {};
-void() nour_attc21	=[ $shotc21, nour_attc22] {};
-void() nour_attc22	=[ $shotc22, nour_attc23] {ai_face();};
-void() nour_attc23	=[ $shotc23, nour_run1] {ai_face();
+void() nour_attc2	= [$shotc2, nour_attc3] { ai_face(); };
+void() nour_attc3	= [$shotc3, nour_attc4] { ai_face(); };
+void() nour_attc4	= [$shotc4, nour_attc5] { Setup_NourMin('24 0 -24',0); };
+void() nour_attc5	= [$shotc5, nour_attc6] { Setup_NourMin('24 0 -24',1); };
+void() nour_attc6	= [$shotc6, nour_attc7] { Setup_NourMin('24 0 -22',2); };
+void() nour_attc7	= [$shotc7, nour_attc8] { Setup_NourMin('24 0 -20',3); };
+void() nour_attc8	= [$shotc8, nour_attc9] { Setup_NourMin('24 0 -16',4); };
+void() nour_attc9	= [$shotc9, nour_attc10] { Setup_NourMin('24 0 -16',5); };
+void() nour_attc10	= [$shotc10, nour_attc11] { Setup_NourMin('24 0 -12',6); };
+void() nour_attc11	= [$shotc11, nour_attc12] { Setup_NourMin('24 0 -8',6); };
+void() nour_attc12	= [$shotc12, nour_attc13] { Setup_NourMin('24 0 -4',7); };
+void() nour_attc13	= [$shotc13, nour_attc14] { Setup_NourMin('24 0 -2',7); };
+void() nour_attc14	= [$shotc14, nour_attc15] { Spawn_NourMin('24 0 0'); };
+void() nour_attc15	= [$shotc15, nour_attc16] { Fire_NourPlasma('24 0 0'); };
+void() nour_attc16	= [$shotc16, nour_attc17] {};
+void() nour_attc17	= [$shotc17, nour_attc18] {};
+void() nour_attc18	= [$shotc18, nour_attc19] {};
+void() nour_attc19	= [$shotc19, nour_attc20] {};
+void() nour_attc20	= [$shotc20, nour_attc21] {};
+void() nour_attc21	= [$shotc21, nour_attc22] {};
+void() nour_attc22	= [$shotc22, nour_attc23] { ai_face(); };
+void() nour_attc23	= [$shotc23, nour_run1] { ai_face();
 	// Restore ammo resistance to default
 	Resist_ChangeType(self, FALSE);
 	self.style = NOUR_PHASE2;	// Fight mode
 };
 
-void() nour_paina1 = [ $paina1, nour_paina2 ] {};
-void() nour_paina2 = [ $paina2, nour_paina3 ] {};
-void() nour_paina3 = [ $paina3, nour_paina4 ] {};
-void() nour_paina4 = [ $paina4, nour_paina5 ] {};
-void() nour_paina5 = [ $paina5, nour_paina6 ] {};
-void() nour_paina6 = [ $paina6, nour_run1 ] {};
+void() nour_paina1 = [$paina1, nour_paina2 ] {};
+void() nour_paina2 = [$paina2, nour_paina3 ] {};
+void() nour_paina3 = [$paina3, nour_paina4 ] {};
+void() nour_paina4 = [$paina4, nour_paina5 ] {};
+void() nour_paina5 = [$paina5, nour_paina6 ] {};
+void() nour_paina6 = [$paina6, nour_run1 ] {};
 
-void() nour_painb1 = [ $painb1, nour_painb2 ] {};
-void() nour_painb2 = [ $painb2, nour_painb3 ] {};
-void() nour_painb3 = [ $painb3, nour_painb4 ] {};
-void() nour_painb4 = [ $painb4, nour_painb5 ] {};
-void() nour_painb5 = [ $painb5, nour_painb6 ] {};
-void() nour_painb6 = [ $painb6, nour_painb7 ] {};
-void() nour_painb7 = [ $painb7, nour_painb8 ] {};
-void() nour_painb8 = [ $painb8, nour_painb9 ] {};
-void() nour_painb9 = [ $painb9, nour_run1 ] {};
+void() nour_painb1 = [$painb1, nour_painb2 ] {};
+void() nour_painb2 = [$painb2, nour_painb3 ] {};
+void() nour_painb3 = [$painb3, nour_painb4 ] {};
+void() nour_painb4 = [$painb4, nour_painb5 ] {};
+void() nour_painb5 = [$painb5, nour_painb6 ] {};
+void() nour_painb6 = [$painb6, nour_painb7 ] {};
+void() nour_painb7 = [$painb7, nour_painb8 ] {};
+void() nour_painb8 = [$painb8, nour_painb9 ] {};
+void() nour_painb9 = [$painb9, nour_run1 ] {};
 
 void(entity inflictor, entity attacker, float damage) nour_pain = {
 	// Finish with all attachments
@@ -552,7 +549,7 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		// Check for boss wave trigger events
-		if (nour_WaveCheck() == TRUE) {self.th_summon(); return;}
+		if (nour_WaveCheck() == TRUE) { self.th_summon(); return;}
 	}
 
 	// Check all pain conditions and set up what to do next
@@ -604,15 +601,15 @@ void() nour_explode = {
 	ThrowGib(5, 10 + rint(random()*3));
 };
 
-void() nour_die1 = [ $death1, nour_die2 ] {};
-void() nour_die2 = [ $death2, nour_die3 ] {};
-void() nour_die3 = [ $death3, nour_die4 ] {self.solid = SOLID_NOT;};
-void() nour_die4 = [ $death4, nour_die5 ] {};
-void() nour_die5 = [ $death5, nour_die6 ] {};
-void() nour_die6 = [ $death6, nour_die7 ] {};
-void() nour_die7 = [ $death7, nour_die8 ] {};
-void() nour_die8 = [ $death8, nour_die9 ] {self.lip = 0;};
-void() nour_die9 = [ $death9, nour_die9 ] {
+void() nour_die1 = [$death1, nour_die2 ] {};
+void() nour_die2 = [$death2, nour_die3 ] {};
+void() nour_die3 = [$death3, nour_die4 ] { self.solid = SOLID_NOT;};
+void() nour_die4 = [$death4, nour_die5 ] {};
+void() nour_die5 = [$death5, nour_die6 ] {};
+void() nour_die6 = [$death6, nour_die7 ] {};
+void() nour_die7 = [$death7, nour_die8 ] {};
+void() nour_die8 = [$death8, nour_die9 ] { self.lip = 0;};
+void() nour_die9 = [$death9, nour_die9 ] {
 	// Spawn implosion effect
 	if (random() < 0.5)
 		particle_implode(self.origin, 20+random()*20, 100, 100, PARTICLE_BURST_BLUE);
@@ -673,13 +670,12 @@ void() nour_die = {
 	nour_die1();
 };
 
-//======================================================================
+
 // Create wizard minion entity chain
 // Entities are created so that the spawning space can be tested
 // before spawning the minions for possible collisions
-//======================================================================
-float() nour_minionsetup =
-{
+
+float() nour_minionsetup = {
 	local entity min_prev, min_first;
 	
 	self.lip = self.attack_summon;
@@ -713,8 +709,7 @@ float() nour_minionsetup =
 };
 
 //----------------------------------------------------------------------
-void() nour_spawntether =
-{
+void() nour_spawntether = {
 	// temporary tether point
 	self.movelast = spawn();
 	self.movelast.owner = self;
@@ -725,11 +720,10 @@ void() nour_spawntether =
 	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
 };
 
-//======================================================================
+
 // REVEAL PHASE (coming out of the ground)
-//======================================================================
-void() nour_readyframe =
-{
+
+void() nour_readyframe = {
 	self.walkframe = 0;				// Reset just in case
 	self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
 	self.movetype = MOVETYPE_STEP;	// back to regular movement
@@ -741,8 +735,7 @@ void() nour_readyframe =
 };
 
 //----------------------------------------------------------------------
-void() nour_revealframe = 
-{
+void() nour_revealframe = {
 	// Beginning of animation block
 	if (self.walkframe == 3) 
 		sound (self, CHAN_BODY, "ad171/nour/reveal.wav", 1, ATTN_NORM);
@@ -780,9 +773,9 @@ void() nour_revealframe =
 	}
 };
 
-//======================================================================
+
 // Setup BOSS Nour after trigger event
-//======================================================================
+
 void() nour_awake = {
 	// make sure boss mode selected
 	if (!(self.spawnflags & MON_NOUR_BOSS)) return;
@@ -991,7 +984,7 @@ void() monster_nour = {
 	self.classtype = CT_MONNOUR;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_wizard";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

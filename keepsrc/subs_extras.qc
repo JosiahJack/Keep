@@ -73,7 +73,7 @@ void() SUB_PushFrameMovers = {
 		if (ent.owner) {
 			// Ignore next frame (done moving)
 			if (ent.owner.velocity == '0 0 0') {
-				ent.fmover = string_null;
+				ent.fmover = "";
 				ent.origin = ent.owner.origin;
 				setorigin(ent, ent.origin);
 			} else if ((ent.owner.attack_finished-(0.5-frametime)) > time ) {
@@ -87,7 +87,7 @@ void() SUB_PushFrameMovers = {
 			}
 		} else if (ent.velocity == '0 0 0') {
 			// Independant func_water or func_watertrain
-			ent.fmover = string_null;// Ignore next frame (done moving)
+			ent.fmover = "";// Ignore next frame (done moving)
 		} else {
 			// Add move for this frame
 			ent.origin = ent.origin + ent.velocity*frametime;

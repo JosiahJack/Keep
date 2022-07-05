@@ -600,15 +600,15 @@ void() BecomeBeamHit = { // [FUNCTION]
 	beamhit1();
 };
 
-void() beamring1 =	[1,		beamring2] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring2 =	[2,		beamring3] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring3 =	[4,		beamring4] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring4 =	[6,		beamring5] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring5 =	[8,		beamring6] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring6 =	[10,	beamring7] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring7 =	[12,	beamring8] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring8 =	[14,	beamring9] {self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring9 =	[16,	SUB_Remove] {self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring1 =	[1,		beamring2] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring2 =	[2,		beamring3] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring3 =	[4,		beamring4] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring4 =	[6,		beamring5] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring5 =	[8,		beamring6] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring6 =	[10,	beamring7] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring7 =	[12,	beamring8] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring8 =	[14,	beamring9] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring9 =	[16,	SUB_Remove] { self.nextthink = time + 0.05;}; // [FUNCTION]
 
 void() d_beamring1 =	[2,		d_beamring2] {}; // [FUNCTION]
 void() d_beamring2 =	[4,		d_beamring3] {}; // [FUNCTION]
@@ -924,7 +924,7 @@ void(entity attacker, vector spot, float damage) Thunderstrike_Ex = { // [FUNCTI
     // Create lightning and thunder effects.
     setorigin(zap,end);
     sound(zap,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",1,0.5);  // It's loud.
-	QC_ParseBeam(TE_LIGHTNING1,string_null, zap, start, end, 32);
+	QC_ParseBeam(TE_LIGHTNING1,"", zap, start, end, 32);
     remove(zap);   // Dummy served its purpose, now begone.
     if (pointcontents(end) == CONTENT_SKY) return;     // Don't explode if it hits sky below.
 
@@ -1048,7 +1048,7 @@ void(vector start, vector dir, float damage, float radius, float ang) DeathRay =
 void() Thor_Pulse = { // [FUNCTION]
 	local vector pak;
 
-    if (self.count < 1) {remove (self);  return;}
+    if (self.count < 1) { remove (self);  return;}
 
     self.nextthink = time + 0.2;
     self.count = self.count - 1;
@@ -1146,6 +1146,6 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor, floa
             }
         } while (ignore); // end do{}while
 
-		QC_ParseBeam(fx,string_null, inflictor, start, p1, 32); // Draw the lightning bolt between the two points.
+		QC_ParseBeam(fx,"", inflictor, start, p1, 32); // Draw the lightning bolt between the two points.
     }
 };

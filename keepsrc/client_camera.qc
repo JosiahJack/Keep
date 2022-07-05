@@ -263,7 +263,7 @@ void() StartIntermissionCamera = {
 		self.takedamage = DAMAGE_NO;		// no more damage
 		setmodel(self, MODEL_EMPTY);		// Hide player model
 		setsize(self, VEC_ORIGIN, VEC_ORIGIN);
-		self.weaponmodel = string_null;		// No vmodel updates
+		self.weaponmodel = "";		// No vmodel updates
 		self.frame = self.weaponframe = 0;	// reset all frames
 		self.waitmin = time + 0.5;			// Delay before start
 		self.think = SUB_Null;				// Stop player.qc

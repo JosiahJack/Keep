@@ -1340,9 +1340,9 @@ void() ToggleSpiritShroud = {
 	spawn_tfog (self.origin);
 	self.invisible_finished = time + POWERUP_TIMER;
 	self.invisible_time = TRUE;
-	self.items = self.items & IT_INVISIBILITY;
+	self.items = self.items | IT_INVISIBILITY;
 	self.notrace = 1;
-	sound (self, CHAN_AUTO, SOUND_ARTINV1, 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, SOUND_ARTINV1, 1, ATTN_NORM);
 	self.perms = self.perms - (self.perms & POW_ARMORSPIRIT); // use it up
 	centerprint(self,"Spirit Shroud raised.\nYou vanish in a puff of smoke!");
 	Safe_stuffcmd (self, "bf\n");
@@ -1354,7 +1354,7 @@ void() ToggleBerserkerArmor = {
 	sound (self, CHAN_AUTO, SOUND_ARTQUAD1, 1, ATTN_NORM);
 	self.super_damage_finished = time + POWERUP_TIMER;		
 	self.super_sound = time + 1;
-	self.items = self.items & IT_QUAD;
+	self.items = self.items | IT_QUAD;
 	self.super_time = TRUE;
 	self.perms = self.perms - (self.perms & POW_ARMORBERSERKER); // use it up
 	centerprint(self,"Demonhide Armor used!\nYou feel like a killing machine!");

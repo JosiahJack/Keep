@@ -65,59 +65,16 @@ void() VermisFoundTarget = {
 
 void() vermis_use = {
 	if (self.enemy) return;
-	if (self.health <= 0) return;
-	if (activator.items & IT_INVISIBILITY) return;
-	if (activator.flags & FL_NOTARGET) return;
+	if (self.health < 1) return;
+	if (Invisible(activator)) return;
 	if (activator.classname != "player") return;
 
 	self.enemy = activator;
 	self.nextthink = time + 0.1;
-	self.think = VermisFoundTarget;
+	self.think = FoundTarget;
 };
 
-float() VermisFindTarget = {
-	local entity client;
-	local float r;
-
-	if (self.passive_state) return FALSE;
-	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & AS_MELEE)) {
-		client = sight_entity;
-		if (client.enemy == self.enemy) return 0;
-	} else {
-		client = checkclient();
-		if (!client) return 0;
-	}
-
-	if (client == self.enemy) return 0;
-	if (client.flags & FL_NOTARGET) return 0;
-	if (client.items & IT_INVISIBILITY) return 0;
-
-	r = range(client);
-	if (r == RANGE_FAR) return 0;
-	if (!visible(client)) return 0;
-
-	if (r == RANGE_NEAR) {
-		if (client.show_hostile < time && !infront(client)) return 0;
-	} else {
-		if (r == RANGE_MID) {
-			if (!infront(client)) return 0;
-		}
-	}
-	self.enemy = client;
-	if (self.enemy.classname != "player") {
-		self.enemy = self.enemy.enemy;
-		if (self.enemy.classname != "player")
-		{
-			self.enemy = world;
-			return 0;
-		}
-	}
-	VermisFoundTarget();
-	return 1;
-};
-
-void() vermis_start_go = 
-{
+void() vermis_start_go = {
 	if (!(self.spawnflags & 64))
 	{
 		self.origin_z = self.origin_z + 1;
@@ -135,17 +92,25 @@ void() vermis_start_go =
 	self.pausetime = 100000000;
 	self.th_stand();
 	self.nextthink = self.nextthink + random() * 0.5;
-	if (self.spawnflags & 64 && (self.spawnflags & 128) && !(activator.items & IT_INVISIBILITY) && !(activator.flags & FL_NOTARGET) && activator.classname == "player")
-	{
-		self.enemy = activator;
-		self.nextthink = time + 0.1;
-		self.think = FoundTarget;
+	if ((self.spawnflags & 64) && (self.spawnflags & 128)) {
+		if ((activator.flags & FL_CLIENT)) {
+			if(!Invisible(activator)) {
+				self.enemy = activator;
+				self.nextthink = time + 0.1;
+				self.think = FoundTarget;
+				return;
+			}
+		}
 	}
-	if (self.awake == 1 && !(self.enemy.items & IT_INVISIBILITY) && !(self.enemy.flags & FL_NOTARGET) && self.enemy.classname == "player")
-	{
-		self.nextthink = time + 0.1;
-		self.think = FoundTarget;
+	if (self.awake == 1 && self.enemy.flags & FL_CLIENT) {
+		if (!Invisible(self.enemy)) {
+			self.nextthink = time + 0.1;
+			self.think = FoundTarget;
+			return;
+		}
 	}
+	self.think = self.th_stand;
+	self.nextthink = time + 0.1;
 };
 
 void() vermis_start = {
@@ -165,7 +130,7 @@ void() ai_vermis_face =  {
 	ChangeYaw();
 };
 
-void() ai_vermis_stand = { if (VermisFindTarget()) return; };
+void() ai_vermis_stand = { if (FindTarget()) return; };
 
 float() CheckVermisAttack =  {
 	local vector spot1;
@@ -1067,8 +1032,7 @@ void() vermis_run30 = [121, vermis_run1]
 	ai_vermis_run();
 };
 
-void() vermis_spore_explode = 
-{
+void() vermis_spore_explode = {
 	T_RadiusDamage(self, self.owner, 55, other,DAMAGEALL);
 	if (other)
 	{
@@ -1085,8 +1049,7 @@ void() vermis_spore_explode =
 	SUB_Remove();
 };
 
-void() vermis_spore_touch = 
-{
+void() vermis_spore_touch = {
 	local float rndsnd;
 	if (other == self.owner)
 	{
@@ -1125,8 +1088,7 @@ void() vermis_spore_touch =
 	self.lip = 1;
 };
 
-void() vermis_spore_think = 
-{
+void() vermis_spore_think = {
 	if (self.ltime < time)
 	{
 		vermis_spore_explode();
@@ -1311,8 +1273,7 @@ void() vermis_shoot20 = [141, vermis_run1]
 	ai_shotcheck();
 };
 
-void(float xoff, float yoff, float zoff) vermis_grab = 
-{
+void(float xoff, float yoff, float zoff) vermis_grab = {
 	local vector org;
 	local float dist;
 	if (self.enemy.flags & FL_MONSTER && !(self.enemy.flags & FL_CLIENT))
@@ -1368,8 +1329,7 @@ void(float xoff, float yoff, float zoff, float xoff2, float yoff2, float zoff2) 
 	self.enemy.teleport_time = time + 0.2;
 };
 
-void() dummy_think = 
-{
+void() dummy_think = {
 	self.owner.vermis_grabbed = 0;
 	self.owner.spawnmaster = world;
 	self.owner.velocity = self.velocity;
@@ -1377,8 +1337,7 @@ void() dummy_think =
 	self.think = SUB_Remove;
 };
 
-void() vermis_launch = 
-{
+void() vermis_launch = {
 	local entity dummy;
 	if (self.enemy.vermis_grabbed != 1)
 	{

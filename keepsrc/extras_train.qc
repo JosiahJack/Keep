@@ -148,7 +148,7 @@ void() train_ext_waypoint = { // [ENTITY]
 	if (self.wait2 < -1) self.wait2 = -1;
 	if (self.speed2 < -1) self.speed2 = -1;
 	if (!self.speed2 && self.speed) self.speed2 = self.speed;
-	if (!self.event2 && self.event != string_null) self.event2 = self.event;
+	if (!self.event2 && self.event != "") self.event2 = self.event;
 	if (self.noise2) precache_sound(self.noise2);
 	if (self.noise3) precache_sound(self.noise3);
 	self.solid = SOLID_NOT;

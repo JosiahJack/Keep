@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 34
+// Function count: 41
 //
 // Implements: Subroutines
 //
@@ -92,19 +92,28 @@ vector (float dm) VelocityForDamage = { // [FUNCTION]
 	return v;
 };
 
+// InSky not made since AD's check_skycontent is more robust and uses different advanced engine features.
 float(vector spot) InSky = { return (pointcontents(spot) == CONTENT_SKY); }; // [FUNCTION]
 float(vector spot) InAir = { return (pointcontents(spot) == CONTENT_EMPTY); }; // [FUNCTION]
 float(vector spot) InSolid = { return (pointcontents(spot) == CONTENT_SOLID); }; // [FUNCTION]
 float(vector spot) InWater = { return (pointcontents(spot) == CONTENT_WATER); }; // [FUNCTION]
 float(vector spot) InSlime = { return (pointcontents(spot) == CONTENT_SLIME); }; // [FUNCTION]
 float(vector spot) InLava = { return (pointcontents(spot) == CONTENT_LAVA); }; // [FUNCTION]
-// InSky not made since AD's check_skycontent is more robust and uses different advanced engine features.
+
 float(vector spot) InLiquid = { // [FUNCTION]
 	local float conts;
 
 	conts = pointcontents(spot);
 	return ((conts <= CONTENT_WATER) && (conts != CONTENT_SKY));
 };
+
+float(vector spot) InOpenOrLiquid = { // [FUNCTION]
+	local float conts;
+
+	conts = pointcontents(spot);
+	if (conts != CONTENT_SOLID && conts != CONTENT_SKY) return TRUE;
+	return FALSE;
+}
 
 float(float amount) SUB_NudgeSelfPlacement = { // [FUNCTION]
 	local float shift, pconts;
@@ -332,15 +341,105 @@ float(entity targ) Invisible = { // [FUNCTION]
 	return FALSE;
 };
 
-float(entity targ) Indestructable = {
+float(entity targ) Indestructable = { // [FUNCTION]
 	if (targ.flags & FL_GODMODE) return TRUE;
 	if (targ.invincible_finished >= time) return TRUE;
+	if (targ.takedamage <= DAMAGE_NO) return TRUE;
 	return FALSE;
 };
 
 // Account for rounding errors on critical checks.
-float(float first, float second) SafeEquals = {
+float(float first, float second) SafeEquals = { // [FUNCTION]
 	if (first == second) return TRUE; // In fact, equal.
 	if (fabs(first - second) < MATH_EPSILON) return TRUE; // Close enough.
 	return FALSE; // Nope, not equal.
+};
+
+float(entity thePoint) IsSpaceClearAtEntity = { // [FUNCTION]
+   local entity neighbors;
+   local entity start;
+
+	if (!InOpenOrLiquid(thePoint.origin)) return FALSE;
+
+   neighbors = findradius (thePoint.origin,64);
+   if (neighbors == world) return TRUE;
+
+   start = neighbors;
+   while (neighbors) {
+      if (neighbors != thePoint) {
+         if ((neighbors.flags & FLx_CREATURE)) return FALSE;
+         else if (neighbors.think) return FALSE;
+      }
+      neighbors = neighbors.chain;
+      if (neighbors == start) return TRUE;
+   }
+   return TRUE;
+};
+
+entity(string cname, entity targ) SUB_FindByClassnameAwayFrom = { // [FUNCTION]
+	local entity furthestDest, bestDest, curDest;
+	local float theDist, curDist, dot, loop;
+	local vector curVector;
+
+	if (!targ) return world;
+	if (cname == "") return world;
+
+	furthestDest = world;
+	bestDest = world;
+	theDist = FALSE;
+	makevectors(targ.angles);
+	loop = 0;
+	curDest = find(curDest,classname,cname);
+	while (curDest) {
+		loop = loop + 1;
+		if (loop > 16) break;
+
+		if (curDest == world) {
+			if (bestDest != world) return bestDest;
+
+			return furthestDest;
+		}
+		if (IsSpaceClearAtEntity(curDest)) {
+			curVector = (curDest.origin - targ.origin);
+			curDist = vlen(curVector);
+			curVector = normalize(curVector);
+			dot = curVector * v_forward;
+			if (dot > 0.6) {
+				if (curDist > 150) bestDest = curDest;
+			}
+			if (curDist > theDist) {
+				furthestDest = curDest;
+				theDist = curDist;
+			}
+		}
+	}
+	return world;
+};
+
+// Used by monsters who teleport themselves to find a spot.
+entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
+	local entity enem, result;
+	local string targtype;
+
+	if (self.enemy) enem = self.enemy;
+	else enem = find(world,classname,"player");
+
+	if (self.classtype == CT_MONWRATHOVERLORD) targtype = "info_overlord_destination";
+	else if (self.classtype == CT_MONMORPH) targtype = "info_morph_destination";
+	else targtype = "info_teleport_destination";
+
+	result = SUB_FindByClassnameAwayFrom(targtype,enem);
+	if (result) return result;
+
+	if (targtype != "info_teleport_destination") targtype = "info_teleport_destination";
+	else targtype = "info_target";
+
+	result = SUB_FindByClassnameAwayFrom(targtype,enem);
+	if (result) return result;
+	if (targtype != "info_target") targtype = "info_target";
+	else return world;
+
+	result = SUB_FindByClassnameAwayFrom(targtype,enem);
+	if (result) return result;
+	return world;
 };

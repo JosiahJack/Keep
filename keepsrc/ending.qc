@@ -66,7 +66,7 @@ void() ending_for_coop = { // [FUNCTION]
 void() xpackEnding = { // [FUNCTION]
    local entity cameraview;
 
-   if (coop) {ending_for_coop(); return; }
+   if (coop) { ending_for_coop(); return; }
 
    intermission_exittime = (time + 10000000.000);
    intermission_running = TRUE;
@@ -185,8 +185,8 @@ void() actor_fire2 = [ 108.000, actor_fire3 ] { // [FUNCTION]
    self.angles_x = FALSE;
    self.nextthink = (time + 0.150);
 };
-void() actor_fire3 = [ 109.000, actor_fire4 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire4 = [ 110.000, actor_fire5 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire3 = [ 109.000, actor_fire4 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire4 = [ 110.000, actor_fire5 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
 void() actor_fire5 = [ 111.000, actor_fire6 ] { // [FUNCTION]
    self.nextthink = (time + 0.150);
    ending_remove_stuff();
@@ -198,25 +198,25 @@ void() actor_fire5 = [ 111.000, actor_fire6 ] { // [FUNCTION]
 	}
 };
 void() actor_fire6 = [ 112.000, actor_fire7 ] { self.effects = 0; self.nextthink = (time + 0.150); }; // [FUNCTION]
-void() actor_fire7 = [ 12.000, actor_fire8 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire8 = [ 13.000, actor_fire9 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire9 = [ 14.000, actor_fire10 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire10 = [ 15.000, actor_fire11 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire11 = [ 16.000, actor_fire12 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire12 = [ 12.000, actor_fire13 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire13 = [ 13.000, actor_fire14 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire14 = [ 14.000, actor_fire15 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire15 = [ 15.000, actor_fire16 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire16 = [ 16.000, actor_fire17 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire17 = [ 12.000, actor_fire18 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire18 = [ 13.000, actor_fire19 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire19 = [ 14.000, actor_fire20 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void() actor_fire20 = [ 15.000, actor_fire21 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire7 = [ 12.000, actor_fire8 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire8 = [ 13.000, actor_fire9 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire9 = [ 14.000, actor_fire10 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire10 = [ 15.000, actor_fire11 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire11 = [ 16.000, actor_fire12 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire12 = [ 12.000, actor_fire13 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire13 = [ 13.000, actor_fire14 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire14 = [ 14.000, actor_fire15 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire15 = [ 15.000, actor_fire16 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire16 = [ 16.000, actor_fire17 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire17 = [ 12.000, actor_fire18 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire18 = [ 13.000, actor_fire19 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire19 = [ 14.000, actor_fire20 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire20 = [ 15.000, actor_fire21 ] { self.nextthink = (time + 0.150); }; // [FUNCTION]
 void() actor_fire21 = [ 16.000, actor_control ] { self.nextthink = (time + 0.150); actorStage = STAGE_TO_POINT2; }; // [FUNCTION]
 
 void() actor_teleport = { // [FUNCTION]
    spawn_tfog (self.origin);
-   self.model = string_null;
+   self.model = "";
    self.think = SUB_Null;
    self.nextthink = (time + 999999.000);
 };

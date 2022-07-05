@@ -127,9 +127,9 @@ void() wyrm_glide = {
 	} else left = 0;
     ChangeYaw();
     if (fabs(ofs) <= self.yaw_speed)
-        {ryu_untilt();  left = 1;}
+        { ryu_untilt();  left = 1;}
     else
-        {ryu_tilt (left, 32);  left = 0;  sped = 20;}
+        { ryu_tilt (left, 32);  left = 0;  sped = 20;}
 
 	// Forward movement.
     swap = self.enemy;
@@ -167,14 +167,14 @@ void(entity targ) wyrm_move = {
 	// Change angles.
     ofs = anglemod(self.angles_y - self.ideal_yaw);
     if (ofs >= 180)
-        {left = 1;  ofs = ofs - 360;}
+        { left = 1;  ofs = ofs - 360;}
     else
         left = 0;
     ChangeYaw();
     if (fabs(ofs) <= self.yaw_speed)
         ryu_untilt();
     else
-        {ryu_tilt (left, sped);  sped = 20;}
+        { ryu_tilt (left, sped);  sped = 20;}
 
 	// Forward movement.
     swap = self.enemy;
@@ -507,7 +507,7 @@ void() ryu_sfx_fire = {
         sound (self, CHAN_WEAPON, "drake/imp/shard.wav", 1, ATTN_NORM);
 };
 
-void() ryu_sfx_idle = {sound (self, CHAN_VOICE, "drake/dragon/idle1.wav", 1, ATTN_NORM);};
+void() ryu_sfx_idle = { sound (self, CHAN_VOICE, "drake/dragon/idle1.wav", 1, ATTN_NORM); };
 
 //  Fly animation forward.  Used for stand, walk, and run anims.
 //  Stand = Dragon hovers in place.   Walk  = The dragon slowly glides along its path.   Run   = The dragon flies quickly toward the enemy.
@@ -526,13 +526,13 @@ void() wyrm_fly_anim = {
     if ( self.frame == $fly8 ) ryu_sfx_fly();
 };
 
-void() ryu_stand1 =[ $fly1, ryu_stand1  ] {wyrm_fly_anim(); ai_stand();};
+void() ryu_stand1 = [$fly1, ryu_stand1  ] { wyrm_fly_anim(); ai_stand(); };
 
-void() ryu_walk1  =[ $fly1, ryu_walk1   ] {wyrm_fly_anim(); ai_walk(SPEED_RYU_MIN);};
+void() ryu_walk1  = [$fly1, ryu_walk1   ] { wyrm_fly_anim(); ai_walk(SPEED_RYU_MIN); };
 
-void() ryu_run1   =[ $fly1, ryu_run1    ] {wyrm_fly_anim(); ai_run(self.speed);};
+void() ryu_run1   = [$fly1, ryu_run1    ] { wyrm_fly_anim(); ai_run(self.speed); };
 
-void() wyrm_fly   =[ $fly1, wyrm_fly    ] {
+void() wyrm_fly   = [$fly1, wyrm_fly    ] {
     wyrm_fly_anim();
 
     // Custom move and attack AI.
@@ -561,23 +561,23 @@ void() wyrm_go = {
         ryu_run1();
 };
 
-void() dragon_bite1  =[ $attack1,  dragon_bite2  ] { self.show_hostile = time + 1; ryu_melee(); };
-void() dragon_bite2  =[ $attack2,  dragon_bite3  ] {ryu_melee();};
-void() dragon_bite3  =[ $attack3,  dragon_bite4  ] {ryu_melee();};
-void() dragon_bite4  =[ $attack4,  dragon_bite5  ] {ryu_melee();};
-void() dragon_bite5  =[ $attack5,  dragon_bite6  ] {ryu_melee();};
-void() dragon_bite6  =[ $attack6,  dragon_bite7  ] {ryu_melee();};
-void() dragon_bite7  =[ $attack7,  dragon_bite8  ] {ryu_melee();};
-void() dragon_bite8  =[ $attack8,  dragon_bite9  ] {ryu_melee();};
-void() dragon_bite9  =[ $attack9,  dragon_bite10 ] {ryu_melee(); ryu_sfx_fly(); Ryu_Bite();};
-void() dragon_bite10 =[ $attack8,  dragon_bite11 ] {ryu_melee();};
-void() dragon_bite11 =[ $attack7,  dragon_bite12 ] {ryu_melee();};
-void() dragon_bite12 =[ $attack6,  dragon_bite13 ] {ryu_melee();};
-void() dragon_bite13 =[ $attack5,  dragon_bite14 ] {ryu_melee();};
-void() dragon_bite14 =[ $attack4,  dragon_bite15 ] {ryu_melee();};
-void() dragon_bite15 =[ $attack3,  dragon_bite16 ] {ryu_melee();};
-void() dragon_bite16 =[ $attack2,  dragon_bite17 ] {ryu_melee(); Ryu_Bite();};
-void() dragon_bite17 =[ $attack1,  ryu_go     ] {ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0;};
+void() dragon_bite1  = [$attack1,  dragon_bite2  ] { self.show_hostile = time + 1; ryu_melee(); };
+void() dragon_bite2  = [$attack2,  dragon_bite3  ] { ryu_melee(); };
+void() dragon_bite3  = [$attack3,  dragon_bite4  ] { ryu_melee(); };
+void() dragon_bite4  = [$attack4,  dragon_bite5  ] { ryu_melee(); };
+void() dragon_bite5  = [$attack5,  dragon_bite6  ] { ryu_melee(); };
+void() dragon_bite6  = [$attack6,  dragon_bite7  ] { ryu_melee(); };
+void() dragon_bite7  = [$attack7,  dragon_bite8  ] { ryu_melee(); };
+void() dragon_bite8  = [$attack8,  dragon_bite9  ] { ryu_melee(); };
+void() dragon_bite9  = [$attack9,  dragon_bite10 ] { ryu_melee(); ryu_sfx_fly(); Ryu_Bite(); };
+void() dragon_bite10 = [$attack8,  dragon_bite11 ] { ryu_melee(); };
+void() dragon_bite11 = [$attack7,  dragon_bite12 ] { ryu_melee(); };
+void() dragon_bite12 = [$attack6,  dragon_bite13 ] { ryu_melee(); };
+void() dragon_bite13 = [$attack5,  dragon_bite14 ] { ryu_melee(); };
+void() dragon_bite14 = [$attack4,  dragon_bite15 ] { ryu_melee(); };
+void() dragon_bite15 = [$attack3,  dragon_bite16 ] { ryu_melee(); };
+void() dragon_bite16 = [$attack2,  dragon_bite17 ] { ryu_melee(); Ryu_Bite(); };
+void() dragon_bite17 = [$attack1,  ryu_go     ] { ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0;};
 
 // Check if missile attack is effective or not.
 float(float chance) Ryu_CanBite = {
@@ -679,15 +679,15 @@ void() Ryu_SetAttack = {
         if (self.worldtype == RYU_USE_LITE) {
             shots = ((shots / 2) & 255) + ((random() * 2 * (shots & 1)) & 1);
             self.height = 10;   // Same damage as shambler bolt.
-            if (shots > 12) {self.height = shots; shots = 10; fts = 5;}
+            if (shots > 12) { self.height = shots; shots = 10; fts = 5;}
         } else {
             // Damage.
             self.height = 9;
             // Special:  If too many shots, cap number and increase damage.
             if (self.worldtype == RYU_USE_FIRE)
-                {if (shots > 18) {self.height = shots / 2; shots = 18;}}
+                { if (shots > 18) { self.height = shots / 2; shots = 18;}}
             else
-                {if (shots > 9) {self.height = shots; shots = 9;}}
+                { if (shots > 9) { self.height = shots; shots = 9;}}
             // Ice check.
             if (self.worldtype == RYU_USE_ICE) multi = TRUE;
         }
@@ -734,52 +734,52 @@ void() dragon_ranged = {
         if (ryu_step(FALSE)) walkmove(self.angles_y, SPEED_RYU_MIN);
 	}
 };
-void() dragon_missile1  =[ $attack1,  dragon_missile2  ] {
+void() dragon_missile1  = [$attack1,  dragon_missile2  ] {
     self.show_hostile = time + 1;   // wake monsters up
     if (self.classtype != CT_MONWYRM) Ryu_StrafeOption();
     dragon_ranged();
 };
-void() dragon_missile2  =[ $attack2,  dragon_missile3  ] {dragon_ranged();};
-void() dragon_missile3  =[ $attack3,  dragon_missile4  ] {dragon_ranged();};
-void() dragon_missile4  =[ $attack4,  dragon_missile5  ] {dragon_ranged();};
-void() dragon_missile5  =[ $attack5,  dragon_missile6  ] {dragon_ranged();};
-void() dragon_missile6  =[ $attack6,  dragon_missile7  ] {dragon_ranged(); Ryu_SetAttack(); ryu_rapid_fire();};
-void() dragon_missile7  =[ $attack7,  dragon_missile8  ] {dragon_ranged(); ryu_rapid_fire();};
-void() dragon_missile8  =[ $attack8,  dragon_missile9  ] {dragon_ranged(); ryu_rapid_fire();};
-void() dragon_missile9  =[ $attack9,  dragon_missile10 ] {dragon_ranged(); ryu_sfx_fly(); ryu_rapid_fire();};
-void() dragon_missile10 =[ $attack8,  dragon_missile11 ] {dragon_ranged(); ryu_rapid_fire();};
-void() dragon_missile11 =[ $attack7,  dragon_missile12 ] {dragon_ranged(); ryu_rapid_fire();};
-void() dragon_missile12 =[ $attack6,  dragon_missile13 ] {dragon_ranged();};
-void() dragon_missile13 =[ $attack5,  dragon_missile14 ] {dragon_ranged();};
-void() dragon_missile14 =[ $attack4,  dragon_missile15 ] {dragon_ranged();};
-void() dragon_missile15 =[ $attack3,  dragon_missile16 ] {dragon_ranged();};
-void() dragon_missile16 =[ $attack2,  dragon_missile17 ] {dragon_ranged();};
-void() dragon_missile17 =[ $attack1,  ryu_go        ] {
+void() dragon_missile2  = [$attack2,  dragon_missile3  ] { dragon_ranged(); };
+void() dragon_missile3  = [$attack3,  dragon_missile4  ] { dragon_ranged(); };
+void() dragon_missile4  = [$attack4,  dragon_missile5  ] { dragon_ranged(); };
+void() dragon_missile5  = [$attack5,  dragon_missile6  ] { dragon_ranged(); };
+void() dragon_missile6  = [$attack6,  dragon_missile7  ] { dragon_ranged(); Ryu_SetAttack(); ryu_rapid_fire(); };
+void() dragon_missile7  = [$attack7,  dragon_missile8  ] { dragon_ranged(); ryu_rapid_fire(); };
+void() dragon_missile8  = [$attack8,  dragon_missile9  ] { dragon_ranged(); ryu_rapid_fire(); };
+void() dragon_missile9  = [$attack9,  dragon_missile10 ] { dragon_ranged(); ryu_sfx_fly(); ryu_rapid_fire(); };
+void() dragon_missile10 = [$attack8,  dragon_missile11 ] { dragon_ranged(); ryu_rapid_fire(); };
+void() dragon_missile11 = [$attack7,  dragon_missile12 ] { dragon_ranged(); ryu_rapid_fire(); };
+void() dragon_missile12 = [$attack6,  dragon_missile13 ] { dragon_ranged(); };
+void() dragon_missile13 = [$attack5,  dragon_missile14 ] { dragon_ranged(); };
+void() dragon_missile14 = [$attack4,  dragon_missile15 ] { dragon_ranged(); };
+void() dragon_missile15 = [$attack3,  dragon_missile16 ] { dragon_ranged(); };
+void() dragon_missile16 = [$attack2,  dragon_missile17 ] { dragon_ranged(); };
+void() dragon_missile17 = [$attack1,  ryu_go        ] {
     dragon_ranged();
     if (self.classtype == CT_MONWYRM) self.attack_finished = time + (1.2 * (3 - skill));
     self.walkframe = 0;
 };
 
-void() dragon_pain1  =[ $pain1,   dragon_pain2  ] {ryu_untilt();};
-void() dragon_pain2  =[ $pain2,   dragon_pain3  ] {ryu_untilt();};
-void() dragon_pain3  =[ $pain3,   dragon_pain4  ] {ryu_untilt();};
-void() dragon_pain4  =[ $pain4,   dragon_pain5  ] {ryu_untilt();};
-void() dragon_pain5  =[ $pain5,   dragon_pain6  ] {ryu_untilt();};
-void() dragon_pain6  =[ $pain6,   ryu_go     ] {ryu_untilt();};
+void() dragon_pain1  = [$pain1,   dragon_pain2  ] { ryu_untilt(); };
+void() dragon_pain2  = [$pain2,   dragon_pain3  ] { ryu_untilt(); };
+void() dragon_pain3  = [$pain3,   dragon_pain4  ] { ryu_untilt(); };
+void() dragon_pain4  = [$pain4,   dragon_pain5  ] { ryu_untilt(); };
+void() dragon_pain5  = [$pain5,   dragon_pain6  ] { ryu_untilt(); };
+void() dragon_pain6  = [$pain6,   ryu_go     ] { ryu_untilt(); };
 
-void() dragon_painb1 =[ $painb1,  dragon_painb2 ] {ryu_untilt();};
-void() dragon_painb2 =[ $painb2,  dragon_painb3 ] {ryu_untilt();};
-void() dragon_painb3 =[ $painb3,  dragon_painb4 ] {ryu_untilt();};
-void() dragon_painb4 =[ $painb4,  dragon_painb5 ] {ryu_untilt();};
-void() dragon_painb5 =[ $painb5,  dragon_painb6 ] {ryu_untilt();};
-void() dragon_painb6 =[ $painb6,  ryu_go     ] {ryu_untilt();};
+void() dragon_painb1 = [$painb1,  dragon_painb2 ] { ryu_untilt(); };
+void() dragon_painb2 = [$painb2,  dragon_painb3 ] { ryu_untilt(); };
+void() dragon_painb3 = [$painb3,  dragon_painb4 ] { ryu_untilt(); };
+void() dragon_painb4 = [$painb4,  dragon_painb5 ] { ryu_untilt(); };
+void() dragon_painb5 = [$painb5,  dragon_painb6 ] { ryu_untilt(); };
+void() dragon_painb6 = [$painb6,  ryu_go     ] { ryu_untilt(); };
 
-void() dragon_painc1 =[ $painc1,  dragon_painc2 ] {ryu_untilt();};
-void() dragon_painc2 =[ $painc2,  dragon_painc3 ] {ryu_untilt();};
-void() dragon_painc3 =[ $painc3,  dragon_painc4 ] {ryu_untilt();};
-void() dragon_painc4 =[ $painc4,  dragon_painc5 ] {ryu_untilt();};
-void() dragon_painc5 =[ $painc5,  dragon_painc6 ] {ryu_untilt();};
-void() dragon_painc6 =[ $painc6,  ryu_go     ] {ryu_untilt();};
+void() dragon_painc1 = [$painc1,  dragon_painc2 ] { ryu_untilt(); };
+void() dragon_painc2 = [$painc2,  dragon_painc3 ] { ryu_untilt(); };
+void() dragon_painc3 = [$painc3,  dragon_painc4 ] { ryu_untilt(); };
+void() dragon_painc4 = [$painc4,  dragon_painc5 ] { ryu_untilt(); };
+void() dragon_painc5 = [$painc5,  dragon_painc6 ] { ryu_untilt(); };
+void() dragon_painc6 = [$painc6,  ryu_go     ] { ryu_untilt(); };
 
 void(entity inflictor, entity attacker, float damage) wyrm_pain = {
     local float r;      // Multi-purpose number.
@@ -820,26 +820,26 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
         dragon_painc1();
 };
 
-void() dragon_die1  =[ $death1,   dragon_die2  ] {DropCoin(2);};
-void() dragon_die2  =[ $death2,   dragon_die3  ] {DropCoin(4);monster_check_gib();};
-void() dragon_die3  =[ $death3,   dragon_die4  ] {monster_check_gib(); self.solid      = SOLID_NOT; };
-void() dragon_die4  =[ $death4,   dragon_die5  ] {};
-void() dragon_die5  =[ $death5,   dragon_die6  ] {};
-void() dragon_die6  =[ $death6,   dragon_die7  ] {};
-void() dragon_die7  =[ $death7,   dragon_die8  ] {};
-void() dragon_die8  =[ $death8,   dragon_die9  ] {};
-void() dragon_die9  =[ $death9,   dragon_die10 ] {};
-void() dragon_die10 =[ $death10,  dragon_die11 ] {};
-void() dragon_die11 =[ $death11,  dragon_die12 ] {};
-void() dragon_die12 =[ $death12,  dragon_die13 ] {monster_death_postcheck();};
-void() dragon_die13 =[ $death13,  dragon_die13  ] { monster_deadbody_check(); };
+void() dragon_die1  = [$death1,   dragon_die2  ] { DropCoin(2); };
+void() dragon_die2  = [$death2,   dragon_die3  ] { DropCoin(4);monster_check_gib(); };
+void() dragon_die3  = [$death3,   dragon_die4  ] { monster_check_gib(); self.solid      = SOLID_NOT; };
+void() dragon_die4  = [$death4,   dragon_die5  ] {};
+void() dragon_die5  = [$death5,   dragon_die6  ] {};
+void() dragon_die6  = [$death6,   dragon_die7  ] {};
+void() dragon_die7  = [$death7,   dragon_die8  ] {};
+void() dragon_die8  = [$death8,   dragon_die9  ] {};
+void() dragon_die9  = [$death9,   dragon_die10 ] {};
+void() dragon_die10 = [$death10,  dragon_die11 ] {};
+void() dragon_die11 = [$death11,  dragon_die12 ] {};
+void() dragon_die12 = [$death12,  dragon_die13 ] { monster_death_postcheck(); };
+void() dragon_die13 = [$death13,  dragon_die13  ] { monster_deadbody_check(); };
 
-void() dragon_dieb1 =[ $deathb1,  dragon_dieb2 ] {DropCoin(2); };
-void() dragon_dieb2 =[ $deathb2,  dragon_dieb3 ] {DropCoin(4);monster_check_gib();};
-void() dragon_dieb3 =[ $deathb3,  dragon_dieb4 ] {monster_check_gib(); self.solid      = SOLID_NOT; };
-void() dragon_dieb4 =[ $deathb4,  dragon_dieb5 ] {};
-void() dragon_dieb5 =[ $deathb5,  dragon_dieb6 ] { monster_death_postcheck();};
-void() dragon_dieb6 =[ $deathb6,  dragon_dieb6  ] { monster_deadbody_check(); };
+void() dragon_dieb1 = [$deathb1,  dragon_dieb2 ] { DropCoin(2); };
+void() dragon_dieb2 = [$deathb2,  dragon_dieb3 ] { DropCoin(4);monster_check_gib(); };
+void() dragon_dieb3 = [$deathb3,  dragon_dieb4 ] { monster_check_gib(); self.solid      = SOLID_NOT; };
+void() dragon_dieb4 = [$deathb4,  dragon_dieb5 ] {};
+void() dragon_dieb5 = [$deathb5,  dragon_dieb6 ] { monster_death_postcheck(); };
+void() dragon_dieb6 = [$deathb6,  dragon_dieb6  ] { monster_deadbody_check(); };
 
 void() dragon_die = {
     monster_death_precheck();
@@ -923,39 +923,39 @@ void() wyrm_countdown = {
         self.think = wyrm_explode;
 };
 
-void() wyrm_die1  =[ $death1,  wyrm_die2  ] {
+void() wyrm_die1  = [$death1,  wyrm_die2  ] {
 	self.reviveframestart = $death13;
 	self.reviveframeend = $death1;
 };
-void() wyrm_die2  =[ $death2,  wyrm_die3  ] {};
-void() wyrm_die3  =[ $death3,  wyrm_die4  ] {self.solid      = SOLID_NOT;};
-void() wyrm_die4  =[ $death4,  wyrm_die5  ] {};
-void() wyrm_die5  =[ $death5,  wyrm_die6  ] {DropCoin(4);};
-void() wyrm_die6  =[ $death6,  wyrm_die7  ] {death_puff();};
-void() wyrm_die7  =[ $death7,  wyrm_die8  ] {};
-void() wyrm_die8  =[ $death8,  wyrm_die9  ] {};
-void() wyrm_die9  =[ $death9,  wyrm_die10 ] {};
-void() wyrm_die10 =[ $death10, wyrm_die11 ] {};
-void() wyrm_die11 =[ $death11, wyrm_die12 ] {death_puff();};
-void() wyrm_die12 =[ $death12, wyrm_die13 ] {DropCoin(2);};
-void() wyrm_die13 =[ $death13, wyrm_die14 ] {death_puff(); self.nextthink = time + 0.2;};
-void() wyrm_die14 =[ $death13, wyrm_die15 ] {death_puff(); self.nextthink = time + 0.3;};
-void() wyrm_die15 =[ $death13, wyrm_die16 ] {death_puff(); self.nextthink = time + 0.2;};
-void() wyrm_die16 =[ $death13, wyrm_die16 ] {death_puff(); wyrm_countdown();};
+void() wyrm_die2  = [$death2,  wyrm_die3  ] {};
+void() wyrm_die3  = [$death3,  wyrm_die4  ] { self.solid      = SOLID_NOT;};
+void() wyrm_die4  = [$death4,  wyrm_die5  ] {};
+void() wyrm_die5  = [$death5,  wyrm_die6  ] { DropCoin(4); };
+void() wyrm_die6  = [$death6,  wyrm_die7  ] { death_puff(); };
+void() wyrm_die7  = [$death7,  wyrm_die8  ] {};
+void() wyrm_die8  = [$death8,  wyrm_die9  ] {};
+void() wyrm_die9  = [$death9,  wyrm_die10 ] {};
+void() wyrm_die10 = [$death10, wyrm_die11 ] {};
+void() wyrm_die11 = [$death11, wyrm_die12 ] { death_puff(); };
+void() wyrm_die12 = [$death12, wyrm_die13 ] { DropCoin(2); };
+void() wyrm_die13 = [$death13, wyrm_die14 ] { death_puff(); self.nextthink = time + 0.2;};
+void() wyrm_die14 = [$death13, wyrm_die15 ] { death_puff(); self.nextthink = time + 0.3;};
+void() wyrm_die15 = [$death13, wyrm_die16 ] { death_puff(); self.nextthink = time + 0.2;};
+void() wyrm_die16 = [$death13, wyrm_die16 ] { death_puff(); wyrm_countdown(); };
 
-void() wyrm_dieb1  =[ $deathb1,  wyrm_dieb2  ] {
+void() wyrm_dieb1  = [$deathb1,  wyrm_dieb2  ] {
 	self.reviveframestart = $deathb6;
 	self.reviveframeend = $deathb1;
 };
-void() wyrm_dieb2  =[ $deathb2,  wyrm_dieb3  ] {};
-void() wyrm_dieb3  =[ $deathb3,  wyrm_dieb4  ] {};
-void() wyrm_dieb4  =[ $deathb4,  wyrm_dieb5  ] {};
-void() wyrm_dieb5  =[ $deathb5,  wyrm_dieb6  ] {DropCoin(4);};
-void() wyrm_dieb6  =[ $deathb6,  wyrm_dieb7  ] {death_puff(); self.nextthink = time + 0.5;};
-void() wyrm_dieb7  =[ $deathb6,  wyrm_dieb8  ] {death_puff(); self.nextthink = time + 0.4;};
-void() wyrm_dieb8  =[ $deathb6,  wyrm_dieb9  ] {death_puff(); self.nextthink = time + 0.3;};
-void() wyrm_dieb9  =[ $deathb6,  wyrm_dieb10 ] {death_puff(); DropCoin(2); self.nextthink = time + 0.2;};
-void() wyrm_dieb10 =[ $deathb6,  wyrm_dieb10 ] {death_puff(); wyrm_countdown();};
+void() wyrm_dieb2  = [$deathb2,  wyrm_dieb3  ] {};
+void() wyrm_dieb3  = [$deathb3,  wyrm_dieb4  ] {};
+void() wyrm_dieb4  = [$deathb4,  wyrm_dieb5  ] {};
+void() wyrm_dieb5  = [$deathb5,  wyrm_dieb6  ] { DropCoin(4); };
+void() wyrm_dieb6  = [$deathb6,  wyrm_dieb7  ] { death_puff(); self.nextthink = time + 0.5;};
+void() wyrm_dieb7  = [$deathb6,  wyrm_dieb8  ] { death_puff(); self.nextthink = time + 0.4;};
+void() wyrm_dieb8  = [$deathb6,  wyrm_dieb9  ] { death_puff(); self.nextthink = time + 0.3;};
+void() wyrm_dieb9  = [$deathb6,  wyrm_dieb10 ] { death_puff(); DropCoin(2); self.nextthink = time + 0.2;};
+void() wyrm_dieb10 = [$deathb6,  wyrm_dieb10 ] { death_puff(); wyrm_countdown(); };
 
 // Special death for the dragon king.
 void() wyrm_die = {

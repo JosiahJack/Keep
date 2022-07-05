@@ -97,7 +97,7 @@ void() revive_gibbed = { // [FUNCTION]
 	local float dist, spd;
 	local vector dir;
 
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
 	if (self.touchedvoid) return;	
 
 	dist = vlen(self.pos1 - self.origin);
@@ -148,7 +148,7 @@ float() CanSelfRevive = { // [FUNCTION]
 	if (self.health > 0) return FALSE; // Only revive the dead!
 	if (self.gorging) return FALSE; // Don't revive monsters who are being eaten by gremlins currently.
 	if (self.touchedvoid) return FALSE;
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return FALSE;}
+	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return FALSE;}
 
     if (self.modelindex) {
 		return SelfHasRoom();

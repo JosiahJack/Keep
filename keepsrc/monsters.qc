@@ -21,15 +21,14 @@ void() monster_use = {
 	
 	// Spiders/Vorelings can be setup on the ceilings need to trigger/drop instead them before anything else.
 	if ((self.classtype == CT_MONSPIDER || self.classtype == CT_MONSWAMPLING || self.classtype == CT_MONVORELING) && (self.spawnflags & MON_VORELING_CEILING)) { // All 3 use spawnflag 4 for ceiling.
-		if (!(activator.flags & FL_CLIENT) || activator.items & IT_INVISIBILITY || activator.flags & FL_NOTARGET) self.enemy = world; // Work through exceptions
+		if (!(activator.flags & FL_CLIENT) || Invisible(activator)) self.enemy = world; // Work through exceptions
 		else self.enemy = activator;
 		self.th_run(); // Drop from ceiling
 		return;
 	}
 
 	if (!(activator.flags & FL_CLIENT)) return; // Player exceptions
-	if (activator.items & IT_INVISIBILITY) return;
-	if (activator.flags & FL_NOTARGET) return;
+	if (Invisible(activator)) return;
 	if (!(IsInsane(self)) && Align_Match(self,activator)) return;
 
 	self.enemy = activator; // Monster angry! Hunt enemy!?!
@@ -106,8 +105,7 @@ void() monster_liquid_check = {
  - zombies have their own unique idle routine
  - tarby added using sight sound
 ======================================================================*/
-void() monster_idle_sound =
-{
+void() monster_idle_sound = {
 	// No monsters, dead and timer not reset?
 	if ( !(self.flags & FL_MONSTER) ) return;
 	if (self.health < 1) return;
@@ -177,7 +175,7 @@ void() monster_sightsound = {
 			else if (rsnd < 0.5) sound (self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
 			else if (rsnd < 0.75) sound (self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
 			else sound (self, CHAN_BODY, self.sight_sound4, 1, ATTN_NORM);
-		} else if (self.classtype == CT_MONNEMESANT) {
+		} else if (self.classtype == CT_MONNEMESANT || self.classtype == CT_MONNEMESANTBOSS) {
 			rsnd = random();			
 			if (rsnd < 0.5) sound (self, CHAN_BODY, "zerstorer/trog/tsight1.wav", 1, ATTN_NORM);
 			else sound (self, CHAN_BODY, "zerstorer/trog/tsight2.wav", 1, ATTN_NORM);
@@ -531,10 +529,7 @@ void() monster_targets = {
 		}
 
 		if (self.enemy.flags & FLx_CREATURE) {
-			if (self.enemy.flags & FL_CLIENT) { // Double check enemy is player and has notarget or wearing RoS?
-				if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
-				else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
-			}
+			if (Invisible(self.enemy)) self.enemy = world;
 
 			// Check the enemy is a player/monster and alive
 			if (self.enemy.health > 0 && self.health > 0) {
@@ -854,7 +849,7 @@ void() monster_spawn = {
 	}
 
 	if (self.classtype == CT_MONEIDOLON) {
-		if (self.targetname != string_null) {
+		if (self.targetname != "") {
 			self.use = eidolon_start;	
 		} else {
 			self.think = eidolon_start;
@@ -990,7 +985,7 @@ void() monster_bbox =  {
 };
 
 float(string mname) monster_checkminion = {
-	if (mname == string_null || mname == "") return FALSE;
+	if (mname == "" || mname == "") return FALSE;
 	dprint("Precached minion: "); dprint(mname);
 	precache_monster(mname);
 	if (!self.minion_spawn_time || !(self.minion_spawn_time & MONANIM_SPECIFIC)) self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIFIC;
@@ -1098,7 +1093,7 @@ void() monster_start = {
     self.mindex2 = self.modelindex;      // Remember original modelindex.
 
 	if (self.spawnflags & MON_SPAWN_DELAY || self.brain & 32) {
-		setmodel(self, string_null);
+		setmodel(self, "");
 		self.solid = SOLID_NOT;				// No world interaction
 		// Check for triggered spawndelay
 		if (self.spawndelay != 0) {

@@ -50,25 +50,25 @@ $frame death1 death2 death3 death4 death5 death6 // fall over and die
 $frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 // body flies up and then back to the ground
 $frame base1 base2 // Not used, modelling templates
 
-void()	swampling_idle1	=[	$idle1,	swampling_idle2	] {monster_idle_sound();ai_stand();};
-void()	swampling_idle2	=[	$idle2,	swampling_idle3	] {ai_stand();};
-void()	swampling_idle3	=[	$idle3,	swampling_idle4	] {ai_stand();};
-void()	swampling_idle4	=[	$idle4,	swampling_idle5	] {ai_stand();};
-void()	swampling_idle5	=[	$idle5,	swampling_idle6	] {ai_stand();};
-void()	swampling_idle6	=[	$idle6,	swampling_idle7	] {ai_stand();};
-void()	swampling_idle7	=[	$idle7,	swampling_idle8	] {ai_stand();};
-void()	swampling_idle8	=[	$idle8,	swampling_idle9	] {ai_stand();};
-void()	swampling_idle9	=[	$idle9,	swampling_idle10] {ai_stand();};
-void()	swampling_idle10=[	$idle10,swampling_idle11] {ai_stand();};
-void()	swampling_idle11=[	$idle11,swampling_idle12] {ai_stand();};
-void()	swampling_idle12=[	$idle12,swampling_idle13] {ai_stand();};
-void()	swampling_idle13=[	$idle13,swampling_idle1	] {ai_stand();};
+void()	swampling_idle1	= [	$idle1,	swampling_idle2	] { monster_idle_sound();ai_stand(); };
+void()	swampling_idle2	= [	$idle2,	swampling_idle3	] { ai_stand(); };
+void()	swampling_idle3	= [	$idle3,	swampling_idle4	] { ai_stand(); };
+void()	swampling_idle4	= [	$idle4,	swampling_idle5	] { ai_stand(); };
+void()	swampling_idle5	= [	$idle5,	swampling_idle6	] { ai_stand(); };
+void()	swampling_idle6	= [	$idle6,	swampling_idle7	] { ai_stand(); };
+void()	swampling_idle7	= [	$idle7,	swampling_idle8	] { ai_stand(); };
+void()	swampling_idle8	= [	$idle8,	swampling_idle9	] { ai_stand(); };
+void()	swampling_idle9	= [	$idle9,	swampling_idle10] { ai_stand(); };
+void()	swampling_idle10= [	$idle10,swampling_idle11] { ai_stand(); };
+void()	swampling_idle11= [	$idle11,swampling_idle12] { ai_stand(); };
+void()	swampling_idle12= [	$idle12,swampling_idle13] { ai_stand(); };
+void()	swampling_idle13= [	$idle13,swampling_idle1	] { ai_stand(); };
 
-void()	swampling_walk1	=[	$walk1,	swampling_walk2	] {monster_idle_sound();ai_walk(4);};
-void()	swampling_walk2	=[	$walk2,	swampling_walk3	] {monster_footstep(FALSE); ai_walk(3);};
-void()	swampling_walk3	=[	$walk3,	swampling_walk4	] {ai_walk(4);};
-void()	swampling_walk4	=[	$walk4,	swampling_walk5	] {ai_walk(5);};
-void()	swampling_walk5	=[	$walk5,	swampling_walk1	] {ai_walk(5);};
+void()	swampling_walk1	= [	$walk1,	swampling_walk2	] { monster_idle_sound();ai_walk(4); };
+void()	swampling_walk2	= [	$walk2,	swampling_walk3	] { monster_footstep(FALSE); ai_walk(3); };
+void()	swampling_walk3	= [	$walk3,	swampling_walk4	] { ai_walk(4); };
+void()	swampling_walk4	= [	$walk4,	swampling_walk5	] { ai_walk(5); };
+void()	swampling_walk5	= [	$walk5,	swampling_walk1	] { ai_walk(5); };
 
 void() swampling_runpause = {
 	if (!self.enemy) return; // Do nothing is not to fight or dead
@@ -80,19 +80,19 @@ void() swampling_runpause = {
 	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
 };
 
-void()	swampling_runp1	=[	$idle1,	swampling_runp2	] {swampling_runpause();};
-void()	swampling_runp2	=[	$idle2,	swampling_runp3	] {swampling_runpause();};
-void()	swampling_runp3	=[	$idle3,	swampling_runp4	] {swampling_runpause();};
-void()	swampling_runp4	=[	$idle4,	swampling_runp5	] {swampling_runpause();};
-void()	swampling_runp5	=[	$idle5,	swampling_runp6	] {swampling_runpause();};
-void()	swampling_runp6	=[	$idle6,	swampling_runp7	] {swampling_runpause();};
-void()	swampling_runp7	=[	$idle7,	swampling_runp8	] {swampling_runpause();};
-void()	swampling_runp8	=[	$idle8,	swampling_runp9	] {swampling_runpause();};
-void()	swampling_runp9	=[	$idle9,	swampling_runp10	] {swampling_runpause();};
-void()	swampling_runp10	=[	$idle10,swampling_runp11	] {swampling_runpause();};
-void()	swampling_runp11	=[	$idle11,swampling_runp12	] {swampling_runpause();};
-void()	swampling_runp12	=[	$idle12,swampling_runp13	] {swampling_runpause();};
-void()	swampling_runp13	=[	$idle13,swampling_runp1	] {swampling_runpause();};
+void()	swampling_runp1	= [	$idle1,	swampling_runp2	] { swampling_runpause(); };
+void()	swampling_runp2	= [	$idle2,	swampling_runp3	] { swampling_runpause(); };
+void()	swampling_runp3	= [	$idle3,	swampling_runp4	] { swampling_runpause(); };
+void()	swampling_runp4	= [	$idle4,	swampling_runp5	] { swampling_runpause(); };
+void()	swampling_runp5	= [	$idle5,	swampling_runp6	] { swampling_runpause(); };
+void()	swampling_runp6	= [	$idle6,	swampling_runp7	] { swampling_runpause(); };
+void()	swampling_runp7	= [	$idle7,	swampling_runp8	] { swampling_runpause(); };
+void()	swampling_runp8	= [	$idle8,	swampling_runp9	] { swampling_runpause(); };
+void()	swampling_runp9	= [	$idle9,	swampling_runp10	] { swampling_runpause(); };
+void()	swampling_runp10	= [	$idle10,swampling_runp11	] { swampling_runpause(); };
+void()	swampling_runp11	= [	$idle11,swampling_runp12	] { swampling_runpause(); };
+void()	swampling_runp12	= [	$idle12,swampling_runp13	] { swampling_runpause(); };
+void()	swampling_runp13	= [	$idle13,swampling_runp1	] { swampling_runpause(); };
 
 void(float dist) swampling_checkpause = {
 	if (!self.enemy) return; // Do nothing is not to fight or dead
@@ -111,26 +111,26 @@ void(float dist) swampling_checkpause = {
 	}
 };
 
-void()	swampling_run1 =[ $run1, swampling_run2 ] {self.movespeed = 0;
+void()	swampling_run1 = [$run1, swampling_run2 ] { self.movespeed = 0;
 	monster_idle_sound();
 	swampling_checkpause(8);
 	// swamplings have constant problems with weird angles (X/Z)
 	// Just keep resetting them so they move normally
 	ai_resetangles();
 };
-void()	swampling_run2 =[ $run2, swampling_run3 ] {monster_footstep(FALSE); swampling_checkpause(6);};
-void()	swampling_run3 =[ $run3, swampling_run4 ] {swampling_checkpause(8);};
-void()	swampling_run4 =[ $run4, swampling_run5 ] {swampling_checkpause(10);};
-void()	swampling_run5 =[ $run1, swampling_run6 ] {swampling_checkpause(8);};
-void()	swampling_run6 =[ $run2, swampling_run7 ] {monster_footstep(FALSE); swampling_checkpause(6);};
-void()	swampling_run7 =[ $run3, swampling_run8 ] {swampling_checkpause(8);};
-void()	swampling_run8 =[ $run4, swampling_run1 ] {swampling_checkpause(10);};
+void()	swampling_run2 = [$run2, swampling_run3 ] { monster_footstep(FALSE); swampling_checkpause(6); };
+void()	swampling_run3 = [$run3, swampling_run4 ] { swampling_checkpause(8); };
+void()	swampling_run4 = [$run4, swampling_run5 ] { swampling_checkpause(10); };
+void()	swampling_run5 = [$run1, swampling_run6 ] { swampling_checkpause(8); };
+void()	swampling_run6 = [$run2, swampling_run7 ] { monster_footstep(FALSE); swampling_checkpause(6); };
+void()	swampling_run7 = [$run3, swampling_run8 ] { swampling_checkpause(8); };
+void()	swampling_run8 = [$run4, swampling_run1 ] { swampling_checkpause(10); };
 
-void()	swampling_slide1	=[	$walk1,		swampling_slide2	] {ai_run_slide(6); monster_idle_sound();};
-void()	swampling_slide2	=[	$walk2,		swampling_slide3	] {ai_run_slide(4);};
-void()	swampling_slide3	=[	$walk3,		swampling_slide4	] {ai_run_slide(6);};
-void()	swampling_slide4	=[	$walk4,		swampling_slide5	] {ai_run_slide(4);};
-void()	swampling_slide5	=[	$walk5,		swampling_run1	] {ai_run(4);};
+void()	swampling_slide1	= [	$walk1,		swampling_slide2	] { ai_run_slide(6); monster_idle_sound(); };
+void()	swampling_slide2	= [	$walk2,		swampling_slide3	] { ai_run_slide(4); };
+void()	swampling_slide3	= [	$walk3,		swampling_slide4	] { ai_run_slide(6); };
+void()	swampling_slide4	= [	$walk4,		swampling_slide5	] { ai_run_slide(4); };
+void()	swampling_slide5	= [	$walk5,		swampling_run1	] { ai_run(4); };
 
 // swampling 2 - POISON SPIT FUNCTIONS (range)
 void(float sideang) swampling_spitacid = {
@@ -155,18 +155,18 @@ void(float sideang) swampling_spitacid = {
 	launch_projectile(org,dir,avel,CT_PROJ_SWAMP,1);
 };
 
-void()	swampling_spit1 = [ $pain1, swampling_spit2 ] {ai_face();
+void()	swampling_spit1 = [$pain1, swampling_spit2 ] { ai_face();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_SWAMPLING); };
-void()	swampling_spit2 = [ $pain2, swampling_spit3 ] {ai_face();
+void()	swampling_spit2 = [$pain2, swampling_spit3 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_SWAMPLING); };
-void()	swampling_spit3 = [ $bite1, swampling_spit4 ] {ai_face();
+void()	swampling_spit3 = [$bite1, swampling_spit4 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_SWAMPLING); };
-void()	swampling_spit4 = [ $bite2, swampling_spit5 ] {swampling_spitacid(-0.1);};
-void()	swampling_spit5 = [ $bite3, swampling_spit6 ] {swampling_spitacid(0);};
-void()	swampling_spit6 = [ $bite4, swampling_spit7 ] {swampling_spitacid(0.1);};
-void()	swampling_spit7 = [ $bite5, swampling_spit8 ] {};
-void()	swampling_spit8 = [ $bite6, swampling_spit9 ] {};
-void()	swampling_spit9 = [ $bite7, swampling_run1 ] {};
+void()	swampling_spit4 = [$bite2, swampling_spit5 ] { swampling_spitacid(-0.1); };
+void()	swampling_spit5 = [$bite3, swampling_spit6 ] { swampling_spitacid(0); };
+void()	swampling_spit6 = [$bite4, swampling_spit7 ] { swampling_spitacid(0.1); };
+void()	swampling_spit7 = [$bite5, swampling_spit8 ] {};
+void()	swampling_spit8 = [$bite6, swampling_spit9 ] {};
+void()	swampling_spit9 = [$bite7, swampling_run1 ] {};
 
 void() swampling_melee = {
 	local float ldmg;
@@ -199,24 +199,23 @@ void() swampling_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-void()	swampling_bite1	=[	$bite1, swampling_bite2	] {ai_face();}; // Start bite 
+void()	swampling_bite1	= [	$bite1, swampling_bite2	] { ai_face(); }; // Start bite 
 																	// attack loop
-void()	swampling_bite2	=[	$bite2, swampling_bite3 ] {ai_face();};
-void()	swampling_bite3	=[	$bite3, swampling_bite4 ] {ai_face();};
-void()	swampling_bite4 = [	$bite4, swampling_bite5 ] {swampling_melee();};
+void()	swampling_bite2	= [	$bite2, swampling_bite3 ] { ai_face(); };
+void()	swampling_bite3	= [	$bite3, swampling_bite4 ] { ai_face(); };
+void()	swampling_bite4 = [	$bite4, swampling_bite5 ] { swampling_melee(); };
 void()	swampling_bite5 = [	$bite5, swampling_bite6 ] {};
-void()	swampling_bite6 =[	$bite6, swampling_bite7 ] {
+void()	swampling_bite6 = [	$bite6, swampling_bite7 ] {
 	if (ai_checkmelee(MONAI_MELEESWAMPLING,FALSE)
 		&& self.enemy.health > 0) {
 		self.think = swampling_bite2; // Exit bite attack loop
 	}
 };
 
-void()	swampling_bite7	=[	$bite7, swampling_run1	] {};
+void()	swampling_bite7	= [	$bite7, swampling_run1	] {};
 
 // JUMP FUNCTION (range)
-void()	swampling_JumpTouch =
-{
+void()	swampling_JumpTouch = {
 	local float ldmg;
 
 	if (self.health <= 0) return;
@@ -251,12 +250,12 @@ void()	swampling_JumpTouch =
 	self.nextthink = time + 0.1;
 };
 
-void() swampling_leap1	=[	$jump1, swampling_leap2	] {ai_face();
+void() swampling_leap1	= [	$jump1, swampling_leap2	] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	monster_idle_sound();
 };
-void() swampling_leap2	=[	$jump2, swampling_leap3	] {ai_face();};
-void() swampling_leap3	=[	$jump3, swampling_leap4	] {
+void() swampling_leap2	= [	$jump2, swampling_leap3	] { ai_face(); };
+void() swampling_leap3	= [	$jump3, swampling_leap4	] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = swampling_JumpTouch;
@@ -268,9 +267,9 @@ void() swampling_leap3	=[	$jump3, swampling_leap4	] {
 };
 
 // Flying through the air waiting to touch something!
-void() swampling_leap4	=[	$jump4, swampling_leap5	] {};
-void() swampling_leap5	=[	$jump5, swampling_leap6 ] {};	
-void() swampling_leap6	=[	$jump6, swampling_leap7	] {
+void() swampling_leap4	= [	$jump4, swampling_leap5	] {};
+void() swampling_leap5	= [	$jump5, swampling_leap6 ] {};	
+void() swampling_leap6	= [	$jump6, swampling_leap7	] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -279,17 +278,17 @@ void() swampling_leap6	=[	$jump6, swampling_leap7	] {
 	self.oldorigin = self.origin;
 };
 
-void() swampling_leap7 =[ $jump3, swampling_leap8 ] {monster_footstep(FALSE);};
-void() swampling_leap8 =[ $jump2, swampling_leap9 ] {monster_footstep(FALSE);};
-void() swampling_leap9 =[ $jump1, swampling_run1	] {ai_resetangles();};
+void() swampling_leap7 = [$jump3, swampling_leap8 ] { monster_footstep(FALSE); };
+void() swampling_leap8 = [$jump2, swampling_leap9 ] { monster_footstep(FALSE); };
+void() swampling_leap9 = [$jump1, swampling_run1	] { ai_resetangles(); };
 
 // CEILING swamplingS - Idle/Drop/Touch/Land functions
-void()	swampling_idleup1 =[ $idleup1, swampling_idleup2] {monster_idle_sound();ai_stand();};
-void()	swampling_idleup2 =[ $idleup2, swampling_idleup3] {ai_stand();};
-void()	swampling_idleup3 =[ $idleup3, swampling_idleup4] {ai_stand();};
-void()	swampling_idleup4 =[ $idleup4, swampling_idleup5] {ai_stand();};
-void()	swampling_idleup5 =[ $idleup5, swampling_idleup6] {ai_stand();};
-void()	swampling_idleup6 =[ $idleup6, swampling_idleup1] {ai_stand();};
+void()	swampling_idleup1 = [$idleup1, swampling_idleup2] { monster_idle_sound();ai_stand(); };
+void()	swampling_idleup2 = [$idleup2, swampling_idleup3] { ai_stand(); };
+void()	swampling_idleup3 = [$idleup3, swampling_idleup4] { ai_stand(); };
+void()	swampling_idleup4 = [$idleup4, swampling_idleup5] { ai_stand(); };
+void()	swampling_idleup5 = [$idleup5, swampling_idleup6] { ai_stand(); };
+void()	swampling_idleup6 = [$idleup6, swampling_idleup1] { ai_stand(); };
 
 void() swampling_droptouch = {
 	// Check if landed on something that is not the ground?
@@ -337,11 +336,11 @@ void() swampling_droptouch = {
 	self.nextthink = time + 0.1;
 };
 
-void()	swampling_drop1	=[	$drop1,	swampling_drop2	] {};
-void()	swampling_drop2	=[	$drop2,	swampling_drop3	] {};
-void()	swampling_drop3	=[	$drop3,	swampling_drop4	] {};
-void()	swampling_drop4	=[	$drop4,	swampling_drop5	] {};
-void()	swampling_drop5	=[	$drop5,	swampling_drop5	] {
+void()	swampling_drop1	= [	$drop1,	swampling_drop2	] {};
+void()	swampling_drop2	= [	$drop2,	swampling_drop3	] {};
+void()	swampling_drop3	= [	$drop3,	swampling_drop4	] {};
+void()	swampling_drop4	= [	$drop4,	swampling_drop5	] {};
+void()	swampling_drop5	= [	$drop5,	swampling_drop5	] {
 	if (self.attack_timer < time || self.velocity_z == 0) swampling_droptouch();
 };
 
@@ -378,17 +377,17 @@ void() swampling_wakeup = {
 };
 
 // MINION - Grow and spin up from nothing
-void() swampling_growangle = {self.angles_y = self.angles_y + self.lefty;};
-void() swampling_grow1 = [ $grow1, swampling_grow2 ] {};
-void() swampling_grow2 = [ $grow2, swampling_grow3 ] {swampling_growangle();};
-void() swampling_grow3 = [ $grow3, swampling_grow4 ] {swampling_growangle();};
-void() swampling_grow4 = [ $grow4, swampling_grow5 ] {swampling_growangle();};
-void() swampling_grow5 = [ $grow5, swampling_grow6 ] {swampling_growangle();};
-void() swampling_grow6 = [ $grow6, swampling_grow7 ] {swampling_growangle();};
-void() swampling_grow7 = [ $grow7, swampling_grow8 ] {swampling_growangle();};
-void() swampling_grow8 = [ $grow8, swampling_grow9 ] {swampling_growangle();};
-void() swampling_grow9 = [ $grow9, swampling_grow10] {swampling_growangle();};
-void() swampling_grow10= [ $grow10, swampling_run1 ] {
+void() swampling_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() swampling_grow1 = [$grow1, swampling_grow2 ] {};
+void() swampling_grow2 = [$grow2, swampling_grow3 ] { swampling_growangle(); };
+void() swampling_grow3 = [$grow3, swampling_grow4 ] { swampling_growangle(); };
+void() swampling_grow4 = [$grow4, swampling_grow5 ] { swampling_growangle(); };
+void() swampling_grow5 = [$grow5, swampling_grow6 ] { swampling_growangle(); };
+void() swampling_grow6 = [$grow6, swampling_grow7 ] { swampling_growangle(); };
+void() swampling_grow7 = [$grow7, swampling_grow8 ] { swampling_growangle(); };
+void() swampling_grow8 = [$grow8, swampling_grow9 ] { swampling_growangle(); };
+void() swampling_grow9 = [$grow9, swampling_grow10] { swampling_growangle(); };
+void() swampling_grow10= [$grow10, swampling_run1 ] {
 	// Is the swampling stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
 		// Time to die!
@@ -416,8 +415,7 @@ void() swampling_grow10= [ $grow10, swampling_run1 ] {
 	}
 };
 
-void() swampling_grow =
-{
+void() swampling_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -426,8 +424,8 @@ void() swampling_grow =
 	swampling_grow1();
 };
 
-void() swampling_pain1	=[	$pain1,	swampling_pain2	] {};
-void() swampling_pain2	=[	$pain2,	swampling_run1	] {};
+void() swampling_pain1	= [	$pain1,	swampling_pain2	] {};
+void() swampling_pain2	= [	$pain2,	swampling_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) swampling_pain = {
 	// Has the swampling been hit while on the ceiling?
@@ -455,22 +453,22 @@ void(entity inflictor, entity attacker, float damage) swampling_pain = {
 	}
 };
 
-void() swampling_die1 =[	$death1, swampling_die2	] {};
-void() swampling_die2 =[	$death2, swampling_die3	] {monster_check_gib();};
-void() swampling_die3 =[	$death3, swampling_die4	] {monster_check_gib();
+void() swampling_die1 = [	$death1, swampling_die2	] {};
+void() swampling_die2 = [	$death2, swampling_die3	] { monster_check_gib(); };
+void() swampling_die3 = [	$death3, swampling_die4	] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() swampling_die4 =[	$death4, swampling_die5	] {};
-void() swampling_die5 =[	$death5, swampling_die6	] {monster_death_postcheck();};
-void() swampling_die6 =[	$death6, swampling_die6	] {monster_deadbody_check();};
+void() swampling_die4 = [	$death4, swampling_die5	] {};
+void() swampling_die5 = [	$death5, swampling_die6	] { monster_death_postcheck(); };
+void() swampling_die6 = [	$death6, swampling_die6	] { monster_deadbody_check(); };
 
-void() swampling_dieB1 =[	$deathB1, swampling_dieB2	] {};
-void() swampling_dieB2 =[	$deathB2, swampling_dieB3	] {monster_check_gib();};
-void() swampling_dieB3 =[	$deathB3, swampling_dieB4	] {monster_check_gib();
+void() swampling_dieB1 = [	$deathB1, swampling_dieB2	] {};
+void() swampling_dieB2 = [	$deathB2, swampling_dieB3	] { monster_check_gib(); };
+void() swampling_dieB3 = [	$deathB3, swampling_dieB4	] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() swampling_dieB4 =[	$deathB4, swampling_dieB5	] {};
-void() swampling_dieB5 =[	$deathB5, swampling_dieB6	] {};
-void() swampling_dieB6 =[	$deathB6, swampling_dieB7	] {monster_death_postcheck();};
-void() swampling_dieB7 =[	$deathB7, swampling_dieB7	] {monster_deadbody_check();};
+void() swampling_dieB4 = [	$deathB4, swampling_dieB5	] {};
+void() swampling_dieB5 = [	$deathB5, swampling_dieB6	] {};
+void() swampling_dieB6 = [	$deathB6, swampling_dieB7	] { monster_death_postcheck(); };
+void() swampling_dieB7 = [	$deathB7, swampling_dieB7	] { monster_deadbody_check(); };
 
 void() swampling_die = {
 	self.max_health = MON_NOGIBVELOCITY; // swamplings are small, gibs don't bounce far

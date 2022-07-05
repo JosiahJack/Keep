@@ -221,7 +221,7 @@ void() item_cells = {
 	item_ammo_setup();
 };
 
-void() item_lava_spikes ={
+void() item_lava_spikes = {
 	ammo_checkrandomizer();
 	if (self.spawnflags & A_LARGE) {
 		item_setupmodel("maps/b_lnail1.bsp",0);

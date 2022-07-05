@@ -72,36 +72,36 @@ void() shamvile_magic6;
 void() sham_raise1;
 void() sham_magic4;
 
-void() sham_stand1	=[	$stand1,	sham_stand2	] {ai_stand();};
-void() sham_stand2	=[	$stand2,	sham_stand3	] {ai_stand();};
-void() sham_stand3	=[	$stand3,	sham_stand4	] {ai_stand();};
-void() sham_stand4	=[	$stand4,	sham_stand5	] {ai_stand();};
-void() sham_stand5	=[	$stand5,	sham_stand6	] {ai_stand();};
-void() sham_stand6	=[	$stand6,	sham_stand7	] {ai_stand();};
-void() sham_stand7	=[	$stand7,	sham_stand8	] {ai_stand();};
-void() sham_stand8	=[	$stand8,	sham_stand9	] {ai_stand();};
-void() sham_stand9	=[	$stand9,	sham_stand10] {ai_stand();};
-void() sham_stand10	=[	$stand10,	sham_stand11] {ai_stand();};
-void() sham_stand11	=[	$stand11,	sham_stand12] {ai_stand();};
-void() sham_stand12	=[	$stand12,	sham_stand13] {ai_stand();};
-void() sham_stand13	=[	$stand13,	sham_stand14] {ai_stand();};
-void() sham_stand14	=[	$stand14,	sham_stand15] {ai_stand();};
-void() sham_stand15	=[	$stand15,	sham_stand16] {ai_stand();};
-void() sham_stand16	=[	$stand16,	sham_stand17] {ai_stand();};
-void() sham_stand17	=[	$stand17,	sham_stand1	] {ai_stand();};
+void() sham_stand1	= [	$stand1,	sham_stand2	] { ai_stand(); };
+void() sham_stand2	= [	$stand2,	sham_stand3	] { ai_stand(); };
+void() sham_stand3	= [	$stand3,	sham_stand4	] { ai_stand(); };
+void() sham_stand4	= [	$stand4,	sham_stand5	] { ai_stand(); };
+void() sham_stand5	= [	$stand5,	sham_stand6	] { ai_stand(); };
+void() sham_stand6	= [	$stand6,	sham_stand7	] { ai_stand(); };
+void() sham_stand7	= [	$stand7,	sham_stand8	] { ai_stand(); };
+void() sham_stand8	= [	$stand8,	sham_stand9	] { ai_stand(); };
+void() sham_stand9	= [	$stand9,	sham_stand10] { ai_stand(); };
+void() sham_stand10	= [	$stand10,	sham_stand11] { ai_stand(); };
+void() sham_stand11	= [	$stand11,	sham_stand12] { ai_stand(); };
+void() sham_stand12	= [	$stand12,	sham_stand13] { ai_stand(); };
+void() sham_stand13	= [	$stand13,	sham_stand14] { ai_stand(); };
+void() sham_stand14	= [	$stand14,	sham_stand15] { ai_stand(); };
+void() sham_stand15	= [	$stand15,	sham_stand16] { ai_stand(); };
+void() sham_stand16	= [	$stand16,	sham_stand17] { ai_stand(); };
+void() sham_stand17	= [	$stand17,	sham_stand1	] { ai_stand(); };
 
-void() sham_walk1	=[ $walk1, sham_walk2 ] {monster_idle_sound(); ai_walk(10);};
-void() sham_walk2	=[ $walk2, sham_walk3 ] {monster_footstep(FALSE); ai_walk(9);};
-void() sham_walk3	=[ $walk3, sham_walk4 ] {ai_walk(9);};
-void() sham_walk4	=[ $walk4, sham_walk5 ] {ai_walk(5);};
-void() sham_walk5	=[ $walk5, sham_walk6 ] {ai_walk(6);};
-void() sham_walk6	=[ $walk6, sham_walk7 ] {ai_walk(12);};
-void() sham_walk7	=[ $walk7, sham_walk8 ] {monster_footstep(FALSE); ai_walk(8);};
-void() sham_walk8	=[ $walk8, sham_walk9 ] {ai_walk(3);};
-void() sham_walk9	=[ $walk9, sham_walk10] {ai_walk(13);};
-void() sham_walk10	=[ $walk10, sham_walk11] {ai_walk(9);};
-void() sham_walk11	=[ $walk11, sham_walk12] {ai_walk(7);};
-void() sham_walk12	=[ $walk12, sham_walk1 ] {ai_walk(7);};
+void() sham_walk1	= [$walk1, sham_walk2 ] { monster_idle_sound(); ai_walk(10); };
+void() sham_walk2	= [$walk2, sham_walk3 ] { monster_footstep(FALSE); ai_walk(9); };
+void() sham_walk3	= [$walk3, sham_walk4 ] { ai_walk(9); };
+void() sham_walk4	= [$walk4, sham_walk5 ] { ai_walk(5); };
+void() sham_walk5	= [$walk5, sham_walk6 ] { ai_walk(6); };
+void() sham_walk6	= [$walk6, sham_walk7 ] { ai_walk(12); };
+void() sham_walk7	= [$walk7, sham_walk8 ] { monster_footstep(FALSE); ai_walk(8); };
+void() sham_walk8	= [$walk8, sham_walk9 ] { ai_walk(3); };
+void() sham_walk9	= [$walk9, sham_walk10] { ai_walk(13); };
+void() sham_walk10	= [$walk10, sham_walk11] { ai_walk(9); };
+void() sham_walk11	= [$walk11, sham_walk12] { ai_walk(7); };
+void() sham_walk12	= [$walk12, sham_walk1 ] { ai_walk(7); };
 
 void(float d) sham_run = {
     if (self.classtype == CT_MONSHAMVILE && !self.lip) {
@@ -110,12 +110,12 @@ void(float d) sham_run = {
     ai_run(d);
 };
 
-void() sham_run1 =[ $run1, sham_run2 ] {monster_idle_sound(); sham_run(20);};
-void() sham_run2 =[ $run2, sham_run3 ] {monster_footstep(FALSE); sham_run(24);};
-void() sham_run3 =[ $run3, sham_run4 ] {sham_run(20);};
-void() sham_run4 =[ $run4, sham_run5 ] {sham_run(20);};
-void() sham_run5 =[ $run5, sham_run6 ] {monster_footstep(FALSE); sham_run(24);};
-void() sham_run6 =[ $run6, sham_run1 ] {sham_run(20);};
+void() sham_run1 = [$run1, sham_run2 ] { monster_idle_sound(); sham_run(20); };
+void() sham_run2 = [$run2, sham_run3 ] { monster_footstep(FALSE); sham_run(24); };
+void() sham_run3 = [$run3, sham_run4 ] { sham_run(20); };
+void() sham_run4 = [$run4, sham_run5 ] { sham_run(20); };
+void() sham_run5 = [$run5, sham_run6 ] { monster_footstep(FALSE); sham_run(24); };
+void() sham_run6 = [$run6, sham_run1 ] { sham_run(20); };
 
 // MELEE ATTACK 1 - Claw and Smash
 // Merged shambler melee attacks (over head smash and side claw)
@@ -170,64 +170,64 @@ void(float melee_attack, float side) sham_meleeattack = {
 	}
 };
 
-void() sham_smash1     =[      $smash1,       sham_smash2    ] {sound (self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(2);};
-void() sham_smash2     =[      $smash2,       sham_smash3    ] {monster_footstep(FALSE); ai_charge(6);};
-void() sham_smash3     =[      $smash3,       sham_smash4    ] {ai_charge(6);};
-void() sham_smash4     =[      $smash4,       sham_smash5    ] {ai_charge(5);};
-void() sham_smash5     =[      $smash5,       sham_smash6    ] {ai_charge(4);};
-void() sham_smash6     =[      $smash6,       sham_smash7    ] {ai_charge(1);};
-void() sham_smash7     =[      $smash7,       sham_smash8    ] {ai_charge(0);};
-void() sham_smash8     =[      $smash8,       sham_smash9    ] {ai_charge(0);};
-void() sham_smash9     =[      $smash9,       sham_smash10   ] {ai_charge(0);};
-void() sham_smash10    =[      $smash10,      sham_smash11   ] {sham_meleeattack(SHAM_MSMASH,0);};
-void() sham_smash11    =[      $smash11,      sham_smash12   ] {ai_charge(5);};
-void() sham_smash12    =[      $smash12,      sham_run1	   ] {ai_charge(4);};
+void() sham_smash1     = [      $smash1,       sham_smash2    ] { sound (self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(2); };
+void() sham_smash2     = [      $smash2,       sham_smash3    ] { monster_footstep(FALSE); ai_charge(6); };
+void() sham_smash3     = [      $smash3,       sham_smash4    ] { ai_charge(6); };
+void() sham_smash4     = [      $smash4,       sham_smash5    ] { ai_charge(5); };
+void() sham_smash5     = [      $smash5,       sham_smash6    ] { ai_charge(4); };
+void() sham_smash6     = [      $smash6,       sham_smash7    ] { ai_charge(1); };
+void() sham_smash7     = [      $smash7,       sham_smash8    ] { ai_charge(0); };
+void() sham_smash8     = [      $smash8,       sham_smash9    ] { ai_charge(0); };
+void() sham_smash9     = [      $smash9,       sham_smash10   ] { ai_charge(0); };
+void() sham_smash10    = [      $smash10,      sham_smash11   ] { sham_meleeattack(SHAM_MSMASH,0); };
+void() sham_smash11    = [      $smash11,      sham_smash12   ] { ai_charge(5); };
+void() sham_smash12    = [      $smash12,      sham_run1	   ] { ai_charge(4); };
 
-void() sham_swingl1	=[      $swingl1,      sham_swingl2   ] {sound (self, CHAN_VOICE, "shambler/melee2.wav", 1, ATTN_NORM); ai_charge(5);};
-void() sham_swingl2 =[      $swingl2,      sham_swingl3   ] {monster_footstep(FALSE); ai_charge(3);};
-void() sham_swingl3 =[      $swingl3,      sham_swingl4   ] {ai_charge(7);};
-void() sham_swingl4 =[      $swingl4,      sham_swingl5   ] {ai_charge(3);};
-void() sham_swingl5 =[      $swingl5,      sham_swingl6   ] {ai_charge(7);};
-void() sham_swingl6 =[      $swingl6,      sham_swingl7   ] {ai_charge(9);};
-void() sham_swingl7 =[      $swingl7,      sham_swingl8   ] {ai_charge(5); sham_meleeattack(SHAM_MCLAW,250);};
-void() sham_swingl8 =[      $swingl8,      sham_swingl9   ] {ai_charge(4);};
-void() sham_swingl9 =[      $swingl9,      sham_run1  ] { ai_charge(8);
+void() sham_swingl1	= [      $swingl1,      sham_swingl2   ] { sound (self, CHAN_VOICE, "shambler/melee2.wav", 1, ATTN_NORM); ai_charge(5); };
+void() sham_swingl2 = [      $swingl2,      sham_swingl3   ] { monster_footstep(FALSE); ai_charge(3); };
+void() sham_swingl3 = [      $swingl3,      sham_swingl4   ] { ai_charge(7); };
+void() sham_swingl4 = [      $swingl4,      sham_swingl5   ] { ai_charge(3); };
+void() sham_swingl5 = [      $swingl5,      sham_swingl6   ] { ai_charge(7); };
+void() sham_swingl6 = [      $swingl6,      sham_swingl7   ] { ai_charge(9); };
+void() sham_swingl7 = [      $swingl7,      sham_swingl8   ] { ai_charge(5); sham_meleeattack(SHAM_MCLAW,250); };
+void() sham_swingl8 = [      $swingl8,      sham_swingl9   ] { ai_charge(4); };
+void() sham_swingl9 = [      $swingl9,      sham_run1  ] { ai_charge(8);
 if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingr1;};
 
-void() sham_swingr1	=[      $swingr1,      sham_swingr2   ] {sound (self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(1);};
-void() sham_swingr2	=[      $swingr2,      sham_swingr3   ] {monster_footstep(FALSE); ai_charge(8);};
-void() sham_swingr3 =[      $swingr3,      sham_swingr4   ] {ai_charge(14);};
-void() sham_swingr4 =[      $swingr4,      sham_swingr5   ] {ai_charge(7);};
-void() sham_swingr5 =[      $swingr5,      sham_swingr6   ] {ai_charge(3);};
-void() sham_swingr6 =[      $swingr6,      sham_swingr7   ] {ai_charge(6);};
-void() sham_swingr7 =[      $swingr7,      sham_swingr8   ] {ai_charge(6); sham_meleeattack(SHAM_MCLAW,-250);};
-void() sham_swingr8 =[      $swingr8,      sham_swingr9   ] {ai_charge(3);};
-void() sham_swingr9 =[      $swingr9,      sham_run1  ] { ai_charge(10);
+void() sham_swingr1	= [      $swingr1,      sham_swingr2   ] { sound (self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(1); };
+void() sham_swingr2	= [      $swingr2,      sham_swingr3   ] { monster_footstep(FALSE); ai_charge(8); };
+void() sham_swingr3 = [      $swingr3,      sham_swingr4   ] { ai_charge(14); };
+void() sham_swingr4 = [      $swingr4,      sham_swingr5   ] { ai_charge(7); };
+void() sham_swingr5 = [      $swingr5,      sham_swingr6   ] { ai_charge(3); };
+void() sham_swingr6 = [      $swingr6,      sham_swingr7   ] { ai_charge(6); };
+void() sham_swingr7 = [      $swingr7,      sham_swingr8   ] { ai_charge(6); sham_meleeattack(SHAM_MCLAW,-250); };
+void() sham_swingr8 = [      $swingr8,      sham_swingr9   ] { ai_charge(3); };
+void() sham_swingr9 = [      $swingr9,      sham_run1  ] { ai_charge(10);
 if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingl1;};
 
 // Quickened attacks -- custom addition for meaner monsters. From Drake for Sha'Vile.
-void() sham_csmash1  =[ $smash2,   sham_csmash2  ] {sound (self, CHAN_VOICE, "drake/shamvile/melee3.wav", 1, ATTN_NORM);ai_charge(6);};
-void() sham_csmash2  =[ $smash4,   sham_csmash3  ] {monster_footstep(FALSE); ai_charge(14);};
-void() sham_csmash3  =[ $smash6,   sham_csmash4  ] {ai_charge(5);};
-void() sham_csmash4  =[ $smash8,   sham_csmash5  ] {ai_charge(0);};
-void() sham_csmash5  =[ $smash9,   sham_csmash6  ] {ai_charge(0);};
-void() sham_csmash6  =[ $smash10,  sham_csmash7  ] {sham_meleeattack(SHAM_MSMASH,0);};
-void() sham_csmash7  =[ $smash12,  sham_run1     ] {ai_charge(9);};
+void() sham_csmash1  = [$smash2,   sham_csmash2  ] { sound (self, CHAN_VOICE, "drake/shamvile/melee3.wav", 1, ATTN_NORM);ai_charge(6); };
+void() sham_csmash2  = [$smash4,   sham_csmash3  ] { monster_footstep(FALSE); ai_charge(14); };
+void() sham_csmash3  = [$smash6,   sham_csmash4  ] { ai_charge(5); };
+void() sham_csmash4  = [$smash8,   sham_csmash5  ] { ai_charge(0); };
+void() sham_csmash5  = [$smash9,   sham_csmash6  ] { ai_charge(0); };
+void() sham_csmash6  = [$smash10,  sham_csmash7  ] { sham_meleeattack(SHAM_MSMASH,0); };
+void() sham_csmash7  = [$smash12,  sham_run1     ] { ai_charge(9); };
 
-void() sham_cswingl1 =[ $swingl2,  sham_cswingl2 ] {sound (self, CHAN_VOICE, "drake/shamvile/melee4.wav", 1, ATTN_NORM);ai_charge(8);};
-void() sham_cswingl2 =[ $swingl4,  sham_cswingl3 ] {monster_footstep(FALSE); ai_charge(10);};
-void() sham_cswingl3 =[ $swingl5,  sham_cswingl4 ] {ai_charge(7);};
-void() sham_cswingl4 =[ $swingl6,  sham_cswingl5 ] {ai_charge(9);};
-void() sham_cswingl5 =[ $swingl7,  sham_cswingl6 ] {ai_charge(5);  sham_meleeattack(SHAM_MCLAW,250);};
-void() sham_cswingl6 =[ $swingl9,  sham_run1     ] {ai_charge(12);
+void() sham_cswingl1 = [$swingl2,  sham_cswingl2 ] { sound (self, CHAN_VOICE, "drake/shamvile/melee4.wav", 1, ATTN_NORM);ai_charge(8); };
+void() sham_cswingl2 = [$swingl4,  sham_cswingl3 ] { monster_footstep(FALSE); ai_charge(10); };
+void() sham_cswingl3 = [$swingl5,  sham_cswingl4 ] { ai_charge(7); };
+void() sham_cswingl4 = [$swingl6,  sham_cswingl5 ] { ai_charge(9); };
+void() sham_cswingl5 = [$swingl7,  sham_cswingl6 ] { ai_charge(5);  sham_meleeattack(SHAM_MCLAW,250); };
+void() sham_cswingl6 = [$swingl9,  sham_run1     ] { ai_charge(12);
 if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingr1;};
 
-void() sham_cswingr1 =[ $swingr2,  sham_cswingr2 ] {sound (self, CHAN_VOICE, "drake/shamvile/melee3.wav", 1, ATTN_NORM);ai_charge(9);};
-void() sham_cswingr2 =[ $swingr4,  sham_cswingr3 ] {monster_footstep(FALSE); ai_charge(21);};
-void() sham_cswingr3 =[ $swingr5,  sham_cswingr4 ] {ai_charge(3);};
-void() sham_cswingr4 =[ $swingr6,  sham_cswingr5 ] {ai_charge(6);};
-void() sham_cswingr5 =[ $swingr7,  sham_cswingr6 ] {ai_charge(6);  sham_meleeattack(SHAM_MCLAW,-250);};
-void() sham_cswingr6 =[ $swingr9,  sham_run1     ] {ai_charge(6);
+void() sham_cswingr1 = [$swingr2,  sham_cswingr2 ] { sound (self, CHAN_VOICE, "drake/shamvile/melee3.wav", 1, ATTN_NORM);ai_charge(9); };
+void() sham_cswingr2 = [$swingr4,  sham_cswingr3 ] { monster_footstep(FALSE); ai_charge(21); };
+void() sham_cswingr3 = [$swingr5,  sham_cswingr4 ] { ai_charge(3); };
+void() sham_cswingr4 = [$swingr6,  sham_cswingr5 ] { ai_charge(6); };
+void() sham_cswingr5 = [$swingr7,  sham_cswingr6 ] { ai_charge(6);  sham_meleeattack(SHAM_MCLAW,-250); };
+void() sham_cswingr6 = [$swingr9,  sham_run1     ] { ai_charge(6);
 if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingl1;};
 
 void() sham_melee = {
@@ -386,12 +386,12 @@ void() VileMagicThink = {
     if (self.lefty) MakeFlame(self.owner.enemy);
 };
 
-void() sham_magic1 =[ $magic1, sham_magic2 ] { ai_face(); sound (self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM); }; // PM:  dsvilatk.wav from Doom2 is nice for the Vile variant, but nsoe2 uses many sounds, so stick with the basic shambler sound.
-void() sham_magic2 =[ $magic2, sham_magic3 ] {
+void() sham_magic1 = [$magic1, sham_magic2 ] { ai_face(); sound (self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM); }; // PM:  dsvilatk.wav from Doom2 is nice for the Vile variant, but nsoe2 uses many sounds, so stick with the basic shambler sound.
+void() sham_magic2 = [$magic2, sham_magic3 ] {
 	if (self.classtype == CT_MONSHAMVILE) ai_face();
 	else sham_casting('0 43 61','16 -4 75',0);
 };
-void() sham_magic3 =[ $magic3, sham_magic3b ] {
+void() sham_magic3 = [$magic3, sham_magic3b ] {
 	ai_face();
 	if (self.classtype == CT_MONSHAMVILE) { // Sham-vile magic.
 		// PM:  Changed effects thinking so it sticks to shambler in case it moves.  Also, use custom sprite file for classic fireball so it gets drawn.
@@ -414,13 +414,13 @@ void() sham_magic3 =[ $magic3, sham_magic3b ] {
 		self.nextthink = self.nextthink + 0.1;  // Extend delay a bit more.
 	} else sham_casting('-16 42 69','7 0 80',1);
 };
-void() sham_magic3b =[ $magic3, sham_magic4 ] {
+void() sham_magic3b = [$magic3, sham_magic4 ] {
 	if (self.classtype == CT_MONSHAMVILE) { sham_magic4(); return; }
 
 	ai_face();
 	sham_casting('-14 38 68','8 6 78',2);
 };
-void() sham_magic4 =[ $magic4, sham_magic5 ] {
+void() sham_magic4 = [$magic4, sham_magic5 ] {
 	monster_footstep(FALSE);
 	if (self.classtype == CT_MONSHAMVILE) { 
 		if (self.attachment2) {
@@ -432,7 +432,7 @@ void() sham_magic4 =[ $magic4, sham_magic5 ] {
 		}
 	} else sham_casting('-22 35 75','6 3 80',3);
 };
-void() sham_magic5 =[ $magic5, sham_magic6 ] {
+void() sham_magic5 = [$magic5, sham_magic6 ] {
 	if (self.classtype == CT_MONSHAMVILE) {
 		if (self.attachment2) {
 			self.attachment2.frame = self.attachment2.frame + 1; // Frame 2.
@@ -444,32 +444,32 @@ void() sham_magic5 =[ $magic5, sham_magic6 ] {
 		self.think = shamvile_magic6;
 	} else sham_casting('-3 26 88','19 -9 81',4);
 };
-void() sham_magic6 =[ $magic6, sham_magic9 ] {
+void() sham_magic6 = [$magic6, sham_magic9 ] {
 	if (self.classtype == CT_MONSHAMVILE) { shamvile_magic6(); return; }
 
 	sham_lightning();
 	sound (self, CHAN_WEAPON, "shambler/sboom.wav", 1, ATTN_NORM);
 };
-void() sham_magic9 =[ $magic9, sham_magic10 ] {sham_lightning();};
-void() sham_magic10=[ $magic10,sham_magic11 ] {sham_lightning();monster_footstep(FALSE);};
-void() sham_magic11=[ $magic11,sham_magic12 ] {
+void() sham_magic9 = [$magic9, sham_magic10 ] { sham_lightning(); };
+void() sham_magic10= [$magic10,sham_magic11 ] { sham_lightning();monster_footstep(FALSE); };
+void() sham_magic11= [$magic11,sham_magic12 ] {
 	if (skill == SKILL_NIGHTMARE && self.classtype != CT_MONSHAMVILE) sham_lightning();
 };
-void() sham_magic12 =[ $magic12, sham_run1] {};
+void() sham_magic12 = [$magic12, sham_run1] {};
 
-void() shamvile_magic6  =[ $magic6,  shamvile_magic9  ] {
+void() shamvile_magic6  = [$magic6,  shamvile_magic9  ] {
     sham_finish_attachment();
     CastVileFire(); // Arch-Vile attack knockoff.
 	self.think = shamvile_magic9;
 	self.nextthink = time + 0.1;
 };
-void() shamvile_magic9  =[ $magic9,  shamvile_magic10 ] {
+void() shamvile_magic9  = [$magic9,  shamvile_magic10 ] {
 	ai_face();
 	self.think = shamvile_magic10;
 	self.nextthink = time + 0.1;
 };
-void() shamvile_magic10 =[ $magic10, shamvile_magic11 ] {ai_face();};
-void() shamvile_magic11 =[ $magic11, sham_magic12     ] {
+void() shamvile_magic10 = [$magic10, shamvile_magic11 ] { ai_face(); };
+void() shamvile_magic11 = [$magic11, sham_magic12     ] {
 	ai_face();
 };
 
@@ -487,12 +487,12 @@ void() shamvile_magic = {
     else sham_cswingl1();
 };
 
-void() sham_pain1       =[      $pain1, sham_pain2      ] {};
-void() sham_pain2       =[      $pain2, sham_pain3      ] {};
-void() sham_pain3       =[      $pain3, sham_pain4      ] {};
-void() sham_pain4       =[      $pain4, sham_pain5      ] {};
-void() sham_pain5       =[      $pain5, sham_pain6      ] {};
-void() sham_pain6       =[      $pain6, sham_run1      ] {};
+void() sham_pain1       = [      $pain1, sham_pain2      ] {};
+void() sham_pain2       = [      $pain2, sham_pain3      ] {};
+void() sham_pain3       = [      $pain3, sham_pain4      ] {};
+void() sham_pain4       = [      $pain4, sham_pain5      ] {};
+void() sham_pain5       = [      $pain5, sham_pain6      ] {};
+void() sham_pain6       = [      $pain6, sham_run1      ] {};
 
 void(entity inflictor, entity attacker, float damage) sham_pain = {
 	sham_finish_attachment(); // Hide all attachments
@@ -508,18 +508,18 @@ void(entity inflictor, entity attacker, float damage) sham_pain = {
 	}
 };
 
-void() sham_death1  =[ $death1,  sham_death2  ] {};
-void() sham_death2  =[ $death2,  sham_death3  ] {monster_check_gib();};
-void() sham_death3  =[ $death3,  sham_death4  ] {monster_check_gib();
+void() sham_death1  = [$death1,  sham_death2  ] {};
+void() sham_death2  = [$death2,  sham_death3  ] { monster_check_gib(); };
+void() sham_death3  = [$death3,  sham_death4  ] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() sham_death4  =[ $death4,  sham_death5  ] {};
-void() sham_death5  =[ $death5,  sham_death6  ] {};
-void() sham_death6  =[ $death6,  sham_death7  ] {};
-void() sham_death7  =[ $death7,  sham_death8  ] {};
-void() sham_death8  =[ $death8,  sham_death9  ] {};
-void() sham_death9  =[ $death9,  sham_death10 ] {};
-void() sham_death10 =[ $death10, sham_death11 ] {monster_death_postcheck();};
-void() sham_death11 =[ $death11, sham_death11 ] {monster_deadbody_check();};
+void() sham_death4  = [$death4,  sham_death5  ] {};
+void() sham_death5  = [$death5,  sham_death6  ] {};
+void() sham_death6  = [$death6,  sham_death7  ] {};
+void() sham_death7  = [$death7,  sham_death8  ] {};
+void() sham_death8  = [$death8,  sham_death9  ] {};
+void() sham_death9  = [$death9,  sham_death10 ] {};
+void() sham_death10 = [$death10, sham_death11 ] { monster_death_postcheck(); };
+void() sham_death11 = [$death11, sham_death11 ] { monster_deadbody_check(); };
 
 void() sham_die = {
 	sham_finish_attachment(); // Finish and remove all attachments
@@ -536,12 +536,12 @@ void() sham_die = {
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-void() sham_wakeup1 =[ $smash7,		sham_wakeup2 ] {
-	sound (self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM);};
-void() sham_wakeup2 =[ $smash9,		sham_wakeup3 ] {};
-void() sham_wakeup3 =[ $smash10,	sham_wakeup4 ] {};
-void() sham_wakeup4 =[ $smash11,	sham_wakeup5 ] {};
-void() sham_wakeup5 =[ $smash12,	sham_run1 ] {};
+void() sham_wakeup1 = [$smash7,		sham_wakeup2 ] {
+	sound (self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); };
+void() sham_wakeup2 = [$smash9,		sham_wakeup3 ] {};
+void() sham_wakeup3 = [$smash10,	sham_wakeup4 ] {};
+void() sham_wakeup4 = [$smash11,	sham_wakeup5 ] {};
+void() sham_wakeup5 = [$smash12,	sham_run1 ] {};
 
 void() monster_shambler_precache = {
 	precache_model("progs/ad171/mon_shambler.mdl");

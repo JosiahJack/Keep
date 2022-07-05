@@ -438,7 +438,7 @@ void() air_bubbles = { // [ENTITY]
 	else entity_state_on();
 };
 
-void() misc_drip_reset ={ // [FUNCTION]
+void() misc_drip_reset = { // [FUNCTION]
 	self.touch = SUB_Null;
 	self.frame = self.flags = 0;
 	setmodel (self, "");
@@ -451,20 +451,20 @@ void() misc_drip_reset ={ // [FUNCTION]
 };
 
 // splash animation (runs at 20fps)
-void() s_splash1 = [0, s_splash2] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash2 = [1, s_splash3] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash3 = [2, s_splash4] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash4 = [3, s_splash5] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash5 = [4, s_splash6] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash6 = [5, misc_drip_reset] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash1 = [0, s_splash2] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash2 = [1, s_splash3] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash3 = [2, s_splash4] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash4 = [3, s_splash5] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash5 = [4, s_splash6] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash6 = [5, misc_drip_reset] { self.nextthink = time+0.05;}; // [FUNCTION]
 
 // splash animation (runs at 20fps)
-void() s_splashremoves1 = [0, s_splashremoves2] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves2 = [1, s_splashremoves3] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves3 = [2, s_splashremoves4] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves4 = [3, s_splashremoves5] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves5 = [4, s_splashremoves6] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves6 = [5, SUB_Remove] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves1 = [0, s_splashremoves2] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves2 = [1, s_splashremoves3] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves3 = [2, s_splashremoves4] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves4 = [3, s_splashremoves5] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves5 = [4, s_splashremoves6] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves6 = [5, SUB_Remove] { self.nextthink = time+0.05;}; // [FUNCTION]
 
 // Effects common to both drips that remove themselves and drips that move back to the start point.
 void() misc_drip_touch_common = { // [FUNCTION]
@@ -879,10 +879,10 @@ void() misc_smoke = { // [ENTITY]
 	self.think = misc_smoke_setup;
 };
 
-void() misc_sparks_fade1 = [0, misc_sparks_fade2] {self.alpha = 0.8; self.nextthink = time + 0.05;}; // [FUNCTION]
-void() misc_sparks_fade2 = [0, misc_sparks_fade3] {self.alpha = 0.6; self.nextthink = time + 0.05;}; // [FUNCTION]
-void() misc_sparks_fade3 = [0, misc_sparks_fade4] {self.alpha = 0.4; self.nextthink = time + 0.05;}; // [FUNCTION]
-void() misc_sparks_fade4 = [0, SUB_Remove       ] {self.alpha = 0.2; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade1 = [0, misc_sparks_fade2] { self.alpha = 0.8; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade2 = [0, misc_sparks_fade3] { self.alpha = 0.6; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade3 = [0, misc_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade4 = [0, SUB_Remove       ] { self.alpha = 0.2; self.nextthink = time + 0.05;}; // [FUNCTION]
 
 void() misc_spark_switchoff = { // [FUNCTION]
 	SUB_UseTargets(); // Always switch off trigger (lights)

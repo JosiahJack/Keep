@@ -60,35 +60,35 @@ $frame	walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame	walk11 walk12
 
 // This is no stand idle! just uses frame 1 of walk
-void() shal_stand	=[	$walk1,	shal_stand	] {ai_stand();};
+void() shal_stand	= [	$walk1,	shal_stand	] { ai_stand(); };
 
-//============================================================================
-void() shal_walk1	=[	$walk2,		shal_walk2	] {monster_idle_sound(); ai_walk(6);};
-void() shal_walk2	=[	$walk3,		shal_walk3	] {ai_walk(4);};
-void() shal_walk3	=[	$walk4,		shal_walk4	] {monster_footstep(FALSE); ai_walk(0);};
-void() shal_walk4	=[	$walk5,		shal_walk5	] {ai_walk(0);};
-void() shal_walk5	=[	$walk6,		shal_walk6	] {ai_walk(0);};
-void() shal_walk6	=[	$walk7,		shal_walk7	] {monster_footstep(FALSE); ai_walk(0);};
-void() shal_walk7	=[	$walk8,		shal_walk8	] {ai_walk(5);};
-void() shal_walk8	=[	$walk9,		shal_walk9	] {ai_walk(6);};
-void() shal_walk9	=[	$walk10,	shal_walk10	] {ai_walk(5);};
-void() shal_walk10	=[	$walk11,	shal_walk11	] {monster_footstep(FALSE); ai_walk(0);};
-void() shal_walk11	=[	$walk12,	shal_walk12	] {ai_walk(4);};
-void() shal_walk12	=[	$walk1,		shal_walk1	] {ai_walk(5);};
+
+void() shal_walk1	= [	$walk2,		shal_walk2	] { monster_idle_sound(); ai_walk(6); };
+void() shal_walk2	= [	$walk3,		shal_walk3	] { ai_walk(4); };
+void() shal_walk3	= [	$walk4,		shal_walk4	] { monster_footstep(FALSE); ai_walk(0); };
+void() shal_walk4	= [	$walk5,		shal_walk5	] { ai_walk(0); };
+void() shal_walk5	= [	$walk6,		shal_walk6	] { ai_walk(0); };
+void() shal_walk6	= [	$walk7,		shal_walk7	] { monster_footstep(FALSE); ai_walk(0); };
+void() shal_walk7	= [	$walk8,		shal_walk8	] { ai_walk(5); };
+void() shal_walk8	= [	$walk9,		shal_walk9	] { ai_walk(6); };
+void() shal_walk9	= [	$walk10,	shal_walk10	] { ai_walk(5); };
+void() shal_walk10	= [	$walk11,	shal_walk11	] { monster_footstep(FALSE); ai_walk(0); };
+void() shal_walk11	= [	$walk12,	shal_walk12	] { ai_walk(4); };
+void() shal_walk12	= [	$walk1,		shal_walk1	] { ai_walk(5); };
 
 // run = walk (identical frames and movement speed!)
-void() shal_run1	=[	$walk2,		shal_run2	] {monster_idle_sound(); ai_run(6);};	
-void() shal_run2	=[	$walk3,		shal_run3	] {ai_run(4);};
-void() shal_run3	=[	$walk4,		shal_run4	] {monster_footstep(FALSE); ai_run(0);};
-void() shal_run4	=[	$walk5,		shal_run5	] {ai_run(0);};
-void() shal_run5	=[	$walk6,		shal_run6	] {ai_run(0);};
-void() shal_run6	=[	$walk7,		shal_run7	] {monster_footstep(FALSE); ai_run(0);};
-void() shal_run7	=[	$walk8,		shal_run8	] {ai_run(5);};
-void() shal_run8	=[	$walk9,		shal_run9	] {ai_run(6);};
-void() shal_run9	=[	$walk10,	shal_run10	] {monster_footstep(FALSE); ai_run(5);};
-void() shal_run10	=[	$walk11,	shal_run11	] {ai_run(0);};
-void() shal_run11	=[	$walk12,	shal_run12	] {ai_run(4);};
-void() shal_run12	=[	$walk1,		shal_run1	] {ai_run(5);};
+void() shal_run1	= [	$walk2,		shal_run2	] { monster_idle_sound(); ai_run(6); };	
+void() shal_run2	= [	$walk3,		shal_run3	] { ai_run(4); };
+void() shal_run3	= [	$walk4,		shal_run4	] { monster_footstep(FALSE); ai_run(0); };
+void() shal_run4	= [	$walk5,		shal_run5	] { ai_run(0); };
+void() shal_run5	= [	$walk6,		shal_run6	] { ai_run(0); };
+void() shal_run6	= [	$walk7,		shal_run7	] { monster_footstep(FALSE); ai_run(0); };
+void() shal_run7	= [	$walk8,		shal_run8	] { ai_run(5); };
+void() shal_run8	= [	$walk9,		shal_run9	] { ai_run(6); };
+void() shal_run9	= [	$walk10,	shal_run10	] { monster_footstep(FALSE); ai_run(5); };
+void() shal_run10	= [	$walk11,	shal_run11	] { ai_run(0); };
+void() shal_run11	= [	$walk12,	shal_run12	] { ai_run(4); };
+void() shal_run12	= [	$walk1,		shal_run1	] { ai_run(5); };
 
 // Attachment management (create, finish and delete)
 void() shalrath_create_attachment = {
@@ -163,17 +163,17 @@ void(vector hmofs, float hmframe) Setup_ShalHome = {
 // 2 24 18, -8 24 18, -18 22 17, -28 18 16 (arm swings round and back)
 // -26 12 20, -18 10 30, 12 8 36 ( arms swings up and forward)
 //
-void() shal_attack1		=[ $attack1,	shal_attack2 ] {ai_face();sound(self,CHAN_WEAPON,"shalrath/attack.wav",1,ATTN_NORM);};
-void() shal_attack2		=[ $attack2,	shal_attack3 ] {ai_face();};
-void() shal_attack3		=[ $attack3,	shal_attack4 ] {ai_face();};
-void() shal_attack4		=[ $attack4,	shal_attack5 ] {ai_face();};
-void() shal_attack5		=[ $attack5,	shal_attack6 ] {ai_face();};
-void() shal_attack6		=[ $attack6,	shal_attack7 ] {Setup_ShalHome('-26 12 20',0);};
-void() shal_attack7		=[ $attack7,	shal_attack8 ] {Setup_ShalHome('-18 10 30',2);};
-void() shal_attack8		=[ $attack8,	shal_attack9 ] {Setup_ShalHome('12 8 36',7);};
-void() shal_attack9		=[ $attack9,	shal_attack10] {shalrath_finish_attachment();ShalMissile();};
-void() shal_attack10	=[ $attack10,	shal_attack11] {};
-void() shal_attack11	=[ $attack11,	shal_run1    ] {};
+void() shal_attack1		= [$attack1,	shal_attack2 ] { ai_face();sound(self,CHAN_WEAPON,"shalrath/attack.wav",1,ATTN_NORM); };
+void() shal_attack2		= [$attack2,	shal_attack3 ] { ai_face(); };
+void() shal_attack3		= [$attack3,	shal_attack4 ] { ai_face(); };
+void() shal_attack4		= [$attack4,	shal_attack5 ] { ai_face(); };
+void() shal_attack5		= [$attack5,	shal_attack6 ] { ai_face(); };
+void() shal_attack6		= [$attack6,	shal_attack7 ] { Setup_ShalHome('-26 12 20',0); };
+void() shal_attack7		= [$attack7,	shal_attack8 ] { Setup_ShalHome('-18 10 30',2); };
+void() shal_attack8		= [$attack8,	shal_attack9 ] { Setup_ShalHome('12 8 36',7); };
+void() shal_attack9		= [$attack9,	shal_attack10] { shalrath_finish_attachment();ShalMissile(); };
+void() shal_attack10	= [$attack10,	shal_attack11] {};
+void() shal_attack11	= [$attack11,	shal_run1    ] {};
 
 // RANGE ATTACK 2 - spawn voreling minion (optional)
 // Creates a ball of green goo and throws it towards the player
@@ -207,17 +207,17 @@ void(vector eggofs, float eggframe) Setup_ShalrathEgg = {
 	self.attachment.frame = eggframe;
 };
 
-void() shal_minion1		=[ $attack1,	shal_minion2 ] {ai_face();};
-void() shal_minion2		=[ $attack2,	shal_minion3 ] {Setup_ShalrathEgg('2 24 18',0);};
-void() shal_minion3		=[ $attack3,	shal_minion4 ] {Setup_ShalrathEgg('-8 24 18',1);};
-void() shal_minion4		=[ $attack4,	shal_minion5 ] {Setup_ShalrathEgg('-18 22 17',1);};
-void() shal_minion5		=[ $attack5,	shal_minion6 ] {Setup_ShalrathEgg('-28 18 16',2);};
-void() shal_minion6		=[ $attack6,	shal_minion7 ] {Setup_ShalrathEgg('-26 12 20',3);};
-void() shal_minion7		=[ $attack7,	shal_minion8 ] {Setup_ShalrathEgg('-18 10 30',4);};
-void() shal_minion8		=[ $attack8,	shal_minion9 ] {Setup_ShalrathEgg('12 8 36',5);};
-void() shal_minion9		=[ $attack9,	shal_minion10] {shalrath_finish_attachment();Create_Egg('12 8 36');};
-void() shal_minion10	=[ $attack10,	shal_minion11] {};
-void() shal_minion11	=[ $attack11,	shal_run1    ] {};
+void() shal_minion1		= [$attack1,	shal_minion2 ] { ai_face(); };
+void() shal_minion2		= [$attack2,	shal_minion3 ] { Setup_ShalrathEgg('2 24 18',0); };
+void() shal_minion3		= [$attack3,	shal_minion4 ] { Setup_ShalrathEgg('-8 24 18',1); };
+void() shal_minion4		= [$attack4,	shal_minion5 ] { Setup_ShalrathEgg('-18 22 17',1); };
+void() shal_minion5		= [$attack5,	shal_minion6 ] { Setup_ShalrathEgg('-28 18 16',2); };
+void() shal_minion6		= [$attack6,	shal_minion7 ] { Setup_ShalrathEgg('-26 12 20',3); };
+void() shal_minion7		= [$attack7,	shal_minion8 ] { Setup_ShalrathEgg('-18 10 30',4); };
+void() shal_minion8		= [$attack8,	shal_minion9 ] { Setup_ShalrathEgg('12 8 36',5); };
+void() shal_minion9		= [$attack9,	shal_minion10] { shalrath_finish_attachment();Create_Egg('12 8 36'); };
+void() shal_minion10	= [$attack10,	shal_minion11] {};
+void() shal_minion11	= [$attack11,	shal_run1    ] {};
 
 void() shal_magic = {
 	local entity miniondef;
@@ -263,11 +263,11 @@ void() shal_magic = {
 	else shal_attack1();
 };
 
-void() shal_pain1 =[ $pain1, shal_pain2 ] {};
-void() shal_pain2 =[ $pain2, shal_pain3 ] {shalrath_finish_attachment();};
-void() shal_pain3 =[ $pain3, shal_pain4 ] {};
-void() shal_pain4 =[ $pain4, shal_pain5 ] {};
-void() shal_pain5 =[ $pain5, shal_run1  ] {};
+void() shal_pain1 = [$pain1, shal_pain2 ] {};
+void() shal_pain2 = [$pain2, shal_pain3 ] { shalrath_finish_attachment(); };
+void() shal_pain3 = [$pain3, shal_pain4 ] {};
+void() shal_pain4 = [$pain4, shal_pain5 ] {};
+void() shal_pain5 = [$pain5, shal_run1  ] {};
 
 void(entity inflictor, entity attacker, float damage) shal_pain = {
 	// Check all pain conditions and set up what to do next
@@ -289,13 +289,13 @@ void(entity inflictor, entity attacker, float damage) shal_pain = {
 	}
 };
 
-void() shal_death1 =[ $death1, shal_death2 ] {};
-void() shal_death2 =[ $death2, shal_death3 ] {monster_check_gib();};
-void() shal_death3 =[ $death3, shal_death4 ] {monster_check_gib();self.solid = SOLID_NOT;};
-void() shal_death4 =[ $death4, shal_death5 ] {};
-void() shal_death5 =[ $death5, shal_death6 ] {};
-void() shal_death6 =[ $death6, shal_death7 ] {monster_death_postcheck();};
-void() shal_death7 =[ $death7, shal_death7 ] {monster_deadbody_check();};
+void() shal_death1 = [$death1, shal_death2 ] {};
+void() shal_death2 = [$death2, shal_death3 ] { monster_check_gib(); };
+void() shal_death3 = [$death3, shal_death4 ] { monster_check_gib();self.solid = SOLID_NOT;};
+void() shal_death4 = [$death4, shal_death5 ] {};
+void() shal_death5 = [$death5, shal_death6 ] {};
+void() shal_death6 = [$death6, shal_death7 ] { monster_death_postcheck(); };
+void() shal_death7 = [$death7, shal_death7 ] { monster_deadbody_check(); };
 
 void() shal_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -347,7 +347,7 @@ void() monster_shalrath = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_voreling";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

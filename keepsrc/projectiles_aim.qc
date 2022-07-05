@@ -145,7 +145,7 @@ vector(vector p1, vector p2, float sped, entity targ) Aim_Lead = {
 	// Check if target's vertical velocity should be ignored.
     xyz = TRUE;
     // if (!wired)
-        if (Aim_IgnoreZ (targ)) {xyz = FALSE; tv_z = 0;}
+        if (Aim_IgnoreZ (targ)) { xyz = FALSE; tv_z = 0;}
 
 	// Calculate the time it takes for a missile to reach a given spot,
 	// then calculate where the moving target will be after that amount of time.
@@ -301,15 +301,17 @@ vector(vector dir, vector spread) Aim_Scatter = {
 vector(vector dir, vector spread) Maim_Scatter = {
     local   float   r;
 
-    if (self.enemy.invisible_finished || (self.enemy.items & IT_INVISIBILITY)) {
+    if (Invisible(self.enemy)) {
         r = random() * 4;   // Monsters have 25% chance to guess right.
         r = floor(r) * 5;   // Aim up to 15 degrees to either side.
         if (random() < 0.5) r = 0 - r;
     } else r = 0;
 
     // Randomize the angles before converting them into tangents.
-    if (!spread_z)
-        {spread_x = crandom() * spread_x;  spread_y = crandom() * spread_y;}
+    if (!spread_z) {
+        spread_x = crandom() * spread_x;
+        spread_y = crandom() * spread_y;
+    }
     spread_x = SUB_tan(spread_x + r);  spread_y = SUB_tan(spread_y);
 
     // Combine the tangent side vector to the old directional vector.
@@ -406,17 +408,17 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float 
 		// One
         d1 = TraceBallistic (p1, v1*sped + vup, FALSE, self, fuse, p2, mtype);
         if (trace_ent == vic) {
-			if (vic != self.enemy) {self.enemy.owner = oown;  remove (vic);}
+			if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic);}
             return v1;      // ONE!
         }
 		// Two
         d2 = TraceBallistic (p1, v2*sped + vup, FALSE, self, fuse, p2, mtype);
         if (trace_ent == vic) {
-			if (vic != self.enemy) {self.enemy.owner = oown;  remove (vic);}
+			if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic);}
             return v2; // TWO!
         }
         // If we didn't eliminate the dummy target yet, remove it now.
-        if (vic != self.enemy) {self.enemy.owner = oown;  remove (vic);}
+        if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic);}
     } else {   // No target to hit, so simply aim at the given point.
         d1 = TraceBallistic (p1, v1*sped + vup, FALSE, self, fuse, p2, mtype);
         d2 = TraceBallistic (p1, v2*sped + vup, FALSE, self, fuse, p2, mtype);
@@ -432,7 +434,7 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex) Aim_To
 
 vector(vector p1, vector p2, float sped, float up, entity targ) Aim_Toss = { return Aim_Ballistic (p1, p2, sped, up, targ, 1, SHOT_TIME_TOSS, MOVETYPE_TOSS); };
 
-vector(vector p1, vector p2, float sped, float up, entity targ, vector spread, float ex) Maim_TossEx ={
+vector(vector p1, vector p2, float sped, float up, entity targ, vector spread, float ex) Maim_TossEx = {
     p2 = Aim_Ballistic (p1, p2, sped, up, targ, ex, SHOT_TIME_TOSS, MOVETYPE_TOSS);
     p2 = Maim_Scatter (p2, spread);
     return p2;
@@ -525,7 +527,7 @@ void() BounceShot_Move = {
 // This updates the velocity and angles of a missile.  Needed for
 // rebounding shots.  Used by pulse rifle and Hip's laser cannon.
 void() BounceShot_Think = {
-    if (time > self.delay) {remove (self); return;}
+    if (time > self.delay) { remove (self); return;}
 
     self.flags      = self.flags - (self.flags & FL_ONGROUND);
     self.velocity   = self.dest;    //old_velocity;

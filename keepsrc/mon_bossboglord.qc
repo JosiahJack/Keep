@@ -17,43 +17,43 @@ $frame pain1 pain2 pain3 pain4 pain5 pain6
 $frame death1 death2 death3 death4 death5 death6 
 $frame death7 death8 death9 death10 death11
 
-void() bogl_stand1	=[	$stand1,	bogl_stand2	] {monster_idle_sound();ai_stand();};
-void() bogl_stand2	=[	$stand2,	bogl_stand3	] {ai_stand();};
-void() bogl_stand3	=[	$stand3,	bogl_stand4	] {ai_stand();};
-void() bogl_stand4	=[	$stand4,	bogl_stand5	] {ai_stand();};
-void() bogl_stand5	=[	$stand5,	bogl_stand6	] {ai_stand();};
-void() bogl_stand6	=[	$stand6,	bogl_stand7	] {ai_stand();};
-void() bogl_stand7	=[	$stand7,	bogl_stand8	] {ai_stand();};
-void() bogl_stand8	=[	$stand8,	bogl_stand9	] {ai_stand();};
-void() bogl_stand9	=[	$stand9,	bogl_stand10] {ai_stand();};
-void() bogl_stand10	=[	$stand10,	bogl_stand11] {ai_stand();};
-void() bogl_stand11	=[	$stand11,	bogl_stand12] {ai_stand();};
-void() bogl_stand12	=[	$stand12,	bogl_stand13] {ai_stand();};
-void() bogl_stand13	=[	$stand13,	bogl_stand14] {ai_stand();};
-void() bogl_stand14	=[	$stand14,	bogl_stand15] {ai_stand();};
-void() bogl_stand15	=[	$stand15,	bogl_stand16] {ai_stand();};
-void() bogl_stand16	=[	$stand16,	bogl_stand17] {ai_stand();};
-void() bogl_stand17	=[	$stand17,	bogl_stand1	] {ai_stand();};
+void() bogl_stand1	= [	$stand1,	bogl_stand2	] { monster_idle_sound();ai_stand(); };
+void() bogl_stand2	= [	$stand2,	bogl_stand3	] { ai_stand(); };
+void() bogl_stand3	= [	$stand3,	bogl_stand4	] { ai_stand(); };
+void() bogl_stand4	= [	$stand4,	bogl_stand5	] { ai_stand(); };
+void() bogl_stand5	= [	$stand5,	bogl_stand6	] { ai_stand(); };
+void() bogl_stand6	= [	$stand6,	bogl_stand7	] { ai_stand(); };
+void() bogl_stand7	= [	$stand7,	bogl_stand8	] { ai_stand(); };
+void() bogl_stand8	= [	$stand8,	bogl_stand9	] { ai_stand(); };
+void() bogl_stand9	= [	$stand9,	bogl_stand10] { ai_stand(); };
+void() bogl_stand10	= [	$stand10,	bogl_stand11] { ai_stand(); };
+void() bogl_stand11	= [	$stand11,	bogl_stand12] { ai_stand(); };
+void() bogl_stand12	= [	$stand12,	bogl_stand13] { ai_stand(); };
+void() bogl_stand13	= [	$stand13,	bogl_stand14] { ai_stand(); };
+void() bogl_stand14	= [	$stand14,	bogl_stand15] { ai_stand(); };
+void() bogl_stand15	= [	$stand15,	bogl_stand16] { ai_stand(); };
+void() bogl_stand16	= [	$stand16,	bogl_stand17] { ai_stand(); };
+void() bogl_stand17	= [	$stand17,	bogl_stand1	] { ai_stand(); };
 
-void() bogl_walk1	=[ $walk1, bogl_walk2 ] {monster_idle_sound(); ai_walk(10);};
-void() bogl_walk2	=[ $walk2, bogl_walk3 ] {monster_footstep(FALSE); ai_walk(9);};
-void() bogl_walk3	=[ $walk3, bogl_walk4 ] {ai_walk(9);};
-void() bogl_walk4	=[ $walk4, bogl_walk5 ] {ai_walk(5);};
-void() bogl_walk5	=[ $walk5, bogl_walk6 ] {ai_walk(6);};
-void() bogl_walk6	=[ $walk6, bogl_walk7 ] {ai_walk(12);};
-void() bogl_walk7	=[ $walk7, bogl_walk8 ] {monster_footstep(FALSE); ai_walk(8);};
-void() bogl_walk8	=[ $walk8, bogl_walk9 ] {ai_walk(3);};
-void() bogl_walk9	=[ $walk9, bogl_walk10] {ai_walk(13);};
-void() bogl_walk10	=[ $walk10, bogl_walk11] {ai_walk(9);};
-void() bogl_walk11	=[ $walk11, bogl_walk12] {ai_walk(7);};
-void() bogl_walk12	=[ $walk12, bogl_walk1 ] {ai_walk(7);};
+void() bogl_walk1	= [$walk1, bogl_walk2 ] { monster_idle_sound(); ai_walk(10); };
+void() bogl_walk2	= [$walk2, bogl_walk3 ] { monster_footstep(FALSE); ai_walk(9); };
+void() bogl_walk3	= [$walk3, bogl_walk4 ] { ai_walk(9); };
+void() bogl_walk4	= [$walk4, bogl_walk5 ] { ai_walk(5); };
+void() bogl_walk5	= [$walk5, bogl_walk6 ] { ai_walk(6); };
+void() bogl_walk6	= [$walk6, bogl_walk7 ] { ai_walk(12); };
+void() bogl_walk7	= [$walk7, bogl_walk8 ] { monster_footstep(FALSE); ai_walk(8); };
+void() bogl_walk8	= [$walk8, bogl_walk9 ] { ai_walk(3); };
+void() bogl_walk9	= [$walk9, bogl_walk10] { ai_walk(13); };
+void() bogl_walk10	= [$walk10, bogl_walk11] { ai_walk(9); };
+void() bogl_walk11	= [$walk11, bogl_walk12] { ai_walk(7); };
+void() bogl_walk12	= [$walk12, bogl_walk1 ] { ai_walk(7); };
 
-void() bogl_run1 =[ $run1, bogl_run2 ] {monster_idle_sound(); ai_run(20);};
-void() bogl_run2 =[ $run2, bogl_run3 ] {monster_footstep(FALSE); ai_run(24);};
-void() bogl_run3 =[ $run3, bogl_run4 ] {ai_run(20);};
-void() bogl_run4 =[ $run4, bogl_run5 ] {ai_run(20);};
-void() bogl_run5 =[ $run5, bogl_run6 ] {monster_footstep(FALSE); ai_run(24);};
-void() bogl_run6 =[ $run6, bogl_run1 ] {ai_run(20);};
+void() bogl_run1 = [$run1, bogl_run2 ] { monster_idle_sound(); ai_run(20); };
+void() bogl_run2 = [$run2, bogl_run3 ] { monster_footstep(FALSE); ai_run(24); };
+void() bogl_run3 = [$run3, bogl_run4 ] { ai_run(20); };
+void() bogl_run4 = [$run4, bogl_run5 ] { ai_run(20); };
+void() bogl_run5 = [$run5, bogl_run6 ] { monster_footstep(FALSE); ai_run(24); };
+void() bogl_run6 = [$run6, bogl_run1 ] { ai_run(20); };
 
 // Attachment management (create, finish and delete)
 void() bogl_create_attachment = {
@@ -150,7 +150,7 @@ void(vector leftofs, vector rightofs, float sbframe, float chfeet) bogl_slimebal
 	self.attachment2.frame = sbframe;
 };
 
-void() bogl_smash1  =[ $smash1,  bogl_smash2 ] { ai_charge(2);
+void() bogl_smash1  = [$smash1,  bogl_smash2 ] { ai_charge(2);
 	// Cycle around the melee sounds
 	self.meleeattack = self.meleeattack + 1;
 	if (self.meleeattack > 2) self.meleeattack = 0;
@@ -159,27 +159,27 @@ void() bogl_smash1  =[ $smash1,  bogl_smash2 ] { ai_charge(2);
 		sound (self, CHAN_VOICE, "ad171/boglord/melee1.wav", 1, ATTN_NORM);}
 	else if (self.meleeattack == 1) {
 		sound (self, CHAN_VOICE, "ad171/boglord/melee2.wav", 1, ATTN_NORM);}
-	else {sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);}
+	else { sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);}
 };
-void() bogl_smash2  =[ $smash2,  bogl_smash3 ] {monster_footstep(FALSE);
-	bogl_slimeball('21 70 60','32 -53 64',0,6);};
-void() bogl_smash3  =[ $smash3,  bogl_smash4 ] {
-	bogl_slimeball('-5 66 102','2 -58 104',1,6);};
-void() bogl_smash4  =[ $smash4,  bogl_smash5 ] {
-	bogl_slimeball('-34 48 122','-34 -48 124',2,5);};
-void() bogl_smash5  =[ $smash5,  bogl_smash6 ] {
-	bogl_slimeball('-58 30 114','-60 -30 114',3,4);};
-void() bogl_smash6  =[ $smash6,  bogl_smash7 ] {
-	bogl_slimeball('-58 20 109','-62 -17 110',4,1);};
-void() bogl_smash7  =[ $smash7,  bogl_smash8 ] {
-	bogl_slimeball('-24 20 114','-26 -14 124',5,0);};
-void() bogl_smash8  =[ $smash8,  bogl_smash9 ] {
-	bogl_slimeball('32 24 108','42 -18 108',6,0);};
-void() bogl_smash9  =[ $smash9,  bogl_smash10] {
-	bogl_throwslime('32 24 108','42 -18 108');};
-void() bogl_smash10 =[ $smash10, bogl_smash11] {ai_charge(0);};
-void() bogl_smash11 =[ $smash11, bogl_smash12] {ai_charge(5);};
-void() bogl_smash12 =[ $smash12, bogl_run1	 ] {ai_charge(4);};
+void() bogl_smash2  = [$smash2,  bogl_smash3 ] { monster_footstep(FALSE);
+	bogl_slimeball('21 70 60','32 -53 64',0,6); };
+void() bogl_smash3  = [$smash3,  bogl_smash4 ] {
+	bogl_slimeball('-5 66 102','2 -58 104',1,6); };
+void() bogl_smash4  = [$smash4,  bogl_smash5 ] {
+	bogl_slimeball('-34 48 122','-34 -48 124',2,5); };
+void() bogl_smash5  = [$smash5,  bogl_smash6 ] {
+	bogl_slimeball('-58 30 114','-60 -30 114',3,4); };
+void() bogl_smash6  = [$smash6,  bogl_smash7 ] {
+	bogl_slimeball('-58 20 109','-62 -17 110',4,1); };
+void() bogl_smash7  = [$smash7,  bogl_smash8 ] {
+	bogl_slimeball('-24 20 114','-26 -14 124',5,0); };
+void() bogl_smash8  = [$smash8,  bogl_smash9 ] {
+	bogl_slimeball('32 24 108','42 -18 108',6,0); };
+void() bogl_smash9  = [$smash9,  bogl_smash10] {
+	bogl_throwslime('32 24 108','42 -18 108'); };
+void() bogl_smash10 = [$smash10, bogl_smash11] { ai_charge(0); };
+void() bogl_smash11 = [$smash11, bogl_smash12] { ai_charge(5); };
+void() bogl_smash12 = [$smash12, bogl_run1	 ] { ai_charge(4); };
 
 // RANGE ATTACK 2 - Projectile Lightning attack
 void() bogl_lightning = {
@@ -269,23 +269,23 @@ void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
 	particle_explode(self.pos2, 5+random()*5, 1, self.part_style, PARTICLE_BURST_LOSTUP);	
 };
 
-void() bogl_magic1 =[ $magic1, bogl_magic2 ] {ai_face();
+void() bogl_magic1 = [$magic1, bogl_magic2 ] { ai_face();
 	self.pain_finished = time + 1;
-	sound (self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM);};
-void() bogl_magic2 =[ $magic2, bogl_magic3 ] {bogl_casting('0 53 86','21 -10 102',0);};
-void() bogl_magic3 =[ $magic3, bogl_magic4 ] {bogl_casting('-16 50 95','11 0 108',1);};
-void() bogl_magic4 =[ $magic4, bogl_magic5 ] {monster_footstep(FALSE); bogl_casting('-28 48 100','6 3 110',2);};
-void() bogl_magic5 =[ $magic5, bogl_magic6 ] {bogl_casting('-3 34 119','19 -15 110',3);};
-void() bogl_magic6 =[ $magic6, bogl_magic9 ] {bogl_lightning();
+	sound (self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM); };
+void() bogl_magic2 = [$magic2, bogl_magic3 ] { bogl_casting('0 53 86','21 -10 102',0); };
+void() bogl_magic3 = [$magic3, bogl_magic4 ] { bogl_casting('-16 50 95','11 0 108',1); };
+void() bogl_magic4 = [$magic4, bogl_magic5 ] { monster_footstep(FALSE); bogl_casting('-28 48 100','6 3 110',2); };
+void() bogl_magic5 = [$magic5, bogl_magic6 ] { bogl_casting('-3 34 119','19 -15 110',3); };
+void() bogl_magic6 = [$magic6, bogl_magic9 ] { bogl_lightning();
 	// Finished with growing ball of energy
 	SUB_FinishAttachments();
 	SpawnExplosion(self.part_life, self.pos3, "quoth/drole/explode3.wav");
 };
-void() bogl_magic9 =[ $magic9, bogl_magic10 ] {bogl_lightning();};
-void() bogl_magic10 =[ $magic10, bogl_magic11 ] {bogl_lightning();monster_footstep(FALSE);};
-void() bogl_magic11 =[ $magic11, bogl_magic12 ] {
-	if (skill == SKILL_NIGHTMARE) bogl_lightning();};
-void() bogl_magic12 =[ $magic12, bogl_run1 ] {};
+void() bogl_magic9 = [$magic9, bogl_magic10 ] { bogl_lightning(); };
+void() bogl_magic10 = [$magic10, bogl_magic11 ] { bogl_lightning();monster_footstep(FALSE); };
+void() bogl_magic11 = [$magic11, bogl_magic12 ] {
+	if (skill == SKILL_NIGHTMARE) bogl_lightning(); };
+void() bogl_magic12 = [$magic12, bogl_run1 ] {};
 
 void() bogl_tetherattack = {
 	// Completely randomize tether attack chance 50/50
@@ -295,12 +295,12 @@ void() bogl_tetherattack = {
 	else self.th_missile();
 };
 
-void() bogl_pain1 =[ $pain1, bogl_pain2 ] {};
-void() bogl_pain2 =[ $pain2, bogl_pain3 ] {};
-void() bogl_pain3 =[ $pain3, bogl_pain4 ] {};
-void() bogl_pain4 =[ $pain4, bogl_pain5 ] {};
-void() bogl_pain5 =[ $pain5, bogl_pain6 ] {};
-void() bogl_pain6 =[ $pain6, bogl_run1  ] {};
+void() bogl_pain1 = [$pain1, bogl_pain2 ] {};
+void() bogl_pain2 = [$pain2, bogl_pain3 ] {};
+void() bogl_pain3 = [$pain3, bogl_pain4 ] {};
+void() bogl_pain4 = [$pain4, bogl_pain5 ] {};
+void() bogl_pain5 = [$pain5, bogl_pain6 ] {};
+void() bogl_pain6 = [$pain6, bogl_run1  ] {};
 
 void(entity inflictor, entity attacker, float damage) bogl_pain = {
 	// Finish with all attachments
@@ -318,17 +318,17 @@ void(entity inflictor, entity attacker, float damage) bogl_pain = {
 };
 
 // Classic death pose! Dead Boggy!
-void() bogl_death1  =[ $death1,  bogl_death2  ] {};
-void() bogl_death2  =[ $death2,  bogl_death3  ] {monster_check_gib();};
-void() bogl_death3  =[ $death3,  bogl_death4  ] {monster_check_gib(); self.solid = SOLID_NOT;};
-void() bogl_death4  =[ $death4,  bogl_death5  ] {};
-void() bogl_death5  =[ $death5,  bogl_death6  ] {};
-void() bogl_death6  =[ $death6,  bogl_death7  ] {};
-void() bogl_death7  =[ $death7,  bogl_death8  ] {};
-void() bogl_death8  =[ $death8,  bogl_death9  ] {};
-void() bogl_death9  =[ $death9,  bogl_death10 ] {};
-void() bogl_death10 =[ $death10, bogl_death11 ] {monster_death_postcheck();};
-void() bogl_death11 =[ $death11, bogl_death11 ] {monster_deadbody_check();};
+void() bogl_death1  = [$death1,  bogl_death2  ] {};
+void() bogl_death2  = [$death2,  bogl_death3  ] { monster_check_gib(); };
+void() bogl_death3  = [$death3,  bogl_death4  ] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() bogl_death4  = [$death4,  bogl_death5  ] {};
+void() bogl_death5  = [$death5,  bogl_death6  ] {};
+void() bogl_death6  = [$death6,  bogl_death7  ] {};
+void() bogl_death7  = [$death7,  bogl_death8  ] {};
+void() bogl_death8  = [$death8,  bogl_death9  ] {};
+void() bogl_death9  = [$death9,  bogl_death10 ] {};
+void() bogl_death10 = [$death10, bogl_death11 ] { monster_death_postcheck(); };
+void() bogl_death11 = [$death11, bogl_death11 ] { monster_deadbody_check(); };
 
 void() bogl_die = {
 	SUB_FinishAttachments(); // Finish and remove all attachments
@@ -351,12 +351,12 @@ void() bogl_die = {
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-void() bogl_wakeup1 =[ $smash7,		bogl_wakeup2 ] {};
-void() bogl_wakeup2 =[ $smash8,		bogl_wakeup3 ] { sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);};
-void() bogl_wakeup3 =[ $smash9,		bogl_wakeup4 ] {};
-void() bogl_wakeup4 =[ $smash10,	bogl_wakeup5 ] {};
-void() bogl_wakeup5 =[ $smash11,	bogl_wakeup6 ] {};
-void() bogl_wakeup6 =[ $smash12,	bogl_run1 ] {};
+void() bogl_wakeup1 = [$smash7,		bogl_wakeup2 ] {};
+void() bogl_wakeup2 = [$smash8,		bogl_wakeup3 ] { sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM); };
+void() bogl_wakeup3 = [$smash9,		bogl_wakeup4 ] {};
+void() bogl_wakeup4 = [$smash10,	bogl_wakeup5 ] {};
+void() bogl_wakeup5 = [$smash11,	bogl_wakeup6 ] {};
+void() bogl_wakeup6 = [$smash12,	bogl_run1 ] {};
 
 void() monster_boglord_precache = {
 	precache_poisongibs(); // precache gibs

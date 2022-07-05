@@ -2,8 +2,7 @@
 //bdw - combined all the _monster_start_go functions into one...
 //
 
-/*float() BDW_CheckForDrop =
-{
+/*float() BDW_CheckForDrop = {
 	if (self.monsterflags & MF_SHUFFLER_MINION)
 		return FALSE;	
 	if (self.spawnflags & M_NODROP)
@@ -12,8 +11,7 @@
 	return TRUE;
 };*/
 
-void() bdw_monster_start_go =
-{
+void() bdw_monster_start_go = {
 	local entity t;
 
 	if (self.flags & FL_FLY)
@@ -104,10 +102,9 @@ void() bdw_monster_start_go =
 
 
 
-//============================================================================
 
-void() bdw_monster_start =
-{
+
+void() bdw_monster_start = {
 // delay drop to floor to make sure all doors have been spawned
 // spread think times so they don't all happen at same time
 	self.nextthink = time + 0.1 + random()*0.5;	// ben - bugfix

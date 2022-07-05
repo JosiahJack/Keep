@@ -128,12 +128,12 @@ void() emitdpp_fcircle = { // [FUNCTION]
 // Particle weather system
 
 // splash animation (runs at 20fps)
-void() pe_splash1 = [0, pe_splash2] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() pe_splash2 = [1, pe_splash3] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() pe_splash3 = [2, pe_splash4] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() pe_splash4 = [3, pe_splash5] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() pe_splash5 = [4, pe_splash6] {self.nextthink = time+0.05;}; // [FUNCTION]
-void() pe_splash6 = [5, finish_particle] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() pe_splash1 = [0, pe_splash2] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() pe_splash2 = [1, pe_splash3] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() pe_splash3 = [2, pe_splash4] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() pe_splash4 = [3, pe_splash5] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() pe_splash5 = [4, pe_splash6] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() pe_splash6 = [5, finish_particle] { self.nextthink = time+0.05;}; // [FUNCTION]
 
 void() emitepp_weather = { // [FUNCTION]
 	// Check for variable wind direction

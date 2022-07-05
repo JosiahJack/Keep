@@ -91,98 +91,96 @@ float SKULLW_HEIGHT = 96;
 float SKULLW_DISTMIN = 256;
 float SKULLW_DISTMAX = 512;
 
-void()	skullw_stand1	=[	$stand1,	skullw_stand2	] {
-self.idlebusy=SKULLW_STAND; monster_idle_sound();ai_stand();};
-void()	skullw_stand2	=[	$stand18,	skullw_stand3	] {ai_stand();};
-void()	skullw_stand3	=[	$stand16,	skullw_stand4	] {ai_stand();};
-void()	skullw_stand4	=[	$stand14,	skullw_stand5	] {ai_stand();};
-void()	skullw_stand5	=[	$stand12,	skullw_stand6	] {ai_stand();};
-void()	skullw_stand6	=[	$stand3,	skullw_stand7	] {ai_stand();};
-void()	skullw_stand7	=[	$stand5,	skullw_stand8	] {ai_stand();};
-void()	skullw_stand8	=[	$stand7,	skullw_stand9	] {ai_stand();};
-void()	skullw_stand9	=[	$stand9,	skullw_stand10	] {ai_stand();};
-void()	skullw_stand10	=[	$stand11,	skullw_stand11	] {ai_stand();};
-void()	skullw_stand11	=[	$stand13,	skullw_stand12	] {ai_stand();};
-void()	skullw_stand12	=[	$stand15,	skullw_stand13	] {ai_stand();};
-void()	skullw_stand13	=[	$stand17,	skullw_stand14	] {ai_stand();};
-void()	skullw_stand14	=[	$stand19,	skullw_stand1	] {ai_stand();};
+void()	skullw_stand1	= [	$stand1,	skullw_stand2	] {
+self.idlebusy=SKULLW_STAND; monster_idle_sound();ai_stand(); };
+void()	skullw_stand2	= [	$stand18,	skullw_stand3	] { ai_stand(); };
+void()	skullw_stand3	= [	$stand16,	skullw_stand4	] { ai_stand(); };
+void()	skullw_stand4	= [	$stand14,	skullw_stand5	] { ai_stand(); };
+void()	skullw_stand5	= [	$stand12,	skullw_stand6	] { ai_stand(); };
+void()	skullw_stand6	= [	$stand3,	skullw_stand7	] { ai_stand(); };
+void()	skullw_stand7	= [	$stand5,	skullw_stand8	] { ai_stand(); };
+void()	skullw_stand8	= [	$stand7,	skullw_stand9	] { ai_stand(); };
+void()	skullw_stand9	= [	$stand9,	skullw_stand10	] { ai_stand(); };
+void()	skullw_stand10	= [	$stand11,	skullw_stand11	] { ai_stand(); };
+void()	skullw_stand11	= [	$stand13,	skullw_stand12	] { ai_stand(); };
+void()	skullw_stand12	= [	$stand15,	skullw_stand13	] { ai_stand(); };
+void()	skullw_stand13	= [	$stand17,	skullw_stand14	] { ai_stand(); };
+void()	skullw_stand14	= [	$stand19,	skullw_stand1	] { ai_stand(); };
 
-//============================================================================
-void()	skullw_walk1	=[	$walk1,		skullw_walk2	] {monster_footstep(FALSE);
-self.idlebusy=SKULLW_WALK; monster_idle_sound();ai_walk(2);};
-void()	skullw_walk2	=[	$walk3,		skullw_walk3	] {ai_walk(5);};
-void()	skullw_walk3	=[	$walk4,		skullw_walk4	] {ai_walk(5);};
-void()	skullw_walk4	=[	$walk5,		skullw_walk5	] {ai_walk(4);};
-void()	skullw_walk5	=[	$walk7,		skullw_walk6	] {ai_walk(4);};
-void()	skullw_walk6	=[	$walk8,		skullw_walk7	] {ai_walk(2);};
-void()	skullw_walk7	=[	$walk9,		skullw_walk8	] {ai_walk(2);};
-void()	skullw_walk8	=[	$walk11,	skullw_walk9	] {ai_walk(2);};
-void()	skullw_walk9	=[	$walk12,	skullw_walk10	] {monster_footstep(FALSE); ai_walk(2);};
-void()	skullw_walk10	=[	$walk13,	skullw_walk11	] {ai_walk(5);};
-void()	skullw_walk11	=[	$walk15,	skullw_walk12	] {ai_walk(5);};
-void()	skullw_walk12	=[	$walk16,	skullw_walk13	] {ai_walk(4);};
-void()	skullw_walk13	=[	$walk17,	skullw_walk14	] {ai_walk(4);};
-void()	skullw_walk14	=[	$walk19,	skullw_walk15	] {ai_walk(2);};
-void()	skullw_walk15	=[	$walk20,	skullw_walk16	] {ai_walk(2);};
-void()	skullw_walk16	=[	$walk22,	skullw_walk1	] {ai_walk(3);};
 
-//============================================================================
+void()	skullw_walk1	= [	$walk1,		skullw_walk2	] { monster_footstep(FALSE);
+self.idlebusy=SKULLW_WALK; monster_idle_sound();ai_walk(2); };
+void()	skullw_walk2	= [	$walk3,		skullw_walk3	] { ai_walk(5); };
+void()	skullw_walk3	= [	$walk4,		skullw_walk4	] { ai_walk(5); };
+void()	skullw_walk4	= [	$walk5,		skullw_walk5	] { ai_walk(4); };
+void()	skullw_walk5	= [	$walk7,		skullw_walk6	] { ai_walk(4); };
+void()	skullw_walk6	= [	$walk8,		skullw_walk7	] { ai_walk(2); };
+void()	skullw_walk7	= [	$walk9,		skullw_walk8	] { ai_walk(2); };
+void()	skullw_walk8	= [	$walk11,	skullw_walk9	] { ai_walk(2); };
+void()	skullw_walk9	= [	$walk12,	skullw_walk10	] { monster_footstep(FALSE); ai_walk(2); };
+void()	skullw_walk10	= [	$walk13,	skullw_walk11	] { ai_walk(5); };
+void()	skullw_walk11	= [	$walk15,	skullw_walk12	] { ai_walk(5); };
+void()	skullw_walk12	= [	$walk16,	skullw_walk13	] { ai_walk(4); };
+void()	skullw_walk13	= [	$walk17,	skullw_walk14	] { ai_walk(4); };
+void()	skullw_walk14	= [	$walk19,	skullw_walk15	] { ai_walk(2); };
+void()	skullw_walk15	= [	$walk20,	skullw_walk16	] { ai_walk(2); };
+void()	skullw_walk16	= [	$walk22,	skullw_walk1	] { ai_walk(3); };
+
+
 // WALK -> STAND
-void()	skullw_transA1	=[	$transA5,	skullw_transA2	] {};
-void()	skullw_transA2	=[	$transA7,	skullw_transA3	] {};
-void()	skullw_transA3	=[	$transA9,	skullw_transA4	] {};
-void()	skullw_transA4	=[	$transA11,	skullw_stand1	] {};
+void()	skullw_transA1	= [	$transA5,	skullw_transA2	] {};
+void()	skullw_transA2	= [	$transA7,	skullw_transA3	] {};
+void()	skullw_transA3	= [	$transA9,	skullw_transA4	] {};
+void()	skullw_transA4	= [	$transA11,	skullw_stand1	] {};
 
 // STAND -> WALK
-void()	skullw_transB1	=[	$transB3,	skullw_transB2	] {};
-void()	skullw_transB2	=[	$transB5,	skullw_transB3	] {};
-void()	skullw_transB3	=[	$transB7,	skullw_walk1	] {};
+void()	skullw_transB1	= [	$transB3,	skullw_transB2	] {};
+void()	skullw_transB2	= [	$transB5,	skullw_transB3	] {};
+void()	skullw_transB3	= [	$transB7,	skullw_walk1	] {};
 
 //----------------------------------------------------------------------
-void() skullw_stand =
-{
+void() skullw_stand = {
 	if (self.idlebusy == SKULLW_WALK) skullw_transA1();
 	else skullw_stand1();
 };
 
 //----------------------------------------------------------------------
-void() skullw_walk =
-{
+void() skullw_walk = {
 	if (self.idlebusy == SKULLW_STAND) skullw_transB1();
 	else skullw_walk1();
 };
 
-//============================================================================
-void()	skullw_run1	=[	$stand1,		skullw_run2	] {ai_face();
-	monster_idle_sound();ai_run(0);};
-void()	skullw_run2	=[	$stand18,		skullw_run3	] {ai_face();ai_run(0);};
-void()	skullw_run3	=[	$stand16,		skullw_run4	] {ai_run(0);};
-void()	skullw_run4	=[	$stand14,		skullw_run5	] {ai_run(0);};
-void()	skullw_run5	=[	$stand12,		skullw_run6	] {ai_face();ai_run(0);};
-void()	skullw_run6	=[	$stand3,		skullw_run7	] {ai_face();ai_run(0);};
-void()	skullw_run7	=[	$stand5,		skullw_run8	] {ai_run(0);};
-void()	skullw_run8	=[	$stand7,		skullw_run9	] {ai_run(0);};
-void()	skullw_run9	=[	$stand9,		skullw_run10] {ai_face();ai_run(0);};
-void()	skullw_run10=[	$stand11,		skullw_run11] {ai_face();ai_run(0);};
-void()	skullw_run11=[	$stand13,		skullw_run12] {ai_run(0);};
-void()	skullw_run12=[	$stand15,		skullw_run13] {ai_run(0);};
-void()	skullw_run13=[	$stand17,		skullw_run14] {ai_run(0);};
-void()	skullw_run14=[	$stand19,		skullw_run1	] {ai_run(0);};
 
-//============================================================================
+void()	skullw_run1	= [	$stand1,		skullw_run2	] { ai_face();
+	monster_idle_sound();ai_run(0); };
+void()	skullw_run2	= [	$stand18,		skullw_run3	] { ai_face();ai_run(0); };
+void()	skullw_run3	= [	$stand16,		skullw_run4	] { ai_run(0); };
+void()	skullw_run4	= [	$stand14,		skullw_run5	] { ai_run(0); };
+void()	skullw_run5	= [	$stand12,		skullw_run6	] { ai_face();ai_run(0); };
+void()	skullw_run6	= [	$stand3,		skullw_run7	] { ai_face();ai_run(0); };
+void()	skullw_run7	= [	$stand5,		skullw_run8	] { ai_run(0); };
+void()	skullw_run8	= [	$stand7,		skullw_run9	] { ai_run(0); };
+void()	skullw_run9	= [	$stand9,		skullw_run10] { ai_face();ai_run(0); };
+void()	skullw_run10= [	$stand11,		skullw_run11] { ai_face();ai_run(0); };
+void()	skullw_run11= [	$stand13,		skullw_run12] { ai_run(0); };
+void()	skullw_run12= [	$stand15,		skullw_run13] { ai_run(0); };
+void()	skullw_run13= [	$stand17,		skullw_run14] { ai_run(0); };
+void()	skullw_run14= [	$stand19,		skullw_run1	] { ai_run(0); };
+
+
 // MELEE - Teleportation
-//============================================================================
-void() skullw_tfin1 =[ $tele9, skullw_tfin2 ] {
+
+void() skullw_tfin1 = [$tele9, skullw_tfin2 ] {
 	self.velocity = '0 0 0';
 	// Always phase in facing the enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	self.angles_y = self.ideal_yaw;
 	sound (self, CHAN_AUTO, "ad171/skullwiz/blinkin.wav", 1, ATTN_NORM);
 };
-void() skullw_tfin2 =[ $tele7, skullw_tfin3 ] {ai_face();};
-void() skullw_tfin3 =[ $tele5, skullw_tfin4 ] {ai_face();};
-void() skullw_tfin4 =[ $tele3, skullw_tfin5 ] {ai_face();};
-void() skullw_tfin5 =[ $tele1, skullw_run1 ] {ai_face();
+void() skullw_tfin2 = [$tele7, skullw_tfin3 ] { ai_face(); };
+void() skullw_tfin3 = [$tele5, skullw_tfin4 ] { ai_face(); };
+void() skullw_tfin4 = [$tele3, skullw_tfin5 ] { ai_face(); };
+void() skullw_tfin5 = [$tele1, skullw_run1 ] { ai_face();
 	self.bodyphased = MONAI_SKULLWSOLID;
 	self.takedamage = DAMAGE_AIM;
 };
@@ -269,8 +267,7 @@ void() skullw_blink = {
 //----------------------------------------------------------------------
 // Cycle around teleport chain lists instead
 //----------------------------------------------------------------------
-void() skullw_waitforlink =
-{
+void() skullw_waitforlink = {
 	self.nextthink = time + 0.5 + random();
 	self.think = skullw_waitforlink;
 	setorigin(self, self.movelast.origin);	// move to new location
@@ -292,7 +289,6 @@ void() skullw_waitforlink =
 	}
 };
 
-//----------------------------------------------------------------------
 void() skullw_checkblinklist = {
 		// Does the blink list exist already?
 	if (self.movelast.classtype != CT_SKULLTELEPORT) {
@@ -305,37 +301,34 @@ void() skullw_checkblinklist = {
 			self.target2 = "";
 			skullw_blink();
 		}
-	}
-	else {
+	} else {
 		// Move forward in chain and try next spawn location
 		self.movelast = self.movelast.enemy;
 		skullw_waitforlink();
 	}
 };
 
-//----------------------------------------------------------------------
 // touch book and phase out
-//----------------------------------------------------------------------
-void() skullw_tele1	=[ $spellB3,	skullw_tele2    ] {
+void() skullw_tele1	= [$spellB3,	skullw_tele2    ] {
 	self.pain_finished = time + 1;				// no pain during teleportation
 	if (random() < 0.5) sound (self, CHAN_VOICE, "ad171/skullwiz/blinkspk1.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_VOICE, "ad171/skullwiz/blinkspk2.wav", 1, ATTN_NORM);
 };
-void() skullw_tele2	=[ $spellB5,	skullw_tele3 ] {};
-void() skullw_tele3	=[ $spellB7,	skullw_tele4 ] {};
-void() skullw_tele4	=[ $spellB9,	skullw_tele6 ] {};
-void() skullw_tele6	=[ $spellB13,	skullw_tele8 ] {};
-void() skullw_tele8	=[ $tele1,		skullw_tele9 ] {
+void() skullw_tele2	= [$spellB5,	skullw_tele3 ] {};
+void() skullw_tele3	= [$spellB7,	skullw_tele4 ] {};
+void() skullw_tele4	= [$spellB9,	skullw_tele6 ] {};
+void() skullw_tele6	= [$spellB13,	skullw_tele8 ] {};
+void() skullw_tele8	= [$tele1,		skullw_tele9 ] {
 	self.takedamage = DAMAGE_NO;	// No damage or impact, phasing out
 	self.solid = SOLID_NOT;
 	self.bodyphased = MONAI_SKULLWINVIS;
 	particle_explode(self.origin, 100, 1, self.part_style, PARTICLE_BURST_SKULLUP);
 	sound (self, CHAN_VOICE, "ad171/skullwiz/blinkout.wav", 1, ATTN_NORM);
 };
-void() skullw_tele9	=[ $tele3,	skullw_tele10 ] {};
-void() skullw_tele10=[ $tele5,	skullw_tele11 ] {};
-void() skullw_tele11=[ $tele7,	skullw_tele12 ] {};
-void() skullw_tele12=[ $tele9,	skullw_tele13 ] {};
+void() skullw_tele9	= [$tele3,	skullw_tele10 ] {};
+void() skullw_tele10= [$tele5,	skullw_tele11 ] {};
+void() skullw_tele11= [$tele7,	skullw_tele12 ] {};
+void() skullw_tele12= [$tele9,	skullw_tele13 ] {};
 void() skullw_tele13 = {
 	setmodel(self,"");
 	// Check if a chain list has been defined
@@ -361,15 +354,15 @@ void(vector orgofs) skullw_fire = {
 	launch_projectile(org,dir,NO_SPIN,proj_type,self.attack_speed);
 };
 
-void() skullw_attack1	=[	$spellA3,	skullw_attack2    ] {
-sound (self, CHAN_VOICE, "ad171/skullwiz/attack.wav", 1, ATTN_NORM);};
-void() skullw_attack2	=[	$spellA5,	skullw_attack3	] {ai_face();};
-void() skullw_attack3	=[	$spellA7,	skullw_attack4	] {ai_face();};
-void() skullw_attack4	=[	$spellA10,	skullw_attack5	] {ai_face();};
-void() skullw_attack5	=[	$spellA11,	skullw_attack6	] {ai_face();};
-void() skullw_attack6	=[	$spellA12,	skullw_attack7	] {skullw_fire('30 0 16');};
-void() skullw_attack7	=[	$spellA13,	skullw_attack8	] {};
-void() skullw_attack8	=[	$spellA15,	skullw_run1		] {};
+void() skullw_attack1	= [	$spellA3,	skullw_attack2    ] {
+sound (self, CHAN_VOICE, "ad171/skullwiz/attack.wav", 1, ATTN_NORM); };
+void() skullw_attack2	= [	$spellA5,	skullw_attack3	] { ai_face(); };
+void() skullw_attack3	= [	$spellA7,	skullw_attack4	] { ai_face(); };
+void() skullw_attack4	= [	$spellA10,	skullw_attack5	] { ai_face(); };
+void() skullw_attack5	= [	$spellA11,	skullw_attack6	] { ai_face(); };
+void() skullw_attack6	= [	$spellA12,	skullw_attack7	] { skullw_fire('30 0 16'); };
+void() skullw_attack7	= [	$spellA13,	skullw_attack8	] {};
+void() skullw_attack8	= [	$spellA15,	skullw_run1		] {};
 
 // Poison Skull Attack (Guardians)
 void() skullw_poison_touch = {
@@ -385,8 +378,7 @@ void() skullw_poison_touch = {
 };
 
 //----------------------------------------------------------------------
-void() skullw_poison_think =
-{
+void() skullw_poison_think = {
 	// Randomly drift upwards and slow down forward movement
 	self.velocity_z = self.velocity_z + 10 + (random() * 20);
 	self.velocity = self.velocity - (self.velocity * 0.125);
@@ -446,11 +438,10 @@ void() skullw_guardian = {
 	}
 };
 
-//============================================================================
+
 // SUMMON MINION - Purple magic ball
-//============================================================================
-void() skullw_create_attachment =
-{
+
+void() skullw_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -461,8 +452,7 @@ void() skullw_create_attachment =
 };
 
 //----------------------------------------------------------------------
-void() skullw_finish_attachment =
-{
+void() skullw_finish_attachment = {
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 		self.attachment.state = STATE_OFF;
@@ -470,8 +460,7 @@ void() skullw_finish_attachment =
 };
 
 //----------------------------------------------------------------------
-void() skullw_remove_attachment =
-{
+void() skullw_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
@@ -481,8 +470,7 @@ void() skullw_remove_attachment =
 //----------------------------------------------------------------------
 // Display a purple ball in the hand of the skull wizard
 //----------------------------------------------------------------------
-void(vector orgofs, float dbframe) skullw_sumball =
-{
+void(vector orgofs, float dbframe) skullw_sumball = {
 	local vector org;
 
 	// Frame 0 is start of the sequence (move everything into place)
@@ -516,11 +504,11 @@ void(vector orgofs, float dbframe) skullw_sumball =
 // Always check if there is space to spawn a lost soul first
 // Block monster pain function so that the summons is completed
 //----------------------------------------------------------------------
-void() skullw_summon1 =[ $summon1, skullw_summon2 ] {
+void() skullw_summon1 = [$summon1, skullw_summon2 ] {
 	ai_face();self.pain_finished = time + 2;};
-void() skullw_summon2 =[ $summon3, skullw_summon3 ] {
-	ai_face();skullw_sumball('22 -2 6',0);};
-void() skullw_summon3 =[ $summon5, skullw_summon4 ] {
+void() skullw_summon2 = [$summon3, skullw_summon3 ] {
+	ai_face();skullw_sumball('22 -2 6',0); };
+void() skullw_summon3 = [$summon5, skullw_summon4 ] {
 	ai_face(); skullw_sumball('23 -3 7',1);
 	sound (self, CHAN_BODY, "ad171/skullwiz/summon.wav", 1, ATTN_NORM);
 	/* The touch trigger is created early (4 frames) so its gets
@@ -530,10 +518,10 @@ void() skullw_summon3 =[ $summon5, skullw_summon4 ] {
 	self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*16;
 	setup_minionspace(self.pos1, '-32 -32 -32', '32 32 32'); */
 };
-void() skullw_summon4 =[ $summon7, skullw_summon5 ] {skullw_sumball('24 -4 9',2);};
-void() skullw_summon5 =[ $summon9, skullw_summon6 ] {skullw_sumball('26 -4 10',3);};
-void() skullw_summon6 =[ $summon11, skullw_summon7 ] {skullw_sumball('26 -4 12',3);};
-void() skullw_summon7 =[ $summon13, skullw_summon8 ] {
+void() skullw_summon4 = [$summon7, skullw_summon5 ] { skullw_sumball('24 -4 9',2); };
+void() skullw_summon5 = [$summon9, skullw_summon6 ] { skullw_sumball('26 -4 10',3); };
+void() skullw_summon6 = [$summon11, skullw_summon7 ] { skullw_sumball('26 -4 12',3); };
+void() skullw_summon7 = [$summon13, skullw_summon8 ] {
 	// Find out if there is enough space to spawn a lost soul
 	// This is really a tricky thing to test for ...
 	// * pointcontents only checks against world space
@@ -556,22 +544,21 @@ void() skullw_summon7 =[ $summon13, skullw_summon8 ] {
 		skullw_sumball('26 -4 14',4);
 	}
 };
-void() skullw_summon8 =[ $summon15, skullw_summon9 ] {skullw_sumball('26 -4 16',4);};
-void() skullw_summon9 =[ $summon17, skullw_summon10 ] {skullw_sumball('26 -4 19',4);};
-void() skullw_summon10 =[ $summon19, skullw_summon11 ] {skullw_sumball('26 -5 23',4);};
-void() skullw_summon11 =[ $summon21, skullw_summon12 ] {skullw_sumball('26 -6 30',3);};
-void() skullw_summon12 =[ $summon23, skullw_summon13 ] {skullw_sumball('19 -7 32',1);};
-void() skullw_summon13 =[ $summon25, skullw_summon14 ] {skullw_finish_attachment();
-	if (self.aflag == TRUE) particle_explode(self.pos1, 15, 2, self.part_style, PARTICLE_BURST_MINOTAUR);};
-void() skullw_summon14 =[ $summon27, skullw_summon15 ] {ai_face();};
-void() skullw_summon15 =[ $summon29, skullw_run1 ] {
-	ai_face();SUB_AttackFinished (1 + 2*random());};
+void() skullw_summon8 = [$summon15, skullw_summon9 ] { skullw_sumball('26 -4 16',4); };
+void() skullw_summon9 = [$summon17, skullw_summon10 ] { skullw_sumball('26 -4 19',4); };
+void() skullw_summon10 = [$summon19, skullw_summon11 ] { skullw_sumball('26 -5 23',4); };
+void() skullw_summon11 = [$summon21, skullw_summon12 ] { skullw_sumball('26 -6 30',3); };
+void() skullw_summon12 = [$summon23, skullw_summon13 ] { skullw_sumball('19 -7 32',1); };
+void() skullw_summon13 = [$summon25, skullw_summon14 ] { skullw_finish_attachment();
+	if (self.aflag == TRUE) particle_explode(self.pos1, 15, 2, self.part_style, PARTICLE_BURST_MINOTAUR); };
+void() skullw_summon14 = [$summon27, skullw_summon15 ] { ai_face(); };
+void() skullw_summon15 = [$summon29, skullw_run1 ] {
+	ai_face();SUB_AttackFinished (1 + 2*random()); };
 
 //----------------------------------------------------------------------
 // Both type of skull wizards go through the same magic function
 //----------------------------------------------------------------------
-void() skullw_magic =
-{
+void() skullw_magic = {
 	local entity miniondef;
 	
 	// Make sure the attachments are setup ready
@@ -607,7 +594,7 @@ void() skullw_magic =
 	else skullw_attack1();
 };
 	
-//============================================================================
+
 void() skullw_phased = { 
 	self.nextthink = time + 0.1;	// Keep looking for player
 	self.think = skullw_phased;		// Keep looping
@@ -618,8 +605,7 @@ void() skullw_phased = {
 };
 
 //----------------------------------------------------------------------
-void() skullw_wakeup =
-{
+void() skullw_wakeup = {
 	// Reset all monster state functions back to default
 	self.th_stand = skullw_stand;
 	self.th_walk = skullw_walk;
@@ -645,30 +631,29 @@ void() skullw_wakeup =
 	else skullw_tfin1();
 };
 
-//============================================================================
+
 // Short body recoil (6 frames)
-void()	skullw_painA1	=[	$painA2,	skullw_painA2	] {};
-void()	skullw_painA2	=[	$painA4,	skullw_painA3	] {};
-void()	skullw_painA3	=[	$painA6,	skullw_painA4	] {};
-void()	skullw_painA4	=[	$painA8,	skullw_painA5	] {};
-void()	skullw_painA5	=[	$painA10,	skullw_painA6	] {};
-void()	skullw_painA6	=[	$painA12,	skullw_run1	] 	{};
+void()	skullw_painA1	= [	$painA2,	skullw_painA2	] {};
+void()	skullw_painA2	= [	$painA4,	skullw_painA3	] {};
+void()	skullw_painA3	= [	$painA6,	skullw_painA4	] {};
+void()	skullw_painA4	= [	$painA8,	skullw_painA5	] {};
+void()	skullw_painA5	= [	$painA10,	skullw_painA6	] {};
+void()	skullw_painA6	= [	$painA12,	skullw_run1	] 	{};
 
 // Long expanded out version (10 frames)
-void()	skullw_painB1	=[	$painA2,	skullw_painB3	] {};
-void()	skullw_painB3	=[	$painA3,	skullw_painB4	] {};
-void()	skullw_painB4	=[	$painA4,	skullw_painB5	] {};
-void()	skullw_painB5	=[	$painA5,	skullw_painB6	] {};
-void()	skullw_painB6	=[	$painA6,	skullw_painB7	] {};
-void()	skullw_painB7	=[	$painA7,	skullw_painB8	] {};
-void()	skullw_painB8	=[	$painA8,	skullw_painB9	] {};
-void()	skullw_painB9	=[	$painA9,	skullw_painB10	] {};
-void()	skullw_painB10	=[	$painA10,	skullw_painB11	] {};
-void()	skullw_painB11	=[	$painA11,	skullw_run1	] 	{};
+void()	skullw_painB1	= [	$painA2,	skullw_painB3	] {};
+void()	skullw_painB3	= [	$painA3,	skullw_painB4	] {};
+void()	skullw_painB4	= [	$painA4,	skullw_painB5	] {};
+void()	skullw_painB5	= [	$painA5,	skullw_painB6	] {};
+void()	skullw_painB6	= [	$painA6,	skullw_painB7	] {};
+void()	skullw_painB7	= [	$painA7,	skullw_painB8	] {};
+void()	skullw_painB8	= [	$painA8,	skullw_painB9	] {};
+void()	skullw_painB9	= [	$painA9,	skullw_painB10	] {};
+void()	skullw_painB10	= [	$painA10,	skullw_painB11	] {};
+void()	skullw_painB11	= [	$painA11,	skullw_run1	] 	{};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) skullw_pain =
-{
+void(entity inflictor, entity attacker, float damage) skullw_pain = {
 	if (random() < skill * 0.1)	//ijed: make them blink sometimes, 10% chance per skill above easy
 	{		
 		//bprint("SkullWiz Telepain\n");
@@ -693,9 +678,8 @@ void(entity inflictor, entity attacker, float damage) skullw_pain =
 	}
 };
 
-//============================================================================
-void() skullw_fadeaway =
-{
+
+void() skullw_fadeaway = {
 	//	sound (self, CHAN_BODY, "ad171/skullwiz/fadeaway.wav", 1, ATTN_NORM);
 	// Particle burst upwards as robes fade away
 	//particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);	//ijed: why call attention to a post-post death sequence?
@@ -705,8 +689,7 @@ void() skullw_fadeaway =
 };
 
 //----------------------------------------------------------------------
-void() skullw_explode =
-{
+void() skullw_explode = {
 	self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
 	//particle_explode(self.origin, 100, 3, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
 	particle_explode(self.origin, 100, 3, PARTICLE_BURST_RED, PARTICLE_BURST_SKULLUP);	//ijed: made them all die red which just seemed to fit better than white tbh																																							
@@ -715,20 +698,20 @@ void() skullw_explode =
 };
 
 //----------------------------------------------------------------------
-void()	skullw_death1	=[	$death2,	skullw_death2	] {ai_face();};
-void()	skullw_death2	=[	$death3,	skullw_death3	] {ai_face();};
-void()	skullw_death3	=[	$death4,	skullw_death4	] {ai_face();self.solid = SOLID_NOT;};
-void()	skullw_death4	=[	$death5,	skullw_death5	] {ai_face();};
-void()	skullw_death5	=[	$death6,	skullw_death6	] {skullw_explode();};
-void()	skullw_death6	=[	$death7,	skullw_death7	] {};
-void()	skullw_death7	=[	$death8,	skullw_death8	] {};
-void()	skullw_death8	=[	$death9,	skullw_death9	] {};
-void()	skullw_death9	=[	$death10,	skullw_death10	] {};
-void()	skullw_death10	=[	$death11,	skullw_death11	] {};
-void()	skullw_death11	=[	$death12,	skullw_death12	] {};
-void()	skullw_death12	=[	$death13,	skullw_death13	] {};
-void()	skullw_death13	=[	$death14,	skullw_death14  ] {};
-void()	skullw_death14	=[	$death15,	skullw_death14] {
+void()	skullw_death1	= [	$death2,	skullw_death2	] { ai_face(); };
+void()	skullw_death2	= [	$death3,	skullw_death3	] { ai_face(); };
+void()	skullw_death3	= [	$death4,	skullw_death4	] { ai_face();self.solid = SOLID_NOT;};
+void()	skullw_death4	= [	$death5,	skullw_death5	] { ai_face(); };
+void()	skullw_death5	= [	$death6,	skullw_death6	] { skullw_explode(); };
+void()	skullw_death6	= [	$death7,	skullw_death7	] {};
+void()	skullw_death7	= [	$death8,	skullw_death8	] {};
+void()	skullw_death8	= [	$death9,	skullw_death9	] {};
+void()	skullw_death9	= [	$death10,	skullw_death10	] {};
+void()	skullw_death10	= [	$death11,	skullw_death11	] {};
+void()	skullw_death11	= [	$death12,	skullw_death12	] {};
+void()	skullw_death12	= [	$death13,	skullw_death13	] {};
+void()	skullw_death13	= [	$death14,	skullw_death14  ] {};
+void()	skullw_death14	= [	$death15,	skullw_death14] {
 	// Random timer for robes to fade away
 	self.think = skullw_fadeaway;
 	self.nextthink = time + 8 + random() * 8;
@@ -797,7 +780,7 @@ void() monster_skullwiz = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_lostsoul";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

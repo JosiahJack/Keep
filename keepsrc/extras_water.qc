@@ -94,15 +94,15 @@ void() CheckFuncWaterDeath = { // [FUNCTION]
 };
 
 void() liquid_playmovesound = { // [FUNCTION]
-	if (self.noise != string_null) sound (self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
+	if (self.noise != "") sound (self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
 };
 
 void() liquid_playreturnsound = { // [FUNCTION]
-	if (self.noise1 != string_null) sound (self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
+	if (self.noise1 != "") sound (self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
 };
 
 void() liquid_playstopsound = { // [FUNCTION]
-	if (self.noise2 != string_null) sound (self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
+	if (self.noise2 != "") sound (self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
 };
 
 void() liquid_at_pos1 = { // [FUNCTION]
@@ -337,9 +337,9 @@ void() liquid_spawnnoisemaker = { // [FUNCTION]
 // "EASEUNDERCURRENT"	Normally, the deeper you are, the more you are affected by current.  This reverses that, making current is stronger at the surface.				
 // An easy way to make rising/falling water, but func_watertrain is much more flexible (it can do anything func_water can do, and then some, but it's more work to setup)
 void() func_water = { // [ENTITY]
-	if (self.noise != string_null) precache_sound (self.noise);
-	if (self.noise1 != string_null) precache_sound (self.noise1);
-	if (self.noise2 != string_null) precache_sound (self.noise2);
+	if (self.noise != "") precache_sound (self.noise);
+	if (self.noise1 != "") precache_sound (self.noise1);
+	if (self.noise2 != "") precache_sound (self.noise2);
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 	setmodel (self, self.model);
@@ -348,7 +348,7 @@ void() func_water = { // [ENTITY]
 	self.classname = "fliquid";
 	self.touch = liquid_touch;
 	if (self.watertype<-5 || self.watertype>-3) self.watertype = CONTENT_WATER;
-	if (self.cshift == string_null) {
+	if (self.cshift == "") {
 		if (self.watertype == CONTENT_WATER) {
 			self.cshift = "130 80 50 128";
 			self.alpha = world.water_alpha;
@@ -422,7 +422,7 @@ void() func_watertrain_init = {
 void() func_watertrain = { // [ENTITY]
 	if (!self.target) objerror ("func_watertrain without a target");
 	if (self.watertype<-5 || self.watertype>-3) self.watertype = CONTENT_WATER;
-	if (self.cshift == string_null) {
+	if (self.cshift == "") {
 		if (self.watertype == CONTENT_WATER) {
 			self.cshift = "130 80 50 128";
 			self.alpha = world.water_alpha;

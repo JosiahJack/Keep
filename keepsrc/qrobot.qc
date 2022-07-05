@@ -121,7 +121,7 @@ void(vector tdest, float ttime, void() func) robot_move = {
 
 // Sets current timers and move point to the next point in the program
 vector(float index) robot_getpoint = {
-	self.syncerbot = string_null; // I wish I had arrays and switch case statments :(     You do now dimwit. -Qmaster of the future
+	self.syncerbot = ""; // I wish I had arrays and switch case statments :(     You do now dimwit. -Qmaster of the future
 
 	// Boiler plate boiler plate ooh ahh ooh ahhhh boiler plate! ba doo doo doo doo
 	if (index == 1) {
@@ -454,14 +454,14 @@ void() robot_sync_all_targets = {
 	self.target = self.syncerbot;
 	SUB_UseTargets();
 	self.target = stemp;
-	self.syncerbot = string_null;
+	self.syncerbot = "";
 	return;
 };
 
 void() robot_wait = {
 	self.poindex = (self.poindex + 1);	
 
-	if (self.syncerbot != string_null) {
+	if (self.syncerbot != "") {
 		robot_sync_all_targets();
 		self.use = robot_use_turnon;
 		self.think = SUB_Null;

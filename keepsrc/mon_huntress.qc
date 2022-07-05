@@ -125,34 +125,34 @@ void() rakuyo_run = {
 	self.attachment.velocity = self.velocity;
 };
 
-void()	elena_taunt1	=[	$taunt1,	elena_taunt2	] {elena_finish_attachment2(); ai_stand(); rakuyo_run();};
-void()	elena_taunt2	=[	$taunt2,	elena_taunt3	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt3	=[	$taunt3,	elena_taunt4	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt4	=[	$taunt4,	elena_taunt5	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt5	=[	$taunt5,	elena_taunt6	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt6	=[	$taunt6,	elena_taunt7	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt7	=[	$taunt7,	elena_taunt8	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt8	=[	$taunt8,	elena_taunt9	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt9	=[	$taunt9,	elena_taunt10	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt10	=[	$taunt10,	elena_taunt11	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt11	=[	$taunt11,	elena_taunt12	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt12	=[	$taunt12,	elena_taunt13	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt13	=[	$taunt13,	elena_taunt14	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt14	=[	$taunt14,	elena_taunt15	] {ai_stand(); rakuyo_run(); self.skin = 1;};
-void()	elena_taunt15	=[	$taunt15,	elena_taunt16	] {ai_stand(); rakuyo_run(); self.skin = 0; sound(self, CHAN_WEAPON, "redfield/huntress/ching.wav", 1, ATTN_NORM);};
-void()	elena_taunt16	=[	$taunt16,	elena_taunt17	] {ai_stand(); elena_particles('20 0 24',6,0.5,64,512);  rakuyo_run(); };
-void()	elena_taunt17	=[	$taunt17,	elena_taunt18	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt18	=[	$taunt18,	elena_taunt19	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt19	=[	$taunt19,	elena_taunt20	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt20	=[	$taunt20,	elena_taunt21	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt21	=[	$taunt21,	elena_taunt22	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt22	=[	$taunt22,	elena_taunt23	] {ai_stand(); rakuyo_run(); self.skin = 1;};
-void()	elena_taunt23	=[	$taunt23,	elena_taunt24	] {ai_stand(); rakuyo_run(); self.skin = 0;};
-void()	elena_taunt24	=[	$taunt24,	elena_taunt25	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt25	=[	$taunt25,	elena_taunt26	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt26	=[	$taunt26,	elena_taunt27	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt27	=[	$taunt27,	elena_taunt28	] {ai_stand(); rakuyo_run();};
-void()	elena_taunt28	=[	$taunt28,	elena_run1	] {ai_stand(); rakuyo_run();
+void()	elena_taunt1	= [	$taunt1,	elena_taunt2	] { elena_finish_attachment2(); ai_stand(); rakuyo_run(); };
+void()	elena_taunt2	= [	$taunt2,	elena_taunt3	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt3	= [	$taunt3,	elena_taunt4	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt4	= [	$taunt4,	elena_taunt5	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt5	= [	$taunt5,	elena_taunt6	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt6	= [	$taunt6,	elena_taunt7	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt7	= [	$taunt7,	elena_taunt8	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt8	= [	$taunt8,	elena_taunt9	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt9	= [	$taunt9,	elena_taunt10	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt10	= [	$taunt10,	elena_taunt11	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt11	= [	$taunt11,	elena_taunt12	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt12	= [	$taunt12,	elena_taunt13	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt13	= [	$taunt13,	elena_taunt14	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt14	= [	$taunt14,	elena_taunt15	] { ai_stand(); rakuyo_run(); self.skin = 1;};
+void()	elena_taunt15	= [	$taunt15,	elena_taunt16	] { ai_stand(); rakuyo_run(); self.skin = 0; sound(self, CHAN_WEAPON, "redfield/huntress/ching.wav", 1, ATTN_NORM); };
+void()	elena_taunt16	= [	$taunt16,	elena_taunt17	] { ai_stand(); elena_particles('20 0 24',6,0.5,64,512);  rakuyo_run(); };
+void()	elena_taunt17	= [	$taunt17,	elena_taunt18	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt18	= [	$taunt18,	elena_taunt19	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt19	= [	$taunt19,	elena_taunt20	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt20	= [	$taunt20,	elena_taunt21	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt21	= [	$taunt21,	elena_taunt22	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt22	= [	$taunt22,	elena_taunt23	] { ai_stand(); rakuyo_run(); self.skin = 1;};
+void()	elena_taunt23	= [	$taunt23,	elena_taunt24	] { ai_stand(); rakuyo_run(); self.skin = 0;};
+void()	elena_taunt24	= [	$taunt24,	elena_taunt25	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt25	= [	$taunt25,	elena_taunt26	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt26	= [	$taunt26,	elena_taunt27	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt27	= [	$taunt27,	elena_taunt28	] { ai_stand(); rakuyo_run(); };
+void()	elena_taunt28	= [	$taunt28,	elena_run1	] { ai_stand(); rakuyo_run();
 };
 
 void(float gprime) elena_usegun = {
@@ -172,44 +172,44 @@ void(float gprime) elena_usegun = {
 
 float hunt_idletime;
 
-void()	elena_idleb1	=[	$idleb1,	elena_idleb2	] {ai_stand(); self.skin = 0; rakuyo_run();
+void()	elena_idleb1	= [	$idleb1,	elena_idleb2	] { ai_stand(); self.skin = 0; rakuyo_run();
 hunt_idletime = 0;
 };
-void()	elena_idleb2	=[	$idleb2,	elena_idleb3	] {ai_stand(); elena_usegun(0); rakuyo_run();
+void()	elena_idleb2	= [	$idleb2,	elena_idleb3	] { ai_stand(); elena_usegun(0); rakuyo_run();
 sound (self, CHAN_WEAPON, "redfield/huntress/pistol_cock.wav", 1, ATTN_NORM);
 };
-void()	elena_idleb3	=[	$idleb3,	elena_idleb4	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb4	=[	$idleb4,	elena_idleb5	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb5	=[	$idleb5,	elena_idleb6	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb6	=[	$idleb6,	elena_idleb7	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb7	=[	$idleb7,	elena_idleb8	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb8	=[	$idleb8,	elena_idleb9	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb9	=[	$idleb9,	elena_idleb10	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb10	=[	$idleb10,	elena_idleb11	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb11	=[	$idleb11,	elena_idleb12	] {ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 1;};
-void()	elena_idleb12	=[	$idleb12,	elena_idleb13	] {ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 0;};
-void()	elena_idleb13	=[	$idleb13,	elena_idleb14	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb14	=[	$idleb14,	elena_idleb15	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb15	=[	$idleb15,	elena_idleb16	] {ai_stand(); elena_usegun(1); rakuyo_run();};
-void()	elena_idleb16	=[	$idleb16,	elena_idle1	] {ai_stand(); elena_finish_attachment2(); rakuyo_run();};
+void()	elena_idleb3	= [	$idleb3,	elena_idleb4	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb4	= [	$idleb4,	elena_idleb5	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb5	= [	$idleb5,	elena_idleb6	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb6	= [	$idleb6,	elena_idleb7	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb7	= [	$idleb7,	elena_idleb8	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb8	= [	$idleb8,	elena_idleb9	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb9	= [	$idleb9,	elena_idleb10	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb10	= [	$idleb10,	elena_idleb11	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb11	= [	$idleb11,	elena_idleb12	] { ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 1;};
+void()	elena_idleb12	= [	$idleb12,	elena_idleb13	] { ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 0;};
+void()	elena_idleb13	= [	$idleb13,	elena_idleb14	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb14	= [	$idleb14,	elena_idleb15	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb15	= [	$idleb15,	elena_idleb16	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
+void()	elena_idleb16	= [	$idleb16,	elena_idle1	] { ai_stand(); elena_finish_attachment2(); rakuyo_run(); };
 
 //===========================================================================
-void()	elena_idle1	=[	$idle1,		elena_idle2	] {elena_finish_attachment2(); ai_stand(); self.skin = 0; 
+void()	elena_idle1	= [	$idle1,		elena_idle2	] { elena_finish_attachment2(); ai_stand(); self.skin = 0; 
 monster_idle_sound();
 rakuyo_run();
 hunt_idletime = hunt_idletime + 1;
 };
-void()	elena_idle2	=[	$idle2,		elena_idle3	] {ai_stand(); rakuyo_run();};
-void()	elena_idle3	=[	$idle3,		elena_idle4	] {ai_stand(); rakuyo_run();};
-void()	elena_idle4	=[	$idle4,		elena_idle5	] {ai_stand(); rakuyo_run();};
-void()	elena_idle5	=[	$idle5,		elena_idle6	] {ai_stand(); rakuyo_run();};
-void()	elena_idle6	=[	$idle6,		elena_idle7	] {ai_stand(); rakuyo_run(); self.skin = 1;};
-void()	elena_idle7	=[	$idle7,		elena_idle8	] {ai_stand(); rakuyo_run(); self.skin = 0;};
-void()	elena_idle8	=[	$idle8,		elena_idle9	] {ai_stand(); rakuyo_run();};
-void()	elena_idle9	=[	$idle9,		elena_idle10	] {ai_stand(); rakuyo_run();};
-void()	elena_idle10	=[	$idle10,	elena_idle11	] {ai_stand(); rakuyo_run();};
-void()	elena_idle11	=[	$idle11,	elena_idle12	] {ai_stand(); rakuyo_run();};
-void()	elena_idle12	=[	$idle12,	elena_idle1	] {rakuyo_run();
+void()	elena_idle2	= [	$idle2,		elena_idle3	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle3	= [	$idle3,		elena_idle4	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle4	= [	$idle4,		elena_idle5	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle5	= [	$idle5,		elena_idle6	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle6	= [	$idle6,		elena_idle7	] { ai_stand(); rakuyo_run(); self.skin = 1;};
+void()	elena_idle7	= [	$idle7,		elena_idle8	] { ai_stand(); rakuyo_run(); self.skin = 0;};
+void()	elena_idle8	= [	$idle8,		elena_idle9	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle9	= [	$idle9,		elena_idle10	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle10	= [	$idle10,	elena_idle11	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle11	= [	$idle11,	elena_idle12	] { ai_stand(); rakuyo_run(); };
+void()	elena_idle12	= [	$idle12,	elena_idle1	] { rakuyo_run();
 		if (hunt_idletime > 5) {
 			if (random() < 0.3) {
 				self.think = elena_idleb1;		// Check gun
@@ -219,36 +219,35 @@ ai_stand();
 };
 
 //===========================================================================
-void()	elena_walk1	=[	$walk1,		elena_walk2	] {elena_finish_attachment2(); ai_walk(2); self.skin = 0;
-rakuyo_run();};
-void()	elena_walk2	=[	$walk2,		elena_walk3	] {ai_walk(3); rakuyo_run();};
-void()	elena_walk3	=[	$walk3,		elena_walk4	] {monster_footstep(FALSE); ai_walk(5); rakuyo_run();};
-void()	elena_walk4	=[	$walk4,		elena_walk5	] {ai_walk(4); rakuyo_run();};
-void()	elena_walk5	=[	$walk5,		elena_walk6	] {ai_walk(4); rakuyo_run();};
-void()	elena_walk6	=[	$walk6,		elena_walk7	] {ai_walk(2); rakuyo_run();};
-void()	elena_walk7	=[	$walk7,		elena_walk8	] {ai_walk(2); rakuyo_run();};
-void()	elena_walk8	=[	$walk8,		elena_walk9	] {ai_walk(3); rakuyo_run();};
-void()	elena_walk9	=[	$walk9,		elena_walk10	] {ai_walk(3); rakuyo_run();};
-void()	elena_walk10	=[	$walk10,	elena_walk11	] {ai_walk(4); rakuyo_run();};
-void()	elena_walk11	=[	$walk11,	elena_walk12	] {monster_footstep(FALSE); ai_walk(3); rakuyo_run();};
-void()	elena_walk12	=[	$walk12,	elena_walk13	] {ai_walk(4); rakuyo_run();};
-void()	elena_walk13	=[	$walk13,	elena_walk14	] {ai_walk(3); rakuyo_run();};
-void()	elena_walk14	=[	$walk14,	elena_walk15	] {ai_walk(4); rakuyo_run();};
-void()	elena_walk15	=[	$walk15,	elena_walk16	] {ai_walk(6); rakuyo_run();};
-void()	elena_walk16	=[	$walk16,	elena_walk1	] {ai_walk(2); rakuyo_run();};
+void()	elena_walk1	= [	$walk1,		elena_walk2	] { elena_finish_attachment2(); ai_walk(2); self.skin = 0;
+rakuyo_run(); };
+void()	elena_walk2	= [	$walk2,		elena_walk3	] { ai_walk(3); rakuyo_run(); };
+void()	elena_walk3	= [	$walk3,		elena_walk4	] { monster_footstep(FALSE); ai_walk(5); rakuyo_run(); };
+void()	elena_walk4	= [	$walk4,		elena_walk5	] { ai_walk(4); rakuyo_run(); };
+void()	elena_walk5	= [	$walk5,		elena_walk6	] { ai_walk(4); rakuyo_run(); };
+void()	elena_walk6	= [	$walk6,		elena_walk7	] { ai_walk(2); rakuyo_run(); };
+void()	elena_walk7	= [	$walk7,		elena_walk8	] { ai_walk(2); rakuyo_run(); };
+void()	elena_walk8	= [	$walk8,		elena_walk9	] { ai_walk(3); rakuyo_run(); };
+void()	elena_walk9	= [	$walk9,		elena_walk10	] { ai_walk(3); rakuyo_run(); };
+void()	elena_walk10	= [	$walk10,	elena_walk11	] { ai_walk(4); rakuyo_run(); };
+void()	elena_walk11	= [	$walk11,	elena_walk12	] { monster_footstep(FALSE); ai_walk(3); rakuyo_run(); };
+void()	elena_walk12	= [	$walk12,	elena_walk13	] { ai_walk(4); rakuyo_run(); };
+void()	elena_walk13	= [	$walk13,	elena_walk14	] { ai_walk(3); rakuyo_run(); };
+void()	elena_walk14	= [	$walk14,	elena_walk15	] { ai_walk(4); rakuyo_run(); };
+void()	elena_walk15	= [	$walk15,	elena_walk16	] { ai_walk(6); rakuyo_run(); };
+void()	elena_walk16	= [	$walk16,	elena_walk1	] { ai_walk(2); rakuyo_run(); };
 
 //----------------------------------------------------------------------
 
 float phase_Counter;
-void() stab_partring =
-{
+void() stab_partring = {
 	particle_ring(self.origin + '0 0 -16', '0 0 4', '4 4 16', 60, 64, 1.2, 4);
 } 
 
-//============================================================================
+
 // Phase transition - Stab self with Rakuyo and scream
-//============================================================================
-void()	elena_transa1	=[	$transa1,	elena_transa2	] {rakuyo_run();
+
+void()	elena_transa1	= [	$transa1,	elena_transa2	] { rakuyo_run();
 self.skin = 0;
 self.pain_finished = time + 2.4;
 phase_Counter = phase_Counter + 1;
@@ -260,27 +259,27 @@ setorigin (b, self.origin);
 b.nextthink = time + 2.3;
 b.think = SUB_Remove;
 };
-void()	elena_transa2	=[	$transa2,	elena_transa3	] {rakuyo_run();};
-void()	elena_transa3	=[	$transa3,	elena_transa4	] {rakuyo_run();};
-void()	elena_transa4	=[	$transa4,	elena_transa5	] {rakuyo_run();};
-void()	elena_transa5	=[	$transa5,	elena_transa6	] {rakuyo_run();};
-void()	elena_transa6	=[	$transa6,	elena_transa7	] {rakuyo_run();};
-void()	elena_transa7	=[	$transa7,	elena_transa8	] {rakuyo_run(); self.attachment.skin = 1;
+void()	elena_transa2	= [	$transa2,	elena_transa3	] { rakuyo_run(); };
+void()	elena_transa3	= [	$transa3,	elena_transa4	] { rakuyo_run(); };
+void()	elena_transa4	= [	$transa4,	elena_transa5	] { rakuyo_run(); };
+void()	elena_transa5	= [	$transa5,	elena_transa6	] { rakuyo_run(); };
+void()	elena_transa6	= [	$transa6,	elena_transa7	] { rakuyo_run(); };
+void()	elena_transa7	= [	$transa7,	elena_transa8	] { rakuyo_run(); self.attachment.skin = 1;
 sound (self, CHAN_VOICE, "redfield/huntress/stabbed.wav", 1, ATTN_NORM);
 spawn_touchblood(self, other, 24); 
 };
-void()	elena_transa8	=[	$transa8,	elena_transa9	] {rakuyo_run(); self.skin = 1;};
-void()	elena_transa9	=[	$transa9,	elena_transa10	] {ai_back(4); rakuyo_run();};
-void()	elena_transa10	=[	$transa10,	elena_transa11	] {rakuyo_run();};
-void()	elena_transa11	=[	$transa11,	elena_transa12	] {rakuyo_run();};
-void()	elena_transa12	=[	$transa12,	elena_transa13	] {rakuyo_run();};
-void()	elena_transa13	=[	$transa13,	elena_transa14	] {rakuyo_run();};
-void()	elena_transa14	=[	$transa14,	elena_transa15	] {rakuyo_run();};
-void()	elena_transa15	=[	$transa15,	elena_transa16	] {rakuyo_run(); self.skin = 0;};
-void()	elena_transa16	=[	$transa16,	elena_transa17	] {rakuyo_run();};
-void()	elena_transa17	=[	$transa17,	elena_transa18	] {rakuyo_run();};
-void()	elena_transa18	=[	$transa18,	elena_transa19	] {rakuyo_run();};
-void()	elena_transa19	=[	$transa19,	elena_transa20	] {rakuyo_run();
+void()	elena_transa8	= [	$transa8,	elena_transa9	] { rakuyo_run(); self.skin = 1;};
+void()	elena_transa9	= [	$transa9,	elena_transa10	] { ai_back(4); rakuyo_run(); };
+void()	elena_transa10	= [	$transa10,	elena_transa11	] { rakuyo_run(); };
+void()	elena_transa11	= [	$transa11,	elena_transa12	] { rakuyo_run(); };
+void()	elena_transa12	= [	$transa12,	elena_transa13	] { rakuyo_run(); };
+void()	elena_transa13	= [	$transa13,	elena_transa14	] { rakuyo_run(); };
+void()	elena_transa14	= [	$transa14,	elena_transa15	] { rakuyo_run(); };
+void()	elena_transa15	= [	$transa15,	elena_transa16	] { rakuyo_run(); self.skin = 0;};
+void()	elena_transa16	= [	$transa16,	elena_transa17	] { rakuyo_run(); };
+void()	elena_transa17	= [	$transa17,	elena_transa18	] { rakuyo_run(); };
+void()	elena_transa18	= [	$transa18,	elena_transa19	] { rakuyo_run(); };
+void()	elena_transa19	= [	$transa19,	elena_transa20	] { rakuyo_run();
 sound (self, CHAN_VOICE, "redfield/huntress/blood_scream.wav", 1, ATTN_NORM);
 local entity eb;
 self.owner = spawn();
@@ -293,21 +292,21 @@ eb.skin = 1;
 eb.nextthink = time + 0.5;
 eb.think = SUB_Remove;
 };
-void()	elena_transa20	=[	$transa20,	elena_transa21	] {ai_forward(4); rakuyo_run();
+void()	elena_transa20	= [	$transa20,	elena_transa21	] { ai_forward(4); rakuyo_run();
 self.owner.frame = 1;
 self.owner.alpha = 0.25;
 ai_shockwave(MONAI_ELENAIMPACT, MONAI_ELENADAMAGE, MONAI_ELENARADIUS, MONAI_ELENAFORWARD, MONAI_ELENAUP);
 ThrowGib(11,6); 			// Blood toss
 };
-void()	elena_transa21	=[	$transa21,	elena_transa22	] {rakuyo_run();
+void()	elena_transa21	= [	$transa21,	elena_transa22	] { rakuyo_run();
 self.owner.frame = 2;
 self.owner.alpha = 0.2;
 };
-void()	elena_transa22	=[	$transa22,	elena_transa23	] {rakuyo_run();
+void()	elena_transa22	= [	$transa22,	elena_transa23	] { rakuyo_run();
 self.owner.frame = 3;
 self.owner.alpha = 0.1;
 };
-void()	elena_transa23	=[	$transa23,	elena_run1	] {rakuyo_run();
+void()	elena_transa23	= [	$transa23,	elena_run1	] { rakuyo_run();
 self.owner.frame = 4;
 self.owner.alpha = 0.05;
 };
@@ -319,7 +318,7 @@ float() elena_Phase2Check = {
 };
 
 void() elena_Phase2Run = {
-	if (elena_Phase2Check() == TRUE) {elena_transa1(); return;}
+	if (elena_Phase2Check() == TRUE) { elena_transa1(); return;}
 };
 
 void() elena_PhaseGate = {
@@ -332,22 +331,22 @@ void() elena_PhaseGate = {
 	else return;
 }
 
-void()	elena_run1	=[	$walk1,		elena_run2	] {ai_run(5); rakuyo_run(); elena_PhaseGate(); self.skin = 0; elena_finish_attachment2();};
-void()	elena_run2	=[	$walk2,		elena_run3	] {ai_run(6); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run3	=[	$walk3,		elena_run4	] {monster_footstep(FALSE); ai_run(7); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run4	=[	$walk4,		elena_run5	] {ai_run(6); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run5	=[	$walk5,		elena_run6	] {ai_run(6); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run6	=[	$walk6,		elena_run7	] {ai_run(4); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run7	=[	$walk7,		elena_run8	] {ai_run(4); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run8	=[	$walk8,		elena_run9	] {ai_run(5); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run9	=[	$walk9,		elena_run10	] {ai_run(5); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run10	=[	$walk10,	elena_run11	] {ai_run(6); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run11	=[	$walk11,	elena_run12	] {monster_footstep(FALSE); ai_run(5); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run12	=[	$walk12,	elena_run13	] {ai_run(6); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run13	=[	$walk13,	elena_run14	] {ai_run(5); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run14	=[	$walk14,	elena_run15	] {ai_run(5); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run15	=[	$walk15,	elena_run16	] {ai_run(6); rakuyo_run(); elena_PhaseGate();};
-void()	elena_run16	=[	$walk16,	elena_run1	] {ai_run(4); rakuyo_run(); elena_PhaseGate();};
+void()	elena_run1	= [	$walk1,		elena_run2	] { ai_run(5); rakuyo_run(); elena_PhaseGate(); self.skin = 0; elena_finish_attachment2(); };
+void()	elena_run2	= [	$walk2,		elena_run3	] { ai_run(6); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run3	= [	$walk3,		elena_run4	] { monster_footstep(FALSE); ai_run(7); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run4	= [	$walk4,		elena_run5	] { ai_run(6); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run5	= [	$walk5,		elena_run6	] { ai_run(6); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run6	= [	$walk6,		elena_run7	] { ai_run(4); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run7	= [	$walk7,		elena_run8	] { ai_run(4); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run8	= [	$walk8,		elena_run9	] { ai_run(5); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run9	= [	$walk9,		elena_run10	] { ai_run(5); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run10	= [	$walk10,	elena_run11	] { ai_run(6); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run11	= [	$walk11,	elena_run12	] { monster_footstep(FALSE); ai_run(5); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run12	= [	$walk12,	elena_run13	] { ai_run(6); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run13	= [	$walk13,	elena_run14	] { ai_run(5); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run14	= [	$walk14,	elena_run15	] { ai_run(5); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run15	= [	$walk15,	elena_run16	] { ai_run(6); rakuyo_run(); elena_PhaseGate(); };
+void()	elena_run16	= [	$walk16,	elena_run1	] { ai_run(4); rakuyo_run(); elena_PhaseGate(); };
 
 // Fireball damage - Hitscan based on radius of blastsize per frame
 void(float fbfactor) fireblast = {
@@ -365,28 +364,28 @@ void(float fbfactor) fireblast = {
 };
 
 //Floating blast attack - transition to boss phase 3
-void()	elena_blast1	=[	$blast1,	elena_blast2	] {
+void()	elena_blast1	= [	$blast1,	elena_blast2	] {
 	rakuyo_run();
 	self.skin = 0;
 	self.pain_finished = time + 2.8;
 	phase_Counter = phase_Counter + 1;
 };
-void()	elena_blast2	=[	$blast2,	elena_blast3	] {rakuyo_run();};
-void()	elena_blast3	=[	$blast3,	elena_blast4	] {rakuyo_run();};
-void()	elena_blast4	=[	$blast4,	elena_blast5	] {rakuyo_run();};
-void()	elena_blast5	=[	$blast5,	elena_blast6	] {rakuyo_run();};
-void()	elena_blast6	=[	$blast6,	elena_blast7	] {rakuyo_run();};
-void()	elena_blast7	=[	$blast7,	elena_blast8	] {rakuyo_run();};
-void()	elena_blast8	=[	$blast8,	elena_blast9	] {rakuyo_run();};
-void()	elena_blast9	=[	$blast9,	elena_blast10	] {rakuyo_run();};
-void()	elena_blast10	=[	$blast10,	elena_blast11	] {rakuyo_run();};
-void()	elena_blast11	=[	$blast11,	elena_blast12	] {rakuyo_run();};
-void()	elena_blast12	=[	$blast12,	elena_blast13	] {rakuyo_run();};
-void()	elena_blast13	=[	$blast13,	elena_blast14	] {rakuyo_run();};
-void()	elena_blast14	=[	$blast14,	elena_blast15	] {rakuyo_run();};
-void()	elena_blast15	=[	$blast15,	elena_blast16	] {rakuyo_run();};
-void()	elena_blast16	=[	$blast16,	elena_blast17	] {rakuyo_run();};
-void()	elena_blast17	=[	$blast17,	elena_blast18	] {
+void()	elena_blast2	= [	$blast2,	elena_blast3	] { rakuyo_run(); };
+void()	elena_blast3	= [	$blast3,	elena_blast4	] { rakuyo_run(); };
+void()	elena_blast4	= [	$blast4,	elena_blast5	] { rakuyo_run(); };
+void()	elena_blast5	= [	$blast5,	elena_blast6	] { rakuyo_run(); };
+void()	elena_blast6	= [	$blast6,	elena_blast7	] { rakuyo_run(); };
+void()	elena_blast7	= [	$blast7,	elena_blast8	] { rakuyo_run(); };
+void()	elena_blast8	= [	$blast8,	elena_blast9	] { rakuyo_run(); };
+void()	elena_blast9	= [	$blast9,	elena_blast10	] { rakuyo_run(); };
+void()	elena_blast10	= [	$blast10,	elena_blast11	] { rakuyo_run(); };
+void()	elena_blast11	= [	$blast11,	elena_blast12	] { rakuyo_run(); };
+void()	elena_blast12	= [	$blast12,	elena_blast13	] { rakuyo_run(); };
+void()	elena_blast13	= [	$blast13,	elena_blast14	] { rakuyo_run(); };
+void()	elena_blast14	= [	$blast14,	elena_blast15	] { rakuyo_run(); };
+void()	elena_blast15	= [	$blast15,	elena_blast16	] { rakuyo_run(); };
+void()	elena_blast16	= [	$blast16,	elena_blast17	] { rakuyo_run(); };
+void()	elena_blast17	= [	$blast17,	elena_blast18	] {
 	local entity fb;
 
 	rakuyo_run();
@@ -402,7 +401,7 @@ void()	elena_blast17	=[	$blast17,	elena_blast18	] {
 	fb.think = SUB_Remove;
 	ai_shockwave(MONAI_ELENAIMPACT, MONAI_ELENADAMAGE, MONAI_ELENARADIUS, MONAI_ELENAFORWARD, MONAI_ELENAUP);
 };
-void()	elena_blast18	=[	$blast18,	elena_blast19	] {
+void()	elena_blast18	= [	$blast18,	elena_blast19	] {
 rakuyo_run();
 self.effects = self.effects | EF_MUZZLEFLASH;
 self.owner.frame = 1;
@@ -410,39 +409,38 @@ self.owner.alpha = 0.35;
 fireblast(100);
 check_FireTrig();
 };
-void()	elena_blast19	=[	$blast19,	elena_blast20	] {
+void()	elena_blast19	= [	$blast19,	elena_blast20	] {
 rakuyo_run();
 self.owner.frame = 2;
 self.owner.alpha = 0.5;
 fireblast(230);
 };
-void()	elena_blast20	=[	$blast20,	elena_blast21	] {
+void()	elena_blast20	= [	$blast20,	elena_blast21	] {
 rakuyo_run();
 self.owner.frame = 3;
 self.owner.alpha = 0.8;
 fireblast(450);
 };
-void()	elena_blast21	=[	$blast21,	elena_blast22	] {
+void()	elena_blast21	= [	$blast21,	elena_blast22	] {
 rakuyo_run();
 self.owner.frame = 4;
 self.owner.alpha = 0.1;
 if (skill == SKILL_NIGHTMARE) fireblast(512);
 };
-void()	elena_blast22	=[	$blast22,	elena_blast23	] {rakuyo_run();};
-void()	elena_blast23	=[	$blast23,	elena_blast24	] {rakuyo_run();};
-void()	elena_blast24	=[	$blast24,	elena_blast25	] {rakuyo_run();};
-void()	elena_blast25	=[	$blast25,	elena_blast26	] {rakuyo_run();};
-void()	elena_blast26	=[	$blast26,	elena_blast27	] {rakuyo_run();};
-void()	elena_blast27	=[	$blast27,	elena_blast28	] {ai_charge(2); rakuyo_run();};
-void()	elena_blast28	=[	$blast28,	elena_run1	] {rakuyo_run();};
+void()	elena_blast22	= [	$blast22,	elena_blast23	] { rakuyo_run(); };
+void()	elena_blast23	= [	$blast23,	elena_blast24	] { rakuyo_run(); };
+void()	elena_blast24	= [	$blast24,	elena_blast25	] { rakuyo_run(); };
+void()	elena_blast25	= [	$blast25,	elena_blast26	] { rakuyo_run(); };
+void()	elena_blast26	= [	$blast26,	elena_blast27	] { rakuyo_run(); };
+void()	elena_blast27	= [	$blast27,	elena_blast28	] { ai_charge(2); rakuyo_run(); };
+void()	elena_blast28	= [	$blast28,	elena_run1	] { rakuyo_run(); };
 
 
 //----------------------------------------------------------------------
 // Check if HP is at 1/3 and setup phase 3
 //----------------------------------------------------------------------
 
-float() elena_Phase3Check =
-{
+float() elena_Phase3Check = {
 	if (self.health > 1 && self.health < 350 && phase_Counter == 1) 
 		{
 		return TRUE;
@@ -450,9 +448,8 @@ float() elena_Phase3Check =
 	return FALSE;
 };
 
-void() elena_Phase3Run =
-{
-	if (elena_Phase3Check() == TRUE) {elena_blast1(); return;}
+void() elena_Phase3Run = {
+	if (elena_Phase3Check() == TRUE) { elena_blast1(); return;}
 };
 
 void() check_FireTrig =
@@ -471,8 +468,7 @@ void() check_FireTrig =
 /*======================================================================
  elena_melee (ai melee with added damage spice factor!)
 ======================================================================*/
-void() elena_melee =
-{
+void() elena_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;			// removed before stroke
@@ -505,8 +501,7 @@ void() elena_melee =
 	
 //----------------------------------------------------------------------
 // Spinning leap - Jumps upward while spinning and slams down for heavy damage
-void() elena_SpinTouch =
-{
+void() elena_SpinTouch = {
 	local float ldmg;
 	
 	if (self.health < 1) return;
@@ -538,18 +533,18 @@ void() elena_SpinTouch =
 };
 
 //===========================================================================
-void()	elena_spin1	=[	$spin1,		elena_spin2	] {ai_face();
+void()	elena_spin1	= [	$spin1,		elena_spin2	] { ai_face();
 rakuyo_run();
 self.skin = 0;
 self.pain_finished = time + 2.2;		// No pain
 self.jump_flag = time + MONAI_JUMPELENATIME;
 };
-void()	elena_spin2	=[	$spin2,		elena_spin3	] {ai_face(); rakuyo_run();};
-void()	elena_spin3	=[	$spin3,		elena_spin4	] {ai_face(); rakuyo_run();
+void()	elena_spin2	= [	$spin2,		elena_spin3	] { ai_face(); rakuyo_run(); };
+void()	elena_spin3	= [	$spin3,		elena_spin4	] { ai_face(); rakuyo_run();
 	sound (self, CHAN_WEAPON, "redfield/huntress/spin.wav", 1, ATTN_NORM);
 };
-void()	elena_spin4	=[	$spin4,		elena_spin5	] {ai_face(); rakuyo_run();};
-void()	elena_spin5	=[	$spin5,		elena_spin6	] {
+void()	elena_spin4	= [	$spin4,		elena_spin5	] { ai_face(); rakuyo_run(); };
+void()	elena_spin5	= [	$spin5,		elena_spin6	] {
 	local entity sb;
 
 	ai_face(); 
@@ -576,31 +571,31 @@ void()	elena_spin5	=[	$spin5,		elena_spin6	] {
 	sb.nextthink = time + 0.6;
 	sb.think = SUB_Remove;
 };
-void()	elena_spin6	=[	$spin6,		elena_spin7	] {self.owner.frame = 1; self.owner.origin = self.origin;
+void()	elena_spin6	= [	$spin6,		elena_spin7	] { self.owner.frame = 1; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 if (phase_Counter > 0) ThrowGib(11,1); 			// Blood toss
 };
-void()	elena_spin7	=[	$spin7,		elena_spin8	] {self.owner.frame = 2; self.owner.origin = self.origin;
+void()	elena_spin7	= [	$spin7,		elena_spin8	] { self.owner.frame = 2; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
 };
-void()	elena_spin8	=[	$spin8,		elena_spin9	] {self.owner.frame = 3; self.owner.origin = self.origin;
+void()	elena_spin8	= [	$spin8,		elena_spin9	] { self.owner.frame = 3; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
 };
-void()	elena_spin9	=[	$spin9,		elena_spin10	] {self.owner.frame = 4; self.owner.origin = self.origin;
+void()	elena_spin9	= [	$spin9,		elena_spin10	] { self.owner.frame = 4; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
 };
-void()	elena_spin10	=[	$spin10,	elena_spin11	] {self.owner.frame = 5; self.owner.origin = self.origin;
+void()	elena_spin10	= [	$spin10,	elena_spin11	] { self.owner.frame = 5; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
 };
-void()	elena_spin11	=[	$spin11,	elena_spin12	] {self.owner.frame = 6; self.owner.origin = self.origin;
+void()	elena_spin11	= [	$spin11,	elena_spin12	] { self.owner.frame = 6; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
 };
-void()	elena_spin12	=[	$spin12,	elena_spin12	] {self.owner.frame = 7; self.owner.origin = self.origin;
+void()	elena_spin12	= [	$spin12,	elena_spin12	] { self.owner.frame = 7; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 // Double check huntress is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
@@ -610,13 +605,13 @@ self.owner.angles = self.angles;
 	self.oldorigin = self.origin;
 
 };
-void()	elena_spin13	=[	$spin13,	elena_spin14	] {monster_footstep(FALSE);
+void()	elena_spin13	= [	$spin13,	elena_spin14	] { monster_footstep(FALSE);
 self.owner.frame = 8; 
 self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 	sound (self, CHAN_VOICE, "redfield/huntress/landing_scream.wav", 1, ATTN_NORM);
 };
-void()	elena_spin14	=[	$spin14,	elena_spin15	] {rakuyo_run(); elena_melee();
+void()	elena_spin14	= [	$spin14,	elena_spin15	] { rakuyo_run(); elena_melee();
 local entity ds;
 self.owner = spawn();
 ds = self.owner;
@@ -627,22 +622,22 @@ ds.alpha = 0.5;
 ds.nextthink = time + 0.4;
 ds.think = SUB_Remove;
 };
-void()	elena_spin15	=[	$spin15,	elena_spin16	] {rakuyo_run(); elena_melee();
+void()	elena_spin15	= [	$spin15,	elena_spin16	] { rakuyo_run(); elena_melee();
 self.owner.frame = 1;
 self.owner.alpha = 0.4;
 };
-void()	elena_spin16	=[	$spin16,	elena_spin17	] {rakuyo_run(); elena_melee();
+void()	elena_spin16	= [	$spin16,	elena_spin17	] { rakuyo_run(); elena_melee();
 self.owner.frame = 2;
 self.owner.alpha = 0.2;
 };
-void()	elena_spin17	=[	$spin17,	elena_spin18	] {rakuyo_run();
+void()	elena_spin17	= [	$spin17,	elena_spin18	] { rakuyo_run();
 self.owner.frame = 3;
 self.owner.alpha = 0.1;
 };
-void()	elena_spin18	=[	$spin18,	elena_spin19	] {rakuyo_run();};
-void()	elena_spin19	=[	$spin19,	elena_spin20	] {rakuyo_run();};
-void()	elena_spin20	=[	$spin20,	elena_spin21	] {rakuyo_run();};
-void()	elena_spin21	=[	$spin21,	elena_run1	] {monster_footstep(FALSE); ai_resetangles();
+void()	elena_spin18	= [	$spin18,	elena_spin19	] { rakuyo_run(); };
+void()	elena_spin19	= [	$spin19,	elena_spin20	] { rakuyo_run(); };
+void()	elena_spin20	= [	$spin20,	elena_spin21	] { rakuyo_run(); };
+void()	elena_spin21	= [	$spin21,	elena_run1	] { monster_footstep(FALSE); ai_resetangles();
 rakuyo_run();
 };
 
@@ -650,57 +645,57 @@ rakuyo_run();
 Melee Attacks
 =============================================================================*/
 //----------------------------------------------------------------------
-void()	elena_slashb1	=[	$slashb1,	elena_slashb2	] {ai_charge(4); rakuyo_run(); self.skin = 0;};
-void()	elena_slashb2	=[	$slashb2,	elena_slashb3	] {ai_charge(8); rakuyo_run();};
-void()	elena_slashb3	=[	$slashb3,	elena_slashb4	] {ai_charge(2); rakuyo_run();};
-void()	elena_slashb4	=[	$slashb4,	elena_slashb5	] {ai_charge(3); rakuyo_run();};
-void()	elena_slashb5	=[	$slashb5,	elena_slashb6	] {ai_charge(6); elena_melee(); rakuyo_run();
-SwordSwipeSound();};
-void()	elena_slashb6	=[	$slashb6,	elena_slashb7	] {ai_charge(8); elena_melee(); rakuyo_run();};
-void()	elena_slashb7	=[	$slashb7,	elena_slashb8	] {ai_charge(2); elena_melee(); rakuyo_run();
+void()	elena_slashb1	= [	$slashb1,	elena_slashb2	] { ai_charge(4); rakuyo_run(); self.skin = 0;};
+void()	elena_slashb2	= [	$slashb2,	elena_slashb3	] { ai_charge(8); rakuyo_run(); };
+void()	elena_slashb3	= [	$slashb3,	elena_slashb4	] { ai_charge(2); rakuyo_run(); };
+void()	elena_slashb4	= [	$slashb4,	elena_slashb5	] { ai_charge(3); rakuyo_run(); };
+void()	elena_slashb5	= [	$slashb5,	elena_slashb6	] { ai_charge(6); elena_melee(); rakuyo_run();
+SwordSwipeSound(); };
+void()	elena_slashb6	= [	$slashb6,	elena_slashb7	] { ai_charge(8); elena_melee(); rakuyo_run(); };
+void()	elena_slashb7	= [	$slashb7,	elena_slashb8	] { ai_charge(2); elena_melee(); rakuyo_run();
 local entity slb;
 self.owner = spawn();
 slb = self.owner;
 setmodel (slb, MODEL_ELENASLSH);
 setorigin (slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) {slb.skin = 0; slb.alpha = 0.4;}
-	else if (phase_Counter == 1) {slb.skin = 2; slb.alpha = 1;}
-	else {slb.skin = 1; slb.alpha = 0.8;}
+if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4;}
+	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1;}
+	else { slb.skin = 1; slb.alpha = 0.8;}
 slb.frame = 1;
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
 };
-void()	elena_slashb8	=[	$slashb8,	elena_slashb9	] {ai_charge(1); rakuyo_run();};
-void()	elena_slashb9	=[	$slashb9,	elena_run1	] {ai_charge(1); rakuyo_run();};
+void()	elena_slashb8	= [	$slashb8,	elena_slashb9	] { ai_charge(1); rakuyo_run(); };
+void()	elena_slashb9	= [	$slashb9,	elena_run1	] { ai_charge(1); rakuyo_run(); };
 
 //===========================================================================
-void()	elena_slasha1	=[	$slasha1,	elena_slasha2	] {ai_charge(4); rakuyo_run(); self.skin = 0;};
-void()	elena_slasha2	=[	$slasha2,	elena_slasha3	] {ai_charge(8); rakuyo_run();};
-void()	elena_slasha3	=[	$slasha3,	elena_slasha4	] {ai_charge(2); rakuyo_run();};
-void()	elena_slasha4	=[	$slasha4,	elena_slasha5	] {ai_charge(3); rakuyo_run();};
-void()	elena_slasha5	=[	$slasha5,	elena_slasha6	] {ai_charge(6); elena_melee(); rakuyo_run();
-SwordSwipeSound();};
-void()	elena_slasha6	=[	$slasha6,	elena_slasha7	] {ai_charge(8); elena_melee(); rakuyo_run();};
-void()	elena_slasha7	=[	$slasha7,	elena_slasha8	] {ai_charge(2); elena_melee(); rakuyo_run();
+void()	elena_slasha1	= [	$slasha1,	elena_slasha2	] { ai_charge(4); rakuyo_run(); self.skin = 0;};
+void()	elena_slasha2	= [	$slasha2,	elena_slasha3	] { ai_charge(8); rakuyo_run(); };
+void()	elena_slasha3	= [	$slasha3,	elena_slasha4	] { ai_charge(2); rakuyo_run(); };
+void()	elena_slasha4	= [	$slasha4,	elena_slasha5	] { ai_charge(3); rakuyo_run(); };
+void()	elena_slasha5	= [	$slasha5,	elena_slasha6	] { ai_charge(6); elena_melee(); rakuyo_run();
+SwordSwipeSound(); };
+void()	elena_slasha6	= [	$slasha6,	elena_slasha7	] { ai_charge(8); elena_melee(); rakuyo_run(); };
+void()	elena_slasha7	= [	$slasha7,	elena_slasha8	] { ai_charge(2); elena_melee(); rakuyo_run();
 local entity slb;
 self.owner = spawn();
 slb = self.owner;
 setmodel (slb, MODEL_ELENASLSH);
 setorigin (slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) {slb.skin = 0; slb.alpha = 0.4;}
-	else if (phase_Counter == 1) {slb.skin = 2; slb.alpha = 1;}
-	else {slb.skin = 1; slb.alpha = 0.8;}
+if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4;}
+	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1;}
+	else { slb.skin = 1; slb.alpha = 0.8;}
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
 };
-void()	elena_slasha8	=[	$slasha8,	elena_run1	] {ai_charge(1); rakuyo_run();
+void()	elena_slasha8	= [	$slasha8,	elena_run1	] { ai_charge(1); rakuyo_run();
 	if (ai_checkmelee(MONAI_ELENAFRONT, FALSE) && self.enemy.health > 0) self.think = elena_slashb1;
 };
 
-void()	elena_stab1	=[	$stab1,		elena_stab2	] {ai_charge(2); rakuyo_run(); self.skin = 0;};
-void()	elena_stab2	=[	$stab2,		elena_stab3	] {ai_charge(8); rakuyo_run();
+void()	elena_stab1	= [	$stab1,		elena_stab2	] { ai_charge(2); rakuyo_run(); self.skin = 0;};
+void()	elena_stab2	= [	$stab2,		elena_stab3	] { ai_charge(8); rakuyo_run();
 	local entity spr;
 
 	sound(self, CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5, ATTN_IDLE);
@@ -712,22 +707,22 @@ void()	elena_stab2	=[	$stab2,		elena_stab3	] {ai_charge(8); rakuyo_run();
 	spr.nextthink = time + 0.1;
 	spr.think = SUB_Remove;
 };
-void()	elena_stab3	=[	$stab3,		elena_stab4	] {ai_charge(8); rakuyo_run();};
-void()	elena_stab4	=[	$stab4,		elena_stab5	] {ai_charge(12); rakuyo_run();};
-void()	elena_stab5	=[	$stab5,		elena_stab6	] {ai_charge(2); rakuyo_run();};
-void()	elena_stab6	=[	$stab6,		elena_stab7	] {ai_chargenoturn(3); elena_melee(); rakuyo_run(); SwordSwipeSound();};
-void()	elena_stab7	=[	$stab7,		elena_stab8	] {ai_chargenoturn(1); elena_melee(); rakuyo_run();};
-void()	elena_stab8	=[	$stab8,		elena_stab9	] {ai_chargenoturn(0); elena_melee(); rakuyo_run();};
-void()	elena_stab9	=[	$stab9,		elena_stab10	] {ai_chargenoturn(0); rakuyo_run();};
-void()	elena_stab10	=[	$stab10,	elena_run1	] {ai_charge(1); rakuyo_run();};
+void()	elena_stab3	= [	$stab3,		elena_stab4	] { ai_charge(8); rakuyo_run(); };
+void()	elena_stab4	= [	$stab4,		elena_stab5	] { ai_charge(12); rakuyo_run(); };
+void()	elena_stab5	= [	$stab5,		elena_stab6	] { ai_charge(2); rakuyo_run(); };
+void()	elena_stab6	= [	$stab6,		elena_stab7	] { ai_chargenoturn(3); elena_melee(); rakuyo_run(); SwordSwipeSound(); };
+void()	elena_stab7	= [	$stab7,		elena_stab8	] { ai_chargenoturn(1); elena_melee(); rakuyo_run(); };
+void()	elena_stab8	= [	$stab8,		elena_stab9	] { ai_chargenoturn(0); elena_melee(); rakuyo_run(); };
+void()	elena_stab9	= [	$stab9,		elena_stab10	] { ai_chargenoturn(0); rakuyo_run(); };
+void()	elena_stab10	= [	$stab10,	elena_run1	] { ai_charge(1); rakuyo_run(); };
 
-void()	elena_cross1	=[	$cross1,		elena_cross2	] {ai_charge(2); rakuyo_run(); self.skin = 0;};
-void()	elena_cross2	=[	$cross2,		elena_cross3	] {ai_charge(8); rakuyo_run();};
-void()	elena_cross3	=[	$cross3,		elena_cross4	] {ai_charge(8); rakuyo_run();
-	sound(self, CHAN_EXTRA1, "redfield/huntress/ching.wav", 0.5, ATTN_IDLE);};
-void()	elena_cross4	=[	$cross4,		elena_cross5	] {ai_chargenoturn(12); rakuyo_run(); elena_melee();
-SwordSwipeSound();};
-void()	elena_cross5	=[	$cross5,		elena_cross6	] {ai_chargenoturn(2); self.meleecontact = TRUE; ai_meleesmash(10);
+void()	elena_cross1	= [	$cross1,		elena_cross2	] { ai_charge(2); rakuyo_run(); self.skin = 0;};
+void()	elena_cross2	= [	$cross2,		elena_cross3	] { ai_charge(8); rakuyo_run(); };
+void()	elena_cross3	= [	$cross3,		elena_cross4	] { ai_charge(8); rakuyo_run();
+	sound(self, CHAN_EXTRA1, "redfield/huntress/ching.wav", 0.5, ATTN_IDLE); };
+void()	elena_cross4	= [	$cross4,		elena_cross5	] { ai_chargenoturn(12); rakuyo_run(); elena_melee();
+SwordSwipeSound(); };
+void()	elena_cross5	= [	$cross5,		elena_cross6	] { ai_chargenoturn(2); self.meleecontact = TRUE; ai_meleesmash(10);
 rakuyo_run();
 local entity slb;
 self.owner = spawn();
@@ -735,26 +730,25 @@ slb = self.owner;
 setmodel (slb, MODEL_ELENASLSH);
 setorigin (slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) {slb.skin = 0; slb.alpha = 0.4;}
-	else if (phase_Counter == 1) {slb.skin = 2; slb.alpha = 1;}
-	else {slb.skin = 1; slb.alpha = 0.8;}
+if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4;}
+	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1;}
+	else { slb.skin = 1; slb.alpha = 0.8;}
 slb.frame = 2;
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
 };
-void()	elena_cross6	=[	$cross6,		elena_cross7	] {ai_chargenoturn(0); self.meleecontact = FALSE; elena_melee();
+void()	elena_cross6	= [	$cross6,		elena_cross7	] { ai_chargenoturn(0); self.meleecontact = FALSE; elena_melee();
 rakuyo_run();
 };
-void()	elena_cross7	=[	$cross7,		elena_cross8	] {ai_chargenoturn(0); rakuyo_run();};
-void()	elena_cross8	=[	$cross8,		elena_cross9	] {ai_charge(2); rakuyo_run();};
-void()	elena_cross9	=[	$cross9,		elena_cross10	] {ai_charge(8); rakuyo_run();};
-void()	elena_cross10	=[	$cross10,		elena_run1	] {ai_charge(5); rakuyo_run();};
+void()	elena_cross7	= [	$cross7,		elena_cross8	] { ai_chargenoturn(0); rakuyo_run(); };
+void()	elena_cross8	= [	$cross8,		elena_cross9	] { ai_charge(2); rakuyo_run(); };
+void()	elena_cross9	= [	$cross9,		elena_cross10	] { ai_charge(8); rakuyo_run(); };
+void()	elena_cross10	= [	$cross10,		elena_run1	] { ai_charge(5); rakuyo_run(); };
 
-//============================================================================
+
 
 //----------------------------------------------------------------------
-void() elena_choosemelee =
-{
+void() elena_choosemelee = {
 	// Make sure next attack is different to previous (randomly while loop)
 	self.lip = self.meleeattack;
 	while (self.lip == self.meleeattack) { self.lip = rint(random()*2);	}
@@ -765,20 +759,19 @@ void() elena_choosemelee =
 
 };
 
-//============================================================================
-void()	elena_pain1	=[	$pain1,		elena_pain2	] {elena_PhaseGate(); self.skin = 0; rakuyo_run();};
-void()	elena_pain2	=[	$pain2,		elena_pain3	] {monster_footstep(FALSE); ai_back(5); rakuyo_run();};
-void()	elena_pain3	=[	$pain3,		elena_pain4	] {rakuyo_run();};
-void()	elena_pain4	=[	$pain4,		elena_pain5	] {self.skin = 1; rakuyo_run();};
-void()	elena_pain5	=[	$pain5,		elena_pain6	] {rakuyo_run();};
-void()	elena_pain6	=[	$pain6,		elena_pain7	] {self.skin = 0; rakuyo_run();};
-void()	elena_pain7	=[	$pain7,		elena_pain8	] {rakuyo_run();};
-void()	elena_pain8	=[	$pain8,		elena_pain9	] {rakuyo_run();};
-void()	elena_pain9	=[	$pain9,		elena_run1	] {rakuyo_run();};
+
+void()	elena_pain1	= [	$pain1,		elena_pain2	] { elena_PhaseGate(); self.skin = 0; rakuyo_run(); };
+void()	elena_pain2	= [	$pain2,		elena_pain3	] { monster_footstep(FALSE); ai_back(5); rakuyo_run(); };
+void()	elena_pain3	= [	$pain3,		elena_pain4	] { rakuyo_run(); };
+void()	elena_pain4	= [	$pain4,		elena_pain5	] { self.skin = 1; rakuyo_run(); };
+void()	elena_pain5	= [	$pain5,		elena_pain6	] { rakuyo_run(); };
+void()	elena_pain6	= [	$pain6,		elena_pain7	] { self.skin = 0; rakuyo_run(); };
+void()	elena_pain7	= [	$pain7,		elena_pain8	] { rakuyo_run(); };
+void()	elena_pain8	= [	$pain8,		elena_pain9	] { rakuyo_run(); };
+void()	elena_pain9	= [	$pain9,		elena_run1	] { rakuyo_run(); };
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) elena_pain =
-{
+void(entity inflictor, entity attacker, float damage) elena_pain = {
 	//Reset Evelyn pistol if holding
 	elena_finish_attachment2();	
 	
@@ -816,16 +809,16 @@ void() elena_shootgun = {
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_EVEBULLET,self.attack_speed);
 };
 
-void()	elena_shoot1	=[	$shoot1,	elena_shoot2	] {self.skin = 0; rakuyo_run();};
-void()	elena_shoot2	=[	$shoot2,	elena_shoot3	] {ai_face(); elena_usegun(0); rakuyo_run();
-	sound (self, CHAN_WEAPON, "redfield/huntress/pistol_cock.wav", 1, ATTN_NORM);};
-void()	elena_shoot3	=[	$shoot3,	elena_shoot4	] {ai_face(); elena_usegun(1); rakuyo_run();};
-void()	elena_shoot4	=[	$shoot4,	elena_shoot5	] {ai_face(); elena_usegun(1); rakuyo_run();};
-void()	elena_shoot5	=[	$shoot5,	elena_shoot6	] {ai_face(); elena_usegun(1); rakuyo_run();};
-void()	elena_shoot6	=[	$shoot6,	elena_shoot7	] {ai_face(); elena_usegun(1); elena_shootgun();
+void()	elena_shoot1	= [	$shoot1,	elena_shoot2	] { self.skin = 0; rakuyo_run(); };
+void()	elena_shoot2	= [	$shoot2,	elena_shoot3	] { ai_face(); elena_usegun(0); rakuyo_run();
+	sound (self, CHAN_WEAPON, "redfield/huntress/pistol_cock.wav", 1, ATTN_NORM); };
+void()	elena_shoot3	= [	$shoot3,	elena_shoot4	] { ai_face(); elena_usegun(1); rakuyo_run(); };
+void()	elena_shoot4	= [	$shoot4,	elena_shoot5	] { ai_face(); elena_usegun(1); rakuyo_run(); };
+void()	elena_shoot5	= [	$shoot5,	elena_shoot6	] { ai_face(); elena_usegun(1); rakuyo_run(); };
+void()	elena_shoot6	= [	$shoot6,	elena_shoot7	] { ai_face(); elena_usegun(1); elena_shootgun();
 	rakuyo_run();
-	sound (self, CHAN_WEAPON, "redfield/huntress/pistol.wav", 1, ATTN_NORM);};
-void()	elena_shoot7	=[	$shoot7,	elena_shoot8	] {self.skin = 1; elena_usegun(1);
+	sound (self, CHAN_WEAPON, "redfield/huntress/pistol.wav", 1, ATTN_NORM); };
+void()	elena_shoot7	= [	$shoot7,	elena_shoot8	] { self.skin = 1; elena_usegun(1);
 	rakuyo_run();
 	local entity gs;
 	self.owner = spawn();
@@ -837,20 +830,20 @@ void()	elena_shoot7	=[	$shoot7,	elena_shoot8	] {self.skin = 1; elena_usegun(1);
 	gs.nextthink = time + 0.3;
 	gs.think = SUB_Remove;
 };
-void()	elena_shoot8	=[	$shoot8,	elena_shoot9	] {self.skin = 0; elena_usegun(1); 
+void()	elena_shoot8	= [	$shoot8,	elena_shoot9	] { self.skin = 0; elena_usegun(1); 
 	rakuyo_run();
 	self.owner.frame = 1;
 	self.owner.alpha = 0.4;
 };
-void()	elena_shoot9	=[	$shoot9,	elena_shoot10	] {elena_usegun(1);
+void()	elena_shoot9	= [	$shoot9,	elena_shoot10	] { elena_usegun(1);
 	rakuyo_run();
 	self.owner.frame = 2;
 	self.owner.alpha = 0.2;
 };
-void()	elena_shoot10	=[	$shoot10,	elena_shoot11	] {elena_usegun(1); rakuyo_run();};
-void()	elena_shoot11	=[	$shoot11,	elena_shoot12	] {elena_usegun(1); rakuyo_run();};
-void()	elena_shoot12	=[	$shoot12,	elena_shoot13	] {elena_finish_attachment2(); rakuyo_run();};
-void()	elena_shoot13	=[	$shoot13,	elena_run1	] {rakuyo_run();};
+void()	elena_shoot10	= [	$shoot10,	elena_shoot11	] { elena_usegun(1); rakuyo_run(); };
+void()	elena_shoot11	= [	$shoot11,	elena_shoot12	] { elena_usegun(1); rakuyo_run(); };
+void()	elena_shoot12	= [	$shoot12,	elena_shoot13	] { elena_finish_attachment2(); rakuyo_run(); };
+void()	elena_shoot13	= [	$shoot13,	elena_run1	] { rakuyo_run(); };
 
 // RANGE ATTACK 2 - Blood Spears - from Golem rock storm
 void() elena_bldspears =  {
@@ -903,24 +896,24 @@ void() elena_fireflameline = {
 	Launch_Trail (org, dir, fire_col, "");
 };
 
-void()	elena_spear1	=[	$spear1,	elena_spear2	] {ai_stand(); rakuyo_run();
+void()	elena_spear1	= [	$spear1,	elena_spear2	] { ai_stand(); rakuyo_run();
 	self.skin = 0;
 	self.pain_finished = time + 2.9;
 };
-void()	elena_spear2	=[	$spear2,	elena_spear3	] {ai_face(); rakuyo_run();};
-void()	elena_spear3	=[	$spear3,	elena_spear4	] {ai_face(); rakuyo_run();};
-void()	elena_spear4	=[	$spear4,	elena_spear5	] {ai_face(); rakuyo_run();};
-void()	elena_spear5	=[	$spear5,	elena_spear6	] {ai_face(); rakuyo_run();};
-void()	elena_spear6	=[	$spear6,	elena_spear7	] {ai_face(); rakuyo_run();};
-void()	elena_spear7	=[	$spear7,	elena_spear8	] {ai_face(); rakuyo_run();
-	sound (self, CHAN_WEAPON, "redfield/huntress/spears.wav", 1, ATTN_NORM);};
-void()	elena_spear8	=[	$spear8,	elena_spear9	] {ai_face(); rakuyo_run();};
-void()	elena_spear9	=[	$spear9,	elena_spear10	] {ai_face(); rakuyo_run();};
-void()	elena_spear10	=[	$spear10,	elena_spear11	] {ai_face(); rakuyo_run();};
-void()	elena_spear11	=[	$spear11,	elena_spear12	] {ai_face(); elena_particles('8 8 16',16,0.4,4,512);
+void()	elena_spear2	= [	$spear2,	elena_spear3	] { ai_face(); rakuyo_run(); };
+void()	elena_spear3	= [	$spear3,	elena_spear4	] { ai_face(); rakuyo_run(); };
+void()	elena_spear4	= [	$spear4,	elena_spear5	] { ai_face(); rakuyo_run(); };
+void()	elena_spear5	= [	$spear5,	elena_spear6	] { ai_face(); rakuyo_run(); };
+void()	elena_spear6	= [	$spear6,	elena_spear7	] { ai_face(); rakuyo_run(); };
+void()	elena_spear7	= [	$spear7,	elena_spear8	] { ai_face(); rakuyo_run();
+	sound (self, CHAN_WEAPON, "redfield/huntress/spears.wav", 1, ATTN_NORM); };
+void()	elena_spear8	= [	$spear8,	elena_spear9	] { ai_face(); rakuyo_run(); };
+void()	elena_spear9	= [	$spear9,	elena_spear10	] { ai_face(); rakuyo_run(); };
+void()	elena_spear10	= [	$spear10,	elena_spear11	] { ai_face(); rakuyo_run(); };
+void()	elena_spear11	= [	$spear11,	elena_spear12	] { ai_face(); elena_particles('8 8 16',16,0.4,4,512);
 	rakuyo_run();
 };
-void()	elena_spear12	=[	$spear12,	elena_spear13	] {ai_face(); rakuyo_run();
+void()	elena_spear12	= [	$spear12,	elena_spear13	] { ai_face(); rakuyo_run();
 	local entity spr;
 
 	self.owner = spawn();
@@ -932,26 +925,26 @@ void()	elena_spear12	=[	$spear12,	elena_spear13	] {ai_face(); rakuyo_run();
 	spr.nextthink = time + 0.3;
 	spr.think = SUB_Remove;
 };
-void()	elena_spear13	=[	$spear13,	elena_spear14	] {ai_face(); rakuyo_run();};
-void()	elena_spear14	=[	$spear14,	elena_spear15	] {ai_face(); rakuyo_run();
+void()	elena_spear13	= [	$spear13,	elena_spear14	] { ai_face(); rakuyo_run(); };
+void()	elena_spear14	= [	$spear14,	elena_spear15	] { ai_face(); rakuyo_run();
 	self.effects = self.effects | EF_MUZZLEFLASH;
 };
-void()	elena_spear15	=[	$spear15,	elena_spear16	] {ai_face(); rakuyo_run(); elena_bldspears();};
-void()	elena_spear16	=[	$spear16,	elena_spear17	] {ai_face(); rakuyo_run(); elena_bldspears();};
-void()	elena_spear17	=[	$spear17,	elena_spear18	] {ai_face(); rakuyo_run(); elena_bldspears();};
-void()	elena_spear18	=[	$spear18,	elena_spear19	] {ai_face(); rakuyo_run();
-	if (phase_Counter > 1) elena_fireflameline();};
-void()	elena_spear19	=[	$spear19,	elena_spear20	] {rakuyo_run();};
-void()	elena_spear20	=[	$spear20,	elena_spear21	] {rakuyo_run();};
-void()	elena_spear21	=[	$spear21,	elena_spear22	] {rakuyo_run(); elena_particles('20 0 24',6,0.5,4,512);
-	sound(self, CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5, ATTN_IDLE);};
-void()	elena_spear22	=[	$spear22,	elena_spear23	] {rakuyo_run();};
-void()	elena_spear23	=[	$spear23,	elena_spear24	] {rakuyo_run();};
-void()	elena_spear24	=[	$spear24,	elena_spear25	] {rakuyo_run();};
-void()	elena_spear25	=[	$spear25,	elena_spear26	] {rakuyo_run();};
-void()	elena_spear26	=[	$spear26,	elena_spear27	] {rakuyo_run();};
-void()	elena_spear27	=[	$spear27,	elena_spear28	] {rakuyo_run();};
-void()	elena_spear28	=[	$spear28,	elena_run1	] {rakuyo_run();};
+void()	elena_spear15	= [	$spear15,	elena_spear16	] { ai_face(); rakuyo_run(); elena_bldspears(); };
+void()	elena_spear16	= [	$spear16,	elena_spear17	] { ai_face(); rakuyo_run(); elena_bldspears(); };
+void()	elena_spear17	= [	$spear17,	elena_spear18	] { ai_face(); rakuyo_run(); elena_bldspears(); };
+void()	elena_spear18	= [	$spear18,	elena_spear19	] { ai_face(); rakuyo_run();
+	if (phase_Counter > 1) elena_fireflameline(); };
+void()	elena_spear19	= [	$spear19,	elena_spear20	] { rakuyo_run(); };
+void()	elena_spear20	= [	$spear20,	elena_spear21	] { rakuyo_run(); };
+void()	elena_spear21	= [	$spear21,	elena_spear22	] { rakuyo_run(); elena_particles('20 0 24',6,0.5,4,512);
+	sound(self, CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5, ATTN_IDLE); };
+void()	elena_spear22	= [	$spear22,	elena_spear23	] { rakuyo_run(); };
+void()	elena_spear23	= [	$spear23,	elena_spear24	] { rakuyo_run(); };
+void()	elena_spear24	= [	$spear24,	elena_spear25	] { rakuyo_run(); };
+void()	elena_spear25	= [	$spear25,	elena_spear26	] { rakuyo_run(); };
+void()	elena_spear26	= [	$spear26,	elena_spear27	] { rakuyo_run(); };
+void()	elena_spear27	= [	$spear27,	elena_spear28	] { rakuyo_run(); };
+void()	elena_spear28	= [	$spear28,	elena_run1	] { rakuyo_run(); };
 
 void() elena_choose_atk = {
 	local vector delta;
@@ -959,7 +952,7 @@ void() elena_choose_atk = {
 	delta = self.enemy.origin - self.origin;
 
 	if (vlen(delta) < MONAI_ELENARANGE) { 
-		if (phase_Counter < 1) {elena_shoot1();}
+		if (phase_Counter < 1) { elena_shoot1();}
 		else {
 			if (random() < 0.6) elena_spear1();
 				else elena_shoot1();
@@ -994,29 +987,29 @@ void() elena_wakeup = {
 	elena_taunt1();
 };
 
-void()	elena_die1	=[	$death1,	elena_die2	] {ai_back(4);self.skin = 0; rakuyo_run();};
-void()	elena_die2	=[	$death2,	elena_die3	] {ai_back(2); rakuyo_run();};
-void()	elena_die3	=[	$death3,	elena_die4	] {rakuyo_run();};
-void()	elena_die4	=[	$death4,	elena_die5	] {self.skin = 1; rakuyo_run();};
-void()	elena_die5	=[	$death5,	elena_die6	] {self.skin = 0; rakuyo_run();};
-void()	elena_die6	=[	$death6,	elena_die7	] {rakuyo_run();};
-void()	elena_die7	=[	$death7,	elena_die8	] {rakuyo_run();};
-void()	elena_die8	=[	$death8,	elena_die9	] {rakuyo_run();
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM);};
-void()	elena_die9	=[	$death9,	elena_die10	] {ai_forward(5); rakuyo_run();};
-void()	elena_die10	=[	$death10,	elena_die11	] {ai_forward(4); self.skin = 1; rakuyo_run();};
-void()	elena_die11	=[	$death11,	elena_die12	] {self.skin = 2; rakuyo_run();};
-void()	elena_die12	=[	$death12,	elena_die13	] {self.solid = SOLID_NOT;
+void()	elena_die1	= [	$death1,	elena_die2	] { ai_back(4);self.skin = 0; rakuyo_run(); };
+void()	elena_die2	= [	$death2,	elena_die3	] { ai_back(2); rakuyo_run(); };
+void()	elena_die3	= [	$death3,	elena_die4	] { rakuyo_run(); };
+void()	elena_die4	= [	$death4,	elena_die5	] { self.skin = 1; rakuyo_run(); };
+void()	elena_die5	= [	$death5,	elena_die6	] { self.skin = 0; rakuyo_run(); };
+void()	elena_die6	= [	$death6,	elena_die7	] { rakuyo_run(); };
+void()	elena_die7	= [	$death7,	elena_die8	] { rakuyo_run(); };
+void()	elena_die8	= [	$death8,	elena_die9	] { rakuyo_run();
+	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+void()	elena_die9	= [	$death9,	elena_die10	] { ai_forward(5); rakuyo_run(); };
+void()	elena_die10	= [	$death10,	elena_die11	] { ai_forward(4); self.skin = 1; rakuyo_run(); };
+void()	elena_die11	= [	$death11,	elena_die12	] { self.skin = 2; rakuyo_run(); };
+void()	elena_die12	= [	$death12,	elena_die13	] { self.solid = SOLID_NOT;
 rakuyo_run();
 };
-void()	elena_die13	=[	$death13,	elena_die14	] {self.alpha = 0.9; rakuyo_run();
-particle_explode(self.origin + '0 0 -22', 24+(8*(random()*2)), 0.5+random()*0.5, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);};
-void()	elena_die14	=[	$death14,	elena_die15	] {self.alpha = 0.75; rakuyo_run();};
-void()	elena_die15	=[	$death15,	elena_die16	] {self.alpha = 0.6; rakuyo_run();};
-void()	elena_die16	=[	$death16,	elena_die17	] {self.skin = 3; self.alpha = 0.45; rakuyo_run(); 
-particle_explode(self.origin + '0 0 -18', 16+(8*(random()*2)), 1+random()*0.5, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);};
-void()	elena_die17	=[	$death17,	elena_die18	] {self.alpha = 0.2; rakuyo_run();};
-void()	elena_die18	=[	$death18,	elena_die18	] {
+void()	elena_die13	= [	$death13,	elena_die14	] { self.alpha = 0.9; rakuyo_run();
+particle_explode(self.origin + '0 0 -22', 24+(8*(random()*2)), 0.5+random()*0.5, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD); };
+void()	elena_die14	= [	$death14,	elena_die15	] { self.alpha = 0.75; rakuyo_run(); };
+void()	elena_die15	= [	$death15,	elena_die16	] { self.alpha = 0.6; rakuyo_run(); };
+void()	elena_die16	= [	$death16,	elena_die17	] { self.skin = 3; self.alpha = 0.45; rakuyo_run(); 
+particle_explode(self.origin + '0 0 -18', 16+(8*(random()*2)), 1+random()*0.5, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD); };
+void()	elena_die17	= [	$death17,	elena_die18	] { self.alpha = 0.2; rakuyo_run(); };
+void()	elena_die18	= [	$death18,	elena_die18	] {
 	rakuyo_run();
 	// Stop thinking and hide entity (prevent elena_die18 loop)
 	self.nextthink = LARGE_TIMER;

@@ -119,16 +119,16 @@ void(entity inflictor, entity attacker, float take) time_pain = {
 
    painRnd = random();
    if ( (painRnd < 0.4) ) {
-      self.pain_finished = (time + FL_SWIM);
+      self.pain_finished = (time + 2);
       painRnd = random();
       makevectors(self.angles);
       painEnt = spawn();
       if ( (painRnd < 0.330) ) {
-         painEnt.origin = ((self.origin + (v_forward * 80.000)) - (v_up * FL_GODMODE));
+         painEnt.origin = ((self.origin + (v_forward * 80.000)) - (v_up * 64));
       } else if ( (painRnd < 0.660) ) {
          painEnt.origin = ((self.origin + (v_right * 80.000)) - (v_up * 24.000));
       } else {
-         painEnt.origin = (((self.origin + (v_forward * FL_GODMODE)) - (v_up * 48.000)) - (v_right * 48.000));
+         painEnt.origin = (((self.origin + (v_forward * 64)) - (v_up * 48.000)) - (v_right * 48.000));
       }
       painEnt.target = self.target;
       painEnt.owner = self;

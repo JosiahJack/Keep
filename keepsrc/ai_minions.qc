@@ -109,9 +109,9 @@ float() test_minionspace = { // [FUNCTION]
 	if (!self.minion_test) return FALSE; // Quick exit if no touch entity exists
 
 	// Basic world collision test for origin/min/max of spawn
-	if (pointcontents(self.minion_test.origin) != CONTENT_EMPTY) return FALSE;
-	if (pointcontents(self.minion_test.origin+'-16 -16 -24') != CONTENT_EMPTY) return FALSE;
-	if (pointcontents(self.minion_test.origin+'16 16 40') != CONTENT_EMPTY) return FALSE;
+	if (!InOpenOrLiquid(self.minion_test.origin)) return FALSE;
+	if (!InOpenOrLiquid(self.minion_test.origin+'-16 -16 -24')) return FALSE;
+	if (!InOpenOrLiquid(self.minion_test.origin+'16 16 40')) return FALSE;
 	
 	// Switch off touch function and check for collision
 	self.minion_test.touch = SUB_Null;
@@ -125,9 +125,9 @@ float(vector org) find_minionspace = { // [FUNCTION]
 	local float foundclient;
 
 	// Basic world collision test for origin/min/max of spawn
-	if (pointcontents(org) != CONTENT_EMPTY) return FALSE;
-	if (pointcontents(org+'-16 -16 -24') != CONTENT_EMPTY) return FALSE;
-	if (pointcontents(org+'16 16 40') != CONTENT_EMPTY) return FALSE;
+	if (!InOpenOrLiquid(org)) return FALSE;
+	if (!InOpenOrLiquid(org+'-16 -16 -24')) return FALSE;
+	if (!InOpenOrLiquid(org+'16 16 40')) return FALSE;
 	
 	foundclient = TRUE;
 	// The player can cover crazy amount of distance very fast so extend radius out further to catch running players

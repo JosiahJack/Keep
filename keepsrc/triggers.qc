@@ -758,7 +758,7 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 
 void() trigger_changelevel_setup = { if (!self.map) self.map = mapname; }; // [FUNCTION], If map not defined, use current mapname instead
 
-void() changelevel_touch = { trigger_changelevel_fire();}; // [FUNCTION], Re-direction for map hacks (not used normally)
+void() changelevel_touch = { trigger_changelevel_fire(); }; // [FUNCTION], Re-direction for map hacks (not used normally)
 
 // QUAKED trigger_changelevel (0.5 0 0.5) ? NO_INTERMIS RESETINV x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 // -------- KEYS --------
@@ -1641,19 +1641,22 @@ void() trigger_takeartifact_fire = { // [FUNCTION]
 
 	// Turn off Suit/InvRing/Quad/Pentagram artifacts ONLY
 	if (self.spawnflags & TRIG_TAKEARTID) {
-		if ((self.bmodel_act.items & IT_INVISIBILITY) || (self.bmodel_act.items & IT_INVULNERABILITY) || (self.bmodel_act.items & IT_SUIT) || (self.bmodel_act.items & IT_QUAD)) {
+		if ((self.bmodel_act.items & IT_INVISIBILITY)
+			|| (self.bmodel_act.items & IT_INVULNERABILITY)
+			|| (self.bmodel_act.items & IT_SUIT)
+			|| (self.bmodel_act.items & IT_QUAD)) {
 			inv_artifact = TRUE;
-			ResetPowerInvRing(self.bmodel_act, self.waitmin);
-			ResetPowerPent(self.bmodel_act, self.waitmin);
-			ResetPowerEnvSuit(self.bmodel_act, self.waitmin);
-			ResetPowerQuad(self.bmodel_act, self.waitmin);
 		}
+		if ((self.bmodel_act.items & IT_INVISIBILITY)) ResetPowerInvRing(self.bmodel_act, self.waitmin);
+		if ((self.bmodel_act.items & IT_INVULNERABILITY)) ResetPowerPent(self.bmodel_act, self.waitmin);
+		if ((self.bmodel_act.items & IT_SUIT)) ResetPowerEnvSuit(self.bmodel_act, self.waitmin);
+		if ((self.bmodel_act.items & IT_QUAD)) ResetPowerQuad(self.bmodel_act, self.waitmin);
 	}
 
 	// Turn off SharpShooter/Nail Piercer artifacts ONLY
 	if (self.spawnflags & TRIG_TAKEARTAD) {
-		if ((self.bmodel_act.moditems & IT_ARTSHARP) ||
-			(self.bmodel_act.moditems & IT_ARTPIERCE)) {
+		if ((self.bmodel_act.moditems & IT_ARTSHARP)
+			|| (self.bmodel_act.moditems & IT_ARTPIERCE)) {
 			inv_artifact = TRUE;
 			ResetPowerSharp(self.bmodel_act, self.waitmin);
 			ResetPowerPiercer(self.bmodel_act, self.waitmin);
@@ -1992,7 +1995,7 @@ void() trigger_monsternojump_fire = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 	if (!(self.bmodel_act.flags & FL_MONSTER)) return; // Block non-monsters
-	if (self.noise1 != string_null && self.bmodel_act.classname != self.noise1) return; // Is there any classname exception setup?
+	if (self.noise1 != "" && self.bmodel_act.classname != self.noise1) return; // Is there any classname exception setup?
 	
 	// Check for any extra triggers
 	if (HasTargets(self)) {
@@ -2244,7 +2247,7 @@ void() trigger_hurt_fire = { // [FUNCTION]
 
 	self.attack_finished = time + self.wait; // Block touch function based on wait time
 	self.dmg = trigger_dmgquery(); // Work out damage based on skill level
-	T_Damage (self.bmodel_act, self, self, self.dmg, DAMARMOR); // Do the damage (using armour/pent resistance)
+	T_Damage(self.bmodel_act, self, self, self.dmg, DAMARMOR); // Do the damage (using armour/pent resistance)
 
 	// Check for any extra triggers
 	if (HasTargets(self)) {
@@ -2319,10 +2322,10 @@ void() trigger_heal_touch = { // [FUNCTION]
 	if (self.max_health > 0) self.health = self.health - self.healamount; // Has the pool run out of health?
 	if (self.health < 1) { // Has the healing trigger expired?
 		if (self.lip < 2) centerprint (other, self.message2); // Only block message lip=1 healing 2=all messages
-		if (self.target2 != "") {trigger_strs(self.target2, other); self.target2 = "";} // Fire any targets once (finish of healing cycle)
+		if (self.target2 != "") { trigger_strs(self.target2, other); self.target2 = "";} // Fire any targets once (finish of healing cycle)
 		entity_state_off(); // Switch off healing trigger
 	} else {
-		if (self.target != "") {trigger_strs(self.target, other);self.target = "";} // Fire any targets once (start of healing cycle)
+		if (self.target != "") { trigger_strs(self.target, other);self.target = "";} // Fire any targets once (start of healing cycle)
 		if (!self.lip) centerprint (other, self.message); // Display healing message (check for lip block)
 	}
 };	

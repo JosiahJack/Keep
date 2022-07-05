@@ -55,8 +55,7 @@ float DEFLECT_WALK = 1;
 float DEFLECT_RUN = 2;
 
 //===========================================================================
-void() deflect_shieldon =
-{
+void() deflect_shieldon = {
 	self.takedamage = DAMAGE_YES;	// Grenades bounce off
 	self.bouncegrenade = TRUE;		// Warning to other monsters
 	self.reflectnails = TRUE;		// Reflect nail projectiles
@@ -101,7 +100,7 @@ void() deflect_shieldparticle = {
 };
 
 void() deflect_stands7;	// Forward compiler reference
-void() deflect_stand1=[ $stand1, deflect_stand2] {ai_stand();
+void() deflect_stand1= [$stand1, deflect_stand2] { ai_stand();
 
 	// Work out if shield was on before this state
 	if (self.weaponstate == DEFLECT_WALK && self.health > 0) {
@@ -112,22 +111,22 @@ void() deflect_stand1=[ $stand1, deflect_stand2] {ai_stand();
 	else monster_idle_sound();
 };
 // Switch off shield (reverse animation)
-void() deflect_stands7=[ $fieldon7, deflect_stands6] {ai_stand();
-	deflect_shieldoff();deflect_shieldsound_off();};
-void() deflect_stands6=[ $fieldon6, deflect_stands5] {ai_stand();};
-void() deflect_stands5=[ $fieldon5, deflect_stand2] {ai_stand();};
+void() deflect_stands7= [$fieldon7, deflect_stands6] { ai_stand();
+	deflect_shieldoff();deflect_shieldsound_off(); };
+void() deflect_stands6= [$fieldon6, deflect_stands5] { ai_stand(); };
+void() deflect_stands5= [$fieldon5, deflect_stand2] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void() deflect_stand2=[ $stand2, deflect_stand3] {ai_stand();};
-void() deflect_stand3=[ $stand3, deflect_stand4] {ai_stand();};
-void() deflect_stand4=[ $stand4, deflect_stand5] {ai_stand();};
-void() deflect_stand5=[ $stand5, deflect_stand6] {ai_stand();};
-void() deflect_stand6=[ $stand6, deflect_stand7] {ai_stand();};
-void() deflect_stand7=[ $stand7, deflect_stand1] {ai_stand();};
+void() deflect_stand2= [$stand2, deflect_stand3] { ai_stand(); };
+void() deflect_stand3= [$stand3, deflect_stand4] { ai_stand(); };
+void() deflect_stand4= [$stand4, deflect_stand5] { ai_stand(); };
+void() deflect_stand5= [$stand5, deflect_stand6] { ai_stand(); };
+void() deflect_stand6= [$stand6, deflect_stand7] { ai_stand(); };
+void() deflect_stand7= [$stand7, deflect_stand1] { ai_stand(); };
 
 //===========================================================================
 void() deflect_walks5;	// Forward compiler reference
-void() deflect_walk1=[ $walk1, deflect_walk2] {ai_walk(2);
+void() deflect_walk1= [$walk1, deflect_walk2] { ai_walk(2);
 	// Work out if shield was on before this state
 	if (self.weaponstate == DEFLECT_IDLE && self.health > 0) {
 		self.weaponstate = DEFLECT_WALK;
@@ -137,29 +136,29 @@ void() deflect_walk1=[ $walk1, deflect_walk2] {ai_walk(2);
 	else monster_idle_sound();
 };
 // Switch on shield (forward animation)
-void() deflect_walks5=[ $fieldon5, deflect_walks6] {ai_walk(0);
-	deflect_shieldon();deflect_shieldsound_on();};
-void() deflect_walks6=[ $fieldon6, deflect_walks7] {ai_walk(0);};
-void() deflect_walks7=[ $fieldon7, deflect_walk2] {ai_walk(0);};
+void() deflect_walks5= [$fieldon5, deflect_walks6] { ai_walk(0);
+	deflect_shieldon();deflect_shieldsound_on(); };
+void() deflect_walks6= [$fieldon6, deflect_walks7] { ai_walk(0); };
+void() deflect_walks7= [$fieldon7, deflect_walk2] { ai_walk(0); };
 
 //----------------------------------------------------------------------
-void() deflect_walk2=[ $walk2, deflect_walk3] {
-	deflect_shieldparticle(); monster_footstep(FALSE);ai_walk(4);};
-void() deflect_walk3=[ $walk3, deflect_walk4] {ai_walk(4);};
-void() deflect_walk4=[ $walk4, deflect_walk5] {ai_walk(3);};
-void() deflect_walk5=[ $walk5, deflect_walk6] {ai_walk(1);};
-void() deflect_walk6=[ $walk6, deflect_walk7] {ai_walk(2);};
-void() deflect_walk7=[ $walk7, deflect_walk8] {ai_walk(2);};
-void() deflect_walk8=[ $walk8, deflect_walk9] {ai_walk(1);};
-void() deflect_walk9=[ $walk9, deflect_walk10] {ai_walk(2);};
-void() deflect_walk10=[ $walk10, deflect_walk11] {
-	deflect_shieldparticle(); monster_footstep(FALSE); ai_walk(4);};
-void() deflect_walk11=[ $walk11, deflect_walk12] {ai_walk(4);};
-void() deflect_walk12=[ $walk12, deflect_walk13] {ai_walk(1);};
-void() deflect_walk13=[ $walk13, deflect_walk14] {ai_walk(2);};
-void() deflect_walk14=[ $walk14, deflect_walk15] {ai_walk(3);};
-void() deflect_walk15=[ $walk15, deflect_walk16] {ai_walk(4);};
-void() deflect_walk16=[ $walk16, deflect_walk1] {ai_walk(2);};
+void() deflect_walk2= [$walk2, deflect_walk3] {
+	deflect_shieldparticle(); monster_footstep(FALSE);ai_walk(4); };
+void() deflect_walk3= [$walk3, deflect_walk4] { ai_walk(4); };
+void() deflect_walk4= [$walk4, deflect_walk5] { ai_walk(3); };
+void() deflect_walk5= [$walk5, deflect_walk6] { ai_walk(1); };
+void() deflect_walk6= [$walk6, deflect_walk7] { ai_walk(2); };
+void() deflect_walk7= [$walk7, deflect_walk8] { ai_walk(2); };
+void() deflect_walk8= [$walk8, deflect_walk9] { ai_walk(1); };
+void() deflect_walk9= [$walk9, deflect_walk10] { ai_walk(2); };
+void() deflect_walk10= [$walk10, deflect_walk11] {
+	deflect_shieldparticle(); monster_footstep(FALSE); ai_walk(4); };
+void() deflect_walk11= [$walk11, deflect_walk12] { ai_walk(4); };
+void() deflect_walk12= [$walk12, deflect_walk13] { ai_walk(1); };
+void() deflect_walk13= [$walk13, deflect_walk14] { ai_walk(2); };
+void() deflect_walk14= [$walk14, deflect_walk15] { ai_walk(3); };
+void() deflect_walk15= [$walk15, deflect_walk16] { ai_walk(4); };
+void() deflect_walk16= [$walk16, deflect_walk1] { ai_walk(2); };
 
 //===========================================================================
 // Two speed run animation based on enemy visibility
@@ -168,8 +167,7 @@ void()	deflect_slow1;
 void()	deflect_fast1;
 
 // run state has two animation speeds (single function required)
-void(float movespd) deflect_run =
-{
+void(float movespd) deflect_run = {
 	// Block all checks if dead
 	if (self.health < 1) return;
 	// idle functions work for both animation sets
@@ -204,41 +202,41 @@ void(float movespd) deflect_run =
 
 // Walk animation with 150% movement speed
 //----------------------------------------------------------------------
-void()	deflect_slow1=[ $walk1,	deflect_slow2 ] {self.walkframe=0;deflect_run(3);};
-void()	deflect_slow2=[ $walk2,	deflect_slow3 ] {
+void()	deflect_slow1= [$walk1,	deflect_slow2 ] { self.walkframe=0;deflect_run(3); };
+void()	deflect_slow2= [$walk2,	deflect_slow3 ] {
 	deflect_shieldparticle(); monster_footstep(FALSE); deflect_run(6);
 };
-void()	deflect_slow3=[ $walk3, deflect_slow4 ] {deflect_run(6);};
-void()	deflect_slow4=[ $walk4, deflect_slow5 ] {deflect_run(4.5);};
-void()	deflect_slow5=[ $walk5, deflect_slow6 ] {deflect_run(1.5);};
-void()	deflect_slow6=[ $walk6, deflect_slow7 ] {deflect_run(3);};
-void()	deflect_slow7=[ $walk7, deflect_slow8 ] {deflect_run(3);};
-void()	deflect_slow8=[ $walk8, deflect_slow9 ] {deflect_run(1.5);};
-void()	deflect_slow9=[ $walk9, deflect_slow10] {deflect_run(3);};
-void()	deflect_slow10=[ $walk10, deflect_slow11] {
+void()	deflect_slow3= [$walk3, deflect_slow4 ] { deflect_run(6); };
+void()	deflect_slow4= [$walk4, deflect_slow5 ] { deflect_run(4.5); };
+void()	deflect_slow5= [$walk5, deflect_slow6 ] { deflect_run(1.5); };
+void()	deflect_slow6= [$walk6, deflect_slow7 ] { deflect_run(3); };
+void()	deflect_slow7= [$walk7, deflect_slow8 ] { deflect_run(3); };
+void()	deflect_slow8= [$walk8, deflect_slow9 ] { deflect_run(1.5); };
+void()	deflect_slow9= [$walk9, deflect_slow10] { deflect_run(3); };
+void()	deflect_slow10= [$walk10, deflect_slow11] {
 	deflect_shieldparticle(); monster_footstep(FALSE); deflect_run(6);
 };
-void()	deflect_slow11=[ $walk11, deflect_slow12] {deflect_run(6);};
-void()	deflect_slow12=[ $walk12, deflect_slow13] {deflect_run(1.5);};
-void()	deflect_slow13=[ $walk13, deflect_slow14] {deflect_run(3);};
-void()	deflect_slow14=[ $walk14, deflect_slow15] {deflect_run(4.5);};
-void()	deflect_slow15=[ $walk15, deflect_slow16] {deflect_run(6);};
-void()	deflect_slow16=[ $walk16, deflect_slow1] {deflect_run(3);};
+void()	deflect_slow11= [$walk11, deflect_slow12] { deflect_run(6); };
+void()	deflect_slow12= [$walk12, deflect_slow13] { deflect_run(1.5); };
+void()	deflect_slow13= [$walk13, deflect_slow14] { deflect_run(3); };
+void()	deflect_slow14= [$walk14, deflect_slow15] { deflect_run(4.5); };
+void()	deflect_slow15= [$walk15, deflect_slow16] { deflect_run(6); };
+void()	deflect_slow16= [$walk16, deflect_slow1] { deflect_run(3); };
 
 // Typical run animation (used when enemy out of sight)
 //----------------------------------------------------------------------
-void()	deflect_fast1=[ $run1, deflect_fast2] {self.walkframe=0;deflect_run(18); };
-void()	deflect_fast2=[ $run2, deflect_fast3] {deflect_run(14);};
-void()	deflect_fast3=[ $run3, deflect_fast4] {
+void()	deflect_fast1= [$run1, deflect_fast2] { self.walkframe=0;deflect_run(18); };
+void()	deflect_fast2= [$run2, deflect_fast3] { deflect_run(14); };
+void()	deflect_fast3= [$run3, deflect_fast4] {
 	deflect_shieldparticle(); monster_footstep(FALSE); deflect_run(7);
 };
-void()	deflect_fast4=[ $run4, deflect_fast5] {deflect_run(12);};
-void()	deflect_fast5=[ $run5, deflect_fast6] {deflect_run(14);};
-void()	deflect_fast6=[ $run6, deflect_fast7] {deflect_run(14);};
-void()	deflect_fast7=[ $run7, deflect_fast8] {
+void()	deflect_fast4= [$run4, deflect_fast5] { deflect_run(12); };
+void()	deflect_fast5= [$run5, deflect_fast6] { deflect_run(14); };
+void()	deflect_fast6= [$run6, deflect_fast7] { deflect_run(14); };
+void()	deflect_fast7= [$run7, deflect_fast8] {
 	deflect_shieldparticle(); monster_footstep(FALSE); deflect_run(7);
 };
-void()	deflect_fast8=[ $run8, deflect_fast1] {deflect_run(11);};
+void()	deflect_fast8= [$run8, deflect_fast1] { deflect_run(11); };
 
 // MELEE Range (Flames)
 void(float fire_explode) deflect_fireflame = {
@@ -492,63 +490,62 @@ void() deflect_rocketframe = {
 //----------------------------------------------------------------------
 void() deflector_range = { self.walkframe = 0; deflect_rocketframe(); };
 
-//============================================================================
+
 // Classic enforcer 4 pain animation sets
-//============================================================================
-void() deflect_paina1=[ $paina1, deflect_paina2] {};
-void() deflect_paina2=[ $paina2, deflect_paina3] {};
-void() deflect_paina3=[ $paina3, deflect_paina4] {};
-void() deflect_paina4=[ $paina4, deflect_slow1] {
+
+void() deflect_paina1= [$paina1, deflect_paina2] {};
+void() deflect_paina2= [$paina2, deflect_paina3] {};
+void() deflect_paina3= [$paina3, deflect_paina4] {};
+void() deflect_paina4= [$paina4, deflect_slow1] {
 	// Last pain frame has shield coming on
-	deflect_shieldon();deflect_shieldsound_on();};
+	deflect_shieldon();deflect_shieldsound_on(); };
 
 //----------------------------------------------------------------------
-void() deflect_painb1=[ $painb1, deflect_painb2] {};
-void() deflect_painb2=[ $painb2, deflect_painb3] {};
-void() deflect_painb3=[ $painb3, deflect_painb4] {};
-void() deflect_painb4=[ $painb4, deflect_painb5] {};
-void() deflect_painb5=[ $painb5, deflect_slow1] {
+void() deflect_painb1= [$painb1, deflect_painb2] {};
+void() deflect_painb2= [$painb2, deflect_painb3] {};
+void() deflect_painb3= [$painb3, deflect_painb4] {};
+void() deflect_painb4= [$painb4, deflect_painb5] {};
+void() deflect_painb5= [$painb5, deflect_slow1] {
 	// Last pain frame has shield coming on
-	deflect_shieldon();deflect_shieldsound_on();};
+	deflect_shieldon();deflect_shieldsound_on(); };
 
 //----------------------------------------------------------------------
-void() deflect_painc1=[ $painc1, deflect_painc2] {};
-void() deflect_painc2=[ $painc2, deflect_painc3] {monster_footstep(FALSE);};
-void() deflect_painc3=[ $painc3, deflect_painc4] {};
-void() deflect_painc4=[ $painc4, deflect_painc5] {};
-void() deflect_painc5=[ $painc5, deflect_painc6] {};
-void() deflect_painc6=[ $painc6, deflect_painc7] {};
-void() deflect_painc7=[ $painc7, deflect_painc8] {};
-void() deflect_painc8=[ $painc8, deflect_slow1] {
+void() deflect_painc1= [$painc1, deflect_painc2] {};
+void() deflect_painc2= [$painc2, deflect_painc3] { monster_footstep(FALSE); };
+void() deflect_painc3= [$painc3, deflect_painc4] {};
+void() deflect_painc4= [$painc4, deflect_painc5] {};
+void() deflect_painc5= [$painc5, deflect_painc6] {};
+void() deflect_painc6= [$painc6, deflect_painc7] {};
+void() deflect_painc7= [$painc7, deflect_painc8] {};
+void() deflect_painc8= [$painc8, deflect_slow1] {
 	// Last pain frame has shield coming on
-	deflect_shieldon();deflect_shieldsound_on();};
+	deflect_shieldon();deflect_shieldsound_on(); };
 
 //----------------------------------------------------------------------
-void() deflect_paind1=[ $paind1, deflect_paind2] {};
-void() deflect_paind2=[ $paind2, deflect_paind3] {};
-void() deflect_paind3=[ $paind3, deflect_paind4] {monster_footstep(FALSE);};
-void() deflect_paind4=[ $paind4, deflect_paind5] {ai_painforward(2);};
-void() deflect_paind5=[ $paind5, deflect_paind6] {ai_painforward(1);};
-void() deflect_paind6=[ $paind6, deflect_paind7] {};
-void() deflect_paind7=[ $paind7, deflect_paind8] {};
-void() deflect_paind8=[ $paind8, deflect_paind9] {};
-void() deflect_paind9=[ $paind9, deflect_paind10] {};
-void() deflect_paind10=[ $paind10, deflect_paind11] {};
-void() deflect_paind11=[ $paind11, deflect_paind12] {ai_painforward(1);};
-void() deflect_paind12=[ $paind12, deflect_paind13] {ai_painforward(1);};
-void() deflect_paind13=[ $paind13, deflect_paind14] {ai_painforward(1);};
-void() deflect_paind14=[ $paind14, deflect_paind15] {};
-void() deflect_paind15=[ $paind15, deflect_paind16] {};
-void() deflect_paind16=[ $paind16, deflect_paind17] {ai_pain(1);};
-void() deflect_paind17=[ $paind17, deflect_paind18] {ai_pain(1);};
-void() deflect_paind18=[ $paind18, deflect_paind19] {};
-void() deflect_paind19=[ $paind19, deflect_slow1] {
+void() deflect_paind1= [$paind1, deflect_paind2] {};
+void() deflect_paind2= [$paind2, deflect_paind3] {};
+void() deflect_paind3= [$paind3, deflect_paind4] { monster_footstep(FALSE); };
+void() deflect_paind4= [$paind4, deflect_paind5] { ai_painforward(2); };
+void() deflect_paind5= [$paind5, deflect_paind6] { ai_painforward(1); };
+void() deflect_paind6= [$paind6, deflect_paind7] {};
+void() deflect_paind7= [$paind7, deflect_paind8] {};
+void() deflect_paind8= [$paind8, deflect_paind9] {};
+void() deflect_paind9= [$paind9, deflect_paind10] {};
+void() deflect_paind10= [$paind10, deflect_paind11] {};
+void() deflect_paind11= [$paind11, deflect_paind12] { ai_painforward(1); };
+void() deflect_paind12= [$paind12, deflect_paind13] { ai_painforward(1); };
+void() deflect_paind13= [$paind13, deflect_paind14] { ai_painforward(1); };
+void() deflect_paind14= [$paind14, deflect_paind15] {};
+void() deflect_paind15= [$paind15, deflect_paind16] {};
+void() deflect_paind16= [$paind16, deflect_paind17] { ai_pain(1); };
+void() deflect_paind17= [$paind17, deflect_paind18] { ai_pain(1); };
+void() deflect_paind18= [$paind18, deflect_paind19] {};
+void() deflect_paind19= [$paind19, deflect_slow1] {
 	// Last pain frame has shield coming on
-	deflect_shieldon();deflect_shieldsound_on();};
+	deflect_shieldon();deflect_shieldsound_on(); };
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) deflect_pain =
-{
+void(entity inflictor, entity attacker, float damage) deflect_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -582,40 +579,39 @@ void(entity inflictor, entity attacker, float damage) deflect_pain =
 	}
 };
 
-//============================================================================
-void() deflect_die1=[ $death1, deflect_die2] {};
-void() deflect_die2=[ $death2, deflect_die3] {monster_check_gib();};
-void() deflect_die3=[ $death3, deflect_die4] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
-void() deflect_die4=[ $death4, deflect_die5] {ai_forward(14);};
-void() deflect_die5=[ $death5, deflect_die6] {ai_forward(2);};
-void() deflect_die6=[ $death6, deflect_die7] {};
-void() deflect_die7=[ $death7, deflect_die8] {};
-void() deflect_die8=[ $death8, deflect_die9] {};
-void() deflect_die9=[ $death9, deflect_die10] {ai_forward(3);};
-void() deflect_die10=[ $death10, deflect_die11] {ai_forward(5);};
-void() deflect_die11=[ $death11, deflect_die12] {ai_forward(5);};
-void() deflect_die12=[ $death12, deflect_die13] {ai_forward(5);};
-void() deflect_die13=[ $death13, deflect_die14] {monster_death_postcheck();};
-void() deflect_die14=[ $death14, deflect_die14] {monster_deadbody_check();};
+
+void() deflect_die1= [$death1, deflect_die2] {};
+void() deflect_die2= [$death2, deflect_die3] { monster_check_gib(); };
+void() deflect_die3= [$death3, deflect_die4] { monster_check_gib();
+	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void() deflect_die4= [$death4, deflect_die5] { ai_forward(14); };
+void() deflect_die5= [$death5, deflect_die6] { ai_forward(2); };
+void() deflect_die6= [$death6, deflect_die7] {};
+void() deflect_die7= [$death7, deflect_die8] {};
+void() deflect_die8= [$death8, deflect_die9] {};
+void() deflect_die9= [$death9, deflect_die10] { ai_forward(3); };
+void() deflect_die10= [$death10, deflect_die11] { ai_forward(5); };
+void() deflect_die11= [$death11, deflect_die12] { ai_forward(5); };
+void() deflect_die12= [$death12, deflect_die13] { ai_forward(5); };
+void() deflect_die13= [$death13, deflect_die14] { monster_death_postcheck(); };
+void() deflect_die14= [$death14, deflect_die14] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() deflect_fdie1=[ $fdeath1, deflect_fdie2] {};
-void() deflect_fdie2=[ $fdeath2, deflect_fdie3] {monster_check_gib();};
-void() deflect_fdie3=[ $fdeath3, deflect_fdie4] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
-void() deflect_fdie4=[ $fdeath4, deflect_fdie5] {};
-void() deflect_fdie5=[ $fdeath5, deflect_fdie6] {};
-void() deflect_fdie6=[ $fdeath6, deflect_fdie7] {};
-void() deflect_fdie7=[ $fdeath7, deflect_fdie8] {};
-void() deflect_fdie8=[ $fdeath8, deflect_fdie9] {};
-void() deflect_fdie9=[ $fdeath9, deflect_fdie10] {};
-void() deflect_fdie10=[ $fdeath10, deflect_fdie11] {monster_death_postcheck();};
-void() deflect_fdie11=[ $fdeath11, deflect_fdie11] {monster_deadbody_check();};
+void() deflect_fdie1= [$fdeath1, deflect_fdie2] {};
+void() deflect_fdie2= [$fdeath2, deflect_fdie3] { monster_check_gib(); };
+void() deflect_fdie3= [$fdeath3, deflect_fdie4] { monster_check_gib();
+	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void() deflect_fdie4= [$fdeath4, deflect_fdie5] {};
+void() deflect_fdie5= [$fdeath5, deflect_fdie6] {};
+void() deflect_fdie6= [$fdeath6, deflect_fdie7] {};
+void() deflect_fdie7= [$fdeath7, deflect_fdie8] {};
+void() deflect_fdie8= [$fdeath8, deflect_fdie9] {};
+void() deflect_fdie9= [$fdeath9, deflect_fdie10] {};
+void() deflect_fdie10= [$fdeath10, deflect_fdie11] { monster_death_postcheck(); };
+void() deflect_fdie11= [$fdeath11, deflect_fdie11] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() deflect_die =
-{
+void() deflect_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 

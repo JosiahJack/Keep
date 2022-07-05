@@ -67,7 +67,7 @@ void() trigger_damagethreshold = { // [ENTITY]
    setorigin (self,self.origin);
    setmodel (self,self.model);
    setsize (self,self.mins,self.maxs);
-   if ( (self.spawnflags & INVISIBLE) ) self.model = string_null;
+   if ( (self.spawnflags & INVISIBLE) ) self.model = "";
    if ( !self.health ) self.health = 60.000;
    self.max_health = self.health;
    self.takedamage = DAMAGE_YES;

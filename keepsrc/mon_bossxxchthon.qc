@@ -87,7 +87,7 @@ void() xxchthon_idleframe = {
 	else if (FindTarget()) self.th_missile();
 };
 
-void() xxchthon_idle ={ self.walkframe = 0; xxchthon_idleframe(); };
+void() xxchthon_idle = { self.walkframe = 0; xxchthon_idleframe(); };
 
 // ATTACK 1 - Constant fireballs
 void(vector orgofs) xxchthon_missile = {
@@ -146,7 +146,7 @@ void() xxchthon_attackframe = {
 	}
 };
 
-void() xxchthon_attack ={ self.walkframe = 0; xxchthon_attackframe(); };
+void() xxchthon_attack = { self.walkframe = 0; xxchthon_attackframe(); };
 
 // Re-using the original shock animations for end of wave event
 void() xxchthon_shakeattack = {
@@ -189,8 +189,7 @@ void() xxchthon_shakeframe = {
 };
 
 //----------------------------------------------------------------------
-void() xxchthon_shake =
-{
+void() xxchthon_shake = {
 	// Start roaring and shaking
 	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	Resist_ChangeType(self, TRUE);
@@ -198,14 +197,13 @@ void() xxchthon_shake =
 	xxchthon_shakeframe();
 };
 
-//============================================================================
+
 // PAIN and DEATH
-//============================================================================
-void(entity inflictor, entity attacker, float damage) xxchthon_pain =
-{
+
+void(entity inflictor, entity attacker, float damage) xxchthon_pain = {
 
 	// Check for boss wave trigger events
-	if (xxchthon_WaveCheck() == TRUE) {self.th_jump(); return;}
+	if (xxchthon_WaveCheck() == TRUE) { self.th_jump(); return;}
 	self.pain_finished = time + 2 + random()*2;
 
 	// Spawn particle/smoke damage
@@ -216,11 +214,10 @@ void(entity inflictor, entity attacker, float damage) xxchthon_pain =
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 };
 
-//============================================================================
+
 // DEATH - Fall down and explode
-//============================================================================
-void() xxchthon_lavasplash =
-{
+
+void() xxchthon_lavasplash = {
 	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	if (ext_dppart) {
 		// Two different types of liquid splash (only DP)
@@ -258,14 +255,14 @@ void() xxchthon_explosion = {
 };
 
 void() xxchthon_death1 = [$death1, xxchthon_death2] {};
-void() xxchthon_death2 = [$death2, xxchthon_death3] {xxchthon_explosion();};
-void() xxchthon_death3 = [$death3, xxchthon_death4] {xxchthon_explosion();};
-void() xxchthon_death4 = [$death4, xxchthon_death5] {xxchthon_explosion();};
-void() xxchthon_death5 = [$death5, xxchthon_death6] {xxchthon_explosion();};
-void() xxchthon_death6 = [$death6, xxchthon_death7] {xxchthon_explosion();};
-void() xxchthon_death7 = [$death7, xxchthon_death8] {xxchthon_explosion();};
-void() xxchthon_death8 = [$death8, xxchthon_death9] {xxchthon_explosion();};
-void() xxchthon_death9 = [$death9, xxchthon_explode] {xxchthon_lavasplash();};
+void() xxchthon_death2 = [$death2, xxchthon_death3] { xxchthon_explosion(); };
+void() xxchthon_death3 = [$death3, xxchthon_death4] { xxchthon_explosion(); };
+void() xxchthon_death4 = [$death4, xxchthon_death5] { xxchthon_explosion(); };
+void() xxchthon_death5 = [$death5, xxchthon_death6] { xxchthon_explosion(); };
+void() xxchthon_death6 = [$death6, xxchthon_death7] { xxchthon_explosion(); };
+void() xxchthon_death7 = [$death7, xxchthon_death8] { xxchthon_explosion(); };
+void() xxchthon_death8 = [$death8, xxchthon_death9] { xxchthon_explosion(); };
+void() xxchthon_death9 = [$death9, xxchthon_explode] { xxchthon_lavasplash(); };
 
 void() xxchthon_die = {
 	self.style = CHTHON_PHASE4;		// Game Over for Chthon!
@@ -279,23 +276,23 @@ void() xxchthon_die = {
 };
 
 // RISE up from the swirling liquid
-void() xxchthon_rise1	=[	$rise1, xxchthon_rise2 ] {xxchthon_lavasplash();};
-void() xxchthon_rise2	=[	$rise2, xxchthon_rise3 ] {sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
-void() xxchthon_rise3	=[	$rise3, xxchthon_rise4 ] {};
-void() xxchthon_rise4	=[	$rise4, xxchthon_rise5 ] {ai_face();};
-void() xxchthon_rise5	=[	$rise5, xxchthon_rise6 ] {};
-void() xxchthon_rise6	=[	$rise6, xxchthon_rise7 ] {ai_face();};
-void() xxchthon_rise7	=[	$rise7, xxchthon_rise8 ] {};
-void() xxchthon_rise8	=[	$rise8, xxchthon_rise9 ] {ai_face();};
-void() xxchthon_rise9	=[	$rise9, xxchthon_rise10 ] {};
-void() xxchthon_rise10	=[	$rise10, xxchthon_rise11 ] {ai_face();};
-void() xxchthon_rise11	=[	$rise11, xxchthon_rise12 ] {};
-void() xxchthon_rise12	=[	$rise12, xxchthon_rise13 ] {ai_face();};
-void() xxchthon_rise13	=[	$rise13, xxchthon_rise14 ] {};
-void() xxchthon_rise14	=[	$rise14, xxchthon_rise15 ] {ai_face();};
-void() xxchthon_rise15	=[	$rise15, xxchthon_rise16 ] {};
-void() xxchthon_rise16	=[	$rise16, xxchthon_rise17 ] {ai_face();};
-void() xxchthon_rise17	=[	$rise17, xxchthon_attack ] {
+void() xxchthon_rise1	= [	$rise1, xxchthon_rise2 ] { xxchthon_lavasplash(); };
+void() xxchthon_rise2	= [	$rise2, xxchthon_rise3 ] { sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
+void() xxchthon_rise3	= [	$rise3, xxchthon_rise4 ] {};
+void() xxchthon_rise4	= [	$rise4, xxchthon_rise5 ] { ai_face(); };
+void() xxchthon_rise5	= [	$rise5, xxchthon_rise6 ] {};
+void() xxchthon_rise6	= [	$rise6, xxchthon_rise7 ] { ai_face(); };
+void() xxchthon_rise7	= [	$rise7, xxchthon_rise8 ] {};
+void() xxchthon_rise8	= [	$rise8, xxchthon_rise9 ] { ai_face(); };
+void() xxchthon_rise9	= [	$rise9, xxchthon_rise10 ] {};
+void() xxchthon_rise10	= [	$rise10, xxchthon_rise11 ] { ai_face(); };
+void() xxchthon_rise11	= [	$rise11, xxchthon_rise12 ] {};
+void() xxchthon_rise12	= [	$rise12, xxchthon_rise13 ] { ai_face(); };
+void() xxchthon_rise13	= [	$rise13, xxchthon_rise14 ] {};
+void() xxchthon_rise14	= [	$rise14, xxchthon_rise15 ] { ai_face(); };
+void() xxchthon_rise15	= [	$rise15, xxchthon_rise16 ] {};
+void() xxchthon_rise16	= [	$rise16, xxchthon_rise17 ] { ai_face(); };
+void() xxchthon_rise17	= [	$rise17, xxchthon_attack ] {
 	self.style = CHTHON_PHASE2;		// Start fighting
 	self.takedamage = DAMAGE_AIM;
 };

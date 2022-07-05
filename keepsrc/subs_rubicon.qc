@@ -1,6 +1,5 @@
 //function to help monsters not shoot each other
-float (entity targ) clean_shot =
-{
+float (entity targ) clean_shot = {
 	local vector	spot1, spot2;
 	
 	spot1 = self.origin + self.view_ofs;

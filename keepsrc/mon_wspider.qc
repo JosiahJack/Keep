@@ -76,7 +76,7 @@ void() spid_attack6 = [0, spid_attack7] { ai_charge(12); };
 void() spid_attack7 = [2, spid_attack8] { ai_charge(12); if (skill > 1) SpidMissile(); };
 void() spid_attack8 = [4, spid_attack9] { ai_charge(12); sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); };
 void() spid_attack9 = [6, spid_attack10] { ai_charge(12); };
-void() spid_attack10 = [8, spid_run1] { SpidMissile();};
+void() spid_attack10 = [8, spid_run1] { SpidMissile(); };
 
 void() spid_pain1 = [20, spid_pain2] {};
 void() spid_pain2 = [21, spid_pain3] {};
@@ -104,16 +104,16 @@ void(entity inflictor, entity attacker, float damage) spid_pain = {
 };
 
 void() spid_death1 = [10, spid_death3] {};
-void() spid_death2 = [10, spid_death3] {monster_check_gib();};
-void() spid_death3 = [11, spid_death4] {monster_check_gib(); self.solid = SOLID_NOT; };
+void() spid_death2 = [10, spid_death3] { monster_check_gib(); };
+void() spid_death3 = [11, spid_death4] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() spid_death4 = [12, spid_death5] {};
 void() spid_death5 = [13, spid_death6] {};
 void() spid_death6 = [14, spid_death7] {};
 void() spid_death7 = [15, spid_death8] {};
 void() spid_death8 = [16, spid_death9] {};
 void() spid_death9 = [17, spid_death10] {};
-void() spid_death10 = [18, spid_death11] {monster_death_postcheck();};
-void() spid_death11 = [19, spid_death11] {monster_deadbody_check();};
+void() spid_death10 = [18, spid_death11] { monster_death_postcheck(); };
+void() spid_death11 = [19, spid_death11] { monster_deadbody_check(); };
 
 void() spid_die = {
 	monster_death_precheck();

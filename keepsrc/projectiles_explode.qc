@@ -68,7 +68,7 @@ void() s_explode5 = [4,	s_explode6] {}; // [FUNCTION]
 void() s_explode6 = [5,	SUB_Remove] {}; // [FUNCTION]
 
 void() s_explode_think = { // [FUNCTION]
-    if (self.frame >= self.cnt) {SUB_Remove();  return;}
+    if (self.frame >= self.cnt) { SUB_Remove();  return;}
 
     self.frame = self.frame + 1;
     self.nextthink = time + self.wait;
@@ -235,7 +235,7 @@ void(vector spot) Rocket_TarExplosion = { // [FUNCTION]
 	Tent_Point(TE_TAREXPLOSION,spot);
 };
 
-void() Old_Explosion1 = {R_Exp3(self.origin); Tent_Explosion(self.origin); BecomeExplosion();}; // [FUNCTION]
+void() Old_Explosion1 = { R_Exp3(self.origin); Tent_Explosion(self.origin); BecomeExplosion(); }; // [FUNCTION]
 
 //  Common Explosions
 //float   CX_ORANGE   = 0;
@@ -291,9 +291,9 @@ void(vector spot, float base, float add, string text) MakeAnyExplosion = { // [F
     self = swap;
 };
 
-void(float base, float add) BecomeFancy = {BecomeAnyExplosion (base, add, "progs/drake/s_fancy.spr");}; // [FUNCTION]
+void(float base, float add) BecomeFancy = { BecomeAnyExplosion (base, add, "progs/drake/s_fancy.spr"); }; // [FUNCTION]
 
-void(vector spot, float base, float add) MakeFancy = {MakeAnyExplosion (spot, base, add, "progs/drake/s_fancy.spr");}; // [FUNCTION]
+void(vector spot, float base, float add) MakeFancy = { MakeAnyExplosion (spot, base, add, "progs/drake/s_fancy.spr"); }; // [FUNCTION]
 
 //  Ice Explosions.  frames 0-2 = iceballs, frames 3-7 = explosion of shards.
 void() BecomeIcyExp = { // [FUNCTION]
@@ -320,21 +320,21 @@ void(vector spot) MakeIcyExp = { // [FUNCTION]
 };
 
 // Modified Custents explosion, fast version; slow version was <7, 8, 10, 12, 14, 16, 18, 19, 20>.
-void() s_explodeb1  =[  7,  s_explodeb2 ] {}; // [FUNCTION]
-void() s_explodeb2  =[ 10,  s_explodeb3 ] {}; // [FUNCTION]
-void() s_explodeb3  =[ 13,  s_explodeb4 ] {}; // [FUNCTION]
-void() s_explodeb4  =[ 16,  s_explodeb5 ] {}; // [FUNCTION]
-void() s_explodeb5  =[ 19,  s_explodeb6 ] {}; // [FUNCTION]
-void() s_explodeb6  =[ 20,  SUB_Remove  ] {}; // [FUNCTION]
+void() s_explodeb1  = [  7,  s_explodeb2 ] {}; // [FUNCTION]
+void() s_explodeb2  = [ 10,  s_explodeb3 ] {}; // [FUNCTION]
+void() s_explodeb3  = [ 13,  s_explodeb4 ] {}; // [FUNCTION]
+void() s_explodeb4  = [ 16,  s_explodeb5 ] {}; // [FUNCTION]
+void() s_explodeb5  = [ 19,  s_explodeb6 ] {}; // [FUNCTION]
+void() s_explodeb6  = [ 20,  SUB_Remove  ] {}; // [FUNCTION]
 
-void() s_fiery1 =[  1, s_fiery2 ] {}; // [FUNCTION]
-void() s_fiery2 =[  3, s_fiery3 ] {}; // [FUNCTION]
-void() s_fiery3 =[  5, s_fiery4 ] {}; // [FUNCTION]
-void() s_fiery4 =[  7, s_fiery5 ] {}; // [FUNCTION]
-void() s_fiery5 =[  9, s_fiery6 ] {}; // [FUNCTION]
-void() s_fiery6 =[ 11, s_fiery7 ] {}; // [FUNCTION]
-void() s_fiery7 =[ 13, s_fiery8 ] {}; // [FUNCTION]
-void() s_fiery8 =[ 15, SUB_Remove]{}; // [FUNCTION]
+void() s_fiery1 = [  1, s_fiery2 ] {}; // [FUNCTION]
+void() s_fiery2 = [  3, s_fiery3 ] {}; // [FUNCTION]
+void() s_fiery3 = [  5, s_fiery4 ] {}; // [FUNCTION]
+void() s_fiery4 = [  7, s_fiery5 ] {}; // [FUNCTION]
+void() s_fiery5 = [  9, s_fiery6 ] {}; // [FUNCTION]
+void() s_fiery6 = [ 11, s_fiery7 ] {}; // [FUNCTION]
+void() s_fiery7 = [ 13, s_fiery8 ] {}; // [FUNCTION]
+void() s_fiery8 = [ 15, SUB_Remove] {}; // [FUNCTION]
 
 void(string fx, void() thinkst) Explosion_Start = { // [FUNCTION]
     self.movetype   = MOVETYPE_NONE;
@@ -414,7 +414,7 @@ void() Particle_Bullet = { // [FUNCTION]
 // * used by Eliminator (enforcer), Soldier and Minotaur
 void() Particle_Plasma = { // [FUNCTION]
 	if (self.waitmin > time) return; // projectile has touched something
-	if (self.attack_finished < time) {entity_remove(self, 0.1); return;} // Projectile has run out of time
+	if (self.attack_finished < time) { entity_remove(self, 0.1); return;} // Projectile has run out of time
 	
 	// Generate sprite particles? DP not active?
 	if (random() < 0.5 && !ext_dppart) {
@@ -510,7 +510,7 @@ void() GrenadeExplode = { maphack_grenade(); }; // [FUNCTION]
 
 void() MonsterGrenadeSound = { sound (self, CHAN_WEAPON, "ad171/weapons/gl_loadshort.wav", 0.1+random()*0.5, ATTN_LOW); }; // [FUNCTION], play generic load grenade sound.
 
-float() MonsterGrenadeSpeed ={ return SPEED_MONGRENADE + (skill * SPEED_MONGLSKILL); }; // [FUNCTION], return generic attack speed.
+float() MonsterGrenadeSpeed = { return SPEED_MONGRENADE + (skill * SPEED_MONGLSKILL); }; // [FUNCTION], return generic attack speed.
 
 void(vector p1, vector p2, entity from, float damage) HIP_HammerDamage = { // [FUNCTION]
    local entity e1, e2;
@@ -731,12 +731,12 @@ void() Iceball_Explode = { // [FUNCTION]
     BecomeIcyExp();
 };
 
-void() mine1 =[ 1, mine2    ] {}; // [FUNCTION]
-void() mine2 =[ 2, mine3    ] { // [FUNCTION]
+void() mine1 = [ 1, mine2    ] {}; // [FUNCTION]
+void() mine2 = [ 2, mine3    ] { // [FUNCTION]
     local float pc;
 
     pc = pointcontents(self.origin);
-    if (pc == CONTENT_LAVA) {IceMine_Explode(); return;}
+    if (pc == CONTENT_LAVA) { IceMine_Explode(); return;}
 
     if (self.delay > time) self.think = mine2;
     if (self.flags & FL_ONGROUND) return;     // Attached to the ground.
@@ -750,10 +750,10 @@ void() mine2 =[ 2, mine3    ] { // [FUNCTION]
         if (self.velocity_z > 48) self.velocity_z = 48;
     } else self.movetype = MOVETYPE_TOSS;
 };
-void() mine3 =[ 3, SUB_Null ] {IceMine_Explode();}; // [FUNCTION]
+void() mine3 = [ 3, SUB_Null ] { IceMine_Explode(); }; // [FUNCTION]
 
 void() IceMine_Explode = { // [FUNCTION]
-    if (self.trigger_field) {remove (self.trigger_field);  self.trigger_field = world;}
+    if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world;}
     self.touch = SUB_Null;      // Stack overflow prevention.
 	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
 	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_CENTER); // Particle explosion drifting upward
@@ -765,7 +765,7 @@ void() IceMine_Explode = { // [FUNCTION]
 
 // Treat destroyed mines as barrels.
 void() IceMine_Die = { // [FUNCTION]
-    if (self.trigger_field) {remove (self.trigger_field);  self.trigger_field = world;}
+    if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world;}
     self.th_die= SUB_Null;      // Don't 'die' again if damaged more.
     self.touch = SUB_Null;      // Stack overflow prevention.
     self.solid = SOLID_NOT;
@@ -1009,12 +1009,12 @@ void(entity inflictor, float radius) StaticField = { // [FUNCTION]
 };
 
 // Flame animation on modified 'flame2.mdl'.
-void() m_ember1 =[ 3, m_ember2   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember2 =[ 4, m_ember3   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember3 =[ 5, m_ember4   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember4 =[ 6, m_ember5   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember5 =[ 7, m_ember6   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember6 =[ 8, m_ember6 ]   { // [FUNCTION]
+void() m_ember1 = [ 3, m_ember2   ] { Ember_Think(); }; // [FUNCTION]
+void() m_ember2 = [ 4, m_ember3   ] { Ember_Think(); }; // [FUNCTION]
+void() m_ember3 = [ 5, m_ember4   ] { Ember_Think(); }; // [FUNCTION]
+void() m_ember4 = [ 6, m_ember5   ] { Ember_Think(); }; // [FUNCTION]
+void() m_ember5 = [ 7, m_ember6   ] { Ember_Think(); }; // [FUNCTION]
+void() m_ember6 = [ 8, m_ember6 ]   { // [FUNCTION]
 	self.think = SUB_Remove;
 	self.nextthink = time + 0.1;
 };
@@ -1333,23 +1333,23 @@ void() Hatch_Egg = {
 };
 
 // The Airfist fire blast sprite animation code.
-void() run_ablast1   =[0, run_ablast2  ] {};
-void() run_ablast2   =[1, run_ablast3  ] {};
-void() run_ablast3   =[2, run_ablast4  ] {};
-void() run_ablast4   =[3, run_ablast5  ] {};
-void() run_ablast5   =[4, run_ablast5  ] { remove(self); };
+void() run_ablast1   = [0, run_ablast2  ] {};
+void() run_ablast2   = [1, run_ablast3  ] {};
+void() run_ablast3   = [2, run_ablast4  ] {};
+void() run_ablast4   = [3, run_ablast5  ] {};
+void() run_ablast5   = [4, run_ablast5  ] { remove(self); };
 
 // Airfist fire blast sprite animation under water (slowed down).
-void() run_ablastWater1   =[0, run_ablastWater2  ] {};
-void() run_ablastWater2   =[0, run_ablastWater3  ] {};
-void() run_ablastWater3   =[1, run_ablastWater4  ] {};
-void() run_ablastWater4   =[1, run_ablastWater5  ] {};
-void() run_ablastWater5   =[2, run_ablastWater6  ] {};
-void() run_ablastWater6   =[2, run_ablastWater7  ] {};
-void() run_ablastWater7   =[3, run_ablastWater8  ] {};
-void() run_ablastWater8   =[3, run_ablastWater9  ] {};
-void() run_ablastWater9   =[4, run_ablastWater10 ] {};
-void() run_ablastWater10  =[4, run_ablastWater1  ] {remove(self);};
+void() run_ablastWater1   = [0, run_ablastWater2  ] {};
+void() run_ablastWater2   = [0, run_ablastWater3  ] {};
+void() run_ablastWater3   = [1, run_ablastWater4  ] {};
+void() run_ablastWater4   = [1, run_ablastWater5  ] {};
+void() run_ablastWater5   = [2, run_ablastWater6  ] {};
+void() run_ablastWater6   = [2, run_ablastWater7  ] {};
+void() run_ablastWater7   = [3, run_ablastWater8  ] {};
+void() run_ablastWater8   = [3, run_ablastWater9  ] {};
+void() run_ablastWater9   = [4, run_ablastWater10 ] {};
+void() run_ablastWater10  = [4, run_ablastWater1  ] { remove(self); };
 
 // Create a Airfist blast sprite
 void(float nearAWall, float adjustForward, float adjustRight, float adjustUp, float positionRight, float spriteSpeed) hornBlastSprite = {

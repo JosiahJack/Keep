@@ -311,7 +311,6 @@ float 	AS_COWARDLY  = 15;// Back off if too close.  Otherwise, as_straight.
 
 float	movedist;
 float	gameover;			// set when a rule exits
-string	string_null;		// Null string, nothing should be held here.  Make sure string_null remains NULL even after save/loading
 entity	newmis;				// launch_spike sets this after spawning it
 entity	activator;			// the entity that activated a trigger or brush
 entity	damage_attacker;	// set by T_Damage

@@ -61,77 +61,77 @@ void() pyro_soundreset = {
 	else StopSound(self,CHAN_WEAPON); // Play sound anyway to be sure the channel is silent
 };
 
-void()	pyro_stand1	=[	$stand1,	pyro_stand2	] {monster_idle_sound(); ai_stand();};
-void()	pyro_stand2	=[	$stand2,	pyro_stand3	] {ai_stand();};
-void()	pyro_stand3	=[	$stand3,	pyro_stand4	] {ai_stand();};
-void()	pyro_stand4	=[	$stand4,	pyro_stand5	] {ai_stand();};
-void()	pyro_stand5	=[	$stand5,	pyro_stand6	] {ai_stand();};
-void()	pyro_stand6	=[	$stand6,	pyro_stand7	] {ai_stand();};
-void()	pyro_stand7	=[	$stand7,	pyro_stand1	] {ai_stand();};
+void()	pyro_stand1	= [	$stand1,	pyro_stand2	] { monster_idle_sound(); ai_stand(); };
+void()	pyro_stand2	= [	$stand2,	pyro_stand3	] { ai_stand(); };
+void()	pyro_stand3	= [	$stand3,	pyro_stand4	] { ai_stand(); };
+void()	pyro_stand4	= [	$stand4,	pyro_stand5	] { ai_stand(); };
+void()	pyro_stand5	= [	$stand5,	pyro_stand6	] { ai_stand(); };
+void()	pyro_stand6	= [	$stand6,	pyro_stand7	] { ai_stand(); };
+void()	pyro_stand7	= [	$stand7,	pyro_stand1	] { ai_stand(); };
 
-void()	pyro_walk1	=[	$walk1,		pyro_walk2	] {monster_idle_sound();ai_walk(2);};
-void()	pyro_walk2	=[	$walk2,		pyro_walk3	] {monster_footstep(FALSE); ai_walk(4);};
-void()	pyro_walk3	=[	$walk3,		pyro_walk4	] {ai_walk(4);};
-void()	pyro_walk4	=[	$walk4,		pyro_walk5	] {ai_walk(3);};
-void()	pyro_walk5	=[	$walk5,		pyro_walk6	] {ai_walk(1);};
-void()	pyro_walk6	=[	$walk6,		pyro_walk7	] {ai_walk(2);};
-void()	pyro_walk7	=[	$walk7,		pyro_walk8	] {ai_walk(2);};
-void()	pyro_walk8	=[	$walk8,		pyro_walk9	] {ai_walk(1);};
-void()	pyro_walk9	=[	$walk9,		pyro_walk10	] {ai_walk(2);};
-void()	pyro_walk10	=[	$walk10,	pyro_walk11	] {monster_footstep(FALSE); ai_walk(4);};
-void()	pyro_walk11	=[	$walk11,	pyro_walk12	] {ai_walk(4);};
-void()	pyro_walk12	=[	$walk12,	pyro_walk13	] {ai_walk(1);};
-void()	pyro_walk13	=[	$walk13,	pyro_walk14	] {ai_walk(2);};
-void()	pyro_walk14	=[	$walk14,	pyro_walk15	] {ai_walk(3);};
-void()	pyro_walk15	=[	$walk15,	pyro_walk16	] {ai_walk(4);};
-void()	pyro_walk16	=[	$walk16,	pyro_walk1	] {ai_walk(2);};
+void()	pyro_walk1	= [	$walk1,		pyro_walk2	] { monster_idle_sound();ai_walk(2); };
+void()	pyro_walk2	= [	$walk2,		pyro_walk3	] { monster_footstep(FALSE); ai_walk(4); };
+void()	pyro_walk3	= [	$walk3,		pyro_walk4	] { ai_walk(4); };
+void()	pyro_walk4	= [	$walk4,		pyro_walk5	] { ai_walk(3); };
+void()	pyro_walk5	= [	$walk5,		pyro_walk6	] { ai_walk(1); };
+void()	pyro_walk6	= [	$walk6,		pyro_walk7	] { ai_walk(2); };
+void()	pyro_walk7	= [	$walk7,		pyro_walk8	] { ai_walk(2); };
+void()	pyro_walk8	= [	$walk8,		pyro_walk9	] { ai_walk(1); };
+void()	pyro_walk9	= [	$walk9,		pyro_walk10	] { ai_walk(2); };
+void()	pyro_walk10	= [	$walk10,	pyro_walk11	] { monster_footstep(FALSE); ai_walk(4); };
+void()	pyro_walk11	= [	$walk11,	pyro_walk12	] { ai_walk(4); };
+void()	pyro_walk12	= [	$walk12,	pyro_walk13	] { ai_walk(1); };
+void()	pyro_walk13	= [	$walk13,	pyro_walk14	] { ai_walk(2); };
+void()	pyro_walk14	= [	$walk14,	pyro_walk15	] { ai_walk(3); };
+void()	pyro_walk15	= [	$walk15,	pyro_walk16	] { ai_walk(4); };
+void()	pyro_walk16	= [	$walk16,	pyro_walk1	] { ai_walk(2); };
 
-void()	pyro_run1	=[	$run1,	pyro_run2	] {monster_idle_sound(); ai_run(18 * pyro_RUN_SPEED);};
-void()	pyro_run2	=[	$run2,	pyro_run3	] {ai_run(14 * pyro_RUN_SPEED);};
-void()	pyro_run3	=[	$run3,	pyro_run4	] {ai_run(7 * pyro_RUN_SPEED);};
-void()	pyro_run4	=[	$run4,	pyro_run5	] {ai_run(12 * pyro_RUN_SPEED);};
-void()	pyro_run5	=[	$run5,	pyro_run6	] {ai_run(14 * pyro_RUN_SPEED);};
-void()	pyro_run6	=[	$run6,	pyro_run7	] {ai_run(14 * pyro_RUN_SPEED);};
-void()	pyro_run7	=[	$run7,	pyro_run8	] {ai_run(7 * pyro_RUN_SPEED);};
-void()	pyro_run8	=[	$run8,	pyro_run1	] {ai_run(11 * pyro_RUN_SPEED);};
+void()	pyro_run1	= [	$run1,	pyro_run2	] { monster_idle_sound(); ai_run(18 * pyro_RUN_SPEED); };
+void()	pyro_run2	= [	$run2,	pyro_run3	] { ai_run(14 * pyro_RUN_SPEED); };
+void()	pyro_run3	= [	$run3,	pyro_run4	] { ai_run(7 * pyro_RUN_SPEED); };
+void()	pyro_run4	= [	$run4,	pyro_run5	] { ai_run(12 * pyro_RUN_SPEED); };
+void()	pyro_run5	= [	$run5,	pyro_run6	] { ai_run(14 * pyro_RUN_SPEED); };
+void()	pyro_run6	= [	$run6,	pyro_run7	] { ai_run(14 * pyro_RUN_SPEED); };
+void()	pyro_run7	= [	$run7,	pyro_run8	] { ai_run(7 * pyro_RUN_SPEED); };
+void()	pyro_run8	= [	$run8,	pyro_run1	] { ai_run(11 * pyro_RUN_SPEED); };
 
-void()	pyro_atk1	=[	$attack1,	pyro_atk2	] {ai_face();};
-void()	pyro_atk2	=[	$attack3,	pyro_atk3	] {ai_face();};
-void()	pyro_atk3	=[	$attack5,	pyro_atk4	] {ai_face();
+void()	pyro_atk1	= [	$attack1,	pyro_atk2	] { ai_face(); };
+void()	pyro_atk2	= [	$attack3,	pyro_atk3	] { ai_face(); };
+void()	pyro_atk3	= [	$attack5,	pyro_atk4	] { ai_face();
 	sound (self, CHAN_WEAPON, self.noise3, 1, ATTN_NORM);	// ON
 	pyro_fire(); // FIRE! FIRE! FIRE!
 	self.attack_finished = time + 0.3;
 };
-void()	pyro_atk4	=[	$attack5,	pyro_atk5	] {ai_face();
+void()	pyro_atk4	= [	$attack5,	pyro_atk5	] { ai_face();
 	pyro_fire();
 	if (self.attack_finished > time || 
 		(range(self.enemy) == RANGE_MELEE && self.enemy.health > 0) )
 		self.think = pyro_atk4;
 };
-void()	pyro_atk5	=[	$attack10,	pyro_run1	] {ai_face();
+void()	pyro_atk5	= [	$attack10,	pyro_run1	] { ai_face();
 	sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);	// OFF
 	SUB_CheckRefire(pyro_atk1);
 };
 
-void()	pyro_paina1	=[	$paina1,	pyro_paina2	] {};
-void()	pyro_paina2	=[	$paina2,	pyro_paina3	] {};
-void()	pyro_paina3	=[	$paina3,	pyro_paina4	] {};
-void()	pyro_paina4	=[	$paina4,	pyro_run1	] {};
+void()	pyro_paina1	= [	$paina1,	pyro_paina2	] {};
+void()	pyro_paina2	= [	$paina2,	pyro_paina3	] {};
+void()	pyro_paina3	= [	$paina3,	pyro_paina4	] {};
+void()	pyro_paina4	= [	$paina4,	pyro_run1	] {};
 
-void()	pyro_painb1	=[	$painb1,	pyro_painb2	] {};
-void()	pyro_painb2	=[	$painb2,	pyro_painb3	] {};
-void()	pyro_painb3	=[	$painb3,	pyro_painb4	] {};
-void()	pyro_painb4	=[	$painb4,	pyro_painb5	] {};
-void()	pyro_painb5	=[	$painb5,	pyro_run1	] {};
+void()	pyro_painb1	= [	$painb1,	pyro_painb2	] {};
+void()	pyro_painb2	= [	$painb2,	pyro_painb3	] {};
+void()	pyro_painb3	= [	$painb3,	pyro_painb4	] {};
+void()	pyro_painb4	= [	$painb4,	pyro_painb5	] {};
+void()	pyro_painb5	= [	$painb5,	pyro_run1	] {};
 
-void()	pyro_painc1	=[	$painc1,	pyro_painc2	] {};
-void()	pyro_painc2	=[	$painc2,	pyro_painc3	] {};
-void()	pyro_painc3	=[	$painc3,	pyro_painc4	] {};
-void()	pyro_painc4	=[	$painc4,	pyro_painc5	] {};
-void()	pyro_painc5	=[	$painc5,	pyro_painc6	] {};
-void()	pyro_painc6	=[	$painc6,	pyro_painc7	] {};
-void()	pyro_painc7	=[	$painc7,	pyro_painc8	] {};
-void()	pyro_painc8	=[	$painc8,	pyro_run1	] {};
+void()	pyro_painc1	= [	$painc1,	pyro_painc2	] {};
+void()	pyro_painc2	= [	$painc2,	pyro_painc3	] {};
+void()	pyro_painc3	= [	$painc3,	pyro_painc4	] {};
+void()	pyro_painc4	= [	$painc4,	pyro_painc5	] {};
+void()	pyro_painc5	= [	$painc5,	pyro_painc6	] {};
+void()	pyro_painc6	= [	$painc6,	pyro_painc7	] {};
+void()	pyro_painc7	= [	$painc7,	pyro_painc8	] {};
+void()	pyro_painc8	= [	$painc8,	pyro_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) pyro_pain = {
 	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
@@ -158,36 +158,36 @@ void(entity inflictor, entity attacker, float damage) pyro_pain = {
 	}
 };
 
-void()	pyro_die1	=[	$death1,	pyro_die2	] {};
-void()	pyro_die2	=[	$death2,	pyro_die3	] {monster_check_gib();};
-void()	pyro_die3	=[	$death3,	pyro_die4	] {
+void()	pyro_die1	= [	$death1,	pyro_die2	] {};
+void()	pyro_die2	= [	$death2,	pyro_die3	] { monster_check_gib(); };
+void()	pyro_die3	= [	$death3,	pyro_die4	] {
 	monster_check_gib();
 	self.solid = SOLID_NOT;
 	if (!self.gibbed) DropBackpack();
 };
-void()	pyro_die4	=[	$death4,	pyro_die5	] {ai_forward(14);};
-void()	pyro_die5	=[	$death5,	pyro_die6	] {ai_forward(2);};
-void()	pyro_die6	=[	$death6,	pyro_die7	] {};
-void()	pyro_die7	=[	$death7,	pyro_die8	] {};
-void()	pyro_die8	=[	$death8,	pyro_die9	] {};
-void()	pyro_die9	=[	$death9,	pyro_die10	] {ai_forward(3);};
-void()	pyro_die10	=[	$death10,	pyro_die11	] {ai_forward(5);};
-void()	pyro_die11	=[	$death11,	pyro_die12	] {ai_forward(5);};
-void()	pyro_die12	=[	$death12,	pyro_die13	] {ai_forward(5);};
-void()	pyro_die13	=[	$death13,	pyro_die14	] {monster_death_postcheck();};
-void()	pyro_die14	=[	$death14,	pyro_die14	] {monster_deadbody_check();};
+void()	pyro_die4	= [	$death4,	pyro_die5	] { ai_forward(14); };
+void()	pyro_die5	= [	$death5,	pyro_die6	] { ai_forward(2); };
+void()	pyro_die6	= [	$death6,	pyro_die7	] {};
+void()	pyro_die7	= [	$death7,	pyro_die8	] {};
+void()	pyro_die8	= [	$death8,	pyro_die9	] {};
+void()	pyro_die9	= [	$death9,	pyro_die10	] { ai_forward(3); };
+void()	pyro_die10	= [	$death10,	pyro_die11	] { ai_forward(5); };
+void()	pyro_die11	= [	$death11,	pyro_die12	] { ai_forward(5); };
+void()	pyro_die12	= [	$death12,	pyro_die13	] { ai_forward(5); };
+void()	pyro_die13	= [	$death13,	pyro_die14	] { monster_death_postcheck(); };
+void()	pyro_die14	= [	$death14,	pyro_die14	] { monster_deadbody_check(); };
 
-void()	pyro_fdie1	=[	$fdeath1,	pyro_fdie2	] {};
-void()	pyro_fdie2	=[	$fdeath2,	pyro_fdie3	] {monster_check_gib();};
-void()	pyro_fdie3	=[	$fdeath3,	pyro_fdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
-void()	pyro_fdie4	=[	$fdeath4,	pyro_fdie5	] {};
-void()	pyro_fdie5	=[	$fdeath5,	pyro_fdie6	] {};
-void()	pyro_fdie6	=[	$fdeath6,	pyro_fdie7	] {};
-void()	pyro_fdie7	=[	$fdeath7,	pyro_fdie8	] {};
-void()	pyro_fdie8	=[	$fdeath8,	pyro_fdie9	] {};
-void()	pyro_fdie9	=[	$fdeath9,	pyro_fdie10	] {};
-void()	pyro_fdie10	=[	$fdeath10,	pyro_fdie11	] {monster_death_postcheck();};
-void()	pyro_fdie11	=[	$fdeath11,	pyro_fdie11	] {monster_deadbody_check();};
+void()	pyro_fdie1	= [	$fdeath1,	pyro_fdie2	] {};
+void()	pyro_fdie2	= [	$fdeath2,	pyro_fdie3	] { monster_check_gib(); };
+void()	pyro_fdie3	= [	$fdeath3,	pyro_fdie4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	pyro_fdie4	= [	$fdeath4,	pyro_fdie5	] {};
+void()	pyro_fdie5	= [	$fdeath5,	pyro_fdie6	] {};
+void()	pyro_fdie6	= [	$fdeath6,	pyro_fdie7	] {};
+void()	pyro_fdie7	= [	$fdeath7,	pyro_fdie8	] {};
+void()	pyro_fdie8	= [	$fdeath8,	pyro_fdie9	] {};
+void()	pyro_fdie9	= [	$fdeath9,	pyro_fdie10	] {};
+void()	pyro_fdie10	= [	$fdeath10,	pyro_fdie11	] { monster_death_postcheck(); };
+void()	pyro_fdie11	= [	$fdeath11,	pyro_fdie11	] { monster_deadbody_check(); };
 
 void() pyro_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities 

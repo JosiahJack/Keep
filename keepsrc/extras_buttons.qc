@@ -86,7 +86,7 @@ void() button_ext_firedisabled = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
 	if (self.noise2)sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-	if (self.event != string_null && activator.classname == "player") centerprint (activator, self.event);
+	if (self.event != "" && activator.classname == "player") centerprint (activator, self.event);
 	self.state = STATE_UP; // Time out for a bit
 	self.think = button_ext_done;
 	self.nextthink = self.ltime + 1.0;
@@ -184,7 +184,7 @@ void() func_button_ext = { // [ENTITY]
 	}
 
 	// Not a "real" message
-	if (self.message != string_null) {
+	if (self.message != "") {
 		self.event = self.message;
 		self.message = "";
 	}

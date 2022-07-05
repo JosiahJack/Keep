@@ -162,7 +162,7 @@ void()	book_closing9 =	[$opening2, book_closing10	] {}; // [FUNCTION]
 void()	book_closing10= [$opening1, book_closed1	] {}; // [FUNCTION]
 
 // Book always open (final stage of book)
-void()	book_stayopen1 = [$open1, book_stayopen2 ] {self.state = MISCBOOK_STAYOPEN;}; // [FUNCTION]
+void()	book_stayopen1 = [$open1, book_stayopen2 ] { self.state = MISCBOOK_STAYOPEN;}; // [FUNCTION]
 void()	book_stayopen2 = [$open2, book_stayopen3 ] {}; // [FUNCTION]
 void()	book_stayopen3 = [$open3, book_stayopen4 ] {}; // [FUNCTION]
 void()	book_stayopen4 = [$open4, book_stayopen5 ] {}; // [FUNCTION]
@@ -185,19 +185,19 @@ void() book_finish = { // [FUNCTION]
 };
 
 // Book is open (waiting to close)
-void()	book_open1 = [$open1, book_open2 ] {self.state = MISCBOOK_OPEN;}; // [FUNCTION]
-void()	book_open2 = [$open2, book_open3 ] {if (self.wait < time) book_finish();}; // [FUNCTION]
+void()	book_open1 = [$open1, book_open2 ] { self.state = MISCBOOK_OPEN;}; // [FUNCTION]
+void()	book_open2 = [$open2, book_open3 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 void()	book_open3 = [$open3, book_open4 ] {}; // [FUNCTION]
-void()	book_open4 = [$open4, book_open5 ] {if (self.wait < time) book_finish();}; // [FUNCTION]
+void()	book_open4 = [$open4, book_open5 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 void()	book_open5 = [$open5, book_open6 ] {}; // [FUNCTION]
-void()	book_open6 = [$open6, book_open7 ] {if (self.wait < time) book_finish();}; // [FUNCTION]
+void()	book_open6 = [$open6, book_open7 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 void()	book_open7 = [$open7, book_open8 ] {}; // [FUNCTION]
-void()	book_open8 = [$open8, book_open9 ] {if (self.wait < time) book_finish();}; // [FUNCTION]
+void()	book_open8 = [$open8, book_open9 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 void()	book_open9 = [$open9, book_open10 ] {}; // [FUNCTION]
-void()	book_open10= [$open10, book_open1 ] {if (self.wait < time) book_finish();}; // [FUNCTION]
+void()	book_open10= [$open10, book_open1 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 
 // Book opening (closed -> open)
-void()	book_opening1 =	[$opening1, book_opening2 ] {self.state = MISCBOOK_OPENING;}; // [FUNCTION]
+void()	book_opening1 =	[$opening1, book_opening2 ] { self.state = MISCBOOK_OPENING;}; // [FUNCTION]
 void()	book_opening2 =	[$opening2, book_opening3 ] {}; // [FUNCTION]
 void()	book_opening3 =	[$opening3, book_opening4 ] {}; // [FUNCTION]
 void()	book_opening4 =	[$opening4, book_opening5 ] {}; // [FUNCTION]

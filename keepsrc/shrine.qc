@@ -370,12 +370,12 @@ void() info_shrine = { // [ENTITY]
 	precache_model("progs/ad171/s_dotmed_red.spr");
 	precache_model("progs/ad171/s_dotmed_purp.spr");
 
-	if (self.style == 0) {s = "\nof the Earth Shrine has blessed\nyou with Aura of Earth Magick,\nbecome as stone. \n"; magikb = " of the Earth Shrine has\nlost influence,\n the Elder God blesses with\nPoison Protection! \n"; }
-	if (self.style == 1) {s = "\nof the Water Shrine has blessed\nyou with Aura of Water Magick,\nflow as water. \n"; magikb = " of the Water Shrine has\nlost influence,\n the Elder God blesses with\nSwimfall Prowess! \n"; }
-	if (self.style == 2) {s = "\nof the Air Shrine has blessed\nyou with Aura of Air Magick,\ninhale deeply. \n"; magikb = " of the Air Shrine has\nlost influence,\n the Elder God blesses with\nBreath of Uplifting! \n"; }
-	if (self.style == 3) {s = "\nof the Fire Shrine has blessed\nyou with Aura of Fire Magick,\nburst with rage. \n"; magikb = " of the Fire Shrine has\nlost influence,\n the Elder God blesses with\nFire and Power! \n"; }
-	if (self.style == 4) {s = "\nof the Blood Shrine has blessed\nyou with Aura of Blood Magick,\nblood of the ancients courses\nthrough you! \n"; magikb = " of the Blood Shrine has\nlost influence,\n the Elder God blesses with\nOverheal Bloodlust! \n"; }
-	if (self.style == 5) {s = "\nof the Spirit Shrine has blessed\nyou with Aura of Spirit Magick,\nthe angels watch over you. \n"; magikb = " of the Spirit Shrine has\nlost influence,\n the Elder God blesses with\nProtection of the Watchers! \n"; }
+	if (self.style == 0) { s = "\nof the Earth Shrine has blessed\nyou with Aura of Earth Magick,\nbecome as stone. \n"; magikb = " of the Earth Shrine has\nlost influence,\n the Elder God blesses with\nPoison Protection! \n"; }
+	if (self.style == 1) { s = "\nof the Water Shrine has blessed\nyou with Aura of Water Magick,\nflow as water. \n"; magikb = " of the Water Shrine has\nlost influence,\n the Elder God blesses with\nSwimfall Prowess! \n"; }
+	if (self.style == 2) { s = "\nof the Air Shrine has blessed\nyou with Aura of Air Magick,\ninhale deeply. \n"; magikb = " of the Air Shrine has\nlost influence,\n the Elder God blesses with\nBreath of Uplifting! \n"; }
+	if (self.style == 3) { s = "\nof the Fire Shrine has blessed\nyou with Aura of Fire Magick,\nburst with rage. \n"; magikb = " of the Fire Shrine has\nlost influence,\n the Elder God blesses with\nFire and Power! \n"; }
+	if (self.style == 4) { s = "\nof the Blood Shrine has blessed\nyou with Aura of Blood Magick,\nblood of the ancients courses\nthrough you! \n"; magikb = " of the Blood Shrine has\nlost influence,\n the Elder God blesses with\nOverheal Bloodlust! \n"; }
+	if (self.style == 5) { s = "\nof the Spirit Shrine has blessed\nyou with Aura of Spirit Magick,\nthe angels watch over you. \n"; magikb = " of the Spirit Shrine has\nlost influence,\n the Elder God blesses with\nProtection of the Watchers! \n"; }
 	self.use = shrine_use;	
 	self.think = SUB_Null;
 	self.state = STATE_OFF;

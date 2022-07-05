@@ -38,12 +38,9 @@
 //=============================================================================
 
 void() spikemine_Home = {
-	local entity head;
-	local entity selected;
-	local float cur_dist;
-	local float head_dist;
-	local vector dir;
-	local vector vtemp;
+	local entity head, selected;
+	local float cur_dist, head_dist;
+	local vector dir, vtemp;
 
 	self.frame = (self.frame + TRUE);
 	if (self.frame == MOVETYPE_FLYMISSILE) self.frame = FALSE;
@@ -54,8 +51,7 @@ void() spikemine_Home = {
 		cur_dist = 2000.000;
 		head = findradius (self.origin,2000.000);
 		while ( head ) {
-			if ( (!(head.flags & FL_NOTARGET) && (head.flags & FL_CLIENT)) ) {
-				visible (head);
+			if (!Invisible(head) && (head.flags & FLx_CREATURE)) {
 				if (visible(head) && (head.health > FALSE)) {
 					head_dist = vlen(head.origin - self.origin);
 					if (head_dist < cur_dist) {

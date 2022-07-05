@@ -733,9 +733,9 @@ void() weapon_stinger = {
 	weapon_start();
 };
 // PM:  Alternate name for the stinger rocket launcher.
-void() weapon_mirv = {self.classname = "weapon_stinger";  weapon_stinger();};
+void() weapon_mirv = { self.classname = "weapon_stinger";  weapon_stinger(); };
 // PM:  Convert Zerstorer's weaksauce SRE to something more worthy.
-void() weapon_stunner = {self.classname = "weapon_stinger";  weapon_stinger();};
+void() weapon_stunner = { self.classname = "weapon_stinger";  weapon_stinger(); };
 
 void() weapon_supershotgun_upright = {
 	self.classname = "weapon_supershotgun";

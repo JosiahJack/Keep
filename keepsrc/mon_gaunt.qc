@@ -251,56 +251,55 @@ void(float offset) gaunt_lightning = {
 	}
 };
 
-void() gauntwings =
-{ sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
+void() gauntwings = { sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
 void() 	gaunt_finish_attachment;
 
-//============================================================================
-void() gaunt_idle1 = [ $hover1, gaunt_idle2 ] {monster_idle_sound();ai_stand();};
-void() gaunt_idle2 = [ $hover2, gaunt_idle3 ] {ai_stand();};
-void() gaunt_idle3 = [ $hover3, gaunt_idle4 ] {ai_stand();};
-void() gaunt_idle4 = [ $hover4, gaunt_idle5 ] {ai_stand();};
-void() gaunt_idle5 = [ $hover5, gaunt_idle6 ] {gauntwings();ai_stand();};
-void() gaunt_idle6 = [ $hover6, gaunt_idle7 ] {ai_stand();};
-void() gaunt_idle7 = [ $hover7, gaunt_idle8 ] {ai_stand();};
-void() gaunt_idle8 = [ $hover8, gaunt_idle9 ] {ai_stand();};
-void() gaunt_idle9 = [ $hover9, gaunt_idle10 ] {ai_stand();};
-void() gaunt_idle10 = [ $hover10, gaunt_idle11 ] {ai_stand();};
-void() gaunt_idle11 = [ $hover11, gaunt_idle12 ] {ai_stand();};
-void() gaunt_idle12 = [ $hover12, gaunt_idle13 ] {ai_stand();};
-void() gaunt_idle13 = [ $hover13, gaunt_idle14 ] {ai_stand();};
-void() gaunt_idle14 = [ $hover14, gaunt_idle15 ] {ai_stand();};
-void() gaunt_idle15 = [ $hover15, gaunt_idle16 ] {gauntwings();ai_stand();};
-void() gaunt_idle16 = [ $hover16, gaunt_idle17 ] {ai_stand();};
-void() gaunt_idle17 = [ $hover17, gaunt_idle18 ] {ai_stand();};
-void() gaunt_idle18 = [ $hover18, gaunt_idle19 ] {ai_stand();};
-void() gaunt_idle19 = [ $hover19, gaunt_idle20 ] {ai_stand();};
-void() gaunt_idle20 = [ $hover20, gaunt_idle1 ] {ai_stand();};
 
-//============================================================================
-void() gaunt_walk1 = [ $hover1, gaunt_walk2 ] {monster_idle_sound();ai_walk(8);};
-void() gaunt_walk2 = [ $hover2, gaunt_walk3 ] {ai_walk(8);};
-void() gaunt_walk3 = [ $hover3, gaunt_walk4 ] {gauntwings();ai_walk(8);};
-void() gaunt_walk4 = [ $hover4, gaunt_walk5 ] {ai_walk(8);};
-void() gaunt_walk5 = [ $hover5, gaunt_walk6 ] {ai_walk(8);};
-void() gaunt_walk6 = [ $hover6, gaunt_walk7 ] {ai_walk(8);};
-void() gaunt_walk7 = [ $hover7, gaunt_walk8 ] {ai_walk(8);};
-void() gaunt_walk8 = [ $hover8, gaunt_walk9 ] {ai_walk(8);};
-void() gaunt_walk9 = [ $hover9, gaunt_walk10 ] {ai_walk(8);};
-void() gaunt_walk10 = [ $hover10, gaunt_walk11 ] {ai_walk(8);};
-void() gaunt_walk11 = [ $hover11, gaunt_walk12 ] {ai_walk(8);};
-void() gaunt_walk12 = [ $hover12, gaunt_walk13 ] {ai_walk(8);};
-void() gaunt_walk13 = [ $hover13, gaunt_walk14 ] {ai_walk(8);};
-void() gaunt_walk14 = [ $hover14, gaunt_walk15 ] {ai_walk(8);};
-void() gaunt_walk15 = [ $hover15, gaunt_walk16 ] {gauntwings();ai_walk(8);};
-void() gaunt_walk16 = [ $hover16, gaunt_walk17 ] {ai_walk(8);};
-void() gaunt_walk17 = [ $hover17, gaunt_walk18 ] {ai_walk(8);};
-void() gaunt_walk18 = [ $hover18, gaunt_walk19 ] {ai_walk(8);};
-void() gaunt_walk19 = [ $hover19, gaunt_walk20 ] {ai_walk(8);};
-void() gaunt_walk20 = [ $hover20, gaunt_walk1 ] {ai_walk(8);};
+void() gaunt_idle1 = [$hover1, gaunt_idle2 ] { monster_idle_sound();ai_stand(); };
+void() gaunt_idle2 = [$hover2, gaunt_idle3 ] { ai_stand(); };
+void() gaunt_idle3 = [$hover3, gaunt_idle4 ] { ai_stand(); };
+void() gaunt_idle4 = [$hover4, gaunt_idle5 ] { ai_stand(); };
+void() gaunt_idle5 = [$hover5, gaunt_idle6 ] { gauntwings();ai_stand(); };
+void() gaunt_idle6 = [$hover6, gaunt_idle7 ] { ai_stand(); };
+void() gaunt_idle7 = [$hover7, gaunt_idle8 ] { ai_stand(); };
+void() gaunt_idle8 = [$hover8, gaunt_idle9 ] { ai_stand(); };
+void() gaunt_idle9 = [$hover9, gaunt_idle10 ] { ai_stand(); };
+void() gaunt_idle10 = [$hover10, gaunt_idle11 ] { ai_stand(); };
+void() gaunt_idle11 = [$hover11, gaunt_idle12 ] { ai_stand(); };
+void() gaunt_idle12 = [$hover12, gaunt_idle13 ] { ai_stand(); };
+void() gaunt_idle13 = [$hover13, gaunt_idle14 ] { ai_stand(); };
+void() gaunt_idle14 = [$hover14, gaunt_idle15 ] { ai_stand(); };
+void() gaunt_idle15 = [$hover15, gaunt_idle16 ] { gauntwings();ai_stand(); };
+void() gaunt_idle16 = [$hover16, gaunt_idle17 ] { ai_stand(); };
+void() gaunt_idle17 = [$hover17, gaunt_idle18 ] { ai_stand(); };
+void() gaunt_idle18 = [$hover18, gaunt_idle19 ] { ai_stand(); };
+void() gaunt_idle19 = [$hover19, gaunt_idle20 ] { ai_stand(); };
+void() gaunt_idle20 = [$hover20, gaunt_idle1 ] { ai_stand(); };
 
-//============================================================================
-void() gaunt_run1 = [ $hover1, gaunt_run2 ] {monster_idle_sound();
+
+void() gaunt_walk1 = [$hover1, gaunt_walk2 ] { monster_idle_sound();ai_walk(8); };
+void() gaunt_walk2 = [$hover2, gaunt_walk3 ] { ai_walk(8); };
+void() gaunt_walk3 = [$hover3, gaunt_walk4 ] { gauntwings();ai_walk(8); };
+void() gaunt_walk4 = [$hover4, gaunt_walk5 ] { ai_walk(8); };
+void() gaunt_walk5 = [$hover5, gaunt_walk6 ] { ai_walk(8); };
+void() gaunt_walk6 = [$hover6, gaunt_walk7 ] { ai_walk(8); };
+void() gaunt_walk7 = [$hover7, gaunt_walk8 ] { ai_walk(8); };
+void() gaunt_walk8 = [$hover8, gaunt_walk9 ] { ai_walk(8); };
+void() gaunt_walk9 = [$hover9, gaunt_walk10 ] { ai_walk(8); };
+void() gaunt_walk10 = [$hover10, gaunt_walk11 ] { ai_walk(8); };
+void() gaunt_walk11 = [$hover11, gaunt_walk12 ] { ai_walk(8); };
+void() gaunt_walk12 = [$hover12, gaunt_walk13 ] { ai_walk(8); };
+void() gaunt_walk13 = [$hover13, gaunt_walk14 ] { ai_walk(8); };
+void() gaunt_walk14 = [$hover14, gaunt_walk15 ] { ai_walk(8); };
+void() gaunt_walk15 = [$hover15, gaunt_walk16 ] { gauntwings();ai_walk(8); };
+void() gaunt_walk16 = [$hover16, gaunt_walk17 ] { ai_walk(8); };
+void() gaunt_walk17 = [$hover17, gaunt_walk18 ] { ai_walk(8); };
+void() gaunt_walk18 = [$hover18, gaunt_walk19 ] { ai_walk(8); };
+void() gaunt_walk19 = [$hover19, gaunt_walk20 ] { ai_walk(8); };
+void() gaunt_walk20 = [$hover20, gaunt_walk1 ] { ai_walk(8); };
+
+
+void() gaunt_run1 = [$hover1, gaunt_run2 ] { monster_idle_sound();
 	gaunt_finish_attachment();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
@@ -309,46 +308,46 @@ void() gaunt_run1 = [ $hover1, gaunt_run2 ] {monster_idle_sound();
 	}
 	ai_run(8);
 };
-void() gaunt_run2 = [ $hover2, gaunt_run3 ] {ai_run(8);};
-void() gaunt_run3 = [ $hover3, gaunt_run4 ] {ai_run(8);};
-void() gaunt_run4 = [ $hover4, gaunt_run5 ] {ai_run(8);};
-void() gaunt_run5 = [ $hover5, gaunt_run6 ] {gauntwings();ai_run(8);};
-void() gaunt_run6 = [ $hover6, gaunt_run7 ] {ai_run(8);};
-void() gaunt_run7 = [ $hover7, gaunt_run8 ] {ai_run(8);};
-void() gaunt_run8 = [ $hover8, gaunt_run9 ] {ai_run(8);};
-void() gaunt_run9 = [ $hover9, gaunt_run10 ] {ai_run(8);};
-void() gaunt_run10 = [ $hover10, gaunt_run11 ] {ai_run(8);};
-void() gaunt_run11 = [ $hover11, gaunt_run12 ] {ai_run(8);};
-void() gaunt_run12 = [ $hover12, gaunt_run13 ] {ai_run(8);};
-void() gaunt_run13 = [ $hover13, gaunt_run14 ] {ai_run(8);};
-void() gaunt_run14 = [ $hover14, gaunt_run15 ] {ai_run(8);};
-void() gaunt_run15 = [ $hover15, gaunt_run16 ] {gauntwings();ai_run(8);};
-void() gaunt_run16 = [ $hover16, gaunt_run17 ] {ai_run(8);};
-void() gaunt_run17 = [ $hover17, gaunt_run18 ] {ai_run(8);};
-void() gaunt_run18 = [ $hover18, gaunt_run19 ] {ai_run(8);};
-void() gaunt_run19 = [ $hover19, gaunt_run20 ] {ai_run(8);};
-void() gaunt_run20 = [ $hover20, gaunt_run1 ] {ai_run(8);};
+void() gaunt_run2 = [$hover2, gaunt_run3 ] { ai_run(8); };
+void() gaunt_run3 = [$hover3, gaunt_run4 ] { ai_run(8); };
+void() gaunt_run4 = [$hover4, gaunt_run5 ] { ai_run(8); };
+void() gaunt_run5 = [$hover5, gaunt_run6 ] { gauntwings();ai_run(8); };
+void() gaunt_run6 = [$hover6, gaunt_run7 ] { ai_run(8); };
+void() gaunt_run7 = [$hover7, gaunt_run8 ] { ai_run(8); };
+void() gaunt_run8 = [$hover8, gaunt_run9 ] { ai_run(8); };
+void() gaunt_run9 = [$hover9, gaunt_run10 ] { ai_run(8); };
+void() gaunt_run10 = [$hover10, gaunt_run11 ] { ai_run(8); };
+void() gaunt_run11 = [$hover11, gaunt_run12 ] { ai_run(8); };
+void() gaunt_run12 = [$hover12, gaunt_run13 ] { ai_run(8); };
+void() gaunt_run13 = [$hover13, gaunt_run14 ] { ai_run(8); };
+void() gaunt_run14 = [$hover14, gaunt_run15 ] { ai_run(8); };
+void() gaunt_run15 = [$hover15, gaunt_run16 ] { gauntwings();ai_run(8); };
+void() gaunt_run16 = [$hover16, gaunt_run17 ] { ai_run(8); };
+void() gaunt_run17 = [$hover17, gaunt_run18 ] { ai_run(8); };
+void() gaunt_run18 = [$hover18, gaunt_run19 ] { ai_run(8); };
+void() gaunt_run19 = [$hover19, gaunt_run20 ] { ai_run(8); };
+void() gaunt_run20 = [$hover20, gaunt_run1 ] { ai_run(8); };
 
-void() gaunt_side1 = [24, gaunt_side2] { gaunt_hadj(2 * self.multiplier); monster_idle_sound();};
-void() gaunt_side2 = [25, gaunt_side3] {gaunt_hadj(2 * self.multiplier);};
-void() gaunt_side3 = [26, gaunt_side4] {gaunt_hadj(3 * self.multiplier);};
-void() gaunt_side4 = [27, gaunt_side5] {gaunt_hadj(3 * self.multiplier);};
-void() gaunt_side5 = [28, gaunt_side6] {gaunt_hadj(4 * self.multiplier);};
-void() gaunt_side6 = [29, gaunt_side7] {gaunt_hadj(5 * self.multiplier);};
-void() gaunt_side7 = [30, gaunt_side8] {gaunt_hadj(6 * self.multiplier);};
-void() gaunt_side8 = [31, gaunt_side9] {gaunt_hadj(8 * self.multiplier);};
-void() gaunt_side9 = [32, gaunt_side10] {gaunt_hadj(10 * self.multiplier);};
-void() gaunt_side10 = [33, gaunt_side11] {gaunt_hadj(12 * self.multiplier);};
-void() gaunt_side11 = [34, gaunt_side12] {gaunt_hadj(2 * self.multiplier);};
-void() gaunt_side12 = [35, gaunt_side13] {gaunt_hadj(2 * self.multiplier);};
-void() gaunt_side13 = [36, gaunt_side14] {gaunt_hadj(3 * self.multiplier);};
-void() gaunt_side14 = [37, gaunt_side15] {gaunt_hadj(3 * self.multiplier);};
-void() gaunt_side15 = [38, gaunt_side16] {gaunt_hadj(4 * self.multiplier);};
-void() gaunt_side16 = [39, gaunt_side17] {gaunt_hadj(5 * self.multiplier);};
-void() gaunt_side17 = [40, gaunt_side18] {gaunt_hadj(6 * self.multiplier);};
-void() gaunt_side18 = [41, gaunt_side19] {gaunt_hadj(8 * self.multiplier);};
-void() gaunt_side19 = [42, gaunt_side20] {gaunt_hadj(10 * self.multiplier);};
-void() gaunt_side20 = [43, gaunt_side1] {gaunt_hadj(12 * self.multiplier);};
+void() gaunt_side1 = [24, gaunt_side2] { gaunt_hadj(2 * self.multiplier); monster_idle_sound(); };
+void() gaunt_side2 = [25, gaunt_side3] { gaunt_hadj(2 * self.multiplier); };
+void() gaunt_side3 = [26, gaunt_side4] { gaunt_hadj(3 * self.multiplier); };
+void() gaunt_side4 = [27, gaunt_side5] { gaunt_hadj(3 * self.multiplier); };
+void() gaunt_side5 = [28, gaunt_side6] { gaunt_hadj(4 * self.multiplier); };
+void() gaunt_side6 = [29, gaunt_side7] { gaunt_hadj(5 * self.multiplier); };
+void() gaunt_side7 = [30, gaunt_side8] { gaunt_hadj(6 * self.multiplier); };
+void() gaunt_side8 = [31, gaunt_side9] { gaunt_hadj(8 * self.multiplier); };
+void() gaunt_side9 = [32, gaunt_side10] { gaunt_hadj(10 * self.multiplier); };
+void() gaunt_side10 = [33, gaunt_side11] { gaunt_hadj(12 * self.multiplier); };
+void() gaunt_side11 = [34, gaunt_side12] { gaunt_hadj(2 * self.multiplier); };
+void() gaunt_side12 = [35, gaunt_side13] { gaunt_hadj(2 * self.multiplier); };
+void() gaunt_side13 = [36, gaunt_side14] { gaunt_hadj(3 * self.multiplier); };
+void() gaunt_side14 = [37, gaunt_side15] { gaunt_hadj(3 * self.multiplier); };
+void() gaunt_side15 = [38, gaunt_side16] { gaunt_hadj(4 * self.multiplier); };
+void() gaunt_side16 = [39, gaunt_side17] { gaunt_hadj(5 * self.multiplier); };
+void() gaunt_side17 = [40, gaunt_side18] { gaunt_hadj(6 * self.multiplier); };
+void() gaunt_side18 = [41, gaunt_side19] { gaunt_hadj(8 * self.multiplier); };
+void() gaunt_side19 = [42, gaunt_side20] { gaunt_hadj(10 * self.multiplier); };
+void() gaunt_side20 = [43, gaunt_side1] { gaunt_hadj(12 * self.multiplier); };
 
 void(float fxframe) gaunt_lightning_fx = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -374,25 +373,25 @@ void() gaunt_fast1 = [44, gaunt_fast2] {
 	o.nextthink = time + 1;
 	o.think = SUB_Remove;
 };
-void() gaunt_fast2 = [45, gaunt_fast3] {gaunt_strafe(); gaunt_lightning_fx(1);};
-void() gaunt_fast3 = [46, gaunt_fast4] {gaunt_strafe(); gaunt_lightning_fx(2);};
-void() gaunt_fast4 = [47, gaunt_fast5] {gaunt_strafe(); gaunt_lightning_fx(3);};
-void() gaunt_fast5 = [48, gaunt_fast6] {gaunt_strafe(); gaunt_lightning_fx(4);};
-void() gaunt_fast6 = [49, gaunt_fast7] {gaunt_strafe(); gaunt_lightning_fx(5);};
-void() gaunt_fast7 = [50, gaunt_fast8] {gaunt_strafe(); gaunt_lightning_fx(6);};
-void() gaunt_fast8 = [51, gaunt_fast9] {gaunt_strafe(); gaunt_lightning_fx(7);};
-void() gaunt_fast9 = [52, gaunt_fast10] {gaunt_strafe(); gaunt_lightning_fx(8);};
-void() gaunt_fast10 = [53, gaunt_fast11] {gaunt_strafe(); gaunt_lightning_fx(9);};
-void() gaunt_fast11 = [54, gaunt_fast12] {sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM); gaunt_lightning(1); remove(self.owner);};
-void() gaunt_fast12 = [55, gaunt_fast13] {gaunt_lightning(0);};
-void() gaunt_fast13 = [56, gaunt_fast14] {gaunt_lightning(1);};
-void() gaunt_fast14 = [57, gaunt_fast15] {gaunt_lightning(0);};
-void() gaunt_fast15 = [58, gaunt_fast16] {gaunt_lightning(1);};
+void() gaunt_fast2 = [45, gaunt_fast3] { gaunt_strafe(); gaunt_lightning_fx(1); };
+void() gaunt_fast3 = [46, gaunt_fast4] { gaunt_strafe(); gaunt_lightning_fx(2); };
+void() gaunt_fast4 = [47, gaunt_fast5] { gaunt_strafe(); gaunt_lightning_fx(3); };
+void() gaunt_fast5 = [48, gaunt_fast6] { gaunt_strafe(); gaunt_lightning_fx(4); };
+void() gaunt_fast6 = [49, gaunt_fast7] { gaunt_strafe(); gaunt_lightning_fx(5); };
+void() gaunt_fast7 = [50, gaunt_fast8] { gaunt_strafe(); gaunt_lightning_fx(6); };
+void() gaunt_fast8 = [51, gaunt_fast9] { gaunt_strafe(); gaunt_lightning_fx(7); };
+void() gaunt_fast9 = [52, gaunt_fast10] { gaunt_strafe(); gaunt_lightning_fx(8); };
+void() gaunt_fast10 = [53, gaunt_fast11] { gaunt_strafe(); gaunt_lightning_fx(9); };
+void() gaunt_fast11 = [54, gaunt_fast12] { sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM); gaunt_lightning(1); remove(self.owner); };
+void() gaunt_fast12 = [55, gaunt_fast13] { gaunt_lightning(0); };
+void() gaunt_fast13 = [56, gaunt_fast14] { gaunt_lightning(1); };
+void() gaunt_fast14 = [57, gaunt_fast15] { gaunt_lightning(0); };
+void() gaunt_fast15 = [58, gaunt_fast16] { gaunt_lightning(1); };
 void() gaunt_fast16 = [59, gaunt_fast17] {};
 void() gaunt_fast17 = [60, gaunt_fast18] {};
 void() gaunt_fast18 = [61, gaunt_fast19] {};
 void() gaunt_fast19 = [62, gaunt_fast20] {};
-void() gaunt_fast20 = [63, gaunt_run1] {ai_face(); self.attack_state = AS_STRAIGHT;};
+void() gaunt_fast20 = [63, gaunt_run1] { ai_face(); self.attack_state = AS_STRAIGHT;};
 
 // RANGE - Plasma from arc infront
 void() gaunt_plasma = {
@@ -457,59 +456,59 @@ void(float elecframe) gaunt_elecupdate = {
 };
 
 //----------------------------------------------------------------------
-void() gaunt_fire1 = [ $attack1, gaunt_fire2 ] {gaunt_elecupdate(0);};
-void() gaunt_fire2 = [ $attack2, gaunt_fire3 ] {gaunt_elecupdate(1);};
-void() gaunt_fire3 = [ $attack3, gaunt_fire4 ] {gaunt_elecupdate(2);};
-void() gaunt_fire4 = [ $attack4, gaunt_fire5 ] {gaunt_elecupdate(3);};
-void() gaunt_fire5 = [ $attack5, gaunt_fire6 ] {gaunt_elecupdate(4);gauntwings();};
-void() gaunt_fire6 = [ $attack6, gaunt_fire7 ] {gaunt_elecupdate(5);gaunt_plasma();};
-void() gaunt_fire7 = [ $attack7, gaunt_fire8 ] {gaunt_elecupdate(6);};
-void() gaunt_fire8 = [ $attack8, gaunt_fire9 ] {gaunt_elecupdate(7);gaunt_plasma();};
-void() gaunt_fire9 = [ $attack9, gaunt_fire10 ] {gaunt_elecupdate(8);};
-void() gaunt_fire10 = [ $attack10, gaunt_fire11 ] {ai_face();
+void() gaunt_fire1 = [$attack1, gaunt_fire2 ] { gaunt_elecupdate(0); };
+void() gaunt_fire2 = [$attack2, gaunt_fire3 ] { gaunt_elecupdate(1); };
+void() gaunt_fire3 = [$attack3, gaunt_fire4 ] { gaunt_elecupdate(2); };
+void() gaunt_fire4 = [$attack4, gaunt_fire5 ] { gaunt_elecupdate(3); };
+void() gaunt_fire5 = [$attack5, gaunt_fire6 ] { gaunt_elecupdate(4);gauntwings(); };
+void() gaunt_fire6 = [$attack6, gaunt_fire7 ] { gaunt_elecupdate(5);gaunt_plasma(); };
+void() gaunt_fire7 = [$attack7, gaunt_fire8 ] { gaunt_elecupdate(6); };
+void() gaunt_fire8 = [$attack8, gaunt_fire9 ] { gaunt_elecupdate(7);gaunt_plasma(); };
+void() gaunt_fire9 = [$attack9, gaunt_fire10 ] { gaunt_elecupdate(8); };
+void() gaunt_fire10 = [$attack10, gaunt_fire11 ] { ai_face();
 	if (skill > SKILL_NORMAL) gaunt_plasma();
-	gaunt_finish_attachment();};
-void() gaunt_fire11 = [ $attack11, gaunt_fire12 ] {};
-void() gaunt_fire12 = [ $attack12, gaunt_fire13 ] {};
-void() gaunt_fire13 = [ $attack13, gaunt_fire14 ] {};
-void() gaunt_fire14 = [ $attack14, gaunt_fire15 ] {};
-void() gaunt_fire15 = [ $attack15, gaunt_fire16 ] {gauntwings();};
-void() gaunt_fire16 = [ $attack16, gaunt_fire17 ] {};
-void() gaunt_fire17 = [ $attack17, gaunt_fire18 ] {};
-void() gaunt_fire18 = [ $attack18, gaunt_fire19 ] {ai_face();};
-void() gaunt_fire19 = [ $attack19, gaunt_fire20 ] {ai_face();};
-void() gaunt_fire20 = [ $attack20, gaunt_run1 ] {};
+	gaunt_finish_attachment(); };
+void() gaunt_fire11 = [$attack11, gaunt_fire12 ] {};
+void() gaunt_fire12 = [$attack12, gaunt_fire13 ] {};
+void() gaunt_fire13 = [$attack13, gaunt_fire14 ] {};
+void() gaunt_fire14 = [$attack14, gaunt_fire15 ] {};
+void() gaunt_fire15 = [$attack15, gaunt_fire16 ] { gauntwings(); };
+void() gaunt_fire16 = [$attack16, gaunt_fire17 ] {};
+void() gaunt_fire17 = [$attack17, gaunt_fire18 ] {};
+void() gaunt_fire18 = [$attack18, gaunt_fire19 ] { ai_face(); };
+void() gaunt_fire19 = [$attack19, gaunt_fire20 ] { ai_face(); };
+void() gaunt_fire20 = [$attack20, gaunt_run1 ] {};
 
-//============================================================================
+
 // PERCH + WAKEUP
-//============================================================================
-void() gaunt_perch1 = [ $perch1, gaunt_perch2 ] {monster_idle_sound();ai_stand();};
-void() gaunt_perch2 = [ $perch2, gaunt_perch3 ] {ai_stand();};
-void() gaunt_perch3 = [ $perch3, gaunt_perch4 ] {ai_stand();};
-void() gaunt_perch4 = [ $perch4, gaunt_perch5 ] {ai_stand();};
-void() gaunt_perch5 = [ $perch5, gaunt_perch6 ] {ai_stand();};
-void() gaunt_perch6 = [ $perch6, gaunt_perch7 ] {ai_stand();};
-void() gaunt_perch7 = [ $perch7, gaunt_perch8 ] {ai_stand();};
-void() gaunt_perch8 = [ $perch8, gaunt_perch9 ] {ai_stand();};
-void() gaunt_perch9 = [ $perch9, gaunt_perch10 ] {ai_stand();};
-void() gaunt_perch10 = [ $perch10, gaunt_perch11 ] {ai_stand();};
-void() gaunt_perch11 = [ $perch11, gaunt_perch12 ] {ai_stand();};
-void() gaunt_perch12 = [ $perch12, gaunt_perch13 ] {ai_stand();};
-void() gaunt_perch13 = [ $perch13, gaunt_perch14 ] {ai_stand();};
-void() gaunt_perch14 = [ $perch14, gaunt_perch15 ] {ai_stand();};
-void() gaunt_perch15 = [ $perch15, gaunt_perch16 ] {ai_stand();};
-void() gaunt_perch16 = [ $perch16, gaunt_perch1 ] {ai_stand();};
+
+void() gaunt_perch1 = [$perch1, gaunt_perch2 ] { monster_idle_sound();ai_stand(); };
+void() gaunt_perch2 = [$perch2, gaunt_perch3 ] { ai_stand(); };
+void() gaunt_perch3 = [$perch3, gaunt_perch4 ] { ai_stand(); };
+void() gaunt_perch4 = [$perch4, gaunt_perch5 ] { ai_stand(); };
+void() gaunt_perch5 = [$perch5, gaunt_perch6 ] { ai_stand(); };
+void() gaunt_perch6 = [$perch6, gaunt_perch7 ] { ai_stand(); };
+void() gaunt_perch7 = [$perch7, gaunt_perch8 ] { ai_stand(); };
+void() gaunt_perch8 = [$perch8, gaunt_perch9 ] { ai_stand(); };
+void() gaunt_perch9 = [$perch9, gaunt_perch10 ] { ai_stand(); };
+void() gaunt_perch10 = [$perch10, gaunt_perch11 ] { ai_stand(); };
+void() gaunt_perch11 = [$perch11, gaunt_perch12 ] { ai_stand(); };
+void() gaunt_perch12 = [$perch12, gaunt_perch13 ] { ai_stand(); };
+void() gaunt_perch13 = [$perch13, gaunt_perch14 ] { ai_stand(); };
+void() gaunt_perch14 = [$perch14, gaunt_perch15 ] { ai_stand(); };
+void() gaunt_perch15 = [$perch15, gaunt_perch16 ] { ai_stand(); };
+void() gaunt_perch16 = [$perch16, gaunt_perch1 ] { ai_stand(); };
 
 //----------------------------------------------------------------------
 // Sightsound and very quick animation while moving forward
-void() gaunt_wakeup1 = [ $launch1, gaunt_wakeup2 ] {monster_sightsound();};
-void() gaunt_wakeup2 = [ $launch2, gaunt_wakeup3 ] {ai_forward(4);};
-void() gaunt_wakeup3 = [ $launch3, gaunt_wakeup4 ] {ai_forward(4);};
-void() gaunt_wakeup4 = [ $launch4, gaunt_wakeup5 ] {ai_forward(4);};
-void() gaunt_wakeup5 = [ $launch5, gaunt_wakeup6 ] {ai_forward(4);};
-void() gaunt_wakeup6 = [ $launch6, gaunt_wakeup7 ] {gauntwings();ai_forward(4);};
-void() gaunt_wakeup7 = [ $launch7, gaunt_wakeup8 ] {ai_forward(4);};
-void() gaunt_wakeup8 = [ $launch8, gaunt_run1 ] {
+void() gaunt_wakeup1 = [$launch1, gaunt_wakeup2 ] { monster_sightsound(); };
+void() gaunt_wakeup2 = [$launch2, gaunt_wakeup3 ] { ai_forward(4); };
+void() gaunt_wakeup3 = [$launch3, gaunt_wakeup4 ] { ai_forward(4); };
+void() gaunt_wakeup4 = [$launch4, gaunt_wakeup5 ] { ai_forward(4); };
+void() gaunt_wakeup5 = [$launch5, gaunt_wakeup6 ] { ai_forward(4); };
+void() gaunt_wakeup6 = [$launch6, gaunt_wakeup7 ] { gauntwings();ai_forward(4); };
+void() gaunt_wakeup7 = [$launch7, gaunt_wakeup8 ] { ai_forward(4); };
+void() gaunt_wakeup8 = [$launch8, gaunt_run1 ] {
 	FoundHuntTarget(TRUE);			// Setup goals and warn other monsters
 	self.spawnstatue = FALSE;		// No longer stationary
 	self.th_stand = gaunt_idle1;	// Restore all think state functions
@@ -519,8 +518,7 @@ void() gaunt_wakeup8 = [ $launch8, gaunt_run1 ] {
 };
 
 //----------------------------------------------------------------------
-void() gaunt_wakeup =
-{
+void() gaunt_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -542,27 +540,26 @@ void() gaunt_wakeup =
 	gaunt_wakeup1();
 };
 
-//============================================================================
+
 // PAIN
-//============================================================================
+
 // Long - Swing wing around infront
-void() 	gaunt_painA1 =[ $painA1, gaunt_painA2 ] {};
-void() 	gaunt_painA2 =[ $painA2, gaunt_painA3 ] {};
-void() 	gaunt_painA3 =[ $painA3, gaunt_painA4 ] {};
-void() 	gaunt_painA4 =[ $painA4, gaunt_painA5 ] {};
-void() 	gaunt_painA5 =[ $painA5, gaunt_painA6 ] {};
-void() 	gaunt_painA6 =[ $painA6, gaunt_run1 ] {};
+void() 	gaunt_painA1 = [$painA1, gaunt_painA2 ] {};
+void() 	gaunt_painA2 = [$painA2, gaunt_painA3 ] {};
+void() 	gaunt_painA3 = [$painA3, gaunt_painA4 ] {};
+void() 	gaunt_painA4 = [$painA4, gaunt_painA5 ] {};
+void() 	gaunt_painA5 = [$painA5, gaunt_painA6 ] {};
+void() 	gaunt_painA6 = [$painA6, gaunt_run1 ] {};
 
 // Short - Knock head backward
-void() 	gaunt_painB1 =[ $painB1, gaunt_painB2 ] {};
-void() 	gaunt_painB2 =[ $painB2, gaunt_painB3 ] {};
-void() 	gaunt_painB3 =[ $painB3, gaunt_painB4 ] {};
-void() 	gaunt_painB4 =[ $painB4, gaunt_painB5 ] {};
-void() 	gaunt_painB5 =[ $painB5, gaunt_run1 ] {};
+void() 	gaunt_painB1 = [$painB1, gaunt_painB2 ] {};
+void() 	gaunt_painB2 = [$painB2, gaunt_painB3 ] {};
+void() 	gaunt_painB3 = [$painB3, gaunt_painB4 ] {};
+void() 	gaunt_painB4 = [$painB4, gaunt_painB5 ] {};
+void() 	gaunt_painB5 = [$painB5, gaunt_run1 ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) gaunt_pain =
-{
+void(entity inflictor, entity attacker, float damage) gaunt_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -579,27 +576,27 @@ void(entity inflictor, entity attacker, float damage) gaunt_pain =
 	}
 };
 
-//============================================================================
-void() gaunt_deathA1 = [ $deathA1, gaunt_deathA2 ] {};
-void() gaunt_deathA2 = [ $deathA2, gaunt_deathA3 ] {monster_check_gib();};
-void() gaunt_deathA3 = [ $deathA3, gaunt_deathA4 ] {monster_check_gib();
+
+void() gaunt_deathA1 = [$deathA1, gaunt_deathA2 ] {};
+void() gaunt_deathA2 = [$deathA2, gaunt_deathA3 ] { monster_check_gib(); };
+void() gaunt_deathA3 = [$deathA3, gaunt_deathA4 ] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() gaunt_deathA4 = [ $deathA4, gaunt_deathA5 ] {};
-void() gaunt_deathA5 = [ $deathA5, gaunt_deathA6 ] {};
-void() gaunt_deathA6 = [ $deathA6, gaunt_deathA7 ] {};
-void() gaunt_deathA7 = [ $deathA7, gaunt_deathA8 ] {monster_death_postcheck();};
-void() gaunt_deathA8 = [ $deathA8, gaunt_deathA8 ] {monster_deadbody_check();};
+void() gaunt_deathA4 = [$deathA4, gaunt_deathA5 ] {};
+void() gaunt_deathA5 = [$deathA5, gaunt_deathA6 ] {};
+void() gaunt_deathA6 = [$deathA6, gaunt_deathA7 ] {};
+void() gaunt_deathA7 = [$deathA7, gaunt_deathA8 ] { monster_death_postcheck(); };
+void() gaunt_deathA8 = [$deathA8, gaunt_deathA8 ] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() gaunt_deathB1 = [ $deathB1, gaunt_deathB2 ] {};
-void() gaunt_deathB2 = [ $deathB2, gaunt_deathB3 ] {monster_check_gib();};
-void() gaunt_deathB3 = [ $deathB3, gaunt_deathB4 ] {monster_check_gib();
+void() gaunt_deathB1 = [$deathB1, gaunt_deathB2 ] {};
+void() gaunt_deathB2 = [$deathB2, gaunt_deathB3 ] { monster_check_gib(); };
+void() gaunt_deathB3 = [$deathB3, gaunt_deathB4 ] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() gaunt_deathB4 = [ $deathB4, gaunt_deathB5 ] {};
-void() gaunt_deathB5 = [ $deathB5, gaunt_deathB6 ] {};
-void() gaunt_deathB6 = [ $deathB6, gaunt_deathB7 ] {};
-void() gaunt_deathB7 = [ $deathB7, gaunt_deathB8 ] {monster_death_postcheck();};
-void() gaunt_deathB8 = [ $deathB8, gaunt_deathB8 ] {monster_deadbody_check();};
+void() gaunt_deathB4 = [$deathB4, gaunt_deathB5 ] {};
+void() gaunt_deathB5 = [$deathB5, gaunt_deathB6 ] {};
+void() gaunt_deathB6 = [$deathB6, gaunt_deathB7 ] {};
+void() gaunt_deathB7 = [$deathB7, gaunt_deathB8 ] { monster_death_postcheck(); };
+void() gaunt_deathB8 = [$deathB8, gaunt_deathB8 ] { monster_deadbody_check(); };
 
 void() gaunt_die = {
 	// Check for perching gaunt, need to blow up in gibs
@@ -680,20 +677,20 @@ void() gaunt_flyswoop = {
 };
 
 void() gaunt_charge1 = [72, gaunt_charge2] {};
-void() gaunt_charge2 = [73, gaunt_charge3] {gaunt_flyswoop();};
-void() gaunt_charge3 = [74, gaunt_charge4] {gaunt_flyswoop();};
-void() gaunt_charge4 = [75, gaunt_charge5] {gaunt_flyswoop();};
-void() gaunt_charge5 = [76, gaunt_charge2] {gaunt_flyswoop();};
+void() gaunt_charge2 = [73, gaunt_charge3] { gaunt_flyswoop(); };
+void() gaunt_charge3 = [74, gaunt_charge4] { gaunt_flyswoop(); };
+void() gaunt_charge4 = [75, gaunt_charge5] { gaunt_flyswoop(); };
+void() gaunt_charge5 = [76, gaunt_charge2] { gaunt_flyswoop(); };
 
-void(float thespeed) gaunt_flyup = {self.movetype = MOVETYPE_FLYMISSILE; self.velocity_z = thespeed; };
+void(float thespeed) gaunt_flyup = { self.movetype = MOVETYPE_FLYMISSILE; self.velocity_z = thespeed; };
 
-void() gaunt_precharge1 = [64, gaunt_precharge2] {gaunt_flyup(SVC_INTERMISSION); self.pain_finished = time + SECRET_1ST_DOWN;};
-void() gaunt_precharge2 = [65, gaunt_precharge3] {gaunt_flyup(40);};
-void() gaunt_precharge3 = [66, gaunt_precharge4] {gaunt_flyup(50);};
-void() gaunt_precharge4 = [67, gaunt_precharge5] {gaunt_flyup(60);};
-void() gaunt_precharge5 = [68, gaunt_precharge6] {gaunt_flyup(80); };
-void() gaunt_precharge6 = [69, gaunt_precharge7] {gaunt_flyup(100);};
-void() gaunt_precharge7 = [70, gaunt_precharge8] {gaunt_flyup(120);};
+void() gaunt_precharge1 = [64, gaunt_precharge2] { gaunt_flyup(SVC_INTERMISSION); self.pain_finished = time + SECRET_1ST_DOWN;};
+void() gaunt_precharge2 = [65, gaunt_precharge3] { gaunt_flyup(40); };
+void() gaunt_precharge3 = [66, gaunt_precharge4] { gaunt_flyup(50); };
+void() gaunt_precharge4 = [67, gaunt_precharge5] { gaunt_flyup(60); };
+void() gaunt_precharge5 = [68, gaunt_precharge6] { gaunt_flyup(80); };
+void() gaunt_precharge6 = [69, gaunt_precharge7] { gaunt_flyup(100); };
+void() gaunt_precharge7 = [70, gaunt_precharge8] { gaunt_flyup(120); };
 void() gaunt_precharge8 = [71, gaunt_charge1] {
 	gaunt_flyup(150);
 	self.movetype = MOVETYPE_FLYMISSILE;
@@ -729,7 +726,7 @@ void() gaunt_Missile = {
 };
 
 // Minion Wakeup
-void()	gaunt_minwake =[ $hover1, gaunt_run1 ] {
+void()	gaunt_minwake = [$hover1, gaunt_run1 ] {
 	// Is the gaunt stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
 		// Time to die!

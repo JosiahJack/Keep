@@ -70,46 +70,46 @@ float WRAITH_SKINGREEN = 2;		// Spider version
 float WRAITH_SKINPURPLE = 4;	// Scorpion version
 float WRAITH_NOFIREDEBUFF = 8192; // No fire debuf attack
 
-void() wraith_stand1 =[ $stand4, wraith_stand2 ] { monster_idle_sound();ai_stand();};
-void() wraith_stand2 =[ $stand5, wraith_stand3 ] { ai_stand();};
-void() wraith_stand3 =[ $stand6, wraith_stand4 ] { ai_stand();};
-void() wraith_stand4 =[ $stand7, wraith_stand5 ] { ai_stand();};
-void() wraith_stand5 =[ $stand8, wraith_stand6 ] { ai_stand();};
-void() wraith_stand6 =[ $stand9, wraith_stand7 ] { ai_stand();};
-void() wraith_stand7 =[ $stand9, wraith_stand8 ] { ai_stand();};
-void() wraith_stand8 =[ $stand8, wraith_stand9 ] { ai_stand();};
-void() wraith_stand9 =[ $stand7, wraith_stand10 ] { ai_stand();};
-void() wraith_stand10 =[ $stand6, wraith_stand11 ] { ai_stand();};
-void() wraith_stand11 =[ $stand5, wraith_stand12 ] { ai_stand();};
-void() wraith_stand12 =[ $stand4, wraith_stand1 ] { ai_stand();};
+void() wraith_stand1 = [$stand4, wraith_stand2 ] { monster_idle_sound();ai_stand(); };
+void() wraith_stand2 = [$stand5, wraith_stand3 ] { ai_stand(); };
+void() wraith_stand3 = [$stand6, wraith_stand4 ] { ai_stand(); };
+void() wraith_stand4 = [$stand7, wraith_stand5 ] { ai_stand(); };
+void() wraith_stand5 = [$stand8, wraith_stand6 ] { ai_stand(); };
+void() wraith_stand6 = [$stand9, wraith_stand7 ] { ai_stand(); };
+void() wraith_stand7 = [$stand9, wraith_stand8 ] { ai_stand(); };
+void() wraith_stand8 = [$stand8, wraith_stand9 ] { ai_stand(); };
+void() wraith_stand9 = [$stand7, wraith_stand10 ] { ai_stand(); };
+void() wraith_stand10 = [$stand6, wraith_stand11 ] { ai_stand(); };
+void() wraith_stand11 = [$stand5, wraith_stand12 ] { ai_stand(); };
+void() wraith_stand12 = [$stand4, wraith_stand1 ] { ai_stand(); };
 
-void() wraith_walk1 =[ $stand3, wraith_walk2 ] { monster_idle_sound();ai_walk(8);};
-void() wraith_walk2 =[ $stand4, wraith_walk3 ] { ai_walk(7);};
-void() wraith_walk3 =[ $stand5, wraith_walk4 ] { ai_walk(7);};
-void() wraith_walk4 =[ $stand6, wraith_walk5 ] { ai_walk(6);};
-void() wraith_walk5 =[ $stand7, wraith_walk6 ] { ai_walk(6);};
-void() wraith_walk6 =[ $stand8, wraith_walk7 ] { ai_walk(5);};
-void() wraith_walk7 =[ $stand9, wraith_walk8 ] { ai_walk(5);};
-void() wraith_walk8 =[ $stand10, wraith_walk9 ] { ai_walk(4);};
-void() wraith_walk9 =[ $stand11, wraith_walk10 ] { ai_walk(8);};
-void() wraith_walk10 =[ $stand12, wraith_walk1 ] { ai_walk(8);};
+void() wraith_walk1 = [$stand3, wraith_walk2 ] { monster_idle_sound();ai_walk(8); };
+void() wraith_walk2 = [$stand4, wraith_walk3 ] { ai_walk(7); };
+void() wraith_walk3 = [$stand5, wraith_walk4 ] { ai_walk(7); };
+void() wraith_walk4 = [$stand6, wraith_walk5 ] { ai_walk(6); };
+void() wraith_walk5 = [$stand7, wraith_walk6 ] { ai_walk(6); };
+void() wraith_walk6 = [$stand8, wraith_walk7 ] { ai_walk(5); };
+void() wraith_walk7 = [$stand9, wraith_walk8 ] { ai_walk(5); };
+void() wraith_walk8 = [$stand10, wraith_walk9 ] { ai_walk(4); };
+void() wraith_walk9 = [$stand11, wraith_walk10 ] { ai_walk(8); };
+void() wraith_walk10 = [$stand12, wraith_walk1 ] { ai_walk(8); };
 
-void() wraith_run1 =[ $stand3, wraith_run2 ] {monster_idle_sound();
+void() wraith_run1 = [$stand3, wraith_run2 ] { monster_idle_sound();
 	if (self.meleeattack < time) {
 		self.meleeattack = time + 4 + (random() + random() + random() * 4);
 		self.lefty = rint(1 - self.lefty);
 	}
 	ai_run(8);
 };
-void() wraith_run2 =[ $stand4, wraith_run3 ] {ai_run(7);};
-void() wraith_run3 =[ $stand5, wraith_run3 ] {ai_run(7);};
-void() wraith_run4 =[ $stand6, wraith_run3 ] {ai_run(6);};
-void() wraith_run5 =[ $stand7, wraith_run3 ] {ai_run(6);};
-void() wraith_run6 =[ $stand8, wraith_run3 ] {ai_run(5);};
-void() wraith_run7 =[ $stand9, wraith_run3 ] {ai_run(5);};
-void() wraith_run8 =[ $stand10, wraith_run3 ] {ai_run(4);};
-void() wraith_run9 =[ $stand11, wraith_run3 ] {ai_run(8);};
-void() wraith_run10 =[ $stand12, wraith_run3 ] {ai_run(8);};
+void() wraith_run2 = [$stand4, wraith_run3 ] { ai_run(7); };
+void() wraith_run3 = [$stand5, wraith_run3 ] { ai_run(7); };
+void() wraith_run4 = [$stand6, wraith_run3 ] { ai_run(6); };
+void() wraith_run5 = [$stand7, wraith_run3 ] { ai_run(6); };
+void() wraith_run6 = [$stand8, wraith_run3 ] { ai_run(5); };
+void() wraith_run7 = [$stand9, wraith_run3 ] { ai_run(5); };
+void() wraith_run8 = [$stand10, wraith_run3 ] { ai_run(4); };
+void() wraith_run9 = [$stand11, wraith_run3 ] { ai_run(8); };
+void() wraith_run10 = [$stand12, wraith_run3 ] { ai_run(8); };
 
 // Attachment management (create, finish and delete)
 void() wraith_create_attachment = {
@@ -155,8 +155,7 @@ void() debuff_fade = {
 //----------------------------------------------------------------------
 // Start fading out (very quick, over 0.5s)
 //----------------------------------------------------------------------
-void() wraith_debuff_chunk =
-{
+void() wraith_debuff_chunk = {
 	self.think = debuff_fade;
 	self.nextthink = time + FADEDEBUFF_TIME;
 	self.ltime = self.nextthink;
@@ -165,8 +164,7 @@ void() wraith_debuff_chunk =
 //----------------------------------------------------------------------
 // Manual animation of ball at end of the debuff particle trail
 //----------------------------------------------------------------------
-void() wraith_debuff_shrink =
-{
+void() wraith_debuff_shrink = {
 	// Count downwards getting smaller
 	self.lip = self.frame - 1;
 	if (self.lip < 0) wraith_debuff_chunk();
@@ -179,15 +177,14 @@ void() wraith_debuff_shrink =
 	}
 };
 
-//======================================================================
+
 // RANGE ATTACK 1 - Apply debuff to player (hitscan!)
 //
 // Generate an animated particle trail from 32 unit segments
 // Slowly remove segments from source to target
 // Generate a ball at target location slowly shrinking
-//======================================================================
-void() wraith_fire_touch =
-{
+
+void() wraith_fire_touch = {
 	if (other.solid == SOLID_TRIGGER) return;
 	if (other.classtype == CT_TEMPSTREAM) return;
 	if (other.health > 0) return;
@@ -200,8 +197,7 @@ void() wraith_fire_touch =
 };
 
 //----------------------------------------------------------------------
-void() wraith_fire_think =
-{
+void() wraith_fire_think = {
 	// Randomly drift upwards and slow down forward movement
 	self.velocity_z = self.velocity_z + 10 + (random() * 20);
 	self.velocity = self.velocity - (self.velocity * 0.125);
@@ -212,8 +208,7 @@ void() wraith_fire_think =
 };
 
 //----------------------------------------------------------------------
-void(vector start_org) wraith_debuff_explode =
-{
+void(vector start_org) wraith_debuff_explode = {
 	local float fire_loop;
 	local vector fire_angles, org, dir;
 	
@@ -253,8 +248,7 @@ void(vector start_org) wraith_debuff_explode =
 };
 
 //----------------------------------------------------------------------
-void() wraith_debuff_trail =
-{
+void() wraith_debuff_trail = {
 	local vector org, orgofs, dir, tvec, tang;
 	local float tdist, tloop, tcount, tpc;
 	local entity tent;
@@ -420,34 +414,33 @@ void(vector orgofs, float dbframe) wraith_debuff = {
 // The debuff attack is a hitscan attack but it does have 1s animation
 // (backward frames) 30 32 8, 14 46 20, -6 46 28, -12 40 28
 // (forward frames)   0 46 30, 16 42 24, 32 38 20, 48 26 10, 52 14 6, 52 4 6
-void() wraith_debuff1 =[ $magicA1, wraith_magicA2 ] {ai_face();};
-void() wraith_magicA2 =[ $magicA2, wraith_magicA3 ] {ai_face();};
-void() wraith_magicA3 =[ $magicA3, wraith_magicA4 ] {wraith_debuff('30 32 8',0);};
-void() wraith_magicA4 =[ $magicA4, wraith_magicA5 ] {wraith_debuff('14 46 20',1);};
-void() wraith_magicA5 =[ $magicA5, wraith_magicA6 ] {wraith_debuff('-6 46 28',2);};
-void() wraith_magicA6 =[ $magicA6, wraith_magicA7 ] {wraith_debuff('-12 40 28',3);};
-void() wraith_magicA7 =[ $magicA7, wraith_magicA8 ] {wraith_debuff('0 46 30',3);};
-void() wraith_magicA8 =[ $magicA8, wraith_magicA9 ] {wraith_debuff('16 42 24',4);};
-void() wraith_magicA9 =[ $magicA9, wraith_magicA10 ] {wraith_debuff('32 38 20',4);};
-void() wraith_magicA10 =[ $magicA10, wraith_magicA11 ] {wraith_debuff('48 26 10',5);};
-void() wraith_magicA11 =[ $magicA11, wraith_magicA12 ] {wraith_debuff('52 14 6',5);};
-void() wraith_magicA12 =[ $magicA12, wraith_magicA13 ] {
+void() wraith_debuff1 = [$magicA1, wraith_magicA2 ] { ai_face(); };
+void() wraith_magicA2 = [$magicA2, wraith_magicA3 ] { ai_face(); };
+void() wraith_magicA3 = [$magicA3, wraith_magicA4 ] { wraith_debuff('30 32 8',0); };
+void() wraith_magicA4 = [$magicA4, wraith_magicA5 ] { wraith_debuff('14 46 20',1); };
+void() wraith_magicA5 = [$magicA5, wraith_magicA6 ] { wraith_debuff('-6 46 28',2); };
+void() wraith_magicA6 = [$magicA6, wraith_magicA7 ] { wraith_debuff('-12 40 28',3); };
+void() wraith_magicA7 = [$magicA7, wraith_magicA8 ] { wraith_debuff('0 46 30',3); };
+void() wraith_magicA8 = [$magicA8, wraith_magicA9 ] { wraith_debuff('16 42 24',4); };
+void() wraith_magicA9 = [$magicA9, wraith_magicA10 ] { wraith_debuff('32 38 20',4); };
+void() wraith_magicA10 = [$magicA10, wraith_magicA11 ] { wraith_debuff('48 26 10',5); };
+void() wraith_magicA11 = [$magicA11, wraith_magicA12 ] { wraith_debuff('52 14 6',5); };
+void() wraith_magicA12 = [$magicA12, wraith_magicA13 ] {
 	wraith_debuff('52 4 6',6);
 	wraith_debuff_trail(); 
 	self.skin = self.exactskin; 
 	self.alpha = WRAITH_ALPHA;
 };
-void() wraith_magicA13 =[ $magicA13, wraith_magicA14 ] {SUB_FinishAttachments();};
-void() wraith_magicA14 =[ $magicA14, wraith_run1 ] {};
+void() wraith_magicA13 = [$magicA13, wraith_magicA14 ] { SUB_FinishAttachments(); };
+void() wraith_magicA14 = [$magicA14, wraith_run1 ] {};
 
-//======================================================================
+
 // RANGE ATTACK 2 - Small bone/nail attack (low damage)
 //
 // Create a ball of blood and throw it towards the player
 // Turning the ball into a pile of bones/nails
-//======================================================================
-void(vector orgofs, float nbframe) wraith_nailball =
-{
+
+void(vector orgofs, float nbframe) wraith_nailball = {
 	local vector org;
 	if (self.health < 1) return;
 
@@ -479,8 +472,7 @@ void(vector orgofs, float nbframe) wraith_nailball =
 };
 
 //----------------------------------------------------------------------
-void(vector boneofs) wraith_firenails =
-{
+void(vector boneofs) wraith_firenails = {
 	local vector org, dir;
 	local float bone_type;
 	if (self.health < 1) return;
@@ -509,35 +501,34 @@ void(vector boneofs) wraith_firenails =
 // RANGE ATTACK 2 - Small bone/nail attack (low damage)
 // 32 22 0, 29 29 6, 15 33 16, 4 28 24, -6 20 24, -10 16 20, 6 16 14, 
 // 14 16 10, 54 5 6, 60 4 14
-void() wraith_nails1 =[ $magicC1, wraith_magicC2 ] {ai_face();
+void() wraith_nails1 = [$magicC1, wraith_magicC2 ] { ai_face();
 	SUB_AttackFinished(1 + random());	// Fire more frequent
 };
-void() wraith_magicC2 =[ $magicC2, wraith_magicC3 ] {ai_face();};
-void() wraith_magicC3 =[ $magicC3, wraith_magicC4 ] {wraith_nailball('15 33 16',0);};
-void() wraith_magicC4 =[ $magicC4, wraith_magicC5 ] {wraith_nailball('4 28 24',1);};
-void() wraith_magicC5 =[ $magicC5, wraith_magicC6 ] {wraith_nailball('-6 20 24',2);};
-void() wraith_magicC6 =[ $magicC6, wraith_magicC7 ] {wraith_nailball('-10 16 20',3);};
-void() wraith_magicC7 =[ $magicC7, wraith_magicC8 ] {wraith_nailball('6 16 14',4);};
-void() wraith_magicC8 =[ $magicC8, wraith_magicC9 ] {wraith_nailball('14 16 10',5);};
-void() wraith_magicC9 =[ $magicC9, wraith_magicC10 ] {wraith_nailball('54 5 6',6);};
-void() wraith_magicC10 =[ $magicC10, wraith_magicC11 ] {
+void() wraith_magicC2 = [$magicC2, wraith_magicC3 ] { ai_face(); };
+void() wraith_magicC3 = [$magicC3, wraith_magicC4 ] { wraith_nailball('15 33 16',0); };
+void() wraith_magicC4 = [$magicC4, wraith_magicC5 ] { wraith_nailball('4 28 24',1); };
+void() wraith_magicC5 = [$magicC5, wraith_magicC6 ] { wraith_nailball('-6 20 24',2); };
+void() wraith_magicC6 = [$magicC6, wraith_magicC7 ] { wraith_nailball('-10 16 20',3); };
+void() wraith_magicC7 = [$magicC7, wraith_magicC8 ] { wraith_nailball('6 16 14',4); };
+void() wraith_magicC8 = [$magicC8, wraith_magicC9 ] { wraith_nailball('14 16 10',5); };
+void() wraith_magicC9 = [$magicC9, wraith_magicC10 ] { wraith_nailball('54 5 6',6); };
+void() wraith_magicC10 = [$magicC10, wraith_magicC11 ] {
 	SUB_FinishAttachments();
 	wraith_firenails('60 4 14');
 };
-void() wraith_magicC11 =[ $magicC11, wraith_magicC12 ] {monster_idle_sound();};
-void() wraith_magicC12 =[ $magicC12, wraith_magicC13 ] {};
-void() wraith_magicC13 =[ $magicC13, wraith_magicC14 ] {};
-void() wraith_magicC14 =[ $magicC14, wraith_magicC15 ] {ai_face();};
-void() wraith_magicC15 =[ $magicC15, wraith_run1 ] {ai_face();};
+void() wraith_magicC11 = [$magicC11, wraith_magicC12 ] { monster_idle_sound(); };
+void() wraith_magicC12 = [$magicC12, wraith_magicC13 ] {};
+void() wraith_magicC13 = [$magicC13, wraith_magicC14 ] {};
+void() wraith_magicC14 = [$magicC14, wraith_magicC15 ] { ai_face(); };
+void() wraith_magicC15 = [$magicC15, wraith_run1 ] { ai_face(); };
 
-//======================================================================
+
 // RANGE ATTACK 3 - spawn spider minion (optional)
 //
 // Create a ball of green goo and throw it towards the player
 // Once ball has landed, hatch/explode and create spider (brown/green)
-//======================================================================
-void(vector eggofs, float eggframe) Setup_WraithEgg =
-{
+
+void(vector eggofs, float eggframe) Setup_WraithEgg = {
 	local vector org;
 	if (self.health < 1) return;
 	
@@ -574,25 +565,25 @@ void(vector eggofs, float eggframe) Setup_WraithEgg =
 // Spawn a yellow/green egg ball shape and then drop it towards the player
 // The egg is spawned in the middle and moved up/down to generate particles
 // 20 2 12, 18 2 12
-void() wraith_minion1 =[ $magicB1, wraith_magicB2 ] {ai_face();};
-void() wraith_magicB2 =[ $magicB2, wraith_magicB3 ] {Setup_WraithEgg('20 2 12',0);};
-void() wraith_magicB3 =[ $magicB3, wraith_magicB4 ] {Setup_WraithEgg('18 2 12',1);};
-void() wraith_magicB4 =[ $magicB4, wraith_magicB5 ] {Setup_WraithEgg('20 2 12',2);};
-void() wraith_magicB5 =[ $magicB5, wraith_magicB6 ] {Setup_WraithEgg('18 2 12',3);};
-void() wraith_magicB6 =[ $magicB6, wraith_magicB7 ] {Setup_WraithEgg('20 2 12',4);};
-void() wraith_magicB7 =[ $magicB7, wraith_magicB8 ] {Setup_WraithEgg('18 2 12',5);};
-void() wraith_magicB8 =[ $magicB8, wraith_magicB9 ] {Setup_WraithEgg('20 2 12',6);};
-void() wraith_magicB9 =[ $magicB9, wraith_magicB10 ] {
+void() wraith_minion1 = [$magicB1, wraith_magicB2 ] { ai_face(); };
+void() wraith_magicB2 = [$magicB2, wraith_magicB3 ] { Setup_WraithEgg('20 2 12',0); };
+void() wraith_magicB3 = [$magicB3, wraith_magicB4 ] { Setup_WraithEgg('18 2 12',1); };
+void() wraith_magicB4 = [$magicB4, wraith_magicB5 ] { Setup_WraithEgg('20 2 12',2); };
+void() wraith_magicB5 = [$magicB5, wraith_magicB6 ] { Setup_WraithEgg('18 2 12',3); };
+void() wraith_magicB6 = [$magicB6, wraith_magicB7 ] { Setup_WraithEgg('20 2 12',4); };
+void() wraith_magicB7 = [$magicB7, wraith_magicB8 ] { Setup_WraithEgg('18 2 12',5); };
+void() wraith_magicB8 = [$magicB8, wraith_magicB9 ] { Setup_WraithEgg('20 2 12',6); };
+void() wraith_magicB9 = [$magicB9, wraith_magicB10 ] {
 	self.skin = self.exactskin;	// Not glowing anymore
 	self.alpha = WRAITH_ALPHA;	// Fade out
 	SUB_FinishAttachments();
 	Create_Egg('20 2 12');
 	particle_explode(self.origin, 30, 2, self.part_style, PARTICLE_BURST_UPWARD); // Particles drifting up slowly from body
 };
-void() wraith_magicB10 =[ $magicB10, wraith_magicB11 ] {};
-void() wraith_magicB11 =[ $magicB11, wraith_magicB12 ] {};
-void() wraith_magicB12 =[ $magicB12, wraith_magicB13 ] {ai_face();};
-void() wraith_magicB13 =[ $magicB13, wraith_run1 ] {ai_face();};
+void() wraith_magicB10 = [$magicB10, wraith_magicB11 ] {};
+void() wraith_magicB11 = [$magicB11, wraith_magicB12 ] {};
+void() wraith_magicB12 = [$magicB12, wraith_magicB13 ] { ai_face(); };
+void() wraith_magicB13 = [$magicB13, wraith_run1 ] { ai_face(); };
 
 void() wraith_magic = {
 	local entity truetarg;
@@ -633,25 +624,25 @@ void() wraith_magic = {
 };
 
 // Pain A - Short flinch backwards
-void() wraith_painA1 = [ $painA1, wraith_painA2 ] {};
-void() wraith_painA2 = [ $painA2, wraith_painA3 ] {};
-void() wraith_painA3 = [ $painA3, wraith_painA4 ] {};
-void() wraith_painA4 = [ $painA4, wraith_painA5 ] {};
-void() wraith_painA5 = [ $painA5, wraith_painA6 ] {};
-void() wraith_painA6 = [ $painA6, wraith_run1 ] {};
+void() wraith_painA1 = [$painA1, wraith_painA2 ] {};
+void() wraith_painA2 = [$painA2, wraith_painA3 ] {};
+void() wraith_painA3 = [$painA3, wraith_painA4 ] {};
+void() wraith_painA4 = [$painA4, wraith_painA5 ] {};
+void() wraith_painA5 = [$painA5, wraith_painA6 ] {};
+void() wraith_painA6 = [$painA6, wraith_run1 ] {};
 
 // Pain B - Long motion of being hit several times
-void() wraith_painB1 = [ $painB1, wraith_painB2 ] {};
-void() wraith_painB2 = [ $painB2, wraith_painB3 ] {};
-void() wraith_painB3 = [ $painB3, wraith_painB4 ] {};
-void() wraith_painB4 = [ $painB4, wraith_painB5 ] {};
-void() wraith_painB5 = [ $painB5, wraith_painB6 ] {};
-void() wraith_painB6 = [ $painB6, wraith_painB7 ] {};
-void() wraith_painB7 = [ $painB7, wraith_painB8 ] {};
-void() wraith_painB8 = [ $painB8, wraith_painB9 ] {};
-void() wraith_painB9 = [ $painB9, wraith_painB10 ] {};
-void() wraith_painB10 = [ $painB10, wraith_painB11 ] {};
-void() wraith_painB11 = [ $painB11, wraith_run1 ] {};
+void() wraith_painB1 = [$painB1, wraith_painB2 ] {};
+void() wraith_painB2 = [$painB2, wraith_painB3 ] {};
+void() wraith_painB3 = [$painB3, wraith_painB4 ] {};
+void() wraith_painB4 = [$painB4, wraith_painB5 ] {};
+void() wraith_painB5 = [$painB5, wraith_painB6 ] {};
+void() wraith_painB6 = [$painB6, wraith_painB7 ] {};
+void() wraith_painB7 = [$painB7, wraith_painB8 ] {};
+void() wraith_painB8 = [$painB8, wraith_painB9 ] {};
+void() wraith_painB9 = [$painB9, wraith_painB10 ] {};
+void() wraith_painB10 = [$painB10, wraith_painB11 ] {};
+void() wraith_painB11 = [$painB11, wraith_run1 ] {};
 
 void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	// Check all pain conditions and set up what to do next
@@ -682,15 +673,15 @@ void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	}
 };
 
-void() wraith_death2 =[ $death2, wraith_death3] {};
-void() wraith_death3 =[ $death3, wraith_death4] {};
-void() wraith_death4 =[ $death4, wraith_death5] {};
-void() wraith_death5 =[ $death5, wraith_death7] {};
-void() wraith_death7 =[ $death7, wraith_death9] {};
-void() wraith_death9 =[ $death9, wraith_death11] {};
-void() wraith_death11 =[ $death11, wraith_death13] {};
-void() wraith_death13 =[ $death13, wraith_death15] {};
-void() wraith_death15 =[ $death15, wraith_death15] {
+void() wraith_death2 = [$death2, wraith_death3] {};
+void() wraith_death3 = [$death3, wraith_death4] {};
+void() wraith_death4 = [$death4, wraith_death5] {};
+void() wraith_death5 = [$death5, wraith_death7] {};
+void() wraith_death7 = [$death7, wraith_death9] {};
+void() wraith_death9 = [$death9, wraith_death11] {};
+void() wraith_death11 = [$death11, wraith_death13] {};
+void() wraith_death13 = [$death13, wraith_death15] {};
+void() wraith_death15 = [$death15, wraith_death15] {
 	// Throw gibs, but create more XY outward velocity
 	self.max_health = MON_XYGIBVELOCITY;
 	monster_ThrowGib();
@@ -804,7 +795,7 @@ void() monster_wraith = { // [ENTITY]
 	
 	// Setup each wraith type with different skins/particles
 	if (self.spawnflags & MON_WRAITH_SCORPIONS) {
-		if (self.minion_name == string_null) {
+		if (self.minion_name == "") {
 			self.minion_name = "monster_scorpion";
 			self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
 		}
@@ -813,7 +804,7 @@ void() monster_wraith = { // [ENTITY]
 		self.poisonous = FALSE;						// Must be off for scorpion wraith
 		self.part_style = PARTICLE_BURST_PURPLE;	// Purple cloud
 	} else if (self.spawnflags & MON_WRAITH_SPIDERS) {
-		if (self.minion_name == string_null) {
+		if (self.minion_name == "") {
 			self.minion_name = "monster_spider";
 			self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
 		}

@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 51
+// Function count: 50
 //
 // Implements: Drake utilty subroutines
 //
@@ -86,13 +86,13 @@ vector(float theta) CoST = {
 };
 
 // Trigonometric functions. Note:  Should use builtin when available.
-float(float t) SUB_cos = {local vector v;  v = CoSine(t);  return v_x;};
-float(float t) SUB_sin = {local vector v;  v = CoSine(t);  return v_y;};
-float(float t) SUB_tan = {local vector v;  v = CoST(t);  return v_z;};
+float(float t) SUB_cos = { local vector v;  v = CoSine(t);  return v_x;};
+float(float t) SUB_sin = { local vector v;  v = CoSine(t);  return v_y;};
+float(float t) SUB_tan = { local vector v;  v = CoST(t);  return v_z;};
 //--------------------------------END WAND MATHS-------------------------------
 
 // Stops the current sound that is playing on the specified channel by playing an empty sound.
-void(entity ent, float chan) StopSound = {sound (ent, chan,SOUND_EMPTY, 1, ATTN_NONE);};
+void(entity ent, float chan) StopSound = { sound (ent, chan,SOUND_EMPTY, 1, ATTN_NONE); };
 
 // Based on 'SV_StepDirection'.  Use this only for big multi-hulled monsters such as dragons.
 float(float yaw, float dist) QC_StepDir = {
@@ -151,7 +151,7 @@ void(float dist) QC_NewChaseDir = {
 	// Try other directions.
     ax = fabs(delta_x);
     ay = fabs(delta_y);
-    if ((random() < 0.333) || (ay > ax)) {turn = d1; d1 = d2; d2 = turn;}
+    if ((random() < 0.333) || (ay > ax)) { turn = d1; d1 = d2; d2 = turn;}
 
     if (d1 != -1)
         if (d1 != back)
@@ -429,25 +429,25 @@ void(float dist) noclip_chase = {
     if (d1 != -1)
         if (d2 != -1) {
         if (d1 == 0)
-            {if (d2 == 90) turn = 45; else turn = 315;}
+            { if (d2 == 90) turn = 45; else turn = 315;}
         else
-            {if (d2 == 90) turn = 135; else turn = 215;}
+            { if (d2 == 90) turn = 135; else turn = 215;}
 
-        if (turn != back) {noclip_step (turn, dist); return;}
+        if (turn != back) { noclip_step (turn, dist); return;}
     }
 
 	// Try other directions.
     ax = fabs(delta_x);
     ay = fabs(delta_y);
     if ((random() < 0.333) || (ay > ax))
-        {turn = d1; d1 = d2; d2 = turn;}
+        { turn = d1; d1 = d2; d2 = turn;}
 
     if (d1 != -1)
         if (d1 != back)
-            {noclip_step (d1, dist); return;}
+            { noclip_step (d1, dist); return;}
     if (d2 != -1)
         if (d2 != back)
-            {noclip_step (d2, dist); return;}
+            { noclip_step (d2, dist); return;}
 
 	// No direct path to goal, so pick another way.
     noclip_step(old, dist);
@@ -460,7 +460,7 @@ void(float dist) noclip_goal = {
 	// If next step hits enemy, stop... but only if wraith is not in a wall.  Why?  Because the wraith can't attack effectively if pinned in the wall.
     if (self.enemy)
         if (QC_CloseEnough (dist))
-            if (pointcontents (self.origin) != CONTENT_SOLID) {self.velocity = '0 0 0'; return;}
+            if (pointcontents (self.origin) != CONTENT_SOLID) { self.velocity = '0 0 0'; return;}
 
     if (random() < 0.333 && self.goalentity.classtype != CT_PATHCORNER)
         noclip_chase(dist);
@@ -572,15 +572,13 @@ void(entity ent) ReflectSound = {
 	sound (ent, CHAN_ITEM, "drake/items/reflect3.wav", 1, ATTN_NORM);
 };
 
-float(entity e) ImmuneToDamage = { return (e.invincible_finished || !e.takedamage || (e.flags & FL_GODMODE)); };
-
 // Checks if entity 'e' can grunt in pain.
 float(entity e) FeelsPain = {
     if (e.health > 0)
         if (e.th_pain)
             if (e.th_pain != SUB_Null)
                 if (e.pain_finished <= time)
-                    if (!ImmuneToDamage (e))
+                    if (!Indestructable(e))
                         return TRUE;
 
     return FALSE;
@@ -915,18 +913,18 @@ float(float r, float m, vector ofs) EntryPoint_Randomize_Ex = {
     return FALSE;
 };
 
-float(float r, float m) EntryPoint_Randomize = {return EntryPoint_Randomize_Ex (r, m, VEC_360);};
+float(float r, float m) EntryPoint_Randomize = { return EntryPoint_Randomize_Ex (r, m, VEC_360); };
 
 //  Selects a random point between close and medium range.
-float() EntryPoint_Random = {return EntryPoint_Randomize_Ex (400, 100, VEC_360);};
+float() EntryPoint_Random = { return EntryPoint_Randomize_Ex (400, 100, VEC_360); };
 
 //  Selects a random point between mid-close and long range.
-float() EntryPoint_LongRandom = {return EntryPoint_Randomize_Ex (600, 250, VEC_360);};
+float() EntryPoint_LongRandom = { return EntryPoint_Randomize_Ex (600, 250, VEC_360); };
 
-float() EntryPoint_Fan = {return EntryPoint_Randomize_Ex (100, 60, '90 60 0');};
+float() EntryPoint_Fan = { return EntryPoint_Randomize_Ex (100, 60, '90 60 0'); };
 
 // Selects and tests a single given point.
-float() EntryPoint_One = {return EntryPoint_Test (self.origin);};
+float() EntryPoint_One = { return EntryPoint_Test (self.origin); };
 
 //  This spawns a dummy entity to test points its owner may use as a
 //  spawn point or teleport destination.  An entity is needed to check
@@ -1033,4 +1031,4 @@ float(vector org, entity ignore) UpIsSky = { // [FUNCTION]
     return ((pc == CONTENT_EMPTY) || (pc == CONTENT_SKY));
 };
 
-float(entity e) IsGhost = {return ((e.solid==SOLID_TRIGGER) && (e.movetype==MOVETYPE_NOCLIP));};
+float(entity e) IsGhost = { return ((e.solid==SOLID_TRIGGER) && (e.movetype==MOVETYPE_NOCLIP)); };

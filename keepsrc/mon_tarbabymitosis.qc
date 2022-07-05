@@ -103,7 +103,7 @@ void() monster_tarbaby_mitosis = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/qmaster/mon_tarbaby.mdl";
-	self.headmdl = string_null;
+	self.headmdl = "";
 	self.idle_sound = "blob/sight1.wav";
 	self.sight_sound = self.idle_sound;
 	self.pain_sound = self.idle_sound;
@@ -117,7 +117,7 @@ void() monster_tarbaby_mitosis = { // [ENTITY]
 	self.pain_flinch = 20;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "") {
 		self.minion_name = "monster_tarbaby";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

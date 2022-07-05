@@ -535,9 +535,8 @@ void() W_FireAxe = { // [FUNCTION]
 
 	makevectors(self.v_angle);				// Player forward angle
 	source = self.origin + '0 0 16';		// Move source point up body
-
 	if (self.flags & FL_GODMODE && self.flags & FL_FLY) {
-		traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self);
+		traceline(source,source +(v_forward* RANGE_PLAYAXE),FALSE,self);
 		if (trace_fraction < 1.0) {
 			if (trace_ent.flags & FL_MONSTER && trace_ent.health > 0) {
 				dprint("\n\b[DEBUG]\b system active, changing monster\n");

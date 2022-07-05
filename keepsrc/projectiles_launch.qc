@@ -1876,7 +1876,7 @@ float() Thor_Safe = { // [FUNCTION]
     if (self.cross_finished) return TRUE; // Immune to radius damage.
     if (self.radsuit_finished) return TRUE; // Inherited wetsuit powers...protected from lightning damage.
     if (self.waterlevel <= 1) return TRUE; // Not in the water.
-    return ImmuneToDamage(self);
+    return Indestructable(self);
 };
 
 // Slammed the ground, so fire off some lightning.
@@ -1899,7 +1899,7 @@ float(vector spot) HIP_SlamMjolnir = { // [FUNCTION]
 float() Hip_ThrewMjolnir = { // [FUNCTION]
 	if (self.hammer_finished >= time) return TRUE;
 	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
-	if (HasPowerToThrow()) {W_FireThor();  return TRUE;} // Throw if player has the juice.
+	if (HasPowerToThrow()) { W_FireThor();  return TRUE;} // Throw if player has the juice.
     return FALSE;
 };
 
@@ -2148,8 +2148,8 @@ void(float ox) W_EchoSpike = { // [FUNCTION]
         if (self.weapon == IT_SUPER_NAILGUN) newmis.classname = "spike2";    // For obituary.
     }
 };
-void() W_EchoSpike_Up = {W_EchoSpike(2);}; // [FUNCTION]
-void() W_EchoSpike_Down = {W_EchoSpike(-2);}; // [FUNCTION]
+void() W_EchoSpike_Up = { W_EchoSpike(2); }; // [FUNCTION]
+void() W_EchoSpike_Down = { W_EchoSpike(-2); }; // [FUNCTION]
 
 void(float ox) W_EchoLavaSpike = { // [FUNCTION]
     local vector org, dir;
@@ -2186,8 +2186,8 @@ void(float ox) W_EchoLavaSpike = { // [FUNCTION]
         if (self.weapon == IT_LAVA_SUPER_NAILGUN) newmis.classname = "spike2";    // For obituary.
     }
 };
-void() W_EchoLavaSpike_Up = {W_EchoLavaSpike(2);}; // [FUNCTION]
-void() W_EchoLavaSpike_Down = {W_EchoLavaSpike(-2);}; // [FUNCTION]
+void() W_EchoLavaSpike_Up = { W_EchoLavaSpike(2); }; // [FUNCTION]
+void() W_EchoLavaSpike_Down = { W_EchoLavaSpike(-2); }; // [FUNCTION]
 
 // In 35 fps Doom, delays in the loop were 4/4/1.  The third frame was the same as first, but not fullbright, and did a vis check.
 void(vector org, vector dir, entity targ, vector err) M_FireChaingun = { // [FUNCTION]
@@ -3120,7 +3120,7 @@ void() launch_horn = {
 	makevectors(self.v_angle);
 	e = findradius(self.origin, inRange);
 	while (e) {
-		if (e == self || e.solid == SOLID_BSP || e.movetype == MOVETYPE_NONE || (e.AIRG_Flags & AIRG_EXCLUDEENTITY)) {e = e.chain; continue; } // This is the exclusion code.  It excludes everything that is "Illegal" to move. eg. doors.
+		if (e == self || e.solid == SOLID_BSP || e.movetype == MOVETYPE_NONE || (e.AIRG_Flags & AIRG_EXCLUDEENTITY)) { e = e.chain; continue; } // This is the exclusion code.  It excludes everything that is "Illegal" to move. eg. doors.
 
 		if (visible(e) && (self.waterlevel > 2 || hornInfront(e)) && (AffectedByPhysics(e) || e.flags & FLx_CREATURE)) { // Affect monsters and projectiles
 			// if flying creature and movetype is step then change to fly

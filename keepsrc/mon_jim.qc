@@ -154,33 +154,32 @@ void(float fstate) jim_update = {
 	self.oldorigin = self.origin;
 };
 
-//======================================================================
+
 // All stand, walk and run functions are condensed down to one entry
 // because the robot has a constant skin/sound update that has to
 // happen at specific intervals
 //
-void()	jim_stand1	=[	$idle1,	jim_stand1 ] {
+void()	jim_stand1	= [	$idle1,	jim_stand1 ] {
 	// Standing idle has gentle bobbing up and down
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_FLY;
-	jim_update(JS_IDLE); ai_stand();};
-void()	jim_walk1	=[	$idle1,	jim_walk1 ] {
+	jim_update(JS_IDLE); ai_stand(); };
+void()	jim_walk1	= [	$idle1,	jim_walk1 ] {
 	// Movement is steps, not velocity
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	jim_update(JS_IDLE); ai_walk(8);};
-void()	jim_run1	=[	$idle1,	jim_run1 ] {
+	jim_update(JS_IDLE); ai_walk(8); };
+void()	jim_run1	= [	$idle1,	jim_run1 ] {
 	// Movement is steps, only velocity when firing weapon
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	jim_update(JS_IDLE);
-	ai_run(16);};
+	ai_run(16); };
 
-//======================================================================
+
 // Range (LASERS or ROCKETS)
-//======================================================================
-void() jim_laser =
-{
+
+void() jim_laser = {
 	local vector org, dir, vec;
 
 	if (!self.enemy) return;
@@ -248,49 +247,48 @@ void() jim_attack = {
 };
 
 //----------------------------------------------------------------------------
-void() jim_fire1 =[ $idle1, jim_fire2 ] {jim_update(JS_IDLE);
+void() jim_fire1 = [$idle1, jim_fire2 ] { jim_update(JS_IDLE);
 	if (self.classtype == CT_MONJIM) 
 		sound (self, CHAN_WEAPON, "quoth/bob/fire.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "ad171/jim/rocket_load.wav", 1, ATTN_NORM);
 };
-void() jim_fire2 =[ $idle1, jim_fire3 ] {jim_update(JS_IDLE);jim_attack();
+void() jim_fire2 = [$idle1, jim_fire3 ] { jim_update(JS_IDLE);jim_attack();
 	if (skill < SKILL_HARD) jim_vel(0.4);
 	else jim_vel(1.5);
 };
-void() jim_fire3 =[ $idle1, jim_fire4 ] {
-	jim_update(JS_IDLE); if (skill < SKILL_HARD) jim_vel(0.6);};
-void() jim_fire4 =[ $idle1, jim_fire5 ] { jim_update(JS_IDLE); 
-	if (skill < SKILL_HARD) jim_vel(0.8);};
-void() jim_fire5 =[ $idle1, jim_fire6 ] {jim_update(JS_IDLE);jim_vel(1.0);};
-void() jim_fire6 =[ $idle1, jim_fire7 ] {
+void() jim_fire3 = [$idle1, jim_fire4 ] {
+	jim_update(JS_IDLE); if (skill < SKILL_HARD) jim_vel(0.6); };
+void() jim_fire4 = [$idle1, jim_fire5 ] { jim_update(JS_IDLE); 
+	if (skill < SKILL_HARD) jim_vel(0.8); };
+void() jim_fire5 = [$idle1, jim_fire6 ] { jim_update(JS_IDLE);jim_vel(1.0); };
+void() jim_fire6 = [$idle1, jim_fire7 ] {
 	jim_update(JS_IDLE); if (skill < SKILL_HARD) jim_vel(1.2);
 	if (self.classtype == CT_MONJIM) jim_laser();
 	else jim_rocket();
 };
-void() jim_fire7 =[ $idle1, jim_fire8 ] {jim_update(JS_IDLE);
+void() jim_fire7 = [$idle1, jim_fire8 ] { jim_update(JS_IDLE);
 	if (skill < SKILL_HARD) jim_vel(1.4);
 	if (self.classtype == CT_MONJIM) jim_laser();
 };
-void() jim_fire8 =[ $idle1, jim_fire9 ] {jim_update(JS_IDLE);
+void() jim_fire8 = [$idle1, jim_fire9 ] { jim_update(JS_IDLE);
 	if (skill < SKILL_HARD) jim_vel(1.3);
 	if (self.classtype == CT_MONJIM && skill >= SKILL_NORMAL) jim_laser();
 };
-void() jim_fire9 =[ $idle1, jim_fire10] {jim_update(JS_IDLE);
+void() jim_fire9 = [$idle1, jim_fire10] { jim_update(JS_IDLE);
 	if (skill < SKILL_HARD) jim_vel(1.1);
 	if (self.classtype == CT_MONJIM && skill >= SKILL_HARD) jim_laser();
 };
-void() jim_fire10 =[ $idle1, jim_fire11]{jim_update(JS_IDLE);jim_vel(0.5);};
-void() jim_fire11 =[ $idle1, jim_run1 ] {jim_update(JS_IDLE);
+void() jim_fire10 = [$idle1, jim_fire11] { jim_update(JS_IDLE);jim_vel(0.5); };
+void() jim_fire11 = [$idle1, jim_run1 ] { jim_update(JS_IDLE);
 	// Chance of bob instantly firing again
 	if (random() < 0.8) SUB_AttackFinished( 1 + random() );
 	else SUB_AttackFinished( 1 + random()*0.5 );
 };
 
-//============================================================================
+
 // ROBOT PAIN!?!
-//============================================================================
-void() jim_inpain =
-{
+
+void() jim_inpain = {
 	// Keep cycling the pain animation
 	self.think = jim_inpain;
 	self.nextthink = time + 0.1;
@@ -322,8 +320,7 @@ void() jim_inpain =
 };
 
 //----------------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) jim_pain = 
-{
+void(entity inflictor, entity attacker, float damage) jim_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 	
@@ -342,15 +339,14 @@ void(entity inflictor, entity attacker, float damage) jim_pain =
 	jim_inpain();
 };
 
-//============================================================================
+
 // SLOW DYING ROBOT!?!
-//============================================================================
+
 void() jim_dying2;
 void() jim_is_dead;
 
 //----------------------------------------------------------------------------
-void() jim_dying1 = 
-{
+void() jim_dying1 = {
 	// Setup correct death frame
 	self.frame = JS_DYING + self.cnt;
 	self.cnt = self.cnt + 1;

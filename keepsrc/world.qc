@@ -707,7 +707,7 @@ void() StartFrame = { // [FUNCTION]
 	Gyro_Run(); // Process the physics.
 };
  
-void() bodyque={}; // [ENTITY] Just here so spawn functions don't complain after the world creates bodyques
+void() bodyque= {}; // [ENTITY] Just here so spawn functions don't complain after the world creates bodyques
 
 void() InitBodyQue = { // [FUNCTION], New Code from Inside3d forums (old system was terrible).  Oh hey, now called InsideQc.  Interesting.
 	local entity e, prev;

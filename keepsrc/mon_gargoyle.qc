@@ -45,35 +45,34 @@ $frame swoopend9 swoopend10 swoopend11 swoopend12 swoopend13 swoopend14 swoopend
 $frame swoopout1 swoopout2 swoopout3 swoopout4 swoopout5 swoopout6 swoopout7 swoopout8
 $frame swoopout9 swoopout10 swoopout11 swoopout12 swoopout13 swoopout14 swoopout15
 
-void() gargoylewings =
-{ sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
+void() gargoylewings = { sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
 void() garg_fbfinish;
 
-void()	garg_idle1	=[	$fly2,	garg_idle2	] {monster_idle_sound();ai_stand();};
-void()	garg_idle2	=[	$fly4,	garg_idle3	] {ai_stand();};
-void()	garg_idle3	=[	$fly6,	garg_idle4	] {gargoylewings();ai_stand();};
-void()	garg_idle4	=[	$fly8,	garg_idle5	] {ai_stand();};
-void()	garg_idle5	=[	$fly10,	garg_idle6	] {ai_stand();};
-void()	garg_idle6	=[	$fly12,	garg_idle7	] {ai_stand();};
-void()	garg_idle7	=[	$fly14,	garg_idle8	] {ai_stand();};
-void()	garg_idle8	=[	$fly16,	garg_idle9	] {ai_stand();};
-void()	garg_idle9	=[	$fly18,	garg_idle10	] {ai_stand();};
-void()	garg_idle10	=[	$fly20,	garg_idle1	] {ai_stand();};
+void()	garg_idle1	= [	$fly2,	garg_idle2	] { monster_idle_sound();ai_stand(); };
+void()	garg_idle2	= [	$fly4,	garg_idle3	] { ai_stand(); };
+void()	garg_idle3	= [	$fly6,	garg_idle4	] { gargoylewings();ai_stand(); };
+void()	garg_idle4	= [	$fly8,	garg_idle5	] { ai_stand(); };
+void()	garg_idle5	= [	$fly10,	garg_idle6	] { ai_stand(); };
+void()	garg_idle6	= [	$fly12,	garg_idle7	] { ai_stand(); };
+void()	garg_idle7	= [	$fly14,	garg_idle8	] { ai_stand(); };
+void()	garg_idle8	= [	$fly16,	garg_idle9	] { ai_stand(); };
+void()	garg_idle9	= [	$fly18,	garg_idle10	] { ai_stand(); };
+void()	garg_idle10	= [	$fly20,	garg_idle1	] { ai_stand(); };
 
-//======================================================================
-void()	garg_walk1	=[	$fly1,	garg_walk2	] {monster_idle_sound();ai_walk(8);};
-void()	garg_walk2	=[	$fly3,	garg_walk3	] {ai_walk(8);};
-void()	garg_walk3	=[	$fly5,	garg_walk4	] {gargoylewings();ai_walk(8);};
-void()	garg_walk4	=[	$fly7,	garg_walk5	] {ai_walk(8);};
-void()	garg_walk5	=[	$fly9,	garg_walk6	] {ai_walk(8);};
-void()	garg_walk6	=[	$fly11,	garg_walk7	] {ai_walk(8);};
-void()	garg_walk7	=[	$fly13,	garg_walk8	] {ai_walk(8);};
-void()	garg_walk8	=[	$fly15,	garg_walk9	] {ai_walk(8);};
-void()	garg_walk9	=[	$fly17,	garg_walk10	] {ai_walk(8);};
-void()	garg_walk10	=[	$fly19,	garg_walk1	] {ai_walk(8);};
 
-//======================================================================
-void()	garg_run1	=[	$fly1,	garg_run2	] {monster_idle_sound();
+void()	garg_walk1	= [	$fly1,	garg_walk2	] { monster_idle_sound();ai_walk(8); };
+void()	garg_walk2	= [	$fly3,	garg_walk3	] { ai_walk(8); };
+void()	garg_walk3	= [	$fly5,	garg_walk4	] { gargoylewings();ai_walk(8); };
+void()	garg_walk4	= [	$fly7,	garg_walk5	] { ai_walk(8); };
+void()	garg_walk5	= [	$fly9,	garg_walk6	] { ai_walk(8); };
+void()	garg_walk6	= [	$fly11,	garg_walk7	] { ai_walk(8); };
+void()	garg_walk7	= [	$fly13,	garg_walk8	] { ai_walk(8); };
+void()	garg_walk8	= [	$fly15,	garg_walk9	] { ai_walk(8); };
+void()	garg_walk9	= [	$fly17,	garg_walk10	] { ai_walk(8); };
+void()	garg_walk10	= [	$fly19,	garg_walk1	] { ai_walk(8); };
+
+
+void()	garg_run1	= [	$fly1,	garg_run2	] { monster_idle_sound();
 	if (self.attachment && self.attachment.state == STATE_ON) garg_fbfinish();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
@@ -82,15 +81,15 @@ void()	garg_run1	=[	$fly1,	garg_run2	] {monster_idle_sound();
 	}
 	ai_run(4);
 };
-void()	garg_run2	=[	$fly3,	garg_run3	] {ai_run(5);};
-void()	garg_run3	=[	$fly5,	garg_run4	] {gargoylewings(); ai_run(6);};
-void()	garg_run4	=[	$fly7,	garg_run5	] {ai_run(7);};
-void()	garg_run5	=[	$fly9,	garg_run6	] {ai_run(8);};
-void()	garg_run6	=[	$fly11,	garg_run7	] {ai_run(4);};
-void()	garg_run7	=[	$fly13,	garg_run8	] {ai_run(5);};
-void()	garg_run8	=[	$fly15,	garg_run9	] {ai_run(6);};
-void()	garg_run9	=[	$fly17,	garg_run10	] {ai_run(7);};
-void()	garg_run10	=[	$fly19,	garg_run1	] {ai_run(8);};
+void()	garg_run2	= [	$fly3,	garg_run3	] { ai_run(5); };
+void()	garg_run3	= [	$fly5,	garg_run4	] { gargoylewings(); ai_run(6); };
+void()	garg_run4	= [	$fly7,	garg_run5	] { ai_run(7); };
+void()	garg_run5	= [	$fly9,	garg_run6	] { ai_run(8); };
+void()	garg_run6	= [	$fly11,	garg_run7	] { ai_run(4); };
+void()	garg_run7	= [	$fly13,	garg_run8	] { ai_run(5); };
+void()	garg_run8	= [	$fly15,	garg_run9	] { ai_run(6); };
+void()	garg_run9	= [	$fly17,	garg_run10	] { ai_run(7); };
+void()	garg_run10	= [	$fly19,	garg_run1	] { ai_run(8); };
 
 // Range attack
 void() garg_fbthrow = {
@@ -142,42 +141,42 @@ void(float fbframe, vector fbofs) garg_fbupdate = {
 // 10 16 0, 4 24 2, -7 28 15, -25 26 28, -38 12 45, -38 9 45, -17 36 30, 24 16 10
 // Changed the offset to match the new model instead
 // Positioned the fireball to match the hand orientation
-void() garg_fire1	=[ $attack2, garg_fire2 ] {garg_fbupdate(0,'10 16 -2');};
-void() garg_fire2	=[ $attack4, garg_fire3 ] {garg_fbupdate(2,'0 20 -2');};
-void() garg_fire3	=[ $attack6, garg_fire4 ] {garg_fbupdate(3,'-6 23 6');gargoylewings();};
-void() garg_fire4	=[ $attack8, garg_fire5 ] {garg_fbupdate(4,'-16 26 18');};
-void() garg_fire5	=[ $attack10, garg_fire6 ] {garg_fbupdate(5,'-29 18 38');};
-void() garg_fire6	=[ $attack12, garg_fire7 ] {garg_fbupdate(4,'-34 9 45');};
-void() garg_fire7	=[ $attack14, garg_fire8 ] {garg_fbupdate(3,'-32 22 38');};
-void() garg_fire8	=[ $attack16, garg_fire9 ] {garg_fbfinish();garg_fbthrow();};
-void() garg_fire9	=[ $attack18, garg_fire10 ] {ai_face();monster_idle_sound();};
-void() garg_fire10	=[ $attack20, garg_run1 ] {ai_face();
+void() garg_fire1	= [$attack2, garg_fire2 ] { garg_fbupdate(0,'10 16 -2'); };
+void() garg_fire2	= [$attack4, garg_fire3 ] { garg_fbupdate(2,'0 20 -2'); };
+void() garg_fire3	= [$attack6, garg_fire4 ] { garg_fbupdate(3,'-6 23 6');gargoylewings(); };
+void() garg_fire4	= [$attack8, garg_fire5 ] { garg_fbupdate(4,'-16 26 18'); };
+void() garg_fire5	= [$attack10, garg_fire6 ] { garg_fbupdate(5,'-29 18 38'); };
+void() garg_fire6	= [$attack12, garg_fire7 ] { garg_fbupdate(4,'-34 9 45'); };
+void() garg_fire7	= [$attack14, garg_fire8 ] { garg_fbupdate(3,'-32 22 38'); };
+void() garg_fire8	= [$attack16, garg_fire9 ] { garg_fbfinish();garg_fbthrow(); };
+void() garg_fire9	= [$attack18, garg_fire10 ] { ai_face();monster_idle_sound(); };
+void() garg_fire10	= [$attack20, garg_run1 ] { ai_face();
 	// If enemy really close, goto into a frenzy of fireball attacks
 	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
 	if (SUB_healthEnemyTarget() > 0 && self.enemydist < MON_RANGE_CLOSE) self.think = garg_fire1;
 	else self.attack_state = AS_STRAIGHT;
 };
 
-void()	garg_perch1	=[	$perch2,	garg_perch2	] {monster_idle_sound();ai_stand();};
-void()	garg_perch2	=[	$perch4,	garg_perch3	] {ai_stand();};
-void()	garg_perch3	=[	$perch6,	garg_perch4	] {ai_stand();};
-void()	garg_perch4	=[	$perch8,	garg_perch5	] {ai_stand();};
-void()	garg_perch5	=[	$perch10,	garg_perch6	] {ai_stand();};
-void()	garg_perch6	=[	$perch12,	garg_perch7	] {ai_stand();};
-void()	garg_perch7	=[	$perch14,	garg_perch8	] {ai_stand();};
-void()	garg_perch8	=[	$perch16,	garg_perch9	] {ai_stand();};
-void()	garg_perch9	=[	$perch18,	garg_perch10	] {ai_stand();};
-void()	garg_perch10=[	$perch20,	garg_perch11	] {ai_stand();};
-void()	garg_perch11=[	$perch22,	garg_perch12	] {ai_stand();};
-void()	garg_perch12=[	$perch24,	garg_perch1	] {ai_stand();};
+void()	garg_perch1	= [	$perch2,	garg_perch2	] { monster_idle_sound();ai_stand(); };
+void()	garg_perch2	= [	$perch4,	garg_perch3	] { ai_stand(); };
+void()	garg_perch3	= [	$perch6,	garg_perch4	] { ai_stand(); };
+void()	garg_perch4	= [	$perch8,	garg_perch5	] { ai_stand(); };
+void()	garg_perch5	= [	$perch10,	garg_perch6	] { ai_stand(); };
+void()	garg_perch6	= [	$perch12,	garg_perch7	] { ai_stand(); };
+void()	garg_perch7	= [	$perch14,	garg_perch8	] { ai_stand(); };
+void()	garg_perch8	= [	$perch16,	garg_perch9	] { ai_stand(); };
+void()	garg_perch9	= [	$perch18,	garg_perch10	] { ai_stand(); };
+void()	garg_perch10= [	$perch20,	garg_perch11	] { ai_stand(); };
+void()	garg_perch11= [	$perch22,	garg_perch12	] { ai_stand(); };
+void()	garg_perch12= [	$perch24,	garg_perch1	] { ai_stand(); };
 
 // Sightsound and very quick animation while moving forward
-void()	garg_wakeup1	=[	$flyup2,	garg_wakeup2	] {};
-void()	garg_wakeup2	=[	$flyup4,	garg_wakeup3	] {ai_forward(4);};
-void()	garg_wakeup3	=[	$flyup6,	garg_wakeup4	] {ai_forward(8);};
-void()	garg_wakeup4	=[	$flyup14,	garg_wakeup5	] {ai_forward(8);gargoylewings();};
-void()	garg_wakeup5	=[	$flyup16,	garg_wakeup6	] {ai_forward(4);};
-void()	garg_wakeup6	=[	$flyup20,	garg_run1	] {
+void()	garg_wakeup1	= [	$flyup2,	garg_wakeup2	] {};
+void()	garg_wakeup2	= [	$flyup4,	garg_wakeup3	] { ai_forward(4); };
+void()	garg_wakeup3	= [	$flyup6,	garg_wakeup4	] { ai_forward(8); };
+void()	garg_wakeup4	= [	$flyup14,	garg_wakeup5	] { ai_forward(8);gargoylewings(); };
+void()	garg_wakeup5	= [	$flyup16,	garg_wakeup6	] { ai_forward(4); };
+void()	garg_wakeup6	= [	$flyup20,	garg_run1	] {
 	self.spawnstatue = FALSE;	// No longer stationary
 	self.th_stand = garg_idle1;	// Restore all think state functions
 	self.th_walk = garg_walk1;
@@ -215,28 +214,27 @@ void() gargoyle_wakeup = {
 };
 
 //----------------------------------------------------------------------
-void() gargoyle_statue =
-{
+void() gargoyle_statue = {
 	if (random() < MON_IDLE_SOUND) sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 	
  	self.think = gargoyle_statue;
  	self.nextthink = time + 5 + random()*5;
 };
 
-//======================================================================
+
 // MINION - Grow and spin up from nothing
-//======================================================================
-void() gargoyle_growangle = {self.angles_y = self.angles_y + self.lefty;};
-void() gargoyle_grow1 = [ $grow1, gargoyle_grow2 ] {};
-void() gargoyle_grow2 = [ $grow2, gargoyle_grow3 ] {gargoyle_growangle();};
-void() gargoyle_grow3 = [ $grow3, gargoyle_grow4 ] {gargoyle_growangle();};
-void() gargoyle_grow4 = [ $grow4, gargoyle_grow5 ] {gargoyle_growangle();};
-void() gargoyle_grow5 = [ $grow5, gargoyle_grow6 ] {gargoyle_growangle();};
-void() gargoyle_grow6 = [ $grow6, gargoyle_grow7 ] {gargoyle_growangle();};
-void() gargoyle_grow7 = [ $grow7, gargoyle_grow8 ] {gargoyle_growangle();};
-void() gargoyle_grow8 = [ $grow8, gargoyle_grow9 ] {gargoyle_growangle();};
-void() gargoyle_grow9 = [ $grow9, gargoyle_grow10] {gargoyle_growangle();};
-void() gargoyle_grow10= [ $grow10, garg_run1 ] {
+
+void() gargoyle_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() gargoyle_grow1 = [$grow1, gargoyle_grow2 ] {};
+void() gargoyle_grow2 = [$grow2, gargoyle_grow3 ] { gargoyle_growangle(); };
+void() gargoyle_grow3 = [$grow3, gargoyle_grow4 ] { gargoyle_growangle(); };
+void() gargoyle_grow4 = [$grow4, gargoyle_grow5 ] { gargoyle_growangle(); };
+void() gargoyle_grow5 = [$grow5, gargoyle_grow6 ] { gargoyle_growangle(); };
+void() gargoyle_grow6 = [$grow6, gargoyle_grow7 ] { gargoyle_growangle(); };
+void() gargoyle_grow7 = [$grow7, gargoyle_grow8 ] { gargoyle_growangle(); };
+void() gargoyle_grow8 = [$grow8, gargoyle_grow9 ] { gargoyle_growangle(); };
+void() gargoyle_grow9 = [$grow9, gargoyle_grow10] { gargoyle_growangle(); };
+void() gargoyle_grow10= [$grow10, garg_run1 ] {
 	// Is the gargoyle stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
 		// Time to die!
@@ -266,18 +264,17 @@ void() gargoyle_grow = {
 	gargoyle_grow1();
 };
 
-//============================================================================
+
 // The gargoyle does not have a specific pain animation
 // - Kinn created one from the death animation (Marcher progs)
-void()	garg_pain1	=[	$death3,	garg_pain2	] {};
-void()	garg_pain2	=[	$death4,	garg_pain3	] {};
-void()	garg_pain3	=[	$death3,	garg_pain4	] {};
-void()	garg_pain4	=[	$death2,	garg_pain5	] {};
-void()	garg_pain5	=[	$death1,	garg_run1	] {};
+void()	garg_pain1	= [	$death3,	garg_pain2	] {};
+void()	garg_pain2	= [	$death4,	garg_pain3	] {};
+void()	garg_pain3	= [	$death3,	garg_pain4	] {};
+void()	garg_pain4	= [	$death2,	garg_pain5	] {};
+void()	garg_pain5	= [	$death1,	garg_run1	] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) garg_pain =
-{
+void(entity inflictor, entity attacker, float damage) garg_pain = {
 	// Check for perching gargoyles, need special wakeup
 	if (self.spawnflags & MON_GARGOYLE_PERCH) gargoyle_wakeup();
 	// Statues don't feel pain!
@@ -300,14 +297,14 @@ void(entity inflictor, entity attacker, float damage) garg_pain =
 	}
 };
 
-void()	garg_death1	=[	$death1,	garg_death2	] {};
-void()	garg_death2	=[	$death3,	garg_death3	] {monster_check_gib();};
-void()	garg_death3	=[	$death5,	garg_death4	] {monster_check_gib(); self.solid = SOLID_NOT;};
-void()	garg_death4	=[	$death7,	garg_death5	] {};
-void()	garg_death5	=[	$death9,	garg_death6	] {};
-void()	garg_death6	=[	$death11,	garg_death7	] {};
-void()	garg_death7	=[	$death13,	garg_death8	] {monster_death_postcheck();};
-void()	garg_death8	=[	$death14,	garg_death8	] {monster_deadbody_check();};
+void()	garg_death1	= [	$death1,	garg_death2	] {};
+void()	garg_death2	= [	$death3,	garg_death3	] { monster_check_gib(); };
+void()	garg_death3	= [	$death5,	garg_death4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void()	garg_death4	= [	$death7,	garg_death5	] {};
+void()	garg_death5	= [	$death9,	garg_death6	] {};
+void()	garg_death6	= [	$death11,	garg_death7	] {};
+void()	garg_death7	= [	$death13,	garg_death8	] { monster_death_postcheck(); };
+void()	garg_death8	= [	$death14,	garg_death8	] { monster_deadbody_check(); };
 
 void() garg_die = {
 	// Statues don't die!
@@ -430,8 +427,8 @@ void() monster_afrit = {
 
 
 void() setup_gargoyle = {
-	if (random() < 0.5) self.gib1mdl = string_null; // Randomize gib parts by removing some
-	else if (random() < 0.5) self.gib2mdl = string_null;
+	if (random() < 0.5) self.gib1mdl = ""; // Randomize gib parts by removing some
+	else if (random() < 0.5) self.gib2mdl = "";
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -500,8 +497,7 @@ void() setup_gargoyle = {
 //----------------------------------------------------------------------------
 // A code way to spawn gargoyles (requires monster_minotaurminion entity)
 //----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ) minion_gargoyle =
-{
+void(vector minion_org, entity minion_targ) minion_gargoyle = {
 	local entity minion;
 
 	// Check if there is space to spawn entity

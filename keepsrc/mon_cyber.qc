@@ -27,16 +27,16 @@ void() CyberDemonFireMissile = {
 };
 
 // PM:  Originally had stand1 only.  Use MF's unused frames.
-void() cyber_stand1  =[ $stand1,  cyber_stand2  ] {ai_stand();};
-void() cyber_stand2  =[ $stand2,  cyber_stand3  ] {ai_stand();};
-void() cyber_stand3  =[ $stand3,  cyber_stand4  ] {ai_stand();};
-void() cyber_stand4  =[ $stand4,  cyber_stand5  ] {ai_stand();};
-void() cyber_stand5  =[ $stand5,  cyber_stand6  ] {ai_stand();};
-void() cyber_stand6  =[ $stand6,  cyber_stand7  ] {ai_stand();};
-void() cyber_stand7  =[ $stand5,  cyber_stand8  ] {ai_stand();};
-void() cyber_stand8  =[ $stand4,  cyber_stand9  ] {ai_stand();};
-void() cyber_stand9  =[ $stand3,  cyber_stand10 ] {ai_stand();};
-void() cyber_stand10 =[ $stand2,  cyber_stand1  ] {ai_stand();};
+void() cyber_stand1  = [$stand1,  cyber_stand2  ] { ai_stand(); };
+void() cyber_stand2  = [$stand2,  cyber_stand3  ] { ai_stand(); };
+void() cyber_stand3  = [$stand3,  cyber_stand4  ] { ai_stand(); };
+void() cyber_stand4  = [$stand4,  cyber_stand5  ] { ai_stand(); };
+void() cyber_stand5  = [$stand5,  cyber_stand6  ] { ai_stand(); };
+void() cyber_stand6  = [$stand6,  cyber_stand7  ] { ai_stand(); };
+void() cyber_stand7  = [$stand5,  cyber_stand8  ] { ai_stand(); };
+void() cyber_stand8  = [$stand4,  cyber_stand9  ] { ai_stand(); };
+void() cyber_stand9  = [$stand3,  cyber_stand10 ] { ai_stand(); };
+void() cyber_stand10 = [$stand2,  cyber_stand1  ] { ai_stand(); };
 
 void(float mad) cyber_anim = {
     if ((self.walkframe < 0) || (self.walkframe >= 7))
@@ -68,11 +68,11 @@ void() cyber_reset = {
     if (( self.frame < $walk1 ) || ( self.frame > $walk7 )) self.walkframe = 0;
 };
 
-void() cyber_walk2  =[ $walk1,  cyber_walk2  ] {cyber_anim(FALSE);};
-void() cyber_walk1  = {cyber_reset(); cyber_walk2();};
+void() cyber_walk2  = [$walk1,  cyber_walk2  ] { cyber_anim(FALSE); };
+void() cyber_walk1  = { cyber_reset(); cyber_walk2(); };
 
-void() cyber_run2   =[ $walk1,  cyber_run2   ] {cyber_anim(TRUE);};
-void() cyber_run1   = {cyber_reset(); cyber_run2();};
+void() cyber_run2   = [$walk1,  cyber_run2   ] { cyber_anim(TRUE); };
+void() cyber_run1   = { cyber_reset(); cyber_run2(); };
 
 
 // ATTACK
@@ -83,22 +83,22 @@ void() cyber_run1   = {cyber_reset(); cyber_run2();};
 
 // Update 12/30/09:  Timing closer to Doom.
 // Frames in Doom is 6/shoot/24/shoot/24/shoot/12.  Doom runs at 35 fps.
-void() cyber_missile1  =[ $shoot1,  cyber_missile2  ] {ai_face(); self.shots_left = 3;};
-void() cyber_missile2  =[ $shoot3,  cyber_missile3  ] {ai_face();};
-void() cyber_missile3  =[ $shoot4,  cyber_missile4  ] {ai_face();
+void() cyber_missile1  = [$shoot1,  cyber_missile2  ] { ai_face(); self.shots_left = 3;};
+void() cyber_missile2  = [$shoot3,  cyber_missile3  ] { ai_face(); };
+void() cyber_missile3  = [$shoot4,  cyber_missile4  ] { ai_face();
     CyberDemonFireMissile();
     self.shots_left = self.shots_left - 1;
 };
-void() cyber_missile4  =[ $shoot4,  cyber_missile5  ] {ai_face();};
-void() cyber_missile5  =[ $shoot5,  cyber_missile6  ] {ai_face();};
-void() cyber_missile6  =[ $shoot6,  cyber_missile7  ] { if (self.shots_left < 1) {self.frame = $shoot1; self.think = cyber_run1;} ai_face(); };
-void() cyber_missile7  =[ $shoot7,  cyber_missile8  ] {ai_face();};
-void() cyber_missile8  =[ $shoot8,  cyber_missile2  ] {ai_face();};
+void() cyber_missile4  = [$shoot4,  cyber_missile5  ] { ai_face(); };
+void() cyber_missile5  = [$shoot5,  cyber_missile6  ] { ai_face(); };
+void() cyber_missile6  = [$shoot6,  cyber_missile7  ] { if (self.shots_left < 1) { self.frame = $shoot1; self.think = cyber_run1;} ai_face(); };
+void() cyber_missile7  = [$shoot7,  cyber_missile8  ] { ai_face(); };
+void() cyber_missile8  = [$shoot8,  cyber_missile2  ] { ai_face(); };
 
 	// PAIN
 	// Pain duration was 10/35 in Doom2.  10/35 = 0.285714...
-void() cyber_pain1 =[ $shoot3,  cyber_pain2  ] {self.nextthink = time + 0.1857;};   // Could be T+0.2.
-void() cyber_pain2 =[ $shoot1,  cyber_run1   ] {};
+void() cyber_pain1 = [$shoot3,  cyber_pain2  ] { self.nextthink = time + 0.1857;};   // Could be T+0.2.
+void() cyber_pain2 = [$shoot1,  cyber_run1   ] {};
 
 void(entity inflictor, entity attacker, float damage) cyber_pain = {
 	// Monsters in Doom are allowed to attack anytime after taking damage.
@@ -125,50 +125,50 @@ void(entity inflictor, entity attacker, float damage) cyber_pain = {
 // DEATH
 // Modified SpawnExplosion to use Drake's Tent functions.
 // Also, use Rogue's TE_EXPLOSION2 effect for fewer particles per explosion.
-//void(vector p) SpawnExplosion = {Rocket_Explosion2 (p, 96, 16);};
+//void(vector p) SpawnExplosion = { Rocket_Explosion2 (p, 96, 16); };
 
-void() cyber_die1  =[ $walk1,  cyber_die2  ] { 	
+void() cyber_die1  = [$walk1,  cyber_die2  ] { 	
     // In Doom, the cyderdemon death cry was heard everywhere at full volume.
     sound (self, 7, "drake/cyber/cybdie.wav", 1, ATTN_NONE);
     ai_back(3);
 };
-void() cyber_die2  =[ $walk2,  cyber_die3  ] {ai_back(3);};
-void() cyber_die3  =[ $walk3,  cyber_die4  ] {ai_back(3);};
-void() cyber_die4  =[ $walk4,  cyber_die5  ] {ai_back(3);};
-void() cyber_die5  =[ $walk5,  cyber_die6  ] {ai_back(3);};
-void() cyber_die6  =[ $walk6,  cyber_die7  ] {ai_back(3);};
-void() cyber_die7  =[ $walk7,  cyber_die8  ] {ai_back(3);};
-void() cyber_die8  =[ $walk1,  cyber_die9  ] {ai_back(3); sound (self, 5, "drake/cyber/servo.wav", 1, ATTN_NORM); };
-void() cyber_die9  =[ $shoot1, cyber_die10 ] {
+void() cyber_die2  = [$walk2,  cyber_die3  ] { ai_back(3); };
+void() cyber_die3  = [$walk3,  cyber_die4  ] { ai_back(3); };
+void() cyber_die4  = [$walk4,  cyber_die5  ] { ai_back(3); };
+void() cyber_die5  = [$walk5,  cyber_die6  ] { ai_back(3); };
+void() cyber_die6  = [$walk6,  cyber_die7  ] { ai_back(3); };
+void() cyber_die7  = [$walk7,  cyber_die8  ] { ai_back(3); };
+void() cyber_die8  = [$walk1,  cyber_die9  ] { ai_back(3); sound (self, 5, "drake/cyber/servo.wav", 1, ATTN_NORM); };
+void() cyber_die9  = [$shoot1, cyber_die10 ] {
 	ai_back(3);
     SpawnExplosion (EXPLODE_MED,self.origin + '0 20 60',SOUND_REXP3);
 };
-void() cyber_die10 =[ $shoot2, cyber_die11 ] {ai_back(3);};
-void() cyber_die11 =[ $shoot2, cyber_die12 ] { ai_back(3); SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 -40',SOUND_REXP3); };
-void() cyber_die12 =[ $shoot3, cyber_die13 ] { sound (self, CHAN_VOICE, "drake/cyber/cybdie.wav", 1, ATTN_NORM); ai_back(3); };
-void() cyber_die13 =[ $shoot3, cyber_die14 ] {
+void() cyber_die10 = [$shoot2, cyber_die11 ] { ai_back(3); };
+void() cyber_die11 = [$shoot2, cyber_die12 ] { ai_back(3); SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 -40',SOUND_REXP3); };
+void() cyber_die12 = [$shoot3, cyber_die13 ] { sound (self, CHAN_VOICE, "drake/cyber/cybdie.wav", 1, ATTN_NORM); ai_back(3); };
+void() cyber_die13 = [$shoot3, cyber_die14 ] {
 	SpawnExplosion(EXPLODE_MED,self.origin + '-20 0 20',SOUND_REXP3);
     SpawnExplosion(EXPLODE_MED,self.origin + '20 0 20',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 20',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 20 20',"");
     ai_back(3);
 };
-void() cyber_die14 =[ $shoot3, cyber_die15 ]  {ai_back(3);};
-void() cyber_die15 =[ $shoot2, cyber_die16 ]  {
+void() cyber_die14 = [$shoot3, cyber_die15 ]  { ai_back(3); };
+void() cyber_die15 = [$shoot2, cyber_die16 ]  {
 	SpawnExplosion(EXPLODE_MED,self.origin + '-20 0 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '20 0 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 20 40',"");
     ai_back(2);
 };
-void() cyber_die16 =[ $shoot2, cyber_die17 ] { ai_back(3); };
-void() cyber_die17 =[ $shoot3, cyber_die18 ] { ai_back(1);
+void() cyber_die16 = [$shoot2, cyber_die17 ] { ai_back(3); };
+void() cyber_die17 = [$shoot3, cyber_die18 ] { ai_back(1);
 	SpawnExplosion(EXPLODE_MED,self.origin + '-10 0 70',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '10 0 70',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -10 70',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 10 70',"");
 };
-void() cyber_die18 =[ $shoot3, cyber_die18    ] {
+void() cyber_die18 = [$shoot3, cyber_die18    ] {
 	self.solid = SOLID_NOT;
 	// Update 1/4/10:  Add some explosive eye candy.
     newmis = spawn();

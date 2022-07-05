@@ -6,7 +6,7 @@ string(string old, float type) GetRandomMonsterName = {
 	local float rand;
 
 	retval = old; // in case something bad happens
-	if (retval == string_null) retval = "monster_voreling";
+	if (retval == "") retval = "monster_voreling";
 	rand = random();
 
 	// Are you sure?  Like...really really?  REALLY????
@@ -1010,19 +1010,19 @@ void() func_spawn_use = {
 	mname = self.spawnclassname;
 	if (self.spawnflags & 2) {
 		r = random();
-		if (r < 0.07 && self.brkobj1 != string_null) 	  mname = self.brkobj1;
-		else if (r < 0.14 && self.brkobj2 != string_null) mname = self.brkobj2; 
-		else if (r < 0.21 && self.brkobj3 != string_null) mname = self.brkobj3; 
-		else if (r < 0.28 && self.brkobj4 != string_null) mname = self.brkobj4; 
-		else if (r < 0.35 && self.corner_event != string_null) mname = self.corner_event; 
-		else if (r < 0.42 && self.gib1soundx != string_null) mname = self.gib1soundx; 
-		else if (r < 0.49 && self.gib2soundx != string_null) mname = self.gib2soundx; 
-		else if (r < 0.56 && self.gib3soundx != string_null) mname = self.gib3soundx; 
-		else if (r < 0.63 && self.break_template1 != string_null) mname = self.break_template1; 
-		else if (r < 0.70 && self.break_template2 != string_null) mname = self.break_template2; 
-		else if (r < 0.77 && self.break_template3 != string_null) mname = self.break_template3; 
-		else if (r < 0.84 && self.break_template4 != string_null) mname = self.break_template4; 
-		else if (r < 1.00 && self.break_template5 != string_null) mname = self.break_template5; 
+		if (r < 0.07 && self.brkobj1 != "") 	  mname = self.brkobj1;
+		else if (r < 0.14 && self.brkobj2 != "") mname = self.brkobj2; 
+		else if (r < 0.21 && self.brkobj3 != "") mname = self.brkobj3; 
+		else if (r < 0.28 && self.brkobj4 != "") mname = self.brkobj4; 
+		else if (r < 0.35 && self.corner_event != "") mname = self.corner_event; 
+		else if (r < 0.42 && self.gib1soundx != "") mname = self.gib1soundx; 
+		else if (r < 0.49 && self.gib2soundx != "") mname = self.gib2soundx; 
+		else if (r < 0.56 && self.gib3soundx != "") mname = self.gib3soundx; 
+		else if (r < 0.63 && self.break_template1 != "") mname = self.break_template1; 
+		else if (r < 0.70 && self.break_template2 != "") mname = self.break_template2; 
+		else if (r < 0.77 && self.break_template3 != "") mname = self.break_template3; 
+		else if (r < 0.84 && self.break_template4 != "") mname = self.break_template4; 
+		else if (r < 1.00 && self.break_template5 != "") mname = self.break_template5; 
 	}
 
 	dprint("Spawning a ");
@@ -1035,7 +1035,7 @@ void() func_spawn_use = {
 void() func_spawn = {
 	if (!self.spawnclassname) self.spawnclassname = "monster_dog";
 	precache_monster(self.spawnclassname);
-	if (self.minion_name != string_null) monster_checkminion(self.minion_name);
+	if (self.minion_name != "") monster_checkminion(self.minion_name);
 
 	if (self.wait == 0) self.wait = 0.1;
 	else if (self.wait < 0) self.wait = 0;

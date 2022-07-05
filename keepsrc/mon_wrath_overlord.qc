@@ -40,120 +40,18 @@
 // Also includes the info_overlord_destination definition.
 //=============================================================================
 
-float (entity thePoint) isSpawnPointEmpty = {
-   local entity neighbors;
-   local entity start;
-
-   neighbors = findradius (thePoint.origin,FL_GODMODE);
-   if ( (neighbors == world) )
-      return ( TRUE );
-
-   start = neighbors;
-   while ( neighbors ) {
-      if ( (neighbors != thePoint) ) {
-         if ( (neighbors.flags & FL_MONSTER) ) {
-            return ( FALSE );
-         } else {
-            if ( (neighbors.classname == "player") ) {
-               return ( FALSE );
-            } else {
-               if ( neighbors.think )
-                  return ( FALSE );
-            }
-         }
-      }
-      neighbors = neighbors.chain;
-      if ( (neighbors == start) )
-         return ( TRUE );
-   }
-   return ( TRUE );
-};
-
-entity () overlord_find_dest3 = {
-   local entity furthestDest;
-   local entity bestDest;
-   local entity curDest;
-   local entity thePlayer;
-   local float theDist;
-   local float curDist;
-   local float dot;
-   local vector curVector;
-
-   furthestDest = world;
-   bestDest = world;
-   theDist = FALSE;
-   thePlayer = find (world,classname,"player");
-   curDest = world;
-   makevectors(thePlayer.angles);
-   while ( TRUE ) {
-      curDest = find (curDest,classname,"info_overlord_destination");
-      if ( (curDest == world) ) {
-         if ( (bestDest != world) )
-            return ( bestDest );
-
-         return ( furthestDest );
-      }
-      if ( isSpawnPointEmpty (curDest) ) {
-         curVector = (curDest.origin - thePlayer.origin);
-         curDist = vlen (curVector);
-         curVector = normalize (curVector);
-         dot = (curVector * v_forward);
-         if ( (dot > 0.600) ) {
-            if ( (curDist > 150.000) )
-               bestDest = curDest;
-         }
-         if ( (curDist > theDist) ) {
-            furthestDest = curDest;
-            theDist = curDist;
-         }
-      }
-   }
-   return ( world );
-};
-
-entity () overlord_find_dest = {
-   local entity curDest;
-   local entity lastDest;
-   local float loopCount;
-
-   curDest = find (world,classname,"info_overlord_destination");
-   if ( (curDest != world) ) {
-      lastDest = curDest;
-      loopCount = (random () * MOVETYPE_FLY);
-      while ( (loopCount > TRUE) ) {
-         curDest = nextent (curDest);
-         curDest = find (curDest,classname,"info_overlord_destination");
-         if ( (curDest != world) ) {
-            if ( isSpawnPointEmpty (curDest) ) {
-               loopCount = (loopCount - TRUE);
-               lastDest = curDest;
-            } else {
-               curDest = world;
-            }
-         } else {
-            return ( lastDest );
-         }
-      }
-      return ( curDest );
-   }
-   return ( curDest );
-};
-
 void() overlord_teleport = {
    local float chance;
    local entity theDest;
    local vector org;
 
-   if ( !(self.spawnflags & FL_SWIM) )
-      return ;
+   if (!(self.spawnflags & FL_SWIM)) return;
 
    chance = random();
-   if ( (chance > 0.750) )
-      return ;
+   if (chance > 0.750) return;
 
-   theDest = overlord_find_dest3();
-   if ( (theDest == world) )
-      return ;
+   theDest = SUB_FindTeleportDestinationEntity();
+   if (!theDest) return;
 
    spawn_tfog (self.origin);
    makevectors(self.angles);
@@ -199,15 +97,15 @@ void() overlord_run15 = [ 15.000, overlord_run01 ] { ai_run (STAT_TOTALMONSTERS)
 
 void() overlord_smash;
 
-void() overlord_at_a01 = [ 16.000, overlord_at_a02 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a02 = [ 17.000, overlord_at_a03 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a03 = [ 18.000, overlord_at_a04 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a04 = [ 19.000, overlord_at_a05 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a05 = [ 20.000, overlord_at_a06 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a06 = [ 21.000, overlord_at_a07 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a07 = [ 22.000, overlord_at_a08 ] { overlord_smash();};
-void() overlord_at_a08 = [ 23.000, overlord_at_a09 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a09 = [ 24.000, overlord_at_a10 ] { ai_charge (STAT_TOTALMONSTERS);};
+void() overlord_at_a01 = [ 16.000, overlord_at_a02 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a02 = [ 17.000, overlord_at_a03 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a03 = [ 18.000, overlord_at_a04 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a04 = [ 19.000, overlord_at_a05 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a05 = [ 20.000, overlord_at_a06 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a06 = [ 21.000, overlord_at_a07 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a07 = [ 22.000, overlord_at_a08 ] { overlord_smash(); };
+void() overlord_at_a08 = [ 23.000, overlord_at_a09 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a09 = [ 24.000, overlord_at_a10 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_a10 = [ 25.000, overlord_run01 ] { ai_charge (STAT_TOTALMONSTERS); };
 
 void() overlord_at_b01 = [ 26.000, overlord_at_b02 ] { ai_charge (STAT_TOTALMONSTERS); };
@@ -302,7 +200,7 @@ void() overlord_pn_a07 = [ 72.000, overlord_run01 ] {};
 
 void() overlord_pn_b01 = [ 80.000, overlord_pn_b02 ] {};
 void() overlord_pn_b02 = [ 81.000, overlord_pn_b03 ] {};
-void() overlord_pn_b03 = [ 82.000, overlord_pn_b04 ] { overlord_teleport();};
+void() overlord_pn_b03 = [ 82.000, overlord_pn_b04 ] { overlord_teleport(); };
 void() overlord_pn_b04 = [ 83.000, overlord_pn_b05 ] {};
 void() overlord_pn_b05 = [ 84.000, overlord_pn_b06 ] {};
 void() overlord_pn_b06 = [ 85.000, overlord_pn_b07 ] {};

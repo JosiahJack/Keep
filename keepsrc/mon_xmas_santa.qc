@@ -57,28 +57,28 @@ $frame base1 base2 base3 // (084 - 086) Misc modelling stuff
 // There is no blend animation for this to go from sitting to standing
 // Original MOD had this animation as a standing alternative
 // Really looked odd when the monster jumped straight to running so this isn't used yet.
-void() santa_lounge1 = [ $lounge1, santa_lounge2 ] {monster_idle_sound();ai_stand();};
-void() santa_lounge2 = [ $lounge2, santa_lounge3 ] {ai_stand();};
-void() santa_lounge3 = [ $lounge3, santa_lounge4 ] {ai_stand();};
-void() santa_lounge4 = [ $lounge4, santa_lounge5 ] {ai_stand();};
-void() santa_lounge5 = [ $lounge5, santa_lounge6 ] {ai_stand();};
-void() santa_lounge6 = [ $lounge6, santa_lounge1 ] {ai_stand();};
+void() santa_lounge1 = [$lounge1, santa_lounge2 ] { monster_idle_sound();ai_stand(); };
+void() santa_lounge2 = [$lounge2, santa_lounge3 ] { ai_stand(); };
+void() santa_lounge3 = [$lounge3, santa_lounge4 ] { ai_stand(); };
+void() santa_lounge4 = [$lounge4, santa_lounge5 ] { ai_stand(); };
+void() santa_lounge5 = [$lounge5, santa_lounge6 ] { ai_stand(); };
+void() santa_lounge6 = [$lounge6, santa_lounge1 ] { ai_stand(); };
 
 // A scaled down good santa sitting shaking his head
-void() santa_seatA1 = [ $sitA1, santa_seatA2 ] {};
-void() santa_seatA2 = [ $sitA2, santa_seatA3 ] {};
-void() santa_seatA3 = [ $sitA3, santa_seatA4 ] {};
-void() santa_seatA4 = [ $sitA4, santa_seatA5 ] {};
-void() santa_seatA5 = [ $sitA5, santa_seatA6 ] {};
-void() santa_seatA6 = [ $sitA6, santa_seatA7 ] {};
-void() santa_seatA7 = [ $sitA7, santa_seatA1 ] {self.th_stand();};
+void() santa_seatA1 = [$sitA1, santa_seatA2 ] {};
+void() santa_seatA2 = [$sitA2, santa_seatA3 ] {};
+void() santa_seatA3 = [$sitA3, santa_seatA4 ] {};
+void() santa_seatA4 = [$sitA4, santa_seatA5 ] {};
+void() santa_seatA5 = [$sitA5, santa_seatA6 ] {};
+void() santa_seatA6 = [$sitA6, santa_seatA7 ] {};
+void() santa_seatA7 = [$sitA7, santa_seatA1 ] { self.th_stand(); };
 
-void() santa_seatB1 = [ $sitB1, santa_seatB2 ] {};
-void() santa_seatB2 = [ $sitB2, santa_seatB3 ] {};
-void() santa_seatB3 = [ $sitB3, santa_seatB4 ] {};
-void() santa_seatB4 = [ $sitB4, santa_seatB5 ] {};
-void() santa_seatB5 = [ $sitB5, santa_seatB6 ] {};
-void() santa_seatB6 = [ $sitB6, santa_seatB1 ] {self.th_stand();};
+void() santa_seatB1 = [$sitB1, santa_seatB2 ] {};
+void() santa_seatB2 = [$sitB2, santa_seatB3 ] {};
+void() santa_seatB3 = [$sitB3, santa_seatB4 ] {};
+void() santa_seatB4 = [$sitB4, santa_seatB5 ] {};
+void() santa_seatB5 = [$sitB5, santa_seatB6 ] {};
+void() santa_seatB6 = [$sitB6, santa_seatB1 ] { self.th_stand(); };
 
 void() santa_trigger = {
 	if (self.waitmin > time) return; // Trigger Once
@@ -100,26 +100,26 @@ void() santa_seated = {
 	else santa_seatB1();
 };
 
-void() santa_stand1 = [ $stand1, santa_stand2 ] {monster_idle_sound();ai_stand();};
-void() santa_stand2 = [ $stand2, santa_stand3 ] {ai_stand();};
-void() santa_stand3 = [ $stand3, santa_stand4 ] {ai_stand();};
-void() santa_stand4 = [ $stand4, santa_stand5 ] {ai_stand();};
-void() santa_stand5 = [ $stand5, santa_stand6 ] {ai_stand();};
-void() santa_stand6 = [ $stand6, santa_stand1 ] {ai_stand();};
+void() santa_stand1 = [$stand1, santa_stand2 ] { monster_idle_sound();ai_stand(); };
+void() santa_stand2 = [$stand2, santa_stand3 ] { ai_stand(); };
+void() santa_stand3 = [$stand3, santa_stand4 ] { ai_stand(); };
+void() santa_stand4 = [$stand4, santa_stand5 ] { ai_stand(); };
+void() santa_stand5 = [$stand5, santa_stand6 ] { ai_stand(); };
+void() santa_stand6 = [$stand6, santa_stand1 ] { ai_stand(); };
 
-void() santa_walk1 = [ $run1, santa_walk2 ] {monster_idle_sound();ai_walk(15);}
-void() santa_walk2 = [ $run2, santa_walk3 ] {ai_walk(17);};
-void() santa_walk3 = [ $run3, santa_walk4 ] {monster_footstep(FALSE);ai_walk(15);};
-void() santa_walk4 = [ $run4, santa_walk5 ] {ai_walk(15);};
-void() santa_walk5 = [ $run5, santa_walk6 ] {ai_walk(17);};
-void() santa_walk6 = [ $run6, santa_walk1 ] {monster_footstep(FALSE);ai_walk(15);};
+void() santa_walk1 = [$run1, santa_walk2 ] { monster_idle_sound();ai_walk(15);}
+void() santa_walk2 = [$run2, santa_walk3 ] { ai_walk(17); };
+void() santa_walk3 = [$run3, santa_walk4 ] { monster_footstep(FALSE);ai_walk(15); };
+void() santa_walk4 = [$run4, santa_walk5 ] { ai_walk(15); };
+void() santa_walk5 = [$run5, santa_walk6 ] { ai_walk(17); };
+void() santa_walk6 = [$run6, santa_walk1 ] { monster_footstep(FALSE);ai_walk(15); };
 
-void() santa_run1 = [ $run1, santa_run2 ] {monster_idle_sound();ai_run(20);}
-void() santa_run2 = [ $run2, santa_run3 ] {ai_run(24);};
-void() santa_run3 = [ $run3, santa_run4 ] {monster_footstep(FALSE);ai_run(20);};
-void() santa_run4 = [ $run4, santa_run5 ] {ai_run(20);};
-void() santa_run5 = [ $run5, santa_run6 ] {ai_run(24);};
-void() santa_run6 = [ $run6, santa_run1 ] {monster_footstep(FALSE);ai_run(20);};
+void() santa_run1 = [$run1, santa_run2 ] { monster_idle_sound();ai_run(20);}
+void() santa_run2 = [$run2, santa_run3 ] { ai_run(24); };
+void() santa_run3 = [$run3, santa_run4 ] { monster_footstep(FALSE);ai_run(20); };
+void() santa_run4 = [$run4, santa_run5 ] { ai_run(20); };
+void() santa_run5 = [$run5, santa_run6 ] { ai_run(24); };
+void() santa_run6 = [$run6, santa_run1 ] { monster_footstep(FALSE);ai_run(20); };
 
 // MELEE : Sack of Presents
 void() SantaMelee = {
@@ -149,19 +149,19 @@ void() SantaMelee = {
 	SpawnMeatSpray (self, self.enemy, crandom() * 100);
 };
 
-void() santa_sack1 = [ $sack1, santa_sack2 ] {ai_face();};
-void() santa_sack2 = [ $sack2, santa_sack3 ] {};
-void() santa_sack3 = [ $sack3, santa_sack4 ] {ai_face();};
-void() santa_sack4 = [ $sack4, santa_sack5 ] {ai_face();
+void() santa_sack1 = [$sack1, santa_sack2 ] { ai_face(); };
+void() santa_sack2 = [$sack2, santa_sack3 ] {};
+void() santa_sack3 = [$sack3, santa_sack4 ] { ai_face(); };
+void() santa_sack4 = [$sack4, santa_sack5 ] { ai_face();
 	// This sound is exactly 0.4s long, with hit to complete
 	sound(self, CHAN_WEAPON, "xmas/santa/sack_swing.wav", 1, ATTN_NORM);
 };
-void() santa_sack5 = [ $sack5, santa_sack6 ] {ai_charge(10);};
-void() santa_sack6 = [ $sack6, santa_sack7 ] {ai_charge(10);};
-void() santa_sack7 = [ $sack7, santa_sack8 ] {ai_charge(10);};
-void() santa_sack8 = [ $sack8, santa_sack9 ] {SantaMelee();};
-void() santa_sack9 = [ $sack9, santa_sack10 ] {};
-void() santa_sack10 = [ $sack10, santa_run1 ] {
+void() santa_sack5 = [$sack5, santa_sack6 ] { ai_charge(10); };
+void() santa_sack6 = [$sack6, santa_sack7 ] { ai_charge(10); };
+void() santa_sack7 = [$sack7, santa_sack8 ] { ai_charge(10); };
+void() santa_sack8 = [$sack8, santa_sack9 ] { SantaMelee(); };
+void() santa_sack9 = [$sack9, santa_sack10 ] {};
+void() santa_sack10 = [$sack10, santa_run1 ] {
 	// Check if snowman is within range to attack again
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = santa_sack3;
@@ -200,13 +200,13 @@ void() Santa_FireSnow = {
 	launch_projectile(spot1,spot2,NO_SPIN,CT_PROJ_SANTA,self.attack_speed);
 };
 
-void() santa_snow1 = [ $attack1, santa_snow2 ] {ai_trackenemy();
+void() santa_snow1 = [$attack1, santa_snow2 ] { ai_trackenemy();
 	// First 0.2s is repeatable to get machine gun sound
 	sound(self, CHAN_WEAPON, "xmas/santa/fire.wav", 1, ATTN_NORM);
 };
-void() santa_snow2 = [ $attack2, santa_snow3 ] {ai_trackenemy();};
-void() santa_snow3 = [ $attack3, santa_snow4 ] {Santa_FireSnow();};
-void() santa_snow4 = [ $attack4, santa_run1 ] {ai_trackenemy();
+void() santa_snow2 = [$attack2, santa_snow3 ] { ai_trackenemy(); };
+void() santa_snow3 = [$attack3, santa_snow4 ] { Santa_FireSnow(); };
+void() santa_snow4 = [$attack4, santa_run1 ] { ai_trackenemy();
 	// Anymore projectiles to fire?
 	if (self.attack_chance < MONAI_SANTAMAX) {
 		// Is the player still visible?
@@ -218,32 +218,30 @@ void() santa_snow4 = [ $attack4, santa_run1 ] {ai_trackenemy();
 	}	
 };
 
-void() santa_snowstart =
-{
+void() santa_snowstart = {
 	self.attack_track = self.enemy.origin;
 	self.attack_chance = self.attack_timer = 0;
 	santa_snow1();
 };
 
-//======================================================================
+
 // PAIN : quick reflection
-//======================================================================
-void() santa_painA1 = [ $painA1, santa_painA2 ] {};
-void() santa_painA2 = [ $painA2, santa_painA3 ] {};
-void() santa_painA3 = [ $painA3, santa_painA4 ] {};
-void() santa_painA4 = [ $painA4, santa_painA5 ] {};
-void() santa_painA5 = [ $painA5, santa_run1 ] {};
+
+void() santa_painA1 = [$painA1, santa_painA2 ] {};
+void() santa_painA2 = [$painA2, santa_painA3 ] {};
+void() santa_painA3 = [$painA3, santa_painA4 ] {};
+void() santa_painA4 = [$painA4, santa_painA5 ] {};
+void() santa_painA5 = [$painA5, santa_run1 ] {};
 
 //----------------------------------------------------------------------
-void() santa_painB1 = [ $painB1, santa_painB2 ] {};
-void() santa_painB2 = [ $painB2, santa_painB3 ] {};
-void() santa_painB3 = [ $painB3, santa_painB4 ] {};
-void() santa_painB4 = [ $painB4, santa_painB5 ] {};
-void() santa_painB5 = [ $painB5, santa_run1 ] {};
+void() santa_painB1 = [$painB1, santa_painB2 ] {};
+void() santa_painB2 = [$painB2, santa_painB3 ] {};
+void() santa_painB3 = [$painB3, santa_painB4 ] {};
+void() santa_painB4 = [$painB4, santa_painB5 ] {};
+void() santa_painB5 = [$painB5, santa_run1 ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) santa_pain =
-{
+void(entity inflictor, entity attacker, float damage) santa_pain = {
 	// Good santa cannot feel pain or die
 	if (self.spawnflags & MON_SANTA_GOOD) return;
 	
@@ -265,36 +263,35 @@ void(entity inflictor, entity attacker, float damage) santa_pain =
 	}
 };
 
-//======================================================================
+
 // Typical forward/backward death animation
-//======================================================================
-void() santa_die1 =[ $death1, santa_die2] {};
-void() santa_die2 =[ $death2, santa_die3] {monster_check_gib();};
-void() santa_die3 =[ $death3, santa_die4] {monster_check_gib();
+
+void() santa_die1 = [$death1, santa_die2] {};
+void() santa_die2 = [$death2, santa_die3] { monster_check_gib(); };
+void() santa_die3 = [$death3, santa_die4] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() santa_die4 =[ $death4, santa_die5] {};
-void() santa_die5 =[ $death5, santa_die6] {};
-void() santa_die6 =[ $death6, santa_die7] {};
-void() santa_die7 =[ $death7, santa_die8] {};
-void() santa_die8 =[ $death8, santa_die9] {};
-void() santa_die9 =[ $death9, santa_die10] {monster_death_postcheck();};
-void() santa_die10 =[ $death10, santa_die10] {monster_deadbody_check();};
+void() santa_die4 = [$death4, santa_die5] {};
+void() santa_die5 = [$death5, santa_die6] {};
+void() santa_die6 = [$death6, santa_die7] {};
+void() santa_die7 = [$death7, santa_die8] {};
+void() santa_die8 = [$death8, santa_die9] {};
+void() santa_die9 = [$death9, santa_die10] { monster_death_postcheck(); };
+void() santa_die10 = [$death10, santa_die10] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() santa_dieb1 =[ $bdeath1, santa_dieb2] {};
-void() santa_dieb2 =[ $bdeath2, santa_dieb3] {monster_check_gib();};
-void() santa_dieb3 =[ $bdeath3, santa_dieb4] {monster_check_gib();
+void() santa_dieb1 = [$bdeath1, santa_dieb2] {};
+void() santa_dieb2 = [$bdeath2, santa_dieb3] { monster_check_gib(); };
+void() santa_dieb3 = [$bdeath3, santa_dieb4] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() santa_dieb4 =[ $bdeath4, santa_dieb5] {};
-void() santa_dieb5 =[ $bdeath5, santa_dieb6] {};
-void() santa_dieb6 =[ $bdeath6, santa_dieb7] {};
-void() santa_dieb7 =[ $bdeath7, santa_dieb8] {};
-void() santa_dieb8 =[ $bdeath8, santa_dieb9] {ai_back(4);monster_death_postcheck();};
-void() santa_dieb9 =[ $bdeath9, santa_dieb9] {monster_deadbody_check();};
+void() santa_dieb4 = [$bdeath4, santa_dieb5] {};
+void() santa_dieb5 = [$bdeath5, santa_dieb6] {};
+void() santa_dieb6 = [$bdeath6, santa_dieb7] {};
+void() santa_dieb7 = [$bdeath7, santa_dieb8] {};
+void() santa_dieb8 = [$bdeath8, santa_dieb9] { ai_back(4);monster_death_postcheck(); };
+void() santa_dieb9 = [$bdeath9, santa_dieb9] { monster_deadbody_check(); };
 
 //----------------------------------------------------------------------
-void() santa_die =
-{
+void() santa_die = {
 	// Good santa cannot feel pain or die
 	if (self.spawnflags & MON_SANTA_GOOD) return;
 	

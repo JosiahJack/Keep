@@ -255,7 +255,7 @@ float(float save, float take, vector dir) CSQC_Parse_Damage = {
 // CSQC_Parse_Event is called when the client sees a
 // #define svcfte_cgamepacket (83) message from the server
 // Not supported for DP, is called from only QSS/FTE
-void() CSQC_Parse_Event = { };
+void() CSQC_Parse_Event = {};
 
 // Can intercept printed messages from the server (top of screen)
 // printlvl (text filtering) 0=low, 1=medium, 2=high, 3=chat

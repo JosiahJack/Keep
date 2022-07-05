@@ -114,7 +114,7 @@ void() fx_spark = { // [ENTITY]
 	if (self.wait < 0) self.wait = 0; // default frequency to 0
 	self.think = spark_spawn;
 	
-	if (self.targetname != string_null && !(self.spawnflags & 1)) spark_pause();
+	if (self.targetname != "" && !(self.spawnflags & 1)) spark_pause();
 	else spark_start();
 };
 
@@ -149,7 +149,7 @@ void() sound_start = { // [FUNCTION]
 
 void() sound_pause = { // [FUNCTION]
 	// play the shutoff wav if we got one, then hang around until next use
-	if (self.noise1 != string_null) sound (self, CHAN_VOICE, self.noise1, self.volume, self.distance);
+	if (self.noise1 != "") sound (self, CHAN_VOICE, self.noise1, self.volume, self.distance);
 	self.nextthink = -1;
 	self.use = sound_start;
 };
@@ -186,9 +186,9 @@ void() sound_play = { // [FUNCTION]
 // still act weird).
 // If you need a triggered looping sound (that can't be turned off once started) use fx_ambientsound.
 void() fx_sound = { // [ENTITY]
-	if (self.noise == string_null) self.noise = "drake/misc/secret2.wav";
+	if (self.noise == "") self.noise = "drake/misc/secret2.wav";
 	precache_sound(self.noise);
-	if (self.noise1 != string_null) precache_sound(self.noise1);
+	if (self.noise1 != "") precache_sound(self.noise1);
 	if (self.volume <= 0) self.volume = 1.0; // default volume to one if not specified
 	if (self.distance < ATTN_NONE || self.distance > ATTN_STATIC) self.distance = ATTN_NORM; // default attenuation to NORM if out of range
 	if (!self.count) self.count = -1; // Set infinite repeat if not specified	
@@ -197,7 +197,7 @@ void() fx_sound = { // [ENTITY]
 	if (self.cnt < 0) self.cnt = 0; // Make sure random seed is valid
 
 	// start sound when triggered
-	if (self.targetname != string_null && !(self.spawnflags & 1)) self.use = sound_start;
+	if (self.targetname != "" && !(self.spawnflags & 1)) self.use = sound_start;
 	else {// Start immediately
 		self.use = sound_pause;// next use stops it
 		self.think = sound_play;

@@ -82,26 +82,25 @@ $frame decap9 decap10 decap11
 $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6 decapb7 decapb8
 $frame decapb9
 
-void() ranger_axstand1  =[ $axstnd1,  ranger_axstand2   ] {ai_stand();};
-void() ranger_axstand2  =[ $axstnd2,  ranger_axstand3   ] {ai_stand();};
-void() ranger_axstand3  =[ $axstnd3,  ranger_axstand4   ] {ai_stand();};
-void() ranger_axstand4  =[ $axstnd4,  ranger_axstand5   ] {ai_stand();};
-void() ranger_axstand5  =[ $axstnd5,  ranger_axstand6   ] {ai_stand();};
-void() ranger_axstand6  =[ $axstnd6,  ranger_axstand7   ] {ai_stand();};
-void() ranger_axstand7  =[ $axstnd7,  ranger_axstand8   ] {ai_stand();};
-void() ranger_axstand8  =[ $axstnd8,  ranger_axstand9   ] {ai_stand();};
-void() ranger_axstand9  =[ $axstnd9,  ranger_axstand10  ] {ai_stand();};
-void() ranger_axstand10 =[ $axstnd10, ranger_axstand11  ] {ai_stand();};
-void() ranger_axstand11 =[ $axstnd11, ranger_axstand1   ] {ai_stand();};
+void() ranger_axstand1  = [$axstnd1,  ranger_axstand2   ] { ai_stand(); };
+void() ranger_axstand2  = [$axstnd2,  ranger_axstand3   ] { ai_stand(); };
+void() ranger_axstand3  = [$axstnd3,  ranger_axstand4   ] { ai_stand(); };
+void() ranger_axstand4  = [$axstnd4,  ranger_axstand5   ] { ai_stand(); };
+void() ranger_axstand5  = [$axstnd5,  ranger_axstand6   ] { ai_stand(); };
+void() ranger_axstand6  = [$axstnd6,  ranger_axstand7   ] { ai_stand(); };
+void() ranger_axstand7  = [$axstnd7,  ranger_axstand8   ] { ai_stand(); };
+void() ranger_axstand8  = [$axstnd8,  ranger_axstand9   ] { ai_stand(); };
+void() ranger_axstand9  = [$axstnd9,  ranger_axstand10  ] { ai_stand(); };
+void() ranger_axstand10 = [$axstnd10, ranger_axstand11  ] { ai_stand(); };
+void() ranger_axstand11 = [$axstnd11, ranger_axstand1   ] { ai_stand(); };
 
-void() ranger_stand1    =[ $stand1,  ranger_stand2  ] {ai_stand();};
-void() ranger_stand2    =[ $stand2,  ranger_stand3  ] {ai_stand();};
-void() ranger_stand3    =[ $stand3,  ranger_stand4  ] {ai_stand();};
-void() ranger_stand4    =[ $stand4,  ranger_stand5  ] {ai_stand();};
-void() ranger_stand5    =[ $stand5,  ranger_stand1  ] {ai_stand();};
+void() ranger_stand1    = [$stand1,  ranger_stand2  ] { ai_stand(); };
+void() ranger_stand2    = [$stand2,  ranger_stand3  ] { ai_stand(); };
+void() ranger_stand3    = [$stand3,  ranger_stand4  ] { ai_stand(); };
+void() ranger_stand4    = [$stand4,  ranger_stand5  ] { ai_stand(); };
+void() ranger_stand5    = [$stand5,  ranger_stand1  ] { ai_stand(); };
 
-void() ranger_stand =
-{
+void() ranger_stand = {
     if (self.war & WARx_AXE_FRAMES)
         ranger_axstand1();
     else
@@ -109,50 +108,50 @@ void() ranger_stand =
 };
 
 // Since player model does not have a proper walk scene, animate the run scene at half speed.
-void() ranger_axwalk1  =[ $axrun1,  ranger_axwalk2  ] {ai_walk(10);};
-void() ranger_axwalk2  =[ $axrun1,  ranger_axwalk3  ] {ai_walk(10);};
-void() ranger_axwalk3  =[ $axrun2,  ranger_axwalk4  ] {M_Step(); ai_walk(8);};
-void() ranger_axwalk4  =[ $axrun2,  ranger_axwalk5  ] {ai_walk(8);};
-void() ranger_axwalk5  =[ $axrun3,  ranger_axwalk6  ] {ai_walk(5);};
-void() ranger_axwalk6  =[ $axrun3,  ranger_axwalk7  ] {ai_walk(4);};
-void() ranger_axwalk7  =[ $axrun4,  ranger_axwalk8  ] {ai_walk(10);};
-void() ranger_axwalk8  =[ $axrun4,  ranger_axwalk9  ] {ai_walk(10);};
-void() ranger_axwalk9  =[ $axrun5,  ranger_axwalk10 ] {M_Step(); ai_walk(8);};
-void() ranger_axwalk10 =[ $axrun5,  ranger_axwalk11 ] {ai_walk(8);};
-void() ranger_axwalk11 =[ $axrun6,  ranger_axwalk12 ] {ai_walk(5);};
-void() ranger_axwalk12 =[ $axrun6,  ranger_axwalk1  ] {ai_walk(4);};
+void() ranger_axwalk1  = [$axrun1,  ranger_axwalk2  ] { ai_walk(10); };
+void() ranger_axwalk2  = [$axrun1,  ranger_axwalk3  ] { ai_walk(10); };
+void() ranger_axwalk3  = [$axrun2,  ranger_axwalk4  ] { M_Step(); ai_walk(8); };
+void() ranger_axwalk4  = [$axrun2,  ranger_axwalk5  ] { ai_walk(8); };
+void() ranger_axwalk5  = [$axrun3,  ranger_axwalk6  ] { ai_walk(5); };
+void() ranger_axwalk6  = [$axrun3,  ranger_axwalk7  ] { ai_walk(4); };
+void() ranger_axwalk7  = [$axrun4,  ranger_axwalk8  ] { ai_walk(10); };
+void() ranger_axwalk8  = [$axrun4,  ranger_axwalk9  ] { ai_walk(10); };
+void() ranger_axwalk9  = [$axrun5,  ranger_axwalk10 ] { M_Step(); ai_walk(8); };
+void() ranger_axwalk10 = [$axrun5,  ranger_axwalk11 ] { ai_walk(8); };
+void() ranger_axwalk11 = [$axrun6,  ranger_axwalk12 ] { ai_walk(5); };
+void() ranger_axwalk12 = [$axrun6,  ranger_axwalk1  ] { ai_walk(4); };
 
-void() ranger_walk1  =[ $rockrun1,  ranger_walk2  ] {ai_walk(10);};
-void() ranger_walk2  =[ $rockrun1,  ranger_walk3  ] {ai_walk(10);};
-void() ranger_walk3  =[ $rockrun2,  ranger_walk4  ] {M_Step(); ai_walk(8);};
-void() ranger_walk4  =[ $rockrun2,  ranger_walk5  ] {ai_walk(8);};
-void() ranger_walk5  =[ $rockrun3,  ranger_walk6  ] {ai_walk(6);};
-void() ranger_walk6  =[ $rockrun3,  ranger_walk7  ] {ai_walk(6);};
-void() ranger_walk7  =[ $rockrun4,  ranger_walk8  ] {ai_walk(10);};
-void() ranger_walk8  =[ $rockrun4,  ranger_walk9  ] {ai_walk(10);};
-void() ranger_walk9  =[ $rockrun5,  ranger_walk10 ] {M_Step(); ai_walk(8);};
-void() ranger_walk10 =[ $rockrun5,  ranger_walk11 ] {ai_walk(8);};
-void() ranger_walk11 =[ $rockrun6,  ranger_walk12 ] {ai_walk(8);};
-void() ranger_walk12 =[ $rockrun6,  ranger_walk1  ] {ai_walk(8);};
+void() ranger_walk1  = [$rockrun1,  ranger_walk2  ] { ai_walk(10); };
+void() ranger_walk2  = [$rockrun1,  ranger_walk3  ] { ai_walk(10); };
+void() ranger_walk3  = [$rockrun2,  ranger_walk4  ] { M_Step(); ai_walk(8); };
+void() ranger_walk4  = [$rockrun2,  ranger_walk5  ] { ai_walk(8); };
+void() ranger_walk5  = [$rockrun3,  ranger_walk6  ] { ai_walk(6); };
+void() ranger_walk6  = [$rockrun3,  ranger_walk7  ] { ai_walk(6); };
+void() ranger_walk7  = [$rockrun4,  ranger_walk8  ] { ai_walk(10); };
+void() ranger_walk8  = [$rockrun4,  ranger_walk9  ] { ai_walk(10); };
+void() ranger_walk9  = [$rockrun5,  ranger_walk10 ] { M_Step(); ai_walk(8); };
+void() ranger_walk10 = [$rockrun5,  ranger_walk11 ] { ai_walk(8); };
+void() ranger_walk11 = [$rockrun6,  ranger_walk12 ] { ai_walk(8); };
+void() ranger_walk12 = [$rockrun6,  ranger_walk1  ] { ai_walk(8); };
 
 void() ranger_walk = {
     if (self.war & WARx_AXE_FRAMES) ranger_axwalk1();
     else ranger_walk1();
 };
 
-void() ranger_axrun1    =[ $axrun1,  ranger_axrun2  ] {ai_run(self.speed);};
-void() ranger_axrun2    =[ $axrun2,  ranger_axrun3  ] {M_Step(); ai_run(self.speed);};
-void() ranger_axrun3    =[ $axrun3,  ranger_axrun4  ] {ai_run(self.speed);};
-void() ranger_axrun4    =[ $axrun4,  ranger_axrun5  ] {ai_run(self.speed);};
-void() ranger_axrun5    =[ $axrun5,  ranger_axrun6  ] {M_Step(); ai_run(self.speed);};
-void() ranger_axrun6    =[ $axrun6,  ranger_axrun1  ] {ai_run(self.speed);};
+void() ranger_axrun1    = [$axrun1,  ranger_axrun2  ] { ai_run(self.speed); };
+void() ranger_axrun2    = [$axrun2,  ranger_axrun3  ] { M_Step(); ai_run(self.speed); };
+void() ranger_axrun3    = [$axrun3,  ranger_axrun4  ] { ai_run(self.speed); };
+void() ranger_axrun4    = [$axrun4,  ranger_axrun5  ] { ai_run(self.speed); };
+void() ranger_axrun5    = [$axrun5,  ranger_axrun6  ] { M_Step(); ai_run(self.speed); };
+void() ranger_axrun6    = [$axrun6,  ranger_axrun1  ] { ai_run(self.speed); };
 
-void() ranger_run1  =[ $rockrun1,  ranger_run2  ] {ai_run(self.speed);};
-void() ranger_run2  =[ $rockrun2,  ranger_run3  ] {M_Step(); ai_run(self.speed);};
-void() ranger_run3  =[ $rockrun3,  ranger_run4  ] {ai_run(self.speed);};
-void() ranger_run4  =[ $rockrun4,  ranger_run5  ] {ai_run(self.speed);};
-void() ranger_run5  =[ $rockrun5,  ranger_run6  ] {M_Step(); ai_run(self.speed);};
-void() ranger_run6  =[ $rockrun6,  ranger_run1  ] {ai_run(self.speed);};
+void() ranger_run1  = [$rockrun1,  ranger_run2  ] { ai_run(self.speed); };
+void() ranger_run2  = [$rockrun2,  ranger_run3  ] { M_Step(); ai_run(self.speed); };
+void() ranger_run3  = [$rockrun3,  ranger_run4  ] { ai_run(self.speed); };
+void() ranger_run4  = [$rockrun4,  ranger_run5  ] { ai_run(self.speed); };
+void() ranger_run5  = [$rockrun5,  ranger_run6  ] { M_Step(); ai_run(self.speed); };
+void() ranger_run6  = [$rockrun6,  ranger_run1  ] { ai_run(self.speed); };
 
 void() ranger_run = {
     self.cnt = 0;   // Reset Nightmare fire counter.
@@ -254,7 +253,7 @@ void(float dist) ranger_charge = {
     else safe_goal (dist);
 };
 
-void(float dist) ranger_strafe = {ai_face(); ai_run_strafe (dist);};
+void(float dist) ranger_strafe = { ai_face(); ai_run_strafe (dist); };
 
 void(float dist) ranger_axe_step = {
     local vector p1, p2;
@@ -284,7 +283,7 @@ void(void() thinkst) ranger_break = {
     else if (!visible (self.enemy)) self.think = thinkst;
 };
 
-void() sfx_axe = {sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM);};
+void() sfx_axe = { sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); };
 
 // NOTE:  Modified axe attacks to be like CoE's axeman instead of player.
 // FIXME:  Change attacks to be more like the Bane's.
@@ -292,50 +291,50 @@ void() ranger_axer;
 
 // Standard four single axe attacks.
 // Steps for axatt* should be = {8, 8, 8, 15, 10, 8}.
-void() ranger_axe1  =[ $axatt1,  ranger_axe2  ] {sfx_axe(); ranger_charge(self.speed);};
-void() ranger_axe2  =[ $axatt2,  ranger_axe3  ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axe3  =[ $axatt3,  ranger_axe4  ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axe4  =[ $axatt4,  ranger_axe5  ] {ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer);};
-void() ranger_axe5  =[ $axatt5,  ranger_axe6  ] {ranger_axe_step(self.speed);};
-void() ranger_axe6  =[ $axatt6,  ranger_run   ] {ranger_axe_step(self.speed);};
+void() ranger_axe1  = [$axatt1,  ranger_axe2  ] { sfx_axe(); ranger_charge(self.speed); };
+void() ranger_axe2  = [$axatt2,  ranger_axe3  ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axe3  = [$axatt3,  ranger_axe4  ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axe4  = [$axatt4,  ranger_axe5  ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axe5  = [$axatt5,  ranger_axe6  ] { ranger_axe_step(self.speed); };
+void() ranger_axe6  = [$axatt6,  ranger_run   ] { ranger_axe_step(self.speed); };
 
-void() ranger_axeb1 =[ $axattb1, ranger_axeb2 ] {sfx_axe(); ranger_charge(self.speed);};
-void() ranger_axebx =[ $axattb2, ranger_axeb3 ] {sfx_axe(); ranger_charge(self.speed);ai_melee();};
-void() ranger_axeb2 =[ $axattb2, ranger_axeb3 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axeb3 =[ $axattb3, ranger_axeb4 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axeb4 =[ $axattb4, ranger_axeb5 ] {ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer);};
-void() ranger_axeb5 =[ $axattb5, ranger_axeb6 ] {ranger_axe_step(self.speed);};
-void() ranger_axeb6 =[ $axattb6, ranger_run   ] {ranger_axe_step(self.speed);};
+void() ranger_axeb1 = [$axattb1, ranger_axeb2 ] { sfx_axe(); ranger_charge(self.speed); };
+void() ranger_axebx = [$axattb2, ranger_axeb3 ] { sfx_axe(); ranger_charge(self.speed);ai_melee(); };
+void() ranger_axeb2 = [$axattb2, ranger_axeb3 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axeb3 = [$axattb3, ranger_axeb4 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axeb4 = [$axattb4, ranger_axeb5 ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axeb5 = [$axattb5, ranger_axeb6 ] { ranger_axe_step(self.speed); };
+void() ranger_axeb6 = [$axattb6, ranger_run   ] { ranger_axe_step(self.speed); };
 
-void() ranger_axec1 =[ $axattc1, ranger_axec2 ] {sfx_axe(); ranger_charge(self.speed);};
-void() ranger_axec2 =[ $axattc2, ranger_axec3 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axec3 =[ $axattc3, ranger_axec4 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axec4 =[ $axattc4, ranger_axec5 ] {ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer);};
-void() ranger_axec5 =[ $axattc5, ranger_axec6 ] {ranger_axe_step(self.speed);};
-void() ranger_axec6 =[ $axattc6, ranger_run   ] {ranger_axe_step(self.speed);};
+void() ranger_axec1 = [$axattc1, ranger_axec2 ] { sfx_axe(); ranger_charge(self.speed); };
+void() ranger_axec2 = [$axattc2, ranger_axec3 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axec3 = [$axattc3, ranger_axec4 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axec4 = [$axattc4, ranger_axec5 ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axec5 = [$axattc5, ranger_axec6 ] { ranger_axe_step(self.speed); };
+void() ranger_axec6 = [$axattc6, ranger_run   ] { ranger_axe_step(self.speed); };
 
-void() ranger_axed1 =[ $axattd1, ranger_axed2 ] {sfx_axe(); ranger_charge(self.speed);};
-void() ranger_axed2 =[ $axattd2, ranger_axed3 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axed3 =[ $axattd3, ranger_axed4 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axed4 =[ $axattd4, ranger_axed5 ] {ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer);};
-void() ranger_axed5 =[ $axattd5, ranger_axed6 ] {ranger_axe_step(self.speed);};
-void() ranger_axed6 =[ $axattd6, ranger_run   ] {ranger_axe_step(self.speed);};
+void() ranger_axed1 = [$axattd1, ranger_axed2 ] { sfx_axe(); ranger_charge(self.speed); };
+void() ranger_axed2 = [$axattd2, ranger_axed3 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axed3 = [$axattd3, ranger_axed4 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axed4 = [$axattd4, ranger_axed5 ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axed5 = [$axattd5, ranger_axed6 ] { ranger_axe_step(self.speed); };
+void() ranger_axed6 = [$axattd6, ranger_run   ] { ranger_axe_step(self.speed); };
 
 // Three hit flurry.  First hit chains into flyby combo.
-void() ranger_axee1 =[ $axatt1,  ranger_axee2 ] {sfx_axe(); ranger_charge(self.speed);};
-void() ranger_axee2 =[ $axatt2,  ranger_axee3 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axee3 =[ $axatt3,  ranger_axee4 ] {ranger_charge(self.speed);ai_melee();};
-void() ranger_axee4 =[ $axatt4,  ranger_axefx ] {ranger_break(ranger_axe5);ranger_charge(self.speed);ai_melee();};
+void() ranger_axee1 = [$axatt1,  ranger_axee2 ] { sfx_axe(); ranger_charge(self.speed); };
+void() ranger_axee2 = [$axatt2,  ranger_axee3 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axee3 = [$axatt3,  ranger_axee4 ] { ranger_charge(self.speed);ai_melee(); };
+void() ranger_axee4 = [$axatt4,  ranger_axefx ] { ranger_break(ranger_axe5);ranger_charge(self.speed);ai_melee(); };
 
 // Fast one-two flyby combo.
-void() ranger_axef1 =[ $axattd1, ranger_axef2 ] {sfx_axe(); ai_charge_left(self.speed);};
-void() ranger_axefx =[ $axattd2, ranger_axef3 ] {sfx_axe(); ai_charge_left(self.speed);ai_melee();};
-void() ranger_axef2 =[ $axattd2, ranger_axef3 ] {ai_charge_left(self.speed);ai_melee();};
-void() ranger_axef3 =[ $axattd3, ranger_axef4 ] {ai_charge_left(self.speed);ai_melee();};
-void() ranger_axef4 =[ $axattd4, ranger_axeg  ] {ranger_break(ranger_axed5);ai_charge_left(self.speed);ai_melee();};
+void() ranger_axef1 = [$axattd1, ranger_axef2 ] { sfx_axe(); ai_charge_left(self.speed); };
+void() ranger_axefx = [$axattd2, ranger_axef3 ] { sfx_axe(); ai_charge_left(self.speed);ai_melee(); };
+void() ranger_axef2 = [$axattd2, ranger_axef3 ] { ai_charge_left(self.speed);ai_melee(); };
+void() ranger_axef3 = [$axattd3, ranger_axef4 ] { ai_charge_left(self.speed);ai_melee(); };
+void() ranger_axef4 = [$axattd4, ranger_axeg  ] { ranger_break(ranger_axed5);ai_charge_left(self.speed);ai_melee(); };
 
 // Common combo ender.
-void() ranger_axeg  =[ $axattb1, ranger_axebx ] {
+void() ranger_axeg  = [$axattb1, ranger_axebx ] {
     M_Reload (0.5);     // Making another swing.
     if (random() < 0.5) self.think = ranger_axec1;
     ranger_charge(self.speed);
@@ -363,7 +362,7 @@ void() ranger_axer = {
     M_Reload (0.5);
 };
 
-entity() Ranger_Target = {if (skill >= 2) return self.enemy; return world;};
+entity() Ranger_Target = { if (skill >= 2) return self.enemy; return world;};
 
 void() ranger_shotgun = {
     local vector p1, p2;
@@ -385,17 +384,17 @@ void() ranger_shotgun = {
     else shotty = FALSE;
     M_FireShotgun(p1, p2,self.enemy,VEC_ORIGIN,FALSE,shotty);
 };
-void() ranger_shot1  =[ $shotatt1,  ranger_shot2  ] {ai_face();ranger_shotgun();};
-void() ranger_shot2  =[ $shotatt2,  ranger_shot3  ] {ai_face();};
-void() ranger_shot3  =[ $shotatt3,  ranger_shot4  ] {ai_face();};
-void() ranger_shot4  =[ $shotatt4,  ranger_shot5  ] {ai_face();};
-void() ranger_shot5  =[ $shotatt5,  ranger_shot6  ] {ai_face();};
-void() ranger_shot6  =[ $shotatt6,  ranger_run    ] {ai_face(); SUB_CheckRefire(ranger_shot1);};
+void() ranger_shot1  = [$shotatt1,  ranger_shot2  ] { ai_face();ranger_shotgun(); };
+void() ranger_shot2  = [$shotatt2,  ranger_shot3  ] { ai_face(); };
+void() ranger_shot3  = [$shotatt3,  ranger_shot4  ] { ai_face(); };
+void() ranger_shot4  = [$shotatt4,  ranger_shot5  ] { ai_face(); };
+void() ranger_shot5  = [$shotatt5,  ranger_shot6  ] { ai_face(); };
+void() ranger_shot6  = [$shotatt6,  ranger_run    ] { ai_face(); SUB_CheckRefire(ranger_shot1); };
 
-void() ranger_auto1  =[ $nailatt1,  ranger_auto2  ] {ranger_strafe(self.speed); ranger_shotgun();};
-void() ranger_auto2  =[ $nailatt2,  ranger_auto3  ] {ranger_strafe(self.speed);};
-void() ranger_auto3  =[ $nailatt1,  ranger_auto4  ] {ranger_strafe(self.speed); ranger_shotgun();if (self.ammo_shells >= 1) SUB_CheckRefire(ranger_auto2);};
-void() ranger_auto4  =[ $nailatt2,  ranger_run    ] {ranger_strafe(self.speed);};
+void() ranger_auto1  = [$nailatt1,  ranger_auto2  ] { ranger_strafe(self.speed); ranger_shotgun(); };
+void() ranger_auto2  = [$nailatt2,  ranger_auto3  ] { ranger_strafe(self.speed); };
+void() ranger_auto3  = [$nailatt1,  ranger_auto4  ] { ranger_strafe(self.speed); ranger_shotgun();if (self.ammo_shells >= 1) SUB_CheckRefire(ranger_auto2); };
+void() ranger_auto4  = [$nailatt2,  ranger_run    ] { ranger_strafe(self.speed); };
 
 void() ranger_nailgun = {
     local vector p1, p2;
@@ -420,10 +419,10 @@ void() ranger_nailgun = {
     M_FireNailgun (p1, p2, targ, '0 0 0', super);
     self.attack_finished = time + 0.2; // Override time finished to let ranger use nailgun like a machinegun.
 };
-void() ranger_nail1  =[ $nailatt1,  ranger_nail2  ] {ranger_strafe(self.speed); ranger_nailgun();};
-void() ranger_nail2  =[ $nailatt2,  ranger_nail3  ] {ranger_strafe(self.speed); ranger_nailgun();};
-void() ranger_nail3  =[ $nailatt1,  ranger_nail4  ] {ranger_strafe(self.speed); ranger_nailgun();if (self.ammo_nails >= 1) SUB_CheckRefire(ranger_nail2);};
-void() ranger_nail4  =[ $nailatt2,  ranger_run    ] {ranger_strafe(self.speed);};   // if (self.war & WAR_CHAINGUN) ranger_nailgun();};
+void() ranger_nail1  = [$nailatt1,  ranger_nail2  ] { ranger_strafe(self.speed); ranger_nailgun(); };
+void() ranger_nail2  = [$nailatt2,  ranger_nail3  ] { ranger_strafe(self.speed); ranger_nailgun(); };
+void() ranger_nail3  = [$nailatt1,  ranger_nail4  ] { ranger_strafe(self.speed); ranger_nailgun();if (self.ammo_nails >= 1) SUB_CheckRefire(ranger_nail2); };
+void() ranger_nail4  = [$nailatt2,  ranger_run    ] { ranger_strafe(self.speed); };   // if (self.war & WAR_CHAINGUN) ranger_nailgun(); };
 
 void(float lite) ranger_laser = {
     local vector p1, p2;
@@ -436,7 +435,7 @@ void(float lite) ranger_laser = {
     if (lite)
         if ((self.war & WAR_LASER_CANNON) || (lite != 1))   // Blech!
             if (!visible (self.enemy))
-                {self.think = ranger_run; return;}
+                { self.think = ranger_run; return;}
 
     targ = Ranger_Target();
     up = self.enemy.maxs_z - self.enemy.mins_z - 2;
@@ -456,14 +455,14 @@ void(float lite) ranger_laser = {
 
     self.attack_finished = time + 0.2; // Override attack time.
 };
-void() ranger_laser1 =[ $nailatt1, ranger_laser2 ] {ranger_strafe(self.speed); ranger_laser(1);};
-void() ranger_laser2 =[ $nailatt2, ranger_laser3 ] {ranger_strafe(self.speed); ranger_laser(2);};
-void() ranger_laser3 =[ $nailatt2, ranger_run    ] {ranger_strafe(self.speed); if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_laser1);};
+void() ranger_laser1 = [$nailatt1, ranger_laser2 ] { ranger_strafe(self.speed); ranger_laser(1); };
+void() ranger_laser2 = [$nailatt2, ranger_laser3 ] { ranger_strafe(self.speed); ranger_laser(2); };
+void() ranger_laser3 = [$nailatt2, ranger_run    ] { ranger_strafe(self.speed); if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_laser1); };
 
-void() ranger_lc1 =[ $nailatt1, ranger_lc2 ] {ranger_strafe(self.speed); ranger_laser(0);};
-void() ranger_lc2 =[ $nailatt2, ranger_lc3 ] {ranger_strafe(self.speed); ranger_laser(1);};
-void() ranger_lc3 =[ $nailatt1, ranger_lc4 ] {ranger_strafe(self.speed); ranger_laser(2);};
-void() ranger_lc4 =[ $nailatt2, ranger_run ] {ranger_strafe(self.speed); ranger_laser(3); if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_lc1);};
+void() ranger_lc1 = [$nailatt1, ranger_lc2 ] { ranger_strafe(self.speed); ranger_laser(0); };
+void() ranger_lc2 = [$nailatt2, ranger_lc3 ] { ranger_strafe(self.speed); ranger_laser(1); };
+void() ranger_lc3 = [$nailatt1, ranger_lc4 ] { ranger_strafe(self.speed); ranger_laser(2); };
+void() ranger_lc4 = [$nailatt2, ranger_run ] { ranger_strafe(self.speed); ranger_laser(3); if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_lc1); };
 
 void() ranger_rocket = {
     local vector p1, p2;
@@ -507,12 +506,12 @@ void() ranger_rocket = {
 
     M_FireBuriza (p1, p2, targ,VEC_ORIGIN);
 };
-void() ranger_rock1  =[ $rockatt1,  ranger_rock2  ] {ai_face();ranger_rocket();self.effects = self.effects | EF_MUZZLEFLASH;};
-void() ranger_rock2  =[ $rockatt2,  ranger_rock3  ] {ai_face();};
-void() ranger_rock3  =[ $rockatt3,  ranger_rock4  ] {ai_face();};
-void() ranger_rock4  =[ $rockatt4,  ranger_rock5  ] {ai_face();};
-void() ranger_rock5  =[ $rockatt5,  ranger_rock6  ] {ai_face();};
-void() ranger_rock6  =[ $rockatt6,  ranger_run    ] {ai_face();
+void() ranger_rock1  = [$rockatt1,  ranger_rock2  ] { ai_face();ranger_rocket();self.effects = self.effects | EF_MUZZLEFLASH;};
+void() ranger_rock2  = [$rockatt2,  ranger_rock3  ] { ai_face(); };
+void() ranger_rock3  = [$rockatt3,  ranger_rock4  ] { ai_face(); };
+void() ranger_rock4  = [$rockatt4,  ranger_rock5  ] { ai_face(); };
+void() ranger_rock5  = [$rockatt5,  ranger_rock6  ] { ai_face(); };
+void() ranger_rock6  = [$rockatt6,  ranger_run    ] { ai_face();
     if (!(self.war & WAR_CRUISE_MISSILE)) { // No encore allowed with MIRVs.
         if (self.ammo_rockets >= 1) SUB_CheckRefire(ranger_rock1);
     }
@@ -531,24 +530,24 @@ void(float cl) ranger_tbolt = {
 };
 
 // No 'SUB_CheckRefire' for Thunderbolt here.
-void() ranger_light1  =[ $light1,  ranger_light2  ] {ai_face();ranger_tbolt(self.war & WAR_CHAIN_LIGHTNING);};
-void() ranger_light2  =[ $light2,  ranger_light3  ] {ai_face();ranger_tbolt(self.war & WAR_CHAIN_LIGHTNING);};
-void() ranger_light3  =[ $light1,  ranger_light4  ] {ai_face();ranger_tbolt(self.war & WAR_CHAIN_LIGHTNING);};    //if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_light2);};
-void() ranger_light4  =[ $light2,  ranger_run     ] {ai_face();
+void() ranger_light1  = [$light1,  ranger_light2  ] { ai_face();ranger_tbolt(self.war & WAR_CHAIN_LIGHTNING); };
+void() ranger_light2  = [$light2,  ranger_light3  ] { ai_face();ranger_tbolt(self.war & WAR_CHAIN_LIGHTNING); };
+void() ranger_light3  = [$light1,  ranger_light4  ] { ai_face();ranger_tbolt(self.war & WAR_CHAIN_LIGHTNING); };    //if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_light2); };
+void() ranger_light4  = [$light2,  ranger_run     ] { ai_face();
     if (self.t_width > self.attack_finished)    // So sound is played at
         self.attack_finished = self.t_width;    // next attack.
 };
 
-void() ranger_plasma1  =[ $light1,  ranger_plasma2  ] {ai_face(); ranger_rocket();};
-void() ranger_plasma2  =[ $light2,  ranger_plasma3  ] {ai_face();};
-void() ranger_plasma3  =[ $light1,  ranger_plasma4  ] {ai_face(); ranger_rocket();};
-void() ranger_plasma4  =[ $light2,  ranger_run      ] {ai_face();
+void() ranger_plasma1  = [$light1,  ranger_plasma2  ] { ai_face(); ranger_rocket(); };
+void() ranger_plasma2  = [$light2,  ranger_plasma3  ] { ai_face(); };
+void() ranger_plasma3  = [$light1,  ranger_plasma4  ] { ai_face(); ranger_rocket(); };
+void() ranger_plasma4  = [$light2,  ranger_run      ] { ai_face();
     if (self.ammo_cells >= 1)
         SUB_CheckRefire(ranger_plasma1);
 };
 
-void() ranger_xbow1   =[ $light1,  ranger_xbow2   ] {ai_face(); ranger_rocket();};
-void() ranger_xbow2   =[ $light2,  ranger_run     ] {ai_face();};
+void() ranger_xbow1   = [$light1,  ranger_xbow2   ] { ai_face(); ranger_rocket(); };
+void() ranger_xbow2   = [$light2,  ranger_run     ] { ai_face(); };
 
 float(float dist) RangerUse_RapidFire = {
     if (self.waitmin > time) {
@@ -711,8 +710,8 @@ void() ranger_fire = {
 
     if (self.arsenal & (WAR_LASER_CANNON | WAR_BLASTER)) {
         if (RangerUse_Laser (dist)) {
-            if (self.arsenal & WAR_LASER_CANNON) {self.war = WAR_LASER_CANNON; ranger_lc1();}
-            else {self.war = WAR_BLASTER; ranger_laser1();}
+            if (self.arsenal & WAR_LASER_CANNON) { self.war = WAR_LASER_CANNON; ranger_lc1();}
+            else { self.war = WAR_BLASTER; ranger_laser1();}
             return;
         }
     }
@@ -741,19 +740,19 @@ void() ranger_fire = {
     ranger_axer(); // Attack sound will be played there.
 };
 
-void() ranger_pain1  =[ $pain1,  ranger_pain2  ] {};
-void() ranger_pain2  =[ $pain2,  ranger_pain3  ] {};
-void() ranger_pain3  =[ $pain3,  ranger_pain4  ] {};
-void() ranger_pain4  =[ $pain4,  ranger_pain5  ] {};
-void() ranger_pain5  =[ $pain5,  ranger_pain6  ] {};
-void() ranger_pain6  =[ $pain6,  ranger_run    ] {};
+void() ranger_pain1  = [$pain1,  ranger_pain2  ] {};
+void() ranger_pain2  = [$pain2,  ranger_pain3  ] {};
+void() ranger_pain3  = [$pain3,  ranger_pain4  ] {};
+void() ranger_pain4  = [$pain4,  ranger_pain5  ] {};
+void() ranger_pain5  = [$pain5,  ranger_pain6  ] {};
+void() ranger_pain6  = [$pain6,  ranger_run    ] {};
 
-void() ranger_axpain1 =[ $axpain1, ranger_axpain2 ] {};
-void() ranger_axpain2 =[ $axpain2, ranger_axpain3 ] {};
-void() ranger_axpain3 =[ $axpain3, ranger_axpain4 ] {};
-void() ranger_axpain4 =[ $axpain4, ranger_axpain5 ] {};
-void() ranger_axpain5 =[ $axpain5, ranger_axpain6 ] {};
-void() ranger_axpain6 =[ $axpain6, ranger_run     ] {};
+void() ranger_axpain1 = [$axpain1, ranger_axpain2 ] {};
+void() ranger_axpain2 = [$axpain2, ranger_axpain3 ] {};
+void() ranger_axpain3 = [$axpain3, ranger_axpain4 ] {};
+void() ranger_axpain4 = [$axpain4, ranger_axpain5 ] {};
+void() ranger_axpain5 = [$axpain5, ranger_axpain6 ] {};
+void() ranger_axpain6 = [$axpain6, ranger_run     ] {};
 
 void(entity inflictor, entity attacker, float damage) ranger_pain = {
     if (!PainSound()) return; // Use same sounds as players. Didn't make a sound.
@@ -765,123 +764,123 @@ void(entity inflictor, entity attacker, float damage) ranger_pain = {
     else ranger_pain1();
 };
 
-void() ranger_decap1  =[ $decap1,  ranger_decap2  ] {blood_spray ('-14 -3 20', 1);};
-void() ranger_decap2  =[ $decap2,  ranger_decap3  ] {blood_spray ('-8 -4 21', 2);};
-void() ranger_decap3  =[ $decap3,  ranger_decap4  ] {blood_spray ('0 -3 21', 1); monster_drop();};
-void() ranger_decap4  =[ $decap4,  ranger_decap5  ] {blood_spray ('3 -3 19', -1);};
-void() ranger_decap5  =[ $decap5,  ranger_decap6  ] {};
-void() ranger_decap6  =[ $decap6,  ranger_decap7  ] {};
-void() ranger_decap7  =[ $decap7,  ranger_decap8  ] {};
-void() ranger_decap8  =[ $decap8,  ranger_decap9  ] {};
-void() ranger_decap9  =[ $decap9,  ranger_decap10 ] {};
-void() ranger_decap10 =[ $decap10, ranger_decap11 ] {};
-void() ranger_decap11 =[ $decap11, decap_end      ] {};
+void() ranger_decap1  = [$decap1,  ranger_decap2  ] { blood_spray ('-14 -3 20', 1); };
+void() ranger_decap2  = [$decap2,  ranger_decap3  ] { blood_spray ('-8 -4 21', 2); };
+void() ranger_decap3  = [$decap3,  ranger_decap4  ] { blood_spray ('0 -3 21', 1); monster_drop(); };
+void() ranger_decap4  = [$decap4,  ranger_decap5  ] { blood_spray ('3 -3 19', -1); };
+void() ranger_decap5  = [$decap5,  ranger_decap6  ] {};
+void() ranger_decap6  = [$decap6,  ranger_decap7  ] {};
+void() ranger_decap7  = [$decap7,  ranger_decap8  ] {};
+void() ranger_decap8  = [$decap8,  ranger_decap9  ] {};
+void() ranger_decap9  = [$decap9,  ranger_decap10 ] {};
+void() ranger_decap10 = [$decap10, ranger_decap11 ] {};
+void() ranger_decap11 = [$decap11, decap_end      ] {};
 
-void() ranger_decapb1  =[ $decapb1,  ranger_decapb2  ] {blood_spray ('3 1 21', 1);};
-void() ranger_decapb2  =[ $decapb2,  ranger_decapb3  ] {blood_spray ('-2 1 20', 2);};
-void() ranger_decapb3  =[ $decapb3,  ranger_decapb4  ] {blood_spray ('-6 1 19', 1); monster_drop();};
-void() ranger_decapb4  =[ $decapb4,  ranger_decapb5  ] {blood_spray ('-6 1 14', -1);};
-void() ranger_decapb5  =[ $decapb5,  ranger_decapb6  ] {};
-void() ranger_decapb6  =[ $decapb6,  ranger_decapb7  ] {};
-void() ranger_decapb7  =[ $decapb7,  ranger_decapb8  ] {};
-void() ranger_decapb8  =[ $decapb8,  ranger_decapb9  ] {};
-void() ranger_decapb9  =[ $decapb9,  decap_end       ] {};
+void() ranger_decapb1  = [$decapb1,  ranger_decapb2  ] { blood_spray ('3 1 21', 1); };
+void() ranger_decapb2  = [$decapb2,  ranger_decapb3  ] { blood_spray ('-2 1 20', 2); };
+void() ranger_decapb3  = [$decapb3,  ranger_decapb4  ] { blood_spray ('-6 1 19', 1); monster_drop(); };
+void() ranger_decapb4  = [$decapb4,  ranger_decapb5  ] { blood_spray ('-6 1 14', -1); };
+void() ranger_decapb5  = [$decapb5,  ranger_decapb6  ] {};
+void() ranger_decapb6  = [$decapb6,  ranger_decapb7  ] {};
+void() ranger_decapb7  = [$decapb7,  ranger_decapb8  ] {};
+void() ranger_decapb8  = [$decapb8,  ranger_decapb9  ] {};
+void() ranger_decapb9  = [$decapb9,  decap_end       ] {};
 
-void() ranger_axdecap1 =[ $axdecap1,  ranger_axdecap2 ] {blood_spray ('-11 0 20', 1);};
-void() ranger_axdecap2 =[ $axdecap2,  ranger_axdecap3 ] {blood_spray ('-16 0 21', 2);};
-void() ranger_axdecap3 =[ $axdecap3,  ranger_axdecap4 ] {blood_spray ('-21 0 13', 1); monster_drop();};
-void() ranger_axdecap4 =[ $axdecap4,  ranger_axdecap5 ] {blood_spray ('-21 0 8', 1);};
-void() ranger_axdecap5 =[ $axdecap5,  ranger_axdecap6 ] {};
-void() ranger_axdecap6 =[ $axdecap6,  ranger_axdecap7 ] {};
-void() ranger_axdecap7 =[ $axdecap7,  ranger_axdecap8 ] {};
-void() ranger_axdecap8 =[ $axdecap8,  decap_end       ] {};
+void() ranger_axdecap1 = [$axdecap1,  ranger_axdecap2 ] { blood_spray ('-11 0 20', 1); };
+void() ranger_axdecap2 = [$axdecap2,  ranger_axdecap3 ] { blood_spray ('-16 0 21', 2); };
+void() ranger_axdecap3 = [$axdecap3,  ranger_axdecap4 ] { blood_spray ('-21 0 13', 1); monster_drop(); };
+void() ranger_axdecap4 = [$axdecap4,  ranger_axdecap5 ] { blood_spray ('-21 0 8', 1); };
+void() ranger_axdecap5 = [$axdecap5,  ranger_axdecap6 ] {};
+void() ranger_axdecap6 = [$axdecap6,  ranger_axdecap7 ] {};
+void() ranger_axdecap7 = [$axdecap7,  ranger_axdecap8 ] {};
+void() ranger_axdecap8 = [$axdecap8,  decap_end       ] {};
 
 // Normal death
-void() ranger_diea1  =[ $deatha1,  ranger_diea2  ] {
+void() ranger_diea1  = [$deatha1,  ranger_diea2  ] {
 	self.reviveframestart = $deatha11;
 	self.reviveframeend = $deatha1;
 };
-void() ranger_diea2  =[ $deatha2,  ranger_diea3  ] {};
-void() ranger_diea3  =[ $deatha3,  ranger_diea4  ] {monster_drop();};
-void() ranger_diea4  =[ $deatha4,  ranger_diea5  ] {};
-void() ranger_diea5  =[ $deatha5,  ranger_diea6  ] {};
-void() ranger_diea6  =[ $deatha6,  ranger_diea7  ] {};
-void() ranger_diea7  =[ $deatha7,  ranger_diea8  ] {};
-void() ranger_diea8  =[ $deatha8,  ranger_diea9  ] {};
-void() ranger_diea9  =[ $deatha9,  ranger_diea10 ] {};
-void() ranger_diea10 =[ $deatha10, ranger_diea11 ] {};
-void() ranger_diea11 =[ $deatha11, monster_end   ] {};
+void() ranger_diea2  = [$deatha2,  ranger_diea3  ] {};
+void() ranger_diea3  = [$deatha3,  ranger_diea4  ] { monster_drop(); };
+void() ranger_diea4  = [$deatha4,  ranger_diea5  ] {};
+void() ranger_diea5  = [$deatha5,  ranger_diea6  ] {};
+void() ranger_diea6  = [$deatha6,  ranger_diea7  ] {};
+void() ranger_diea7  = [$deatha7,  ranger_diea8  ] {};
+void() ranger_diea8  = [$deatha8,  ranger_diea9  ] {};
+void() ranger_diea9  = [$deatha9,  ranger_diea10 ] {};
+void() ranger_diea10 = [$deatha10, ranger_diea11 ] {};
+void() ranger_diea11 = [$deatha11, monster_end   ] {};
 
-void() ranger_dieb1  =[ $deathb1,  ranger_dieb2  ] {
+void() ranger_dieb1  = [$deathb1,  ranger_dieb2  ] {
 	self.reviveframestart = $deathb9;
 	self.reviveframeend = $deathb1;
 };
-void() ranger_dieb2  =[ $deathb2,  ranger_dieb3  ] {};
-void() ranger_dieb3  =[ $deathb3,  ranger_dieb4  ] {monster_drop();};
-void() ranger_dieb4  =[ $deathb4,  ranger_dieb5  ] {};
-void() ranger_dieb5  =[ $deathb5,  ranger_dieb6  ] {};
-void() ranger_dieb6  =[ $deathb6,  ranger_dieb7  ] {};
-void() ranger_dieb7  =[ $deathb7,  ranger_dieb8  ] {};
-void() ranger_dieb8  =[ $deathb8,  ranger_dieb9  ] {};
-void() ranger_dieb9  =[ $deathb9,  monster_end   ] {};
+void() ranger_dieb2  = [$deathb2,  ranger_dieb3  ] {};
+void() ranger_dieb3  = [$deathb3,  ranger_dieb4  ] { monster_drop(); };
+void() ranger_dieb4  = [$deathb4,  ranger_dieb5  ] {};
+void() ranger_dieb5  = [$deathb5,  ranger_dieb6  ] {};
+void() ranger_dieb6  = [$deathb6,  ranger_dieb7  ] {};
+void() ranger_dieb7  = [$deathb7,  ranger_dieb8  ] {};
+void() ranger_dieb8  = [$deathb8,  ranger_dieb9  ] {};
+void() ranger_dieb9  = [$deathb9,  monster_end   ] {};
 
-void() ranger_diec1  =[ $deathc1,  ranger_diec2  ] {
+void() ranger_diec1  = [$deathc1,  ranger_diec2  ] {
 	self.reviveframestart = $deathc15;
 	self.reviveframeend = $deathc1;
 };
-void() ranger_diec2  =[ $deathc2,  ranger_diec3  ] {};
-void() ranger_diec3  =[ $deathc3,  ranger_diec4  ] {monster_drop();};
-void() ranger_diec4  =[ $deathc4,  ranger_diec5  ] {};
-void() ranger_diec5  =[ $deathc5,  ranger_diec6  ] {};
-void() ranger_diec6  =[ $deathc6,  ranger_diec7  ] {};
-void() ranger_diec7  =[ $deathc7,  ranger_diec8  ] {};
-void() ranger_diec8  =[ $deathc8,  ranger_diec9  ] {};
-void() ranger_diec9  =[ $deathc9,  ranger_diec10 ] {};
-void() ranger_diec10 =[ $deathc10, ranger_diec11 ] {};
-void() ranger_diec11 =[ $deathc11, ranger_diec12 ] {};
-void() ranger_diec12 =[ $deathc12, ranger_diec13 ] {};
-void() ranger_diec13 =[ $deathc13, ranger_diec14 ] {};
-void() ranger_diec14 =[ $deathc14, ranger_diec15 ] {};
-void() ranger_diec15 =[ $deathc15, monster_end   ] {};
+void() ranger_diec2  = [$deathc2,  ranger_diec3  ] {};
+void() ranger_diec3  = [$deathc3,  ranger_diec4  ] { monster_drop(); };
+void() ranger_diec4  = [$deathc4,  ranger_diec5  ] {};
+void() ranger_diec5  = [$deathc5,  ranger_diec6  ] {};
+void() ranger_diec6  = [$deathc6,  ranger_diec7  ] {};
+void() ranger_diec7  = [$deathc7,  ranger_diec8  ] {};
+void() ranger_diec8  = [$deathc8,  ranger_diec9  ] {};
+void() ranger_diec9  = [$deathc9,  ranger_diec10 ] {};
+void() ranger_diec10 = [$deathc10, ranger_diec11 ] {};
+void() ranger_diec11 = [$deathc11, ranger_diec12 ] {};
+void() ranger_diec12 = [$deathc12, ranger_diec13 ] {};
+void() ranger_diec13 = [$deathc13, ranger_diec14 ] {};
+void() ranger_diec14 = [$deathc14, ranger_diec15 ] {};
+void() ranger_diec15 = [$deathc15, monster_end   ] {};
 
-void() ranger_died1  =[ $deathd1,  ranger_died2  ] {
+void() ranger_died1  = [$deathd1,  ranger_died2  ] {
 	self.reviveframestart = $deathd9;
 	self.reviveframeend = $deathd1;
 };
-void() ranger_died2  =[ $deathd2,  ranger_died3  ] {};
-void() ranger_died3  =[ $deathd3,  ranger_died4  ] {monster_drop();};
-void() ranger_died4  =[ $deathd4,  ranger_died5  ] {};
-void() ranger_died5  =[ $deathd5,  ranger_died6  ] {};
-void() ranger_died6  =[ $deathd6,  ranger_died7  ] {};
-void() ranger_died7  =[ $deathd7,  ranger_died8  ] {};
-void() ranger_died8  =[ $deathd8,  ranger_died9  ] {};
-void() ranger_died9  =[ $deathd9,  monster_end   ] {};
+void() ranger_died2  = [$deathd2,  ranger_died3  ] {};
+void() ranger_died3  = [$deathd3,  ranger_died4  ] { monster_drop(); };
+void() ranger_died4  = [$deathd4,  ranger_died5  ] {};
+void() ranger_died5  = [$deathd5,  ranger_died6  ] {};
+void() ranger_died6  = [$deathd6,  ranger_died7  ] {};
+void() ranger_died7  = [$deathd7,  ranger_died8  ] {};
+void() ranger_died8  = [$deathd8,  ranger_died9  ] {};
+void() ranger_died9  = [$deathd9,  monster_end   ] {};
 
-void() ranger_diee1  =[ $deathe1,  ranger_diee2  ] {
+void() ranger_diee1  = [$deathe1,  ranger_diee2  ] {
 	self.reviveframestart = $deathe9;
 	self.reviveframeend = $deathe1;
 };
-void() ranger_diee2  =[ $deathe2,  ranger_diee3  ] {};
-void() ranger_diee3  =[ $deathe3,  ranger_diee4  ] {monster_drop();};
-void() ranger_diee4  =[ $deathe4,  ranger_diee5  ] {};
-void() ranger_diee5  =[ $deathe5,  ranger_diee6  ] {};
-void() ranger_diee6  =[ $deathe6,  ranger_diee7  ] {};
-void() ranger_diee7  =[ $deathe7,  ranger_diee8  ] {};
-void() ranger_diee8  =[ $deathe8,  ranger_diee9  ] {};
-void() ranger_diee9  =[ $deathe9,  monster_end   ] {};
+void() ranger_diee2  = [$deathe2,  ranger_diee3  ] {};
+void() ranger_diee3  = [$deathe3,  ranger_diee4  ] { monster_drop(); };
+void() ranger_diee4  = [$deathe4,  ranger_diee5  ] {};
+void() ranger_diee5  = [$deathe5,  ranger_diee6  ] {};
+void() ranger_diee6  = [$deathe6,  ranger_diee7  ] {};
+void() ranger_diee7  = [$deathe7,  ranger_diee8  ] {};
+void() ranger_diee8  = [$deathe8,  ranger_diee9  ] {};
+void() ranger_diee9  = [$deathe9,  monster_end   ] {};
 
-void() ranger_axdie1 =[ $axdeth1,  ranger_axdie2 ] {
+void() ranger_axdie1 = [$axdeth1,  ranger_axdie2 ] {
 	self.reviveframestart = $axdeth9;
 	self.reviveframeend = $axdeth1;
 };
-void() ranger_axdie2 =[ $axdeth2,  ranger_axdie3 ] {};
-void() ranger_axdie3 =[ $axdeth3,  ranger_axdie4 ] {monster_drop();};
-void() ranger_axdie4 =[ $axdeth4,  ranger_axdie5 ] {};
-void() ranger_axdie5 =[ $axdeth5,  ranger_axdie6 ] {};
-void() ranger_axdie6 =[ $axdeth6,  ranger_axdie7 ] {};
-void() ranger_axdie7 =[ $axdeth7,  ranger_axdie8 ] {};
-void() ranger_axdie8 =[ $axdeth8,  ranger_axdie9 ] {};
-void() ranger_axdie9 =[ $axdeth9,  monster_end   ] {};
+void() ranger_axdie2 = [$axdeth2,  ranger_axdie3 ] {};
+void() ranger_axdie3 = [$axdeth3,  ranger_axdie4 ] { monster_drop(); };
+void() ranger_axdie4 = [$axdeth4,  ranger_axdie5 ] {};
+void() ranger_axdie5 = [$axdeth5,  ranger_axdie6 ] {};
+void() ranger_axdie6 = [$axdeth6,  ranger_axdie7 ] {};
+void() ranger_axdie7 = [$axdeth7,  ranger_axdie8 ] {};
+void() ranger_axdie8 = [$axdeth8,  ranger_axdie9 ] {};
+void() ranger_axdie9 = [$axdeth9,  monster_end   ] {};
 
 float(float dm) ranger_gib = {
     if (self.health < self.gibhealth) {

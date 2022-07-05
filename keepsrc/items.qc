@@ -246,7 +246,7 @@ void() item_use = { // [FUNCTION]
 };
 
 void() item_touch = { // [FUNCTION]
-	if (self.touchedvoid) {entity_hide(self); return;}
+	if (self.touchedvoid) { entity_hide(self); return;}
 	if (self.estate & ESTATE_BLOCK) return;
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
@@ -311,7 +311,7 @@ void() item_restore = { // [FUNCTION]
 };
 
 void() item_delay = { // [FUNCTION]
-	if (self.touchedvoid) {entity_hide(self); return;}
+	if (self.touchedvoid) { entity_hide(self); return;}
 	if (self.estate == ESTATE_DISABLE) return;
 	
 	// Check for Axe / Shotgun / LG upgrade monster spawn exceptions?

@@ -62,6 +62,8 @@ void() inquisitor_magicd1;
 void() mcorn_atkb1;
 float(vector waveqty) SpriteCount_Flame;
 float(entity targ, float maxextra) HazardProjectile_CheckLimit;
+void() dfury_boss_char_a1;
+void() dfury_boss_run1;
 
 void() CheckAttack = { // [FUNCTION]
 	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
@@ -2229,7 +2231,7 @@ void() Shade_CheckAttack = {
     if (time < self.attack_finished) return;
 
     // Determine the chance that the nightshade will attack.
-    if (enemy_range == RANGE_MELEE) {self.attack_finished = 0; chance = 0.9;}
+    if (enemy_range == RANGE_MELEE) { self.attack_finished = 0; chance = 0.9;}
     else if (enemy_range == RANGE_NEAR) // Short range (120-500)
         chance = 0.2;
     else
@@ -2501,7 +2503,7 @@ void() DGuardCheckAttack = {
 
 void() FragCheckAttack = {
 	if (enemy_range == RANGE_MELEE) { self.attack_state = AS_MELEE; return; } // if close enough for slashing, go for it
-	if (CheckFragJump ()) {self.attack_state = AS_MISSILE; return; }
+	if (CheckFragJump ()) { self.attack_state = AS_MISSILE; return; }
 };
 
 void() InquisitorCheckAttack = {
@@ -2777,4 +2779,27 @@ float() M_FirewallCheck = { // [FUNCTION]
         }
     }
     return TRUE; // Fire away.
+};
+
+// check for mad charge
+void() CheckForCharge_boss = {
+	if (!enemy_vis) return; 
+	if (time < self.attack_finished) return;	
+	if ( fabs(self.origin_z - self.enemy.origin_z) > 20) return;		// too much height change
+	if ( vlen (self.origin - self.enemy.origin) < 80) return;		// use regular attack
+
+	SUB_AttackFinished (2);
+	dfury_boss_char_a1(); 	// charge!	
+};
+
+void() CheckContinueCharge_boss = {
+	if (time > self.attack_finished) {
+		SUB_AttackFinished (3);
+		dfury_boss_run1();
+		return;		// done charging
+	}
+	if (random() > 0.5)
+		sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+	else
+		sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
 };

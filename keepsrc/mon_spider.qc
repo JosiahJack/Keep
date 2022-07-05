@@ -70,34 +70,33 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20
 
-//======================================================================
-void() spider_idle1 =[ $idle1, spider_idle2] {monster_idle_sound();ai_stand();};
-void() spider_idle2 =[ $idle2, spider_idle3] {ai_stand();};
-void() spider_idle3 =[ $idle3, spider_idle4] {ai_stand();};
-void() spider_idle4 =[ $idle4, spider_idle5] {ai_stand();};
-void() spider_idle5 =[ $idle5, spider_idle6] {ai_stand();};
-void() spider_idle6 =[ $idle6, spider_idle7] {ai_stand();};
-void() spider_idle7 =[ $idle7, spider_idle8] {ai_stand();};
-void() spider_idle8 =[ $idle8, spider_idle9] {ai_stand();};
-void() spider_idle9 =[ $idle9, spider_idle10] {ai_stand();};
-void() spider_idle10 =[ $idle10, spider_idle11] {ai_stand();};
-void() spider_idle11 =[ $idle11, spider_idle12] {ai_stand();};
-void() spider_idle12 =[ $idle12, spider_idle13] {ai_stand();};
-void() spider_idle13 =[ $idle13, spider_idle1] {ai_stand();};
 
-//======================================================================
-void() spider_walk1 =[ $walk1, spider_walk2] {monster_idle_sound();ai_walk(4);};
-void() spider_walk2 =[ $walk3, spider_walk3] {monster_footstep(FALSE); ai_walk(3);};
-void() spider_walk3 =[ $walk5, spider_walk4] {ai_walk(4);};
-void() spider_walk4 =[ $walk7, spider_walk5] {ai_walk(5);};
-void() spider_walk5 =[ $walk9, spider_walk6] {ai_walk(4);};
-void() spider_walk6 =[ $walk11, spider_walk7] {monster_footstep(FALSE); ai_walk(3);};
-void() spider_walk7 =[ $walk13, spider_walk8] {ai_walk(4);};
-void() spider_walk8 =[ $walk15, spider_walk1] {ai_walk(5);};
+void() spider_idle1 = [$idle1, spider_idle2] { monster_idle_sound();ai_stand(); };
+void() spider_idle2 = [$idle2, spider_idle3] { ai_stand(); };
+void() spider_idle3 = [$idle3, spider_idle4] { ai_stand(); };
+void() spider_idle4 = [$idle4, spider_idle5] { ai_stand(); };
+void() spider_idle5 = [$idle5, spider_idle6] { ai_stand(); };
+void() spider_idle6 = [$idle6, spider_idle7] { ai_stand(); };
+void() spider_idle7 = [$idle7, spider_idle8] { ai_stand(); };
+void() spider_idle8 = [$idle8, spider_idle9] { ai_stand(); };
+void() spider_idle9 = [$idle9, spider_idle10] { ai_stand(); };
+void() spider_idle10 = [$idle10, spider_idle11] { ai_stand(); };
+void() spider_idle11 = [$idle11, spider_idle12] { ai_stand(); };
+void() spider_idle12 = [$idle12, spider_idle13] { ai_stand(); };
+void() spider_idle13 = [$idle13, spider_idle1] { ai_stand(); };
 
-//======================================================================
-void() spider_runpause =
-{
+
+void() spider_walk1 = [$walk1, spider_walk2] { monster_idle_sound();ai_walk(4); };
+void() spider_walk2 = [$walk3, spider_walk3] { monster_footstep(FALSE); ai_walk(3); };
+void() spider_walk3 = [$walk5, spider_walk4] { ai_walk(4); };
+void() spider_walk4 = [$walk7, spider_walk5] { ai_walk(5); };
+void() spider_walk5 = [$walk9, spider_walk6] { ai_walk(4); };
+void() spider_walk6 = [$walk11, spider_walk7] { monster_footstep(FALSE); ai_walk(3); };
+void() spider_walk7 = [$walk13, spider_walk8] { ai_walk(4); };
+void() spider_walk8 = [$walk15, spider_walk1] { ai_walk(5); };
+
+
+void() spider_runpause = {
 	// Do nothing is not to fight or dead
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -109,23 +108,22 @@ void() spider_runpause =
 };
 
 //----------------------------------------------------------------------
-void()	spider_runp1	=[	$idle1,	spider_runp2	] {spider_runpause();};
-void()	spider_runp2	=[	$idle2,	spider_runp3	] {spider_runpause();};
-void()	spider_runp3	=[	$idle3,	spider_runp4	] {spider_runpause();};
-void()	spider_runp4	=[	$idle4,	spider_runp5	] {spider_runpause();};
-void()	spider_runp5	=[	$idle5,	spider_runp6	] {spider_runpause();};
-void()	spider_runp6	=[	$idle6,	spider_runp7	] {spider_runpause();};
-void()	spider_runp7	=[	$idle7,	spider_runp8	] {spider_runpause();};
-void()	spider_runp8	=[	$idle8,	spider_runp9	] {spider_runpause();};
-void()	spider_runp9	=[	$idle9,	spider_runp10	] {spider_runpause();};
-void()	spider_runp10	=[	$idle10,spider_runp11	] {spider_runpause();};
-void()	spider_runp11	=[	$idle11,spider_runp12	] {spider_runpause();};
-void()	spider_runp12	=[	$idle12,spider_runp13	] {spider_runpause();};
-void()	spider_runp13	=[	$idle13,spider_runp1	] {spider_runpause();};
+void()	spider_runp1	= [	$idle1,	spider_runp2	] { spider_runpause(); };
+void()	spider_runp2	= [	$idle2,	spider_runp3	] { spider_runpause(); };
+void()	spider_runp3	= [	$idle3,	spider_runp4	] { spider_runpause(); };
+void()	spider_runp4	= [	$idle4,	spider_runp5	] { spider_runpause(); };
+void()	spider_runp5	= [	$idle5,	spider_runp6	] { spider_runpause(); };
+void()	spider_runp6	= [	$idle6,	spider_runp7	] { spider_runpause(); };
+void()	spider_runp7	= [	$idle7,	spider_runp8	] { spider_runpause(); };
+void()	spider_runp8	= [	$idle8,	spider_runp9	] { spider_runpause(); };
+void()	spider_runp9	= [	$idle9,	spider_runp10	] { spider_runpause(); };
+void()	spider_runp10	= [	$idle10,spider_runp11	] { spider_runpause(); };
+void()	spider_runp11	= [	$idle11,spider_runp12	] { spider_runpause(); };
+void()	spider_runp12	= [	$idle12,spider_runp13	] { spider_runpause(); };
+void()	spider_runp13	= [	$idle13,spider_runp1	] { spider_runpause(); };
 
 //----------------------------------------------------------------------
-void(float dist) spider_checkpause =
-{
+void(float dist) spider_checkpause = {
 	// Do nothing is not to fight or dead
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -144,23 +142,23 @@ void(float dist) spider_checkpause =
 	}
 };
 
-void()	spider_run1 =[ $walk1, spider_run2 ] {self.movespeed = 0; monster_idle_sound();spider_checkpause(8);};
-void()	spider_run2 =[ $walk3, spider_run3 ] {monster_footstep(FALSE); spider_checkpause(6);};
-void()	spider_run3 =[ $walk5, spider_run4 ] {spider_checkpause(8);};
-void()	spider_run4 =[ $walk7, spider_run5 ] {spider_checkpause(10);};
-void()	spider_run5 =[ $walk9, spider_run6 ] {spider_checkpause(8);};
-void()	spider_run6 =[ $walk11, spider_run7 ] {monster_footstep(FALSE); spider_checkpause(6);};
-void()	spider_run7 =[ $walk13, spider_run8 ] {spider_checkpause(8);};
-void()	spider_run8 =[ $walk15, spider_run1 ] {spider_checkpause(10);};
+void()	spider_run1 = [$walk1, spider_run2 ] { self.movespeed = 0; monster_idle_sound();spider_checkpause(8); };
+void()	spider_run2 = [$walk3, spider_run3 ] { monster_footstep(FALSE); spider_checkpause(6); };
+void()	spider_run3 = [$walk5, spider_run4 ] { spider_checkpause(8); };
+void()	spider_run4 = [$walk7, spider_run5 ] { spider_checkpause(10); };
+void()	spider_run5 = [$walk9, spider_run6 ] { spider_checkpause(8); };
+void()	spider_run6 = [$walk11, spider_run7 ] { monster_footstep(FALSE); spider_checkpause(6); };
+void()	spider_run7 = [$walk13, spider_run8 ] { spider_checkpause(8); };
+void()	spider_run8 = [$walk15, spider_run1 ] { spider_checkpause(10); };
 
-void()	spider_slide1 =[ $walk1, spider_slide2 ] {ai_run_slide(6); monster_idle_sound();};
-void()	spider_slide2 =[ $walk3, spider_slide3 ] {ai_run_slide(4);};
-void()	spider_slide3 =[ $walk5, spider_slide4 ] {ai_run_slide(6);};
-void()	spider_slide4 =[ $walk7, spider_slide5 ] {ai_run_slide(4);};
-void()	spider_slide5 =[ $walk9, spider_slide6 ] {ai_run_slide(6);};
-void()	spider_slide6 =[ $walk11, spider_slide7 ] {ai_run_slide(4);};
-void()	spider_slide7 =[ $walk13, spider_slide8 ] {ai_run_slide(6);};
-void()	spider_slide8 =[ $walk15, spider_run1 ] {ai_run(4);};
+void()	spider_slide1 = [$walk1, spider_slide2 ] { ai_run_slide(6); monster_idle_sound(); };
+void()	spider_slide2 = [$walk3, spider_slide3 ] { ai_run_slide(4); };
+void()	spider_slide3 = [$walk5, spider_slide4 ] { ai_run_slide(6); };
+void()	spider_slide4 = [$walk7, spider_slide5 ] { ai_run_slide(4); };
+void()	spider_slide5 = [$walk9, spider_slide6 ] { ai_run_slide(6); };
+void()	spider_slide6 = [$walk11, spider_slide7 ] { ai_run_slide(4); };
+void()	spider_slide7 = [$walk13, spider_slide8 ] { ai_run_slide(6); };
+void()	spider_slide8 = [$walk15, spider_run1 ] { ai_run(4); };
 
 // SPIDER 2 - ACID SPIT FUNCTIONS (range)
 void(float sideang) spider_spitacid = {
@@ -185,21 +183,21 @@ void(float sideang) spider_spitacid = {
 	launch_projectile(org,dir,avel,CT_PROJ_SPID,1);
 };
 
-void()	spider_spit1	=[	$atkup1,		spider_spit2	] {ai_face();};
-void()	spider_spit2	=[	$atkup5,		spider_spit3	] {ai_face();};
-void()	spider_spit3	=[	$atkup7,		spider_spit4	] {ai_face();};
-void()	spider_spit4	=[	$atkup9,		spider_spit5 ] {ai_face();};
-void()	spider_spit5	=[	$atkup11,		spider_spit6 ] {ai_face();
+void()	spider_spit1	= [	$atkup1,		spider_spit2	] { ai_face(); };
+void()	spider_spit2	= [	$atkup5,		spider_spit3	] { ai_face(); };
+void()	spider_spit3	= [	$atkup7,		spider_spit4	] { ai_face(); };
+void()	spider_spit4	= [	$atkup9,		spider_spit5 ] { ai_face(); };
+void()	spider_spit5	= [	$atkup11,		spider_spit6 ] { ai_face();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_SPIDER); };
-void()	spider_spit6	=[	$atkloop1,		spider_spit7 ] {ai_face();
+void()	spider_spit6	= [	$atkloop1,		spider_spit7 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_SPIDER); };
-void()	spider_spit7	=[	$atkloop3,		spider_spit8 ] {ai_face();
+void()	spider_spit7	= [	$atkloop3,		spider_spit8 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_SPIDER); };
-void()	spider_spit8 = [	$atkloop5,		spider_spit9 ] {spider_spitacid(-0.1);};
-void()	spider_spit9 = [	$atkloop7,		spider_spit10 ] {spider_spitacid(0);};
-void()	spider_spit10 =[	$atkloop9,		spider_spit11 ] {spider_spitacid(0.1);};
-void()	spider_spit11	=[	$atkup7,		spider_spit12] {};
-void()	spider_spit12	=[	$atkup5,		spider_run1	] {};
+void()	spider_spit8 = [	$atkloop5,		spider_spit9 ] { spider_spitacid(-0.1); };
+void()	spider_spit9 = [	$atkloop7,		spider_spit10 ] { spider_spitacid(0); };
+void()	spider_spit10 = [	$atkloop9,		spider_spit11 ] { spider_spitacid(0.1); };
+void()	spider_spit11	= [	$atkup7,		spider_spit12] {};
+void()	spider_spit12	= [	$atkup5,		spider_run1	] {};
 
 // BITE - Both spider types can bite if within range
 void() spider_melee = {
@@ -231,28 +229,27 @@ void() spider_melee = {
 };
 
 //----------------------------------------------------------------------
-void() spider_bite1 = [ $atkup1, spider_bite2 ] {ai_face();};
-void() spider_bite2 = [ $atkup5, spider_bite3 ] {ai_face();};
-void() spider_bite3 = [ $atkup7, spider_bite4 ] {ai_face();};
-void() spider_bite4 = [ $atkup9, spider_bite5 ] {ai_face();};
-void() spider_bite5 = [ $atkup11, spider_bite6 ] {ai_face();};
+void() spider_bite1 = [$atkup1, spider_bite2 ] { ai_face(); };
+void() spider_bite2 = [$atkup5, spider_bite3 ] { ai_face(); };
+void() spider_bite3 = [$atkup7, spider_bite4 ] { ai_face(); };
+void() spider_bite4 = [$atkup9, spider_bite5 ] { ai_face(); };
+void() spider_bite5 = [$atkup11, spider_bite6 ] { ai_face(); };
 // Start bite attack loop
-void() spider_bite6 = [ $atkloop1, spider_bite7 ] {ai_face();};
-void() spider_bite7=[ $atkloop3, spider_bite8 ] {ai_face();};
-void() spider_bite8 = [ $atkloop5, spider_bite9 ] {spider_melee();};
-void() spider_bite9 = [ $atkloop7, spider_bite10 ] {};
-void() spider_bite10 = [ $atkloop9, spider_bite11 ] {
+void() spider_bite6 = [$atkloop1, spider_bite7 ] { ai_face(); };
+void() spider_bite7= [$atkloop3, spider_bite8 ] { ai_face(); };
+void() spider_bite8 = [$atkloop5, spider_bite9 ] { spider_melee(); };
+void() spider_bite9 = [$atkloop7, spider_bite10 ] {};
+void() spider_bite10 = [$atkloop9, spider_bite11 ] {
 	if (ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.enemy.health > 0 && self.health > 0) 
 		self.think = spider_bite6;};
 // Exit bite attack loop
-void() spider_bite11 = [ $atkup7, spider_bite12 ] {};
-void() spider_bite12 = [ $atkup5, spider_run1 ] {};
+void() spider_bite11 = [$atkup7, spider_bite12 ] {};
+void() spider_bite12 = [$atkup5, spider_run1 ] {};
 
-//============================================================================
+
 // SPIDER 1 - JUMP FUNCTION (range)
-//============================================================================
-void()	Spider_JumpTouch =
-{
+
+void()	Spider_JumpTouch = {
 	local	float	ldmg;
 
 	if (self.health <= 0) return;
@@ -288,12 +285,12 @@ void()	Spider_JumpTouch =
 };
 
 //----------------------------------------------------------------------------
-void() spider_leap1 =[ $jump1, spider_leap2 ] {ai_face();
+void() spider_leap1 = [$jump1, spider_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	monster_idle_sound();
 };
-void() spider_leap2 =[ $jump3, spider_leap3 ] {ai_face();};
-void() spider_leap3 =[ $jump5, spider_leap4 ] {
+void() spider_leap2 = [$jump3, spider_leap3 ] { ai_face(); };
+void() spider_leap3 = [$jump5, spider_leap4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Spider_JumpTouch;
@@ -303,10 +300,10 @@ void() spider_leap3 =[ $jump5, spider_leap4 ] {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
 };
-void() spider_leap4 =[ $jump7, spider_leap5 ] {};
-void() spider_leap5 =[ $jump8, spider_leap6 ] {};	
-void() spider_leap6 =[ $jump9, spider_leap7 ] {};
-void() spider_leap7 =[ $jump10, spider_leap8 ] {
+void() spider_leap4 = [$jump7, spider_leap5 ] {};
+void() spider_leap5 = [$jump8, spider_leap6 ] {};	
+void() spider_leap6 = [$jump9, spider_leap7 ] {};
+void() spider_leap7 = [$jump10, spider_leap8 ] {
 	// Double check monster is still falling?
 	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
@@ -316,30 +313,29 @@ void() spider_leap7 =[ $jump10, spider_leap8 ] {
 };
 
 //----------------------------------------------------------------------
-void() spider_leap8 =[ $jump11, spider_leap9] {monster_footstep(FALSE);};
-void() spider_leap9 =[ $jump13, spider_leap10] {monster_footstep(FALSE);};
-void() spider_leap10 =[ $jump15, spider_run1] {ai_resetangles();};
+void() spider_leap8 = [$jump11, spider_leap9] { monster_footstep(FALSE); };
+void() spider_leap9 = [$jump13, spider_leap10] { monster_footstep(FALSE); };
+void() spider_leap10 = [$jump15, spider_run1] { ai_resetangles(); };
 
-//======================================================================
+
 // CEILING SPIDERS - Idle/Drop/Touch/Land functions
-//======================================================================
-void()	spider_idleup1	=[	$idleup1,	spider_idleup2	] {monster_idle_sound();ai_stand();};
-void()	spider_idleup2	=[	$idleup2,	spider_idleup3	] {ai_stand();};
-void()	spider_idleup3	=[	$idleup3,	spider_idleup4	] {ai_stand();};
-void()	spider_idleup4	=[	$idleup4,	spider_idleup5	] {ai_stand();};
-void()	spider_idleup5	=[	$idleup5,	spider_idleup6	] {ai_stand();};
-void()	spider_idleup6	=[	$idleup6,	spider_idleup7	] {ai_stand();};
-void()	spider_idleup7	=[	$idleup7,	spider_idleup8	] {ai_stand();};
-void()	spider_idleup8	=[	$idleup8,	spider_idleup9	] {ai_stand();};
-void()	spider_idleup9	=[	$idleup9,	spider_idleup10	] {ai_stand();};
-void()	spider_idleup10	=[	$idleup10,	spider_idleup11	] {ai_stand();};
-void()	spider_idleup11	=[	$idleup11,	spider_idleup12	] {ai_stand();};
-void()	spider_idleup12	=[	$idleup12,	spider_idleup13	] {ai_stand();};
-void()	spider_idleup13	=[	$idleup13,	spider_idleup1	] {ai_stand();};
+
+void()	spider_idleup1	= [	$idleup1,	spider_idleup2	] { monster_idle_sound();ai_stand(); };
+void()	spider_idleup2	= [	$idleup2,	spider_idleup3	] { ai_stand(); };
+void()	spider_idleup3	= [	$idleup3,	spider_idleup4	] { ai_stand(); };
+void()	spider_idleup4	= [	$idleup4,	spider_idleup5	] { ai_stand(); };
+void()	spider_idleup5	= [	$idleup5,	spider_idleup6	] { ai_stand(); };
+void()	spider_idleup6	= [	$idleup6,	spider_idleup7	] { ai_stand(); };
+void()	spider_idleup7	= [	$idleup7,	spider_idleup8	] { ai_stand(); };
+void()	spider_idleup8	= [	$idleup8,	spider_idleup9	] { ai_stand(); };
+void()	spider_idleup9	= [	$idleup9,	spider_idleup10	] { ai_stand(); };
+void()	spider_idleup10	= [	$idleup10,	spider_idleup11	] { ai_stand(); };
+void()	spider_idleup11	= [	$idleup11,	spider_idleup12	] { ai_stand(); };
+void()	spider_idleup12	= [	$idleup12,	spider_idleup13	] { ai_stand(); };
+void()	spider_idleup13	= [	$idleup13,	spider_idleup1	] { ai_stand(); };
 
 //----------------------------------------------------------------------
-void() spider_droptouch =
-{
+void() spider_droptouch = {
 	// Check if landed on something that is not the ground?
 	if (!checkbottom(self)) {
 		// Is the spider standing on something?
@@ -386,18 +382,17 @@ void() spider_droptouch =
 };
 
 //----------------------------------------------------------------------
-void()	spider_drop1 =[	$drop1,	spider_drop2 ] {};
-void()	spider_drop2 =[	$drop2,	spider_drop3 ] {};
-void()	spider_drop3 =[	$drop3,	spider_drop4 ] {};
-void()	spider_drop4 =[	$drop4,	spider_drop5 ] {};
-void()	spider_drop5 =[	$drop5,	spider_drop6 ] {};
-void()	spider_drop6 =[	$drop6,	spider_drop6 ] {
+void()	spider_drop1 = [	$drop1,	spider_drop2 ] {};
+void()	spider_drop2 = [	$drop2,	spider_drop3 ] {};
+void()	spider_drop3 = [	$drop3,	spider_drop4 ] {};
+void()	spider_drop4 = [	$drop4,	spider_drop5 ] {};
+void()	spider_drop5 = [	$drop5,	spider_drop6 ] {};
+void()	spider_drop6 = [	$drop6,	spider_drop6 ] {
 	if (self.attack_timer < time || self.velocity_z == 0) spider_droptouch();
 };
 
 //----------------------------------------------------------------------------
-void() spider_wakeup =
-{
+void() spider_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
 		
@@ -430,20 +425,20 @@ void() spider_wakeup =
 	spider_drop1();						// Turn around, cat tricks!
 };
 
-//======================================================================
+
 // MINION - Grow and spin up from nothing
-//======================================================================
-void() spider_growangle = {self.angles_y = self.angles_y + self.lefty;};
-void() spider_grow1 = [ $grow1, spider_grow2 ] {};
-void() spider_grow2 = [ $grow2, spider_grow3 ] {spider_growangle();};
-void() spider_grow3 = [ $grow3, spider_grow4 ] {spider_growangle();};
-void() spider_grow4 = [ $grow4, spider_grow5 ] {spider_growangle();};
-void() spider_grow5 = [ $grow5, spider_grow6 ] {spider_growangle();};
-void() spider_grow6 = [ $grow6, spider_grow7 ] {spider_growangle();};
-void() spider_grow7 = [ $grow7, spider_grow8 ] {spider_growangle();};
-void() spider_grow8 = [ $grow8, spider_grow9 ] {spider_growangle();};
-void() spider_grow9 = [ $grow9, spider_grow10] {spider_growangle();};
-void() spider_grow10= [ $grow10, spider_run1 ] {
+
+void() spider_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() spider_grow1 = [$grow1, spider_grow2 ] {};
+void() spider_grow2 = [$grow2, spider_grow3 ] { spider_growangle(); };
+void() spider_grow3 = [$grow3, spider_grow4 ] { spider_growangle(); };
+void() spider_grow4 = [$grow4, spider_grow5 ] { spider_growangle(); };
+void() spider_grow5 = [$grow5, spider_grow6 ] { spider_growangle(); };
+void() spider_grow6 = [$grow6, spider_grow7 ] { spider_growangle(); };
+void() spider_grow7 = [$grow7, spider_grow8 ] { spider_growangle(); };
+void() spider_grow8 = [$grow8, spider_grow9 ] { spider_growangle(); };
+void() spider_grow9 = [$grow9, spider_grow10] { spider_growangle(); };
+void() spider_grow10= [$grow10, spider_run1 ] {
 	if (monster_revive_finish()) { // Die if stuck, else restore damagability, setup goals, and warn other monsters.  Then do this stuff:
 		self.angles_y = self.angles_y + self.lefty; // Finally spin back to original position
 		self.th_stand = spider_idle1; // Restore all think state functions
@@ -468,17 +463,17 @@ void() spider_grow = {
 	spider_grow1();
 };
 
-void() spider_paind1	=[	$paindown1,	spider_paind2	] {};
-void() spider_paind2	=[	$paindown3,	spider_paind3	] {};
-void() spider_paind3	=[	$paindown5,	spider_paind4	] {};
-void() spider_paind4	=[	$paindown7,	spider_paind5	] {};
-void() spider_paind5	=[	$paindown9,	spider_run1	] {};
+void() spider_paind1	= [	$paindown1,	spider_paind2	] {};
+void() spider_paind2	= [	$paindown3,	spider_paind3	] {};
+void() spider_paind3	= [	$paindown5,	spider_paind4	] {};
+void() spider_paind4	= [	$paindown7,	spider_paind5	] {};
+void() spider_paind5	= [	$paindown9,	spider_run1	] {};
 
 // Front legs up (in melee or missile attack)
-void() spider_painu1	=[	$painup1,	spider_painu2	] {};
-void() spider_painu2	=[	$painup3,	spider_painu3	] {};
-void() spider_painu3	=[	$painup5,	spider_painu4	] {};
-void() spider_painu4	=[	$painup6,	spider_run1	] {};
+void() spider_painu1	= [	$painup1,	spider_painu2	] {};
+void() spider_painu2	= [	$painup3,	spider_painu3	] {};
+void() spider_painu3	= [	$painup5,	spider_painu4	] {};
+void() spider_painu4	= [	$painup6,	spider_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) spider_pain = {
 	// Has the spider been hit while on the ceiling?
@@ -510,18 +505,18 @@ void(entity inflictor, entity attacker, float damage) spider_pain = {
 	}
 };
 
-//============================================================================
-void() spider_die1		=[	$death1,	spider_die2	] {};
-void() spider_die2		=[	$death3,	spider_die3	] {monster_check_gib();};
-void() spider_die3		=[	$death5,	spider_die4	] {monster_check_gib();
+
+void() spider_die1		= [	$death1,	spider_die2	] {};
+void() spider_die2		= [	$death3,	spider_die3	] { monster_check_gib(); };
+void() spider_die3		= [	$death5,	spider_die4	] { monster_check_gib();
 	self.solid = SOLID_NOT;};
-void() spider_die4		=[	$death7,	spider_die5	] {};
-void() spider_die5		=[	$death9,	spider_die6	] {};
-void() spider_die6		=[	$death11,	spider_die7	] {};
-void() spider_die7		=[	$death13,	spider_die8	] {};
-void() spider_die8		=[	$death15,	spider_die9	] {};
-void() spider_die9		=[	$death17,	spider_die10] {monster_death_postcheck();};
-void() spider_die10		=[	$death19,	spider_die10] {monster_deadbody_check();};
+void() spider_die4		= [	$death7,	spider_die5	] {};
+void() spider_die5		= [	$death9,	spider_die6	] {};
+void() spider_die6		= [	$death11,	spider_die7	] {};
+void() spider_die7		= [	$death13,	spider_die8	] {};
+void() spider_die8		= [	$death15,	spider_die9	] {};
+void() spider_die9		= [	$death17,	spider_die10] { monster_death_postcheck(); };
+void() spider_die10		= [	$death19,	spider_die10] { monster_deadbody_check(); };
 
 void() spider_die = {
 	// Spiders are small, gibs don't bounce far

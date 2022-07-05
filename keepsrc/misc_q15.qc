@@ -238,7 +238,7 @@ void() actor_anim = { // [FUNCTION]
 		self.frame++;
 		self.think = actor_anim;
 		self.nextthink = time + self.speed;
-	} else if (ext_dppart && self.spawnflags & FLAG_REMOVE_PARTICLES) self.traileffectnum = particleeffectnum(string_null);
+	} else if (ext_dppart && self.spawnflags & FLAG_REMOVE_PARTICLES) self.traileffectnum = particleeffectnum("");
 }
 
 void() actor_throw = { // [FUNCTION]

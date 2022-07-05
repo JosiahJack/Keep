@@ -58,16 +58,16 @@ void() death_aura = {
 	self.attack_finished = time + 0.5;
 };
 
-void() nehwraith_souls1  =[ 92,  nehwraith_souls2  ] { // [FUNCTION]
+void() nehwraith_souls1  = [ 92,  nehwraith_souls2  ] { // [FUNCTION]
 	ai_face();
 	if (vlen(self.enemy.origin - self.origin) < 256) self.velocity = '0 0 0';
 	else ai_walk(4); 
     sound(self, CHAN_VOICE, "nehahra/wraith/talk1.wav", 1, ATTN_IDLE);
     self.gorging = TRUE;
 };
-void() nehwraith_souls2  =[ 93, nehwraith_souls3  ] {ai_face();}; // [FUNCTION]
-void() nehwraith_souls3  =[ 94, nehwraith_souls4  ] {ai_face();}; // [FUNCTION]
-void() nehwraith_souls4  =[ 95, nehwraith_souls3  ] { // [FUNCTION]
+void() nehwraith_souls2  = [ 93, nehwraith_souls3  ] { ai_face(); }; // [FUNCTION]
+void() nehwraith_souls3  = [ 94, nehwraith_souls4  ] { ai_face(); }; // [FUNCTION]
+void() nehwraith_souls4  = [ 95, nehwraith_souls3  ] { // [FUNCTION]
 	ai_face();
 	if (vlen(self.enemy.origin - self.origin) < 256) self.velocity = '0 0 0';
 	else ai_walk(4); 
@@ -91,20 +91,20 @@ void(float d) ai_nehwraith_walk = { // [FUNCTION]
 
     ai_walk(d);
 };
-void() nehwraith_walk1  =[ 65,  nehwraith_walk2  ] {ai_nehwraith_walk(6); monster_idle_sound();}; // [FUNCTION]
-void() nehwraith_walk2  =[ 66,  nehwraith_walk3  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk3  =[ 67,  nehwraith_walk4  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk4  =[ 68,  nehwraith_walk5  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk5  =[ 69,  nehwraith_walk6  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk6  =[ 70,  nehwraith_walk7  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk7  =[ 71,  nehwraith_walk8  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk8  =[ 72,  nehwraith_walk9  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk9  =[ 73,  nehwraith_walk10 ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk10 =[ 74, nehwraith_walk11 ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk11 =[ 75, nehwraith_walk12 ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk12 =[ 76, nehwraith_walk13 ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk13 =[ 77, nehwraith_walk14 ] {ai_nehwraith_walk(6);}; // [FUNCTION]
-void() nehwraith_walk14 =[ 78, nehwraith_walk1  ] {ai_nehwraith_walk(6);}; // [FUNCTION]
+void() nehwraith_walk1  = [ 65,  nehwraith_walk2  ] { ai_nehwraith_walk(6); monster_idle_sound(); }; // [FUNCTION]
+void() nehwraith_walk2  = [ 66,  nehwraith_walk3  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk3  = [ 67,  nehwraith_walk4  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk4  = [ 68,  nehwraith_walk5  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk5  = [ 69,  nehwraith_walk6  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk6  = [ 70,  nehwraith_walk7  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk7  = [ 71,  nehwraith_walk8  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk8  = [ 72,  nehwraith_walk9  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk9  = [ 73,  nehwraith_walk10 ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk10 = [ 74, nehwraith_walk11 ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk11 = [ 75, nehwraith_walk12 ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk12 = [ 76, nehwraith_walk13 ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk13 = [ 77, nehwraith_walk14 ] { ai_nehwraith_walk(6); }; // [FUNCTION]
+void() nehwraith_walk14 = [ 78, nehwraith_walk1  ] { ai_nehwraith_walk(6); }; // [FUNCTION]
 
 void(float d) ai_nehwraith_run = { // [FUNCTION]
 	if (!self.enemy) {
@@ -130,27 +130,27 @@ void(float d) ai_nehwraith_run = { // [FUNCTION]
 
     ai_run(d);
 };
-void() nehwraith_run1   =[ 65,  nehwraith_run2   ] {ai_nehwraith_run(self.speed); monster_idle_sound();}; // [FUNCTION]
-void() nehwraith_run2   =[ 66,  nehwraith_run3   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run3   =[ 67,  nehwraith_run4   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run4   =[ 68,  nehwraith_run5   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run5   =[ 69,  nehwraith_run6   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run6   =[ 70,  nehwraith_run7   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run7   =[ 71,  nehwraith_run8   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run8   =[ 72,  nehwraith_run9   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run9   =[ 73,  nehwraith_run10  ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run10  =[ 74, nehwraith_run11  ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run11  =[ 75, nehwraith_run12  ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run12  =[ 76, nehwraith_run13  ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run13  =[ 77, nehwraith_run14  ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
-void() nehwraith_run14  =[ 78, nehwraith_run1   ] {ai_nehwraith_run(self.speed);}; // [FUNCTION]
+void() nehwraith_run1   = [ 65,  nehwraith_run2   ] { ai_nehwraith_run(self.speed); monster_idle_sound(); }; // [FUNCTION]
+void() nehwraith_run2   = [ 66,  nehwraith_run3   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run3   = [ 67,  nehwraith_run4   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run4   = [ 68,  nehwraith_run5   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run5   = [ 69,  nehwraith_run6   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run6   = [ 70,  nehwraith_run7   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run7   = [ 71,  nehwraith_run8   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run8   = [ 72,  nehwraith_run9   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run9   = [ 73,  nehwraith_run10  ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run10  = [ 74, nehwraith_run11  ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run11  = [ 75, nehwraith_run12  ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run12  = [ 76, nehwraith_run13  ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run13  = [ 77, nehwraith_run14  ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
+void() nehwraith_run14  = [ 78, nehwraith_run1   ] { ai_nehwraith_run(self.speed); }; // [FUNCTION]
 
 // For those summoned by Dark Lord.
-void() nehwraith_grow1  =[ 8,  nehwraith_grow2  ] {ai_face();}; // [FUNCTION]
-void() nehwraith_grow2  =[ 10, nehwraith_grow3  ] {ai_face();}; // [FUNCTION]
-void() nehwraith_grow3  =[ 12, nehwraith_grow4  ] {ai_face();}; // [FUNCTION]
-void() nehwraith_grow4  =[ 14, nehwraith_grow5  ] {ai_face();}; // [FUNCTION]
-void() nehwraith_grow5  =[ 16, nehwraith_run1   ] {ai_face();}; // [FUNCTION]
+void() nehwraith_grow1  = [ 8,  nehwraith_grow2  ] { ai_face(); }; // [FUNCTION]
+void() nehwraith_grow2  = [ 10, nehwraith_grow3  ] { ai_face(); }; // [FUNCTION]
+void() nehwraith_grow3  = [ 12, nehwraith_grow4  ] { ai_face(); }; // [FUNCTION]
+void() nehwraith_grow4  = [ 14, nehwraith_grow5  ] { ai_face(); }; // [FUNCTION]
+void() nehwraith_grow5  = [ 16, nehwraith_run1   ] { ai_face(); }; // [FUNCTION]
 
 // ATTACK.  Like ai_melee, but heals wrath as it causes damage.  Built for wraths.
 void() ai_drain = { // [FUNCTION]
@@ -175,16 +175,16 @@ void() ai_drain = { // [FUNCTION]
     T_Damage (self.enemy, self, self, damage, NOARMOR); // No armor, because armor cannot block incorporal attacks.  Leech, because the wraith will suck and drain your life force.
 };
 
-void() nehwraith_fail1   =[ 101,  nehwraith_fail2  ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_fail2   =[ 91,  nehwraith_fail3   ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_fail3   =[ 92,  nehwraith_run1    ] {ai_charge(self.speed);}; // [FUNCTION]
+void() nehwraith_fail1   = [ 101,  nehwraith_fail2  ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_fail2   = [ 91,  nehwraith_fail3   ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_fail3   = [ 92,  nehwraith_run1    ] { ai_charge(self.speed); }; // [FUNCTION]
 
-void() nehwraith_melee1  =[ 92,  nehwraith_melee2  ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee2  =[ 93,  nehwraith_melee3  ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee3  =[ 94,  nehwraith_melee4  ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee4  =[ 95,   nehwraith_melee5  ] {ai_charge(self.speed); self.t_width = 0; ai_drain();}; // [FUNCTION]
-void() nehwraith_melee5  =[ 96,   nehwraith_melee6  ] {ai_charge(self.speed); ai_drain();}; // [FUNCTION]
-void() nehwraith_melee6  =[ 95,   nehwraith_melee7  ] {ai_charge(self.speed); ai_drain(); // [FUNCTION]
+void() nehwraith_melee1  = [ 92,  nehwraith_melee2  ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee2  = [ 93,  nehwraith_melee3  ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee3  = [ 94,  nehwraith_melee4  ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee4  = [ 95,   nehwraith_melee5  ] { ai_charge(self.speed); self.t_width = 0; ai_drain(); }; // [FUNCTION]
+void() nehwraith_melee5  = [ 96,   nehwraith_melee6  ] { ai_charge(self.speed); ai_drain(); }; // [FUNCTION]
+void() nehwraith_melee6  = [ 95,   nehwraith_melee7  ] { ai_charge(self.speed); ai_drain(); // [FUNCTION]
     if (self.t_width) { // Wraith touched its target.
         if (self.t_width < 5)
             if (self.enemy.health > 0)
@@ -193,14 +193,14 @@ void() nehwraith_melee6  =[ 95,   nehwraith_melee7  ] {ai_charge(self.speed); ai
     }
     self.think = nehwraith_fail1;
 };
-void() nehwraith_melee7  =[ 96,   nehwraith_melee8  ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee8  =[ 95,   nehwraith_melee9  ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee9  =[ 96,   nehwraith_melee10 ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee10 =[ 97,   nehwraith_melee11 ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee11 =[ 98,   nehwraith_melee12 ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee12 =[ 100,   nehwraith_melee13 ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee13 =[ 95,   nehwraith_melee14 ] {ai_charge(self.speed);}; // [FUNCTION]
-void() nehwraith_melee14 =[ 93,   nehwraith_run1    ] {ai_charge(self.speed);}; // [FUNCTION]
+void() nehwraith_melee7  = [ 96,   nehwraith_melee8  ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee8  = [ 95,   nehwraith_melee9  ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee9  = [ 96,   nehwraith_melee10 ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee10 = [ 97,   nehwraith_melee11 ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee11 = [ 98,   nehwraith_melee12 ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee12 = [ 100,   nehwraith_melee13 ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee13 = [ 95,   nehwraith_melee14 ] { ai_charge(self.speed); }; // [FUNCTION]
+void() nehwraith_melee14 = [ 93,   nehwraith_run1    ] { ai_charge(self.speed); }; // [FUNCTION]
 
 void(float ofs) nehwraith_shot = { // [FUNCTION]
     local vector dir, org;
@@ -238,28 +238,28 @@ void() ai_nehwraith_charge = { // [FUNCTION]
     else ai_charge(self.speed);
 };
 
-void() nehwraith_spray1  =[ 92, nehwraith_spray2  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray2  =[ 94, nehwraith_spray3  ] {ai_nehwraith_charge();nehwraith_shot(0);}; // [FUNCTION]
-void() nehwraith_spray3  =[ 96, nehwraith_spray4  ] {ai_nehwraith_charge();nehwraith_shot(-1);nehwraith_shot(1);}; // [FUNCTION]
-void() nehwraith_spray4  =[ 100, nehwraith_spray5  ] {ai_nehwraith_charge();nehwraith_shot(-2);nehwraith_shot(2);}; // [FUNCTION]
-void() nehwraith_spray5  =[ 101, nehwraith_spray6  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray6  =[ 99,  nehwraith_spray7  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray7  =[ 98,  nehwraith_spray8  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray8  =[ 97,  nehwraith_spray9  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray9  =[ 96,  nehwraith_spray10 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray10 =[ 95,  nehwraith_spray11 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray11 =[ 94,  nehwraith_spray12 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray12 =[ 93,  nehwraith_spray13 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray13 =[ 92,  nehwraith_spray14 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_spray14 =[ 80,  nehwraith_run1    ] {ai_nehwraith_charge();}; // [FUNCTION]
+void() nehwraith_spray1  = [ 92, nehwraith_spray2  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray2  = [ 94, nehwraith_spray3  ] { ai_nehwraith_charge();nehwraith_shot(0); }; // [FUNCTION]
+void() nehwraith_spray3  = [ 96, nehwraith_spray4  ] { ai_nehwraith_charge();nehwraith_shot(-1);nehwraith_shot(1); }; // [FUNCTION]
+void() nehwraith_spray4  = [ 100, nehwraith_spray5  ] { ai_nehwraith_charge();nehwraith_shot(-2);nehwraith_shot(2); }; // [FUNCTION]
+void() nehwraith_spray5  = [ 101, nehwraith_spray6  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray6  = [ 99,  nehwraith_spray7  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray7  = [ 98,  nehwraith_spray8  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray8  = [ 97,  nehwraith_spray9  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray9  = [ 96,  nehwraith_spray10 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray10 = [ 95,  nehwraith_spray11 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray11 = [ 94,  nehwraith_spray12 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray12 = [ 93,  nehwraith_spray13 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray13 = [ 92,  nehwraith_spray14 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_spray14 = [ 80,  nehwraith_run1    ] { ai_nehwraith_charge(); }; // [FUNCTION]
 
-void() nehwraith_orb1  =[ 102,  nehwraith_orb2  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb2  =[ 91,  nehwraith_orb3  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb3  =[ 84,  nehwraith_orb4  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb4  =[ 83,  nehwraith_orb5  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb5  =[ 82,  nehwraith_orb6  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb6  =[ 83,  nehwraith_orb7  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb7  =[ 84,  nehwraith_orb8  ] { // [FUNCTION]
+void() nehwraith_orb1  = [ 102,  nehwraith_orb2  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb2  = [ 91,  nehwraith_orb3  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb3  = [ 84,  nehwraith_orb4  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb4  = [ 83,  nehwraith_orb5  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb5  = [ 82,  nehwraith_orb6  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb6  = [ 83,  nehwraith_orb7  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb7  = [ 84,  nehwraith_orb8  ] { // [FUNCTION]
 	ai_nehwraith_charge();
     if (self.skin) { // Note:  Was done in the previous frame
 		self.effects = self.effects | EF_MUZZLEFLASH;
@@ -270,12 +270,12 @@ void() nehwraith_orb7  =[ 84,  nehwraith_orb8  ] { // [FUNCTION]
 		newmis.dmg = 30;
     } else WrathMissile(2);
 };
-void() nehwraith_orb8  =[ 102,  nehwraith_orb9  ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb9  =[ 85,  nehwraith_orb10 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb10 =[ 87, nehwraith_orb11 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb11 =[ 90, nehwraith_orb12 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb12 =[ 82, nehwraith_orb13 ] {ai_nehwraith_charge();}; // [FUNCTION]
-void() nehwraith_orb13 =[ 80, nehwraith_run1  ] {ai_nehwraith_charge();}; // [FUNCTION]
+void() nehwraith_orb8  = [ 102,  nehwraith_orb9  ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb9  = [ 85,  nehwraith_orb10 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb10 = [ 87, nehwraith_orb11 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb11 = [ 90, nehwraith_orb12 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb12 = [ 82, nehwraith_orb13 ] { ai_nehwraith_charge(); }; // [FUNCTION]
+void() nehwraith_orb13 = [ 80, nehwraith_run1  ] { ai_nehwraith_charge(); }; // [FUNCTION]
 
 // Rubberbanding animations sucks, beats writing 100+ functions for it
 void() nehwraith_stand1 = [self.walkframe, nehwraith_stand1] { // [FUNCTION]
@@ -340,20 +340,20 @@ void() nehwraith_melee = { // [FUNCTION]
     else nehwraith_attack();
 };
 
-void() nehwraith_pain1 =[ 79,  nehwraith_pain2 ] {}; // [FUNCTION]
-void() nehwraith_pain2 =[ 80,  nehwraith_pain3 ] {}; // [FUNCTION]
-void() nehwraith_pain3 =[ 81,  nehwraith_pain4 ] {}; // [FUNCTION]
-void() nehwraith_pain4 =[ 82,  nehwraith_pain5 ] {}; // [FUNCTION]
-void() nehwraith_pain5 =[ 83,  nehwraith_pain6 ] {}; // [FUNCTION]
-void() nehwraith_pain6 =[ 84,  nehwraith_run1  ] {}; // [FUNCTION]
+void() nehwraith_pain1 = [ 79,  nehwraith_pain2 ] {}; // [FUNCTION]
+void() nehwraith_pain2 = [ 80,  nehwraith_pain3 ] {}; // [FUNCTION]
+void() nehwraith_pain3 = [ 81,  nehwraith_pain4 ] {}; // [FUNCTION]
+void() nehwraith_pain4 = [ 82,  nehwraith_pain5 ] {}; // [FUNCTION]
+void() nehwraith_pain5 = [ 83,  nehwraith_pain6 ] {}; // [FUNCTION]
+void() nehwraith_pain6 = [ 84,  nehwraith_run1  ] {}; // [FUNCTION]
 
-void() nehwraith_painb6  =[ 85,  nehwraith_painb7  ] {}; // [FUNCTION]
-void() nehwraith_painb7  =[ 86,  nehwraith_painb8  ] {}; // [FUNCTION]
-void() nehwraith_painb8  =[ 87,  nehwraith_painb9  ] {}; // [FUNCTION]
-void() nehwraith_painb9  =[ 88,  nehwraith_painb10 ] {}; // [FUNCTION]
-void() nehwraith_painb10 =[ 89, nehwraith_painb11 ] {}; // [FUNCTION]
-void() nehwraith_painb11 =[ 90, nehwraith_painb12 ] {}; // [FUNCTION]
-void() nehwraith_painb12 =[ 91, nehwraith_run1    ] {}; // [FUNCTION]
+void() nehwraith_painb6  = [ 85,  nehwraith_painb7  ] {}; // [FUNCTION]
+void() nehwraith_painb7  = [ 86,  nehwraith_painb8  ] {}; // [FUNCTION]
+void() nehwraith_painb8  = [ 87,  nehwraith_painb9  ] {}; // [FUNCTION]
+void() nehwraith_painb9  = [ 88,  nehwraith_painb10 ] {}; // [FUNCTION]
+void() nehwraith_painb10 = [ 89, nehwraith_painb11 ] {}; // [FUNCTION]
+void() nehwraith_painb11 = [ 90, nehwraith_painb12 ] {}; // [FUNCTION]
+void() nehwraith_painb12 = [ 91, nehwraith_run1    ] {}; // [FUNCTION]
 
 void() nehwraith_materialize = {
 	ai_face();
@@ -396,15 +396,15 @@ void(entity inflictor, entity attacker, float damage) nehwraith_pain = { // [FUN
     else nehwraith_pain1();
 };
 
-void() nehwraith_die1  =[ 102, nehwraith_die2  ] {self.solid = SOLID_NOT;}; // [FUNCTION]
-void() nehwraith_die2 =[ 104,  nehwraith_die3  ] {}; // [FUNCTION]
-void() nehwraith_die3 =[ 106,  nehwraith_die4  ] {}; // [FUNCTION]
-void() nehwraith_die4 =[ 108,  nehwraith_die5  ] {}; // [FUNCTION]
-void() nehwraith_die5 =[ 110,  nehwraith_die6  ] {}; // [FUNCTION]
-void() nehwraith_die6 =[ 112,  nehwraith_die7  ] {}; // [FUNCTION]
-void() nehwraith_die7 =[ 114, nehwraith_die8  ] {}; // [FUNCTION]
-void() nehwraith_die8 =[ 116, nehwraith_die9  ] {}; // [FUNCTION]
-void() nehwraith_die9 =[ 118, SUB_Null    ] { // [FUNCTION]
+void() nehwraith_die1  = [ 102, nehwraith_die2  ] { self.solid = SOLID_NOT;}; // [FUNCTION]
+void() nehwraith_die2 = [ 104,  nehwraith_die3  ] {}; // [FUNCTION]
+void() nehwraith_die3 = [ 106,  nehwraith_die4  ] {}; // [FUNCTION]
+void() nehwraith_die4 = [ 108,  nehwraith_die5  ] {}; // [FUNCTION]
+void() nehwraith_die5 = [ 110,  nehwraith_die6  ] {}; // [FUNCTION]
+void() nehwraith_die6 = [ 112,  nehwraith_die7  ] {}; // [FUNCTION]
+void() nehwraith_die7 = [ 114, nehwraith_die8  ] {}; // [FUNCTION]
+void() nehwraith_die8 = [ 116, nehwraith_die9  ] {}; // [FUNCTION]
+void() nehwraith_die9 = [ 118, SUB_Null    ] { // [FUNCTION]
     monster_ThrowGib();
     T_RadiusDamage (self, self, 80, world,DAMAGEALL);
     Rocket_Explosion2 (self.origin + '0 0 24', 0, 4);
