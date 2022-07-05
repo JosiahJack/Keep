@@ -114,7 +114,7 @@ void() player_failedairgun1;
 void(float num_bubbles) death_bubbles;
 void() player_airgun1;
 float(vector spot) SpawnMinionInRadius;
-vector(vector p1, vector p2, float sped, entity targ, vector spread) Maim_Line;
+vector(vector p1, vector p2, float sped, entity targ, vector spread, float ex) Maim_LineEx;
 
 // OLD STYLE BULLET SYSTEM (HITSCAN)
 void() ClearMultiDamage = { // [FUNCTION]
@@ -2193,7 +2193,7 @@ void() W_EchoLavaSpike_Down = { W_EchoLavaSpike(-2); }; // [FUNCTION]
 void(vector org, vector dir, entity targ, vector err) M_FireChaingun = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound (self, CHAN_WEAPON, "drake/weapons/dsshotgn.wav", 1, ATTN_NORM);
-    dir = Maim_Line (org, dir, 0, targ, err);
+    dir = Maim_LineEx(org,dir,0,targ,err,1);
 	FireBullets(1, '0.14 0.08 0'); // Chaingunners were lousy shots in Doom2, so use a wide spread.  Normal SSG spread should do nicely.  Also, Doom's damage is 1d3*5.  Yaw scatter should be crandom * 3.125.
     // Slow down thinking to give a rate-of-fire of Doom's chaingun zombie.
     self.b0_click = !self.b0_click;     // Use client-only field for this.
@@ -2640,9 +2640,9 @@ void(float skillaim) FirewallSetup = { // [FUNCTION]
     org = self.origin + self.view_ofs;
     dir = self.enemy.origin + self.enemy.view_ofs;
 	if (skillaim) {
-		if (skill >= 2) dir = Maim_Line (org, dir, SPEED_FIREWALL, self.enemy, VEC_ORIGIN); // As with Chthon, lead on Hard and up.
-		else dir = Maim_Line (org, dir, SPEED_FIREWALL, world, VEC_ORIGIN);
-	} else dir = Maim_Line(org,dir,SPEED_FIREWALL,world,'0 0 0');
+		if (skill >= 2) dir = Maim_LineEx(org,dir,SPEED_FIREWALL,self.enemy,'0 0 0',1); // As with Chthon, lead on Hard and up.
+		else dir = Maim_LineEx(org,dir,SPEED_FIREWALL,world,'0 0 0',1);
+	} else dir = Maim_LineEx(org,dir,SPEED_FIREWALL,world,'0 0 0',1);
 
 	self.pos1 = org;
 	self.pos2 = dir;
@@ -2723,26 +2723,6 @@ void(vector offset,float set_speed) do_faSpell = { // [FUNCTION]
 	newmis.nextthink = time + HX_FRAME_TIME;
 };
 
-// Magic Missiles -- Used by the wand and monsters such as hell knights.
-void(vector start, vector dir, float sped) Knightspike_Launch = { // [FUNCTION]
-    newmis = spawn();
-    newmis.owner = self;
-    newmis.movetype = MOVETYPE_FLYMISSILE;
-    newmis.solid = SOLID_BBOX;
-    newmis.angles = vectoangles(dir);
-    newmis.classname = "spike";
-    newmis.think = SUB_Remove;
-    newmis.nextthink = time + 6;
-    setorigin (newmis, start);
-    newmis.velocity = dir * 1000;
-    setmodel (newmis, "progs/k_spike.mdl");
-    setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);       
-    newmis.worldtype = TE_KNIGHTSPIKE;
-    newmis.classname = "knightspike";
-    newmis.speed     = sped;
-    newmis.velocity  = dir * sped;
-};
-
 // Is there any space left to spawn a hazard projectile?  Return TRUE if counter is lower than limit
 float(entity targ, float maxextra) HazardProjectile_CheckLimit = {
 	// Can't do a limit check if no limit (proj_limit) is set!  This allows for an override to be defined on attacker
@@ -2776,11 +2756,9 @@ void(entity targ) HazardProjectile_AddCounter = {
 	}
 };
 
-/*======================================================================
- FLAME WALL PROJECTILE ATTACK
- * Uses sprites for animation/flame effect
- * Has radius and impact touch damage
-======================================================================*/
+// FLAME WALL PROJECTILE ATTACK
+//  * Uses sprites for animation/flame effect
+//  * Has radius and impact touch damage
 // Wall of flame, left > right
 // Easy = 3(-1/1), Normal = 5(-2/2), Hard/NM = 7(-3/3)
 float(vector waveqty) SpriteCount_Flame = {
@@ -2790,7 +2768,6 @@ float(vector waveqty) SpriteCount_Flame = {
 	return wave_count;
 };
 
-//----------------------------------------------------------------------
 // target entity, origin, v_forward, colour, size, lifetime, speed
 void(entity targ, vector org, vector dir, float proj_color, float proj_size, float proj_life, float proj_speed) Launch_Flame = {
 	// Check if the hazard projectile limit exists and has been reached?
@@ -2962,7 +2939,7 @@ void(vector org, vector dir, float proj_color, string proj_sfx) Launch_Trail = {
 };
 
 // Hazard projectiles are about denying movement space to players
-// and creating a temporary hazard to naviagate around
+// and creating a temporary hazard to navigate around.
 //
 // Players who jump a lot and have greater DM focused movement skills,
 // will find hazard damage projectiles easier to deal with.
@@ -3037,21 +3014,6 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 		}
 		newmis.nextthink = time + 0.02; // Particle trail needs quick update
 	}
-};
-
-// Work out direction speed of egg and then launch it!
-void(vector eggofs) Create_Egg = {
-	local vector org, dir;
-	local float egg_speed;
-	if (self.health < 1) return;
-	
-	// Turn towards player and drop the egg!
-	makevectors(self.angles);
-	org = self.origin + attack_vector(eggofs);
-	egg_speed = self.minion_throwspeed + (random() * self.minion_throwextra);
-	dir = v_forward * egg_speed + (v_right * (crandom()*self.minion_throwside));
-	launch_projectile(org,dir,NO_SPIN,CT_PROJ_MEGG,1);
-	SUB_AttackFinished (2 + random());
 };
 
 // Convert the movetype back to MOVETYPE_STEP cas we are finished with the velocity change (we should be anyway).
@@ -3237,86 +3199,6 @@ void() launch_horn = {
 	player_airgun1(); // AirFist gun frame animation
 };
 
-void(float offset) dprince_hazard = { // [FUNCTION]
-	local vector org, torg, dir, ang, avel;
-	local float targetang, haz_loop;
-	
-	if (!self.enemy) return;
-	if (self.enemy.health < 1) return;
-
-	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
-	makevectors(self.angles);	
-	org = self.origin + attack_vector(self.attack_offset);
-	if (skill <= SKILL_NORMAL) haz_loop = 1;
-	else haz_loop = 2;
-	
-	while(haz_loop > 0) {
-		// Keep looping
-		haz_loop = haz_loop - 1;
-		torg = self.enemy.origin;
-		// Last projectile (0) is direct at enemy
-		if (haz_loop > 0) {
-			// Very large random area around target
-			torg_x = torg_x + (crandom() * 128);
-			torg_y = torg_y + (crandom() * 128);
-		}
-		// Work out elevation towards target origin
-		targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_DPRINCE);
-		ang = vectoangles(torg - org);
-		ang_x = -targetang;
-		makevectors(ang);
-		// fire projectile in arc pattern (offset)
-		dir = ( (v_forward * (0.75 + random()*0.25)) + (v_right * (offset*0.1)) ) * SPEED_DPRINCE;	
-		// Some random angle rotation
-		avel = vecrand(100,200,FALSE);
-		Launch_Hazard(org, dir, avel, CT_PROJ_DPRINCE2);
-	}
-};
-
-// Range - Grenades (uses generic attack function in projectiles.qc)
-// Nail - Alternative firemode (based on nail ogre from Marcher Fortress)
-void() OgreFireADNails = {
-	local vector org, dir, vec;
-	local float loopvar;
-
-	if (self.health < 1) return; // Check for death?
-
-	loopvar = 0;
-	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
-	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
-	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
-	makevectors(self.angles); // turn and face your enemy!
-	org = self.origin + attack_vector(self.attack_offset);
-	if (self.attack_count <= 0) self.attack_count = 5; // Shoot something!
-	while (loopvar < self.attack_count) { // Loop through the nail burst (all at once)
-		vec = (crandom()*20)*v_right + (crandom()*20)*v_up; // Random circle spread pattern
-		dir = normalize((self.enemy.origin + vec) - org);
-		launch_projectile(org,dir,NO_SPIN,CT_PROJ_MONNG,self.attack_speed); // Generate a red hot nail projectile
-		loopvar = loopvar + 1;
-	}
-};
-
-// FLAMES PATTERN 2 - straight line towards player
-void() judge_fireflameline = {
-	local vector org, dir;
-	local float fire_col;
-
-	// Judge cannot find target!
-	if (!self.enemy) return;
-
-	// Turn toward enemy
-	ai_face();
-	makevectors(self.angles);	
-	org = self.origin + attack_vector(self.attack_offset2);
-	dir = v_forward;
-	
-	// Setup colour scheme (was original red/blue flames)
-	fire_col = FLAME_RED;
-	// Fire that flame!
-	// Origin, v_forward, colour, sfx
-	Launch_Trail (org, dir, fire_col, "");
-};
-
 void(vector org, vector dir) pyroflame_spawn = {
 	local vector variance;
 	local float roll, pointc;
@@ -3379,20 +3261,6 @@ void(vector org, vector dir) pyroflame_spawn = {
 	newmis.nextthink = time + 0.1;
 	newmis.think = pyroflame_think;
 	newmis.touch = pyroflame_touch;
-};
-
-void() pyro_fire = {
-	local vector org, dir, targ_org;
-
-	if (self.health < 1) return;
-	
-	makevectors(self.angles);
-	org = self.origin + attack_vector(self.attack_offset);
-	// point the flames at the feet of the player
-	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20';
-	else targ_org = self.enemy.origin - self.enemy.view_ofs;
-	dir = normalize(targ_org - self.origin);
-	pyroflame_spawn(org, dir);
 };
 
 // Spawns an immobile tornado that sucks in and damages targets.

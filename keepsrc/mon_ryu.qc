@@ -343,8 +343,9 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
         if (trace_fraction < 1) p4 = p2; // Point is blocked, so don't lead.
 
         // Calculate aim vector.
-        if (bomb && (atype != RYU_USE_LITE)) dir = Aim_Toss (p1, p4, sped2, 200, world);
-        else dir = normalize (p4 - p1);
+        if (bomb && (atype != RYU_USE_LITE)) {
+            dir = Aim_Ballistic(p1,p4,sped2,200,world,1,SHOT_TIME_TOSS,MOVETYPE_TOSS);
+        } else dir = normalize(p4 - p1);
 
         dir = Maim_Scatter (dir, err);
         if (atype & RYU_ELEMENTS == RYU_USE_ICE) {
@@ -375,8 +376,9 @@ void() Ryu_Shot_Fire = {
     local   vector  dir;    // Vector from 'start' to 'end'.
     local   vector  start;  // Location of dragon's mouth.
     local   vector  end;    // Place where projectile will strike.
+    local vector p2;
     local   float   sped;   // Missile speed or lightning bolt range.
-    local   float   frac;   // Lead coefficient.  0 = no lead, 1 = perfect.
+    local   float   frac, d;   // Lead coefficient.  0 = no lead, 1 = perfect.
 
 	// As with players, pay ammo cost first then attack.
     if (self.shots_left < 1) return;     // Out of ammo.
@@ -386,10 +388,13 @@ void() Ryu_Shot_Fire = {
     // Calculate lead coefficient.  The value begins at or close to zero at
     // the start of the salvo, then the value increases with each successive
     // shot until it reaches one at the final shot.
-    frac = Frac_ShotDown();     // Lowers 'shots_left', pays ammo cost.
-	
+    // frac reduces shots in a series by one using a number between 0 and 1.
+    // frac is used for shot leading.  0 for none, 1 for perfect.  Gradually
+    // improves aim during the attack salvo.
+    self.shots_left = self.shots_left - 1; // Pay ammo cost.
+    d = self.shots_max - 1;
+    if (d > 1) frac = fabs((d - self.shots_left) / d);
     if (self.spawnflags & SPAWN_SLOW) frac = frac * 0.5;      // Can't fully track if slow.
-
     targ = self.enemy;
     // Shot speed varies by dragon size -- bigger is faster.
     // Faster because of gravity or short range.
@@ -416,7 +421,8 @@ void() Ryu_Shot_Fire = {
         if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
         if (!self.shots_left || (self.shots_left == (self.shots_max - 1))) newmis.effects = newmis.effects | EF_DIMLIGHT;
     } else if (self.worldtype == RYU_USE_ACID) {
-        dir = Maim_TossEx (start, end, sped, 200, targ, '0 0 0', frac);
+        dir = Aim_Ballistic(start,end,sped,200,targ,frac,SHOT_TIME_TOSS,MOVETYPE_TOSS);
+        dir = Maim_Scatter(dir,'0 0 0');
         Acid_Toss (start, dir, sped);
         if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
     } else if (self.worldtype == RYU_USE_LITE) {
@@ -440,7 +446,7 @@ void() Ryu_Shot_Fire = {
             if (self.enemy.waterlevel < 2) end = end - (self.enemy.velocity * ((1 - frac) * 0.2));
 		}
 
-        dir = Maim_Line (start, end, 0, world, '0 0 0');    // Insta-hit.
+        dir = Maim_LineEx(start,end,0,world,'0 0 0',1);    // Insta-hit.
         end = start + (dir * sped);
 
 		LightningBolt (start, end, self, self.height, self, TE_LIGHTNING2); // Create the bolt of lightning.

@@ -194,7 +194,8 @@ void() Shade_Meat = {
     vy = v_right;
     org = self.origin + (v_forward*org_x) + (v_right*org_y) + (v_up*org_z);
     dir = self.enemy.origin + self.enemy.view_ofs;
-    dir = Maim_Toss (org, dir, sped, up, world, '0 0 0');
+    dir = Aim_Ballistic(org,dir,sped,up,self.enemy,1,SHOT_TIME_BOUNCE,MOVETYPE_BOUNCE);
+    dir = Maim_Scatter(dir,'0 0 0');
     mx = vlen(dir);
     sound (self, CHAN_WEAPON, "drake/dragon/ice.wav", 1, ATTN_NORM);
     arc = 0.06;

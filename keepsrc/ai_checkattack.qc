@@ -64,6 +64,7 @@ float(vector waveqty) SpriteCount_Flame;
 float(entity targ, float maxextra) HazardProjectile_CheckLimit;
 void() dfury_boss_char_a1;
 void() dfury_boss_run1;
+void() hknight_char_b1;
 
 void() CheckAttack = { // [FUNCTION]
 	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
@@ -156,6 +157,43 @@ void() SoldierCheckAttack = {
 		if (self.classtype == CT_MONARMYROCKET) SUB_AttackFinished (2 + random());
 		else SUB_AttackFinished (1 + random());
 		if (random() < 0.3) self.lefty = !self.lefty;
+	}
+};
+
+// Death Knight charge.
+void() CheckForCharge = {
+	// There are 4 conditions to keep charging
+	// Can see player, no attack timer, similar Z axis and outside melee range
+	// Nightmare skill level can lock HK in constant charging (no attack timer)
+	enemy_vis = visible(self.enemy);
+	if (!enemy_vis) return;
+	if (time < self.attack_finished) return;
+	if (self.movespeed < 0) return;
+	if (self.tetherlock) return;
+	// Only charge at player if ground height < 20
+	if ( fabs(self.origin_z - self.enemy.origin_z) > MONAI_CHARGEZAXIS) return;
+	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) return;
+
+    if (self.classname == "monster_hkboss") {
+		// Emulate old behavior.
+        self.shots_left = 3;    // Replaced 'currentammo' with 'shots_*'.
+        hknight_char_b1();
+        return;
+    }
+
+	SUB_AttackFinished (2);
+	
+	// Used a pre-defined charge routine (th_charge) so that hell and death knights can share the same function
+	if (self.th_charge) self.th_charge();
+	else self.th_run();
+};
+
+// Death Knight continue charge.  Only called from hknight_char_b.
+void() CheckContinueCharge = {
+	if (time > self.attack_finished) {
+		SUB_AttackFinished (3);
+		self.th_run();
+		return;	// done charging
 	}
 };
 

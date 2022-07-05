@@ -364,7 +364,7 @@ void(vector st) Dog_Fire = {
 
     makevectors(self.angles);
     spot = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
-    dir = Maim_Line (spot, self.enemy.origin, 1000, world, '1.2 0.9 0');
+    dir = Maim_LineEx(spot,self.enemy.origin,1000,world,'1.2 0.9 0',1);
     Ryu_Fire (spot, dir, 1000, 0, 0);
 };
 

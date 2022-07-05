@@ -98,8 +98,8 @@ void(vector st) warlock_fire = {
 		//            targ = self.enemy;
     }
     MakeFancy (org, X32_STAR_RED, 2);
-    dir = Maim_Line (org, vec, 600, targ, '0 0 0');
-    NecroBolt_Launch (org, dir);
+    dir = Maim_LineEx(org,vec,600,targ,'0 0 0',1);
+    NecroBolt_Launch(org,dir);
 // Update:  Secondary bolts from necro boss can spawn monsters.
     if (self.classtype == CT_MONNECRO)
         if ( self.frame == $Hatak8 )

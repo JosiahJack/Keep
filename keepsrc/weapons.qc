@@ -148,16 +148,14 @@ void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
 		d1_y = 0;
 		d1_z = 1;
         end = Aim_Scatter(dir, d1);
-        // launch_projectile(start,(start - end),NO_SPIN,CT_PROJ_HKN,600); // Death Knight spike
-		Knightspike_Launch(start,end,600); //18*35=630.
+		launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); //18*35=630.
         newmis.dmg = damage;
         newmis.touch = WandSpark_Touch;
 		newmis.classtype = CT_WANDSPARK;
         if (shots > 1) {
             d1_x = 0 - d1_x;
             end = Aim_Scatter(dir, d1);
-            // launch_projectile (start,(start - end),NO_SPIN,CT_PROJ_HKN,600); // Death Knight spike
-			Knightspike_Launch(start,end,600);
+			launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); // Death Knight spike
             newmis.dmg = damage;
             newmis.touch = WandSpark_Touch;
             newmis.classtype = CT_WANDSPARK;

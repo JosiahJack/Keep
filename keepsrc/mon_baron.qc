@@ -521,16 +521,16 @@ void() Baron_Air = {
 
 // Replaced lightning bolt with plasma/ball lightning.
 void(vector st) M_FireBaronPlasma = {
-    local vector  p1, p2, dir;
-    local entity  targ;
+    local vector p1, p2, dir;
+    local entity targ;
 
     targ = world;
     makevectors(self.angles);
     p1 = self.origin + (v_forward * st_x) + (v_right * st_y) + (v_up * st_z);
     p2 = Aimpoint (self.enemy);
-    dir = Maim_Line (p1, p2, 1000, targ, '0 0 0');
+    dir = Maim_LineEx(p1,p2,1000,targ,'0 0 0',1);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    RyuPlasma_Launch (p1, dir, 1000, 60);
+    RyuPlasma_Launch(p1,dir,1000,60);
 };
 
 void() baron_slam = {
@@ -548,7 +548,7 @@ void() baron_slam = {
             org = org + self.view_ofs;
             org2 = self.origin + self.view_ofs;
             dir = self.enemy.origin + self.enemy.view_ofs;
-            dir = Maim_Line(org2, dir, SPEED_FIREWALL, world, '0 0 0');
+            dir = Maim_LineEx(org2,dir,SPEED_FIREWALL,world,'0 0 0',1);
             Firewall_Spawn(org,dir,self.enemy,FALSE);
             newmis.dmg = 120;
         } else {

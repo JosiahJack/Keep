@@ -65,8 +65,7 @@ void() rebel_fire = { // [FUNCTION]
     dir = (v_forward*12) + (v_right*8.5) + (v_up*16);
     org = self.origin + dir;
     dir = self.enemy.origin + dir;
-    dir = Maim_Line (org, dir, AKARROW_SPEED_FLY, self.enemy, '0 0 0');
-
+    dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,self.enemy,'0 0 0',1);
     sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
     AkArrow_Launch (org, dir, 0);
 };

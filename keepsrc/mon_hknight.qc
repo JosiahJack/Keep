@@ -111,33 +111,6 @@ void()	hknight_walk20	= [	$walk20,	hknight_walk1	] { ai_walk(2); };
 
 void()	hknight_char_b1;
 
-void() CheckForCharge = {
-	// There are 4 conditions to keep charging
-	// Can see player, no attack timer, similar Z axis and outside melee range
-	// Nightmare skill level can lock HK in constant charging (no attack timer)
-	enemy_vis = visible(self.enemy);
-	if (!enemy_vis) return;
-	if (time < self.attack_finished) return;
-	if (self.movespeed < 0) return;
-	if (self.tetherlock) return;
-	// Only charge at player if ground height < 20
-	if ( fabs(self.origin_z - self.enemy.origin_z) > MONAI_CHARGEZAXIS) return;
-	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) return;
-
-    if (self.classname == "monster_hkboss") {
-		// Emulate old behavior.
-        self.shots_left = 3;    // Replaced 'currentammo' with 'shots_*'.
-        hknight_char_b1();
-        return;
-    }
-
-	SUB_AttackFinished (2);
-	
-	// Used a pre-defined charge routine (th_charge) so that hell and death knights can share the same function
-	if (self.th_charge) self.th_charge();
-	else self.th_run();
-};
-
 float(float d) ai_medic;
 void() bane_magicd1; // Checks if the Bane can use a nearby dead body.
 void() bane_magice1;
@@ -201,15 +174,6 @@ void()	hknight_char_a13= [	$char_a13,	hknight_char_a14] { ai_charge(14); };
 void()	hknight_char_a14= [	$char_a14,	hknight_char_a15] { monster_footstep(FALSE);ai_charge(25); };
 void()	hknight_char_a15= [	$char_a15,	hknight_char_a16] { ai_charge(21); };
 void()	hknight_char_a16= [	$char_a16,	hknight_run1	] { ai_charge(13); };
-
-// Only called from hknight_char_b
-void() CheckContinueCharge = {
-	if (time > self.attack_finished) {
-		SUB_AttackFinished (3);
-		self.th_run();
-		return;	// done charging
-	}
-};
 
 void()	hknight_char_b1	= [	$char_b1,	hknight_char_b2	] { CheckContinueCharge_boss(); ai_charge(23); ai_melee(); };
 void()	hknight_char_b2	= [	$char_b2,	hknight_char_b3	] { SwordSwipeSound(); ai_charge(17); ai_melee(); };
@@ -298,16 +262,13 @@ void(float offset) hknight_shot = {
 	if (self.health < 1) return;
 
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
-
 	self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;
 	makevectors(offang);
-
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	
     if (self.classname == "monster_bane") {
         KnightBall_Launch(org, dir);
         newmis.dmg = 60;

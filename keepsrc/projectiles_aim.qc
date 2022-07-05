@@ -318,18 +318,17 @@ vector(vector dir, vector spread) Maim_Scatter = {
     return Aim_Tangent (dir, spread);
 };
 
-float   SHOT_TIME_TOSS      = 5;
-float   SHOT_TIME_BOUNCE    = 2.5;      // Assuming grenades.
-float   SMARTBALL           = -1;   // Used instead of a movetype to do hack.
+float SHOT_TIME_TOSS   =  5.0;
+float SHOT_TIME_BOUNCE =  2.5;    // Assuming grenades.
+float SMARTBALL        = -1.0; // Used instead of a movetype to do hack.
 
 // This returns the directional vector needed for a monster to hit its target.
 // NOTE:  The vector returned can be smaller than a unit vector.  (Really, it should not because that is cheating.  Oh well.)
 vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float fuse, float mtype)  Aim_Ballistic = {
-    if (!sped) return '0 0 0';     // Avoid divison by zero.
+    local vector dir, vel, v1, v2, vup;
+    local float d1, d2, toss, mx;
 
-    local   vector  dir, vel, v1, v2, vup;
-    local   float   d1, d2;
-    local   float   toss, mx;
+    if (!sped) return '0 0 0'; // Avoid divison by zero.
 
     vup = '0 0 0';
     vup_z = up;
@@ -351,7 +350,6 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float 
     dir = normalize(p2 - p1);
     vel = dir * sped;
     vel_z = vel_z + up;
-
     v1 = v2 = dir;
     v1_z = 0;
     v1 = normalize (v1);
@@ -430,29 +428,6 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float 
     return v1;      // 2D Forward
 };
 
-vector(vector p1, vector p2, float sped, float up, entity targ, float ex) Aim_TossEx = { return Aim_Ballistic (p1, p2, sped, up, targ, ex, SHOT_TIME_TOSS, MOVETYPE_TOSS); };
-
-vector(vector p1, vector p2, float sped, float up, entity targ) Aim_Toss = { return Aim_Ballistic (p1, p2, sped, up, targ, 1, SHOT_TIME_TOSS, MOVETYPE_TOSS); };
-
-vector(vector p1, vector p2, float sped, float up, entity targ, vector spread, float ex) Maim_TossEx = {
-    p2 = Aim_Ballistic (p1, p2, sped, up, targ, ex, SHOT_TIME_TOSS, MOVETYPE_TOSS);
-    p2 = Maim_Scatter (p2, spread);
-    return p2;
-};
-
-vector(vector p1, vector p2, float sped, float up, entity targ, vector spread) Maim_Toss = {
-    p2 = Aim_Ballistic (p1, p2, sped, up, targ, 1, SHOT_TIME_TOSS, MOVETYPE_TOSS);
-    p2 = Maim_Scatter (p2, spread);
-    return p2;
-};
-
-// Specially made for grenade lobbers such as ogres.
-vector(vector p1, vector p2, float sped, float up, entity targ, vector spread) Maim_Grenade = {
-    p2 = Aim_Ballistic (p1, p2, sped, up, targ, 1, SHOT_TIME_BOUNCE, MOVETYPE_BOUNCE);
-    p2 = Maim_Scatter (p2, spread);
-    return p2;
-};
-
 // Specially made for the "smart balls" launched by Zerstorer's Nemesant.
 vector(vector p1, vector p2, float sped, float up, entity targ, vector spread) Maim_SmartBall = {
     p2 = Aim_Ballistic (p1, p2, sped, up, targ, 1, SHOT_TIME_TOSS, SMARTBALL);
@@ -478,29 +453,9 @@ vector(vector p1, vector p2, float sped, entity targ, float ex) Aim_LineEx = {
 };
 
 vector(vector p1, vector p2, float sped, entity targ, vector spread, float ex) Maim_LineEx = {
-    p2 = Aim_LineEx (p1, p2, sped, targ, ex);
-    p2 = Maim_Scatter (p2, spread);
+    p2 = Aim_LineEx(p1, p2, sped, targ, ex);
+    p2 = Maim_Scatter(p2, spread);
     return p2;
-};
-
-vector(vector p1, vector p2, float sped, entity targ, vector spread) Maim_Line = {
-    p2 = Aim_LineEx (p1, p2, sped, targ, 1);
-    p2 = Maim_Scatter (p2, spread);
-    return p2;
-};
-
-// Reduces shots in a series by one and returns a number between 0 and 1.
-// Number returned is used for shot leading.  0 for none, 1 for perfect.
-// Used by monsters who gradually improve their aim during an attack salvo.
-float() Frac_ShotDown = {
-    local float d;
-
-    if (self) {
-        self.shots_left = self.shots_left - 1;
-        d = self.shots_max - 1;
-        if (d > 1) return fabs((d - self.shots_left) / d);
-    }
-    return 1;
 };
 
 // This traces for the vector normal to a surface.  It also resets the
@@ -596,4 +551,113 @@ void(vector st) M_FireSmart = { // [FUNCTION]
     sound (self, CHAN_AUTO, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
     launch_projectile(p1,dir,NO_SPIN,CT_PROJ_SMARTBALL,600);
     newmis.velocity = newmis.velocity + up;
+};
+
+// Work out direction speed of egg and then launch it!
+void(vector eggofs) Create_Egg = {
+	local vector org, dir;
+	local float egg_speed;
+	if (self.health < 1) return;
+	
+	// Turn towards player and drop the egg!
+	makevectors(self.angles);
+	org = self.origin + attack_vector(eggofs);
+	egg_speed = self.minion_throwspeed + (random() * self.minion_throwextra);
+	dir = v_forward * egg_speed + (v_right * (crandom()*self.minion_throwside));
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_MEGG,1);
+	SUB_AttackFinished (2 + random());
+};
+
+void(float offset) dprince_hazard = { // [FUNCTION]
+	local vector org, torg, dir, ang, avel;
+	local float targetang, haz_loop;
+	
+	if (!self.enemy) return;
+	if (self.enemy.health < 1) return;
+
+	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	makevectors(self.angles);	
+	org = self.origin + attack_vector(self.attack_offset);
+	if (skill <= SKILL_NORMAL) haz_loop = 1;
+	else haz_loop = 2;
+	
+	while(haz_loop > 0) {
+		// Keep looping
+		haz_loop = haz_loop - 1;
+		torg = self.enemy.origin;
+		// Last projectile (0) is direct at enemy
+		if (haz_loop > 0) {
+			// Very large random area around target
+			torg_x = torg_x + (crandom() * 128);
+			torg_y = torg_y + (crandom() * 128);
+		}
+		// Work out elevation towards target origin
+		targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_DPRINCE);
+		ang = vectoangles(torg - org);
+		ang_x = -targetang;
+		makevectors(ang);
+		// fire projectile in arc pattern (offset)
+		dir = ( (v_forward * (0.75 + random()*0.25)) + (v_right * (offset*0.1)) ) * SPEED_DPRINCE;	
+		// Some random angle rotation
+		avel = vecrand(100,200,FALSE);
+		Launch_Hazard(org, dir, avel, CT_PROJ_DPRINCE2);
+	}
+};
+
+// Range - Grenades (uses generic attack function in projectiles.qc)
+// Nail - Alternative firemode (based on nail ogre from Marcher Fortress)
+void() OgreFireADNails = {
+	local vector org, dir, vec;
+	local float loopvar;
+
+	if (self.health < 1) return; // Check for death?
+
+	loopvar = 0;
+	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
+	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
+	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
+	makevectors(self.angles); // turn and face your enemy!
+	org = self.origin + attack_vector(self.attack_offset);
+	if (self.attack_count <= 0) self.attack_count = 5; // Shoot something!
+	while (loopvar < self.attack_count) { // Loop through the nail burst (all at once)
+		vec = (crandom()*20)*v_right + (crandom()*20)*v_up; // Random circle spread pattern
+		dir = normalize((self.enemy.origin + vec) - org);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_MONNG,self.attack_speed); // Generate a red hot nail projectile
+		loopvar = loopvar + 1;
+	}
+};
+
+// FLAMES PATTERN 2 - straight line towards player
+void() judge_fireflameline = {
+	local vector org, dir;
+	local float fire_col;
+
+	// Judge cannot find target!
+	if (!self.enemy) return;
+
+	// Turn toward enemy
+	ai_face();
+	makevectors(self.angles);	
+	org = self.origin + attack_vector(self.attack_offset2);
+	dir = v_forward;
+	
+	// Setup colour scheme (was original red/blue flames)
+	fire_col = FLAME_RED;
+	// Fire that flame!
+	// Origin, v_forward, colour, sfx
+	Launch_Trail (org, dir, fire_col, "");
+};
+
+void() pyro_fire = {
+	local vector org, dir, targ_org;
+
+	if (self.health < 1) return;
+	
+	makevectors(self.angles);
+	org = self.origin + attack_vector(self.attack_offset);
+	// point the flames at the feet of the player
+	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20';
+	else targ_org = self.enemy.origin - self.enemy.view_ofs;
+	dir = normalize(targ_org - self.origin);
+	pyroflame_spawn(org, dir);
 };

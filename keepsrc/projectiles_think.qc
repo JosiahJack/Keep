@@ -1348,7 +1348,7 @@ void() Firewall_Think = { // [FUNCTION]
 		particle (trace_endpos, trace_plane_normal, 41, 10);
 	} else if (self.classgroup == CG_PROJFIRE) {
 		// Spawn a flame.
-		traceline (self.origin, self.origin - '0 0 600', TRUE, self);
+		traceline(self.origin, self.origin - '0 0 600', TRUE, self);
 		spot = trace_endpos;
 		pc = pointcontents (spot); // Spawn a flame only if there is open space on the ground.
 		if (trace_fraction < 1 && pc != CONTENT_SOLID && pc != CONTENT_SKY) Firelink_Spawn(spot,(pc == CONTENT_EMPTY));

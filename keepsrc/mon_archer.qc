@@ -78,7 +78,7 @@ void(vector st, float up) M_FireAkArrow = {
     makevectors(self.angles);
     org = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     dir = Aimpoint (self.enemy);
-    dir = Maim_Line (org, dir, AKARROW_SPEED_FLY, targ, '0 0 0');
+    dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,targ,'0 0 0',1);
     if (self.classtype == CT_MONARCHERLORD) {   
         if (IsGhost(self.enemy)) { // Magic arrows can hit ghosts, but normal arrows cannot.
            type = 2;

@@ -207,7 +207,7 @@ void() Nemesant_Bolt = {
 
     p1 = Nemesant_Hand (TRUE);      // This will call makevectors as well.
     p2 = self.enemy.origin + '0 0 16';
-    p2 = Maim_Line (p1, p2, 0, self.enemy, '0 0 0');
+    p2 = Maim_LineEx(p1,p2,0,self.enemy,'0 0 0',1);
     p2 = p1 + p2*600;
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound(self,CHAN_WEAPON,"weapons/lhit.wav",1,ATTN_NORM);

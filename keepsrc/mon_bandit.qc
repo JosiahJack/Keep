@@ -39,7 +39,7 @@ void() bandit_fire = {
     dir = (v_forward*9) + (v_right*6) + (v_up*16);
     org = self.origin + dir;
     dir = self.enemy.origin + dir;
-    dir = Maim_Line(org, dir, AKARROW_SPEED_FLY, world, '0 0 0');
+    dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,world,'0 0 0',1);
     sound(self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
     // PM:  Assumes skin is 0 or 1.  If 2+, rewrite!
     if (self.ryuflags & RYU_REBEL)
