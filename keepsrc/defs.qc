@@ -455,24 +455,26 @@ void(float to, entity s) WriteEntity	= #59;
 // void(entity e) bWriteEntity 			= #66;
 void(float step) movetogoal_builtin 	= #67;
 void(float step) movetogoal = {
-	// Save origin for cinematic camera angle interpolation
-	// This does not cope with bmodel origins, only point entities
+	// Save origin for cinematic camera angle interpolation.  This does not cope
+	// with bmodel origins, only point entities
 	self.lastorigin = self.origin;
 	if (self.attack_state == AS_TURRET) return;
 	if (self.movespeed < 0) return;
 	if (self.tetherlock == TRUE) return;
-	if (self.movetype == MOVETYPE_NOCLIP) noclip_goal(step); // Nehahra wraith or custom
+	if (self.movetype == MOVETYPE_NOCLIP) noclip_goal(step); // Ghostly
 	movetogoal_builtin(step);
 };
-string(string s) precache_file			= #68;		// // Only in world.qc.  no effect except for -copy
+string(string s) precache_file			= #68; // Only in world.qc. No effect
+                                               // except for -copy.
 void(entity e) makestatic				= #69;
-void(string var, string val) cvar_set 	= #72;	// sets cvar.value
+void(string var, string val) cvar_set 	= #72; // sets cvar.value
 void(string var, string s, string s) cvar_setlong = #72; // sets cvar.value
 void(vector pos, string samp, float vol, float atten) ambientsound = #74;
-string(string s) precache_model2		= #75;	// not used anymore
-string(string s) precache_sound2		= #76;	// registered version only
-string(string s) precache_file2			= #77;	// Only in world.qc
-void(entity e) setspawnparms			= #78;	// set parm1... to the values at level start for coop respawn
+string(string s) precache_model2		= #75; // not used anymore
+string(string s) precache_sound2		= #76; // registered version only
+string(string s) precache_file2			= #77; // Only in world.qc
+void(entity e) setspawnparms			= #78; // set parm1... to the values at
+                                               // level start for coop respawn
 
 entity sight_entity;		// Highlight an angry monster
 float sight_entity_time;	// Time got angry
@@ -487,7 +489,8 @@ float (entity targ) visible;
 float(entity targ, float flat2d) range_distance;
 float(float attackdist, float attackzaxis) ai_checkmelee;
 float(entity targ) visblocked;
-float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray;
+float(entity source, entity targ, vector s_offset, vector t_offset,
+      float nomonsters) visxray;
 float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide;
 float() FacingIdeal;
 float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable;
@@ -511,8 +514,10 @@ float NOARMOR = 2;		// Ingnores armour for damage reduction
 float DAMSPLASH = 4;	// Splash damage only
 float DAMAGEALL = 4;
 float IGNORECLASS = 8;
-void(entity targ, entity inflictor, entity attacker, float damage, float checkarmor) T_Damage;
-void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage;
+void(entity targ, entity inflictor, entity attacker, float damage,
+     float checkarmor) T_Damage;
+void(entity inflictor, entity attacker, float damage, entity ignore,
+     float checkclass) T_RadiusDamage;
 float(entity targ, entity inflictor) CanDamage;
 float enemy_vis, enemy_infront, enemy_range;
 float enemy_yaw;

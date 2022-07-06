@@ -5,7 +5,7 @@
 //
 // Compiled by Qmaster
 //
-// Attributions: Nehahra
+// Attributions: Qmaster, Drake, Nehahra
 //
 //
 // Distribution / Copyright / Permissions 
@@ -37,13 +37,24 @@
 // functionality.
 //=============================================================================
 
+//  This makes an entity do a think function right now.  From Drake.
+void(entity ent, void() thinkst) SUB_ThinkImmediate = {
+    local entity swap;
+
+    swap = self;
+    self = ent;
+    thinkst();
+    self = swap;
+};
+
 // This reduces a lot of boilerplate code assigning a think and nextthink.
 void(entity targ, void() th_think, float th_time) SUB_Think = { // [FUNCTION]
-	if (th_time <= 0) th_time = 0.1;
+	if (th_time <= 0) { SUB_ThinkImmediate(targ,th_think); return; }
 
 	targ.think = th_think;
-	if (targ.bsporigin > 0) targ.nextthink = targ.ltime + th_time;
-	else targ.nextthink = time + th_time;
+	if (targ.bsporigin > 0 && targ.solid > SOLID_TRIGGER) {
+		targ.nextthink = targ.ltime + th_time;
+	} else targ.nextthink = time + th_time;
 };
 
 void(void() th_think, float th_time) SUB_SelfThink = { // [FUNCTION]

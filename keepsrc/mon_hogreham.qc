@@ -65,7 +65,6 @@ $frame deathB9 deathB10 deathB11 deathB12 deathB13 deathB14
 
 void(float soundtype) hogreham_sound;
 
-
 void() hogreham_stand1	= [	$stand1,	hogreham_stand2	] { monster_idle_sound(); ai_stand(); };
 void() hogreham_stand2	= [	$stand2,	hogreham_stand3	] { ai_stand(); };
 void() hogreham_stand3	= [	$stand3,	hogreham_stand4	] { ai_stand(); };
@@ -74,7 +73,6 @@ void() hogreham_stand5	= [	$stand5,	hogreham_stand6	] { ai_stand(); };
 void() hogreham_stand6	= [	$stand6,	hogreham_stand7	] { ai_stand(); };
 void() hogreham_stand7	= [	$stand7,	hogreham_stand8	] { ai_stand(); };
 void() hogreham_stand8	= [	$stand8,	hogreham_stand1	] { ai_stand(); };
-
 
 void() hogreham_walk1	= [	$walk1,		hogreham_walk2	] { ai_walk(4); };
 void() hogreham_walk2	= [	$walk2,		hogreham_walk3	] { ai_walk(4); };
@@ -89,7 +87,6 @@ void() hogreham_walk10	= [	$walk10,	hogreham_walk11	] { ai_walk(4); };
 void() hogreham_walk11	= [	$walk11,	hogreham_walk12	] { ai_walk(4); };
 void() hogreham_walk12	= [	$walk12,	hogreham_walk1	] { monster_footstep(FALSE);ai_walk(3); };
 
-
 void() hogreham_run1	= [	$run1,		hogreham_run2	] { monster_idle_sound(); ai_run(8); };
 void() hogreham_run2	= [	$run2,		hogreham_run3	] { monster_footstep(FALSE); ai_run(13); };
 void() hogreham_run3	= [	$run3,		hogreham_run4	] { ai_run(13); };
@@ -99,9 +96,7 @@ void() hogreham_run6	= [	$run6,		hogreham_run7	] { monster_footstep(FALSE); ai_r
 void() hogreham_run7	= [	$run7,		hogreham_run8	] { ai_run(18); };
 void() hogreham_run8	= [	$run8,		hogreham_run1	] { ai_run(13); };
 
-
 // ogreham_melee(float melee_attack, float side) - defined in aisubs.qc
-//----------------------------------------------------------------------
 void() hogreham_swing1	= [	$swing1,	hogreham_swing2	] { ai_charge(4); };
 void() hogreham_swing2	= [	$swing2,	hogreham_swing3	] { ai_charge(8);hogreham_sound(4); };
 void() hogreham_swing3	= [	$swing3,	hogreham_swing4	] { ai_charge(8); };
@@ -120,7 +115,6 @@ void() hogreham_swing12	= [	$swing12,	hogreham_swing13 ] { ai_face();monster_foo
 void() hogreham_swing13	= [	$swing13,	hogreham_swing14 ] { ai_face(); };
 void() hogreham_swing14	= [	$swing14,	hogreham_run1	] { ai_face(); };
 
-//----------------------------------------------------------------------
 void() hogreham_smash1	= [	$smash1,	hogreham_smash2	] { ai_charge(10); };
 void() hogreham_smash2	= [	$smash2,	hogreham_smash3	] { ai_charge(10);hogreham_sound(4); };
 void() hogreham_smash3	= [	$smash3,	hogreham_smash4	] { ai_charge(10); };
@@ -143,13 +137,9 @@ void() hogreham_smash12	= [	$smash12,	hogreham_smash13 ] {};
 void() hogreham_smash13	= [	$smash13,	hogreham_smash14 ] { ai_face(); };
 void() hogreham_smash14	= [	$smash14,	hogreham_run1	] { ai_face(); };
 
-/*============================================================================
- Special new ground slam attack - knockback shockwave
-============================================================================*/
-//----------------------------------------------------------------------
+// Special new ground slam attack - knockback shockwave
 // Slow wind up animation (impact frame - 13) so it is easier to spot
 // Pain animations are suppressed so that the attack always happens
-//----------------------------------------------------------------------
 void() hogreham_slam1	= [	$slam1,		hogreham_slam2	] { ai_charge(2); };
 void() hogreham_slam2	= [	$slam2,		hogreham_slam3	] { ai_charge(2); };
 void() hogreham_slam3	= [	$slam3,		hogreham_slam4	] { ai_charge(2); };
@@ -177,14 +167,13 @@ void() hogreham_slam17	= [	$slam17,	hogreham_run1 ] {
 	// Double check enemy is still alive?
 	if (self.enemy.health > 1) {
 		// If the enemy is visible, quickly fire a grenade at them
-		if (visxray(self.enemy, self.view_ofs, self.enemy.view_ofs, FALSE)) {
+		if (visxray(self,self.enemy, self.view_ofs, self.enemy.view_ofs, FALSE)) {
 			self.attack_state = AS_MISSILE;
 			self.think = self.th_missile;
 		}
 	}
 };
 
-//----------------------------------------------------------------------
 void() hogreham_melee = {
 	// Hammer ogres don't get interrupted with pain for melee
 	self.pain_finished = time + 2;
@@ -196,9 +185,6 @@ void() hogreham_melee = {
 	}
 };
 
-/*============================================================================
- OgreFireGrenade (use version in mon_ogre.qc)
-============================================================================*/
 void() hogreham_shoot1	= [	$shoot1,		hogreham_shoot2	] { ai_face(); 
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
@@ -212,18 +198,14 @@ void() hogreham_shoot5	= [	$shoot5,		hogreham_shoot6	] { ai_face(); };
 void() hogreham_shoot6	= [	$shoot6,		hogreham_shoot7	] { ai_face(); };
 void() hogreham_shoot7	= [	$shoot7,		hogreham_run1	] { ai_face(); };
 
-
 // painA - Quick backwards flex
-//----------------------------------------------------------------------
 void()	hogreham_painA1	= [	$painA1,	hogreham_painA2	] {};
 void()	hogreham_painA2	= [	$painA2,	hogreham_painA3	] {};
 void()	hogreham_painA3	= [	$painA3,	hogreham_painA4	] {};
 void()	hogreham_painA4	= [	$painA4,	hogreham_painA5	] {};
 void()	hogreham_painA5	= [	$painA5,	hogreham_run1	] {};
 
-//----------------------------------------------------------------------
 // painB - Stagger backwards
-//----------------------------------------------------------------------
 void()	hogreham_painB1	= [	$painB1,	hogreham_painB2	] { ai_pain(7); };
 void()	hogreham_painB2	= [	$painB2,	hogreham_painB3	] { ai_pain(5); };
 void()	hogreham_painB3	= [	$painB3,	hogreham_painB4	] {};
@@ -238,9 +220,7 @@ void()	hogreham_painB11= [	$painB11,	hogreham_painB12] { ai_forward(2); };
 void()	hogreham_painB12= [	$painB12,	hogreham_painB13] { ai_forward(2); };
 void()	hogreham_painB13= [	$painB13,	hogreham_run1	] { monster_footstep(FALSE); ai_forward(2); };
 
-//----------------------------------------------------------------------
 // painC - Fall down
-//----------------------------------------------------------------------
 void()	hogreham_painC1	= [	$painC1,	hogreham_painC2	] { ai_pain(5); };
 void()	hogreham_painC2	= [	$painC2,	hogreham_painC3	] { ai_pain(2); };
 void()	hogreham_painC3	= [	$painC3,	hogreham_painC4	] {};
@@ -259,7 +239,6 @@ void()	hogreham_painC15= [	$painC15,	hogreham_painC16	] { ai_forward(4); };
 void()	hogreham_painC16= [	$painC16,	hogreham_painC17	] { ai_forward(5); };
 void()	hogreham_painC17= [	$painC17,	hogreham_run1	] { ai_forward(4); };
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) hogreham_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);

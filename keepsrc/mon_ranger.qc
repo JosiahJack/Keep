@@ -159,94 +159,6 @@ void() ranger_run = {
     else ranger_run1();
 };
 
-// Similar to 'SoldierCheckAttack', with a few changes.  Part 2.
-float() RangerCheckAttack_II = {
-    local vector spot1, spot2;    
-    local entity targ;
-    local float chance, reload;
-
-    targ = self.enemy;
-    spot1 = self.origin + self.view_ofs;
-    spot2 = targ.origin + targ.view_ofs;
-    traceline (spot1, spot2, FALSE, self); // see if any entities are in the way of the shot
-
-    // FIXME:  Check already done in ai_run, so it is redundant.
-    // DISABLED:  Rangers can see into water, just like players in GLQuake.
-    //    if (trace_inopen && trace_inwater)
-    //        return FALSE;            // sight line crossed contents
-    if (trace_ent != targ)
-        if (DontHurtMe (trace_ent)) return FALSE; // Check who's in the way.
-
-    // If controlling a MIRV, use it if it is near the enemy.
-    if (self.mirv1)
-        if (vlen(self.mirv1.origin - spot2) < 500) Mirv_Use();
-
-    // missile attack
-    if (time < self.attack_finished) return FALSE;
-    if (enemy_range == RANGE_FAR) return FALSE;
-        
-    if (enemy_range == RANGE_MELEE)
-        chance = 0.9;
-    else if (enemy_range == RANGE_NEAR)
-        chance = 0.4;
-    else if (self.war == WAR_AXE)
-        chance = 0;     // Don't swing wildly if not close.
-    else if (enemy_range == RANGE_MID)
-        chance = 0.1;   // Grunt is 0.05.
-    else if (enemy_range == RANGE_LONG)
-        chance = 0.02;  // Modified Grunt is 0.01.
-    else
-        chance = 0;
-
-    if (random () < chance) {
-        reload = 2*random();    // Grunt is '1+random()'.
-        if (self.attack_finished > (time + reload)) reload = self.attack_finished - time;   // Obey reload times.
-        self.th_missile();
-        SUB_AttackFinished (reload);
-        if (random() < 0.3) self.lefty = !self.lefty;
-        return TRUE;
-    }
-    return FALSE;
-};
-
-void() Ranger_Option = {
-    local float too_close, dist;
-    local vector spot1, spot2;
-
-    too_close = FALSE;
-    if (enemy_vis) {
-        if (enemy_range == RANGE_MELEE)
-            too_close = TRUE;
-        else {
-            dist = self.enemy.maxs_x * 1.25 + 90;   // e.g., x=16 for 110.
-            if (self.war == WAR_AXE) dist = dist + self.speed;   // Must be closer to hit.
-            else dist = dist + 40;
-            if (self.arsenal & WARx_USES_ROCKETS) {
-                if (self.ammo_rockets >= 1)
-                    if (self.enemy.classname == "monster_zombie") dist = 200;     // Stay further back for rocket use.
-            }
-
-            spot1 = self.origin + self.view_ofs;
-            spot2 = self.enemy.origin + self.enemy.view_ofs;
-            if (vlen(spot2 - spot1) <= dist) too_close = TRUE;
-        }
-    }
-
-    if (too_close) self.attack_state = AS_SLIDING;
-    else self.attack_state = AS_STRAIGHT;
-};
-
-// Similar to 'SoldierCheckAttack', with a few changes.  Part 1.
-float() RangerCheckAttack = {
-    if (RangerCheckAttack_II ()) {
-        self.attack_state = AS_STRAIGHT;
-        return TRUE;
-    }
-
-    Ranger_Option(); // Cannot attack, so check if should approach or sidestep.
-    return FALSE;
-};
-
 void(float dist) ranger_charge = {
     ai_face();
     if (QC_CloseEnough (dist)) safe_goal (8);   // Given speed was too fast, so slow down.
@@ -260,9 +172,6 @@ void(float dist) ranger_axe_step = {
 
     p1 = self.origin + self.view_ofs;
     p2 = self.enemy.origin + self.enemy.view_ofs;
-
-    // Distance used to be 150 + dist.
-    // Look at Ranger_Option above to see if the formula sans dist matches.
     if (vlen(p2 - p1) > (self.enemy.maxs_x * 1.25 + 90 + dist)) ai_charge (dist);   // Head straight in.
     else ranger_strafe (dist);   // Strafe to the side.
 };
@@ -1049,7 +958,6 @@ void() monster_ranger = {
     self.th_pain    = ranger_pain;
     self.th_die     = ranger_die;
     self.th_sight   = ranger_sight;
-    self.th_check   = RangerCheckAttack;
     self.th_gib     = ranger_gib;
     self.th_revive  = ranger_revive;
     self.th_spawn   = monster_ranger;

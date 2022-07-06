@@ -80,7 +80,7 @@ void() trigger_bmodel_inview = { // [FUNCTION]
 	client = checkclient(); // Find a client in current PVS
 	self = tself;
 	if (client.flags & FL_CLIENT) { // Found a player to check sight/distance for?
-		if (visxray(client, VEC_ORIGIN, VEC_ORIGIN, FALSE)) {
+		if (visxray(self,client, VEC_ORIGIN, VEC_ORIGIN, FALSE)) {
 			play_dist = vlen(self.oldorigin - client.origin); // Work out vector length between entity and player	
 			if (!self.t_length) play_range = play_dist + 1; // Is there a distance check active? if not make sure it will pass
 			else play_range = self.t_length;

@@ -341,7 +341,7 @@ void() deflect_flameframe = {
 				if (HazardProjectile_CheckLimit(self, self.attack_count)) {
 					// Can see player and within range?
 					if (ai_checkmelee(MONAI_RANGEDEFLECT,FALSE) && 
-						visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) {
+						visxray(self,self.enemy, self.attack_offset, '0 0 0', FALSE)) {
 						// Back around animation loop
 						self.frame = $attack3; 
 						self.walkframe = 1;
@@ -387,8 +387,7 @@ void() deflect_plasmaframe = {
 		self.attack_track = SUB_orgEnemyTarget();
 		deflect_shieldoff(); deflect_shieldsound_off();
 	} else if (self.walkframe == 2) { self.frame = $attack3; ai_trackenemy();}
-	// MAIN ATTACK LOOP ---------------------------------------------------
-	else if (self.walkframe == 3) { self.frame = $attack14; ai_trackenemy();}
+	else if (self.walkframe == 3) { self.frame = $attack14; ai_trackenemy();} // MAIN ATTACK LOOP
 	else if (self.walkframe == 4) { self.frame = $attack15; deflect_fireplasma(0);}
 	else if (self.walkframe == 5) { self.frame = $attack16; ai_trackenemy();}
 	else if (self.walkframe == 6) { self.frame = $attack17; deflect_fireplasma(-1);}
@@ -400,7 +399,7 @@ void() deflect_plasmaframe = {
 		
 		// Burst mode still active? Can see player?
 		if (self.attack_count <= self.proj_attqty_z &&
-			visxray(self.enemy, self.attack_offset, '0 0 0', FALSE) ) {
+			visxray(self,self.enemy, self.attack_offset, '0 0 0', FALSE) ) {
 			// Keep looping
 			self.walkframe = 3; self.frame = $attack14; ai_trackenemy();
 		} else {

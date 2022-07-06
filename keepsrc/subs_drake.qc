@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 50
+// Function count: 49
 //
 // Implements: Drake utilty subroutines
 //
@@ -85,14 +85,14 @@ vector(float theta) CoST = {
     return vec;
 };
 
-// Trigonometric functions. Note:  Should use builtin when available.
+// Trigonometric functions.  Different than builtins, DON'T CHANGE/REMOVE!!
 float(float t) SUB_cos = { local vector v;  v = CoSine(t);  return v_x;};
 float(float t) SUB_sin = { local vector v;  v = CoSine(t);  return v_y;};
 float(float t) SUB_tan = { local vector v;  v = CoST(t);  return v_z;};
 //--------------------------------END WAND MATHS-------------------------------
 
 // Stops the current sound that is playing on the specified channel by playing an empty sound.
-void(entity ent, float chan) StopSound = { sound (ent, chan,SOUND_EMPTY, 1, ATTN_NONE); };
+void(entity ent, float chan) StopSound = { sound(ent,chan,SOUND_EMPTY,1,ATTN_NONE); };
 
 // Based on 'SV_StepDirection'.  Use this only for big multi-hulled monsters such as dragons.
 float(float yaw, float dist) QC_StepDir = {
@@ -110,26 +110,20 @@ float(float yaw, float dist) QC_StepDir = {
 
 // Based on 'SV_NewChaseDir'.
 void(float dist) QC_NewChaseDir = {
-    local   vector  delta;
-    local   float   d1, d2, old, back, turn, ax, ay;
+    local vector delta;
+    local float d1, d2, old, back, turn, ax, ay, end, next;
 
     old = floor (self.ideal_yaw / 45);  // IIRC, int chops off decimals.
     old = anglemod (old * 45);
     back = anglemod (old - 180);
     delta = self.goalentity.origin - self.origin;
-    if (delta_x > 10)
-        d1 = 0;
-    else if (delta_x < -10)
-        d1 = 180;
-    else
-        d1 = -1;
+    if (delta_x > 10) d1 = 0;
+    else if (delta_x < -10) d1 = 180;
+    else d1 = -1;
 
-    if (delta_y < -10)
-        d2 = 270;
-    else if (delta_y > 10)
-        d2 = 90;
-    else
-        d2 = -1;
+    if (delta_y < -10) d2 = 270;
+    else if (delta_y > 10) d2 = 90;
+    else d2 = -1;
 
 	// Try direct route.
     if (d1 != -1) {
@@ -155,14 +149,13 @@ void(float dist) QC_NewChaseDir = {
 
     if (d1 != -1)
         if (d1 != back)
-            if (QC_StepDir (d1, dist)) return;
+            if (QC_StepDir(d1,dist)) return;
     if (d2 != -1)
         if (d2 != back)
-            if (QC_StepDir (d2, dist)) return;
+            if (QC_StepDir(d2,dist)) return;
 
-    if ((old != -1) && QC_StepDir (old, dist)) return; // No direct path to goal, so pick another way.
+    if (old != -1 && QC_StepDir(old,dist)) return; // No direct path to goal, so pick another way.
 
-    local   float   end, next;
     if (random() < 0.5) {
 		turn = 0; end = 315; next = 45;
 	} else {
@@ -171,6 +164,7 @@ void(float dist) QC_NewChaseDir = {
 
     while (turn <= end) {
         if ((turn != back) && QC_StepDir (turn, dist)) return;
+
         turn = turn + next;
     }
 
@@ -192,50 +186,15 @@ float(float dist) QC_CloseEnough = {
     return TRUE;
 };
 
-// This tries to emulate movetogoal for multiple bboxes acting as a unit.  This is probably a very slow function compared to other functions.  However, it is not noticable at all with a modern computer.
+// This tries to emulate movetogoal for multiple bboxes acting as a unit.  This
+// is probably a very slow function compared to other functions.  However, it
+// is not noticable at all with a modern computer.
 void(float dist) QC_MoveToGoal = {
-	if (self.goalentity && QC_CloseEnough (dist)) return; // If next step hits enemy, stop.
+	if (self.goalentity && QC_CloseEnough(dist)) return; // If next step hits enemy, stop.
 
 	// Bump around...
-    if (random() < 0.333)
-        QC_NewChaseDir (dist);
-    else if (!QC_StepDir (self.ideal_yaw, dist))
-        QC_NewChaseDir (dist);
-};
-
-// Checks if the given two entities' bboxes overlap.
-// Similar to 'EntitiesTouching', but uses absmin/absmax.
-float(entity e1, entity e2) Overlap = {
-    if (e1.absmin_x > e2.absmax_x)  return FALSE;
-    if (e1.absmax_x < e2.absmin_x)  return FALSE;
-    if (e1.absmin_y > e2.absmax_y)  return FALSE;
-    if (e1.absmax_y < e2.absmin_y)  return FALSE;
-    if (e1.absmin_z > e2.absmax_z)  return FALSE;
-    if (e1.absmax_z < e2.absmin_z)  return FALSE;
-    return TRUE;
-};
-
-
-// Like 'Overlap' above, but adds distance.
-// Useful to check collisions when one entity has a clip bonus.
-float(entity e1, entity e2, float dist) Overlapped = {
-    if (e1.absmin_x > e2.absmax_x + dist)  return FALSE;
-    if (e1.absmax_x < e2.absmin_x - dist)  return FALSE;
-    if (e1.absmin_y > e2.absmax_y + dist)  return FALSE;
-    if (e1.absmax_y < e2.absmin_y - dist)  return FALSE;
-    if (e1.absmin_z > e2.absmax_z + dist)  return FALSE;
-    if (e1.absmax_z < e2.absmin_z - dist)  return FALSE;
-    return TRUE;
-};
-
-float(vector amin, vector amax, vector bmin, vector bmax) Point_Overlap = {
-    if (amin_x > bmax_x)  return FALSE;
-    if (amax_x < bmin_x)  return FALSE;
-    if (amin_y > bmax_y)  return FALSE;
-    if (amax_y < bmin_y)  return FALSE;
-    if (amin_z > bmax_z)  return FALSE;
-    if (amax_z < bmin_z)  return FALSE;
-    return TRUE;
+    if (random() < 0.333) QC_NewChaseDir(dist);
+    else if (!QC_StepDir (self.ideal_yaw,dist)) QC_NewChaseDir(dist);
 };
 
 // Checks if entity 'e' is a missile.
@@ -246,18 +205,7 @@ float(entity e) IsMissile = {
     return TRUE;
 };
 
-//  This makes an entity do a think function right now.
-void(entity ent, void() thinkst) SUB_ThinkImmediate = {
-    local   entity  swap;
-
-    swap = self;
-    self = ent;
-    thinkst();
-    self = swap;
-};
-
 //  Safe Message Functions
-
 // These are for functions that display messages and are used by clients
 // (players) and non-clients (monsters).  Such functions include item pickups
 // and powerup countdowns.
@@ -285,11 +233,11 @@ void(string text, string noise, entity act) Mass_Centerprint = {
     }
 };
 
-// Convenience function -- set model, size, and origin. Called by various missile functions.
-void(entity e, string s, vector v1, vector v2, vector org) setall = {
-    setmodel(e,s);        // May resize hullbox after this is called.
-    setsize(e,v1,v2);    // Must do *after* setmodel.
-    setorigin(e,org);     // Updates links immediately, so do last.
+// Convenience function -- set model, size, and origin in safe order.
+void(entity ent, string mdl, vector mins, vector maxs, vector org) setall = {
+    setmodel(ent,mdl); // May resize hullbox after this is called.
+    setsize(ent,mins,maxs); // Must do *after* setmodel.
+    setorigin(ent,org); // Updates links immediately, so do last.
 };
 
 //  Miscellaneous Junk
@@ -320,10 +268,9 @@ float() SUB_QuickAttack = {
 // Checks if enemy is within melee range.  def_range is defined melee range.
 // Assumes self has an enemy and can damage said enemy.
 float(float def_range) InMeleeRange = {
-    local   float   dist;
+    local float dist;
 
-    if (!self.enemy.modelindex)
-        if (self.enemy.solid == SOLID_NOT) return FALSE; // Phased out of the level.
+    if (Invisible(self.enemy)) return FALSE; // Phased out of the level.
 
     dist = vlen(self.enemy.origin - self.origin);
     if (dist > def_range)
@@ -331,7 +278,7 @@ float(float def_range) InMeleeRange = {
     return TRUE;    // Within range.
 };
 
-entity  temp_goal;
+entity temp_goal;
 
 // From Drake DRAGONS: 'walkmove' and 'movetogoal' always causes a flying monster to drift
 // vertically toward edict.enemy by 8 per call.  In addition, if the drift fails, the whole move aborts and no horizontal move is done.
@@ -484,18 +431,6 @@ entity(vector org, float radius) QC_FindRadius = {
         e = nextent (e);
     }
     return head;
-};
-
-// visible2 -- same as visible except a 'src' entity takes place of self.
-float(entity targ, entity src) visible2 = {
-    local   entity  os;
-    local   float   found;
-
-    os = self;
-    self = src;
-    found = visible (targ);
-    self = os;
-    return found;
 };
 
 // Spawns a beam of particles.
@@ -985,7 +920,6 @@ float() EntryPoint_BossCube = {
         if (pointcontents(self.origin) > CONTENT_WATER) return FALSE;   // Fish must be in the water.
 
     // Don't check for creatures because of telefragging.
-
 	return TRUE; // Got one!
 };
 
@@ -1002,10 +936,8 @@ void(float loop, float drop_chance, float gem_chance) monster_purse = {
 	self.purse_z = encode(loop,drop_chance * 100,gem_chance * 100);
     while (loop > 0) {
         if (random() < drop_chance) {
-            if (random() < gem_chance)
-                self.purse_y = self.purse_y + 1;    // Gem
-            else
-                self.purse_x = self.purse_x + 1;    // Coin
+            if (random() < gem_chance) self.purse_y = self.purse_y + 1; // Gem
+            else self.purse_x = self.purse_x + 1; // Coin
         }
         loop = loop - 1;
     }
@@ -1014,7 +946,7 @@ void(float loop, float drop_chance, float gem_chance) monster_purse = {
 void(void() thinkst) M_Break = {
     if (self.enemy.health > 0)
         if (self.enemy.solid > SOLID_TRIGGER)
-            if (visible (self.enemy))
+            if (visible(self.enemy))
                 if (enemy_range < RANGE_FAR) return;
 
     if (!((self.health <= 0) || self.deadflag)) self.think = thinkst; // Break attack sequence.
@@ -1031,4 +963,10 @@ float(vector org, entity ignore) UpIsSky = { // [FUNCTION]
     return ((pc == CONTENT_EMPTY) || (pc == CONTENT_SKY));
 };
 
-float(entity e) IsGhost = { return ((e.solid==SOLID_TRIGGER) && (e.movetype==MOVETYPE_NOCLIP)); };
+float(entity e) IsGhost = {
+	return (e.solid == SOLID_TRIGGER
+	        || e.movetype == MOVETYPE_NOCLIP
+	        || e.bodyphased == MONAI_SPIRITINVIS
+			|| e.bodyphased == MONAI_SKULLWINVIS
+			|| ((e.flags & FL_NOTARGET) && e.classtype == CT_MONPOLYP));
+};

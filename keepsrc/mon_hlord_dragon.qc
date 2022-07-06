@@ -445,12 +445,9 @@ void() hlorddragon_painF2 = [$drgpan6b, hlorddragon_painF3 ] { hlorddragon_move(
 void() hlorddragon_painF3 = [$drgpan6c, hlorddragon_walk2  ] { hlorddragon_move(12); };
 
 void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
-    if (self.pain_finished > time)
-        return;
-    if (skill >= 3)
-        return;     // PM:  No pain in Nightmare.
-    if (self.dragonAttacking)
-        return;     // PM:  Don't flinch while attacking.
+    if (self.pain_finished > time) return;
+    if (SUB_IgnorePain()) return;
+    if (self.dragonAttacking) return; // PM:  Don't flinch while attacking.
 
     if (random() < 0.25) {
         dragon_stop_attack();

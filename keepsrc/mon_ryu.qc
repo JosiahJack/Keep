@@ -588,7 +588,7 @@ void() dragon_bite17 = [$attack1,  ryu_go     ] { ryu_melee(); self.attack_state
 // Check if missile attack is effective or not.
 float(float chance) Ryu_CanBite = {
     if (!self.th_missile) return TRUE; // Can't shoot.
-    if (Ryu_NoShot (self)) return TRUE; // Not allowed to fire.
+    if (Ryu_NoShot(self)) return TRUE; // Not allowed to fire.
     if (self.enemy.solid <= SOLID_TRIGGER) return TRUE; // Missile attacks pass through non-solid enemies.
 	if (check_liquidblock(self.origin, self.enemy.origin)) return FALSE; // Check for liquid surface block condition
     if (random() < chance && InMeleeRange(RYU_RANGE_MELEE)) return TRUE; // Now check if the dragon really wants to bite.

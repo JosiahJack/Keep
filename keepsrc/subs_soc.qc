@@ -264,8 +264,7 @@ void(entity targ, float removetime) entity_remove = {
 	if (targ.flags & FL_CLIENT) return;
 
 	entity_hide(targ);
-	targ.think = SUB_Remove;
-	targ.nextthink = time + removetime;
+	SUB_Think(targ,SUB_Remove,removetime);
 };
 
 // Show where broken monster/items are located (developer only)

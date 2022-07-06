@@ -139,7 +139,7 @@ void(vector weapofs) fred_standfire = {
 	// If no enemy or enemy dead then stop attack
 	if (!self.enemy || self.enemy.health < 1) self.cnt = 10;
 	// Check if can see enemy? (use weapon offset)
-	else if (visxray(self.enemy, weapofs, '0 0 0', FALSE))
+	else if (visxray(self,self.enemy, weapofs, '0 0 0', FALSE))
 		self.cnt = self.cnt + 1;
 	// Reset counter and keep firing
 	else self.cnt = 0;
@@ -151,7 +151,6 @@ void(vector weapofs) fred_standfire = {
 
 // Cycle through barrel firing
 // Easy = 7 shots, Normal = 11 shots, Hard/NM = 15 shots
-//----------------------------------------------------------------------
 void() fred_sfire9 = [$sfire9, fred_sfire10 ] { fred_standfire('45 -10 20'); };
 void() fred_sfire10 = [$sfire10, fred_sfire11 ] { fred_standfire('45 -10 20'); };
 void() fred_sfire11 = [$sfire11, fred_sfire12 ] { fred_standfire('45 -10 22'); };
@@ -179,9 +178,8 @@ void() fred_sfire26 = [$sfire26, fred_sfire27 ] {};
 void() fred_sfire27 = [$sfire27, fred_run ] {};
 
 
-// freddie has a run while firing and can switch seamless
-// between the two if the player is within sight
-
+// Freddie has a run while firing and can switch seamless between the two if
+// the player is within sight.
 void() fred_runframe = {
 	// If dead, no more updates
 	if (self.health < 1) return;

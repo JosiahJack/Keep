@@ -198,42 +198,49 @@ void() trap_tesla_scan = { // [FUNCTION]
    local entity head, prev;
 
    self.tesla_numtargets = FALSE;
-   head = findradius (self.origin,self.distance);
-   while ( head ) {
-      if ( (!(head.flags & FL_NOTARGET) && (head.flags & self.cnt)) ) {
-         visible (head);
-         if ( ((visible (head) && (head.health > FALSE)) && (head.struck_by_mjolnir == FALSE)) ) {
-            if (self.tesla_numtargets == FALSE) self.tesla_target = head;
-            else prev.next_ent = head;
+   head = findradius(self.origin,self.distance);
+   while (head) {
+      if (!(head.flags & FL_NOTARGET) && (head.flags & self.cnt)) {
+		 if (head.health > 0 && !head.struck_by_mjolnir) {
+			 if (visible(head)) {
+				if (self.tesla_numtargets == FALSE) self.tesla_target = head;
+				else prev.next_ent = head;
 
-            self.tesla_numtargets = (self.tesla_numtargets + TRUE);
-            prev = head;
-            if (self.tesla_numtargets == self.count) return ;
-         }
+				self.tesla_numtargets = (self.tesla_numtargets + TRUE);
+				prev = head;
+				if (self.tesla_numtargets == self.count) return ;
+			 }
+		 }
       }
       head = head.chain;
    }
 };
 
 void() TeslaLightningThink = { // [FUNCTION]
-   self.owner.attack_state = FL_SWIM;
-   if (time > self.delay) { self.enemy.struck_by_mjolnir = FALSE; remove(self); return; }
+	local float dist;
+	
+	self.owner.attack_state = FL_SWIM;
+	if (time > self.delay) { self.enemy.struck_by_mjolnir = FALSE; remove(self); return; }
 
-   traceline (self.origin,self.enemy.origin,TRUE,self);
-   vlen ((self.origin - self.enemy.origin));
-   if ( (((trace_fraction != TRUE) || (self.enemy.health <= FALSE)) || (vlen ((self.origin - self.enemy.origin)) > (self.distance + MOVETYPE_BOUNCE))) ) { self.enemy.struck_by_mjolnir = FALSE; remove(self); return; }
+	traceline (self.origin,self.enemy.origin,TRUE,self);
+	dist = vlen(self.origin - self.enemy.origin);
+	if ((trace_fraction != 1.0 || self.enemy.health <= 0) || (dist > (self.distance + 10))) {
+		self.enemy.struck_by_mjolnir = FALSE;
+		remove(self);
+		return;
+	}
 
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-   WriteEntity (MSG_BROADCAST,self);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   WriteCoord (MSG_BROADCAST,trace_endpos_x);
-   WriteCoord (MSG_BROADCAST,trace_endpos_y);
-   WriteCoord (MSG_BROADCAST,trace_endpos_z);
-   LightningDamage(self.origin,trace_endpos,self.lastvictim,self.dmg);
-   self.nextthink = (time + 0.100);
+	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
+	WriteEntity (MSG_BROADCAST,self);
+	WriteCoord (MSG_BROADCAST,self.origin_x);
+	WriteCoord (MSG_BROADCAST,self.origin_y);
+	WriteCoord (MSG_BROADCAST,self.origin_z);
+	WriteCoord (MSG_BROADCAST,trace_endpos_x);
+	WriteCoord (MSG_BROADCAST,trace_endpos_y);
+	WriteCoord (MSG_BROADCAST,trace_endpos_z);
+	LightningDamage(self.origin,trace_endpos,self.lastvictim,self.dmg);
+	self.nextthink = (time + 0.100);
 };
 
 void(entity targ) SpawnTeslaLightning = { // [FUNCTION]

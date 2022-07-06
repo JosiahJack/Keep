@@ -210,7 +210,7 @@ void() santa_snow4 = [$attack4, santa_run1 ] { ai_trackenemy();
 	// Anymore projectiles to fire?
 	if (self.attack_chance < MONAI_SANTAMAX) {
 		// Is the player still visible?
-		if ( visxray(self.enemy, self.attack_offset, '0 0 0', FALSE) ) {
+		if ( visxray(self,self.enemy, self.attack_offset, '0 0 0', FALSE) ) {
 			self.attack_timer = time + 0.8;
 		}
 		// Is the enemy in view timer still active?

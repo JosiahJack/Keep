@@ -337,7 +337,7 @@ void(vector leftofs, vector rightofs) seek_attack = {
 		vec = v_right*(10+random()*10);
 		dir = normalize((self.enemy.origin + vec) - org);
 		// Double check nothing (world/monsters) is blocking the rocket
-		if (visxray(self.enemy, leftofs, '0 0 0', FALSE)) {
+		if (visxray(self,self.enemy, leftofs, '0 0 0', FALSE)) {
 			if (self.weaponstate == TRUE) {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
@@ -360,7 +360,7 @@ void(vector leftofs, vector rightofs) seek_attack = {
 		vec = v_right*(10+random()*10);
 		dir = normalize((self.enemy.origin - vec) - org);
 		// Double check nothing (world/monsters) is blocking the rocket
-		if (visxray(self.enemy, rightofs, '0 0 0', FALSE)) {
+		if (visxray(self,self.enemy,rightofs,'0 0 0',FALSE)) {
 			if (self.weaponstate == TRUE) {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);

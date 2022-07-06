@@ -129,9 +129,9 @@ void() SUB_switchEnemyTarget = {
 // Will remove any enemytarget functionality safely as possible.  The enemytarget system should take care of itself and safely delete.  This is a brute force version that will make sure, "its dead jim!"
 void(entity targ) SUB_removeEnemyTarget = {
 	if (targ.enemytarget.classtype != CT_ENEMYTARGET) return;
+
 	targ.enemytarget.state = STATE_OFF;
-	targ.enemytarget.think = SUB_Remove;
-	targ.enemytarget.nextthink = time + 0.1;
+	SUB_Think(targ.enemytarget,SUB_Remove,0.1);
 };
 
 // Function called all the time when the enemytarget is active

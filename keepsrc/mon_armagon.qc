@@ -112,10 +112,14 @@ void(float angdelta, float delta) armagon_turn = {
 void() armagon_overleft1;
 void() armagon_overright1;
 
+float(float delta) armagon_yaw_delta = {
+	if (delta >  180) delta = (delta - 360.000);
+	if (delta < -180) delta = (delta + 360.000);
+	return delta;
+};
+
 void() armagon_think = {
-   local float delta;
-   local float angdelta;
-   local float r;
+   local float delta, angdelta, r;
 
    setorigin (self.trigger_field,self.origin);
    self.trigger_field.angles = self.angles;
@@ -123,22 +127,15 @@ void() armagon_think = {
    self.trigger_field.angles_y = (self.trigger_field.angles_y + self.fixangle);
    enemy_yaw = vectoyaw ((self.enemy.origin - self.origin));
    self.ideal_yaw = enemy_yaw;
-   delta = (self.ideal_yaw - self.angles_y);
    self.cnt = FALSE;
-   if ( (delta > 180.000) )
-      delta = (delta - 360.000);
-
-   if ( (delta < -180.000) )
-      delta = (delta + 360.000);
-
-   if ( (fabs (delta) > 90.000) ) {
-      delta = FALSE;
+   delta = armagon_yaw_delta(self.ideal_yaw - self.angles_y);
+   if (fabs(delta) > 90) {
+      delta = 0;
       self.cnt = TRUE;
    }
    angdelta = (delta - self.fixangle);
    armagon_turn (angdelta,delta);
-   if ( (self.health < FALSE) )
-      return ;
+   if (self.health < 1) return;
 
    if ( (time > self.super_time) ) {
       self.super_time = (time + MOVETYPE_WALK);
@@ -162,8 +159,7 @@ void() armagon_think = {
 };
 
 void() armagon_walkthink = {
-   local float delta;
-   local float angdelta;
+   local float delta, angdelta;
    local entity client;
    local float r;
 
@@ -174,20 +170,15 @@ void() armagon_walkthink = {
    ChangeYaw();
    delta = FALSE;
    self.cnt = FALSE;
-   if ( (delta > 180.000) )
-      delta = (delta - 360.000);
-
-   if ( (delta < -180.000) )
-      delta = (delta + 360.000);
-
-   if ( (fabs (delta) > 90.000) ) {
+   if (delta > 180) delta = delta - 360;
+   if (delta < -180) delta = delta + 360;
+   if ( (fabs (delta) > 90) ) {
       delta = FALSE;
       self.cnt = TRUE;
    }
    angdelta = (delta - self.fixangle);
    armagon_turn (angdelta,delta);
-   if ( (self.health < FALSE) )
-      return ;
+   if (self.health < 1) return;
 
    if ( (time > self.super_time) ) {
       self.super_time = (time + MOVETYPE_WALK);
@@ -209,35 +200,27 @@ void() armagon_walkthink = {
       }
    }
    client = checkclient();
-   if ( !client )
-      return ;
+   if (!client) return;
 
-   if ( visible (client) ) {
+   if ( visible(client) ) {
       self.enemy = client;
       FoundTarget();
    }
 };
 
 void() armagon_overleft_think = {
-   local float delta;
-   local float angdelta;
+   local float delta, angdelta;
 
    ChangeYaw();
-   walkmove (self.angles_y,14.000);
+   walkmove(self.angles_y,14.000);
    setorigin (self.trigger_field,self.origin);
    self.trigger_field.angles = self.angles;
    self.trigger_field.frame = self.frame;
    self.trigger_field.angles_y = (self.trigger_field.angles_y + self.fixangle);
-   if ( (self.count == FALSE) ) {
+   if (self.count == 0) {
       enemy_yaw = vectoyaw ((self.enemy.origin - self.origin));
       self.ideal_yaw = enemy_yaw;
-      delta = ((self.ideal_yaw - self.angles_y) - 165.000);
-      if ( (delta > 180.000) )
-         delta = (delta - 360.000);
-
-      if ( (delta < -180.000) )
-         delta = (delta + 360.000);
-
+	  delta = armagon_yaw_delta((self.ideal_yaw - self.angles_y) - 165.000);
       angdelta = (delta - self.fixangle);
    } else {
       if ( (self.count == TRUE) ) {
@@ -264,24 +247,18 @@ void() armagon_overright_think = {
    if ( (self.count == FALSE) ) {
       enemy_yaw = vectoyaw ((self.enemy.origin - self.origin));
       self.ideal_yaw = enemy_yaw;
-      delta = ((self.ideal_yaw - self.angles_y) + 165.000);
-      if ( (delta > 180.000) )
-         delta = (delta - 360.000);
-
-      if ( (delta < -180.000) )
-         delta = (delta + 360.000);
-
+      delta = armagon_yaw_delta((self.ideal_yaw - self.angles_y) + 165.000);
       angdelta = (delta - self.fixangle);
    } else {
-      if ( (self.count == TRUE) ) {
-         armagon_launch_missile (-40.000,FL_SWIM);
-         return ;
+      if (self.count == TRUE) {
+         armagon_launch_missile(-40.000,FL_SWIM);
+         return;
       } else {
-         delta = FALSE;
+         delta = 0;
          angdelta = (delta - self.fixangle);
       }
    }
-   armagon_turn (angdelta,delta);
+   armagon_turn(angdelta,delta);
 };
 
 void() armagon_stand_attack;
@@ -338,19 +315,13 @@ void() armagon_run12 = [ 11.000, armagon_run1 ] {
    ai_run (14.000);
    armagon_think();
    if ( ((self.cnt == TRUE) && (time > self.attack_finished)) ) {
-      delta = (self.ideal_yaw - self.angles_y);
-      if ( (delta > 180.000) )
-         delta = (delta - 360.000);
-
-      if ( (delta < -180.000) )
-         delta = (delta + 360.000);
-
+      delta = armagon_yaw_delta(self.ideal_yaw - self.angles_y);
       if ( (delta > FALSE) ) {
          self.think = armagon_overleft1;
       } else {
          self.think = armagon_overright1;
       }
-      return ;
+      return;
    }
    if ( (self.lefty == TRUE) ) {
       self.lefty = FALSE;

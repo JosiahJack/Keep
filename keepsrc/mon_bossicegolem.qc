@@ -135,7 +135,7 @@ void() iceg_CheckCombo = {
 	if (skill < SKILL_NORMAL) return;
 	
 	// If the enemy is visible, quickly go for range attack
-	if (visxray(self.enemy, self.attack_offset, self.enemy.view_ofs, TRUE)) {
+	if (visxray(self,self.enemy, self.attack_offset, self.enemy.view_ofs, TRUE)) {
 		self.attack_finished = time + ((4-skill)*0.5) + random();
 		// Skip forward in magic attack
 		self.think = self.th_charge;

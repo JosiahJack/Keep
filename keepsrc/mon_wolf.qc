@@ -260,7 +260,7 @@ void() wolf_spin13	= [	$spin13,	wolf_spin14	] { ai_charge(40); wolf_blur(6, 0.2)
 void() wolf_spin14	= [	$spin14,	wolf_spin15	] { ai_charge(40); wolf_blur(7, 0.2); wolf_melee(); };
 void() wolf_spin15	= [	$spin15,	wolf_spin16	] { ai_chargenoturn(0); wolf_blur(8, 0.1); wolf_melee(); };
 void() wolf_spin16	= [	$spin16,	wolf_run1	] { ai_chargenoturn(0); wolf_reset_attachment(); wolf_melee();
-	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = wolf_slash1;
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) self.think = wolf_slash1;
 };
 
 // Magic Sword Attack

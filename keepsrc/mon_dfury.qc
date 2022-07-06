@@ -238,7 +238,6 @@ void()	dfury_slice9	= [	$slice11,	dfury_slice10	] { monster_footstep(FALSE); ai_
 void()	dfury_slice10	= [	$slice13,	dfury_slice11	] { ai_charge(0); };
 void()	dfury_slice11	= [	$slice14,	dfury_run1	] { monster_footstep(FALSE); ai_charge(7); };
 
-//----------------------------------------------------------------------
 // Melee Attack 2 - Smash (both swords chop overhead to ground)
 void()	dfury_smash1	= [	$smash2,	dfury_smash2	] { ai_charge(1); };
 void()	dfury_smash2	= [	$smash3,	dfury_smash3	] { ai_charge(13); };
@@ -252,7 +251,6 @@ void()	dfury_smash9	= [	$smash10,	dfury_smash10	] { ai_charge(3); ai_melee();sel
 void()	dfury_smash10	= [	$smash12,	dfury_smash11	] { ai_charge(0); };
 void()	dfury_smash11	= [	$smash13,	dfury_run1	] { ai_charge(0); };
 
-//----------------------------------------------------------------------
 // Melee Attack 4a - Single Right Swing (fast attack)
 void()	dfury_lswing3;
 void()	dfury_rswing1	= [	$rswing2,	dfury_rswing3	] { ai_charge(2); };
@@ -262,10 +260,9 @@ void()	dfury_rswing5	= [	$rswing5,	dfury_rswing6	] { ai_charge(7);ai_melee(); };
 void()	dfury_rswing6	= [	$rswing6,	dfury_rswing7	] { ai_charge(5);ai_melee(); SwordSwipeSound(); };
 void()	dfury_rswing7	= [	$rswing7,	dfury_rswing8	] { ai_charge(2);monster_footstep(FALSE); };
 void()	dfury_rswing8	= [	$rswing8,	dfury_run1	] { ai_charge(1);
-	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_lswing3;
+	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) self.think = dfury_lswing3;
 };
 
-//----------------------------------------------------------------------
 // Melee Attack 4a - Single Right Swing (fast attack)
 void()	dfury_lswing1	= [	$lswing2,	dfury_lswing3	] { ai_charge(2); };
 void()	dfury_lswing3	= [	$lswing3,	dfury_lswing4	] { dfury_grunt_sound(DFURY_SOUND_OPTIONAL);ai_charge(5); };
@@ -274,10 +271,9 @@ void()	dfury_lswing5	= [	$lswing5,	dfury_lswing6	] { ai_charge(7);ai_melee(); };
 void()	dfury_lswing6	= [	$lswing6,	dfury_lswing7	] { ai_charge(5);ai_melee(); SwordSwipeSound(); };
 void()	dfury_lswing7	= [	$lswing7,	dfury_lswing8	] { ai_charge(2);monster_footstep(FALSE); };
 void()	dfury_lswing8	= [	$lswing8,	dfury_run1	] { ai_charge(1);
-	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
+	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) self.think = dfury_rswing3;
 };
 
-//----------------------------------------------------------------------
 // Melee Attack 3 - Lunge forward (leaving ground) and do heavy damage
 void() dfury_JumpTouch = {
 	local float ldmg;
@@ -339,7 +335,6 @@ void()	dfury_lunge8	= [	$lunge8,	dfury_lunge8	] {
 	self.oldorigin = self.origin;
 };
 
-//----------------------------------------------------------------------
 // Landed with thrush attack
 void()	dfury_lunge9	= [	$lunge9,	dfury_lunge10	] { ai_melee(); };
 void()	dfury_lunge10	= [	$lunge10,	dfury_lunge11	] { ai_charge(5);ai_melee(); };
@@ -349,14 +344,12 @@ void()	dfury_lunge13	= [	$lunge13,	dfury_lunge14	] { ai_charge(1);ai_melee();mon
 void()	dfury_lunge14	= [	$lunge14,	dfury_lunge15	] { ai_charge(1); };
 void()	dfury_lunge15	= [	$lunge15,	dfury_run1	] { ai_resetangles();
 	// If close enough starting swinging left+right ELSE return to run cycle
-	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
+	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) self.think = dfury_rswing3;
 };
 
-//----------------------------------------------------------------------
 // Melee Attack 5 - W_Attack (two handed slashing attack)
 // Identical frame set (Hell Knight / Death Knight)
 // Speed boost (+16 charge) to all frames, fast charging attack!
-
 void()	dfury_watk1	= [	$w_attack2,	dfury_watk3	] { ai_charge(18);monster_footstep(FALSE); };
 void()	dfury_watk3	= [	$w_attack3,	dfury_watk4	] { ai_charge(18); };
 void()	dfury_watk4	= [	$w_attack4,	dfury_watk5	] { ai_charge(18); };
@@ -387,7 +380,6 @@ void()	dfury_watk22= [	$w_attack22,dfury_run1	] { ai_charge(21);
 	}
 };
 
-//----------------------------------------------------------------------
 void() dfury_melee = {
 	// Use heavy overhead smash for monsters
 	if (self.enemy.flags & FL_MONSTER) dfury_smash1();
@@ -428,7 +420,7 @@ void(float offset) dfury_magica_shot = {
 		soffset = v_forward * 20 + v_up * random() * 20;
 
 		// Double check that missile is not blocked by any world geo
-		if (!visxray(self.enemy, soffset, '0 0 0', TRUE)) soffset = soffset + '0 0 24';
+		if (!visxray(self,self.enemy, soffset, '0 0 0', TRUE)) soffset = soffset + '0 0 24';
 		soffset = self.origin + soffset;
 
 		// Straight line velocity from source to target
@@ -465,7 +457,7 @@ void() dfury_magicb_shot = {
 		soffset = v_forward * 20 + v_up * (5 + random() * 10);
 		
 		// Double check that missile is not blocked by any world geo
-		if (!visxray(self.enemy, soffset, '0 0 0', TRUE)) soffset = soffset + '0 0 24';
+		if (!visxray(self,self.enemy, soffset, '0 0 0', TRUE)) soffset = soffset + '0 0 24';
 		soffset = self.origin + soffset;
 	
 		// Straight line velocity from source to target

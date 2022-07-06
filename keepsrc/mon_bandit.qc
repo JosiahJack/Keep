@@ -121,7 +121,7 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
     else
         { p1 = 0.2;  p2 = 0.6;}
 
-    if ((r < p1) || (skill >= 3)) {
+    if ((r < p1) && !SUB_IgnorePain()) {
         self.pain_finished = time + 0.6;
         army_pain1();
         if (self.classtype == CT_MONBANDIT)

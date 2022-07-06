@@ -51,6 +51,8 @@ float() eidolon_WaveCheck;
 void() dcrossbow_stop1;
 void() dcrossbow_fire1;
 void() dcrossbow_slide1;
+void() dcrossbow_ready1;
+void() dcrossbow_melee;
 void() deathguard_charge1;
 float()	CheckFragJump;
 void() gaunt_run1;
@@ -67,7 +69,21 @@ void() dfury_boss_run1;
 void() hknight_char_b1;
 
 void() CheckAttack = { // [FUNCTION]
-	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+	if ((  self.classtype == CT_MONARMY
+	    || self.classtype == CT_MONDRAKEGOBLIN
+        || self.classtype == CT_MONBANDIT
+		|| self.classtype == CT_MONREBEL
+		|| self.classtype == CT_MONARMYGRENADE
+		|| self.classtype == CT_MONARMYPLASMA
+		|| self.classtype == CT_MONARMYSPIKE
+		|| self.classtype == CT_MONARMYDBSHOTGUN)
+		  && enemy_range == RANGE_MELEE) {
+		self.attack_state = AS_MISSILE;
+		return;
+	}
+	// Does the monster have a clear shot?  Sightline can be blocked by monsters
+	// Ghosts can presumably see through walls.
+	if (visblocked(self.enemy) && !IsGhost(self)) return;  
 
 	// Melee attack
 	// enemy_range is checked before this function (ai_run - ai.qc)
@@ -130,7 +146,7 @@ void() SoldierCheckAttack = {
 	
 	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 	if (visblocked(self.enemy)) return;
-	if (!visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) return;
+	if (!visxray(self,self.enemy, self.attack_offset,'0 0 0',FALSE)) return;
 
 	if (self.classtype == CT_MONARMYROCKET) {
 		if (ai_checkmelee(MONAI_RANGEARMYR,FALSE)) {
@@ -492,7 +508,7 @@ void() MegaforceCheckAttack = {
 	// Close attack (Plasma)
 	// Do a sight test from gun position to enemy (more accurate)
 	if (ai_checkmelee(MONAI_RANGEMEGAF,FALSE) && 
-		visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) {
+		visxray(self,self.enemy, self.attack_offset,'0 0 0',FALSE)) {
 		self.attack_state = AS_MELEE;
 		self.th_melee();
 		return;
@@ -1418,7 +1434,7 @@ void() DSergeantCheckAttack = {
 	if (self.movespeed < 0) {
 		if (time < self.attack_finished) return;
 		// If the sightline between self and player blocked by anything, keep moving
-		if (!visxray(self.enemy, self.attack_offset, '0 0 10', FALSE)) return;
+		if (!visxray(self,self.enemy,self.attack_offset,'0 0 10',FALSE)) return;
 		self.attack_state = AS_MISSILE;
 		return;
 	}
@@ -1437,7 +1453,7 @@ void() DSergeantCheckAttack = {
 	} else {
 		// Range attack - Homing missile
 		// If the sightline between self and player blocked, allow for monsters to be hit (infighting rules!)
-		if (!visxray(self.enemy, self.attack_offset, '0 0 10', FALSE)) return;
+		if (!visxray(self,self.enemy,self.attack_offset,'0 0 10',FALSE)) return;
 		self.attack_state = AS_MISSILE;
 	}
 };
@@ -1495,7 +1511,7 @@ void() DFuryCheckAttack = {
 	if (self.movespeed < 0) {
 		if (time < self.attack_finished) return;
 		// If the sightline between self and player blocked by anything, keep moving
-		if (!visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) return;
+		if (!visxray(self,self.enemy, self.attack_offset,'0 0 0',FALSE)) return;
 		self.attack_state = AS_MISSILE;
 		return;
 	}
@@ -1523,7 +1539,7 @@ void() DFuryCheckAttack = {
 	// Range attack.  The attack chance percentages are constant across skill levels
 	if (time < self.attack_finished) return;
 	// If the sightline between self and player blocked by anything, keep moving
-	if (!visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) return;
+	if (!visxray(self,self.enemy,self.attack_offset,'0 0 0',FALSE)) return;
 	
 	if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
 	else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.4;	// range < 500 map units
@@ -1564,7 +1580,7 @@ void() JusticeCheckAttack = {
 	if (!enemy_vis) return; // Can see the enemy?
 	if (time < self.attack_finished) return; // Range/Jump attacks blocked for a while
 	// If the sightline between self and player blocked by anything, keep moving
-	if (!visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) return;
+	if (!visxray(self,self.enemy,self.attack_offset,'0 0 0',FALSE)) return;
 
 	// Mid Range attack (JUMP).  Jumped recently, facing right direction and not blocked?
 	if ( self.jump_flag < time && infront(self.enemy) && !visblocked(self.enemy) ) {
@@ -2694,7 +2710,7 @@ void() HuntressCheckAttack = {
 };
 
 void() SpiritCheckAttack = {
-	if (self.enemydist < MONAI_MELEESPIRIT) {
+	if (self.enemydist < self.meleerange) {
 		self.attack_state = AS_MELEE;
 		return;
 	}
@@ -2840,4 +2856,21 @@ void() CheckContinueCharge_boss = {
 		sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+};
+
+void() dcrossbow_checkmelee = {
+	// Always return if monster is dead!
+	if (self.health < 1) return;
+
+	// Check to see if enemy is dead? back to run/hunt cycle
+	if (self.enemy.health < 1) ai_run(0);
+	else {
+		// Is the enemy within melee range?
+		// If not then do a quick hipshot at the player
+		if (!ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
+			self.attack_chance = -1;	// Start with higher percentage
+			dcrossbow_ready1();			// Raise up crossbow ready
+		}
+		else dcrossbow_melee();
+	}
 };

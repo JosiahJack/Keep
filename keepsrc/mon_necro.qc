@@ -431,10 +431,8 @@ void() ai_repel;    // In 'nemesant.qc'.
 
 float() necro_encore = {
     if (self.classtype == CT_MONNECRO) return TRUE;
-    if (skill >= 3) return TRUE;
-    if (skill >= 2)
-        if (random() < 0.25) return TRUE;
-
+    if (SUB_IgnorePain()) return TRUE;
+    if (skill >= 2 && random() < 0.25) return TRUE;
     return FALSE;
 };
 
@@ -756,10 +754,10 @@ void() necro4_attack = {
                             yes = 0;   // Already have a golem out.
                             if (self.enemy)
                             if (!((head.health <= 0) || head.deadflag))
-                            if (!visible (head))
-                            if (!visible2 (self.enemy, head)) {
+                            if (!visxray(self,head,self.view_ofs,head.view_ofs,TRUE))
+                            if (!visxray(head,self.enemy,self.view_ofs,head.view_ofs,TRUE)) {
 								// Unsummon current, and summon new one.
-                                T_Damage (head, self, self, (head.health + 1), NOARMOR);
+                                T_Damage(head, self, self, (head.health + 1), NOARMOR);
                                 if (head.health <= 0)   // Confirm destruction.
                                     self.worldtype = NSA_SUMMON_GOLEM;
                             }

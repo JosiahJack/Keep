@@ -1760,3 +1760,5 @@ string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";
 .float		poisoned;			// Poison debuff status
 .float		poisoned_time;		// Timer (1s tick) for screen/sound update
 .float		poisoned_qty;		// Total amount of damage stored (DoT)
+
+void(entity targ, void() th_think, float th_time) SUB_Think;

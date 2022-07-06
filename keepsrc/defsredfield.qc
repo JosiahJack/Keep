@@ -78,7 +78,7 @@ float MONAI_WOLFRANGE = 1500;		// Moonlight Guardian energy sword range
 // Vengeful Spirit
 float MONAI_SPIRITSOLID = 1;		// Regular spawn state
 float MONAI_SPIRITINVIS = 2;		// Invisible
-float MONAI_MELEESPIRIT = 80;		// Melee range
+float MONAI_MELEESPIRIT = 120;		// Melee range
 float MONAI_CLOSESPIRIT = 192;		// Too close, teleport away
 float MONAI_RANGESPIRIT = 256;		// Distance to be after teleport
 vector MONAI_SPIRITIMPACT = '16 0 0';	// Blast radius centre
@@ -86,7 +86,6 @@ float MONAI_SPIRITDAMAGE = 12;		// Impact damage
 float MONAI_SPIRITRADIUS = 512;		// Radius of scream attack
 float MONAI_SPIRITFORWARD = 400;	// Forward momentum
 float MONAI_SPIRITUP = 0;		// Vertical momentum
-float MONAI_SPIRITSCREAMRANGE = 120;	// Long range scream
 
 // Elena the Blood Huntress
 float MONAI_ELENAFRONT = 80;	

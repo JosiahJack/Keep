@@ -363,8 +363,6 @@ void() dsergeant_melee = {
 void() SergMissile = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
-	// Removing a fired homing missiles looks weird
-	//if (!visxray(self.enemy, self.attack_offset, '0 0 10', FALSE)) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad171/dknight/dserg_magic.wav", 1, ATTN_NORM);

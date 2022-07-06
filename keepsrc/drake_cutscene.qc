@@ -197,9 +197,8 @@ void() go_back = { // [FUNCTION]
 
     val = ftos (c.cnt);
     cvar_set ("viewsize", val); // Restore old viewsize
-    t.nextthink = time + 0.1;
-    t.think = SUB_Remove;
-    remove (self);
+	entity_remove(t,0.1);
+	entity_remove(self,0.1);
 };
 
 // This routine short-circuits player turning and movement while in camera

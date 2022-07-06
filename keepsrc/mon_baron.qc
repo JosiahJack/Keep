@@ -485,32 +485,32 @@ void() Baron_Air = {
         if (head.touch != TouchGib) { // Hack to prevent heads from flying.
             if (head.flags & FLx_CREATURE)
                 hit = 1;
-            else if (IsMissile (head))
+            else if (IsMissile(head))
                 hit = 2;
             else
                 hit = 0;
 
             if (hit) {
-                if (infront (head) && visible (head)) {
+                if (infront(head) && visible(head)) {
                     str = random();
                     damage = str * 5 + 10;
                     if (hit == 1) {
-                        if (!Ally_Check (head, self)) {
+                        if (!Ally_Check(head,self)) {
                             ang = '0 0 0';
                             ang_y = random() * 360;
                             ang = vectoangles(ang);
                             ang_z = str * 250 + 250;
                             head.velocity = ang;
-                            head.flags = head.flags - (head.flags & FL_ONGROUND);
+                            head.flags = head.flags - FL_ONGROUND;
                         } else hit = 0;
                     } else { // Check owner for missile control, not who launched.
-                        if (!Ally_Check (head.owner, self)) ReflectMissile(head.owner, head, TRUE); // just go straight up!
+                        if (!Ally_Check (head.owner,self)) ReflectMissile(head.owner,head,TRUE); // just go straight up!
                         else hit = 0;
                     }
                     if (hit) {
-                        Particle_Gust (head);   // Show some dust.
-                        T_Damage (head, self, self, damage,DAMARMOR);
-                        sound (head, 7, "drake/skullwiz/push.wav", 1, ATTN_NORM);
+                        Particle_Gust(head);   // Show some dust.
+                        T_Damage(head,self,self,damage,DAMARMOR);
+                        sound (head,7,"drake/skullwiz/push.wav",1,ATTN_NORM);
                     }
                 }
             }
@@ -589,7 +589,7 @@ void() baron_cast5  = [$magica3,  baron_cast6  ] { ai_face();
     else if (self.level == BARON_EARTH) {
         if (BaronGolem_Check ()) {
             //if (!SpawnMonster_Attack (self, CT_MONGOLEM)) { // TODO
-            //    if (visible (self.enemy)) SpawnMonster (self, self.origin, CT_MONGOLEM, EntryPoint_Fan);
+            //    if (visible(self.enemy)) SpawnMonster (self, self.origin, CT_MONGOLEM, EntryPoint_Fan);
             //}
 		}
     } else { // Lightnign bolt from the sky.

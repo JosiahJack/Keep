@@ -170,7 +170,7 @@ void(float dist) ai_run = {
 	movedist = dist;
 	winner = FALSE;
     if (self.enemy) {
-		if ((self.enemy.flags & FLx_CREATURE) && visible (self.enemy)) {
+		if ((self.enemy.flags & FLx_CREATURE) && visible(self.enemy)) {
 			winner = TRUE;
 			self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin); // Set yaw in case we need to face the fallen during the dance.
 		}

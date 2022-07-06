@@ -198,10 +198,9 @@ void(entity thekilled, entity attacker) AddToKills = {
 	while(victory) {
 		if (!(victory.spawnflags & VICTORY_MANUAL_ONLY)) {
 			victory.enemy = attacker; // Pass through so that activator can be set.
-			victory.think = trigger_victory_check; // Let the trigger_victory figure out
-												// what to do, either 0 kills, partial,
-												// or 100%.
-			victory.nextthink = time + 0.1;
+			SUB_Think(victory,trigger_victory_check,0.1); // figure out what to
+														  // do, either 0 kills,
+														  // partial, or 100%.
 		}
 		victory = find(victory, classname, "trigger_victory");
 	}
@@ -898,8 +897,7 @@ void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
 	Particle_Cube(self, 1, 41);
     targ.oldenemy = attacker;
     targ.enemy = world;
-    targ.think = FreezeFinish;
-    targ.nextthink = time + 0.05;
+	SUB_Think(targ,FreezeFinish,0.05);
 };
 
 // Radius damage but ignores entities outside of the water and other eels

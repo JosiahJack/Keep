@@ -451,13 +451,13 @@ void(entity attacker, float damage) monster_pain_check = {
 	// already dying, don't go into pain frame
 	if (self.health < 1) self.pain_check = 0;
 	// The new axe forces monsters into long pain animations (if they exist)
-	else if (attacker.moditems & IT_UPGRADE_AXE && self.axhitme && self.pain_longanim) self.pain_check = 2;
+	else if (self.axhitme && self.pain_longanim) self.pain_check = 2;
 	// always go into pain frame if it has been a while (first hit = pain)
 	else if (time - self.pain_finstate > PAIN_ALWAY) self.pain_check = 1;
 	// Dangerous liquids should kill the monster and keeping them in
 	// constant pain animations which makes them look better than doing nothing!
 	else if (self.liquidbase == CONTENT_SLIME || self.liquidbase == CONTENT_LAVA) self.pain_check = 1;
-	// If being attacked by a world object (shooter, electricity, bmodel) in pain
+	// If being attacked by a world object (shooter,electricity,bmodel) in pain
 	else if (attacker == world) self.pain_check = 1;
 	// Random chance to flinch and not ignore the pain (play sound only)
 	else if (random()* self.pain_flinch > damage ) self.pain_check = 3;

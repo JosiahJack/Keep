@@ -655,7 +655,7 @@ float() gaunt_checkswoop = {
 	while (head) {
 		if (head.classname == "gaunt_corner" && head.targetname == self.pathtarget) {
 			m = vlen(self.enemy.origin - head.origin);
-			if (m > 500 && visible2(head, self.enemy))
+			if (m > 500 && visxray(self.enemy,head,self.view_ofs,head.view_ofs,TRUE))
 			{
 				return 1;
 			}

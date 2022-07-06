@@ -118,15 +118,9 @@ void() shalrath_remove_attachment = {
 
 // RANGE ATTACK 1 - Homing Missile Attack
 void() ShalMissile = {
-	// Check if there is a clear line of sight
-	// The original behaviour is ruined by this final check
-	// Baiting shalraths to fire will generate more voreballs flying
-	// around and projectiles to dodge, best leave this working
-	//if ( !(visxray(self.enemy, '0 8 20', '0 0 10', FALSE)) ) return;
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "shalrath/attack2.wav", 1, ATTN_NORM);
 	self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
-	// Original vector location 0 0 10, new 0 8 36
 	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
 };
 

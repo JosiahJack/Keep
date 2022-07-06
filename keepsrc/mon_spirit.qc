@@ -81,7 +81,6 @@ $frame laugh1 laugh2 laugh3 laugh4 laugh5 laugh6 laugh7 laugh8 laugh9
 $frame laugh10 laugh11 laugh12 laugh13 laugh14 laugh15 laugh16 laugh17 
 $frame laugh18 laugh19 laugh20 laugh21
 
-//float SPIRIT_HEIGHT = 0;
 float SPIRIT_DISTMIN = 256;
 float SPIRIT_DISTMAX = 512;
 
@@ -377,29 +376,18 @@ void() spirit_spin11	= {
 	else spirit_fade();
 };
 
-
-// Melee Sword Attacks
-
-
-//Slash A
-//----------------------------------------------------------------------
 void()	spirit_slasha1	= [	$slasha1,	spirit_slasha2	] { ai_charge(20); spirit_alphacontrol(); spirit_glow(); };
 void()	spirit_slasha2	= [	$slasha2,	spirit_slasha3	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
 void()	spirit_slasha3	= [	$slasha3,	spirit_slasha4	] { ai_charge_side(); self.skin = 0; spirit_glow(); };
 void()	spirit_slasha4	= [	$slasha4,	spirit_slasha5	] { ai_charge_side(); spirit_glow(); };
-void()	spirit_slasha5	= [	$slasha5,	spirit_slasha6	] { ai_charge_side();
-spirit_sword_sound();
-spirit_glow();
-};
+void()	spirit_slasha5	= [	$slasha5,	spirit_slasha6	] { ai_charge_side(); spirit_sword_sound(); spirit_glow(); };
 void()	spirit_slasha6	= [	$slasha6,	spirit_slasha7	] { ai_melee_side(); spirit_glow(); };
 void()	spirit_slasha7	= [	$slasha7,	spirit_slasha8	] { ai_melee_side(); spirit_glow(); };
 void()	spirit_slasha8	= [	$slasha8,	spirit_slasha9	] { ai_charge_side(); spirit_glow(); };
 void()	spirit_slasha9	= [	$slasha9,	spirit_run1	] { ai_charge(12); spirit_glow();
-if (random() < 0.35) spirit_spin1();
+	if (random() < 0.35) spirit_spin1();
 };
 
-//Slash B
-//----------------------------------------------------------------------
 void()	spirit_slashb1	= [	$slashb1,	spirit_slashb2	] { ai_charge(20); spirit_alphacontrol();
 spirit_glow();
 };
@@ -414,9 +402,7 @@ void()	spirit_slashb9	= [	$slashb9,	spirit_slashb10	] { ai_charge(12); spirit_gl
 void()	spirit_slashb10	= [	$slashb10,	spirit_run1	] { ai_charge(16); spirit_glow();
 if (random() < 0.3) spirit_spin1();
 };
-	
-//Stab
-//----------------------------------------------------------------------
+
 void()	spirit_stab1	= [	$stab1,		spirit_stab2	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
 void()	spirit_stab2	= [	$stab2,		spirit_stab3	] { ai_charge(12); spirit_alphacontrol(); spirit_glow(); };
 void()	spirit_stab3	= [	$stab3,		spirit_stab4	] { ai_charge(10); self.skin = 0; spirit_glow(); };
@@ -434,7 +420,6 @@ if (random() < 0.25) spirit_spin1();
 };
 
 // Buildup particles for scream
-//----------------------------------------------------------------------
 void(vector leftofsb, vector rightofsb) spirit_charge = {	
 	if (self.health < 1) return;
 
@@ -508,12 +493,10 @@ void()	spirit_scream18	= [	$scream18,	spirit_scream19	] { ai_charge(12); spirit_
 void()	spirit_scream19	= [	$scream19,	spirit_run1	] { ai_charge(16); spirit_glow(); };
 
 void() spirit_chooseatk = {
-	if (!ai_checkmelee(MONAI_MELEESPIRIT,FALSE)) return;		// Too far away
-
+	if (!ai_checkmelee(self.meleerange,FALSE)) return;		// Too far away
 	if (self.health < 1) return;				// Ghost is dead again
 
 	spirit_atk = spirit_atk + 1;
-
 	if (spirit_atk == 1)
 		spirit_slasha1();
 	else if (spirit_atk == 2)
@@ -535,7 +518,6 @@ void() spirit_phased = {
 	ai_stand(); 					// Keep looking
 };
 
-//----------------------------------------------------------------------
 void() spirit_wakeup = {
 	// Reset all monster state functions back to default
 	self.th_stand = spirit_stand1;
@@ -577,7 +559,6 @@ void()	spirit_pain10	= [	$pain10,	spirit_run1	] { spirit_glow();
 if (random() < 0.75) spirit_spin1();
 };
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) spirit_pain = {
 	
 	// Check all pain conditions and set up what to do next
@@ -596,7 +577,6 @@ void(entity inflictor, entity attacker, float damage) spirit_pain = {
 	}
 };
 
-//----------------------------------------------------------------------
 void()	spirit_death1	= [	$death1,	spirit_death2	] { self.skin = 0; spirit_glow();
 	sound (self, CHAN_VOICE, "redfield/spirit/death.wav", 1, ATTN_NORM);
 };
@@ -619,7 +599,6 @@ self.think = SUB_Null;
 entity_hide(self);
 };
 
-//----------------------------------------------------------------------
 void() spirit_die = {
 	
 	// Pre-check routine to tidy up extra entities
@@ -706,7 +685,6 @@ void() monster_spirit = {
 	self.steptype = FS_FLYING;
 	self.bleedcolour = MON_BCOLOR_WHITE;	
 	self.meleecontact = FALSE;		// Scream smash contact
-	self.meleerange = MONAI_SPIRITSCREAMRANGE;	// Scream range
 	self.pain_longanim = TRUE;		// Long pain animation
 	self.attack_offset = '16 0 8';		// Between hands
 	self.deathstring = " was murdered by Vengeful Spirit\n";
@@ -721,15 +699,15 @@ void() monster_spirit = {
 	setorigin(self.attachment, self.origin);
 	self.attachment.state = TRUE;
 
-	// Vengeful Spirits have special animation movement sets
-	// Need extra parameters for their teleporting ability
-	// Can be setup to start phased out and surprise the player
-	// if (self.height == 0) self.height = SPIRIT_HEIGHT;
+	// Vengeful Spirits have special animation movement sets.  Need extra
+	// parameters for their teleporting ability.  Can be setup to start phased
+	// out and surprise the player.
 	if (self.distmin == 0) self.distmin = SPIRIT_DISTMIN;
 	if (self.distmax == 0) self.distmax = SPIRIT_DISTMAX;
 	if (!self.bodyphased) self.bodyphased = MONAI_SPIRITSOLID;
 	else self.bodyphased = MONAI_SPIRITINVIS;
 
+	self.meleerange = MONAI_MELEESPIRIT;
 	self.th_checkattack = SpiritCheckAttack;
 	self.th_pain = spirit_pain;
 	self.th_die = spirit_die;

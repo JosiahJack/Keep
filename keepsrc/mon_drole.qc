@@ -252,7 +252,7 @@ void() drole_clawR13 = [$clawR13, drole_clawR14 ] { drole_charge(27); };
 void() drole_clawR14 = [$clawR14, drole_clawR15 ] { drole_charge(26);sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM); };
 void() drole_clawR15 = [$clawR15, drole_clawR16 ] { monster_footstep(FALSE);drole_charge(30); };
 void() drole_clawR16 = [$clawR16, drole_run ] { drole_charge(28);
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && self.enemy.health > 0 && visible(self.enemy)) drole_clawL1();
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && visible(self.enemy)) drole_clawL1();
 };
 
 void() drole_clawL1 = [$clawL1, drole_clawL2 ] { drole_charge(27); };
@@ -272,7 +272,7 @@ void() drole_clawL14 = [$clawL14, drole_clawL15 ] { drole_charge(26);
 sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM); };
 void() drole_clawL15 = [$clawL15, drole_clawL16 ] { monster_footstep(FALSE);drole_charge(30); };
 void() drole_clawL16 = [$clawL16, drole_run ] { drole_charge(28);
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && self.enemy.health > 0 && visible(self.enemy)) drole_clawR1();
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && visible(self.enemy)) drole_clawR1();
 };
 
 void() drole_melee = {

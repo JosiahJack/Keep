@@ -364,6 +364,9 @@ void() CheckBlockedBreakable = {
 float(float attackdist, float attackzaxis) ai_checkmelee = {
 	local vector spot1, spot2;
 	local float delta, zdiff;
+	
+	if (!self.enemy) return FALSE;
+	if (self.enemy.health < 1) return FALSE;
 
 	// Setup default
 	if (attackzaxis <= 0) attackzaxis = MONAI_MELEEZAXIS;

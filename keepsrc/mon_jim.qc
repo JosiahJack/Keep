@@ -185,7 +185,7 @@ void() jim_laser = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	// Always make sure there is no monster or obstacle in the way
-	if ( visxray(self.enemy, self.attack_offset, '0 0 12', FALSE) ) return;
+	if ( visxray(self,self.enemy, self.attack_offset, '0 0 12', FALSE) ) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
@@ -207,7 +207,7 @@ void() jim_rocket = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	// Always make sure there is no monster or obstacle in the way
-	if ( visxray(self.enemy, self.attack_offset, '0 0 -12', FALSE) ) return;
+	if ( visxray(self,self.enemy, self.attack_offset, '0 0 -12', FALSE) ) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	

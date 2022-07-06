@@ -450,7 +450,6 @@ void()	dcrossbow_smash9	= [	$smash10,	dcrossbow_smash10	] { ai_charge(1); };
 void()	dcrossbow_smash10	= [	$smash12,	dcrossbow_smash11	] { ai_charge(1); };
 void()	dcrossbow_smash11	= [	$smash13,	dcrossbow_smash1	] { dcrossbow_checkmelee(); };
 
-//----------------------------------------------------------------------
 void() dcrossbow_melee = {
 	// Cycle between different melee attacks
 	self.meleeattack = self.meleeattack + 1;
@@ -458,31 +457,12 @@ void() dcrossbow_melee = {
 	else { dcrossbow_smash1(); self.meleeattack = 0; }
 };
 
-//----------------------------------------------------------------------
-void() dcrossbow_checkmelee = {
-	// Always return if monster is dead!
-	if (self.health < 1) return;
-
-	// Check to see if enemy is dead? back to run/hunt cycle
-	if (self.enemy.health < 1) ai_run(0);
-	else {
-		// Is the enemy within melee range?
-		// If not then do a quick hipshot at the player
-		if (!ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
-			self.attack_chance = -1;	// Start with higher percentage
-			dcrossbow_ready1();			// Raise up crossbow ready
-		}
-		else dcrossbow_melee();
-	}
-};
-
-
 void()	dcrossbow_painA1	= [	$painA1,		dcrossbow_painA2	] { self.weaponstate = CROSS_DOWN;};
 void()	dcrossbow_painA2	= [	$painA2,		dcrossbow_painA3	] {};
 void()	dcrossbow_painA3	= [	$painA3,		dcrossbow_painA4	] {};
 void()	dcrossbow_painA4	= [	$painA4,		dcrossbow_painA5	] {};
 void()	dcrossbow_painA5	= [	$painA5,		dcrossbow_run1	] {};
-//----------------------------------------------------------------------
+
 void()	dcrossbow_painD1	= [	$painD1,		dcrossbow_painD2	] { self.weaponstate = CROSS_DOWN;};
 void()	dcrossbow_painD2	= [	$painD2,		dcrossbow_painD3	] {};
 void()	dcrossbow_painD3	= [	$painD3,		dcrossbow_painD4	] {};
@@ -494,7 +474,7 @@ void()	dcrossbow_painD8	= [	$painD8,		dcrossbow_painD9	] { monster_footstep(FALS
 void()	dcrossbow_painD9	= [	$painD9,		dcrossbow_painD10	] {};
 void()	dcrossbow_painD10= [	$painD10,		dcrossbow_painD11	] {};
 void()	dcrossbow_painD11= [	$painD11,		dcrossbow_run1	] {};
-//----------------------------------------------------------------------
+
 void(entity inflictor, entity attacker, float damage)	dcrossbow_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);

@@ -164,7 +164,7 @@ void() archer_fire1;
 
 // Emulate Hexen2 behavior.
 float() archer_face = {
-    if (visible (self.enemy)) { ai_face();  return TRUE;}
+    if (visible(self.enemy)) { ai_face();  return TRUE;}
     else { self.think = archer_run1;  return FALSE;}
 };
 
@@ -346,8 +346,8 @@ void() archer_fire10   = [$tranB16, archer_run1    ] { ai_run(8); };
 // Counter means counterattack here.  Use at end of pain anims.
 void() archer_counter = {
     if (self.enemy)
-        if (visible (self.enemy))
-            if (infront (self.enemy))
+        if (visible(self.enemy))
+            if (infront(self.enemy))
                 if (archer_check_shot ())
                     self.think = archer_fire1;
 };

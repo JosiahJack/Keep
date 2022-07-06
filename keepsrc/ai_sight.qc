@@ -5,7 +5,7 @@
 //
 // Compiled by Qmaster
 //
-// Attributions: Mine plus Arcane Dimensions(AD) and Drake influences
+// Attributions: Qmaster, Arcane Dimensions(AD), Drake, Nehahra
 //
 //
 // Distribution / Copyright / Permissions 
@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 19
+// Function count: 15
 //
 // Implements: Monster Sight System
 //
@@ -37,29 +37,8 @@
 // on the alignment of the monster in sight and the monster checking, as well
 // as our temperament.  Also decides when to follow if a leader is seen.
 //
-// Visibility checks
-// - float(vector org_source, vector org_targ) check_liquidblock
-// - float(entity targ) visible
-// - float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray
-// - float(entity targ, vector s_offset, vector targang, float nomonsters) visang
-// - float(entity targ) visblocked
-// - float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide
-// - float(entity targ) infront
-//
-// Distance checks
-// - float(entity targ) range
-// - float(entity targ, float flat2d) range_distance
-// - float (entity source, entity targ) rangeattack_check
-//
-// Angle checks
-// - float(entity source, entity targ, float offset, float reverse) targangle
-// - float(entity source, entity targ) targzone
-//
-// Hunt & Target Enemies
-// - void() HuntTarget
-// - void() FoundTarget
-// - void(float wakeupothers) FoundHuntTarget
-// - float() FindTarget
+// Includes visibility checks, distance checks, angle checks, and hunt after an
+// enemy has been sighted.
 //=============================================================================
 
 void() MonsterDeBuff;
@@ -77,59 +56,49 @@ float(vector org_source, vector org_targ) check_liquidblock = {
 		if (pc_source != pc_targ) return TRUE; // Are point content different? (like water/air)
 		if (trace_inopen && trace_inwater) {
 			if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
-				if (Ryu_BlockCrossfire ()){
+				if (Ryu_BlockCrossfire()){
 					if (vlen(org_targ - org_source) > 120) return FALSE;
 				}
-			} else {
-				return TRUE; // Standard traceline check (not 100% reliable)
-			}
+			} else return TRUE; // Standard traceline check (not 100% reliable)
 		}
 	}
 	return FALSE; // No liquid check required
 };
 
-// Conditions added to water surface check.  Most maps are compiled with transparent water nowadays
-float(entity targ) visible = {
-	local vector spot1, spot2;
-	
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-	traceline (spot1, spot2, TRUE, self);	// see through other monsters
-	
-	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will draw a diamond model where the AI is looking
-	if (self.debuglvl) {
-		if (!debugent1) debugent1 = spawn_devmarker(self.origin);
-		spot1 = vectoangles(self.origin - trace_endpos);
-		makevectors(spot1);
-		spot2 = trace_endpos + (v_up * -16) + (v_forward * 50);
-		setorigin(debugent1,'0 0 0');
-		setorigin(debugent1, spot2);
-	}
-
-	// Check for liquid surface block condition
-	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
-	visible_distance = vlen ((trace_endpos - spot1));
-	if (trace_fraction == 1) return TRUE;
-	return FALSE;
-};
-
-
 // Returns TRUE if there is no blocking, FALSE if something in the way
 // Custom options for variable source/target offsets and monster blocking
-// (nomonsters) TRUE = no block, FALSE = blocked.  self is excluded from any trace starting points
-float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray = {
-	local vector spot1, spot2;
+// (nomonsters) TRUE = no block, FALSE = blocked.  targ is excluded from any
+// trace starting points
+float(entity source, entity targ, vector s_offset, vector t_offset, float nomonsters) visxray = {
+	local vector spot1, spot2, debugspot1, debugspot2;
+	
+	if (!source) source = self;
+	if (!source) return FALSE;
+	if (!targ) return FALSE;
+	if (source == targ) return FALSE;
 
-	// Bmodels don't have proper origins
-	if (self.bsporigin) spot1 = bmodel_origin(self) + s_offset;
-	else spot1 = self.origin + s_offset;
+	 // Bmodels don't have proper origins
+	if (source.bsporigin) spot1 = bmodel_origin(source) + s_offset;
+	else spot1 = source.origin + s_offset;
 
 	spot2 = targ.origin + t_offset;
-	traceline (spot1, spot2, nomonsters, self);	// custom options
-	
-	// Check for liquid surface block condition
-	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
+	traceline(spot1,spot2,nomonsters,source);
 
+	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will
+	// draw a diamond model where the AI is looking.
+	if ((targ.debuglvl || source.debuglvl) && developer > 1) {
+		if (!debugent1) debugent1 = spawn_devmarker(targ.origin);
+		debugspot1 = vectoangles(source.origin - trace_endpos);
+		makevectors(debugspot1);
+		debugspot2 = trace_endpos + (v_up * -16) + (v_forward * 50);
+		setorigin(debugent1,'0 0 0');
+		setorigin(debugent1,debugspot2);
+	}
+
+	// Check for liquid surface block condition.  Conditions added to water
+	// surface check.  Most maps are compiled with transparent water nowadays.
+	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
+	
 	visible_distance = vlen ((trace_endpos - spot1));
 	if (nomonsters) { // monster blocking changes which test to use
 		// Has the traceline gone from source>target without anything blocking?
@@ -140,6 +109,17 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
 		if (trace_ent == targ) return TRUE;
 		return FALSE;
 	}
+};
+
+ // Sees through monsters, defaults to self and view_ofs for self and targ.
+float(entity targ) visible = {
+	return visxray(self,targ,self.view_ofs,targ.view_ofs,TRUE);
+};
+
+// Check to see if sightline is blocked by other monsters.  Really only used in
+// CheckAttack (was in original ID code).
+float(entity targ) visblocked = {
+	return !visxray(self,targ,self.view_ofs,targ.view_ofs,FALSE);
 };
 
 // The enemy location is based on the source facing angles.  Returns TRUE if there is no blocking, FALSE if something in the way
@@ -148,13 +128,16 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
 float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 	local vector spot1, spot2;
 
+	if (!targ) return FALSE; // Can't check against the world
+	if (targ == self) return FALSE; // Can't compare with ourself
+
 	// Bmodels don't have proper origins
 	if (self.bsporigin) spot1 = bmodel_origin(self) + s_offset;
 	else spot1 = self.origin + s_offset;
 
 	makevectors(targang);
 	spot2 = spot1 + (v_forward * 4096); // Use supplied ang + v_forward for direction
-	traceline (spot1, spot2, nomonsters, self); // Trace a line using angle vector instead of enemy origin
+	traceline(spot1, spot2, nomonsters, self); // Trace a line using angle vector instead of enemy origin
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE; // Check for liquid surface block condition
 	visible_distance = vlen ((trace_endpos - spot1));
 	if (nomonsters) { // monster blocking changes which test to use
@@ -166,22 +149,6 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 		if (trace_ent == targ) return TRUE;
 		return FALSE;
 	}
-};
-
-// Check to see if sightline is blocked by other monsters
-// Really only used in CheckAttack functions (was in org ID code)
-float(entity targ) visblocked = {
-	local vector spot1, spot2;
-	
-	if (!targ) return FALSE; // Can't check against the world
-	if (targ == self) return FALSE; // Can't block ourself
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-	traceline (spot1, spot2, FALSE, self);	// blocked by monsters
-	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE; // Check for liquid surface block condition
-	visible_distance = vlen ((trace_endpos - spot1));
-	if (trace_ent == targ) return FALSE; // Original ID behaviour for this type of function.  Traceline entity hit = enemy?
-	return TRUE;
 };
 
 /*======================================================================
@@ -264,8 +231,6 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 	return tr_result;
 };
 
-// float(entity targ) range;
-
 /*======================================================================
  infront (target entity)
  - relies on self being set correctly before entering this function
@@ -303,14 +268,11 @@ float(entity targ) infront = {
 	} else return FALSE;
 };
 
-/*======================================================================
- range (target entity)
-  returns the range catagorization of an entity reletive to self
-  uses constants defined in defs.qc
-======================================================================*/
+// Returns the range catagorization of an entity reletive to self using 
+// constants defined in defs.qc
 float(entity targ) range = {
-	local vector	spot1, spot2;
-	local float		r;
+	local vector spot1, spot2;
+	local float r;
 		
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
@@ -711,18 +673,14 @@ float() FindTarget = { // [FUNCTION]
 	}
 	
 	if (client == self.enemy) return FALSE; // if we assigned to a nearby angry monster sight_entity above, we'd never be here if this if were true, FYI
-	enemy_range = range (client);
+	enemy_range = range(client);
 
 	if (!self.charmed) {
-		if ( (enemy_range == RANGE_NEAR) ) {
-			if ( ((client.show_hostile < time) && !infront (client)) ) {
-				return ( FALSE );
-			}
+		if (enemy_range == RANGE_NEAR) {
+			if (client.show_hostile < time && !infront(client)) return FALSE;
 		} else {
 			if ( (enemy_range == RANGE_MID) ) {
-				if ( !infront (client) ) {
-					return ( FALSE );
-				}
+				if (!infront(client)) return FALSE;
 			}
 		}
 	}
