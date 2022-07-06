@@ -78,6 +78,15 @@ void() CheckAttack = { // [FUNCTION]
 		|| self.classtype == CT_MONARMYSPIKE
 		|| self.classtype == CT_MONARMYDBSHOTGUN)
 		  && enemy_range == RANGE_MELEE) {
+		// If setup to be a turret, check range attack only
+		if (self.movespeed < 0) {
+			if (time < self.attack_finished) return;
+			if (visblocked(self.enemy)) return;
+			SUB_AttackFinished (2 + random());
+			self.attack_state = AS_MISSILE;
+			return;
+		}
+
 		self.attack_state = AS_MISSILE;
 		return;
 	}
