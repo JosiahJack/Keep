@@ -493,6 +493,8 @@ void() monster_ogre_library_becomenormal = {
   self.mdl = "progs/ad171/mon_ogre.mdl";
   setmodel(self,self.mdl);
   setsize(self,self.bbmins, self.bbmaxs);
+	self.meleerange = MONAI_MELEEOGRE;
+	self.meleerangez = 0;
   self.idle_sound = "ogre/ogidle.wav";
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = ogre_stand1;

@@ -221,7 +221,7 @@ void() monster_sentinel = {
 	if (self.deathstring == "") self.deathstring = " was scorched by a Sentinel\n";
 	self.th_run = sentinel_run1;
 	self.th_walk = sentinel_writhe1;
-	self.th_checkattack = SentinelCheckAttack;
+	self.th_checkattack = WizardCheckAttack;
 	self.th_stand = sentinel_writhe1;
 	self.th_missile = sentinel_attack1;
 	self.th_pain = sentinel_pain;

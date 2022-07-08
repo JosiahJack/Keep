@@ -218,6 +218,7 @@ void() monster_ogre_spikeshooter = {
 	self.pain_longanim = TRUE;
 	self.steptype = FS_TYPESLOW;
 	self.meleerange = MONAI_MELEEOGRE;	// Chainsaw range
+	self.meleerangez = 0;
 	self.no_zaware = FALSE;
 	if (self.exactskin == 0) self.skin = self.exactskin = 1;
 	if (self.health < 1) self.health = 200;

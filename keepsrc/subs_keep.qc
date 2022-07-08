@@ -518,3 +518,22 @@ float(float ctype) SUB_BossWaveCheck = { // [FUNCTION]
 	}
 	return FALSE;
 };
+
+float(entity targ) Armored = {
+	if (targ.armorvalue > 0 && targ.armortype > 0) return TRUE;
+	if (targ.hittype == HIT_METAL) return TRUE;
+	if (targ.classgroup == CG_OGRE) {
+		if ((targ.spawnflags & MON_OGRE_GREEN)
+			|| (targ.spawnflags & MON_HOGRE_METAL)) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+};
+
+float(entity targ) StoneArmored = {
+	if (targ.hittype == HIT_STONE) return TRUE;
+	if (targ.classgroup == CG_STONE) return TRUE;
+	if (targ.gibtype == GIBTYPE_STONE) return TRUE;
+	return FALSE;
+};

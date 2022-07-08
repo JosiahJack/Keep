@@ -902,11 +902,42 @@ void() trigger_rune = { // [ENTITY]
 };
 
 float() trigger_pushable = { // [FUNCTION]
-	if (self.bmodel_act.classgroup == CG_PROJGRENADES) return TRUE; // Cool feature is that it will push grenades!
-	if ((self.spawnflags & 8) && AffectedByPhysics(self.bmodel_act)) return TRUE;  // Qmaster added spawnflag to affect all physical objects such as particles, rockets, etc.
-	if (self.bmodel_act.classtype == CT_PROJ_GL || self.bmodel_act.classtype == CT_PROJ_GLMON ||self.bmodel_act.classtype == CT_PROJ_MEGG) return TRUE; // Added player, ogre and minion eggs to the catch.
-	return (self.bmodel_act.classtype == CT_TEMPGIB || self.bmodel_act.classtype == CT_FUNCBREAKOBJ); // Bonus!  Qmaster also has gibs affected.
+	if (self.bmodel_act.classgroup == CG_PROJGRENADES) {
+		return TRUE; // Cool feature is that it will push grenades!
+	}
+	if ((self.spawnflags & 8) && AffectedByPhysics(self.bmodel_act)){
+		return TRUE;  // Qmaster added spawnflag to affect all physical objects
+					  // such as particles, rockets, etc.
+	}
+	if (self.bmodel_act.classtype == CT_PROJ_GL
+		|| self.bmodel_act.classtype == CT_PROJ_GLMON
+		|| self.bmodel_act.classtype == CT_PROJ_MEGG) {
+		return TRUE; // Added player, ogre and minion eggs to the catch.
+	}
+	if ((self.bmodel_act.flags & FLx_CREATURE) && self.bmodel_act.health > 0) {
+		return TRUE; // Only push living creatures, corpses are shield from wind.
+	}
+	return (self.bmodel_act.classtype == CT_TEMPGIB // Bonus!  Qmaster also has 
+			|| self.bmodel_act.classtype == CT_FUNCBREAKOBJ); // gibs affected.
 };
+
+void() trigger_push_controlled_arc = {
+	local float zdiff, dist, spdattn;
+
+	dist = vlen((self.movetarget.origin - self.bmodel_act.origin));
+	if (dist > self.tetherrange) self.bmodel_act.arcing = TRUE;
+	if (dist < self.tetherdist) self.bmodel_act.arcing = FALSE;
+	if (!self.bmodel_act.arcing) return;
+
+	zdiff = self.movetarget.origin_z - self.bmodel_act.origin_z;
+	self.finalangle = self.movetarget.origin;
+	if (zdiff > 0) self.finalangle_z = self.finalangle_z + zdiff * 6.66 + 64;
+	self.movedir = normalize(self.finalangle - self.bmodel_act.origin);
+	spdattn = 10;
+	if (dist < 128) spdattn = dist / 128 * 10;
+	spdattn = SUB_ClampFloat(spdattn,25,spdattn);
+	self.bmodel_act.velocity = self.movedir * self.speed * spdattn;
+}
 
 void() trigger_push_fire = { // [FUNCTION]
 	local float zdiff, dist, spdattn;
@@ -919,40 +950,7 @@ void() trigger_push_fire = { // [FUNCTION]
 	if (self.target != "") { self.angletarget = self.target; TargetMovedir(self, (self.spawnflags & TRIG_PUSHARC)); } // If custom push direction setup, calculate new facing angletarget
 	if (trigger_pushable()) {
 		if (self.spawnflags & TRIG_PUSHARC && self.movetarget) {
-			dist = vlen((self.movetarget.origin - self.bmodel_act.origin));
-			if (dist > self.tetherrange) self.bmodel_act.arcing = TRUE;
-			if (dist < self.tetherdist) self.bmodel_act.arcing = FALSE;
-			if (!self.bmodel_act.arcing) return;
-
-			zdiff = self.movetarget.origin_z - self.bmodel_act.origin_z;
-			self.finalangle = self.movetarget.origin;
-			if (zdiff > 0) self.finalangle_z = self.finalangle_z + zdiff * 6.66 + 64;
-			self.movedir = normalize(self.finalangle - self.bmodel_act.origin);
-			spdattn = 10;
-			if (dist < 128) spdattn = dist / 128 * 10;
-			spdattn = SUB_ClampFloat(spdattn,25,spdattn);
-			self.bmodel_act.velocity = self.movedir * self.speed * spdattn;
-		} else {
-			if (self.spawnflags & TRIG_PUSHADDITIVE) { // Additive velocity rather than forcing the entity to a velocity.
-				self.attack_finished = time + 0.1;
-				self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
-			} else self.bmodel_act.velocity = self.speed * self.movedir * 10; // This is after _use, _killed and _touch, so any reference to activator has to go through 'bmodel_act'.
-		}
-	} else if (self.bmodel_act.health > 0) { // Standard push for all bmodel_act living entities
-		if (self.spawnflags & TRIG_PUSHARC && self.movetarget) {
-			dist = vlen((self.movetarget.origin - self.bmodel_act.origin));
-			if (dist > self.tetherrange) self.bmodel_act.arcing = TRUE;
-			if (dist < self.tetherdist) self.bmodel_act.arcing = FALSE;
-			if (!self.bmodel_act.arcing) return;
-
-			zdiff = self.movetarget.origin_z - self.bmodel_act.origin_z;
-			self.finalangle = self.movetarget.origin;
-			if (zdiff > 0) self.finalangle_z = self.finalangle_z + zdiff * 6.66 + 64;
-			self.movedir = normalize(self.finalangle - self.bmodel_act.origin);
-			spdattn = 10;
-			if (dist < 128) spdattn = dist / 128 * 10;
-			spdattn = SUB_ClampFloat(spdattn,25,spdattn);
-			self.bmodel_act.velocity = self.movedir * self.speed * spdattn;
+			trigger_push_controlled_arc(); // Safely and forcefully guide to point.
 		} else {
 			if (self.spawnflags & TRIG_PUSHADDITIVE) { // Additive velocity rather than forcing the entity to a velocity.
 				self.attack_finished = time + 0.1;

@@ -874,6 +874,7 @@ Void function hknight_char_b1();
 {
   #106 hknight_char_b2;
   CheckContinueCharge();
+  SwordSwipeSound();
   ai_charge(SVC_TEMPENTITY);
   ai_melee();
 }

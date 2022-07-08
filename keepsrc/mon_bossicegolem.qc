@@ -936,14 +936,14 @@ void() monster_icegolem_precache = {
 void() monster_icegolem = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/ad171/mon_bossicegolem.mdl";
-	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
-	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
-	self.gib1frame = self.gib2frame = 9;
-	self.idle_sound = "ne_ruins/h2golem/foley3.wav"; // Idle1a-1b (long sound) idle2a-2b (short sound)
-	self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
-	self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
-	self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
+	if (self.mdl == "") self.mdl = "progs/ad171/mon_bossicegolem.mdl";
+	if (self.gib1mdl == "") self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
+	if (self.gib2mdl == "") self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
+	if (self.gib1frame <= 0) self.gib1frame = self.gib2frame = 9;
+	if (self.idle_sound == "") self.idle_sound = "ne_ruins/h2golem/foley3.wav"; // Idle1a-1b (long sound) idle2a-2b (short sound)
+	if (self.idle_sound2 == "") self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
+	if (self.idle_soundcom == "") self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
+	if (self.idle_soundcom2 == "") self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
 	if (self.brkobj1 == "") self.brkobj1 = MODEL_BRK_ROCK1A;
 	if (self.brkobj2 == "") self.brkobj2 = MODEL_BRK_ROCK1B;
 	if (CheckZeroVector(self.dest1)) self.dest1 = '80 8 1'; // Additional rubble emitter parameters
@@ -952,9 +952,9 @@ void() monster_icegolem = {
 	if (CheckZeroVector(self.brkvelbase)) self.brkvelbase = '0 0 50';
 	if (CheckZeroVector(self.brkveladd)) self.brkveladd = '100 100 100';
 	if (self.brkfade <= 0) self.brkfade = 4;
-	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
-	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
-	self.sight_sound = "ad171/golem/sight.wav"; // Roar!
+	if (self.pain_sound == "") self.pain_sound = "ne_ruins/h2golem/pain1.wav";
+	if (self.pain_sound2 == "") self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
+	if (self.sight_sound == "") self.sight_sound = "ad171/golem/sight.wav"; // Roar!
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bbmins = '-32 -32 -24';	// Special Size
@@ -963,18 +963,19 @@ void() monster_icegolem = {
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
 	self.steptype = FS_TYPEGIANT;	// Giant sound
 	self.health = self.max_health = MEGADEATH;
-	self.classtype = CT_MONICEGOLEM;
+	if (self.classtype <= 0) self.classtype = CT_MONICEGOLEM;
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
 	self.style = 0;
 	self.walkframe = 0;
-	if (self.deathstring == "")  self.deathstring = " was shattered by the Ice Golem\n";
+	if (self.deathstring == "") self.deathstring = " was shattered by the Ice Golem\n";
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
 	monster_start();
 	if (self.targetname == "") {
-		dprint("\b[ICEGOLEM]\b Missing targetname name! Going ahead and spawning anyways.\n");
+		dprint(self.classname);
+		dprint(": Missing targetname name! Going ahead and spawning anyways.\n");
 		iceg_setup();
 	} else self.use = iceg_setup;
 };
@@ -1018,49 +1019,12 @@ void() monster_lavagolem_precache = {
 };
 
 void() monster_lavagolem = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/ne_ruins/h2golemlg.mdl";
-	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
-	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
-	self.gib1frame = self.gib2frame = 9;
-	self.idle_sound = "ne_ruins/h2golem/foley3.wav"; // Idle1a-1b (long sound) idle2a-2b (short sound)
-	self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
-	self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
-	self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
-	if (self.brkobj1 == "") self.brkobj1 = MODEL_BRK_ROCK1A;
-	if (self.brkobj2 == "") self.brkobj2 = MODEL_BRK_ROCK1B;
-	if (CheckZeroVector(self.dest1)) self.dest1 = '80 8 1'; // Additional rubble emitter parameters
-	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 16';
-	if (CheckZeroVector(self.brkvol)) self.brkvol = '160 160 8';
-	if (CheckZeroVector(self.brkvelbase)) self.brkvelbase = '0 0 50';
-	if (CheckZeroVector(self.brkveladd)) self.brkveladd = '100 100 100';
-	if (self.brkfade <= 0) self.brkfade = 4;
-	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
-	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
-	self.sight_sound = "ad171/golem/sight.wav"; // Roar!
-	self.solid = SOLID_NOT;			// No interaction with world
-	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-32 -32 -24';	// Special Size
-	self.bbmaxs = '32 32 128';
-	self.bboxtype = BBOX_CUSTOM;
-	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	self.steptype = FS_TYPEGIANT;	// Giant sound
-	self.health = self.max_health = MEGADEATH;
 	self.classtype = CT_MONLAVAGOLEM;
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
-	self.style = 0;
 	self.skin = self.exactskin = 4;
 	self.bloodtype = BLOOD_FIRE;
-	if (self.deathstring == "")  self.deathstring = " was shattered by the Lava Golem\n";
-	self.th_stand = self.th_walk = self.th_run = SUB_Null;
-	self.th_missile = self.th_die = SUB_Null;
-	self.th_pain = SUB_Null_pain;
-	self.walkframe = 0;
-	monster_start();
-	if (self.targetname == "") {
-		dprint("\b[ICEGOLEM]\b Missing targetname name! Going ahead and spawning anyways.\n");
-		iceg_setup();
-	} else self.use = iceg_setup;
+	if (self.deathstring == "") self.deathstring = " was shattered by the Lava Golem\n";
+	monster_icegolem();
 };

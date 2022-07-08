@@ -102,7 +102,7 @@ $frame idlec9 idlec10 idlec11 idlec12 idlec13 idlec14 idlec15
 $frame idled1 idled2 idled3 idled4 idled5 idled6 idled7 idled8
 $frame idled9 idled10 idled11 idled12 idled13 idled14 idled15
 
-void(float type) zombiek_sound;
+void(float type) zombie_sound;
 void() zombiek_knockdown;
 
 void() zombiek_standB1	= [	$idleb1,		zombiek_standB2	] { ai_stand(); };
@@ -239,7 +239,7 @@ void() zombiek_walk10	= [	$walk10,	zombiek_walk11] { ai_walk(1); };
 void() zombiek_walk11	= [	$walk11,	zombiek_walk12] { ai_walk(1); };
 void() zombiek_walk12	= [	$walk12,	zombiek_walk13] { ai_walk(1);monster_footstep(TRUE); };	// Scrapping Clubfoot
 void() zombiek_walk13	= [	$walk13,	zombiek_walk14] { ai_walk(1); };
-void() zombiek_walk14	= [	$walk14,	zombiek_walk1	] { zombiek_sound(2);ai_walk(1); };
+void() zombiek_walk14	= [	$walk14,	zombiek_walk1	] { zombie_sound(2);ai_walk(1); };
 
 
 void() zombiek_run1		= [	$run1,		zombiek_run2	] {
@@ -264,7 +264,7 @@ void() zombiek_run11	= [	$run11,		zombiek_run1	] { ai_run(11);
 // Removed frames 1,3,4,5,7
 void()	zombiek_attb1	= [	$attb2,		zombiek_attb6 ] { ai_face(); };
 void()	zombiek_attb6	= [	$attb6,		zombiek_attb8	] { ai_face(); };
-void()	zombiek_attb8	= [	$attb8,		zombiek_attb9	] { ai_face();zombiek_sound(7); };
+void()	zombiek_attb8	= [	$attb8,		zombiek_attb9	] { ai_face();zombie_sound(7); };
 void()	zombiek_attb9	= [	$attb9,		zombiek_attb10] { ai_face(); };
 void()	zombiek_attb10= [	$attb10,	zombiek_attb11] { ai_face();ai_melee(); };
 void()	zombiek_attb11= [	$attb11,	zombiek_attb12] { ai_melee(); };
@@ -280,7 +280,7 @@ void()	zombiek_attb17= [	$attb17,	zombiek_run1	] {};
 // Removed frames 1,3,15
 void()	zombiek_attc1	= [	$attc2,		zombiek_attc4	] { ai_face(); };
 void()	zombiek_attc4	= [	$attc4,		zombiek_attc5	] { ai_face(); };
-void()	zombiek_attc5	= [	$attc5,		zombiek_attc6	] { zombiek_sound(7); ai_face(); };
+void()	zombiek_attc5	= [	$attc5,		zombiek_attc6	] { zombie_sound(7); ai_face(); };
 void()	zombiek_attc6	= [	$attc6,		zombiek_attc7	] { ai_face(); };
 void()	zombiek_attc7	= [	$attc7,		zombiek_attc8	] { ai_face();ai_melee(); };
 void()	zombiek_attc8	= [	$attc8,		zombiek_attc9	] { ai_melee(); };
@@ -339,7 +339,7 @@ void()	zombiek_JumpTouch = {
 //----------------------------------------------------------------------
 void()	zombiek_jump1	= [	$atta1,		zombiek_jump2 ] { ai_charge(12);
 	self.jump_flag = time + MONAI_JUMPZOMBTIME;
-	zombiek_sound(3);	// Moan about jumping forward
+	zombie_sound(3);	// Moan about jumping forward
 };
 void()	zombiek_jump2	= [	$atta2,		zombiek_jump3 ] { ai_charge(16); };
 void()	zombiek_jump3	= [	$atta3,		zombiek_jump4 ] {
@@ -429,7 +429,7 @@ void()	zombiek_painb25	= [	$painb25,		zombiek_run1	] { ai_painforward(3); };
 void()	zombiek_painc1	= [	$painc1,		zombiek_painc2	] { ai_painforward(8); };
 void()	zombiek_painc2	= [	$painc2,		zombiek_painc3	] { ai_painforward(6); };
 void()	zombiek_painc3	= [	$painc3,		zombiek_painc4	] { ai_painforward(5); };
-void()	zombiek_painc4	= [	$painc4,		zombiek_painc5	] { ai_painforward(7);zombiek_sound(5); };
+void()	zombiek_painc4	= [	$painc4,		zombiek_painc5	] { ai_painforward(7);zombie_sound(5); };
 void()	zombiek_painc5	= [	$painc5,		zombiek_painc6	] { ai_painforward(6); };
 void()	zombiek_painc6	= [	$painc6,		zombiek_painc7	] { ai_painforward(3); };
 void()	zombiek_painc7	= [	$painc7,		zombiek_painc8	] { ai_painforward(3); };
@@ -460,7 +460,7 @@ void()	zombiek_paind6	= [	$paind6,		zombiek_paind7	] { ai_painforward(2); };
 void()	zombiek_paind7	= [	$paind7,		zombiek_paind8	] { ai_painforward(2); };
 void()	zombiek_paind8	= [	$paind8,		zombiek_paind9	] {};
 void()	zombiek_paind9	= [	$paind9,		zombiek_paind10	] {};
-void()	zombiek_paind10	= [	$paind10,		zombiek_paind11	] { zombiek_sound(5); };
+void()	zombiek_paind10	= [	$paind10,		zombiek_paind11	] { zombie_sound(5); };
 void()	zombiek_paind11	= [	$paind11,		zombiek_paind12	] { self.solid = SOLID_NOT;};
 void()	zombiek_paind12	= [	$paind12,		zombiek_paind12	] { zombiek_onground(MONAI_ZOMBIEUPD); };
 
@@ -508,7 +508,7 @@ void()	zombiek_paine7	= [	$paine7,		zombiek_paine8	] { ai_pain(2); };
 void()	zombiek_paine8	= [	$paine8,		zombiek_paine9	] {};
 void()	zombiek_paine9	= [	$paine9,		zombiek_paine10	] {};
 void()	zombiek_paine10	= [	$paine10,		zombiek_paine11	] { self.solid = SOLID_NOT;};
-void()	zombiek_paine11	= [	$paine11,		zombiek_paine12	] { zombiek_sound(5); };
+void()	zombiek_paine11	= [	$paine11,		zombiek_paine12	] { zombie_sound(5); };
 void()	zombiek_paine12	= [	$paine12,		zombiek_paine12	] { zombiek_onground(MONAI_ZOMBIEUPE); };
 
 // Start of get up sequence
@@ -555,7 +555,7 @@ void(entity inflictor, entity attacker, float take) zombiek_pain = {
 	if (take < MONAI_ZOMBIELOW_DAM) return;		// totally ignore
 	if (self.inpain > 0) return;				// in pain animation, do nothing
 
-	zombiek_sound(4);			// Moan about the pain
+	zombie_sound(4);			// Moan about the pain
 	self.inpain = 1;			// In pain, don't interrupt animation
 	self.attack_elev = targzone(self, attacker);
 	
@@ -606,7 +606,7 @@ void() zombiek_wakeup	= {
 	else {
 		self.bodyonflr = "";	// Body is chop proof!
 		self.inpain = 1;				// Animation not finished
-		zombiek_sound(6);				// Wake up sound
+		zombie_sound(6);				// Wake up sound
 		self.nextthink = time + 0.1;
 		self.use = monster_use;			// Just in case interruption
 		if (self.zombieflr == MONAI_ZOMBIEUPD) self.think = zombiek_paind13;
@@ -711,41 +711,6 @@ void() zombiek_knockdown = {
 	else {
 		if (self.debuglvl) dprint("\b[KNOCKDOWN]\b HIT from the FRONT\n");
 		zombiek_paine1();
-	}
-};
-
-// All sounds used
-// 2 = strutting the stuff (walking)
-// 3 = running (in slow motion)
-// 4 = all pain routines (zombiek_paina1, _painb1, _painc1, _paind1)
-// 5 = its a knockout!
-// 6 = get up and moan about it
-// 7 = sword swipe
-void(float type) zombiek_sound = {
-	// check for gibbed or idle sound block
-	if (self.health < 1) return;
-	if (self.spawnflags & MON_SPAWN_NOIDLE && type < 3) return;
-	
-	// Random sound check
- 	self.lip = random();
-	if (type == 2 && self.idletimer < time) {
-	 	self.idletimer = time + 1 + (random()*2);
-		if (self.lip < 0.2)
-			sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	} else if (type == 3 && self.idletimer < time) {
-	 	self.idletimer = time + 1 + (random()*2);
-		if (self.lip < 0.2) sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-		if (self.lip > 0.8) sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
-	} else if (type == 4) {
-		if (self.lip < 0.25) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
-	} else if (type == 5) {
-		sound (self, CHAN_BODY, "zombie/z_fall.wav", 1, ATTN_NORM);
-	} else if (type == 6) {
-		if (self.lip < 0.5) sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-		else sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
-	} else if (type == 7) {
-		SwordSwipeSound();
 	}
 };
 

@@ -453,6 +453,7 @@ void() monster_hogremac = {
 	self.steptype = FS_TYPEMEDIUM;
 	self.meleecontact = FALSE;				// Smash contact
 	self.meleerange = MONAI_MELEEBLUNTOGRE;	// Blunt mace attack
+	self.meleerangez = 0;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = hogremac_stand1;

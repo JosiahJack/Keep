@@ -115,15 +115,15 @@ void() GrappleAnchor = { // [FUNCTION]
     local string sfx;
 
     if (InSky(self.origin)) { GrappleReset(); return;}
-    if (Reflected_Damage (self.dmg)) return;
+    if (Reflected_Damage(self.dmg)) return;
 
     if (!self.dmg) self.dmg = 10;
 	if (self.master.tome_finished) self.dmg = self.dmg * 2;
     if (!self.cnt) self.cnt = 1;
     self.touch = SUB_Null; // Stack overflow prevention.
     if (other.takedamage || (other.solid != SOLID_BSP)) {   // PM:  Removed teammate immunity.
-        if (other.hittype == HIT_METAL) sfx = "drake/weapons/clang.wav";
-        else if (other.hittype == HIT_STONE) sfx = "drake/weapons/axhitwal.wav";
+        if (Armored(other)) sfx = "drake/weapons/clang.wav";
+        else if (StoneArmored(other)) sfx = "drake/weapons/axhitwal.wav";
         else if ((self.master.hook == self) && !self.count) sfx = "shambler/smack.wav";
         else  sfx = "zombie/z_hit.wav"; // Not grabbing, so just thump.
     } else {

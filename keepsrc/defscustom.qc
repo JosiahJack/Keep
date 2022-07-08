@@ -1752,3 +1752,13 @@ string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";
 .float		poisoned_qty;		// Total amount of damage stored (DoT)
 
 void(entity targ, void() th_think, float th_time) SUB_Think;
+
+.float gibtype; // What type of gibs (blood, stone, etc)
+float GIBTYPE_BLOOD = 0;		// Blood (default)
+float GIBTYPE_STONE = 1;		// Stone/rubble
+float GIBTYPE_WOOD = 2;			// Woodchip
+float GIBTYPE_GLASS = 3;		// Glass impact sounds
+float GIBTYPE_METAL = 4;		// Metal scraps
+float GIBTYPE_CERAMIC = 5;		// Ceramic pot shards
+float GIBTYPE_POISON = 10;		// Poisoned flesh
+float GIBTYPE_ICE = 16;

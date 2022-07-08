@@ -113,30 +113,6 @@ void(float offset) hknight2_shot = {
 	sound(self, CHAN_WEAPON, "q15/warlord/attack1.wav", 1, ATTN_NORM);
 };
 
-void() CheckForCharge2 = {
-	// check for mad charge
-	if (!enemy_vis) return;
-	if (time < self.attack_finished) return;	
-	if ( fabs(self.origin_z - self.enemy.origin_z) > 30) return; // too much height change
-	if ((vlen (self.origin - self.enemy.origin) < 80) || (vlen (self.origin - self.enemy.origin) > 300)) return; // use regular attack
-
-	// charge		
-	SUB_AttackFinished(2);
-	hknight2_char_a1();
-};
-
-void() CheckContinueCharge2 = {
-	if (time > self.attack_finished) {
-		SUB_AttackFinished (3);
-		hknight2_run1();
-		return;		// done charging
-	}
-	if (random() > 0.5)
-		sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-	else
-		sound(self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-};
-
 void()	hknight2_stand1	= [	$stand1,	hknight2_stand2	] { ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand2	= [	$stand2,	hknight2_stand3	] { ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand3	= [	$stand3,	hknight2_stand4	] { ai_stand();self.nextthink = time + 0.06;};
@@ -193,7 +169,7 @@ void()	hknight2_walk10	= [	$walk10,	hknight2_walk11	] { ai_walk(4); monster_foot
 void()	hknight2_walk11	= [	$walk11,	hknight2_walk12	] { ai_walk(5); };
 void()	hknight2_walk12	= [	$walk12,	hknight2_walk1	] { ai_walk(4); };
 
-void()	hknight2_run1	= [	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge2(); };
+void()	hknight2_run1	= [	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge_boss(30,80,hknight2_char_a1); };
 void()	hknight2_run2	= [	$run2,		hknight2_run3	] { ai_run(25); monster_footstep(FALSE); };
 void()	hknight2_run3	= [	$run3,		hknight2_run4	] { ai_run(18); };
 void()	hknight2_run4	= [	$run4,		hknight2_run5	] { ai_run(16); };
@@ -643,8 +619,8 @@ void()	hknight2_char_a15= [	$char_a15,	hknight2_char_a16	] { ai_charge(2); };
 void()	hknight2_char_a16= [	$char_a16,	hknight2_run1	] { ai_charge(2); };
 
 void()	hknight2_char_b1	= [	$char_b1,	hknight2_char_b2	]
-{ CheckContinueCharge_boss(); ai_charge(1); };
-void()	hknight2_char_b2	= [	$char_b2,	hknight2_char_b3	] { ai_charge(10); };
+{ CheckContinueCharge(); ai_charge(1); };
+void()	hknight2_char_b2	= [	$char_b2,	hknight2_char_b3	] { SwordSwipeSound(); ai_charge(10); };
 void()	hknight2_char_b3	= [	$char_b3,	hknight2_char_b4	] { ai_charge(15); ai_melee(); monster_footstep(FALSE); };
 void()	hknight2_char_b4	= [	$char_b4,	hknight2_char_b5	] { ai_charge(22); ai_melee(); };
 void()	hknight2_char_b5	= [	$char_b5,	hknight2_char_b6	] { ai_charge(18); ai_melee(); };

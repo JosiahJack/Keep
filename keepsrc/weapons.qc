@@ -527,13 +527,63 @@ void() W_FireSidewinder = { // [FUNCTION]
 
 void() W_FireAirFist = { launch_horn(); }; // Redirect for consistent and clear naming. -Qmaster
 
+void(float dmg, vector spraydir, float mechanical) MeleeImpactEffects = {
+	local vector org;
+
+	org = trace_endpos - v_forward*4;	// Back 4 units to spawn blood
+	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,""); // REFLECTION stuff like blue shields
+	else if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
+		if (self.tome_finished) {
+			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			if (dmg > DAMAGE_PLAYAXE1) {
+				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			}
+		}
+		SpawnBlood (trace_ent,org,spraydir,dmg,0); // Spamn blood always up so player can see it
+		if (trace_ent.flags & FL_MONSTER) { // Monster impact sounds (fleshy stuff)
+			if (mechanical) { // E.g. Chainsaw, Grapple
+				self.punchangle_x = -8;
+				trace_ent.velocity = trace_ent.velocity * 0.5;
+				sound(self,CHAN_WEAPON,"zerstorer/weapons/sawguts.wav",1,ATTN_NORM);
+				if (trace_ent.pain_finished > time && FeelsPain(trace_ent)) {
+					if (Armored(trace_ent)) {
+						sound(self,CHAN_AUTO,"drake/weapons/clang.wav",1,ATTN_NORM);
+					} else if (StoneArmored(other)) {
+						sound(self,CHAN_AUTO,"drake/weapons/axhitwal.wav",1,ATTN_NORM);
+					}
+				}
+			} else {
+				if (random() < 0.5) sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY, 1, ATTN_NORM);
+				else sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY2, 1, ATTN_NORM);
+			}
+		} else if (trace_ent.classtype == CT_FUNCBREAK) { // Breakable impact sounds (def=stone/brick)
+			if (trace_ent.style == BTYPE_WOOD) sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_GLASS) sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_METAL) sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_FLESH) sound (self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
+			else sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		} else if (trace_ent.classtype == CT_FUNCPUSHABLE) { // Pushable impact sounds (def=stone/brick)
+			if (trace_ent.style == PTYPE_WOOD) sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
+			else if (trace_ent.style == PTYPE_GLASS) sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
+			else if (trace_ent.style == PTYPE_METAL) sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
+			else sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		}
+	} else {
+		// WORLD OBJECT : Target does not bleed, play stone hitting sound
+		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		Tent_Point(TE_GUNSHOT,org);
+	}
+};
+
 void() W_FireAxe = { // [FUNCTION]
 	local vector source, org;
 	local float axedmg;
 
 	makevectors(self.v_angle);				// Player forward angle
 	source = self.origin + '0 0 16';		// Move source point up body
-	if (self.flags & FL_GODMODE && self.flags & FL_FLY) {
+	if (developer && self.flags & FL_GODMODE && self.flags & FL_FLY) {
 		traceline(source,source +(v_forward* RANGE_PLAYAXE),FALSE,self);
 		if (trace_fraction < 1.0) {
 			if (trace_ent.flags & FL_MONSTER && trace_ent.health > 0) {
@@ -552,62 +602,28 @@ void() W_FireAxe = { // [FUNCTION]
 	if (trace_fraction == 1) return;	// No contact, no hit
 
 	self.show_hostile = time + 1;	// wake monsters up, we hit stuff
-	org = trace_endpos - v_forward*4;	// Back 4 units to spawn blood
-	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,""); // REFLECTION stuff like blue shields
-	else if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
+	if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
 		// Mark the monster with type of axe used and change damage
 		if (self.moditems & IT_UPGRADE_AXE) {
-			axedmg = DAMAGE_PLAYAXE2; trace_ent.axhitme = 2;
+			axedmg = DAMAGE_PLAYAXE2;
+			trace_ent.axhitme = 2;
 		} else {
-			axedmg = DAMAGE_PLAYAXE1; trace_ent.axhitme = 1;
+			axedmg = DAMAGE_PLAYAXE1;
+			trace_ent.axhitme = 1;
 		}
+
 		if (self.tome_finished) {
 			axedmg = axedmg * 2;
 			if (trace_ent.classgroup == CG_ZOMBIE) axedmg = 120;
-			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
-			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
-			if (self.moditems & IT_UPGRADE_AXE) {
-				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
-				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
-			}
 		}
-
-		SpawnBlood (trace_ent, org, '0 0 1', axedmg,0); // Spamn blood always up so player can see it
-		T_Damage (trace_ent, self, self, axedmg, DAMARMOR);
-		if (trace_ent.flags & FL_MONSTER) { // Monster impact sounds (fleshy stuff)
-			if (random() < 0.5) sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY, 1, ATTN_NORM);
-			else sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY2, 1, ATTN_NORM);
-		} else if (trace_ent.classtype == CT_FUNCBREAK) { // Breakable impact sounds (def=stone/brick)
-			if (trace_ent.style == BTYPE_WOOD) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_GLASS) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_METAL) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_FLESH) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
-			else
-				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		} else if (trace_ent.classtype == CT_FUNCPUSHABLE) { // Pushable impact sounds (def=stone/brick)
-			if (trace_ent.style == PTYPE_WOOD) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
-			else if (trace_ent.style == PTYPE_GLASS) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
-			else if (trace_ent.style == PTYPE_METAL) 
-				sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
-			else
-				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		}
-	} else {
-		// WORLD OBJECT : Target does not bleed, play stone hitting sound
-		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		Tent_Point(TE_GUNSHOT,org);
+		T_Damage (trace_ent,self,self, axedmg, DAMARMOR);
 	}
+	MeleeImpactEffects(axedmg,'0 0 1',FALSE);
 };
 
 void() W_FireSaw = { // [FUNCTION]
-    local vector  spot, source, org, vec, vec2;
-	local float src_dist, dotprod, axedmg, damage, pain, save, ignore;
+    local vector  spot, source, org;
+	local float damage, save, ignore;
 	local entity onflr, tself, tother;
 
 	makevectors(self.v_angle); // Calculate viewing angle
@@ -615,7 +631,7 @@ void() W_FireSaw = { // [FUNCTION]
 	if (GibFloorBody(source, 200)) return;
 
     spot = self.origin + '0 0 16';      // 'source'
-    traceline (spot, spot + v_forward*64, FALSE, self);
+    traceline(spot, spot + v_forward*64, FALSE, self);
     if (trace_fraction == 1) return;
 
     spot = trace_endpos - v_forward*4;        // 'org'
@@ -639,29 +655,10 @@ void() W_FireSaw = { // [FUNCTION]
 			if (save > 0) T_Heal (self, save, ignore);
 		}
 
-        vec = ((random()*300) - 150) * v_right + (100 * v_forward);
-        SpawnBlood (trace_ent, trace_endpos, '0 0 5', damage,0); // Blood!
         if (self.weaponframe & 1) SpawnMeatSpray(self,trace_ent,(crandom() * 300));
-        pain = FeelsPain(trace_ent); // Damage!
         T_Damage(trace_ent, self, self, damage, DAMARMOR);
-        if (trace_ent.flags & FL_MONSTER){
-            trace_ent.velocity = trace_ent.velocity * 0.5;
-			sound(self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM);
-			if ((trace_ent.hittype == HIT_METAL || trace_ent.spawnflags & MON_OGRE_GREEN || trace_ent.spawnflags & MON_HOGRE_METAL) && (pain && (trace_ent.pain_finished > time))) sound (self, CHAN_AUTO, "drake/weapons/clang.wav", 1, ATTN_NORM);
-			else if ((trace_ent.hittype == HIT_STONE) && (pain && (trace_ent.pain_finished > time))) sound (self, CHAN_AUTO, "drake/weapons/axhitwal.wav", 1, ATTN_NORM);
-
-			self.punchangle_x = -8;
-		} else if (trace_ent.classtype == CT_FUNCBREAK) { // Breakable impact sounds (def=stone/brick)
-			if (trace_ent.style == BTYPE_WOOD) sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_GLASS) sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_METAL) sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_FLESH) sound (self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
-			else sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		}
-    } else { // Hit wall.
-		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		Tent_Point(TE_GUNSHOT,org);
     }
+	MeleeImpactEffects(damage,'0 0 5',TRUE);
 };
 
 void() W_FireShotgun = { // [FUNCTION]
@@ -2385,6 +2382,35 @@ vector GetWepIT_FromID(float id) = { // [FUNCTION]
 	return retval;
 };
 
+void(float wepID, vector idconversion, float am) SetCycledWeapon = {
+	idconversion = GetWepIT_FromID(wepID); // Return to normal IT_* number.
+	self.weapon = idconversion_x;
+	self.selfweaponismoditems = idconversion_y;
+
+	// Has the player got the weapons and ammo to switch?
+	if (self.selfweaponismoditems) {
+		if (wepID == ID_MACE || wepID == ID_ICE
+			|| wepID == ID_VOIDSTAFF || wepID == ID_FLAK
+			|| wepID == ID_GUNGNIR) {
+			if ((self.moditems & self.weapon) && !am) W_SetCurrentAmmo(self);
+		} else if (wepID == ID_AIRGUN) {
+			if ((self.perms & self.weapon) && !am) W_SetCurrentAmmo(self);
+		}
+	} else {
+		if (wepID == ID_RAPIER) {
+			if ((self.moditems & self.weapon) && !am) W_SetCurrentAmmo(self);
+		} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
+			if ((self.moditems & self.weapon) && !am) W_SetCurrentAmmo(self);
+		} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR
+			|| wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2
+			|| wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
+			if ((self.items2 & self.weapon) && !am) W_SetCurrentAmmo(self);
+		} else {
+			if ((self.items & self.weapon) && !am) W_SetCurrentAmmo(self);
+		}
+	}
+};
+
 void() CycleWeaponCommand = { // [FUNCTION]
 	local float	am, inhackbank, wepID, cyclecheck;
 	local vector idconversion;
@@ -2485,85 +2511,9 @@ void() CycleWeaponCommand = { // [FUNCTION]
 			wepID = ID_AXE_SHADAXE_CHAINSAW;
 		}
 
-		if (wepID == FALSE) {
-			return; // prevent crash in "cinematic mode"
-		}
+		if (wepID == FALSE) return; // prevent crash in "cinematic mode"
 
-		// ok we found the weapon from the full list, turn it back into a normal IT_ number
-		idconversion = GetWepIT_FromID(wepID);
-		self.weapon =  idconversion_x;
-		self.selfweaponismoditems = idconversion_y;
-		if (self.selfweaponismoditems) inhackbank = TRUE; // just in case I need to add a check below
-		else inhackbank = FALSE;
-
-		// Has the player got the weapons and ammo to switch?
-		if (inhackbank) {
-			if (wepID == ID_MACE || wepID == ID_ICE
-                || wepID == ID_VOIDSTAFF || wepID == ID_FLAK
-                || wepID == ID_GUNGNIR) {
-				if ((self.moditems & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else if (wepID == ID_AIRGUN) {
-				if ((self.perms & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			}
-		} else {
-			if (wepID == ID_RAPIER) {
-				if ((self.moditems & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
-				if ((self.moditems & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
-				if ((self.items2 & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else {
-				if ((self.items & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			}
-		}
+		SetCycledWeapon(wepID,idconversion,am);
 	}
 };
 
@@ -2669,81 +2619,7 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 
 		if (wepID == FALSE) return; // prevent crash in "cinematic mode"
 
-		// ok we found the weapon from the full list, turn it back into a normal IT_ number
-		idconversion = GetWepIT_FromID(wepID);
-		self.weapon = idconversion_x;
-		self.selfweaponismoditems = idconversion_y;
-		if (self.selfweaponismoditems) inhackbank = TRUE; // just in case I need to add a check below
-		else inhackbank = FALSE;
-
-		// Has the player got the weapons and ammo to switch?
-		if (inhackbank) {
-			if (wepID == ID_MACE || wepID == ID_ICE
-                || wepID == ID_VOIDSTAFF || wepID == ID_FLAK
-                || wepID == ID_GUNGNIR) {
-				if ((self.moditems & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else if (wepID == ID_AIRGUN) {
-				if ((self.perms & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			}
-		} else {
-			if (wepID == ID_RAPIER) {
-				if ((self.moditems & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
-				if ((self.moditems & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
-				if ((self.items2 & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			} else {
-				if ((self.items & self.weapon) && !am) {
-					W_SetCurrentAmmo (self);
-					dprint("idconversion: ");
-					dprint(ftos(idconversion_x));
-					dprint(" ");
-					dprint(ftos(idconversion_y));
-					dprint("\n");
-					return;
-				}
-			}
-		}
+		SetCycledWeapon(wepID,idconversion,am);
 	}
 };
 

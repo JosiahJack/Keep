@@ -488,80 +488,9 @@ void(entity targ) ammostats_artsummary = {
 
 // PHASE 3 : Count MONSTERS and display summary table
 void() ammostats_phase3 = {
-	local entity entlist;
-
-	// FIND all MONSTERS in the map
-	as_monqty = as_monlist = as_finalmonhp = as_zombiehp = 0;
-	as_nightonly = as_cooponly = 0;
-	as_monzombie = as_mondelay = as_monnocount = 0;
-	
-	// Start from beginning of entity list, world!
-	entlist = nextent(world);
-	// Keep looping through entity list
-	while (entlist) {
-		// Only interested in monsters
-		if (entlist.flags & FL_MONSTER) {
-			// Spawn exceptions
-			if (entlist.nightmare == TRUE)
-				as_nightonly = as_nightonly + 1;
-			if (entlist.cooponly == TRUE)
-				as_cooponly = as_cooponly + 1;
-			
-			// Is the monster designed for nightmare skill only?
-			if (entlist.nightmare && skill != SKILL_NIGHTMARE) {
-				// Easier to do nothing
-			}
-			// Is the monster designed for coop only?
-			else if (entlist.cooponly && coop == FALSE) {
-				// Easier to do nothing
-			}
-			else {
-				// Total monsters in map might be different to HUD
-				// Exceptions = nomonstercount, delaymonstercount
-				as_monqty = as_monqty + 1;
-				
-				// Include any backpack ammo drops
-				shellqty[AC_MONSTER]= shellqty[AC_MONSTER]+ entlist.ammo_shells;
-				nailqty[AC_MONSTER] = nailqty[AC_MONSTER] + entlist.ammo_nails;
-				rockqty[AC_MONSTER] = rockqty[AC_MONSTER] + entlist.ammo_rockets;
-				cellqty[AC_MONSTER] = cellqty[AC_MONSTER] + entlist.ammo_cells;
-				
-				// Keep track of zombie's, they need rockets!
-				if (entlist.classgroup == CG_ZOMBIE) {
-					// Exception = crucified zombies
-					if (!(entlist.spawnflags & MON_CRUCIFIED)) {
-						as_monzombie = as_monzombie + 1;
-						as_zombiehp = as_zombiehp + entlist.max_health;
-					}
-				}
-				// Keep track of spawn delay monsters
-				if (entlist.spawnflags & MON_SPAWN_DELAY)
-					as_mondelay = as_mondelay + 1;
-				// Keep track of monsters with no count
-				if (entlist.nomonstercount > 0 || entlist.delaymonstercount > 0)
-					as_monnocount = as_monnocount + 1;
-				// Keep track of all monster HP, exclude negative + boss
-				if (entlist.max_health > 0 && !entlist.bossflag) {
-					// Some monsters reset HP later
-					if (entlist.reset_health > 0) 
-						as_finalmonhp = as_finalmonhp + entlist.reset_health;
-					// Anything over 9999 is a special setup (don't include it)
-					else if (entlist.max_health < 9999) {
-						as_finalmonhp = as_finalmonhp + entlist.max_health;	
-					}
-				}
-			}
-		}
-		// Keep search through ALL of the entity list
-		entlist = nextent(entlist);
-	} 
-		
-	// Display Summary stuff for the map
-	ammostats_monsummary(self.owner);
+	display_monsqty();
 	ammostats_artsummary(self.owner);
-
-	// next stage of stats
-	ammocontrol.state = AC_PHASE4;
+	ammocontrol.state = AC_PHASE4; // next stage of stats
 	ammocontrol.think = ammostats_phase4;
 	ammocontrol.nextthink = time + 0.1;
 };
@@ -958,17 +887,19 @@ void() display_monsleft = {
 	sprint(self, "\n\n");
 };
 
+void(float careAboutFirst) populate_monsterlist = {
+
+};
+
+// FIND all MONSTERS in the map
 // Display quantity of different monster types
 void() display_monsqty = {
 	local entity asmonent[MAX_MONARRAY], entlist; // Monster Array of quantity/hp differences
 	local float asmonqty[MAX_MONARRAY], asmonhp[MAX_MONARRAY], monloop, monfound, monarrayfull, subtmonhp;
-	
-	if (impulse_activecameras()) return;	// Are cameras active
+
 	if (impulse_playeronly()) return;		// Player only
 
 	self.impulse = 0; // flush keyboard buffer
-
-	// FIND all MONSTERS in the map
 	as_monqty = as_monlist = as_finalmonhp = 0;
 	as_nightonly = as_cooponly = as_backammo = 0;
 	as_monzombie = as_zombiehp = as_mondelay = as_monnocount = 0;

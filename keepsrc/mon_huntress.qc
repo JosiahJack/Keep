@@ -970,9 +970,6 @@ void() elena_wakeup = {
 	// No longer need taunt spawnflag, remove it
 	if (self.spawnflags & MON_HUNTRESS_TAUNT) {
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_HUNTRESS_TAUNT);}
-	
-	//self.spawnstatue = FALSE;		// No longer stationary
-
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.use = SUB_Null;				// no re-trigger
 	
@@ -980,7 +977,6 @@ void() elena_wakeup = {
 	self.th_run = elena_run1;
 	self.th_melee = elena_choosemelee;
 	self.th_missile = elena_choose_atk;
-
 	self.movetype = MOVETYPE_STEP;
 	self.pain_finished = time + 3;		// No pain
 	self.attack_finished = 2.8 + random();	// No skill adjustment
@@ -1118,7 +1114,9 @@ void() monster_huntress = {
 	self.th_pain = elena_pain;
 	self.th_die = elena_die;
 	self.th_jump = elena_spin1;
-	self.th_jumpexit = elena_spin13;	
+	self.th_jumpexit = elena_spin13;
+	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPELENANEAR;
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELENAFAR;
 	if (self.spawnflags & MON_HUNTRESS_TAUNT) { //Huntress taunt start
 		self.th_run = self.th_missile = self.th_melee = elena_wakeup;
 	} else { //Default Huntress start	

@@ -401,6 +401,10 @@ void() monster_manticore = {
 	self.th_jumpexit = mcorn_leap8;
 	self.th_missile = mcorn_atk1;
 	if (self.skin == 1) self.th_missile = self.th_jump; // just in case, Lich Fiend doesn't spit
+	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPELENANEAR;
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELENAFAR;
+	// Use half of fiend height since manticore jumps less up and more forward.
+	if (self.jumprange_z <= 0) self.jumprange_z = (MONAI_JUMPDEMONCHECK/2);
 	self.classtype = CT_MONMANTICORE;
 	if (self.skin == 1) self.classtype = CT_MONLICHFIEND;
 	self.classgroup = CG_DEMON;

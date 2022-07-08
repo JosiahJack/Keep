@@ -484,38 +484,38 @@ void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 };
 
 void() monster_zombie_master_precache = {
-	precache_model ("progs/custents/zmaster.mdl");
-	precache_model ("progs/k_spike.mdl");
-	precache_model ("progs/custents/h_zmastr.mdl");
-	precache_sound ("hknight/attack1.wav");
-	precache_sound ("custents/zmaster/death.wav");
-	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
-	precache_sound ("hknight/slash1.wav");
-	precache_sound ("custents/zmaster/idle1.wav");
-	precache_sound ("custents/zmaster/idle2.wav");
-	precache_sound ("custents/zmaster/sight.wav");
-	precache_sound ("custents/zmaster/pain.wav");
-	precache_sound ("custents/zmaster/energize.wav");
-	precache_sound ("custents/zmaster/toreturn.wav");
-	precache_sound ("custents/zmaster/comnback.wav");
-	precache_sound ("items/protect.wav");
-	precache_sound ("items/protect2.wav");
-	precache_sound ("items/protect3.wav");
-	precache_sound ("custents/zmaster/echo.wav"); // sound prechache for foot steps
-	precache_model ("progs/custents/axzombie.mdl"); // precaches for the controlled zombies
-	precache_model ("progs/custents/h_axzomb.mdl");
-	precache_model ("progs/zom_gib.mdl");
-	precache_sound ("zombie/z_idle.wav");
-	precache_sound ("zombie/z_idle1.wav");
-	precache_sound ("zombie/z_shot1.wav");
-	precache_sound ("zombie/z_gib.wav");
-	precache_sound ("zombie/z_pain.wav");
-	precache_sound ("zombie/z_pain1.wav");
-	precache_sound ("zombie/z_fall.wav");
-	precache_sound ("zombie/z_miss.wav");
-	precache_sound ("zombie/z_hit.wav");
-	precache_sound ("zombie/idle_w2.wav");
-	precache_sound ("custents/zombie/trick.wav"); // a clue on how to kill the modified axzombies
+	precache_model("progs/custents/zmaster.mdl");
+	precache_model("progs/k_spike.mdl");
+	precache_model("progs/custents/h_zmastr.mdl");
+	precache_sound("hknight/attack1.wav");
+	precache_sound("custents/zmaster/death.wav");
+	precache_sound("hknight/hit.wav");		// used by C code, so don't sound2
+	precache_sound("hknight/slash1.wav");
+	precache_sound("custents/zmaster/idle1.wav");
+	precache_sound("custents/zmaster/idle2.wav");
+	precache_sound("custents/zmaster/sight.wav");
+	precache_sound("custents/zmaster/pain.wav");
+	precache_sound("custents/zmaster/energize.wav");
+	precache_sound("custents/zmaster/toreturn.wav");
+	precache_sound("custents/zmaster/comnback.wav");
+	precache_sound("items/protect.wav");
+	precache_sound("items/protect2.wav");
+	precache_sound("items/protect3.wav");
+	precache_sound("custents/zmaster/echo.wav"); // sound prechache for foot steps
+	precache_model("progs/custents/axzombie.mdl"); // precaches for the controlled zombies
+	precache_model("progs/custents/h_axzomb.mdl");
+	precache_model("progs/zom_gib.mdl");
+	precache_sound("zombie/z_idle.wav");
+	precache_sound("zombie/z_idle1.wav");
+	precache_sound("zombie/z_shot1.wav");
+	precache_sound("zombie/z_gib.wav");
+	precache_sound("zombie/z_pain.wav");
+	precache_sound("zombie/z_pain1.wav");
+	precache_sound("zombie/z_fall.wav");
+	precache_sound("zombie/z_miss.wav");
+	precache_sound("zombie/z_hit.wav");
+	precache_sound("zombie/idle_w2.wav");
+	precache_sound("custents/zombie/trick.wav"); // a clue on how to kill the modified axzombies
 };
 
 void() monster_zombie_master = { // [ENTITY]

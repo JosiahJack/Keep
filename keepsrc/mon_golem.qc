@@ -648,7 +648,7 @@ void() setup_golem = {
 	self.resist_nails = 0.5;
 	self.resist_lava_nails = 0.25;
 	self.reflectnails = TRUE;		// Reflect nail projectiles
-
+	self.hittype = HIT_STONE;
 	//----------------------------------------------------------------------
 	// Detect statues and setup different parameters
 	// Tougher skin, less pain, heavy feet etc	

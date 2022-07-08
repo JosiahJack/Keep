@@ -364,14 +364,13 @@ void() monster_knight = {
 	if (self.deathstring == "")  self.deathstring = " was slashed by a Knight\n";
 
 	if (self.spawnflags & MON_STATUE) {
+		self.hittype = HIT_STONE;
 		self.idle_sound = "ad171/statue/idle1.wav";
 		self.idle_sound2 = "ad171/statue/idle2.wav";
 		self.idle_soundcom = "rogue/statue/idle.wav";
+		if (random() < 0.5) self.sight_sound = "ad171/statue/sight.wav";
+		else self.sight_sound = "rogue/statue/see.wav";
 
-		if (random() < 0.5)
-			self.sight_sound = "ad171/statue/sight.wav";
-		else
-			self.sight_sound = "rogue/statue/see.wav";
 		self.pain_sound = "rogue/statue/pain.wav";
 		self.death_sound = "rogue/statue/death.wav";
 		self.gib1skin = 1;					// Stoney sword
@@ -410,7 +409,7 @@ void() monster_knight = {
 		self.steptype = FS_TYPEHEAVY;	// heavy stone feet!
 		self.no_liquiddmg = TRUE;		// Immune to slime/lava
 		if (self.deathstring == "")  self.deathstring = " was smashed by a Stone Knight\n";
-		self.hittype    = HIT_STONE;
+		self.hittype = HIT_STONE;
 		
 		// Allow knights to start with a stone skin, but not be frozen!
 		if (self.spawnflags & MON_NOTFROZEN) {

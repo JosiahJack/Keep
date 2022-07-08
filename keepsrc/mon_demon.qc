@@ -293,6 +293,7 @@ void() monster_demon1 = {
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '600 0 250'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPDEMONNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPDEMONFAR;
+	if (self.jumprange_z <= 0) self.jumprange_z = MONAI_JUMPDEMONCHECK;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = DemonCheckAttack;
 	self.th_stand = demon1_stand1;

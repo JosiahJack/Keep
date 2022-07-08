@@ -213,7 +213,6 @@ void() gargoyle_wakeup = {
 	garg_wakeup1();
 };
 
-//----------------------------------------------------------------------
 void() gargoyle_statue = {
 	if (random() < MON_IDLE_SOUND) sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 	
@@ -467,6 +466,7 @@ void() setup_gargoyle = {
 		self.th_run = self.th_missile = gargoyle_wakeup;
 	} else if (self.spawnflags & MON_STATUE) {
 		// Statue Gargoyles setup in perch position with statue idle sounds.  Randomly picks a frame position from perch animation set
+		self.hittype = HIT_STONE;
 		self.idle_sound = "ad171/statue/idle1.wav"; // Setup stone idle sounds
 		self.idle_sound2 = "ad171/statue/idle2.wav";	
 		self.spawnstatue = TRUE;			// Start as a statue

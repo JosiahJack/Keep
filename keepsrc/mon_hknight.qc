@@ -175,7 +175,7 @@ void()	hknight_char_a14= [	$char_a14,	hknight_char_a15] { monster_footstep(FALSE
 void()	hknight_char_a15= [	$char_a15,	hknight_char_a16] { ai_charge(21); };
 void()	hknight_char_a16= [	$char_a16,	hknight_run1	] { ai_charge(13); };
 
-void()	hknight_char_b1	= [	$char_b1,	hknight_char_b2	] { CheckContinueCharge_boss(); ai_charge(23); ai_melee(); };
+void()	hknight_char_b1	= [	$char_b1,	hknight_char_b2	] { CheckContinueCharge(); ai_charge(23); ai_melee(); };
 void()	hknight_char_b2	= [	$char_b2,	hknight_char_b3	] { SwordSwipeSound(); ai_charge(17); ai_melee(); };
 void()	hknight_char_b3	= [	$char_b3,	hknight_char_b4	] { ai_charge(12); ai_melee(); };
 void()	hknight_char_b4	= [	$char_b4,	hknight_char_b5	] { monster_footstep(FALSE); ai_charge(22); ai_melee(); };
@@ -763,6 +763,7 @@ void() monster_hell_knight = {
 	}
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent	
 	if (self.spawnflags & MON_STATUE) {
+		self.hittype = HIT_STONE;
 		if (!self.idle_sound) self.idle_sound = "ad171/statue/idle1.wav";
 		if (!self.idle_sound2) self.idle_sound2 = "ad171/statue/idle2.wav";
 		if (!self.idle_soundcom) self.idle_soundcom = "rogue/statue/idle.wav";
@@ -859,7 +860,7 @@ void() monster_hell_knight = {
 			return;  // champion knights can't be statues!
 		}
 		self.classgroup = CG_STONE;		// Stone hates metal!
-		self.hittype    = HIT_STONE;
+		self.hittype = HIT_STONE;
 		self.skin = 1;					// Stone skin
 		self.pain_flinch = 60;			// Doubled
 		self.pain_longanim = FALSE;		// resistant to shadow axe

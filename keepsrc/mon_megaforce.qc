@@ -498,7 +498,9 @@ void() monster_megaforce = {
 	if (self.deathstring == "") self.deathstring = " was vaporized by a Mega-Enforcer\n";
 	Resist_ChangeType(self,-1);
 	megaf_shieldoff(); // Reset Ammo Resistance/Shield parameters
-	self.th_checkattack = MegaforceCheckAttack;
+	self.meleerange = MONAI_RANGEMEGAF;
+	self.meleerangez = 0;
+	self.th_checkattack = DeflectorCheckAttack;
 	self.th_stand = megaf_stand1;
 	self.th_walk = megaf_walk1;
 	self.th_run = megaf_slow1;

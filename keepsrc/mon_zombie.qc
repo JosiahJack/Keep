@@ -478,59 +478,46 @@ void(float frameno) zombie_onground = {
 	}
 };
 
-/*============================================================================
- All sounds used
- 1 = sticking around, crucified
- 2 = strutting the stuff (walking)
- 3 = running (in slow motion)
- 4 = all pain routines (zombie_paina1, _painb1, _painc1, _paind1, _paine1)
- 5 = its a knockout!
- 6 = get up and moan about it
- 7 = fire zombie gib
-============================================================================*/
+// All sounds used
+// 1 = sticking around, crucified
+// 2 = strutting the stuff (walking)
+// 3 = running (in slow motion)
+// 4 = all pain routines (zombie_paina1, _painb1, _painc1, _paind1, _paine1)
+// 5 = its a knockout!
+// 6 = get up and moan about it
+// 7 = fire zombie gib
 void(float type) zombie_sound = {
-	// check for gibbed or idle sound block
-	if (self.health < 1) return;
+	if (self.health < 1) return; // check for gibbed or idle sound block
 	if (self.spawnflags & MON_SPAWN_NOIDLE && type < 3) return;
 	
-	// Random sound check
- 	self.lip = random();
+ 	self.lip = random(); // Random sound check
 	if (type == 1) {
-		if (self.lip < 0.1) 
-			sound (self, CHAN_VOICE, "zombie/idle_w2.wav", 1, ATTN_STATIC);
-	}
-	else if (type == 2 && self.idletimer < time) {
+		if (self.lip < 0.1) sound(self,CHAN_VOICE,"zombie/idle_w2.wav",1,ATTN_STATIC);
+	} else if (type == 2 && self.idletimer < time) {
 	 	self.idletimer = time + 1 + (random()*2);
-		if (self.lip < 0.2)
-			sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	}
-	else if (type == 3 && self.idletimer < time) {
+		if (self.lip < 0.2) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
+	} else if (type == 3 && self.idletimer < time) {
 	 	self.idletimer = time + 1 + (random()*2);
-		if (self.lip < 0.2) sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-		if (self.lip > 0.8) sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
-	}
-	else if (type == 4) {
-		if (self.lip < 0.25) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
-	}
-	else if (type == 5) {
-		sound (self, CHAN_BODY, "zombie/z_fall.wav", 1, ATTN_NORM);
-	}
-	else if (type == 6) {
-		if (self.lip < 0.5) sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-		else sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
-	}
-	else if (type == 7) {
-		sound (self, CHAN_WEAPON, "zombie/z_shot1.wav", 1, ATTN_NORM);
+		if (self.lip < 0.2) sound (self, CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
+		if (self.lip > 0.8) sound (self, CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
+	} else if (type == 4) {
+		if (self.lip < 0.25) sound(self,CHAN_VOICE,self.pain_sound, 1,ATTN_NORM);
+		else if (self.lip < 0.5) sound(self,CHAN_VOICE,self.pain_sound2,1,ATTN_NORM);
+	} else if (type == 5) {
+		sound (self, CHAN_BODY,"zombie/z_fall.wav",1,ATTN_NORM);
+	} else if (type == 6) {
+		if (self.lip < 0.5) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
+		else sound (self,CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
+	} else if (type == 7) {
+		if (self.classtype == CT_MONZOMBIEK) SwordSwipeSound();
+		else sound(self,CHAN_WEAPON,"zombie/z_shot1.wav",1,ATTN_NORM);
 	}
 };
-
 
 void() zombie_die = {
 	self.health = self.gibhealth; // Force gib
 	monster_death_precheck();
 };
-
 
 void() zombie_cruc1	= [$cruc_1,zombie_cruc2] { zombie_sound(1); };
 void() zombie_cruc2	= [$cruc_2,zombie_cruc3] { self.nextthink = time + 0.1 + random()*0.1;};
@@ -539,7 +526,6 @@ void() zombie_cruc4	= [$cruc_4,zombie_cruc5] { self.nextthink = time + 0.1 + ran
 void() zombie_cruc5	= [$cruc_5,zombie_cruc6] { self.nextthink = time + 0.1 + random()*0.1;};
 void() zombie_cruc6	= [$cruc_6,zombie_cruc1] { self.nextthink = time + 0.1 + random()*0.1;};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) zombie_cruc_pain = {
 	self.health = self.max_health;				// reset health	
 	// Any pain to moan about?
@@ -547,7 +533,6 @@ void(entity inflictor, entity attacker, float damage) zombie_cruc_pain = {
 	self.pain_finished = time + 1 + random();
 };
 
-//----------------------------------------------------------------------
 void() zombie_cruc_spawn = {
 	self.use = SUB_Null;				// No more triggers
 	self.solid = SOLID_BBOX;			// Interact with objects

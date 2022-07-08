@@ -434,7 +434,7 @@ void() monster_floyd = {
 	self.attack_offset = '24 0 30';		// Laser offset
 	self.frame = 1;						// Frame 0 is special skin version
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = FloydCheckAttack;
+	self.th_checkattack = EliminatorCheckAttack;
 	self.th_die = floyd_die;
 	self.classtype = CT_MONFLOYD;
 	self.classgroup = CG_ROBOT;

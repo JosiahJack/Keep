@@ -408,7 +408,7 @@ mon_axeman.qc				// Axeman, Drake, from SOE (Soul of Evil).  Very fast axe wield
 mon_axegrunt.qc				// Axe Grunt, Lunaran's axe wielding grunt.
 mon_drone.qc				// Drone, Drake, from OUM (Operation Urth Majik) flying small robot with lasers.  Early predecessor to Jim / Bob.
 mon_tur.qc					// Turret, Drake, from OUM, stationary tech trap that can retract and extend.  Likely derived from Custents.
-//mon_turret.qc				// Turret, Custents, stationary tech trap that can shoot phase beams
+mon_turret.qc				// Turret, Custents, stationary tech trap that can shoot phase beams
 //mon_srvomech.qc			// Servo Mech, Custents, walking robot. Also player controllable via the vehicle system
 mon_hydra.qc				// Hydra, Hexen II, implemented by khreathor as part of extras_r5 update patch to extras_r4
 mon_snakeman.qc				// Snakeman, a snake with twin nailguns.

@@ -731,6 +731,9 @@ void() monster_dfury = {
 	self.meleeoffset = '24 0 16';		// Jump attack offset
 	self.attack_offset = '20 0 10';		// Average of both attacks
 	if (self.deathstring == "") self.deathstring = " was sliced by a Fury Knight\n";
+	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
+	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPFURYNEAR;
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPFURYFAR;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = DSergeantCheckAttack;
 	self.th_stand = dfury_standL1;

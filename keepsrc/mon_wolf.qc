@@ -310,9 +310,6 @@ void() wolf_wakeup = {
 	// No longer need howl spawnflag, remove it
 	if (self.spawnflags & MON_WOLF_HOWL) {
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_WOLF_HOWL);}
-	
-	//self.spawnstatue = FALSE;		// No longer stationary
-
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.use = SUB_Null;				// no re-trigger
 	
@@ -320,7 +317,6 @@ void() wolf_wakeup = {
 	self.th_run = wolf_run1;
 	self.th_melee = wolf_spin1;
 	self.th_missile = wolf_shoot1;
-
 	self.movetype = MOVETYPE_STEP;
 	self.pain_finished = time + 2;		// No pain
 	self.attack_finished = 1.7 + random();	// No skill adjustment

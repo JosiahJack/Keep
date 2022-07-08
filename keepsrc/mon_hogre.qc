@@ -421,7 +421,8 @@ void() monster_hogre = {
 	self.pain_longanim = TRUE;
 	self.steptype = FS_TYPESLOW;
 	self.meleerange = MONAI_MELEEOGRE;	// Chainsaw range
-	
+	self.meleerangez = 0;
+
 	// Standard ogre health 200 with metal+ option
 	if (self.health < 1) self.health = 200;
 	if (self.spawnflags & MON_HOGRE_METAL) {

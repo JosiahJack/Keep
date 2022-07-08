@@ -63,7 +63,6 @@
 .vector		gibmins;			// Minimum bounding box for model
 .vector		gibmaxs;			// Maximum bounding box for model
 .float		gibdir;				// Override for gib velocity direction
-.float		gibtype;			// What type of gibs (blood, stone, etc)
 .float		blockudeath;		// ID udeath.wav sounds human, block it for non-humanoids
 .float		gib1dmg;			// Special damage from touching
 .float		gib1exp;			// Special damage particle explosion
@@ -87,14 +86,6 @@ float GIB_IMPACT_METALA = 40;	// Short metal impact
 float GIB_IMPACT_METALB = 41;	// Long metal impact
 float GIB_IMPACT_CHAIN = 42;	// Blue metal flail
 float GIB_IMPACT_CUSTOM = 50;	// Custom sound
-float GIBTYPE_BLOOD = 0;		// Blood (default)
-float GIBTYPE_STONE = 1;		// Stone/rubble
-float GIBTYPE_WOOD = 2;			// Woodchip
-float GIBTYPE_GLASS = 3;		// Glass impact sounds
-float GIBTYPE_METAL = 4;		// Metal scraps
-float GIBTYPE_CERAMIC = 5;		// Ceramic pot shards
-float GIBTYPE_POISON = 10;		// Poisoned flesh
-float GIBTYPE_ICE = 16;
 float MON_BCOLOR_BROWN = 16;	// Brown dust/dirt
 float MON_BCOLOR_RED = 73;		// Red index colour
 float MON_BCOLOR_GREEN = 52;	// Green index

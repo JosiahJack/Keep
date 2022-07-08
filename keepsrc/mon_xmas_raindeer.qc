@@ -253,10 +253,12 @@ void() monster_xmas_raindeer = { // [ENTITY]
 	self.steptype = FS_TYPESLOW;		// Small sounding feet
 	self.poisonous = FALSE;				// Not Supported
 	self.meleeoffset = '24 0 20';		// Antler attack offset
+	self.meleerange = MONAI_MELEERAINDEER;
+	self.meleerangez = 0;
 	self.lefty = 0;						// Cycle attack sounds
 	if (self.deathstring == "") self.deathstring = " was trampled by a Raindeer\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = RaindeerCheckAttack;
+	self.th_checkattack = OgreCheckAttack;
 	self.meleerange = MONAI_MELEERAINDEER;
 	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_stand = raind_stand1;

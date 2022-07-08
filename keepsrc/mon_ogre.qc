@@ -581,6 +581,7 @@ void() monster_ogre = {
 	self.pain_longanim = TRUE;			// Can be chopped with shadow axe
 	self.steptype = FS_TYPESLOW;		// Small sounding feet
 	self.meleerange = MONAI_MELEEOGRE;	// Chainsaw range
+	self.meleerangez = 0;
 	self.no_zaware = TRUE;				
 	if (self.health < 1) self.health = 200; // Standard ogre health 200 with green+ option
 	if (self.spawnflags & MON_OGRE_GREEN) {
@@ -639,6 +640,7 @@ void() monster_ogre_fishing = {
 	self.no_zaware = FALSE;			// Fishing ogre has perfect aim!
 	self.bouncegrenade = TRUE;		// Grenades bounce off!
 	self.meleerange = MONAI_MELEEOGRE;	// Chainsaw range
+	self.meleerangez = 0;
 	self.exactskin = 0;				// Skin defined by spawnflag
 	self.noinfighting = TRUE;		// No infighting
 	self.pain_ignore = TRUE;		// Will not wake up from monsters

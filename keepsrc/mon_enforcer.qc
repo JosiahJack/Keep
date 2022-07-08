@@ -543,6 +543,8 @@ void() monster_defender = {
 	self.sight_sound4 = "quoth/defender/sight4.wav";
 	self.th_missile = def_atkgl1;
 	self.th_melee = def_atkssg1;
+	self.meleerange = MONAI_RANGEDEFSSG;
+	self.meleerangez = 0;
 	self.th_checkattack = DefenderCheckAttack;
 	// Grenade bounce off body
 	self.bouncegrenade = TRUE;
