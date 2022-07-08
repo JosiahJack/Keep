@@ -52,34 +52,7 @@ $frame idleb28 idleb29 idleb30
 
 void() queen_stand = { self.movetype = MOVETYPE_NONE; };
 
-void(float dist) ghost_walk = {
-		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
-		movetogoal (dist);
-		
-		// Find out if the ghost is close enough to next path corner
-		// The ghost is not a monster, negative health and no body!
-		// The path_corner touch function won't work with ghosts
-		self.enemydist = range_distance(self.goalentity, FALSE);
-		if (self.enemydist < 64) {
-			// Check for any new targets to walk toward
-			if (self.goalentity.target != "") {
-				self.movetarget = find(world, targetname, self.goalentity.target);
-				if (self.movetarget) {
-					if (self.movetarget.classtype == CT_PATHCORNER) {
-						self.goalentity = self.movetarget;
-						self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-						return;
-					}
-				}
-			}
-			// It seems its time to stand around!
-			self.th_stand();
-			// Check for any path corner event triggers
-			if (self.goalentity.corner_event) trigger_strs(self.goalentity.corner_event, self);
-		}
-};
-
-void() queen_walk1= [$spell1, queen_walk1] { ghost_walk(5); }; //Unfinished and unused walking animation
+void() queen_walk1= [$spell1, queen_walk1] { huntressmodel_walk(5); }; //Unfinished and unused walking animation
 
 void() queen_ghostnull = {}; // The Ghost Queen system (this is not a monster)
 
@@ -244,89 +217,6 @@ void() 	redqueen_spell27 = [	$spell27,	redqueen_spell28 ] { redqueen_drawq(19,0,
 void()	redqueen_spell28 = [	$spell28,	redqueen_spell29 ] { redqueen_drawq(20,0,0.25);self.skin = 1;};
 void()	redqueen_spell29 = [	$spell28,	redqueen_idle1 	 ] { redqueen_reset_attachment();self.skin = 0;};
 
-// The use function is for triggering the ghost to move
-void() queen_ghost_use = { 
-	// Check for a delay target route (using target2)
-	if (self.estate == ESTATE_ON && self.target2 != "") {
-		self.target = self.target2;
-		self.target2 = "";
-		self.estate = ESTATE_OFF;
-	}
-	// Always go to an on state
-	self.estate_on();
-};
-
-
-float ghost_timer; 
-
-void() queen_ghost_fade = {
-	if (self.estate == ESTATE_ON) return;	
-    ghost_timer = ghost_timer - FADEMODEL_TIME;
-
-	if (ghost_timer <= 0.8) self.effects = self.effects | EF_MUZZLEFLASH;
-
-	if (ghost_timer <= 0.7) setmodel (self, "");
-	else self.nextthink = time + FADEMODEL_TIME;
-};
-
-void() queen_ghost_off = {
-	// Block if already off
-	if (self.estate == ESTATE_OFF) return;	
-	
-	self.estate = ESTATE_OFF;
-	particle_explode(self.origin+'0 0 -20', 75, 2, PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
-	particle_explode(self.origin+'0 0 16', 75, 2, PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
-	self.flags = 0;		// Always reset
-	self.takedamage = DAMAGE_NO;		// No pain/death triggers
-	self.movetype = MOVETYPE_NONE;		// Stationary
-	self.solid = SOLID_NOT;				// no world interaction
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);		// No size, no impact
-	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
-	if (self.attachment) {
-		self.attachment.movetype = MOVETYPE_NONE;	// Stationary
-		self.attachment.solid = SOLID_NOT;			// no world interaction
-		setmodel(self.attachment,"");
-		self.attachment.velocity = '0 0 0';
-	}
-	StopSound(self,CHAN_VOICE);
-	self.think = queen_ghost_fade;
-	self.nextthink = time + FADEMODEL_TIME;
-}
-
-void() queen_ghost_on = {
-	// Block if already ON
-	if (self.estate == ESTATE_ON) return;	
-	
-	self.estate = ESTATE_ON;
-	ghost_timer = 1;
-	particle_explode(self.origin, 30, 2, PARTICLE_BURST_RED, PARTICLE_BURST_SKULLUP);
-	self.flags = 0;		// Always reset
-	self.takedamage = DAMAGE_NO;		// No pain/death triggers
-	self.movetype = MOVETYPE_NONE;		// Regular walking
-	self.solid = SOLID_NOT;				// no world interaction
-	setmodel(self, self.mdl);					// Setup model
-	if (CheckZeroVector(self.bbmins)) monster_bbox();
-	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
-	
-
-	// Check for any targets to walk toward
-	if (self.target != "") {
-		self.movetarget = find(world, targetname, self.target);
-		if (self.movetarget) {
-			if (self.movetarget.classtype == CT_PATHCORNER) {
-				self.goalentity = self.movetarget;
-				self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-				self.th_walk();
-				return;
-			}
-		}
-	}
-	// No valid target, just stand around
-	self.movetarget = self.goalentity = world;
-	self.th_stand();
-};
-
 void() monster_queen_precache = {
 	precache_model ("progs/redfield/red_queen.mdl");
 	precache_model ("progs/redfield/proj_rqspell.mdl");
@@ -351,9 +241,9 @@ void() monster_queen = {
 		
 	// The ghost is a scenery prop, not a monster
 	if (self.targetname != "") self.use = entity_state_use;
-	self.estate_on = queen_ghost_on;
-	self.estate_off = queen_ghost_off;
-	self.estate_use = queen_ghost_use;
+	self.estate_on = dknight_ghost_on;
+	self.estate_off = dknight_ghost_off;
+	self.estate_use = dknight_ghost_use;
 
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
@@ -365,4 +255,5 @@ void() monster_queen = {
 	self.movetype = MOVETYPE_NONE;			// Stationary
 	self.solid = SOLID_NOT;				// no world interaction
 	setmodel (self, "");				// invisible
+	self.classtype = CT_MONQUEEN;
 };

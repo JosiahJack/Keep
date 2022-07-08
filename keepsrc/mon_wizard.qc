@@ -339,7 +339,7 @@ void() setup_wizard = {
 
 	// Allow wizards to keep a certain distance above the enemy
 	if (self.spawnflags & MON_WIZARD_ABOVE) {
-		self.th_checkattack = GargoyleCheckAttack;
+		self.th_checkattack = StrafeFlyerCheckAttack;
 	} else {
 		// Default behaviour, really high distance checks
 		self.th_checkattack = WizardCheckAttack;

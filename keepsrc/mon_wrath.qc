@@ -180,33 +180,7 @@ void() wrath_die07 = [ 78.000, wrath_die09 ] {};
 void() wrath_die09 = [ 80.000, wrath_die11 ] {};
 void() wrath_die11 = [ 82.000, wrath_die13 ] {};
 void() wrath_die13 = [ 84.000, wrath_die15 ] {};
-void() wrath_die15 = [ 86.000, wrath_die15 ] {
- 	// Throw gibs, but create more XY outward velocity
-	self.max_health = MON_XYGIBVELOCITY;
-	monster_ThrowGib();
-	// Move the explosion up to the middle/top of the body
-	// Use to be a regular explosion, switched to tarbaby instead
-	self.origin = self.origin + '0 0 24';
-	T_RadiusDamage (self, self, 80, world, IGNORECLASS);
-	
-	// Big purple explosion
-	if (ext_dppart) 
-		pointparticles(particleeffectnum(DPP_WRAITHEXPLODE), self.origin, '0 0 0', 1);
-	else {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);	// Hard coded explosion
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-	}
-	
-	R_Exp3(self.origin); // Play original explosion sound or replacement
-
-	// Stop thinking and hide entity (prevent wraith_death15 loop)
-	self.nextthink = LARGE_TIMER;
-	self.think = SUB_Null;
-	entity_hide(self);
-};
+void() wrath_die15 = [ 86.000, wrath_die15 ] { wrath_deatheffects(TE_EXPLOSION); };
 
 void() wrath_die01 = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities

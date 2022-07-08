@@ -454,3 +454,67 @@ entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
 	if (result) return result;
 	return world;
 };
+
+// Setup wave HP and trigger boundaries
+void() SUB_BossWaveSetupHP = {
+	// Is there anymore boss waves left?
+	if (self.bosswave >= self.bosswavetotal) {
+		self.health = self.bosswaveqty; // Only one wave left (death is final trigger)
+		self.bosswavetrig = -1000;
+	} else {
+		// Multiple waves are still left (reset hp+trigger)
+		// Always reset HP to stop high DPS weapons trashing waves boundaries
+		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
+		// The wave trigger is always one wave lower
+		self.bosswavetrig = self.health - self.bosswaveqty;
+	}
+	// Debug messages for wave and health
+	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
+	dprint(" / "); dprint(ftos(self.bosswavetotal));
+	dprint(") HP ("); dprint(ftos(self.health));
+	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
+	dprint(")\n");
+};
+
+// Check for boss wave boundary event.
+float(float ctype) SUB_BossWaveCheck = { // [FUNCTION]
+	if (self.classtype == CT_MONJUDGE && self.style == 3) return TRUE;
+
+	if (self.health > 1 && self.health < self.bosswavetrig) {
+		// Check for wave boundary triggers
+		self.noise = "";
+		if (self.bosswave == 1) self.noise = self.noise1;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
+		
+		// Is there any trigger for the wave boundary?
+		if (self.noise != "") {
+			if (self.classtype == CT_MONJUDGE || self.classtype == CT_MONNOUR
+				|| self.classtype == CT_MONXXCHTHON
+				|| self.classtype == CT_MONXXSHUB) {
+				trigger_strs(self.noise, self);
+			} else {
+				self.attachment2 = find(world, targetname, self.noise);
+				// Spawn any adds to keep player busy
+				if (self.attachment2.classtype == ctype) {
+					if (HasTargets(self.attachment2)) {
+						SUB_UseTargetsOnEnt(self.attachment2);
+					}
+					self.th_jump(); // Turn around and blow up breakables
+				}
+			}
+		}
+
+		// Update Boss wave parameters (next wave!)
+		self.bosswave = self.bosswave + 1;
+		SUB_BossWaveSetupHP();	// Reset trigger/hp
+		if (self.classtype == CT_MONJUDGE|| self.classtype == CT_MONNOUR
+			|| self.classtype == CT_MONXXCHTHON
+			|| self.classtype == CT_MONXXSHUB) {
+			self.style = 3; // Summon mode
+		}
+		return TRUE;
+	}
+	return FALSE;
+};

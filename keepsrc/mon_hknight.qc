@@ -353,7 +353,6 @@ void()	hknight_magica14 = [	$magica14,	hknight_run1	] {
 
 void() darklord_magicb6;
 
-//----------------------------------------------------------------------
 // Magic attack B (pointing sword) - not used
 void()	hknight_magicb1 = [	$magicb1,	hknight_magicb2	] { ai_face(); };
 void()	hknight_magicb2 = [	$magicb2,	hknight_magicb3	] { ai_face(); };
@@ -385,7 +384,6 @@ void()	hknight_magicb13 = [	$magicb13,	hknight_run1] {
 
 void() bane_strafe;
 
-//----------------------------------------------------------------------
 // Magic attack C (swing sword in arc)
 void()	hknight_magicc1 = [	$magicc1,	hknight_magicc2	] { ai_face(); };
 void()	hknight_magicc2 = [	$magicc2,	hknight_magicc3	] { ai_face(); };
@@ -401,7 +399,6 @@ void()	hknight_magicc11 = [	$magicc11,	hknight_run1] { hknight_shot(3);if (self.
 
 
 // Special setup - Hell Knight firing electricity at target
-//----------------------------------------------------------------------
 void() hknight_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
@@ -416,15 +413,6 @@ void() hknight_create_attachment = {
 	}
 };
 
-//----------------------------------------------------------------------
-void() hknight_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-}
-
-//----------------------------------------------------------------------
 void() hknight_pointfire = {
 	local vector hkp_start, hkp_rand, hkp_end;
 	
@@ -442,12 +430,9 @@ void() hknight_pointfire = {
 	self.frame = self.frame + self.pos3_z;
 	if (self.frame < self.pos3_x) self.frame = self.pos3_y;
 	if (self.frame > self.pos3_y) self.frame = self.pos3_x;
-	
-	// Turn the Knight towards lightning target
-	self.ideal_yaw = vectoyaw(self.movetarget.origin - self.origin);
-	ChangeYaw();
-	// Work out start point of lightning bolt
-	makevectors(self.angles);
+	self.ideal_yaw = vectoyaw(self.movetarget.origin - self.origin); 
+	ChangeYaw(); // Turn the Knight towards lightning target
+	makevectors(self.angles); // Work out start point of lightning bolt
 	
 	// Work out starting point for lightning on sword
 	hkp_start = v_forward*self.pos1_x + v_right*self.pos1_y + v_up*self.pos1_z;
@@ -460,9 +445,7 @@ void() hknight_pointfire = {
 	if (self.t_length > 0) {
 		hkp_end = vecrand(0,self.t_length,1);
 		hkp_end = hkp_end + self.movetarget.origin;
-	}
-	// Default (0) = exact target position
-	else hkp_end = self.movetarget.origin;
+	} else hkp_end = self.movetarget.origin; // Default (0) = exact target position
 
 	// Update sword with lightning visuals
 	if (self.attachment) {
@@ -480,20 +463,8 @@ void() hknight_pointfire = {
 		particle_explode(hkp_start, 2, 1, PARTICLE_BURST_BLUE, PARTICLE_BURST_LOSTUP);
 	}
 	
-	// Create lightning bolt
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, hkp_start_x);
-	WriteCoord (MSG_BROADCAST, hkp_start_y);
-	WriteCoord (MSG_BROADCAST, hkp_start_z);
-	WriteCoord (MSG_BROADCAST, hkp_end_x);
-	WriteCoord (MSG_BROADCAST, hkp_end_y);
-	WriteCoord (MSG_BROADCAST, hkp_end_z);
-
-	// Can the lightning damage things?
-	if (self.dmg > 0) 
-		LightningDamage(hkp_start, hkp_end, self, self.dmg);
+	Tent_Beam(TE_LIGHTNING2,self,hkp_start,hkp_end); // Create lightning bolt
+	LightningDamage(hkp_start, hkp_end, self, self.dmg);
 	
 	// Keep Looping
 	self.think = self.th_run;
@@ -622,7 +593,7 @@ void()	hknight_dieb9	= [	$deathb9,	hknight_dieb9	] { monster_deadbody_check(); }
 
 void() hknight_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-	hknight_remove_attachment(); // Make sure attachments are removed
+	SUB_RemoveAttachment(); // Make sure attachments are removed
 
     if (self.classname == "monster_hell_lord") self.death_sound = "drake/archer/death2.wav";
     else if (self.classname == "monster_bane") {
@@ -689,7 +660,7 @@ void() hknight_pointwakeup = {
 		self.reflectnails = TRUE; // Reflect nail projectiles
 	}
 	
-	hknight_remove_attachment();		// Remove glowing sword
+	SUB_RemoveAttachment();		// Remove glowing sword
 	hknight_aistates();					// Restore AI state functions
 
 	// Check for any enemy target?
@@ -999,3 +970,36 @@ void() monster_hell_knight_enforcer = {
 	if (self.deathstring == "") self.deathstring = " was cauterized by a Saber Enforcer\n";
 	monster_hell_knight();
 };
+
+// ben - 08/04/03 - a champion knight  always strides into battle - never runs.
+void()	hknight_stride1	= [	$walk1,	hknight_stride2	] { monster_idle_sound();ai_run(2); };
+void()	hknight_stride2	= [	$walk2,	hknight_stride3	] { ai_run(5); };
+void()	hknight_stride3	= [	$walk3,	hknight_stride4	] { ai_run(5); };
+void()	hknight_stride4	= [	$walk4,	hknight_stride5	] { ai_run(4); };
+void()	hknight_stride5	= [	$walk5,	hknight_stride6	] { ai_run(4); };
+void()	hknight_stride6	= [	$walk6,	hknight_stride7	] { ai_run(2); };
+void()	hknight_stride7	= [	$walk7,	hknight_stride8	] { ai_run(2); };
+void()	hknight_stride8	= [	$walk8,	hknight_stride9	] { ai_run(3); };
+void()	hknight_stride9	= [	$walk9,	hknight_stride10	] { ai_run(3); };
+void()	hknight_stride10= [	$walk10,	hknight_stride11	] { ai_run(4); };
+void()	hknight_stride11= [	$walk11,	hknight_stride12	] { ai_run(3); };
+void()	hknight_stride12= [	$walk12,	hknight_stride13	] { ai_run(4); };
+void()	hknight_stride13= [	$walk13,	hknight_stride14	] { ai_run(6); };
+void()	hknight_stride14= [	$walk14,	hknight_stride15	] { ai_run(2); };
+void()	hknight_stride15= [	$walk15,	hknight_stride16	] { ai_run(2); };
+void()	hknight_stride16= [	$walk16,	hknight_stride17	] { ai_run(4); };
+void()	hknight_stride17= [	$walk17,	hknight_stride18	] { ai_run(3); };
+void()	hknight_stride18= [	$walk18,	hknight_stride19	] { ai_run(3); };
+void()	hknight_stride19= [	$walk19,	hknight_stride20	] { ai_run(3); };
+void()	hknight_stride20= [	$walk20,	hknight_stride1	] { ai_run(2); };
+
+// A champion has a choice of two missile attacks - a faster version of the standard attack, and a vore-style homing missile. eventually he will be able to teleport.
+void() hknight_champion_magic = {
+	if (random() < 0.6) hknight_magicc1();
+	else hknight_magicb1();
+};
+
+void() monster_hell_knight_champion { 
+	if (self.deathstring == "")  self.deathstring = " was conquered by a Champion Death Knight\n";
+	monster_hell_knight();
+}

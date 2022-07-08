@@ -190,46 +190,12 @@ void(entity inflictor, entity attacker, float damage) raind_pain = {
 	}
 };
 
-
-// DEATH : Its raining raindeer tonight!
-
-void() raind_explode = {
-	// no more raindeer!
-	entity_hide (self);
-	// Make sure gibs go flying up
-	self.max_health = MON_GIBFOUNTAIN;
-	self.health = -100;
-
-	// ID style explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	if (self.death_dmg > 0)
-		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	
-	// Sprite + Dust
-	SpawnExplosion(EXPLODE_BIG, self.origin, self.death_sound);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-
-	// Regular blood like gibs
-	ThrowGib(4, 2 + rint(random()*4));
-	ThrowGib(5, 2 + rint(random()*4));
-	ThrowGib(25, 1);
-	ThrowGib(11, 2 + rint(random()*2));
-	// Metal backpack
-	self.gibtype = GIBTYPE_METAL;
-	ThrowGib(12, rint(random()*2));
-};
-
 void() raind_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// There is no death animation
-	sound (self, CHAN_BODY, self.death_sound, 1, ATTN_NORM);
-	raind_explode();
+	sound(self,CHAN_BODY,self.death_sound,1,ATTN_NORM);
+	ExplosiveGibDeath(self.death_sound,0,0,0);
 };
 
 void() raind_deadbody = {

@@ -256,11 +256,7 @@ void() func_pushable_death = { // [FUNCTION]
 
 	// Check for explosion sprite/particle effect
 	if (self.death_dmg > 0) {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, self.oldorigin_x);
-		WriteCoord (MSG_BROADCAST, self.oldorigin_y);
-		WriteCoord (MSG_BROADCAST, self.oldorigin_z);
+		Tent_Explosion(self.oldorigin);
 		SpawnExplosion(EXPLODE_SMALL, self.oldorigin, SOUND_REXP3);
 		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	}

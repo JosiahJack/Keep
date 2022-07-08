@@ -687,17 +687,7 @@ void() ChainedLightning = {
 	
 	sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 	traceline(self.origin, self.enemy.origin, FALSE, self);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	
+	Tent_Beam(TE_LIGHTNING1,self,self.origin,trace_endpos);
 	damage = 30;
 	if (self.enemy.classname == "player")//half damage to players
 		damage = damage * 0.5;
@@ -760,17 +750,7 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	org = self.origin + '0 0 8' + v_forward*12 + v_right*10;
 	traceline(org, org+v_forward*640, TRUE, self);
 	terminus = trace_endpos;
-	
-	//MakeBeam(org, terminus, "progs/aoa/bolt4.mdl", 0.4);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, terminus_x);
-	WriteCoord (MSG_BROADCAST, terminus_y);
-	WriteCoord (MSG_BROADCAST, terminus_z);
+	Tent_Beam(TE_LIGHTNING1,self,org,terminus);
 	PlayerLightningDamage(org,terminus,self,40);
 	SpawnBlood(trace_ent,terminus,vecrand(5,50,TRUE),20,225);
 	stormOrigin = terminus + '0 0 20';
@@ -1698,50 +1678,33 @@ void() impactFrames = {
 
 void() ImpaleTouch = {
 	local entity enemies, impact;
-	local vector explosionCenter;
+	local vector explosionCenter, blastDirection;
 	local float armorResist;
 	
 	self.velocity = self.velocity*0; //'0 0 0';
 	self.touch = SUB_Null;
 	self.weaponframe = 2;
-	if (other.takedamage)
-	{
+	if (other.takedamage) {
 		if (other.armorvalue > 0) //direct hits are less effective against armor, but full potency against armorless targets. This is to ensure it does less damage to players, and more to monsters
 			armorResist = other.armorvalue/2;
 		T_Damage (other, self, self.owner, 120 - armorResist, DAMARMOR);
 	}
-	if (!self.tome_finished)
-		T_RadiusDamageAOA(self, self, 100, 350, self, DAMAGEALL); //norm damage 50-100
-	else
-		T_RadiusDamageAOA(self, self, 150, 350, self, DAMAGEALL); //Tome dmg 75-150
+	if (!self.tome_finished) T_RadiusDamageAOA(self, self, 100, 350, self, DAMAGEALL); //norm damage 50-100
+	else T_RadiusDamageAOA(self, self, 150, 350, self, DAMAGEALL); //Tome dmg 75-150
 
-	
 	makevectors(self.v_angle);
 	explosionCenter = self.origin + ignoreVertical(v_forward)*20;
 	sound (self, CHAN_AUTO, "shambler/sboom.wav", 1, ATTN_NORM); //needs a new sound #techdebt
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
-	WriteCoord (MSG_BROADCAST, explosionCenter_x);
-	WriteCoord (MSG_BROADCAST, explosionCenter_y);
-	WriteCoord (MSG_BROADCAST, explosionCenter_z);
-	
+	Tent_Point(TE_TAREXPLOSION,explosionCenter);
 	makevectors(self.v_angle);
-	
 	enemies = findradius(explosionCenter, 300);
-	
-	while (enemies)//area knockback 
-	{
-		if ( (HasLOS(enemies, self)) && ((enemies.movetype == MOVETYPE_STEP) || (enemies.movetype == MOVETYPE_WALK)) ) //if 'enemies' entity is in line of sight, and is not NONE, NOCLIP, or PUSH, then:
-		{
-			local vector blastDirection;
+	while (enemies) { // Area knockback 
+		if ( (HasLOS(enemies, self)) && ((enemies.movetype == MOVETYPE_STEP)
+			|| (enemies.movetype == MOVETYPE_WALK)) ) { //if 'enemies' entity is in line of sight, and is not NONE, NOCLIP, or PUSH, then:
 			blastDirection = ignoreVertical(normalize(enemies.origin - self.origin)) *600 + '0 0 225' + '0 0 100'*random();
 			enemies.flags = enemies.flags - FL_ONGROUND;
 			enemies.velocity = blastDirection;
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_TELEPORT);
-			WriteCoord (MSG_BROADCAST, enemies.origin_x);
-			WriteCoord (MSG_BROADCAST, enemies.origin_y);
-			WriteCoord (MSG_BROADCAST, enemies.origin_z);
+			Tent_Point(TE_TELEPORT,enemies.origin);
 		}
 		enemies = enemies.chain;
 	}
@@ -1755,96 +1718,59 @@ void() ImpaleTouch = {
 	impact.nextthink = time + 0.1;
 	impact.think = impactFrames;
 
-	if (self.tome_finished && self.button0) //Tome of Power: Adds Eye of Odin to attack
-	{
+	if (self.tome_finished && self.button0) { //Tome of Power: Adds Eye of Odin to attack
 		self.nextthink = time + 0.1;
 		self.think = GungnirVortex1;
-	}
-	else
-	{
-		player_run();
-	}
+	} else player_run();
 };
 
-void() GungnirDive = {
+void() GungnirDive = { // [FUNCTION]
 	local vector org, dest;	
 	
-	if (self.ammo_voidshards < 3)
-	{
-		centerprint(self, "Not enough ammo");
-		return;
-	}
-	else
-	{
-		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - GUNGNIR_DIVE_VOIDUSAGE;//consume 3 voidshards for a dive
-		if (self.ammo_voidshards < 0) self.currentammo = self.ammo_voidshards = 0;
-	}
+	if (self.ammo_voidshards < 3) { centerprint(self, "Not enough ammo"); return; }
+
+	self.currentammo = self.ammo_voidshards = self.ammo_voidshards - GUNGNIR_DIVE_VOIDUSAGE;//consume 3 voidshards for a dive
+	if (self.ammo_voidshards < 0) self.currentammo = self.ammo_voidshards = 0;
 	makevectors(self.v_angle);
 	org = self.origin + '0 0 32' + v_forward*8;
 	dest = org + ignoreVertical(v_forward)*150 + v_forward*150 + '0 0 -200';
 	traceline(org, dest, TRUE, self);
 	W_Reload(0.8);
-	
-	if ( (trace_endpos_z - self.origin_z <= -80) && (trace_fraction > 0.2) )
-	{
+	if ( (trace_endpos_z - self.origin_z <= -80) && (trace_fraction > 0.2) ) {
 		self.velocity = normalize(dest - self.origin)*950 + v_forward*600;
 		self.touch = ImpaleTouch;
-	}
-	else
-	{
-		GungnirAttack1();
-	}
+	} else GungnirAttack1();
 };
 
-
-void() VortexTouch = {
-	if (other.takedamage)
-	{	
+void() VortexTouch = { // [FUNCTION]
+	if (other.takedamage) {	
 		T_Damage(other, self, self.owner, 50, DAMARMOR);
 		self.touch = SUB_Null;
 	}
 	self.velocity = '0 0 0';
 };
 
-
-void(entity victim) ZapEnemy = {	
-	if (random() > 0.65)
-		sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+void(entity victim) ZapEnemy = { // [FUNCTION]
+	if (random() > 0.65) sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 	traceline(self.origin, victim.origin, FALSE, self);
-	
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
+	Tent_Beam(TE_LIGHTNING2,self,self.origin,trace_endpos);
 	LightningDamage(self.origin, trace_endpos, self.owner, 15);	
 };
 
-void() VortexThink = {	
+void() VortexThink = { // [FUNCTION]
 	local entity victims;
 	local vector gravity;
 	
-		sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);	
-	
-	if (vlen(self.velocity) > 50)
-		self.velocity = self.velocity * 0.95;
-	else
-		self.velocity = '0 0 0';
+	sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);	
+	if (vlen(self.velocity) > 50) self.velocity = self.velocity * 0.95;
+	else self.velocity = '0 0 0';
 	
 	victims = findradius(self.origin, 350);
-	while (victims)
-	{
-		if (victims.takedamage && victims != self.owner && random() > 0.8)
-		{
-			ZapEnemy(victims);
-		}
-		if (victims != self.owner && victims.movetype != MOVETYPE_NONE && victims.movetype != MOVETYPE_PUSH && victims.movetype != MOVETYPE_NOCLIP && victims != self)
-		{
+	while (victims) {
+		if (victims.takedamage && victims != self.owner && random() > 0.8) ZapEnemy(victims);
+		if (victims != self.owner && victims.movetype != MOVETYPE_NONE
+			&& victims.movetype != MOVETYPE_PUSH
+			&& victims.movetype != MOVETYPE_NOCLIP && victims != self) {
 			gravity = self.origin - victims.origin;
 			makevectors(vectoangles(gravity));
 			gravity = normalize(gravity);
@@ -1853,23 +1779,17 @@ void() VortexThink = {
 		}
 		victims = victims.chain;
 	}
-	if (time > self.attack_finished) //delete if past expiry
-		remove(self);
+	if (time > self.attack_finished) remove(self); // Delete if past expiry.
 
-	if (self.frame == 1)
-		sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);
-	if (self.frame == 23)
-		self.frame = 0;
-	else
-		self.frame = self.frame + 1;
-		
+	if (self.frame == 1) sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);
+	if (self.frame == 23) self.frame = 0;
+	else self.frame = self.frame + 1;
 
 	self.nextthink = time + 0.05;
 	self.think = VortexThink;
 };
 
-void() LaunchVortex = //#EyeOfOdin
-{
+void() LaunchVortex = { // [FUNCTION] #EyeOfOdin
 	local entity nearby, vortex;
 	local vector org;
 	
@@ -2041,11 +1961,9 @@ void()	LGaunt3 = [		118,		RGaunt1	]
 };
 
 void() GauntletOrbTouch = {
-	if (other == self.owner)
-		return;	
+	if (other == self.owner) return;	
 	
-	if (other.takedamage)
-	{
+	if (other.takedamage) {
 		if (other.classname == "monster_shambler")
 			self.dmg = self.dmg *2;
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
@@ -2054,17 +1972,11 @@ void() GauntletOrbTouch = {
 	remove(self);
 };
 
-
-void() GreyOrbTouch = //Tome of Power blood orb projectiles
-{
+void() GreyOrbTouch = { //Tome of Power blood orb projectiles
 	if (other != self.owner) {
 		T_RadiusDamageAOA(self, self.owner, 100, 80, self.owner, DAMAGEALL);
 		R_Exp3(self.origin);
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);		
+		Tent_Explosion(self.origin);		
 		BecomeExplosion();
 		remove(self);
 	}
@@ -2084,12 +1996,9 @@ void() CountGreyOrbs = {
 	//aoaprint("There are ", ftos(orbCount), "orbs on the server.", "");
 };
 
-entity (entity first, entity second, entity reference) ClosestEntity = //returns the closest of first or second, filtering out world
-{
-	if (first == world && second != world)
-		return second;
-	if (second == world && first != world)
-		return first;
+entity (entity first, entity second, entity reference) ClosestEntity = { // Returns the closest of first or second, filtering out world
+	if (first == world && second != world) return second;
+	if (second == world && first != world) return first;
 	
 	local float distance1, distance2;
 	

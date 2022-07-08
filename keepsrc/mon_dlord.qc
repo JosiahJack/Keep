@@ -39,60 +39,6 @@ void(void() thinkst) SUB_DLordCheckRefire = {
 	self.think = thinkst;
 };
 
-void(float dist) ai_dlord_run = {
-	movedist = dist;
-	if (self.enemy.health <= 0) {
-		self.enemy = world;
-		if (self.oldenemy.health > 0) {
-			self.enemy = self.oldenemy;
-			HuntTarget();
-		} else {
-			if (self.movetarget) {
-				self.th_walk();
-			} else {
-				self.th_stand();
-			}
-			return;
-		}
-	}
-	self.show_hostile = time + 1;
-	enemy_vis = visible(self.enemy);
-	if (enemy_vis)
-		self.search_time = time + 5;
-
-	if (coop && self.search_time < time) {
-		if (FindTarget())
-			return;
-	}
-	enemy_infront = infront(self.enemy);
-	enemy_range = range(self.enemy);
-	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
-	if (self.attack_state == AS_MISSILE) {
-		ai_run_missile();
-		return;
-	}
-	if (self.attack_state == AS_MELEE) {
-		ai_run_melee();
-		return;
-	}
-	CheckAttack();
-
-
-	if (enemy_vis)
-		self.dlord_searchtime = time + 2 + 2 * random();
-
-	if (enemy_vis && self.th_run != dlord_move1) {
-		self.th_run = dlord_move1;
-		self.think = self.th_run;
-	} else {
-		if (!enemy_vis && self.th_run != dlord_run1 && self.dlord_searchtime < time) {
-			self.th_run = dlord_run1;
-			self.think = self.th_run;
-		}
-	}
-	movetogoal(dist);
-};
-
 void() dlord_shot_think = {
 	if (self.enemy.health < 1)
 		return;
@@ -180,35 +126,35 @@ void() dlord_walk18 = [26, dlord_walk19] { ai_walk(3); };
 void() dlord_walk19 = [27, dlord_walk20] { ai_walk(3); };
 void() dlord_walk20 = [28, dlord_walk1] { ai_walk(2); };
 
-void() dlord_move1 = [9, dlord_move2] { ai_dlord_run(2 * 1.5); shieldon(); };
-void() dlord_move2 = [10, dlord_move3] { ai_dlord_run(5 * 1.5); };
-void() dlord_move3 = [11, dlord_move4] { ai_dlord_run(5 * 1.5); };
-void() dlord_move4 = [12, dlord_move5] { ai_dlord_run(4 * 1.5); };
-void() dlord_move5 = [13, dlord_move6] { ai_dlord_run(4 * 1.5); };
-void() dlord_move6 = [14, dlord_move7] { ai_dlord_run(2 * 1.5); };
-void() dlord_move7 = [15, dlord_move8] { ai_dlord_run(2 * 1.5); };
-void() dlord_move8 = [16, dlord_move9] { ai_dlord_run(3 * 1.5); };
-void() dlord_move9 = [17, dlord_move10] { ai_dlord_run(3 * 1.5); };
-void() dlord_move10 = [18, dlord_move11] { ai_dlord_run(4 * 1.5); };
-void() dlord_move11 = [19, dlord_move12] { ai_dlord_run(3 * 1.5); };
-void() dlord_move12 = [20, dlord_move13] { ai_dlord_run(4 * 1.5); };
-void() dlord_move13 = [21, dlord_move14] { ai_dlord_run(6 * 1.5); };
-void() dlord_move14 = [22, dlord_move15] { ai_dlord_run(2 * 1.5); };
-void() dlord_move15 = [23, dlord_move16] { ai_dlord_run(2 * 1.5); };
-void() dlord_move16 = [24, dlord_move17] { ai_dlord_run(4 * 1.5); };
-void() dlord_move17 = [25, dlord_move18] { ai_dlord_run(3 * 1.5); };
-void() dlord_move18 = [26, dlord_move19] { ai_dlord_run(3 * 1.5); };
-void() dlord_move19 = [27, dlord_move20] { ai_dlord_run(3 * 1.5); };
-void() dlord_move20 = [28, dlord_move1] { ai_dlord_run(2 * 1.5); dlord_idle_sound(); };
+void() dlord_move1 = [9, dlord_move2] { ai_run(2 * 1.5); shieldon(); };
+void() dlord_move2 = [10, dlord_move3] { ai_run(5 * 1.5); };
+void() dlord_move3 = [11, dlord_move4] { ai_run(5 * 1.5); };
+void() dlord_move4 = [12, dlord_move5] { ai_run(4 * 1.5); };
+void() dlord_move5 = [13, dlord_move6] { ai_run(4 * 1.5); };
+void() dlord_move6 = [14, dlord_move7] { ai_run(2 * 1.5); };
+void() dlord_move7 = [15, dlord_move8] { ai_run(2 * 1.5); };
+void() dlord_move8 = [16, dlord_move9] { ai_run(3 * 1.5); };
+void() dlord_move9 = [17, dlord_move10] { ai_run(3 * 1.5); };
+void() dlord_move10 = [18, dlord_move11] { ai_run(4 * 1.5); };
+void() dlord_move11 = [19, dlord_move12] { ai_run(3 * 1.5); };
+void() dlord_move12 = [20, dlord_move13] { ai_run(4 * 1.5); };
+void() dlord_move13 = [21, dlord_move14] { ai_run(6 * 1.5); };
+void() dlord_move14 = [22, dlord_move15] { ai_run(2 * 1.5); };
+void() dlord_move15 = [23, dlord_move16] { ai_run(2 * 1.5); };
+void() dlord_move16 = [24, dlord_move17] { ai_run(4 * 1.5); };
+void() dlord_move17 = [25, dlord_move18] { ai_run(3 * 1.5); };
+void() dlord_move18 = [26, dlord_move19] { ai_run(3 * 1.5); };
+void() dlord_move19 = [27, dlord_move20] { ai_run(3 * 1.5); };
+void() dlord_move20 = [28, dlord_move1] { ai_run(2 * 1.5); dlord_idle_sound(); };
 
-void() dlord_run1 = [29, dlord_run2] { dlord_idle_sound(); ai_dlord_run(20); };
-void() dlord_run2 = [30, dlord_run3] { ai_dlord_run(25); };
-void() dlord_run3 = [31, dlord_run4] { ai_dlord_run(18); };
-void() dlord_run4 = [32, dlord_run5] { ai_dlord_run(16); };
-void() dlord_run5 = [33, dlord_run6] { ai_dlord_run(14); };
-void() dlord_run6 = [34, dlord_run7] { ai_dlord_run(25); };
-void() dlord_run7 = [35, dlord_run8] { ai_dlord_run(21); };
-void() dlord_run8 = [36, dlord_run1] { ai_dlord_run(13); };
+void() dlord_run1 = [29, dlord_run2] { dlord_idle_sound(); ai_run(20); };
+void() dlord_run2 = [30, dlord_run3] { ai_run(25); };
+void() dlord_run3 = [31, dlord_run4] { ai_run(18); };
+void() dlord_run4 = [32, dlord_run5] { ai_run(16); };
+void() dlord_run5 = [33, dlord_run6] { ai_run(14); };
+void() dlord_run6 = [34, dlord_run7] { ai_run(25); };
+void() dlord_run7 = [35, dlord_run8] { ai_run(21); };
+void() dlord_run8 = [36, dlord_run1] { ai_run(13); };
 
 void() dlord_pain1 = [37, dlord_pain2] { sound(self, CHAN_VOICE, "quoth/dlord/pain.wav", 1, ATTN_NORM); shieldon(); };
 void() dlord_pain2 = [38, dlord_pain3] {};
@@ -252,10 +198,7 @@ void() dlord_die = {
 };
 
 void(float vertoffset) dlord_light = {
-	local vector org;
-	local vector dir;
-	local vector offang;
-	local vector org2;
+	local vector org, org2, dir, offang;
 
 	offang_z = offang_z + vertoffset;
 	makevectors(offang);
@@ -266,15 +209,7 @@ void(float vertoffset) dlord_light = {
 	dir = self.enemy.origin + '0 0 16' - org2;
 	dir = normalize(dir);
 	traceline(org, self.origin + dir * 200, 1, self);
-	WriteByte(0, SVC_TEMPENTITY);
-	WriteByte(0, TE_LIGHTNING2);
-	WriteEntity(0, self);
-	WriteCoord(0, org_x);
-	WriteCoord(0, org_y);
-	WriteCoord(0, org_z);
-	WriteCoord(0, trace_endpos_x);
-	WriteCoord(0, trace_endpos_y);
-	WriteCoord(0, trace_endpos_z);
+	Tent_Beam(TE_LIGHTNING2,self,org,trace_endpos);
 	LightningDamage(org, trace_endpos, self, 5);
 };
 

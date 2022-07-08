@@ -47,55 +47,9 @@ float NOUR_PHASE2 = 2;	// Fighting
 float NOUR_PHASE3 = 3;	// Summon mode
 float NOUR_PHASE4 = 4;	// Death
 
-// Setup wave HP and trigger boundaries
-void() nour_WaveSetupHP = {
-	// Is there anymore boss waves left?
-	if (self.bosswave >= self.bosswavetotal) {
-		// Only one wave left (death is final trigger)
-		self.health = self.bosswaveqty;
-		self.bosswavetrig = -1000;
-	}
-	else {
-		// Multiple waves are still left (reset hp+trigger)
-		// Always reset HP to stop high DPS weapons trashing waves boundaries
-		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
-		// The wave trigger is always one wave lower
-		self.bosswavetrig = self.health - self.bosswaveqty;
-	}
-	// Debug messages for wave and health
-	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
-	dprint(" / "); dprint(ftos(self.bosswavetotal));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
-	dprint(")\n");
-};
+void() Fire_judgePlasma;
 
-// Check if HP has reached next boss wave trigger event
-float() nour_WaveCheck = {
-	// Check for boss wave boundary event
-	if (self.health > 1 && self.health < self.bosswavetrig) {
-		// Check for wave boundary triggers
-		self.noise = "";
-		if (self.bosswave == 1) self.noise = self.noise1;
-		else if (self.bosswave == 2) self.noise = self.noise2;
-		else if (self.bosswave == 3) self.noise = self.noise3;
-		else if (self.bosswave == 4) self.noise = self.noise4;
-		
-		// Is there any trigger for the wave boundary?
-		if (self.noise != "") trigger_strs(self.noise, self);
-
-		// Update Boss wave parameters (next wave!)
-		self.bosswave = self.bosswave + 1;
-		nour_WaveSetupHP();
-		self.style = NOUR_PHASE3;	// Summon mode
-		return TRUE;
-	}
-	return FALSE;
-};
-
-//----------------------------------------------------------------------
 // Check the tether system
-//----------------------------------------------------------------------
 float() nour_CheckTether = {
 	local float currentdist;
 	
@@ -129,7 +83,6 @@ void() nour_stand9	= [	$idle9, nour_stand10] { ai_stand(); };
 void() nour_stand10	= [	$idle10, nour_stand11] { ai_stand(); };
 void() nour_stand11	= [	$idle11, nour_stand1] { ai_stand(); };
 
-
 void() nour_walk1	= [	$idle1, nour_walk2] { monster_idle_sound();ai_walk(8); };
 void() nour_walk2	= [	$idle2, nour_walk3] { ai_walk(8); };
 void() nour_walk3	= [	$idle3, nour_walk4] { ai_walk(8); };
@@ -142,14 +95,13 @@ void() nour_walk9	= [	$idle9, nour_walk10] { ai_walk(8); };
 void() nour_walk10	= [	$idle10, nour_walk11] { ai_walk(8); };
 void() nour_walk11	= [	$idle11, nour_walk1] { ai_walk(8); };
 
-
 void() nour_slideframe = {
 	// Check for boss mode (phase and wave check)
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		if (self.style != NOUR_PHASE2) return;
 
 		// Check for boss wave trigger events
-		if (nour_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(0)) { self.th_summon(); return;}
 	}
 	
 	// Dead monster?
@@ -183,7 +135,7 @@ void() nour_runframe = {
 		if (self.style != NOUR_PHASE2) return;
 
 		// Check for boss wave trigger events
-		if (nour_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(0)) { self.th_summon(); return;}
 	}
 	
 	if (self.health < 1) return;
@@ -344,25 +296,6 @@ void() nour_attb15	= [$shotb15, nour_attb16] {};
 void() nour_attb16	= [$shotb16, nour_attb17] { ai_face(); };
 void() nour_attb17	= [$shotb17, nour_run1] { ai_face(); };
 
-// ATTACK C - Summon wizards around boss
-void() Spawn_NourFog = {
-	// Randomly pick from teleport sounds
-	self.lip = random() * 5;
-	if (self.lip < 1) self.noise = "misc/r_tele1.wav";
-	else if (self.lip < 2) self.noise = "misc/r_tele2.wav";
-	else if (self.lip < 3) self.noise = "misc/r_tele3.wav";
-	else if (self.lip < 4) self.noise = "misc/r_tele4.wav";
-	else self.noise = "misc/r_tele5.wav";
-	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-	
-	// Show ID teleport particle effect
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-};
-
 // Fire random plasma spikes while summoning wizard minions
 void(vector minofs) Fire_NourPlasma = {
 	local vector org;
@@ -382,7 +315,7 @@ void(vector minofs) Spawn_NourMin = {
 	// Cycle through spawn targets and spawn Tfog + Wizard
 	self.lip = self.attack_summon;
 	while(self.lip > 0) {
-		self.bossminchain.think = Spawn_NourFog;
+		self.bossminchain.think = spawn_tfog_self;
 		self.bossminchain.nextthink = time + 0.01 + random()*0.3;
 
 		// If the spawn locaiton all clear, spawn something!
@@ -401,14 +334,39 @@ void(vector minofs) Spawn_NourMin = {
 	}
 };
 
+void(vector minofs, float minframe) Setup_NourMinChain = {
+	local vector org, ovec;
+
+	// Move the energy ball into position infront of the nour
+	makevectors(self.angles);
+	if (self.classtype == CT_MONJUDGE) {
+		ovec = self.attack_offset3 + (random() * self.attack_offset4);
+		org = self.origin + attack_vector(ovec);
+	} else org = self.origin + attack_vector(minofs);
+	
+	if (self.attachment) {
+		setorigin(self.attachment, org);	
+		self.attachment.angles = self.angles;
+		self.attachment.angles_x = random()*360;
+		self.attachment.frame = minframe;
+	}
+
+	particle_implode(org, 20+random()*20, 75, 75, PARTICLE_BURST_BLUE); // Slowly suck in particles to energy ball
+	if (self.classtype == CT_MONJUDGE) Fire_judgePlasma(); // Random bolt.
+	self.lip = self.attack_summon; // Cycle through spawn targets and fire Lightning per frame
+	while(self.lip > 0) {
+		self.pos1 = self.bossminchain.origin - org; // Traceline from spawn point to random direction
+		self.pos2 = vecrand(0,50,TRUE);
+		self.pos3 = normalize(self.pos1 + self.pos2);
+		M_FireRandomLightningEffect(org,self.pos3,self.bossminchain);
+		self.bossminchain = self.bossminchain.entchain; // Next spawn point
+		self.lip = self.lip - 1;
+	}
+};
+
 void(vector minofs, float minframe) Setup_NourMin = {
-	local vector org;
-	
-	// Re-use the energy ball attachment for spawning lightning from
-	if (!self.attachment) nour_create_attachment();
-	
-	// Frame 0 is start of the sequence (move everything into place)
-	if (minframe == 0) {
+	if (!self.attachment) nour_create_attachment(); // Re-use attachment for lightning
+	if (minframe == 0) { // Start of the sequence, move everything into place.
 		self.attachment.state = STATE_ON;
 		setorigin(self.attachment, self.origin);
 		setmodel(self.attachment, self.attachment.mdl);
@@ -416,60 +374,14 @@ void(vector minofs, float minframe) Setup_NourMin = {
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
 		self.attachment.skin = 1;
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM); // Start Spawning sound
+	} 
 
-		// Start Spawning sound
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
-	}
-
-	// Move the energy ball into position infront of the nour
-	makevectors(self.angles);
-	org = self.origin + attack_vector(minofs);
-	setorigin(self.attachment, org);
-	self.attachment.angles = self.angles;
-	self.attachment.angles_x = random()*360;
-	self.attachment.frame = minframe;
-	// Slowly suck in particles to energy ball
-	particle_implode(org, 20+random()*20, 75, 75, PARTICLE_BURST_BLUE);
-
-	// Cycle through spawn targets and fire Lightning per frame
-	self.lip = self.attack_summon;
-	while(self.lip > 0) {
-		// Traceline from spawn point to random direction
-		self.pos1 = self.bossminchain.origin - org;
-		self.pos2 = vecrand(0,50,TRUE);
-		self.pos3 = normalize(self.pos1 + self.pos2);
-		traceline(org, org + self.pos3 * 600, FALSE, self);
-		
-		// Create lightning bolt from source to target
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self.bossminchain);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		
-		// Play some arching lightning sounds
-		if (random() < 0.5) {
-			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self.bossminchain, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
-		}
-
-		// Next spawn point
-		self.bossminchain = self.bossminchain.entchain;
-		self.lip = self.lip - 1;
-	}
-	
-	// Generate a random bolt of electricity
-	Fire_NourPlasma(minofs);
+	Setup_NourMinChain(minofs,minframe);
+	Fire_NourPlasma(minofs); // Generate a random bolt of electricity
 };
 
-void() nour_attc1	= [$shotc1, nour_attc2] { ai_face();
-	// Make sure boss mode active for this attack
-	if (!(self.spawnflags & MON_NOUR_BOSS)) { self.think = self.th_run; return; }
-
+void() nour_powersummon = {
 	// Block all damage while summoning stuff
 	Resist_ChangeType(self, TRUE);
 	
@@ -498,6 +410,13 @@ void() nour_attc1	= [$shotc1, nour_attc2] { ai_face();
 		self.bossminchain = self.bossminchain.entchain;
 		self.lip = self.lip - 1;
 	}
+};
+
+void() nour_attc1	= [$shotc1, nour_attc2] { ai_face();
+	// Make sure boss mode active for this attack
+	if (!(self.spawnflags & MON_NOUR_BOSS)) { self.think = self.th_run; return; }
+
+	nour_powersummon();
 };
 void() nour_attc2	= [$shotc2, nour_attc3] { ai_face(); };
 void() nour_attc3	= [$shotc3, nour_attc4] { ai_face(); };
@@ -549,7 +468,7 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		// Check for boss wave trigger events
-		if (nour_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(0)) { self.th_summon(); return;}
 	}
 
 	// Check all pain conditions and set up what to do next
@@ -571,26 +490,15 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 
 // Death comes to us all, even Nour!
 void() nour_explode = {
-	// Check for any final trigger events
-	if (self.message2 != "") trigger_strs(self.message2,self);
-	
-	// No more Nour!
+	if (self.message2 != "") trigger_strs(self.message2,self); // Final triggers
 	entity_hide(self);
-	
-	// Blue ID particle explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteByte (MSG_BROADCAST, 35);
-	WriteByte (MSG_BROADCAST, 8);
+	Tent_Explosion2(self.origin,35,8); // Blue ID particle explosion
+
 	// Check for any death radius damage
-	if (self.death_dmg > 0) 
-		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
+	if (self.death_dmg > 0) T_RadiusDamage(self,self,self.death_dmg,world,DAMAGEALL);
 	
 	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/seeker/explode_major.wav");
+	SpawnExplosion(EXPLODE_PLASMA_BIG,self.origin,"ad171/seeker/explode_major.wav");
 
 	// Gib explosive fountain!?!
 	self.max_health = MON_GIBEXPLOSION;
@@ -599,6 +507,29 @@ void() nour_explode = {
 	ThrowGib(13, 1);	// Tail
 	ThrowGib(4, 10 + rint(random()*3));
 	ThrowGib(5, 10 + rint(random()*3));
+};
+
+// Spawn implosion effect and lightning.
+void(float partcol) nour_lightningdeath = {
+	if (random() < 0.5) particle_implode(self.origin,20+random()*20,100,100,partcol);
+	else { // Spawn particle smoke and explosive smoke
+		SpawnProjectileSmoke(self.origin,150,100,300);
+		particle_dust(self.origin, 10+random()*10,16,partcol);
+	}
+	
+	// Check for any random lightning strikes outward
+	if (random() < 0.5) {
+		self.pos1 = self.origin - '0 0 16';
+		self.pos2 = vecrand(0,50,TRUE);
+		self.pos2_z = 25 + random()*25;	// Always up!
+		self.pos3 = normalize(self.pos2);
+		M_FireRandomLightningEffect(self.pos1,self.pos1 + self.pos3,self);
+	}
+
+	// Cycle through end phase
+	self.lip = self.lip + 1;
+	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 40) nour_explode();
 };
 
 void() nour_die1 = [$death1, nour_die2 ] {};
@@ -610,47 +541,8 @@ void() nour_die6 = [$death6, nour_die7 ] {};
 void() nour_die7 = [$death7, nour_die8 ] {};
 void() nour_die8 = [$death8, nour_die9 ] { self.lip = 0;};
 void() nour_die9 = [$death9, nour_die9 ] {
-	// Spawn implosion effect
-	if (random() < 0.5)
-		particle_implode(self.origin, 20+random()*20, 100, 100, PARTICLE_BURST_BLUE);
-	// Spawn particle smoke and explosive smoke
-	else {
-		SpawnProjectileSmoke(self.origin, 150, 100, 300);
-		particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_BLUE);
-	}
-	
-	// Check for any random lightning strikes outward
-	if (random() < 0.5) {
-		self.pos1 = self.origin - '0 0 16';
-		self.pos2 = vecrand(0,50,TRUE);
-		self.pos2_z = 25 + random()*25;	// Always up!
-		self.pos3 = normalize(self.pos2);
-		traceline(self.pos1, self.pos1 + self.pos3 * 600, FALSE, self);
-		
-		// Create lightning bolt
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
-		// Play some arching lightning sounds
-		if (random() < 0.5) {
-			if (random() < 0.5) sound (self, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
-		}
-	}
-	// Check for a random bolt of plasma
-	if (random() < 0.2) Fire_NourPlasma('0 0 -16');
-	
-	// Cycle through end phase
-	self.lip = self.lip + 1;
-	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
-	if (self.lip == 40) nour_explode();
+	if (random() < 0.2) Fire_NourPlasma('0 0 -16'); // Check for a random bolt of plasma
+	nour_lightningdeath(PARTICLE_BURST_BLUE); // No more Nour!
 };
 
 void() nour_die = {
@@ -671,10 +563,9 @@ void() nour_die = {
 };
 
 
-// Create wizard minion entity chain
+// Create minion entity chain
 // Entities are created so that the spawning space can be tested
 // before spawning the minions for possible collisions
-
 float() nour_minionsetup = {
 	local entity min_prev, min_first;
 	
@@ -708,7 +599,6 @@ float() nour_minionsetup = {
 	else return TRUE;
 };
 
-//----------------------------------------------------------------------
 void() nour_spawntether = {
 	// temporary tether point
 	self.movelast = spawn();
@@ -720,9 +610,7 @@ void() nour_spawntether = {
 	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
 };
 
-
 // REVEAL PHASE (coming out of the ground)
-
 void() nour_readyframe = {
 	self.walkframe = 0;				// Reset just in case
 	self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
@@ -734,7 +622,6 @@ void() nour_readyframe = {
 	else self.th_stand();			// Wait for the player
 };
 
-//----------------------------------------------------------------------
 void() nour_revealframe = {
 	// Beginning of animation block
 	if (self.walkframe == 3) 
@@ -773,9 +660,7 @@ void() nour_revealframe = {
 	}
 };
 
-
 // Setup BOSS Nour after trigger event
-
 void() nour_awake = {
 	// make sure boss mode selected
 	if (!(self.spawnflags & MON_NOUR_BOSS)) return;
@@ -879,8 +764,7 @@ void() nour_awake = {
 	if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
 	// Setup boss wave HP + trigger event
-	nour_WaveSetupHP();
-
+	SUB_BossWaveSetupHP();
 	self.pain_finished = time + 3;		// Make pain go away
 	self.attack_finished = time + 2;	// Reset attack system
 	

@@ -145,6 +145,7 @@ float(entity e, float heal, float ignore) T_Repair;
 void Rocket_Explosion2 (vector org, float x, float y);
 float() can_eat_bones;
 void MakeIcyExp (vector org);
+void(string explosound, float g1cnt, float g2cnt, float g3cnt) ExplosiveGibDeath;
 
 // Only load extra gibs when there is a monster requiring them
 // There are separate gib models because of particle trail colours
@@ -189,7 +190,6 @@ float(float gibsound) check_gibsound = {
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
 void(entity gibent) DPP_blood_trail = {
 	// Cannot add particle trails to the player!
 	if (gibent.flags & FL_CLIENT) {
@@ -584,7 +584,10 @@ void() monster_ThrowGib = {
 		}
 	}	
 	// Some monsters have special death setups
-	if (self.th_gibdie) { self.th_gibdie(); return; }
+	if (self.classtype == CT_MONFREDDIE) {
+		ExplosiveGibDeath(self.death_sound,1,2,2);
+		return;
+	}
 	
 	// If any special gib models defined, throw them
 	if (self.gib1mdl != "") ThrowGib(11, 1);
@@ -813,4 +816,46 @@ void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	SpawnBlood(onflr, onflr.origin, '0 0 50', impactdmg*4,0);
 	if (onflr.bodyonflrtrig) trigger_strs(onflr.bodyonflrtrig,self);
 	entity_hide(onflr); // Hide/Remove original body/shadow
+};
+
+void(string explosound, float g1cnt, float g2cnt, float g3cnt) ExplosiveGibDeath = {
+	entity_hide (self); // No more FLOYD!
+	self.max_health = MON_GIBFOUNTAIN; // Make sure gibs go flying up
+	self.health = -100;
+	Tent_Explosion(self.origin); // ID style explosion
+	T_RadiusDamage(self, self, self.death_dmg, world, DAMAGEALL);
+	SpawnExplosion(EXPLODE_BIG, self.origin,explosound);
+	SpawnProjectileSmoke(self.origin, 200, 250, 100);
+	SpawnProjectileSmoke(self.origin, 200, 250, 100);
+	if (self.classtype == CT_MONFREDDIE) { // Extra regular blood like gibs
+		ThrowGib(4, 2 + rint(random()*4));
+		ThrowGib(5, 2 + rint(random()*4));
+	}
+
+	if (self.gibbed) ThrowGib(25, 1); // Only throw head if a quick gib death
+	self.gibtype = GIBTYPE_METAL; // Metal and custom body parts
+	if (g1cnt > 0) ThrowGib(11, g1cnt + rint(random()*2));
+	if (g2cnt > 0) ThrowGib(12, g2cnt + rint(random()*2));
+	if (g3cnt > 0) ThrowGib(13, g3cnt + rint(random()*2));
+	if (self.classtype == CT_MONRAINDEER) { // DEATH : Its raining raindeer tonight!
+		ThrowGib(4, 2 + rint(random()*4)); // Regular blood like gibs
+		ThrowGib(5, 2 + rint(random()*4));
+		ThrowGib(11, 2 + rint(random()*2));
+		self.gibtype = GIBTYPE_METAL;
+		ThrowGib(12, rint(random()*2)); // Metal backpack
+	} else if (self.classtype == CT_MONSNOWMAN) {
+		ThrowGib(11, 1);
+		ThrowGib(12, 1); // No blood or guts!
+		ThrowGib(13, 8 + rint(random()*8));
+		// The snowball model has a melting animation (6 frames)
+		// Unfortunately it does look really old and dated,
+		// its better to let model just fade away.
+		//
+		// The final gib is a snowball which has a melting animation
+		// Setup animation start/finish parameters before throwing
+		//self.gibAnimstart = 1;
+		//self.gibAnimfinal = 5;
+		//self.gibAnimTimer = 2;		// timer + (random() * (timer*2))
+		//ThrowGib(13, 8 + rint(random()*8));
+	}
 };

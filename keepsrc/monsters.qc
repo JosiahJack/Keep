@@ -98,19 +98,32 @@ void() monster_liquid_check = {
 	T_Damage (self, world, world, monster_dmg, DAMARMOR); // Liquid damage
 };
 
-/*======================================================================
- monster_idle_sound
- - use one routine so more stuff can be added easily
- - easier to add any exceptions this way
- - zombies have their own unique idle routine
- - tarby added using sight sound
-======================================================================*/
+// - use one routine so more stuff can be added easily
+// - easier to add any exceptions this way
+// - zombies have their own unique idle routine
+// - tarby added using sight sound
 void() monster_idle_sound = {
+	local float r;
+
 	// No monsters, dead and timer not reset?
 	if ( !(self.flags & FL_MONSTER) ) return;
 	if (self.health < 1) return;
 	if (self.idletimer > time) return;
 	if (self.spawnflags & MON_SPAWN_NOIDLE) return;
+
+	if (self.classtype == CT_MONARMAGON) {
+		if ( (time > self.idletimer) ) {
+			self.idletimer = (time + MOVETYPE_WALK);
+			if (random () < 0.5) {
+				r = random();
+				if (r < 0.25) sound (self,CHAN_VOICE,"hipnotic/armagon/idle1.wav",TRUE,ATTN_ARMAGON);
+				else if (r < 0.50) sound (self,CHAN_VOICE,"hipnotic/armagon/idle2.wav",TRUE,ATTN_ARMAGON);
+				else if (r < 0.75) sound (self,CHAN_VOICE,"hipnotic/armagon/idle3.wav",TRUE,ATTN_ARMAGON);
+				else sound (self,CHAN_VOICE,"hipnotic/armagon/idle4.wav",TRUE,ATTN_ARMAGON);
+			}
+		}
+		return;
+	}
 
 	self.idletimer = time + 5 + (random() * 3);
 	if (!self.idlemoreoften && random() > MON_IDLE_SOUND) return;
@@ -737,9 +750,9 @@ void() monster_spawn = {
 	// Ceiling critters have special idle animation (rotated)
 	// and need to let go of the ceiling before resuming any
 	// normal behaviour (most think functions are intercepted)
-	if (self.classtype == CT_MONSPIDER && self.spawnflags & MON_SPIDER_CEILING ||
-		self.classtype == CT_MONSWAMPLING && self.spawnflags & MON_SWAMPLING_CEILING ||
-		self.classtype == CT_MONVORELING && self.spawnflags & MON_VORELING_CEILING) {
+	if ((self.classtype == CT_MONSPIDER || self.classtype == CT_MONSWAMPLING
+         || self.classtype == CT_MONVORELING)
+		&& self.spawnflags & MON_VORELING_CEILING) {
 		// Work out where the ceiling is (traceline upwards)
 		traceline (self.origin, self.origin+'0 0 4096', TRUE, self);
 		
@@ -1056,6 +1069,10 @@ void() monster_start = {
 	if (self.turrethealth < 0 || self.turrethealth > 1) self.turrethealth = 0.5;
 	if (self.jump_flag < 0) self.jump_flag = LARGE_TIMER; // Check if jump function has been disabled?
 	if (!self.th_checkattack) self.th_checkattack = CheckAttack; // Default attack function and class group
+	if (self.th_melee) {
+		if (self.meleerange <= 0) self.meleerange = MONAI_MELEEKNIGHT;
+		if (self.meleerangez < 0) self.meleerangez = 0;
+	}
 	if (!self.classgroup) self.classgroup = CG_MONSTERS;
 	// if (self.no_zaware && developer > 0 && !query_configflag(SVR_DEVHELPER)) spawn_marker(self.origin+'0 0 32', SPNMARK_WHITE); // Highlight monsters with forced no_zaware entity key
 	monster_bbox(); // Setup bounding box based on presets

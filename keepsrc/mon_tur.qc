@@ -120,11 +120,7 @@ void() tur_run = {
 };
 
 void() tur_death = {
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin);
 	self.trigger_field.think = SUB_Remove;
 	self.trigger_field.nextthink = time + 0.1;
 	if (!deathmatch) {

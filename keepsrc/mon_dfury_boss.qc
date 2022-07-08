@@ -186,11 +186,7 @@ void() FuryBossMissileTouch = {
 
 	if (other.classgroup == CG_ZOMBIE) T_Damage (other, self, self, 110, DAMARMOR);	
 	T_RadiusDamage (self, self.owner, 20, world, DAMAGEALL);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin);
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
@@ -199,19 +195,19 @@ void() FuryBossMissileTouch = {
 };
 
 void() FuryBossSpikeTouch = {
-	if (other == self.owner || other.classgroup == self.classgroup || other.classtype == CT_MONDFURY) { remove(self); return; } // don't explode on any fury knight friends
+	if (other == self.owner || other.classgroup == self.classgroup
+		|| other.classtype == CT_MONDFURY || Align_Match(self,other)) {
+		remove(self); // Don't explode on any fury knight friends
+		return;
+	} 
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_KNIGHTSPIKE,self.origin);
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
-	setmodel (self, "progs/drake/s_explod.spr");
+	setmodel(self,"progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
 	s_explode1();
-	T_RadiusDamage (self, self.owner, 5, world, DAMAGEALL);	
+	T_RadiusDamage(self,self.owner,5,world,DAMAGEALL);	
 };
 
 void(float loudness) dfury_boss_footsteps = {

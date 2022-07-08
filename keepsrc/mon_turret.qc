@@ -52,55 +52,6 @@ float(float pitch) turret_frame = { return floor(pitch/5.625); };
 // returns the appropriate frame for while firing
 float(float pitch) turret_fireframe= { return (turret_frame(pitch) + 23); };
 
-// Check to see if the turret will fire
-float() CheckTurretAttack = {
-	local vector	spot1, spot2;	
-	local entity	targ;
-	local float		chance;
-
-	targ = self.enemy;
-	
-// see if any entities are in the way of the shot
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-
-	traceline (spot1, spot2, FALSE, self);
-
-	if (trace_ent != targ)
-		return FALSE;		// don't have a clear shot
-			
-	if (trace_inopen && trace_inwater)
-		return FALSE;			// sight line crossed contents
-
-	if (time < self.attack_finished)
-		return FALSE;
-		
-	if (enemy_range == RANGE_MELEE)
-		chance = 0.9;
-	else if (enemy_range == RANGE_NEAR)
-		chance = 0.5;
-	else if (enemy_range == RANGE_MID)
-		chance = 0.2;
-	else
-		chance = 0.05;
-
-	if (random () < chance)
-	{
-		self.th_missile();
-		if (self.spawnflags & TUR_LASERS)
-			SUB_AttackFinished (1.5 + 2*random());
-		if (self.spawnflags & TUR_ROCKETS)
-			SUB_AttackFinished (1.5 + 3*random());
-		if (self.spawnflags & TUR_PPC)
-			SUB_AttackFinished (2 + 2*random());
-		else
-			SUB_AttackFinished (1 + 1.5*random());
-		return TRUE;
-	}
-
-	return FALSE;
-};
-
 void() turret_face = {
 	local vector tmpvec;
 	local float idealframe;
@@ -127,26 +78,16 @@ void() turret_face = {
 	ChangeYaw();
 };
 
-//=============================================================================
-
-
-
-//=============================================================================
-
 void() turret_active;
 void() turret_ret2;
 
-void() turret_still =	[$tilt0, turret_still]
-{
+void() turret_still = [$tilt0, turret_still] {
 	self.frame = turret_frame(self.rotate_type);
-
 	FindTarget();
 };
 
-void() turret_ret1 =	[$retract1, turret_ret1]
-{
-	if (self.frame >= 15)
-	{
+void() turret_ret1 = [$retract1, turret_ret1] {
+	if (self.frame >= 15) {
 		turret_ret2();
 		return;
 	}
@@ -167,8 +108,7 @@ void() turret_ret8 =	[$retract7, turret_retracted]
 void() turret_unret1 =	[$retract6, turret_unret2] { self.nextthink = time + 0.05;};
 void() turret_unret2 =	[$retract5, turret_unret3] { self.nextthink = time + 0.05;};
 void() turret_unret3 =	[$retract4, turret_unret4] { self.nextthink = time + 0.05;};
-void() turret_unret4 =	[$retract3, turret_unret5]
-{
+void() turret_unret4 =	[$retract3, turret_unret5] {
 	self.solid = SOLID_SLIDEBOX;
 	setmodel (self, "progs/custents/turret.mdl");
 	self.nextthink = time + 0.05;
@@ -186,53 +126,40 @@ void() turret_unret7 =	[$tilt0, turret_unret7]
 	}
 };
 
-void() turret_retracted =	[$retract7, turret_retracted]
-{
-	if (FindTarget ())
-		turret_unret1();
+void() turret_retracted =	[$retract7, turret_retracted] {
+	if (FindTarget ()) turret_unret1();
 };
 
-void() turret_active =	[$tilt0, turret_active]
-{
+void() turret_active =	[$tilt0, turret_active] {
+	local vector delta;
+	local float axis, direct, ang_rint, ang_floor, ang_ceil;
+
 	enemy_infront = infront(self.enemy);
 	enemy_range = range(self.enemy);
 	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
-
 	self.frame = turret_frame(self.rotate_type);
 
-	local	vector	delta;
-	local	float	axis;
-	local	float	direct, ang_rint, ang_floor, ang_ceil;
-
-// see if the enemy is dead
-	if (self.enemy.health <= 0 || self.enemy.deadflag != 0)
-	{
+	// see if the enemy is dead
+	if (self.enemy.health <= 0 || self.enemy.deadflag != 0) {
 		self.enemy = world;
-	// FIXME: look all around for other targets
-		if (self.oldenemy.health > 0)
-		{
+		// FIXME: look all around for other targets
+		if (self.oldenemy.health > 0) {
 			self.enemy = self.oldenemy;
 			HuntTarget();
-		}
-		else
-		{
+		} else {
 			self.th_stand();
 			return;
 		}
 	}
+    self.show_hostile = time + 1;       // wake up other monsters
 
-      self.show_hostile = time + 1;       // wake up other monsters
-
-// check knowledge of enemy
+	// check knowledge of enemy
 	enemy_vis = visible(self.enemy);
-	if (enemy_vis)
-		self.search_time = time + 5;
+	if (enemy_vis) self.search_time = time + 5;
 
-// look for other coop players
-   if (coop && self.search_time < time)
-	{
-		if (FindTarget ())
-			return;
+	// look for other coop players
+	if (coop && self.search_time < time) {
+		if (FindTarget()) return;
 	}
 
 	if (self.attack_state == AS_MISSILE || self.attack_state == AS_MELEE)
@@ -253,8 +180,7 @@ void() turret_bullet1 = [$tilt0, turret_bullet2] {
 	dir = normalize (dir - self.origin);
 	FireBullets (2, '0 0 0');
 };
-void() turret_bullet2 = [$tilt0, turret_bullet3]
-{ turret_face();self.nextthink = time + 0.05;};
+void() turret_bullet2 = [$tilt0, turret_bullet3] { turret_face();self.nextthink = time + 0.05;};
 void() turret_bullet3 = [$tilt0, turret_bullet4] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
@@ -394,22 +320,16 @@ void(entity inflictor, entity attacker, float take)	turret_pain = {
 };
 
 void() turret_die = {
-	local entity dedtur;
-
 	self.use = SUB_Null;
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	dedtur = spawn();
-	dedtur.solid = SOLID_NOT;
-	dedtur.movetype = MOVETYPE_NONE;
-	dedtur.angles = self.angles;
-	setorigin(dedtur, self.origin);
-	setmodel (dedtur, "progs/custents/dedturet.mdl");
+	Tent_Explosion(self.origin);
+	newmis = spawn();
+	newmis.solid = SOLID_NOT;
+	newmis.movetype = MOVETYPE_NONE;
+	newmis.angles = self.angles;
+	setorigin(newmis, self.origin);
+	setmodel (newmis, "progs/custents/dedturet.mdl");
 	setsize (self, '-10 -10 -3', '10 10 12');
-	dedtur.skin = self.skin;
+	newmis.skin = self.skin;
 	ThrowGib(25,1);
 	ThrowGib(11,4);
 };

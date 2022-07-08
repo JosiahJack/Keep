@@ -220,10 +220,10 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FU
 			SpawnProjectileSmoke(trace_endpos, 200, 50, 150);
 		} else if (trace_ent.resist_cells > 0) { // Check for any cell/lightning resistance
 			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,""); // damage = damage * trace_ent.resist_cells;
-			if (damage > 0) T_Damage (trace_ent, from, from, damage, DAMARMOR);
+			if (damage > 0) T_Damage(trace_ent, from, from, damage, DAMARMOR);
 		} else {
 			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4,225);
-			T_Damage (trace_ent, from, from, damage, DAMARMOR);
+			T_Damage(trace_ent, from, from, damage, DAMARMOR);
 		}
 		if (trace_ent.reflectlightning) LightningReflection(trace_endpos, trace_ent, damage*0.5); // Check for any lightning reflection abilitites.  Source = Lightning originally came from player
 	}
@@ -240,15 +240,7 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [F
 		dir = normalize(trace_endpos - lstart);
 		launch_projectile(lstart,dir,NO_SPIN,CT_REFLECTLIGHT,SPEED_REFLECTION);
 	} else {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY); // Draw lighting beam (32 model unit chunks)
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, lsource);
-		WriteCoord (MSG_BROADCAST, lstart_x);
-		WriteCoord (MSG_BROADCAST, lstart_y);
-		WriteCoord (MSG_BROADCAST, lstart_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
+		Tent_Beam(TE_LIGHTNING2, lsource, lstart, trace_endpos); // Draw lighting beam (32 model unit chunks)
 		LightningDamage(lstart, trace_endpos, world, ldamage); // Check for damage with new lightning beam
 	}
 };

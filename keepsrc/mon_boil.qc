@@ -208,20 +208,9 @@ void() boil_explode = {
 	
 	// Switch explosions effect based on poison flag
 	if (self.poisonous) {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-		WriteByte (MSG_BROADCAST, 51);
-		WriteByte (MSG_BROADCAST, 8);
+		Tent_Explosion2(self.origin,51,8);
 	} else {
-		// Show classic grenade explosion effect
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
+		Tent_Explosion(self.origin); // Show classic grenade explosion effect
 	}
 	// Can drop health packs! - randomizer
 	if (self.healamount > 0) DropHealthpack();

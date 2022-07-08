@@ -502,7 +502,7 @@ void() monster_jim = {
 	self.idlereverse = FALSE;			// Reverse direction for idle
 	self.attack_offset = '20 0 -10';	// front of laser/rocket
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = JimCheckAttack;
+	self.th_checkattack = StrafeFlyerCheckAttack;
 	self.th_stand = jim_stand1;
 	self.th_walk = jim_walk1;
 	self.th_run = jim_run1;

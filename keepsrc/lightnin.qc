@@ -52,15 +52,7 @@ void() ltrail_fire = { // [FUNCTION]
    if ( (self.classname != "ltrail_end") ) {
       sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
       myTarget = find (world,targetname,self.target);
-      WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-      WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-      WriteEntity (MSG_BROADCAST,self);
-      WriteCoord (MSG_BROADCAST,self.origin_x);
-      WriteCoord (MSG_BROADCAST,self.origin_y);
-      WriteCoord (MSG_BROADCAST,self.origin_z);
-      WriteCoord (MSG_BROADCAST,myTarget.origin_x);
-      WriteCoord (MSG_BROADCAST,myTarget.origin_y);
-      WriteCoord (MSG_BROADCAST,myTarget.origin_z);
+      Tent_Beam(TE_LIGHTNING2,self,self.origin,myTarget.origin);
       LightningDamage(self.origin,myTarget.origin,self,self.currentammo);
    }
 

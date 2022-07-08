@@ -62,12 +62,7 @@ void() misc_deadplayer = { // [ENTITY]
 void() spawnmartin = { // [FUNCTION]
 	local entity m;
 
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord(MSG_BROADCAST, self.pos1_x);
-	WriteCoord(MSG_BROADCAST, self.pos1_y);
-	WriteCoord(MSG_BROADCAST, self.pos1_z);
-	sound(self, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
+	spawn_tfog(self.pos1);
 	m = spawn();
 	setmodel(m, "progs/player.mdl");
 	setorigin(m, self.pos1);
@@ -96,16 +91,16 @@ void() vigtrig = { // [FUNCTION]
 		pl.solid = SOLID_NOT;
 		pl.movetype = MOVETYPE_NONE;
 		pl.modelindex = 0;
-		setorigin(pl, pos.origin);
-		pl = find(pl, classname, "player");
+		setorigin(pl,pos.origin);
+		pl = find(pl,classname,"player");
 	}
 	n = spawn();
-	setmodel(n, "progs/player.mdl");
-	setorigin(n, self.mangle);
+	setmodel(n,"progs/player.mdl");
+	setorigin(n,self.mangle);
 	n.angles = '0 10 0';
 	n.frame = 13;
-	WriteByte(MSG_ALL, SVC_FINALE);
-	WriteString(MSG_ALL, self.message);
+	WriteByte(MSG_ALL,SVC_FINALE);
+	WriteString(MSG_ALL,self.message);
 	timer = spawn();
 	timer.nextthink = time + self.delay;
 	timer.think = spawnmartin;

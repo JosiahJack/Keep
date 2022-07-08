@@ -47,7 +47,6 @@ void() baron_slam1;
 float() BaronGolem_Check;
 float(entity ent) QuakeHurts;
 float(vector org, entity ignore) UpIsSky;
-float() eidolon_WaveCheck;
 void() dcrossbow_stop1;
 void() dcrossbow_fire1;
 void() dcrossbow_slide1;
@@ -68,16 +67,27 @@ void() dfury_boss_char_a1;
 void() dfury_boss_run1;
 void() hknight_char_b1;
 
+void(float melee, float near, float mid) SetSelfAttackChances = {
+	if (enemy_range == RANGE_MELEE) self.attack_chance = melee;		// range < 120 map units
+	else if (enemy_range == RANGE_NEAR) self.attack_chance = near;	// range < 500 map units
+	else if (enemy_range == RANGE_MID) self.attack_chance = mid;	// range < 1000 map units
+	else self.attack_chance = 0;
+};
+
+float() IsSoldier = {
+	return (self.classtype == CT_MONARMY
+	         || self.classtype == CT_MONDRAKEGOBLIN
+             || self.classtype == CT_MONBANDIT
+		     || self.classtype == CT_MONREBEL
+		     || self.classtype == CT_MONARMYGRENADE
+		     || self.classtype == CT_MONARMYPLASMA
+		     || self.classtype == CT_MONARMYSPIKE
+		     || self.classtype == CT_MONARMYDBSHOTGUN
+			 || self.classtype == CT_MONARMYROCKET);
+};
+
 void() CheckAttack = { // [FUNCTION]
-	if ((  self.classtype == CT_MONARMY
-	    || self.classtype == CT_MONDRAKEGOBLIN
-        || self.classtype == CT_MONBANDIT
-		|| self.classtype == CT_MONREBEL
-		|| self.classtype == CT_MONARMYGRENADE
-		|| self.classtype == CT_MONARMYPLASMA
-		|| self.classtype == CT_MONARMYSPIKE
-		|| self.classtype == CT_MONARMYDBSHOTGUN)
-		  && enemy_range == RANGE_MELEE) {
+	if  (IsSoldier()) {
 		// If setup to be a turret, check range attack only
 		if (self.movespeed < 0) {
 			if (time < self.attack_finished) return;
@@ -87,8 +97,14 @@ void() CheckAttack = { // [FUNCTION]
 			return;
 		}
 
-		self.attack_state = AS_MISSILE;
-		return;
+		// If enemy is within melee range, just keep on attacking!
+		// Original ID behaviour is 10% chance to not attack in melee range
+		// This has changed so that the soldier is more agressive up close
+		// The army rocket has a special behaviour for melee range
+		if (self.classtype != CT_MONARMYROCKET && enemy_range == RANGE_MELEE) {
+			self.attack_state = AS_MISSILE;
+			return;
+		}
 	}
 	// Does the monster have a clear shot?  Sightline can be blocked by monsters
 	// Ghosts can presumably see through walls.
@@ -97,7 +113,7 @@ void() CheckAttack = { // [FUNCTION]
 	// Melee attack
 	// enemy_range is checked before this function (ai_run - ai.qc)
 	// If the monster is within melee range they instantly attack
-	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE) && self.th_melee) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.th_melee) {
 		self.attack_state = AS_MELEE;
 		self.th_melee();
 		return;
@@ -115,18 +131,11 @@ void() CheckAttack = { // [FUNCTION]
 	if (time < self.attack_finished) return;
 	if (enemy_range == RANGE_FAR) return;
 
-	// Range attack.  The attack chance percentages are constant across skill levels
-	if (enemy_range == RANGE_MELEE) { // range < 120 map units
-		self.attack_chance = 0.9;
-		self.attack_finished = 0;
-	} else if (enemy_range == RANGE_NEAR) { // range < 500 map units
-		if (self.th_melee) self.attack_chance = 0.2;
-		else self.attack_chance = 0.4;
-	} else if (enemy_range == RANGE_MID) { // range < 1000 map units
-		if (self.th_melee) self.attack_chance = 0.05;
-		else self.attack_chance = 0.1;
-	} else self.attack_chance = 0;
-
+	// Range attack.  The attack chances are constant across skill levels.
+	if (self.th_melee) SetSelfAttackChances(0.9,0.2,0.05);
+	else SetSelfAttackChances(0.9,0.4,0.1);
+	
+	if (enemy_range == RANGE_MELEE) self.attack_finished = 0;
 	if (random () < self.attack_chance) {
 		SUB_AttackFinished (2*random());
 		self.th_missile();
@@ -155,7 +164,6 @@ void() SoldierCheckAttack = {
 	
 	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 	if (visblocked(self.enemy)) return;
-	if (!visxray(self,self.enemy, self.attack_offset,'0 0 0',FALSE)) return;
 
 	if (self.classtype == CT_MONARMYROCKET) {
 		if (ai_checkmelee(MONAI_RANGEARMYR,FALSE)) {
@@ -172,11 +180,9 @@ void() SoldierCheckAttack = {
 
 	// Range attack (bullets)
 	if (time < self.attack_finished) return;
-	if (enemy_range == RANGE_FAR) return;	
-	if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-	else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.4;	// range < 500 map units
-	else if (enemy_range == RANGE_MID) self.attack_chance = 0.05;	// range < 1000 map units
-	else self.attack_chance = 0;
+	if (enemy_range == RANGE_FAR) return;
+
+	SetSelfAttackChances(0.9,0.4,0.05);
 	if (random () < self.attack_chance) {
 		self.attack_state = AS_MISSILE;
 		if (self.classtype == CT_MONARMYROCKET) SUB_AttackFinished (2 + random());
@@ -777,11 +783,7 @@ void() WizardCheckAttack = {
 			self.attack_state = AS_STRAIGHT;
 		return;
 	}
-
-	if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-	else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-	else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-	else self.attack_chance = 0;
+	SetSelfAttackChances(0.9,0.6,0.2);
 	if (random () < self.attack_chance) {
 		self.attack_state = AS_MISSILE;
 	} else if (enemy_range == RANGE_MID) { 
@@ -857,7 +859,7 @@ void() LostCheckAttack = { // Found it!
 	} else self.attack_state = AS_SLIDING; // Wait for attack timer, better to face the player
 };
 
-void() JimCheckAttack = {
+void() StrafeFlyerCheckAttack = {
 	// Cannot see enemy? stop chasing enemytarget
 	if (!enemy_vis) {
 		SUB_switchEnemyTarget();
@@ -883,16 +885,29 @@ void() JimCheckAttack = {
 
 	// Range attack (Lasers).  Only range attack if cooldown has finished
 	if (time > self.attack_finished) {
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
+		if (self.classtype == CT_MONWRAITH) {
 			if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
 				if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());
 				self.attack_state = AS_MISSILE;
 				return;
 			}
+		} else {
+			SetSelfAttackChances(0.9,0.6,0.2);
+			if (random () < self.attack_chance) {
+				if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
+					if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());
+					self.attack_state = AS_MISSILE;
+					return;
+				}
+			}
+		}
+	}
+
+	if (self.classtype == CT_MONWRAITH) {
+		// If turret, then do not move sideways
+		if (self.movespeed < 0) {
+			if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
+			return;
 		}
 	}
 
@@ -1008,144 +1023,6 @@ void() TurretbCheckAttack = {
 	}	
 };
 
-void() CenturionCheckAttack = {
-	// Cannot see enemy? stop chasing enemytarget
-	if (!enemy_vis) {
-		SUB_switchEnemyTarget();
-		return;
-	}
-
-	// If setup to be a turret, check range attack only
-	if (self.movespeed < 0) {
-		if (time < self.attack_finished) return;
-		if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-			SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-		}
-		return;
-	}
-
-	// setup enemytarget if one is not active
-	if (self.enemy.classtype != CT_ENEMYTARGET && self.height > 0) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	// Range attack (Plasma).  Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
-			if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-				if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());
-				self.attack_state = AS_MISSILE;
-				return;
-			}
-		}
-	}	
-
-	// Make sure the centurion maintains its distance (strafe)
-	if (enemy_range >= RANGE_MID) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	}
-	else self.attack_state = AS_SLIDING;
-};
-
-void() GargoyleCheckAttack = {
-	// Cannot see enemy? stop chasing enemytarget
-	if (!enemy_vis) {
-		SUB_switchEnemyTarget();
-		return;
-	}
-
-	// If setup to be a turret, check range attack only
-	if (self.movespeed < 0) {
-		if (time < self.attack_finished) return;
-		if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-			SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-		}
-		return;
-	}
-
-	// setup enemytarget if one is not active
-	if (self.enemy.classtype != CT_ENEMYTARGET && self.height > 0) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	// Range attack (Fireball).  Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
-			if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-				if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());
-				self.attack_state = AS_MISSILE;
-				return;
-			}
-		}
-	}
-	
-	// Make sure the gargoyle maintains its distance (strafe)
-	if (enemy_range >= RANGE_MID) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	}
-	else self.attack_state = AS_SLIDING;
-};
-
-void() GauntCheckAttack = {
-	// Cannot see enemy? stop chasing enemytarget
-	if (!enemy_vis) {
-		SUB_switchEnemyTarget();
-		return;
-	}
-
-	// If setup to be a turret, check range attack only
-	if (self.movespeed < 0) {
-		if (time < self.attack_finished) return;
-		if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-			SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-		}
-		return;
-	}
-
-	// setup enemytarget if one is not active
-	if (self.enemy.classtype != CT_ENEMYTARGET && self.height > 0) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	// Range attack (Plasma volley).  Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
-			if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-				if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());
-				self.attack_state = AS_MISSILE;
-				return;
-			}
-		}
-	}
-
-	// Make sure the Gaunt maintains its distance (strafe)
-	if (enemy_range >= RANGE_MID) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	}
-	else self.attack_state = AS_SLIDING;
-};
-
 void() GauntCheckAttackQuoth = {
 	local vector spot1, spot2;
 	local entity targ;
@@ -1224,64 +1101,26 @@ void() EelCheckAttack = {
 	else self.attack_state = AS_SLIDING;
 };
 
-void() WraithCheckAttack = {
-	// Cannot see enemy? stop chasing enemytarget
-	if (!enemy_vis) {
-		SUB_switchEnemyTarget();
-		return;
-	}
-
-	// If setup to be a turret, check range attack only
-	if (self.movespeed < 0) {
-		if (time < self.attack_finished) return;
-		if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-			SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-		}
-		return;
-	}
-
-	// setup enemytarget if one os not active
-	if (self.enemy.classtype != CT_ENEMYTARGET && self.height > 0) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	// Range attack (burning and creature summons).  Much more aggressive decision on range attacks (ogre style)
-	// No random chance percentages, logic with wraith magic function.  Only range attack if cooldown has finished.
-	if (time > self.attack_finished) {
-		if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
-			if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-			return;
-		}
-	}
-
-	// If turret, then do not move sideways
-	if (self.movespeed < 0) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-		return;
-	}
-
-	// Make sure the wraith maintains its distance (strafe)
-	if (enemy_range >= RANGE_MID) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	} else self.attack_state = AS_SLIDING;
-};
-
 void() MinotaurCheckAttack = {
+	local float ragepercent;
+
+	// Using % (350/500) so mappers can change health.  Quoth had 350 for drole.
+	if (self.classtype == CT_MONDROLE) ragepercent = 0.7;
+	else ragepercent = 0.5;
+
 	// If health is low enough, switch to rage mode; this does not affect the minion spawning version
-	if ( !(self.spawnflags & MON_MINOTAUR_MINIONS) && self.movespeed >= 0) {
-		if (self.health < self.max_health*0.5 && !self.attack_rage) {
+	if (self.minion_name == "" && self.movespeed >= 0) {
+		if (self.health < self.max_health * ragepercent && !self.attack_rage) {
 			self.attack_rage = TRUE;
-			self.th_charge();	// Short howl at the sky
-			return;
+			if (self.classtype != CT_MONDROLE) {
+				self.th_charge();	// Short howl at the sky
+				return;
+			}
 		}
 	}
 
 	// Melee attack (claws)
-	if (ai_checkmelee(MONAI_MELEEMINOTAUR,MONAI_MELEEZTALL)) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		self.attack_state = AS_MELEE;
 		return;
 	}
@@ -1302,12 +1141,29 @@ void() MinotaurCheckAttack = {
 		// Check range and sight for a low chance range attack
 		if (!enemy_vis) return;
 		if (time < self.attack_finished) return;
-		// If enemy not infront or random chance, stop and range attack
-		if (!infront(self.enemy) || random() < 0.1) {
-			// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-			if (visblocked(self.enemy)) return;
-			SUB_AttackFinished (2 + 2*random());
-			self.attack_state = AS_MISSILE; // Plasma bolt attack
+
+		if (self.classtype == CT_MONDROLE) {
+			// Calculate a flat vector to ignore Z axis difference.  Not too
+			// convinced a flat vector is good for a melee only state.  Using
+			// to 3D distance chance so it's not so dumb
+			self.enemydist = range_distance(self.enemy, FALSE);
+			if (self.enemydist > MONAI_RANGEDROLE && random() < 0.3) {
+				// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+				if (visblocked(self.enemy)) return;
+				// Standard rocket attack
+				SUB_AttackFinished (1 + 2*random());
+				self.attack_state = AS_MISSILE;
+			}
+		} else {
+			// If enemy not infront or random chance, stop and range attack
+			if (!infront(self.enemy) || random() < 0.1) {
+				// Does the monster have a clear shot to the player? sightline
+				// can be blocked by other monsters
+				if (visblocked(self.enemy)) return;
+
+				SUB_AttackFinished (2 + 2*random());
+				self.attack_state = AS_MISSILE; // Plasma bolt attack
+			}
 		}
 	} else {
 		// PASSIVE mode (keep at distance)
@@ -1316,7 +1172,8 @@ void() MinotaurCheckAttack = {
 			if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
 		} else {
 			// Mid Range attack (JUMP) Not spawning dark version
-			if ( !(self.spawnflags & MON_MINOTAUR_MINIONS) && random() < 0.35) {
+			if (self.minion_name == "" && random() < 0.35
+				&& self.classtype != CT_MONDROLE) {
 				// Jumped recently, facing right direction and not blocked?
 				if (self.jump_flag < time && infront(self.enemy)) {
 					if (!visblocked_wide(self.enemy, self.view_ofs, self.enemy.view_ofs) ) {
@@ -1340,7 +1197,7 @@ void() MinotaurCheckAttack = {
 				// Calculate a flat vector to ignore Z axis difference
 				self.enemydist = range_distance(self.enemy, TRUE);
 				// Don't always stay at absolute range, move closer
-				if (random() < 0.15 && self.enemydist > MONAI_RANGEMINOTAUR) {
+				if (random() < 0.15 && self.enemydist > 300) {
 					self.attack_sidedeny = time + 1 + random();
 					self.attack_state = AS_STRAIGHT;
 				} else {
@@ -1348,79 +1205,12 @@ void() MinotaurCheckAttack = {
 					if (self.attack_sidedeny < time) self.attack_state = AS_SIDESTEP;
 				}
 			} else {
-				// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+				// Does the monster have a clear shot to the player? sightline
+				// can be blocked by other monsters.
 				if (visblocked(self.enemy)) return;
 
-				SUB_AttackFinished (2 + 2*random()); // Keep firing plasma when at range
-				self.attack_state = AS_MISSILE;
-			}
-		}
-	}
-};
-
-void() DroleCheckAttack = {
-	// Quoth setup - 500HP, with rage at 350HP.  Converted it to a % so mappers can change health
-	if (self.movespeed >= 0) {
-		if (self.health < self.max_health*0.7 && !self.attack_rage) self.attack_rage = TRUE;
-	}
-
-	// Melee attack (tentacles)
-	if (ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL)) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	// If setup to be a turret, check range attack only
-	if (self.movespeed < 0) {
-		if (time < self.attack_finished) return;
-		if (visblocked(self.enemy)) return;
-		// Keep firing rockets when at range
-		SUB_AttackFinished (1 + 2*random());
-		self.attack_state = AS_MISSILE;
-		return;
-	}
-
-	// RAGE mode (keep running at player)
-	if (self.attack_rage) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-		// Check range and sight for a low chance range attack
-		if (!enemy_vis) return;
-		if (time < self.attack_finished) return;
-		// Calculate a flat vector to ignore Z axis difference.  Not convinced a flat vector is good for a melee only state
-		// Switched to 3D distance chance so its not so dumb
-		self.enemydist = range_distance(self.enemy, FALSE);
-		if (self.enemydist > MONAI_RANGEDROLE && random() < 0.3) {
-			// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-			if (visblocked(self.enemy)) return;
-			// Standard rocket attack
-			SUB_AttackFinished (1 + 2*random());
-			self.attack_state = AS_MISSILE;
-		}
-	} else {
-		// PASSIVE mode (keep at distance)
-		// Is the player visible? Keep getting closer
-		if (!enemy_vis) {
-			if (self.attack_state != AS_STRAIGHT) 
-				self.attack_state = AS_STRAIGHT;
-		} else {
-			// Player in sight, fireball or loiter?  Any chance of a range attack?
-			if (time < self.attack_finished) {
-				// Calculate a flat vector to ignore Z axis difference.  Not convinced a flat vector is good for a melee only state
-				// Switched to 3D distance chance so its not so dumb
-				self.enemydist = range_distance(self.enemy, FALSE);
-				// Don't always stay at absolute range, move closer 15% of the time
-				if (random() < 0.15 && self.enemydist > MONAI_RANGEDROLE) {
-					self.attack_sidedeny = time + 1 + random();
-					self.attack_state = AS_STRAIGHT;
-				} else {
-					// If not blocked, turn and move sideways
-					if (self.attack_sidedeny < time) self.attack_state = AS_SIDESTEP;
-				}
-			} else {
-				// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-				if (visblocked(self.enemy)) return;
-				// Keep firing rockets when at range
-				SUB_AttackFinished (1 + 2*random());
+				SUB_AttackFinished (2 + 2*random()); // Keep firing plasma when
+													 // at range.
 				self.attack_state = AS_MISSILE;
 			}
 		}
@@ -1428,6 +1218,7 @@ void() DroleCheckAttack = {
 };
 
 void() DSergeantCheckAttack = {
+	local vector targoffset;
 	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 	if (visblocked(self.enemy)) return;
 
@@ -1448,8 +1239,34 @@ void() DSergeantCheckAttack = {
 		return;
 	}
 
+	if (self.classtype == CT_MONDFURY) {
+		targoffset = '0 0 0';
+		// is the enemy close enough for a double sword slice attack?
+		if (self.enemydist < self.jumprange_x) {
+			self.attack_state = AS_MELEE;
+			self.th_slide(); 
+			return;
+		}
+
+		// Mid Range attack (JUMP).  Jumped recently, facing right direction and not blocked?
+		if (self.jump_flag < time && infront(self.enemy) && !visblocked(self.enemy) ) {
+			if (self.enemy.origin_z <= self.origin_z) { // Check for enemy above? (z axis)
+				if (self.enemydist > self.jumprange_x && self.enemydist < self.jumprange_y) { // Is the fury knight within the right range?
+					SUB_AttackFinished (random()); // Block any range attacks for a while
+					self.jumptouch = world;		// Reset last object touched
+					self.count = 0;				// Number of times jumped
+					if (random() < 0.65) self.th_jump();
+					else self.th_charge();
+					return;
+				}
+			}
+		}
+	} else targoffset = '0 0 10';
+
 	// If range blocked do charging instead
 	if (time < self.attack_finished) {
+		if (self.classtype == CT_MONDFURY) return;
+
 		// Charge attack.  Player within certain range, height and charging not blocked?
 		self.height = fabs(self.origin_z - self.enemy.origin_z);
 		if (ai_checkmelee(MONAI_CHARGEFLAIL,FALSE) && self.height < MONAI_CHARGEZAXIS
@@ -1462,8 +1279,12 @@ void() DSergeantCheckAttack = {
 	} else {
 		// Range attack - Homing missile
 		// If the sightline between self and player blocked, allow for monsters to be hit (infighting rules!)
-		if (!visxray(self,self.enemy,self.attack_offset,'0 0 10',FALSE)) return;
-		self.attack_state = AS_MISSILE;
+		if (!visxray(self,self.enemy,self.attack_offset,targoffset,FALSE)) return;
+
+		if (self.classtype == CT_MONDFURY) {
+			SetSelfAttackChances(0.9,0.4,0.05);
+			if (random () < self.attack_chance) self.attack_state = AS_MISSILE;
+		} else self.attack_state = AS_MISSILE;
 	}
 };
 
@@ -1502,59 +1323,6 @@ void() DPrinceCheckAttack = {
 		else SUB_AttackFinished (1 + random());
 	}
 	self.attack_state = AS_MISSILE; // Range attacks (decided by weaponstate)
-};
-
-void() DFuryCheckAttack = {
-	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-	if (visblocked(self.enemy)) return;
-		
-	// Melee attack, enemy_range is checked before this function (ai_run - ai.qc)
-	// If the monster is within melee range they instantly attack
-	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) {
-		self.attack_state = AS_MELEE;
-		self.th_melee(); 
-		return;
-	}
-
-	// If setup to be a turret, check range attack only
-	if (self.movespeed < 0) {
-		if (time < self.attack_finished) return;
-		// If the sightline between self and player blocked by anything, keep moving
-		if (!visxray(self,self.enemy, self.attack_offset,'0 0 0',FALSE)) return;
-		self.attack_state = AS_MISSILE;
-		return;
-	}
-
-	// is the enemy close enough for a double sword slice attack?
-	if (self.enemydist < self.jumprange_x) {
-		self.attack_state = AS_MELEE;
-		self.th_slide(); 
-		return;
-	}
-
-	// Mid Range attack (JUMP).  Jumped recently, facing right direction and not blocked?
-	if (self.jump_flag < time && infront(self.enemy) && !visblocked(self.enemy) ) {
-		if (self.enemy.origin_z <= self.origin_z) { // Check for enemy above? (z axis)
-			if (self.enemydist > self.jumprange_x && self.enemydist < self.jumprange_y) { // Is the fury knight within the right range?
-				SUB_AttackFinished (random()); // Block any range attacks for a while
-				self.jumptouch = world;		// Reset last object touched
-				self.count = 0;				// Number of times jumped
-				if (random() < 0.65) self.th_jump();
-				else self.th_charge();
-				return;
-			}
-		}
-	}
-	// Range attack.  The attack chance percentages are constant across skill levels
-	if (time < self.attack_finished) return;
-	// If the sightline between self and player blocked by anything, keep moving
-	if (!visxray(self,self.enemy,self.attack_offset,'0 0 0',FALSE)) return;
-	
-	if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-	else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.4;	// range < 500 map units
-	else if (enemy_range == RANGE_MID) self.attack_chance = 0.05;	// range < 1000 map units
-	else self.attack_chance = 0;
-	if (random () < self.attack_chance) self.attack_state = AS_MISSILE;
 };
 
 void() JusticeCheckAttack = {
@@ -1759,8 +1527,10 @@ void() SpawnCheckAttack = {
 };
 
 void() DemonCheckAttack = {
+	local vector ycheck;
+
 	// Melee attack (CLAWS).  Check that within range of a claw attack
-	if (ai_checkmelee(MONAI_MELEEDEMON,FALSE)) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		self.attack_state = AS_MELEE;
 		return;
 	}
@@ -1783,9 +1553,12 @@ void() DemonCheckAttack = {
 		// Check for closeness, but not long range!
 		self.enemydist = range_distance(self.enemy, TRUE);
 		if (self.enemydist < self.jumprange_x) return;
+		if (self.classtype == CT_MONDOG && self.enemydist > self.jumprange_y) return;
 		
 		// Check for low ceilings directly above the demon
-		traceline(self.origin, self.origin + '0 0 256', TRUE, self);
+		ycheck = '0 0 56';
+		ycheck_z = ycheck_z + self.jumprange_y;
+		traceline(self.origin, self.origin + ycheck, TRUE, self);
 		self.height = fabs(vlen(trace_endpos - self.origin));
 		// Ceiling is too low (looks dumb hitting ceilings)
 		if (self.height < MONAI_JUMPDEMONCHECK) return; 
@@ -1799,10 +1572,13 @@ void() DemonCheckAttack = {
 			return;
 		}
 		
-		setorigin(self, self.pos1);			// walkmove successful, move demon back
-		self.jumptouch = world;				// Reset last object touched
-		self.count = 0;						// Number of times jumped
-		self.attack_state = AS_JUMP;		// JUMP JUMP JUMP!
+		setorigin(self, self.pos1);	// walkmove successful, move demon back
+		if ((self.classtype == CT_MONDOG || self.classtype == CT_MONHELLHOUND)
+			&& self.enemy.origin_z > self.origin_z) return;
+
+		self.jumptouch = world;	// Reset last object touched
+		self.count = 0;	// Number of times jumped
+		self.attack_state = AS_JUMP; // JUMP JUMP JUMP!
 	}
 };
 
@@ -1841,106 +1617,10 @@ void() ScorpionCheckAttack = {
 			self.attack_state = AS_JUMP;
 		}
 	} else {
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
+		SetSelfAttackChances(0.9,0.6,0.2);
 		if (random () < self.attack_chance) {
 			SUB_AttackFinished (2 + random());
 			self.attack_state = AS_MISSILE;
-		}
-	}
-};
-
-void()	DogCheckAttack = {
-	// Melee attack (BITE).  Check that within range of a bite attack
-	if (ai_checkmelee(MONAI_MELEEDOG,FALSE)) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	// If setup to be a turret, randomly do melee attacks
-	if (self.movespeed < 0) {
-		if (random() < MONAI_TURRETMODE) return;
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	// Range attack (JUMP).  Has the dog jumped less than 2 seconds ago?
-	if (self.jump_flag < time) {
-		// Stop the dog over or under jumping the enemy
-		if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z
-		+ 0.75 * self.enemy.size_z) return;
-		if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z
-		+ 0.25 * self.enemy.size_z) return;
-			
-		self.enemydist = range_distance(self.enemy, TRUE);
-		if (self.enemydist < self.jumprange_x) return;
-		if (self.enemydist > self.jumprange_y) return;
-
-		// Check for enemy above? (z axis)
-		if (self.enemy.origin_z > self.origin_z) return;
-		self.jumptouch = world;			// Reset last object touched
-		self.count = 0;					// Number of times jumped
-		self.attack_state = AS_JUMP;
-	}
-};
-
-void() SpiderCheckAttack = {
-	// Melee attack (BITE)
-	if (ai_checkmelee(MONAI_MELEESPIDER,FALSE)) { // Check that within range of a bite attack
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	// Range attack (Large Green Spider = SPIT).  Behaves like a wizards; strafe, spit goo
-	if (self.spawnflags & MON_SPIDER_LARGE) {
-		if (!enemy_vis) return;
-		if (time < self.attack_finished) return;
-
-		// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
-			if (self.attack_state != AS_STRAIGHT) {
-				self.attack_state = AS_STRAIGHT;
-				self.th_run();
-			}
-			return;
-		}
-
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
-			SUB_AttackFinished (2 + random());
-			self.attack_state = AS_MISSILE;
-		} else if (enemy_range == RANGE_MID) {
-			if (self.attack_state != AS_STRAIGHT) {
-				self.attack_state = AS_STRAIGHT;
-				self.th_run();
-			}
-		} else {
-			if (self.attack_state != AS_SLIDING) {
-				self.attack_state = AS_SLIDING;
-				self.th_slide();
-			}
-		}
-	} else {
-		// Range attack (Small Brown Spider = JUMP).  Behaves like a dog; run and jump
-		if (self.jump_flag < time) { // Is it time to jump?
-			// Stop the spider over or under jumping the enemy
-			if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z
-			+ 0.75 * self.enemy.size_z) return;
-			if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z
-			+ 0.25 * self.enemy.size_z) return;
-				
-			self.enemydist = range_distance(self.enemy, TRUE);
-			if (self.enemydist < self.jumprange_x) return;
-			if (self.enemydist > self.jumprange_y) return;
-			if (self.enemy.origin_z > self.origin_z) return; // Check for enemy above? (z axis)
-			self.jumptouch = world;		// Reset last object touched
-			self.count = 0;				// Number of times jumped
-			self.attack_state = AS_JUMP;
 		}
 	}
 };
@@ -1967,68 +1647,9 @@ void() SteelclawCheckAttack = {
 	}
 };
 
-void() ElfCheckAttack = {
-	// Melee attack (CANE).  Check that within range of a cane attack
-	if (ai_checkmelee(MONAI_MELEEELF,FALSE)) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	// Range attack (Elf 2 (Black pants) = Magic).  Behaves like a wizards; strafe, spit goo
-	if (self.spawnflags & MON_ELF_MAGIC) {
-		if (!enemy_vis) return;
-		if (time < self.attack_finished) return;
-
-		// Does the monster have a clear shot to the player?
-		// sightline can be blocked by other monsters
-		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
-			if (self.attack_state != AS_STRAIGHT) {
-				self.attack_state = AS_STRAIGHT;
-				self.th_run();
-			}
-			return;
-		}
-
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
-			SUB_AttackFinished (2 + random());
-			self.attack_state = AS_MISSILE;
-		} else if (enemy_range == RANGE_MID) {
-			if (self.attack_state != AS_STRAIGHT) {
-				self.attack_state = AS_STRAIGHT;
-				self.th_run();
-			}
-		} else {
-			if (self.attack_state != AS_SLIDING) {
-				self.attack_state = AS_SLIDING;
-				self.th_slide();
-			}
-		}
-	} else {
-		// Range attack (Elf 1 (green/red pants) = JUMP). Behaves like a dog; run and jump.  Is it time to jump?
-		if (self.jump_flag < time) {
-			// Stop the elf over or under jumping the enemy
-			if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z + 0.75 * self.enemy.size_z) return;
-			if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z + 0.25 * self.enemy.size_z) return;
-	
-			self.enemydist = range_distance(self.enemy, TRUE);
-			if (self.enemydist < self.jumprange_x) return;
-			if (self.enemydist > self.jumprange_y) return;
-			// Check for enemy above? (z axis)
-			if (self.enemy.origin_z > self.origin_z) return;
-			self.jumptouch = world;		// Reset last object touched
-			self.count = 0;				// Number of times jumped
-			self.attack_state = AS_JUMP;
-		}
-	}
-};
-
 void() VorelingCheckAttack = {
 	// Melee attack (BITE).  Check that within range of a bite attack
-	if (ai_checkmelee(MONAI_MELEEVORELING,FALSE)) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		self.attack_state = AS_MELEE;
 		return;
 	}
@@ -2046,11 +1667,7 @@ void() VorelingCheckAttack = {
 			}
 			return;
 		}
-
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
+		SetSelfAttackChances(0.9,0.6,0.2);
 		if (random () < self.attack_chance) {
 			SUB_AttackFinished (2 + random());
 			self.attack_state = AS_MISSILE;
@@ -2073,67 +1690,6 @@ void() VorelingCheckAttack = {
 			if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z + 0.25 * self.enemy.size_z) return;	
 			
 			self.enemydist = range_distance(self.enemy, TRUE); // Too close/far?
-			if (self.enemydist < self.jumprange_x) return;
-			if (self.enemydist > self.jumprange_y) return;
-			// Check for enemy above? (z axis)
-			if (self.enemy.origin_z > self.origin_z) return;
-			self.jumptouch = world;			// Reset last object touched
-			self.count = 0;					// Number of times jumped
-			self.attack_state = AS_JUMP;
-		}
-	}
-};
-
-void() SwamplingCheckAttack = {
-	// Melee attack (BITE).  Check that within range of a bite attack
-	if (ai_checkmelee(MONAI_MELEESWAMPLING,FALSE)) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	// Range attack (Large Green Swampling = SPIT).   Behaves like a wizards; strafe, spit goo
-	if (self.spawnflags & MON_SWAMPLING_LARGE) {
-		if (!enemy_vis) return;
-		if (time < self.attack_finished) return;
-
-		// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
-			if (self.attack_state != AS_STRAIGHT) {
-				self.attack_state = AS_STRAIGHT;
-				self.th_run();
-			}
-			return;
-		}
-
-		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
-		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
-		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
-		else self.attack_chance = 0;
-		if (random () < self.attack_chance) {
-			SUB_AttackFinished (2 + random());
-			self.attack_state = AS_MISSILE;
-		} else if (enemy_range == RANGE_MID) {
-			if (self.attack_state != AS_STRAIGHT) {
-				self.attack_state = AS_STRAIGHT;
-				self.th_run();
-			}
-		} else {
-			if (self.attack_state != AS_SLIDING) {
-				self.attack_state = AS_SLIDING;
-				self.th_slide();
-			}
-		}
-	} else {
-		// Range attack (Small Light Green Swampling = JUMP).  Behaves like a dog; run and jump.  Is it time to jump?
-		if (self.jump_flag < time) {
-			// Stop the swampling over or under jumping the enemy
-			if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z
-			+ 0.75 * self.enemy.size_z) return;
-			if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z
-			+ 0.25 * self.enemy.size_z) return;
-				
-			// Too close/far?
-			self.enemydist = range_distance(self.enemy, TRUE);
 			if (self.enemydist < self.jumprange_x) return;
 			if (self.enemydist > self.jumprange_y) return;
 			// Check for enemy above? (z axis)
@@ -2389,7 +1945,7 @@ void() BaronBossCheckAttack = {
 void() EidolonCheckAttack = {
 	local float currentdist;
 
-	if (eidolon_WaveCheck() == TRUE) return; // Check for boss wave trigger events
+	if (SUB_BossWaveCheck(CT_MONEIDOLONWAVE)) return; // Check for boss wave trigger events
 
 	// Check the tether system
 	currentdist = vlen(self.origin - self.movelast.origin);
@@ -2881,5 +2437,36 @@ void() dcrossbow_checkmelee = {
 			dcrossbow_ready1();			// Raise up crossbow ready
 		}
 		else dcrossbow_melee();
+	}
+};
+
+void() CheckGugAttack = {
+	local vector spot1, spot2;
+	local entity targ;
+	local float chance, dist;
+
+	if (self.carry_time > 8) {
+		if (self.t_width < time) {
+			if (!visible(self.enemy)) {
+				self.th_novis();
+				return;
+			}
+		}
+	}
+	dist = vlen(self.enemy.origin - self.origin);
+	targ = self.enemy;
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+	traceline(spot1, spot2, 0, self);
+	if (trace_ent != targ) return;
+	if (trace_inopen && trace_inwater) return;
+	if (dist < 170) { self.th_melee(); return; }
+	if (time < self.attack_finished) return;
+	if (enemy_range == RANGE_FAR) return;
+
+	SetSelfAttackChances(0.9,0.8,0.2);
+	if (random() < self.attack_chance) {
+		self.th_missile();
+		SUB_AttackFinished(2.3 + 0.3 * random());
 	}
 };

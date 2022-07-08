@@ -218,7 +218,7 @@ void() inquisitor_fireflamewall = {
 	local vector org, eorg, torg, dir, ang;
 	local float targetang, fire_life;
 
-	if (!self.enemy) return; // cannot find target!
+	if (!self.enemy) return; //Cannot find target!
 	if (self.health < 1) return; // we're dead Jim!
 
 	makevectors(self.angles);	
@@ -228,26 +228,7 @@ void() inquisitor_fireflamewall = {
 	// Quiet sfx + dust/smoke
 	sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
 	if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
-
-	// Start with facing angle
-	makevectors(self.angles);	
-	// Work out offset (24 unit) from left to right (- to +)
-	if (self.lefty == 0) self.lefty = 1;
-	torg = self.enemy.origin + (v_right * (self.attack_count*24*self.lefty));
-	targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_FLAME);
-	// Work out angle
-	ang = vectoangles(torg - org);
-	ang_x = -targetang;	// Negative = upwards angle 
-	makevectors(ang);
-	// fire flames forward with slight Z wobble
-	dir = (v_forward + (v_up * (random()*0.2)) ) * SPEED_FLAME;
-
-	// Fire that flame!
-	fire_life = (LIFE_FLAME/2) + random() + random();
-	if (random() < 0.5) self.part_exitpuff = FALSE;
-	else self.part_exitpuff = TRUE;
-	// target, origin, v_forward, colour, size, lifetime, speed
-	Launch_Flame (self, org, dir, FLAME_GREEN, -1, fire_life, SPEED_FLAME);
+	M_LaunchFlameWall(org,FLAME_GREEN);
 };
 
 void() inquisitor_magicc24;
@@ -423,37 +404,6 @@ void()	inquisitor_pain19= [203,inquisitor_pain20] { ai_down(4); };
 void()	inquisitor_pain20= [204,inquisitor_pain21] { ai_down(4); };
 void()	inquisitor_pain21= [205,inquisitor_pain22] { if (self.health < 1) { inquisitor_hunch_idle1(); } };
 
-// Die at this point if health is gone
-void() inquisitor_explode = {
-	// Check for any final trigger events
-	if (self.message2 != "") trigger_strs(self.message2,self);
-	
-	// No more Nour!
-	entity_hide(self);
-	
-	// Blue ID particle explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteByte (MSG_BROADCAST, 35);
-	WriteByte (MSG_BROADCAST, 8);
-	// Check for any death radius damage
-	if (self.death_dmg > 0) T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	
-	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/seeker/explode_major.wav");
-
-	// Gib explosive fountain!?!
-	self.max_health = MON_GIBEXPLOSION;
-	ThrowGib(11, 2);	// Left Arm
-	ThrowGib(12, 2);	// Right Arm
-	ThrowGib(13, 1);	// Tail
-	ThrowGib(4, 10 + rint(random()*3));
-	ThrowGib(5, 10 + rint(random()*3));
-};
-
 // HunchIdle 168-184
 void()	inquisitor_hunch_idle1= [168,inquisitor_hunch_idle2] { ai_down(4); };
 void()	inquisitor_hunch_idle2= [169,inquisitor_hunch_idle3] { ai_down(4); };
@@ -472,45 +422,7 @@ void()	inquisitor_hunch_idle14= [181,inquisitor_hunch_idle15] { ai_down(4); };
 void()	inquisitor_hunch_idle15= [182,inquisitor_hunch_idle16] { ai_down(4); };
 void()	inquisitor_hunch_idle16= [183,inquisitor_hunch_idle17] { ai_down(4); };
 void()	inquisitor_hunch_idle17= [184,inquisitor_hunch_idle17] {
-	// Spawn implosion effect
-	if (random() < 0.5)
-		particle_implode(self.origin, 20+random()*20, 100, 100, PARTICLE_BURST_GREEN);
-	// Spawn particle smoke and explosive smoke
-	else {
-		SpawnProjectileSmoke(self.origin, 150, 100, 300);
-		particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_GREEN);
-	}
-	
-	// Check for any random lightning strikes outward
-	if (random() < 0.5) {
-		self.pos1 = self.origin - '0 0 16';
-		self.pos2 = vecrand(0,50,TRUE);
-		self.pos2_z = 25 + random()*25;	// Always up!
-		self.pos3 = normalize(self.pos2);
-		traceline(self.pos1, self.pos1 + self.pos3 * 600, FALSE, self);
-		
-		// Create lightning bolt
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
-		// Play some arching lightning sounds
-		if (random() < 0.5) {
-			if (random() < 0.5) sound (self, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
-		}
-	}
-	
-	// Cycle through end phase
-	self.lip = self.lip + 1;
-	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
-	if (self.lip == 40) inquisitor_explode();
+	nour_lightningdeath(PARTICLE_BURST_GREEN); // No more inquisitor!
 };
 
 // We yet live?  Ok, let's fly up and scare the pants off the player

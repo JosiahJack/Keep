@@ -159,56 +159,13 @@ void(entity inflictor, entity attacker, float damage) snowm_pain = {
 	}
 };
 
-
-// Exploding snowball!
-
-void() snowm_explode = {
-	// no more raindeer!
-	entity_hide (self);
-	// Make sure gibs go flying up
-	self.max_health = MON_GIBFOUNTAIN;
-	self.health = -100;
-
-	// ID style explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	if (self.death_dmg > 0)
-		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	
-	// Sprite + Dust
-	SpawnExplosion(EXPLODE_BIG, self.origin, self.death_sound);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-
-	// No blood or guts!
-	ThrowGib(25, 1);
-	ThrowGib(11, 1);
-	ThrowGib(12, 1);
-	ThrowGib(13, 8 + rint(random()*8));
-
-	/*-------------------------------------------------------------------
-	// The snowball model has a melting animation (6 frames)
-	// Unfortunately it does look really old and dated,
-	// its better to let model just fade away.
-	//
-	// The final gib is a snowball which has a melting animation
-	// Setup animation start/finish parameters before throwing
-	self.gibAnimstart = 1;
-	self.gibAnimfinal = 5;
-	self.gibAnimTimer = 2;		// timer + (random() * (timer*2))
-	ThrowGib(13, 8 + rint(random()*8)); */
-};
-
 void() snowm_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// There is no death animation
 	if (random() < 0.5) sound (self, CHAN_BODY, self.death_sound, 1, ATTN_NORM);
 	else sound (self, CHAN_BODY, self.death_sound2, 1, ATTN_NORM);
-	snowm_explode();
+	ExplosiveGibDeath(self.death_sound,0,0,0);
 };
 
 void() monster_xmas_snowman_precache = {

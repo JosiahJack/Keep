@@ -198,7 +198,7 @@ void() W_Bomb = { // [FUNCTION]
 	}
 
 	spawn_big_explosion(self.origin,1);
-	t = findradius(self.origin, 10000);
+	t = nextent(world);
 	while (t) {
 		if (t.classname == "player") {
 			dist = vlen(self.origin - t.origin);
@@ -208,7 +208,7 @@ void() W_Bomb = { // [FUNCTION]
 				else shake_player(t, 0.5, 0.010000, 10);
 			}
 		}
-		t = t.chain;
+		t = nextent(t);
 	}
 
 	ring = spawn();
@@ -224,11 +224,7 @@ void() W_Bomb = { // [FUNCTION]
 	ring.movetype = MOVETYPE_FLY;
 	ring.effects = 32;
 	ring.angles = '0 90 0';
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(ring.origin);
 	if (self.invincible_finished) {
 		self.items = self.items - IT_INVULNERABILITY;
 		self.invincible_time = 0;

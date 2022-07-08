@@ -38,41 +38,22 @@
 //=============================================================================
 
 void(vector src, vector dir, float lsrdamage) FireLaser = {
-	local vector vel, org;
-	local vector src;
+	local vector vel, org, src;
 
 	traceline (src, src + dir*2048, FALSE, self);
-
-
 	org = trace_endpos - dir*4;
-
-	if (trace_ent.takedamage && trace_ent != self)
-	{
+	if (trace_ent.takedamage && trace_ent != self) {
 		vel = normalize(dir + v_up*crandom() + v_right*crandom());
 		vel = vel + 2*trace_plane_normal;
 		vel = vel * 200;
-
 		T_Damage (trace_ent, self, self, lsrdamage);
 		SpawnBlood (org, vel*0.2, lsrdamage, trace_ent,0);
 	} else if (trace_fraction != 1) {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		Tent_Point(TE_KNIGHTSPIKE,org);
 	}
 
-	// draw in the laser using the temp entity for a
-	// Shambler's lightning with a new model
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, src_x);
-	WriteCoord (MSG_BROADCAST, src_y);
-	WriteCoord (MSG_BROADCAST, src_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	// Draw in the laser
+	QC_ParseBeam(0,"progs/redfield/beam.mdl",self,src,trace_endpos,32);
 };
 
 

@@ -169,10 +169,8 @@ void() idchthon_awake = {
 	self.movetype = MOVETYPE_STEP;
 	self.takedamage = DAMAGE_NO;
 	self.velocity = '0 0 0';
-
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
 	if (skill == SKILL_EASY) self.health = 1;
 	else self.health = 3;
 	self.enemy = activator;
@@ -180,14 +178,7 @@ void() idchthon_awake = {
 	// DP particle spark and smoke effect to Chthon 
 	// original idea by Seven, green version added later by me
 	if (ext_dppart) self.traileffectnum = particleeffectnum(self.dpp_name);
-	
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
-	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
+	Tent_LavaSplash(self.origin,0,"ad171/chthon/lavasplash.wav");
 	idchthon_rise1();
 };
 
@@ -202,7 +193,6 @@ void() idchthon_shocka8 = [	$shocka8, idchthon_shocka9 ] {};
 void() idchthon_shocka9 = [	$shocka9, idchthon_shocka10 ] {};
 void() idchthon_shocka10 = [	$shocka10, idchthon_missile1 ] {};
 
-//----------------------------------------------------------------------
 void() idchthon_shockb1 = [	$shockb1, idchthon_shockb2 ] {};
 void() idchthon_shockb2 = [	$shockb2, idchthon_shockb3 ] {};
 void() idchthon_shockb3 = [	$shockb3, idchthon_shockb4 ] {};
@@ -306,12 +296,7 @@ void() idchthon_death6 = [$death6, idchthon_death7] {};
 void() idchthon_death7 = [$death7, idchthon_death8] {};
 void() idchthon_death8 = [$death8, boss_death9] {};
 void() boss_death9 = [$death9, boss_death10] {
-	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_LavaSplash(self.origin,0,"ad171/chthon/lavasplash.wav");
 };
 
 void() boss_death10 = [$death9, SUB_Null] { // No plans to support map hacks anymore, function name changed.  Aaahh, nope.  Let the hacks live. -Qmaster

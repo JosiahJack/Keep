@@ -87,7 +87,8 @@ void() Touch_Bullet = { // [FUNCTION]
 
 void() Touch_Projectile = { // [FUNCTION]
 	local vector org, dir, vec;
-	local float proj_type, proj_speed, old_armortype, old_armorvalue, old_armormask, olddmg;
+	local float proj_type, proj_speed, old_armortype, old_armorvalue;
+	local float old_armormask, olddmg, fx;
 	local entity tself, newent, stemp;
 
 	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}	
@@ -394,13 +395,7 @@ void() Touch_Projectile = { // [FUNCTION]
 			setorigin(self, trace_endpos); // Move entity to impact point so its not stuck
 
 			// Show Laser impact on geo surface
-			if (self.attack_ricochet == 0 || random() < 0.25) {
-				WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-				WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-				WriteCoord (MSG_BROADCAST, self.origin_x);
-				WriteCoord (MSG_BROADCAST, self.origin_y);
-				WriteCoord (MSG_BROADCAST, self.origin_z);
-			}
+			if (self.attack_ricochet == 0 || random() < 0.25) Tent_Point(TE_KNIGHTSPIKE,self.origin);
 			
 			// Create ricochet angle using trace_plane_normal, which is the normal of the surface hit.
 			self.pos3 = normalize(self.finalangle);
@@ -449,37 +444,31 @@ void() Touch_Projectile = { // [FUNCTION]
 			self.think = model_fade;	
 			return;
 		} else if (self.classgroup == CG_PROJCELLS) { // Plasma world impact effects
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New special coloured particle explosion (rogue expansion)
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-			WriteByte (MSG_BROADCAST, 35);
-			WriteByte (MSG_BROADCAST, 8);
+			Tent_Explosion2(self.origin,35,8); // New special coloured particle explosion (rogue expansion)
 			if (self.poisonous) self.lip = EXPLODE_POISON_SMALL; // Poisonous sprite explosion instead
 			else self.lip = EXPLODE_ELECT_SMALL; // Classic quoth electric impact explosion
 			SpawnExplosion(self.lip, self.origin, SOUND_PLASMA_HIT);
 		} else { // Standard engine impact particles and sounds
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			if (self.classtype == CT_PROJ_SNG) WriteByte (MSG_BROADCAST, TE_SUPERSPIKE);
-			else if (self.classtype == CT_PROJ_LASER) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-			else if (self.classtype == CT_PROJ_GROCK) WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-			else if (self.classtype == CT_PROJ_WIZ) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_SPID) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_SWAMP) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_WILLY) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_VORE) WriteByte (MSG_BROADCAST, TE_SUPERSPIKE);
-			else if (self.classtype == CT_PROJ_ELF) WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-			else if (self.classtype == CT_PROJ_FURY2) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_NOUR1) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_BLBOLT) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_BLBOLT2 || self.classtype == CT_PROJ_WIZBOSS) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-			else if (self.classtype == CT_PROJ_HKN || self.classtype == CT_PROJ_HKN_BLUE) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-			else if (self.classtype == CT_PROJ_HKN2) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-			else WriteByte (MSG_BROADCAST, TE_SPIKE);
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
+			fx = TE_SPIKE;
+			if (self.classtype == CT_PROJ_SNG) fx = TE_SUPERSPIKE;
+			else if (self.classtype == CT_PROJ_LASER) fx = TE_KNIGHTSPIKE;
+			else if (self.classtype == CT_PROJ_GROCK) fx = TE_GUNSHOT;
+			else if (self.classtype == CT_PROJ_WIZ) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_SPID) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_SWAMP) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_WILLY) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_VORE) fx = TE_SUPERSPIKE;
+			else if (self.classtype == CT_PROJ_ELF) fx = TE_GUNSHOT;
+			else if (self.classtype == CT_PROJ_FURY2) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_NOUR1) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_BLBOLT) fx = TE_WIZSPIKE;
+			else if (self.classtype == CT_PROJ_BLBOLT2) fx = TE_KNIGHTSPIKE;
+			else if (self.classtype == CT_PROJ_WIZBOSS) fx = TE_KNIGHTSPIKE;
+			else if (self.classtype == CT_PROJ_HKN) fx = TE_KNIGHTSPIKE;
+			else if (self.classtype == CT_PROJ_HKN_BLUE) fx = TE_KNIGHTSPIKE;
+			else if (self.classtype == CT_PROJ_HKN2) fx = TE_KNIGHTSPIKE;
+
+			Tent_Point(fx,self.origin);
 		}
 	}
 	entity_remove(self,3); // Hide projectile and wait for any sounds to finish playing
@@ -538,20 +527,10 @@ void() Touch_HomingMissile = { // [FUNCTION]
 				R_Exp3(self.origin); // Play standard explosion sound
 			} else {
 				if (self.poisonous) {
-					WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-					WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New special coloured particle explosion (rogue expansion)
-					WriteCoord (MSG_BROADCAST, self.origin_x);
-					WriteCoord (MSG_BROADCAST, self.origin_y);
-					WriteCoord (MSG_BROADCAST, self.origin_z);
-					WriteByte (MSG_BROADCAST, 51);
-					WriteByte (MSG_BROADCAST, 8);
+					Tent_Explosion2(self.origin,51,8); // New special coloured particle explosion (rogue expansion)
 					SpawnExplosion(EXPLODE_POISON_SMALL, self.origin, SOUND_REXP3); // Sprite explosion for Fitz engines
 				} else {
-					WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-					WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Standard explosion
-					WriteCoord (MSG_BROADCAST, self.origin_x);
-					WriteCoord (MSG_BROADCAST, self.origin_y);
-					WriteCoord (MSG_BROADCAST, self.origin_z);
+					Tent_Explosion(self.origin); // Standard explosion
 					SpawnExplosion(EXPLODE_SMALL, self.origin, SOUND_REXP3); // Sprite explosion for Fitz engines
 				}
 			}
@@ -655,13 +634,7 @@ void() Touch_Missile = { // [FUNCTION]
 			if (self.poisonous == TRUE) { self.height = EXPLODE_POISON_MED; PoisonDeBuff(other); } // Check for poison debuff (using poisonous flag).  Use new poison explosion.
 			self.origin = self.origin - 8*normalize(self.velocity); // Move the explosion effect higher up from point of contact
 			if (self.classtype == CT_PROJ_ROCKETSUPER || self.classtype == CT_PROJ_SIDEWINDER) self.height = EXPLODE_SMALL; // Because it's used for the think function to adjsut velocity over time.
-			if (self.height < EXPLODE_PLASMA_SMALL) {
-				WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-				WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Default ID particle explosion for fire explosions
-				WriteCoord (MSG_BROADCAST, self.origin_x);
-				WriteCoord (MSG_BROADCAST, self.origin_y);
-				WriteCoord (MSG_BROADCAST, self.origin_z);
-			}
+			if (self.height < EXPLODE_PLASMA_SMALL) Tent_Explosion(self.origin); // Default ID particle explosion for fire explosions
 			if (self.noise == "") self.noise = SOUND_REXP3; // Play original explosion sound or replacement
 			SpawnExplosion(self.height, self.origin, self.noise);
 		}
@@ -959,11 +932,7 @@ void() beam_touch = { // [FUNCTION]
 			T_Damage (other, self, self.owner, 99999,DAMARMOR);
 			if (other.health <= 0) {
 				MakeBeamRing(other.origin);
-				WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-				WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
-				WriteCoord (MSG_BROADCAST, other.origin_x);
-				WriteCoord (MSG_BROADCAST, other.origin_y);
-				WriteCoord (MSG_BROADCAST, other.origin_z);
+				Tent_Point(TE_TAREXPLOSION,other.origin);
 				remove(self);
 				return;
 			}
@@ -1358,7 +1327,7 @@ void() Buriza_Touch = { // [FUNCTION]
     T_RadiusDamage (self, self.master, 60, world, DAMAGEALL);
     self.origin = self.origin - 8*normalize(self.velocity);
     sound (self, CHAN_AUTO, "drake/weapons/icewall.wav", 1, ATTN_NORM); // Don't spawn shockwaves like the dragons' iceballs.
-    Particle_Explosion (self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2 (self.origin, 32, 16);'.
+    Particle_Explosion (self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2(self.origin, 32, 16);'.
     BecomeIcyExp();
 };
 

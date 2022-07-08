@@ -148,17 +148,7 @@ void() trap_shooter_fire = { // [FUNCTION]
 			newmis.think = SUB_Remove;
 		}
 		if (self.spawnflags & TRAP_LIGHTPART) particle_explode(trace_endpos, 5+random()*5, 1, PARTICLE_BURST_BLUE, PARTICLE_BURST_LOSTUP);
-		
-		// Generate the lightning effect
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, self.lip);
-		WriteEntity (MSG_BROADCAST, self);
-		WriteCoord (MSG_BROADCAST, lightn_start_x);
-		WriteCoord (MSG_BROADCAST, lightn_start_y);
-		WriteCoord (MSG_BROADCAST, lightn_start_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
+		Tent_Beam(TE_LIGHTNING1,self,lightn_start,trace_endpos); // Generate the lightning effect
 		LightningDamage(lightn_start, trace_endpos, self, self.dmg);	 // Check for things to damage in between the two points	
 	}
 

@@ -634,13 +634,7 @@ void() monster_zombie = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		self.classname = "monster_zombiep"; // Redirect to Keep direct named enemy
-		monster_zombiep();
-		return;
-	}
-
+	if (self.poisonous) self.classname = "monster_zombiep"; // Ensure precaches.
 	self.mdl = "progs/ad171/mon_zombie.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";
 
@@ -668,11 +662,8 @@ void() monster_zombie = { // [ENTITY]
 	if (!self.exactskin) self.randomskin = 2;
 	if (self.deathstring == "") self.deathstring = " joins the Zombies\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-
-	// Setup crucified zombies
-	if (self.spawnflags & MON_CRUCIFIED) {
-		zombie_cruc_setup();
-	} else {
+	if (self.spawnflags & MON_CRUCIFIED) zombie_cruc_setup(); // Setup crucified zombies
+	else {
 		// Setup zombie ready for placement
 		self.health = HP_MONZOMBIE;				// Basic health (cannot override)
 		self.gibhealth = -60;					// Gib value, not used
@@ -696,70 +687,31 @@ void() monster_zombie = { // [ENTITY]
 };
 
 void() monster_zombiep_precache = {
-	precache_model ("progs/ad171/mon_zombie.mdl");
-	precache_model ("progs/ad181/h_zombie.mdl");
-	precache_model (MODEL_PROJ_FLESHP);
-	precache_sound ("zombie/z_idle.wav");	// Idle A
-	precache_sound ("zombie/z_idle1.wav");	// Idle B
-	precache_sound ("zombie/idle_w2.wav");	// Crucified
-	precache_sound ("zombie/z_pain.wav");
-	precache_sound ("zombie/z_pain1.wav");
-	precache_sound ("zombie/z_shot1.wav");	// Swipe sound
-	precache_sound ("zombie/z_fall.wav");	// Impact - floor
-	precache_sound ("zombie/z_miss.wav");	// Impact - miss
-	precache_sound ("zombie/z_hit.wav");	// Impact - hit
-	precache_sound ("zombie/z_gib.wav");	// Death sound
-	precache_sound ("zombie/z_idle.wav");
+	precache_model("progs/ad171/mon_zombie.mdl");
+	precache_model("progs/ad181/h_zombie.mdl");
+	precache_model(MODEL_PROJ_FLESHP);
+	precache_sound("zombie/z_idle.wav");	// Idle A
+	precache_sound("zombie/z_idle1.wav");	// Idle B
+	precache_sound("zombie/idle_w2.wav");	// Crucified
+	precache_sound("zombie/z_pain.wav");
+	precache_sound("zombie/z_pain1.wav");
+	precache_sound("zombie/z_shot1.wav");	// Swipe sound
+	precache_sound("zombie/z_fall.wav");	// Impact - floor
+	precache_sound("zombie/z_miss.wav");	// Impact - miss
+	precache_sound("zombie/z_hit.wav");	// Impact - hit
+	precache_sound("zombie/z_gib.wav");	// Death sound
+	precache_sound("zombie/z_idle.wav");
 	precache_poisongibs();					// precache gibs
-	precache_model (MODEL_PROJ_FLESHP);	// Green flesh!?!
+	precache_model(MODEL_PROJ_FLESHP);	// Green flesh!?!
 };
 
 // QUAKED monster_zombiep (1 0 0) (-16 -16 -24) (16 16 32) ambush x FLOOR
 // Poisonous Zombie that has poisonous gibs on death
 void() monster_zombiep = { // [ENTITY]
-	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
-	self.mdl = "progs/ad171/mon_zombie.mdl";
-	self.headmdl = "progs/ad181/h_zombie.mdl";
-	self.pain_sound = "zombie/z_pain.wav";
-	self.pain_sound2 = "zombie/z_pain1.wav";
-	self.sight_sound = "zombie/z_idle.wav";
+	self.poisonous = 1;
 	self.gibtype = GIBTYPE_POISON;		// Poisonous blood trails
-	self.solid = SOLID_NOT;					// No interaction with world
-	self.movetype = MOVETYPE_NONE;			// Static item, no movement
-	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
-	self.exactskin = rint(2 + random());						// Mouldly bandages
-	self.gibtype = GIBTYPE_POISON;			// Poison gibs!
+	self.exactskin = rint(2 + random());	// Mouldly bandages
 	self.no_liquiddmg = TRUE;				// Immune to slime/lava
-	self.poisonous = TRUE;					// Poison debuff
-	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " joins the Poisonous Zombies\n";
-	self.classtype = CT_MONMUMMY;
-	self.classgroup = CG_ZOMBIE;			// One big happy zombie family!
-	self.classmove = MON_MOVEWALK;
-
-	// Setup crucified zombies
-	if (self.spawnflags & MON_CRUCIFIED) zombie_cruc_setup();
-	else {
-		// Setup zombie ready for placement
-		self.health = 60;				// Basic health (cannot override)
-		self.gibhealth = -60;					// Gib value, not used
-		self.gibbed = FALSE;					// In one piece
-		self.pain_flinch = MONAI_ZOMBIEHGH_DAM;
-		self.steptype = FS_TYPESLOW;			// Small leg
-		self.altsteptype = FS_TYPEDRAG;			// Clubfoot
-		self.pain_timeout = -5;					// Always go into pain (health reset)
-		if (!self.movespeed) self.movespeed = 1;// Adjustable speed via skill level
-		self.inpain = 0;						// Zombie starts with no pain lock
-		self.count = 0;							// Reset get up timer
-		self.th_stand = zombie_stand1;
-		self.th_walk = zombie_walk1;
-		self.th_run = zombie_run1;
-		self.th_pain = zombie_pain;
-		self.th_die = zombie_die;
-		self.th_missile = zombie_missile;
-		self.th_wakeup = zombie_wakeup;			// Get off floor
-		monster_start();
-	}
+	monster_zombie();
 };

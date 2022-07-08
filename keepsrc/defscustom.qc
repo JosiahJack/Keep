@@ -384,7 +384,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .void()		th_jump;			// Special jump animation for jumpers!
 .void()		th_jumpexit;		// Exit animation to stop flying (stuck)
 .void()		th_updmissile;		// Update monster missiles while flying
-.void()		th_gibdie;			// Special function for gib death
 .void()		th_summon;			// Special boss ONLY summon mode
 .float		liquidbase;			// Liquid content at base of model (feet)
 .float		liquidcheck;		// Timer to prevent over checking of liqdmg
@@ -788,11 +787,8 @@ float MON_OGRE_GREEN = 4;		// Green Skin version +HP
 float MON_OGRE_GRNUPG = 50;		// Extra health for green upgrade
 float MON_FREDDIE_LASER = 2;		// Fires laser instead of nails
 float MON_SPIDER_LARGE = 2;		// Large green spitting version
-float MON_VORELING_LARGE = 2;		// Large purple spitting version
-float MON_SPIDER_CEILING = 4;		// Spider starts on the ceiling
+float MON_VORELING_LARGE = 2;		// Large spitting version, poisonous for swampling
 float MON_VORELING_CEILING = 4;		// Voreling starts on the ceiling
-float MON_SWAMPLING_LARGE = 2;		// Large Green spitting version
-float MON_SWAMPLING_CEILING = 4;	// Swampling starts on the ceiling
 float MON_GARGOYLE_PERCH = 4;		// Start in perched position
 float MON_GAUNT_PERCH = 4;		// Start in perched position
 
@@ -1059,7 +1055,7 @@ float SPEED_WRAITHBONE = 400;		// Wraith Nail Storm (large arc infront)
 float SPEED_WBONESKILL = 100;		// 400=easy, 500=normal, 600=hard, 700=nm
 float DAMGE_WRAITHBOLT = 10;		// Biosuit protection from debuff, base dmg
 float DAMAGE_PYROWRAITH = 20;		// Damage from Wraith flame bolt
-float DAMAGE_WRAITH = 120;			// Explosive damage from wraiths (org=80)
+float DAMAGE_WRAITH = 80;			// Explosive damage from wraiths/wrath on death
 float SPEED_PYROFLAME = 250;		// Base speed of flames
 float SPEED_PYROSKILL = 50;			// 250=easy, 300=normal, 350=hard, 400=nm
 float DAMAGE_PYROFLAME = 4;			// Damage from each pyro flame
@@ -1149,15 +1145,9 @@ float MONAI_JUMPDOGFAR = 150;
 float MONAI_MELEESPIDER = 60;		// Distance for spider bite
 float MONAI_JUMPSPIDERNEAR = 80;	// SPIDER Jump attack ranges
 float MONAI_JUMPSPIDERFAR = 200;
-float MONAI_JUMPSPIDERDIST = 400;	// Forward distance modifier
 float MONAI_MELEEVORELING = 60;		// Distance for voreling bite
 float MONAI_JUMPVORELINGNEAR = 80;	// VORELING Jump attack ranges
 float MONAI_JUMPVORELINGFAR = 200;
-float MONAI_JUMPVORELINGDIST = 500;	// Forward distance modifier
-float MONAI_MELEESWAMPLING = 60;	// Distance for bite attack
-float MONAI_JUMPSWAMPLINGNEAR = 80;	// Jump attack ranges
-float MONAI_JUMPSWAMPLINGFAR = 200;
-float MONAI_JUMPSWAMPLINGDIST = 500;// Forward distance modifier
 
 // Scorpions
 float MONAI_JUMPSCORPTIME = 1;		// Special timer for scorpion

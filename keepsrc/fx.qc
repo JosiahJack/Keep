@@ -242,6 +242,15 @@ void(float fx, vector spot) Tent_Point = { // [FUNCTION]
     WriteCoord (MSG_BROADCAST, spot_z);
 };
 
+void(vector start, float zoffset, string snd) Tent_LavaSplash = {
+	local vector org;
+
+	org = start;
+	org_z = org_z + zoffset;
+	Tent_Point(TE_LAVASPLASH,org);
+	sound(self,CHAN_AUTO,snd,1,ATTN_NONE);
+};
+
 // Explode self into ice chunks.
 void() Shattered = { // [FUNCTION]
     sound (self, CHAN_VOICE, "drake/weapons/shatter.wav", 1, ATTN_NORM);
@@ -719,7 +728,7 @@ void big_bang() = { // [FUNCTION]
 	newo_x = self.origin_x + x;
 	newo_y = self.origin_y + y;
 	newo_z = self.origin_z + z;
-	Tent_Point(TE_EXPLOSION,newo);
+	Tent_Explosion(newo);
 	self.wait = self.wait - 1;
 	if (self.wait < 0) { entity_hide(self); return; }
 
@@ -829,7 +838,7 @@ void() screenshake = { // [FUNCTION]
 
 	if (self.attack_finished < time) return; // Is the shaking over?
 	
-	plyr = findradius(self.origin, 1300); // Create a list of entities to check for players
+	plyr = nextent(world); // Create a list of entities to check for players
 	while(plyr) {
 		if (plyr.flags & FL_CLIENT) { // Only shake players (clients)
 			d = vlen(self.origin - plyr.origin); // Scale effect by distance
@@ -840,7 +849,7 @@ void() screenshake = { // [FUNCTION]
 				plyr.punchangle_z = -1 * (random(-2,2) + (0.05*d));	
 			}
 		}
-		plyr = plyr.chain; // Find next entity in chain.
+		plyr = nextent(plyr); // Find next entity in chain.
 	}
 	self.nextthink = time + 0.1;
 	self.think = screenshake; // keep on shaking!  shake a little faster!  shake a little slower!  good thing we got our shaking clothes

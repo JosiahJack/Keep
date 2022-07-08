@@ -724,17 +724,12 @@ void() skullw_die = {
 
 	// Special death, Instantly vaporize cloak.  This is really a gib death without the gibs!
 	if (self.health < -40) {
-		// Typical Grenade explosion
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
+		Tent_Explosion(self.origin); // Typical Grenade explosion
 		SpawnExplosion(EXPLODE_MED, self.origin, SOUND_REXP3);
-
 		self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
 		self.gib2skin = self.exactskin;		// Update book skin
-		ThrowGib(11,1); ThrowGib(12,1);		// Throw head and book
+		ThrowGib(11,1); // Throw head and book
+		ThrowGib(12,1);	
 		entity_hide(self);
 	} else {
 		// Regular death, collapse and fade away

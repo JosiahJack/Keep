@@ -311,70 +311,49 @@ void() seek_melee8 = [$punch8, seek_melee9 ] {};
 void() seek_melee9 = [$punch9, seek_melee10 ] {};
 void() seek_melee10 = [$punch10, seek_run ] {};
 
+void(vector offset) seek_armattack = {
+	local vector org, dir, vec;
+
+	// Fire left arm rocket
+	org = self.origin + attack_vector(offset);
+	// Fire rocket slightly to the side of target.
+	vec = v_right*(10+random()*10);
+	dir = normalize((self.enemy.origin + vec) - org);
+	// Double check nothing (world/monsters) is blocking the rocket
+	if (visxray(self,self.enemy, offset, '0 0 0', FALSE)) {
+		if (self.weaponstate == TRUE) {
+			if (skill > SKILL_NORMAL) {
+				sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+				launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA, self.attack_speed);
+			} else {
+				sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
+				launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER, self.attack_speed);
+			}
+		} else {
+			sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
+			launch_projectile(org,dir,NO_SPIN,CT_PROJ_SEEKER,self.attack_speed);
+		}
+	}
+};
+
 // Range attack - 3 rockets from each arm
 void(vector leftofs, vector rightofs) seek_attack = {
-	local vector org, dir, vec;
-	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
+
 	// Setup different speeds for projectiles (rockets/laz0rs)
-	if (self.weaponstate == TRUE)
-		self.attack_speed = SPEED_SEEKLAZ + (skill * SPEED_SEEKLAZSKILL);
-	else
-		self.attack_speed = SPEED_SEEKROCK + (skill * SPEED_SEEKROCKSKILL);
+	if (self.weaponstate == TRUE) self.attack_speed = SPEED_SEEKLAZ + (skill * SPEED_SEEKLAZSKILL);
+	else self.attack_speed = SPEED_SEEKROCK + (skill * SPEED_SEEKROCKSKILL);
 	
-	// turn and face your enemy!
-	ai_face();
+	ai_face(); // turn and face your enemy!
 	makevectors(self.angles);
-
-	// Does the LEFT arm exist?
-	if (self.state == SEEKER_ARMS_BOTH || self.state == SEEKER_ARMS_LEFT) { 
-		// Fire left arm rocket
-		org = self.origin + attack_vector(leftofs);
-		// Fire rocket slightly to the LEFT of player
-		vec = v_right*(10+random()*10);
-		dir = normalize((self.enemy.origin + vec) - org);
-		// Double check nothing (world/monsters) is blocking the rocket
-		if (visxray(self,self.enemy, leftofs, '0 0 0', FALSE)) {
-			if (self.weaponstate == TRUE) {
-				if (skill > SKILL_NORMAL) {
-					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-					launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA, self.attack_speed);
-				} else {
-					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
-					launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER, self.attack_speed);
-				}
-			} else {
-				sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
-				launch_projectile(org,dir,NO_SPIN,CT_PROJ_SEEKER,self.attack_speed);
-			}
-		}
-	}
-
-	// Does the RIGHT arm exist?
-	if (self.state == SEEKER_ARMS_BOTH || self.state == SEEKER_ARMS_RIGHT) { 
-		org = self.origin + attack_vector(rightofs);
-		// Fire rocket slightly to the RIGHT of player
-		vec = v_right*(10+random()*10);
-		dir = normalize((self.enemy.origin - vec) - org);
-		// Double check nothing (world/monsters) is blocking the rocket
-		if (visxray(self,self.enemy,rightofs,'0 0 0',FALSE)) {
-			if (self.weaponstate == TRUE) {
-				if (skill > SKILL_NORMAL) {
-					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-					launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
-				} else {
-					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
-					launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,self.attack_speed);
-				}
-			} else {
-				sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
-				launch_projectile(org,dir,NO_SPIN,CT_PROJ_SEEKER,self.attack_speed);
-			}
-		}
-	}
+	if (self.state == SEEKER_ARMS_BOTH) { // Fire out of arm(s) we have.
+		seek_armattack(leftofs);
+		seek_armattack(rightofs);
+	} else if (self.state == SEEKER_ARMS_LEFT) seek_armattack(leftofs);
+	else if (self.state == SEEKER_ARMS_RIGHT) seek_armattack(rightofs);
 };
 
 void() seek_fireframe = {
@@ -491,19 +470,13 @@ void(entity inflictor, entity attacker, float damage) seek_pain = {
 
 void() seek_explode = {
 	entity_hide(self); // Hide and Seek
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Regular ID particle explosion
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin); // Regular ID particle explosion
 	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav"); // Classic sprite/DP explosion
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
-
-	// Throw a couple of random body pieces
-	if (random() < 0.5) ThrowGib(11, 1);
+	if (random() < 0.5) ThrowGib(11, 1); // Throw a couple of random body pieces
 	else ThrowGib(11, 2);
 
 	if (self.state != SEEKER_ARMSLESS) ThrowGib(12, 1); // Lets throw our arms in the air like we don't care!

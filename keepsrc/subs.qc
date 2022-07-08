@@ -44,6 +44,7 @@ void(entity thekilled, entity attacker) AddToKills;
 void(entity targ) AddToTotals;
 void(string text, string noise, entity act) Mass_Centerprint;
 void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
+void(float fx, vector spot) Tent_Point;
 
 void() SUB_Null = {}; // [FUNCTION]
 void() SUB_Remove = { remove(self); }; // [FUNCTION]
@@ -436,17 +437,15 @@ void() play_teleport = { // [FUNCTION]
 };
 
 void(vector org) spawn_tfog = { // [FUNCTION]
-	local entity spawneffect;
-	
-	spawneffect = spawn();
-	spawneffect.origin = org;
-	spawneffect.nextthink = time + 0.2;
-	spawneffect.think = play_teleport;
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
+	newmis = spawn();
+	newmis.origin = org;
+	newmis.nextthink = time + 0.2;
+	newmis.think = play_teleport;
+	Tent_Point(TE_TELEPORT,org);
+};
+
+void() spawn_tfog_self = { // [FUNCTION]
+	spawn_tfog(self.origin);
 };
 
 void() tdeath_touch = { // [FUNCTION]

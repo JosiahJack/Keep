@@ -124,7 +124,6 @@ void()	dknight_standB22= [	$standB22,	dknight_standB23] { dk_stand(); };
 void()	dknight_standB23= [	$standB23,	dknight_standB24] { dk_stand(); };
 void()	dknight_standB24= [	$standB24,	dknight_stand1	] { dk_stand(); };
 
-//----------------------------------------------------------------------
 void()	dknight_standC1	= [	$standC1,	dknight_standC2	] { dk_stand(); };
 void()	dknight_standC2	= [	$standC2,	dknight_standC3	] { dk_stand(); };
 void()	dknight_standC3	= [	$standC3,	dknight_standC4	] { dk_stand(); };
@@ -150,7 +149,6 @@ void()	dknight_standC22= [	$standC22,	dknight_standC23] { dk_stand(); };
 void()	dknight_standC23= [	$standC23,	dknight_standC24] { dk_stand(); };
 void()	dknight_standC24= [	$standC24,	dknight_stand1	] { dk_stand(); };
 
-//----------------------------------------------------------------------
 void()	dknight_standD1	= [	$standD1,	dknight_standD2	] { dk_stand(); };
 void()	dknight_standD2	= [	$standD2,	dknight_standD3	] { dk_stand(); };
 void()	dknight_standD3	= [	$standD3,	dknight_standD4	] { dk_stand(); };
@@ -199,7 +197,6 @@ void()	dknight_stand12	= [	$stand12,	dknight_stand1	] {
 	}
 };
 
-//===========================================================================
 void(float dist) dk_walk = {
 	if (self.spawnflags & MON_GHOST_ONLY) {
 		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
@@ -234,7 +231,6 @@ void(float dist) dk_walk = {
 	else ai_walk(dist);
 };
 
-//----------------------------------------------------------------------
 void()	dknight_walk1	= [	$walk1,		dknight_walk2	] { self.idlebusy = FALSE;
 	monster_idle_sound(); dk_walk(2); };
 void()	dknight_walk2	= [	$walk2,		dknight_walk3	] { monster_footstep(FALSE);dk_walk(5); };
@@ -490,7 +486,7 @@ void() dknight_die = {
 // The Death Knight ghost system (this is not a monster)
 
 void() dknight_ghostnull = {};
-//----------------------------------------------------------------------
+
 void() dknight_ghost_glow = {
 	if (self.attachment) {
 		self.attachment.frame = self.frame;
@@ -501,7 +497,7 @@ void() dknight_ghost_glow = {
 		self.attachment.velocity = self.velocity;
 	}
 };
-//----------------------------------------------------------------------
+
 void() dknight_ghost_particle = {
 	self.alpha = 0.5 + (0.1*random());
 	self.pos1 = '0 0 0';
@@ -518,25 +514,30 @@ void() dknight_ghost_particle = {
 	}
 };
 
-//----------------------------------------------------------------------
 // The use function is for triggering the ghost to move
 void() dknight_ghost_use = { 
-	// Check for a delay target route (using target2)
+	// Check for a delay target route (using target2).
 	if (self.estate == ESTATE_ON && self.target2 != "") {
 		self.target = self.target2;
 		self.target2 = "";
 		self.estate = ESTATE_OFF;
 	}
-	// Always go to an on state
-	self.estate_on();
+	
+	self.estate_on(); // Always go to an on state.
 };
 
-//----------------------------------------------------------------------
 void() dknight_ghost_fade = {
-	if (self.estate == ESTATE_ON) return;	
-    self.alpha = self.alpha - FADEMODEL_TIME;
+	if (self.estate == ESTATE_ON) return;
+	self.endstate = self.endstate - FADEMODEL_TIME;
+	if (self.classtype != CT_MONQUEEN) self.alpha = self.endstate;
+	else {
+		if (self.endstate <= 0.8) self.effects = self.effects | EF_MUZZLEFLASH;
+		if (self.endstate <= 0.7) setmodel (self,"");
+		else self.nextthink = time + FADEMODEL_TIME;
+		return;
+	}
 
-    if (self.alpha <= 0) setmodel (self, "");
+    if (self.alpha <= 0) setmodel (self,"");
 	else self.nextthink = time + FADEMODEL_TIME;
 };
 
@@ -545,30 +546,38 @@ void() dknight_ghost_off = {
 	if (self.estate == ESTATE_OFF) return;	
 
 	self.estate = ESTATE_OFF;
-	particle_explode(self.origin+'0 0 -20', 75, 2, PARTICLE_BURST_FIRE, PARTICLE_BURST_UPWARD);
-	self.flags = self.effects = 0;		// Always reset
+	if (self.classtype == CT_MONQUEEN) {
+		particle_explode(self.origin+'0 0 -20', 75, 2, PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
+		particle_explode(self.origin+'0 0 16', 75, 2, PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
+		self.flags = 0;		// Always reset
+	} else {
+		particle_explode(self.origin+'0 0 -20', 75, 2, PARTICLE_BURST_FIRE, PARTICLE_BURST_UPWARD);
+		self.flags = self.effects = 0;		// Always reset
+	}
 	self.takedamage = DAMAGE_NO;		// No pain/death triggers
 	self.movetype = MOVETYPE_NONE;		// Stationary
 	self.solid = SOLID_NOT;				// no world interaction
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);		// No size, no impact
 	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
-	if (self.attachment) {
-		self.attachment.movetype = MOVETYPE_NONE;	// Stationary
-		self.attachment.solid = SOLID_NOT;			// no world interaction
-		setmodel(self.attachment,"");
-		self.attachment.velocity = '0 0 0';
-	}
+	SUB_FinishAttachment();
 	StopSound(self,CHAN_VOICE);
 	self.think = dknight_ghost_fade;
 	self.nextthink = time + FADEMODEL_TIME;
 }
 
 void() dknight_ghost_on = {
-	// Block if already ON
-	if (self.estate == ESTATE_ON) return;	
+	local float pcol;
+	
+	if (self.estate == ESTATE_ON) return; // Block if already ON
 	
 	self.estate = ESTATE_ON;
-	particle_explode(self.origin, 30, 2, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
+	pcol = PARTICLE_BURST_WHITE;
+	if (self.classtype == CT_MONQUEEN) {
+		self.endstate = 1;
+		pcol = PARTICLE_BURST_RED;
+	}
+
+	particle_explode(self.origin,30,2,pcol,PARTICLE_BURST_SKULLUP);
 	self.flags = self.effects = 0;		// Always reset
 	self.takedamage = DAMAGE_NO;		// No pain/death triggers
 	self.movetype = MOVETYPE_NONE;		// Regular walking
@@ -579,13 +588,15 @@ void() dknight_ghost_on = {
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
 	
-	// Setup ghost glow effect
-	if (!self.attachment) self.attachment = spawn();
-	self.attachment.movetype = MOVETYPE_NOCLIP;	// No movement
-	self.attachment.solid = SOLID_NOT;			// no world interaction
-	setmodel(self.attachment, self.headmdl);
-	setsize(self.attachment,VEC_ORIGIN, VEC_ORIGIN);
-	setorigin(self.attachment, self.origin);
+	if (self.classtype != CT_MONQUEEN) {
+		// Setup ghost glow effect
+		if (!self.attachment) self.attachment = spawn();
+		self.attachment.movetype = MOVETYPE_NOCLIP;	// No movement
+		self.attachment.solid = SOLID_NOT;			// no world interaction
+		setmodel(self.attachment, self.headmdl);
+		setsize(self.attachment,VEC_ORIGIN, VEC_ORIGIN);
+		setorigin(self.attachment, self.origin);
+	}
 
 	// Check for any targets to walk toward
 	if (self.target != "") { // Path finding, not entity I/O

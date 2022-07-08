@@ -116,7 +116,6 @@ void()	army_run6	= [	$run6,		army_run7	] { monster_footstep(FALSE);ai_run(15); }
 void()	army_run7	= [	$run7,		army_run8	] { ai_run(10); };
 void()	army_run8	= [	$run8,		army_run1	] { ai_run(8); };
 
-// Move backwards to create some space to fire a rocket
 void()	army_runback1	= [	$run8,	army_runback2	] { ai_backface(8); };
 void()	army_runback2	= [	$run7,	army_runback3	] { ai_backface(10); };
 void()	army_runback3	= [	$run6,	army_runback4	] { monster_footstep(FALSE);ai_backface(15); };
@@ -125,6 +124,20 @@ void()	army_runback5	= [	$run4,	army_runback6	] { ai_backface(10); };
 void()	army_runback6	= [	$run3,	army_runback7	] { ai_backface(10); };
 void()	army_runback7	= [	$run2,	army_runback8	] { monster_footstep(FALSE);ai_backface(15); };
 void()	army_runback8	= [	$run1,	army_run1	] { ai_backface(11); };
+
+// Move backwards to create some space to fire a rocket
+void() army_runbackcheck = {
+	self.oldorigin = self.origin;
+	// If move backward works, run back animation
+	if (walkmove(self.angles_y+180, 16)) {
+		setorigin(self, self.oldorigin);
+		self.attack_state = AS_MELEE;
+		army_runback1();
+	} else {
+		setorigin(self, self.oldorigin);
+		self.attack_state = AS_STRAIGHT;
+	}
+};
 
 void() army_fire = {
 	if (!self.enemy) return;
@@ -522,6 +535,8 @@ void() monster_army = {
 	self.steptype = FS_TYPEMEDIUM;		// Average feet
 	self.attack_offset = '12 8 12';		// End of Gun
 	self.mass = MASS_MEDIUM;
+	self.meleerange = MONAI_RANGEARMYR;
+	self.meleerangez = 0;
 	if (self.deathstring == "") self.deathstring = " was shot by a Grunt\n";	
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     if (self.classtype != CT_MONARMYCYBORG) self.th_checkattack = SoldierCheckAttack;
@@ -553,7 +568,7 @@ void() monster_army_rocket = {
 	if (random() < 0.35 && self.ammo_rockets < 1) self.ammo_rockets = 1;
 	self.th_missile = army_rocket_atk1;
 	self.th_updmissile = army_rocket_think;	// Update flying rocket
-	self.th_melee = army_runback1;
+	self.th_melee = army_runbackcheck;
 	if (self.deathstring == "") self.deathstring = " was blown up by a Rocketeer\n";
 	monster_army();
 };
@@ -568,7 +583,7 @@ void() monster_army_grenade = {
 	else self.exactskin = 7;
 	if (random() < 0.35 && self.ammo_rockets < 1) self.ammo_rockets = 1;
 	self.th_missile = army_grenade_atk1;
-	self.th_melee = army_runback1;
+	self.th_melee = army_runbackcheck;
 	self.bouncegrenade = TRUE; // Grenade bounce off body
 	if (self.deathstring == "") self.deathstring = " was pineappled by a Grenadier\n";
 	monster_army();

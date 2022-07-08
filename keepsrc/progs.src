@@ -299,7 +299,7 @@ mon_demon.qc				// Fiend, vanilla, lunging jumping claw slinging son of a nether
 mon_dog.qc					// Rottweiler, vanilla, bad doggie!
 mon_fish.qc					// Rot Fish, vanilla, essentially a sluggish pirahna
 mon_hknight.qc				// Death Knight, vanilla, basic knight with spikey armor that shoots magic spray at you
-mon_dchampion.qc			// Kinn monster, here because of shared frame macros
+//mon_zmaster.qc			// Zombie Master, Custents, tough mysterious knight who can summon zombies
 mon_knight.qc				// Knight, vanilla, standard tin-can with a sword
 mon_ogre.qc					// Ogre, vanilla, ugly chainsaw toting monster that lobs grenades at you
 mon_enforcer.qc				// Enforcer, vanilla, laser toting soldier with a helmet
@@ -316,7 +316,6 @@ mon_dcrossbow.qc			// Crossbow Knight, AD, medieval enforcer-type monster but wi
 mon_dfury.qc				// Fury Knight, AD, a Persian looking knight with twin blades and magic attacks similar to a vore.  Lunges at you.
 mon_dguard.qc				// Death Guard, AD,
 mon_dknight.qc				// Death Knight, AD,
-mon_swampling.qc			// Swampling, AD,
 mon_drole.qc				// Drole, Quoth but with AD updates, a quad tentacled monstrosity that shoots exploding fireballs and chases you when enraged.
 mon_dsergeant.qc			// Death Seargent, AD, blue flail knight with powerful sweeping flail attack.
 mon_freddie.qc				// Freddie / Eddie, Quoth's ogre mech with AD updates, half ogre, half mech, all mean.
@@ -335,8 +334,8 @@ mon_pyro.qc					// Pyro, Rubicon's flamethrower wielding enforcer with AD update
 mon_scorpion.qc				// Scorpions, AD's implementation of Hexen 2 scorpions.
 mon_seeker.qc				// Hunter Seeker, Rubicon's robot with power shields and AD's updates.
 mon_skullwiz.qc				// Skull Wizard, AD,
-mon_spider.qc				// Spider, Kinn's cute spider monsters, with AD updates.
 mon_voreling.qc				// Voreling, Quoth's baby vore, everyone's favorite monster with AD updates.
+mon_spider.qc				// Spider, Kinn's cute spider monsters, with AD updates.
 mon_wraith.qc				// Wraith, AD's reimplementation of Rogue's wrath, complete with two versions - fire or minion egg throwing.
 mon_zombiek.qc				// Zombie Knight, AD,
 mon_xmas_elf.qc				// Elf, Twisted Christmas's elf with candy cane club, Santa's helper, with AD updates.
@@ -411,7 +410,6 @@ mon_drone.qc				// Drone, Drake, from OUM (Operation Urth Majik) flying small ro
 mon_tur.qc					// Turret, Drake, from OUM, stationary tech trap that can retract and extend.  Likely derived from Custents.
 //mon_turret.qc				// Turret, Custents, stationary tech trap that can shoot phase beams
 //mon_srvomech.qc			// Servo Mech, Custents, walking robot. Also player controllable via the vehicle system
-//mon_zmaster.qc			// Zombie Master, Custents, tough mysterious knight who can summon zombies
 mon_hydra.qc				// Hydra, Hexen II, implemented by khreathor as part of extras_r5 update patch to extras_r4
 mon_snakeman.qc				// Snakeman, a snake with twin nailguns.
 mon_wspider.qc				// Willy the Spider, an old classic spider that shoots scrag spit.

@@ -98,12 +98,8 @@ void() FlakTouch = {
 		self.nextthink = time + 0.05;
 		return;
 	}
-	
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_SUPERSPIKE);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+
+	Tent_Point(TE_SUPERSPIKE,self.origin);
 	if (self.spawnflags & MONSTER_FLAK_OGRE) { remove(self); return; } // bit of a hack
 
 	self.dmg = self.dmg - 5;	// gets weaker with each bounce. also stops them getting stuck in world.

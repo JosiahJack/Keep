@@ -170,9 +170,14 @@ void(float dist) ai_run = {
 	movedist = dist;
 	winner = FALSE;
     if (self.enemy) {
-		if ((self.enemy.flags & FLx_CREATURE) && visible(self.enemy)) {
-			winner = TRUE;
-			self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin); // Set yaw in case we need to face the fallen during the dance.
+		if ((self.enemy.flags & FLx_CREATURE)) {
+			if (visible(self.enemy)) {
+				self.carry_time = 0;
+				winner = TRUE;
+				self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin); // Set yaw in case we need to face the fallen during the dance.
+			} else {
+				self.carry_time = self.carry_time + 0.1;	
+			}
 		}
 		if (self.enemy.classtype == CT_SOUL) {
 			self.gorging = TRUE;
@@ -375,11 +380,8 @@ void(float dist) ai_run = {
 	// Some monsters don't have distance checks, like wizards
 	// All monsters have checkattack defined, no need for ifs and buts!
 	if (self.enemymaxdist || self.attack_sniper || self.enemydist < MON_MAX_RANGE) {
-		if (!self.th_checkattack) {
-			self.th_checkattack = CheckAttack;
-		} else {
-			self.th_checkattack();
-		}
+		if (!self.th_checkattack) self.th_checkattack = CheckAttack;
+		self.th_checkattack();
 	}
 
 	if (self.attack_state == AS_SLIDING) {

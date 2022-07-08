@@ -81,11 +81,7 @@ void() dg_fireball_touch = {
 		return;
 	}
 	org = self.origin - 8 * normalize(self.velocity);
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord(MSG_BROADCAST, org_x);
-	WriteCoord(MSG_BROADCAST, org_y);
-	WriteCoord(MSG_BROADCAST, org_z);
+	Tent_Explosion(org);
 	sound(self, CHAN_VOICE, "quoth/dguard/hit.wav", 1, ATTN_NORM);
 	T_RadiusDamage(self, self.owner, 40, other,DAMAGEALL);
 	if (other.classgroup == CG_ZOMBIE) T_Damage(other, self, self.owner, 120,DAMARMOR); // gib zombies!
@@ -94,20 +90,15 @@ void() dg_fireball_touch = {
 };
 
 void() deathguard_shot = {
-	local vector org;
-	local vector vec;
-	local vector spot1;
-	local vector spot2;
+	local vector org, vec, spot1, spot2;
 	local entity targ;
 
 	targ = self.enemy;
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 	traceline(spot1, spot2, 0, self);
-	if (trace_ent != targ) {
-		self.think = self.th_run;
-		return;
-	}
+	if (trace_ent != targ) { self.think = self.th_run; return; }
+
 	hknight_shot(0);
 	newmis.mdl = "progs/quoth/fireball.mdl";
 	org = self.origin + '0 0 24';

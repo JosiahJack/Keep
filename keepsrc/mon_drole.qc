@@ -433,11 +433,13 @@ void() monster_drole = {
 	self.attack_offset = '0 0 34';		// Middle of chest
 	if (self.deathstring == "") self.deathstring = " was decimated by a Drole\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = DroleCheckAttack;
+	self.th_checkattack = MinotaurCheckAttack;
 	self.th_stand = drole_standC1;
 	self.th_walk = drole_walk1;
 	self.th_run = drole_run;
 	self.th_melee = drole_melee;		// Claw attack
+	self.meleerange = MONAI_MELEEDROLE2;
+	self.meleerangez = MONAI_MELEEZTALL;
 	self.th_missile = drole_magic1;		// Fireball incoming!
 	self.th_updmissile = drole_rocket1;	// Update flying rocket
 	self.th_pain = drole_pain;

@@ -30,7 +30,7 @@
 // Entity count: 1
 // Function count: 121
 //
-// Implements: Voreling
+// Implements: Voreling, Swampling
 //
 // Description:
 // A baby vore that bites your kneecaps off, can start hanging from the
@@ -39,6 +39,8 @@
 // AD added the growing effect when spawning from an egg as a minion dropped by
 // momma vores.  AD also added large purple variant that attacks with toxic
 // (poisonous) spit.
+//
+// The monster_swampling variant is a slimy poisonous green version.
 //=============================================================================
 
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
@@ -104,8 +106,7 @@ void(float dist) voreling_checkpause = {
 
 	self.movespeed = self.movespeed + 1; // Make vorelings run in bursts of
 										 // speed and reset every run cycle.
-	// Do run code to check for enemies
-	ai_run(dist + self.movespeed);
+	ai_run(dist + self.movespeed); // Do run code to check for enemies
 	if (self.enemydist < MONAI_RUNPAUSE) return; // Too close
 
 	// Random chance to stop and pause running
@@ -136,16 +137,29 @@ void()	voreling_slide3	= [	$walk3,		voreling_slide4	] { ai_run_slide(6); };
 void()	voreling_slide4	= [	$walk4,		voreling_slide5	] { ai_run_slide(4); };
 void()	voreling_slide5	= [	$walk5,		voreling_run1	] { ai_run(4); };
 
-// VORELING 2 - PURPLE SPIT FUNCTIONS (range)
+// VORELING 2 - PURPLE/POISON SPIT FUNCTIONS (range)
 void(float sideang) voreling_spitacid = {
-	local	vector org, ang, dir, avel;
+	local vector org, ang, dir, avel;
+	local string snd;
+	local float projtype;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
+
+	if (self.classtype == CT_MONSWAMPLING) {
+		snd = "ad171/swampling/spit4.wav";
+		projtype = CT_PROJ_SWAMP;
+	} else if (self.classtype == CT_MONSPIDER) {
+		snd = self.idle_sound2;
+		projtype = CT_PROJ_SPID;
+	} else {
+		snd = "ad171/spider/hiss2.wav";
+		projtype = CT_PROJ_VORE;
+	}
 		
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (sideang < 0) sound (self, CHAN_WEAPON, "ad171/spider/hiss2.wav", 1, ATTN_NORM);
+	if (sideang < 0) sound (self,CHAN_WEAPON,snd,1,ATTN_NORM);
 	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
@@ -156,7 +170,7 @@ void(float sideang) voreling_spitacid = {
 	// fire spit in arc pattern (sideang)
 	dir = (v_forward * SPEED_VORELING + v_right * sideang);	
 	avel = vecrand(100,200,FALSE);
-	launch_projectile(org,dir,avel,CT_PROJ_VORE,1);
+	launch_projectile(org,dir,avel,projtype,1);
 };
 
 void()	voreling_spit1 = [$pain1, voreling_spit2 ] { ai_face();self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_VORELING); };
@@ -178,22 +192,27 @@ void() voreling_melee = {
 		
 	ai_charge(10);			// Get closer for extra bite
 	ai_damagebreakable(10);	// Damage any breakables
-
 	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return;	// Too far away
 	if (!self.enemy.takedamage) return; // Can the target bleed?
 
-	if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bitestrt.wav", TRUE, TRUE);
-	else {
-		if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bite.wav", TRUE, TRUE);
-		else sound(self, CHAN_VOICE, "ad171/voreling/attacktear.wav", TRUE, TRUE);
+	if (self.classtype == CT_MONSPIDER) {
+		if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/spider/attackmunch.wav", TRUE, TRUE);
+		else sound(self, CHAN_WEAPON, "ad171/spider/attacktear.wav", TRUE, TRUE);
+	} else {
+		if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bitestrt.wav", TRUE, TRUE);
+		else {
+			if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bite.wav", TRUE, TRUE);
+			else sound(self, CHAN_VOICE, "ad171/voreling/attacktear.wav", TRUE, TRUE);
+		}
 	}
 
-	ldmg = (random() + random() + random()) * 3; // Voreling bite is very weak
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-	spawn_touchblood (self, self.enemy, ldmg*3);
+	if (self.poisonous) PoisonDeBuff(self.enemy);
+	ldmg = SUB_ClampFloat((random() + random() + random()) * 3,1,9); // Very weak.
+	T_Damage(self.enemy,self,self,ldmg,DAMARMOR);
+	spawn_touchblood(self,self.enemy,ldmg * 3);
 };
 
-void()	voreling_bite1	= [	$bite1, voreling_bite2	] { ai_face(); }; // Start bite attack loop
+void()	voreling_bite1	= [	$bite1, voreling_bite2	] { ai_face(); };
 void()	voreling_bite2	= [	$bite2, voreling_bite3 ] { ai_face(); }; 
 void()	voreling_bite3	= [	$bite3, voreling_bite4 ] { ai_face(); };
 void()	voreling_bite4 = [	$bite4, voreling_bite5 ] { voreling_melee(); };
@@ -214,13 +233,13 @@ void()	Voreling_JumpTouch = {
 
 	// Do not damage other vorelings with jump attacks
 	// Prevents packs from killing themselves
-	if (self.classtype != other.classtype && other.takedamage) {
-		if ( vlen(self.velocity) > 300 ) {
+	if ((self.classtype != other.classtype || Align_Opposing(self,other))
+		&& other.takedamage) {
+		if (vlen(self.velocity) > 300 ) {
 			ldmg = 5 + 5*random();
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
-			// Spawn some touch blood (no explicit direction)
-			spawn_touchblood (self, self.enemy, ldmg*3);
+			T_Damage(other,self,self,ldmg,DAMARMOR);	
+			spawn_touchblood(self,self.enemy,ldmg*3);
 		}
 	}
 
@@ -233,11 +252,9 @@ void()	Voreling_JumpTouch = {
 		}
 	}
 
-	// Next timer
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------------
 void() voreling_leap1	= [	$jump1, voreling_leap2	] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	monster_idle_sound();
@@ -265,7 +282,7 @@ void() voreling_leap6	= [	$jump6, voreling_leap7	] {
 	}
 	self.oldorigin = self.origin;
 };
-//----------------------------------------------------------------------
+
 void() voreling_leap7 = [$jump3, voreling_leap8 ] { monster_footstep(FALSE); };
 void() voreling_leap8 = [$jump2, voreling_leap9 ] { monster_footstep(FALSE); };
 void() voreling_leap9 = [$jump1, voreling_run1	] { ai_resetangles(); };
@@ -280,7 +297,6 @@ void()	voreling_idleup4 = [$idleup4, voreling_idleup5] { ai_stand(); };
 void()	voreling_idleup5 = [$idleup5, voreling_idleup6] { ai_stand(); };
 void()	voreling_idleup6 = [$idleup6, voreling_idleup1] { ai_stand(); };
 
-//----------------------------------------------------------------------
 void() voreling_droptouch = {
 	// Check if landed on something that is not the ground?
 	if (!checkbottom(self)) {
@@ -300,15 +316,12 @@ void() voreling_droptouch = {
 	// No more flying, back to running
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	setsize(self, self.bbmins, self.bbmaxs);
+	setsize(self,self.bbmins,self.bbmaxs);
 	self.view_ofs = '0 0 24';		// Restore view offset
-
 	self.touch = SUB_Null;			// No more jump touching
 	FoundHuntTarget(TRUE);			// Setup goals and warn other monsters
 	if (self.enemy.flags & FL_CLIENT) monster_sightsound();
-
-	// Restore all think state functions (voreling is off the ceiling)
-	self.th_stand = voreling_idle1;
+	self.th_stand = voreling_idle1; // Restore all thinks, off ceiling now.
 	self.th_walk = voreling_walk1;
 	self.th_run = voreling_run1; 
 	self.th_slide = voreling_slide1;
@@ -333,32 +346,23 @@ void()	voreling_drop5	= [	$drop5,	voreling_drop5	] {
 };
 
 void() voreling_wakeup = {
-	// Dead already?
-	if (self.health < 1) return;
-		
-	// Only call wakeup function once
-	self.th_walk = self.th_run = self.th_slide = SUB_Null;
+	if (self.health < 1) return; // Dead already?
 
 	// No longer need cling to ceiling spawnflag, remove it
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_VORELING_CEILING);
-
+	self.th_walk = self.th_run = self.th_slide = SUB_Null; // Only wakeup once.
 	self.flags = FL_MONSTER;			// reset flags
-	
 	if (engine == ENG_FITZ) self.origin_z = self.origin_z - 8;
 	else self.origin_z = self.origin_z - 32;	// Unstick from ceiling
 	setorigin(self, self.origin);		// Move down slightly
-	
 	self.movetype = MOVETYPE_TOSS;		// Affected by gravity
 	self.solid = SOLID_SLIDEBOX;
 	self.attack_timer = time + 1;		// Stuck timer
-
 	self.classmove = MON_MOVEWALK;		// Back to walking/running 
 	self.pain_finished = time + 1.5;	// No pain
-	SUB_AttackFinished(2 + random());	// No attacking
-		
+	SUB_AttackFinished(2 + random());	// No attacking for short bit
 	makevectors(self.angles);			// Move towards face direction
 	self.velocity = v_forward * 50;		// Slight nudge forward
-
 	self.touch = voreling_droptouch;	// Touch something?
 	if (!self.jump_flag) 
 	self.jump_flag = time + 1 + random()*2;	// Don't jump straight away
@@ -377,25 +381,18 @@ void() voreling_grow7 = [$grow7, voreling_grow8 ] { voreling_growangle(); };
 void() voreling_grow8 = [$grow8, voreling_grow9 ] { voreling_growangle(); };
 void() voreling_grow9 = [$grow9, voreling_grow10] { voreling_growangle(); };
 void() voreling_grow10= [$grow10, voreling_run1 ] {
-	// Is the voreling stuck? cannot move?
-	if (pointcontents(self.origin) == CONTENT_SOLID) {
-		// Time to die!
+	if (!InOpenOrLiquid(self.origin)) { // Is the voreling stuck? cannot move?
 		self.health = self.gibhealth;
-		Killed(self, self);
-	}
-	else {
-		// Finally spin back to original position
-		self.angles_y = self.angles_y + self.lefty;
-		// Setup goals and warn other monsters
-		FoundHuntTarget(TRUE);
-
-		// Restore all think state functions
-		self.th_stand = voreling_idle1;
+		Killed(self,self); // Time to die!
+	} else {
+		self.angles_y = self.angles_y + self.lefty; // Spin to original position
+		FoundHuntTarget(TRUE); // Setup goals and warn other monsters
+		self.th_stand = voreling_idle1; // Restore all think state functions
 		self.th_walk = voreling_walk1;
 		self.th_run = voreling_run1; 
 		self.th_slide = voreling_slide1;
 		self.th_melee = voreling_bite1;
-		// Voreling 1 and 2 have different range attacks
+		// Large variants have different range attacks
 		if (self.spawnflags & MON_VORELING_LARGE) self.th_missile = voreling_spit1;
 		else {
 			self.th_jump = voreling_leap1;
@@ -457,12 +454,10 @@ void() voreling_dieB6 = [	$deathB6, voreling_dieB7	] { monster_death_postcheck()
 void() voreling_dieB7 = [	$deathB7, voreling_dieB7	] { monster_deadbody_check(); };
 
 void() voreling_die = {
-	self.max_health = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far
+	if (random() < 0.5) self.max_health = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far
 	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE; // Has the voreling died while on the ceiling?
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-
-	// regular death
-	if (!self.gibbed) {
+	if (!self.gibbed) { // regular death
 		sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
 		if (random() < 0.6) voreling_die1();
 		else voreling_dieB1();
@@ -487,27 +482,61 @@ void() monster_voreling_precache = {
 	precache_sound ("quoth/voreling/sight.wav");
 };
 
+void() monster_swampling_precache = {
+	monster_voreling_precache();
+	precache_model("progs/ad171/mon_swamplingp.mdl");
+	precache_model("progs/ad171/gib_swamplegp.mdl");
+	precache_model("progs/ad171/mon_swampling.mdl");
+	precache_model("progs/ad171/gib_swampleg.mdl");
+	precache_model(MODEL_PROJ_SWAMP);			// Spit Projectile
+	precache_poisongibs();
+	precache_sound("ad171/swampling/idle1.wav");
+	precache_sound("ad171/swampling/idle3.wav");
+	precache_sound("ad171/swampling/idle2.wav");
+	precache_sound("ad171/swampling/pain3.wav");
+	precache_sound("ad171/swampling/spit4.wav");	// Spit attack
+	precache_sound("ad171/swampling/sight2.wav");
+};
+
 void() setup_voreling;
 
 // QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_voreling = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.spawnflags & MON_VORELING_LARGE) {
-		self.mdl = "progs/ad171/mon_vorelingp.mdl";
-		self.gib1mdl = "progs/ad171/gib_vorelegp.mdl";	// Single Leg
+		if (self.mdl == "") self.mdl = "progs/ad171/mon_vorelingp.mdl";
+		if (self.gib1mdl == "") self.gib1mdl = "progs/ad171/gib_vorelegp.mdl";	// Single Leg
 	}
 	if (!(self.spawnflags & MON_VORELING_LARGE) || 
 		self.classtype == CT_CACHEVORELING) {
-		self.mdl = "progs/ad171/mon_voreling.mdl";
-		self.gib1mdl = "progs/q15/gib_voreleg.mdl";		// Single Leg, q15 has added frame
+		if (self.mdl == "") self.mdl = "progs/ad171/mon_voreling.mdl";
+		if (self.gib1mdl == "") self.gib1mdl = "progs/q15/gib_voreleg.mdl";		// Single Leg, q15 has added frame
 	}
 	
-	self.idle_sound = "quoth/voreling/idle.wav"; // IDLE/COMBAT and SIGHT sounds
-	self.pain_sound = "quoth/voreling/pain.wav";
-	self.sight_sound = "quoth/voreling/sight.wav";
-
+	if (self.idle_sound == "") self.idle_sound = "quoth/voreling/idle.wav"; // IDLE/COMBAT and SIGHT sounds
+	if (self.pain_sound == "") self.pain_sound = "quoth/voreling/pain.wav";
+	if (self.sight_sound == "") self.sight_sound = "quoth/voreling/sight.wav";
 	if (self.classtype != CT_CACHEVORELING) setup_voreling(); // Cache voreling is a special class used for precache only
+};
+
+void() monster_swampling = { // [ENTITY]
+	self.classtype = CT_MONSWAMPLING;
+	if (self.spawnflags & MON_VORELING_LARGE) {
+		self.mdl = "progs/ad171/mon_swamplingp.mdl";
+		self.gib1mdl = "progs/ad171/gib_swamplegp.mdl";	// Single Leg
+	} else {
+		self.mdl = "progs/ad171/mon_swampling.mdl";
+		self.gib1mdl = "progs/ad171/gib_swampleg.mdl";	// Single Leg
+	}
+	self.idle_sound = "ad171/swampling/idle1.wav"; // IDLE/COMBAT and SIGHT sounds
+	self.idle_sound2 = "ad171/swampling/idle3.wav";
+	self.idle_soundcom = "ad171/swampling/idle2.wav";
+	self.pain_sound = "ad171/swampling/pain3.wav";
+	self.sight_sound = "ad171/swampling/sight2.wav";
+	if (self.poisonous == 0) self.poisonous = TRUE;
+	if (self.deathstring == "") self.deathstring = " was bitten by a Swampling\n";
 };
 
 void() monster_shalrathminion = { 
@@ -526,6 +555,8 @@ void() setup_voreling = { // [ENTITY]
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.meleeoffset = '20 0 0';		// Bite attack offset
+	self.meleerange = MONAI_MELEESPIDER;
+	self.meleerangez = 0;
 	self.attack_offset = '14 0 8';		// Used by purple voreling, at jaws
 	self.movespeed = 1;					// Can never be a turret
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
@@ -553,6 +584,11 @@ void() setup_voreling = { // [ENTITY]
 		if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 200';
 		if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPVORELINGNEAR;
 		if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPVORELINGFAR;
+	}
+
+	// Check for quoth on ceiling entity flag
+	if (self.dangle) {
+		self.spawnflags = self.spawnflags | MON_VORELING_CEILING;
 	}
 
 	// Ceiling vorelings have special idle animation and need to let go of the ceiling before resuming any normal behaviour (most think functions are intercepted)

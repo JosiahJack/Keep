@@ -1,13 +1,10 @@
-/*==============================================================================
-OLD ONE / Shub-Niggurath (ID software Version)
-==============================================================================*/
+// OLD ONE / Shub-Niggurath (ID software Version)
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13 idle14 idle15 idle16
 $frame idle17 idle18 idle19 idle20 idle21 idle22 idle23 idle24
 $frame idle25 idle26 idle27 idle28 idle29 idle30 idle31 idle32
 $frame idle33 idle34 idle35 idle36 idle37 idle38 idle39 idle40
 $frame idle41 idle42 idle43 idle44 idle45 idle46
-
 $frame shake1 shake2 shake3 shake4 shake5 shake6 shake7 shake8
 $frame shake9 shake10 shake11 shake12 shake13 shake14 shake15
 $frame shake16 shake17 shake18 shake19 shake20
@@ -16,56 +13,9 @@ float SHUB_PHASE1 = 1;  // Waiting for a trigger event
 float SHUB_PHASE2 = 2;  // Fighting
 float SHUB_PHASE3 = 3;  // Frenzy mode
 float SHUB_PHASE4 = 4;	// Death
-
 float SHUB_NEEDS_2ND_TRIG = 8;
 
-// Setup wave HP and trigger boundaries (one function to be consistent)
-void() xxshub_WaveSetupHP = {
-	// Is there anymore boss waves left?
-	if (self.bosswave >= self.bosswavetotal) {
-		// Only one wave left (death is final trigger)
-		self.health = self.bosswaveqty;
-		self.bosswavetrig = -1000;
-	}
-	else {
-		// Multiple waves are still left (reset hp+trigger)
-		// Always reset HP to stop high DPS weapons trashing waves boundaries
-		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
-		// The wave trigger is always one wave lower
-		self.bosswavetrig = self.health - self.bosswaveqty;
-	}
-	// Debug messages for wave and health
-	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
-	dprint(" / "); dprint(ftos(self.bosswavetotal));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
-	dprint(")\n");
-};
-
 void() xxshub_wakeup;
-
-// Check if HP has reached next boss wave trigger event
-float() xxshub_WaveCheck = {
-	// Check for boss wave boundary event
-	if (self.health > 1 && self.health < self.bosswavetrig) {
-		// Check for wave boundary triggers
-		self.noise = "";
-		if (self.bosswave == 1) self.noise = self.noise1;
-		else if (self.bosswave == 2) self.noise = self.noise2;
-		else if (self.bosswave == 3) self.noise = self.noise3;
-		else if (self.bosswave == 4) self.noise = self.noise4;
-		
-		// Is there any trigger for the wave boundary?
-		if (self.noise != "") trigger_strs(self.noise, self);
-
-		// Update Boss wave parameters (next wave!)
-		self.bosswave = self.bosswave + 1;
-		xxshub_WaveSetupHP();		// Reset trigger/hp
-		self.style = SHUB_PHASE3;	// Frenzy mode
-		return TRUE;
-	}
-	return FALSE;
-};
 
 // IDLE state - flailing arms (only state really)
 void() xxshub_idleframe = {
@@ -82,7 +32,7 @@ void() xxshub_idleframe = {
 	self.nextthink = time + 0.1;
 	self.think = xxshub_idleframe;
 	self.frame = $idle1 + self.walkframe; // Setup current animation frame
-	if (xxshub_WaveCheck() == TRUE) self.th_missile(); // Check for HP trigger event
+	if (SUB_BossWaveCheck(0)) self.th_missile(); // Check for HP trigger event
 	
 	// Check for combat event
 	if (self.style == SHUB_PHASE2) {
@@ -183,7 +133,7 @@ void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 	self.pain_finished = time + 2 + random()*2;
 
 	// Check for boss wave trigger events
-	if (xxshub_WaveCheck() == TRUE) { self.th_missile(); return;}
+	if (SUB_BossWaveCheck(0)) { self.th_missile(); return;}
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -202,17 +152,8 @@ void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 
 // FINAL DEATH - shake it baby and explode
 void() xxshub_explode = {
-	// No more Boss!
-	entity_hide(self);
-	
-	// Blue ID particle explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteByte (MSG_BROADCAST, 35);
-	WriteByte (MSG_BROADCAST, 8);
+	entity_hide(self); // No more Boss!
+	Tent_Explosion2(self.origin,35,8); // Blue ID particle explosion
 	
 	// Classic sprite/DP explosion
 	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
@@ -319,7 +260,7 @@ void() xxshub_start = {
 	self.bosswave = 1; // Always start bosswave at 1
 	if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	xxshub_WaveSetupHP(); // Setup boss wave HP + trigger event
+	SUB_BossWaveSetupHP(); // Setup boss wave HP + trigger event
 
 	// Restore all think functions
 	self.th_stand = xxshub_idle;

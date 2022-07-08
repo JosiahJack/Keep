@@ -1044,29 +1044,9 @@ void() trig_explode_fire = { // [FUNCTION]
 
 	if (self.dmg > 0) T_RadiusDamage (self, self, self.dmg, self, DAMAGEALL); // create any explosive radius damage	
 	if ( !(self.spawnflags & TRIG_EXPLODENOEFF) ) { // Check for old particle effect
-		if (self.style == 0) {
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_EXPLOSION); // classic ID explosion
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-		} else if (self.style == 1) {
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New Rogue extension - Blue
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-			WriteByte (MSG_BROADCAST, 39);	// Blue 32 + 7
-			WriteByte (MSG_BROADCAST, 8);	// Colour range
-		} else if (self.style == 2) {
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New Rogue extension - Green
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-			WriteByte (MSG_BROADCAST, 55);	// Green 48 + 7
-			WriteByte (MSG_BROADCAST, 8);	// Colour range
-		}
+		if (self.style == 0) Tent_Explosion(self.origin); // classic ID explosion
+		else if (self.style == 1) Tent_Explosion2(self.origin,39,8); // New Rogue extension - Blue
+		else if (self.style == 2) Tent_Explosion2(self.origin,55,8); // New Rogue extension - Green
 	}
 
 	if (self.height == -1) self.lip = rint(0.5+ random() * 2.5); // Check for randomly sized explosion type

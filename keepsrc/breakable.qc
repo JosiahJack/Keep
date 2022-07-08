@@ -257,6 +257,7 @@ string SOUND_AXE_STONE = "player/axhit2.wav";			// stone impact
 void() make_breakable_debris;
 void() BecomeExplosion;
 void(float fx,vector spot) Tent_Point;
+void(vector spot) Tent_Explosion;
 
 // Qmaster's custom template breakable setup
 .string break_template1;
@@ -480,7 +481,7 @@ void() funcbreakable_use = { // [FUNCTION]
 		setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 		// Produce explosion sprite/particle effect using attachment entity
 		if (self.spawnflags & BREAK_EXPLOSION) {
-			Tent_Point(TE_EXPLOSION,self.attachment.origin);
+			Tent_Explosion(self.attachment.origin);
 			SpawnExplosion(EXPLODE_SMALL, self.attachment.origin, SOUND_REXP3);
 			entity_hide(self); // Do no remove breakable, the rumble is still using the noise keys for impact sounds
 		}

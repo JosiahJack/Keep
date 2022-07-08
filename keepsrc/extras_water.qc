@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 2
-// Function count: 13
+// Function count: 14
 //
 // Implements: Moving Water Volumes
 //
@@ -318,6 +318,21 @@ void() liquid_spawnnoisemaker = { // [FUNCTION]
 	setorigin(self.aiment, self.aiment.pos1); // Get in position in case STARTSOUND is set
 };
 
+void() liquid_default_cshifts = { // [FUNCTION]
+	if (self.cshift == "") {
+		if (self.watertype == CONTENT_WATER) {
+			self.cshift = "130 80 50 128";
+			self.alpha = world.water_alpha;
+		} else if (self.watertype == CONTENT_SLIME) {
+			self.cshift = "0 25 5 150";
+			self.alpha = world.slimealpha;
+		} else if (self.watertype == CONTENT_LAVA) {
+			self.cshift = "255 80 0 150";
+			self.alpha = world.lavaalpha;
+		}
+	}
+};
+
 // QUAKED func_water (0 .5 .8)
 // Turns a brush into a liquid-mimic that can move up & down.
 // "watertype"		-3 = water, -4 = slime, -5 = lava
@@ -348,18 +363,7 @@ void() func_water = { // [ENTITY]
 	self.classname = "fliquid";
 	self.touch = liquid_touch;
 	if (self.watertype<-5 || self.watertype>-3) self.watertype = CONTENT_WATER;
-	if (self.cshift == "") {
-		if (self.watertype == CONTENT_WATER) {
-			self.cshift = "130 80 50 128";
-			self.alpha = world.water_alpha;
-		} else if (self.watertype == CONTENT_SLIME) {
-			self.cshift = "0 25 5 150";
-			self.alpha = world.slimealpha;
-		} else if (self.watertype == CONTENT_LAVA) {
-			self.cshift = "255 80 0 150";
-			self.alpha = world.lavaalpha;
-		}
-	}
+	liquid_default_cshifts();
 
 	if (self.drag > 100) self.drag = 100; // Cap drag force
 	if (self.drag < 0) self.drag = 0;
@@ -422,20 +426,7 @@ void() func_watertrain_init = {
 void() func_watertrain = { // [ENTITY]
 	if (!self.target) objerror ("func_watertrain without a target");
 	if (self.watertype<-5 || self.watertype>-3) self.watertype = CONTENT_WATER;
-	if (self.cshift == "") {
-		if (self.watertype == CONTENT_WATER) {
-			self.cshift = "130 80 50 128";
-			self.alpha = world.water_alpha;
-		} else if (self.watertype == CONTENT_SLIME) {
-			self.cshift = "0 25 5 150";
-			self.alpha = world.slimealpha;
-		} else if (self.watertype == CONTENT_LAVA) {
-			self.cshift = "255 80 0 150";
-			self.alpha = world.lavaalpha;
-		}
-	}
-	
-	
+	liquid_default_cshifts();
 	if (self.drag > 100) self.drag = 100; // Cap drag force
 	if (self.drag < 0) self.drag = 0;
 	if (self.mangle != '0 0 0') self.mangle = self.mangle*50;	

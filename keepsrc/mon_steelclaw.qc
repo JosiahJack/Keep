@@ -181,35 +181,6 @@ void() steelc_bite7 = [$atkloop7, steelc_bite8 ] {};
 void() steelc_bite8 = [$atkup7, steelc_bite9 ] {};
 void() steelc_bite9 = [$atkup3, steelc_run1 ] {};
 
-// JUMP FUNCTION (range)
-void() steelc_JumpTouch = {
-	if (self.health <= 0) return;
-	ai_jumpbreakable(20);			// Damage any breakables
-	self.touch = SUB_Null;			// No more touching
-	self.count = self.count + 1;	// Total amount of touch jumps
-	self.think = self.th_jumpexit;	// Exit frame
-	self.jumptouch = other;			// Keep track of touch target
-
-	// Prevents packs from killing themselves
-	if (self.classgroup != other.classgroup && other.takedamage) {
-		sound (self, CHAN_VOICE, "ad171/scorpion/jumphit.wav", 1, ATTN_NORM);
-		if (Align_DamageModifier(other,self,1, TRUE)) BleedDeBuff(other);
-		spawn_touchblood (self, self.enemy, 100);
-	}
-
-	// Is floating in the air?
-	if (!checkbottom(self)) {
-		// Is standing on something?		
-		if (self.flags & FL_ONGROUND) {	
-			// Do an extra jump if got the count
-			if (self.count < 2)  self.think = self.th_jump;
-		}
-	}
-
-	// Next timer
-	self.nextthink = time + 0.1;
-};
-
 void() steelc_leap1 = [$jump1, steelc_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much
 	if (random() > 0.5) {
@@ -232,7 +203,7 @@ void() steelc_leap3 = [$jump5, steelc_leap4 ] { ai_face();
 	self.velocity = v_forward * self.attack_speed;
 	
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much
-	self.touch = steelc_JumpTouch;
+	self.touch = pinch_jumptouch;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
 };

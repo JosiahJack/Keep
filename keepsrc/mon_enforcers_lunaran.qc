@@ -122,11 +122,7 @@ void() enforcer_missiletouch = {
 	}
 	T_RadiusDamage (self, self.owner, damg, other, IGNORECLASS);
 	self.origin = self.origin - 8*normalize(self.velocity);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin);
 	BecomeExplosion();
 };
 

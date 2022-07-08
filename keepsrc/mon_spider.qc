@@ -95,61 +95,28 @@ void() spider_walk6 = [$walk11, spider_walk7] { monster_footstep(FALSE); ai_walk
 void() spider_walk7 = [$walk13, spider_walk8] { ai_walk(4); };
 void() spider_walk8 = [$walk15, spider_walk1] { ai_walk(5); };
 
+void()	spider_runp1	= [	$idle1,	spider_runp2	] { voreling_runpause(); };
+void()	spider_runp2	= [	$idle2,	spider_runp3	] { voreling_runpause(); };
+void()	spider_runp3	= [	$idle3,	spider_runp4	] { voreling_runpause(); };
+void()	spider_runp4	= [	$idle4,	spider_runp5	] { voreling_runpause(); };
+void()	spider_runp5	= [	$idle5,	spider_runp6	] { voreling_runpause(); };
+void()	spider_runp6	= [	$idle6,	spider_runp7	] { voreling_runpause(); };
+void()	spider_runp7	= [	$idle7,	spider_runp8	] { voreling_runpause(); };
+void()	spider_runp8	= [	$idle8,	spider_runp9	] { voreling_runpause(); };
+void()	spider_runp9	= [	$idle9,	spider_runp10	] { voreling_runpause(); };
+void()	spider_runp10	= [	$idle10,spider_runp11	] { voreling_runpause(); };
+void()	spider_runp11	= [	$idle11,spider_runp12	] { voreling_runpause(); };
+void()	spider_runp12	= [	$idle12,spider_runp13	] { voreling_runpause(); };
+void()	spider_runp13	= [	$idle13,spider_runp1	] { voreling_runpause(); };
 
-void() spider_runpause = {
-	// Do nothing is not to fight or dead
-	if (!self.enemy) return;
-	if (self.health < 1) return;
-
-	if (self.jump_flag < time) self.th_run();
-	// Is the enemy too close? no more pausing, fight!
-	self.enemydist = range_distance(self.enemy, FALSE);
-	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
-};
-
-//----------------------------------------------------------------------
-void()	spider_runp1	= [	$idle1,	spider_runp2	] { spider_runpause(); };
-void()	spider_runp2	= [	$idle2,	spider_runp3	] { spider_runpause(); };
-void()	spider_runp3	= [	$idle3,	spider_runp4	] { spider_runpause(); };
-void()	spider_runp4	= [	$idle4,	spider_runp5	] { spider_runpause(); };
-void()	spider_runp5	= [	$idle5,	spider_runp6	] { spider_runpause(); };
-void()	spider_runp6	= [	$idle6,	spider_runp7	] { spider_runpause(); };
-void()	spider_runp7	= [	$idle7,	spider_runp8	] { spider_runpause(); };
-void()	spider_runp8	= [	$idle8,	spider_runp9	] { spider_runpause(); };
-void()	spider_runp9	= [	$idle9,	spider_runp10	] { spider_runpause(); };
-void()	spider_runp10	= [	$idle10,spider_runp11	] { spider_runpause(); };
-void()	spider_runp11	= [	$idle11,spider_runp12	] { spider_runpause(); };
-void()	spider_runp12	= [	$idle12,spider_runp13	] { spider_runpause(); };
-void()	spider_runp13	= [	$idle13,spider_runp1	] { spider_runpause(); };
-
-//----------------------------------------------------------------------
-void(float dist) spider_checkpause = {
-	// Do nothing is not to fight or dead
-	if (!self.enemy) return;
-	if (self.health < 1) return;
-
-	// make spider run in bursts of speed (reset every run animation cycle)
-	self.movespeed = self.movespeed + 1;
-	// Do run code to check for enemies
-	ai_run(dist + self.movespeed);
-	
-	// Check if target is too close?
-	if (self.enemydist < MONAI_RUNPAUSE) return;
-	// Random chance to stop and pause running
-	if (self.movespeed > 7 && random() < 0.2) {
-		self.jump_flag = time + random();
-		self.think = spider_runp1;
-	}
-};
-
-void()	spider_run1 = [$walk1, spider_run2 ] { self.movespeed = 0; monster_idle_sound();spider_checkpause(8); };
-void()	spider_run2 = [$walk3, spider_run3 ] { monster_footstep(FALSE); spider_checkpause(6); };
-void()	spider_run3 = [$walk5, spider_run4 ] { spider_checkpause(8); };
-void()	spider_run4 = [$walk7, spider_run5 ] { spider_checkpause(10); };
-void()	spider_run5 = [$walk9, spider_run6 ] { spider_checkpause(8); };
-void()	spider_run6 = [$walk11, spider_run7 ] { monster_footstep(FALSE); spider_checkpause(6); };
-void()	spider_run7 = [$walk13, spider_run8 ] { spider_checkpause(8); };
-void()	spider_run8 = [$walk15, spider_run1 ] { spider_checkpause(10); };
+void()	spider_run1 = [$walk1, spider_run2 ] { self.movespeed = 0; monster_idle_sound();voreling_checkpause(8); };
+void()	spider_run2 = [$walk3, spider_run3 ] { monster_footstep(FALSE); voreling_checkpause(6); };
+void()	spider_run3 = [$walk5, spider_run4 ] { voreling_checkpause(8); };
+void()	spider_run4 = [$walk7, spider_run5 ] { voreling_checkpause(10); };
+void()	spider_run5 = [$walk9, spider_run6 ] { voreling_checkpause(8); };
+void()	spider_run6 = [$walk11, spider_run7 ] { monster_footstep(FALSE); voreling_checkpause(6); };
+void()	spider_run7 = [$walk13, spider_run8 ] { voreling_checkpause(8); };
+void()	spider_run8 = [$walk15, spider_run1 ] { voreling_checkpause(10); };
 
 void()	spider_slide1 = [$walk1, spider_slide2 ] { ai_run_slide(6); monster_idle_sound(); };
 void()	spider_slide2 = [$walk3, spider_slide3 ] { ai_run_slide(4); };
@@ -159,29 +126,6 @@ void()	spider_slide5 = [$walk9, spider_slide6 ] { ai_run_slide(6); };
 void()	spider_slide6 = [$walk11, spider_slide7 ] { ai_run_slide(4); };
 void()	spider_slide7 = [$walk13, spider_slide8 ] { ai_run_slide(6); };
 void()	spider_slide8 = [$walk15, spider_run1 ] { ai_run(4); };
-
-// SPIDER 2 - ACID SPIT FUNCTIONS (range)
-void(float sideang) spider_spitacid = {
-	local vector org, ang, dir, avel;
-	
-	if (!self.enemy) return;
-	if (self.health < 1) return;
-		
-	// Flash effect to show where bolt is coming from	
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (sideang < 0) sound (self, CHAN_WEAPON, self.idle_sound2, 1, ATTN_NORM);
-	makevectors(self.angles);	
-	org = self.origin + attack_vector(self.attack_offset);
-
-	// Create elevation angle and use makevectors to create projectile direction
-	ang = vectoangles(self.enemy.origin - org);
-	ang_x = -self.attack_elev;	// Negative = upwards angle 
-	makevectors(ang);
-	// fire spit in arc pattern (sideang)
-	dir = (v_forward * SPEED_SPIDER + v_right * sideang);	
-	avel = vecrand(100,200,FALSE);
-	launch_projectile(org,dir,avel,CT_PROJ_SPID,1);
-};
 
 void()	spider_spit1	= [	$atkup1,		spider_spit2	] { ai_face(); };
 void()	spider_spit2	= [	$atkup5,		spider_spit3	] { ai_face(); };
@@ -193,42 +137,12 @@ void()	spider_spit6	= [	$atkloop1,		spider_spit7 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_SPIDER); };
 void()	spider_spit7	= [	$atkloop3,		spider_spit8 ] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_SPIDER); };
-void()	spider_spit8 = [	$atkloop5,		spider_spit9 ] { spider_spitacid(-0.1); };
-void()	spider_spit9 = [	$atkloop7,		spider_spit10 ] { spider_spitacid(0); };
-void()	spider_spit10 = [	$atkloop9,		spider_spit11 ] { spider_spitacid(0.1); };
+void()	spider_spit8 = [	$atkloop5,		spider_spit9 ] { voreling_spitacid(-0.1); };
+void()	spider_spit9 = [	$atkloop7,		spider_spit10 ] { voreling_spitacid(0); };
+void()	spider_spit10 = [	$atkloop9,		spider_spit11 ] { voreling_spitacid(0.1); };
 void()	spider_spit11	= [	$atkup7,		spider_spit12] {};
 void()	spider_spit12	= [	$atkup5,		spider_run1	] {};
 
-// BITE - Both spider types can bite if within range
-void() spider_melee = {
-	local float ldmg;
-
-	if (!self.enemy) return;
-	if (self.health < 1) return;
-		
-	ai_charge(10);									// Get closer for extra bite
-	ai_damagebreakable(10);							// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEESPIDER,FALSE)) return;	// Too far away
-
-	// Can the target bleed?
-	if (!self.enemy.takedamage) return;
-
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/spider/attackmunch.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "ad171/spider/attacktear.wav", TRUE, TRUE);
-
-	// Spider bite (damage 1-9) is very weak
-	ldmg = (random() + random() + random()) * 3;
-	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-
-	// Check for poisonous attribute (generally green spider)
-	if (self.poisonous) PoisonDeBuff(self.enemy);
-	
-	// Spawn blood at mouth of spider
-	spawn_touchblood (self, self.enemy, ldmg*3);
-};
-
-//----------------------------------------------------------------------
 void() spider_bite1 = [$atkup1, spider_bite2 ] { ai_face(); };
 void() spider_bite2 = [$atkup5, spider_bite3 ] { ai_face(); };
 void() spider_bite3 = [$atkup7, spider_bite4 ] { ai_face(); };
@@ -237,7 +151,7 @@ void() spider_bite5 = [$atkup11, spider_bite6 ] { ai_face(); };
 // Start bite attack loop
 void() spider_bite6 = [$atkloop1, spider_bite7 ] { ai_face(); };
 void() spider_bite7= [$atkloop3, spider_bite8 ] { ai_face(); };
-void() spider_bite8 = [$atkloop5, spider_bite9 ] { spider_melee(); };
+void() spider_bite8 = [$atkloop5, spider_bite9 ] { voreling_melee(); };
 void() spider_bite9 = [$atkloop7, spider_bite10 ] {};
 void() spider_bite10 = [$atkloop9, spider_bite11 ] {
 	if (ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.enemy.health > 0 && self.health > 0) 
@@ -246,45 +160,6 @@ void() spider_bite10 = [$atkloop9, spider_bite11 ] {
 void() spider_bite11 = [$atkup7, spider_bite12 ] {};
 void() spider_bite12 = [$atkup5, spider_run1 ] {};
 
-
-// SPIDER 1 - JUMP FUNCTION (range)
-
-void()	Spider_JumpTouch = {
-	local	float	ldmg;
-
-	if (self.health <= 0) return;
-	ai_jumpbreakable(20);			// Damage any breakables
-	self.touch = SUB_Null;			// No more touching
-	self.count = self.count + 1;	// Total amount of touch jumps
-	self.think = self.th_jumpexit;	// Exit frame
-	self.jumptouch = other;			// Keep track of touch target
-
-	// Do not damage other spiders with jump attacks
-	// Prevents packs from killing themselves
-	if (self.classgroup != other.classgroup && other.takedamage) {
-		if ( vlen(self.velocity) > 300 ) {
-			ldmg = 5 + 5*random();
-			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
-			// Spawn some touch blood (no explicit direction)
-			spawn_touchblood (self.enemy, self.enemy, ldmg*3);
-		}
-	}
-
-	// Is the spider floating in the air?
-	if (!checkbottom(self)) {
-		// Is the spider standing on something?		
-		if (self.flags & FL_ONGROUND) {	
-			// Do an extra jump if got the count
-			if (self.count < 2)  self.think = self.th_jump;
-		}
-	}
-
-	// Next timer
-	self.nextthink = time + 0.1;
-};
-
-//----------------------------------------------------------------------------
 void() spider_leap1 = [$jump1, spider_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	monster_idle_sound();
@@ -293,7 +168,7 @@ void() spider_leap2 = [$jump3, spider_leap3 ] { ai_face(); };
 void() spider_leap3 = [$jump5, spider_leap4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
-	self.touch = Spider_JumpTouch;
+	self.touch = Voreling_JumpTouch;
 	makevectors(self.angles);
 	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
@@ -312,14 +187,11 @@ void() spider_leap7 = [$jump10, spider_leap8 ] {
 	self.oldorigin = self.origin;
 };
 
-//----------------------------------------------------------------------
 void() spider_leap8 = [$jump11, spider_leap9] { monster_footstep(FALSE); };
 void() spider_leap9 = [$jump13, spider_leap10] { monster_footstep(FALSE); };
 void() spider_leap10 = [$jump15, spider_run1] { ai_resetangles(); };
 
-
 // CEILING SPIDERS - Idle/Drop/Touch/Land functions
-
 void()	spider_idleup1	= [	$idleup1,	spider_idleup2	] { monster_idle_sound();ai_stand(); };
 void()	spider_idleup2	= [	$idleup2,	spider_idleup3	] { ai_stand(); };
 void()	spider_idleup3	= [	$idleup3,	spider_idleup4	] { ai_stand(); };
@@ -334,7 +206,6 @@ void()	spider_idleup11	= [	$idleup11,	spider_idleup12	] { ai_stand(); };
 void()	spider_idleup12	= [	$idleup12,	spider_idleup13	] { ai_stand(); };
 void()	spider_idleup13	= [	$idleup13,	spider_idleup1	] { ai_stand(); };
 
-//----------------------------------------------------------------------
 void() spider_droptouch = {
 	// Check if landed on something that is not the ground?
 	if (!checkbottom(self)) {
@@ -381,7 +252,6 @@ void() spider_droptouch = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void()	spider_drop1 = [	$drop1,	spider_drop2 ] {};
 void()	spider_drop2 = [	$drop2,	spider_drop3 ] {};
 void()	spider_drop3 = [	$drop3,	spider_drop4 ] {};
@@ -391,7 +261,6 @@ void()	spider_drop6 = [	$drop6,	spider_drop6 ] {
 	if (self.attack_timer < time || self.velocity_z == 0) spider_droptouch();
 };
 
-//----------------------------------------------------------------------------
 void() spider_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
@@ -400,7 +269,7 @@ void() spider_wakeup = {
 	self.th_walk = self.th_run = self.th_slide = SUB_Null;
 
 	// No longer need cling to ceiling spawnflag, remove it
-	self.spawnflags = self.spawnflags - (self.spawnflags & MON_SPIDER_CEILING);
+	self.spawnflags = self.spawnflags - (self.spawnflags & MON_VORELING_CEILING);
 
 	self.flags = FL_MONSTER;			// reset flags
 	
@@ -477,7 +346,7 @@ void() spider_painu4	= [	$painup6,	spider_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) spider_pain = {
 	// Has the spider been hit while on the ceiling?
-	if (self.spawnflags & MON_SPIDER_CEILING) {
+	if (self.spawnflags & MON_VORELING_CEILING) {
 		self.pain_finished = time + 1;
 		spider_wakeup();
 		return;
@@ -523,7 +392,7 @@ void() spider_die = {
 	self.max_health = MON_NOGIBVELOCITY;
 
 	// Has the spider died while on the ceiling?
-	if (self.spawnflags & MON_SPIDER_CEILING)
+	if (self.spawnflags & MON_VORELING_CEILING)
 		self.gibondeath = TRUE;
 
 	// Pre-check routine to tidy up extra entities
@@ -608,12 +477,14 @@ void() setup_spider = {
 	self.steptype = FS_TYPELIGHT;
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.blockudeath = TRUE;			// No humanoid death sound
+	self.meleerange = MONAI_MELEESPIDER;
+	self.meleerangez = 0;
 	self.meleeoffset = '24 0 20';		// Bite attack offset
 	self.attack_offset = '14 0 8';		// Used by green spider, at jaws
 	self.movespeed = 1;					// Can never be a turret
 	self.deathstring = " was bitten by a Spider\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = SpiderCheckAttack;
+	self.th_checkattack = VorelingCheckAttack;
 	self.th_pain = spider_pain;
 	self.th_die = spider_die;
 	if (!self.classtype) self.classtype = CT_MONSPIDER;
@@ -639,12 +510,12 @@ void() setup_spider = {
 	}
 	
 	// Check for quoth on ceiling entity flag
-	if (self.dangle) self.spawnflags = self.spawnflags | MON_SPIDER_CEILING;
+	if (self.dangle) self.spawnflags = self.spawnflags | MON_VORELING_CEILING;
 
 	// Ceiling spiders have special idle animation (rotated)
 	// and need to let go of the ceiling before resuming any
 	// normal behaviour (most think functions are intercepted)
-	if (self.spawnflags & MON_SPIDER_CEILING) {
+	if (self.spawnflags & MON_VORELING_CEILING) {
 		self.th_stand = self.th_walk = spider_idleup1;
 		self.th_run = self.th_slide = spider_wakeup;
 		self.th_melee = self.th_missile = self.th_jump = spider_wakeup;
@@ -698,6 +569,8 @@ void(vector minion_org, entity minion_targ) minion_spider = {
 		minion.gib2mdl = "progs/ad171/gib_spidbodyb.mdl";	// Back Body
 	}
 
+	minion.meleerange = MONAI_MELEESPIDER;
+	minion.meleerangez = 0;
 	minion.gib1frame = 9;
 	minion.idle_sound = "ad171/spider/idle1.wav";
 	minion.idle_sound2 = "ad171/spider/hiss2.wav";

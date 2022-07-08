@@ -1313,18 +1313,11 @@ var
       }
     T_Damage(other, self, self.owner, damg);
     self.origin = self.origin - FL_CLIENT * normalize(self.velocity);
-    WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-    WriteByte(MSG_BROADCAST, TE_EXPLOSION);
-    WriteCoord(MSG_BROADCAST, self.origin_x);
-    WriteCoord(MSG_BROADCAST, self.origin_y);
-    WriteCoord(MSG_BROADCAST, self.origin_z);
-    if (random() < 0.4) {
-      becomeexplosion();
-      }
-    else {
-      becomeexplosion3();
-      }
-    exit;
+    Tent_Explosion(self.origin);
+    if (random() < 0.4) becomeexplosion();
+    else becomeexplosion3();
+    
+    return;
     }
   sound(self, CHAN_BAL, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
   remove(self);

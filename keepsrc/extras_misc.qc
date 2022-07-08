@@ -53,7 +53,7 @@ void() explobsp_explode = { // [FUNCTION]
 	setorigin(new, new.origin);
 	new.classname = "explo_box";
 	T_RadiusDamage (new, new, self.dmg, world, DAMAGEALL);
-	Tent_Point(TE_EXPLOSION,new.origin);
+	Tent_Explosion(new.origin);
 	stemp = self;
 	self = new;
 	BecomeExplosion();

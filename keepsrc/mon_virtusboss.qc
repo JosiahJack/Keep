@@ -80,45 +80,34 @@ void() newboss_face = {
 	ai_face();
 };
 
-void() newboss_rise1 = [1, newboss_rise2]
-{
+void() newboss_rise1 = [1, newboss_rise2] {
 	setmodel(self, self.mdl);
 	setsize(self, VEC_HULL2_MIN, '32 32 256');
 	self.solid = SOLID_SLIDEBOX;
-	sound(self, CHAN_WEAPON, "boss1/out1.wav", 1, ATTN_NORM);
 	newboss_face();
 };
 
-void() newboss_rise2 = [2, newboss_rise3]
-{
-	newboss_face();
-};
-
+void() newboss_rise2 = [2, newboss_rise3] { newboss_face(); };
 void() newboss_rise3 = [3, newboss_rise4]
 {
 	newboss_face();
 };
-
 void() newboss_rise4 = [4, newboss_rise5]
 {
 	newboss_face();
 };
-
 void() newboss_rise5 = [5, newboss_rise6]
 {
 	newboss_face();
 };
-
 void() newboss_rise6 = [6, newboss_rise7]
 {
 	newboss_face();
 };
-
 void() newboss_rise7 = [7, newboss_rise8]
 {
 	newboss_face();
 };
-
 void() newboss_rise8 = [8, newboss_missile1]
 {
 	self.takedamage = DAMAGE_AIM;
@@ -345,14 +334,7 @@ void() newboss_death9 = [25, newboss_death10] {};
 void() newboss_death10 = [26, newboss_death11] {};
 void() newboss_death11 = [27, newboss_death12] {};
 void() newboss_death12 = [28, newboss_death12] {
-	local float z;
-	z = self.origin_z - 50;
-	sound(self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, z);
+	Tent_LavaSplash(self.origin,-50,"boss1/out1.wav");
 	self.use = SUB_Null;
 	self.th_die = SUB_Null;
 	self.nextthink = time + 0.2;
@@ -400,9 +382,7 @@ void(vector p) newboss_missile = {
 };
 
 void() newboss_awake = {
-	local float z;
 	self.use = SUB_Null;
-	z = self.origin_z - 50;
 	self.flags = FL_MONSTER;
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
@@ -415,11 +395,7 @@ void() newboss_awake = {
 	self.th_stand = newboss_missile1;
 	self.th_run = newboss_missile1;
 	newboss_rise1();
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, z);
+	Tent_LavaSplash(self.origin,-50,"boss/out1.wav");
 };
 
 void() monster_virtus_precache = {

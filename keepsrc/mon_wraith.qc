@@ -247,7 +247,6 @@ void(vector start_org) wraith_debuff_explode = {
 	}
 };
 
-//----------------------------------------------------------------------
 void() wraith_debuff_trail = {
 	local vector org, orgofs, dir, tvec, tang;
 	local float tdist, tloop, tcount, tpc;
@@ -277,17 +276,15 @@ void() wraith_debuff_trail = {
 	tloop = tdist / 32;
 	tcount = 0;
 
-	//----------------------------------------------------------------------
 	// Originally - BleedDeBuff(SUB_entEnemyTarget());
 	// New version - Fire explosion + burning
 	if ((trace_ent.flags & FL_CLIENT) || (trace_ent.flags & FL_MONSTER)) {
 		self.owner = self;	// Fix for T_damage inside ApplyFireDmg
 		ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
-	}
-	else if (ai_foundbreakable(self, trace_ent, FALSE))
+	} else if (ai_foundbreakable(self, trace_ent, FALSE))
 		T_Damage (trace_ent, self, self, 100, DAMARMOR);
 	
-	//----------------------------------------------------------------------
+
 	// Generate particle beam in segments
 	while(tcount < tloop) {
 		// Create segment in the middle of 32 segment
@@ -319,7 +316,6 @@ void() wraith_debuff_trail = {
 	// Workout final destination of explosion and effects
 	self.finaldest = tvec+(dir *16);
 
-	//----------------------------------------------------------------------
 	// Spawn a ball of plasma at the final destination
 	// Shrinking downwards in size over 0.1s frames
 	tent = spawn();
@@ -336,18 +332,9 @@ void() wraith_debuff_trail = {
 	tent.skin = BALL_DEBUFF_COL2;
 	tent.think = wraith_debuff_shrink;	// Animate manually
 	tent.nextthink = time + 0.1;
-
-	// Generate particle explosion (+ sound effect)
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);	// hard coded explosion
-	WriteCoord (MSG_BROADCAST, self.finaldest_x);
-	WriteCoord (MSG_BROADCAST, self.finaldest_y);
-	WriteCoord (MSG_BROADCAST, self.finaldest_z);
-	// Play original explosion sound
-	sound(tent, CHAN_WEAPON, "quoth/drole/explode3.wav", 1, ATTN_NORM);
-
-	// Large circular flame explosion
-	wraith_debuff_explode(self.finaldest);
+	Tent_Explosion(self.finaldest); // Generate particle explosion (+ sound effect)
+	sound(tent, CHAN_WEAPON, "quoth/drole/explode3.wav", 1, ATTN_NORM); // Play original explosion sound
+	wraith_debuff_explode(self.finaldest); // Large circular flame explosion
 };
 
 void(entity handent, vector orgofs, vector orgside, float dbframe) wraith_debuffball = {
@@ -673,33 +660,19 @@ void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	}
 };
 
-void() wraith_death2 = [$death2, wraith_death3] {};
-void() wraith_death3 = [$death3, wraith_death4] {};
-void() wraith_death4 = [$death4, wraith_death5] {};
-void() wraith_death5 = [$death5, wraith_death7] {};
-void() wraith_death7 = [$death7, wraith_death9] {};
-void() wraith_death9 = [$death9, wraith_death11] {};
-void() wraith_death11 = [$death11, wraith_death13] {};
-void() wraith_death13 = [$death13, wraith_death15] {};
-void() wraith_death15 = [$death15, wraith_death15] {
+void(float fx) wrath_deatheffects = {
 	// Throw gibs, but create more XY outward velocity
 	self.max_health = MON_XYGIBVELOCITY;
 	monster_ThrowGib();
 	// Move the explosion up to the middle/top of the body
 	// Use to be a regular explosion, switched to tarbaby instead
 	self.origin = self.origin + '0 0 24';
-	T_RadiusDamage (self, self, DAMAGE_WRAITH, world, IGNORECLASS);
+	T_RadiusDamage(self,self,DAMAGE_WRAITH,world,IGNORECLASS);
 	
 	// Big purple explosion
 	if (ext_dppart) 
 		pointparticles(particleeffectnum(DPP_WRAITHEXPLODE), self.origin, '0 0 0', 1);
-	else {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);	// Hard coded explosion
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-	}
+	else Tent_Point(fx,self.origin);
 	
 	R_Exp3(self.origin); // Play original explosion sound or replacement
 
@@ -708,6 +681,16 @@ void() wraith_death15 = [$death15, wraith_death15] {
 	self.think = SUB_Null;
 	entity_hide(self);
 };
+
+void() wraith_death2 = [$death2, wraith_death3] {};
+void() wraith_death3 = [$death3, wraith_death4] {};
+void() wraith_death4 = [$death4, wraith_death5] {};
+void() wraith_death5 = [$death5, wraith_death7] {};
+void() wraith_death7 = [$death7, wraith_death9] {};
+void() wraith_death9 = [$death9, wraith_death11] {};
+void() wraith_death11 = [$death11, wraith_death13] {};
+void() wraith_death13 = [$death13, wraith_death15] {};
+void() wraith_death15 = [$death15, wraith_death15] { wrath_deatheffects(TE_EXPLOSION); };
 
 void() wraith_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -780,7 +763,7 @@ void() monster_wraith = { // [ENTITY]
 	self.frame = 1;						// First frame is never used!
 	self.attack_offset = '30 2 8';		// Half way point.  Hitscan = 52 4 6; Nails = 60 4 14; Egg = 20 2 12.
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = WraithCheckAttack;
+	self.th_checkattack = StrafeFlyerCheckAttack;
 	self.th_stand = wraith_stand1;
 	self.th_walk = wraith_walk1;
 	self.th_run = wraith_run1;

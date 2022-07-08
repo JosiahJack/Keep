@@ -427,6 +427,8 @@ void() monster_dog = {
 	self.steptype = FS_TYPESLOW;		// Tiny feet
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.meleeoffset = '24 0 10';		// Bite attack offset
+	self.meleerange = MONAI_MELEEDOG;
+	self.meleerangez = 0;
 	self.mass = MASS_LIGHT;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was mauled by a Rottweiler\n";
@@ -436,7 +438,7 @@ void() monster_dog = {
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPDOGNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPDOGFAR;
 
-	self.th_checkattack = DogCheckAttack;
+	self.th_checkattack = DemonCheckAttack;
 	self.th_stand = dog_stand1;
 	self.th_walk = dog_walk1;
 	self.th_run = dog_run1;

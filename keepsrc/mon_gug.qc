@@ -24,114 +24,6 @@ void(float stime, entity eshake) gug_screen_shake = {
 
 float(float num) mrandom = { return 0.5 * num - num * random(); };
 
-float() CheckGugAttack = {
-	local vector spot1;
-	local vector spot2;
-	local entity targ;
-	local float chance;
-	local float dist;
-
-	if (!visible(self.enemy) && self.carry_time > 8 && self.t_width < time) {
-		self.th_novis();
-		return 1;
-	}
-	dist = vlen(self.enemy.origin - self.origin);
-	targ = self.enemy;
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-	traceline(spot1, spot2, 0, self);
-	if (trace_ent != targ)
-		return 0;
-
-	if (trace_inopen && trace_inwater)
-		return 0;
-
-	if (dist < 170) {
-		self.th_melee();
-		return 1;
-	}
-
-	if (time < self.attack_finished)
-		return 0;
-
-	if (dist > 1200)
-		return 0;
-
-	if (dist >= 600) {
-		chance = 0.9;
-		self.attack_finished = 0;
-	} else {
-		if (dist >= 400) {
-			chance = 0.8;
-		} else {
-			if (dist >= 250) {
-				chance = 0.8;
-			} else {
-				if (dist >= 170) {
-					chance = 0.2;
-				} else {
-					chance = 0;
-				}
-			}
-		}
-	}
-	if (random() < chance) {
-		self.th_missile();
-		SUB_AttackFinished(2.3 + 0.3 * random());
-		return 1;
-	}
-	return 0;
-};
-
-void(float dist) ai_gug_run = {
-	if (!visible(self.enemy))
-		self.carry_time = self.carry_time + 0.1;
-
-	if (visible(self.enemy))
-		self.carry_time = 0;
-
-	movedist = dist;
-	if (self.enemy.health <= 0) {
-		self.enemy = world;
-		if (self.oldenemy.health > 0) {
-			self.enemy = self.oldenemy;
-			HuntTarget();
-		} else {
-			if (self.movetarget) {
-				self.th_walk();
-			} else {
-				self.th_stand();
-			}
-			return;
-		}
-	}
-	self.show_hostile = time + 1;
-	enemy_vis = visible(self.enemy);
-	if (enemy_vis)
-		self.search_time = time + 5;
-
-	if (coop && self.search_time < time) {
-		if (FindTarget())
-			return;
-	}
-	enemy_infront = infront(self.enemy);
-	enemy_range = range(self.enemy);
-	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
-	if (self.attack_state == AS_MISSILE) {
-		ai_run_missile();
-		return;
-	}
-	if (self.attack_state == AS_MELEE) {
-		ai_run_melee();
-		return;
-	}
-	if (CheckGugAttack())
-		return;
-
-	ai_shotcheck();
-	movetogoal(dist);
-};
-
 void() gug_stand1 = [2, gug_stand2] { ai_stand(); };
 void() gug_stand2 = [3, gug_stand3] { ai_stand(); };
 void() gug_stand3 = [4, gug_stand4] { ai_stand(); };
@@ -274,14 +166,14 @@ void() gug_walk14 = [95, gug_walk15] { ai_walk(4); };
 void() gug_walk15 = [96, gug_walk16] { ai_walk(3); };
 void() gug_walk16 = [97, gug_walk1] { ai_walk(2); };
 
-void() gug_run1 = [98, gug_run2] { ai_gug_run(22); gug_step_sound(); };
-void() gug_run2 = [99, gug_run3] { ai_gug_run(20); };
-void() gug_run3 = [100, gug_run4] { ai_gug_run(18); };
-void() gug_run4 = [101, gug_run5] { ai_gug_run(16); };
-void() gug_run5 = [102, gug_run6] { ai_gug_run(22); gug_step_sound(); };
-void() gug_run6 = [103, gug_run7] { ai_gug_run(20); };
-void() gug_run7 = [104, gug_run8] { ai_gug_run(18); };
-void() gug_run8 = [105, gug_run1] { ai_gug_run(16); };
+void() gug_run1 = [98, gug_run2] { ai_run(22); gug_step_sound(); };
+void() gug_run2 = [99, gug_run3] { ai_run(20); };
+void() gug_run3 = [100, gug_run4] { ai_run(18); };
+void() gug_run4 = [101, gug_run5] { ai_run(16); };
+void() gug_run5 = [102, gug_run6] { ai_run(22); gug_step_sound(); };
+void() gug_run6 = [103, gug_run7] { ai_run(20); };
+void() gug_run7 = [104, gug_run8] { ai_run(18); };
+void() gug_run8 = [105, gug_run1] { ai_run(16); };
 
 void(float dist, float yawspd) ai_gug_swing = {
 	self.yaw_speed = yawspd;
@@ -917,6 +809,7 @@ void() monster_gug = {
 	self.gibbed = FALSE;			// Still in one piece
 	self.pain_flinch = 200;			// Demon level
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.th_checkattack = CheckGugAttack;
 	self.th_stand = gug_stand1;
 	self.th_walk = gug_walk1;
 	self.th_run = gug_run1;

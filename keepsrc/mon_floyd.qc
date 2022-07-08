@@ -234,38 +234,6 @@ void(entity inflictor, entity attacker, float damage) floyd_pain = {
 	}
 };
 
-
-void() floyd_explode = {
-	// no more FLOYD!
-	entity_hide (self);
-	// Make sure gibs go flying up
-	self.max_health = MON_GIBFOUNTAIN;
-	self.health = -100;
-
-	// ID style explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	
-	// Sprite + Dust
-	SpawnExplosion(EXPLODE_BIG, self.origin, self.death_sound2);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-
-	// Only throw head if a quick gib death
-	if (self.gibbed) ThrowGib(25, 1);
-	
-	// Metal and custom body parts
-	self.gibtype = GIBTYPE_METAL;
-	ThrowGib(11, 2 + rint(random()*2));
-	ThrowGib(12, 4 + rint(random()*2));
-	ThrowGib(13, 4 + rint(random()*2));
-};
-
-//----------------------------------------------------------------------
 //skip $death1, which is the idle frame
 void() floyd_death2 = [$death2, floyd_death3 ] { ai_painforward(-3.33); };
 void() floyd_death3 = [$death3, floyd_death4 ] { ai_painforward(-3.34); };
@@ -280,15 +248,15 @@ void() floyd_death11 = [$death11, floyd_death12 ] {};
 void() floyd_death12 = [$death12, floyd_death13 ] {};
 void() floyd_death13 = [$death13, floyd_death14 ] {};
 void() floyd_death14 = [$death14, floyd_death15 ] {};
-void() floyd_death15 = [$death15, floyd_explode ] {};
+void() floyd_death15 = [$death15, floyd_death15 ] {
+	ExplosiveGibDeath(self.death_sound2,2,4,4);
+};
 
-//----------------------------------------------------------------------
 void() floyd_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// Check for rolling on floor first
-	if (self.spawnflags & MON_FLOYDROLL) floyd_explode();
+	if (self.spawnflags & MON_FLOYDROLL) ExplosiveGibDeath(self.death_sound2,2,4,4);
 	else {
 		// Check for a quick gib death
 		if ( self.health < -35 || self.gibondeath) self.gibbed = TRUE;
@@ -299,7 +267,7 @@ void() floyd_die = {
 			floyd_death2();
 		}
 		// Quick explosion with head model
-		else floyd_explode();
+		else ExplosiveGibDeath(self.death_sound2,2,4,4);
 	}
 };
 

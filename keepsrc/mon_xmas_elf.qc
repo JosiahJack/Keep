@@ -394,7 +394,7 @@ void() monster_xmas_elf = {
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '400 0 200';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPELFNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELFFAR;	
-	self.th_checkattack = ElfCheckAttack;
+	self.th_checkattack = VorelingCheckAttack;
 	self.meleerange = MONAI_MELEEELF;
 	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_stand = elf_stand1;

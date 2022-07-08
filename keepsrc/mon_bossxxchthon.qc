@@ -22,52 +22,6 @@ float CHTHON_PHASE2 = 2;	// Fighting
 float CHTHON_PHASE3 = 3;	// Frenzy mode
 float CHTHON_PHASE4 = 4;	// Death
 
-// Setup wave HP and trigger boundaries
-void() xxchthon_WaveSetupHP = {
-	// Is there anymore boss waves left?
-	if (self.bosswave >= self.bosswavetotal) {
-		// Only one wave left (death is final trigger)
-		self.health = self.bosswaveqty;
-		self.bosswavetrig = -1000;
-	}
-	else {
-		// Multiple waves are still left (reset hp+trigger)
-		// Always reset HP to stop high DPS weapons trashing waves boundaries
-		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
-		// The wave trigger is always one wave lower
-		self.bosswavetrig = self.health - self.bosswaveqty;
-	}
-	// Debug messages for wave and health
-	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
-	dprint(" / "); dprint(ftos(self.bosswavetotal));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
-	dprint(")\n");
-};
-
-// Check if HP has reached next boss wave trigger event
-float() xxchthon_WaveCheck = {
-	// Check for boss wave boundary event
-	if (self.health > 1 && self.health < self.bosswavetrig) {
-		// Check for wave boundary triggers
-		self.noise = "";
-		if (self.bosswave == 1) self.noise = self.noise1;
-		else if (self.bosswave == 2) self.noise = self.noise2;
-		else if (self.bosswave == 3) self.noise = self.noise3;
-		else if (self.bosswave == 4) self.noise = self.noise4;
-		
-		// Is there any trigger for the wave boundary?
-		if (self.noise != "") trigger_strs(self.noise, self);
-
-		// Update Boss wave parameters (next wave!)
-		self.bosswave = self.bosswave + 1;
-		xxchthon_WaveSetupHP();
-		self.style = CHTHON_PHASE3;	// Frenzy mode
-		return TRUE;
-	}
-	return FALSE;
-};
-
 // IDLE state - waiting for player
 void() xxchthon_idleframe = {
 	// Get the obvious exception(s) done first
@@ -83,7 +37,7 @@ void() xxchthon_idleframe = {
 	self.frame = $walk1 + self.walkframe; // Setup current animation frame
 
 	// Check for HP trigger event
-	if (xxchthon_WaveCheck() == TRUE) self.th_jump();
+	if (SUB_BossWaveCheck(0)) self.th_jump();
 	else if (FindTarget()) self.th_missile();
 };
 
@@ -133,7 +87,7 @@ void() xxchthon_attackframe = {
 	self.nextthink = time + 0.1;
 	self.think = xxchthon_attackframe;
 	self.frame = $attack1 + self.walkframe; // Setup current animation frame
-	if (xxchthon_WaveCheck() == TRUE) self.th_jump(); // Check for HP trigger event
+	if (SUB_BossWaveCheck(0)) self.th_jump(); // Check for HP trigger event
 	else {
 		// Keep checking for player and turning towards them
 		// Check for any no combat conditions
@@ -203,7 +157,7 @@ void() xxchthon_shake = {
 void(entity inflictor, entity attacker, float damage) xxchthon_pain = {
 
 	// Check for boss wave trigger events
-	if (xxchthon_WaveCheck() == TRUE) { self.th_jump(); return;}
+	if (SUB_BossWaveCheck(0)) { self.th_jump(); return;}
 	self.pain_finished = time + 2 + random()*2;
 
 	// Spawn particle/smoke damage
@@ -214,24 +168,13 @@ void(entity inflictor, entity attacker, float damage) xxchthon_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 };
 
-
 // DEATH - Fall down and explode
-
 void() xxchthon_lavasplash = {
-	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	if (ext_dppart) {
 		// Two different types of liquid splash (only DP)
 		if (self.spawnflags & MON_CHTHON_GREEN) 
 			pointparticles(particleeffectnum("TE_SLIMESPLASH"), self.origin, '0 0 0', 1);
-		else
-			pointparticles(particleeffectnum("TE_LAVASPLASH"), self.origin, '0 0 0', 1);
-	} else {
-		// Classic Fitz/QS engine effects (hard coded)
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
+		else Tent_LavaSplash(self.origin,0,"ad171/chthon/lavasplash.wav");
 	}
 };
 
@@ -250,6 +193,7 @@ void() xxchthon_explosion = {
 	SpawnProjectileSmoke(self.oldorigin, 100, 400, 100);
 	if (random() < 0.5) self.lip = EXPLODE_MED;
 	else self.lip = EXPLODE_BIG;
+
 	SpawnExplosion(self.lip, self.oldorigin, "");
 	ThrowGib(11, 1);
 };
@@ -322,7 +266,7 @@ void() xxchthon_awake = {
 	if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
 	// Setup boss wave HP + trigger event
-	xxchthon_WaveSetupHP();
+	SUB_BossWaveSetupHP();
 
 	// Restore all think functions
 	self.th_stand = xxchthon_idle;

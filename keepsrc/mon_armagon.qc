@@ -1,6 +1,3 @@
-float ATTN_ARMAGON    = 0.500;
-float SERVO_VOLUME    = 0.500;
-
 void() T_ArmaMissileTouch = {
 	local float damg;
 
@@ -137,25 +134,7 @@ void() armagon_think = {
    armagon_turn (angdelta,delta);
    if (self.health < 1) return;
 
-   if ( (time > self.super_time) ) {
-      self.super_time = (time + MOVETYPE_WALK);
-      if ( (random () < 0.500) ) {
-         r = random();
-         if ( (r < 0.250) ) {
-            sound (self,CHAN_VOICE,"hipnotic/armagon/idle1.wav",TRUE,ATTN_ARMAGON);
-         } else {
-            if ( (r < 0.500) ) {
-               sound (self,CHAN_VOICE,"hipnotic/armagon/idle2.wav",TRUE,ATTN_ARMAGON);
-            } else {
-               if ( (r < 0.750) ) {
-                  sound (self,CHAN_VOICE,"hipnotic/armagon/idle3.wav",TRUE,ATTN_ARMAGON);
-               } else {
-                  sound (self,CHAN_VOICE,"hipnotic/armagon/idle4.wav",TRUE,ATTN_ARMAGON);
-               }
-            }
-         }
-      }
-   }
+   monster_idle_sound();
 };
 
 void() armagon_walkthink = {
@@ -177,35 +156,11 @@ void() armagon_walkthink = {
       self.cnt = TRUE;
    }
    angdelta = (delta - self.fixangle);
-   armagon_turn (angdelta,delta);
+   armagon_turn(angdelta,delta);
    if (self.health < 1) return;
 
-   if ( (time > self.super_time) ) {
-      self.super_time = (time + MOVETYPE_WALK);
-      if ( (random () < 0.500) ) {
-         r = random();
-         if ( (r < 0.250) ) {
-            sound (self,CHAN_VOICE,"hipnotic/armagon/idle1.wav",TRUE,ATTN_ARMAGON);
-         } else {
-            if ( (r < 0.500) ) {
-               sound (self,CHAN_VOICE,"hipnotic/armagon/idle2.wav",TRUE,ATTN_ARMAGON);
-            } else {
-               if ( (r < 0.750) ) {
-                  sound (self,CHAN_VOICE,"hipnotic/armagon/idle3.wav",TRUE,ATTN_ARMAGON);
-               } else {
-                  sound (self,CHAN_VOICE,"hipnotic/armagon/idle4.wav",TRUE,ATTN_ARMAGON);
-               }
-            }
-         }
-      }
-   }
-   client = checkclient();
-   if (!client) return;
-
-   if ( visible(client) ) {
-      self.enemy = client;
-      FoundTarget();
-   }
+   monster_idle_sound();
+   FindTarget();
 };
 
 void() armagon_overleft_think = {
@@ -626,6 +581,7 @@ void() monster_armagon = {
 	self.th_missile = armagon_missile_attack;
 	self.th_melee = armagon_stop1;
 	self.th_pain = armagon_pain;
+   self.classtype = CT_MONARMAGON;
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "") self.deathstring = " was outgunned by Armagon\n";
 	monster_start();

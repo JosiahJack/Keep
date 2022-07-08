@@ -171,7 +171,7 @@ void() trap_lightning_triggered = { // [ENTITY]
    self.huntingcharmer = self.nextthink;
    self.think = lightning_firstthink;
    self.nextthink = (time + 0.250);
-   if (!self.deathstring) self.deathstring = " was electrocuted";
+   if (self.deathstring == "") self.deathstring = " was electrocuted";
 };
 
 void() trap_lightning = { // [ENTITY]
@@ -230,15 +230,7 @@ void() TeslaLightningThink = { // [FUNCTION]
 		return;
 	}
 
-	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST,self);
-	WriteCoord (MSG_BROADCAST,self.origin_x);
-	WriteCoord (MSG_BROADCAST,self.origin_y);
-	WriteCoord (MSG_BROADCAST,self.origin_z);
-	WriteCoord (MSG_BROADCAST,trace_endpos_x);
-	WriteCoord (MSG_BROADCAST,trace_endpos_y);
-	WriteCoord (MSG_BROADCAST,trace_endpos_z);
+   Tent_Beam(TE_LIGHTNING2,self,self.origin,trace_endpos);
 	LightningDamage(self.origin,trace_endpos,self.lastvictim,self.dmg);
 	self.nextthink = (time + 0.100);
 };

@@ -98,7 +98,7 @@ void() exploder_fire = { // [FUNCTION]
    else sound (self,CHAN_AUTO,"drake/misc/longexpl.wav",self.volume,self.speed);
 
    T_RadiusDamage (self,self.owner,self.dmg,other,DAMAGEALL);
-   if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Point(TE_EXPLOSION,self.origin);
+   if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Explosion(self.origin);
    BecomeExplosion();
 };
 
@@ -147,7 +147,7 @@ void() multi_exploder_fire = { // [FUNCTION]
    expl.origin_z = (self.absmin_z + (random() * (self.absmax_z - self.absmin_z)));
    sound (expl,CHAN_VOICE,"drake/misc/shortexp.wav",self.volume,self.speed);
    T_RadiusDamage (expl,self.owner,self.dmg,other,DAMAGEALL);
-   if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Point(TE_EXPLOSION,expl.origin);
+   if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Explosion(expl.origin);
    temp = self;
    self = expl;
    BecomeExplosion();

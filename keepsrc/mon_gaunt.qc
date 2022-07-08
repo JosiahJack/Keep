@@ -163,87 +163,45 @@ void(vector p1, vector p2, entity from, float damage) GauntLightningDamage = {
 };
 
 void(float offset) gaunt_lightning = {
-	local vector org;
-	local vector vec;
-	local vector dir;
-	local float damage;
-	local float hadj;
-	local vector hadjvec;
-	local float ofs;
-	local vector oldorg;
-	local vector reqvel;
+	local vector org, vec, dir, hadjvec, oldorg, reqvel;
+	local float damage, hadj, ofs;
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 	ChangeYaw();
-	if (self.lefty == LIGHTNING_RANDOM)
-	{
-		ofs = 90;
-	}
-	else
-	{
-		ofs = -90;
-	}
+	if (self.lefty == LIGHTNING_RANDOM) ofs = 90;
+	else ofs = -90;
+
 	self.origin2 = self.origin;
 	oldorg = self.origin;
 	walkmove(self.ideal_yaw - ofs, SECRET_NO_SHOOT * self.multiplier);
 	hadj = self.origin_z - self.origin2_z;
-	if (visible(self.enemy))
-	{
-		hadj = hadj * self.vsightmultiplier;
-	}
-	else
-	{
-		hadj = hadj * self.vmultiplier;
-	}
+	if (visible(self.enemy)) hadj = hadj * self.vsightmultiplier;
+	else hadj = hadj * self.vmultiplier;
+
 	hadjvec_z = hadj;
 	setorigin(self, self.origin + hadjvec);
-	if (self.lip == MSG_BROADCAST)
-	{
+	if (self.lip == 0) {
 		self.movetype = MOVETYPE_FLY;
 		reqvel = normalize(self.origin - oldorg) * SECRET_NO_SHOOT * TE_WIZSPIKE;
 		setorigin(self, oldorg);
 		self.velocity = reqvel;
 	}
-	if (self.lip == LIGHTNING_RANDOM)
-	{
-		self.lip = MSG_BROADCAST;
-	}
-	if (self.enemy.classname == "player")
-	{
-		vec = self.enemy.origin - self.enemy.velocity * 0.085;
-	}
-	else
-	{
-		vec = self.enemy.origin - self.enemy.velocity * MSG_BROADCAST;
-	}
+	if (self.lip == 1) self.lip = 0;
+	if (self.enemy.classname == "player") vec = self.enemy.origin - self.enemy.velocity * 0.085;
+	else vec = self.enemy.origin - self.enemy.velocity * 0;
+
 	vec = normalize(vec - self.origin);
-	if (vlen(self.enemy.origin - self.origin) > 1200)
-	{
-		vec = self.origin + vec * 1100;
-	}
-	else
-	{
-		vec = self.origin + vec * (vlen(self.enemy.origin - self.origin) + 20);
-	}
+	if (vlen(self.enemy.origin - self.origin) > 1200) vec = self.origin + vec * 1100;
+	else vec = self.origin + vec * (vlen(self.enemy.origin - self.origin) + 20);
+
 	org = self.origin;
 	traceline(org, vec, 1, self);
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LIGHTNING2);
-	WriteEntity(MSG_BROADCAST, self);
-	WriteCoord(MSG_BROADCAST, org_x);
-	WriteCoord(MSG_BROADCAST, org_y);
-	WriteCoord(MSG_BROADCAST, org_z);
-	WriteCoord(MSG_BROADCAST, trace_endpos_x);
-	WriteCoord(MSG_BROADCAST, trace_endpos_y);
-	WriteCoord(MSG_BROADCAST, trace_endpos_z);
+	Tent_Beam(TE_LIGHTNING2,self,org,trace_endpos);
 	damage = (50 / (vlen(self.enemy.origin - trace_endpos) * 0.25) + LIGHTNING_RANDOM) * 0.75;
-	if (self.enemy.carrymode == LIGHTNING_RANDOM)
-	{
-		damage = damage * 0.5;
-	}
+	if (self.enemy.carrymode == LIGHTNING_RANDOM) damage = damage * 0.5;
 	GauntLightningDamage(self.origin, trace_endpos, self, damage);
-	if (self.enemy.health <= MSG_BROADCAST && vlen(self.enemy.origin - self.origin) <= 600)
-	{
+	if (self.enemy.health < 1 && vlen(self.enemy.origin - self.origin) <= 600) {
 		self.enemy.velocity = self.enemy.velocity + '0 0 10';
 		dir = self.enemy.origin - (self.absmin + self.absmax) * 0.5;
 		dir = normalize(dir);
@@ -253,7 +211,6 @@ void(float offset) gaunt_lightning = {
 
 void() gauntwings = { sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
 void() 	gaunt_finish_attachment;
-
 
 void() gaunt_idle1 = [$hover1, gaunt_idle2 ] { monster_idle_sound();ai_stand(); };
 void() gaunt_idle2 = [$hover2, gaunt_idle3 ] { ai_stand(); };
@@ -651,9 +608,9 @@ float(entity targ, entity viewpoint) visiblegaunt = {
 float() gaunt_checkswoop = {
 	local entity head;
 	local float m;
-	head = findradius(self.origin, 10000);
+	head = findradius(self.origin,1024);
 	while (head) {
-		if (head.classname == "gaunt_corner" && head.targetname == self.pathtarget) {
+		if (head.targetname == self.pathtarget || head.flags & FLx_CREATURE) {
 			m = vlen(self.enemy.origin - head.origin);
 			if (m > 500 && visxray(self.enemy,head,self.view_ofs,head.view_ofs,TRUE))
 			{
@@ -796,7 +753,7 @@ void() monster_gaunt = {
 	if (self.spawnflags & 2) {
 		self.th_checkattack = GauntCheckAttackQuoth;
 	} else {
-		self.th_checkattack = GauntCheckAttack;
+		self.th_checkattack = StrafeFlyerCheckAttack;
 	}
 
 	self.th_pain = gaunt_pain; 
@@ -858,7 +815,7 @@ void() setup_gaunt = {
 
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_cells = 0.25;
-	self.th_checkattack = GauntCheckAttack;
+	self.th_checkattack = StrafeFlyerCheckAttack;
 	self.th_pain = gaunt_pain; 
 	self.th_die = gaunt_die;
 	if (self.spawnflags & MON_GAUNT_PERCH) {

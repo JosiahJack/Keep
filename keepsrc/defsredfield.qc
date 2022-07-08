@@ -39,6 +39,7 @@
 float screen_time; // Used by lightning cshift flash
 float fgrasscount; // Global grass counter
 float belltrig_count;
+float ghost_timer; // For the Queen fading.
 
 .float first_frame; // The starting frame of the animation
 .float last_frame; // The ending frame of the animation

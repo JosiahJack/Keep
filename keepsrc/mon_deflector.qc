@@ -340,7 +340,7 @@ void() deflect_flameframe = {
 				// Any sprite space left for flame burst attack?
 				if (HazardProjectile_CheckLimit(self, self.attack_count)) {
 					// Can see player and within range?
-					if (ai_checkmelee(MONAI_RANGEDEFLECT,FALSE) && 
+					if (ai_checkmelee(self.meleerange,self.meleerangez) && 
 						visxray(self,self.enemy, self.attack_offset, '0 0 0', FALSE)) {
 						// Back around animation loop
 						self.frame = $attack3; 
@@ -692,6 +692,8 @@ void() monster_deflector = {
 	self.death_sound2 = "ad181/deflector/death2.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	self.meleerange = MONAI_RANGEDEFLECT;
+	self.meleerangez = 0;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	if (self.health < 1) self.health = 250;
 	self.gibhealth = -50;

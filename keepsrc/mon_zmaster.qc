@@ -389,15 +389,8 @@ void()	zmaster_magica13 = [	$magica11,	zmaster_magica14	] {
 		zmaster_zombify();
 
 	self.effects = EF_BRIGHTLIGHT + EF_BRIGHTFIELD;
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	if (self.gorging != 0)
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	else
-		WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.enemy.origin_x);
-	WriteCoord (MSG_BROADCAST, self.enemy.origin_y);
-	WriteCoord (MSG_BROADCAST, self.enemy.origin_z);
+	if (self.gorging != 0) Tent_Explosion(self.enemy.origin);
+	else Tent_Point(TE_TAREXPLOSION,self.enemy.origin);
 };
 void()	zmaster_magica14 = [	$magica11,	zmaster_magica15	] {};
 void()	zmaster_magica15 = [	$magica11,	zmaster_magica16	] { self.effects = EF_DIMLIGHT + EF_BRIGHTFIELD; };

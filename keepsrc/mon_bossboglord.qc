@@ -335,16 +335,12 @@ void() bogl_die = {
 	SUB_RemoveAttachments();
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) { // Regular death
-		sound (self, CHAN_VOICE, "ad171/boglord/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE,"ad171/boglord/death1.wav",1,ATTN_NORM);
 		bogl_death1();
 	} else { // Explosion for gib death!
-		T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL);
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Sprite/Particle based explosion
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-		SpawnExplosion(EXPLODE_SMALL, self.origin, SOUND_REXP3); // Play original explosion sound or replacement
+		T_RadiusDamage(self,self,self.dmg,world,DAMAGEALL);
+		Tent_Explosion(self.origin); // Show classic grenade explosion effect
+		SpawnExplosion(EXPLODE_SMALL,self.origin,SOUND_REXP3); // Play original explosion sound or replacement
 	}
 };
 

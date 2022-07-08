@@ -43,58 +43,6 @@ float(vector targorg, float angdiff) eidolon_angcheck = {
 	else return FALSE;
 };
 
-// Setup wave HP and trigger boundaries
-void() eidolon_WaveSetupHP = {
-	// Is there anymore boss waves left?
-	if (self.bosswave >= self.bosswavetotal) {
-		// Only one wave left (death is final trigger)
-		self.health = self.bosswaveqty;
-		self.bosswavetrig = -1000;
-	}
-	else {
-		// Multiple waves are still left (reset hp+trigger)
-		// Always reset HP to stop high DPS weapons trashing waves boundaries
-		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
-		// The wave trigger is always one wave lower
-		self.bosswavetrig = self.health - self.bosswaveqty;
-	}
-	// Debug messages for wave and health
-	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
-	dprint(" / "); dprint(ftos(self.bosswavetotal));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
-	dprint(")\n");
-};
-
-// Check if HP reached next wave, walk to center and fire targets
-float() eidolon_WaveCheck = {
-	// Check for boss wave boundary event
-	if (self.health > 1 && self.health < self.bosswavetrig) {
-		// Check for wave boundary triggers
-		self.noise = "";
-		if (self.bosswave == 1) self.noise = self.noise1;
-		else if (self.bosswave == 2) self.noise = self.noise2;
-		else if (self.bosswave == 3) self.noise = self.noise3;
-		else if (self.bosswave == 4) self.noise = self.noise4;
-		
-		// Is there any trigger for the wave boundary?
-		if (self.noise != "") {
-			self.attachment2 = find(world, targetname, self.noise);
-			if (self.attachment2.classtype == CT_MONEIDOLONWAVE) {
-				// Spawn any adds to keep player busy
-				if (HasTargets(self.attachment2)) SUB_UseTargetsOnEnt(self.attachment2);
-				self.th_summon(); // Turn around and fire at crystal
-			}
-		}
-
-		// Update Boss wave parameters (next wave!)
-		self.bosswave = self.bosswave + 1;
-		eidolon_WaveSetupHP();		// Reset trigger/hp
-		return TRUE;
-	}
-	return FALSE;
-};
-
 void() eidolon_idle = {
 	if (self.health < 1) return; // Do nothing if dead
 
@@ -154,13 +102,10 @@ void(float fstate) eidolon_move = {
 	else if (fstate == EIDOLON_RUN && self.enemy) ai_run(6);
 };
 
-//----------------------------------------------------------------------
 void() eidolon_walk1 = [$walk1, eidolon_walk1 ] { eidolon_move(EIDOLON_WALK); };
 void() eidolon_run1 = [$walk1, eidolon_run1 ] { eidolon_move(EIDOLON_RUN); };
 
-
 // Attachment management (create, finish and delete)
-
 void() eidolon_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
@@ -356,18 +301,8 @@ void(vector rockofs, float rockframe) Setup_attackE = {
 		self.attachment.frame = rockframe;
 		// Random explosion like particles from ball as it grows
 		particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_BLUE, 0);
-
-		// Generate the lightning effect
-		self.effects = self.effects | EF_MUZZLEFLASH;
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self);
-		WriteCoord (MSG_BROADCAST, self.attachment.origin_x);
-		WriteCoord (MSG_BROADCAST, self.attachment.origin_y);
-		WriteCoord (MSG_BROADCAST, self.attachment.origin_z);
-		WriteCoord (MSG_BROADCAST, self.attachment2.origin_x);
-		WriteCoord (MSG_BROADCAST, self.attachment2.origin_y);
-		WriteCoord (MSG_BROADCAST, self.attachment2.origin_z);
+		self.effects = self.effects | EF_MUZZLEFLASH; // Generate the lightning effect
+		Tent_Beam(TE_LIGHTNING2,self,self.attachment.origin,self.attachment2.origin);
 	}
 };
 
@@ -450,7 +385,6 @@ void() eidolon_painA2 = {
 	else self.frame = $painA1 + self.walkframe;
 };
 
-//----------------------------------------------------------------------
 void() eidolon_painB2 = {
 	// Do nothing if dead
 	if (self.health < 1) return;
@@ -465,16 +399,14 @@ void() eidolon_painB2 = {
 	else self.frame = $painB1 + self.walkframe;
 };
 
-//----------------------------------------------------------------------
 void() eidolon_painA1 = [$painA1, eidolon_painA2 ] { self.walkframe = 0;};
 void() eidolon_painB1 = [$painB1, eidolon_painB2 ] { self.walkframe = 0;};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) eidolon_pain = {
 	SUB_FinishAttachment(); // Finish with all attachments
 
 	// Check for boss wave trigger events
-	if (eidolon_WaveCheck() == TRUE) return;
+	if (SUB_BossWaveCheck(CT_MONEIDOLONWAVE)) return;
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -497,20 +429,23 @@ void(entity inflictor, entity attacker, float damage) eidolon_pain = {
 void() eidolon_explode = {
 	if (self.deathtarget != "") trigger_strs(self.deathtarget,self); // Check for any final trigger events
 	entity_hide(self); // No more Boss!
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // Blue ID particle explosion
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteByte (MSG_BROADCAST, 35);
-	WriteByte (MSG_BROADCAST, 8);
+	Tent_Explosion2(self.origin,35,8); // Blue ID particle explosion
 	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/seeker/explode_major.wav"); // Classic sprite/DP explosion
 	self.max_health = MON_GIBEXPLOSION; // Gib explosive fountain!?!
 	ThrowGib(11, 10 + rint(random()*10));	// Small Golem rock
 	ThrowGib(12, 10 + rint(random()*10));	// Large Golem rock
 	ThrowGib(4, 5 + rint(random()*3));		// Some flesh bits
 	ThrowGib(5, 5 + rint(random()*3));
+};
+
+void(vector start, vector dir, entity source) M_FireRandomLightningEffect = {
+	traceline(start,dir * 600,FALSE,self);
+	Tent_Beam(TE_LIGHTNING2,source,self.origin,trace_endpos);
+	if (random() < 0.5) { // Play some arching lightning sounds
+		if (random() < 0.5) {
+			sound(self,CHAN_BODY,"ad171/eidolon/elec_arch1.wav",1,ATTN_NORM);
+		} else sound(self,CHAN_BODY,"ad171/eidolon/elec_arch2.wav",1,ATTN_NORM);
+	}
 };
 
 void() eidolon_die2 = {
@@ -521,51 +456,31 @@ void() eidolon_die2 = {
 	if (self.walkframe < 30) {
 		self.walkframe = self.walkframe + 1;
 		self.frame = $crouch1 + self.walkframe;
-	} else {
-		// Make sure final frame is set
-		self.frame = $crouch30;
-
-		// Spawn implosion effect
-		if (random() < 0.5)
-			particle_implode(self.origin, 20+random()*20, 100, 100, PARTICLE_BURST_WHITE);
-		// Spawn particle smoke and explosive smoke
-		else {
-			SpawnProjectileSmoke(self.origin, 150, 100, 300);
-			particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_WHITE);
-		}
-	
-		// Check for any random lightning strikes outward
-		if (random() < 0.5) {
-			self.pos1 = self.origin - '0 0 16';
-			self.pos2 = vecrand(0,50,TRUE);
-			self.pos2_z = 25 + random()*25;	// Always up!
-			self.pos3 = normalize(self.pos2);
-			traceline(self.pos1, self.pos1 + self.pos3 * 600, FALSE, self);
-			
-			// Create lightning bolt
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-			WriteEntity (MSG_BROADCAST, self);
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-			WriteCoord (MSG_BROADCAST, trace_endpos_x);
-			WriteCoord (MSG_BROADCAST, trace_endpos_y);
-			WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
-			// Play some arching lightning sounds
-			if (random() < 0.5) {
-				if (random() < 0.5) sound (self, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
-				else sound (self, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
-			}
-		}
-	
-		// Cycle through end phase
-		self.lip = self.lip + 1;
-		self.nextthink = time + 0.1;	// Slow down to regular time
-		if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
-		if (self.lip > 40) eidolon_explode();
+		return;
 	}
+
+	self.frame = $crouch30; // Make sure final frame is set
+	if (random() < 0.5) { // Spawn implosion effect
+		particle_implode(self.origin,20 + random() * 20,100,100,PARTICLE_BURST_WHITE);
+	} else { // Spawn particle smoke and explosive smoke
+		SpawnProjectileSmoke(self.origin, 150, 100, 300);
+		particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_WHITE);
+	}
+
+	// Check for any random lightning strikes outward
+	if (random() < 0.5) {
+		self.pos1 = self.origin - '0 0 16';
+		self.pos2 = vecrand(0,50,TRUE);
+		self.pos2_z = 25 + random()*25;	// Always up!
+		self.pos3 = normalize(self.pos2);
+		M_FireRandomLightningEffect(self.pos1,self.pos1 + self.pos3,self);
+	}
+
+	// Cycle through end phase
+	self.lip = self.lip + 1;
+	self.nextthink = time + 0.1;	// Slow down to regular time
+	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip > 40) eidolon_explode();
 };
 
 void() eidolon_die1 = [$crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0; };
@@ -644,16 +559,12 @@ void() eidolon_start = {
 	self.reflectaxe = TRUE;			// Prevent axe damage
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
-	
-	// Setup boss waves and overall health
-	self.bosswave = 1;
+	self.bosswave = 1; // Setup boss waves and overall health
 	self.bosswavetotal = 5;
 	self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	eidolon_WaveSetupHP(); // Setup boss wave HP + trigger event
-
-	// default = No think functions
-	self.th_checkattack = EidolonCheckAttack;
+	SUB_BossWaveSetupHP(); // Setup boss wave HP + trigger event
+	self.th_checkattack = EidolonCheckAttack; // default = No think functions
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
@@ -668,13 +579,9 @@ void() eidolon_start = {
 	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
 	spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
 	if (self.tetherrange < 32) self.tetherrange = MONAI_MAXEIDO;
-
-	// Can only stand around and walk on the spot
-	self.th_stand = eidolon_stand1;
+	self.th_stand = eidolon_stand1; // Can only stand around and walk on the spot
 	self.th_walk = self.th_run = eidolon_walk1;
-	
-	// Wait for trigger event to be free from cage
-	self.think = self.th_stand;
+	self.think = self.th_stand; // Wait for trigger event to be free from cage
 	self.nextthink = time + 0.1;
 	if (self.targetname != "") {
 		self.use = eidolon_wakeup;

@@ -661,3 +661,32 @@ void() pyro_fire = {
 	dir = normalize(targ_org - self.origin);
 	pyroflame_spawn(org, dir);
 };
+
+void(vector org, float type) M_LaunchFlameWall = {
+	local vector torg, dir, ang;
+	local float targetang, fire_life;
+
+	// Start with facing angle
+	makevectors(self.angles);	
+	// Work out offset (24 unit) from left to right (- to +)
+    if (self.classtype == CT_MONINQUISITOR) {
+        if (self.lefty == 0) self.lefty = 1;
+        torg = self.enemy.origin + (v_right * (self.attack_count*24*self.lefty));
+	} else {
+        torg = self.enemy.origin + (v_right * (self.proj_attarc*24));
+    }
+	targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_FLAME);
+	// Work out angle
+	ang = vectoangles(torg - org);
+	ang_x = -targetang;	// Negative = upwards angle 
+	makevectors(ang);
+	// fire flames forward with slight Z wobble
+	dir = (v_forward + (v_up * (random()*0.2)) ) * SPEED_FLAME;
+
+	// Fire that flame!
+	fire_life = (LIFE_FLAME/2) + random() + random();
+	if (random() < 0.5) self.part_exitpuff = FALSE;
+	else self.part_exitpuff = TRUE;
+	// target, origin, v_forward, colour, size, lifetime, speed
+	Launch_Flame(self,org,dir,type,-1,fire_life,SPEED_FLAME);
+};

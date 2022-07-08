@@ -138,20 +138,8 @@ void() ftop_lightning = {
 
 	self.pos1 = self.movetarget2.origin;
 	self.pos2 = self.movetarget3.origin;
-	
-	// compensate for length of bolt
-	self.pos2 = self.pos2 - normalize(self.pos2 - self.pos1) * 100;
-	
-	// Generate the lightning effect
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING3);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, self.pos1_x);
-	WriteCoord (MSG_BROADCAST, self.pos1_y);
-	WriteCoord (MSG_BROADCAST, self.pos1_z);
-	WriteCoord (MSG_BROADCAST, self.pos2_x);
-	WriteCoord (MSG_BROADCAST, self.pos2_y);
-	WriteCoord (MSG_BROADCAST, self.pos2_z);
+	self.pos2 = self.pos2 - normalize(self.pos2 - self.pos1) * 100; // compensate for length of bolt
+	Tent_Beam(TE_LIGHTNING3, self, self.pos1, self.pos2); // Generate the lightning effect
 };
 
 void(entity inflictor, entity attacker, float damage) ftop_pain = {
@@ -171,12 +159,7 @@ void() ftop_death6 = [$death6, ftop_death7] {};
 void() ftop_death7 = [$death7, ftop_death8] {};
 void() ftop_death8 = [$death8, ftop_death9] {};
 void() ftop_death9 = [$death9, ftop_death10] {
-	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_LavaSplash(self.origin,0,"ad171/chthon/lavasplash.wav");
 };
 void() ftop_death10 = [$death9, ftop_death11] {
 	AddToKills(self,self.enemy);
@@ -283,11 +266,7 @@ void() ftop_wakeup = {
 	if (activator) self.enemy = activator;			// Setup trigger enemy
 	self.use = ftop_deathsequence;	// Final death trigger event
 	if (ext_dppart) self.traileffectnum = particleeffectnum("TR_BOSSCHTHON"); // DP particle spark and smoke effect to Chthon, originally done by Seven
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_LAVASPLASH,self.origin);
 	ftop_rise1();
 };
 

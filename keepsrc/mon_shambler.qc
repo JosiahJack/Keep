@@ -288,15 +288,7 @@ void() sham_lightning = {
 	dir = self.enemy.origin + '0 0 16' - org;
 	dir = normalize (dir);
 	traceline (org, self.origin + dir*MONAI_SHAMRANGE, TRUE, self); // Trace direct line of lightning infront of shambler
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING1); // Display lightning model segments
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	Tent_Beam(TE_LIGHTNING1, self, org, trace_endpos); // Display lightning model segments
 	if (ai_foundbreakable(self, trace_ent, FALSE)) T_Damage (trace_ent, self, self, 80, DAMARMOR); // Check for any breakables first
 	else LightningDamage(org, trace_endpos, self, 10); // Standard player lightning damage function
 };

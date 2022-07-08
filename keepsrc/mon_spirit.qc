@@ -591,16 +591,15 @@ void()	spirit_death9	= [	$death9,	spirit_death10	] { self.alpha = 0.8; spirit_gl
 void()	spirit_death10	= [	$death10,	spirit_death11	] { self.alpha = 0.4; spirit_glow(); };
 void()	spirit_death11	= [	$death11,	spirit_death12	] { self.alpha = 0.2; spirit_glow(); };
 void()	spirit_death12	= [	$death12,	spirit_death12	] {
-// Stop thinking and hide entity (prevent spirit_death12 loop)
-spirit_glow_off();
-spirit_remove_glow();
-self.nextthink = LARGE_TIMER;
-self.think = SUB_Null;
-entity_hide(self);
+	// Stop thinking and hide entity (prevent spirit_death12 loop)
+	spirit_glow_off();
+	spirit_remove_glow();
+	self.nextthink = LARGE_TIMER;
+	self.think = SUB_Null;
+	entity_hide(self);
 };
 
 void() spirit_die = {
-	
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -609,16 +608,8 @@ void() spirit_die = {
 	if (self.health < -45) {
 		// Play gib death sound
 		sound (self, CHAN_VOICE, "redfield/spirit/deathb.wav", 1, ATTN_NORM);
-
 		self.origin = self.origin + '0 0 24';
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-		WriteByte (MSG_BROADCAST, 1);
-        	WriteByte (MSG_BROADCAST, 15);
-
+		Tent_Explosion2(self.origin,1,15);
 		self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
 		ThrowGib(11,1); 			// Throw sword
 		spirit_glow_off();

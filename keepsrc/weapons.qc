@@ -1126,15 +1126,7 @@ void() W_FireLightning = { // [FUNCTION]
 	self.punchangle_x = -2;
 	dir = self.origin + '0 0 16';
 	traceline (dir, dir + v_forward*6000, TRUE, self);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, dir_x);
-	WriteCoord (MSG_BROADCAST, dir_y);
-	WriteCoord (MSG_BROADCAST, dir_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	Tent_Beam(TE_LIGHTNING2,self,dir,trace_endpos);
 	PlayerLightningDamage(self.origin, trace_endpos + v_forward*4, self, DAMAGE_LGPLAYER);
 };
 

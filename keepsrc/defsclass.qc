@@ -225,7 +225,7 @@ float CT_MONDGUARD = 200;		// HD Knight (Guard)
 float CT_MONANACONDACOIL = 201;	// Anaconda coils
 float CT_MONSPELLMAS = 202;		// Baseboss from madfox's Phantom Pholly map (very similar but not the same as Virtus boss)
 float CT_MONNEMESANTBOSS = 203;	// Zerstorer Nemesant Boss from Drake
-
+float CT_MONARMAGON = 204;      // Armagon from Quake: Mission Pack 1: Scourge of Armagon
 float CT_MONDCROSS = 205;		// HD Knight (Crossbow)
 float CT_MONDFURY = 210;		// HD Knight (Fury)
 float CT_MONDFURYBOSS = 211;	// Brigade Commander (Quake 1.5)
@@ -233,6 +233,7 @@ float CT_MONDBLOOD = 215;		// HD Hell Knight (Blood)
 float CT_MONDKNIGHT = 220;		// HD Hell Knight (Death)
 float CT_MONDPRINCE = 221;		// HD Hell Knight (Prince)
 float CT_MONWARLORD = 222;		// Quake 1.5 Warlord
+float CT_MONQUEEN = 223;        // Redfield's friendly Queen
 
 
 float CT_MONDSERG = 225;		// HD Hell Knight (Sergeant)

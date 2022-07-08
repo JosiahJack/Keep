@@ -732,7 +732,7 @@ void() monster_dfury = {
 	self.attack_offset = '20 0 10';		// Average of both attacks
 	if (self.deathstring == "") self.deathstring = " was sliced by a Fury Knight\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = DFuryCheckAttack;
+	self.th_checkattack = DSergeantCheckAttack;
 	self.th_stand = dfury_standL1;
 	self.th_walk = dfury_walk1;
 	self.th_run = dfury_run1;

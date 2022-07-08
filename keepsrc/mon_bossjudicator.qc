@@ -164,56 +164,6 @@ float JUSTICESPD_SMASH = 22.9;
 // Forward compiler refeence
 void(float finalstate, float soundtype) judge_checksword;
 
-// Setup wave HP and trigger boundaries
-void() judge_WaveSetupHP = {
-	// Is there anymore boss waves left?
-	if (self.bosswave >= self.bosswavetotal) {
-		// Only one wave left (death is final trigger)
-		self.health = self.bosswaveqty;
-		self.bosswavetrig = -1000;
-	}
-	else {
-		// Multiple waves are still left (reset hp+trigger)
-		// Always reset HP to stop high DPS weapons trashing waves boundaries
-		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
-		// The wave trigger is always one wave lower
-		self.bosswavetrig = self.health - self.bosswaveqty;
-	}
-	// Debug messages for wave and health
-	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
-	dprint(" / "); dprint(ftos(self.bosswavetotal));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
-	dprint(")\n");
-};
-
-//----------------------------------------------------------------------
-// Check if HP has reached next boss wave trigger event
-//----------------------------------------------------------------------
-float() judge_WaveCheck = {
-	// Should be in summon code, double check
-	if (self.style == JUDGE_PHASE3) return TRUE;
-	// Check for boss wave boundary event
-	if (self.health > 1 && self.health < self.bosswavetrig) {
-		// Check for wave boundary triggers
-		self.noise = "";
-		if (self.bosswave == 1) self.noise = self.noise1;
-		else if (self.bosswave == 2) self.noise = self.noise2;
-		else if (self.bosswave == 3) self.noise = self.noise3;
-		else if (self.bosswave == 4) self.noise = self.noise4;
-		
-		// Is there any trigger for the wave boundary?
-		if (self.noise != "") trigger_strs(self.noise, self);
-
-		// Update Boss wave parameters (next wave!)
-		self.bosswave = self.bosswave + 1;
-		judge_WaveSetupHP();
-		self.style = JUDGE_PHASE3;	// Summon mode
-		return TRUE;
-	}
-	return FALSE;
-};
-
 // Check the tether system
 float() judge_CheckTether = {
 	local float currentdist;
@@ -442,7 +392,7 @@ void() judge_runframe = {
 	
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -480,7 +430,7 @@ void() judge_fistframe = {
 	if (self.classtype == CT_MONJUSTICE) return;
 	
 	// Check for summoning condition?
-	if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+	if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 
 	self.nextthink = time + 0.1;
 	self.think = judge_fistframe; // Keep looping
@@ -552,7 +502,6 @@ void() judge_chargeframe = {
 	}
 };
 
-//----------------------------------------------------------------------
 void() judge_swingframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
@@ -560,7 +509,7 @@ void() judge_swingframe = {
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -601,7 +550,7 @@ void() judge_smashframe = {
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -705,8 +654,8 @@ void(float fire_explode) judge_fireflamewall = {
 	local vector org, eorg, torg, dir, ang;
 	local float expl_type, targetang, fire_life;
 
-	// Judge cannot find target!
-	if (!self.enemy) return;
+	if (!self.enemy) return; // Cannot find target!
+	if (self.health < 1) return; // we're dead Jim!
 
 	// Facing angle
 	ai_face();
@@ -737,24 +686,7 @@ void(float fire_explode) judge_fireflamewall = {
 		if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 	}
 
-	// Start with facing angle
-	makevectors(self.angles);	
-	// Work out offset (24 unit) from left to right (- to +)
-	torg = self.enemy.origin + (v_right * (self.proj_attarc*24));
-	targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_FLAME);
-	// Work out angle
-	ang = vectoangles(torg - org);
-	ang_x = -targetang;	// Negative = upwards angle 
-	makevectors(ang);
-	// fire flames forward with slight Z wobble
-	dir = (v_forward + (v_up * (random()*0.2)) ) * SPEED_FLAME;
-
-	// Fire that flame!
-	fire_life = (LIFE_FLAME/2) + random() + random();
-	if (random() < 0.5) self.part_exitpuff = FALSE;
-	else self.part_exitpuff = TRUE;
-	// target, origin, v_forward, colour, size, lifetime, speed
-	Launch_Flame (self, org, dir, FLAME_RED, -1, fire_life, SPEED_FLAME);
+	M_LaunchFlameWall(org,FLAME_RED);
 	// Next arc position
 	self.proj_attarc = self.proj_attarc + 1;
 };
@@ -893,7 +825,7 @@ void() judge_magicBframe = {
 	// Boss ONLY attack, make sure no Justice
 	if (self.classtype == CT_MONJUSTICE) return;
 
-	if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+	if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 
 	// Keep looping
 	self.nextthink = time + 0.1;
@@ -930,7 +862,7 @@ void() judge_flameline = {
 	if (self.classtype == CT_MONJUSTICE) return;
 
 	// Check for boss wave trigger events
-	if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+	if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 
 	// Keep looping
 	self.nextthink = time + 0.1;
@@ -1036,7 +968,6 @@ void()	judge_jump7 = [$jump7, judge_run ] {
 	// Make sure attack state is reset (can then decide melee or range)
 	self.attack_state = AS_STRAIGHT; ai_resetangles(); ai_face(); };
 
-//----------------------------------------------------------------------
 void() judge_jump = {
 	// Entered combat once
 	self.attack_active = TRUE;
@@ -1045,7 +976,7 @@ void() judge_jump = {
 	
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	self.state = JUDGE_JUMP;
@@ -1057,7 +988,6 @@ void() judge_jump = {
 
 // Entry point for Stand, Walk and Run monster states
 // All have to cope with sword out/on back blend animations
-//----------------------------------------------------------------------
 void() judge_stand = { 
 	// Hide any glowing/sprite attachments
 	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
@@ -1070,7 +1000,6 @@ void() judge_stand = {
 	judge_checksword(JUDGE_SWSHOULDER, JUDGE_SFXDEF);
 };
 
-//----------------------------------------------------------------------
 void() judge_walk =  {
 	// Start walking
 	self.state = JUDGE_WALK;
@@ -1082,7 +1011,6 @@ void() judge_walk =  {
 	else judge_checksword(JUDGE_SWBACK, JUDGE_SFXDEF);
 };
 
-//----------------------------------------------------------------------
 void() judge_run = {
 	// Don't start combat with a jump!
 	if (!self.attack_active) self.jump_flag = time + 2;
@@ -1093,14 +1021,13 @@ void() judge_run = {
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	self.state = JUDGE_RUN; 
 	judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
 };
 
-//----------------------------------------------------------------------
 void() judge_melee = {
 	// Entered combat once
 	self.attack_active = TRUE;
@@ -1111,7 +1038,7 @@ void() judge_melee = {
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	self.state = JUDGE_MELEE; 
@@ -1120,7 +1047,6 @@ void() judge_melee = {
 	judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
 };
 
-//----------------------------------------------------------------------
 void() judge_range = {
 	// Entered combat once
 	self.attack_active = TRUE;
@@ -1129,12 +1055,10 @@ void() judge_range = {
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
-	//------------------------------------------------------------------
 	// Flame LINE and MagicB = JUDGE (boss) only
-	//------------------------------------------------------------------
 	if (self.classtype == CT_MONJUDGE) {
 		// Magic range will always reach a monster
 		if (self.enemy.flags & FL_MONSTER) self.state = JUDGE_MAGICB;
@@ -1154,11 +1078,7 @@ void() judge_range = {
 			// Do magic attack instead
 			else self.state = JUDGE_MAGICB;
 		}
-	}
-	//------------------------------------------------------------------
-	// Flame BURST and MagicA = JUSTICE only
-	//------------------------------------------------------------------
-	else {
+	} else { // Flame BURST and MagicA = JUSTICE only
 		// Magic range will always reach a monster
 		if (self.enemy.flags & FL_MONSTER) self.state = JUDGE_MAGICA;
 		else {
@@ -1206,7 +1126,7 @@ void() judge_finishsword = {
 			// Special setup for monster infighting
 			if (self.enemy.flags & FL_MONSTER) judge_smashframe();
 			// Close enough for classic swing left/right
-			else if (ai_checkmelee(self.meleerange, MONAI_MELEEZTALL)) 
+			else if (ai_checkmelee(self.meleerange,self.meleerangez)) 
 				judge_swingframe();
 			// Fist smash ground (Boss ONLY)
 			else judge_fistframe();
@@ -1230,7 +1150,7 @@ void() judge_finishsword = {
 void() judge_movesword = {
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	// Keep looping
@@ -1346,26 +1266,6 @@ void(float finalstate, float soundtype) judge_checksword = {
 };
 
 
-// BOSS ONLY - summon a bunch of gaunts
-//----------------------------------------------------------------------
-void() Spawn_judgeMinFX = {
-	// Randomly pick from teleport sounds
-	self.lip = random() * 5;
-	if (self.lip < 1) self.noise = "misc/r_tele1.wav";
-	else if (self.lip < 2) self.noise = "misc/r_tele2.wav";
-	else if (self.lip < 3) self.noise = "misc/r_tele3.wav";
-	else if (self.lip < 4) self.noise = "misc/r_tele4.wav";
-	else self.noise = "misc/r_tele5.wav";
-	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-	
-	// Show ID teleport particle effect
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-};
-
 // Fire random plasma spikes while summoning gaunt minions
 void() Fire_judgePlasma = {
 	local vector org, ovec, rndvec, destvec;
@@ -1385,58 +1285,11 @@ void() Spawn_judgeMin = {
 	// Cycle through spawn targets and spawn Tfog + Gaunt
 	self.lip = self.attack_summon;
 	while(self.lip > 0) {
-		self.bossminchain.think = Spawn_judgeMinFX;
+		self.bossminchain.think = spawn_tfog_self;
 		self.bossminchain.nextthink = time + 0.01 + random()*0.3;
 		self.pos1 = self.bossminchain.origin;
 		SpawnMinionInRadius(self.pos1); // If the spawn locaiton all clear, spawn something!
 		self.bossminchain = self.bossminchain.entchain; // Next spawn point
-		self.lip = self.lip - 1;
-	}
-};
-
-void() Setup_judgeMin = {
-	local vector org, ovec;
-	
-	// Work out random position along length of sword
-	// Hilt = 20 0 112  Middle = 16 0 128  Top = 12 0 144
-	makevectors(self.angles);
-	ovec = self.attack_offset3 + (random() * self.attack_offset4);
-	org = self.origin + attack_vector(ovec);
-
-	// Slowly suck in particles to sword
-	particle_implode(org, 20+random()*20, 75, 75, PARTICLE_BURST_BLUE);
-	
-	// Generate a random bolt of electricity
-	Fire_judgePlasma();
-
-	// Cycle through spawn targets and fire Lightning per frame
-	self.lip = self.attack_summon;
-	while(self.lip > 0) {
-		// Traceline from spawn point to random direction
-		self.pos1 = self.bossminchain.origin - org;
-		self.pos2 = vecrand(0,50,TRUE);
-		self.pos3 = normalize(self.pos1 + self.pos2);
-		traceline(org, org + self.pos3 * 600, FALSE, self);
-		
-		// Create lightning bolt from source to target
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self.bossminchain);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		
-		// Play some arching lightning sounds
-		if (random() < 0.5) {
-			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self.bossminchain, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
-		}
-
-		// Next spawn point
-		self.bossminchain = self.bossminchain.entchain;
 		self.lip = self.lip - 1;
 	}
 };
@@ -1461,7 +1314,7 @@ void() judge_summonframe = {
 	else if (self.walkframe >= 4 && self.walkframe <= 9) {
 		self.frame = $summon1 + self.walkframe;
 		if (self.walkframe == 9 && self.attack_count == 1) Spawn_judgeMin();
-		else Setup_judgeMin();
+		else Setup_NourMinChain('0 0 0',0);
 	}
 	// OUTRO sequence --------------------------------------
 	if (self.walkframe > 8) {
@@ -1486,66 +1339,30 @@ void() judge_summonframe = {
 	}
 };
 
+// Make sure boss ONLY active for this attack
 void() judge_summon = {
-	// Make sure boss ONLY active for this attack
-	if (self.classtype == CT_MONJUSTICE) { 
-		self.think = self.th_run; return;
-	}
+	if (self.classtype == CT_MONJUSTICE) { self.think = self.th_run; return; }
 
-	// Always reset the think
 	self.nextthink = time + 0.1;
-	self.think = judge_summonframe;
-	
-	// Block all damage while summoning stuff
-	Resist_ChangeType(self, TRUE);
-	
-	// Reset attack state so it does not keep spawning
-	self.attack_state = AS_STRAIGHT;
-	self.lip = self.attack_summon;
-	while (self.lip > 0) {
-		self.cnt = 4;	// Try 4 times, no infinite loops
-		while (self.cnt > 0) {
-			// Work out 2 empty spaces around Judicator for minions
-			self.pos2 = vecrand(self.bossminbase, self.bossminrnd, TRUE);
-			// Always spawn higher than boss
-			if (self.pos2_z < self.maxs_z) self.pos2_z = self.maxs_z;
-			self.pos1 = self.origin + self.pos2;
-			// Check for available space for mininon
-			self.aflag = find_minionspace(self.pos1);
-			self.cnt = self.cnt - 1;
-			// Space is right, save origin
-			if (self.aflag == TRUE) self.cnt = -10;
-		}
-		// Found space, store origin for later
-		if (self.cnt == -10) self.bossminchain.origin = self.pos1;
-		else self.bossminchain.origin = self.origin;
-		
-		// Next spawn point
-		self.bossminchain = self.bossminchain.entchain;
-		self.lip = self.lip - 1;
-	}
-	
-	// Start spawning stuff!
+	self.think = judge_summonframe; // Always reset the think
+	nour_powersummon();
 	self.walkframe = 0; self.attack_count = 2;
-	judge_summonframe();
+	judge_summonframe(); // Start spawning stuff!
 };
 
-
 // Pain, Death and Taxes!
-//----------------------------------------------------------------------
 void()	judge_painA1 = [$painA1, judge_painA2 ] {};
 void()	judge_painA2 = [$painA2, judge_painA3 ] {};
 void()	judge_painA3 = [$painA3, judge_painA4 ] {};
 void()	judge_painA4 = [$painA4, judge_run ] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) judge_pain = {
 	// Hide any glowing/sprite attachments
 	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	if (self.classtype == CT_MONJUDGE) {
 		// Check for boss wave trigger events
-		if (judge_WaveCheck() == TRUE) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return;}
 	}
 
 	// No pain animations if jumping
@@ -1559,11 +1376,9 @@ void(entity inflictor, entity attacker, float damage) judge_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		self.pain_finished = time + 2;
 		// Only do pain animation if required
-		if (self.pain_check == 1 || self.pain_check == 2)
-			judge_painA1();
+		if (self.pain_check == 1 || self.pain_check == 2) judge_painA1();
 	}
 };
-
 
 void() judge_dieA1 = [$deathA1, judge_dieA2 ] {};
 void() judge_dieA2 = [$deathA2, judge_dieA3 ] { monster_check_gib(); };
@@ -1615,42 +1430,6 @@ void() judge_die = {
 	}
 };
 
-// Create gaunt minion entity chain
-// Entities are created so that the spawning space can be tested
-// before spawning the minions for possible collisions
-float() judge_minionsetup = {
-	local entity min_prev, min_first;
-	
-	self.lip = self.attack_summon;
-	min_prev = min_first = world;
-	
-	// Cycle through minion list
-	while(self.lip > 0) {
-		newmis = spawn();
-		newmis.origin = self.origin;
-		newmis.owner = self;
-		// Is this the first pass through loop?
-		if (!min_first) min_first = newmis;
-		// Any previous entities created?
-		if (!min_prev) min_prev = newmis;
-		else {
-			// Link previous to current entity
-			// and move previous forward in chain
-			min_prev.entchain = newmis;
-			min_prev = newmis;
-		}
-		// Keep on looping
-		self.lip = self.lip - 1;
-	}
-	// Close loop
-	if (min_first) {
-		newmis.entchain = min_first;
-		self.bossminchain = min_first;
-		return FALSE;
-	}
-	else return TRUE;
-};
-
 void() judge_spawntether = {
 	// temporary tether point
 	self.movelast = spawn();
@@ -1662,9 +1441,7 @@ void() judge_spawntether = {
 	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
 };
 
-
 // INTRO PHASE (??)
-
 void() judge_readyframe = {
 	self.takedamage = DAMAGE_AIM;	// Can take damage
 	self.style = JUDGE_PHASE2;		// Time to fight!
@@ -1678,9 +1455,7 @@ void() judge_readyframe = {
 	//else self.th_stand();			// Wait for the player
 };
 
-
 // Setup BOSS Judicator after trigger event
-
 void() judge_awake = {
 	// make sure boss mode selected
 	if (self.classtype == CT_MONJUSTICE) return;
@@ -1704,7 +1479,7 @@ void() judge_awake = {
 		// skill modifier : Easy = 1, Normal = 2, Hard/NM = 3
 	if (self.attack_summon > 3) self.attack_summon = 3;
 	// Setup minion chain entity system
-	if (judge_minionsetup()) {
+	if (nour_minionsetup()) {
 		dprint("\b[JUDGE]\b Cannot create minion chain!\n");
 		spawn_marker(self.origin+'0 0 32', SPNMARK_YELLOW);
 		entity_hide(self);
@@ -1759,7 +1534,7 @@ void() judge_awake = {
 	if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
 	// Setup boss wave HP + trigger event
-	judge_WaveSetupHP();
+	SUB_BossWaveSetupHP();
 
 	self.pain_finished = time + 3;		// Make pain go away
 	self.attack_finished = time + 2;	// Reset attack system
@@ -1846,6 +1621,7 @@ void() monster_judicator = {
 	self.move_altwalk = FALSE;			// No alternative walk
 	self.attack_active = FALSE;			// Not started combat yet
 	self.meleerange = MONAI_CLOSEJUDGE;	// swing/smash range
+	self.meleerangez = MONAI_MELEEZTALL;
 	self.meleecontact = FALSE;			// Smash contact sound
 	self.meleeoffset = '24 0 32';		// Arrow spawn height
 	self.attack_offset = '32 0 -16';	// Firewall ground explosion
@@ -1915,7 +1691,7 @@ void() monster_judicator = {
 		if (self.attack_summon > 3) self.attack_summon = 3;
 
 		// Setup minion chain entity system
-		if (judge_minionsetup()) {
+		if (nour_minionsetup()) {
 			dprint("\b[JUDGE]\b Cannot create minion chain!\n");
 			// spawn_marker(self.origin+'0 0 32', SPNMARK_YELLOW);
 			// entity_hide(self);
@@ -1944,7 +1720,7 @@ void() monster_judicator = {
 		if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 		self.max_health = self.bosswavetotal * self.bosswaveqty;
 		// Setup boss wave HP + trigger event
-		judge_WaveSetupHP();
+		SUB_BossWaveSetupHP();
 
 		// self.pain_finished = time + 3;		// Make pain go away
 		// self.attack_finished = time + 2;	// Reset attack system

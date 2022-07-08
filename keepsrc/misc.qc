@@ -1106,6 +1106,15 @@ void() misc_builtineffects_fire = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) self.state = STATE_OFF; // Check if disabled/off first
 	if (self.state == STATE_OFF) return;
 
+	if (self.count == TE_TELEPORT) {
+		spawn_tfog(self.movetarget.origin);
+		if (self.wait > 0) { // Continuous mode?
+			self.think = misc_builtineffects_fire;
+			self.nextthink = time + self.wait + random()*self.delay;
+		} else self.state = STATE_OFF; // Fire once and switch off
+
+		return;
+	}
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY); // Play builtin effects at target/self location
 	WriteByte (MSG_BROADCAST, self.count);
 	self.pos2 = self.origin;
@@ -1129,14 +1138,7 @@ void() misc_builtineffects_fire = { // [FUNCTION]
 	WriteCoord (MSG_BROADCAST, self.pos2_z);
 
 	// The effect sounds have to come after the write commands otherwise the engine will get confused and think the protocol has changed, there is an exact format for effects.
-	if (self.count == TE_TELEPORT) {
-		self.lip = rint(random()*5);
-		if (self.lip == 0) sound (self.movetarget, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
-		else if (self.lip == 1) sound (self.movetarget, CHAN_VOICE, "misc/r_tele2.wav", 1, ATTN_NORM);
-		else if (self.lip == 2) sound (self.movetarget, CHAN_VOICE, "misc/r_tele3.wav", 1, ATTN_NORM);
-		else if (self.lip == 3) sound (self.movetarget, CHAN_VOICE, "misc/r_tele4.wav", 1, ATTN_NORM);
-		else sound (self.movetarget, CHAN_VOICE, "misc/r_tele5.wav", 1, ATTN_NORM);
-	} else if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
+	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
 		self.count == TE_LIGHTNING3) {
 		if (self.waitmin < time) { // Stop the sound constantly playing
 			sound (self.movetarget, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM); // Play lightning sound (LG weapon hit)

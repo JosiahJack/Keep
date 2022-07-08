@@ -393,38 +393,6 @@ void() fred_death33 = [$death33, fred_death34 ] {};
 void() fred_death34 = [$death34, fred_death35 ] { monster_death_postcheck(); };
 void() fred_death35 = [$death35, fred_death35 ] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
-void() fred_explode = {
-	// no more FREDDIE!
-	entity_hide (self);
-	// Make sure gibs go flying up
-	self.max_health = MON_GIBFOUNTAIN;
-	self.health = -100;
-
-	// ID style explosion
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	
-	// Sprite + Dust
-	SpawnExplosion(EXPLODE_BIG, self.origin, self.death_sound);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-	SpawnProjectileSmoke(self.origin, 200, 250, 100);
-
-	// Regular blood like gibs
-	ThrowGib(4, 2 + rint(random()*4));
-	ThrowGib(5, 2 + rint(random()*4));
-	ThrowGib(25, 1);
-	// Metal and custom body parts
-	self.gibtype = GIBTYPE_METAL;
-	ThrowGib(11, 1 + rint(random()*2));
-	ThrowGib(12, 2 + rint(random()*2));
-	ThrowGib(13, 2 + rint(random()*2));
-};
-
 void() fred_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
@@ -521,7 +489,6 @@ void() monster_freddie = {
 	self.th_charge = fred_sfire24;		// End of barrel weapon
 	self.th_pain = fred_pain;
 	self.th_die = fred_die;
-	self.th_gibdie = fred_explode;
 	self.hittype = HIT_METAL;
 	self.classtype = CT_MONFREDDIE;
 	self.classgroup = CG_OGRE;

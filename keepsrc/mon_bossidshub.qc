@@ -131,42 +131,28 @@ void() finale_1 = {
 	self.count = 10;
 };
 
-//----------------------------------------------------------------------
 // Randomnly spawn 10 teleporter sparkle effects
-//----------------------------------------------------------------------
 void() finale_2 = {
 	if (self.count < 0) finale_3();
 	else {
-		sound (self, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
-
-		// start a teleport splash inside shub
-		self.view_ofs_x = crandom()*50;
+		self.view_ofs_x = crandom()*50; // start a teleport splash inside shub
 		self.view_ofs_y = -100;
 		self.view_ofs_z = random()*100;
 		self.oldorigin = self.origin + self.view_ofs;
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_TELEPORT);
-		WriteCoord (MSG_BROADCAST, self.oldorigin_x);
-		WriteCoord (MSG_BROADCAST, self.oldorigin_y);
-		WriteCoord (MSG_BROADCAST, self.oldorigin_z);
-
+		spawn_tfog(self.oldorigin);
 		self.count = self.count - 1;
 		self.nextthink = time + random()*0.5;
 		self.think = finale_2;
 	}
 };
 
-//----------------------------------------------------------------------
-void() finale_3 = {
-	// start shub thrashing wildly
-	sound (self, CHAN_VOICE, "boss2/death.wav", 1, ATTN_NORM);
-	lightstyle(0, "abcdefghijklmlkjihgfedcb");	
+void() finale_3 = { // start shub thrashing wildly
+	sound(self,CHAN_VOICE,"boss2/death.wav",1,ATTN_NORM);
+	lightstyle(0,"abcdefghijklmlkjihgfedcb");	
 	idshub_pain1();
 };
 
-//----------------------------------------------------------------------
 // Called after thrash animation (last frame)
-//----------------------------------------------------------------------
 void() finale_4 = {
 	sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM); // Play exploding sound
 	self.oldorigin = self.origin;

@@ -447,7 +447,7 @@ void() setup_gargoyle = {
 	self.attack_offset = '16 28 22';	// fireball start location
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "")  self.deathstring = " was burned by a Gargoyle\n";
-	self.th_checkattack = GargoyleCheckAttack;
+	self.th_checkattack = StrafeFlyerCheckAttack;
 	self.th_pain = garg_pain; 
 	self.th_die = garg_die;
 	if (!self.classtype) self.classtype = CT_MONGARGOYLE;

@@ -1,13 +1,8 @@
-/*==============================================================================
-Elena the Blood Huntress Cutscene Model 
-==============================================================================*/
-
+// Elena the Blood Huntress Cutscene Model 
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16 
-
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8 idle9
 $frame idle10 idle11 idle12 
-
 $frame drink1 drink2 drink3 drink4 drink5 drink6 drink7 drink8 drink9
 $frame drink10 drink11 drink12 drink13 drink14 drink15 drink16 drink17
 $frame drink18 drink19 drink20 drink21 drink22 drink23 drink24 drink25
@@ -16,9 +11,7 @@ $frame drink34 drink35 drink36 drink37
 
 void() huntressmodel_drink1;
 
-
 // Attachment management (create, finish and delete the Chalice)
-
 void() huntress_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment2) {
@@ -32,14 +25,11 @@ void() huntress_create_attachment = {
 	}
 };
 
-//----------------------------------------------------------------------
 void() huntress_update_attachment = {
 	self.attachment2.frame = self.frame;
 };
 
-//===========================================================================
 //Update the Rakuoy model frame and position with the Huntress
-
 void() create_rakuyo = {
 	if (self.attachment.model == "") {
 		setmodel(self.attachment, "progs/redfield/huntress/cutscene_rakuyo.mdl");
@@ -54,12 +44,10 @@ void() huntressmodel_rakuyo = {
 	self.attachment.frame = self.frame;
 };
 
-//===========================================================================
 void() huntressmodel_stand = {
 	self.movetype = MOVETYPE_NONE;
 };
 
-//===========================================================================
 void(float dist) huntressmodel_walk = {
 		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
 		movetogoal (dist);
@@ -88,8 +76,6 @@ void(float dist) huntressmodel_walk = {
 		}
 };
 
-
-//===========================================================================
 void()	huntressmodel_walk1	= [	$walk1,		huntressmodel_walk2	] { create_rakuyo(); huntressmodel_walk(4); self.skin = 0; huntressmodel_rakuyo(); };
 void()	huntressmodel_walk2	= [	$walk2,		huntressmodel_walk3	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
 void()	huntressmodel_walk3	= [	$walk3,		huntressmodel_walk4	] { monster_footstep(FALSE); huntressmodel_walk(4); huntressmodel_rakuyo(); };

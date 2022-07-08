@@ -55,18 +55,8 @@ void() random_thunder_triggered = { // [ENTITY]
    self.impulse = MOVETYPE_TOSS;
 };
 
-void() effect_teleport_use = { // [FUNCTION]
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_TELEPORT);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   sound (self,CHAN_VOICE,"misc/r_tele1.wav",TRUE,ATTN_NORM);
-};
-
 void() effect_teleport = { // [ENTITY]
-   precache_sound ("misc/r_tele1.wav");
-   self.use = effect_teleport_use;
+   self.use = spawn_tfog_self;
 };
 
 float SVC_UPDATEENTITY    = 128.000;

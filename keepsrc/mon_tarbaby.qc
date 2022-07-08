@@ -212,12 +212,7 @@ void() tbaby_explode = {
 	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	sound (self, CHAN_BODY, "blob/death1.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8*normalize(self.velocity);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);	// Hard coded explosion
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_TAREXPLOSION,self.origin); // Hard coded explosion
 	
 	// Sprite explosion for Fitz engines
 	// Check for DP particle system as visuals is done with TE_TAREXPLOSION
@@ -288,6 +283,8 @@ void() monster_tarbaby = {
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
 	self.deathstring = " was slimed by a Spawn\n";
+	self.meleerange = MONAI_MELEESPAWN;
+	self.meleerangez = 0;
 	
 	// Allow for extra functionality (death damage and poison)
 	if (self.death_dmg < 1) self.death_dmg = DAMAGE_TARBABY;
@@ -302,7 +299,7 @@ void() monster_tarbaby = {
 	self.th_jump = tbaby_jump1;
 	self.th_jumpexit = tbaby_jump5;
 	self.th_melee = tbaby_jump1;
-	self.th_pain = tbaby_pain;
+	if (!self.th_pain) self.th_pain = tbaby_pain;
 	self.th_die = tbaby_die;
 	self.classtype = CT_MONSPAWN;
 	self.classgroup = CG_SPAWN;

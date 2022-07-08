@@ -206,15 +206,7 @@ void(float dist, float damage) ubs_zap = {
 	dir = self.enemy.origin + '0 0 16' - org;
 	dir = normalize (dir);
 	traceline (org, self.origin + dir*dist, FALSE, self);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	Tent_Beam(TE_LIGHTNING1,self,org,trace_endpos);
 	if ((trace_ent.classgroup == CG_ZOMBIE)) damage = 70;
 	if ((trace_ent.health <= damage)) damage = 60;
 	if (trace_ent.takedamage) T_Damage (trace_ent, self, self, damage);
@@ -224,11 +216,7 @@ void() ubs_shot1_touch = {
 	self.think = SUB_Null;
 	if ((other == self.owner)) ubshome();
 	T_Damage (other, self, self.owner, 15);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin);
 	BecomeExplosion();
 };
 
@@ -696,12 +684,7 @@ void() ubs_fast = {
 };
 
 void() ubs_makewiza1 = [$flinga1, ubs_makewiza2 ] {
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "travail/ubs/spawnst.wav", 1, ATTN_NONE);
+	Tent_LavaSplash(self.origin,-32,"travail/ubs/spawnst.wav");
 };
 void() ubs_makewiza2 = [$flinga2, ubs_makewiza3 ] {};
 void() ubs_makewiza3 = [$flinga3, ubs_makewiza4 ] {};
@@ -717,14 +700,8 @@ void() ubs_makewiza12 = [$flinga12, ubs_makewiza13 ] {};
 void() ubs_makewiza13 = [$flinga13, ubs_makewiza14 ] {};
 void() ubs_makewiza14 = [$flinga14, ubs_run ] { ubscheckdist(); SUB_AttackFinished (2); ubsAttackFinished(); };
 
-void() ubs_makewizb1 = [$flingb1, ubs_makewizb2 ]
-{
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "travail/ubs/spawnst.wav", 1, ATTN_NONE);
+void() ubs_makewizb1 = [$flingb1, ubs_makewizb2 ] {
+	Tent_LavaSplash(self.origin,-32,"travail/ubs/spawnst.wav");
 };
 void() ubs_makewizb2 = [$flingb2, ubs_makewizb3 ] {};
 void() ubs_makewizb3 = [$flingb3, ubs_makewizb4 ] {};
@@ -740,14 +717,8 @@ void() ubs_makewizb12 = [$flingb12, ubs_makewizb13 ] {};
 void() ubs_makewizb13 = [$flingb13, ubs_makewizb14 ] {};
 void() ubs_makewizb14 = [$flingb14, ubs_run ] { ubscheckdist(); SUB_AttackFinished (SPAWNFLAG_LASER); ubsAttackFinished(); };
 
-void() ubs_makewizc1 = [$flingc1, ubs_makewizc2 ]
-{
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "travail/ubs/spawnst.wav", 1, ATTN_NONE);
+void() ubs_makewizc1 = [$flingc1, ubs_makewizc2 ] {
+	Tent_LavaSplash(self.origin,-32,"travail/ubs/spawnst.wav");
 };
 void() ubs_makewizc2 = [$flingc2, ubs_makewizc3 ] {};
 void() ubs_makewizc3 = [$flingc3, ubs_makewizc4 ] {};
@@ -771,8 +742,6 @@ void() ubs_makewiz = {
 	else
 		ubs_makewiza1();
 };
-
-
 
 void() ubs_spreada1 = [$figeighta1, ubs_spreada2 ] { ai_face(); };
 void() ubs_spreada2 = [$figeighta2, ubs_spreada3 ] { ai_face(); };
@@ -944,41 +913,19 @@ void() ubs_dieend12 = [$dieend11, ubs_dieend13 ] { setorigin (self, self.origin)
 void() ubs_dieend13 = [$dieend11, ubs_dieend13 ] { if (!checkclient() || corpse_removal) remove(self); };
 
 void() ubs_killdie = {
-	local	entity	wizkill;
-
+	local entity wizkill;
 
 	wizkill = nextent(world);
-
-	while (wizkill != world)
-	{
-		if (wizkill.model == "progs/wizard.mdl")
-		{
+	while (wizkill != world) {
+		if (wizkill.classtype == CT_MONWIZARD) {
 			spawn_tfog (self.origin);
 			spawn_tfog (wizkill.origin);
-
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-			WriteEntity (MSG_BROADCAST, self);
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-			WriteCoord (MSG_BROADCAST, wizkill.origin_x);
-			WriteCoord (MSG_BROADCAST, wizkill.origin_y);
-			WriteCoord (MSG_BROADCAST, wizkill.origin_z);
-
-			sound (wizkill, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-			ThrowUBSGib ("progs/h_wizard.mdl", -50, wizkill.origin);
-			ThrowUBSGib ("progs/gib2.mdl", -50, wizkill.origin);
-			ThrowUBSGib ("progs/gib2.mdl", -50, wizkill.origin);
-			ThrowUBSGib ("progs/gib2.mdl", -50, wizkill.origin);
-			if ((wizkill.classname != "monster_corpse") && (wizkill.health > 0))
-				killed_monster();
-			remove(wizkill);
-			return;
+			Tent_Beam(TE_LIGHTNING2,self,self.origin,wizkill.origin);
+			sound(wizkill,CHAN_VOICE,"player/udeath.wav", 1, ATTN_NORM);
+			T_Damage(wizkill,self,self,wizkill.health - wizkill.gibhealth + 1,NOARMOR);
 		}
 		wizkill = nextent(wizkill);
 	}
-
 	ubs_dieend1();
 };
 

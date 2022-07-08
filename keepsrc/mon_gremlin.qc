@@ -554,7 +554,6 @@ void() GremlinFireLaser = {
 	local vector org, dir;
 
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
-
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
 	makevectors(self.v_angle);
@@ -562,7 +561,6 @@ void() GremlinFireLaser = {
 	dir = normalize (dir);
 	sound (self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
 	self.attack_finished = time + 0.9;
-
 	org = self.origin + '0 0 16';
 	HIP_LaunchLaser (org,dir,TRUE);
 };
@@ -594,15 +592,7 @@ void() GremlinFireLightning = {
    dir = normalize (dir);
    dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
    traceline (org,(self.origin + (dir * 600.000)),TRUE,self);
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-   WriteEntity (MSG_BROADCAST,self);
-   WriteCoord (MSG_BROADCAST,org_x);
-   WriteCoord (MSG_BROADCAST,org_y);
-   WriteCoord (MSG_BROADCAST,org_z);
-   WriteCoord (MSG_BROADCAST,trace_endpos_x);
-   WriteCoord (MSG_BROADCAST,trace_endpos_y);
-   WriteCoord (MSG_BROADCAST,trace_endpos_z);
+   Tent_Beam(TE_LIGHTNING2,self,org,trace_endpos);
    LightningDamage(org,trace_endpos+ (dir * MOVETYPE_STEP),self,SVC_INTERMISSION);
 };
 
@@ -618,7 +608,6 @@ void() gremlin_grenade3 = [ 137.000, gremlin_grenade4 ] { self.attack_elev = SUB
 void() gremlin_grenade4 = [ 138.000, gremlin_grenade5 ] { MonsterFireGrenade(self.origin, self.enemy.origin); self.currentammo = self.currentammo - 1; self.ammo_rockets = self.ammo_rockets -1;};
 void() gremlin_grenade5 = [ 139.000, gremlin_grenade6 ] {};
 void() gremlin_grenade6 = [ 140.000, gremlin_run1 ] {};
-
 
 void() gremlin_prox1 = [ 135.000, gremlin_prox2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
 void() gremlin_prox2 = [ 136.000, gremlin_prox3 ] { self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };

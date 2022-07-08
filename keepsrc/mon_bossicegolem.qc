@@ -60,59 +60,7 @@ float ICEG_PHASE2 = 2;	// Fighting
 float ICEG_PHASE3 = 3;	// Busting Columns
 float ICEG_PHASE4 = 4;	// Death
 
-// Setup wave HP and trigger boundaries
-void() iceg_WaveSetupHP = {
-	// Is there anymore boss waves left?
-	if (self.bosswave >= self.bosswavetotal) {
-		self.health = self.bosswaveqty; // Only one wave left (death is final trigger)
-		self.bosswavetrig = -1000;
-	} else {
-		// Multiple waves are still left (reset hp+trigger)
-		// Always reset HP to stop high DPS weapons trashing waves boundaries
-		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
-		// The wave trigger is always one wave lower
-		self.bosswavetrig = self.health - self.bosswaveqty;
-	}
-	// Debug messages for wave and health
-	dprint("\b[BOSS]\b Wave ("); dprint(ftos(self.bosswave));
-	dprint(" / "); dprint(ftos(self.bosswavetotal));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
-	dprint(")\n");
-};
-
-// Check if HP reached next wave, turn and fire at targets
-float() iceg_WaveCheck = {
-	// Check for boss wave boundary event
-	if (self.health > 1 && self.health < self.bosswavetrig) {
-		// Check for wave boundary triggers
-		self.noise = "";
-		if (self.bosswave == 1) self.noise = self.noise1;
-		else if (self.bosswave == 2) self.noise = self.noise2;
-		else if (self.bosswave == 3) self.noise = self.noise3;
-		else if (self.bosswave == 4) self.noise = self.noise4;
-		
-		// Is there any trigger for the wave boundary?
-		if (self.noise != "") {
-			self.attachment2 = find(world, targetname, self.noise);
-			if (self.attachment2.classtype == CT_MONICEGOLEMWAVE) {
-				// Spawn any adds to keep player busy
-				if (HasTargets(self.attachment2)) SUB_UseTargetsOnEnt(self.attachment2);
-				self.th_jump(); // Turn around and blow up breakables
-			}
-		}
-
-		// Update Boss wave parameters (next wave!)
-		self.bosswave = self.bosswave + 1;
-		iceg_WaveSetupHP();		// Reset trigger/hp
-		return TRUE;
-	}
-	return FALSE;
-};
-
-//----------------------------------------------------------------------
 // Check the tether system
-//----------------------------------------------------------------------
 float() iceg_CheckTether = {
 	self.t_length = vlen(self.origin - self.movelast.origin);
 	// Check the most obvious first, inside tether range?
@@ -126,9 +74,7 @@ float() iceg_CheckTether = {
 	}
 };
 	
-//----------------------------------------------------------------------
 // Quick check for stomp/melee + fast range attack
-//----------------------------------------------------------------------
 void() iceg_CheckCombo = {
 	if (self.health < 1) return;
 	if (self.enemy.health < 1) return;
@@ -192,7 +138,10 @@ void() iceg_runframe = {
 	if (self.health < 1) return;
 	
 	// Check for boss wave trigger events
-	if (iceg_WaveCheck() == TRUE) { self.th_jump(); return;}
+	if (SUB_BossWaveCheck(CT_MONICEGOLEMWAVE)) {
+		self.th_jump();
+		return;
+	}
 	
 	// Default run speed (very slow)
 	self.lip = 8;
@@ -715,7 +664,10 @@ void() iceg_waveboundary = {
 // PAIN (no pain animations)
 void(entity inflictor, entity attacker, float damage) iceg_pain = {
 	// Check for boss wave trigger events
-	if (iceg_WaveCheck() == TRUE) { self.th_jump(); return;}
+	if (SUB_BossWaveCheck(CT_MONICEGOLEMWAVE)) {
+		self.th_jump();
+		return;
+	}
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -909,7 +861,7 @@ void() iceg_setup = {
 	self.bosswavetotal = 5;
 	self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	iceg_WaveSetupHP(); // Setup boss wave HP + trigger event
+	SUB_BossWaveSetupHP(); // Setup boss wave HP + trigger event
 	self.th_checkattack = IcegCheckAttack;
 	self.th_stand = self.th_walk = self.th_run = SUB_Null; // default = No think functions
 	self.th_missile = self.th_die = SUB_Null;

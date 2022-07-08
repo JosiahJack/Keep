@@ -72,11 +72,7 @@ void() coil_pain02 = [10, coil_pain03] { ai_pain(ATTN_NORM); };
 void() coil_pain03 = [11, coil_run] { ai_pain(ATTN_NORM); };
 
 void() coil_awake = {
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_LAVASPLASH,self.origin);
 	self.yaw_speed = 20;
 	coil_rise();
 };
@@ -127,11 +123,7 @@ void() Puke_Touch = {
 	T_Damage(other, self, self.owner, 10,DAMARMOR);
 	T_RadiusDamage(self, self.owner, 30, other,DAMAGEALL);
 	self.origin = self.origin - MOVETYPE_NOCLIP * normalize(self.velocity);
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin);
 	BecomeExplosion();
 };
 
@@ -153,7 +145,7 @@ void(vector p) anac_missile = {
 	newmis.angles = vectoangles(vec);
 	newmis.classname = "spike";
 	newmis.think = SUB_Remove;
-	newmis.nextthink = time + TE_LIGHTNING2;
+	newmis.nextthink = time + 6;
 	setorigin(newmis, org);
 	setmodel(newmis, "progs/drake/s_explod.spr");
 	newmis.avelocity = '200 100 300';
@@ -793,14 +785,7 @@ void() anacdoom_1 = {
 };
 
 void() anacdoom_2 = {
-	local vector o;
-
-	o = self.owner.origin - '0 100 0';
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_TAREXPLOSION);
-	WriteCoord(MSG_BROADCAST, o_x);
-	WriteCoord(MSG_BROADCAST, o_y);
-	WriteCoord(MSG_BROADCAST, o_z);
+	Tent_Point(TE_TAREXPLOSION,(self.owner.origin - '0 100 0'));
 	self.nextthink = time + 1.5;
 	self.think = anacdoom_3;
 };
@@ -861,31 +846,19 @@ void() anac_explode2 = [6, anac_explode2] {
 	T_RadiusDamage(self, self, 20, world,DAMAGEALL);
 	sound(self, CHAN_VOICE, "blob/death1.wav", ATTN_NORM, ATTN_NORM);
 	self.origin = self.origin - MOVETYPE_NOCLIP * normalize(self.velocity);
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_TAREXPLOSION);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_TAREXPLOSION,self.origin);
 	self.gibbed = TRUE;
 	BecomeExplosion();
 };
 
 void() anac_awake = {
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_LAVASPLASH,self.origin);
 	self.yaw_speed = 20;
 	anac_rise();
 };
 
 void() anac_down = {
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Point(TE_LAVASPLASH,self.origin);
 	self.yaw_speed = 20;
 	anac_fall6();
 };

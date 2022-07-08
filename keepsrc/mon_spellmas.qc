@@ -78,11 +78,7 @@ void() Spell_MissileTouch = {
 	if (other.health) T_Damage(other, self, self.owner, damg,DAMARMOR);
 	T_RadiusDamage(self, self.owner, 120, other,DAMAGEALL);
 	self.origin = self.origin - SECRET_NO_SHOOT * normalize(self.velocity);
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord(MSG_BROADCAST, self.origin_x);
-	WriteCoord(MSG_BROADCAST, self.origin_y);
-	WriteCoord(MSG_BROADCAST, self.origin_z);
+	Tent_Explosion(self.origin);
 	BecomeExplosion();
 };
 

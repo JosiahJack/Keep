@@ -42,6 +42,8 @@ float CHARMED_RADIUS    		= 1500.000;
 float MAX_CHARMER_DISTANCE   	= 200.000;
 float MIN_CHARMER_DISTANCE    	= 150.000;
 float TOOCLOSE_CHARMER_DISTANCE = 120.000;
+float ATTN_ARMAGON    = 0.500;
+float SERVO_VOLUME    = 0.500;
 float hipearthquake;
 float quakeactive;
 float discharged;

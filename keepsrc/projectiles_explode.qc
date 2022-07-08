@@ -193,11 +193,7 @@ void() BecomeExplosion = { // [FUNCTION]
 };
 
 void(vector spot) Tent_Explosion = { // [FUNCTION]
-    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-    WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-    WriteCoord (MSG_BROADCAST, spot_x);
-    WriteCoord (MSG_BROADCAST, spot_y);
-    WriteCoord (MSG_BROADCAST, spot_z);
+    Tent_Point(TE_EXPLOSION,spot);
 };
 
 void(vector spot, float rgb, float add) Tent_Explosion2 = { // [FUNCTION]
@@ -206,8 +202,11 @@ void(vector spot, float rgb, float add) Tent_Explosion2 = { // [FUNCTION]
     WriteCoord (MSG_BROADCAST, spot_x);
     WriteCoord (MSG_BROADCAST, spot_y);
     WriteCoord (MSG_BROADCAST, spot_z);
-    WriteByte (MSG_BROADCAST, rgb);     // First index to use on the palette.
-    WriteByte (MSG_BROADCAST, add);     // Range is from rgb to rgb+add-1.
+    if (rgb > 256) rgb = 256;
+    if (add > 256) add = 256;
+    if (add >= rgb) rgb = add;
+    if (rgb > 0) WriteByte (MSG_BROADCAST, rgb); // First index to use on the palette.
+    if (add > 0) WriteByte (MSG_BROADCAST, add); // Range is from rgb to rgb+add-1.
 };
 
 void(vector spot) R_Exp3 = { // [FUNCTION]
@@ -484,11 +483,7 @@ void() Explode_Grenade = { // [FUNCTION]
 		if (self.poisonous == TRUE) { self.height = EXPLODE_POISON_MED; PoisonDeBuff(other); } // Check for poison debuff (using poisonous flag).  Use new poison explosion.
 		if (self.think1) self.think1(); 
 		else if (self.height < EXPLODE_PLASMA_SMALL) {
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Default ID particle explosion for fire explosions
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
+            Tent_Explosion(self.origin); // Default ID particle explosion for fire explosions
 			SpawnExplosion(self.height, self.origin, SOUND_REXP3); // Play original explosion sound
 		}	
 	}
@@ -675,11 +670,7 @@ void(float burstcharge) beam_water_burst = { // [FUNCTION]
 					T_Damage (current, self, self, 99999,DAMARMOR);
 					if (other.health <= 0) {
 						MakeBeamRing(other.origin);
-						WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-						WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
-						WriteCoord (MSG_BROADCAST, other.origin_x);
-						WriteCoord (MSG_BROADCAST, other.origin_y);
-						WriteCoord (MSG_BROADCAST, other.origin_z);
+                        Tent_Point(TE_TAREXPLOSION,other.origin);
 					}
 				} else T_Damage (current, self, self, totaldmg,DAMARMOR);
 			}

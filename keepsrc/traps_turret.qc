@@ -129,13 +129,13 @@ void() turret_active =	[$tilt0, turret_active] { // [FUNCTION]
 	CheckTurretAttack();
 };
 
-void() turret_bullet1 = [$tilt0, turret_bullet2] { // [FUNCTION]
+void() M_TurretFireBullets = {
 	local vector dir, bullet_dir, spread_dir, bullet_spread;
 
 	bullet_spread = SPREAD_SG2; // Sharpshooter!
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"custents/turret/plasbult.wav",1,ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	bullet_dir = self.enemy.origin - self.enemy.velocity*0.2;
 	bullet_dir = normalize (dir - self.origin);
@@ -144,38 +144,12 @@ void() turret_bullet1 = [$tilt0, turret_bullet2] { // [FUNCTION]
 	Launch_Bullet(self.origin, dir, CT_PROJ_SG, (crandom()*10 + (SPEED_MONSG + (skill*SPEED_MONSGMULT))));
 	Launch_ShellCasing(1);
 };
+
+void() turret_bullet1 = [$tilt0, turret_bullet2] { M_TurretFireBullets(); }; // [FUNCTION]
 void() turret_bullet2 = [$tilt0, turret_bullet3] { turret_face(); self.nextthink = time + 0.05; }; // [FUNCTION]
-void() turret_bullet3 = [$tilt0, turret_bullet4] { // [FUNCTION]
-	local vector dir, bullet_dir, spread_dir, bullet_spread;
-
-	bullet_spread = SPREAD_SG2; // Sharpshooter!
-	turret_face();
-	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	bullet_dir = self.enemy.origin - self.enemy.velocity*0.2;
-	bullet_dir = normalize (dir - self.origin);
-	spread_dir = bullet_dir + (crandom()*bullet_spread_x) * v_right + (crandom()*bullet_spread_y) * v_up;
-	Launch_Bullet(self.origin, dir, CT_PROJ_SG, (crandom()*10 + (SPEED_MONSG + (skill*SPEED_MONSGMULT))));
-	Launch_Bullet(self.origin, dir, CT_PROJ_SG, (crandom()*10 + (SPEED_MONSG + (skill*SPEED_MONSGMULT))));
-	Launch_ShellCasing(1);
-};
+void() turret_bullet3 = [$tilt0, turret_bullet4] { M_TurretFireBullets(); }; // [FUNCTION]
 void() turret_bullet4 = [$tilt0, turret_bullet5] { turret_face(); self.nextthink = time + 0.05; }; // [FUNCTION]
-void() turret_bullet5 = [$tilt0, turret_active] { // [FUNCTION]
-	local vector dir, bullet_dir, spread_dir, bullet_spread;
-
-	bullet_spread = SPREAD_SG2; // Sharpshooter!
-	turret_face();
-	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	bullet_dir = self.enemy.origin - self.enemy.velocity*0.2;
-	bullet_dir = normalize (dir - self.origin);
-	spread_dir = bullet_dir + (crandom()*bullet_spread_x) * v_right + (crandom()*bullet_spread_y) * v_up;
-	Launch_Bullet(self.origin, dir, CT_PROJ_SG, (crandom()*10 + (SPEED_MONSG + (skill*SPEED_MONSGMULT))));
-	Launch_Bullet(self.origin, dir, CT_PROJ_SG, (crandom()*10 + (SPEED_MONSG + (skill*SPEED_MONSGMULT))));
-	Launch_ShellCasing(1);
-};
+void() turret_bullet5 = [$tilt0, turret_active] { M_TurretFireBullets(); }; // [FUNCTION]
 
 void() turret_laser1 = [$tilt0, turret_laser2] { // [FUNCTION]
 	local vector dir, vel;
@@ -263,24 +237,18 @@ void(entity inflictor, entity attacker, float damage)	turret_pain = { // [FUNCTI
 };
 
 void() turret_die= { // [FUNCTION]
-	local entity dedtur;
-
 	self.use = SUB_Null;
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	dedtur = spawn();
-	dedtur.solid = SOLID_NOT;
-	dedtur.movetype = MOVETYPE_NONE;
-	dedtur.angles = self.angles;
-	setorigin(dedtur, self.origin);
-	setmodel (dedtur, "progs/custents/dedturet.mdl");
-	setsize (self, '-10 -10 -3', '10 10 12');
-	dedtur.skin = self.skin;
-	ThrowGib (25,1); // headmdl
-	ThrowGib (11,4);
+	Tent_Explosion(self.origin);
+	newmis = spawn();
+	newmis.solid = SOLID_NOT;
+	newmis.movetype = MOVETYPE_NONE;
+	newmis.angles = self.angles;
+	setorigin(newmis, self.origin);
+	setmodel(newmis, "progs/custents/dedturet.mdl");
+	setsize(self, '-10 -10 -3', '10 10 12');
+	newmis.skin = self.skin;
+	ThrowGib(25,1); // headmdl
+	ThrowGib(11,4);
 };
 
 void() turret_use= { // [FUNCTION]

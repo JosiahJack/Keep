@@ -275,7 +275,7 @@ void() monster_centurion = {
 	self.attack_offset = '28 8.5 24';
 	if (self.deathstring == "") self.deathstring = " was vaporized by a Centurion\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_checkattack = CenturionCheckAttack;
+	self.th_checkattack = StrafeFlyerCheckAttack;
 	self.th_stand = cent_stand1;
 	self.th_walk = cent_walk1;
 	self.th_run = cent_run1;
