@@ -173,7 +173,7 @@ void() dlord_die8 = [49, dlord_die9] { ai_forward(10); };
 void() dlord_die9 = [50, dlord_die10] { ai_forward(11); };
 void() dlord_die10 = [51, dlord_die11] {};
 void() dlord_die11 = [52, dlord_die12] { monster_death_postcheck(); };
-void() dlord_die12 = [53, dlord_die12] {};
+void() dlord_die12 = [53, dlord_die12] { monster_deadbody_check(); };
 
 void() dlord_dieb1 = [54, dlord_dieb2] {};
 void() dlord_dieb2 = [55, dlord_dieb3] {};
@@ -183,7 +183,7 @@ void() dlord_dieb5 = [58, dlord_dieb6] {};
 void() dlord_dieb6 = [59, dlord_dieb7] {};
 void() dlord_dieb7 = [60, dlord_dieb8] {};
 void() dlord_dieb8 = [61, dlord_dieb9] { monster_death_postcheck(); };
-void() dlord_dieb9 = [62, dlord_dieb9] {};
+void() dlord_dieb9 = [62, dlord_dieb9] { monster_deadbody_check(); };
 
 void() dlord_die = {
 	// Pre-check routine to tidy up extra entities

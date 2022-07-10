@@ -79,13 +79,13 @@ void() button_ext_done = { // [FUNCTION]
 void() button_ext_return = { // [FUNCTION]
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, button_ext_done);
-	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 };
 
 void() button_ext_firedisabled = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
-	if (self.noise2)sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	if (self.noise2)sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	if (self.event != "" && activator.classname == "player") centerprint (activator, self.event);
 	self.state = STATE_UP; // Time out for a bit
 	self.think = button_ext_done;
@@ -96,7 +96,7 @@ void() button_ext_fire = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
 	self.frame = 1;// use alternate textures
-	if (self.noise) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);	
+	if (self.noise) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);	
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, button_ext_wait);
 };
@@ -164,7 +164,7 @@ void() func_button_ext = { // [ENTITY]
 	SetMovedir();
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	self.blocked = SUB_Null;
 	self.use = button_ext_use;
 	if (self.health) {
@@ -207,10 +207,10 @@ void() switch_toggle = { // [FUNCTION]
 	if (self.cnt) return;
 
 	if (self.state == STATE_UP) {
-		if (self.noise) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		if (self.noise) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 		self.state = STATE_DOWN;
 		self.frame = 1; // alt texture
-		if (self.mdl) setmodel (self, self.mdl);// alt model	
+		if (self.mdl) setmodel(self, self.mdl);// alt model	
 		activator = self.enemy;
 		SUB_UseTargets();
 		if (self.spawnflags & NOTOUCHRETURN) self.touch = SUB_Null; // Can't touch till reset
@@ -221,10 +221,10 @@ void() switch_toggle = { // [FUNCTION]
 			self.nextthink = time + self.wait;
 		}
 	} else {		
-		if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+		if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 		self.state = STATE_UP;
 		self.frame = 0;
-		if (self.mdl) setmodel (self, self.weaponmodel);	
+		if (self.mdl) setmodel(self, self.weaponmodel);	
 		if (!(self.spawnflags & NOTONRETURN)) {
 			activator = self.enemy;
 			SUB_UseTargets();
@@ -291,9 +291,9 @@ void() func_switch = { // [ENTITY]
 	if (self.angles != '0 0 0') SetMovedir();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setsize (self, self.mins , self.maxs);
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.weaponmodel = self.model;
 	if (!self.wait) self.wait = -1;// Default is true toggle
 	self.state = STATE_UP;

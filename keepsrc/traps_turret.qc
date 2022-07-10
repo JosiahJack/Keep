@@ -49,7 +49,7 @@ void() turret_shoot = { // [FUNCTION]
 	local vector ang;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
 	ang = vectoangles(self.enemy.origin - self.origin); //calculate pitch based on the enemy's position, but clamp it to a narrow range
 	if (ang_x > 180) ang_x = ang_x - 360;	
 	if (ang_x > TURRET_MAX_PITCH) ang_x = TURRET_MAX_PITCH;
@@ -69,14 +69,14 @@ void() turret_helper_think = { // [FUNCTION]
 	turret_shoot(); //shoot if enemy is in sight (even if facing wrong way)
 };
 
-void() turret_hit_bottom = { sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); self.state = TURRET_STATE_INACTIVE; }; // [FUNCTION]
+void() turret_hit_bottom = { sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); self.state = TURRET_STATE_INACTIVE; }; // [FUNCTION]
 
-void() turret_go_down = { sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); self.state = TURRET_STATE_DEACTIVATING; SUB_CalcMove (self.pos1, self.speed, turret_hit_bottom); }; // [FUNCTION]
+void() turret_go_down = { sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); self.state = TURRET_STATE_DEACTIVATING; SUB_CalcMove (self.pos1, self.speed, turret_hit_bottom); }; // [FUNCTION]
 
-void() turret_hit_top = { sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); self.state = TURRET_STATE_ACTIVE; }; // [FUNCTION]
+void() turret_hit_top = { sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); self.state = TURRET_STATE_ACTIVE; }; // [FUNCTION]
 
 void() turret_go_up = { // [FUNCTION]
-	sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	self.state = TURRET_STATE_ACTIVATING;
 	SUB_CalcMove (self.pos2, self.speed, turret_hit_top);
 };
@@ -116,33 +116,33 @@ void() func_turret = { // [ENTITY]
 
 	if (self.sounds == 0) self.noise1 = self.noise2 = SOUND_EMPTY;
 	if (self.sounds == 1) {
-		precache_sound ("doors/drclos4.wav");
-		precache_sound ("doors/doormv1.wav");
+		precache_sound("doors/drclos4.wav");
+		precache_sound("doors/doormv1.wav");
 		self.noise1 = "doors/drclos4.wav";
 		self.noise2 = "doors/doormv1.wav";
 	} else if (self.sounds == 2) {
-		precache_sound ("doors/hydro1.wav");
-		precache_sound ("doors/hydro2.wav");
+		precache_sound("doors/hydro1.wav");
+		precache_sound("doors/hydro2.wav");
 		self.noise2 = "doors/hydro1.wav";
 		self.noise1 = "doors/hydro2.wav";
 	} else if (self.sounds == 3) {
-		precache_sound ("doors/stndr1.wav");
-		precache_sound ("doors/stndr2.wav");
+		precache_sound("doors/stndr1.wav");
+		precache_sound("doors/stndr2.wav");
 		self.noise2 = "doors/stndr1.wav";
 		self.noise1 = "doors/stndr2.wav";
 	} else if (self.sounds == 4) {
-		precache_sound ("doors/ddoor1.wav");
-		precache_sound ("doors/ddoor2.wav");
+		precache_sound("doors/ddoor1.wav");
+		precache_sound("doors/ddoor2.wav");
 		self.noise1 = "doors/ddoor2.wav";
 		self.noise2 = "doors/ddoor1.wav";
 	}
 	precache_model ("progs/laser.mdl");
-	precache_sound (SOUND_LASER_FIRE);
-	precache_sound (SOUND_LASER_HIT);
+	precache_sound(SOUND_LASER_FIRE);
+	precache_sound(SOUND_LASER_HIT);
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setorigin (self, self.origin);	
-	setmodel (self, self.model);
+	setorigin(self, self.origin);	
+	setmodel(self, self.model);
 	self.use = turret_func_use;
 	if (!self.speed) self.speed = 100;
 	self.pos1 = self.origin + self.movedir; //inactive position
@@ -158,17 +158,17 @@ void() func_turret = { // [ENTITY]
 	org_x = (self.absmin_x + self.absmax_x) / 2;
 	org_y = (self.absmin_y + self.absmax_y) / 2;
 	org_z = self.absmin_z + self.height;
-	setorigin (helper, org);
+	setorigin(helper, org);
 	self.angles = '0 0 0'; // Set actual angles to 0 now that helper has its angles
 
 	//move to initial position
 	if (self.spawnflags & TUR_STARTOFF) {
 		self.state = TURRET_STATE_INACTIVE;
-		setorigin (self, self.pos1);
+		setorigin(self, self.pos1);
 		self.frame = 1;
 	} else {
 		self.state = TURRET_STATE_ACTIVE;
-		setorigin (self, self.pos2);
+		setorigin(self, self.pos2);
 		self.frame = 0;
 	}
 

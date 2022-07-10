@@ -50,7 +50,7 @@ void() ltrail_fire = { // [FUNCTION]
    local entity myTarget;
 
    if ( (self.classname != "ltrail_end") ) {
-      sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
+      sound(self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
       myTarget = find (world,targetname,self.target);
       Tent_Beam(TE_LIGHTNING2,self,self.origin,myTarget.origin);
       LightningDamage(self.origin,myTarget.origin,self,self.currentammo);
@@ -92,7 +92,7 @@ void() ltrail_start_fire = { // [FUNCTION]
 
 void() ltrail_start = { // [ENTITY]
    self.ltrailLastUsed = time;
-   precache_sound ("weapons/lhit.wav");
+   precache_sound("weapons/lhit.wav");
    self.movetype = MOVETYPE_NONE;
    self.solid = SOLID_BBOX;
    self.use = ltrail_start_fire;
@@ -107,7 +107,7 @@ void() ltrail_start = { // [ENTITY]
 };
 
 void() ltrail_relay = { // [ENTITY]
-   precache_sound ("weapons/lhit.wav");
+   precache_sound("weapons/lhit.wav");
    self.movetype = MOVETYPE_NONE;
    self.solid = SOLID_BBOX;
    self.use = ltrail_start_fire;
@@ -117,7 +117,7 @@ void() ltrail_relay = { // [ENTITY]
 };
 
 void() ltrail_end = { // [ENTITY]
-   precache_sound ("weapons/lhit.wav");
+   precache_sound("weapons/lhit.wav");
    self.movetype = MOVETYPE_NONE;
    self.solid = SOLID_BBOX;
    self.use = ltrail_start_fire;

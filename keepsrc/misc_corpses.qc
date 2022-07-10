@@ -43,10 +43,10 @@ void() misc_deadbody_on = { // [FUNCTION]
 	if (self.gibbed == TRUE) return;
 
 	self.estate = ESTATE_ON;			// Show entity
-	self.solid = SOLID_NOT;				// No world interaction
+	self.solid = SOLID_TRIGGER;			// No world interaction
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	setmodel(self,self.mdl);			// Show model
-	setsize (self, self.bbmins, self.bbmaxs);
+	setsize(self,self.bbmins,self.bbmaxs);
 	self.bodyonflr = MON_ONFLR;			// Let Shadow Axe interact
 };
 
@@ -57,7 +57,7 @@ void() misc_deadbody_off = { // [FUNCTION]
 	self.solid = SOLID_NOT;			// No world interaction
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	setmodel(self,"");				// Show model
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
+	setsize(self,VEC_ORIGIN,VEC_ORIGIN);
 	self.bodyonflr = "";			// No Shadows Axe interaction
 };
 

@@ -45,7 +45,7 @@ void() misc_sparks_fade1;
 // Flags: "Not Animated" Banner is not animated. "Big" Banner is twice as big: 128 wide by 288 long.
 void() misc_flag = { // [ENTITY]
 	precache_model ("progs/rubicon2/flag.mdl");
-	setmodel (self, "progs/rubicon2/flag.mdl");
+	setmodel(self, "progs/rubicon2/flag.mdl");
 	self.frame = (self.spawnflags & 3);
 	makestatic (self);
 };
@@ -75,7 +75,7 @@ void() make_sparks = { // [FUNCTION]
 			i = i + 1;
 		}
 
-		if (self.sounds == 1) sound (self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
+		if (self.sounds == 1) sound(self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
 		SUB_UseTargets();
 		self.nextthink = time + 0.1 + random() * 0.1;
 		self.think = spark_turnofflight;
@@ -94,7 +94,7 @@ void() make_sparks = { // [FUNCTION]
 // 1)	sparks
 void() misc_sparks = { // [ENTITY]
 	precache_model ("progs/rrp/spark.mdl");
-	precache_sound ("rrp/misc/spark.wav");
+	precache_sound("rrp/misc/spark.wav");
 	if (!self.movedir) self.movedir = '0 0 -30';
 	if (!self.wait) self.wait = 2;
 	if (!self.cnt) self.cnt = 15;

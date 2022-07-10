@@ -347,8 +347,8 @@ void() funcbreakable_use = { // [FUNCTION]
 
 	if (self.waitmin == TRUE) return;	// Trigger once block
 
-	// Play initial breaking sound (exception - silent spawnflag)
-	if (!(self.spawnflags & BREAK_SILENT)) sound (self.attachment, CHAN_BODY, self.noise, 1, ATTN_NORM);
+	// Play initial breaking sound(exception - silent spawnflag)
+	if (!(self.spawnflags & BREAK_SILENT)) sound(self.attachment, CHAN_BODY, self.noise, 1, ATTN_NORM);
 
 	// Hide breakable func model (ignore if point entity)
 	if (self.classtype == CT_FUNCBREAK) {
@@ -424,12 +424,12 @@ void() funcbreakable_use = { // [FUNCTION]
 			newmis.classgroup = CG_TEMPENT;
 			newmis.owner = self;
 			self.lip = random()*self.brkobjqty; // Setup broken model/bsp (random selection if possible)
-			if (self.lip < 1) setmodel (newmis, self.brkobj1);
-			else if (self.lip < 2) setmodel (newmis, self.brkobj2);
-			else if (self.lip < 3) setmodel (newmis, self.brkobj3);
-			else setmodel (newmis, self.brkobj4);
+			if (self.lip < 1) setmodel(newmis, self.brkobj1);
+			else if (self.lip < 2) setmodel(newmis, self.brkobj2);
+			else if (self.lip < 3) setmodel(newmis, self.brkobj3);
+			else setmodel(newmis, self.brkobj4);
 	
-			setorigin (newmis, rorg); // Setup origin based on previous content checks	
+			setorigin(newmis, rorg); // Setup origin based on previous content checks	
 			setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 			newmis.movetype = MOVETYPE_BOUNCE; // Setup movement and spin parameters
 			newmis.solid = SOLID_BBOX;
@@ -548,7 +548,7 @@ void() make_breakable_debris = { // [FUNCTION]
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
 			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
-			setmodel (new, new.model); //dumptruck_ds
+			setmodel(new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
@@ -572,7 +572,7 @@ void() make_breakable_debris = { // [FUNCTION]
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
 			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
-			setmodel (new, new.model); //dumptruck_ds
+			setmodel(new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
@@ -596,7 +596,7 @@ void() make_breakable_debris = { // [FUNCTION]
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
 			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
-			setmodel (new, new.model); //dumptruck_ds
+			setmodel(new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
@@ -620,7 +620,7 @@ void() make_breakable_debris = { // [FUNCTION]
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
 			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
-			setmodel (new, new.model); //dumptruck_ds
+			setmodel(new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
@@ -644,7 +644,7 @@ void() make_breakable_debris = { // [FUNCTION]
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
 			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
-			setmodel (new, new.model); //dumptruck_ds
+			setmodel(new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
@@ -753,10 +753,10 @@ void() breakable_cache = { // [FUNCTION]
 		if (self.noise3 == "") self.noise3 = SOUND_EMPTY;
 		if (self.noise4 == "") self.noise4 = SOUND_EMPTY;
 	}
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
-	precache_sound (self.noise4);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
+	precache_sound(self.noise4);
 	if (self.brkobjects < BMODTYPE_SELF) self.brkobjects = BMODTYPE_ROCK1; // Make sure breakable objects are within range types (def=rock)
 
 	// Two ways the models can be defined, using the default bmodel types or specifying the models via the brkobjs strings
@@ -988,8 +988,8 @@ void() breakable_on = { // [FUNCTION]
 	if (self.bsporigin) {
 		self.solid = SOLID_BSP;
 		self.movetype = MOVETYPE_PUSH;
-		setmodel (self, self.model);
-		setorigin (self, self.origin);	
+		setmodel(self, self.model);
+		setorigin(self, self.origin);	
 		setsize (self, self.mins , self.maxs);
 		self.attachment = spawn(); // Used for sound, radius damage and explosion
 		self.attachment.origin = bmodel_origin(self);
@@ -997,8 +997,8 @@ void() breakable_on = { // [FUNCTION]
 	} else {
 		self.solid = SOLID_BBOX;
 		self.movetype = MOVETYPE_NONE;
-		setmodel (self, self.mdl);
-		setorigin (self, self.origin);	
+		setmodel(self, self.mdl);
+		setorigin(self, self.origin);	
 		setsize (self, self.bbmins , self.bbmaxs);
 		self.angles = self.pos2;
 		self.attachment = self; // Used for sound, radius damage and explosion
@@ -1032,7 +1032,7 @@ void() breakable_on = { // [FUNCTION]
 // brksound   : Initial breaking sound type (override style default)
 // brkimpsound : Impact sound type (override style default)
 // brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
-// noise     : Initial breaking sound (unique sound file)
+// noise     : Initial breaking sound(unique sound file)
 // noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
 // noise2    : Custom Rubble Impact sound 2
 // noise3    : Custom Rubble Impact sound 3
@@ -1093,7 +1093,7 @@ void() func_breakable = { // [ENTITY]
 // brksound   : Initial breaking sound type (override style default)
 // brkimpsound : Impact sound type (override style default)
 // brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
-// noise      : Initial breaking sound (unique sound file)
+// noise      : Initial breaking sound(unique sound file)
 // noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
 // noise2    : Custom Rubble Impact sound 2
 // noise3    : Custom Rubble Impact sound 3
@@ -1153,7 +1153,7 @@ void() breakable_wall_state = { // [FUNCTION]
 			self.solid = SOLID_NOT;
 			self.movetype = MOVETYPE_NONE;  // Bmodel visible, no collision
 		}
-		setmodel (self, self.mdl); // Add bmodel to the world
+		setmodel(self, self.mdl); // Add bmodel to the world
 	} else {
 		// hide model
 		self.solid = SOLID_NOT;
@@ -1204,7 +1204,7 @@ void() func_breakable_wall = { // [ENTITY]
 
 	self.solid = SOLID_BSP; // Make sure the bmodel is active in the world before changing state
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	if (self.spawnflags & BREAKWALL_FADEOUT) self.wait = -1; // Something that fades away does it only once
 	if (!self.waitmin) self.waitmin = 4; // Default fade time = time+fade+random()*fade
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality

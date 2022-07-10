@@ -54,9 +54,9 @@ void() SentinelFire = {
 	if (self.attack_finished < time) {
 		if (self.enemy == world || !enemy_vis) return;
 		if (self.spawnflags & 4) {
-			sound (self, CHAN_WEAPON, "quoth/sentinel/nail.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "quoth/sentinel/nail.wav", 1, ATTN_NORM);
 		} else {
-			sound (self, CHAN_WEAPON, "quoth/sentinel/laser.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "quoth/sentinel/laser.wav", 1, ATTN_NORM);
 		}
 		self.attack_finished = time + self.wait;
 		makevectors(self.angles);
@@ -71,7 +71,7 @@ void() SentinelFire = {
 	}
 };
 
-void() sentinel_writhe1 = [0, sentinel_writhe2 ] { monster_idle_sound();ai_stand(); };
+void() sentinel_writhe1 = [0, sentinel_writhe2 ] { monster_idle_sound(); ai_stand(); };
 void() sentinel_writhe2 = [1, sentinel_writhe3 ] { ai_stand(); };
 void() sentinel_writhe3 = [2, sentinel_writhe4 ] { ai_stand(); };
 void() sentinel_writhe4 = [3, sentinel_writhe5 ] { ai_stand(); };
@@ -82,16 +82,16 @@ void() sentinel_writhe8 = [7, sentinel_writhe9 ] { ai_stand(); };
 void() sentinel_writhe9 = [8, sentinel_writhe10 ] { ai_stand(); };
 void() sentinel_writhe10 = [9, sentinel_writhe1 ] { ai_stand(); };
 
-void() sentinel_run1 = [0, sentinel_run2 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run2 = [1, sentinel_run3 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run3 = [2, sentinel_run4 ] { SentinelFire();ai_runfly(8); };
+void() sentinel_run1 = [0, sentinel_run2 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run2 = [1, sentinel_run3 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run3 = [2, sentinel_run4 ] { SentinelFire(); ai_runfly(8); };
 void() sentinel_run4 = [3, sentinel_run5 ] { SentinelFire();monster_idle_sound(); ai_runfly(8); };
-void() sentinel_run5 = [4, sentinel_run6 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run6 = [5, sentinel_run7 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run7 = [6, sentinel_run8 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run8 = [7, sentinel_run9 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run9 = [8, sentinel_run10 ] { SentinelFire();ai_runfly(8); };
-void() sentinel_run10 = [9, sentinel_run1 ] { SentinelFire();ai_runfly(8); };
+void() sentinel_run5 = [4, sentinel_run6 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run6 = [5, sentinel_run7 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run7 = [6, sentinel_run8 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run8 = [7, sentinel_run9 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run9 = [8, sentinel_run10 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run10 = [9, sentinel_run1 ] { SentinelFire(); ai_runfly(8); };
 
 void() sentinel_attack1 = [9, sentinel_run1 ] { SentinelFire(); };
 //void() sentinel_attack2 = [1, sentinel_attack3 ] { SentinelFire(); };
@@ -116,13 +116,13 @@ void(entity inflictor, entity attacker, float damage) sentinel_pain = {
 	monster_pain_check(attacker, damage);
 
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		sentinel_pain1();
 		self.pain_finished = time + 2;
 	}
 };
 
-void(entity own) sentinel_death_fx = {
+void(entity own, float fr, float idle, float t) sentinel_death_fx = {
 	local entity puff;
 	local vector vrand;
 
@@ -132,8 +132,8 @@ void(entity own) sentinel_death_fx = {
 	puff.touch = SUB_Null;
 	puff.movetype = MOVETYPE_NONE;
 	puff.velocity = '0 0 0';
-	puff.frame = 21;
-	puff.idleweaponframe = 34;
+	puff.frame = fr;
+	puff.idleweaponframe = idle;
 	vrand_x = (crandom()*16);
 	vrand_y = (crandom()*16);
 	vrand_z = (crandom()*16);
@@ -141,46 +141,22 @@ void(entity own) sentinel_death_fx = {
 	puff.mdl = "progs/quoth/s_vp_pll.spr";
 	setmodel(puff,"progs/quoth/s_vp_pll.spr");
 	puff.think = BDW_SpriteGenericPlayOnce;
-	puff.nextthink = time + 0.05;
-};
-
-void(entity own) sentinel_death_fx2 = {
-	local entity puff;
-	local vector vrand;
-
-	puff = spawn();
-	puff.owner = own;
-	puff.solid = SOLID_NOT;
-	puff.touch = SUB_Null;
-	puff.movetype = MOVETYPE_NONE;
-	puff.velocity = '0 0 0';
-	puff.frame = 35;
-	puff.idleweaponframe = 51;
-	vrand_x = (crandom()*16);
-	vrand_y = (crandom()*16);
-	vrand_z = (crandom()*16);
-	puff.origin = own.origin + vrand;
-	puff.mdl = "progs/quoth/s_vp_pll.spr";
-	setmodel(puff,"progs/quoth/s_vp_pll.spr");
-	puff.think = BDW_SpriteGenericPlayOnce;
-	puff.nextthink = time + 0.15;
+	puff.nextthink = time + t;
 };
 
 void() sentinel_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	sound (self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
-	sentinel_death_fx(self);
-	sentinel_death_fx2(self);
-
+	sentinel_death_fx(self,21,34,0.05);
+	sentinel_death_fx(self,35,51,0.15);
 	ThrowGib(11,1);
 	ThrowGib(12,2);
-	self.think = SUB_Remove;
-	self.nextthink = time + 0.100;
+	entity_remove(self,0.1);
 };
 
 void() monster_sentinel_precache = {
@@ -210,7 +186,7 @@ void() monster_sentinel = {
 	self.idle_sound = "quoth/sentinel/widle1.wav";
 	self.pain_sound = "quoth/sentinel/wpain.wav";
 	self.pain_flinch = 75;
-	self.gibondeath = TRUE;
+	self.gibhealth = MON_NEVERGIB;
 	self.attack_offset = '0 0 16';
 	if (self.wait <= 0) self.wait = 0.2;
 	self.solid = SOLID_NOT;			// No interaction with world

@@ -1071,7 +1071,7 @@ void() display_secrets = {
 };
 
 void() FinishSecretCamera = {
-	setmodel (self, MODEL_PLAYER); // Restore player core parameters (NO save)
+	setmodel(self, MODEL_PLAYER); // Restore player core parameters (NO save)
 	modelindex_player = self.modelindex;
 	setsize (self, self.bbmins, self.bbmaxs);
 	self.solid = SOLID_SLIDEBOX;

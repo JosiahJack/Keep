@@ -58,7 +58,7 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8 // roll over deat
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20
 
-void() steelc_idle1 = [$idle1, steelc_idle2] { monster_idle_sound();ai_stand(); };
+void() steelc_idle1 = [$idle1, steelc_idle2] { monster_idle_sound(); ai_stand(); };
 void() steelc_idle2 = [$idle2, steelc_idle3] { ai_stand(); };
 void() steelc_idle3 = [$idle3, steelc_idle4] { ai_stand(); };
 void() steelc_idle4 = [$idle4, steelc_idle5] { ai_stand(); };
@@ -72,7 +72,7 @@ void() steelc_idle11 = [$idle11, steelc_idle12] { ai_stand(); };
 void() steelc_idle12 = [$idle12, steelc_idle13] { ai_stand(); };
 void() steelc_idle13 = [$idle13, steelc_idle1] { ai_stand(); };
 
-void() steelc_walk1 = [$walk1, steelc_walk2] { monster_idle_sound();ai_walk(4); };
+void() steelc_walk1 = [$walk1, steelc_walk2] { monster_idle_sound(); ai_walk(4); };
 void() steelc_walk2 = [$walk3, steelc_walk3] { monster_footstep(FALSE); ai_walk(3); };
 void() steelc_walk3 = [$walk5, steelc_walk4] { ai_walk(4); };
 void() steelc_walk4 = [$walk7, steelc_walk5] { ai_walk(5); };
@@ -173,7 +173,7 @@ void() steelc_bite9;
 void() steelc_bite1 = [$atkup1, steelc_bite2 ] { ai_face(); };
 void() steelc_bite2 = [$atkup5, steelc_bite3 ] { ai_face(); };
 void() steelc_bite3 = [$atkup7, steelc_bite4 ] { ai_face();
-	if (!ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.health > 0) self.think = steelc_bite9;};
+	if (!ai_checkmelee(60,FALSE) && self.health > 0) self.think = steelc_bite9;};
 void() steelc_bite4 = [$atkloop1, steelc_bite5 ] { ai_face(); };
 void() steelc_bite5 = [$atkloop3, steelc_bite6 ] { ai_face(); };
 void() steelc_bite6 = [$atkloop5, steelc_bite7 ] { steelc_melee(); };
@@ -185,8 +185,8 @@ void() steelc_leap1 = [$jump1, steelc_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much
 	if (random() > 0.5) {
 		self.volume = 0.5 + (random()*0.5);
-		if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", self.volume, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", self.volume, ATTN_NORM);
+		if (self.lefty < 1) sound(self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", self.volume, ATTN_NORM);
+		else sound(self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", self.volume, ATTN_NORM);
 		self.lefty = 1 - self.lefty;
 	}
 };
@@ -240,8 +240,8 @@ void(entity inflictor, entity attacker, float damage) steelc_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -259,7 +259,7 @@ void(entity inflictor, entity attacker, float damage) steelc_pain = {
 
 void() steelc_die1 = [$death1, steelc_die2] {};
 void() steelc_die2 = [$death3, steelc_die3] { monster_check_gib(); };
-void() steelc_die3 = [$death5, steelc_die4] { monster_check_gib();self.solid = SOLID_NOT;};
+void() steelc_die3 = [$death5, steelc_die4] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() steelc_die4 = [$death7, steelc_die5] {};
 void() steelc_die5 = [$death9, steelc_die6] {};
 void() steelc_die6 = [$death11, steelc_die7] {};
@@ -272,7 +272,7 @@ void() steelc_die = {
 	self.max_health = MON_NOGIBVELOCITY; // Gibs don't bounce far
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		steelc_die1(); // regular death
 	}
 };
@@ -282,8 +282,8 @@ void() monster_steelclaw_precache = {
 	precache_model ("progs/ad181/h_steelclaw.mdl");
 	precache_model ("progs/ad181/gib_steelleg.mdl");
 	precache_model ("progs/ad181/gib_steelbody.mdl");
-	precache_sound ("ad171/scorpion/idle1.wav");
-	precache_sound ("ad171/scorpion/idle2.wav");
+	precache_sound("ad171/scorpion/idle1.wav");
+	precache_sound("ad171/scorpion/idle2.wav");
 	precache_sound("ad171/scorpion/pain1.wav");
 	precache_sound("ad171/scorpion/pain2.wav");
 	precache_sound("drake/spider/death.wav");
@@ -293,7 +293,7 @@ void() monster_steelclaw_precache = {
 	precache_sound("ad171/scorpion/jumpattack2.wav");
 	precache_sound("ad171/scorpion/jumphit.wav");
 	precache_sound("ad171/scorpion/jumpland.wav");
-	precache_sound ("ad171/scorpion/sight1.wav");
+	precache_sound("ad171/scorpion/sight1.wav");
 };
 
 void() monster_steelclaw = { // [ENTITY]

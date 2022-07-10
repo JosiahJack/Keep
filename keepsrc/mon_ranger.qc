@@ -192,7 +192,7 @@ void(void() thinkst) ranger_break = {
     else if (!visible (self.enemy)) self.think = thinkst;
 };
 
-void() sfx_axe = { sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); };
+void() sfx_axe = { sound(self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); };
 
 // NOTE:  Modified axe attacks to be like CoE's axeman instead of player.
 // FIXME:  Change attacks to be more like the Bane's.
@@ -201,46 +201,46 @@ void() ranger_axer;
 // Standard four single axe attacks.
 // Steps for axatt* should be = {8, 8, 8, 15, 10, 8}.
 void() ranger_axe1  = [$axatt1,  ranger_axe2  ] { sfx_axe(); ranger_charge(self.speed); };
-void() ranger_axe2  = [$axatt2,  ranger_axe3  ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axe3  = [$axatt3,  ranger_axe4  ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axe4  = [$axatt4,  ranger_axe5  ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axe2  = [$axatt2,  ranger_axe3  ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axe3  = [$axatt3,  ranger_axe4  ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axe4  = [$axatt4,  ranger_axe5  ] { ranger_charge(self.speed); ai_melee();SUB_CheckRefire(ranger_axer); };
 void() ranger_axe5  = [$axatt5,  ranger_axe6  ] { ranger_axe_step(self.speed); };
 void() ranger_axe6  = [$axatt6,  ranger_run   ] { ranger_axe_step(self.speed); };
 
 void() ranger_axeb1 = [$axattb1, ranger_axeb2 ] { sfx_axe(); ranger_charge(self.speed); };
-void() ranger_axebx = [$axattb2, ranger_axeb3 ] { sfx_axe(); ranger_charge(self.speed);ai_melee(); };
-void() ranger_axeb2 = [$axattb2, ranger_axeb3 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axeb3 = [$axattb3, ranger_axeb4 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axeb4 = [$axattb4, ranger_axeb5 ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axebx = [$axattb2, ranger_axeb3 ] { sfx_axe(); ranger_charge(self.speed); ai_melee(); };
+void() ranger_axeb2 = [$axattb2, ranger_axeb3 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axeb3 = [$axattb3, ranger_axeb4 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axeb4 = [$axattb4, ranger_axeb5 ] { ranger_charge(self.speed); ai_melee();SUB_CheckRefire(ranger_axer); };
 void() ranger_axeb5 = [$axattb5, ranger_axeb6 ] { ranger_axe_step(self.speed); };
 void() ranger_axeb6 = [$axattb6, ranger_run   ] { ranger_axe_step(self.speed); };
 
 void() ranger_axec1 = [$axattc1, ranger_axec2 ] { sfx_axe(); ranger_charge(self.speed); };
-void() ranger_axec2 = [$axattc2, ranger_axec3 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axec3 = [$axattc3, ranger_axec4 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axec4 = [$axattc4, ranger_axec5 ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axec2 = [$axattc2, ranger_axec3 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axec3 = [$axattc3, ranger_axec4 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axec4 = [$axattc4, ranger_axec5 ] { ranger_charge(self.speed); ai_melee();SUB_CheckRefire(ranger_axer); };
 void() ranger_axec5 = [$axattc5, ranger_axec6 ] { ranger_axe_step(self.speed); };
 void() ranger_axec6 = [$axattc6, ranger_run   ] { ranger_axe_step(self.speed); };
 
 void() ranger_axed1 = [$axattd1, ranger_axed2 ] { sfx_axe(); ranger_charge(self.speed); };
-void() ranger_axed2 = [$axattd2, ranger_axed3 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axed3 = [$axattd3, ranger_axed4 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axed4 = [$axattd4, ranger_axed5 ] { ranger_charge(self.speed);ai_melee();SUB_CheckRefire(ranger_axer); };
+void() ranger_axed2 = [$axattd2, ranger_axed3 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axed3 = [$axattd3, ranger_axed4 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axed4 = [$axattd4, ranger_axed5 ] { ranger_charge(self.speed); ai_melee();SUB_CheckRefire(ranger_axer); };
 void() ranger_axed5 = [$axattd5, ranger_axed6 ] { ranger_axe_step(self.speed); };
 void() ranger_axed6 = [$axattd6, ranger_run   ] { ranger_axe_step(self.speed); };
 
 // Three hit flurry.  First hit chains into flyby combo.
 void() ranger_axee1 = [$axatt1,  ranger_axee2 ] { sfx_axe(); ranger_charge(self.speed); };
-void() ranger_axee2 = [$axatt2,  ranger_axee3 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axee3 = [$axatt3,  ranger_axee4 ] { ranger_charge(self.speed);ai_melee(); };
-void() ranger_axee4 = [$axatt4,  ranger_axefx ] { ranger_break(ranger_axe5);ranger_charge(self.speed);ai_melee(); };
+void() ranger_axee2 = [$axatt2,  ranger_axee3 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axee3 = [$axatt3,  ranger_axee4 ] { ranger_charge(self.speed); ai_melee(); };
+void() ranger_axee4 = [$axatt4,  ranger_axefx ] { ranger_break(ranger_axe5);ranger_charge(self.speed); ai_melee(); };
 
 // Fast one-two flyby combo.
 void() ranger_axef1 = [$axattd1, ranger_axef2 ] { sfx_axe(); ai_charge_left(self.speed); };
-void() ranger_axefx = [$axattd2, ranger_axef3 ] { sfx_axe(); ai_charge_left(self.speed);ai_melee(); };
-void() ranger_axef2 = [$axattd2, ranger_axef3 ] { ai_charge_left(self.speed);ai_melee(); };
-void() ranger_axef3 = [$axattd3, ranger_axef4 ] { ai_charge_left(self.speed);ai_melee(); };
-void() ranger_axef4 = [$axattd4, ranger_axeg  ] { ranger_break(ranger_axed5);ai_charge_left(self.speed);ai_melee(); };
+void() ranger_axefx = [$axattd2, ranger_axef3 ] { sfx_axe(); ai_charge_left(self.speed); ai_melee(); };
+void() ranger_axef2 = [$axattd2, ranger_axef3 ] { ai_charge_left(self.speed); ai_melee(); };
+void() ranger_axef3 = [$axattd3, ranger_axef4 ] { ai_charge_left(self.speed); ai_melee(); };
+void() ranger_axef4 = [$axattd4, ranger_axeg  ] { ranger_break(ranger_axed5); ai_charge_left(self.speed); ai_melee(); };
 
 // Common combo ender.
 void() ranger_axeg  = [$axattb1, ranger_axebx ] {
@@ -415,7 +415,7 @@ void() ranger_rocket = {
 
     M_FireBuriza (p1, p2, targ,VEC_ORIGIN);
 };
-void() ranger_rock1  = [$rockatt1,  ranger_rock2  ] { ai_face();ranger_rocket();self.effects = self.effects | EF_MUZZLEFLASH;};
+void() ranger_rock1  = [$rockatt1,  ranger_rock2  ] { ai_face();ranger_rocket(); self.effects = self.effects | EF_MUZZLEFLASH;};
 void() ranger_rock2  = [$rockatt2,  ranger_rock3  ] { ai_face(); };
 void() ranger_rock3  = [$rockatt3,  ranger_rock4  ] { ai_face(); };
 void() ranger_rock4  = [$rockatt4,  ranger_rock5  ] { ai_face(); };
@@ -673,73 +673,42 @@ void(entity inflictor, entity attacker, float damage) ranger_pain = {
     else ranger_pain1();
 };
 
-void() ranger_decap1  = [$decap1,  ranger_decap2  ] { blood_spray ('-14 -3 20', 1); };
-void() ranger_decap2  = [$decap2,  ranger_decap3  ] { blood_spray ('-8 -4 21', 2); };
-void() ranger_decap3  = [$decap3,  ranger_decap4  ] { blood_spray ('0 -3 21', 1); monster_drop(); };
-void() ranger_decap4  = [$decap4,  ranger_decap5  ] { blood_spray ('3 -3 19', -1); };
-void() ranger_decap5  = [$decap5,  ranger_decap6  ] {};
-void() ranger_decap6  = [$decap6,  ranger_decap7  ] {};
-void() ranger_decap7  = [$decap7,  ranger_decap8  ] {};
-void() ranger_decap8  = [$decap8,  ranger_decap9  ] {};
-void() ranger_decap9  = [$decap9,  ranger_decap10 ] {};
-void() ranger_decap10 = [$decap10, ranger_decap11 ] {};
-void() ranger_decap11 = [$decap11, decap_end      ] {};
-
-void() ranger_decapb1  = [$decapb1,  ranger_decapb2  ] { blood_spray ('3 1 21', 1); };
-void() ranger_decapb2  = [$decapb2,  ranger_decapb3  ] { blood_spray ('-2 1 20', 2); };
-void() ranger_decapb3  = [$decapb3,  ranger_decapb4  ] { blood_spray ('-6 1 19', 1); monster_drop(); };
-void() ranger_decapb4  = [$decapb4,  ranger_decapb5  ] { blood_spray ('-6 1 14', -1); };
-void() ranger_decapb5  = [$decapb5,  ranger_decapb6  ] {};
-void() ranger_decapb6  = [$decapb6,  ranger_decapb7  ] {};
-void() ranger_decapb7  = [$decapb7,  ranger_decapb8  ] {};
-void() ranger_decapb8  = [$decapb8,  ranger_decapb9  ] {};
-void() ranger_decapb9  = [$decapb9,  decap_end       ] {};
-
-void() ranger_axdecap1 = [$axdecap1,  ranger_axdecap2 ] { blood_spray ('-11 0 20', 1); };
-void() ranger_axdecap2 = [$axdecap2,  ranger_axdecap3 ] { blood_spray ('-16 0 21', 2); };
-void() ranger_axdecap3 = [$axdecap3,  ranger_axdecap4 ] { blood_spray ('-21 0 13', 1); monster_drop(); };
-void() ranger_axdecap4 = [$axdecap4,  ranger_axdecap5 ] { blood_spray ('-21 0 8', 1); };
-void() ranger_axdecap5 = [$axdecap5,  ranger_axdecap6 ] {};
-void() ranger_axdecap6 = [$axdecap6,  ranger_axdecap7 ] {};
-void() ranger_axdecap7 = [$axdecap7,  ranger_axdecap8 ] {};
-void() ranger_axdecap8 = [$axdecap8,  decap_end       ] {};
-
 // Normal death
 void() ranger_diea1  = [$deatha1,  ranger_diea2  ] {
 	self.reviveframestart = $deatha11;
 	self.reviveframeend = $deatha1;
 };
-void() ranger_diea2  = [$deatha2,  ranger_diea3  ] {};
-void() ranger_diea3  = [$deatha3,  ranger_diea4  ] { monster_drop(); };
+void() ranger_diea2  = [$deatha2,  ranger_diea3  ] { monster_check_gib(); };
+void() ranger_diea3  = [$deatha3,  ranger_diea4  ] { monster_check_gib(); };
 void() ranger_diea4  = [$deatha4,  ranger_diea5  ] {};
 void() ranger_diea5  = [$deatha5,  ranger_diea6  ] {};
 void() ranger_diea6  = [$deatha6,  ranger_diea7  ] {};
 void() ranger_diea7  = [$deatha7,  ranger_diea8  ] {};
 void() ranger_diea8  = [$deatha8,  ranger_diea9  ] {};
 void() ranger_diea9  = [$deatha9,  ranger_diea10 ] {};
-void() ranger_diea10 = [$deatha10, ranger_diea11 ] {};
-void() ranger_diea11 = [$deatha11, monster_end   ] {};
+void() ranger_diea10 = [$deatha10, ranger_diea11 ] { monster_death_postcheck(); };
+void() ranger_diea11 = [$deatha11, monster_end   ] { monster_deadbody_check(); };
 
 void() ranger_dieb1  = [$deathb1,  ranger_dieb2  ] {
 	self.reviveframestart = $deathb9;
 	self.reviveframeend = $deathb1;
 };
 void() ranger_dieb2  = [$deathb2,  ranger_dieb3  ] {};
-void() ranger_dieb3  = [$deathb3,  ranger_dieb4  ] { monster_drop(); };
-void() ranger_dieb4  = [$deathb4,  ranger_dieb5  ] {};
+void() ranger_dieb3  = [$deathb3,  ranger_dieb4  ] { monster_check_gib(); };
+void() ranger_dieb4  = [$deathb4,  ranger_dieb5  ] { monster_check_gib(); };
 void() ranger_dieb5  = [$deathb5,  ranger_dieb6  ] {};
 void() ranger_dieb6  = [$deathb6,  ranger_dieb7  ] {};
 void() ranger_dieb7  = [$deathb7,  ranger_dieb8  ] {};
-void() ranger_dieb8  = [$deathb8,  ranger_dieb9  ] {};
-void() ranger_dieb9  = [$deathb9,  monster_end   ] {};
+void() ranger_dieb8  = [$deathb8,  ranger_dieb9  ] { monster_death_postcheck(); };
+void() ranger_dieb9  = [$deathb9,  monster_end   ] { monster_deadbody_check(); };
 
 void() ranger_diec1  = [$deathc1,  ranger_diec2  ] {
 	self.reviveframestart = $deathc15;
 	self.reviveframeend = $deathc1;
 };
 void() ranger_diec2  = [$deathc2,  ranger_diec3  ] {};
-void() ranger_diec3  = [$deathc3,  ranger_diec4  ] { monster_drop(); };
-void() ranger_diec4  = [$deathc4,  ranger_diec5  ] {};
+void() ranger_diec3  = [$deathc3,  ranger_diec4  ] { monster_check_gib(); };
+void() ranger_diec4  = [$deathc4,  ranger_diec5  ] { monster_check_gib(); };
 void() ranger_diec5  = [$deathc5,  ranger_diec6  ] {};
 void() ranger_diec6  = [$deathc6,  ranger_diec7  ] {};
 void() ranger_diec7  = [$deathc7,  ranger_diec8  ] {};
@@ -749,61 +718,47 @@ void() ranger_diec10 = [$deathc10, ranger_diec11 ] {};
 void() ranger_diec11 = [$deathc11, ranger_diec12 ] {};
 void() ranger_diec12 = [$deathc12, ranger_diec13 ] {};
 void() ranger_diec13 = [$deathc13, ranger_diec14 ] {};
-void() ranger_diec14 = [$deathc14, ranger_diec15 ] {};
-void() ranger_diec15 = [$deathc15, monster_end   ] {};
+void() ranger_diec14 = [$deathc14, ranger_diec15 ] { monster_death_postcheck(); };
+void() ranger_diec15 = [$deathc15, monster_end   ] { monster_deadbody_check(); };
 
 void() ranger_died1  = [$deathd1,  ranger_died2  ] {
 	self.reviveframestart = $deathd9;
 	self.reviveframeend = $deathd1;
 };
 void() ranger_died2  = [$deathd2,  ranger_died3  ] {};
-void() ranger_died3  = [$deathd3,  ranger_died4  ] { monster_drop(); };
-void() ranger_died4  = [$deathd4,  ranger_died5  ] {};
+void() ranger_died3  = [$deathd3,  ranger_died4  ] { monster_check_gib(); };
+void() ranger_died4  = [$deathd4,  ranger_died5  ] { monster_check_gib(); };
 void() ranger_died5  = [$deathd5,  ranger_died6  ] {};
 void() ranger_died6  = [$deathd6,  ranger_died7  ] {};
 void() ranger_died7  = [$deathd7,  ranger_died8  ] {};
-void() ranger_died8  = [$deathd8,  ranger_died9  ] {};
-void() ranger_died9  = [$deathd9,  monster_end   ] {};
+void() ranger_died8  = [$deathd8,  ranger_died9  ] { monster_death_postcheck(); };
+void() ranger_died9  = [$deathd9,  monster_end   ] { monster_deadbody_check(); };
 
 void() ranger_diee1  = [$deathe1,  ranger_diee2  ] {
 	self.reviveframestart = $deathe9;
 	self.reviveframeend = $deathe1;
 };
 void() ranger_diee2  = [$deathe2,  ranger_diee3  ] {};
-void() ranger_diee3  = [$deathe3,  ranger_diee4  ] { monster_drop(); };
-void() ranger_diee4  = [$deathe4,  ranger_diee5  ] {};
+void() ranger_diee3  = [$deathe3,  ranger_diee4  ] { monster_check_gib(); };
+void() ranger_diee4  = [$deathe4,  ranger_diee5  ] { monster_check_gib(); };
 void() ranger_diee5  = [$deathe5,  ranger_diee6  ] {};
 void() ranger_diee6  = [$deathe6,  ranger_diee7  ] {};
 void() ranger_diee7  = [$deathe7,  ranger_diee8  ] {};
-void() ranger_diee8  = [$deathe8,  ranger_diee9  ] {};
-void() ranger_diee9  = [$deathe9,  monster_end   ] {};
+void() ranger_diee8  = [$deathe8,  ranger_diee9  ] { monster_death_postcheck(); };
+void() ranger_diee9  = [$deathe9,  monster_end   ] { monster_deadbody_check(); };
 
 void() ranger_axdie1 = [$axdeth1,  ranger_axdie2 ] {
 	self.reviveframestart = $axdeth9;
 	self.reviveframeend = $axdeth1;
 };
 void() ranger_axdie2 = [$axdeth2,  ranger_axdie3 ] {};
-void() ranger_axdie3 = [$axdeth3,  ranger_axdie4 ] { monster_drop(); };
-void() ranger_axdie4 = [$axdeth4,  ranger_axdie5 ] {};
+void() ranger_axdie3 = [$axdeth3,  ranger_axdie4 ] { monster_check_gib(); };
+void() ranger_axdie4 = [$axdeth4,  ranger_axdie5 ] { monster_check_gib(); };
 void() ranger_axdie5 = [$axdeth5,  ranger_axdie6 ] {};
 void() ranger_axdie6 = [$axdeth6,  ranger_axdie7 ] {};
 void() ranger_axdie7 = [$axdeth7,  ranger_axdie8 ] {};
-void() ranger_axdie8 = [$axdeth8,  ranger_axdie9 ] {};
-void() ranger_axdie9 = [$axdeth9,  monster_end   ] {};
-
-float(float dm) ranger_gib = {
-    if (self.health < self.gibhealth) {
-        if (self.enemy.classname == "teledeath") sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NORM);
-        else if (random() < 0.5) sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NORM);
-        else sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-        ThrowGib ("progs/gib1.mdl", dm);
-        ThrowGib ("progs/gib2.mdl", dm);
-        ThrowGib ("progs/gib3.mdl", dm);
-        ThrowHead ("progs/h_player.mdl", dm);
-        return TRUE;
-    }
-    return FALSE;
-};
+void() ranger_axdie8 = [$axdeth8,  ranger_axdie9 ] { monster_death_postcheck(); };
+void() ranger_axdie9 = [$axdeth9,  monster_end   ] { monster_deadbody_check(); };
 
 void() ranger_die = {
     local float r;
@@ -848,7 +803,7 @@ void() ranger_die = {
         else //if (r == 4)
             sfx = "player/death4.wav";
     }
-    sound (self, CHAN_VOICE, sfx, 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, sfx, 1, ATTN_NORM);
 
     if (self.war == WAR_AXE)
     {
@@ -869,9 +824,9 @@ void() ranger_die = {
 };
 
 void(float hello) ranger_sight = {
-    if (hello) sound (self, CHAN_VOICE, "ranger/idle.wav", 1, ATTN_NORM);
-    else if (random() < 0.5) sound (self, CHAN_VOICE, "ranger/sight1.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_VOICE, "ranger/sight2.wav", 1, ATTN_NORM);
+    if (hello) sound(self, CHAN_VOICE, "ranger/idle.wav", 1, ATTN_NORM);
+    else if (random() < 0.5) sound(self, CHAN_VOICE, "ranger/sight1.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_VOICE, "ranger/sight2.wav", 1, ATTN_NORM);
 };
 
 void() monster_ranger_precache = {
@@ -964,5 +919,8 @@ void() monster_ranger = {
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     self.ryuflags   = self.ryuflags | RYU_ALERT; // From Dragons.
     if (soul_evil) self.purse = '1 0 1'; // Guaranteed gold coin.
+	if (!self.classtype) self.classtype = CT_MONRANGER;
+	if (!self.classgroup) self.classgroup = CG_ARMY;
+	self.classmove = MON_MOVEFLY;
     monster_start();
 };

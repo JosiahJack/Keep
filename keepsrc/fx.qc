@@ -85,13 +85,13 @@ void(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke 
 
 void(entity source, entity targ) ProjectileType = { // [FUNCTION]
 	if (source.poisonous) {
-		setmodel (targ, MODEL_PROJ_FLESHP);
+		setmodel(targ, MODEL_PROJ_FLESHP);
 		targ.gibtype = GIBTYPE_POISON;
 	} else if (source.classgroup == CG_ROBOT || source.classgroup == CG_STONE) {
-		setmodel (targ, MODEL_PROJ_SMOKE);
+		setmodel(targ, MODEL_PROJ_SMOKE);
 		targ.gibtype = GIBTYPE_STONE;
 	} else {
-		setmodel (targ, MODEL_PROJ_FLESH);
+		setmodel(targ, MODEL_PROJ_FLESH);
 		targ.gibtype = GIBTYPE_BLOOD;
 	}
 	if (ext_dppart) DPP_blood_trail(targ); // Finally add DP particle trails
@@ -105,7 +105,7 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 	newmis.movetype = MOVETYPE_BOUNCE;
 	newmis.solid = SOLID_NOT;
 	ProjectileType(source, newmis); // Projectile types (Poison/Robot/Stone/Blood)
-	setorigin (newmis, org);
+	setorigin(newmis, org);
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
 	newmis.velocity = vecrand(0,velrnd,TRUE);
 	newmis.velocity_z = upbase, random()*uprnd;
@@ -212,7 +212,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 		newmis.solid = SOLID_NOT;
 		ProjectileType(targ, newmis);
 		setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
-		setorigin (newmis, org);
+		setorigin(newmis, org);
 		newmis.velocity = ((crandom()*16) * v_forward) + (side * v_right); // Use side velocity to determine which direction to throw
 		newmis.velocity_z = newmis.velocity_z + 150 + 50*random();
 		newmis.avelocity = vecrand(100,200,FALSE);
@@ -222,7 +222,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 		}
 
 		if (text != "")
-			setmodel (newmis, text); // Oh hey we actually have substance!
+			setmodel(newmis, text); // Oh hey we actually have substance!
 		else
 			newmis.modelindex  = 0; // Invisible blood dripper
 
@@ -248,21 +248,21 @@ void(vector start, float zoffset, string snd) Tent_LavaSplash = {
 	org = start;
 	org_z = org_z + zoffset;
 	Tent_Point(TE_LAVASPLASH,org);
-	sound(self,CHAN_AUTO,snd,1,ATTN_NONE);
+	if (snd != "") sound(self,CHAN_AUTO,snd,1,ATTN_NONE);
 };
 
 // Explode self into ice chunks.
 void() Shattered = { // [FUNCTION]
-    sound (self, CHAN_VOICE, "drake/weapons/shatter.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE,"drake/weapons/shatter.wav",1,ATTN_NORM);
     MakeIcyExp (self.origin); 
 	self.gibbed = TRUE;
 	self.think = SUB_Null;
 	self.gibpartstyle = PARTICLE_BURST_BLUE;
 	self.gibtype = GIBTYPE_ICE;
-	particle (self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
-	particle (self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
-	particle (self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
-	particle (self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
+	particle(self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
+	particle(self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
+	particle(self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
+	particle(self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
 	ThrowGib(GIBTYPE_ICE,rint(random() * (self.max_health / 10)));
 	remove(self);
 };
@@ -575,9 +575,9 @@ void() misc_raincloud = { // [ENTITY]
 	if (!self.noise1) self.noise1 = "rrp/misc/drip1.wav";
 	if (!self.noise2) self.noise2 = "rrp/misc/drip2.wav";
 	if (!self.noise3) self.noise3 = "rrp/misc/drip3.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
 	precache_model("progs/qmaster/astorm.spr");
 	if (!self.delay && (self.targetname == "")) self.delay = (random() * 5); // random spawn time to not all storm the same
 	spawn_raincloud();
@@ -589,7 +589,7 @@ void() skyl_stand3	= [  2,	skyl_stand4  ] { self.effects = 0;}; // [FUNCTION]
 void() skyl_stand4	= [  3,	skyl_stand5  ] { self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
 void() skyl_stand5	= [  4,	skyl_stand6  ] {}; // [FUNCTION]
 void() skyl_stand6	= [  5,	skyl_stand7  ] {}; // [FUNCTION]
-void() skyl_stand7	= [  6,	skyl_stand8  ] { if (!(self.spawnflags & 2)) { sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); } }; // [FUNCTION]
+void() skyl_stand7	= [  6,	skyl_stand8  ] { if (!(self.spawnflags & 2)) { sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); } }; // [FUNCTION]
 void() skyl_stand8	= [  7,	skyl_stand1  ] { self.effects = 0; self.nextthink = time + self.wait + (random() * self.waitmax); }; //time  lightning appears time + your time, [FUNCTION]
 
 void() model_skylight = { // [ENTITY]
@@ -597,8 +597,8 @@ void() model_skylight = { // [ENTITY]
 	self.solid = SOLID_BBOX;                               
 	self.movetype = MOVETYPE_NONE;
 	self.classname = "env_lightning";
-	setmodel (self, "progs/madfox/skylight.spr");
-	precache_sound ("drake/bane/thunder.wav");
+	setmodel(self, "progs/madfox/skylight.spr");
+	precache_sound("drake/bane/thunder.wav");
 	setsize (self, '16 16 16', '24 24 24');
 	if (!self.wait) self.wait = 10;
 	self.think = skyl_stand1;

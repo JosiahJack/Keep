@@ -329,7 +329,7 @@ void() sigil_touch = { // [FUNCTION]
 	if (query_configflag(self.customkey)) return;
 	
 	centerprint3( other, "You got ", self.netname, "!");
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	update_configflag(self.customkey, TRUE); // Add rune to server! not player
 	if (other.flags & FL_CLIENT) other.serverflagstemp = other.serverflagstemp | self.customkey;
@@ -392,7 +392,7 @@ void() tomeofpower_touch = { // [FUNCTION]
 	sprint(other, "You got the ");
 	sprint(other, self.netname);
 	sprint(other,"\n");
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	other.tome_finished = time + self.cnt;
 	activator = other;
@@ -443,7 +443,7 @@ void() item_artifact_envirosuit = { // [ENTITY]
 	item_setupmodel("progs/ad171/artifact_envsuit.mdl",0);
 	item_setupnoise(SOUND_ARTSUIT1);
 	self.noise1 = SOUND_ARTSUIT2;
-	precache_sound (self.noise1);
+	precache_sound(self.noise1);
 	if (self.netname == "") self.netname = "Environment Suit";
 	self.items = IT_SUIT;
 	self.classtype = CT_ARTSUIT;
@@ -483,9 +483,9 @@ void() item_artifact_wetsuit = { // [ENTITY], cshifts 0,255,0,20
 	self.noise1 = SOUND_ARTWETS2;
 	self.noise2 = SOUND_ARTWETS3;
 	self.noise3 = SOUND_ARTWETS3B;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
 	if (self.netname == "") self.netname = "Wet Suit";
 	self.moditems = IT_ARTWETSUIT;
 	self.classtype = CT_ARTWETSUIT;
@@ -534,8 +534,8 @@ void() item_artifact_invulnerability = { // [ENTITY], cshifts 255,255,0,30
 	item_setupnoise(SOUND_ARTPENT1);
 	self.noise1 = SOUND_ARTPENT2;
 	self.noise2 = SOUND_ARTPENT3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Pentagram of Protection";
 	self.items = IT_INVULNERABILITY;
 	self.classtype = CT_ARTPENT;
@@ -572,8 +572,8 @@ void() item_artifact_invisibility = { // [ENTITY], cshifts 100,100,100,100
 	item_setupnoise(SOUND_ARTINV1);
 	self.noise1 = SOUND_ARTINV2;
 	self.noise2 = SOUND_ARTINV3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Ring of Shadows";
 	self.items = IT_INVISIBILITY;
 	self.classtype = CT_ARTINVS;
@@ -610,8 +610,8 @@ void() item_artifact_super_damage = { // [ENTITY], cshifts 0,0,255,30
 	item_setupnoise(SOUND_ARTQUAD1);
 	self.noise1 = SOUND_ARTQUAD2;
 	self.noise2 = SOUND_ARTQUAD3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Quad Damage";
 	self.items = IT_QUAD;
 	self.classtype = CT_ARTQUAD;
@@ -648,8 +648,8 @@ void() item_artifact_sharp_shooter = { // [ENTITY]
 	item_setupnoise(SOUND_ARTSHARP1);
 	self.noise1 = SOUND_ARTSHARP2;
 	self.noise2 = SOUND_ARTSHARP3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Sharp Shooter";
 	self.items = IT_QUAD;
 	self.moditems = IT_ARTSHARP;
@@ -687,8 +687,8 @@ void() item_artifact_nail_piercer = { // [ENTITY]
 	item_setupnoise(SOUND_ARTNAILP1);
 	self.noise1 = SOUND_ARTNAILP2;
 	self.noise2 = SOUND_ARTNAILP3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Nail Piercer";
 	self.items = IT_QUAD;
 	self.moditems = IT_ARTPIERCE;
@@ -728,8 +728,8 @@ void() item_artifact_lavashield = { // [ENTITY]
 	item_setupnoise(SOUND_ARTLSHIELD1);
 	self.noise1 = SOUND_ARTLSHIELD2;
 	self.noise2 = SOUND_ARTLSHIELD3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Aegis of Chthon";
 	self.items = 0;
 	self.moditems = IT_ARTLAVASHIELD;
@@ -769,8 +769,8 @@ void() item_artifact_blastbelt = { // [ENTITY]
 	item_setupnoise(SOUND_ARTBLASTBELT1);
 	self.noise1 = SOUND_ARTBLASTBELT2;
 	self.noise2 = SOUND_ARTBLASTBELT3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Blast Belt";
 	self.items = 0;
 	self.moditems = IT_ARTBLASTBELT;
@@ -814,10 +814,10 @@ void() item_artifact_jumpboots = { // [ENTITY]
 	self.noise2 = SOUND_ARTJUMPBOOTS3A;	// First jump
 	self.noise3 = SOUND_ARTJUMPBOOTS3B; // Second+ jump; sounds 3a-3c are used in client.qc (lines 915+).
 	self.noise4 = SOUND_ARTJUMPBOOTS3C; // No more jumps
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
-	precache_sound (self.noise4);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
+	precache_sound(self.noise4);
 	self.moditems = IT_ARTJUMPBOOTS;
 	self.classtype = CT_ARTJUMPBOOTS;
 	self.part_active = PARTICLE_STYLE_JUMPBOOTS;
@@ -847,8 +847,8 @@ void() item_powerup_shield = { // [ENTITY]
 	item_setupnoise("rogue/shield/pickup.wav");
 	self.noise1 = "rogue/shield/hit.wav";
 	self.noise2 = SOUND_ARTPSHIELD3;
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Power Shield";
 	self.items = IT_QUAD;
 	self.items2 = IT2_SHIELD;
@@ -866,8 +866,8 @@ void() item_powerup_belt = { // [ENTITY]
 	item_setupnoise("rogue/belt/pickup.wav");
 	self.noise1 = "rogue/belt/use.wav";
 	self.noise2 = "rogue/belt/fadeout.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Anti-Grav Belt";
 	self.items = IT_QUAD;
 	self.classtype = CT_ARTGRAVBELT;
@@ -885,8 +885,8 @@ void() item_artifact_empathy_shields = { // [ENTITY]
 	item_setupnoise("hipnotic/items/empathy.wav");
 	self.noise1 = "hipnotic/items/empathy2.wav";
 	self.noise2 = "items/suit2.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Empathy Shield";
 	self.items2 = HIP_IT2_EMPATHY_SHIELDS;
 	self.classtype = CT_ARTEMPATHY;
@@ -902,7 +902,7 @@ void() item_artifact_lavasuit = { // [ENTITY]
 	item_setupmodel("progs/suit2.mdl",1);
 	item_setupnoise("items/suit.wav");
 	self.noise1 = "items/suit2.wav";
-	precache_sound (self.noise1);
+	precache_sound(self.noise1);
 	if (self.netname == "") self.netname = "Thermal Protection Suit";
 	self.classtype = CT_ARTTHERMSUIT;
 	self.part_active = PARTICLE_STYLE_PENT;
@@ -918,8 +918,8 @@ void() item_artifact_trinity = { // [ENTITY]
 	item_setupnoise("quoth/items2/trintake.wav");
 	self.noise1 = "quoth/items2/trinuse.wav";
 	self.noise2 = "quoth/items2/trinend.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Trinity";
 	self.items = IT_QUAD;
 	self.items2 = IT2_TRINITY;
@@ -936,7 +936,7 @@ void() item_artifact_cross = { // [ENTITY]
 	item_setupmodel("progs/quoth/cross.mdl",0);
 	item_setupnoise("quoth/items2/crostake.wav");
 	self.noise2 = "quoth/items2/crosend.wav";
-	precache_sound (self.noise2);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Cross of Deflection";
 	self.items = IT_QUAD;
 	self.classtype = CT_ARTCROSS;
@@ -952,7 +952,7 @@ void() item_artifact_haste = { // [ENTITY]
 	item_setupmodel("progs/drake/wings2.mdl",0);
 	item_setupnoise("taov/player/fast.wav");
 	self.noise2 = "taov/player/bighit.wav";
-	precache_sound (self.noise2);
+	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Haste";
 	self.items = POW_HASTE;
 	self.classtype = CT_ARTHASTE;
@@ -1041,7 +1041,7 @@ void() item_artifact_horn = { // [ENTITY]
 	item_setupmodel("progs/hipnotic/horn.mdl",0);
 	item_setupnoise("hipnotic/items/horn.wav");
 	self.touch2 = horn_touch;
-	setmodel (self,self.mdl);
+	setmodel(self,self.mdl);
 	if (self.netname == "") self.netname = "Horn of Conjuring";
 	if (self.noise == "") self.noise = "hipnotic/items/horn.wav";
 	self.classtype = CT_ARTHORN;
@@ -1096,8 +1096,8 @@ void() item_artifact_levitation = { // [ENTITY]
 	item_setupnoise("nehahra/player/flight.wav");
 	self.noise1 = "zerstorer/ambience/wingget.wav";
 	self.noise2 = "zerstorer/ambience/wingend.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
     self.netname = "Boots of Levitation";
 	self.classtype = CT_ARTLEVITATION;
 	self.part_active = PARTICLE_STYLE_TOMEOFP;

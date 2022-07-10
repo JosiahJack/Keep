@@ -96,8 +96,8 @@ void(vector st, float up) M_FireAkArrow = {
     }
 
     // In Hexen2, 0=green, 1=red, 2=gold.
-    if (type & 1) sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
+    if (type & 1) sound(self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
 
     AkArrow_Launch (org, dir, type);
 };
@@ -122,16 +122,16 @@ void() archer_stand17 = [$waitA17, archer_stand18 ] { ai_stand(); };
 void() archer_stand18 = [$waitA18, archer_stand1  ] { ai_stand(); };
 
 // WALK
-void() archer_draw = { sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
+void() archer_draw = { sound(self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
 
 void() archer_growl = {
     if (random() < 0.1) {
         if (self.classtype == CT_MONARCHERLORD) {
             if (random() < 0.7)
-                sound (self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM);
+                sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM);
             else
-                sound (self, CHAN_VOICE, "drake/archer/growl3.wav", 1, ATTN_NORM);
-        } else sound (self, CHAN_VOICE, "drake/archer/growl.wav", 1, ATTN_NORM);
+                sound(self, CHAN_VOICE, "drake/archer/growl3.wav", 1, ATTN_NORM);
+        } else sound(self, CHAN_VOICE, "drake/archer/growl.wav", 1, ATTN_NORM);
     }
 };
 
@@ -387,13 +387,13 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
 
     self.pain_finished = time + 1;
     if (self.classtype == CT_MONARCHERLORD) {
-        sound (self, CHAN_VOICE, "drake/archer/pain2.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "drake/archer/pain2.wav", 1, ATTN_NORM);
     // The archer looks like a hell knight, so give him the same no-flinch,
     // but only if he is a lord class.
         if (random()*30 > damage)
             return;        // didn't flinch
     } else
-        sound (self, CHAN_VOICE, "drake/archer/pain.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "drake/archer/pain.wav", 1, ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
@@ -427,10 +427,11 @@ void() archer_die7  = [$deathA14, archer_die8  ] {};
 void() archer_die8  = [$deathA16, archer_die9  ] {};
 void() archer_die9  = [$deathA18, archer_die10 ] {};
 void() archer_die10 = [$deathA20, archer_die11 ] {
-// PM:  Archer death sound split into two files.  Play part 2.
-    if ((self.flags & FL_ONGROUND) && (self.classtype != CT_MONARCHERLORD)) sound (self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
+    monster_death_postcheck();
+    // PM:  Archer death sound split into two files.  Play part 2.
+    if ((self.flags & FL_ONGROUND) && (self.classtype != CT_MONARCHERLORD)) sound(self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
 };
-void() archer_die11 = [$deathA22, archer_die11  ] {};
+void() archer_die11 = [$deathA22, archer_die11  ] { monster_deadbody_check(); };
 
 void() archer_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -439,9 +440,9 @@ void() archer_die = {
 	// regular death
 	if (!self.gibbed) {
 		if (self.classtype == CT_MONARCHERLORD)
-			sound (self, CHAN_VOICE, "drake/archer/death2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "drake/archer/death2.wav", 1, ATTN_NORM);
 		else
-			sound (self, CHAN_VOICE, "drake/archer/death.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "drake/archer/death.wav", 1, ATTN_NORM);
 		archer_die1();
 	}
 };
@@ -450,24 +451,24 @@ void() monster_archer_precache = {
     precache_model ("progs/drake/arrow.mdl");     // Replaced 'akarrow.mdl'.
     precache_model ("progs/drake/archer.mdl");
     precache_model ("progs/drake/h_archer.mdl");
-    precache_sound ("drake/archer/draw.wav");
-    precache_sound ("drake/archer/arrow1.wav");
-    precache_sound ("drake/archer/arrow2.wav");
-    precache_sound ("drake/archer/arrow3.wav");
-    precache_sound ("drake/archer/arrowbrk.wav");
-    precache_sound ("drake/archer/arrowg.wav");   // Type 0 and 2 arrows.
-    precache_sound ("drake/archer/arrowr.wav");   // Type 1 arrows.
-    precache_sound ("drake/archer/death.wav");
-    precache_sound ("drake/archer/growl.wav");
-    precache_sound ("drake/archer/pain.wav");
-    precache_sound ("drake/archer/sight.wav");
-    precache_sound ("drake/archer/crash.wav");
-    precache_sound ("drake/archer/death2.wav");
-    precache_sound ("drake/archer/growl2.wav");
-    precache_sound ("drake/archer/growl3.wav");
-    precache_sound ("drake/archer/pain2.wav");
-    precache_sound ("drake/archer/sight2.wav");
-    precache_sound ("hexen2/weapons/explode.wav");
+    precache_sound("drake/archer/draw.wav");
+    precache_sound("drake/archer/arrow1.wav");
+    precache_sound("drake/archer/arrow2.wav");
+    precache_sound("drake/archer/arrow3.wav");
+    precache_sound("drake/archer/arrowbrk.wav");
+    precache_sound("drake/archer/arrowg.wav");   // Type 0 and 2 arrows.
+    precache_sound("drake/archer/arrowr.wav");   // Type 1 arrows.
+    precache_sound("drake/archer/death.wav");
+    precache_sound("drake/archer/growl.wav");
+    precache_sound("drake/archer/pain.wav");
+    precache_sound("drake/archer/sight.wav");
+    precache_sound("drake/archer/crash.wav");
+    precache_sound("drake/archer/death2.wav");
+    precache_sound("drake/archer/growl2.wav");
+    precache_sound("drake/archer/growl3.wav");
+    precache_sound("drake/archer/pain2.wav");
+    precache_sound("drake/archer/sight2.wav");
+    precache_sound("hexen2/weapons/explode.wav");
 };
 
 // QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush

@@ -83,7 +83,7 @@ void() func_bmodelfade_think = { // [FUNCTION]
 		if (self.classtype == CT_FUNCWALL) { // Switch func_wall back to being solid again
 			self.movetype = MOVETYPE_PUSH;
 			self.solid = SOLID_BSP;
-			setmodel (self, self.mdl);
+			setmodel(self, self.mdl);
 		}
 	} else if (self.alpha < FUNC_FADEZERO) entity_hide(self); // hide entity, no longer required anymore
 	else {
@@ -169,7 +169,7 @@ void() func_wall_on = { // [FUNCTION]
 		self.solid = SOLID_BSP;
 	}
 	
-	setmodel (self, self.mdl); // Make model is linked properly
+	setmodel(self, self.mdl); // Make model is linked properly
 	switch_shadow_on();
 };
 
@@ -177,7 +177,7 @@ void() func_wall_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	switch_shadow_off();
 };
 
@@ -215,7 +215,7 @@ void() func_wall = { // [ENTITY]
 	if (self.spawnflags & ENT_SPNSTATIC) { // Check for static entity option first
 		self.movetype = MOVETYPE_PUSH;
 		self.solid = SOLID_BSP;
-		setmodel (self, self.mdl);
+		setmodel(self, self.mdl);
 		makestatic(self);
 	} else { 
 		if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
@@ -238,7 +238,7 @@ void() func_illusionary_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	switch_shadow_on();
 };
 
@@ -276,7 +276,7 @@ void() func_illusionary = { // [ENTITY]
 	if (self.spawnflags & ENT_SPNSTATIC) {
 		self.movetype = MOVETYPE_NONE;
 		self.solid = SOLID_NOT;
-		setmodel (self, self.mdl);
+		setmodel(self, self.mdl);
 		makestatic(self);
 	} else {
 		
@@ -314,7 +314,7 @@ void() func_togglewall_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.model = ""; // Make bmodel surface invisible
 	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 };
@@ -323,7 +323,7 @@ void() func_togglewall_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 };
 
@@ -331,9 +331,9 @@ void() func_togglewall_off = { // [FUNCTION]
 // Originally from hip_part.qc by Hipnotic (Quake expansion pack 1)
 // -------- KEYS --------
 // targetname  : trigger entity (works with entity state system)
-// noise       : Switched OFF sound (def=rrp/misc/laseroff.wav)
-// noise1      : Switched ON sound (def=rrp/misc/laser_on.wav)
-// noise2      : Touch damage sound (enforcer/enfstop.wav)
+// noise       : Switched OFF sound(def=rrp/misc/laseroff.wav)
+// noise1      : Switched ON sound(def=rrp/misc/laser_on.wav)
+// noise2      : Touch damage sound(enforcer/enfstop.wav)
 // wait        : wait between damage (def=0.5)
 // dmg         : Contact damage (def=0)
 // _dirt       : -1 = will be excluded from dirtmapping
@@ -365,7 +365,7 @@ void() func_togglewall = { // [ENTITY]
 	self.height = self.alpha;			// Used for think function
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl); // Add bmodel to world
+	setmodel(self, self.mdl); // Add bmodel to world
 	if (self.spawnflags & FUNC_TWALLOFF) self.spawnflags = self.spawnflags | ENT_STARTOFF; // Shift the 'start off' to the correct spawnflag
 	if (check_nightmare() == TRUE) return; // Check for spawning conditions (nightmare, coop).  Needs to exist after entity has been added to work for BSPorigin.
 	if (check_coop() == TRUE) return;
@@ -387,7 +387,7 @@ void() func_episodegate_touch = { // [FUNCTION]
 	// Got a message to display with bmodel on?
 	if (self.message != "") {
 		centerprint(other, self.message);
-		sound (other, CHAN_AUTO, self.noise, 1, ATTN_NORM); // Uses default talktalk sound
+		sound(other, CHAN_AUTO, self.noise, 1, ATTN_NORM); // Uses default talktalk sound
 		self.attack_finished = time + 2; // Slowdown touch functionality
 	}
 };
@@ -423,7 +423,7 @@ void() func_episodegate = { // [ENTITY]
 	self.bsporigin = TRUE;
 	self.angles = '0 0 0';
 	self.mdl = self.model;	
-	if (self.noise == "") self.noise = SOUND_TALK; // Touch sound when bmodel is ON
+	if (self.noise == "") self.noise = "misc/talk.wav"; // Touch sound when bmodel is ON
 	precache_sound(self.noise);
 	if (check_nightmare() == TRUE) return; // Check for spawning conditions (nightmare, coop).  Needs to exist after entity has been added to work for BSPorigin.
 	if (check_coop() == TRUE) return;
@@ -506,7 +506,7 @@ void() func_laser_on = { // [FUNCTION]
 
 	// Only play the ON sound and display message when not spawning
 	if (self.waitmin == TRUE) {
-		if (self.sound_emitter && self.noise1 != "") sound (self.sound_emitter, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play sound on extra emitter if sounds been defined
+		if (self.sound_emitter && self.noise1 != "") sound(self.sound_emitter, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play sound on extra emitter if sounds been defined
 		if (activator.flags & FL_CLIENT && self.message != "") centerprint(activator,self.message);
 		if (self.wait == TRUE) self.message = "";
 	} else self.waitmin = TRUE;
@@ -520,7 +520,7 @@ void() func_laser_on = { // [FUNCTION]
 		self.movetype = MOVETYPE_NONE;
 	}
 	
-	setmodel (self, self.mdl); // Add bmodel back to world (visually)
+	setmodel(self, self.mdl); // Add bmodel back to world (visually)
 	if (check_nightmare() == TRUE) return; // Check for spawning conditions (nightmare, coop).  Needs to exist after entity has been added to work for BSPorigin.
 	if (check_coop() == TRUE) return;
 
@@ -533,7 +533,7 @@ void() func_laser_on = { // [FUNCTION]
 void() func_laser_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF; // Switch laser to active
 	if (self.waitmin == TRUE) { // Only play the OFF sound and display message when not spawning
-		if (self.sound_emitter && self.noise2 != "") sound (self.sound_emitter, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play sound on extra emitter if sounds been defined
+		if (self.sound_emitter && self.noise2 != "") sound(self.sound_emitter, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play sound on extra emitter if sounds been defined
 		if (activator.flags & FL_CLIENT && self.message2 != "") centerprint(activator,self.message2);
 		if (self.wait == TRUE) self.message2 = "";
 	} else self.waitmin = TRUE;
@@ -672,7 +672,7 @@ void() func_chaos_touch = { // [FUNCTION]
 
 	func_chaos_check(); // Force quick update
 	if (self.target2 != "") trigger_strs(self.target2, other); // Any other targets to fire when touch/damaged
-	sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Play touch sound regardless of chaos change
+	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Play touch sound regardless of chaos change
 };
 
 void() func_skill_check = { // [FUNCTION]
@@ -724,7 +724,7 @@ void() func_skill_touch = { // [FUNCTION]
 	
 	// Play touch sound regardless of skill change
 	if (self.pausetime < time) {
-		sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
 		self.pausetime = time + 1;	// No constant sound
 	}	
 };
@@ -741,12 +741,12 @@ void() func_skill_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.th_wakeup(); // Check/Update state
 };
 
 void() func_skill_finishmove = { // [FUNCTION]
-	sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Stop sound, ON and particles!
+	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Stop sound, ON and particles!
 	self.ltime = time; // Need to reset local entity time, otherwise timer is broken it because of the SUB_CalcMove function changes it.
 	self.estate_on();
 };
@@ -755,7 +755,7 @@ void() func_skill_startmove = { // [FUNCTION]
 	self.estate_use = SUB_Null; // Trigger once functionality
 	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // Remove any start off / disable spawnflags
 	self.spawnflags = self.spawnflags - (self.spawnflags & FUNC_SKILLSTARTDIS);
-	sound (self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play movement sound and move pillar into place
+	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play movement sound and move pillar into place
 	SUB_CalcMove (self.pos2, self.speed, func_skill_finishmove);
 };
 
@@ -763,7 +763,7 @@ void() func_skill_disable = { // [FUNCTION]
 	self.estate = ESTATE_DISABLE;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.frame = 1; // Off texture (+A)
 	func_pillar_particles(); // Frame used to determine particle state
 };
@@ -772,7 +772,7 @@ void() func_skill_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	self.frame = 1; // Off texture (+A)
 	func_pillar_particles(); // Frame used to determine particle state
 };
@@ -814,8 +814,8 @@ void() func_skill = { // [ENTITY]
 	if (self.noise1 == "") self.noise1 = "doors/drclos4.wav"; // Setup default sounds if no custom sounds exist
 	if (self.noise2 == "") self.noise2 = "doors/stndr1.wav";
 	if (self.noise3 == "") self.noise3 = "plats/medplat2.wav";
-	precache_sound(self.noise1);	// stop sound (big clunk sound)
-	precache_sound(self.noise2);	// moving sound (door moving)
+	precache_sound(self.noise1);	// stop sound(big clunk sound)
+	precache_sound(self.noise2);	// moving sound(door moving)
 	precache_sound(self.noise3);	// Touch sound
 	SUB_BoundVolume(1);
 	self.bsporigin = TRUE;			// Bmodel (0,0,0 origin)
@@ -845,15 +845,15 @@ void() func_skill = { // [ENTITY]
 	self.lefty = -1; // Always check first time
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.mdl); // Add bmodel to world and work out movement positions
-	setorigin (self, self.origin);	
+	setmodel(self, self.mdl); // Add bmodel to world and work out movement positions
+	setorigin(self, self.origin);	
 	setsize (self, self.mins , self.maxs);
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
 	if (check_coop() == TRUE) return; // Check for spawning conditions (coop, no NM check).  Needs to exist after entity has been added to work for BSPorigin.
 	
 	if (self.spawnflags & FUNC_SKILLSTARTOPEN) { // hide a skill pillar until it is triggered (nightmare skill)
-		setorigin (self, self.pos2);
+		setorigin(self, self.pos2);
 		self.pos2 = self.pos1;
 		self.pos1 = self.origin;
 		self.spawnflags = self.spawnflags | FUNC_SKILLSTARTDIS; // Start open always starts disabled
@@ -946,7 +946,7 @@ void() func_bob_on = { // [FUNCTION]
 		else self.solid = SOLID_NOT;
 		self.flags = 0;	// Reset any onground flags
 	}
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, self.mins , self.maxs);
 	if (check_nightmare() == TRUE) return; // Check for spawning conditions (nightmare, coop).  Needs to exist after entity has been added to work for BSPorigin.
 	if (check_coop() == TRUE) return; // Um?
@@ -956,7 +956,7 @@ void() func_bob_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	self.velocity = '0 0 0';
 };
 

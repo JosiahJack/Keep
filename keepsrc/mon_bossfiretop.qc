@@ -81,7 +81,7 @@ void(vector orgofs) ftop_fire = {
 	if (!self.enemy) return;
 	if (self.enemy.health < 1) return;
 	
-	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
 	makevectors(offang);
 	org = self.origin + attack_vector(orgofs);
@@ -148,7 +148,7 @@ void(entity inflictor, entity attacker, float damage) ftop_pain = {
 
 void() ftop_death1 = [$death1, ftop_death2] {
 	ftop_lightning();
-	sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
 	if (self.noise3 != "") trigger_strs(self.noise3, self);
 };
 void() ftop_death2 = [$death2, ftop_death3] { ftop_lightning(); };
@@ -218,8 +218,8 @@ void() ftop_deathsequence = {
 	if (self.noise2 != "") 
 		self.movetarget3 = find(world, targetname, self.noise2);
 	
-	sound (self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
-	sound (self, CHAN_VOICE, "ad171/chthon/pain1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
+	sound(self, CHAN_VOICE, "ad171/chthon/pain1.wav", 1, ATTN_NORM);
 
 	self.attack_finished = time + 1.5;
 	self.lip = random();
@@ -229,9 +229,9 @@ void() ftop_deathsequence = {
 };
 
 void() ftop_rise1	= [	$rise1, ftop_rise2 ] {
-	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM); };
 void() ftop_rise2	= [	$rise2, ftop_rise3 ] {
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
 void() ftop_rise3	= [	$rise3, ftop_rise4 ] {};
 void() ftop_rise4	= [	$rise4, ftop_rise5 ] {};
 void() ftop_rise5	= [	$rise5, ftop_rise6 ] {};

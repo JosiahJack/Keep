@@ -177,93 +177,62 @@ void(float fx, string m, entity src, vector start, vector end, float length, flo
 
 void(float fx, string m, entity src, vector start, vector end, float length) QC_ParseBeam = { QC_ParseBeamGeneric(fx,m,src,start,end,length,BEAM_TEMPORARY,world); }; // [FUNCTION]
 
+void(vector spot, float count, float gopop, vector norm) LightningSparks = {
+	local float iter, xyadd, zadd;
+	local vector dir;
+
+	if (CheckZeroVector(norm)) {
+		dir = safe_client_forward();
+		zadd = 200;
+	} else {
+		zadd = 0;
+		dir = norm;
+	}
+
+	if (gopop) { // Extra special for death
+		if (count < 30) count = 30; // Looks better to pizzaz it.
+		xyadd = 0;
+	} else xyadd = 200;
+
+	iter = 0;
+	while (iter < count) {
+		make_spark(spot, dir, FALSE); // False to use direction.
+		if (gopop && iter < 15) newmis.velocity_z = 200;
+		else if (gopop) newmis.velocity_z = -200;
+		else newmis.velocity_z = zadd + crandom() * 300;
+		newmis.velocity_y = crandom() * (100 + xyadd);
+		newmis.velocity_x = crandom() * (100 + xyadd);
+		newmis.solid = SOLID_NOT;
+		newmis.touch = SUB_Null;
+		newmis.skin = 8;
+		iter = iter + 1;
+	}
+};
+
 void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
-	local entity e1, e2;
+	local entity e1, e2, litmaker;
 	local vector f;
-	local float lighthit, temp_classgroup;
+	local float lighthit, iter, dmg;
 	
 	f = normalize(p2 - p1);
 	f_x = 0 - f_y;
 	f_y = f_x;
 	f_z = 0;
 	f = f*16;
-	temp_classgroup = from.classgroup; // Need to fool T_Damage that damage is coming from LG
-	if (from) from.classgroup = CG_PROJCELLS;
+	litmaker = spawn();
+	litmaker.classgroup = CG_PROJCELLS; // To fool T_Damage it's coming from LG.
+	litmaker.owner = from;
+	if (from && !(from.flags & FL_CLIENT)) {
+		if (from.owner && (from.owner.flags & FL_CLIENT)) {
+			litmaker.owner = from.owner;
+		}
+	}
 	e1 = e2 = world;
 	lighthit = FALSE;
-	traceline (p1, p2, FALSE, self);
+	traceline(p1, p2, FALSE,litmaker.owner);
 	if (trace_ent.takedamage) {
 		lighthit = TRUE;
-		if (((self.flags & FL_CLIENT) || self.classname == "monster_ranger")
-		    && ((other.flags & FL_CLIENT)|| other.classname == "monster_ranger")) {
-			trace_ent.velocity_z = trace_ent.velocity_z + 400; // Some weird MP velocity hack! KEEP IT!!
-		}
-	} else {
-		e1 = trace_ent;
-		traceline (p1 + f, p2 + f, FALSE, self);
-		if (trace_ent != e1 && trace_ent.takedamage) lighthit = TRUE;
-		else {
-			e2 = trace_ent;
-			traceline (p1 - f, p2 - f, FALSE, self);
-			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage) lighthit = TRUE;
-		}
-	}
 
-	// Found a target to hit?
-	if (lighthit) {
-		// Check for breakable/pushable monster immunity
-		if (ai_immunebreakable(self, trace_ent)) {
-			if (self.lightning_timer < time) { // This is resist lightning function without pain sound.  Don't spawn smoke constantly (let the sprite finish)
-				self.lightning_timer = time + 0.3;
-				SpawnExplosion(EXPLODE_BURST_SMOKE, trace_endpos, "");
-			}
-			SpawnProjectileSmoke(trace_endpos, 200, 50, 150);
-		} else if (trace_ent.resist_cells > 0) { // Check for any cell/lightning resistance
-			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,""); // damage = damage * trace_ent.resist_cells;
-			if (damage > 0) T_Damage(trace_ent, from, from, damage, DAMARMOR);
-		} else {
-			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4,225);
-			T_Damage(trace_ent, from, from, damage, DAMARMOR);
-		}
-		if (trace_ent.reflectlightning) LightningReflection(trace_endpos, trace_ent, damage*0.5); // Check for any lightning reflection abilitites.  Source = Lightning originally came from player
-	}
-	if (from) from.classgroup = temp_classgroup;
-};
-
-// New ability to spawn lighting strikes in random directions
-void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [FUNCTION]
-	local vector lfinish, dir;
-
-	lfinish = lstart + vecrand(0,1000,1); // Setup a random XYZ direction (+/-)
-	traceline(lstart, lfinish, FALSE, lsource); // Trace line in random direction
-	if (random() < 0.5) { // Random chance of a plasma/lightning bolt!
-		dir = normalize(trace_endpos - lstart);
-		launch_projectile(lstart,dir,NO_SPIN,CT_REFLECTLIGHT,SPEED_REFLECTION);
-	} else {
-		Tent_Beam(TE_LIGHTNING2, lsource, lstart, trace_endpos); // Draw lighting beam (32 model unit chunks)
-		LightningDamage(lstart, trace_endpos, world, ldamage); // Check for damage with new lightning beam
-	}
-};
-
-// This lightning damage check is designed for the lightning gun with many modifiers designed for the player and MP combat.
-// This function should not be used for general lightning damage
-void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = { // [FUNCTION]
-	local entity e1, e2;
-	local vector f, dir;
-	local float lighthit, temp_classgroup, iter, dmg;
-	
-	f = p2 - p1;
-	normalize (f);
-	f_x = 0 - f_y;
-	f_y = f_x;
-	f_z = 0;
-	f = f*16;
-	dmg = damage;
-	e1 = e2 = world;
-	lighthit = FALSE;
-	traceline (p1, p2, FALSE, self);
-	if (trace_ent.takedamage) {
-		lighthit = TRUE;
 		// Some weird MP velocity hack!
 		// The story about this code (from quakeworld.nu)
 		//
@@ -285,89 +254,75 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = { 
 		// won't normally see it in NQ mods. But it is there in the
 		// progs.dat in pak0.pak; and it will work in QuakeWorld engines
 		// supporting progs.dat (currently FTE and ZQuake).
-		if ((self.flags & FL_CLIENT) && (other.flags & FL_CLIENT)) trace_ent.velocity_z = trace_ent.velocity_z + 400;
+		if ((from.flags & FL_CLIENT)
+			|| from.classtype == CT_MONRANGER
+			|| from.classtype == CT_MONGREMLIN) { // Added monsters who have LG.
+		    if ((trace_ent.flags & FL_CLIENT)     //  -Qmaster
+				|| trace_ent.classtype == CT_MONRANGER
+				|| trace_ent.classtype == CT_MONGREMLIN) {
+				trace_ent.velocity_z = trace_ent.velocity_z + 400; // KEEP IT!!
+			}
+		}
 	} else {
 		e1 = trace_ent;
-		traceline (p1 + f, p2 + f, FALSE, self);
+		traceline(p1 + f, p2 + f, FALSE, litmaker.owner);
 		if (trace_ent != e1 && trace_ent.takedamage) lighthit = TRUE;
 		else {
 			e2 = trace_ent;
-			traceline (p1 - f, p2 - f, FALSE, self);
+			traceline(p1 - f, p2 - f, FALSE, litmaker.owner);
 			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage) lighthit = TRUE;
 		}
 	}
 
+	// For sparks and sound.
+	if (trace_ent) setorigin(litmaker,trace_ent.origin);
+	else setorigin(litmaker,trace_endpos); 
+
 	// Found a target to hit?
 	if (lighthit) {
-		if (self.tome_finished && trace_ent) {
-			// Make some extra tome of power spark effects
-			iter = 0;
-			while (iter < 6) {
-				dir = safe_client_forward();
-				make_spark(trace_ent.origin, dir, FALSE); // False to use direction.
-				newmis.velocity_z = 200 + crandom() * 300;
-				newmis.velocity_y = crandom() * 300;
-				newmis.velocity_x = crandom() * 300;
-				newmis.solid = SOLID_NOT;
-				newmis.touch = SUB_Null;
-				newmis.skin = 8;
-				iter = iter + 1;
-			}
+		if (litmaker.owner.tome_finished && trace_ent) {
+			LightningSparks(litmaker.origin,6,FALSE,'0 0 0');
 			dmg = dmg * 2; // Double damage
 			if (trace_ent.health < dmg) { // Monster go pop!
-				iter = 0;
-				sound (self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
-				while (iter < 30) {
-					dir = safe_client_forward();
-					make_spark(trace_ent.origin, dir, FALSE); // False to use direction.
-					if (iter < 15) newmis.velocity_z = 200;
-					else newmis.velocity_z = -200;
-					newmis.velocity_y = crandom() * 100;
-					newmis.velocity_x = crandom() * 100;
-					newmis.solid = SOLID_NOT;
-					newmis.touch = SUB_Null;
-					newmis.skin = 8;
-					iter = iter + 1;
-				}
+				sound(litmaker,CHAN_AUTO,"rrp/misc/spark.wav", 1, ATTN_STATIC);
+				LightningSparks(litmaker.origin,30,TRUE,'0 0 0');
 			}
 		}
 
-		// Check for any cell/lightning resistance
-		if (trace_ent.resist_cells > 0) {
+		// Check for breakable/pushable monster immunity
+		if (ai_immunebreakable(litmaker.owner, trace_ent)) {
+			if (litmaker.owner.lightning_timer < time) { // This is resist lightning function without pain sound.  Don't spawn smoke constantly (let the sprite finish)
+				litmaker.owner.lightning_timer = time + 0.3;
+				SpawnExplosion(EXPLODE_BURST_SMOKE, trace_endpos, "");
+			}
+			SpawnProjectileSmoke(trace_endpos, 200, 50, 150);
+		} else if (trace_ent.resist_cells > 0) { // Check for any cell/lightning resistance
 			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
-			if (dmg > 0) {
-				// Need to fool T_Damage that damage is coming from LG
-				temp_classgroup = from.classgroup;
-				from.classgroup = CG_PROJCELLS;
-				T_Damage (trace_ent, from, from, dmg, DAMARMOR);
-				from.classgroup = temp_classgroup;
-			}
+			T_Damage(trace_ent,litmaker,litmaker.owner,damage,DAMARMOR);
 		} else {
-			SpawnBlood(trace_ent, trace_endpos, '0 0 100', dmg*4,225);
-			T_Damage (trace_ent, from, from, dmg, DAMARMOR);
+			SpawnBlood(trace_ent, trace_endpos,'0 0 100',damage*4,225);
+			T_Damage(trace_ent,litmaker,litmaker.owner,damage,DAMARMOR);
 		}
-
-		// Check for any lightning reflection abilitites
-		if (trace_ent.reflectlightning) {
-			dmg = dmg * 0.5; // Lightning splits when reflected...I guess.
-			LightningReflection(trace_endpos, trace_ent, dmg); // Source = Lightning originally came from player
-		}
+		if (trace_ent.reflectlightning) LightningReflection(trace_endpos, trace_ent, damage*0.5); // Check for any lightning reflection abilitites.  Source = Lightning originally came from player
 	} else {
-		if (self.tome_finished) {
-			// Make some extra tome of power spark effects
-			iter = 0;
-			while (iter < 6) {
-				dir = safe_client_forward();	
-				make_spark(trace_endpos, dir * 300, FALSE); // False to use direction.
-				newmis.velocity_z = crandom() * 300;
-				newmis.velocity_y = crandom() * 300;
-				newmis.velocity_x = crandom() * 300;
-				newmis.solid = SOLID_NOT;
-				newmis.touch = SUB_Null;
-				newmis.skin = 8;
-				iter = iter + 1;
-			}
+		if (litmaker.owner.tome_finished) {
+			LightningSparks(litmaker.origin,6,FALSE,trace_plane_normal);
 		}
+	}
+};
+
+// New ability to spawn lighting strikes in random directions
+void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [FUNCTION]
+	local vector lfinish, dir;
+
+	lfinish = lstart + vecrand(0,1000,1); // Setup a random XYZ direction (+/-)
+	traceline(lstart, lfinish, FALSE, lsource); // Trace line in random direction
+	if (random() < 0.5) { // Random chance of a plasma/lightning bolt!
+		dir = normalize(trace_endpos - lstart);
+		launch_projectile(lstart,dir,NO_SPIN,CT_REFLECTLIGHT,SPEED_REFLECTION);
+	} else {
+		Tent_Beam(TE_LIGHTNING2, lsource, lstart, trace_endpos); // Draw lighting beam (32 model unit chunks)
+		LightningDamage(lstart, trace_endpos, world, ldamage); // Check for damage with new lightning beam
 	}
 };
 
@@ -399,8 +354,8 @@ void() HIP_SpawnMjolnirBase = { // [FUNCTION]
 	light.struck_by_mjolnir = TRUE;
 	light.think = SUB_Remove;
 	light.nextthink = (time + TRUE);
-	sound (light,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",TRUE,ATTN_NORM);
-	sound (light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
+	sound(light,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",TRUE,ATTN_NORM);
+	sound(light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
 	makevectors(self.v_angle);
 	light.movedir = v_forward;
 	light.dmg = 100;
@@ -445,7 +400,7 @@ void(entity current, float life) SpawnLightningTrace = { // [FUNCTION]
 	WriteCoord (MSG_BROADCAST,self.origin_x);
 	WriteCoord (MSG_BROADCAST,self.origin_y);
 	WriteCoord (MSG_BROADCAST,self.origin_z);
-	sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
+	sound(self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
 	if (current.classgroup == CG_ZOMBIE) dmg = current.max_health; // poor zombies die in so many ways
 	else dmg = 30;
 
@@ -538,7 +493,7 @@ void(entity current) PlasmaDischarge = { // [FUNCTION]
 	WriteCoord (MSG_BROADCAST,self.origin_x);
 	WriteCoord (MSG_BROADCAST,self.origin_y);
 	WriteCoord (MSG_BROADCAST,self.origin_z);
-	sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
+	sound(self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
 	if (self.owner.classtype == CT_MONGREMLIN) {
 		dmg = 20;
 	} else {
@@ -587,7 +542,7 @@ void() BecomeBeamHit = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
-	setmodel (self, "progs/custents/beamhit.spr");
+	setmodel(self, "progs/custents/beamhit.spr");
 	self.solid = SOLID_NOT;
 	beamhit1();
 };
@@ -613,7 +568,7 @@ void(vector ringorg) MakeBeamRing = { // [FUNCTION]
 	
 	ringent = spawn();
 	ringent.movetype = MOVETYPE_NONE;
-	setmodel (ringent, "progs/custents/dring.spr");
+	setmodel(ringent, "progs/custents/dring.spr");
 	ringent.solid = SOLID_NOT;
 	setorigin(ringent, ringorg);
 	ringent.angles = '90 0 0';
@@ -626,7 +581,7 @@ void(vector ringorg) MakeBeamRing = { // [FUNCTION]
 
 	ringent = spawn();
 	ringent.movetype = MOVETYPE_NONE;
-	setmodel (ringent, "progs/custents/dring.spr");
+	setmodel(ringent, "progs/custents/dring.spr");
 	ringent.solid = SOLID_NOT;
 	setorigin(ringent, ringorg);
 	ringent.angles = '-90 0 0';
@@ -700,8 +655,8 @@ float(entity targ, entity inflictor, entity attacker, float damage, vector spot,
         if (targ.flags & FL_CLIENT) Tent_Beam(TE_LIGHTNING2, targ, end, spot);
         else Tent_Beam(TE_LIGHTNING2, targ, spot, end);
 
-        if (bang == 2) sound (inflictor, CHAN_VOICE, "weapons/lstart.wav", 1, ATTN_NORM);
-        else if (bang) sound (inflictor, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
+        if (bang == 2) sound(inflictor, CHAN_VOICE, "weapons/lstart.wav", 1, ATTN_NORM);
+        else if (bang) sound(inflictor, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
 
         end = trace_endpos; // Use where bolt hit for blood spot.
         if (targ.bodyonflr == MON_ONFLR) {
@@ -813,7 +768,7 @@ void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_
 
 				if (targ.health < damage) { // Monster go pop!
 					iter = 0;
-					sound (self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
+					sound(self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
 					while (iter < 30) {
 						dir = safe_client_forward();
 						make_spark(targ.origin, dir, FALSE); // False to use direction.
@@ -862,7 +817,7 @@ void(entity attacker, vector spot, float damage, entity ignore) Zapper_Spawn = {
     zap.touch     = SUB_Null;
     zap.solid     = SOLID_NOT;
     zap.owner     = world;
-    setall (zap, "", '0 0 0', '0 0 0', spot);   // invisible
+    setall(zap, "", '0 0 0', '0 0 0', spot);   // invisible
     Rocket_Explosion2 (zap.origin, 244, 3);
     T_RadiusDamage (zap, attacker, damage, ignore, DAMAGEALL);
     remove (zap);
@@ -887,7 +842,7 @@ void(entity attacker, vector spot, float damage) Thunderstrike_Ex = { // [FUNCTI
     zap.touch     = SUB_Null;
     zap.solid     = SOLID_NOT;
     zap.owner     = world;
-    setall (zap, "", '0 0 0', '0 0 0', spot);   // invisible   
+    setall(zap, "", '0 0 0', '0 0 0', spot);   // invisible   
     traceline (start, spot - air, FALSE, zap); // Execute trace.
     targ = trace_ent;
     // Don't remove zap now, we need it later for thunder effects.
@@ -991,7 +946,7 @@ float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
     }
     if (hits) {
         if (!shots) shots = 255; // Set maximum hits an attacker may score.
-        if (!lightzero_finished) sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+        if (!lightzero_finished) sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
         LightZero_Set(-1,dur,-2);
         self.divine_hits = shots; // Number of bolts in slam, so match that.
     }
@@ -1014,7 +969,7 @@ void(vector start, vector dir, float damage, float radius, float ang) DeathRay =
 
     // Create dummy entity at spawn point so that 'CanDamage' works right.
     inflictor = spawn();
-    setorigin (inflictor, start);
+    setorigin(inflictor, start);
     attacker = self;
     head = findradius(start, radius);
     while (head) {
@@ -1140,4 +1095,54 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor, floa
 
 		QC_ParseBeam(fx,"", inflictor, start, p1, 32); // Draw the lightning bolt between the two points.
     }
+};
+
+void(float offset) gaunt_lightning = {
+	local vector org, vec, dir, hadjvec, oldorg, reqvel;
+	local float damage, hadj, ofs;
+
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+	ChangeYaw();
+	if (self.lefty == TRUE) ofs = 90;
+	else ofs = -90;
+
+	self.origin2 = self.origin;
+	oldorg = self.origin;
+	walkmove(self.ideal_yaw - ofs, 8 * self.multiplier);
+	hadj = self.origin_z - self.origin2_z;
+	if (visible(self.enemy)) hadj = hadj * self.vsightmultiplier;
+	else hadj = hadj * self.vmultiplier;
+
+	hadjvec_z = hadj;
+	setorigin(self, self.origin + hadjvec);
+	if (self.lip == FALSE) {
+		self.movetype = MOVETYPE_FLY;
+		reqvel = normalize(self.origin - oldorg) * 56;
+		setorigin(self, oldorg);
+		self.velocity = reqvel;
+	}
+	if (self.lip == TRUE) self.lip = FALSE;
+	if (self.enemy.classname == "player") vec = self.enemy.origin - self.enemy.velocity * 0.085;
+	else vec = self.enemy.origin - self.enemy.velocity * 0;
+
+	vec = normalize(vec - self.origin);
+	if (vlen(self.enemy.origin - self.origin) > 1200) vec = self.origin + vec * 1100;
+	else vec = self.origin + vec * (vlen(self.enemy.origin - self.origin) + 20);
+
+	org = self.origin;
+	traceline(org, vec, 1, self);
+	Tent_Beam(TE_LIGHTNING2,self,org,trace_endpos);
+	damage = (50 / (vlen(self.enemy.origin - trace_endpos) * 0.25) + 1) * 0.75;
+	if (self.enemy.carrymode == TRUE) damage = damage * 0.5;
+	if (trace_ent) {
+		if (trace_ent.flags & FL_MONSTER) damage = 25; // Consistent for monsters.
+	}
+	LightningDamage(self.origin, trace_endpos, self, damage);
+	if (self.enemy.health < 1 && vlen(self.enemy.origin - self.origin) <= 600) {
+		self.enemy.velocity = self.enemy.velocity + '0 0 10';
+		dir = self.enemy.origin - (self.absmin + self.absmax) * 0.5;
+		dir = normalize(dir);
+		self.enemy.velocity = self.enemy.velocity + dir * 50;
+	}
 };

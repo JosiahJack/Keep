@@ -242,17 +242,7 @@ void(float dist) ai_run = {
 			if (!self.charmer) { // already have a leader to follow
 				client = SeeFriendly(); // hey buddy!
 				if (client) {
-					if ((IsLeader(client))) {
-						// dprint("Hey buddy, when did you get here?\n");
-						self.enemy = self.oldenemy = world;
-						self.charmer = client;
-						self.charmed = TRUE;
-						self.goalentity = self.movetarget = self.charmer;
-						self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-						self.nextthink = time + 0.1 + random()*0.5;
-						self.think = self.th_walk;
-						return;
-					}
+					if ((IsLeader(client))) { FollowTheLeader(client); return; }
 				}
 			}
 		}
@@ -275,17 +265,7 @@ void(float dist) ai_run = {
 			if (IsLoyal(self) && self.calm_memory_finished < time) { // Find a leader
 				client = SeeFriendly(); // hey buddy!
 				if (client) {
-					if ((IsLeader(client))) {
-						dprint("Hey buddy, what's up?\n");
-						self.enemy = self.oldenemy = world;
-						self.charmer = client;
-						self.charmed = TRUE;
-						self.goalentity = self.movetarget = self.charmer;
-						self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-						self.nextthink = time + 0.1 + random()*0.5;
-						self.think = self.th_walk;
-						return;
-					}
+					if ((IsLeader(client))) { FollowTheLeader(client); return; }
 				}
 			}
 		}

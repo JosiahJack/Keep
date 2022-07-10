@@ -175,7 +175,7 @@ void() InitTrigger = { // [FUNCTION]
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 	self.mdl = self.model;		// Save model for later
-	setmodel (self, self.mdl);	// set size and link into world
+	setmodel(self, self.mdl);	// set size and link into world
 	self.bbmins = self.mins;	// Save bmodel bounds for later
 	self.bbmaxs = self.maxs;
 	self.bsporigin = TRUE;		// bmodel origin 0,0,0
@@ -190,7 +190,7 @@ void() InitPointTrigger = { // [FUNCTION]
     v1 = self.origin;
     v2 = v1 + self.mangle;
     self.model = "";
-    setorigin (self, '0 0 0');
+    setorigin(self, '0 0 0');
     InitTrigger();     // Calls 'setmodel', so do first.
     setsize (self, v1, v2);     // Calling 'setmodel' resets entity size.
 };
@@ -431,7 +431,7 @@ void() play_teleport = { // [FUNCTION]
 	else if (self.lip < 3) self.noise = "misc/r_tele3.wav";
 	else if (self.lip < 4) self.noise = "misc/r_tele4.wav";
 	else self.noise = "misc/r_tele5.wav";
-	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	self.nextthink = time + 2;	// Allow time for the sound to finish
 	self.think = SUB_Remove;	// tidy up function
 };
@@ -491,7 +491,7 @@ void(vector org, entity death_owner) spawn_tdeath = { // [FUNCTION]
 	death.solid = SOLID_TRIGGER;
 	death.angles = '0 0 0';
 	setsize (death, death_owner.mins - '1 1 1', death_owner.maxs + '1 1 1');
-	setorigin (death, org);
+	setorigin(death, org);
 	death.touch = tdeath_touch;
 	death.nextthink = time + 0.2;
 	death.think = SUB_Remove;

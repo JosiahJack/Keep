@@ -130,25 +130,15 @@ void() newboss_sink1 = [8, newboss_sink2]
 	setsize(self, VEC_HULL2_MIN, '32 32 0');
 };
 
-void() newboss_sink2 = [7, newboss_sink3]
-{
-};
+void() newboss_sink2 = [7, newboss_sink3] {};
 
-void() newboss_sink3 = [6, newboss_sink4]
-{
-};
+void() newboss_sink3 = [6, newboss_sink4] {};
 
-void() newboss_sink4 = [5, newboss_sink5]
-{
-};
+void() newboss_sink4 = [5, newboss_sink5] {};
 
-void() newboss_sink5 = [4, newboss_sink6]
-{
-};
+void() newboss_sink5 = [4, newboss_sink6] {};
 
-void() newboss_sink6 = [3, newboss_sink7]
-{
-};
+void() newboss_sink6 = [3, newboss_sink7] {};
 
 void() newboss_sink7 = [2, newboss_sink8]
 {};
@@ -322,7 +312,7 @@ void() newboss_finale = {
 	self.think = newboss_finale2;
 };
 
-void() newboss_death1 = [17, newboss_death2] { sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM); };
+void() newboss_death1 = [17, newboss_death2] {};
 void() newboss_death2 = [18, newboss_death3] {};
 void() newboss_death3 = [19, newboss_death4] {};
 void() newboss_death4 = [20, newboss_death5] {};
@@ -335,11 +325,13 @@ void() newboss_death10 = [26, newboss_death11] {};
 void() newboss_death11 = [27, newboss_death12] {};
 void() newboss_death12 = [28, newboss_death12] {
 	Tent_LavaSplash(self.origin,-50,"boss1/out1.wav");
-	self.use = SUB_Null;
-	self.th_die = SUB_Null;
-	self.nextthink = time + 0.2;
-	self.solid = SOLID_NOT;
-	self.think = newboss_finale;
+	entity_hide(self);
+};
+
+void() newboss_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
+	sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
+	newboss_death1();
 };
 
 void(vector p) newboss_missile = {
@@ -349,6 +341,7 @@ void(vector p) newboss_missile = {
 	local vector vec;
 	local vector d;
 	local float t;
+
 	offang = vectoangles(self.enemy.origin - self.origin);
 	makevectors(offang);
 	org = self.origin + p_x * v_forward + p_y * v_right + p_z * '0 0 1';
@@ -416,8 +409,9 @@ void() monster_newboss = {
 	if (self.health < 1) self.health = 1800;
 	self.th_run = SUB_Null;
 	self.max_health = self.health;
+	self.gibhealth = MON_NEVERGIB;
 	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Wyrm\n";
-	self.th_die = newboss_death1;
+	self.th_die = newboss_die;
 	self.th_pain = newboss_damage;
 	self.classtype = CT_MONVIRTUS;
 	self.classgroup = CG_BOSS;

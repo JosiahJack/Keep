@@ -263,7 +263,7 @@ void() trigger_mapvar_multiple_fire = { // [FUNCTION]
 		self.message = self.idle_soundcom2;
 	}
 	
-	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play the sound ON the trigger, NOT the activator
+	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play the sound ON the trigger, NOT the activator
 	activator = self.bmodel_act; // Original trigger_multiple activator behaviour
 	SUB_UseTargets(); 
 	if (self.wait > 0) { // Is the trigger repeatable?
@@ -319,7 +319,6 @@ void() trigger_mapvar_multiple = { // [ENTITY]
 };
 
 void() logic_auto_think = { // [FUNCTION]
-	//Mass_Centerprint(self.message,SOUND_TALK,world);
 	if (self.use) self.use();
 	SUB_UseTargets();
 	self.think = self.use = SUB_Null; // go idle

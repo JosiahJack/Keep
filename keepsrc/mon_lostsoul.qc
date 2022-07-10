@@ -280,7 +280,7 @@ void() lost_charge_touch = {
 
 void()	lost_charge1 = {
 	// Play hiss sound, sighted enemy, charging
-	sound (self, CHAN_WEAPON, "ad171/lostsoul/charge.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "ad171/lostsoul/charge.wav", 1, ATTN_NORM);	
 	
 	self.count = 0;				// reset start of animation block
 	lost_flymode();				// allow velocity updates
@@ -337,7 +337,7 @@ void() lost_bite = {
 	// Can the target bleed?
 	if (enemy_targ.takedamage < 1) return;
 
-	sound (self, CHAN_WEAPON, "ad171/lostsoul/bite.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/lostsoul/bite.wav", 1, ATTN_NORM);
 
 	// Lost Soul bite is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -370,7 +370,6 @@ void() lost_melee2 = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------------
 void() lost_melee1 = {
 	self.count = 0;				// reset start of animation block
 	self.cnt = 0;				// Reset bite frame counter
@@ -381,9 +380,7 @@ void() lost_melee1 = {
 	self.nextthink = time + 0.1;
 };
 
-
 // MINION - Grow and spin up from nothing
-
 void() lost_growangle = { self.angles_y = self.angles_y + self.lefty;};
 void() lost_grow1 = [$grow1, lost_grow2 ] {};
 void() lost_grow2 = [$grow2, lost_grow3 ] { lost_growangle(); };
@@ -428,7 +425,6 @@ void() lost_grow10= [$grow10, lost_run1 ] {
 	}
 };
 
-//----------------------------------------------------------------------------
 void() lost_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
@@ -441,7 +437,6 @@ void() lost_grow = {
 
 
 // PAIN in the head!
-
 void() lost_inpain = {
 	// Update pain frame
 	lost_update(self.attack_rage);
@@ -453,7 +448,6 @@ void() lost_inpain = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) lost_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -461,7 +455,7 @@ void(entity inflictor, entity attacker, float damage) lost_pain = {
 	if (self.state != LOST_STATE_PAIN) {
 		// Stop all velocity and reset movetype
 		lost_stepmode();
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 	}
 
 	// Work out which direction the damage came from (enemy)
@@ -473,7 +467,6 @@ void(entity inflictor, entity attacker, float damage) lost_pain = {
 	self.inpain = self.count = 0;
 	lost_inpain();
 };
-
 
 void() lost_die1 = [$pain1, lost_die2 ] {};
 void() lost_die2 = [$pain2, lost_die2 ] {
@@ -498,12 +491,12 @@ void() lost_die = {
 
 void() monster_lostsoul_precache = {
 	precache_model ("progs/ad171/mon_lostsoul.mdl");
-	precache_sound ("ad171/lostsoul/idle1.wav");
-	precache_sound ("ad171/lostsoul/idle2.wav");
-	precache_sound ("ad171/lostsoul/charge.wav"); // Charge hiss/scream
-	precache_sound ("ad171/lostsoul/bite.wav"); // Chomp with teeth
-	precache_sound ("ad171/lostsoul/pain1.wav");
-	precache_sound ("ad171/lostsoul/death.wav");
+	precache_sound("ad171/lostsoul/idle1.wav");
+	precache_sound("ad171/lostsoul/idle2.wav");
+	precache_sound("ad171/lostsoul/charge.wav"); // Charge hiss/scream
+	precache_sound("ad171/lostsoul/bite.wav"); // Chomp with teeth
+	precache_sound("ad171/lostsoul/pain1.wav");
+	precache_sound("ad171/lostsoul/death.wav");
 };
 
 void() setup_lostsoul;

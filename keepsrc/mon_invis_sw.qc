@@ -19,11 +19,6 @@ void() sword_create_attachment = {
 	self.attachment.state = FALSE;
 };
 
-// Redfield attachment eyes hide
-void() sword_finish_attachment = {
-	if (self.attachment) setmodel(self.attachment, "");
-};
-
 // Redfield attachment eyes setup
 void() sword_setup_attachment = {
 	if (self.attachment) {
@@ -34,15 +29,6 @@ void() sword_setup_attachment = {
 		self.attachment.state = TRUE;
 		self.attachment.alpha = self.alpha;
 		if (self.spawnflags & MON_SWORD_BLUE) self.attachment.skin = 1;
-	}
-};
-
-// Redfield remove eyes (attachment is eyes)
-void() sword_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.state = FALSE;
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
 	}
 };
 
@@ -67,7 +53,7 @@ void() sword_sound = {
 	self.count = self.count + 1;
 	if (self.count > 3) {
 		if (random() < 0.3) {
-			sound (self, CHAN_VOICE, "redfield/sword/die.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "redfield/sword/die.wav", 1, ATTN_NORM);
 			self.count = 0;
 		}
 	} else return;
@@ -88,7 +74,7 @@ void() sword_run8 = [ 8.000, sword_run1 ] { ai_run (14); };
 
 // Rogue attack
 void() sword_atk1 = [ 9.000, sword_atk2 ] {
-   sound (self,FALSE,"knight/sword1.wav",TRUE,TRUE);
+   sound(self,FALSE,"knight/sword1.wav",TRUE,TRUE);
    ai_charge (14);
 };
 void() sword_atk2 = [ 10.000, sword_atk3 ] { ai_charge (14); };
@@ -108,10 +94,10 @@ void() sword_die3 = [ 21.000, sword_die4 ] { self.solid = SOLID_NOT; monster_che
 void() sword_die4 = [ 22.000, sword_die5 ] {};
 void() sword_die5 = [ 23.000, sword_die6 ] {};
 void() sword_die6 = [ 24.000, sword_die7 ] {};
-void() sword_die7 = [ 25.000, sword_die8 ] { sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
+void() sword_die7 = [ 25.000, sword_die8 ] { sound(self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
 void() sword_die8 = [ 26.000, sword_die9 ] {};
 void() sword_die9 = [ 27.000, sword_die10 ] { monster_death_postcheck(); };
-void() sword_die10 = [ 28.000, sword_die10 ] {};
+void() sword_die10 = [ 28.000, sword_die10 ] { monster_deadbody_check(); };
 
 // Rogue dieb
 void() sword_dieb1 = [ 29.000, sword_dieb2 ] {};
@@ -120,11 +106,11 @@ void() sword_dieb3 = [ 31.000, sword_dieb4 ] { self.solid = SOLID_NOT; monster_c
 void() sword_dieb4 = [ 32.000, sword_dieb5 ] {};
 void() sword_dieb5 = [ 33.000, sword_dieb6 ] {};
 void() sword_dieb6 = [ 34.000, sword_dieb7 ] {};
-void() sword_dieb7 = [ 35.000, sword_dieb8 ] { sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
+void() sword_dieb7 = [ 35.000, sword_dieb8 ] { sound(self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
 void() sword_dieb8 = [ 36.000, sword_dieb9 ] {};
 void() sword_dieb9 = [ 37.000, sword_dieb10 ] {};
 void() sword_dieb10 = [ 38.000, sword_dieb11 ] { monster_death_postcheck(); };
-void() sword_dieb11 = [ 39.000, sword_dieb11 ] {};
+void() sword_dieb11 = [ 39.000, sword_dieb11 ] { monster_deadbody_check(); };
 
 // Run Refield run
 void() swordredfield_run1 = [$run1, swordredfield_run2 ] {
@@ -143,7 +129,7 @@ void() swordredfield_run8 = [$run8, swordredfield_run1 ] { ai_run (14); sword_ey
 
 // Refield attack
 void() swordredfield_atk1 = [$atk1, sword_atk2 ] {
-   sound (self,FALSE,"knight/sword1.wav",TRUE,TRUE);
+   sound(self,FALSE,"knight/sword1.wav",TRUE,TRUE);
    ai_charge (14);
    sword_eyecheck();
 };
@@ -165,8 +151,8 @@ self.solid = SOLID_NOT; monster_check_gib(); };
 void() swordredfield_die4 = [$death4, swordredfield_die5 ] { sword_eyecheck(); };
 void() swordredfield_die5 = [$death5, swordredfield_die6 ] { sword_eyecheck(); };
 void() swordredfield_die6 = [$death6, swordredfield_die7 ] { sword_eyecheck(); };
-void() swordredfield_die7 = [$death7, swordredfield_die8 ] { sword_finish_attachment(); sword_remove_attachment(); 
-sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
+void() swordredfield_die7 = [$death7, swordredfield_die8 ] { SUB_FinishAttachment(); SUB_RemoveAttachment(); 
+sound(self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
 void() swordredfield_die8 = [$death8, swordredfield_die9 ] { self.alpha = 1; };
 void() swordredfield_die9 = [$death9, swordredfield_die10 ] { monster_death_postcheck(); };
 void() swordredfield_die10 = [$death10, swordredfield_die10 ] { monster_deadbody_check(); };
@@ -178,8 +164,8 @@ void() swordredfield_dieb3 = [$deathb3, swordredfield_dieb4 ] { sword_eyecheck()
 void() swordredfield_dieb4 = [$deathb4, swordredfield_dieb5 ] { sword_eyecheck(); };
 void() swordredfield_dieb5 = [$deathb5, swordredfield_dieb6 ] { sword_eyecheck(); };
 void() swordredfield_dieb6 = [$deathb6, swordredfield_dieb7 ] { sword_eyecheck(); };
-void() swordredfield_dieb7 = [$deathb7, swordredfield_dieb8 ] { sword_finish_attachment(); sword_remove_attachment(); 
-sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
+void() swordredfield_dieb7 = [$deathb7, swordredfield_dieb8 ] { SUB_FinishAttachment(); SUB_RemoveAttachment(); 
+sound(self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
 void() swordredfield_dieb8 = [$deathb8, swordredfield_dieb9 ] {};
 void() swordredfield_dieb9 = [$deathb9, swordredfield_dieb10 ] { self.alpha = 1; };
 void() swordredfield_dieb10 = [$deathb10, swordredfield_dieb11 ] { monster_death_postcheck(); };
@@ -222,70 +208,49 @@ void() sword_idlechoose = {
 
 void() sword_die = {
    monster_death_precheck();
-
    if (self.attachment) self.attachment.movetype = MOVETYPE_NOCLIP;
-
-   if (!self.gibbed) {
-      if ( (random () < 0.500) ) {
-         sword_die1();
-      } else {
-         sword_dieb1();
-      }
-   }
-};
-
-void() swordredfield_die = {
-   monster_death_precheck();
-
-   if (self.attachment) self.attachment.movetype = MOVETYPE_NOCLIP;
-
-   if (!self.gibbed) {
-      if ( (random () < 0.500) ) {
-         swordredfield_die1();
-      } else {
-         swordredfield_dieb1();
-      }
-   }
+	if ( (random () < 0.500) ) {
+		if (self.spawnflags & INVIS_SWORD_REDFIELD) swordredfield_die1();
+		else sword_die1();
+	} else {
+		if (self.spawnflags & INVIS_SWORD_REDFIELD) swordredfield_dieb1();
+		else sword_dieb1();
+	}
 };
 
 void() sword_pause = {
-   self.th_run = sword_run1;
-   self.think = sword_run1;
-   self.nextthink = (time + self.delay);
-   self.delay = FALSE;
+	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
+		self.th_run = swordredfield_run1;
+		self.think = swordredfield_run1;
+	} else {
+		self.th_run = sword_run1;
+		self.think = sword_run1;
+	}
+	self.nextthink = (time + self.delay);
+	self.delay = FALSE;
 };
 
 void(entity inflictor,entity attacker, float damage) sword_pain = {
-   self.th_run = sword_run1;
-   self.think = sword_run1;
-   self.nextthink = (time + 0.100);
-   self.delay = FALSE;
-   self.th_pain = SUB_Null_pain;
-};
-
-void() swordredfield_pause = {
-   self.th_run = swordredfield_run1;
-   self.think = swordredfield_run1;
-   self.nextthink = (time + self.delay);
-   self.delay = FALSE;
-};
-
-void(entity inflictor,entity attacker, float damage) swordredfield_pain = {
-   self.th_run = swordredfield_run1;
-   self.think = swordredfield_run1;
-   self.nextthink = (time + 0.100);
-   self.delay = FALSE;
-   self.th_pain = SUB_Null_pain;
+	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
+		self.th_run = swordredfield_run1;
+		self.think = swordredfield_run1;
+	} else {
+		self.th_run = sword_run1;
+		self.think = sword_run1;
+	}
+	self.nextthink = (time + 0.100);
+	self.delay = FALSE;
+	self.th_pain = SUB_Null_pain;
 };
 
 void() monster_sword_precache = {
 	precache_model ("progs/rogue/mon_sword.mdl");
 	precache_model ("progs/redfield/mon_sword.mdl");
 	precache_model (MODEL_SWORDEYES);
-	precache_sound ("knight/sword1.wav");
-	precache_sound ("knight/ksight.wav");
-	precache_sound ("player/axhit2.wav");
-	precache_sound ("redfield/sword/die.wav");
+	precache_sound("knight/sword1.wav");
+	precache_sound("knight/ksight.wav");
+	precache_sound("player/axhit2.wav");
+	precache_sound("redfield/sword/die.wav");
 };
 
 void() monster_sword = {
@@ -306,24 +271,22 @@ void() monster_sword = {
 	self.classtype = CT_MONINVISSWORD;
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;
+	self.th_run = sword_pause;
+	self.th_die = sword_die;
+	self.th_pain = sword_pain;
 	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
 		self.mdl = "progs/redfield/mon_sword.mdl";
 		self.spawnflags = self.spawnflags | MON_SPAWN_NOSIGHT;
 		self.th_stand = sword_idlechoose;
 		self.th_walk = sword_walk1;
-		self.th_run = swordredfield_pause;
 		self.th_melee = swordredfield_atk1;
-		self.th_die = swordredfield_die;
-		self.th_pain = swordredfield_pain;
+
 	} else {
 		self.mdl = "progs/rogue/mon_sword.mdl";
 		self.hittype = HIT_METAL;
 		self.th_stand = sword_stand1;
 		self.th_walk = sword_stand1;
-		self.th_run = sword_pause;
 		self.th_melee = sword_atk1;
-		self.th_die = sword_die;
-		self.th_pain = sword_pain;
 	}
 
 	self.classmove = MON_MOVEWALK;

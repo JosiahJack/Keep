@@ -1,6 +1,4 @@
-/*==============================================================================
-CROSSBOW KNIGHT (low health, good range attack)
-==============================================================================*/
+// CROSSBOW KNIGHT (low health, good range attack)
 $cd id1/models/dcrossbow
 $origin 0 0 24
 $base base
@@ -88,7 +86,6 @@ void() dcrossbow_crossbow_sound;
 float CROSS_DOWN = 1;
 float CROSS_UP = 2;
 
-//===========================================================================
 void()	dcrossbow_standA1	= [	$standA1,	dcrossbow_standA2	] { ai_stand(); };
 void()	dcrossbow_standA2	= [	$standA2,	dcrossbow_standA3	] { ai_stand(); };
 void()	dcrossbow_standA3	= [	$standA3,	dcrossbow_standA4	] { ai_stand(); };
@@ -112,7 +109,6 @@ void()	dcrossbow_standA20	= [	$standA20,	dcrossbow_standA21	] { ai_stand(); };
 void()	dcrossbow_standA21	= [	$standA21,	dcrossbow_standA22	] { ai_stand(); };
 void()	dcrossbow_standA22	= [	$standA22,	dcrossbow_stand1	] { ai_stand(); };
 
-//===========================================================================
 void()	dcrossbow_standB1	= [	$standB1,	dcrossbow_standB2	] { ai_stand(); };
 void()	dcrossbow_standB2	= [	$standB2,	dcrossbow_standB3	] { ai_stand(); };
 void()	dcrossbow_standB3	= [	$standB3,	dcrossbow_standB4	] { ai_stand(); };
@@ -134,7 +130,6 @@ void()	dcrossbow_standB18	= [	$standB18,	dcrossbow_standB19	] { ai_stand(); };
 void()	dcrossbow_standB19	= [	$standB19,	dcrossbow_standB20	] { ai_stand(); };
 void()	dcrossbow_standB20	= [	$standB20,	dcrossbow_stand1	] { ai_stand(); };
 
-//===========================================================================
 void()	dcrossbow_standC1	= [	$tready1,	dcrossbow_standC2	] { ai_stand(); };
 void()	dcrossbow_standC2	= [	$tready2,	dcrossbow_standC3	] { ai_stand(); };
 void()	dcrossbow_standC3	= [	$tready3,	dcrossbow_standC4	] { ai_stand(); };
@@ -155,7 +150,6 @@ void()	dcrossbow_standC17	= [	$tstop4,	dcrossbow_standC18	] { ai_stand(); };
 void()	dcrossbow_standC18	= [	$tstop5,	dcrossbow_standC19	] { ai_stand(); };
 void()	dcrossbow_standC19	= [	$tstop6,	dcrossbow_stand1	] { ai_stand(); };
 
-//===========================================================================
 void()	dcrossbow_standD1	= [	$standD1,	dcrossbow_standD2	] { ai_stand(); };
 void()	dcrossbow_standD2	= [	$standD2,	dcrossbow_standD3	] { ai_stand(); };
 void()	dcrossbow_standD3	= [	$standD3,	dcrossbow_standD4	] { ai_stand(); };
@@ -187,7 +181,6 @@ void()	dcrossbow_standD28	= [	$standD28,	dcrossbow_standD29	] { ai_stand(); };
 void()	dcrossbow_standD29	= [	$standD29,	dcrossbow_standD30	] { ai_stand(); };
 void()	dcrossbow_standD30	= [	$standD30,	dcrossbow_stand1	] { ai_stand(); };
 
-//===========================================================================
 void()	dcrossbow_standE1	= [	$standE1,	dcrossbow_standE2	] { ai_stand(); };
 void()	dcrossbow_standE2	= [	$standE2,	dcrossbow_standE3	] { ai_stand(); };
 void()	dcrossbow_standE3	= [	$standE3,	dcrossbow_standE4	] { ai_stand(); };
@@ -210,7 +203,6 @@ void()	dcrossbow_standE19	= [	$standE19,	dcrossbow_standE20	] { ai_stand(); };
 void()	dcrossbow_standE20	= [	$standE20,	dcrossbow_standE21	] { ai_stand(); };
 void()	dcrossbow_standE21	= [	$standE21,	dcrossbow_stand1	] { ai_stand(); };
 
-//===========================================================================
 void()	dcrossbow_standF1	= [	$standF1,	dcrossbow_standF2	] { ai_stand(); };
 void()	dcrossbow_standF2	= [	$standF2,	dcrossbow_standF3	] { ai_stand(); };
 void()	dcrossbow_standF3	= [	$standF3,	dcrossbow_standF4	] { ai_stand(); };
@@ -223,8 +215,7 @@ void()	dcrossbow_standF9	= [	$standF9,	dcrossbow_standF10	] { ai_stand(); };
 void()	dcrossbow_standF10	= [	$standF10,	dcrossbow_standF11	] { ai_stand(); };
 void()	dcrossbow_standF11	= [	$standF11,	dcrossbow_stand1	] { ai_stand(); };
 
-//===========================================================================
-void()	dcrossbow_stand1	= [	$stand1,	dcrossbow_stand2	] { monster_idle_sound();ai_stand(); };
+void()	dcrossbow_stand1	= [	$stand1,	dcrossbow_stand2	] { monster_idle_sound(); ai_stand(); };
 void()	dcrossbow_stand2	= [	$stand2,	dcrossbow_stand3	] { ai_stand(); };
 void()	dcrossbow_stand3	= [	$stand3,	dcrossbow_stand4	] { ai_stand(); };
 void()	dcrossbow_stand4	= [	$stand4,	dcrossbow_stand5	] { ai_stand(); };
@@ -251,10 +242,9 @@ void()	dcrossbow_stand10	= [	$stand10,	dcrossbow_stand1	] {
 	ai_stand();
 };
 
-//===========================================================================
 void()	dcrossbow_walk1	= [	$walk1,		dcrossbow_walk2	] { monster_idle_sound(); 
 	self.idlebusy = FALSE; ai_walk(2); };
-void()	dcrossbow_walk2	= [	$walk2,		dcrossbow_walk3	] { monster_footstep(FALSE);ai_walk(5); };
+void()	dcrossbow_walk2	= [	$walk2,		dcrossbow_walk3	] { monster_footstep(FALSE); ai_walk(5); };
 void()	dcrossbow_walk3	= [	$walk3,		dcrossbow_walk4	] { ai_walk(5); };
 void()	dcrossbow_walk4	= [	$walk4,		dcrossbow_walk5	] { ai_walk(4); };
 void()	dcrossbow_walk5	= [	$walk5,		dcrossbow_walk6	] { ai_walk(4); };
@@ -268,9 +258,7 @@ void()	dcrossbow_walk12	= [	$walk12,	dcrossbow_walk13	] { ai_walk(4); };
 void()	dcrossbow_walk13	= [	$walk13,	dcrossbow_walk14	] { ai_walk(6); };
 void()	dcrossbow_walk14	= [	$walk14,	dcrossbow_walk1	] { ai_walk(2); };
 
-//===========================================================================
 // 6 frames instead of 8 frames (skipping 3rd/7th timing of original)
-
 void()	dcrossbow_run1	= [	$run1,	dcrossbow_run2	] { monster_idle_sound();
 	self.idlebusy = FALSE; ai_run (16); };
 void()	dcrossbow_run2	= [	$run2,	dcrossbow_run3	] { ai_run(20); };
@@ -279,7 +267,6 @@ void()	dcrossbow_run4	= [	$run4,	dcrossbow_run5	] { ai_run(16); };
 void()	dcrossbow_run5	= [	$run5,	dcrossbow_run6	] { ai_run(20); };
 void()	dcrossbow_run6	= [	$run6,	dcrossbow_run1	] { ai_run(6); };
 
-//===========================================================================
 // FINISHING (STOP) - exit point for the range attack logic
 // STOP  - lower crossbow and then run / hunt player
 void()	dcrossbow_stop1 = [	$tstop1,	dcrossbow_stop2	] { self.weaponstate = CROSS_UP;};
@@ -298,7 +285,7 @@ void() dcrossbow_shot = {
 
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 
 	// Skill level adjustment
 	self.attack_speed = SPEED_DCROSS + (skill*SPEED_BOLTSKILL);
@@ -330,7 +317,7 @@ void()	dcrossbow_fire12 = [	$tfire12,	dcrossbow_fire13] {};
 void()	dcrossbow_fire13 = [	$tfire13,	dcrossbow_fire14] {};
 void()	dcrossbow_fire14 = [	$tfire14,	dcrossbow_fire15] {};
 void()	dcrossbow_fire15 = [	$tfire15,	dcrossbow_fire16] {
-	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_rdy.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, "ad171/weapons/crossbow_rdy.wav", 1, ATTN_NORM); };
 void()	dcrossbow_fire16 = [	$tfire16,	dcrossbow_fire18] {};
 void()	dcrossbow_fire18 = [	$tfire18,	dcrossbow_fire20] {};
 void()	dcrossbow_fire20 = [	$tfire20,	dcrossbow_fire22] {};
@@ -342,7 +329,6 @@ void()	dcrossbow_fire30 = [	$tfire30,	dcrossbow_hold1] { ai_face();
 	self.weaponswitch = time + 1;			// Don't exit straight away
 };
 
-//----------------------------------------------------------------------------
 // SLIDE  - strafe side to side movement, crossbow up high
 void()	dcrossbow_slide1 = [	$tslide1,	dcrossbow_slide2	] { ai_run_slide(4);
 	self.attack_state = AS_SLIDING;			// Update type of attack
@@ -361,7 +347,6 @@ void()	dcrossbow_slide8 = [	$tslide8,	dcrossbow_slide1	] { ai_run_slide(2);
 	else dcrossbow_checkattack();
 };
 
-//----------------------------------------------------------------------------
 // STARTING (SLIDE) - brings crossbow up to shoulder height
 void()	dcrossbow_slideup1 = [	$tready1,	dcrossbow_slideup2	] { ai_face();
 	self.weaponstate = CROSS_DOWN;		// Crossbow animation state
@@ -377,13 +362,11 @@ void()	dcrossbow_slideup7 = [	$tready7,	dcrossbow_slide1	] { ai_face();
 	self.weaponstate = CROSS_UP;		// Crossbow animation in correct state for slide/hold
 };
 
-//----------------------------------------------------------------------------
 void() dcrossbow_checkslide = {
 	if (self.weaponstate == CROSS_DOWN) dcrossbow_slideup1();
 	else dcrossbow_slide1();
 };
 
-//----------------------------------------------------------------------------
 // HOLD  - keeps crossbow up high and wait to fire at player
 // Random chance to slide to the side instead of being a stationary target
 void()	dcrossbow_hold1 = [	$thold1,	dcrossbow_hold2	] { ai_face();
@@ -403,7 +386,6 @@ void()	dcrossbow_hold6 = [	$thold6,	dcrossbow_hold1	] {
 	else dcrossbow_checkattack();
 };
 		
-//----------------------------------------------------------------------------
 // STARTING (HOLD) - brings crossbow up to shoulder height
 void()	dcrossbow_ready1 = [	$tready1,	dcrossbow_ready2	] { ai_face();
 	self.weaponstate = CROSS_DOWN;		// Crossbow animation state
@@ -419,33 +401,30 @@ void()	dcrossbow_ready7 = [	$tready7,	dcrossbow_hold1	] { ai_face();
 	self.weaponstate = CROSS_UP;				// Crossbow animation in correct state for slide/hold
 };
 
-//===========================================================================
 // Cycle between melee attacks
 // Attack 1 - Slice (stationary one hand slashing attack)
 // Attack 2 - Smash (chop overhead to ground)
-//----------------------------------------------------------------------
-void()	dcrossbow_slice1	= [	$slice2,	dcrossbow_slice2	] { self.weaponstate = CROSS_DOWN;ai_face(); };
+void()	dcrossbow_slice1	= [	$slice2,	dcrossbow_slice2	] { self.weaponstate = CROSS_DOWN; ai_face(); };
 void()	dcrossbow_slice2	= [	$slice3,	dcrossbow_slice3	] { ai_face(); dcrossbow_crossbow_sound(); };
 void()	dcrossbow_slice3	= [	$slice4,	dcrossbow_slice4	] { ai_face(); };
 void()	dcrossbow_slice4	= [	$slice5,	dcrossbow_slice5	] { ai_melee(); };
-void()	dcrossbow_slice5	= [	$slice6,	dcrossbow_slice6	] { self.meleecontact=TRUE;ai_meleesmash(15); };
-void()	dcrossbow_slice6	= [	$slice7,	dcrossbow_slice7	] { ai_melee();self.meleecontact=FALSE;};
+void()	dcrossbow_slice5	= [	$slice6,	dcrossbow_slice6	] { self.meleecontact=TRUE; ai_meleesmash(15); };
+void()	dcrossbow_slice6	= [	$slice7,	dcrossbow_slice7	] { ai_melee(); self.meleecontact=FALSE;};
 void()	dcrossbow_slice7	= [	$slice8,	dcrossbow_slice8	] {};
 void()	dcrossbow_slice8	= [	$slice9,	dcrossbow_slice9	] {};
 void()	dcrossbow_slice9	= [	$slice10,	dcrossbow_slice10	] {};
 void()	dcrossbow_slice10	= [	$slice11,	dcrossbow_slice11	] { ai_face(); };
 void()	dcrossbow_slice11	= [	$slice12,	dcrossbow_slice1	] { dcrossbow_checkmelee(); };
 
-//----------------------------------------------------------------------
 // Knight - 11 frames (skipped (1, 11, 14, 15)
-void()	dcrossbow_smash1	= [	$smash2,	dcrossbow_smash2	] { self.weaponstate = CROSS_DOWN;ai_charge(1); };
+void()	dcrossbow_smash1	= [	$smash2,	dcrossbow_smash2	] { self.weaponstate = CROSS_DOWN; ai_charge(1); };
 void()	dcrossbow_smash2	= [	$smash3,	dcrossbow_smash3	] { ai_charge(7); };
 void()	dcrossbow_smash3	= [	$smash4,	dcrossbow_smash4	] { monster_footstep(FALSE); ai_charge(4); };
 void()	dcrossbow_smash4	= [	$smash5,	dcrossbow_smash5	] { ai_face(); };
 void()	dcrossbow_smash5	= [	$smash6,	dcrossbow_smash6	] { dcrossbow_crossbow_sound(); ai_charge(3); };
-void()	dcrossbow_smash6	= [	$smash7,	dcrossbow_smash7	] { ai_charge(4);ai_melee(); };
-void()	dcrossbow_smash7	= [	$smash8,	dcrossbow_smash8	] { monster_footstep(FALSE);self.meleecontact=TRUE;ai_meleesmash(15); };
-void()	dcrossbow_smash8	= [	$smash9,	dcrossbow_smash9	] { ai_charge(3);ai_melee();self.meleecontact=FALSE;};
+void()	dcrossbow_smash6	= [	$smash7,	dcrossbow_smash7	] { ai_charge(4); ai_melee(); };
+void()	dcrossbow_smash7	= [	$smash8,	dcrossbow_smash8	] { monster_footstep(FALSE); self.meleecontact=TRUE; ai_meleesmash(15); };
+void()	dcrossbow_smash8	= [	$smash9,	dcrossbow_smash9	] { ai_charge(3); ai_melee(); self.meleecontact=FALSE;};
 void()	dcrossbow_smash9	= [	$smash10,	dcrossbow_smash10	] { ai_charge(1); };
 void()	dcrossbow_smash10	= [	$smash12,	dcrossbow_smash11	] { ai_charge(1); };
 void()	dcrossbow_smash11	= [	$smash13,	dcrossbow_smash1	] { dcrossbow_checkmelee(); };
@@ -481,7 +460,7 @@ void(entity inflictor, entity attacker, float damage)	dcrossbow_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dcrossbow_painA1();	// classic, body recoil
@@ -501,7 +480,7 @@ void(entity inflictor, entity attacker, float damage)	dcrossbow_pain = {
 
 
 void()	dcrossbow_die1	= [	$death1,	dcrossbow_die2	] { ai_forward(10); };
-void()	dcrossbow_die2	= [	$death2,	dcrossbow_die3	] { monster_check_gib();ai_forward(8); };
+void()	dcrossbow_die2	= [	$death2,	dcrossbow_die3	] { monster_check_gib(); ai_forward(8); };
 void()	dcrossbow_die3	= [	$death3,	dcrossbow_die4	] { monster_check_gib();
 	self.solid = SOLID_NOT; ai_forward(7); };
 void()	dcrossbow_die4	= [	$death4,	dcrossbow_die5	] {};
@@ -509,11 +488,11 @@ void()	dcrossbow_die5	= [	$death5,	dcrossbow_die6	] {};
 void()	dcrossbow_die6	= [	$death6,	dcrossbow_die7	] {};
 void()	dcrossbow_die7	= [	$death7,	dcrossbow_die8	] {};
 void()	dcrossbow_die8	= [	$death8,	dcrossbow_die9	] { ai_forward(10);
-	sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM); };
 void()	dcrossbow_die9	= [	$death9,	dcrossbow_die10	] { ai_forward(11); };
 void()	dcrossbow_die10	= [	$death10,	dcrossbow_die11	] { monster_death_postcheck(); };
 void()	dcrossbow_die11	= [	$death11,	dcrossbow_die11	] { monster_deadbody_check(); };
-//----------------------------------------------------------------------
+
 void()	dcrossbow_dieb1	= [	$deathb1,	dcrossbow_dieb2	] {};
 void()	dcrossbow_dieb2	= [	$deathb2,	dcrossbow_dieb3	] { monster_check_gib(); };
 void()	dcrossbow_dieb3	= [	$deathb3,	dcrossbow_dieb4	] { monster_check_gib();
@@ -522,7 +501,7 @@ void()	dcrossbow_dieb4	= [	$deathb4,	dcrossbow_dieb5	] {};
 void()	dcrossbow_dieb5	= [	$deathb5,	dcrossbow_dieb6	] {};
 void()	dcrossbow_dieb6	= [	$deathb6,	dcrossbow_dieb7	] {};
 void()	dcrossbow_dieb7	= [	$deathb7,	dcrossbow_dieb8	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM); };
 void()	dcrossbow_dieb8	= [	$deathb8,	dcrossbow_dieb9	] {};
 void()	dcrossbow_dieb9	= [	$deathb9,	dcrossbow_dieb10	] {};
 void()	dcrossbow_dieb10	= [	$deathb10,	dcrossbow_dieb11	] {};
@@ -540,18 +519,17 @@ void()	dcrossbow_dieb20	= [	$deathb20,	dcrossbow_dieb20	] { monster_deadbody_che
 void() dcrossbow_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
-
 	StopSound(self,CHAN_WEAPON); // Clear weapon sound
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
 		if (random() > 0.5) dcrossbow_die1();
 		else dcrossbow_dieb1();
 	}
 };
 
-void() dcrossbow_crossbow_sound = { sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_NORM); };
+void() dcrossbow_crossbow_sound = { sound(self, CHAN_WEAPON, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_NORM); };
 
 void() monster_dcrossbow_precache = {
 	precache_model ("progs/ad171/mon_dcrossbow.mdl");
@@ -560,18 +538,18 @@ void() monster_dcrossbow_precache = {
 	precache_model ("progs/ad171/w_dcrossbow.mdl");
 	precache_model ("progs/ad171/gib_knfoot_l.mdl");
 	precache_model ("progs/ad171/gib_knfoot_r.mdl");
-	precache_sound ("ad171/dknight/dcross_idle.wav");
-	precache_sound ("ad171/dknight/dcross_idlecom.wav");
-	precache_sound ("knight/khurt.wav");
-	precache_sound ("knight/kdeath.wav");
-	precache_sound ("ad171/weapons/bolt_hit1.wav"); // Crossbow and bolt sounds
-	precache_sound ("ad171/weapons/bolt_hit2.wav");
-	precache_sound ("ad171/weapons/bolt_hit3.wav");
-	precache_sound ("ad171/weapons/bolt_hit4.wav");
-	precache_sound ("ad171/weapons/crossbow_fire.wav");
-	precache_sound ("ad171/weapons/crossbow_swipe.wav");
-	precache_sound ("ad171/weapons/crossbow_hit1.wav");
-	precache_sound ("ad171/weapons/crossbow_rdy.wav");
+	precache_sound("ad171/dknight/dcross_idle.wav");
+	precache_sound("ad171/dknight/dcross_idlecom.wav");
+	precache_sound("knight/khurt.wav");
+	precache_sound("knight/kdeath.wav");
+	precache_sound("ad171/weapons/bolt_hit1.wav"); // Crossbow and bolt sounds
+	precache_sound("ad171/weapons/bolt_hit2.wav");
+	precache_sound("ad171/weapons/bolt_hit3.wav");
+	precache_sound("ad171/weapons/bolt_hit4.wav");
+	precache_sound("ad171/weapons/crossbow_fire.wav");
+	precache_sound("ad171/weapons/crossbow_swipe.wav");
+	precache_sound("ad171/weapons/crossbow_hit1.wav");
+	precache_sound("ad171/weapons/crossbow_rdy.wav");
 };
 
 // QUAKED monster_dcrossbow (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -615,7 +593,7 @@ void() monster_dcrossbow = {
 	self.steptype = FS_TYPEMEDIUM;
 	self.weaponstate = CROSS_DOWN;		// Maintain crossbow state
 	self.meleecontact = FALSE;			// Smash contact
-	self.meleerange = MONAI_MELEEFRONT;	// Smash attack
+	self.meleerange = 70;	// Smash attack
 	self.attack_offset = '20 12 28';	// Where to fire bolt from
 	if (self.spawnflags & MON_DCROSSSNIPER) self.enemymaxdist = TRUE; // check for sniper mode, no distance checks for attacks
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent

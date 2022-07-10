@@ -22,7 +22,7 @@ void() hip_train_wait = {
 
    if ( self.wait ) {
 
-      sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+      sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
       if ( (self.wait != CONTENT_EMPTY) ) {
 
          self.nextthink = (self.ltime + self.wait);
@@ -54,7 +54,7 @@ void() hip_train_next = {
       objerror ("hip_train_next: no next target");
 
    }
-   sound (self,CHAN_VOICE,self.noise1,TRUE,ATTN_NORM);
+   sound(self,CHAN_VOICE,self.noise1,TRUE,ATTN_NORM);
    self.wait = targ.wait;
    if ( targ.wait ) {
 
@@ -78,7 +78,7 @@ void() hip_train_next = {
    self.goalentity = targ;
    if ( (current == CONTENT_EMPTY) ) {
 
-      setorigin (self,(targ.origin - self.mins));
+      setorigin(self,(targ.origin - self.mins));
       self.nextthink = (self.ltime + 0.010);
 
    } else {
@@ -102,7 +102,7 @@ void() hip_func_train_find = {
    self.goalentity = targ;
    self.cnt = targ.speed;
    self.target = targ.target;
-   setorigin (self,(targ.origin - self.mins));
+   setorigin(self,(targ.origin - self.mins));
    if ( !self.targetname ) {
 
       self.nextthink = (self.ltime + 0.100);
@@ -157,17 +157,17 @@ void() func_train2 = {
       }
 
    }
-   precache_sound (self.noise);
-   precache_sound (self.noise1);
+   precache_sound(self.noise);
+   precache_sound(self.noise1);
    self.cnt = TRUE;
    self.solid = SOLID_BSP;
    self.movetype = MOVETYPE_PUSH;
    self.blocked = func_train_blocked;
    self.use = hip_train_use;
    self.classname = "train2";
-   setmodel (self,self.model);
+   setmodel(self,self.model);
    setsize (self,self.mins,self.maxs);
-   setorigin (self,self.origin);
+   setorigin(self,self.origin);
    self.nextthink = (self.ltime + 0.100);
    self.think = hip_func_train_find;
 

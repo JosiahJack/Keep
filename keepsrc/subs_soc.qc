@@ -106,31 +106,31 @@ void(entity target_ent, entity activator_ent) trigger_ent = {
 
 	dprint("\b[ENT_TRIG]\b Ent ("); dprint(ftos(target_ent.classtype));
 	dprint(") Activator ("); dprint(activator_ent.classname);
-	if (!target_ent) dprint(") - ERROR!!\n");
+	if (!target_ent) {dprint(") - ERROR!!\n"); return; }
 	else dprint(")\n");
 
-	if (target_ent && target_ent.use) {
-		// Save self/other for later
-		tself = self;
-		tother = other;
-		tactivator = activator;
-		if (activator_ent.flags & FL_CLIENT) activator = activator_ent;
-		
-		// Switch around self/other for USE function
-		self = target_ent;
-		other = tself;
-		
-		// Use trigger
-		if (self.use) {
-			self.activate = activator_ent;		// Link activator
-			self.use();							// Fire use function
-		}
-			
-		// Restore self/other from previous temp storage
-		self = tself;
-		other = tother;
-		if (activator_ent.flags & FL_CLIENT) activator = tactivator;
+	if (!target_ent.use) return;
+
+	// Save self/other for later
+	tself = self;
+	tother = other;
+	tactivator = activator;
+	if (activator_ent.flags & FL_CLIENT) activator = activator_ent;
+	
+	// Switch around self/other for USE function
+	self = target_ent;
+	other = tself;
+	
+	// Use trigger
+	if (self.use) {
+		self.activate = activator_ent;		// Link activator
+		self.use();							// Fire use function
 	}
+		
+	// Restore self/other from previous temp storage
+	self = tself;
+	other = tother;
+	if (activator_ent.flags & FL_CLIENT) activator = tactivator;
 };
 
 // Check if the entity has solid surface below 
@@ -255,7 +255,7 @@ void(entity targ) entity_hide = {
 
 	entity_stop(targ);					// No world interaction
 	targ.modelindex = 0;				// Make sure no model
-	setmodel (targ, "");				// invisible
+	setmodel(targ, "");				// invisible
 };
 
 void(entity targ, float removetime) entity_remove = {

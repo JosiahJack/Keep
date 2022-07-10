@@ -129,9 +129,9 @@ void() ActorDie = { // [FUNCTION]
 		self.frame = 0;
 		monster_ThrowGib();
 		self.deadflag = DEAD_DEAD;
-		if (damage_attacker.classname == "teledeath")	sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
-		else if (random() < 0.5)						sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
-		else											sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
+		if (damage_attacker.classname == "teledeath")	sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+		else if (random() < 0.5)						sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
+		else											sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
 		return;
 	}
 
@@ -210,13 +210,13 @@ void() Actor_fire = { // [FUNCTION]
 	if (self.spawnflags & ZEREND_ROCKETS) {
         makevectors(self.v_angle);
         org = self.origin + v_forward*8 + '0 0 16';
-        sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NONE);
+        sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NONE);
 		self.finalangle = vecrand(100,200,FALSE);
 		launch_projectile(self.origin,self.movedir,self.finalangle,CT_PROJ_ROCKET,self.speed);
         newmis.velocity = dir * 800;
         newmis.touch = SUB_Remove;      // The Zerstorer cannot be harmed.
     } else {
-        sound (self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM);    
+        sound(self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM);    
         FireBullets (8, '0.1 0.1 0');
     }
 	W_Reload(1);
@@ -341,7 +341,7 @@ void() misc_hostage = { // [ENTITY]
     self.movetype = MOVETYPE_STEP;    // They just stand on the ground
     setmodel(self,MODEL_PLAYER);
     setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
-    setorigin (self, self.origin);
+    setorigin(self, self.origin);
     self.nextthink = time + 0.1;
     self.think = actor_start;
 };
@@ -359,14 +359,14 @@ void() ActorJump = { // [FUNCTION]
 
         if (self.swim_flag < time) { // play swiming sound
             self.swim_flag = time + 1;
-            if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
-            else				sound (self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
+            if (random() < 0.5) sound(self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
+            else				sound(self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
         }
         return;
     }
 
-    sound (self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
-    self.flags = self.flags - FL_ONGROUND;
+    sound(self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
+    SUB_RemoveFlags(self,FL_ONGROUND);
     setorigin(self, self.origin + '0 0 2');
     self.velocity_z = self.velocity_z + 270;
 };

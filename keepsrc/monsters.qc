@@ -116,10 +116,10 @@ void() monster_idle_sound = {
 			self.idletimer = (time + MOVETYPE_WALK);
 			if (random () < 0.5) {
 				r = random();
-				if (r < 0.25) sound (self,CHAN_VOICE,"hipnotic/armagon/idle1.wav",TRUE,ATTN_ARMAGON);
-				else if (r < 0.50) sound (self,CHAN_VOICE,"hipnotic/armagon/idle2.wav",TRUE,ATTN_ARMAGON);
-				else if (r < 0.75) sound (self,CHAN_VOICE,"hipnotic/armagon/idle3.wav",TRUE,ATTN_ARMAGON);
-				else sound (self,CHAN_VOICE,"hipnotic/armagon/idle4.wav",TRUE,ATTN_ARMAGON);
+				if (r < 0.25) sound(self,CHAN_VOICE,"hipnotic/armagon/idle1.wav",TRUE,ATTN_ARMAGON);
+				else if (r < 0.50) sound(self,CHAN_VOICE,"hipnotic/armagon/idle2.wav",TRUE,ATTN_ARMAGON);
+				else if (r < 0.75) sound(self,CHAN_VOICE,"hipnotic/armagon/idle3.wav",TRUE,ATTN_ARMAGON);
+				else sound(self,CHAN_VOICE,"hipnotic/armagon/idle4.wav",TRUE,ATTN_ARMAGON);
 			}
 		}
 		return;
@@ -131,16 +131,16 @@ void() monster_idle_sound = {
 	// Is the monster active in combat (special idle sound)
 	if (self.enemy && self.idle_soundcom != "") {
 		if (self.idle_soundcom2 != "") {
-			if (random() < 0.5) sound (self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
-			else sound (self, CHAN_VOICE, self.idle_soundcom2, 1, ATTN_NORM);
-		} else sound (self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
+			else sound(self, CHAN_VOICE, self.idle_soundcom2, 1, ATTN_NORM);
+		} else sound(self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
 	} else {
 		// setup each monster with unique idle sounds (easier and quicker)
 		if (self.idle_sound2 != "" && self.idle_sound != "") {
-			if (random() < 0.5) sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
-			else sound (self, CHAN_VOICE, self.idle_sound2, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+			else sound(self, CHAN_VOICE, self.idle_sound2, 1, ATTN_NORM);
 		} else {
-			if (self.idle_sound) sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+			if (self.idle_sound) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 		}
 	}
 };
@@ -153,7 +153,7 @@ void() monster_sightsound = {
 
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
-	if (self.classtype == CT_MONINQUISITOR) { sound (self, CHAN_BODY, "drake/archer/sight2.wav", 1, ATTN_NONE); self.sight_timeout = time + MON_SIGHTSOUND; return;}
+	if (self.classtype == CT_MONINQUISITOR) { sound(self, CHAN_BODY, "drake/archer/sight2.wav", 1, ATTN_NONE); self.sight_timeout = time + MON_SIGHTSOUND; return;}
 	if (!(self.sight_sound)) return;
 	self.monster_awake = TRUE;
 	if (self.spawnflags & MON_SPAWN_NOSIGHT) return;
@@ -166,7 +166,7 @@ void() monster_sightsound = {
 
 		if ((self.master || self.owner || self.charmed) && !self.enemy && !(self.master == self)) {
 			if (self.hello_sound) {
-				sound (self, CHAN_BODY, self.hello_sound, 1, ATTN_NORM);
+				sound(self, CHAN_BODY, self.hello_sound, 1, ATTN_NORM);
 				return;
 			}
 		}
@@ -175,25 +175,25 @@ void() monster_sightsound = {
 		// The id enforcer has four sight sounds, which is a bit excessive
 		// Check through sight strings to find out quantity
 		if (self.sight_count == 2) {
-			if (rsnd < 0.5) sound (self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
+			if (rsnd < 0.5) sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
+			else sound(self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
 		}
 		else if (self.sight_count == 3) {
-			if (rsnd < 0.3) sound (self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else if (rsnd < 0.6) sound (self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
+			if (rsnd < 0.3) sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
+			else if (rsnd < 0.6) sound(self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
+			else sound(self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
 		}
 		else if (self.sight_count == 4) {
-			if (rsnd < 0.25) sound (self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else if (rsnd < 0.5) sound (self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
-			else if (rsnd < 0.75) sound (self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, self.sight_sound4, 1, ATTN_NORM);
+			if (rsnd < 0.25) sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
+			else if (rsnd < 0.5) sound(self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
+			else if (rsnd < 0.75) sound(self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
+			else sound(self, CHAN_BODY, self.sight_sound4, 1, ATTN_NORM);
 		} else if (self.classtype == CT_MONNEMESANT || self.classtype == CT_MONNEMESANTBOSS) {
 			rsnd = random();			
-			if (rsnd < 0.5) sound (self, CHAN_BODY, "zerstorer/trog/tsight1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "zerstorer/trog/tsight2.wav", 1, ATTN_NORM);
+			if (rsnd < 0.5) sound(self, CHAN_BODY, "zerstorer/trog/tsight1.wav", 1, ATTN_NORM);
+			else sound(self, CHAN_BODY, "zerstorer/trog/tsight2.wav", 1, ATTN_NORM);
 		}
-		else sound (self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
 	}
 };
 
@@ -326,9 +326,9 @@ void(float altfoot) monster_footstep = {
 		else footstepwav = SOUND_FS_SLOW5;
 	}
 	
-	// Play the sound (large feet need to be heard further away)
-	if (footstep == FS_TYPELARGE) sound (self, CHAN_FEET, footstepwav, footvol, ATTN_FEETL);
-	else sound (self, CHAN_FEET, footstepwav, footvol, ATTN_FEET);
+	// Play the sound(large feet need to be heard further away)
+	if (footstep == FS_TYPELARGE) sound(self, CHAN_FEET, footstepwav, footvol, ATTN_FEETL);
+	else sound(self, CHAN_FEET, footstepwav, footvol, ATTN_FEET);
 };
 
 // PRE/POST CHECK conditions for monster death
@@ -336,6 +336,9 @@ void() monster_death_precheck = {
 	local float loop;
 
 	if (self.flags & FL_MONSTER) {
+		 // If fish in water, reduce self gravity to pretend to slowly sink
+		if (self.classmove == MON_MOVESWIM && InLiquid(self.origin)) self.gravity = 0.25;
+
 		// Check for minion monster and update parent counters
 		if (self.owner.minion_active) update_minioncount(self.owner, -1);
 
@@ -356,17 +359,15 @@ void() monster_death_precheck = {
 		if (!self.gibbed && (self.classmove == MON_MOVEFLY || (self.flags & FL_FLY))
             && self.classmove != MON_MOVESTATIC && self.movetype != MOVETYPE_NONE) {
 			self.movetype = MOVETYPE_TOSS; // Affected by gravity
-		   }
+		}
 	}
 };
 
 void() monster_death_postcheck = {
-	local float bodytimer;
-	
-	self.blockudeath = TRUE;	// Body is dead, no human death noise
+	self.blockudeath = TRUE; // Body is dead, no human death noise
 	if (!self.gibbed) self.bodyonflr = MON_ONFLR;
 	self.solid = SOLID_TRIGGER; // Allow for the dead body/head to touch triggers (void/hurt)
-	setorigin(self, self.origin);
+	setorigin(self,self.origin);
 	self.touch = SUB_Null;
 };
 
@@ -376,7 +377,7 @@ void() monster_deadbody_check = {
 	// Check for deadflag first, if touched something this will be changed
 	if (self.deadflag == DEAD_REMOVE || self.deadflag == DEAD_EXPLODE
 		&& self.gibbed == FALSE) {
-		// make sure touch,solid and body axe interaction are off
+		// Make sure touch, solid, and body axe interaction are off
 		self.touch = SUB_Null;
 		self.solid = SOLID_NOT;
 		self.bodyonflr = "";
@@ -391,20 +392,16 @@ void() monster_deadbody_check = {
 	} else {
 		// Check global map variable first (default = off)
 		// Check floor below dead body (global function)
-		if (map_bodyflrcheck == TRUE)
-			ent_floorcheck(self, FLOOR_TRACE_MONSTER);
-
-		// Keep checking for dead body/head conditions
-		self.think = monster_deadbody_check;
+		if (map_bodyflrcheck == TRUE) ent_floorcheck(self, FLOOR_TRACE_MONSTER);
+		self.think = monster_deadbody_check; // Keep checking for dead body/head conditions
 		self.nextthink = time + 0.1;	
 	}
 };
 
 // When a mosnter dies, it fires all of its targets with the current enemy as activator.
 void() monster_death_use = {
-	// fall to ground or stop swimming
-	if (self.flags & FL_FLY) self.flags = self.flags - FL_FLY;
-	if (self.flags & FL_SWIM) self.flags = self.flags - FL_SWIM;
+	SUB_RemoveFlags(self,FL_FLY); // fall to ground or stop swimming
+	SUB_RemoveFlags(self,FL_SWIM); 
 
 	// Always use a deathtarget if one defined
 	if (self.deathtarget != "") {
@@ -474,7 +471,7 @@ void(entity attacker, float damage) monster_pain_check = {
 	else if (attacker == world) self.pain_check = 1;
 	// Random chance to flinch and not ignore the pain (play sound only)
 	else if (random()* self.pain_flinch > damage ) self.pain_check = 3;
-	// DEFAULT  : pain animation + sound (last condition)
+	// DEFAULT  : pain animation + sound(last condition)
 	else self.pain_check = 1;
 };
 
@@ -582,7 +579,7 @@ void() monster_reset_runtime_attributes = {
 	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 
-	// Long time before first idle sound (except scorpions!)
+	// Long time before first idle sound(except scorpions!)
 	if (self.idletimer < 1) {
 		if (self.classtype == CT_MONSCORPION) self.idletimer = time + 0.1 + random();
 		else self.idletimer = time + 4 + (random() * 4);
@@ -1070,7 +1067,7 @@ void() monster_start = {
 	if (self.jump_flag < 0) self.jump_flag = LARGE_TIMER; // Check if jump function has been disabled?
 	if (!self.th_checkattack) self.th_checkattack = CheckAttack; // Default attack function and class group
 	if (self.th_melee) {
-		if (self.meleerange <= 0) self.meleerange = MONAI_MELEEKNIGHT;
+		if (self.meleerange <= 0) self.meleerange = 80;
 		if (self.meleerangez < 0) self.meleerangez = 0;
 	}
 	if (!self.classgroup) self.classgroup = CG_MONSTERS;

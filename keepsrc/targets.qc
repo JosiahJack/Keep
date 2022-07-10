@@ -77,10 +77,10 @@ void() trigger_relay_fire = { // [FUNCTION]
 			if (self.endstate > 0 && self.state != self.endstate) { // Is the current state the final position?
 				self.state = self.endstate;
 				if (self.state == TRIG_RELAYSW1) {
-					sound (self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
+					sound(self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
 					self.target = self.noise3;
 				} else {
-					sound (self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
+					sound(self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
 					self.target = self.noise4;
 				}
 
@@ -93,15 +93,15 @@ void() trigger_relay_fire = { // [FUNCTION]
 		// Setup repeat wait/delay timers and play trigger state sounds.  The noise1/noise2 are setup with empty sounds if not defined.
 		if (self.state == TRIG_RELAYSW1) {
 			self.nextthink = time + self.wait + (random() * self.delay);
-			sound (self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
+			sound(self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
 		} else {
 			self.nextthink = time + self.wait2 + (random() * self.delay2);
-			sound (self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
+			sound(self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
 		}
 		self.think = trigger_relay_fire; // Keep on looping
 	} else {
 		if (self.wait < 0) self.attack_finished = time + LARGE_TIMER; // Setup to trigger once?
-		if (self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play any trigger sounds
+		if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play any trigger sounds
 	}
 	
 	// Randomly pick between target/target2.  SUB_UseTargets will fire both target strings if found the random choices need to be stored elsewhere (noise3/4)
@@ -207,8 +207,8 @@ void() trigger_relay = { // [ENTITY]
 		self.nodebuginfo = TRUE; // Turn off extra debug info
 		if (self.noise1 == "") self.noise1 = SOUND_EMPTY; // Make sure sound files have default sound before precache
 		if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
-		precache_sound (self.noise1);
-		precache_sound (self.noise2);
+		precache_sound(self.noise1);
+		precache_sound(self.noise2);
 		if (self.wait < 0) self.wait = 0; // Can't have wait=-1 option, remove it
 		if (self.wait2 <= 0) self.wait2 = self.wait; // Duplicate wait/delay stuff if empty
 		if (self.delay2 <= 0) self.delay2 = self.delay;
@@ -300,7 +300,7 @@ void() trigger_counter_use = { // [FUNCTION]
 		else if ( !(self.spawnflags & TRIG_COUNTNOMESSAGE) ) centerprint(activator, "Sequence completed!");
 	}	
 	
-	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // If sound defined, play sound
+	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // If sound defined, play sound
 
 	// This is a big problem with the trigger_counter entity, it does not update
 	// the activator global variable and does not wake up enemies correctly.
@@ -770,7 +770,7 @@ void() trigger_clientmsg_use = { // [FUNCTION]
 	msg_entity = self;
 	WriteByte (MSG_ALL, SVC_CENTERPRINT); // Write message to all clients
 	WriteString (MSG_ALL, self.message);
-	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // If any sounds defined play them at entity source
+	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // If any sounds defined play them at entity source
 };
 
 // QUAKED trigger_clientmsg (0.5 0.5 0) (-8 -8 -16) (8 8 16) x
@@ -1072,7 +1072,7 @@ void() trig_explode_use = { // [FUNCTION]
 // targetname : trigger entity (works with entity state system)
 // dmg    : explosive radius damage (def=40, -1=no damage)
 // delay  : time delay to explosion (def=0s)
-// noise  : string name for explosion sound (def=weapons/r_exp3.wav)
+// noise  : string name for explosion sound(def=weapons/r_exp3.wav)
 // wait   : re-trigger explosions (def=-1 trigger once)
 // style  : 0=Explosion, 1=Plasma, 2=Poison, 3=Electric, 4=Burst (Smoke/Flame/Poison)
 // height : 0=Small, 1=Medium, 2=Large, -1=Random
@@ -1101,7 +1101,7 @@ void() trigger_explode = { // [ENTITY]
 		else if (self.style == 4) self.noise = SOUND_RESIST_ROCKET;
 		else self.noise = SOUND_REXP3;		// Default
 	}
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.spawnflags & TRIG_EXPLODEDUST) {
 		precache_model(MODEL_PROJ_SMOKE); // Precache smoke particles and set default movement
 		if (CheckZeroVector(self.angles)) self.angles_y = 360;

@@ -57,12 +57,12 @@ void() ambient_sound_setup = { // [FUNCTION]
 };
 
 void() ambientsound_trigger_start = { // [FUNCTION]
-	sound (self, CHAN_AUTO, self.noise, self.volume, self.distance);
+	sound(self, CHAN_AUTO, self.noise, self.volume, self.distance);
 };
 
 // QUAKED ambient_custom_loop (0.3 0.1 0.6) (-16 -16 -8) (16 16 8) x
 // -------- KEYS --------
-// volume : volume of sound (default 1, capped at 1)
+// volume : volume of sound(default 1, capped at 1)
 // noise : custom sound to play (looped)
 // -------- SPAWNFLAGS --------
 // -------- NOTES --------
@@ -74,7 +74,7 @@ void() ambient_custom_loop = { // [ENTITY]
 		self.noise = "ambience/wat_cave.wav";
 	}
 	
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 
 	// start right away if not triggered
@@ -97,7 +97,7 @@ void() fx_ambientsound =  { // [ENTITY], Re-direct
 
 void() ambient_comp_hum = { // [ENTITY]
 	self.noise = "ambience/comp1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
@@ -111,49 +111,49 @@ void() ambient_drip = { // [ENTITY]
 
 void() ambient_drone = { // [ENTITY]
 	self.noise = "ambience/drone6.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_flouro_buzz = { // [ENTITY]
 	self.noise = "ambience/buzz1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_light_buzz = { // [ENTITY]
 	self.noise = "ambience/fl_hum1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_suck_wind = { // [ENTITY]
 	self.noise = "ambience/suck1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_swamp1 = { // [ENTITY]
 	self.noise = "ambience/swamp1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_swamp2 = { // [ENTITY]
 	self.noise = "drake/ambience/swamp2.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_thunder = { // [ENTITY]
 	self.noise = "ambience/thunder1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
@@ -169,28 +169,28 @@ void() ambient_generalpurpose = { // [ENTITY]
 		return;
 	}
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1.0;
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	ambient_sound_setup();
 };
 
 // Travil MOD - Extra ambient sounds
 void() ambient_lavagurg = { // [ENTITY]
 	self.noise = "travail/ambience/lavagurg.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_hevifals = { // [ENTITY]
 	self.noise = "travail/ambience/hevifals.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_bublfals = { // [ENTITY]
 	self.noise = "custents/ambient/runwater.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
@@ -205,7 +205,7 @@ void() ambient_custom_stop = { // [FUNCTION]
 	if (self.estate & ESTATE_DISABLE) return; // Catch play once/disable setting separate
 	
 	// Check for OFF sound, else play silence to clear sound
-	if (self.noise1 != "") sound (self, self.impulse, self.noise1, self.volume, self.speed);
+	if (self.noise1 != "") sound(self, self.impulse, self.noise1, self.volume, self.speed);
 	else {
 		if (!self.waitmin2) StopSound(self,self.impulse); // If aflag is defined, do not cut off sound
 	}
@@ -222,11 +222,11 @@ void() ambient_custom_play = { // [FUNCTION]
 	
 	// Check for weather system?
 	if (self.check_weather == TRUE) {
-		if (query_weathersystem() == TRUE) sound (self, self.impulse, self.noise, self.volume, self.speed); // never has multiple sounds
+		if (query_weathersystem() == TRUE) sound(self, self.impulse, self.noise, self.volume, self.speed); // never has multiple sounds
 	} else {
 		// Check for multiple random sounds
-		if (self.noise2 != "" && random() < 0.5) sound (self, self.impulse, self.noise2, self.volume, self.speed);
-		else sound (self, self.impulse, self.noise, self.volume, self.speed);
+		if (self.noise2 != "" && random() < 0.5) sound(self, self.impulse, self.noise2, self.volume, self.speed);
+		else sound(self, self.impulse, self.noise, self.volume, self.speed);
 		
 		if (HasTargets(self)) SUB_UseTargets(); // If any targets defined, trigger them
 	}
@@ -269,19 +269,19 @@ void() ambient_custom_disable = { // [FUNCTION]
 	StopSound(self,self.impulse);
 };
 
-// QUAKED ambient_custom_sound (0.5 0.1 0.8) (-16 -16 -8) (16 16 8) x PLAYONCE x x x x STARTOFF x
+// QUAKED ambient_custom_sound(0.5 0.1 0.8) (-16 -16 -8) (16 16 8) x PLAYONCE x x x x STARTOFF x
 // -------- KEYS --------
 // targetname : trigger entity (works with entity state system)
 // target  : targets to trigger each time sound is played
-// volume  : volume of sound (default 1, capped at 1)
-// noise   : primary sound (ad171/ambience/windgust1a.wav)
-// noise1  : stop sound (ad171/ambience/switch_6off.wav)
-// noise2  : random sound (ad171/ambience/windgust1b.wav)
+// volume  : volume of sound(default 1, capped at 1)
+// noise   : primary sound(ad171/ambience/windgust1a.wav)
+// noise1  : stop sound(ad171/ambience/switch_6off.wav)
+// noise2  : random sound(ad171/ambience/windgust1b.wav)
 // wait    : random time between sounds (default 20, =-1 no random element)
 // delay   : minimum time between sounds (default 2)
 // waitmin : Starting time (waitmin + random() x waitmin, =-1 no delay)
 // waitmin2: 1 = Will not silence any playing sound if switching off
-// impulse : channel on which to play sound (0-7) (0 automatic is default)
+// impulse : channel on which to play sound(0-7) (0 automatic is default)
 // speed   : attenuation -1=no attenuation, 1=normal (default), 2=idle, 3=static, 4=quiet
 // -------- SPAWNFLAGS --------
 // PLAYONCE : When triggered plays once
@@ -297,9 +297,9 @@ void() ambient_custom_sound = { // [ENTITY]
 		remove(self);
 		return;
 	}
-	precache_sound (self.noise);
-	if (self.noise1 != "") precache_sound (self.noise1); // Is there an OFF sound defined (used for toggle sounds)
-	if (self.noise2 != "") precache_sound (self.noise2); // Is there any random alternative sounds
+	precache_sound(self.noise);
+	if (self.noise1 != "") precache_sound(self.noise1); // Is there an OFF sound defined (used for toggle sounds)
+	if (self.noise2 != "") precache_sound(self.noise2); // Is there any random alternative sounds
 	self.classtype = CT_SOUNDEMITTER;
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	if (self.wait == 0) self.wait = 20;
@@ -356,9 +356,9 @@ void() ambient_custom_rain = { // [ENTITY]
 };
 
 void() ambient_custom_rumble = { // [ENTITY]
-	precache_sound ("ad171/ambience/rumble1.wav");
-	precache_sound ("ad171/ambience/rumble2.wav");
-	precache_sound ("ad171/ambience/rumble3.wav");
+	precache_sound("ad171/ambience/rumble1.wav");
+	precache_sound("ad171/ambience/rumble2.wav");
+	precache_sound("ad171/ambience/rumble3.wav");
 	if (self.count < 0) self.count = random()*3; // Pick a random sound to start with	
 	if (self.count <= 1) {
 		self.noise = "ad171/ambience/rumble1.wav";
@@ -389,12 +389,12 @@ void() ambient_custom_rumble = { // [ENTITY]
 };
 
 void() ambient_custom_wind = { // [ENTITY]
-	precache_sound ("ad171/ambience/windgust1.wav");
-	precache_sound ("ad171/ambience/windgust2.wav");
-	precache_sound ("ad171/ambience/windgust3.wav");
-	precache_sound ("ad171/ambience/windgust4.wav");
-	precache_sound ("ad171/ambience/windgust5.wav");
-	precache_sound ("ad171/ambience/windgust6.wav");
+	precache_sound("ad171/ambience/windgust1.wav");
+	precache_sound("ad171/ambience/windgust2.wav");
+	precache_sound("ad171/ambience/windgust3.wav");
+	precache_sound("ad171/ambience/windgust4.wav");
+	precache_sound("ad171/ambience/windgust5.wav");
+	precache_sound("ad171/ambience/windgust6.wav");
 	if (self.count < 0) self.count = random()*6; // Pick a random sound to start with
 
 	// Setup sound wav names
@@ -449,10 +449,10 @@ void() ambient_custom_wood = { // [ENTITY]
 	// Always precache all sounds and then randomly pick one
 	// load/save games will always generate new random selection
 	// and that will produce cache errors everytime
-	precache_sound ("ad171/ambience/woodcreak2a.wav");
-	precache_sound ("ad171/ambience/woodcreak2b.wav");
-	precache_sound ("ad171/ambience/woodcreak2c.wav");
-	precache_sound ("ad171/ambience/woodcreak2d.wav");
+	precache_sound("ad171/ambience/woodcreak2a.wav");
+	precache_sound("ad171/ambience/woodcreak2b.wav");
+	precache_sound("ad171/ambience/woodcreak2c.wav");
+	precache_sound("ad171/ambience/woodcreak2d.wav");
 
 	// Pick a random sound to start with
 	if (self.count < 0) self.count = random()*4;
@@ -505,56 +505,56 @@ void() ambient_custom_chime = { // [ENTITY]
 
 void() ambient_drain = { // [ENTITY]
 	self.noise = "nehahra/ambience/drain.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN)self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_eerie = { // [ENTITY]
 	self.noise = "nehahra/ambience/rych1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_factory = { // [ENTITY]
 	self.noise = "nehahra/ambience/factory.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume <= 0) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_fan_blowing = { // [ENTITY]
 	self.noise = "nehahra/ambience/fanblow.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_flies = { // [ENTITY]
 	self.noise = "nehahra/ambience/bugs.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_flys = { // [ENTITY]
 	self.noise = "drake/misc/flys.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_grinder = { // [ENTITY]
 	self.noise = "quoth/ambience/grinder.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_highwind = { // [ENTITY]
 	self.noise = "quoth/necros/highwind.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
@@ -568,20 +568,20 @@ void() ambient_humming = { // [ENTITY]
 		self.noise = "hipnotic/ambience/humming.wav";
 		if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	}
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	ambient_sound_setup();
 };
 
 void() ambient_hum1 = { // [ENTITY]
 	self.noise = "ambience/hum1.wav";
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	ambient_sound_setup();
 };
 
 void() ambient_lapping = { // [ENTITY]
 	self.noise = "quoth/necros/wat_amb.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
@@ -589,7 +589,7 @@ void() ambient_lapping = { // [ENTITY]
 
 void() ambient_lapping2 = { // [ENTITY]
 	self.noise = "ambience/wat_cave.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
@@ -597,14 +597,14 @@ void() ambient_lapping2 = { // [ENTITY]
 
 void() ambient_machines = { // [ENTITY]
 	self.noise = "nehahra/ambience/begths.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_nehum = { // [ENTITY]
 	self.noise = "nehahra/ambience/filt.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
@@ -614,21 +614,21 @@ void() ambient_rain = { // [ENTITY]
 	if (self.count == 1) self.noise = "ambience/rain3.wav"; // Steady Rain
 	if (self.count == 2) self.noise = "zerstorer/ambience/rain.wav"; // Heavy Rain
 	if (self.count > 2 || self.count < 0) self.noise = "ambience/rain3.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_riftpower = { // [ENTITY]
 	self.noise = "hipnotic/ambience/riftpowr.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_running_lava = { // [ENTITY]
 	self.noise = "ambience/runlava.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
@@ -637,21 +637,21 @@ void() ambient_running_water = { ambient_bublfals(); };  // [ENTITY], Re-direct 
 
 void() ambient_rushing = { // [ENTITY]
 	self.noise = "drake/ambience/rushing.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_sizzle = { // [ENTITY]
 	self.noise = "nehahra/ambience/amsizl.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_stargate_hum = { // [ENTITY]
 	self.noise = "necros/sgatehum.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
@@ -659,42 +659,42 @@ void() ambient_stargate_hum = { // [ENTITY]
 
 void() ambient_swamp3 = { // [ENTITY]
 	self.noise = "nehahra/ambience/swamp3.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_teeth = { // [ENTITY]
 	self.noise = "quoth/ambience/teeth.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_teleport = { // [ENTITY]
 	self.noise = "ambience/hum1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_thrum = { // [ENTITY]
 	self.noise = "quoth/ambience/thrum.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_waterfall = { // [ENTITY]
 	self.noise = "drake/ambience/waterfal.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
 void() ambient_water_fall = { // [ENTITY]
 	self.noise = "ne_ruins/ambience/wat_fall.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
@@ -702,14 +702,14 @@ void() ambient_water_fall = { // [ENTITY]
 
 void() ambient_whnoise = { // [ENTITY]
 	self.noise = "nehahra/ambience/whn.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_zzxzz = { // [ENTITY]
 	self.noise = "nehahra/ambience/flash.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };

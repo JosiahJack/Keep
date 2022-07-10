@@ -481,7 +481,7 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		idlereverse;		// Reverse direction for idle animation
 .float		idletimer;			// Idle sound timer (next time to check)
 .float		idleframe;			// Used for multi functional monster setups
-.float		idlemoreoften;		// Chance of more idle sound (def=random)
+.float		idlemoreoften;		// Chance of more idle sound(def=random)
 .string		idle_sound;			// Idle sound wav file
 .string		idle_sound2;		// Alternative Idle sound wav file
 .string		idle_soundcom;		// Combat Idle sound wav file
@@ -1087,9 +1087,6 @@ float DAMAGE_LOSTSOUL = 40;			// Explosive damage from lost soul
 float DAMAGE_LOSTCHARGE = 10;		// Charging damage for lost soul
 
 // Generic melee/jump attack distances
-float MONAI_MELEEFRONT = 70;		// Front attacks reach further (original = 60)
-float MONAI_MELEESIDE = 60;			// Side attacks less distance
-float MONAI_MELEEZAXIS = 48;		// Z axis range for melee attack
 float MONAI_MELEEZTALL = 64;		// Tall monster Z axis melee attack
 float MONAI_CHARGEZAXIS = 20;		// Maximum height for knight charge attack
 float MONAI_RANGESUMMON = 128;		// High close to block summoning minion
@@ -1390,7 +1387,6 @@ string SOUND_HEAL15 = "items/r_item1.wav";		// pickup sound for rotten health
 string SOUND_HEAL25 = "items/health1.wav";		// large health
 string SOUND_HEAL100 = "items/r_item2.wav";		// mega health
 string SOUND_RESPAWN = "items/itembk2.wav";		// item respawn sound
-string SOUND_TALK = "misc/talk.wav";			// Activate/message sound
 string SOUND_REXP3 = "weapons/r_exp3.wav";		// Original explode sound
 string SOUND_PLASMA_LOAD = "ad171/enforcer/elim_pg_load.wav";	// Plasma Load
 string SOUND_PLASMA_FIRE = "ad171/weapons/plasma_fire.wav";	// Plasma Fire

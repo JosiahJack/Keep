@@ -287,32 +287,32 @@ void() misc_splash = { // [ENTITY]
 void() light_globecolor = { // [ENTITY]
    if ( (self.spawnflags & FLAG_REDORANGE) ) {
       precache_model ("progs/s_light2.spr");
-      setmodel (self,"progs/s_light2.spr");
+      setmodel(self,"progs/s_light2.spr");
       makestatic (self);
    }
    if ( (self.spawnflags & FLAG_YELLOW) ) {
       precache_model ("progs/s_light3.spr");
-      setmodel (self,"progs/s_light3.spr");
+      setmodel(self,"progs/s_light3.spr");
       makestatic (self);
    }
    if ( (self.spawnflags & FLAG_BLUE) ) {
       precache_model ("progs/s_light4.spr");
-      setmodel (self,"progs/s_light4.spr");
+      setmodel(self,"progs/s_light4.spr");
       makestatic (self);
    }
    if ( (self.spawnflags & FLAG_WHITE) ) {
       precache_model ("progs/s_light5.spr");
-      setmodel (self,"progs/s_light5.spr");
+      setmodel(self,"progs/s_light5.spr");
       makestatic (self);
    }
    if ( (self.spawnflags & FLAG_DARKRED) ) {
       precache_model ("progs/s_light6.spr");
-      setmodel (self,"progs/s_light6.spr");
+      setmodel(self,"progs/s_light6.spr");
       makestatic (self);
    }
    if ( (self.spawnflags & FALSE) ) {
       precache_model ("progs/s_light.spr");
-      setmodel (self,"progs/s_light.spr");
+      setmodel(self,"progs/s_light.spr");
       makestatic (self);
    }
 };
@@ -352,7 +352,7 @@ void() misc_fan_disable = { // [FUNCTION]
 };
 
 void() misc_fan_reset = { // [FUNCTION]
-	setmodel (self,self.mdl);
+	setmodel(self,self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.velocity = '0 0 0';
 	setorigin(self, self.oldorigin);
@@ -370,7 +370,7 @@ void() misc_fan_off = { // [FUNCTION]
 void() misc_fan = { // [ENTITY]
 	self.mdl = "progs/madfox/fanhouse.mdl";
 	precache_model (self.mdl);
-	setmodel (self,self.mdl);
+	setmodel(self,self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin(self, self.origin);
 	self.solid = SOLID_NOT;

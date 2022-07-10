@@ -115,7 +115,6 @@ void()	dprince_standB22= [	$standB22,	dprince_standB23] { ai_stand(); };
 void()	dprince_standB23= [	$standB23,	dprince_standB24] { ai_stand(); };
 void()	dprince_standB24= [	$standB24,	dprince_stand1	] { ai_stand(); };
 
-//----------------------------------------------------------------------
 void()	dprince_standC1	= [	$standC1,	dprince_standC2	] { ai_stand(); };
 void()	dprince_standC2	= [	$standC2,	dprince_standC3	] { ai_stand(); };
 void()	dprince_standC3	= [	$standC3,	dprince_standC4	] { ai_stand(); };
@@ -141,7 +140,6 @@ void()	dprince_standC22= [	$standC22,	dprince_standC23] { ai_stand(); };
 void()	dprince_standC23= [	$standC23,	dprince_standC24] { ai_stand(); };
 void()	dprince_standC24= [	$standC24,	dprince_stand1	] { ai_stand(); };
 
-//----------------------------------------------------------------------
 void()	dprince_standD1	= [	$standD1,	dprince_standD2	] { ai_stand(); };
 void()	dprince_standD2	= [	$standD2,	dprince_standD3	] { ai_stand(); };
 void()	dprince_standD3	= [	$standD3,	dprince_standD4	] { ai_stand(); };
@@ -163,8 +161,7 @@ void()	dprince_standD18= [	$standD18,	dprince_standD19] { ai_stand(); };
 void()	dprince_standD19= [	$standD19,	dprince_standD20] { ai_stand(); };
 void()	dprince_standD20= [	$standD20,	dprince_stand1	] { ai_stand(); };
 
-//----------------------------------------------------------------------
-void()	dprince_stand1	= [	$stand1,	dprince_stand2	] { monster_idle_sound();ai_stand(); };
+void()	dprince_stand1	= [	$stand1,	dprince_stand2	] { monster_idle_sound(); ai_stand(); };
 void()	dprince_stand2	= [	$stand2,	dprince_stand3	] { ai_stand(); };
 void()	dprince_stand3	= [	$stand3,	dprince_stand4	] { ai_stand(); };
 void()	dprince_stand4	= [	$stand4,	dprince_stand5	] { ai_stand(); };
@@ -190,11 +187,10 @@ void()	dprince_stand12	= [	$stand12,	dprince_stand1	] {
 	}
 };
 
-//===========================================================================
 void()	dprince_walk1	= [	$walk1,		dprince_walk2	] {
 	self.idlebusy = FALSE; monster_idle_sound(); ai_walk(2); };
 void()	dprince_walk2	= [	$walk2,		dprince_walk3	] {
-	monster_footstep(FALSE);ai_walk(5); };
+	monster_footstep(FALSE); ai_walk(5); };
 void()	dprince_walk3	= [	$walk3,		dprince_walk4	] { ai_walk(5); };
 void()	dprince_walk4	= [	$walk4,		dprince_walk5	] { ai_walk(4); };
 void()	dprince_walk5	= [	$walk5,		dprince_walk6	] { ai_walk(4); };
@@ -209,7 +205,6 @@ void()	dprince_walk12	= [	$walk12,	dprince_walk13	] { ai_walk(4); };
 void()	dprince_walk13	= [	$walk13,	dprince_walk14	] { ai_walk(6); };
 void()	dprince_walk14	= [	$walk14,	dprince_walk1	] { ai_walk(2); };
 
-//===========================================================================
 void()	dprince_run1	= [	$run1,	dprince_run2	] { monster_idle_sound(); 
 	self.idlebusy = FALSE; ai_run (20); CheckForCharge(); };
 void()	dprince_run2	= [	$run2,	dprince_run3	] { monster_footstep(FALSE); ai_run(25); };
@@ -218,15 +213,13 @@ void()	dprince_run4	= [	$run4,	dprince_run5	] { ai_run(14); };
 void()	dprince_run5	= [	$run5,	dprince_run6	] { monster_footstep(FALSE); ai_run(25); };
 void()	dprince_run6	= [	$run6,	dprince_run1	] { ai_run(13); };
 
-//===========================================================================
 // Charging attack A - swinging sword left to right infront
 // Hell Knight - 16 frames / Death Knight - 12 frames
 // Death Knight is faster (-4 frames will cycle damage frames quicker)
 // Damage Frames - Hell Knight (6-11, Total 6) Death Knight (6-10, Total 5)
-
 void()	dprince_char_a1	= [	$char_a1,	dprince_char_a2	] { ai_charge(20); SwordSwipeSound(); };
-void()	dprince_char_a2	= [	$char_a2,	dprince_char_a3	] { monster_footstep(FALSE); ai_charge(25);ai_melee(); };
-void()	dprince_char_a3	= [	$char_a3,	dprince_char_a4	] { ai_charge(18);ai_melee(); };
+void()	dprince_char_a2	= [	$char_a2,	dprince_char_a3	] { monster_footstep(FALSE); ai_charge(25); ai_melee(); };
+void()	dprince_char_a3	= [	$char_a3,	dprince_char_a4	] { ai_charge(18); ai_melee(); };
 void()	dprince_char_a4	= [	$char_a4,	dprince_char_a5	] { ai_charge(16); };
 void()	dprince_char_a5	= [	$char_a5,	dprince_char_a6	] { monster_footstep(FALSE); ai_charge(14); };
 void()	dprince_char_a6	= [	$char_a6,	dprince_char_a7	] { ai_charge(20); ai_melee(); };
@@ -237,9 +230,7 @@ void()	dprince_char_a10= [	$char_a10,	dprince_char_a11] { ai_charge(20); ai_mele
 void()	dprince_char_a11= [	$char_a11,	dprince_char_a12] { monster_footstep(FALSE); ai_charge(18); };
 void()	dprince_char_a12= [	$char_a12,	dprince_run1	] { ai_charge(16); };
 
-//----------------------------------------------------------------------
 // Identical frame set (Hell Knight / Death Knight)
-
 void()	dprince_char_b1	= [	$char_b1,	dprince_char_b2	] {
 	CheckContinueCharge(); ai_charge(23); ai_melee(); SwordSwipeSound(); };
 void()	dprince_char_b2	= [	$char_b2,	dprince_char_b3	] { monster_footstep(FALSE); ai_charge(17); ai_melee(); };
@@ -248,11 +239,9 @@ void()	dprince_char_b4	= [	$char_b4,	dprince_char_b5	] { ai_charge(22); ai_melee
 void()	dprince_char_b5	= [	$char_b5,	dprince_char_b6	] { monster_footstep(FALSE); ai_charge(18); ai_melee(); };
 void()	dprince_char_b6	= [	$char_b6,	dprince_char_b1	] { ai_charge(8); ai_melee(); };
 
-//===========================================================================
 // Melee Attack 1 - Slice (one hand slashing run attack)
 // Hell Knight - 10 frames / Death Knight - 15 frames (skipped 1, 3, 12, 15)
 // Death Knight - trimmed frames so melee attack 1 and 2 the same
-
 void()	dprince_slice1	= [	$slice2,	dprince_slice2	] { ai_charge(9); };
 void()	dprince_slice2	= [	$slice4,	dprince_slice3	] { monster_footstep(FALSE); ai_charge(6); };
 void()	dprince_slice3	= [	$slice5,	dprince_slice4	] { ai_charge(13); };
@@ -265,27 +254,23 @@ void()	dprince_slice9	= [	$slice11,	dprince_slice10	] { ai_melee(); };
 void()	dprince_slice10	= [	$slice13,	dprince_slice11	] { monster_footstep(FALSE); ai_charge(0); };
 void()	dprince_slice11	= [	$slice14,	dprince_run1	] { ai_charge(3); };
 
-//----------------------------------------------------------------------
 // Melee Attack 2 - Smash (chop overhead to ground)
 // Hell Knight - 11 frames / Death Knight - 15 frames (skipped (1, 11, 14, 15)
 // Death Knight frames trimmed down to match Hell Knight (damage ratio)
-
 void()	dprince_smash1	= [	$smash2,	dprince_smash2	] { ai_charge(1); };
 void()	dprince_smash2	= [	$smash3,	dprince_smash3	] { ai_charge(13); };
 void()	dprince_smash3	= [	$smash4,	dprince_smash4	] { monster_footstep(FALSE); ai_charge(9); };
 void()	dprince_smash4	= [	$smash5,	dprince_smash5	] { ai_charge(11);SwordSwipeSound(); };
 void()	dprince_smash5	= [	$smash6,	dprince_smash6	] { ai_charge(10); };
 void()	dprince_smash6	= [	$smash7,	dprince_smash7	] { ai_charge(7); self.meleecontact = TRUE; ai_meleesmash(40); };
-void()	dprince_smash7	= [	$smash8,	dprince_smash8	] { monster_footstep(FALSE);ai_charge(12);ai_melee(); };
-void()	dprince_smash8	= [	$smash9,	dprince_smash9	] { ai_charge(2);self.meleecontact = FALSE;ai_melee(); };
-void()	dprince_smash9	= [	$smash10,	dprince_smash10	] { ai_charge(3);ai_melee(); };
-void()	dprince_smash10	= [	$smash12,	dprince_smash11	] { ai_charge(0);ai_melee(); };
+void()	dprince_smash7	= [	$smash8,	dprince_smash8	] { monster_footstep(FALSE); ai_charge(12); ai_melee(); };
+void()	dprince_smash8	= [	$smash9,	dprince_smash9	] { ai_charge(2); self.meleecontact = FALSE; ai_melee(); };
+void()	dprince_smash9	= [	$smash10,	dprince_smash10	] { ai_charge(3); ai_melee(); };
+void()	dprince_smash10	= [	$smash12,	dprince_smash11	] { ai_charge(0); ai_melee(); };
 void()	dprince_smash11	= [	$smash13,	dprince_run1	] { ai_charge(0); };
 
-//----------------------------------------------------------------------
 // Melee Attack 3 - W_Attack (two handed slashing attack)
 // Identical frame set (Hell Knight / Death Knight)
-
 void()	dprince_watk1	= [	$w_attack1,	dprince_watk2	] { ai_charge(2); };
 void()	dprince_watk2	= [	$w_attack2,	dprince_watk3	] { monster_footstep(FALSE); ai_charge(0); };
 void()	dprince_watk3	= [	$w_attack3,	dprince_watk4	] { ai_charge(0); };
@@ -339,7 +324,7 @@ void() dprince_rocket = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;	
-	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 
 	// Re-use spike projectile speeds
 	// Maximum speed, initial speed set in launch_projectile
@@ -427,7 +412,7 @@ void(entity inflictor, entity attacker, float damage) dprince_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dprince_painA1();	// classic, body recoil
@@ -446,13 +431,13 @@ void(entity inflictor, entity attacker, float damage) dprince_pain = {
 };
 
 void()	dprince_die1	= [	$death1,	dprince_die2	] { ai_forward(10); };
-void()	dprince_die2	= [	$death2,	dprince_die3	] { monster_check_gib();ai_forward(8); };
+void()	dprince_die2	= [	$death2,	dprince_die3	] { monster_check_gib(); ai_forward(8); };
 void()	dprince_die3	= [	$death3,	dprince_die4	] { monster_check_gib();
 	self.solid = SOLID_NOT; ai_forward(7); };
 void()	dprince_die4	= [	$death4,	dprince_die5	] {};
 void()	dprince_die5	= [	$death5,	dprince_die6	] {};
 void()	dprince_die6	= [	$death6,	dprince_die7	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
 void()	dprince_die7	= [	$death7,	dprince_die8	] {};
 void()	dprince_die8	= [	$death8,	dprince_die9	] { ai_forward(10); };
 void()	dprince_die9	= [	$death9,	dprince_die10	] { ai_forward(11); };
@@ -460,7 +445,6 @@ void()	dprince_die10	= [	$death10,	dprince_die11	] {};
 void()	dprince_die11	= [	$death11,	dprince_die12	] { monster_death_postcheck(); };
 void()	dprince_die12	= [	$death12,	dprince_die12	] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void()	dprince_dieb1	= [	$deathb1,	dprince_dieb2	] {};
 void()	dprince_dieb2	= [	$deathb2,	dprince_dieb3	] { monster_check_gib(); };
 void()	dprince_dieb3	= [	$deathb3,	dprince_dieb4	] { monster_check_gib();
@@ -471,7 +455,7 @@ void()	dprince_dieb6	= [	$deathb6,	dprince_dieb7	] {};
 void()	dprince_dieb7	= [	$deathb7,	dprince_dieb8	] {};
 void()	dprince_dieb8	= [	$deathb8,	dprince_dieb9	] {};
 void()	dprince_dieb9	= [	$deathb9,	dprince_dieb10	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
 void()	dprince_dieb10	= [	$deathb10,	dprince_dieb11	] {};
 void()	dprince_dieb11	= [	$deathb11,	dprince_dieb12	] {};
 void()	dprince_dieb12	= [	$deathb12,	dprince_dieb13	] {};
@@ -489,7 +473,7 @@ void() dprince_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		if (random() > 0.5) dprince_die1();
 		else dprince_dieb1();
 	}
@@ -505,13 +489,13 @@ void() monster_dprince_precache = {
 	precache_model (MODEL_PROJ_DPRINCE2R);
 	precache_model (MODEL_PROJ_DPRINCE1B);	
 	precache_model (MODEL_PROJ_DPRINCE2B);
-	precache_sound ("hknight/idle.wav");
-	precache_sound ("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
-	precache_sound ("hknight/hit.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-	precache_sound ("hknight/sight1.wav");
-	precache_sound ("hknight/pain1.wav");
-	precache_sound ("hknight/death1.wav");
+	precache_sound("hknight/idle.wav");
+	precache_sound("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
+	precache_sound("hknight/hit.wav");
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound("hknight/sight1.wav");
+	precache_sound("hknight/pain1.wav");
+	precache_sound("hknight/death1.wav");
 };
 
 // QUAKED monster_dprince (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -559,7 +543,7 @@ void() monster_dprince = {
 	self.poisonous = FALSE;				// No Poison version
 	self.no_liquiddmg = TRUE;			// Immune to slime/lava
 	self.meleecontact = FALSE;			// Smash contact
-	self.meleerange = MONAI_MELEEFRONT;	// Smash attack
+	self.meleerange = 70;	// Smash attack
 	self.attack_offset = '20 0 8';		// Middle of body (id location)
 	self.attack_count = 6;				// Default floor projectiles
 	self.deathstring = " was annihilated by a Dark Prince\n";

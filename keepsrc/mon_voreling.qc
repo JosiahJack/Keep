@@ -57,7 +57,7 @@ $frame death1 death2 death3 death4 death5 death6 // fall over and die
 $frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 // body flies up and then back to the ground
 $frame base1 base2 // Not used, modelling templates
 
-void()	voreling_idle1	= [	$idle1,	voreling_idle2	] { monster_idle_sound();ai_stand(); };
+void()	voreling_idle1	= [	$idle1,	voreling_idle2	] { monster_idle_sound(); ai_stand(); };
 void()	voreling_idle2	= [	$idle2,	voreling_idle3	] { ai_stand(); };
 void()	voreling_idle3	= [	$idle3,	voreling_idle4	] { ai_stand(); };
 void()	voreling_idle4	= [	$idle4,	voreling_idle5	] { ai_stand(); };
@@ -71,7 +71,7 @@ void()	voreling_idle11	= [	$idle11,voreling_idle12	] { ai_stand(); };
 void()	voreling_idle12	= [	$idle12,voreling_idle13	] { ai_stand(); };
 void()	voreling_idle13	= [	$idle13,voreling_idle1	] { ai_stand(); };
 
-void()	voreling_walk1	= [	$walk1,	voreling_walk2	] { monster_idle_sound();ai_walk(4); };
+void()	voreling_walk1	= [	$walk1,	voreling_walk2	] { monster_idle_sound(); ai_walk(4); };
 void()	voreling_walk2	= [	$walk2,	voreling_walk3	] { monster_footstep(FALSE); ai_walk(3); };
 void()	voreling_walk3	= [	$walk3,	voreling_walk4	] { ai_walk(4); };
 void()	voreling_walk4	= [	$walk4,	voreling_walk5	] { ai_walk(5); };
@@ -159,7 +159,7 @@ void(float sideang) voreling_spitacid = {
 		
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (sideang < 0) sound (self,CHAN_WEAPON,snd,1,ATTN_NORM);
+	if (sideang < 0) sound(self,CHAN_WEAPON,snd,1,ATTN_NORM);
 	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
@@ -173,9 +173,9 @@ void(float sideang) voreling_spitacid = {
 	launch_projectile(org,dir,avel,projtype,1);
 };
 
-void()	voreling_spit1 = [$pain1, voreling_spit2 ] { ai_face();self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_VORELING); };
-void()	voreling_spit2 = [$pain2, voreling_spit3 ] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
-void()	voreling_spit3 = [$bite1, voreling_spit4 ] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
+void()	voreling_spit1 = [$pain1, voreling_spit2 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_VORELING); };
+void()	voreling_spit2 = [$pain2, voreling_spit3 ] { ai_face(); self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
+void()	voreling_spit3 = [$bite1, voreling_spit4 ] { ai_face(); self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_VORELING); };
 void()	voreling_spit4 = [$bite2, voreling_spit5 ] { voreling_spitacid(-0.1); };
 void()	voreling_spit5 = [$bite3, voreling_spit6 ] { voreling_spitacid(0); };
 void()	voreling_spit6 = [$bite4, voreling_spit7 ] { voreling_spitacid(0.1); };
@@ -290,7 +290,7 @@ void() voreling_leap9 = [$jump1, voreling_run1	] { ai_resetangles(); };
 
 // CEILING VORELINGS - Idle/Drop/Touch/Land functions
 
-void()	voreling_idleup1 = [$idleup1, voreling_idleup2] { monster_idle_sound();ai_stand(); };
+void()	voreling_idleup1 = [$idleup1, voreling_idleup2] { monster_idle_sound(); ai_stand(); };
 void()	voreling_idleup2 = [$idleup2, voreling_idleup3] { ai_stand(); };
 void()	voreling_idleup3 = [$idleup3, voreling_idleup4] { ai_stand(); };
 void()	voreling_idleup4 = [$idleup4, voreling_idleup5] { ai_stand(); };
@@ -302,11 +302,10 @@ void() voreling_droptouch = {
 	if (!checkbottom(self)) {
 		// Is the voreling standing on something?
 		if (self.flags & FL_ONGROUND) {
-			self.flags = self.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self,FL_ONGROUND);
 			self.origin_z = self.origin_z + 8;
 			setorigin(self, self.origin);	// raise up
 			self.attack_timer = time + 1;	// reset timer
-			
 			makevectors(self.angles);
 			self.velocity = v_forward * 100 + '0 0 200';
 		}
@@ -425,7 +424,7 @@ void(entity inflictor, entity attacker, float damage) voreling_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1) voreling_pain1();
@@ -440,14 +439,14 @@ void(entity inflictor, entity attacker, float damage) voreling_pain = {
 
 void() voreling_die1 = [	$death1, voreling_die2	] {};
 void() voreling_die2 = [	$death2, voreling_die3	] { monster_check_gib(); };
-void() voreling_die3 = [	$death3, voreling_die4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void() voreling_die3 = [	$death3, voreling_die4	] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() voreling_die4 = [	$death4, voreling_die5	] {};
 void() voreling_die5 = [	$death5, voreling_die6	] { monster_death_postcheck(); };
 void() voreling_die6 = [	$death6, voreling_die6	] { monster_deadbody_check(); };
 
 void() voreling_dieB1 = [	$deathB1, voreling_dieB2	] {};
 void() voreling_dieB2 = [	$deathB2, voreling_dieB3	] { monster_check_gib(); };
-void() voreling_dieB3 = [	$deathB3, voreling_dieB4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void() voreling_dieB3 = [	$deathB3, voreling_dieB4	] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() voreling_dieB4 = [	$deathB4, voreling_dieB5	] {};
 void() voreling_dieB5 = [	$deathB5, voreling_dieB6	] {};
 void() voreling_dieB6 = [	$deathB6, voreling_dieB7	] { monster_death_postcheck(); };
@@ -458,7 +457,7 @@ void() voreling_die = {
 	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE; // Has the voreling died while on the ceiling?
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) { // regular death
-		sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
 		if (random() < 0.6) voreling_die1();
 		else voreling_dieB1();
 	}
@@ -479,7 +478,7 @@ void() monster_voreling_precache = {
 	precache_sound("quoth/voreling/bite.wav");
 	precache_sound("ad171/voreling/attacktear.wav");
 	precache_sound("quoth/voreling/land.wav");
-	precache_sound ("quoth/voreling/sight.wav");
+	precache_sound("quoth/voreling/sight.wav");
 };
 
 void() monster_swampling_precache = {
@@ -563,7 +562,7 @@ void() setup_voreling = { // [ENTITY]
 	if (self.deathstring == "") self.deathstring = " was nibbled by a Voreling\n";
 	self.th_checkattack = VorelingCheckAttack;
 	self.meleerange = MONAI_MELEEVORELING;
-	self.meleerangez = MONAI_MELEEZAXIS;
+	self.meleerangez = 48;
 	self.th_pain = voreling_pain;
 	self.th_die = voreling_die;
 	if (!self.classtype) self.classtype = CT_MONVORELING;

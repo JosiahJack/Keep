@@ -391,9 +391,9 @@ void() path_corner_touch = {
 	if (other.enemy) return;					// In combat, no time to follow paths
 	if (other.movetarget != self) return;		// Suppose to follow this corner?
 
-	// If ogre, play chainsaw drag sound (50% of the time)
+	// If ogre, play chainsaw drag sound(50% of the time)
 	if (other.classtype == CT_MONOGRE || other.classtype == CT_MONHOGRE) {
-		if (random() > 0.5) sound (other, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+		if (random() > 0.5) sound(other, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 	}
 
 	// Fire any event targets (activator = monster)
@@ -447,12 +447,10 @@ void() path_corner_touch = {
 			other.nextthink = time + 0.05;
 		} else { // no pause, turn and keep walking towards next goal
 			if (other.goalentity.classtype == CT_PATHCORNER && other.goalentity.spawnflags & PATHC_INSTANT && other.goalentity.movetarget) {
-				//if (!SUB_BBoxInOccupied(other.bbmins, other.bbmaxs, other.goalentity.origin)) {
-					setorigin(other,other.goalentity.origin + '0 0 24');
-					other.angles_y = vectoyaw(other.goalentity.origin - other.goalentity.movetarget.origin);
-					other.ideal_yaw = vectoyaw(other.goalentity.movetarget.origin - other.origin);
-					force_retouch = 2;
-				//}
+				setorigin(other,other.goalentity.origin + '0 0 24');
+				other.angles_y = vectoyaw(other.goalentity.origin - other.goalentity.movetarget.origin);
+				other.ideal_yaw = vectoyaw(other.goalentity.movetarget.origin - other.origin);
+				force_retouch = 2;
 			} else other.ideal_yaw = vectoyaw(other.goalentity.origin - other.origin);
 			other.pausetime = 0;
 		}

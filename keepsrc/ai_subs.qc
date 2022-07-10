@@ -365,11 +365,12 @@ float(float attackdist, float attackzaxis) ai_checkmelee = {
 	local vector spot1, spot2;
 	local float delta, zdiff;
 	
+	if (self.health < 1) return FALSE;
 	if (!self.enemy) return FALSE;
 	if (self.enemy.health < 1) return FALSE;
 
 	// Setup default
-	if (attackzaxis <= 0) attackzaxis = MONAI_MELEEZAXIS;
+	if (attackzaxis <= 0) attackzaxis = 48;
 	
 	// Calculate distance and z axis difference seperate
 	spot1 = SUB_orgEnemyTarget();
@@ -379,7 +380,7 @@ float(float attackdist, float attackzaxis) ai_checkmelee = {
 	delta = vlen(spot1 - spot2);		// Calculate vector distance
 
 	// Is the enemy too far away and the zaxis is wrong (too low/high)
-	if (delta <= attackdist && zdiff <= MONAI_MELEEZAXIS) return TRUE;
+	if (delta <= attackdist && zdiff <= attackzaxis) return TRUE;
 	else return FALSE;
 };
 
@@ -389,7 +390,7 @@ void() ai_melee = {
 
 	if (!self.enemy) return;			// removed before stroke
 	ai_damagebreakable(10);				// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEEFRONT,FALSE)) return;	// Too far away
+	if (!ai_checkmelee(70,0)) return;	// Too far away
 
 	// Can the target bleed? - no blood/damage, quick exit
 	// This candamage test not in origina id code (sync'd to melee_side)
@@ -411,7 +412,7 @@ void() ai_melee = {
 	// This is trigger_once per melee combat swing
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		if (self.meleehitsound != "") sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		if (self.meleehitsound != "") sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
 	}
 };
 
@@ -450,7 +451,7 @@ void(float dmg_multiplier) ai_meleesmash = {
 	// This is trigger_once per melee combat swing
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		if (self.meleehitsound) sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		if (self.meleehitsound) sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
 	}
 };
 
@@ -466,7 +467,7 @@ void() ai_melee_side = {
 	if (!self.enemy) return;	// removed before stroke
 	ai_damagebreakable(10);		// Damage any breakables
 	ai_charge_side();					// move (20 units) to the side of enemy
-	if (!ai_checkmelee(MONAI_MELEESIDE,FALSE)) return;	// Too far away
+	if (!ai_checkmelee(60,FALSE)) return;	// Too far away, front is 70 here.
 
 	// Can the target bleed? - no blood/damage, quick exit
 	if (!CanDamage (self.enemy, self)) return;
@@ -483,7 +484,7 @@ void() ai_melee_side = {
 	// No check if meleehitsound is defined or not
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
 	}
 };
 
@@ -642,7 +643,7 @@ float(float dist) ai_up = {
         temp_goal.origin_z = self.origin_z - 30 + dist;     // Going up.
 	}
 
-    setorigin (temp_goal, temp_goal.origin);
+    setorigin(temp_goal, temp_goal.origin);
     spot = self.origin;
     swap = self.enemy;
     self.enemy = temp_goal;
@@ -657,16 +658,16 @@ float(float dist) ai_up = {
             box.enemy       = self.enemy;
             box.owner       = self;     // Pass through monster.
             setsize (box, self.mins, self.maxs);
-            setorigin (box, self.origin);
+            setorigin(box, self.origin);
             os = self;
             self = box;
             if (walkmove (self.angles_y, 0)) { // Dummy moved, now move the monster precisely.
                 if (self.origin_z > self.oldorigin_z) { // Going up.
                     os.origin_z = os.origin_z + dist;
-                    setorigin (os, os.origin);
+                    setorigin(os, os.origin);
                 } else if (self.origin_z < self.oldorigin_z) { // Going down.
                     os.origin_z = os.origin_z - dist;
-                    setorigin (os, os.origin);
+                    setorigin(os, os.origin);
                 }
             }
             remove (box);
@@ -784,15 +785,14 @@ void(entity destEnt, float trackSpeed) ai_track = {
 void(float dist) ai_run;
 void(float dist) ai_walk;
 
-// Only used by Quoth Polyp
-void(float dist) ai_walkfly = {
+void(float dist, void(float dist) th_think) ai_runwalkfly = {
 	local vector oldorg;
 	local vector reqvel;
 	local float d;
 	
 	oldorg = self.origin;
 	self.movetype = MOVETYPE_STEP;
-	ai_walk(dist);
+	th_think(dist);
 	d = vlen(self.origin - oldorg);
 	self.velocity = VEC_ORIGIN;
 	if (d <= dist + 5) {
@@ -803,23 +803,14 @@ void(float dist) ai_walkfly = {
 	}
 };
 
+// Only used by Quoth Polyp
+void(float dist) ai_walkfly = {
+	ai_runwalkfly(dist,ai_walk);
+};
+
 // Only used by Quoth Sentinel
 void(float dist) ai_runfly = {
-	local vector oldorg;
-	local vector reqvel;
-	local float d;
-	
-	oldorg = self.origin;
-	self.movetype = MOVETYPE_STEP;
-	ai_run(dist);
-	d = vlen(self.origin - oldorg);
-	self.velocity = VEC_ORIGIN;
-	if (d <= dist + 5) {
-		self.movetype = MOVETYPE_FLY;
-		reqvel = normalize(self.origin - oldorg) * dist * 7;
-		setorigin(self, oldorg);
-		self.velocity = reqvel;
-	}
+	ai_runwalkfly(dist,ai_run);
 };
 
 void(float scratch_noise) ai_melee_carnivean = {
@@ -840,7 +831,7 @@ void(float scratch_noise) ai_melee_carnivean = {
 		SpawnMeatSpray(self, self.enemy, crandom () * 100);	// spawn a little gore
 	}
 
-	if (scratch_noise) sound (self, CHAN_AUTO, "demon/dhit2.wav", 0.5, ATTN_NORM);
+	if (scratch_noise) sound(self, CHAN_AUTO, "demon/dhit2.wav", 0.5, ATTN_NORM);
 };
 
 void() ai_melee_torment = {

@@ -5,7 +5,7 @@ void() time_chunk = {
    local entity timeChunk;
 
    timeChunk = spawn();
-   setmodel (timeChunk,"progs/rogue/timegib.mdl");
+   setmodel(timeChunk,"progs/rogue/timegib.mdl");
    timeChunk.solid = SOLID_NOT;
    timeChunk.movetype = MOVETYPE_TOSS;
    makevectors(self.owner.angles);
@@ -155,7 +155,7 @@ void() time_die = { time_pain(world, world, 0); };
 void() item_time_machine = {
    precache_model ("progs/rogue/timemach.mdl");
    precache_model ("progs/rogue/timegib.mdl");
-   setmodel (self,"progs/rogue/timemach.mdl");
+   setmodel(self,"progs/rogue/timemach.mdl");
    self.solid = SOLID_SLIDEBOX;
    self.movetype = MOVETYPE_STEP;
    self.health = 1600.000;
@@ -176,7 +176,7 @@ void() item_time_machine = {
 
 void() item_time_core = {
    precache_model ("progs/rogue/timecore.mdl");
-   setmodel (self,"progs/rogue/timecore.mdl");
+   setmodel(self,"progs/rogue/timecore.mdl");
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_FLY;
    self.avelocity = '60 60 60';

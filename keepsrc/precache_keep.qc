@@ -49,10 +49,10 @@ void() PreCache_Flame = {
 	precache_model (MODEL_PROJ_FLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_FLAMEMED);		// 32 (wide) x  96 (high)
 	//precache_model (MODEL_PROJ_FLAMEVLRG);		// 48 (wide) x 128 (high)
-	precache_sound ("ambience/flames1.wav");
-	precache_sound ("ambience/flames2.wav");
-	precache_sound ("ambience/flames3.wav");
-	precache_sound ("ambience/flames4.wav");
+	precache_sound("ambience/flames1.wav");
+	precache_sound("ambience/flames2.wav");
+	precache_sound("ambience/flames3.wav");
+	precache_sound("ambience/flames4.wav");
 };
 
 void() PreCache_BlueFlame = {
@@ -60,10 +60,10 @@ void() PreCache_BlueFlame = {
 	precache_model (MODEL_PROJ_BFLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_BFLAMEMED);		// 32 (wide) x  96 (high)
 	//precache_model (MODEL_PROJ_BFLAMEVLRG);		// 48 (wide) x 128 (high)
-	precache_sound ("ambience/flames1.wav");
-	precache_sound ("ambience/flames2.wav");
-	precache_sound ("ambience/flames3.wav");
-	precache_sound ("ambience/flames4.wav");
+	precache_sound("ambience/flames1.wav");
+	precache_sound("ambience/flames2.wav");
+	precache_sound("ambience/flames3.wav");
+	precache_sound("ambience/flames4.wav");
 };
 
 void() PreCache_GreenFlame = {
@@ -71,10 +71,10 @@ void() PreCache_GreenFlame = {
 	precache_model (MODEL_PROJ_GRFLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_GRFLAMEMED);		// 32 (wide) x  96 (high)
 	//precache_model (MODEL_PROJ_GRFLAMEVLRG);		// 48 (wide) x 128 (high)
-	precache_sound ("ambience/flames1.wav");
-	precache_sound ("ambience/flames2.wav");
-	precache_sound ("ambience/flames3.wav");
-	precache_sound ("ambience/flames4.wav");
+	precache_sound("ambience/flames1.wav");
+	precache_sound("ambience/flames2.wav");
+	precache_sound("ambience/flames3.wav");
+	precache_sound("ambience/flames4.wav");
 };
 
 void() PrecacheAll = { // [FUNCTION]

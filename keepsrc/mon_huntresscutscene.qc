@@ -199,7 +199,7 @@ void() huntressmodel_off = {
 	self.solid = SOLID_NOT;				// no world interaction
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);		// No size, no impact
 	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
-	setmodel (self, "");				// invisible
+	setmodel(self, "");				// invisible
 	if (self.attachment) {
 		self.attachment.movetype = MOVETYPE_NONE;	// Stationary
 		self.attachment.solid = SOLID_NOT;			// no world interaction
@@ -257,7 +257,7 @@ void() monster_huntressmodel = {
 
 	precache_model (self.mdl);
 	
-	precache_sound ("redfield/huntress/dialogue2.wav");
+	precache_sound("redfield/huntress/dialogue2.wav");
 
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;	
 
@@ -275,11 +275,11 @@ void() monster_huntressmodel = {
 	self.stepc3 = "redfield/huntress/step3.wav";
 	self.stepc4 = "redfield/huntress/step4.wav";
 	self.stepc5 = "redfield/huntress/step5.wav";
-	precache_sound (self.stepc1);
-	precache_sound (self.stepc2);
-	precache_sound (self.stepc3);
-	precache_sound (self.stepc4);
-	precache_sound (self.stepc5);
+	precache_sound(self.stepc1);
+	precache_sound(self.stepc2);
+	precache_sound(self.stepc3);
+	precache_sound(self.stepc4);
+	precache_sound(self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
 		
 	self.th_stand = huntressmodel_idle1;
@@ -304,5 +304,5 @@ void() monster_huntressmodel = {
 	self.takedamage = DAMAGE_NO;			// No pain/death triggers
 	self.movetype = MOVETYPE_NONE;			// Stationary
 	self.solid = SOLID_NOT;				// no world interaction
-	setmodel (self, "");				// invisible
+	setmodel(self, "");				// invisible
 };

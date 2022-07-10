@@ -47,13 +47,13 @@ void() gibs_fly = { // [FUNCTION]
 		ThrowGib(3,1);
 		ThrowGib(4,1);
 		ThrowGib(25,1);
-        sound (self, CHAN_AUTO, "zerstorer/gibfnt/gf_sbig.wav", 1, ATTN_NORM);
+        sound(self, CHAN_AUTO, "zerstorer/gibfnt/gf_sbig.wav", 1, ATTN_NORM);
     } else if (rnum < 0.45) ThrowGib(1,1);
     else if (rnum < 0.85) ThrowGib(2,1);   //Zer uses gib4.mdl.
     else ThrowGib(3,1);
 
-    if (random() < 0.5) sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound(self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt2.wav", 1, ATTN_NORM);
 
     self.nextthink = time + (random() * 5) + 3;
     self.think = gibs_fly;
@@ -74,10 +74,10 @@ void() misc_gibft = { // [ENTITY]
     precache_model ("progs/gib3.mdl");
     precache_model ("progs/h_player.mdl");
 	self.headmdl = "progs/h_player.mdl";
-    precache_sound ("zerstorer/gibfnt/gf_sprt1.wav");
-    precache_sound ("zerstorer/gibfnt/gf_sprt2.wav");
-    precache_sound ("zerstorer/gibfnt/gf_plop.wav");
-    precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
+    precache_sound("zerstorer/gibfnt/gf_sprt1.wav");
+    precache_sound("zerstorer/gibfnt/gf_sprt2.wav");
+    precache_sound("zerstorer/gibfnt/gf_plop.wav");
+    precache_sound("zerstorer/gibfnt/gf_sbig.wav");
     if (!self.wait) self.wait = 2;
     self.nextthink  = time + (random() * self.wait);
     self.think = gibs_fly;
@@ -112,7 +112,7 @@ void() bell_ring = [ 0, bell_ring ] { // [FUNCTION]
     self.frame = self.waitmin + self.walkframe;
     if (self.waitmin) return; // Not using ringing anim if TRUE.
 
-    if ((self.frame == 2) || (self.frame == 7) || (self.frame == 11)) sound (self, CHAN_AUTO, "drake/misc/bellring.wav", 1, 0.2); // Big bell should be heard from long distance, see attenuation note above.
+    if ((self.frame == 2) || (self.frame == 7) || (self.frame == 11)) sound(self, CHAN_AUTO, "drake/misc/bellring.wav", 1, 0.2); // Big bell should be heard from long distance, see attenuation note above.
 };
 
 // Self-explanatory -- called when bell gets used.
@@ -157,7 +157,7 @@ void(entity inflictor, entity attacker, float damage) bell_hit = { // [FUNCTION]
 void() misc_bell = { // [ENTITY]
     precache_model("progs/drake/bellring.mdl");
 	setmodel(self,"progs/drake/bellring.mdl");
-    precache_sound ("drake/misc/bellring.wav");
+    precache_sound("drake/misc/bellring.wav");
     setsize (self, '-64 -64 -80', '64 64 88');
     self.movetype   = MOVETYPE_NONE;
     self.velocity   = '0 0 0';
@@ -207,7 +207,7 @@ void(float loop, float dm) statue_pieces = { // [FUNCTION]
 // PM:  Use Drake gib functions so that carnivores can't eat tree splinters.
     hp = self.health;
     self.health = dm;   // So the rocks have some velocity.
-    sound (self, CHAN_AUTO, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
+    sound(self, CHAN_AUTO, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
     do {
         if (random() < 0.5)
 			ThrowGib(11, 1); // gib1mdl  ThrowTreeChunks ("progs/drake/imp_rock.mdl");
@@ -272,7 +272,7 @@ void() misc_statue = { // [ENTITY]
         precache_model (self.gib1mdl);
 		self.gib2mdl = "progs/drake/st_gib3.mdl";
         precache_model (self.gib2mdl);
-        precache_sound ("drake/misc/wallbrk.wav");
+        precache_sound("drake/misc/wallbrk.wav");
     }
 	self.gibtype = GIBTYPE_STONE;
     misc_decor();
@@ -284,13 +284,13 @@ void() misc_statue_angel = { misc_statue(); }; // [ENTITY]
 void(entity inflictor, entity attacker, float damage) tree_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;
 
-    sound (self, CHAN_VOICE, "drake/misc/met2wd.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "drake/misc/met2wd.wav", 1, ATTN_NORM);
     self.pain_finished = time + 0.1;    //2;
 };
 
 void() tree_die = { // [FUNCTION]
     monster_death_use();
-    sound (self, CHAN_VOICE, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
     if (self.health > -50) self.health = -50;  // So gibs have some velocity.
 	ThrowGib(11, 1); // gib1mdl
 	ThrowGib(12, 1); // gib2mdl
@@ -332,8 +332,8 @@ void() misc_tree = { // [ENTITY]
         precache_model (self.gib3mdl);
 		self.headmdl = "progs/drake/rubble4.mdl";
         precache_model (self.headmdl);
-        precache_sound ("drake/misc/met2wd.wav");
-        precache_sound ("drake/misc/woodbrk.wav");
+        precache_sound("drake/misc/met2wd.wav");
+        precache_sound("drake/misc/woodbrk.wav");
         self.bloodtype = 17;    // Roughly tree sap color.
     } else self.takedamage = DAMAGE_NO;
 

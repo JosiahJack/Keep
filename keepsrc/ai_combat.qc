@@ -483,7 +483,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 					saveperms = PowerArmor_Absorb(targ,take,TRUE); // only does something if damage is greater than 2
 				} else {
 					targ.powershield_active = FALSE;
-					sound (targ, CHAN_AUTO, "zerstorer/me/me_soff.wav", 1, ATTN_NORM);
+					sound(targ, CHAN_AUTO, "zerstorer/me/me_soff.wav", 1, ATTN_NORM);
 				}
 			}
 		}
@@ -528,7 +528,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			float z_add = 150;
 			if (attacker.tome_finished) z_add = z_add * 2;
 			if (targ.mass == MASS_SUPER) z_add = z_add * 0.5;
-			targ.flags = targ.flags - FL_ONGROUND;
+			SUB_RemoveFlags(targ,FL_ONGROUND);
 			targ.velocity = targ.velocity + dir;
 			if (targ.velocity_z < z_add) targ.velocity_z = z_add;	
 		}
@@ -748,68 +748,83 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	self = oldself;
 };
 
+float(entity targ, entity attacker, entity ignore, float checkclass) T_RadiusCanDamage = {
+	if (targ == ignore) return FALSE;
+	if (checkclass == IGNORECLASS && targ.classtype == ignore.classtype) return FALSE;
+	if (ai_immunebreakable(attacker, targ)) return FALSE;
+
+	// Check for any breakable which is prone to explosive damage.
+	if (ai_foundbreakable(attacker, targ,TRUE) && targ.brktrigmissile !=0) { 
+		trigger_ent(targ, attacker);
+		return FALSE;
+	}
+	if (!targ.takedamage) return FALSE; // Cannot be damaged.
+	if (targ.noradiusdmg) return FALSE; // Immune to radius (splash) damage.
+	if (attacker.classtype == CT_MONEEL) {
+		if (targ.classtype == CT_MONEEL) return FALSE;
+		if (InWater(attacker.origin)) {
+			if (!InWater(targ.origin)) return FALSE;
+		} else if (InSlime(attacker.origin)) {
+			if (!InSlime(targ.origin)) return FALSE;
+		}
+	}
+	return TRUE;
+};
+
 // inflictor -(self) = projectile
 // attacker - (self.owner) = monster/player OR (self) = direct attack
 // ignore   - (other) = Original target OR (world) = no exceptions
 void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage = {
-	local	float 	points;
-	local	entity	head;
-	local	vector	org, imporg, dir;
+	local float points;
+	local entity head;
+	local vector org, imporg, dir;
 
 	// Cannot hurt the world or enemy targets (fake flying markers)
 	if (attacker.noradiusdmg) return;
 	if (attacker.classtype == CT_WORLD) return;
 	if (attacker.classtype == CT_ENEMYTARGET) return;
 
-	// check if inflictor is a bmodel (different origin location)
-	if (inflictor.bsporigin) imporg = bmodel_origin(inflictor);
-	else imporg = inflictor.origin;
-	head = findradius(imporg, damage+40);
+	imporg = SUB_EntityOrigin(inflictor);
+	head = findradius(imporg,damage+40);
 	points = damage;
 	while (head) {
-		if (head != ignore) {
-			// This is used mostly for wraiths so when they die they don't kill each other, can't get the code logic to work so its setup as a dead exception path
-			if (checkclass == IGNORECLASS && head.classtype == ignore.classtype) { // Nothing
-			} else {
-				if (ai_immunebreakable(attacker, head)) { // Check for breakable/pushable monster immunity.  Do nothing, radius damage has no miss effect
-				} else if (ai_foundbreakable(attacker, head,TRUE) && head.brktrigmissile !=0) { // Check for any breakable which is prone to explosive damage
-					trigger_ent(head, attacker);
-				} else {
-					// Can be damaged and NOT immune to radius (splash) damage
-					if (head.takedamage > 0 && head.noradiusdmg == 0) {
-						// This formula is using bounding box size which means the damage amount is lower if the monster is larger
-						// It should really be based on bounding box edge not monster origin
-						org = head.origin + (head.mins + head.maxs)*0.5;
-						points = 0.5*vlen (imporg - org);
-						points = SUB_ClampFloat(points,0,points); // Only prevent negative.
-						points = damage - points;
-						if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
-						if (points > 0 && head.health > 0) {
-							// Need CanDamage to check for anything blocking LoS.  It will do several traces (source->target) to check for any blocking entities (lifts, doors, walls etc)
-							if (CanDamage(head, inflictor)) {
-								if (points > 0) {
-									if ((inflictor.classgroup == CG_PROJFIRE || attacker.classgroup == CG_PROJFIRE) && (random() < (damage+1)*0.01)) Burn_Add(head, attacker, MAX_BURN_DAMAGE); // Chance to burn equals (damage + 1)%.  E.g., 9 damage = 10%. Yes, use 'damage' and not 'take'.
-									T_Damage (head, inflictor, attacker, points, DAMARMOR); // Any damage left? Check for poison as well
-								}
-								if (attacker.poisonous) PoisonDeBuff(head);
-							}
+		if (T_RadiusCanDamage(head,attacker,ignore,checkclass)){
+			// This formula is using bounding box size which means the damage amount is lower if the monster is larger
+			// It should really be based on bounding box edge not monster origin
+			org = head.origin + (head.mins + head.maxs)*0.5;
+			points = 0.5*vlen (imporg - org);
+			points = SUB_ClampFloat(points,0,points); // Only saturate negative.
+			points = damage - points;
+			if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
+			if (points > 0 && head.health > 0) {
+				// Need CanDamage to check for anything blocking LoS.  It will do several traces (source->target) to check for any blocking entities (lifts, doors, walls etc)
+				if (CanDamage(head, inflictor)) {
+					if (points > 0) {
+						if ((inflictor.classgroup == CG_PROJFIRE
+							 || attacker.classgroup == CG_PROJFIRE)
+							&& (random() < (damage+1)*0.01)) {
+							// Chance to burn equals (damage + 1)%. 
+							// e.g. 9 damage = 10% chance.
+							Burn_Add(head,attacker,MAX_BURN_DAMAGE);
 						}
+						T_Damage(head,inflictor,attacker,points,DAMARMOR); // Any damage left? Check for poison as well
 					}
-
-					// From bsqmsafe
-					if (head.classtype == CT_TEMPGIB || head.frozen) {
-						if (head.flags & FL_ONGROUND) head.flags = head.flags - FL_ONGROUND;
-						dir = head.origin - ((inflictor.absmin + inflictor.absmax) * 0.5);
-						dir = normalize(dir);
-						if (head.frozen) {
-							head.velocity = head.velocity + dir*damage*2; // Half as much for frozen enemies
-							head.health = head.health - points;
-						} else head.velocity = head.velocity + dir*damage*4;
-						if (head.velocity_z < 10) head.velocity_z = 10;
-						head.velocity_z = vlen(head.velocity) * 0.5;
-					}
+					if (attacker.poisonous) PoisonDeBuff(head);
 				}
 			}
+		}
+
+		// From bsqmsafe
+		if (head.classtype == CT_TEMPGIB || head.frozen) {
+			SUB_RemoveFlags(head,FL_ONGROUND);
+			dir = head.origin - ((inflictor.absmin + inflictor.absmax) * 0.5);
+			dir = normalize(dir);
+			if (head.frozen) {
+				head.velocity = head.velocity + dir*damage*2; // Half as much for frozen enemies
+				head.health = head.health - points;
+			} else head.velocity = head.velocity + dir*damage*4;
+			if (head.velocity_z < 10) head.velocity_z = 10;
+			head.velocity_z = vlen(head.velocity) * 0.5;
 		}
 		head = head.chain;
 	}
@@ -865,9 +880,7 @@ void() FreezeFinish = {
 	self.deadflag = DEAD_DEAD; 
 	Particle_Cube(self, 1, 41);
 	take_monster_object(self); // drop our stuff
-	if (self.attachment) entity_remove(self.attachment, 0.1);
-	if (self.attachment2) entity_remove(self.attachment2, 0.1);
-	if (self.attachment3) entity_remove(self.attachment3, 0.1);
+	SUB_RemoveAttachments();
 	self.velocity = self.avelocity = '0 0 0';
 	self.movetype = MOVETYPE_TOSS;
 	self.colormod = '1 1 2'; // Pale blue white
@@ -898,54 +911,6 @@ void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
     targ.oldenemy = attacker;
     targ.enemy = world;
 	SUB_Think(targ,FreezeFinish,0.05);
-};
-
-// Radius damage but ignores entities outside of the water and other eels
-// inflictor -(self) = projectile
-// attacker - (self.owner) = monster/player OR (self) = direct attack
-// ignore   - (other) = Original target OR (world) = no exceptions
-void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_EELZap = {
-	local float points;
-	local entity head;
-	local vector org, imporg;
-
-	// Cannot hurt the world or enemy targets (fake flying markers)
-	if (attacker.noradiusdmg) return;
-	if (attacker.classtype == CT_WORLD) return;
-	if (attacker.classtype == CT_ENEMYTARGET) return;
-
-	// check if inflictor is a bmodel (different origin location)
-	if (inflictor.bsporigin) imporg = bmodel_origin(inflictor);
-	else imporg = inflictor.origin;
-		
-	head = findradius(imporg, damage+40);
-	while (head) {
-		if (head != ignore) {
-			// This is used also for wraiths so when they die they don't kill each other
-			if ((checkclass != IGNORECLASS) && (head.classtype != ignore.classtype)) {
-				// Check for any breakable which is prone to explosive damage
-				if (ai_foundbreakable(attacker, head,TRUE) && head.brktrigmissile !=0) {
-					trigger_ent(head, attacker);
-				} else {
-					// Can be damaged and NOT immune to radius (splash) damage
-					if (head.takedamage > 0 && head.noradiusdmg == 0) {
-						org = head.origin + (head.mins + head.maxs)*0.5;
-						points = 0.5*vlen (imporg - org);
-						points = SUB_ClampFloat(points,0,points); // Only prevent negative.
-						points = damage - points;
-						if (head == attacker) points = points * 0.5;
-						if (points > 0 && head.health > 0) {
-							// Need CanDamage to check for anything blocking LoS.  It will do several traces (source->target) to check for any blocking entities (lifts, doors, walls etc)
-							if (CanDamage (head, inflictor)) {
-								if ((head.classtype != CT_MONEEL) && (head.flags & FL_INWATER)) T_Damage (head, inflictor, attacker, points, DAMARMOR);
-							}
-						}
-					}
-				}
-			}
-		}
-		head = head.chain;
-	}
 };
 
 // From Quoth

@@ -41,7 +41,7 @@ void() hipRubbleTouch = { // [FUNCTION]
 
 	if (other.takedamage) {
 		T_Damage (other,self,self.owner,MOVETYPE_BOUNCE,DAMARMOR);
-		sound (self,CHAN_WEAPON,"zombie/z_hit.wav",TRUE,ATTN_NORM);
+		sound(self,CHAN_WEAPON,"zombie/z_hit.wav",TRUE,ATTN_NORM);
 		self.pausetime = (self.ltime + 0.100);
 	}
 };
@@ -52,7 +52,7 @@ void(string rubblename) hipThrowRubble = { // [FUNCTION]
 	new = spawn();
 	new.classtype = CT_TEMPPHYS;
 	new.origin = self.origin;
-	setmodel (new,rubblename);
+	setmodel(new,rubblename);
 	setsize (new,VEC_ORIGIN,VEC_ORIGIN);
 	new.velocity_x = ((self.mangle_x) + 70.000 * crandom ());
 	new.velocity_y = ((self.mangle_y) + 70.000 * crandom ());
@@ -89,7 +89,7 @@ void() func_rubble = { // [ENTITY]
 	precache_model ("progs/hipnotic/rubble1.mdl");
 	precache_model ("progs/hipnotic/rubble2.mdl");
 	precache_model ("progs/hipnotic/rubble3.mdl");
-	precache_sound ("zombie/z_hit.wav");
+	precache_sound("zombie/z_hit.wav");
 	if (self.classname == "func_rubble") self.classname = "rubble";
 	self.cnt = FALSE;
 	if (!self.count) self.count = 1;

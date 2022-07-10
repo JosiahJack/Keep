@@ -365,15 +365,8 @@ Void function hknight_die10();
   #51 hknight_die11;
 }
 
-Void function hknight_die11();
-{
-  #52 hknight_die12;
-}
-
-Void function hknight_die12();
-{
-  #53 corpse_think;
-}
+void()	beard_die11 = [	$deathb10,	beard_die12] { monster_death_postcheck(); };
+void()	beard_die12 = [	$deathb11,	beard_die12] { monster_deadbody_check(); };
 
 Void function hknight_dieb1();
 {
@@ -417,17 +410,18 @@ Void function hknight_dieb8();
   #61 hknight_dieb9;
 }
 
-Void function hknight_dieb9();
-{
+void()	beard_dieb8 = [	$deathb10,	beard_dieb9] { monster_death_postcheck(); };
+void()	beard_dieb9 = [	$deathb11,	beard_dieb9] {
+  monster_deadbody_check();
   if (self.classtype == CT_MONBEARD && self.lives > 0) {
     self.aflag = 9 + random() + random() + random();
     #62 beard_returndelay;
-    }
+  }
   else {
     Sub_UseTargets();
     #62 corpse_think;
-    }
-}
+  }
+};
 
 Void function beard_returndelay();
 {
@@ -528,7 +522,7 @@ Void function hknight_magica6();
   ai_face();
   if (ai_check_z()) {
     if (self.flags & FL_ONGROUND) {
-      self.flags = self.flags - FL_ONGROUND;
+      SUB_RemoveFlags(self,FL_ONGROUND);
       self.origin_z = self.origin_z + 1;
       self.velocity_z = 280;
       }
@@ -619,7 +613,7 @@ Void function hknight_magicb6();
   ai_face();
   if (ai_check_z()) {
     if (self.flags & FL_ONGROUND) {
-      self.flags = self.flags - FL_ONGROUND;
+      SUB_RemoveFlags(self,FL_ONGROUND);
       self.origin_z = self.origin_z + 1;
       self.velocity_z = 300;
       }
@@ -718,7 +712,7 @@ Void function hknight_magicc4();
   ai_face();
   if (ai_check_z()) {
     if (self.flags & FL_ONGROUND) {
-      self.flags = self.flags - FL_ONGROUND;
+      SUB_RemoveFlags(self,FL_ONGROUND);
       self.origin_z = self.origin_z + 1;
       self.velocity_z = 180;
       }
@@ -1350,7 +1344,7 @@ void() ai_orbit_nehahra(float radius, vector offset) = {
     }
   traceline(self.origin, self.owner.origin + offset, TRUE, world);
   if (trace_fraction < 1) {
-    setorigin (self, self.owner.origin + offset);
+    setorigin(self, self.owner.origin + offset);
     self.rotate_type = self.rotate_type + 1;
     exit;
     }
@@ -1402,9 +1396,9 @@ void(float num, vector dave) beard_balls = {
 	ball.enemy = self.enemy;
 	ball.effects = EF_BRIGHTFIELD;
 	ball.owner = self;
-	setmodel (ball, "progs/s_explod.spr");
+	setmodel(ball, "progs/s_explod.spr");
 	setsize (ball, [0 0 0], [0 0 0]);     
-	setorigin (ball, self.origin);
+	setorigin(ball, self.origin);
 	ball.cnt = 0;
 	ball.avelocity = [40 40 40];
 	ball.think = thinking_balls;

@@ -1,7 +1,7 @@
 void(float AttackNumber) lavaman_missile;
 
-void() lavaman_rise1 = [ 0.000, lavaman_rise2 ] { sound (self,CHAN_WEAPON,"boss1/out1.wav",TRUE,ATTN_NORM); };
-void() lavaman_rise2 = [ 1.000, lavaman_rise3 ] { sound (self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM); };
+void() lavaman_rise1 = [ 0.000, lavaman_rise2 ] { sound(self,CHAN_WEAPON,"boss1/out1.wav",TRUE,ATTN_NORM); };
+void() lavaman_rise2 = [ 1.000, lavaman_rise3 ] { sound(self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM); };
 void() lavaman_rise3 = [ 2.000, lavaman_rise4 ] {};
 void() lavaman_rise4 = [ 3.000, lavaman_rise5 ] {};
 void() lavaman_rise5 = [ 4.000, lavaman_rise6 ] {};
@@ -22,7 +22,7 @@ void() lavaman_fire1;
 
 void() lavaman_idle1 = [ 17.000, lavaman_idle2 ] {
    if ( (random () < 0.200) )
-      sound (self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM);
+      sound(self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM);
 };
 
 void() lavaman_idle2 = [ 18.000, lavaman_idle3 ] { ai_stand(); };
@@ -143,7 +143,7 @@ void(entity inflictor, entity attacker, float damage) lavaman_pain = {
    }
 };
 
-void() lavaman_death1 = [ 48.000, lavaman_death2 ] { sound (self,CHAN_VOICE,"boss1/death.wav",TRUE,ATTN_NORM); };
+void() lavaman_death1 = [ 48.000, lavaman_death2 ] {};
 void() lavaman_death2 = [ 49.000, lavaman_death3 ] {};
 void() lavaman_death3 = [ 50.000, lavaman_death4 ] {};
 void() lavaman_death4 = [ 51.000, lavaman_death5 ] {};
@@ -152,86 +152,20 @@ void() lavaman_death6 = [ 53.000, lavaman_death7 ] { self.solid = SOLID_NOT; };
 void() lavaman_death7 = [ 54.000, lavaman_death8 ] {};
 void() lavaman_death8 = [ 55.000, lavaman_death9 ] {};
 void() lavaman_death9 = [ 56.000, lavaman_death10 ] {
-   sound (self,CHAN_BODY,"boss1/out1.wav",TRUE,ATTN_NORM);
+   monster_death_postcheck();
+   sound(self,CHAN_BODY,"boss1/out1.wav",TRUE,ATTN_NORM);
    WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
    WriteByte (MSG_BROADCAST,TE_LAVASPLASH);
    WriteCoord (MSG_BROADCAST,self.origin_x);
    WriteCoord (MSG_BROADCAST,self.origin_y);
    WriteCoord (MSG_BROADCAST,self.origin_z);
 };
-void() lavaman_death10 = [ 56.000, lavaman_death10 ] {
-   AddToKills(self,self.enemy);
-   SUB_UseTargets();
-   remove (self);
-};
+void() lavaman_death10 = [ 56.000, lavaman_death10 ] { entity_remove(self,0.1); };
 
-void() lavaman_touch = {
-	local float damg;
-
-	if ( (other == self.owner) ) return ;
-	if ( (pointcontents (self.origin) == CONTENT_SKY) ) { remove (self); return ; }
-
-	damg = 40;
-	if (other.health && !(other.moditems & IT_ARTLAVASHIELD) && !(other.therm_finished > 0) && other.resist_fire < 1) {
-		if ( (other.classname == "monster_shambler") ) damg = (damg * 0.500);
-		if  (other.classname == "monster_boss" || other.classname == "monster_chthon") damg = 0;
-
-		if (other.resist_fire > 0) damg = damg * (1-other.resist_fire);
-		T_Damage (other,self,self.owner,damg, DAMARMOR);
-	}
-	T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
-	self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
-	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST,TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST,self.origin_x);
-	WriteCoord (MSG_BROADCAST,self.origin_y);
-	WriteCoord (MSG_BROADCAST,self.origin_z);
-	BecomeExplosion();
-};
-
-void(float AttackNumber) lavaman_missile = {
-   local entity fireball;
-   local vector org;
-   local vector vec;
-   local vector d;
-   local float t;
-
-   makevectors(self.angles);
-   if ( (AttackNumber == TRUE) ) {
-      org = (((self.origin + (v_forward * 40)) + (v_right * 65.000)) + (v_up * 130.000));
-   } else {
-      if ( (AttackNumber == FL_SWIM) )
-         org = (((self.origin + (v_forward * 40)) - (v_right * 75.000)) + (v_up * 125.000));
-   }
-   d = self.enemy.origin;
-   t = vlen ((d - org));
-   t = (t / 380.000);
-   if ( (t > 1.750) )
-      t = 1.750;
-
-   if ( (t < TRUE) )
-      t = TRUE;
-
-   vec = normalize ((d - org));
-   fireball = spawn();
-	fireball.classgroup = CG_PROJALL;
-   fireball.owner = self;
-   fireball.movetype = MOVETYPE_BOUNCE;
-   fireball.solid = SOLID_BBOX;
-   fireball.angles = vectoangles (vec);
-   fireball.touch = lavaman_touch;
-   fireball.classname = "lavaman_ball";
-   fireball.skin = 0;
-   setmodel (fireball,MODEL_PROJ_LAVA);
-   setsize (fireball,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (fireball,org);
-   fireball.velocity = ((vec * 600.000) * t);
-   fireball.velocity_z = (fireball.velocity_z + (200.000 * t));
-   fireball.avelocity = '200.000 100.000 300.000';
-   fireball.think = SUB_Remove;
-   fireball.nextthink = (time + MOVETYPE_TOSS);
-   sound (self,CHAN_WEAPON,"boss1/throw.wav",TRUE,ATTN_NORM);
-   if ( (self.enemy.health <= FALSE) ) lavaman_idle1();
+void() lavaman_die = {
+   monster_death_precheck(); // Pre-check routine to tidy up extra entities
+   sound(self,CHAN_VOICE,"boss1/death.wav",TRUE,ATTN_NORM);
+   lavaman_death1();
 };
 
 void() lavaman_awake = {
@@ -261,11 +195,11 @@ void() lavaman_awake = {
 void() monster_lava_man_precache = {
 	precache_model ("progs/rogue/mon_lavaman.mdl");
 	precache_model (MODEL_PROJ_LAVA);
-	precache_sound ("boss1/out1.wav");
-	precache_sound ("boss1/sight1.wav");
-	precache_sound ("boss1/throw.wav");
-	precache_sound ("boss1/pain.wav");
-	precache_sound ("boss1/death.wav");
+	precache_sound("boss1/out1.wav");
+	precache_sound("boss1/sight1.wav");
+	precache_sound("boss1/throw.wav");
+	precache_sound("boss1/pain.wav");
+	precache_sound("boss1/death.wav");
 };
 
 void() monster_lava_man = {
@@ -297,7 +231,7 @@ void() monster_lava_man = {
 	self.view_ofs = '0.000 0.000 48.000';
 	self.th_missile = lavaman_fire1;
 	self.th_pain = lavaman_pain;
-	self.th_die = lavaman_death1;
+	self.th_die = lavaman_die;
 	self.th_melee = lavaman_fire1;
 	self.attack_offset = (self.origin + '0.000 0.000 96.000');
 	self.th_checkattack = LavaManCheckAttack;

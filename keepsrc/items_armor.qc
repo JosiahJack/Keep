@@ -50,7 +50,7 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb = { // [FUNCTION
 		if (targ.ammo_cells < 0) targ.ammo_cells = 0;
 		//Update_PowerArmor (targ);
 		Particle_Cube (targ, 241, 241);
-		sound (targ, CHAN_AUTO, "zerstorer/me/me_fire1.wav", 1, ATTN_NORM);
+		sound(targ, CHAN_AUTO, "zerstorer/me/me_fire1.wav", 1, ATTN_NORM);
 	}
     return save;
 };
@@ -59,35 +59,35 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb = { // [FUNCTION
 void(entity ent) PowerArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound (ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     centerprint (ent, "Power Armor!\nPress 'L' to toggle.\nUses cells when hit.");
 };
 
 void(entity ent) BerserkerArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound (ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     centerprint (ent, "Demonhide Armor!\nPress 'K' to expend for Quad Damage!\nKills repair armor while equipped.");
 };
 
 void(entity ent) SpiritArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound (ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     centerprint (ent, "Spirit Shroud!\nPress 'J' to expend for Invisibility!");
 };
 
 void(entity ent) DragonArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound (ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     centerprint (ent, "Dragon Armor!\nPress 'H' to expend for Invulnerability.");
 };
 
 void(entity ent) OnyxArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound (ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     centerprint (ent, "Onyx Armor!\nAll damage permanently halved!");
 };
 
@@ -219,7 +219,7 @@ void() item_armor_exotic = { // [ENTITY]
 		if (self.armorvalue <= 0) self.armorvalue = ARMOR_DRAGON_VALUE;
 		self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_RING;
 		if (!self.part_active) self.part_active = PARTICLE_STYLE_ALTAR;
-		precache_sound (SOUND_ARTPENT1);
+		precache_sound(SOUND_ARTPENT1);
 	} else if (self.count == 2) { // Onyx
 		item_setupmodel("progs/drake/armor.mdl",4);
 		self.classtype = CT_ARMORONYX;
@@ -249,7 +249,7 @@ void() item_armor_exotic = { // [ENTITY]
 		if (self.armorvalue <= 0) self.armorvalue = ARMOR_BERSERKER_VALUE;
 		self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_RING;
 		if (!self.part_active) self.part_active = PARTICLE_STYLE_PENT;
-		precache_sound (SOUND_ARTQUAD1);
+		precache_sound(SOUND_ARTQUAD1);
 	} else if (self.count == 5) { // Spirit Shroud
 		item_setupmodel("progs/drake/armor.mdl",7);
 		self.classtype = CT_ARMORSPIRIT;
@@ -259,7 +259,7 @@ void() item_armor_exotic = { // [ENTITY]
 		if (self.armorvalue <= 0) self.armorvalue = ARMOR_SPIRIT_VALUE;
 		self.respawn_style = PARTICLE_BURST_PURPLE + PARTICLE_BURST_RING;
 		if (!self.part_active) self.part_active = PARTICLE_STYLE_SHARP;
-		precache_sound (SOUND_ARTINV1);
+		precache_sound(SOUND_ARTINV1);
 	} else if (self.count == 6) { // Chaos
 		item_setupmodel("progs/drake/armor.mdl",8);
 		self.classtype = CT_ARMORCHAOS;

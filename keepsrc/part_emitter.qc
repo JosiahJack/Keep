@@ -1311,7 +1311,7 @@ void() misc_particle_burst = { // [ENTITY]
 // wakeup_dist  : how close the player needs to be for the weather to work
 // wakeup_timer : time to keep checking when in standby mode
 // -------- SPAWNFLAGS --------
-// SILENT   : Don't make any drip sound (good for multiple drips)
+// SILENT   : Don't make any drip sound(good for multiple drips)
 // SNOW     : White wispy flakes falling
 // BLOOD    : Blood red rain
 // SLIME    : Slime green rain

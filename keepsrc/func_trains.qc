@@ -44,7 +44,7 @@ float TRAIN_TOUCH = 8;
 float TRAIN_REVERSE = 32;
 
 void() func_train_stop = { // [FUNCTION]
-	if ( self.sounds > 0 && self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound and switch state OFF
+	if ( self.sounds > 0 && self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound and switch state OFF
 	self.velocity = self.avelocity = '0 0 0';
 	self.state = STATE_OFF;
 };
@@ -72,7 +72,7 @@ void() func_train_pause = { // [FUNCTION]
 	else {
 		if (self.wait > 0 ) { // Is wait setup to pause the train?
 			self.nextthink = self.ltime + self.wait + (self.delay * random());
-			if ( self.sounds > 0 ) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound if setup
+			if ( self.sounds > 0 ) sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound if setup
 			self.velocity = self.avelocity = '0 0 0'; // Stop any movement or rotation
 		} else self.nextthink = self.ltime + 0.1; // ID logic - 1 frame pause at each path_corner.  This is a default in the ID (plats.qc, line 242) code!  Hence why there is a NOPAUSE option on path corners.
 
@@ -147,7 +147,7 @@ void() func_train_next = { // [FUNCTION]
 
 	if (!self.goalentity) func_train_stop(); // If no route entity found, then stop.
 	else { // Route found so setup final details and move towards next corner.
-		if ( self.sounds > 0 && self.noise1 != "") sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
+		if ( self.sounds > 0 && self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
 		self.finaldest = func_train_origin(self.goalentity); // Work out NEXT path_corner origin
 		if (self.movetarget.speed > 0) self.distance = self.movetarget.speed; // Check if CURRENT path_corner for a different speed
 		else self.distance = self.speed;
@@ -203,7 +203,7 @@ void() func_train_next = { // [FUNCTION]
 		}
 
 		if (self.movetarget.spawnflags & PATHC_INSTANT) { // Is the next path_corner an instant move?
-			setorigin (self, self.finaldest); // Train entity has stopped moving
+			setorigin(self, self.finaldest); // Train entity has stopped moving
 			func_train_pause();
 		} else SUB_CalcMove (self.finaldest, self.distance, func_train_pause); // Finally workout movement (finaldest) and speed (distance)
 	}
@@ -215,7 +215,7 @@ void() func_train_resume = { // [FUNCTION]
 	if (self.goalentity.classtype != CT_PATHCORNER) self.estate_fire(); // Final destionation not setup correctly, move on
 	pc_dist = fabs(vlen(self.finaldest - self.origin));
 	if (pc_dist > 0) {
-		if ( self.sounds > 0) sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
+		if ( self.sounds > 0) sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
 		if (self.classtype == CT_SAWBLADE) { // Setup sawblades to keep spinning
 			if (self.movedir_x > 0 || self.movedir_y > 0 || self.movedir_z > 0) self.avelocity = -self.v_angle;
 			else self.avelocity = self.v_angle;
@@ -253,7 +253,7 @@ void() func_train_startcorner = { // [FUNCTION]
 	if (!self.movestart) self.movestart = find(world, targetname, self.target); // Find first corner (after spawning)
 	if (self.movestart) { // Has the first path corner been found?
 		self.finaldest = func_train_origin(self.movestart); // Move to first path corner (instantly)
-		setorigin (self, self.finaldest);
+		setorigin(self, self.finaldest);
 		self.movetarget = self.movestart;
 		if (self.direction) self.movelast = self.movestart.movetarget; // Setup last path corner location based on direction
 		else self.movelast = self.movestart.movetarget3;
@@ -261,7 +261,7 @@ void() func_train_startcorner = { // [FUNCTION]
 		if (!self.movelast) self.movelast = self.movestart; // Double check movelast is valid, if not reset
 		if (self.movetarget.corner_event) trigger_strs(self.movetarget.corner_event, self); // Fire any event targets on path_corner
 	} else {
-		setorigin (self, self.dest0); // Cannot find first corner (bad situation).  Go back to spawn location!
+		setorigin(self, self.dest0); // Cannot find first corner (bad situation).  Go back to spawn location!
 		self.movetarget = self.movelast = self;
 	}
 };
@@ -284,7 +284,7 @@ void() func_train_bmodel_on = { // [FUNCTION]
 		
 	self.estate = ESTATE_ON;					// Switch on entity
 	self.state = STATE_ON;						// Start train functions
-	setmodel (self, self.mdl);					// Show bmodel/model
+	setmodel(self, self.mdl);					// Show bmodel/model
 	setsize (self, self.mins , self.maxs);		// Use defined size above
 	StopSound(self,CHAN_VOICE); 				// Stop any sound
 	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
@@ -299,7 +299,7 @@ void() func_train_off = { // [FUNCTION]
 	self.state = STATE_OFF;				// Stop train functions
 	self.movetype = MOVETYPE_NONE;		// Switch off movement
 	self.solid = SOLID_NOT;				// No world interaction
-	setmodel (self, "");				// Remove any bmodel/model
+	setmodel(self, "");				// Remove any bmodel/model
 	StopSound(self,CHAN_VOICE); // Stop any sound
 	setorigin(self, self.finaldest);	// Instantly move to final destionation
 	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
@@ -387,8 +387,8 @@ void() func_train = { // [ENTITY]
 		if (self.noise == "") self.noise = SOUND_EMPTY;
 		if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
 	}
-	precache_sound (self.noise);
-	precache_sound (self.noise1);
+	precache_sound(self.noise);
+	precache_sound(self.noise1);
 	SUB_BoundVolume(1);
 	self.classtype = CT_FUNCTRAIN;
 	self.classgroup = CG_FUNCMOVER;
@@ -403,7 +403,7 @@ void() func_train = { // [ENTITY]
 	
 	// There are two types of func_trains (bmodel or point entities).  Setup train collision / block damage.
 	if ( self.spawnflags & TRAIN_MODEL ) {
-		setmodel (self, self.model);			// Setup bmodel for origin
+		setmodel(self, self.model);			// Setup bmodel for origin
 		self.dest0 = bmodel_origin(self);		// Calculate reset location
 		self.finaldest = self.dest0;			// Save reset location
 		setmodel(self, "");						// no longer need bmodel

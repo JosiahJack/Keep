@@ -114,109 +114,11 @@ void() gaunt_strafe = {
 	if (self.lip == 1) self.lip = 0;
 };
 
-void(vector p1, vector p2, entity from, float damage) GauntLightningDamage = {
-	local entity e1, e2;
-	local vector f;
-	local float preserve_classgroup;
-
-	f = normalize(p2 - p1);
-	f_x = 0 - f_y;
-	f_y = f_x;
-	f_z = 0;
-	f = f * 16;
-	e2 = world;
-	e1 = world;
-	traceline(p1, p2, 0, self);
-	if (trace_ent.classname != "player")
-	{
-		damage = 25;
-	}
-	if (trace_ent.takedamage)
-	{
-		preserve_classgroup = from.classgroup;
-		if (from) from.classgroup = CG_PROJCELLS;
-		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
-		T_Damage(trace_ent, from, from, damage, DAMARMOR);
-		if (from) from.classgroup = preserve_classgroup;
-		if (self.classname == "player")
-		{
-			if (other.classname == "player")
-			{
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
-			}
-		}
-	}
-	e1 = trace_ent;
-	traceline(p1 + f, p2 + f, 0, self);
-	if (trace_ent != e1 && trace_ent.takedamage)
-	{
-		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
-		T_Damage(trace_ent, from, from, damage, DAMARMOR);
-	}
-	e2 = trace_ent;
-	traceline(p1 - f, p2 - f, 0, self);
-	if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
-	{
-		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
-		T_Damage(trace_ent, from, from, damage, DAMARMOR);
-	}
-};
-
-void(float offset) gaunt_lightning = {
-	local vector org, vec, dir, hadjvec, oldorg, reqvel;
-	local float damage, hadj, ofs;
-
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-	ChangeYaw();
-	if (self.lefty == LIGHTNING_RANDOM) ofs = 90;
-	else ofs = -90;
-
-	self.origin2 = self.origin;
-	oldorg = self.origin;
-	walkmove(self.ideal_yaw - ofs, SECRET_NO_SHOOT * self.multiplier);
-	hadj = self.origin_z - self.origin2_z;
-	if (visible(self.enemy)) hadj = hadj * self.vsightmultiplier;
-	else hadj = hadj * self.vmultiplier;
-
-	hadjvec_z = hadj;
-	setorigin(self, self.origin + hadjvec);
-	if (self.lip == 0) {
-		self.movetype = MOVETYPE_FLY;
-		reqvel = normalize(self.origin - oldorg) * SECRET_NO_SHOOT * TE_WIZSPIKE;
-		setorigin(self, oldorg);
-		self.velocity = reqvel;
-	}
-	if (self.lip == 1) self.lip = 0;
-	if (self.enemy.classname == "player") vec = self.enemy.origin - self.enemy.velocity * 0.085;
-	else vec = self.enemy.origin - self.enemy.velocity * 0;
-
-	vec = normalize(vec - self.origin);
-	if (vlen(self.enemy.origin - self.origin) > 1200) vec = self.origin + vec * 1100;
-	else vec = self.origin + vec * (vlen(self.enemy.origin - self.origin) + 20);
-
-	org = self.origin;
-	traceline(org, vec, 1, self);
-	Tent_Beam(TE_LIGHTNING2,self,org,trace_endpos);
-	damage = (50 / (vlen(self.enemy.origin - trace_endpos) * 0.25) + LIGHTNING_RANDOM) * 0.75;
-	if (self.enemy.carrymode == LIGHTNING_RANDOM) damage = damage * 0.5;
-	GauntLightningDamage(self.origin, trace_endpos, self, damage);
-	if (self.enemy.health < 1 && vlen(self.enemy.origin - self.origin) <= 600) {
-		self.enemy.velocity = self.enemy.velocity + '0 0 10';
-		dir = self.enemy.origin - (self.absmin + self.absmax) * 0.5;
-		dir = normalize(dir);
-		self.enemy.velocity = self.enemy.velocity + dir * 50;
-	}
-};
-
-void() gauntwings = { sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
-void() 	gaunt_finish_attachment;
-
-void() gaunt_idle1 = [$hover1, gaunt_idle2 ] { monster_idle_sound();ai_stand(); };
+void() gaunt_idle1 = [$hover1, gaunt_idle2 ] { monster_idle_sound(); ai_stand(); };
 void() gaunt_idle2 = [$hover2, gaunt_idle3 ] { ai_stand(); };
 void() gaunt_idle3 = [$hover3, gaunt_idle4 ] { ai_stand(); };
 void() gaunt_idle4 = [$hover4, gaunt_idle5 ] { ai_stand(); };
-void() gaunt_idle5 = [$hover5, gaunt_idle6 ] { gauntwings();ai_stand(); };
+void() gaunt_idle5 = [$hover5, gaunt_idle6 ] { gargoylewings(); ai_stand(); };
 void() gaunt_idle6 = [$hover6, gaunt_idle7 ] { ai_stand(); };
 void() gaunt_idle7 = [$hover7, gaunt_idle8 ] { ai_stand(); };
 void() gaunt_idle8 = [$hover8, gaunt_idle9 ] { ai_stand(); };
@@ -226,17 +128,16 @@ void() gaunt_idle11 = [$hover11, gaunt_idle12 ] { ai_stand(); };
 void() gaunt_idle12 = [$hover12, gaunt_idle13 ] { ai_stand(); };
 void() gaunt_idle13 = [$hover13, gaunt_idle14 ] { ai_stand(); };
 void() gaunt_idle14 = [$hover14, gaunt_idle15 ] { ai_stand(); };
-void() gaunt_idle15 = [$hover15, gaunt_idle16 ] { gauntwings();ai_stand(); };
+void() gaunt_idle15 = [$hover15, gaunt_idle16 ] { gargoylewings(); ai_stand(); };
 void() gaunt_idle16 = [$hover16, gaunt_idle17 ] { ai_stand(); };
 void() gaunt_idle17 = [$hover17, gaunt_idle18 ] { ai_stand(); };
 void() gaunt_idle18 = [$hover18, gaunt_idle19 ] { ai_stand(); };
 void() gaunt_idle19 = [$hover19, gaunt_idle20 ] { ai_stand(); };
 void() gaunt_idle20 = [$hover20, gaunt_idle1 ] { ai_stand(); };
 
-
-void() gaunt_walk1 = [$hover1, gaunt_walk2 ] { monster_idle_sound();ai_walk(8); };
+void() gaunt_walk1 = [$hover1, gaunt_walk2 ] { monster_idle_sound(); ai_walk(8); };
 void() gaunt_walk2 = [$hover2, gaunt_walk3 ] { ai_walk(8); };
-void() gaunt_walk3 = [$hover3, gaunt_walk4 ] { gauntwings();ai_walk(8); };
+void() gaunt_walk3 = [$hover3, gaunt_walk4 ] { gargoylewings(); ai_walk(8); };
 void() gaunt_walk4 = [$hover4, gaunt_walk5 ] { ai_walk(8); };
 void() gaunt_walk5 = [$hover5, gaunt_walk6 ] { ai_walk(8); };
 void() gaunt_walk6 = [$hover6, gaunt_walk7 ] { ai_walk(8); };
@@ -248,7 +149,7 @@ void() gaunt_walk11 = [$hover11, gaunt_walk12 ] { ai_walk(8); };
 void() gaunt_walk12 = [$hover12, gaunt_walk13 ] { ai_walk(8); };
 void() gaunt_walk13 = [$hover13, gaunt_walk14 ] { ai_walk(8); };
 void() gaunt_walk14 = [$hover14, gaunt_walk15 ] { ai_walk(8); };
-void() gaunt_walk15 = [$hover15, gaunt_walk16 ] { gauntwings();ai_walk(8); };
+void() gaunt_walk15 = [$hover15, gaunt_walk16 ] { gargoylewings(); ai_walk(8); };
 void() gaunt_walk16 = [$hover16, gaunt_walk17 ] { ai_walk(8); };
 void() gaunt_walk17 = [$hover17, gaunt_walk18 ] { ai_walk(8); };
 void() gaunt_walk18 = [$hover18, gaunt_walk19 ] { ai_walk(8); };
@@ -257,7 +158,7 @@ void() gaunt_walk20 = [$hover20, gaunt_walk1 ] { ai_walk(8); };
 
 
 void() gaunt_run1 = [$hover1, gaunt_run2 ] { monster_idle_sound();
-	gaunt_finish_attachment();
+	SUB_FinishAttachment();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
 		self.meleeattack = time + 4 + (random() + random() + random() * 4);
@@ -268,7 +169,7 @@ void() gaunt_run1 = [$hover1, gaunt_run2 ] { monster_idle_sound();
 void() gaunt_run2 = [$hover2, gaunt_run3 ] { ai_run(8); };
 void() gaunt_run3 = [$hover3, gaunt_run4 ] { ai_run(8); };
 void() gaunt_run4 = [$hover4, gaunt_run5 ] { ai_run(8); };
-void() gaunt_run5 = [$hover5, gaunt_run6 ] { gauntwings();ai_run(8); };
+void() gaunt_run5 = [$hover5, gaunt_run6 ] { gargoylewings(); ai_run(8); };
 void() gaunt_run6 = [$hover6, gaunt_run7 ] { ai_run(8); };
 void() gaunt_run7 = [$hover7, gaunt_run8 ] { ai_run(8); };
 void() gaunt_run8 = [$hover8, gaunt_run9 ] { ai_run(8); };
@@ -278,7 +179,7 @@ void() gaunt_run11 = [$hover11, gaunt_run12 ] { ai_run(8); };
 void() gaunt_run12 = [$hover12, gaunt_run13 ] { ai_run(8); };
 void() gaunt_run13 = [$hover13, gaunt_run14 ] { ai_run(8); };
 void() gaunt_run14 = [$hover14, gaunt_run15 ] { ai_run(8); };
-void() gaunt_run15 = [$hover15, gaunt_run16 ] { gauntwings();ai_run(8); };
+void() gaunt_run15 = [$hover15, gaunt_run16 ] { gargoylewings(); ai_run(8); };
 void() gaunt_run16 = [$hover16, gaunt_run17 ] { ai_run(8); };
 void() gaunt_run17 = [$hover17, gaunt_run18 ] { ai_run(8); };
 void() gaunt_run18 = [$hover18, gaunt_run19 ] { ai_run(8); };
@@ -355,7 +256,7 @@ void() gaunt_plasma = {
 	local vector org, dir;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(SUB_orgEnemyTarget() - self.origin);
@@ -375,21 +276,6 @@ void() gaunt_create_attachment = {
 	}
 };
 
-void() gaunt_finish_attachment = {
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-void() gaunt_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-};
-
-//----------------------------------------------------------------------
 void(float elecframe) gaunt_elecupdate = {
 	if (self.health < 1) return;
 	if (!self.attachment) gaunt_create_attachment();
@@ -402,7 +288,7 @@ void(float elecframe) gaunt_elecupdate = {
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_start.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/gaunt/plasma_start.wav", 1, ATTN_NORM);
 	}
 
 	ai_face();					// Turn towards enemy
@@ -417,29 +303,27 @@ void() gaunt_fire1 = [$attack1, gaunt_fire2 ] { gaunt_elecupdate(0); };
 void() gaunt_fire2 = [$attack2, gaunt_fire3 ] { gaunt_elecupdate(1); };
 void() gaunt_fire3 = [$attack3, gaunt_fire4 ] { gaunt_elecupdate(2); };
 void() gaunt_fire4 = [$attack4, gaunt_fire5 ] { gaunt_elecupdate(3); };
-void() gaunt_fire5 = [$attack5, gaunt_fire6 ] { gaunt_elecupdate(4);gauntwings(); };
+void() gaunt_fire5 = [$attack5, gaunt_fire6 ] { gaunt_elecupdate(4);gargoylewings(); };
 void() gaunt_fire6 = [$attack6, gaunt_fire7 ] { gaunt_elecupdate(5);gaunt_plasma(); };
 void() gaunt_fire7 = [$attack7, gaunt_fire8 ] { gaunt_elecupdate(6); };
 void() gaunt_fire8 = [$attack8, gaunt_fire9 ] { gaunt_elecupdate(7);gaunt_plasma(); };
 void() gaunt_fire9 = [$attack9, gaunt_fire10 ] { gaunt_elecupdate(8); };
 void() gaunt_fire10 = [$attack10, gaunt_fire11 ] { ai_face();
 	if (skill > SKILL_NORMAL) gaunt_plasma();
-	gaunt_finish_attachment(); };
+	SUB_FinishAttachment(); };
 void() gaunt_fire11 = [$attack11, gaunt_fire12 ] {};
 void() gaunt_fire12 = [$attack12, gaunt_fire13 ] {};
 void() gaunt_fire13 = [$attack13, gaunt_fire14 ] {};
 void() gaunt_fire14 = [$attack14, gaunt_fire15 ] {};
-void() gaunt_fire15 = [$attack15, gaunt_fire16 ] { gauntwings(); };
+void() gaunt_fire15 = [$attack15, gaunt_fire16 ] { gargoylewings(); };
 void() gaunt_fire16 = [$attack16, gaunt_fire17 ] {};
 void() gaunt_fire17 = [$attack17, gaunt_fire18 ] {};
 void() gaunt_fire18 = [$attack18, gaunt_fire19 ] { ai_face(); };
 void() gaunt_fire19 = [$attack19, gaunt_fire20 ] { ai_face(); };
 void() gaunt_fire20 = [$attack20, gaunt_run1 ] {};
 
-
 // PERCH + WAKEUP
-
-void() gaunt_perch1 = [$perch1, gaunt_perch2 ] { monster_idle_sound();ai_stand(); };
+void() gaunt_perch1 = [$perch1, gaunt_perch2 ] { monster_idle_sound(); ai_stand(); };
 void() gaunt_perch2 = [$perch2, gaunt_perch3 ] { ai_stand(); };
 void() gaunt_perch3 = [$perch3, gaunt_perch4 ] { ai_stand(); };
 void() gaunt_perch4 = [$perch4, gaunt_perch5 ] { ai_stand(); };
@@ -456,14 +340,13 @@ void() gaunt_perch14 = [$perch14, gaunt_perch15 ] { ai_stand(); };
 void() gaunt_perch15 = [$perch15, gaunt_perch16 ] { ai_stand(); };
 void() gaunt_perch16 = [$perch16, gaunt_perch1 ] { ai_stand(); };
 
-//----------------------------------------------------------------------
 // Sightsound and very quick animation while moving forward
 void() gaunt_wakeup1 = [$launch1, gaunt_wakeup2 ] { monster_sightsound(); };
 void() gaunt_wakeup2 = [$launch2, gaunt_wakeup3 ] { ai_forward(4); };
 void() gaunt_wakeup3 = [$launch3, gaunt_wakeup4 ] { ai_forward(4); };
 void() gaunt_wakeup4 = [$launch4, gaunt_wakeup5 ] { ai_forward(4); };
 void() gaunt_wakeup5 = [$launch5, gaunt_wakeup6 ] { ai_forward(4); };
-void() gaunt_wakeup6 = [$launch6, gaunt_wakeup7 ] { gauntwings();ai_forward(4); };
+void() gaunt_wakeup6 = [$launch6, gaunt_wakeup7 ] { gargoylewings(); ai_forward(4); };
 void() gaunt_wakeup7 = [$launch7, gaunt_wakeup8 ] { ai_forward(4); };
 void() gaunt_wakeup8 = [$launch8, gaunt_run1 ] {
 	FoundHuntTarget(TRUE);			// Setup goals and warn other monsters
@@ -474,20 +357,18 @@ void() gaunt_wakeup8 = [$launch8, gaunt_run1 ] {
 	self.th_missile = gaunt_fire1;
 };
 
-//----------------------------------------------------------------------
 void() gaunt_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
 
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.use = SUB_Null;				// no re-trigger
-	
-	// Only call wakeup function once
-	self.th_walk = self.th_run = SUB_Null;
+	self.th_walk = self.th_run = SUB_Null; // Only call wakeup function once
 
 	// No longer need perch spawnflag, remove it
-	if (self.spawnflags & MON_GAUNT_PERCH) 
+	if (self.spawnflags & MON_GAUNT_PERCH) {
 		self.spawnflags = self.spawnflags - MON_GAUNT_PERCH;
+	}
 
 	// Allow gaunt to fly up, no more ground checks
 	if (!(self.flags & FL_FLY)) self.flags = self.flags | FL_FLY;
@@ -515,24 +396,20 @@ void() 	gaunt_painB3 = [$painB3, gaunt_painB4 ] {};
 void() 	gaunt_painB4 = [$painB4, gaunt_painB5 ] {};
 void() 	gaunt_painB5 = [$painB5, gaunt_run1 ] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) gaunt_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
-
-	// make sure any electricity is hidden
-	if (self.attachment) gaunt_finish_attachment();
+	SUB_FinishAttachment(); // make sure any electricity is hidden
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			if (self.lip < 0.4) gaunt_painB1();	// Long
 			else gaunt_painA1();				// Short
 		}
 	}
 };
-
 
 void() gaunt_deathA1 = [$deathA1, gaunt_deathA2 ] {};
 void() gaunt_deathA2 = [$deathA2, gaunt_deathA3 ] { monster_check_gib(); };
@@ -544,7 +421,6 @@ void() gaunt_deathA6 = [$deathA6, gaunt_deathA7 ] {};
 void() gaunt_deathA7 = [$deathA7, gaunt_deathA8 ] { monster_death_postcheck(); };
 void() gaunt_deathA8 = [$deathA8, gaunt_deathA8 ] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() gaunt_deathB1 = [$deathB1, gaunt_deathB2 ] {};
 void() gaunt_deathB2 = [$deathB2, gaunt_deathB3 ] { monster_check_gib(); };
 void() gaunt_deathB3 = [$deathB3, gaunt_deathB4 ] { monster_check_gib();
@@ -559,9 +435,7 @@ void() gaunt_die = {
 	// Check for perching gaunt, need to blow up in gibs
 	// In an awkward pose that does not go well into death animations
 	if (self.spawnflags & MON_GAUNT_PERCH) self.gibondeath = TRUE;
-
 	StopSound(self,CHAN_ITEM); // Make sure any wings sound is silenced
-
 	
 	// If casting electricity, make it explode!
 	if (self.attachment) {
@@ -574,8 +448,7 @@ void() gaunt_die = {
 			self.oldorigin = self.origin + v_forward*8;
 			SpawnExplosion(EXPLODE_PLASMA_BIG, self.oldorigin, SOUND_REXP3);
 		}
-		// make sure any electricity is hidden
-		gaunt_finish_attachment();
+		SUB_RemoveAttachment(); // make sure any electricity is hidden
 	}
 	
 	// Pre-check routine to tidy up extra entities
@@ -583,7 +456,7 @@ void() gaunt_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "quoth/gaunt/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "quoth/gaunt/death.wav", 1, ATTN_NORM);
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
@@ -593,18 +466,6 @@ void() gaunt_die = {
 	}
 };
 
-float(entity targ, entity viewpoint) visiblegaunt = {
-	local vector spot1;
-	local vector spot2;
-	spot1 = viewpoint.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-	traceline(spot1, spot2, 1, self);
-	if (trace_inopen && trace_inwater) return 0;
-	if (trace_fraction == LIGHTNING_RANDOM) return 1;
-
-	return 0;
-};
-
 float() gaunt_checkswoop = {
 	local entity head;
 	local float m;
@@ -612,18 +473,16 @@ float() gaunt_checkswoop = {
 	while (head) {
 		if (head.targetname == self.pathtarget || head.flags & FLx_CREATURE) {
 			m = vlen(self.enemy.origin - head.origin);
-			if (m > 500 && visxray(self.enemy,head,self.view_ofs,head.view_ofs,TRUE))
-			{
-				return 1;
+			if (m > 500 && visxray(self.enemy,head,self.view_ofs,self.enemy.view_ofs,TRUE)) {
+				return TRUE;
 			}
-			if (m <= 500 && !visiblegaunt(head, self.enemy))
-			{
-				return 1;
+			if (m <= 500 && visxray(head,self.enemy,self.view_ofs,self.enemy.view_ofs,TRUE)) {
+				return TRUE;
 			}
 		}
 		head = head.chain;
 	}
-	return 0;
+	return FALSE;
 };
 
 void() gaunt_flyswoop = {

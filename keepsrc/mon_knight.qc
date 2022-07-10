@@ -204,7 +204,7 @@ void() knight_fast6  = [$attackb9,  knight_fast7  ] { ai_charge(1); ai_melee(); 
 void() knight_fast7  = [$attackb10, knight_run1   ] { monster_footstep(FALSE); ai_charge(5); };
 
 void() knight_melee = {
-	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		if (self.exactskin == 2 && self.max_health > 75) knight_fast1(); // Drake's cranked monster_warrior
 		else knight_atk1();
 	} else knight_runatk1();
@@ -231,7 +231,7 @@ void(entity inflictor, entity attacker, float damage)	knight_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) knight_pain1();	// classic, body recoil
@@ -261,7 +261,7 @@ void()	knight_die10= [	$death10,	knight_die10] { monster_deadbody_check(); };
 
 void()	knight_dieb1	= [	$deathb1,	knight_dieb2	] {};
 void()	knight_dieb2	= [	$deathb2,	knight_dieb3	] { monster_check_gib(); };
-void()	knight_dieb3	= [	$deathb3,	knight_dieb4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void()	knight_dieb3	= [	$deathb3,	knight_dieb4	] { monster_check_gib(); self.solid = SOLID_NOT;};
 void()	knight_dieb4	= [	$deathb4,	knight_dieb5	] {};
 void()	knight_dieb5	= [	$deathb5,	knight_dieb6	] {};
 void()	knight_dieb6	= [	$deathb6,	knight_dieb7	] {};
@@ -272,11 +272,11 @@ void()	knight_dieb10 = [	$deathb10,	knight_dieb11] { monster_death_postcheck(); 
 void()	knight_dieb11 = [	$deathb11,	knight_dieb11] { monster_deadbody_check(); };
 
 void() knight_die = {
-	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 
-	// regular death
+	// regular des
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		if (random() > 0.5) knight_die1();		// Forward - standard
 		else knight_dieb1();									// Backward - standard
 	}
@@ -317,7 +317,7 @@ void() knight_statue = {
 		}
 		self.lip = self.pos1_x + rint(random()*self.pos1_z);
 		if (new_frame) {
-			sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 			self.frame = self.lip;
 		}
 	}
@@ -333,19 +333,19 @@ void() monster_knight_precache = {
 	precache_model ("progs/ad171/gib_knfoot_l.mdl");
 	precache_model ("progs/ad171/gib_knfoot_r.mdl");
 	precache_stonegibs(); // Always precache these stone gib models
-	precache_sound ("ad171/statue/idle1.wav");
-	precache_sound ("ad171/statue/idle2.wav");
-	precache_sound ("rogue/statue/idle.wav");
-	precache_sound ("knight/idle.wav");
-	precache_sound ("rogue/statue/see.wav");
-	precache_sound ("rogue/statue/pain.wav");
-	precache_sound ("rogue/statue/death.wav");
-	precache_sound ("ad171/statue/sight.wav");
-	precache_sound ("knight/ksight.wav");
-	precache_sound ("knight/khurt.wav");
-	precache_sound ("knight/kdeath.wav");
-	precache_sound ("knight/sword1.wav");
-	precache_sound ("knight/sword2.wav");
+	precache_sound("ad171/statue/idle1.wav");
+	precache_sound("ad171/statue/idle2.wav");
+	precache_sound("rogue/statue/idle.wav");
+	precache_sound("knight/idle.wav");
+	precache_sound("rogue/statue/see.wav");
+	precache_sound("rogue/statue/pain.wav");
+	precache_sound("rogue/statue/death.wav");
+	precache_sound("ad171/statue/sight.wav");
+	precache_sound("knight/ksight.wav");
+	precache_sound("knight/khurt.wav");
+	precache_sound("knight/kdeath.wav");
+	precache_sound("knight/sword1.wav");
+	precache_sound("knight/sword2.wav");
 };
 
 // QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -396,7 +396,8 @@ void() monster_knight = {
 	self.th_die = knight_die;			// Face meets floor
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
     self.hittype    = HIT_METAL;
-	
+	self.meleerange = 80;
+	self.meleerangez = 48;
 	// Detect statues and setup different parameters
 	// Tougher skin, less pain, heavy feet etc	
 	if (self.spawnflags & MON_STATUE) {

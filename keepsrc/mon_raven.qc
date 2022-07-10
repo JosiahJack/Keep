@@ -132,7 +132,7 @@ void()	raven_eat20	= [	$eat22,		raven_eat1	] { ai_stand(); };
 void()	raven_takeoff1	= [	$takeoff1,		raven_takeoff2	] { ai_run(8); };
 void()	raven_takeoff2	= [	$takeoff2,		raven_takeoff3	] { ai_run(8); };
 void()	raven_takeoff3	= [	$takeoff3,		raven_takeoff4	] { ai_run(8);
-	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM); };
 void()	raven_takeoff4	= [	$takeoff4,		raven_takeoff5	] { ai_run(8); };
 void()	raven_takeoff5	= [	$takeoff5,		raven_takeoff6	] { ai_run(8); };
 void()	raven_takeoff6	= [	$takeoff6,		raven_takeoff7	] { ai_run(8); };
@@ -156,7 +156,7 @@ void()	raven_run10	= [	$fly10,		raven_run11	] { ai_run(28); };
 void()	raven_run11	= [	$fly11,		raven_run1	] { ai_run(28); };
 
 void()	raven_hover1	= [	$fly1,		raven_hover2	] { ai_stand(); };
-void()	raven_hover2	= [	$fly2,		raven_hover3	] { ai_stand();sound (self,CHAN_VOICE,"redfield/raven/wings.wav",1,ATTN_NORM); };
+void()	raven_hover2	= [	$fly2,		raven_hover3	] { ai_stand();sound(self,CHAN_VOICE,"redfield/raven/wings.wav",1,ATTN_NORM); };
 void()	raven_hover3	= [	$fly3,		raven_hover4	] { ai_stand(); };
 void()	raven_hover4	= [	$fly4,		raven_hover5	] { ai_stand(); };
 void()	raven_hover5	= [	$fly5,		raven_hover6	] { ai_stand(); };
@@ -172,7 +172,7 @@ void()	raven_atk2  	= [ 	$atk2, 		raven_atk3 	] { ai_charge(26); };
 void()	raven_atk3  	= [ 	$atk3, 		raven_atk4 	] { ai_charge(26); };
 void()	raven_atk4  	= [ 	$atk4, 		raven_atk5 	] { ai_charge(26); };
 void()	raven_atk5  	= [ 	$atk5, 		raven_atk6 	] { ai_charge(24);raven_melee();
-	sound (self, CHAN_VOICE, "redfield/raven/rclaw.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, "redfield/raven/rclaw.wav", 1, ATTN_NORM); };
 void()	raven_atk6  	= [ 	$atk6, 		raven_atk7 	] { ai_charge(26); };
 void()	raven_atk7  	= [ 	$atk7, 		raven_atk8 	] { ai_charge(24);raven_melee(); };
 void()	raven_atk8  	= [ 	$atk8, 		raven_atk9 	] { ai_charge(26); };
@@ -180,11 +180,11 @@ void()	raven_atk9  	= [ 	$atk9, 		raven_atk10 	] { ai_charge(26); };
 void()	raven_atk10  	= [ 	$atk10, 	raven_atk11 	] { ai_charge(26); };
 void()	raven_atk11  	= [ 	$atk11, 	raven_atk12	] { ai_charge(26); };
 void()	raven_atk12  	= [ 	$atk12, 	raven_atk13	] { ai_charge(24);raven_melee();
-	sound (self, CHAN_VOICE, "redfield/raven/rsnap.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, "redfield/raven/rsnap.wav", 1, ATTN_NORM); };
 void()	raven_atk13  	= [ 	$atk13, 	raven_atk14 	] { ai_charge(26); };
 void()	raven_atk14  	= [ 	$atk14, 	raven_atk15	] { ai_charge(26); };
 void()	raven_atk15  	= [ 	$atk15, 	raven_atk16	] { ai_charge(24);raven_melee();
-	sound (self, CHAN_VOICE, "redfield/raven/ravencall.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, "redfield/raven/ravencall.wav", 1, ATTN_NORM); };
 void()	raven_atk16  	= [ 	$atk16, 	raven_atk17	] { ai_charge(26); };
 void()	raven_atk17  	= [ 	$atk17, 	raven_atk18	] { ai_charge(26); };
 void()	raven_atk18  	= [ 	$atk18, 	raven_atk19	] { ai_charge(26); };
@@ -252,7 +252,7 @@ void(entity inflictor, entity attacker, float damage) raven_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		self.pain_finished = time + 1;
 	}
 	else if (self.pain_check == 2) {
@@ -288,7 +288,7 @@ void() raven_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) {  //normal death
-		if (random() < 0.5) { sound (self, CHAN_VOICE, "redfield/raven/rdeath.wav", 1, ATTN_NORM);}
+		if (random() < 0.5) { sound(self, CHAN_VOICE, "redfield/raven/rdeath.wav", 1, ATTN_NORM);}
 		else sound(self, CHAN_VOICE, "redfield/raven/rdeathb.wav", 1, ATTN_NORM);
 		self.flags = FL_MONSTER;			// reset all flag conditions
 		self.movetype = MOVETYPE_TOSS;			// Affected by gravity

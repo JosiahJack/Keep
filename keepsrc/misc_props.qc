@@ -35,7 +35,6 @@ void() misc_model_loop = {
 	self.nextthink = time + self.speed;
 };
 
-//----------------------------------------------------------------------
 void() misc_model_on = {
 	// Check if there is any spawn/on delay setup
 	// Useful for delay spawning models on to platform/doors
@@ -50,7 +49,7 @@ void() misc_model_on = {
 
 	self.estate = ESTATE_ON;
 
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	// Restore model/size and check if collision needed
 	if (self.spawnflags & MISC_COLLISION) {
 		self.solid = SOLID_BBOX;
@@ -99,7 +98,6 @@ void() misc_model_on = {
 	}
 };
 
-//----------------------------------------------------------------------
 void() misc_model_off = {
 	// Turn off model/world interaction
 	self.estate = ESTATE_OFF;
@@ -107,7 +105,6 @@ void() misc_model_off = {
 	self.solid = SOLID_NOT;
 };
 
-//----------------------------------------------------------------------
 void() misc_model = {
 	// Is the model defined using the noise key?
 	if (!self.mdl) {

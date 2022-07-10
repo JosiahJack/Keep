@@ -263,8 +263,8 @@ void()	dknight_run6	= [	$run6,	dknight_run1	] { ai_run(13); };
 // Damage Frames - Hell Knight (6-11, Total 6) Death Knight (6-10, Total 5)
 
 void()	dknight_char_a1	= [	$char_a1,	dknight_char_a2	] { ai_charge(20); SwordSwipeSound(); };
-void()	dknight_char_a2	= [	$char_a2,	dknight_char_a3	] { monster_footstep(FALSE); ai_charge(25);ai_melee(); };
-void()	dknight_char_a3	= [	$char_a3,	dknight_char_a4	] { ai_charge(18);ai_melee(); };
+void()	dknight_char_a2	= [	$char_a2,	dknight_char_a3	] { monster_footstep(FALSE); ai_charge(25); ai_melee(); };
+void()	dknight_char_a3	= [	$char_a3,	dknight_char_a4	] { ai_charge(18); ai_melee(); };
 void()	dknight_char_a4	= [	$char_a4,	dknight_char_a5	] { ai_charge(16); };
 void()	dknight_char_a5	= [	$char_a5,	dknight_char_a6	] { monster_footstep(FALSE); ai_charge(14); };
 void()	dknight_char_a6	= [	$char_a6,	dknight_char_a7	] { ai_charge(20); ai_melee(); };
@@ -317,7 +317,7 @@ void()	dknight_smash6	= [	$smash7,	dknight_smash7	] { ai_charge(7); ai_melee(); 
 void()	dknight_smash7	= [	$smash8,	dknight_smash8	] { monster_footstep(FALSE); ai_charge(12); ai_melee(); };
 void()	dknight_smash8	= [	$smash9,	dknight_smash9	] { ai_charge(2); ai_melee(); };
 void()	dknight_smash9	= [	$smash10,	dknight_smash10	] { ai_charge(3); ai_melee(); };
-void()	dknight_smash10	= [	$smash12,	dknight_smash11	] { ai_charge(0);ai_melee(); };
+void()	dknight_smash10	= [	$smash12,	dknight_smash11	] { ai_charge(0); ai_melee(); };
 void()	dknight_smash11	= [	$smash13,	dknight_run1	] { ai_charge(0); };
 
 //----------------------------------------------------------------------
@@ -410,7 +410,7 @@ void(entity inflictor, entity attacker, float damage)	dknight_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dknight_painA1();	// classic, body recoil
@@ -430,13 +430,13 @@ void(entity inflictor, entity attacker, float damage)	dknight_pain = {
 
 
 void()	dknight_die1	= [	$death1,	dknight_die2	] { ai_forward(10); };
-void()	dknight_die2	= [	$death2,	dknight_die3	] { monster_check_gib();ai_forward(8); };
+void()	dknight_die2	= [	$death2,	dknight_die3	] { monster_check_gib(); ai_forward(8); };
 void()	dknight_die3	= [	$death3,	dknight_die4	] { monster_check_gib();
 	self.solid = SOLID_NOT; ai_forward(7); };
 void()	dknight_die4	= [	$death4,	dknight_die5	] {};
 void()	dknight_die5	= [	$death5,	dknight_die6	] {};
 void()	dknight_die6	= [	$death6,	dknight_die7	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
 void()	dknight_die7	= [	$death7,	dknight_die8	] {};
 void()	dknight_die8	= [	$death8,	dknight_die9	] { ai_forward(10); };
 void()	dknight_die9	= [	$death9,	dknight_die10	] { ai_forward(11); };
@@ -455,7 +455,7 @@ void()	dknight_dieb6	= [	$deathb6,	dknight_dieb7	] {};
 void()	dknight_dieb7	= [	$deathb7,	dknight_dieb8	] {};
 void()	dknight_dieb8	= [	$deathb8,	dknight_dieb9	] {};
 void()	dknight_dieb9	= [	$deathb9,	dknight_dieb10	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
 void()	dknight_dieb10	= [	$deathb10,	dknight_dieb11	] {};
 void()	dknight_dieb11	= [	$deathb11,	dknight_dieb12	] {};
 void()	dknight_dieb12	= [	$deathb12,	dknight_dieb13	] {};
@@ -475,7 +475,7 @@ void() dknight_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		if (random() > 0.5) dknight_die1();
 		else dknight_dieb1();
 	}
@@ -509,8 +509,8 @@ void() dknight_ghost_particle = {
 	if (self.idletimer < time) {
 		self.idletimer = time + 7 + (random() * 3);
 		self.lefty = 1 - self.lefty;
-		if (self.lefty) sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.idle_sound2, 1, ATTN_NORM);
+		if (self.lefty) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.idle_sound2, 1, ATTN_NORM);
 	}
 };
 
@@ -532,12 +532,12 @@ void() dknight_ghost_fade = {
 	if (self.classtype != CT_MONQUEEN) self.alpha = self.endstate;
 	else {
 		if (self.endstate <= 0.8) self.effects = self.effects | EF_MUZZLEFLASH;
-		if (self.endstate <= 0.7) setmodel (self,"");
+		if (self.endstate <= 0.7) setmodel(self,"");
 		else self.nextthink = time + FADEMODEL_TIME;
 		return;
 	}
 
-    if (self.alpha <= 0) setmodel (self,"");
+    if (self.alpha <= 0) setmodel(self,"");
 	else self.nextthink = time + FADEMODEL_TIME;
 };
 
@@ -632,8 +632,8 @@ void() monster_dknight_precache = {
 	precache_sound("hknight/sight1.wav");
 	precache_sound("hknight/pain1.wav");
 	precache_sound("hknight/death1.wav");
-	precache_sound ("ad171/dknight/ghost_idle1.wav");
-	precache_sound ("ad171/dknight/ghost_idle2.wav");
+	precache_sound("ad171/dknight/ghost_idle1.wav");
+	precache_sound("ad171/dknight/ghost_idle2.wav");
 };
 
 // QUAKED monster_dknight (1 0 0) (-16 -16 -24) (16 16 40) Ambush

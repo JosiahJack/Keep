@@ -91,8 +91,8 @@ void() player_vehicle_animation = { // [FUNCTION]
 	} else {
 		setmodel(self,"");
 	}
-	if (!(cinematic_running || cutscene || intermission_running)) setorigin (self,self.owner.origin);
-	else setorigin (self,self.oldorigin); // stay put
+	if (!(cinematic_running || cutscene || intermission_running)) setorigin(self,self.owner.origin);
+	else setorigin(self,self.oldorigin); // stay put
 	self.oldorigin = self.origin;
 	self.think = player_vehicle_animation;
 	self.nextthink = time + 0.05;

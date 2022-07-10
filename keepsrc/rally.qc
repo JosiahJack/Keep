@@ -102,12 +102,12 @@ void(float jump, float destroy) TakePlayerOutOfVehicle = { // [FUNCTION]
 	self.max_health = self.turrethealth2;
 	self.armorvalue = self.turrettimer;
 	self.turrethealth = self.turrethealth2 = self.turrettimer = 0;
-	self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
-	self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
+	SUB_RemoveFlags(self,FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
+	SUB_RemoveFlags(self,FL_ONGROUND); // don't stairwalk
 	self.button2 = 0;
 	if (jump) {
 		if (self.shroom_finished > time) sound(self,CHAN_BODY,"qmaster/player/jumpmario.wav",1,ATTN_NORM);
-		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
+		else sound(self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
 
 		self.velocity_z = self.velocity_z + map_jumpheight;
 		makevectors(self.v_angle);
@@ -826,37 +826,21 @@ void() dirt5 = [5, dirt6]
 	}
 };
 
-void() dirt6 = [4, dirt7]
-{
-};
+void() dirt6 = [4, dirt7] {};
 
-void() dirt7 = [5, dirt8]
-{
-};
+void() dirt7 = [5, dirt8] {};
 
-void() dirt8 = [4, dirt9]
-{
-};
+void() dirt8 = [4, dirt9] {};
 
-void() dirt9 = [3, dirt10]
-{
-};
+void() dirt9 = [3, dirt10] {};
 
-void() dirt10 = [2, dirt11]
-{
-};
+void() dirt10 = [2, dirt11] {};
 
-void() dirt11 = [3, dirt12]
-{
-};
+void() dirt11 = [3, dirt12] {};
 
-void() dirt12 = [2, dirt13]
-{
-};
+void() dirt12 = [2, dirt13] {};
 
-void() dirt13 = [1, dirt14]
-{
-};
+void() dirt13 = [1, dirt14] {};
 
 void() dirt14 = [0, dirt14]
 {
@@ -929,7 +913,7 @@ float() MoveTail = {
 				commentary(self, "qrally/voice/yeah.wav");
 			}
 		}
-		self.flags = self.flags - FL_ONGROUND;
+		SUB_RemoveFlags(self,FL_ONGROUND);
 		CarAirborne();
 	}
 	else
@@ -946,10 +930,7 @@ float() MoveTail = {
 			{
 				self.flags = self.flags + FL_ONGROUND;
 				self.racing_flags = self.racing_flags | QR_JUST_LANDED;
-				if (tail.flags & FL_ONGROUND)
-				{
-					tail.flags = tail.flags - FL_ONGROUND;
-				}
+				SUB_RemoveFlags(tail,FL_ONGROUND);
 				makevectors(self.veh_body.angles);
 				setorigin(self.veh_tail, self.origin - v_forward * TAIL_DIST);
 				tail_angles = vectoangles(self.veh_dir);
@@ -1039,7 +1020,7 @@ float() MoveTail = {
 			}
 			setorigin(self, self.origin + '0 0 1');
 			self.last_jump_z = self.last_jump_z * 0.9;
-			self.flags = self.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self,FL_ONGROUND);
 			if (self.roll_velocity_z < 0 && self.roll_velocity_z > -10)
 			{
 				self.roll_velocity_z = -10;
@@ -3192,7 +3173,7 @@ void() VehiclePreThink = {
 				} else {
 					self.veh_body.roll_velocity_z = -20;
 				}
-				self.flags = self.flags - FL_ONGROUND;
+				SUB_RemoveFlags(self,FL_ONGROUND);
 				self.last_flags = self.last_flags - (self.last_flags & FL_ONGROUND);
 				self.velocity = self.velocity + '0 0 50';
 			}

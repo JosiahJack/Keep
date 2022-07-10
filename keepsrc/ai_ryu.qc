@@ -457,6 +457,11 @@ void() ryu_melee = {
     if (ryu_step(TRUE)) movetogoal(SPEED_RYU_MIN);   // Close in on the opponent.
 };
 
+float(vector spot, vector add, float yaw, float dist) WyrmPt = {
+    setorigin(self,spot + add);
+    return Ryu_WalkMove(yaw,dist);
+};
+
 // Any monster, regardless of size, uses one of three clipping hull sizes.
 //
 //  if (size_x < 3)
@@ -492,7 +497,7 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     local   float   flat, up, lo, hi;
 
     org = self.origin;
-    setorigin (move_box, self.origin);
+    setorigin(move_box, self.origin);
     setsize (move_box, self.mins, self.maxs);
     move_box.flags      = FL_FLY;
     move_box.angles     = self.angles;
@@ -506,7 +511,7 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     move_box.watertype  = self.watertype;
     swap = self;
     self = move_box;
-    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;} // Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.
+    if (!Ryu_WalkMove(yaw,dist)) { self = swap; return FALSE;} // Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.
 
     flat = FALSE;
     up = self.origin_z; // Remember this!  All movement must have the same elevation.
@@ -519,127 +524,60 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     add = VEC_ORIGIN;
 	
 	// Check NW corner.
-    add_x = lo;
-    add_y = hi;
-    setorigin (self, org + add);
-    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-    if (self.origin_z != up) flat = TRUE;
+    add_x = lo; add_y = hi; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 	
 	// Check NE corner.
-    add_x = hi;
-    setorigin (self, org + add);
-    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-    if (self.origin_z != up) flat = TRUE;
+    add_x = hi; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 	
 	// Check SE corner.
-    add_y = lo;
-    setorigin (self, org + add);
-    if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-    if (self.origin_z != up) flat = TRUE;
+    add_y = lo; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 	
 	// If the dragon is larger than a 128x128 area, areas between the corners must be checked too.  Otherwise, we are done.
     if (swap.maxs_x > 96) { // 4x4 -- Safe up to 256x256.
 		// Check S face.
-        add_x = 32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-        add_x = -32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_x = 32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_x = -32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
 		// Check N face.
-        add_y = hi;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-        add_x = 32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_y = hi; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_x = 32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
 		// Check W face.
-        add_x = lo;
-        add_y = 32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-        add_y = -32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_x = lo; add_y = 32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_y = -32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
 		// Check E face.
-        add_x = hi;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_x = hi; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_y = 32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
-        add_y = 32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-		// Check the middle.  Yes, we need to do this too to prevent the dragon for clipping things directly above or below it, such as the tops of pyramids or obelisks.
-        add_x = 32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-        add_x = -32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-        add_y = -32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
-        add_x = 32;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
-		
+		// Check the middle.  Yes, we need to do this too to prevent the dragon
+        // for clipping things directly above or below it, such as the tops of
+        // pyramids or obelisks.
+        add_x = 32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_x = -32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_y = -32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
+        add_x = 32; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
     } else if (swap.maxs_x > 64) { // 3x3 -- Safe up to 192x192.
 		// Check S face.
-        add_x = 0;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_x = 0; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
 		// Check N face.
-        add_y = hi;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_y = hi; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
 		// Check W face.
-        add_x = lo;
-        add_y = 0;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_x = lo; add_y = 0; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
 		// Check E face.
-        add_x = hi;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+        add_x = hi; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
 		
-		// Check the middle.  Yes, we need to do this too to prevent the dragon for clipping things directly above or below it, such as the tops of pyramids or obelisks.
-        add_x = 0;
-        setorigin (self, org + add);
-        if (!Ryu_WalkMove (yaw, dist)) { self = swap; return FALSE;}
-        if (self.origin_z != up) flat = TRUE;
+		// Check the middle.  Yes, we need to do this too to prevent the dragon
+        // for clipping things directly above or below it, such as the tops of
+        // pyramids or obelisks.
+        add_x = 0; if (!WyrmPt(org,add,yaw,dist)) { self = swap; return FALSE;}
     }
 
-	// Test movement successful.  Now move the dragon for real.
-    self = swap;
-    if (flat) return flat_move (yaw, dist);
-    return Ryu_WalkMove (yaw, dist);
+    if (self.origin_z != up) flat = TRUE;
+    self = swap; // Test movement successful.  Now move the dragon for real.
+    if (flat) return flat_move(yaw,dist);
+    return Ryu_WalkMove(yaw,dist);
 };

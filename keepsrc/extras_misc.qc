@@ -80,9 +80,9 @@ void(entity inflictor, entity attacker, float damage) explobsp_hurt = { // [FUNC
 void() func_explobsp = { // [ENTITY]
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
    	setsize( self, self.mins, self.maxs );
-	precache_sound ("weapons/r_exp3.wav");
+	precache_sound("weapons/r_exp3.wav");
 	if (!self.health) self.health = 20;
 	if (!self.dmg) self.dmg = 160;
 	self.dest = (self.mins + self.maxs)*0.5; // Center of the volume
@@ -95,7 +95,7 @@ void() func_explobsp = { // [ENTITY]
 
 void() breakaway_break = { // [FUNCTION]
 	self.takedamage = DAMAGE_NO;
-	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
+	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
 	activator = damage_attacker;
 	self.delay = 0.01;// Don't fire targets right away, since they might be inside
 	SUB_UseTargets();
@@ -106,7 +106,7 @@ void() breakaway_break = { // [FUNCTION]
 };
 
 void(entity inflictor, entity attacker, float damage) breakaway_hurt = { // [FUNCTION]
-	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
+	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
 	if (self.spawnflags & HEAL) { self.health = self.max_health; return; }
 	
 	if (!self.frame && self.health <= self.frags) self.frame = 1;
@@ -128,10 +128,10 @@ void(entity inflictor, entity attacker, float damage) breakaway_hurt = { // [FUN
 void() func_breakaway = { // [ENTITY]
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
    	setsize( self, self.mins, self.maxs );
-	if (self.noise)	precache_sound (self.noise);
-	if (self.noise1) precache_sound (self.noise1);
+	if (self.noise)	precache_sound(self.noise);
+	if (self.noise1) precache_sound(self.noise1);
 	if (!self.health) self.health = 20;
 	self.max_health = self.health;
 	if (!(self.spawnflags & BLEED)) self.nobleed = TRUE;
@@ -149,7 +149,7 @@ void() func_nodraw = { // [ENTITY]
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	if (!(self.spawnflags & 1)) self.model = "";
 };
 

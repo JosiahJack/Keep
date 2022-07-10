@@ -167,7 +167,7 @@ void() train_ext_linkchild = { // [FUNCTION]
 	self.owner = parent; // Set the train as this ent's owner
 	if (parent.child) self.child = parent.child; // Copy off any other children
 	parent.child = self; // Make this ent a child
-	setorigin (self, self.owner.origin); // Set start position
+	setorigin(self, self.owner.origin); // Set start position
 };
 
 void() train_ext_playstopsound = { // [FUNCTION]
@@ -178,7 +178,7 @@ void() train_ext_playstopsound = { // [FUNCTION]
 		cchain = self.child;
 		while(cchain) {	
 			if (cchain.cshift) // func_watertrain
-				if (cchain.noise1) sound (cchain, CHAN_VOICE, cchain.noise1, 1, ATTN_NORM);	
+				if (cchain.noise1) sound(cchain, CHAN_VOICE, cchain.noise1, 1, ATTN_NORM);	
 			cchain = cchain.child;
 		}
 	}
@@ -187,7 +187,7 @@ void() train_ext_playstopsound = { // [FUNCTION]
 void() train_ext_playtravelsound = { // [FUNCTION]
 	local entity cchain;
 	
-	sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	if (!self.cshift) { // play child sounds
 		cchain = self.child;
 		while(cchain) {	
@@ -201,7 +201,7 @@ void() train_ext_playtravelsound = { // [FUNCTION]
 void() train_ext_playchangedirsound = { // [FUNCTION], Doesn't mute CHAN_VOICE
 	local entity cchain;
 	
-	if (self.noise4) sound (self, CHAN_BODY, self.noise4, 1, ATTN_NORM);
+	if (self.noise4) sound(self, CHAN_BODY, self.noise4, 1, ATTN_NORM);
 	if (!self.cshift) { // play child sounds
 		cchain = self.child;
 		while(cchain) {
@@ -215,7 +215,7 @@ void() train_ext_playchangedirsound = { // [FUNCTION], Doesn't mute CHAN_VOICE
 void() train_ext_playwrongwaysound = { // [FUNCTION]
 	local entity cchain;
 	
-	if (self.noise5) sound (self, CHAN_VOICE, self.noise5, 1, ATTN_NORM);
+	if (self.noise5) sound(self, CHAN_VOICE, self.noise5, 1, ATTN_NORM);
 	if (!self.cshift) { // play child sounds
 		cchain = self.child;
 		while(cchain) {
@@ -247,7 +247,7 @@ void() train_ext_move = { // [FUNCTION]
 	
 	// Warp instantly to next waypoint
 	if (self.speed == -1) {	
-		setorigin (self, self.dest-self.mins);
+		setorigin(self, self.dest-self.mins);
 		self.nextthink = self.ltime + 0.001;
 	} else { // Move at speed to next waypoint	
 		train_ext_playtravelsound();
@@ -258,7 +258,7 @@ void() train_ext_move = { // [FUNCTION]
 	if (!self.cshift) {// func_watertrain can't have children
 		cchain = self.child;
 		while(cchain) {
-			if (self.speed == -1) setorigin (cchain, self.dest-self.mins);
+			if (self.speed == -1) setorigin(cchain, self.dest-self.mins);
 			else cchain.fmover = "moving";// SUB_PushFrameMovers takes care of child moves
 
 			cchain = cchain.child;
@@ -510,7 +510,7 @@ void() train_ext_init = { // [FUNCTION]
 
 	self = stemp; // Restore self to the train
 	if (!self.goalentity) self.goalentity = self.next; // Prep goalentity so it points to start position
-	setorigin (self, self.goalentity.origin-self.mins); // Position the train at it's first waypoint
+	setorigin(self, self.goalentity.origin-self.mins); // Position the train at it's first waypoint
 	self.nextthink = -1;
 	self.think = train_ext_next; // Start it up...
 		
@@ -587,9 +587,9 @@ void() func_train_ext = { // [ENTITY]
 	self.movetype = MOVETYPE_PUSH;
 	self.blocked = train_ext_blocked;
 	self.classname = "train_ext";
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setsize (self, self.mins , self.maxs);
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	if (!self.targetname) self.spawnflags = self.spawnflags | START_ON; // set start flag if not triggered
 	self.use = train_ext_use;
 	self.nextthink = self.ltime + 0.1; // start trains on the second frame, to make sure their targets have had a chance to spawn

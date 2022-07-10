@@ -30,7 +30,7 @@
 // 203-210-203 ogle_leaning_wipebrow needs rubber banded from 203 to 203, 210 center sound at 1st 207
 // 211-216 ogle_idle_to_lean
 // 217-224 ogle_walk
-// 225-232 ogle_chargea swoosh sound on frame 230 sound (self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM); 
+// 225-232 ogle_chargea swoosh sound on frame 230 sound(self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM); 
 // 233-240+233 ogle_chargeb swoosh sound on frame 239, pickflesh sound on frame 233 if hittype is flesh
 // 241-254 ogle_die
 
@@ -58,26 +58,26 @@ void() ogle_mining_sound = {
 	r = random();
 	if (self.spawnflags & OGLE_FLESHMINING) {
 		if (r < 0.5) {
-			sound (self, CHAN_VOICE, "ogle/pickflesh.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "ogle/pickflesh.wav", 1, ATTN_NORM);
 			return;
 		} else {
-			sound (self, CHAN_VOICE, "ogle/hammerflesh.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "ogle/hammerflesh.wav", 1, ATTN_NORM);
 			return;
 		}
 	}
 
 	if (r < 0.17) {
-		sound (self, CHAN_VOICE, "ogle/hammer1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/hammer1.wav", 1, ATTN_NORM);
 	} else if (r < 0.33) {
-		sound (self, CHAN_VOICE, "ogle/hammer2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/hammer2.wav", 1, ATTN_NORM);
 	} else if (r < 0.5) {
-		sound (self, CHAN_VOICE, "ogle/pick1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/pick1.wav", 1, ATTN_NORM);
 	} else if (r < 0.67) {
-		sound (self, CHAN_VOICE, "ogle/pick2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/pick2.wav", 1, ATTN_NORM);
 	} else if (r < 0.83) {
-		sound (self, CHAN_VOICE, "ogle/spike1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/spike1.wav", 1, ATTN_NORM);
 	} else {
-		sound (self, CHAN_VOICE, "ogle/spike2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/spike2.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -86,11 +86,11 @@ void() ogle_cheer_sound = {
 	r = random();
 
 	if (r < 0.33) {
-		sound (self, CHAN_VOICE, "ogle/cheer1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/cheer1.wav", 1, ATTN_NORM);
 	} else if (r < 0.66) {
-		sound (self, CHAN_VOICE, "ogle/cheer2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/cheer2.wav", 1, ATTN_NORM);
 	} else {
-		sound (self, CHAN_VOICE, "ogle/cheer3.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogle/cheer3.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -112,7 +112,7 @@ void() ogle_relax_to_standb6	= [12,ogle_stand1			] {};
 
 void() ogle_stand_to_work1;
 
-void() ogle_stand1	= [13, ogle_stand2	] { self.state = OGLE_STANDING;ai_stand(); };
+void() ogle_stand1	= [13, ogle_stand2	] { self.state = OGLE_STANDING; ai_stand(); };
 void() ogle_stand2	= [14, ogle_stand3	] { ai_stand(); };
 void() ogle_stand3	= [15, ogle_stand4	] { ai_stand(); };
 void() ogle_stand4	= [16, ogle_stand5	] { ai_stand(); };
@@ -152,7 +152,7 @@ void() ogle_whippainshort4	= [46, ogle_whippainshort5	] {};
 void() ogle_whippainshort5	= [47, ogle_whippainshort6	] {};
 void() ogle_whippainshort6	= [48, ogle_positionchisel1	] { if (random() < 0.25) ogle_mine(); };
 
-void() ogle_positionchisel1	= [49, ogle_positionchisel2	] { ai_stand();self.state = OGLE_MINING;};
+void() ogle_positionchisel1	= [49, ogle_positionchisel2	] { ai_stand(); self.state = OGLE_MINING;};
 void() ogle_positionchisel2	= [50, ogle_positionchisel3	] { ai_stand(); };
 void() ogle_positionchisel3	= [51, ogle_positionchisel4	] { ai_stand(); };
 void() ogle_positionchisel4	= [52, ogle_positionchisel5	] { ai_stand(); };
@@ -201,7 +201,7 @@ void() ogle_run8 = [84, ogle_run1	] { ai_run(8); };
 
 void() ogle_idle_to_lean1;
 
-void() ogle_hammera1 = [109, ogle_hammera2	] { ai_stand();self.state = OGLE_MINING;ogle_mining_sound(); };
+void() ogle_hammera1 = [109, ogle_hammera2	] { ai_stand(); self.state = OGLE_MINING;ogle_mining_sound(); };
 void() ogle_hammera2 = [110, ogle_hammera3	] { ai_stand();if (random() < 0.05) ogle_idle_to_lean1(); };
 void() ogle_hammera3 = [111, ogle_hammera4	] { ai_stand(); };
 void() ogle_hammera4 = [112, ogle_hammera5	] { if (random() < 0.1) ogle_positionchisel1(); };
@@ -213,7 +213,7 @@ void() ogle_hammera9 = [117, ogle_hammera1	] { ai_stand(); };
 
 void() ogle_wipebrow1;
 
-void() ogle_hammerb1 = [118, ogle_hammerb2	] { ai_stand();self.state = OGLE_MINING;};
+void() ogle_hammerb1 = [118, ogle_hammerb2	] { ai_stand(); self.state = OGLE_MINING;};
 void() ogle_hammerb2 = [119, ogle_hammerb3	] { ai_stand(); };
 void() ogle_hammerb3 = [120, ogle_hammerb4	] { ai_stand(); };
 void() ogle_hammerb4 = [121, ogle_hammerb5	] { ai_stand(); };
@@ -230,8 +230,8 @@ void() ogle_hammerb14= [131, ogle_hammerb15	] { ai_stand(); };
 void() ogle_hammerb15= [132, ogle_wipebrow1	] { ai_stand();ogle_mining_sound(); if (random() < 0.8) ogle_hammerb1(); };
 
 void() ogle_wipebrow1 = [133, ogle_wipebrow2	] { ai_stand(); };
-void() ogle_wipebrow2 = [134, ogle_wipebrow3	] { ai_stand();self.state = OGLE_STANDING;};
-void() ogle_wipebrow3 = [135, ogle_wipebrow4	] { ai_stand();sound (self, CHAN_VOICE, "ogle/wipebrow.wav", 1, ATTN_NORM); };
+void() ogle_wipebrow2 = [134, ogle_wipebrow3	] { ai_stand(); self.state = OGLE_STANDING;};
+void() ogle_wipebrow3 = [135, ogle_wipebrow4	] { ai_stand();sound(self, CHAN_VOICE, "ogle/wipebrow.wav", 1, ATTN_NORM); };
 void() ogle_wipebrow4 = [136, ogle_wipebrow5	] { ai_stand(); };
 void() ogle_wipebrow5 = [137, ogle_wipebrow6	] { ai_stand(); };
 void() ogle_wipebrow6 = [138, ogle_wipebrow7	] { ai_stand(); };
@@ -254,7 +254,7 @@ void() ogle_paina4 = [148, 	ogle_run1] {
 void() ogle_hammerlowb1;
 void() ogle_wipebrowlow1;
 
-void() ogle_hammerlowa1 = [149, ogle_hammerlowa2	] { ai_stand();self.state = OGLE_MINING;ogle_mining_sound(); };
+void() ogle_hammerlowa1 = [149, ogle_hammerlowa2	] { ai_stand(); self.state = OGLE_MINING;ogle_mining_sound(); };
 void() ogle_hammerlowa2 = [150, ogle_hammerlowa3	] { ai_stand(); };
 void() ogle_hammerlowa3 = [151, ogle_hammerlowa4	] { ai_stand();if (random() < 0.05) ogle_wipebrowlow1(); };
 void() ogle_hammerlowa4 = [152, ogle_hammerlowa5	] { ai_stand(); };
@@ -262,7 +262,7 @@ void() ogle_hammerlowa5 = [153, ogle_hammerlowa6	] { ai_stand(); };
 void() ogle_hammerlowa6 = [154, ogle_hammerlowa7	] { ai_stand(); };
 void() ogle_hammerlowa7 = [155, ogle_hammerlowb1	] { ai_stand();if (random() < 0.2) ogle_mine(); };
 
-void() ogle_hammerlowb1 = [156, ogle_hammerlowb2	] { ai_stand();self.state = OGLE_MINING;ogle_mining_sound(); };
+void() ogle_hammerlowb1 = [156, ogle_hammerlowb2	] { ai_stand(); self.state = OGLE_MINING;ogle_mining_sound(); };
 void() ogle_hammerlowb2 = [157, ogle_hammerlowb3	] { ai_stand();if (random() < 0.05) ogle_wipebrowlow1(); };
 void() ogle_hammerlowb3 = [158, ogle_hammerlowb4	] { ai_stand(); };
 void() ogle_hammerlowb4 = [159, ogle_hammerlowb5	] { ai_stand(); };
@@ -270,7 +270,7 @@ void() ogle_hammerlowb5 = [160, ogle_hammerlowb6	] { ai_stand(); };
 void() ogle_hammerlowb6 = [161, ogle_hammerlowb7	] { ai_stand(); };
 void() ogle_hammerlowb7 = [162, ogle_hammerlowa1	] { ai_stand();if (random() < 0.2) ogle_mine(); };
 
-void() ogle_wipebrowlow1 = [163, ogle_wipebrowlow2	] { ai_stand();self.state = OGLE_STANDING;};
+void() ogle_wipebrowlow1 = [163, ogle_wipebrowlow2	] { ai_stand(); self.state = OGLE_STANDING;};
 void() ogle_wipebrowlow2 = [164, ogle_wipebrowlow3	] { ai_stand(); };
 void() ogle_wipebrowlow3 = [165, ogle_wipebrowlow4	] { ai_stand();ogle_mining_sound(); };
 void() ogle_wipebrowlow4 = [166, ogle_wipebrowlow5	] { ai_stand(); };
@@ -278,12 +278,12 @@ void() ogle_wipebrowlow5 = [167, ogle_wipebrowlow6	] { ai_stand(); };
 void() ogle_wipebrowlow6 = [168, ogle_wipebrowlow7	] { ai_stand(); };
 void() ogle_wipebrowlow7 = [169, ogle_wipebrowlow8	] { ai_stand(); };
 void() ogle_wipebrowlow8 = [170, ogle_wipebrowlow9	] { ai_stand(); };
-void() ogle_wipebrowlow9 = [171, ogle_wipebrowlow10	] { ai_stand();self.state = OGLE_MINING;};
+void() ogle_wipebrowlow9 = [171, ogle_wipebrowlow10	] { ai_stand(); self.state = OGLE_MINING;};
 void() ogle_wipebrowlow10= [172, ogle_hammerlowa1	] { ai_stand();if (random() < 0.2) ogle_mine(); };
 
 void() ogle_walk1;
 
-void() ogle_pushcart1 = [173, ogle_pushcart2	] { ai_walk(4); monster_footstep(FALSE);self.state = OGLE_PUSHING;if (!self.attachment) ogle_walk1(); };
+void() ogle_pushcart1 = [173, ogle_pushcart2	] { ai_walk(4); monster_footstep(FALSE); self.state = OGLE_PUSHING;if (!self.attachment) ogle_walk1(); };
 void() ogle_pushcart2 = [174, ogle_pushcart3	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
 void() ogle_pushcart3 = [175, ogle_pushcart4	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
 void() ogle_pushcart4 = [176, ogle_pushcart5	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
@@ -292,7 +292,7 @@ void() ogle_pushcart6 = [178, ogle_pushcart7	] { ai_walk(4);monster_footstep(FAL
 void() ogle_pushcart7 = [179, ogle_pushcart8	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
 void() ogle_pushcart8 = [180, ogle_pushcart1	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
 
-void() ogle_leaning1 = [181, ogle_leaning2] { ai_stand();self.state = OGLE_LEANING;};
+void() ogle_leaning1 = [181, ogle_leaning2] { ai_stand(); self.state = OGLE_LEANING;};
 void() ogle_leaning2 = [182, ogle_leaning3] { ai_stand(); };
 void() ogle_leaning3 = [183, ogle_leaning4] { ai_stand(); };
 void() ogle_leaning4 = [184, ogle_leaning5] { ai_stand(); };
@@ -332,7 +332,7 @@ void() ogle_leaning_wipebrow1 = [203, ogle_leaning_wipebrow2] {};
 void() ogle_leaning_wipebrow2 = [204, ogle_leaning_wipebrow3] {};
 void() ogle_leaning_wipebrow3 = [205, ogle_leaning_wipebrow4] {};
 void() ogle_leaning_wipebrow4 = [206, ogle_leaning_wipebrow5] {};
-void() ogle_leaning_wipebrow5 = [207, ogle_leaning_wipebrow6] { sound (self, CHAN_VOICE, "ogle/wipebrow.wav", 1, ATTN_NORM); };
+void() ogle_leaning_wipebrow5 = [207, ogle_leaning_wipebrow6] { sound(self, CHAN_VOICE, "ogle/wipebrow.wav", 1, ATTN_NORM); };
 void() ogle_leaning_wipebrow6 = [208, ogle_leaning_wipebrow7] {};
 void() ogle_leaning_wipebrow7 = [209, ogle_leaning_wipebrow8] {};
 void() ogle_leaning_wipebrow8 = [210, ogle_leaning_wipebrow9] {};
@@ -390,8 +390,8 @@ void(entity inflictor, entity attacker, float damage) ogle_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random () < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random () < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 
 		if (self.state == OGLE_LEANING) {
 			ogle_leaning_pain1();
@@ -428,9 +428,9 @@ void() ogle_chargea3 = [226, ogle_chargea4	] { ai_charge(10); };
 void() ogle_chargea4 = [227, ogle_chargea5	] { ai_charge(10); };
 void() ogle_chargea5 = [228, ogle_chargea6	] { ai_charge(10); };
 void() ogle_chargea6 = [229, ogle_chargea7	] { ai_charge(12); };
-void() ogle_chargea7 = [230, ogle_chargea8	] { ai_charge(12);sound (self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM); };
-void() ogle_chargea8 = [231, ogle_chargea9	] { ai_charge(18);ai_melee(); };
-void() ogle_chargea9 = [232, ogle_run1	] { ai_charge(14);ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
+void() ogle_chargea7 = [230, ogle_chargea8	] { ai_charge(12);sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM); };
+void() ogle_chargea8 = [231, ogle_chargea9	] { ai_charge(18); ai_melee(); };
+void() ogle_chargea9 = [232, ogle_run1	] { ai_charge(14); ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
 
 void() ogle_chargeb1 = [233, ogle_chargeb2	] { ai_charge(12); };
 void() ogle_chargeb2 = [234, ogle_chargeb3	] { ai_charge(10); };
@@ -438,9 +438,9 @@ void() ogle_chargeb3 = [235, ogle_chargeb4	] { ai_charge(10); };
 void() ogle_chargeb4 = [236, ogle_chargeb5	] { ai_charge(10); };
 void() ogle_chargeb5 = [237, ogle_chargeb6	] { ai_charge(10); };
 void() ogle_chargeb6 = [238, ogle_chargeb7	] { ai_charge(12); };
-void() ogle_chargeb7 = [239, ogle_chargeb8	] { ai_charge(12);sound (self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM); };
-void() ogle_chargeb8 = [240, ogle_chargeb9	] { ai_charge(18);ai_melee(); };
-void() ogle_chargeb9 = [233, ogle_run1	] { ai_charge(14);ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
+void() ogle_chargeb7 = [239, ogle_chargeb8	] { ai_charge(12);sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM); };
+void() ogle_chargeb8 = [240, ogle_chargeb9	] { ai_charge(18); ai_melee(); };
+void() ogle_chargeb9 = [233, ogle_run1	] { ai_charge(14); ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
 
 void() ogle_charge = {
 	if (random() < 0.5) ogle_chargea1();
@@ -449,7 +449,7 @@ void() ogle_charge = {
 
 void() ogle_death1 = [241, ogle_death2	] {};
 void() ogle_death2 = [242, ogle_death3	] { monster_check_gib(); };
-void() ogle_death3 = [243, ogle_death4	] { monster_check_gib();self.solid = SOLID_NOT;};
+void() ogle_death3 = [243, ogle_death4	] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() ogle_death4 = [244, ogle_death5	] {};
 void() ogle_death5 = [245, ogle_death6	] {};
 void() ogle_death6 = [246, ogle_death7	] {};
@@ -466,31 +466,31 @@ void() ogle_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) { 
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		ogle_death1();
 	}
 };
 
 void() monster_ogle_precache =  {
 	precache_model ("progs/heretic2/mon_ogle.mdl");
-	precache_sound ("ogle/cheer1.wav");
-	precache_sound ("ogle/cheer2.wav");
-	precache_sound ("ogle/cheer3.wav");
-	precache_sound ("ogle/hammer1.wav");
-	precache_sound ("ogle/hammer2.wav");
-	precache_sound ("ogle/pick1.wav");
-	precache_sound ("ogle/pick2.wav");
-	precache_sound ("ogle/pickflesh.wav");
-	precache_sound ("ogle/spike1.wav");
-	precache_sound ("ogle/spike2.wav");
-	precache_sound ("ogle/hammerflesh.wav");
-	precache_sound ("ogle/wipebrow.wav");
-	precache_sound ("ogle/enrage1.wav");
-	precache_sound ("ogle/enrage2.wav");
-	precache_sound ("ogle/death.wav");
-	precache_sound ("ogle/oglemoan1.wav");
-	precache_sound ("ogle/oglemoan2.wav");
-	precache_sound ("knight/sword1.wav");
+	precache_sound("ogle/cheer1.wav");
+	precache_sound("ogle/cheer2.wav");
+	precache_sound("ogle/cheer3.wav");
+	precache_sound("ogle/hammer1.wav");
+	precache_sound("ogle/hammer2.wav");
+	precache_sound("ogle/pick1.wav");
+	precache_sound("ogle/pick2.wav");
+	precache_sound("ogle/pickflesh.wav");
+	precache_sound("ogle/spike1.wav");
+	precache_sound("ogle/spike2.wav");
+	precache_sound("ogle/hammerflesh.wav");
+	precache_sound("ogle/wipebrow.wav");
+	precache_sound("ogle/enrage1.wav");
+	precache_sound("ogle/enrage2.wav");
+	precache_sound("ogle/death.wav");
+	precache_sound("ogle/oglemoan1.wav");
+	precache_sound("ogle/oglemoan2.wav");
+	precache_sound("knight/sword1.wav");
 };
 
 void() monster_ogle =  {

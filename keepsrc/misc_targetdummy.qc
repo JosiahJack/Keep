@@ -101,7 +101,7 @@ void() misc_targetdummy_stand = { // [FUNCTION]
 void(entity inflictor, entity attacker, float damage) misc_targetdummy_pain = { // [FUNCTION]
 	self.pain_finished = 0; // want all damage to go through pain function, reset timer
 	if (self.pain_check < time) { // Play a pain sound every second
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		self.pain_check = time + 1;
 	}
 	
@@ -212,7 +212,7 @@ void() misc_targetdummy = { // [ENTITY]
 	
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
-	precache_sound (self.pain_sound);
+	precache_sound(self.pain_sound);
 	precache_model (MODEL_IMPACT);			// Impact model marker
 	self.classtype = CT_TARGETDUMMY;
 	self.classgroup = CG_MONSTERS;

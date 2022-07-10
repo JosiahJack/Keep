@@ -57,13 +57,13 @@ void() decoy_walk1 = [ 6.000, decoy_walk1 ] {
 	if (self.walkframe == 6) self.walkframe = 0;
 	if ((self.walkframe == FL_SWIM) || (self.walkframe == 5)) {
 		r = random();
-		if ( (r < 0.140) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot1.wav",0.500,ATTN_NORM);
-		else if ( (r < 0.290) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot2.wav",0.500,ATTN_NORM);
-		else if ( (r < 0.430) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot3.wav",0.500,ATTN_NORM);
-		else if ( (r < 0.580) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot4.wav",0.500,ATTN_NORM);
-		else if ( (r < 0.720) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot5.wav",0.500,ATTN_NORM);
-		else if ( (r < 0.860) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot6.wav",0.500,ATTN_NORM);
-		else sound (self,CHAN_VOICE,"hipnotic/misc/foot7.wav",0.500,ATTN_NORM);
+		if ( (r < 0.140) ) sound(self,CHAN_VOICE,"hipnotic/misc/foot1.wav",0.500,ATTN_NORM);
+		else if ( (r < 0.290) ) sound(self,CHAN_VOICE,"hipnotic/misc/foot2.wav",0.500,ATTN_NORM);
+		else if ( (r < 0.430) ) sound(self,CHAN_VOICE,"hipnotic/misc/foot3.wav",0.500,ATTN_NORM);
+		else if ( (r < 0.580) ) sound(self,CHAN_VOICE,"hipnotic/misc/foot4.wav",0.500,ATTN_NORM);
+		else if ( (r < 0.720) ) sound(self,CHAN_VOICE,"hipnotic/misc/foot5.wav",0.500,ATTN_NORM);
+		else if ( (r < 0.860) ) sound(self,CHAN_VOICE,"hipnotic/misc/foot6.wav",0.500,ATTN_NORM);
+		else sound(self,CHAN_VOICE,"hipnotic/misc/foot7.wav",0.500,ATTN_NORM);
 	}
 
 	self.frame = (self.frame + self.walkframe);
@@ -115,7 +115,7 @@ void(entity decoy) setup_decoy = {
    local entity pl;
 
    decoy.classname = "monster_decoy";
-   setmodel (decoy,"progs/player.mdl");
+   setmodel(decoy,"progs/player.mdl");
    setsize (decoy,VEC_HULL_MIN,VEC_HULL_MAX);
    decoy.view_ofs = '0.000 0.000 22.000';
    decoy.solid = SOLID_SLIDEBOX;

@@ -310,7 +310,7 @@ void() func_rotate_entity = {
 
 	self.solid    = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setsize( self, self.mins, self.maxs );
 	if ( self.speed != 0 ) self.cnt = 1 / self.speed;
 	self.think = rotate_entity_firstthink;
@@ -384,8 +384,8 @@ void() rotate_train_use = {
 
 void() rotate_train_wait = {
 	self.state = RSTATE_WAIT;
-	if ( self.goalentity.noise ) sound (self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if ( self.goalentity.noise ) sound(self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
 	if ( self.goalentity.spawnflags & TRAIN_ANGLES ) {
 		self.rotate = '0 0 0';
@@ -399,8 +399,8 @@ void() rotate_train_wait = {
 
 void() rotate_train_stop = {
 	self.state = RSTATE_STOP;
-	if ( self.goalentity.noise ) sound (self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if ( self.goalentity.noise ) sound(self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
 	if (self.goalentity.spawnflags & TRAIN_ANGLES) {
 		self.rotate = '0 0 0';
@@ -422,7 +422,7 @@ void() rotate_train_next = {
 	targ = find (world, targetname, self.path);
 	if (targ.classname != "path_rotate") dprint("\b[ROT TRAIN]\b func_rotate_train next target is not path_rotate\n");
 	if (self.goalentity.noise1) self.noise1 = self.goalentity.noise1;
-	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.goalentity = targ;
 	self.path = targ.target;
 	if (!self.path ) dprint("\b[ROT TRAIN]\b func_rotate_train no next target\n");
@@ -519,7 +519,7 @@ void() rotate_train_find = {
 		self.finalangle = SUB_NormalizeAngles( targ.angles );
 	}
 	self.path = targ.target;
-	setorigin (self, targ.origin );
+	setorigin(self, targ.origin );
 	SetTargetOrigin();
 	RotateTargetsFinal();
 	self.think1 = rotate_train_next;
@@ -554,9 +554,9 @@ void() func_rotate_train = {
 	self.solid    = SOLID_NOT;
 	self.movetype = MOVETYPE_STEP;
 	self.use = rotate_train_use;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setsize (self, self.mins, self.maxs);
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.ltime = time;
 	self.nextthink = self.ltime + 0.1; // Start trains on the second frame, to make sure the corner has spawned.
 	self.endtime = self.ltime + 0.1;
@@ -642,7 +642,7 @@ void() func_movewall = {
 	}
 	
 	if (self.spawnflags & MOVEWALL_TOUCH) self.touch = movewall_touch;
-	setmodel (self,self.model);
+	setmodel(self,self.model);
 	if ( !( self.spawnflags & MOVEWALL_VISIBLE ) ) self.model = "";
 	self.think = movewall_think;
 	self.nextthink = time + 0.02;
@@ -681,7 +681,7 @@ void() rotate_object = {
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.bsporigin = TRUE;		// bmodel origin 0,0,0
-	setmodel (self,self.model);
+	setmodel(self,self.model);
 	setsize( self, self.mins, self.maxs );
 	
 	// Check for a target (info_rotate) to move the object
@@ -831,12 +831,12 @@ void() func_rotate_door = {
 		self.noise2 = SOUND_EMPTY;
 		self.noise3 = SOUND_EMPTY;
 	}
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setorigin( self, self.origin );
 	setsize( self, self.mins, self.maxs );
 	self.state = RSTATE_CLOSED;

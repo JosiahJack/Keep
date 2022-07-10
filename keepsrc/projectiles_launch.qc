@@ -115,6 +115,7 @@ void(float num_bubbles) death_bubbles;
 void() player_airgun1;
 float(vector spot) SpawnMinionInRadius;
 vector(vector p1, vector p2, float sped, entity targ, vector spread, float ex) Maim_LineEx;
+void() lavaman_idle1;
 
 // OLD STYLE BULLET SYSTEM (HITSCAN)
 void() ClearMultiDamage = { // [FUNCTION]
@@ -259,7 +260,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet = 
 	newmis.velocity = dir * proj_speed;			// Constant speed multiplier
 	newmis.angles = vectoangles(dir);			// Create direction angle
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);	// Zero size
-	setorigin (newmis, org);					// Move to starting position
+	setorigin(newmis, org);					// Move to starting position
 	newmis.avelocity = vecrand(100,200,FALSE);
 };
 
@@ -952,7 +953,7 @@ void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = { // [FUN
 	local vector ang, dir, avel;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
 
 	// Is Z aware disabled?
 	if ( query_configflag(SVR_ZAWARE) || self.no_zaware ) {
@@ -1000,8 +1001,8 @@ void(float shell_qty) Launch_ShellCasing = { // [FUNCTION]
 };
 
 void(vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
-	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) sound (self,CHAN_WEAPON,"enforcer/enfire.wav",TRUE,ATTN_NORM);
-	else sound (self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
+	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) sound(self,CHAN_WEAPON,"enforcer/enfire.wav",TRUE,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
 
 	vec = normalize (vec);
 	newmis = spawn();
@@ -1014,11 +1015,11 @@ void(vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;
 	if (light || self.owner.tome_finished) newmis.effects = EF_DIMLIGHT;
-	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) setmodel (newmis,"progs/ad171/proj_laz.mdl");
-	else setmodel (newmis,"progs/hipnotic/lasrspik.mdl");
+	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) setmodel(newmis,"progs/ad171/proj_laz.mdl");
+	else setmodel(newmis,"progs/hipnotic/lasrspik.mdl");
 
 	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
-	setorigin (newmis,org);
+	setorigin(newmis,org);
 	newmis.speed = 1000.000;
 	newmis.dmg = 18.000;
 	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) newmis.dmg = 24; // slight boost for blaster to at least match AD shotgun boost
@@ -1138,9 +1139,9 @@ void() Mirv_Payload = { // [FUNCTION]
 // This spawns and launches a MIRV.
 void(vector start, vector dir) Mirv_Launch = { // [FUNCTION]
     newmis = spawn();
-    setmodel (newmis, "progs/drake/rocket1.mdl");
+    setmodel(newmis, "progs/drake/rocket1.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
-    setorigin (newmis, start);
+    setorigin(newmis, start);
     newmis.movetype   = MOVETYPE_FLYMISSILE;
     newmis.solid      = SOLID_BBOX;
     newmis.angles     = vectoangles(dir);
@@ -1207,7 +1208,7 @@ void(entity attacker, vector start, vector dir, float damage,entity targ1, entit
     newmis.nextthink    = time + 0.2;
     newmis.think        = DrunkRocket_Think;
     newmis.think1       = SmallExplosion;
-    setall (newmis, "progs/drake/memissil.mdl", '0 0 0', '0 0 0', start);
+    setall(newmis, "progs/drake/memissil.mdl", '0 0 0', '0 0 0', start);
 };
 
 // Splits the missile and launches all payload missiles.
@@ -1247,9 +1248,9 @@ void(vector org, vector dir) launch_lava_spike = { // [FUNCTION]
 	newmis.classtype = CT_PROJ_LAVASPIK;
 	newmis.think = SUB_Remove;
 	newmis.nextthink = (time + MOVETYPE_TOSS);
-	setmodel (newmis,"progs/lspike.mdl");
+	setmodel(newmis,"progs/lspike.mdl");
 	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
-	setorigin (newmis,org);
+	setorigin(newmis,org);
 	newmis.velocity = (dir * 1000.000);
 };
 
@@ -1478,9 +1479,9 @@ void(vector start, vector dir, float sped, float damage) RyuPlasma_Launch = { //
     newmis.waitmin      = 2;
     newmis.waitmax      = 4;
     newmis.effects      = EF_DIMLIGHT;  // DoE used EF_BRIGHTLIGHT.
-    setmodel (newmis, "progs/plasma.mdl");  // Big plasma balls from DoE.
+    setmodel(newmis, "progs/plasma.mdl");  // Big plasma balls from DoE.
     setsize (newmis, '0 0 0', '0 0 0');
-    setorigin (newmis, start);
+    setorigin(newmis, start);
 };
 
 //  Acid Bomb -- Used by green dragon.
@@ -1500,9 +1501,9 @@ void(vector start, vector dir, float sped, float damage) Acidball_Launch = { // 
     newmis.touch        = Acidball_Touch;
     newmis.nextthink    = time + 5;
     newmis.think        = SUB_Remove;
-    setmodel (newmis, "progs/drake/acidbal1.mdl");
+    setmodel(newmis, "progs/drake/acidbal1.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
-    setorigin (newmis, start);
+    setorigin(newmis, start);
 };
 
 void(vector start, vector dir, float sped) Acid_Toss = { // [FUNCTION]
@@ -1557,7 +1558,7 @@ void(vector start, vector dir, float sped) Ice_Launch = { // [FUNCTION]
 // Launch an explosive icy spikeball.
 void(vector start, vector dir, float sped) Iceball_Launch = { // [FUNCTION]
     Ice_Launch (start, dir, sped);
-    setmodel (newmis, "progs/drake/iceball.mdl");
+    setmodel(newmis, "progs/drake/iceball.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
     newmis.avelocity = '300 300 300';
     newmis.dmg      = 60;
@@ -1569,7 +1570,7 @@ void(vector start, vector dir, float sped) Iceball_Launch = { // [FUNCTION]
 
 void(vector start, vector dir, float sped, float damage) Iceball_Toss = { // [FUNCTION]
     Ice_Launch (start, dir, sped);
-    setmodel (newmis, "progs/drake/iceball.mdl");
+    setmodel(newmis, "progs/drake/iceball.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
     newmis.movetype = MOVETYPE_TOSS;
     newmis.avelocity = '300 300 300';
@@ -1648,7 +1649,7 @@ void() RainStorm = { // [FUNCTION]
 
     super_active = 1; // This chews through a lot of edicts.
     newmis = spawn();
-    setorigin (newmis, '0 0 0');
+    setorigin(newmis, '0 0 0');
     newmis.owner    = self;
     newmis.enemy    = self.enemy;
     newmis.delay    = time + 5;
@@ -1945,10 +1946,10 @@ float() HIP_ThrowMjolnir = { // [FUNCTION]
 		} // Check for premature hit on the ground.
 
 		if (GibFloorBody(trace_endpos,200)) {
-			sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
 			return TRUE;
 		}
-        sound (self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
         Tent_Point(TE_GUNSHOT, org);
         return TRUE;
     } else { // Whiff
@@ -1981,8 +1982,8 @@ void(float damage, vector dir, float addedtime) TraceExploAttack = { // [FUNCTIO
     newmis.dmg       = damage;
     newmis.think    = TraceExploShell_Think;
 	newmis.nextthink = time + 0.1 + addedtime;
-    setmodel (newmis, "");
-    setorigin (newmis, org);
+    setmodel(newmis, "");
+    setorigin(newmis, org);
     shot_head = newmis; // Don't use chain because findradius will overwrite that. Some engines, like DarkPlaces, pick up even SOLID_NOT.
 };
 
@@ -2020,7 +2021,7 @@ void(vector start, vector dir) Buriza_Launch = { // [FUNCTION]
     newmis.delay        = time + 10;    // Give it long range.
     newmis.nextthink    = 0.01;
     newmis.think        = Buriza_Think;
-    setall (newmis, "progs/drake/arrow.mdl", '0 0 0', '0 0 0', start);
+    setall(newmis, "progs/drake/arrow.mdl", '0 0 0', '0 0 0', start);
 };
 
 // Loop through all entities and damage everyone who has damage stacked
@@ -2125,9 +2126,9 @@ void(float ox) W_EchoSpike = { // [FUNCTION]
 
     makevectors(self.v_angle);
     if (self.weapon == IT_NAILGUN)
-        sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
     else    // Assume super nailgun.
-        sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
     self.attack_finished = time + 0.2;
     self.currentammo = self.ammo_nails = self.ammo_nails - cost;
     if (self.tome_finished) { // Tome of Power SPIKES which are hitscan
@@ -2165,8 +2166,8 @@ void(float ox) W_EchoLavaSpike = { // [FUNCTION]
     if (self.ammo_nails < cost) return;
 
     makevectors(self.v_angle);
-    if (self.weapon == IT_LAVA_NAILGUN) sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM); // Assume super nailgun.
+    if (self.weapon == IT_LAVA_NAILGUN) sound(self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM); // Assume super nailgun.
 
     self.attack_finished = time + 0.2;
     self.currentammo = self.ammo_nails = self.ammo_nails - cost;
@@ -2192,7 +2193,7 @@ void() W_EchoLavaSpike_Down = { W_EchoLavaSpike(-2); }; // [FUNCTION]
 // In 35 fps Doom, delays in the loop were 4/4/1.  The third frame was the same as first, but not fullbright, and did a vis check.
 void(vector org, vector dir, entity targ, vector err) M_FireChaingun = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, "drake/weapons/dsshotgn.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "drake/weapons/dsshotgn.wav", 1, ATTN_NORM);
     dir = Maim_LineEx(org,dir,0,targ,err,1);
 	FireBullets(1, '0.14 0.08 0'); // Chaingunners were lousy shots in Doom2, so use a wide spread.  Normal SSG spread should do nicely.  Also, Doom's damage is 1d3*5.  Yaw scatter should be crandom * 3.125.
     // Slow down thinking to give a rate-of-fire of Doom's chaingun zombie.
@@ -2410,6 +2411,7 @@ void(entity victim, entity attacker, float burn) Burn_Add = { // [FUNCTION]
 
 	spot = Burn_Point(victim);
 	if (InLiquid(spot)) return; // Flame will be out as soon as it spawns, so abort.
+	if (InSlime(spot)) return;
 
     if (victim.burner) {
         if (victim.burner.deadflag) return; // In death mode, so do nothing.
@@ -2440,7 +2442,7 @@ void(entity victim, entity attacker, float burn) Burn_Add = { // [FUNCTION]
 	newmis.dmg          = burn; // Initial damage.
 	newmis.nextthink    = 0.01;
 	newmis.think        = Burn_Think;
-	setall (newmis, "progs/drake/flame2.mdl", '0 0 0', '0 0 0', spot);
+	setall(newmis, "progs/drake/flame2.mdl", '0 0 0', '0 0 0', spot);
 	newmis.mdl          = newmis.model; // Differentiate between normal and death modes.  Only used by death mode code.
 	newmis.deadflag     = 0;            // Use standard burn rules.
 	victim.burner = newmis; // Link target to the fire.
@@ -2465,7 +2467,7 @@ void(entity attacker, entity victim, vector spot) FloorFire = { // [FUNCTION]
         newmis.wait       =
         newmis.nextthink  = 0.01;
         newmis.think      = FloorFire_Think;
-        setall (newmis, "progs/drake/flame2.mdl", '-4 -4 -12', '4 4 16', newmis.origin + '0 0 12');
+        setall(newmis, "progs/drake/flame2.mdl", '-4 -4 -12', '4 4 16', newmis.origin + '0 0 12');
     } else {
         remove(newmis);
     }
@@ -2581,7 +2583,7 @@ void(vector spot, float hot) Firelink_Spawn = { // [FUNCTION]
         fire.cnt        = 1;    // Particle count.
         // 17/7 = 2.42857.  Hexen2 dmg was 3.
         fire.dmg        = ceil(self.dmg * 0.075);
-        setmodel (fire, "progs/drake/flame2.mdl");
+        setmodel(fire, "progs/drake/flame2.mdl");
     } else { // It's in liquid so no flame model.
         fire.volume     = 1;    // Steam
         fire.cnt        = 5;
@@ -2686,7 +2688,7 @@ void(vector offset,float set_speed,vector dest_offset) do_faBlade =  { // [FUNCT
 	//newmis.effects = EF_DIMLIGHT;
 	//newmis.drawflags = MLS_ABSLIGHT;
 	//newmis.abslight = 0.50000;
-	setmodel (newmis, "progs/hexen2/fablade.mdl");
+	setmodel(newmis, "progs/hexen2/fablade.mdl");
 	setsize (newmis, '0.00000 0.00000 0.00000', '0.00000 0.00000 0.00000');
 	makevectors(self.angles);
 	setorigin(newmis,(self.origin + self.attack_offset));
@@ -2782,7 +2784,7 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 	newmis.attack_speed = proj_speed;		// Projectile Speed (velocity)
 	newmis.view_ofs = '0 0 16';				// Offset for particle effects
 	newmis.oldorigin = newmis.origin = org;	// Save starting origin
-	setorigin (newmis, newmis.origin);		// Move to start point
+	setorigin(newmis, newmis.origin);		// Move to start point
 
 	// Allow for stationary fire hazards to exist
 	if (newmis.attack_speed <= 0) newmis.movetype = MOVETYPE_NONE;
@@ -2822,27 +2824,27 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 	// Default = Tiny flame
 	if (proj_size == FLAME_SML) {
 		newmis.bbmins = '-6 -6 0'; newmis.bbmaxs = '6 6 24';
-		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMESML);
-		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMESML);
-		else setmodel (newmis, MODEL_PROJ_FLAMESML);		// 24x64 BB=12x24
+		if (proj_color == FLAME_BLUE) setmodel(newmis, MODEL_PROJ_BFLAMESML);
+		else if (proj_color == FLAME_GREEN) setmodel(newmis, MODEL_PROJ_GRFLAMESML);
+		else setmodel(newmis, MODEL_PROJ_FLAMESML);		// 24x64 BB=12x24
 	} else if (proj_size == FLAME_MED) {
 		newmis.bbmins = '-8 -8 0'; newmis.bbmaxs = '8 8 32';
-		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMEMED);
-		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMEMED);
-		else setmodel (newmis, MODEL_PROJ_FLAMEMED);		// 32x96 BB=16x32
+		if (proj_color == FLAME_BLUE) setmodel(newmis, MODEL_PROJ_BFLAMEMED);
+		else if (proj_color == FLAME_GREEN) setmodel(newmis, MODEL_PROJ_GRFLAMEMED);
+		else setmodel(newmis, MODEL_PROJ_FLAMEMED);		// 32x96 BB=16x32
 	}
 	/* Maybe add it later
 	else if (proj_size == FLAME_VLRG) {
 		newmis.bbmins = '-12 -12 0'; newmis.bbmaxs = '12 12 48';
-		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMEVLRG);
-		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMEVLRG);
-		else setmodel (newmis, MODEL_PROJ_FLAMEVLRG);	// 48x128 BB=24x48
+		if (proj_color == FLAME_BLUE) setmodel(newmis, MODEL_PROJ_BFLAMEVLRG);
+		else if (proj_color == FLAME_GREEN) setmodel(newmis, MODEL_PROJ_GRFLAMEVLRG);
+		else setmodel(newmis, MODEL_PROJ_FLAMEVLRG);	// 48x128 BB=24x48
 	} */
 	else {
 		newmis.bbmins = '-4 -4 0'; newmis.bbmaxs = '4 4 16';
-		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMETINY);
-		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMETINY);
-		else setmodel (newmis, MODEL_PROJ_FLAMETINY);	// 16x48 BB=8x16
+		if (proj_color == FLAME_BLUE) setmodel(newmis, MODEL_PROJ_BFLAMETINY);
+		else if (proj_color == FLAME_GREEN) setmodel(newmis, MODEL_PROJ_GRFLAMETINY);
+		else setmodel(newmis, MODEL_PROJ_FLAMETINY);	// 16x48 BB=8x16
 	}
 	
 	// override sprite default bounding box
@@ -2998,9 +3000,9 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 	newmis.avelocity = avel;
 	newmis.angles = vectoangles(newmis.velocity);
 	newmis.oldorigin = newmis.origin = org;	// Save starting origin
-	setorigin (newmis, newmis.origin);		// Move to start point
+	setorigin(newmis, newmis.origin);		// Move to start point
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.part_soundtouch = GIB_SOUND_ACID; // Burning touch sound (precached in world.qc)
+	newmis.part_soundtouch = GIB_SOUND_ACID; // Burning touch sound(precached in world.qc)
 	Default_ParticleTrail(newmis); // Setup particle defaults for hazard emitter
 	newmis.think = Custom_ParticleTrail;	
 	newmis.nextthink = time + 0.1;
@@ -3062,9 +3064,9 @@ void() launch_horn = {
 		self.AIRG_FireCount = 1; // and the count
 	} else if (self.AIRG_FireCount >= 5) { // Max Fire Rate reached, so this is a failed shot.
 		if (self.waterlevel > 2) // Play failed AirFist sound
-			sound (self, CHAN_AUTO, "weapons/agwfail.wav", 1, ATTN_NORM); // Below the water, play under water sound
+			sound(self, CHAN_AUTO, "weapons/agwfail.wav", 1, ATTN_NORM); // Below the water, play under water sound
 		else
-			sound (self, CHAN_AUTO, "weapons/agfail.wav", 1, ATTN_NORM); // Play above water sound
+			sound(self, CHAN_AUTO, "weapons/agfail.wav", 1, ATTN_NORM); // Play above water sound
 
 		player_failedairgun1(); // Play Failed AirFist animation
 		return;					// and get out of here.
@@ -3123,7 +3125,7 @@ void() launch_horn = {
 				// We biased the up direction when entity is on the ground.
 				// Looks cooler and small entitys (heath, etc) go somewhere instead
 				// of along the ground (because they're below the line of sight).
-				e.flags = e.flags - FL_ONGROUND; // If on the ground, makem go up, up, and away
+				SUB_RemoveFlags(e,FL_ONGROUND); // If on the ground, makem go up, up, and away
 				if (delta_z < 0) delta_z = delta_z / -2;
 				delta = delta * 0.7;
 				if (delta_z < 100) delta_z = 100;
@@ -3188,13 +3190,13 @@ void() launch_horn = {
 	// Recoil code
 	if (self.flags & FL_ONGROUND) { // Raise the bugger a bit; if self on the ground, raise me up so that the velocity will take affect.
 		setorigin(self, self.origin + '0 0 1');
-		self.flags = self.flags - FL_ONGROUND;
+		SUB_RemoveFlags(self,FL_ONGROUND);
 	}
 	if (nearAWall) recoil = recoil + (recoil * (1.0 - trace_fraction) * 3); // hit wall, Bounce based on the distance from the wall
 	self.velocity = self.velocity + v_forward * recoil * -1; // recoil self
 
-	if (self.waterlevel > 2)	sound (self, CHAN_AUTO, "weapons/agwater.wav", 1, ATTN_NORM); // below the water, play under water sound
-	else					sound (self, CHAN_AUTO, "weapons/agfire.wav", 1, ATTN_NORM); // play above water sound
+	if (self.waterlevel > 2)	sound(self, CHAN_AUTO, "weapons/agwater.wav", 1, ATTN_NORM); // below the water, play under water sound
+	else					sound(self, CHAN_AUTO, "weapons/agfire.wav", 1, ATTN_NORM); // play above water sound
 
 	player_airgun1(); // AirFist gun frame animation
 };
@@ -3224,25 +3226,25 @@ void(vector org, vector dir) pyroflame_spawn = {
 			if (ext_dppart) {
 				// Use special DP smoke and empty sprite for collision
 				pointparticles(particleeffectnum(DPP_PYROFLAME2), org, dir, 1);
-				setmodel (newmis, SBURST_FLAMEDP);
+				setmodel(newmis, SBURST_FLAMEDP);
 			}
-			else setmodel (newmis, SBURST_SMOKE);
+			else setmodel(newmis, SBURST_SMOKE);
 		} else {
 			if (ext_dppart) {
 				// Use special DP flames and empty sprite for collision
 				pointparticles(particleeffectnum(DPP_PYROFLAME1), org, dir, 1);
-				setmodel (newmis, SBURST_FLAMEDP);
-			} else setmodel (newmis, SBURST_FLAME);
+				setmodel(newmis, SBURST_FLAMEDP);
+			} else setmodel(newmis, SBURST_FLAME);
 		}
 	} else {
 		if (ext_dppart) {
 			// Use special DP flames and empty sprite for collision
 			pointparticles(particleeffectnum(DPP_PYROFLAME3), org, dir, 1);
-			setmodel (newmis, SBURST_FLAMEDP);
-		} else setmodel (newmis, SBURST_POISON);
+			setmodel(newmis, SBURST_FLAMEDP);
+		} else setmodel(newmis, SBURST_POISON);
 	}
 	
-	setorigin (newmis, org);
+	setorigin(newmis, org);
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 
 	// Work out forward speed (tweak based on skill level)
@@ -3290,6 +3292,51 @@ void(vector start) Tornado_Spawn = { // [FUNCTION]
     wind.nextthink    = time + 0.1;
     wind.delay        = time + 5;
     wind.t_width      = 0;
-    setall (wind, "", '0 0 0', '0 0 0', start);
+    setall(wind, "", '0 0 0', '0 0 0', start);
     ShockWave(wind.origin + '0 0 4', RING_QUAKE, 4, "progs/drake/s_wave.spr",FALSE);
+};
+
+void(float AttackNumber) lavaman_missile = {
+   local entity fireball;
+   local vector org;
+   local vector vec;
+   local vector d;
+   local float t;
+
+   makevectors(self.angles);
+   if ( (AttackNumber == TRUE) ) {
+      org = (((self.origin + (v_forward * 40)) + (v_right * 65.000)) + (v_up * 130.000));
+   } else {
+      if ( (AttackNumber == FL_SWIM) )
+         org = (((self.origin + (v_forward * 40)) - (v_right * 75.000)) + (v_up * 125.000));
+   }
+   d = self.enemy.origin;
+   t = vlen ((d - org));
+   t = (t / 380.000);
+   if ( (t > 1.750) )
+      t = 1.750;
+
+   if ( (t < TRUE) )
+      t = TRUE;
+
+   vec = normalize ((d - org));
+   fireball = spawn();
+	fireball.classgroup = CG_PROJALL;
+   fireball.owner = self;
+   fireball.movetype = MOVETYPE_BOUNCE;
+   fireball.solid = SOLID_BBOX;
+   fireball.angles = vectoangles (vec);
+   fireball.touch = lavaman_touch;
+   fireball.classname = "lavaman_ball";
+   fireball.skin = 0;
+   setmodel(fireball,MODEL_PROJ_LAVA);
+   setsize (fireball,VEC_ORIGIN,VEC_ORIGIN);
+   setorigin(fireball,org);
+   fireball.velocity = ((vec * 600.000) * t);
+   fireball.velocity_z = (fireball.velocity_z + (200.000 * t));
+   fireball.avelocity = '200.000 100.000 300.000';
+   fireball.think = SUB_Remove;
+   fireball.nextthink = (time + MOVETYPE_TOSS);
+   sound(self,CHAN_WEAPON,"boss1/throw.wav",TRUE,ATTN_NORM);
+   if ( (self.enemy.health <= FALSE) ) lavaman_idle1();
 };

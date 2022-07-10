@@ -44,7 +44,7 @@ void() stop_earthquake;
 void() earthquake_rumble = { // [FUNCTION]
    if (self.attack_finished < time) stop_earthquake();
    else {
-      sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NONE);
+      sound(self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NONE);
       self.think = earthquake_rumble;
       self.nextthink = (time + TRUE);
    }
@@ -71,7 +71,7 @@ void() earthquake = { // [ENTITY]
    if ( !self.delay ) self.delay = 20.000;
    if ( !self.wait ) self.wait = 60.000;
    if ( !self.weapon ) self.weapon = 40;
-   precache_sound ("rogue/equake/rumble.wav");
+   precache_sound("rogue/equake/rumble.wav");
    earthquake_active = FALSE;
    earthquake_intensity = (self.weapon * 0.500);
    setsize (self,VEC_ORIGIN,VEC_ORIGIN);
@@ -84,7 +84,7 @@ void() info_earthquake = { earthquake(); }; // [ENTITY]
 void() earthquake_touch = { // [FUNCTION]
    if ( self.delay ) {
       if ( (self.attack_finished < time) ) {
-         sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NORM);
+         sound(self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NORM);
          self.attack_finished = (time + TRUE);
       }
       if ( (other.classname == "player") ) {
@@ -100,7 +100,7 @@ void() earthquake_touch = { // [FUNCTION]
 void() earthquake_use = { self.delay = !self.delay; }; // [FUNCTION]
 
 void() trigger_earthquake = { // [ENTITY]
-   precache_sound ("rogue/equake/rumble.wav");
+   precache_sound("rogue/equake/rumble.wav");
    if ( !self.weapon ) self.weapon = 40;
    self.weapon = self.weapon * 0.5;
    self.delay = TRUE;
@@ -140,13 +140,13 @@ void(float value) EarthQuakeTime = { // [FUNCTION]
 void() earthquake_postthink = { // [FUNCTION]
    if ( (hipearthquake > time) ) {
       if ( (quakeactive == FALSE) ) {
-         sound (self,CHAN_VOICE,"hipnotic/misc/quake.wav",TRUE,ATTN_NONE);
+         sound(self,CHAN_VOICE,"hipnotic/misc/quake.wav",TRUE,ATTN_NONE);
          quakeactive = TRUE;
       }
       if ( (self.flags & FL_ONGROUND) ) self.velocity = (self.velocity + (random () * '0.000 0.000 150.000'));
    } else {
       if ( (quakeactive == TRUE) ) {
-         sound (self,CHAN_VOICE,"hipnotic/misc/quakeend.wav",TRUE,ATTN_NONE);
+         sound(self,CHAN_VOICE,"hipnotic/misc/quakeend.wav",TRUE,ATTN_NONE);
          quakeactive = FALSE;
       }
    }
@@ -158,8 +158,8 @@ void() hipearthquake_use = { // [FUNCTION]
 
 void() func_earthquake = { // [ENTITY]
    quakeactive = FALSE;
-   precache_sound ("hipnotic/misc/quake.wav");
-   precache_sound ("hipnotic/misc/quakeend.wav");
+   precache_sound("hipnotic/misc/quake.wav");
+   precache_sound("hipnotic/misc/quakeend.wav");
    self.classname = "earthquake";
    self.use = hipearthquake_use;
    self.think = SUB_Null;

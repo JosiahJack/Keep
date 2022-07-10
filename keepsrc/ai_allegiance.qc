@@ -149,6 +149,7 @@ float(entity targ, entity attacker, float dmg, float touch) Align_DamageModifier
 };
 
 float(entity targ) IsLeader = { // [FUNCTION]
+	if (!targ) return FALSE;
 	if (targ.leader) return TRUE; // Manual override
 	if (targ.flags & FL_CLIENT) return TRUE;
 	if (targ.classgroup == CG_DRAGON || targ.classgroup == CG_HARMLESS) return FALSE; // Can't follow dragons or denizens

@@ -180,7 +180,7 @@ void()	octa_dieb16	= [	$dieb16,  	octa_dieb16	] { monster_deadbody_check(); };
 void() octa_die = {
 	monster_death_precheck();
 	if (!self.gibbed) {
-		//sound (self, CHAN_VOICE, ???, 1, ATTN_NORM);
+		//sound(self, CHAN_VOICE, ???, 1, ATTN_NORM);
 		self.lip = random();
 		if (self.lip < 0.5) octa_die1();
 		else octa_dieb1();

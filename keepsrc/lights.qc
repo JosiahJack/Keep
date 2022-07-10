@@ -121,7 +121,7 @@ void() play_light_sound = { // [FUNCTION]
 	
 	self.think = play_light_sound;
 	self.nextthink = time + self.owner.waitmin;
-	sound (self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
+	sound(self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
 };
 
 void() setup_light_sound = { // [FUNCTION]
@@ -135,7 +135,7 @@ void() setup_light_sound = { // [FUNCTION]
 			self.attachment.think = play_light_sound;
 		}
 		else {
-			ambientsound (self.origin, self.noise, self.volume, ATTN_QUIET);
+			ambientsound(self.origin, self.noise, self.volume, ATTN_QUIET);
 		}
 	}
 };
@@ -143,7 +143,7 @@ void() setup_light_sound = { // [FUNCTION]
 void() setup_light_static = { // [FUNCTION]
 	if (self.spawnflags & LIGHT_NOSTATIC) return; // Default = static, check for exception spawnflag
 
-	if (self.mdl) setmodel (self, self.mdl); // Setup any models that are defined
+	if (self.mdl) setmodel(self, self.mdl); // Setup any models that are defined
 	if (self.part_emitter && self.part_static == FALSE) return; // Cannot have static entities and particle emitters!
 
 	makestatic (self); // Goodbye entity, no longer interactive with QC
@@ -190,7 +190,7 @@ void() light_part_emitter_on = { // [FUNCTION]
 
 void() light_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
-	if (self.mdl) setmodel (self, self.mdl); // Setup any models, like torches etc
+	if (self.mdl) setmodel(self, self.mdl); // Setup any models, like torches etc
 
 	if (self.style > 0) { // Light style defined?
 		if (self.style < LIGHT_MAXLIGHTSTYLE) lightstyle(self.style, light_style_str[self.style]); // Update light style (use array to get the latest)
@@ -384,7 +384,7 @@ void() light = { // [ENTITY]
 // Non-displayed light. Makes steady fluorescent humming sound
 void() light_fluoro = { // [ENTITY]
 	if (self.noise == "") self.noise = "ambience/fl_hum1.wav"; // Allow for custom sound
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
 	light_customstyle_start(); // Check for any custom light styles
 	setup_vanilla_nostatic();
@@ -415,7 +415,7 @@ void() light_fluoro = { // [ENTITY]
 // Non-displayed light. Makes sparking, broken fluorescent sound
 void() light_fluorospark = { // [ENTITY]
 	if (self.noise == "") self.noise = "ambience/buzz1.wav"; // Allow for custom sound
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (!self.style) self.style = 10; // Wait for worldspawn to be read correctly
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
 	setup_vanilla_nostatic();
@@ -449,7 +449,7 @@ void() light_fluorospark = { // [ENTITY]
 void() light_globe = { // [ENTITY]
 	self.mdl = "progs/s_light.spr";
 	precache_model (self.mdl);
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
 	setup_vanilla_nostatic();
@@ -500,9 +500,9 @@ void() light_torch_small_walltorch = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/q15/flame.mdl"; // // Allow for custom models.  Using the SMC/Q1.5 version as it has on/off frames
 	precache_model (self.mdl);
 	if (self.noise == "") self.noise = "ambience/fire1.wav"; // Allow for custom sounds
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (!self.waitmin) self.waitmin = 2.165; // Default for fire1 sound
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	if (self.angles_y < 0) self.angles_y = rint(random()*359); // Setting the angle key in the editor to UP/DOWN = random rotation.  I dunno, might be nice if there's a lot.
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
@@ -543,10 +543,10 @@ void() light_flame_large_yellow = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/flame2.mdl"; // Allow for custom models
 	precache_model (self.mdl);
 	if (self.noise == "") self.noise = "ambience/fire1.wav"; // Allow for custom sounds
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (!self.waitmin) self.waitmin = 2.165; // The default length of the ambient fire1 sound
 	if (engine == ENG_DPEXT) self.effects = self.effects + EF_NOSHADOW; // If DP engine active remove model shadow
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.frame = 1;			// Switch to frame group 2 (larger flame)
 	if (!self.alpha) self.alpha = 0.8;
@@ -587,10 +587,10 @@ void() light_flame_small_yellow = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/flame2.mdl"; // Allow for custom models
 	precache_model (self.mdl);
 	if (self.noise == "") self.noise = "ambience/fire1.wav"; // Allow for custom sounds
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (!self.waitmin) self.waitmin = 2.165; // The default length of the ambient fire1 sound
 	if (engine == ENG_DPEXT) self.effects = self.effects + EF_NOSHADOW; // If DP engine active remove candle model shadow
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	if (!self.alpha) self.alpha = 0.8;
 	if (self.angles_y <= 0) self.angles_y = rint(random()*359); // Setting the angle key in the editor to UP/DOWN = random rotation	
@@ -947,7 +947,7 @@ void() light_lantern = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/rogue/lantern.mdl"; // Allow for custom models
 	precache_model (self.mdl);
 	self.angles_y = self.fixangle;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
 	setup_quoth_nostatic();
@@ -959,9 +959,9 @@ void() light_lantern2 = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/ad171/misc_lantern.mdl"; // Allow for custom models
 	precache_model(self.mdl);
 	if (self.noise == "") self.noise = "ambience/fire1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (!self.waitmin) self.waitmin = 2.165;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE))) self.angles_y = rint(random()*359); // Setting the angle key in the editor to UP/DOWN = random rotation	
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
@@ -980,7 +980,7 @@ void() light_beacon = { // [ENTITY]
 	precache_model (self.mdl);
 	if (self.spawnflags & 1) self.skin = 1;
 	self.angles_y = self.fixangle;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
 	setup_quoth_nostatic();

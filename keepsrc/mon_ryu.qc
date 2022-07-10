@@ -185,7 +185,7 @@ void(entity targ) wyrm_move = {
         if (!self.enemy) {   // Restore previous angles then bump around with movetogoal.
             self.ideal_yaw = oy;
             self.angles = oang;
-            QC_MoveToGoal(sped);
+            QC_MoveToGoal(sped,FALSE);
             ryu_untilt();
         }
     }
@@ -261,7 +261,7 @@ void() Ryu_Bite = {
     // Update 4/23/2009:  Do 15-20 damage for standard.  Wyrms multiply damage.
     damage = 15 + random()*5;
     if (self.spawnflags & SPAWN_WYRM) damage = damage * 4; // Moot since wyrms can't bite.
-    sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
     SpawnMeatSpray(self, self.enemy,(crandom() * 200) - 100); // Throw a piece of meat from the dragon's head (mouth).
 };
@@ -431,7 +431,7 @@ void() Ryu_Shot_Fire = {
         if (self.waterlevel > 1) {
             // Dragon is deep enough in water so discharge.
             // Note:  Discharge is weak, so just fizzle harmlessly.
-            sound (self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
+            sound(self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
             self.shots_left = 0;
             return;
         }
@@ -487,9 +487,9 @@ void() ryu_sfx_fly = {
     // Not while Quad is sounding.
     if (self.super_sound < time) {
         if (self.waterlevel <= 1)     // Not while in the water.
-            sound (self, CHAN_BODY, "drake/dragon/fly.wav", 1, ATTN_NORM);
+            sound(self, CHAN_BODY, "drake/dragon/fly.wav", 1, ATTN_NORM);
         else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME))
-            sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
+            sound(self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     }
 };
 
@@ -498,22 +498,22 @@ void() ryu_sfx_fire = {
 
     type = self.worldtype & RYU_ELEMENTS;
     if (type == RYU_USE_FIRE)
-        sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
     else if (type == RYU_USE_ACID)
-        sound (self, CHAN_WEAPON, "drake/dragon/acid.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "drake/dragon/acid.wav", 1, ATTN_NORM);
     else if (type == RYU_USE_LITE) {
         if (self.worldtype & RYU_BOMB)
-            sound (self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+            sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
         else {
-            sound (self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
-            sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+            sound(self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
+            sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
         }
     }
     else if (type == RYU_USE_ICE)
-        sound (self, CHAN_WEAPON, "drake/imp/shard.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "drake/imp/shard.wav", 1, ATTN_NORM);
 };
 
-void() ryu_sfx_idle = { sound (self, CHAN_VOICE, "drake/dragon/idle1.wav", 1, ATTN_NORM); };
+void() ryu_sfx_idle = { sound(self, CHAN_VOICE, "drake/dragon/idle1.wav", 1, ATTN_NORM); };
 
 //  Fly animation forward.  Used for stand, walk, and run anims.
 //  Stand = Dragon hovers in place.   Walk  = The dragon slowly glides along its path.   Run   = The dragon flies quickly toward the enemy.
@@ -803,9 +803,9 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
     }
 
 	if (random() < 0.5)
-		sound (self, CHAN_VOICE, "drake/dragon/pain1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "drake/dragon/pain1.wav", 1, ATTN_NORM);
 	else
-		sound (self, CHAN_VOICE, "drake/dragon/pain2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "drake/dragon/pain2.wav", 1, ATTN_NORM);
 
     if ((random() * 400) > damage) return; // didn't flinch
     if (damage < self.max_health * 0.01) return; // Damage dealt is too low to cause flinching.
@@ -858,7 +858,7 @@ void() dragon_die = {
         self.velocity_z =  100 + 100*random();
         self.flags = self.flags - (self.flags & FL_ONGROUND);
         self.movetype = MOVETYPE_TOSS;
-        sound (self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NORM);
         if (random() < 0.5) {
     	    // Shove it up a little for the fallback death anim.
             self.velocity_z = 250 + 100*random();
@@ -882,14 +882,14 @@ void() wyrm_explode = {
     // The big fireball at the center.
     swap = self;
     self = spawn();
-    setorigin (self, swap.origin + '0 0 24');
+    setorigin(self, swap.origin + '0 0 24');
     WarpExplosion();
     self = swap;
     self.health = -99;      // Spawn dragon parts. Some gibs get some velocity.
     org = self.origin;
     makevectors(self.angles);
     vx = v_forward;  vy = v_right;  vz = v_up;
-    sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
     // Throw dragon parts first.  They will be thrown from a point relative to the body instead of randomly.
     // Since we do not want to update corpse origin, don't use setorigin.
     self.origin = org - vy*72 - vz*20;
@@ -900,18 +900,19 @@ void() wyrm_explode = {
         self.origin = org - vx*72 - vz*20;
     else
         self.origin = org + vx*72 - vz*20;
-	ThrowGib(13, 1);
+	ThrowGib(13,1);
     self.origin = org;      // Restore origin.
-    ThrowGib (2, 5); // Throw random meat chunks.
-    ThrowGib (3, 2);
+    ThrowGib(2,5); // Throw random meat chunks.
+    ThrowGib(3,2);
 
     // Throw the head.  Now we can set origin for real.
     if ( self.frame == $deathb6 )
         org = org + (vx * 88);
     else
         org = org - (vx * 88);
-    setorigin (self, org);
-	ThrowGib (25,1); // headmdl
+    setorigin(self, org);
+	ThrowGib(25,1); // headmdl
+    entity_remove(self,0.1);
 };
 
 void() ryu_go = {
@@ -973,8 +974,8 @@ void() wyrm_die = {
     self.velocity_x = -200 + 400*random();
     self.velocity_y = -200 + 400*random();
     self.velocity_z =  100 + 100*random();
-    self.flags = self.flags - FL_ONGROUND;
-    sound (self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NONE); // The wyrm is a boss, so use full volume.
+    SUB_RemoveFlags(self,FL_ONGROUND);
+    sound(self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NONE); // The wyrm is a boss, so use full volume.
     if (random() < 0.5) {
         self.velocity_z = 250 + 100*random(); // Shove it up a little for the fallback death anim.
         wyrm_die1();
@@ -1001,32 +1002,32 @@ void() monster_ryu_precache = {
     precache_model ("progs/drake/plasma.mdl");    // Plasma ball
     precache_model ("progs/drake/s_wave2.spr");   // Ice bolt ripple
     precache_model ("progs/ad171/proj_wiz.mdl");   // Acid shot
-    precache_sound ("demon/dhit2.wav");
-    precache_sound ("drake/dragon/acid.wav");
-    precache_sound ("drake/dragon/death1.wav");
-    precache_sound ("drake/dragon/fire.wav");
-    precache_sound ("drake/dragon/firehit.wav");
-    precache_sound ("drake/dragon/fly.wav");
-    precache_sound ("drake/dragon/flywater.wav");
-    precache_sound ("drake/dragon/icehit.wav");
-    precache_sound ("drake/dragon/idle1.wav");
-    precache_sound ("drake/dragon/pain1.wav");
-	precache_sound ("drake/dragon/pain2.wav"); // Qmaster added this.  The sound existed already in Drake, but it was never played.
-    precache_sound ("drake/dragon/sight1.wav");
-    precache_sound ("drake/imp/shard.wav");
-    precache_sound ("misc/power.wav");      // Discharge & Fizzle, vanilla id1 sound
-    precache_sound ("drake/weapons/shatter.wav");
-    precache_sound ("wizard/hit.wav");
-    precache_sound ("rogue/plasma/explode.wav");
+    precache_sound("demon/dhit2.wav");
+    precache_sound("drake/dragon/acid.wav");
+    precache_sound("drake/dragon/death1.wav");
+    precache_sound("drake/dragon/fire.wav");
+    precache_sound("drake/dragon/firehit.wav");
+    precache_sound("drake/dragon/fly.wav");
+    precache_sound("drake/dragon/flywater.wav");
+    precache_sound("drake/dragon/icehit.wav");
+    precache_sound("drake/dragon/idle1.wav");
+    precache_sound("drake/dragon/pain1.wav");
+	precache_sound("drake/dragon/pain2.wav"); // Qmaster added this.  The sound existed already in Drake, but it was never played.
+    precache_sound("drake/dragon/sight1.wav");
+    precache_sound("drake/imp/shard.wav");
+    precache_sound("misc/power.wav");      // Discharge & Fizzle, vanilla id1 sound
+    precache_sound("drake/weapons/shatter.wav");
+    precache_sound("wizard/hit.wav");
+    precache_sound("rogue/plasma/explode.wav");
     precache_model ("progs/drake/dr2_head.mdl");  // Gib (head)
     precache_model ("progs/drake/dr2_lw.mdl");    // Gib (left wing)
     precache_model ("progs/drake/dr2_rw.mdl");    // Gib (right wing)
     precache_model ("progs/drake/dr2_tail.mdl");  // Gib (tail)
     precache_model ("progs/drake/dragon2.mdl");   // Qtest dragon (full-sized)
     precache_model ("progs/drake/warp2.mdl");     // Big explosion
-    precache_sound ("boss1/out1.wav");
-    precache_sound ("hknight/hit.wav");     // used by C code, so don't sound2
-    precache_sound ("zerstorer/trog/bigboom.wav");
+    precache_sound("boss1/out1.wav");
+    precache_sound("hknight/hit.wav");     // used by C code, so don't sound2
+    precache_sound("zerstorer/trog/bigboom.wav");
 };
 
 // --> QUAKED monster_ryu (1 0 0) (-56 -56 -24) (56 56 56) Ambush Boss Fast Slow

@@ -345,7 +345,6 @@ void() drn_die7 = [0, drn_die7] {
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
 	T_RadiusDamage(self, self, 80, world, DAMAGEALL);
-
 	monster_check_gib();
 	entity_hide(self);
 };

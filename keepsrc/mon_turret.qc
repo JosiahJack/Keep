@@ -91,18 +91,18 @@ void() turret_ret1 = [$retract1, turret_ret1] { // [FUNCTION]
 void() turret_ret2 =	[$retract1, turret_ret3] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_ret3 =	[$retract2, turret_ret4] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_ret4 =	[$retract3, turret_ret5] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() turret_ret5 =	[$retract4, turret_ret6] { self.solid = SOLID_NOT;self.nextthink = time + 0.05;}; // [FUNCTION]
+void() turret_ret5 =	[$retract4, turret_ret6] { self.solid = SOLID_NOT; self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_ret6 =	[$retract5, turret_ret7] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_ret7 =	[$retract6, turret_ret8] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_ret8 =	[$retract7, turret_retracted]
-{ if (!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05;}; // [FUNCTION]
+{ if (!self.currentammo) self.think = SUB_Null; self.nextthink = time + 0.05;}; // [FUNCTION]
 
 void() turret_unret1 =	[$retract6, turret_unret2] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_unret2 =	[$retract5, turret_unret3] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_unret3 =	[$retract4, turret_unret4] { self.nextthink = time + 0.05;}; // [FUNCTION]
 void() turret_unret4 =	[$retract3, turret_unret5] {
 	self.solid = SOLID_SLIDEBOX;
-	setmodel (self, "progs/custents/turret.mdl");
+	setmodel(self, "progs/custents/turret.mdl");
 	self.nextthink = time + 0.05;
 };
 void() turret_unret5 =	[$retract2, turret_unret6] { self.nextthink = time + 0.05;}; // [FUNCTION]
@@ -187,7 +187,7 @@ void() turret_laser1 = [$tilt0, turret_laser2] { // [FUNCTION]
 
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	vel = normalize(self.enemy.origin - self.origin);
 	vel = vel * SPEED_LASER;
@@ -202,7 +202,7 @@ void() turret_laser5 = [$tilt0, turret_active] { // [FUNCTION]
 	
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	vel = normalize(self.enemy.origin - self.origin);
 	vel = vel * SPEED_LASER;
@@ -215,7 +215,7 @@ void() turret_rocket1 = [$tilt0, turret_active] { // [FUNCTION]
 	
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	vel = normalize(self.enemy.origin - self.origin);
 	vel = vel * SPEED_LASER;
@@ -223,9 +223,9 @@ void() turret_rocket1 = [$tilt0, turret_active] { // [FUNCTION]
 	launch_projectile(self.origin,dir,self.avelocity,CT_PROJ_ARMY,SPEED_RLPLAYER);
 };
 
-void() turret_beam1 = [$tilt0, turret_beam2] { turret_face(); sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
-void() turret_beam2 = [$tilt0, turret_beam3] { turret_face(); sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
-void() turret_beam3 = [$tilt0, turret_beam4] { turret_face(); sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
+void() turret_beam1 = [$tilt0, turret_beam2] { turret_face(); sound(self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
+void() turret_beam2 = [$tilt0, turret_beam3] { turret_face(); sound(self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
+void() turret_beam3 = [$tilt0, turret_beam4] { turret_face(); sound(self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
 void() turret_beam4 = [$tilt0, turret_beam5] { // [FUNCTION]
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
@@ -263,7 +263,7 @@ void(entity inflictor, entity attacker, float take)	turret_pain = {
 	if (self.pain_finished > time) return;
 
 	self.pain_finished = time + 1;
-	sound (self, CHAN_VOICE, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	ThrowGib(11,1);
 };
 
@@ -275,11 +275,12 @@ void() turret_die = {
 	newmis.movetype = MOVETYPE_NONE;
 	newmis.angles = self.angles;
 	setorigin(newmis, self.origin);
-	setmodel (newmis, "progs/custents/dedturet.mdl");
+	setmodel(newmis, "progs/custents/dedturet.mdl");
 	setsize (self, '-10 -10 -3', '10 10 12');
 	newmis.skin = self.skin;
 	ThrowGib(25,1);
 	ThrowGib(11,4);
+	entity_remove(self,0.1);
 };
 
 void() turret_use= {
@@ -303,16 +304,16 @@ void() monster_turret_precache = {
 	precache_model ("progs/custents/h_turret.mdl");
 	precache_model ("progs/custents/dedturet.mdl");
 	precache_model ("progs/custents/turetgib.mdl");
-	precache_sound ("custents/turret/beamchrg.wav");
-	precache_sound ("custents/turret/beammode.wav");
+	precache_sound("custents/turret/beamchrg.wav");
+	precache_sound("custents/turret/beammode.wav");
 	precache_model ("progs/laser.mdl");
-	precache_sound (SOUND_LASER_FIRE);
-	precache_sound (SOUND_LASER_HIT);
+	precache_sound(SOUND_LASER_FIRE);
+	precache_sound(SOUND_LASER_HIT);
 	precache_model ("progs/missile.mdl");
 	precache_model ("progs/custents/beam.mdl");
-	precache_sound ("custents/turret/beamhit.wav");
-	precache_sound ("hipnotic/weapons/mjolhit.wav");
-	precache_sound ("custents/turret/plasbult.wav");
+	precache_sound("custents/turret/beamhit.wav");
+	precache_sound("hipnotic/weapons/mjolhit.wav");
+	precache_sound("custents/turret/plasbult.wav");
 };
 
 void() monster_turret = {
@@ -325,7 +326,7 @@ void() monster_turret = {
 	self.gib1mdl = "progs/custents/turetgib.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
 	setsize (self, '-12 -12 -6', '12 12 12');
 	if (self.health < 1) self.health = 100;

@@ -54,10 +54,8 @@ $frame paina1 paina2 paina3 paina4
 $frame painb1 painb2 painb3 painb4 painb5
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 
-float pyro_RUN_SPEED = 1.5;
-
 void() pyro_soundreset = {
-	if (self.attack_finished > time) sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM); // Turn off flame sound
+	if (self.attack_finished > time) sound(self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM); // Turn off flame sound
 	else StopSound(self,CHAN_WEAPON); // Play sound anyway to be sure the channel is silent
 };
 
@@ -69,7 +67,7 @@ void()	pyro_stand5	= [	$stand5,	pyro_stand6	] { ai_stand(); };
 void()	pyro_stand6	= [	$stand6,	pyro_stand7	] { ai_stand(); };
 void()	pyro_stand7	= [	$stand7,	pyro_stand1	] { ai_stand(); };
 
-void()	pyro_walk1	= [	$walk1,		pyro_walk2	] { monster_idle_sound();ai_walk(2); };
+void()	pyro_walk1	= [	$walk1,		pyro_walk2	] { monster_idle_sound(); ai_walk(2); };
 void()	pyro_walk2	= [	$walk2,		pyro_walk3	] { monster_footstep(FALSE); ai_walk(4); };
 void()	pyro_walk3	= [	$walk3,		pyro_walk4	] { ai_walk(4); };
 void()	pyro_walk4	= [	$walk4,		pyro_walk5	] { ai_walk(3); };
@@ -86,19 +84,19 @@ void()	pyro_walk14	= [	$walk14,	pyro_walk15	] { ai_walk(3); };
 void()	pyro_walk15	= [	$walk15,	pyro_walk16	] { ai_walk(4); };
 void()	pyro_walk16	= [	$walk16,	pyro_walk1	] { ai_walk(2); };
 
-void()	pyro_run1	= [	$run1,	pyro_run2	] { monster_idle_sound(); ai_run(18 * pyro_RUN_SPEED); };
-void()	pyro_run2	= [	$run2,	pyro_run3	] { ai_run(14 * pyro_RUN_SPEED); };
-void()	pyro_run3	= [	$run3,	pyro_run4	] { ai_run(7 * pyro_RUN_SPEED); };
-void()	pyro_run4	= [	$run4,	pyro_run5	] { ai_run(12 * pyro_RUN_SPEED); };
-void()	pyro_run5	= [	$run5,	pyro_run6	] { ai_run(14 * pyro_RUN_SPEED); };
-void()	pyro_run6	= [	$run6,	pyro_run7	] { ai_run(14 * pyro_RUN_SPEED); };
-void()	pyro_run7	= [	$run7,	pyro_run8	] { ai_run(7 * pyro_RUN_SPEED); };
-void()	pyro_run8	= [	$run8,	pyro_run1	] { ai_run(11 * pyro_RUN_SPEED); };
+void()	pyro_run1	= [	$run1,	pyro_run2	] { monster_idle_sound(); ai_run(18 * 1.5); };
+void()	pyro_run2	= [	$run2,	pyro_run3	] { ai_run(14 * 1.5); };
+void()	pyro_run3	= [	$run3,	pyro_run4	] { ai_run(7 * 1.5); };
+void()	pyro_run4	= [	$run4,	pyro_run5	] { ai_run(12 * 1.5); };
+void()	pyro_run5	= [	$run5,	pyro_run6	] { ai_run(14 * 1.5); };
+void()	pyro_run6	= [	$run6,	pyro_run7	] { ai_run(14 * 1.5); };
+void()	pyro_run7	= [	$run7,	pyro_run8	] { ai_run(7 * 1.5); };
+void()	pyro_run8	= [	$run8,	pyro_run1	] { ai_run(11 * 1.5); };
 
 void()	pyro_atk1	= [	$attack1,	pyro_atk2	] { ai_face(); };
 void()	pyro_atk2	= [	$attack3,	pyro_atk3	] { ai_face(); };
 void()	pyro_atk3	= [	$attack5,	pyro_atk4	] { ai_face();
-	sound (self, CHAN_WEAPON, self.noise3, 1, ATTN_NORM);	// ON
+	sound(self, CHAN_WEAPON, self.noise3, 1, ATTN_NORM);	// ON
 	pyro_fire(); // FIRE! FIRE! FIRE!
 	self.attack_finished = time + 0.3;
 };
@@ -109,7 +107,7 @@ void()	pyro_atk4	= [	$attack5,	pyro_atk5	] { ai_face();
 		self.think = pyro_atk4;
 };
 void()	pyro_atk5	= [	$attack10,	pyro_run1	] { ai_face();
-	sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);	// OFF
+	sound(self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);	// OFF
 	SUB_CheckRefire(pyro_atk1);
 };
 
@@ -140,8 +138,8 @@ void(entity inflictor, entity attacker, float damage) pyro_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 	
 		// Not using long pain animation (need to be agile)
 		if (self.pain_check == 1) {
@@ -179,7 +177,7 @@ void()	pyro_die14	= [	$death14,	pyro_die14	] { monster_deadbody_check(); };
 
 void()	pyro_fdie1	= [	$fdeath1,	pyro_fdie2	] {};
 void()	pyro_fdie2	= [	$fdeath2,	pyro_fdie3	] { monster_check_gib(); };
-void()	pyro_fdie3	= [	$fdeath3,	pyro_fdie4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	pyro_fdie3	= [	$fdeath3,	pyro_fdie4	] { monster_check_gib(); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	pyro_fdie4	= [	$fdeath4,	pyro_fdie5	] {};
 void()	pyro_fdie5	= [	$fdeath5,	pyro_fdie6	] {};
 void()	pyro_fdie6	= [	$fdeath6,	pyro_fdie7	] {};
@@ -192,9 +190,8 @@ void()	pyro_fdie11	= [	$fdeath11,	pyro_fdie11	] { monster_deadbody_check(); };
 void() pyro_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities 
 	pyro_soundreset();
-
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
 		if (random() > 0.5) pyro_die1(); // regular death
 		else pyro_fdie1();
 	}
@@ -204,13 +201,13 @@ void() monster_pyro_precache = {
 	precache_model ("progs/ad171/mon_pyro.mdl");
 	precache_model ("progs/ad171/h_pyro.mdl");
 	precache_model ("progs/ad171/w_enforcergun.mdl");
-	precache_sound ("enforcer/death1.wav");
-	precache_sound ("enforcer/pain1.wav");
-	precache_sound ("enforcer/pain2.wav");
-	precache_sound ("enforcer/idle1.wav");
-	precache_sound ("quoth/pyro/sight.wav");
-	precache_sound ("rrp/dread/flameon.wav");
-	precache_sound ("rrp/dread/flameoff.wav");
+	precache_sound("enforcer/death1.wav");
+	precache_sound("enforcer/pain1.wav");
+	precache_sound("enforcer/pain2.wav");
+	precache_sound("enforcer/idle1.wav");
+	precache_sound("quoth/pyro/sight.wav");
+	precache_sound("rrp/dread/flameon.wav");
+	precache_sound("rrp/dread/flameoff.wav");
 	precache_model (SBURST_FLAME);		// Flame on
 	precache_model (SBURST_SMOKE);		// Underwater
 	precache_model (SBURST_FLAMEDP);	// DP Collision

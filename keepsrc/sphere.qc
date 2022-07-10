@@ -84,7 +84,7 @@ void() sphere_attack = { // [FUNCTION]
 
 void() sphere_think = { // [FUNCTION]
    if ((self.shieldSoundTime < time)) {
-      sound (self,CHAN_VOICE,"rogue/sphere/sphere.wav",TRUE,ATTN_NORM);
+      sound(self,CHAN_VOICE,"rogue/sphere/sphere.wav",TRUE,ATTN_NORM);
       self.shieldSoundTime = (time + MOVETYPE_STEP);
    }
 
@@ -128,9 +128,9 @@ void() sphere_spawn = { // [FUNCTION]
    missile.owner = other;
    missile.weapon = FALSE;
    missile.delay = (time + SVC_INTERMISSION);
-   setmodel (missile,"progs/rogue/sphere.mdl");
+   setmodel(missile,"progs/rogue/sphere.mdl");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (missile,self.origin);
+   setorigin(missile,self.origin);
    missile.avelocity = '40.000 40.000 40.000';
    missile.think = sphere_think;
    missile.nextthink = (time + 0.100);
@@ -140,8 +140,8 @@ void() item_sphere = { // [ENTITY]
 	item_setupmodel("progs/rogue/sphere.mdl",0);
 	item_setupnoise("rogue/sphere/sphere.wav");
 	self.noise1 = self.noise2 = "rogue/sphere/sphere.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	self.items2 = IT2_V_SPHERE;
 	self.avelocity = '40.000 40.000 40.000';
 	if (self.netname == "") self.netname = "Vengeance Sphere";

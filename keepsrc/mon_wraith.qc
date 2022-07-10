@@ -70,7 +70,7 @@ float WRAITH_SKINGREEN = 2;		// Spider version
 float WRAITH_SKINPURPLE = 4;	// Scorpion version
 float WRAITH_NOFIREDEBUFF = 8192; // No fire debuf attack
 
-void() wraith_stand1 = [$stand4, wraith_stand2 ] { monster_idle_sound();ai_stand(); };
+void() wraith_stand1 = [$stand4, wraith_stand2 ] { monster_idle_sound(); ai_stand(); };
 void() wraith_stand2 = [$stand5, wraith_stand3 ] { ai_stand(); };
 void() wraith_stand3 = [$stand6, wraith_stand4 ] { ai_stand(); };
 void() wraith_stand4 = [$stand7, wraith_stand5 ] { ai_stand(); };
@@ -83,7 +83,7 @@ void() wraith_stand10 = [$stand6, wraith_stand11 ] { ai_stand(); };
 void() wraith_stand11 = [$stand5, wraith_stand12 ] { ai_stand(); };
 void() wraith_stand12 = [$stand4, wraith_stand1 ] { ai_stand(); };
 
-void() wraith_walk1 = [$stand3, wraith_walk2 ] { monster_idle_sound();ai_walk(8); };
+void() wraith_walk1 = [$stand3, wraith_walk2 ] { monster_idle_sound(); ai_walk(8); };
 void() wraith_walk2 = [$stand4, wraith_walk3 ] { ai_walk(7); };
 void() wraith_walk3 = [$stand5, wraith_walk4 ] { ai_walk(7); };
 void() wraith_walk4 = [$stand6, wraith_walk5 ] { ai_walk(6); };
@@ -363,7 +363,7 @@ void(vector orgofs, float dbframe) wraith_debuff = {
 	
 	if (dbframe == 0) {
 		self.pain_finished = time + 1.1;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
 
 		// Setup halo/glow models around wraith (5% larger)
 		setorigin(self.attachment3, self.origin);
@@ -444,7 +444,7 @@ void(vector orgofs, float nbframe) wraith_nailball = {
 		else self.attachment.skin = BALL_NAIL_COL1;
 
 		self.pain_finished = time + 1;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack2.wav", 1, ATTN_NORM);
 	}
 	
 	// Turn towards enemy and make vector
@@ -531,7 +531,7 @@ void(vector eggofs, float eggframe) Setup_WraithEgg = {
 
 		// Present wraith from going into pain during egg cycle
 		self.pain_finished = time + 1;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 		// Should be visible during spawn minion cycle
 		self.skin = self.exactskin + 1;
 		self.alpha = WRAITH_ALPHAFIRE;
@@ -642,7 +642,7 @@ void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) wraith_painA1();
@@ -695,7 +695,7 @@ void() wraith_death15 = [$death15, wraith_death15] { wrath_deatheffects(TE_EXPLO
 void() wraith_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
-	sound (self, CHAN_VOICE, "ad171/wraith/death1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ad171/wraith/death1.wav", 1, ATTN_NORM);
 	self.skin = self.exactskin; // Make sure fire wraith skin/alpha is reset on pain/death
 	self.alpha = WRAITH_ALPHA;
 	SUB_RemoveAttachments(); // Make sure any attachments are removed
@@ -718,18 +718,18 @@ void() monster_wraith_precache = {
 	precache_model ("progs/rogue/wrthgib1.mdl");
 	precache_model ("progs/rogue/wrthgib2.mdl");
 	precache_model ("progs/rogue/wrthgib3.mdl");
-	precache_sound ("ad171/wraith/idle1.wav");
-	precache_sound ("ad171/wraith/idle2.wav");
-	precache_sound ("ad171/wraith/idle3.wav");
-	precache_sound ("ad171/wraith/death1.wav");
-	precache_sound ("ad171/wraith/pain1.wav");
-	precache_sound ("ad171/wraith/attack1.wav"); // HITSCAN bolt
-	precache_sound ("quoth/drole/explode3.wav");
+	precache_sound("ad171/wraith/idle1.wav");
+	precache_sound("ad171/wraith/idle2.wav");
+	precache_sound("ad171/wraith/idle3.wav");
+	precache_sound("ad171/wraith/death1.wav");
+	precache_sound("ad171/wraith/pain1.wav");
+	precache_sound("ad171/wraith/attack1.wav"); // HITSCAN bolt
+	precache_sound("quoth/drole/explode3.wav");
 	precache_model (SBURST_FLAME); // Flames
-	precache_sound ("ad171/wraith/attack2.wav"); // Nail/Bones
-	precache_sound ("ad171/wraith/attack3.wav"); // Minions
-	precache_sound ("ad171/wraith/bounce.wav"); // Egg bounce
-	precache_sound ("ad171/wraith/sight1.wav");
+	precache_sound("ad171/wraith/attack2.wav"); // Nail/Bones
+	precache_sound("ad171/wraith/attack3.wav"); // Minions
+	precache_sound("ad171/wraith/bounce.wav"); // Egg bounce
+	precache_sound("ad171/wraith/sight1.wav");
 	monster_scorpion_precache();
 	monster_spider_precache();
 };

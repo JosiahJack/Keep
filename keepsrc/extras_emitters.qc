@@ -379,7 +379,7 @@ void() particle_death_anim = { // [FUNCTION]
 // Particle is done
 void() particle_die = { // [FUNCTION]
 	self.classname = "p_dying";// So effectors ignore dying particles
-	if (self.owner.noise2) sound (self, CHAN_VOICE, self.owner.noise2, 1, ATTN_NORM);	
+	if (self.owner.noise2) sound(self, CHAN_VOICE, self.owner.noise2, 1, ATTN_NORM);	
 	if (!self.owner.mdl2) { remove(self); return; }
 	
 	self.solid = SOLID_NOT;// Change this and DIE!
@@ -387,7 +387,7 @@ void() particle_die = { // [FUNCTION]
 	self.velocity = '0 0 0';
 	setorigin(self, self.origin + '0 0 4');// kick it up a bit
 	self.frame = 0;
-	setmodel (self, self.owner.mdl2);
+	setmodel(self, self.owner.mdl2);
 	self.think = particle_death_anim;
 	self.nextthink = time + self.owner.frate2;
 };
@@ -413,7 +413,7 @@ void() particle_touch = { // [FUNCTION]
 	if (AffectedByPhysics(other)) return; // Don't die on other particles
 	if (self.cnt == 3) return; // Don't go nuts (especially if caught up)
 	
-	if (!self.cnt && self.owner.noise1) sound (self, CHAN_VOICE, self.owner.noise1, 1, ATTN_NORM);	
+	if (!self.cnt && self.owner.noise1) sound(self, CHAN_VOICE, self.owner.noise1, 1, ATTN_NORM);	
 	self.cnt = self.cnt + 1;	
 	if (self.owner.dmg != 0) {
 		if (other.takedamage) {
@@ -475,14 +475,14 @@ void() emitter_emit = { // [FUNCTION]
 	local entity p;
 	local vector dir;
 	
-	if (self.noise != "" && self.count == 1) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
+	if (self.noise != "" && self.count == 1) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
 		
 	// Emit a particle
 	p = spawn();
 	p.owner = self;
 	p.origin = particle_origin();
-	setorigin (p, p.origin);
-	setmodel (p, self.mdl);
+	setorigin(p, p.origin);
+	setmodel(p, self.mdl);
 	setsize (p, VEC_ORIGIN, VEC_ORIGIN);
 	p.solid = self.cnt;
 	p.movetype = self.style;
@@ -724,7 +724,7 @@ void() func_emitter_volume = { // [ENTITY]
 	self.movetype = MOVETYPE_NONE;
 	setmodel(self,self.model);
 	setsize(self,self.mins,self.maxs);
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.modelindex = 0;
 	self.model = "";
 	self.aflag = TRUE;// volume origin

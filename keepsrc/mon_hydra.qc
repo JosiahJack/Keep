@@ -111,7 +111,7 @@ void() hydra_melee = {
 	if (vlen(delta) > 80)
 		return;
 		
-	sound (self, CHAN_VOICE, "extras_r5/hydra/hydra_tent.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "extras_r5/hydra/hydra_tent.wav", 1, ATTN_NORM);
 	//var float autocvar_hydra_tentacle = 4;				// set damage value of Hydra�s tentacle attacks
 	ldmg = (random() + random()) * 4;		// default 4
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -162,12 +162,12 @@ void() hydra_spit_touch = {
 			//other.pausetime = time + 2;	// player cannot walk and see during this time
 			spawn_touchblood (self, other, 7);
 			T_Damage (other, self, self.owner, 7, DAMARMOR);	// default 7
-			sound (self, CHAN_WEAPON, "extras_r5/hydra/spit_impact_player.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "extras_r5/hydra/spit_impact_player.wav", 1, ATTN_NORM);
 			///	TODO: Add paralyze effect?
 		}
 	} else {	
 		///	TODO: Add some particles on collision
-		sound (self, CHAN_WEAPON, "player/tornoff2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "player/tornoff2.wav", 1, ATTN_NORM);
 	}
 	remove(self);
 };
@@ -188,8 +188,8 @@ void() hydra_spit_start = {
 	spit = spawn();
 	spit.classgroup = CG_PROJALL;
 	spit.classname = "spit";
-	setorigin (spit, org);
-	setmodel (spit, "progs/w_spike.mdl");
+	setorigin(spit, org);
+	setmodel(spit, "progs/w_spike.mdl");
 	setsize (spit, VEC_ORIGIN, VEC_ORIGIN);		
 	spit.movetype = MOVETYPE_FLYMISSILE;
 	spit.solid = SOLID_BBOX;
@@ -207,21 +207,21 @@ void() hydra_spit_start = {
 	spit.think = SUB_Remove;
 	spit.nextthink = time + 5;
 
-	sound (self, CHAN_WEAPON, "extras_r5/hydra/hydra_spit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "extras_r5/hydra/hydra_spit.wav", 1, ATTN_NORM);
 };
 
 
-void()	Hydra_Spit1	= [	$hspit1,	Hydra_Spit2] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit2	= [	$hspit2,	Hydra_Spit3] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit3	= [	$hspit3,	Hydra_Spit4] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit4	= [	$hspit4,	Hydra_Spit5] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit5	= [	$hspit5,	Hydra_Spit6] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit6	= [	$hspit6,	Hydra_Spit7] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit7	= [	$hspit7,	Hydra_Spit8] { ai_face();self.nextthink = time + 0.07;};
+void()	Hydra_Spit1	= [	$hspit1,	Hydra_Spit2] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit2	= [	$hspit2,	Hydra_Spit3] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit3	= [	$hspit3,	Hydra_Spit4] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit4	= [	$hspit4,	Hydra_Spit5] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit5	= [	$hspit5,	Hydra_Spit6] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit6	= [	$hspit6,	Hydra_Spit7] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit7	= [	$hspit7,	Hydra_Spit8] { ai_face(); self.nextthink = time + 0.07;};
 void()	Hydra_Spit8	= [	$hspit8,	Hydra_Spit9] { ai_face(); hydra_spit_start(); };
-void()	Hydra_Spit9	= [	$hspit9,	Hydra_Spit10] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit10	= [	$hspit10,	Hydra_Spit11] { ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit11	= [	$hspit11,	Hydra_Spit12] { ai_face();self.nextthink = time + 0.07;};
+void()	Hydra_Spit9	= [	$hspit9,	Hydra_Spit10] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit10	= [	$hspit10,	Hydra_Spit11] { ai_face(); self.nextthink = time + 0.07;};
+void()	Hydra_Spit11	= [	$hspit11,	Hydra_Spit12] { ai_face(); self.nextthink = time + 0.07;};
 void()	Hydra_Spit12	= [	$hspit12,	hydra_run1] { ai_face(); SUB_AttackFinished (1 + random()); };
 
 void() hydra_death1 = [      $death1,        hydra_death2        ] { monster_check_gib(); };
@@ -262,21 +262,17 @@ void(entity inflictor, entity attacker, float damage)	hydra_pain = {
 			return;
 
 		self.pain_finished = time + 1;
-		sound (self, CHAN_AUTO, "extras_r5/hydra/hydra_pain.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "extras_r5/hydra/hydra_pain.wav", 1, ATTN_NORM);
 		hydra_pain1();
 	}
 };
 
 void() hydra_death= {
-	// If fish in water, reduce self gravity to pretend to slowly sink
-	if (pointcontents(self.origin) == CONTENT_WATER) self.gravity = 0.25;
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "extras_r5/hydra/hydra_death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "extras_r5/hydra/hydra_death.wav", 1, ATTN_NORM);
 		hydra_death1();
 	}
 };
@@ -285,14 +281,14 @@ void() monster_hydra_precache = {
 	precache_model ("progs/extras_r5/hydra.mdl");
 	precache_model ("progs/extras_r5/hydragib.mdl");
 	precache_model ("progs/w_spike.mdl");
-	precache_sound ("extras_r5/hydra/hydra_death.wav");
-	precache_sound ("extras_r5/hydra/spit_impact_player.wav");
-	precache_sound ("extras_r5/hydra/hydra_pain.wav");
-	precache_sound ("extras_r5/hydra/hydra_spit.wav");
-	precache_sound ("extras_r5/hydra/hydra_idle.wav");
-	precache_sound ("extras_r5/hydra/hydra_idle2.wav");
-	precache_sound ("extras_r5/hydra/hydra_tent.wav");
-	precache_sound ("player/tornoff2.wav");
+	precache_sound("extras_r5/hydra/hydra_death.wav");
+	precache_sound("extras_r5/hydra/spit_impact_player.wav");
+	precache_sound("extras_r5/hydra/hydra_pain.wav");
+	precache_sound("extras_r5/hydra/hydra_spit.wav");
+	precache_sound("extras_r5/hydra/hydra_idle.wav");
+	precache_sound("extras_r5/hydra/hydra_idle2.wav");
+	precache_sound("extras_r5/hydra/hydra_tent.wav");
+	precache_sound("player/tornoff2.wav");
 };
 
 // QUAKED monster_hydra (1 0 0) (-16 -16 -24) (16 16 24) Ambush

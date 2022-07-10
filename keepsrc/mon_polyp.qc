@@ -46,7 +46,6 @@ void() polyp_walkfly1;
 void() polyp_visible1;
 void() polyp_missile;
 void() polyp_die1;
-void() polyp_idie1;
 void() polyp_jump5;
 
 void() polypcheckdist = {
@@ -127,7 +126,7 @@ void() polyp_wake2 = [134, polyp_wake3] {};
 void() polyp_wake3 = [135, polyp_wake4] {};
 void() polyp_wake4 = [136, polyp_wake5] {};
 void() polyp_wake5 = [137, polyp_wake6] {};
-void() polyp_wake6 = [138, polyp_wake7] { self.movetype = MOVETYPE_FLY;self.flags = self.flags - (self.flags & FL_ONGROUND);self.velocity = '0 0 25';};
+void() polyp_wake6 = [138, polyp_wake7] { self.movetype = MOVETYPE_FLY; self.flags = self.flags - (self.flags & FL_ONGROUND); self.velocity = '0 0 25';};
 void() polyp_wake7 = [139, polyp_wake8] { self.velocity = '0 0 50';};
 void() polyp_wake8 = [140, polyp_wake9] { self.velocity = '0 0 175';};
 void() polyp_wake9 = [141, polyp_wake10] { self.velocity = '0 0 125';};
@@ -153,9 +152,9 @@ void() polyp_float1 = [153, polyp_float2] {
 	if (random() < 0.05)
 		sound(self, CHAN_VOICE, "quoth/polyp/idle.wav", 1, AS_MELEE);
 };
-void() polyp_float2 = [154, polyp_float3] { self.count = time + 2 + 1 * random();ai_stand(); };
-void() polyp_float3 = [155, polyp_float4] { self.count = time + 2 + 1 * random();ai_stand(); };
-void() polyp_float4 = [156, polyp_float1] { self.count = time + 2 + 1 * random();ai_stand(); };
+void() polyp_float2 = [154, polyp_float3] { self.count = time + 2 + 1 * random(); ai_stand(); };
+void() polyp_float3 = [155, polyp_float4] { self.count = time + 2 + 1 * random(); ai_stand(); };
+void() polyp_float4 = [156, polyp_float1] { self.count = time + 2 + 1 * random(); ai_stand(); };
 
 void() polyp_walk1 = [11, polyp_walk2] {
 	self.velocity = VEC_ORIGIN;
@@ -226,7 +225,7 @@ void() polyp_ihover4 = [0, polyp_ihover1] { polypcheckdist();polyp_invisible_sou
 void() polyp_visible1 = [0, polyp_visible2] {
 	local vector org;
 
-	self.flags = self.flags - FL_NOTARGET;
+	SUB_RemoveFlags(self,FL_NOTARGET);
 	org = self.origin;
 	sound(self, CHAN_AUTO, "quoth/polyp/decloak.wav", 1, ATTN_NORM);
 	self.frame = 0;
@@ -251,7 +250,6 @@ void() polyp_invisible = [0, polyp_invisible2] {
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.th_missile = SUB_Null;
 	self.th_run = SUB_Null;
-	self.th_die = polyp_idie1;
 	self.count = time + 2 + 2 * random();
 };
 void() polyp_invisible2 = [0, polyp_invisible3] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX); };
@@ -364,7 +362,7 @@ void() polyp_jump5 = [151, polyp_jump6] {
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 600 + '0 0 200';
 	self.velocity_z = self.velocity_z + random() * 150;
-	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
+	SUB_RemoveFlags(self,FL_ONGROUND);
 	self.cnt = 0;
 };
 void() polyp_jump6 = [152, polyp_fly1] {};
@@ -421,37 +419,14 @@ void() polyp_die2 = [157, polyp_hover1] {
 	throwpolypgib("progs/quoth/polypgib.mdl", -60);
 	throwpolypgib("progs/quoth/polypgib.mdl", -75);
 	throwpolypgib("progs/quoth/polypgib.mdl", -75);
-	SUB_Remove();
-};
-
-void() polyp_idie1 = [0, polyp_idie2] {
-	self.takedamage = DAMAGE_NO;
-	self.nextthink = time + 0.2;
-	self.velocity = VEC_ORIGIN;
-};
-void() polyp_idie2 = [0, polyp_hover1] {
-	sound(self, CHAN_VOICE, "quoth/polyp/gibsplt1.wav", 1, ATTN_NORM);
-	throwpolypgib("progs/quoth/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth/polypgib.mdl", -50);
-	throwpolypgib("progs/quoth/polypgib.mdl", -50);
-	throwpolypgib("progs/quoth/polypgib.mdl", -60);
-	throwpolypgib("progs/quoth/polypgib.mdl", -60);
-	throwpolypgib("progs/quoth/polypgib.mdl", -75);
-	throwpolypgib("progs/quoth/polypgib.mdl", -75);
-	SUB_Remove();
+	entity_remove(self,0.1);
 };
 
 void() polyp_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
-
 	self.takedamage = DAMAGE_NO;
-	if (random() < 0.5)
-		polyp_die1();
-	else
-		polyp_idie1();
+	polyp_die1();
 };
 
 void() polyp_missile = {

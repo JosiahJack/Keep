@@ -130,7 +130,7 @@ void() dog_walk8	= [	$walk8 ,	dog_walk1	] {
 };
 
 //----------------------------------------------------------------------
-void() dog_walkb1	= [	$walkb1 ,	dog_walkb2	] { self.idlebusy = TRUE; monster_idle_sound();ai_walk(8); };
+void() dog_walkb1	= [	$walkb1 ,	dog_walkb2	] { self.idlebusy = TRUE; monster_idle_sound(); ai_walk(8); };
 void() dog_walkb2	= [	$walkb2 ,	dog_walkb3	] { monster_footstep(FALSE); ai_walk(8); };
 void() dog_walkb3	= [	$walkb3 ,	dog_walkb4	] { ai_walk(8); };
 void() dog_walkb4	= [	$walkb4 ,	dog_walkb5	] { monster_footstep(FALSE); ai_walk(8); };
@@ -189,11 +189,11 @@ void() dog_atta1	= [	$attack1,	dog_atta2	] { ai_charge(10); };
 void() dog_atta2	= [	$attack2,	dog_atta3	] { ai_charge(10); };
 void() dog_atta3	= [	$attack3,	dog_atta4	] { ai_charge(10); };
 void() dog_atta4	= [	$attack4,	dog_atta5	] {
-sound (self, CHAN_VOICE, "dog/dattack1.wav", 1, ATTN_NORM);
+sound(self, CHAN_VOICE, "dog/dattack1.wav", 1, ATTN_NORM);
 dog_bite(); };
 void() dog_atta5	= [	$attack5,	dog_atta6	] { ai_charge(10); };
 void() dog_atta6	= [	$attack6,	dog_atta7	] { ai_charge(10); };
-void() dog_atta7	= [	$attack7,	dog_atta8	] { monster_footstep(FALSE);ai_charge(10); };
+void() dog_atta7	= [	$attack7,	dog_atta8	] { monster_footstep(FALSE); ai_charge(10); };
 void() dog_atta8	= [	$attack8,	dog_run1	] { ai_charge(10); };
 
 
@@ -307,7 +307,7 @@ void(entity inflictor, entity attacker, float damage)	dog_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() > 0.5) dog_pain1();
@@ -350,7 +350,7 @@ void() dog_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "dog/ddeath.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "dog/ddeath.wav", 1, ATTN_NORM);
 
 		if (random() > 0.5) dog_die1();
 		else dog_dieb1();
@@ -369,7 +369,7 @@ void(vector st) Dog_Fire = {
 };
 
 void() dog_fire1  = [$attack1, dog_fire2  ] { ai_face(); };
-void() dog_fire2  = [$attack3, dog_fire3  ] { ai_face(); sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM); Dog_Fire('25 2 6'); };
+void() dog_fire2  = [$attack3, dog_fire3  ] { ai_face(); sound(self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM); Dog_Fire('25 2 6'); };
 void() dog_fire3  = [$attack3, dog_fire4  ] { ai_face(); Dog_Fire('25 2 6'); };
 void() dog_fire4  = [$attack2, dog_fire5  ] { ai_face(); Dog_Fire('25 2 2'); };
 void() dog_fire5  = [$attack1, dog_run1   ] { ai_face(); };
@@ -385,13 +385,13 @@ void() dog_missile = {
 void() monster_dog_precache = {
 	precache_model ("progs/mon_dog.mdl");
 	precache_model ("progs/h_dog.mdl");
-	precache_sound ("dog/idle.wav");
-	precache_sound ("dog/dattack1.wav");
-	precache_sound ("dog/ddeath.wav");
-	precache_sound ("dog/dpain1.wav");
-	precache_sound ("drake/dragon/fire.wav");
-	precache_sound ("drake/dragon/firehit.wav");
-	precache_sound ("dog/dsight.wav");
+	precache_sound("dog/idle.wav");
+	precache_sound("dog/dattack1.wav");
+	precache_sound("dog/ddeath.wav");
+	precache_sound("dog/dpain1.wav");
+	precache_sound("drake/dragon/fire.wav");
+	precache_sound("drake/dragon/firehit.wav");
+	precache_sound("dog/dsight.wav");
 	precache_model ("progs/q15/gib_dogleg.mdl");
 };
 

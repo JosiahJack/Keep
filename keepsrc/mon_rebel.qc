@@ -66,7 +66,7 @@ void() rebel_fire = { // [FUNCTION]
     org = self.origin + dir;
     dir = self.enemy.origin + dir;
     dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,self.enemy,'0 0 0',1);
-    sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
     AkArrow_Launch (org, dir, 0);
 };
 
@@ -88,21 +88,21 @@ void() monster_rebel_precache = { // [FUNCTION]
 	precache_model ("progs/drake/h_rebel.mdl");
     precache_model ("progs/drake/arrow.mdl");     // Replaced 'akarrow.mdl'.
     precache_model ("progs/gib1.mdl");
-	precache_sound ("enforcer/idle1.wav");
-	precache_sound ("enforcer/sight1.wav");
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
-	precache_sound ("enforcer/enfire.wav");
-	precache_sound (SOUND_LASER_HIT);
-	precache_sound ("enforcer/pain1.wav");
-	precache_sound ("enforcer/pain2.wav");
-	precache_sound ("enforcer/death1.wav");
-    precache_sound ("drake/archer/arrow1.wav");
-    precache_sound ("drake/archer/arrow2.wav");
-    precache_sound ("drake/archer/arrow3.wav");
-    precache_sound ("drake/archer/arrowbrk.wav");
-    precache_sound ("drake/archer/arrowr.wav");
+	precache_sound("enforcer/idle1.wav");
+	precache_sound("enforcer/sight1.wav");
+	precache_sound("enforcer/sight2.wav");
+	precache_sound("enforcer/sight3.wav");
+	precache_sound("enforcer/sight4.wav");
+	precache_sound("enforcer/enfire.wav");
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("enforcer/pain1.wav");
+	precache_sound("enforcer/pain2.wav");
+	precache_sound("enforcer/death1.wav");
+    precache_sound("drake/archer/arrow1.wav");
+    precache_sound("drake/archer/arrow2.wav");
+    precache_sound("drake/archer/arrow3.wav");
+    precache_sound("drake/archer/arrowbrk.wav");
+    precache_sound("drake/archer/arrowr.wav");
 };
 
 void() monster_rebel = { // [ENTITY]

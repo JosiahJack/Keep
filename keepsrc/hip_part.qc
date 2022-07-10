@@ -47,7 +47,7 @@ void() particlefield_XZ = { // [FUNCTION]
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
 
    self.ltime = (time + 0.250);
-   if ( self.noise ) sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+   if ( self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return ;
    start = (self.dest1 + self.origin);
    end = (self.dest2 + self.origin);
@@ -69,7 +69,7 @@ void() particlefield_YZ = { // [FUNCTION]
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
 
    self.ltime = (time + 0.250);
-   if ( self.noise ) sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+   if ( self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return;
    start = (self.dest1 + self.origin);
    end = (self.dest2 + self.origin);
@@ -93,7 +93,7 @@ void() particlefield_XY = { // [FUNCTION]
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
 
    self.ltime = (time + 0.250);
-   if ( self.noise ) sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+   if ( self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return ;
    start = (self.dest1 + self.origin);
    end = (self.dest2 + self.origin);
@@ -124,10 +124,10 @@ void() func_particlefield = { // [ENTITY]
    self.classname = "particlefield";
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_NONE;
-   setmodel (self,self.model);
+   setmodel(self,self.model);
    self.model = "";
    self.origin = ((self.mins + self.maxs) * 0.500);
-   setorigin (self,self.origin);
+   setorigin(self,self.origin);
    self.dest = ((self.maxs - self.mins) - '16.000 16.000 16.000');
    self.dest1 = ((self.mins + '8.000 8.000 8.000') - self.origin);
    self.dest2 = ((self.maxs + '7.900 7.900 7.900') - self.origin);
@@ -150,6 +150,6 @@ void() func_particlefield = { // [ENTITY]
          self.dest1_y = ((self.dest1_y + self.dest2_y) / FL_SWIM);
       }
    }
-   if ( self.noise ) precache_sound (self.noise);
+   if ( self.noise ) precache_sound(self.noise);
    self.ltime = time;
 };

@@ -112,7 +112,7 @@ void() zombie_walk15	= [	$walk15,	zombie_walk16	] { ai_walk(0); };
 void() zombie_walk16	= [	$walk16,	zombie_walk17	] { ai_walk(0); };
 void() zombie_walk17	= [	$walk17,	zombie_walk18	] { ai_walk(0); };
 void() zombie_walk18	= [	$walk18,	zombie_walk19	] { ai_walk(0); };
-void() zombie_walk19	= [	$walk19,	zombie_walk1	] { zombie_sound(2);ai_walk(0); };
+void() zombie_walk19	= [	$walk19,	zombie_walk1	] { zombie_sound(2); ai_walk(0); };
 
 
 void() zombie_run1		= [	$run1,		zombie_run2	] {
@@ -498,16 +498,16 @@ void(float type) zombie_sound = {
 		if (self.lip < 0.2) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
 	} else if (type == 3 && self.idletimer < time) {
 	 	self.idletimer = time + 1 + (random()*2);
-		if (self.lip < 0.2) sound (self, CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
-		if (self.lip > 0.8) sound (self, CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
+		if (self.lip < 0.2) sound(self, CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
+		if (self.lip > 0.8) sound(self, CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
 	} else if (type == 4) {
 		if (self.lip < 0.25) sound(self,CHAN_VOICE,self.pain_sound, 1,ATTN_NORM);
 		else if (self.lip < 0.5) sound(self,CHAN_VOICE,self.pain_sound2,1,ATTN_NORM);
 	} else if (type == 5) {
-		sound (self, CHAN_BODY,"zombie/z_fall.wav",1,ATTN_NORM);
+		sound(self, CHAN_BODY,"zombie/z_fall.wav",1,ATTN_NORM);
 	} else if (type == 6) {
 		if (self.lip < 0.5) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
-		else sound (self,CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
+		else sound(self,CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
 	} else if (type == 7) {
 		if (self.classtype == CT_MONZOMBIEK) SwordSwipeSound();
 		else sound(self,CHAN_WEAPON,"zombie/z_shot1.wav",1,ATTN_NORM);
@@ -598,17 +598,17 @@ void() zombie_cruc_setup = {
 void() monster_zombie_precache = {
 	precache_model ("progs/ad171/mon_zombie.mdl");
 	precache_model ("progs/ad181/h_zombie.mdl");
-	precache_sound ("zombie/z_idle.wav");	// Idle A
-	precache_sound ("zombie/z_idle1.wav");	// Idle B
-	precache_sound ("zombie/idle_w2.wav");	// Crucified
-	precache_sound ("zombie/z_pain.wav");
-	precache_sound ("zombie/z_pain1.wav");
-	precache_sound ("zombie/z_shot1.wav");	// Swipe sound
-	precache_sound ("zombie/z_fall.wav");	// Impact - floor
-	precache_sound ("zombie/z_miss.wav");	// Impact - miss
-	precache_sound ("zombie/z_hit.wav");	// Impact - hit
-	precache_sound ("zombie/z_gib.wav");	// Death sound
-	precache_sound ("zombie/z_idle.wav");
+	precache_sound("zombie/z_idle.wav");	// Idle A
+	precache_sound("zombie/z_idle1.wav");	// Idle B
+	precache_sound("zombie/idle_w2.wav");	// Crucified
+	precache_sound("zombie/z_pain.wav");
+	precache_sound("zombie/z_pain1.wav");
+	precache_sound("zombie/z_shot1.wav");	// Swipe sound
+	precache_sound("zombie/z_fall.wav");	// Impact - floor
+	precache_sound("zombie/z_miss.wav");	// Impact - miss
+	precache_sound("zombie/z_hit.wav");	// Impact - hit
+	precache_sound("zombie/z_gib.wav");	// Death sound
+	precache_sound("zombie/z_idle.wav");
 };
 
 void() monster_zombiep;

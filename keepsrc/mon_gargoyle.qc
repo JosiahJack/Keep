@@ -46,11 +46,10 @@ $frame swoopout1 swoopout2 swoopout3 swoopout4 swoopout5 swoopout6 swoopout7 swo
 $frame swoopout9 swoopout10 swoopout11 swoopout12 swoopout13 swoopout14 swoopout15
 
 void() gargoylewings = { sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
-void() garg_fbfinish;
 
-void()	garg_idle1	= [	$fly2,	garg_idle2	] { monster_idle_sound();ai_stand(); };
+void()	garg_idle1	= [	$fly2,	garg_idle2	] { monster_idle_sound(); ai_stand(); };
 void()	garg_idle2	= [	$fly4,	garg_idle3	] { ai_stand(); };
-void()	garg_idle3	= [	$fly6,	garg_idle4	] { gargoylewings();ai_stand(); };
+void()	garg_idle3	= [	$fly6,	garg_idle4	] { gargoylewings(); ai_stand(); };
 void()	garg_idle4	= [	$fly8,	garg_idle5	] { ai_stand(); };
 void()	garg_idle5	= [	$fly10,	garg_idle6	] { ai_stand(); };
 void()	garg_idle6	= [	$fly12,	garg_idle7	] { ai_stand(); };
@@ -60,9 +59,9 @@ void()	garg_idle9	= [	$fly18,	garg_idle10	] { ai_stand(); };
 void()	garg_idle10	= [	$fly20,	garg_idle1	] { ai_stand(); };
 
 
-void()	garg_walk1	= [	$fly1,	garg_walk2	] { monster_idle_sound();ai_walk(8); };
+void()	garg_walk1	= [	$fly1,	garg_walk2	] { monster_idle_sound(); ai_walk(8); };
 void()	garg_walk2	= [	$fly3,	garg_walk3	] { ai_walk(8); };
-void()	garg_walk3	= [	$fly5,	garg_walk4	] { gargoylewings();ai_walk(8); };
+void()	garg_walk3	= [	$fly5,	garg_walk4	] { gargoylewings(); ai_walk(8); };
 void()	garg_walk4	= [	$fly7,	garg_walk5	] { ai_walk(8); };
 void()	garg_walk5	= [	$fly9,	garg_walk6	] { ai_walk(8); };
 void()	garg_walk6	= [	$fly11,	garg_walk7	] { ai_walk(8); };
@@ -73,7 +72,7 @@ void()	garg_walk10	= [	$fly19,	garg_walk1	] { ai_walk(8); };
 
 
 void()	garg_run1	= [	$fly1,	garg_run2	] { monster_idle_sound();
-	if (self.attachment && self.attachment.state == STATE_ON) garg_fbfinish();
+	if (self.attachment && self.attachment.state == STATE_ON) SUB_FinishAttachment();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
 		self.meleeattack = time + 4 + (random() + random() + random() * 4);
@@ -102,11 +101,6 @@ void() garg_fbthrow = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_GARG,self.attack_speed);
 };
 
-void() garg_fbfinish = {
-	setmodel(self.attachment, "");
-	self.attachment.state = STATE_OFF;
-};
-
 void(float fbframe, vector fbofs) garg_fbupdate = {
 	if (self.health < 1) return;
 	if (!self.attachment) {
@@ -125,7 +119,7 @@ void(float fbframe, vector fbofs) garg_fbupdate = {
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		sound (self, CHAN_WEAPON, "ad171/gargoyle/attack1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/gargoyle/attack1.wav", 1, ATTN_NORM);
 	}
 
 	ai_face();					// Turn towards enemy
@@ -148,7 +142,7 @@ void() garg_fire4	= [$attack8, garg_fire5 ] { garg_fbupdate(4,'-16 26 18'); };
 void() garg_fire5	= [$attack10, garg_fire6 ] { garg_fbupdate(5,'-29 18 38'); };
 void() garg_fire6	= [$attack12, garg_fire7 ] { garg_fbupdate(4,'-34 9 45'); };
 void() garg_fire7	= [$attack14, garg_fire8 ] { garg_fbupdate(3,'-32 22 38'); };
-void() garg_fire8	= [$attack16, garg_fire9 ] { garg_fbfinish();garg_fbthrow(); };
+void() garg_fire8	= [$attack16, garg_fire9 ] { SUB_FinishAttachment(); garg_fbthrow(); };
 void() garg_fire9	= [$attack18, garg_fire10 ] { ai_face();monster_idle_sound(); };
 void() garg_fire10	= [$attack20, garg_run1 ] { ai_face();
 	// If enemy really close, goto into a frenzy of fireball attacks
@@ -157,7 +151,7 @@ void() garg_fire10	= [$attack20, garg_run1 ] { ai_face();
 	else self.attack_state = AS_STRAIGHT;
 };
 
-void()	garg_perch1	= [	$perch2,	garg_perch2	] { monster_idle_sound();ai_stand(); };
+void()	garg_perch1	= [	$perch2,	garg_perch2	] { monster_idle_sound(); ai_stand(); };
 void()	garg_perch2	= [	$perch4,	garg_perch3	] { ai_stand(); };
 void()	garg_perch3	= [	$perch6,	garg_perch4	] { ai_stand(); };
 void()	garg_perch4	= [	$perch8,	garg_perch5	] { ai_stand(); };
@@ -214,7 +208,7 @@ void() gargoyle_wakeup = {
 };
 
 void() gargoyle_statue = {
-	if (random() < MON_IDLE_SOUND) sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+	if (random() < MON_IDLE_SOUND) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 	
  	self.think = gargoyle_statue;
  	self.nextthink = time + 5 + random()*5;
@@ -272,7 +266,6 @@ void()	garg_pain3	= [	$death3,	garg_pain4	] {};
 void()	garg_pain4	= [	$death2,	garg_pain5	] {};
 void()	garg_pain5	= [	$death1,	garg_run1	] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) garg_pain = {
 	// Check for perching gargoyles, need special wakeup
 	if (self.spawnflags & MON_GARGOYLE_PERCH) gargoyle_wakeup();
@@ -281,14 +274,12 @@ void(entity inflictor, entity attacker, float damage) garg_pain = {
 	else {
 		// Check all pain conditions and set up what to do next
 		monster_pain_check(attacker, damage);
-
-		// make sure any fireball is hidden
-		if (self.attachment) garg_fbfinish();
+		SUB_FinishAttachment(); // make sure any fireball is hidden
 
 		// Any pain animation/sound required?
 		if (self.pain_check > 0) {
-			if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-			else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+			else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 			if (self.pain_check == 1 || self.pain_check == 2) {
 				garg_pain1();
 			}
@@ -326,14 +317,14 @@ void() garg_die = {
 			self.oldorigin = self.origin + v_forward*8;
 			SpawnExplosion(EXPLODE_BIG, self.oldorigin, SOUND_REXP3);
 		}
-		garg_fbfinish(); // make sure any fireball is hidden
+		SUB_FinishAttachment(); // Make sure any fireball is hidden.
 	}
 
-	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	
 	// If not gibbed, then drop to ground
 	if (!self.gibbed) { 
-		sound (self, CHAN_VOICE, "ad171/gargoyle/death1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ad171/gargoyle/death1.wav", 1, ATTN_NORM);
 		self.flags = FL_MONSTER;				// reset all flag conditions
 		self.movetype = MOVETYPE_TOSS;			// Affected by gravity
 		self.velocity_x = -200 + 400*random();
@@ -494,9 +485,7 @@ void() setup_gargoyle = {
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn gargoyles (requires monster_minotaurminion entity)
-//----------------------------------------------------------------------------
 void(vector minion_org, entity minion_targ) minion_gargoyle = {
 	local entity minion;
 

@@ -153,7 +153,7 @@ void() trig_shake_think = { // [FUNCTION]
 
 	if (self.attack_finished < time) { // Done
 		self.nextthink = -1;
-		if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+		if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 		return;
 	}
 
@@ -181,7 +181,7 @@ void() trig_shake_think = { // [FUNCTION]
 void() trig_shake_use = { // [FUNCTION]
 	if (self.attack_finished > time) return;// already active
 
-	if (self.noise) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.noise) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	self.attack_finished = time + self.wait;
 	self.nextthink = time + 0.01; // Start...
 };
@@ -199,8 +199,8 @@ void() trig_shake_use = { // [FUNCTION]
 // "VIEWONLY"		Shakes the view, but player movement is not affected
 void() trigger_shake = { // [ENTITY]	
 	if (!self.targetname) objerror("trigger_shake without name");
-	if (self.noise) precache_sound (self.noise);
-	if (self.noise1) precache_sound (self.noise1);
+	if (self.noise) precache_sound(self.noise);
+	if (self.noise1) precache_sound(self.noise1);
 	if (!self.dmg) self.dmg = 120;
 	if (self.count <= 0) self.count = 200;
 	if (self.wait <= 0) self.wait = 1.0;
@@ -241,8 +241,8 @@ void() enemy_anger = { // [FUNCTION]
 void() trigger_enemy = { // [ENTITY]
 	if (!self.targetname) objerror("trigger_enemy without name");
 	if (!self.target) objerror("trigger_enemy without a target");
-	setorigin (self, self.origin);
-	setmodel (self, "");
+	setorigin(self, self.origin);
+	setmodel(self, "");
 	self.health = 100;	
 	self.use = enemy_anger;
 };

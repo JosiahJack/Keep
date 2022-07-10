@@ -1443,7 +1443,7 @@ float(entity clent) clienttype = #455; // returns one of the CLIENTTYPE_* consta
 //example ideas for use of this extension:
 //making icons over teammates' heads which are only visible to teammates.  for exasmple: float() playericon_customizeentityforclient = { return self.owner.team == other.team;};
 //making cloaked players more visible to their teammates than their enemies.  for example: float() player_customizeentityforclient = { if (self.items & IT_CLOAKING) { if (self.team == other.team) self.alpha = 0.6;else self.alpha = 0.1;} return TRUE;};
-//making explosion models that face the viewer (does not work well with chase_active).  for example: float() explosion_customizeentityforclient = { self.angles = vectoangles(other.origin + other.view_ofs - self.origin);self.angles_x = 0 - self.angles_x;};
+//making explosion models that face the viewer (does not work well with chase_active).  for example: float() explosion_customizeentityforclient = { self.angles = vectoangles(other.origin + other.view_ofs - self.origin); self.angles_x = 0 - self.angles_x;};
 //implementation notes:
 //entity customization is done before per-client culling (visibility for instance) because the entity may be doing setorigin to display itself in different locations on different clients, may be altering its .modelindex, .effects and other fields important to culling, so customized entities increase cpu usage (non-customized entities can use all the early culling they want however, as they are not changing on a per client basis).
 
@@ -1692,7 +1692,7 @@ void(entity e, vector torque) physics_addtorque = #542; // add relative torque
 //idea: id Software (Quake2)
 //darkplaces implementation: LordHavoc
 //description:
-//this extension allows precache_model and precache_sound (and any variants) to be used during the game (with automatic messages to clients to precache the new model/sound indices), also setmodel/sound/ambientsound can be called without precaching first (they will cause an automatic precache).
+//this extension allows precache_model and precache_sound(and any variants) to be used during the game (with automatic messages to clients to precache the new model/sound indices), also setmodel/sound/ambientsound can be called without precaching first (they will cause an automatic precache).
 
 //DP_SV_QCSTATUS
 //idea: divVerent

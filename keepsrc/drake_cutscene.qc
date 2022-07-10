@@ -137,7 +137,7 @@ void() go_back = { // [FUNCTION]
     c = find (world, classname, "camera");
     if (!c) objerror ("couldn't find camera");
     c.oldorigin     = t.origin;     // So player won't bounce back to cam.
-    setorigin (c, t.origin);
+    setorigin(c, t.origin);
     c.velocity      = t.velocity;
     c.view_ofs      = '0 0 22'; // PM:  Morph should take care of itself.
     c.angles_x      = t.angles_x;
@@ -353,7 +353,7 @@ void() go_camera = { // [FUNCTION]
     self.cnt = cvar("viewsize");
     cvar_set ("viewsize", "120");     //Full screen
     Safe_stuffcmd (self, "sizedown\nsizeup\n");   //hack-fix for GLquake
-    setorigin (self, self.enemy.origin);
+    setorigin(self, self.enemy.origin);
 
     // Space claim.
 	// PM: Make the dummy solid to prevent monsters or other junk from occupying

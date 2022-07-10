@@ -73,11 +73,10 @@ void()	Frag_JumpTouch = {
 			self.touch = SUB_Null;
 			self.think = frag_jump1;
 			self.nextthink = time + 0.1;
-
 			self.velocity_x = (random() - 0.5) * 50;
 			self.velocity_y = (random() - 0.5) * 50;
 			self.velocity_z = 80;
-			self.flags = self.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self,FL_ONGROUND);
 		}
 		return;	// not on ground yet
 	}
@@ -208,9 +207,9 @@ void()	frag_atack1	= [	$artk1, 	frag_atack2	] { self.nextthink = time + 0.05;};
 void()	frag_atack2	= [	$artk2, 	frag_atack3	] { self.nextthink = time + 0.05;};
 void()	frag_atack3	= [	$artk3, 	frag_atack4	] { self.nextthink = time + 0.05;};
 void()	frag_atack4	= [	$artk4, 	frag_atack5	] { self.nextthink = time + 0.05;};
-void()	frag_atack5	= [	$artk5, 	frag_atack6	] { ai_melee();self.nextthink = time + 0.05;};
+void()	frag_atack5	= [	$artk5, 	frag_atack6	] { ai_melee(); self.nextthink = time + 0.05;};
 void()	frag_atack6	= [	$artk6, 	frag_atack7	] { self.nextthink = time + 0.05;};
-void()	frag_atack7	= [	$artk7, 	frag_atack8	] { ai_melee();self.nextthink = time + 0.05;};
+void()	frag_atack7	= [	$artk7, 	frag_atack8	] { ai_melee(); self.nextthink = time + 0.05;};
 void()	frag_atack8	= [	$artk8, 	frag_atack9	] { self.nextthink = time + 0.05;};
 void()	frag_atack9	= [	$artk9, 	frag_run1	] { self.nextthink = time + 0.05;};
 
@@ -228,13 +227,13 @@ void() frag_jump2 = [       $jump2,        frag_jump3        ] {
 		makevectors(self.angles);
 		self.origin_z = self.origin_z + 1;
 		self.velocity = v_forward * 300 + '0 0 200';
-		if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
+		SUB_RemoveFlags(self,FL_ONGROUND);
 	} else {
 		ai_walk(2);
 	}
 };
 void() frag_jump3 = [       $jump3,        frag_jump4  ] {
-	sound(self,CHAN_VOICE,"ad171/gibs/gibhit1.wav",1,ATTN_NORM);self.nextthink = time + 0.05;
+	sound(self,CHAN_VOICE,"ad171/gibs/gibhit1.wav",1,ATTN_NORM); self.nextthink = time + 0.05;
 	if (self.enemy) ai_run(2);
 	else ai_walk(2);
 };
@@ -296,7 +295,7 @@ void() frag_grounddie3 = [       $death4,        frag_grounddie4] {};
 void() frag_grounddie4 = [       $death6,        frag_grounddie5] {};
 void() frag_grounddie5 = [       $death8,        frag_grounddie6] {};
 void() frag_grounddie6 = [      $death10,       frag_grounddie7 ] {};
-void() frag_grounddie7 = [      $death12,       frag_grounddie8 ] { monster_death_postcheck();sound (self, CHAN_VOICE, "quoth/voreling/land.wav", 1, ATTN_NORM); };
+void() frag_grounddie7 = [      $death12,       frag_grounddie8 ] { monster_death_postcheck();sound(self, CHAN_VOICE, "quoth/voreling/land.wav", 1, ATTN_NORM); };
 void() frag_grounddie8 = [      $death13,       frag_grounddie8 ] { monster_deadbody_check(); };
 
 void() frag_die = {
@@ -305,8 +304,8 @@ void() frag_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		if (pointcontents(self.origin) <= CONTENT_WATER) sound (self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
+		if (pointcontents(self.origin) <= CONTENT_WATER) sound(self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
 		frag_die1();
 	}
 };
@@ -330,13 +329,13 @@ float()	CheckFragJump = {
 
 void() monster_fragy_precache = {
 	precache_model ("progs/madfox/mon_fragy.mdl");
-	precache_sound ("fish/death.wav");
-	precache_sound ("fish/bite.wav");
-	precache_sound ("fish/idle.wav");
-	precache_sound ("quoth/voreling/death.wav");
-	precache_sound ("quoth/voreling/land.wav");
-	precache_sound ("ad171/gibs/gibhit1.wav");
-	precache_sound ("ad171/gibs/gibhit3.wav");
+	precache_sound("fish/death.wav");
+	precache_sound("fish/bite.wav");
+	precache_sound("fish/idle.wav");
+	precache_sound("quoth/voreling/death.wav");
+	precache_sound("quoth/voreling/land.wav");
+	precache_sound("ad171/gibs/gibhit1.wav");
+	precache_sound("ad171/gibs/gibhit3.wav");
 };
 
 //QUAKED monster_fragy (1 0 0) (-16 -16 -24) (16 16 24) Ambush

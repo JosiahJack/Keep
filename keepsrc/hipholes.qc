@@ -6,7 +6,7 @@ void() wallsprite = {
    else if ( (self.angles == '0.000 -2.000 0.000') ) self.angles = '90.000 0.000 0.000';
 
    makevectors(self.angles);
-   setorigin (self,(self.origin - (v_forward * 0.200)));
+   setorigin(self,(self.origin - (v_forward * 0.200)));
    makestatic (self);
 };
 
@@ -37,14 +37,14 @@ void(vector pos) placebullethole = {
    new.movetype = MOVETYPE_NONE;
    new.solid = SOLID_NOT;
    new.classname = "bullethole";
-   setmodel (new,"progs/hipnotic/s_bullet.spr");
+   setmodel(new,"progs/hipnotic/s_bullet.spr");
    setsize (new,VEC_ORIGIN,VEC_ORIGIN);
    norm = trace_plane_normal;
    norm_x = (FALSE - norm_x);
    norm_y = (FALSE - norm_y);
    new.angles = vectoangles (norm);
    makevectors(self.angles);
-   setorigin (new,(pos - (v_forward * 0.200)));
+   setorigin(new,(pos - (v_forward * 0.200)));
    new.think = remove_bullethole;
    new.nextthink = (time + 300.000);
    numbulletholes = (numbulletholes + TRUE);

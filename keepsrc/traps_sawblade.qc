@@ -52,7 +52,7 @@ void() trap_sawblade_touch = { // [FUNCTION]
 	// Different touch damage based on blade state
 	if (self.state == STATE_ON) {
 		if (self.waitmin > 0) self.attack_finished = time + self.waitmin;
-		if (self.noise2 !="") sound (self, CHAN_AUTO, self.noise2, 1, 1); // Hit sounded added by Lunaran, added sound string check
+		if (self.noise2 !="") sound(self, CHAN_AUTO, self.noise2, 1, 1); // Hit sounded added by Lunaran, added sound string check
 	} else {
 		if (self.height > 0) self.attack_finished = time + self.height;
 	}
@@ -88,7 +88,7 @@ void() trap_sawblade_stopthink = { // [FUNCTION]
 void() trap_sawblade_stop = { // [FUNCTION]
 	float d, timeToPathCorner;
 
-	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play wind down stop sound
+	sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play wind down stop sound
 	self.pain_finished = time + self.lip; // save the time we become completely still in pain_finished
 	timeToPathCorner = vlen(self.origin-self.finaldest) / self.speed; // So when we hit next pathcorner (if ever), we can stop there.
 	
@@ -136,7 +136,7 @@ void() trap_sawblade_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;				// Switch on entity
 	self.solid = SOLID_TRIGGER;				// Keep on cutting!
 	self.movetype = MOVETYPE_NOCLIP;		// Free movement
-	setmodel (self, self.mdl);				// Show bmodel/model
+	setmodel(self, self.mdl);				// Show bmodel/model
 	setsize (self, self.bbmins , self.bbmaxs);	// Use pre-defined size
 	StopSound(self,CHAN_VOICE); // Stop any current sounds, new sound will play in func_train function
 	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
@@ -154,9 +154,9 @@ void() trap_sawbladey = { // [ENTITY]
 			if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
 			if (self.noise2 == "") self.noise2 = SOUND_EMPTY;	// lunaran
 		}	
-		precache_sound (self.noise);
-		precache_sound (self.noise1);
-		precache_sound (self.noise2);	// lunaran
+		precache_sound(self.noise);
+		precache_sound(self.noise1);
+		precache_sound(self.noise2);	// lunaran
 	}
 
 	self.mdl = "progs/ad171/trap_sawblade.mdl";

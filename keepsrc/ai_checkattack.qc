@@ -1006,7 +1006,7 @@ void() DSergeantCheckAttack = {
 
 	// Melee attack, enemy_range is checked before this function (ai_run - ai.qc)
 	// If the monster is within melee range they instantly attack
-	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		self.attack_state = AS_MELEE;
 		self.th_melee();
 		return;
@@ -1063,7 +1063,7 @@ void() DPrinceCheckAttack = {
 
 	// Melee attack, enemy_range is checked before this function (ai_run - ai.qc)
 	// If the monster is within melee range they instantly attack
-	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		self.attack_state = AS_MELEE;
 		self.th_melee(); 
 		return;

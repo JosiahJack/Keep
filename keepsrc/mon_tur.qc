@@ -37,7 +37,6 @@
 // is essentially like a trap_spikeshooter but it can track and aim at you.
 //=============================================================================
 
-void() start_monster_tur;
 void() tur_aim;
 void() tur_run;
 
@@ -123,23 +122,11 @@ void() tur_death = {
 	Tent_Explosion(self.origin);
 	self.trigger_field.think = SUB_Remove;
 	self.trigger_field.nextthink = time + 0.1;
-	if (!deathmatch) {
-		remove(self);
-	} else {
-		setmodel(self, "");
-		self.takedamage = 0;
-		self.think = start_monster_tur;
-		self.nextthink = time + self.wait;
-	}
+	entity_remove(self,0.1);
 };
 
 void() tur_die = {
-	if (self.health < -90) {
-		sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-		ThrowGib(11,1);
-		ThrowGib(12,1);
-		ThrowGib(13,1);
-	}
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	self.solid = SOLID_NOT;
 	tur_death();
 };
@@ -259,6 +246,7 @@ void() monster_tur = {
 	self.gib3mdl = "progs/gib3.mdl";
 	self.oldorigin = self.origin;
 	if (!(self.health)) self.health = 200;
+	self.gibhealth = -90;
 	self.max_health = self.health;
 	v1 = self.angles_y * '0 1 0' + '-20 0 0';
 	makevectors(v1);

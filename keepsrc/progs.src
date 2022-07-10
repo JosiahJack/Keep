@@ -109,7 +109,6 @@ subs_keep.qc				// REFINED Keep subroutines
 subs_drake.qc				// REFINED Drake subroutines
 subs_extras.qc				// REFINED extras_r5, extras_r4 subroutines
 subs_aoa.qc					// REFINED Arms of Asgard (AoA) subroutines
-subs_q15.qc					// REFINED Quake 1.5 subroutines
 subs_nehahra.qc				// REFINED Nehahra subroutines
 
 // HUD

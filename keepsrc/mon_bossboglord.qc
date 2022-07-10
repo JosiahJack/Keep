@@ -17,7 +17,7 @@ $frame pain1 pain2 pain3 pain4 pain5 pain6
 $frame death1 death2 death3 death4 death5 death6 
 $frame death7 death8 death9 death10 death11
 
-void() bogl_stand1	= [	$stand1,	bogl_stand2	] { monster_idle_sound();ai_stand(); };
+void() bogl_stand1	= [	$stand1,	bogl_stand2	] { monster_idle_sound(); ai_stand(); };
 void() bogl_stand2	= [	$stand2,	bogl_stand3	] { ai_stand(); };
 void() bogl_stand3	= [	$stand3,	bogl_stand4	] { ai_stand(); };
 void() bogl_stand4	= [	$stand4,	bogl_stand5	] { ai_stand(); };
@@ -156,10 +156,10 @@ void() bogl_smash1  = [$smash1,  bogl_smash2 ] { ai_charge(2);
 	if (self.meleeattack > 2) self.meleeattack = 0;
 	// Never play the same melee sound twice
 	if (self.meleeattack == 0) {
-		sound (self, CHAN_VOICE, "ad171/boglord/melee1.wav", 1, ATTN_NORM);}
+		sound(self, CHAN_VOICE, "ad171/boglord/melee1.wav", 1, ATTN_NORM);}
 	else if (self.meleeattack == 1) {
-		sound (self, CHAN_VOICE, "ad171/boglord/melee2.wav", 1, ATTN_NORM);}
-	else { sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);}
+		sound(self, CHAN_VOICE, "ad171/boglord/melee2.wav", 1, ATTN_NORM);}
+	else { sound(self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);}
 };
 void() bogl_smash2  = [$smash2,  bogl_smash3 ] { monster_footstep(FALSE);
 	bogl_slimeball('21 70 60','32 -53 64',0,6); };
@@ -191,7 +191,7 @@ void() bogl_lightning = {
 
 	// Setup skill based attack speed
 	self.attack_speed = SPEED_BLORDBOLT + (skill * SPEED_BLORDSKILL);
-	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);	
 
 	// Aim around player
 	makevectors(self.angles);
@@ -271,7 +271,7 @@ void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
 
 void() bogl_magic1 = [$magic1, bogl_magic2 ] { ai_face();
 	self.pain_finished = time + 1;
-	sound (self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM); };
 void() bogl_magic2 = [$magic2, bogl_magic3 ] { bogl_casting('0 53 86','21 -10 102',0); };
 void() bogl_magic3 = [$magic3, bogl_magic4 ] { bogl_casting('-16 50 95','11 0 108',1); };
 void() bogl_magic4 = [$magic4, bogl_magic5 ] { monster_footstep(FALSE); bogl_casting('-28 48 100','6 3 110',2); };
@@ -311,8 +311,8 @@ void(entity inflictor, entity attacker, float damage) bogl_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) bogl_pain1();
 	}
 };
@@ -348,7 +348,7 @@ void() bogl_die = {
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
 void() bogl_wakeup1 = [$smash7,		bogl_wakeup2 ] {};
-void() bogl_wakeup2 = [$smash8,		bogl_wakeup3 ] { sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM); };
+void() bogl_wakeup2 = [$smash8,		bogl_wakeup3 ] { sound(self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM); };
 void() bogl_wakeup3 = [$smash9,		bogl_wakeup4 ] {};
 void() bogl_wakeup4 = [$smash10,	bogl_wakeup5 ] {};
 void() bogl_wakeup5 = [$smash11,	bogl_wakeup6 ] {};
@@ -374,22 +374,22 @@ void() monster_boglord_precache = {
 	precache_model (MODEL_PROJ_BLORDBEAM2);
 	precache_model (MODEL_PROJ_BLORDBOLT1);	// Large Bolt Projectile
 	precache_model (MODEL_PROJ_BLORDBOLT2);
-	precache_sound ("ad171/boglord/idle1.wav");
-	precache_sound ("ad171/boglord/idle2.wav");
-	precache_sound ("ad171/boglord/death1.wav");
-	precache_sound ("ad171/boglord/pain1.wav");
-	precache_sound ("ad171/boglord/pain2.wav");
-	precache_sound ("ad171/boglord/melee1.wav");
-	precache_sound ("ad171/boglord/melee2.wav");
-	precache_sound ("ad171/boglord/melee3.wav");
-	precache_sound ("ad171/gaunt/plasma_fire.wav");
-	precache_sound ("ad171/boglord/attack2.wav");
-	precache_sound ("quoth/drole/explode3.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-	precache_sound ("ad171/boglord/sight.wav");
-	precache_sound ("ad171/boglord/thud.wav");
-	precache_sound ("ad171/boglord/bangdoor1.wav");
-	precache_sound ("ad171/boglord/bangdoor2.wav");
+	precache_sound("ad171/boglord/idle1.wav");
+	precache_sound("ad171/boglord/idle2.wav");
+	precache_sound("ad171/boglord/death1.wav");
+	precache_sound("ad171/boglord/pain1.wav");
+	precache_sound("ad171/boglord/pain2.wav");
+	precache_sound("ad171/boglord/melee1.wav");
+	precache_sound("ad171/boglord/melee2.wav");
+	precache_sound("ad171/boglord/melee3.wav");
+	precache_sound("ad171/gaunt/plasma_fire.wav");
+	precache_sound("ad171/boglord/attack2.wav");
+	precache_sound("quoth/drole/explode3.wav");
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound("ad171/boglord/sight.wav");
+	precache_sound("ad171/boglord/thud.wav");
+	precache_sound("ad171/boglord/bangdoor1.wav");
+	precache_sound("ad171/boglord/bangdoor2.wav");
 };
 
 // QUAKED monster_boglord (1 0 0) (-32 -32 -24) (32 32 64) Ambush

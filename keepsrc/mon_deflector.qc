@@ -81,11 +81,11 @@ void() deflect_shieldoff = {
 };
 
 void() deflect_shieldsound_on = {
-	sound (self, CHAN_ITEM, "ad181/deflector/shield_on.wav", 1, ATTN_NORM);
+	sound(self, CHAN_ITEM, "ad181/deflector/shield_on.wav", 1, ATTN_NORM);
 };
 
 void() deflect_shieldsound_off = {
-	sound (self, CHAN_ITEM, "ad181/deflector/shield_off.wav", 1, ATTN_NORM);
+	sound(self, CHAN_ITEM, "ad181/deflector/shield_off.wav", 1, ATTN_NORM);
 };
 
 void() deflect_shieldparticle = {
@@ -143,7 +143,7 @@ void() deflect_walks7= [$fieldon7, deflect_walk2] { ai_walk(0); };
 
 //----------------------------------------------------------------------
 void() deflect_walk2= [$walk2, deflect_walk3] {
-	deflect_shieldparticle(); monster_footstep(FALSE);ai_walk(4); };
+	deflect_shieldparticle(); monster_footstep(FALSE); ai_walk(4); };
 void() deflect_walk3= [$walk3, deflect_walk4] { ai_walk(4); };
 void() deflect_walk4= [$walk4, deflect_walk5] { ai_walk(3); };
 void() deflect_walk5= [$walk5, deflect_walk6] { ai_walk(1); };
@@ -247,7 +247,7 @@ void(float fire_explode) deflect_fireflame = {
 	if (self.health < 1) return;
 
 	// Whooshing attack sound
-	sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);
 	
 	// Facing angle
 	ai_face();
@@ -312,8 +312,8 @@ void() deflect_flameframe = {
 		self.think = self.th_run;
 	} else if (self.walkframe == 0) { self.frame = $attack1; 
 		self.attack_switch = self.attack_timer = 0;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
-	} else if (self.walkframe == 1) { self.frame = $attack2;ai_face();
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+	} else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
 		deflect_shieldoff(); deflect_shieldsound_off();
 	} else if (self.walkframe == 2) { self.frame = $attack3; ai_face();}
 	// MAIN ATTACK LOOP ---------------------------------------------------
@@ -362,7 +362,7 @@ void(float sideang) deflect_fireplasma = {
 	// Keep adding up projectile counter
 	self.attack_count = self.attack_count + 1;
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 	self.attack_speed = SPEED_DEFLECTBOLT + (skill * SPEED_DEFLECTBSKILL);
 	ai_trackenemy();
 	makevectors(self.angles);
@@ -382,7 +382,7 @@ void() deflect_plasmaframe = {
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) { self.frame = $attack1; ai_face();
 		self.attack_count = self.attack_switch = self.attack_timer = 0;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
 	} else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
 		self.attack_track = SUB_orgEnemyTarget();
 		deflect_shieldoff(); deflect_shieldsound_off();
@@ -431,7 +431,7 @@ void(float sideang) deflect_fire_rocket = {
 	if (!self.enemy) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
 
 	// Maximum speed, initial speed set in launch_projectile
 	self.attack_speed = SPEED_DEFLECTROCKET + (skill * SPEED_DEFLECTRSKILL);
@@ -459,7 +459,7 @@ void() deflect_rocketframe = {
 		self.frame = $attackp1;
 		self.pain_finished = time + 1;
 		self.attack_track = SUB_orgEnemyTarget();
-		sound (self, CHAN_WEAPON, "ad181/deflector/rocket_load.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad181/deflector/rocket_load.wav", 1, ATTN_NORM);
 	}
 	else if (self.walkframe == 1) { 
 		ai_trackenemy(); self.frame = $attackp2;
@@ -551,8 +551,8 @@ void(entity inflictor, entity attacker, float damage) deflect_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 
 		// Turn off shield
 		deflect_shieldoff();
@@ -595,7 +595,6 @@ void() deflect_die12= [$death12, deflect_die13] { ai_forward(5); };
 void() deflect_die13= [$death13, deflect_die14] { monster_death_postcheck(); };
 void() deflect_die14= [$death14, deflect_die14] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() deflect_fdie1= [$fdeath1, deflect_fdie2] {};
 void() deflect_fdie2= [$fdeath2, deflect_fdie3] { monster_check_gib(); };
 void() deflect_fdie3= [$fdeath3, deflect_fdie4] { monster_check_gib();
@@ -609,7 +608,6 @@ void() deflect_fdie9= [$fdeath9, deflect_fdie10] {};
 void() deflect_fdie10= [$fdeath10, deflect_fdie11] { monster_death_postcheck(); };
 void() deflect_fdie11= [$fdeath11, deflect_fdie11] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() deflect_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
@@ -622,11 +620,11 @@ void() deflect_die = {
 		// Typical forward/backward death + unique sound
 		if (random() > 0.5) {
 			deflect_die1();
-			sound (self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
 		}
 		else {
 			deflect_fdie1();
-			sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		}
 	}
 };
@@ -636,30 +634,30 @@ void() monster_deflector_precache = {
 	precache_model ("progs/ad181/h_deflector.mdl");
 	precache_model ("progs/ad171/w_enforcergun.mdl");
 	precache_model (MODEL_PROJ_LASERBLUE); // Range attack (Blue laser model)
-	precache_sound (SOUND_LASER_FIRE);
-	precache_sound (SOUND_LASER_HIT);
-	precache_sound (SOUND_LASER_RIC);	
+	precache_sound(SOUND_LASER_FIRE);
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound(SOUND_LASER_RIC);	
 	PreCache_Flame();
 	precache_model (MODEL_PROJ_ROCKET); // Range attack (rocket model)
-	precache_sound ("ad171/wraith/attack1.wav"); // Melee attack (Fire/plasma)
-	precache_sound ("ad181/justice/flame_fire.wav"); // New YELLOW version (flame/rocket)
-	precache_sound ("ad171/wraith/attack1_explode.wav"); // Melee attack (Projectile Flames)
-	precache_sound ("ad181/deflector/idle1.wav");
-	precache_sound ("ad181/deflector/sight1.wav");
-	precache_sound ("ad181/deflector/sight2.wav");
-	precache_sound ("ad181/deflector/sight3.wav");
-	precache_sound ("ad181/deflector/shield_off.wav"); // Shield off, shield on!
-	precache_sound ("ad181/deflector/shield_on.wav");
-	precache_sound ("ad181/deflector/rocket_load.wav"); // Projectile fire and impact (used in projectiles)
-	precache_sound ("ad181/deflector/rocket_fire.wav");
-	precache_sound ("ad181/deflector/rocket_hit.wav");
-	precache_sound (SOUND_PLASMA_LOAD); // Extra load/fire sounds
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-	precache_sound ("ad181/deflector/pain1.wav");
-	precache_sound ("ad181/deflector/pain2.wav");
-	precache_sound ("ad181/deflector/death1.wav");
-	precache_sound ("ad181/deflector/death2.wav");
+	precache_sound("ad171/wraith/attack1.wav"); // Melee attack (Fire/plasma)
+	precache_sound("ad181/justice/flame_fire.wav"); // New YELLOW version (flame/rocket)
+	precache_sound("ad171/wraith/attack1_explode.wav"); // Melee attack (Projectile Flames)
+	precache_sound("ad181/deflector/idle1.wav");
+	precache_sound("ad181/deflector/sight1.wav");
+	precache_sound("ad181/deflector/sight2.wav");
+	precache_sound("ad181/deflector/sight3.wav");
+	precache_sound("ad181/deflector/shield_off.wav"); // Shield off, shield on!
+	precache_sound("ad181/deflector/shield_on.wav");
+	precache_sound("ad181/deflector/rocket_load.wav"); // Projectile fire and impact (used in projectiles)
+	precache_sound("ad181/deflector/rocket_fire.wav");
+	precache_sound("ad181/deflector/rocket_hit.wav");
+	precache_sound(SOUND_PLASMA_LOAD); // Extra load/fire sounds
+	precache_sound(SOUND_PLASMA_FIRE);
+	precache_sound(SOUND_PLASMA_HIT);
+	precache_sound("ad181/deflector/pain1.wav");
+	precache_sound("ad181/deflector/pain2.wav");
+	precache_sound("ad181/deflector/death1.wav");
+	precache_sound("ad181/deflector/death2.wav");
 };
 
 // QUAKED monster_deflector (1 0 0) (-16 -16 -24) (16 16 40) Ambush

@@ -65,7 +65,7 @@ void() func_plat_hit_bottom = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_BOTTOM;
-	sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 };
 
 void() plat_hit_bottom = { func_plat_hit_bottom(); }; // [FUNCTION], Re-direction for map hacks (not used normally)
@@ -74,7 +74,7 @@ void() func_plat_go_down = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_DOWN;
-	sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 	SUB_CalcMove (self.pos2, self.speed, func_plat_hit_bottom);
 };
 
@@ -82,7 +82,7 @@ void() func_plat_hit_top = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_TOP;
-	sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 	self.think = func_plat_go_down;
 	self.nextthink = self.ltime + 3;
 };
@@ -91,7 +91,7 @@ void() func_plat_go_up = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_UP;
-	sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 	SUB_CalcMove (self.pos1, self.speed, func_plat_hit_top);
 };
 
@@ -154,7 +154,7 @@ void() func_plat_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	if (self.state != STATE_DISABLED) { // Reset health, state and frame back to default
 		setorigin(self, self.pos2);
 		self.state = STATE_BOTTOM;
@@ -173,7 +173,7 @@ void() func_plat_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	StopSound(self,CHAN_VOICE); // Stop all movement sounds
 	if (self.state != STATE_DISABLED) { // Reset health, position and frame back to default
 		setorigin(self, self.pos2);
@@ -229,8 +229,8 @@ void() func_plat = { // [ENTITY]
 		if (self.noise == "" || self.sounds == 4) self.noise = SOUND_EMPTY; // sounds 4 = silent, sounds 5 = custom
 		if (self.noise1 == "" || self.sounds == 4) self.noise1 = SOUND_EMPTY;
 	}
-	precache_sound (self.noise);
-	precache_sound (self.noise1);
+	precache_sound(self.noise);
+	precache_sound(self.noise1);
 	SUB_BoundVolume(1);	
 	self.classtype = CT_FUNCPLAT;
 	self.classgroup = CG_FUNCMOVER;
@@ -244,8 +244,8 @@ void() func_plat = { // [ENTITY]
 	self.state = STATE_BOTTOM; // Default state (lower)
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setorigin (self, self.origin);	
-	setmodel (self, self.mdl);
+	setorigin(self, self.origin);	
+	setmodel(self, self.mdl);
 	setsize (self, self.mins , self.maxs);
 	if (self.targetname != "" && self.estate > 0) { // Check for any entity state setups (OFF/DISABLE).  Need targetname defined (can't active bmodel otherwise).
 		if (self.estate == ESTATE_OFF) self.spawnflags = self.spawnflags | ENT_STARTOFF;
@@ -288,7 +288,7 @@ void() func_plat = { // [ENTITY]
 	// == "" Platform starts in lower position (default)
 	// != "" Platform starts in upper position and requires trigger to work
 	if (self.targetname != "" && !(self.spawnflags & PLAT_START_LOWER)) self.state = STATE_DISABLED;
-	else setorigin (self, self.pos2);	// Start in lower position
+	else setorigin(self, self.pos2);	// Start in lower position
 	
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = func_plat_on;

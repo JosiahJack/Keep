@@ -125,7 +125,7 @@ void(float muzzle) floyd_fire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_FLOYDBOLT + (skill * SPEED_FLOYDSKILL);
-	sound (self, CHAN_WEAPON, "rrp/floyd/fire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "rrp/floyd/fire.wav", 1, ATTN_NORM);
 	muzoff = '0 0 0'; muzoff_y = muzzle; // Create left/right laser vector
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset + muzoff);
@@ -180,7 +180,6 @@ void() floyd_painb8 =  [$painb8,  floyd_painb9]  {};
 void() floyd_painb9 =  [$painb9,  floyd_painb10] {};
 void() floyd_painb10 = [$painb10,  floyd_run1]   {};
 
-//----------------------------------------------------------------------
 // C = Long stumble animation
 void() floyd_painc1 =  [$painc1,  floyd_painc2]  {};
 void() floyd_painc2 =  [$painc2,  floyd_painc3]  {};
@@ -197,14 +196,13 @@ void() floyd_painc12 = [$painc12, floyd_painc13] { ai_painforward(1.25); };
 void() floyd_painc13 = [$painc13, floyd_painc14] { ai_painforward(1.25); };
 void() floyd_painc14 = [$painc14, floyd_run1]    { ai_painforward(1.25); };
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) floyd_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 
 		// Rolling around on floor?
 		if (self.spawnflags & MON_FLOYDROLL) return;
@@ -263,7 +261,7 @@ void() floyd_die = {
 		
 		// regular death (no head model)
 		if (!self.gibbed) {
-			sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 			floyd_death2();
 		}
 		// Quick explosion with head model

@@ -71,7 +71,7 @@ float() nour_CheckTether = {
 
 // MONSTER STATES (stand, walk run, attack, pain and death!
 
-void() nour_stand1	= [	$idle1, nour_stand2] { monster_idle_sound();ai_stand(); };
+void() nour_stand1	= [	$idle1, nour_stand2] { monster_idle_sound(); ai_stand(); };
 void() nour_stand2	= [	$idle2, nour_stand3] { ai_stand(); };
 void() nour_stand3	= [	$idle3, nour_stand4] { ai_stand(); };
 void() nour_stand4	= [	$idle4, nour_stand5] { ai_stand(); };
@@ -83,7 +83,7 @@ void() nour_stand9	= [	$idle9, nour_stand10] { ai_stand(); };
 void() nour_stand10	= [	$idle10, nour_stand11] { ai_stand(); };
 void() nour_stand11	= [	$idle11, nour_stand1] { ai_stand(); };
 
-void() nour_walk1	= [	$idle1, nour_walk2] { monster_idle_sound();ai_walk(8); };
+void() nour_walk1	= [	$idle1, nour_walk2] { monster_idle_sound(); ai_walk(8); };
 void() nour_walk2	= [	$idle2, nour_walk3] { ai_walk(8); };
 void() nour_walk3	= [	$idle3, nour_walk4] { ai_walk(8); };
 void() nour_walk4	= [	$idle4, nour_walk5] { ai_walk(8); };
@@ -206,7 +206,7 @@ void(vector offset) nour_spike = {
 
 void() nour_atta1	= [	$shota1, nour_atta2] { ai_face();
 	self.pain_finished = time + 1;
-	sound (self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
 };
 void() nour_atta2	= [$shota2, nour_atta3] { ai_face(); };
 void() nour_atta3	= [$shota3, nour_atta4] { ai_face(); };
@@ -229,7 +229,7 @@ void(vector bombofs) Fire_NourBomb = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
 	ai_face();
 	makevectors(self.angles);
 	org = self.origin + attack_vector(bombofs);
@@ -262,7 +262,7 @@ void(vector bombofs, float bombframe) Setup_NourBomb = {
 		self.attachment.skin = 0;
 
 		// Start growing bomb sound
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 	}
 
 	// Turn towards enemy and update model attachment
@@ -278,7 +278,7 @@ void(vector bombofs, float bombframe) Setup_NourBomb = {
 	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_YELLOW, 0);
 };
 
-void() nour_attb1	= [$shotb1, nour_attb2] { ai_face();self.pain_finished = time + 1.5;};
+void() nour_attb1	= [$shotb1, nour_attb2] { ai_face(); self.pain_finished = time + 1.5;};
 void() nour_attb2	= [$shotb2, nour_attb3] { ai_face(); };
 void() nour_attb3	= [$shotb3, nour_attb4] { ai_face(); };
 void() nour_attb4	= [$shotb4, nour_attb5] { ai_face(); };
@@ -374,7 +374,7 @@ void(vector minofs, float minframe) Setup_NourMin = {
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
 		self.attachment.skin = 1;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM); // Start Spawning sound
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM); // Start Spawning sound
 	} 
 
 	Setup_NourMinChain(minofs,minframe);
@@ -476,7 +476,7 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.8) nour_paina1();		// Short recoil right
@@ -528,7 +528,7 @@ void(float partcol) nour_lightningdeath = {
 
 	// Cycle through end phase
 	self.lip = self.lip + 1;
-	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 26) sound(self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
 	if (self.lip == 40) nour_explode();
 };
 
@@ -546,22 +546,17 @@ void() nour_die9 = [$death9, nour_die9 ] {
 };
 
 void() nour_die = {
-	dprint("[NOUR] Dying State ("); dprint(ftos(self.style));
-	dprint(") HP ("); dprint(ftos(self.health));
-	dprint(")\n");
 	self.deadflag = DEAD_DEAD;	// Nour bites the dust
 	self.effects = 0;			// Remove effects on death
 	SUB_FinishAttachment();	// Remove any attachments
 	SUB_RemoveAttachment();
-
-	sound (self, CHAN_VOICE, "ad171/nour/death.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE,"ad171/nour/death.wav",1,ATTN_NORM);
 	self.velocity_x = -200 + 400*random();
 	self.velocity_y = -200 + 400*random();
 	self.velocity_z = 100 + 100*random();
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	nour_die1();
 };
-
 
 // Create minion entity chain
 // Entities are created so that the spawning space can be tested
@@ -625,9 +620,9 @@ void() nour_readyframe = {
 void() nour_revealframe = {
 	// Beginning of animation block
 	if (self.walkframe == 3) 
-		sound (self, CHAN_BODY, "ad171/nour/reveal.wav", 1, ATTN_NORM);
+		sound(self, CHAN_BODY, "ad171/nour/reveal.wav", 1, ATTN_NORM);
 	else if (self.walkframe == 23)
-		sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 	
 	if (self.movetarget2 != world) { 
 		// Work out remaining distance to go
@@ -797,19 +792,19 @@ void() monster_nour_precache = {
 	precache_model (MODEL_PROJ_NOUR2S);	// Explosive pieces
 	precache_model (MODEL_PROJ_LIGHTNING2);
 	precache_model (SBURST_POISON);		// Poison Burst
-	precache_sound ("ad171/nour/idle1.wav");
-	precache_sound ("ad171/nour/pain.wav");
-	precache_sound ("ad171/nour/sight.wav");
-	precache_sound ("ad171/nour/reveal.wav");
-	precache_sound ("ad171/nour/death.wav"); // Final death sequence
-	precache_sound ("ad171/seeker/explode_major.wav");
-	precache_sound ("ad171/eidolon/elec_arch1.wav");
-	precache_sound ("ad171/eidolon/elec_arch2.wav");
-	precache_sound ("ad171/eidolon/implode_death.wav");
-	precache_sound ("ad171/nour/attack1.wav"); // Attack A - Wizard style spit
-	precache_sound ("ad171/wraith/attack3.wav"); // Attack B - Large explosive ball
-	precache_sound ("ad171/nour/explode2.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
+	precache_sound("ad171/nour/idle1.wav");
+	precache_sound("ad171/nour/pain.wav");
+	precache_sound("ad171/nour/sight.wav");
+	precache_sound("ad171/nour/reveal.wav");
+	precache_sound("ad171/nour/death.wav"); // Final death sequence
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("ad171/eidolon/elec_arch1.wav");
+	precache_sound("ad171/eidolon/elec_arch2.wav");
+	precache_sound("ad171/eidolon/implode_death.wav");
+	precache_sound("ad171/nour/attack1.wav"); // Attack A - Wizard style spit
+	precache_sound("ad171/wraith/attack3.wav"); // Attack B - Large explosive ball
+	precache_sound("ad171/nour/explode2.wav");
+	precache_sound("ad171/wraith/bounce.wav");
 };
 
 // QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)

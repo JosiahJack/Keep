@@ -169,8 +169,8 @@ void() make_glitter = { // [FUNCTION]
         else rgb = floor(rgb / 16) * 5;
 
         newmis = spawn();
-        setmodel (newmis, "progs/drake/s_spark.spr");
-        setorigin (newmis, spot);
+        setmodel(newmis, "progs/drake/s_spark.spr");
+        setorigin(newmis, spot);
         newmis.movetype     = MOVETYPE_FLY;
         newmis.solid        = SOLID_TRIGGER;
         newmis.velocity     = vel;
@@ -262,7 +262,7 @@ void() divine_use = { // [FUNCTION]
         self.think      = SUB_Remove;
     } else {
 		// No lightning strikes, so just flash and thunder ominously.
-        sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+        sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
         LightZero_Set (LIGHTZERO_MAX, 0, -4);
         remove(self);
     }
@@ -272,8 +272,8 @@ void() divine_use = { // [FUNCTION]
 };
 
 void() trigger_smite = { // [ENTITY]
-    precache_sound ("drake/bane/thunder.wav");
-    precache_sound ("hipnotic/weapons/mjolhit.wav");
+    precache_sound("drake/bane/thunder.wav");
+    precache_sound("hipnotic/weapons/mjolhit.wav");
     self.attack_finished = 0;
     if (!self.cnt) self.cnt = 1;
     self.use = divine_use;

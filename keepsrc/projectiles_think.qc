@@ -91,7 +91,7 @@ void() Steer_LimitedMissile = { // [FUNCTION]
 	}
 
 	// play sound when starting the missile in flight
-	if (self.attack_instant == TRUE && self.noise1 != "") sound (self, CHAN_WEAPON, self.noise1, 1, ATTN_NORM);
+	if (self.attack_instant == TRUE && self.noise1 != "") sound(self, CHAN_WEAPON, self.noise1, 1, ATTN_NORM);
 	self.attack_instant = FALSE; // Only play first sound once
 
 	// Stop steering if attacker or enemy is dead
@@ -161,7 +161,7 @@ void() HIP_LaserThink = { // [FUNCTION]
 	if (self.owner.tome_finished) { spark_spawn(); spark_spawn(); spark_spawn(); }
 	if ( (time > self.attack_finished) ) { remove (self); return; }
 
-	if ( (self.flags & FL_ONGROUND) ) self.flags = (self.flags - FL_ONGROUND); // Keep it bouncing.
+	SUB_RemoveFlags(self,FL_ONGROUND); // Keep it bouncing.
 	self.velocity = self.old_velocity;
 	self.angles = vectoangles(self.velocity);
 	self.nextthink = (time + 0.100);
@@ -361,7 +361,7 @@ void() Warhead_Think = { // [FUNCTION]
 
     // Apply new velocity.
     if (self.flags & FL_ONGROUND) {
-        self.flags      = self.flags - FL_ONGROUND;
+        SUB_RemoveFlags(self,FL_ONGROUND);
         if (self.owner.solid == SOLID_BSP) { // Glide along the ground.
             dir = 16*dir;
             p1 = self.origin - (dir);
@@ -537,13 +537,13 @@ void() beam_generate = { // [FUNCTION]
 	makevectors(self.owner.v_angle);
 	if (self.owner.flags & FL_CLIENT) {
 		self.owner.attack_finished = time + 0.5;
-		setorigin (beamseg, self.owner.origin + v_forward*12 + self.owner.dest2);
+		setorigin(beamseg, self.owner.origin + v_forward*12 + self.owner.dest2);
 		beamseg.velocity = aim(self.owner, 800) * 800;
 	} else if (self.owner.flags & FL_MONSTER) {
-		setorigin (beamseg, self.owner.origin);
+		setorigin(beamseg, self.owner.origin);
 		beamseg.velocity = normalize(self.owner.enemy.origin - self.owner.origin) * 800;
 	} else {
-		setorigin (beamseg, self.owner.origin);
+		setorigin(beamseg, self.owner.origin);
 		beamseg.velocity = self.owner.movedir * 800;
 	}
 	beamseg.angles = vectoangles(beamseg.velocity);
@@ -554,7 +554,7 @@ void() beam_generate = { // [FUNCTION]
 	beamseg.touch = beam_touch;
 	beamseg.think = SUB_Remove;
 	beamseg.nextthink = time + 6;
-	sound (self.owner, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+	sound(self.owner, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo / 2;
 	if ((self.owner.flags & FL_CLIENT) && self.deadflag == DEAD_NO) {
 		self.owner.punchangle_x = -6;
@@ -676,7 +676,7 @@ void() Iceball_Think = { // [FUNCTION]
     Touch_Missile(); // Time to blow up.
 };
 
-void() IceMineTrigger_Think = [ 0, IceMineTrigger_Think ] { if (self.owner) setorigin (self, self.owner.origin); }; // [FUNCTION]
+void() IceMineTrigger_Think = [ 0, IceMineTrigger_Think ] { if (self.owner) setorigin(self, self.owner.origin); }; // [FUNCTION]
 
 void() RainStorm_Think = { // [FUNCTION]
     local vector p1, p2, dir;
@@ -1015,7 +1015,7 @@ void(entity inflictor, float damage) Hammer_Block = { // [FUNCTION]
     local   float   points;
 
     spot = inflictor.origin;
-    head = QC_FindRadius (spot, damage + 40);
+    head = QC_FindRadius(spot, damage + 40);
     while (head) {
         if (head.owner != self)
         if (head.solid == SOLID_NOT) { // Hit zombies!
@@ -1092,8 +1092,8 @@ void() TraceExploShell_Think = { // [FUNCTION]
 void() FrozenThink = { // [FUNCTION]
 	if (self.health < self.cnt) {
 		self.count = self.count + (self.cnt - self.health);
-		if (self.health < self.gibhealth || self.health < 600) { sound (self, CHAN_ITEM, "drake/weapons/shatter.wav", 1, ATTN_NORM); Shattered(); return; }
-		sound (self, CHAN_ITEM, "drake/weapons/icehit.wav", 1, ATTN_NORM);
+		if (self.health < self.gibhealth || self.health < 600) { sound(self, CHAN_ITEM, "drake/weapons/shatter.wav", 1, ATTN_NORM); Shattered(); return; }
+		sound(self, CHAN_ITEM, "drake/weapons/icehit.wav", 1, ATTN_NORM);
 	}
 	self.cnt = self.health;
 	self.think = FrozenThink;
@@ -1206,10 +1206,10 @@ void() Burn_Think = { // [FUNCTION]
         if (self.owner.deadflag >= DEAD_DEAD || self.owner.solid == SOLID_NOT) { Smokey(targ); Burn_Null(targ); return; } // Done burning.
 
         spot = Burn_Point(self.owner); // Move the flame to its target's center point.
-        setorigin (self, spot);
+        setorigin(self, spot);
         if (InLiquid(spot)) { // Hide the flame and make steam in its place.  Hiss!!
-			setmodel (self, "");
-			sound (self, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM);
+			setmodel(self, "");
+			sound(self, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM);
 			particle(spot, '0 0 100', 1, 50); 
         } else Burn_Burn(); // Flame is not in the water, keep burning until it's out of fuel.
     } else { // Standard burn mode.
@@ -1218,13 +1218,13 @@ void() Burn_Think = { // [FUNCTION]
         if (ImmuneToBurning(targ)) { Burn_Null(targ); return;} // Target suddenly can't burn, snuff.
 
         spot = Burn_Point (targ);
-        setorigin (self, spot); // Move the flame.
+        setorigin(self, spot); // Move the flame.
         pc = pointcontents (spot);
         if (pc <= CONTENT_WATER) { // Check if flame is in the water.
             self.cnt = 1; // Flame disappears instead of exploding.
             Burn_Null(targ); // Snuff it. Sever link between flame and its victim.
             if (pc >= CONTENT_SLIME) { 
-                sound (targ, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM); // Sizzle
+                sound(targ, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM); // Sizzle
 				particle (spot, '0 0 100', 1, 50); // In water or slime, make some steam too.  In lava or sky, just disappear.
             } return;
         }
@@ -1640,7 +1640,7 @@ void() tornado2 = [ 0, tornado2 ] { // [FUNCTION]
     trig = CoSine(self.cnt);
     dir = (('1 0 0' * self.speed) * trig_x) + (('0 1 0' * self.speed) * trig_y);
     spot = spot + dir;
-    setorigin (self, spot);
+    setorigin(self, spot);
 };
 
 // Think function for the tornado.  Spawns all of its effects.
@@ -1654,7 +1654,7 @@ void() tornado1 = [ 0, tornado1 ] { // [FUNCTION]
 
     if (self.t_width < time) {
         self.t_width = time + 1;
-        sound (self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
+        sound(self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
     }
     Tornado_Attack();
     self.height = (self.height + 3) & 7;
@@ -1670,5 +1670,5 @@ void() tornado1 = [ 0, tornado1 ] { // [FUNCTION]
     newmis.think      = tornado2;
     newmis.cnt        = self.cnt + self.height;
     newmis.oldorigin  = self.origin;
-    setall (newmis, "progs/drake/smoke.mdl", '0 0 0', '0 0 0', self.origin);
+    setall(newmis, "progs/drake/smoke.mdl", '0 0 0', '0 0 0', self.origin);
 };

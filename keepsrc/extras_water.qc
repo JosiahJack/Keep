@@ -94,15 +94,15 @@ void() CheckFuncWaterDeath = { // [FUNCTION]
 };
 
 void() liquid_playmovesound = { // [FUNCTION]
-	if (self.noise != "") sound (self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
+	if (self.noise != "") sound(self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
 };
 
 void() liquid_playreturnsound = { // [FUNCTION]
-	if (self.noise1 != "") sound (self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
+	if (self.noise1 != "") sound(self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
 };
 
 void() liquid_playstopsound = { // [FUNCTION]
-	if (self.noise2 != "") sound (self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
+	if (self.noise2 != "") sound(self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
 };
 
 void() liquid_at_pos1 = { // [FUNCTION]
@@ -171,7 +171,7 @@ void(entity entToDrown) liquid_drown = { // [FUNCTION]
 	if (entToDrown.bodyonflr == MON_ONFLR) return;
 	
 	if (entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN) {
-		sound (self, CHAN_BODY, "player/drown1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_BODY, "player/drown1.wav", 1, ATTN_NORM);
 		death_bubbles(5);
 		// drowning damage formula 5*(x^2/10 + 1) // (khreathor)
 		entToDrown.drown_dmg = 5 * (entToDrown.drown_cnt * entToDrown.drown_cnt * 0.1 + 1);
@@ -352,14 +352,14 @@ void() liquid_default_cshifts = { // [FUNCTION]
 // "EASEUNDERCURRENT"	Normally, the deeper you are, the more you are affected by current.  This reverses that, making current is stronger at the surface.				
 // An easy way to make rising/falling water, but func_watertrain is much more flexible (it can do anything func_water can do, and then some, but it's more work to setup)
 void() func_water = { // [ENTITY]
-	if (self.noise != "") precache_sound (self.noise);
-	if (self.noise1 != "") precache_sound (self.noise1);
-	if (self.noise2 != "") precache_sound (self.noise2);
+	if (self.noise != "") precache_sound(self.noise);
+	if (self.noise1 != "") precache_sound(self.noise1);
+	if (self.noise2 != "") precache_sound(self.noise2);
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setsize (self, self.mins , self.maxs);
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.classname = "fliquid";
 	self.touch = liquid_touch;
 	if (self.watertype<-5 || self.watertype>-3) self.watertype = CONTENT_WATER;
@@ -435,9 +435,9 @@ void() func_watertrain = { // [ENTITY]
 	train_ext_precachenoise();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.model);
+	setmodel(self, self.model);
 	setsize (self, self.mins , self.maxs);
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.nextthink = time + 0.2; // Start after first frame to allow train to move to it's startpoint and wait for targets to spawn
 	self.think = func_watertrain_init; // 
 };

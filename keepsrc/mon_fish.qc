@@ -85,7 +85,7 @@ void() fish_melee = {
 		
 	// Fish bites man!
 	ldmg = (random() + random()) * 3;
-	sound (self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 	
 	// Spawn some touch blood (no explicit direction)
@@ -142,8 +142,6 @@ void(entity inflictor, entity attacker, float damage) fish_pain = {
 	else f_pain1();
 };
 
-void() f_deathend = { monster_deadbody_check(); };
-
 void() f_death2 = {
 	self.nextthink = time + 0.1;
 
@@ -155,21 +153,19 @@ void() f_death2 = {
 	if (self.walkframe < 3) monster_check_gib();
 	if (self.walkframe > 2) self.solid = SOLID_NOT;
 	if (self.walkframe == 19) monster_death_postcheck();
-	if (self.walkframe > 19) f_deathend();
+	if (self.walkframe > 19) monster_deadbody_check();
 };
 
 void() f_death1 = [$death1, f_death2 ] {};
 void() f_deathS1 = [$deathS1, f_death2 ] {};
 
 void() fish_die = {
-	if (pointcontents(self.origin) == CONTENT_WATER) self.gravity = 0.25; // If fish in water, reduce self gravity to pretend to slowly sink
-
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
 		self.walkframe = 0;
-		sound (self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
 		if (self.spawnflags & MON_FISH_SMALL) f_deathS1();
 		else f_death1();
 	}
@@ -177,9 +173,9 @@ void() fish_die = {
 
 void() monster_fish_precache = {
 	precache_model ("progs/ad171/mon_fish.mdl");
-	precache_sound ("fish/idle.wav");
-	precache_sound ("fish/death.wav");
-	precache_sound ("fish/bite.wav");
+	precache_sound("fish/idle.wav");
+	precache_sound("fish/death.wav");
+	precache_sound("fish/bite.wav");
 };
 
 // QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush

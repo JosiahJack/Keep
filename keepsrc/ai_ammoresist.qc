@@ -151,19 +151,25 @@ void(entity targ, float artype) Resist_ChangeType = {
 void(entity targ, string hitsound) Resist_Sound = {
 	if (hitsound != "") {
 		if (hitsound == SOUND_AXE_STONE) {
-			sound (targ, CHAN_WEAPON, hitsound, 1, ATTN_NORM);
+			sound(targ, CHAN_WEAPON, hitsound, 1, ATTN_NORM);
 		} else {
 			if (targ.health > 0 && targ.pain_finished < time) {
 				targ.pain_finished = time + 0.3 + random();
 				if (hitsound != targ.pain_sound) {
-					if (targ.pain_sound != "") sound (targ, CHAN_VOICE, targ.pain_sound, 1, ATTN_NORM);
-					else sound (targ, CHAN_VOICE, hitsound, 1, ATTN_NORM);
+					if (targ.pain_sound != "") sound(targ, CHAN_VOICE, targ.pain_sound, 1, ATTN_NORM);
+					else sound(targ, CHAN_VOICE, hitsound, 1, ATTN_NORM);
 				} else {
-					sound (targ, CHAN_VOICE, hitsound, 1, ATTN_NORM);
+					sound(targ, CHAN_VOICE, hitsound, 1, ATTN_NORM);
 				}
 			}
 		}
 	}
+};
+
+void(vector spot) GenericResistEffects = {
+	SpawnProjectileSmoke(spot, 200, 50, 150); // Spawn a random smoke particle and chance of blood
+	SpawnProjectileSmoke(spot, 200, 50, 250); // Extra smoke puffs
+	SpawnProjectileSmoke(spot, 300, 50, 150); // Extra smoke puffs
 };
 
 void(entity targ, vector org, vector vel, float damage, float type, string hitsound, string burstsound) Resist_Effects = {
@@ -194,16 +200,15 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 		if (random() < 0.5) SpawnProjectileSmoke(org, 200, 50, 150);
 	}
 
-	if (type == AM_ROCKETS) {
-		if (targ.resist_rockets < 1) {
+	if (type == AM_ROCKETS || type == AM_MULTI_ROCKETS) {
+		if (type == AM_ROCKETS && targ.resist_rockets < 1
+			|| type == AM_MULTI_ROCKETS && targ.resist_multi_rockets < 1) {
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 			SpawnProjectileMeat(targ, org, 200, 50, 150);
 			SpawnProjectileMeat(targ, org, 300, 50, 150);
 		}
 		SpawnExplosion(EXPLODE_BURST_SMOKE,org,burstsound);
-		SpawnProjectileSmoke(org, 200, 50, 150);
-		SpawnProjectileSmoke(org, 200, 50, 250);
-		SpawnProjectileSmoke(org, 300, 50, 150);
+		GenericResistEffects(org);
 	}
 
 	if (type == AM_CELLS || type == AM_COLD) {
@@ -235,69 +240,37 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 		if (random() < 0.5) SpawnProjectileSmoke(org, 200, 50, 250);
 	}
 
-	if (type == AM_MULTI_ROCKETS) {
-		if (targ.resist_multi_rockets < 1) {
-			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-			SpawnProjectileMeat(targ, org, 200, 50, 150);
-			SpawnProjectileMeat(targ, org, 300, 50, 150);
-		}
-		SpawnExplosion(EXPLODE_BURST_SMOKE,org,burstsound);
-		SpawnProjectileSmoke(org, 200, 50, 150);
-		SpawnProjectileSmoke(org, 200, 50, 250);
-		SpawnProjectileSmoke(org, 300, 50, 150);
-	}
-
 	if (type == AM_PLASMA) {
 		if (targ.resist_cells < 1) {
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 			if (random() < 0.4) SpawnProjectileMeat(targ, org, 200, 50, 150); // Same for meat as pain sound
 		}
 		SpawnExplosion(EXPLODE_BURST_SMOKE, org, burstsound);
-		SpawnProjectileSmoke(org, 200, 50, 150); // Spawn a random smoke particle and chance of blood
-		SpawnProjectileSmoke(org, 200, 50, 250); // Extra smoke puffs
-		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
+		GenericResistEffects(org);
 	}
 
-	if (type == AM_BOLTS) {
-		if (targ.resist_bolts < 1) {
+	if (type == AM_BOLTS || type == AM_POISON || type == AM_ACID) {
+		if (type == AM_BOLTS && targ.resist_bolts < 1
+			|| (type == AM_POISON || type == AM_ACID) && targ.resist_poison < 1) {
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 			SpawnProjectileMeat(targ, org, 200, 50, 150);
 			SpawnProjectileMeat(targ, org, 300, 50, 150);
 		}
-		SpawnProjectileSmoke(org, 200, 50, 150); // Spawn a random smoke particle and chance of blood
-		SpawnProjectileSmoke(org, 200, 50, 250); // Extra smoke puffs
-		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
-	}
-
-	if (type == AM_POISON || type == AM_ACID) {
-		if (targ.resist_poison < 1) {
-			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-			SpawnProjectileMeat(targ, org, 200, 50, 150);
-			SpawnProjectileMeat(targ, org, 300, 50, 150);
-		}
-		SpawnProjectileSmoke(org, 200, 50, 150); // Spawn a random smoke particle and chance of blood
-		SpawnProjectileSmoke(org, 200, 50, 250); // Extra smoke puffs
-		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
+		GenericResistEffects(org);
 	}
 
 	if (type == AM_BLOODCRYSTALS) {
 		if (targ.resist_bloodcrystals < 1) Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-		SpawnProjectileSmoke(org, 200, 50, 150); // Spawn a random smoke particle and chance of blood
-		SpawnProjectileSmoke(org, 200, 50, 250); // Extra smoke puffs
-		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
+		GenericResistEffects(org);
 	}
 
 	if (type == AM_VOIDSHARDS) {
 		if (targ.resist_voidshards < 1) Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-		SpawnProjectileSmoke(org, 200, 50, 150); // Spawn a random smoke particle and chance of blood
-		SpawnProjectileSmoke(org, 200, 50, 250); // Extra smoke puffs
-		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
+		GenericResistEffects(org);
 	}
 
 	if (type == AM_ELEMENTAL) {
 		if (targ.resist_elemental < 1) Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-		SpawnProjectileSmoke(org, 200, 50, 150); // Spawn a random smoke particle and chance of blood
-		SpawnProjectileSmoke(org, 200, 50, 250); // Extra smoke puffs
-		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
+		GenericResistEffects(org);
 	}
 };

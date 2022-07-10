@@ -39,50 +39,50 @@
 //precache all models and sounds for aoa weapons
 void() precache_aoa = {
 	//#aoa precache sounds
-	precache_sound ("aoa/melee_meat.wav");
-	precache_sound ("aoa/axhit3.wav");
-	precache_sound ("aoa/acidhit.wav");
-	precache_sound ("aoa/radius.wav");
-	precache_sound ("aoa/rapier_meat.wav");
-	precache_sound ("aoa/rapier_meat2.wav");
-	precache_sound ("aoa/rapier_meat3.wav");
-	precache_sound ("aoa/staffhit.wav");
-	precache_sound ("ad171/seeker/explode_major.wav");
-	precache_sound ("aoa/staffshot.wav");
-	precache_sound ("aoa/melee_meat.wav");
-	precache_sound ("aoa/swing2.wav");
-	precache_sound ("aoa/gauntlet_att.wav");
-	precache_sound ("aoa/gauntlet_att2.wav");
-	precache_sound ("aoa/gauntlet_att3.wav");
-	precache_sound ("aoa/gauntlet_att4.wav");
-	precache_sound ("aoa/heartbeat.wav");
-	precache_sound ("ad171/gibs/gibacid.wav");
-	precache_sound ("aoa/heal.wav");
-	precache_sound ("aoa/drainhealth.wav");
-	precache_sound ("aoa/corruption.wav");
-	precache_sound ("aoa/crossshot.wav");
-	precache_sound ("aoa/thndr.wav");
-	precache_sound ("aoa/iceattack.wav");
-	precache_sound ("aoa/vortex.wav");
-	precache_sound ("aoa/whisper1.wav");
-	precache_sound ("aoa/whisper2.wav");
-	precache_sound ("aoa/whisper3.wav");
-	precache_sound ("aoa/whisper4.wav");
-	precache_sound ("aoa/sanguinator_atk1.wav");
-	precache_sound ("aoa/sanguinator_atk2.wav");
-	precache_sound ("aoa/sanguinator_atk3.wav");
-	precache_sound ("blob/hit1.wav");
-	precache_sound ("player/axhit2.wav");
-	precache_sound ("kurok/weapons/ax1.wav");
-	precache_sound ("hknight/hit.wav");
-	precache_sound ("shambler/sboom.wav");
-	precache_sound ("weapons/ax1.wav");
-	precache_sound ("aoa/rockattack.wav");
-	precache_sound ("aoa/fastboulder.wav");
-	precache_sound ("aoa/slowboulder.wav");
-	precache_sound ("aoa/flakshot.wav");
-	precache_sound ("aoa/hhs.wav"); //mace third attack (Tome of Power)
-	precache_sound ("aoa/mildarmor.wav");
+	precache_sound("aoa/melee_meat.wav");
+	precache_sound("aoa/axhit3.wav");
+	precache_sound("aoa/acidhit.wav");
+	precache_sound("aoa/radius.wav");
+	precache_sound("aoa/rapier_meat.wav");
+	precache_sound("aoa/rapier_meat2.wav");
+	precache_sound("aoa/rapier_meat3.wav");
+	precache_sound("aoa/staffhit.wav");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("aoa/staffshot.wav");
+	precache_sound("aoa/melee_meat.wav");
+	precache_sound("aoa/swing2.wav");
+	precache_sound("aoa/gauntlet_att.wav");
+	precache_sound("aoa/gauntlet_att2.wav");
+	precache_sound("aoa/gauntlet_att3.wav");
+	precache_sound("aoa/gauntlet_att4.wav");
+	precache_sound("aoa/heartbeat.wav");
+	precache_sound("ad171/gibs/gibacid.wav");
+	precache_sound("aoa/heal.wav");
+	precache_sound("aoa/drainhealth.wav");
+	precache_sound("aoa/corruption.wav");
+	precache_sound("aoa/crossshot.wav");
+	precache_sound("aoa/thndr.wav");
+	precache_sound("aoa/iceattack.wav");
+	precache_sound("aoa/vortex.wav");
+	precache_sound("aoa/whisper1.wav");
+	precache_sound("aoa/whisper2.wav");
+	precache_sound("aoa/whisper3.wav");
+	precache_sound("aoa/whisper4.wav");
+	precache_sound("aoa/sanguinator_atk1.wav");
+	precache_sound("aoa/sanguinator_atk2.wav");
+	precache_sound("aoa/sanguinator_atk3.wav");
+	precache_sound("blob/hit1.wav");
+	precache_sound("player/axhit2.wav");
+	precache_sound("kurok/weapons/ax1.wav");
+	precache_sound("hknight/hit.wav");
+	precache_sound("shambler/sboom.wav");
+	precache_sound("weapons/ax1.wav");
+	precache_sound("aoa/rockattack.wav");
+	precache_sound("aoa/fastboulder.wav");
+	precache_sound("aoa/slowboulder.wav");
+	precache_sound("aoa/flakshot.wav");
+	precache_sound("aoa/hhs.wav"); //mace third attack (Tome of Power)
+	precache_sound("aoa/mildarmor.wav");
 	
 	//#aoa precache models
 	precache_model ("progs/aoa/ghostrapier.mdl");
@@ -146,7 +146,7 @@ void(string playerModel) setPlayerModel = //sets the player model to the string 
 {
 	setmodel(self, playerModel);
 	setsize (self, '-16 -16 -24', '16 16 32');
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.view_ofs = '0 0 22';
 };
 
@@ -173,7 +173,7 @@ void() mirrorPlayerModel = {
 		remove(self);
 		return;
 	}	
-	setmodel (self, self.owner.model);
+	setmodel(self, self.owner.model);
 	self.skin = self.owner.skin;
 	self.frame = self.owner.frame;
 	// self.angles = self.owner.angles; this makes is difficult to see the front of the mirror
@@ -190,9 +190,9 @@ void() spawnPlayerModel = {
 	playerModel.skin = self.skin;
 	playerModel.frame = self.frame;
 	playerModel.attack_finished = time + 60;
-	setmodel (playerModel, self.model);
+	setmodel(playerModel, self.model);
 	setsize (playerModel, '0 0 0', '0 0 0');
-	setorigin (playerModel, self.origin);
+	setorigin(playerModel, self.origin);
 	playerModel.nextthink = time + 0.1;
 	playerModel.think = mirrorPlayerModel;
 };
@@ -247,7 +247,7 @@ void(vector org, vector dir, string model, float duration) SpawnBeamSegment = {
 	
 	setmodel(segment, model);
 	setsize(segment, '0 0 0', '0 0 0');
-	setorigin (segment, org);
+	setorigin(segment, org);
 	segment.attack_finished = time + duration;
 	segment.nextthink = time + 0.03;
 	segment.think = randomTwist;
@@ -278,8 +278,8 @@ void(vector org) TestThisVector = //this function is designed to test locations 
 {
 	local	entity	test;
 	test = spawn();
-	setmodel (test, "progs/aoa/test.mdl");		
-	setorigin (test, org);
+	setmodel(test, "progs/aoa/test.mdl");		
+	setorigin(test, org);
 	test.nextthink = time + 4;
 	test.think = SUB_Remove;
 };
@@ -322,9 +322,9 @@ void(string model, vector org) TestModel = {
 	ModelPreview.think = SUB_Remove;
 	ModelPreview.movetype = MOVETYPE_TOSS;
 	
-	setmodel (ModelPreview, model);
+	setmodel(ModelPreview, model);
 	setsize( ModelPreview, '0 0 0', '0 0 0');
-	setorigin (ModelPreview, org);
+	setorigin(ModelPreview, org);
 };
 
 /*

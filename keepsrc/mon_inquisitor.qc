@@ -3,23 +3,23 @@ INQUISITOR - For Twilight of the Idols map by Tronyn, for Stair of Grief Episode
 ==============================================================================*/
 
 // Idle 70-72
-void()	inquisitor_idle1	= [70,	inquisitor_idle2	] { ai_stand();ai_down(4); };
-void()	inquisitor_idle2	= [71,	inquisitor_idle3	] { ai_stand();ai_down(4); };
-void()	inquisitor_idle3	= [72,	inquisitor_idle1	] { ai_stand();ai_down(4); };
+void()	inquisitor_idle1	= [70,	inquisitor_idle2	] { ai_stand(); ai_down(4); };
+void()	inquisitor_idle2	= [71,	inquisitor_idle3	] { ai_stand(); ai_down(4); };
+void()	inquisitor_idle3	= [72,	inquisitor_idle1	] { ai_stand(); ai_down(4); };
 
 // Walk 206-217
-void()	inquisitor_walk1	= [206,	inquisitor_walk2	] { ai_walk(5);ai_down(4); };
-void()	inquisitor_walk2	= [207,	inquisitor_walk3	] { ai_walk(4);ai_down(4); };
-void()	inquisitor_walk3	= [208,	inquisitor_walk4	] { ai_walk(3);ai_down(4); };
-void()	inquisitor_walk4	= [209,	inquisitor_walk5	] { ai_walk(5);ai_down(4); };
-void()	inquisitor_walk5	= [210,	inquisitor_walk6	] { ai_walk(6);ai_down(4); };
-void()	inquisitor_walk6	= [211,	inquisitor_walk7	] { ai_walk(5);ai_down(4); };
-void()	inquisitor_walk7	= [212,	inquisitor_walk8	] { ai_walk(5);ai_down(4); };
-void()	inquisitor_walk8	= [213,	inquisitor_walk9	] { ai_walk(4);ai_down(4); };
-void()	inquisitor_walk9	= [214,	inquisitor_walk10	] { ai_walk(4);ai_down(4); };
-void()	inquisitor_walk10	= [215,	inquisitor_walk11	] { ai_walk(3);ai_down(4); };
-void()	inquisitor_walk11	= [216,	inquisitor_walk12	] { ai_walk(3);ai_down(4); };
-void()	inquisitor_walk12	= [217,	inquisitor_walk1	] { ai_walk(6);ai_down(4); };
+void()	inquisitor_walk1	= [206,	inquisitor_walk2	] { ai_walk(5); ai_down(4); };
+void()	inquisitor_walk2	= [207,	inquisitor_walk3	] { ai_walk(4); ai_down(4); };
+void()	inquisitor_walk3	= [208,	inquisitor_walk4	] { ai_walk(3); ai_down(4); };
+void()	inquisitor_walk4	= [209,	inquisitor_walk5	] { ai_walk(5); ai_down(4); };
+void()	inquisitor_walk5	= [210,	inquisitor_walk6	] { ai_walk(6); ai_down(4); };
+void()	inquisitor_walk6	= [211,	inquisitor_walk7	] { ai_walk(5); ai_down(4); };
+void()	inquisitor_walk7	= [212,	inquisitor_walk8	] { ai_walk(5); ai_down(4); };
+void()	inquisitor_walk8	= [213,	inquisitor_walk9	] { ai_walk(4); ai_down(4); };
+void()	inquisitor_walk9	= [214,	inquisitor_walk10	] { ai_walk(4); ai_down(4); };
+void()	inquisitor_walk10	= [215,	inquisitor_walk11	] { ai_walk(3); ai_down(4); };
+void()	inquisitor_walk11	= [216,	inquisitor_walk12	] { ai_walk(3); ai_down(4); };
+void()	inquisitor_walk12	= [217,	inquisitor_walk1	] { ai_walk(6); ai_down(4); };
 
 void() inquisitor_flightland1;
 
@@ -66,7 +66,7 @@ void()	inquisitor_run15= [119,		inquisitor_run1 ] { flat_goal(13);InquisitorChec
 
 // FlyAscend 89-104
 void() inquisitor_ascend1= [89, inquisitor_ascend2] {};
-void() inquisitor_ascend2= [90, inquisitor_ascend3] { self.flags = self.flags - FL_ONGROUND; ai_up(2); };
+void() inquisitor_ascend2= [90, inquisitor_ascend3] { SUB_RemoveFlags(self,FL_ONGROUND); ai_up(2); };
 void() inquisitor_ascend3= [91, inquisitor_ascend4] { ai_up(3);inquisitor_flight_attack(); };
 void() inquisitor_ascend4= [92, inquisitor_ascend5] { ai_up(4); };
 void() inquisitor_ascend5= [93, inquisitor_ascend6] { ai_up(5); };
@@ -111,7 +111,7 @@ void()	inquisitor_flightland11= [162,inquisitor_flightland12] { ai_down(4); };
 void()	inquisitor_flightland12= [163,inquisitor_flightland13] { ai_down(4); };
 void()	inquisitor_flightland13= [164,inquisitor_flightland14] { ai_down(4); };
 void()	inquisitor_flightland14= [165,inquisitor_flightland15] { ai_down(4); };
-void()	inquisitor_flightland15= [166,inquisitor_flightland16] { ai_down(4);self.movetype = MOVETYPE_STEP;};
+void()	inquisitor_flightland15= [166,inquisitor_flightland16] { ai_down(4); self.movetype = MOVETYPE_STEP;};
 void()	inquisitor_flightland16= [167,inquisitor_standrun1] { ai_down(4); };
 
 void() InquisitorCheckAttack;
@@ -159,19 +159,19 @@ void() inquisitor_stormcloud = {
 
 // AttackStaffPlantHuge 0-12
 // Shockwave knock players and monsters back, Cast multiple poison clouds that move around slowly
-void()	inquisitor_magica1 = [0,	inquisitor_magica2	] { ai_face();ai_down(4); };
-void()	inquisitor_magica2 = [1,	inquisitor_magica3	] { ai_face();ai_down(4); };
-void()	inquisitor_magica3 = [2,	inquisitor_magica4	] { ai_face();ai_down(4); };
-void()	inquisitor_magica4 = [3,	inquisitor_magica5	] { ai_face();ai_down(4); };
-void()	inquisitor_magica5 = [4,	inquisitor_magica6	] { ai_face();ai_down(4); };
-void()	inquisitor_magica6 = [5,	inquisitor_magica7	] { ai_face();ai_down(4); };
-void()	inquisitor_magica7 = [6,	inquisitor_magica8	] { ai_face();ai_down(4); };
-void()	inquisitor_magica8 = [7,	inquisitor_magica9	] { ai_face();ai_down(4); };
-void()	inquisitor_magica9 = [8,	inquisitor_magica10	] { ai_face();ai_down(4); };
-void()	inquisitor_magica10= [9,	inquisitor_magica11	] { ai_face();ai_down(4); ai_shockwave(MONAI_STOMPIMPACT, MONAI_STOMPDAMAGE, MONAI_STOMPICERADIUS, MONAI_STOMPUP, 100); };
-void()	inquisitor_magica11= [10,inquisitor_magica12	] { ai_face();inquisitor_stormcloud();ai_down(4); 	sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); };
-void()	inquisitor_magica12= [11,inquisitor_magica13	] { ai_face();inquisitor_stormcloud();ai_down(4); };
-void()	inquisitor_magica13= [12,inquisitor_standrun1] { ai_face();inquisitor_stormcloud();ai_down(4); };
+void()	inquisitor_magica1 = [0,	inquisitor_magica2	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica2 = [1,	inquisitor_magica3	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica3 = [2,	inquisitor_magica4	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica4 = [3,	inquisitor_magica5	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica5 = [4,	inquisitor_magica6	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica6 = [5,	inquisitor_magica7	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica7 = [6,	inquisitor_magica8	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica8 = [7,	inquisitor_magica9	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica9 = [8,	inquisitor_magica10	] { ai_face(); ai_down(4); };
+void()	inquisitor_magica10= [9,	inquisitor_magica11	] { ai_face(); ai_down(4); ai_shockwave(MONAI_STOMPIMPACT, MONAI_STOMPDAMAGE, MONAI_STOMPICERADIUS, MONAI_STOMPUP, 100); };
+void()	inquisitor_magica11= [10,inquisitor_magica12	] { ai_face();inquisitor_stormcloud(); ai_down(4); 	sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); };
+void()	inquisitor_magica12= [11,inquisitor_magica13	] { ai_face();inquisitor_stormcloud(); ai_down(4); };
+void()	inquisitor_magica13= [12,inquisitor_standrun1] { ai_face();inquisitor_stormcloud(); ai_down(4); };
 
 void(vector boneofs) inquisitor_firebones = {
 	local vector org, dir;
@@ -198,21 +198,21 @@ void(vector boneofs) inquisitor_firebones = {
 };
 
 // AttackHoldStaffOut 13-27
-void()	inquisitor_magicb1= [13,inquisitor_magicb2	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb2= [14,inquisitor_magicb3	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb3= [15,inquisitor_magicb4	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb4= [16,inquisitor_magicb5	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb5= [17,inquisitor_magicb6	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb6= [18,inquisitor_magicb7	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb7= [19,inquisitor_magicb8	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb8= [20,inquisitor_magicb9	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb9= [21,inquisitor_magicb10	] { ai_face();inquisitor_firebones('60 4 14');ai_down(4); };
-void()	inquisitor_magicb10= [22,inquisitor_magicb11	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb11= [23,inquisitor_magicb12	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb12= [24,inquisitor_magicb13	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb13= [25,inquisitor_magicb14	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb14= [26,inquisitor_magicb15	] { ai_face();ai_down(4); };
-void()	inquisitor_magicb15= [27,inquisitor_standrun1] { ai_face();ai_down(4); };
+void()	inquisitor_magicb1= [13,inquisitor_magicb2	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb2= [14,inquisitor_magicb3	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb3= [15,inquisitor_magicb4	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb4= [16,inquisitor_magicb5	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb5= [17,inquisitor_magicb6	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb6= [18,inquisitor_magicb7	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb7= [19,inquisitor_magicb8	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb8= [20,inquisitor_magicb9	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb9= [21,inquisitor_magicb10	] { ai_face();inquisitor_firebones('60 4 14'); ai_down(4); };
+void()	inquisitor_magicb10= [22,inquisitor_magicb11	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb11= [23,inquisitor_magicb12	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb12= [24,inquisitor_magicb13	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb13= [25,inquisitor_magicb14	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb14= [26,inquisitor_magicb15	] { ai_face(); ai_down(4); };
+void()	inquisitor_magicb15= [27,inquisitor_standrun1] { ai_face(); ai_down(4); };
 
 void() inquisitor_fireflamewall = {
 	local vector org, eorg, torg, dir, ang;
@@ -226,7 +226,7 @@ void() inquisitor_fireflamewall = {
 	eorg = org + attack_vector('16 0 16'); // Setup explosion origin (infront)
 	
 	// Quiet sfx + dust/smoke
-	sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
 	if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 	M_LaunchFlameWall(org,FLAME_GREEN);
 };
@@ -234,22 +234,22 @@ void() inquisitor_fireflamewall = {
 void() inquisitor_magicc24;
 
 // AttackRaiseHandsPalmOutAfter 29-50
-void()	inquisitor_magicc1=	[29,inquisitor_magicc2]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc2=	[30,inquisitor_magicc3]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc3=	[31,inquisitor_magicc4]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc4=	[32,inquisitor_magicc5]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc5=	[33,inquisitor_magicc6]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc6=	[34,inquisitor_magicc7]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc7=	[35,inquisitor_magicc8]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc8=	[36,inquisitor_magicc9]  { ai_face();ai_down(4); };
-void()	inquisitor_magicc9=	[37,inquisitor_magicc10] { ai_face();ai_down(4); };
-void()	inquisitor_magicc10= [38,inquisitor_magicc11] { ai_face();ai_down(4); };
-void()	inquisitor_magicc11= [39,inquisitor_magicc12] { ai_face();ai_down(4); };
-void()	inquisitor_magicc12= [40,inquisitor_magicc13] { ai_face();ai_down(4); };
-void()	inquisitor_magicc13= [41,inquisitor_magicc14] { ai_face();ai_down(4); };
-void()	inquisitor_magicc14= [42,inquisitor_magicc15] { ai_face();ai_down(4); };
+void()	inquisitor_magicc1=	[29,inquisitor_magicc2]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc2=	[30,inquisitor_magicc3]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc3=	[31,inquisitor_magicc4]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc4=	[32,inquisitor_magicc5]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc5=	[33,inquisitor_magicc6]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc6=	[34,inquisitor_magicc7]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc7=	[35,inquisitor_magicc8]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc8=	[36,inquisitor_magicc9]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicc9=	[37,inquisitor_magicc10] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc10= [38,inquisitor_magicc11] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc11= [39,inquisitor_magicc12] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc12= [40,inquisitor_magicc13] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc13= [41,inquisitor_magicc14] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc14= [42,inquisitor_magicc15] { ai_face(); ai_down(4); };
 void()	inquisitor_magicc15= [43,inquisitor_magicc16] {
-	ai_face();ai_down(4); 
+	ai_face(); ai_down(4); 
 	local float total;
 
 	self.attack_count = SpriteCount_Flame(self.proj_attqty);
@@ -264,11 +264,11 @@ void()	inquisitor_magicc15= [43,inquisitor_magicc16] {
 	}
 	if (skill == 0) inquisitor_magicc24();
 };
-void()	inquisitor_magicc16= [44,inquisitor_magicc17] { ai_face();ai_down(4); };
-void()	inquisitor_magicc17= [43,inquisitor_magicc18] { ai_face();ai_down(4); };
-void()	inquisitor_magicc18= [42,inquisitor_magicc19] { ai_face();ai_down(4); };
+void()	inquisitor_magicc16= [44,inquisitor_magicc17] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc17= [43,inquisitor_magicc18] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc18= [42,inquisitor_magicc19] { ai_face(); ai_down(4); };
 void()	inquisitor_magicc19= [43,inquisitor_magicc20] {
-	ai_face();ai_down(4); 
+	ai_face(); ai_down(4); 
 	self.attack_count = SpriteCount_Flame(self.proj_attqty);
 	while (self.attack_count) {
 		inquisitor_fireflamewall();
@@ -276,27 +276,27 @@ void()	inquisitor_magicc19= [43,inquisitor_magicc20] {
 	}
 	if (skill < 2) inquisitor_magicc24();
 };
-void()	inquisitor_magicc20= [44,inquisitor_magicc21] { ai_face();ai_down(4); };
-void()	inquisitor_magicc21= [43,inquisitor_magicc22] { ai_face();ai_down(4); };
-void()	inquisitor_magicc22= [42,inquisitor_magicc23] { ai_face();ai_down(4); };
+void()	inquisitor_magicc20= [44,inquisitor_magicc21] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc21= [43,inquisitor_magicc22] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc22= [42,inquisitor_magicc23] { ai_face(); ai_down(4); };
 void()	inquisitor_magicc23= [43,inquisitor_magicc24] {
-	ai_face();ai_down(4); 
+	ai_face(); ai_down(4); 
 	self.attack_count = SpriteCount_Flame(self.proj_attqty);
 	while (self.attack_count) {
 		inquisitor_fireflamewall();
 		self.attack_count = self.attack_count - 1;
 	}
 };
-void()	inquisitor_magicc24= [44,inquisitor_magicc25] { ai_face();ai_down(4); };
-void()	inquisitor_magicc25= [45,inquisitor_magicc26] { ai_face();ai_down(4); };
-void()	inquisitor_magicc26= [46,inquisitor_magicc27] { ai_face();ai_down(4); };
-void()	inquisitor_magicc27= [47,inquisitor_magicc28] { ai_face();ai_down(4); };
-void()	inquisitor_magicc28= [48,inquisitor_magicc29] { ai_face();ai_down(4); };
-void()	inquisitor_magicc29= [49,inquisitor_magicc30] { ai_face();ai_down(4); };
-void()	inquisitor_magicc30= [50,inquisitor_standrun1]  { ai_face();ai_down(4); };
+void()	inquisitor_magicc24= [44,inquisitor_magicc25] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc25= [45,inquisitor_magicc26] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc26= [46,inquisitor_magicc27] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc27= [47,inquisitor_magicc28] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc28= [48,inquisitor_magicc29] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc29= [49,inquisitor_magicc30] { ai_face(); ai_down(4); };
+void()	inquisitor_magicc30= [50,inquisitor_standrun1]  { ai_face(); ai_down(4); };
 
 void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] { setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL); self.nextthink = time + 0.15; };
-void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound (world, CHAN_AUTO, "quoth/gug/bile.wav", 1, ATTN_NONE);  self.nextthink = time + 0.15;};
+void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound(world, CHAN_AUTO, "quoth/gug/bile.wav", 1, ATTN_NONE);  self.nextthink = time + 0.15;};
 void() inquisitor_bbomb_die3 = [2,inquisitor_bbomb_die4] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 14); self.nextthink = time + 0.15; };
 void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die5] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 12); self.nextthink = time + 0.15;};
 void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die6] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 10); self.nextthink = time + 0.15;};
@@ -342,24 +342,24 @@ void() inquisitor_bilebomb_at_enemys_feet = {
 };
 
 // AttackCastCircleSpell 71-88
-void()	inquisitor_magicd1=	[71,inquisitor_magicd2]  { ai_face();ai_down(4); };
-void()	inquisitor_magicd2=	[72,inquisitor_magicd3]  { ai_face();ai_down(4); };
-void()	inquisitor_magicd3=	[73,inquisitor_magicd4]  { ai_face();ai_down(4); };
-void()	inquisitor_magicd4=	[74,inquisitor_magicd5]  { ai_face();ai_down(4); };
-void()	inquisitor_magicd5=	[75,inquisitor_magicd6]  { ai_face();ai_down(4);  inquisitor_bilebomb_at_enemys_feet(); };
-void()	inquisitor_magicd6=	[76,inquisitor_magicd7]  { ai_face();ai_down(4); };
-void()	inquisitor_magicd7=	[77,inquisitor_magicd8]  { ai_face();ai_down(4); };
-void()	inquisitor_magicd8=	[78,inquisitor_magicd9]  { ai_face();ai_down(4);  inquisitor_bilebomb_at_enemys_feet(); };
-void()	inquisitor_magicd9=	[79,inquisitor_magicd10] { ai_face();ai_down(4); };
-void()	inquisitor_magicd10= [80,inquisitor_magicd11] { ai_face();ai_down(4); };
-void()	inquisitor_magicd11= [81,inquisitor_magicd12] { ai_face();ai_down(4); };
-void()	inquisitor_magicd12= [82,inquisitor_magicd13] { ai_face();ai_down(4);  inquisitor_bilebomb_at_enemys_feet(); };
-void()	inquisitor_magicd13= [83,inquisitor_magicd14] { ai_face();ai_down(4); };
-void()	inquisitor_magicd14= [84,inquisitor_magicd15] { ai_face();ai_down(4); };
-void()	inquisitor_magicd15= [85,inquisitor_magicd16] { ai_face();ai_down(4); };
-void()	inquisitor_magicd16= [86,inquisitor_magicd17] { ai_face();ai_down(4); };
-void()	inquisitor_magicd17= [87,inquisitor_magicd18] { ai_face();ai_down(4); };
-void()	inquisitor_magicd18= [88,inquisitor_standrun1] { ai_face();ai_down(4); };
+void()	inquisitor_magicd1=	[71,inquisitor_magicd2]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicd2=	[72,inquisitor_magicd3]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicd3=	[73,inquisitor_magicd4]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicd4=	[74,inquisitor_magicd5]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicd5=	[75,inquisitor_magicd6]  { ai_face(); ai_down(4);  inquisitor_bilebomb_at_enemys_feet(); };
+void()	inquisitor_magicd6=	[76,inquisitor_magicd7]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicd7=	[77,inquisitor_magicd8]  { ai_face(); ai_down(4); };
+void()	inquisitor_magicd8=	[78,inquisitor_magicd9]  { ai_face(); ai_down(4);  inquisitor_bilebomb_at_enemys_feet(); };
+void()	inquisitor_magicd9=	[79,inquisitor_magicd10] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd10= [80,inquisitor_magicd11] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd11= [81,inquisitor_magicd12] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd12= [82,inquisitor_magicd13] { ai_face(); ai_down(4);  inquisitor_bilebomb_at_enemys_feet(); };
+void()	inquisitor_magicd13= [83,inquisitor_magicd14] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd14= [84,inquisitor_magicd15] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd15= [85,inquisitor_magicd16] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd16= [86,inquisitor_magicd17] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd17= [87,inquisitor_magicd18] { ai_face(); ai_down(4); };
+void()	inquisitor_magicd18= [88,inquisitor_standrun1] { ai_face(); ai_down(4); };
 
 void() inquisitor_pain1;
 
@@ -438,7 +438,7 @@ void()	inquisitor_pain29= [127,inquisitor_pain30] {};
 void()	inquisitor_pain30= [128,inquisitor_pain31] {};
 void()	inquisitor_pain31= [129,inquisitor_pain32] {};
 void()	inquisitor_pain32= [130,inquisitor_pain33] { inquisitor_shieldoff(); self.turrettimer = time + (random() * 15) + 8;};
-void()	inquisitor_pain33= [131,inquisitor_pain34] { self.flags = self.flags - FL_ONGROUND;};
+void()	inquisitor_pain33= [131,inquisitor_pain34] { SUB_RemoveFlags(self,FL_ONGROUND); };
 void()	inquisitor_pain34= [132,inquisitor_pain35] { ai_up(2); };
 void()	inquisitor_pain35= [133,inquisitor_pain36] { ai_up(3); };
 void()	inquisitor_pain36= [134,inquisitor_pain37] { ai_up(4); };
@@ -496,17 +496,17 @@ void() monster_inquisitor_precache = {
 	precache_model ("progs/qmaster/astorm.spr"); // Rain storm
 	precache_model ("progs/s_dripgreen_lg.spr"); // Large green drip
 	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
-	precache_sound ("ad171/skullwiz/idle1.wav");
-	precache_sound ("ad171/skullwiz/pain2.wav");
-	precache_sound ("drake/archer/sight2.wav");
-	precache_sound ("ad171/skullwiz/fadeaway.wav");
-	precache_sound ("ad181/justice/flame_fire.wav");
-	precache_sound ("drake/bane/thunder.wav");
-	precache_sound ("quoth/gug/bile.wav");
-	precache_sound ("ad171/eidolon/elec_arch1.wav");
-	precache_sound ("ad171/eidolon/elec_arch2.wav");
-	precache_sound ("quoth/dguard/hit.wav");
-	precache_sound ("ad171/eidolon/implode_death.wav");
+	precache_sound("ad171/skullwiz/idle1.wav");
+	precache_sound("ad171/skullwiz/pain2.wav");
+	precache_sound("drake/archer/sight2.wav");
+	precache_sound("ad171/skullwiz/fadeaway.wav");
+	precache_sound("ad181/justice/flame_fire.wav");
+	precache_sound("drake/bane/thunder.wav");
+	precache_sound("quoth/gug/bile.wav");
+	precache_sound("ad171/eidolon/elec_arch1.wav");
+	precache_sound("ad171/eidolon/elec_arch2.wav");
+	precache_sound("quoth/dguard/hit.wav");
+	precache_sound("ad171/eidolon/implode_death.wav");
 	if (ext_dppart) particleeffectnum(DPP_TEPLASMA);
 };
 

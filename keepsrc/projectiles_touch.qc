@@ -99,16 +99,16 @@ void() Touch_Projectile = { // [FUNCTION]
 	self.touch = SUB_Null; // No more touch/world interaction
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	if (self.classtype == CT_PROJ_LASER) { //	Laser impact/stop sound (precached by owner)
-		if (self.attack_ricochet > 0) sound (self, CHAN_WEAPON, SOUND_LASER_RIC, 1, ATTN_STATIC);
-		else sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
-	} else if (self.classtype == CT_PROJ_GROCK) { // Golem rock impact sound (precached by owner)
+	if (self.classtype == CT_PROJ_LASER) { //	Laser impact/stop sound(precached by owner)
+		if (self.attack_ricochet > 0) sound(self, CHAN_WEAPON, SOUND_LASER_RIC, 1, ATTN_STATIC);
+		else sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
+	} else if (self.classtype == CT_PROJ_GROCK) { // Golem rock impact sound(precached by owner)
 		self.lip = random();
 		self.volume = 0.5 + random()*0.5;
-		if (self.lip < 0.25) sound (self, CHAN_WEAPON, SOUND_IMP_ROCK1, self.volume, ATTN_BREAK);
-		else if (self.lip < 0.5) sound (self, CHAN_WEAPON, SOUND_IMP_ROCK2, self.volume, ATTN_BREAK);
-		else if (self.lip < 0.75) sound (self, CHAN_WEAPON, SOUND_IMP_ROCK3, self.volume, ATTN_BREAK);
-		else sound (self, CHAN_WEAPON, SOUND_IMP_ROCK4, self.volume, ATTN_BREAK);
+		if (self.lip < 0.25) sound(self, CHAN_WEAPON, SOUND_IMP_ROCK1, self.volume, ATTN_BREAK);
+		else if (self.lip < 0.5) sound(self, CHAN_WEAPON, SOUND_IMP_ROCK2, self.volume, ATTN_BREAK);
+		else if (self.lip < 0.75) sound(self, CHAN_WEAPON, SOUND_IMP_ROCK3, self.volume, ATTN_BREAK);
+		else sound(self, CHAN_WEAPON, SOUND_IMP_ROCK4, self.volume, ATTN_BREAK);
 	}
 
 	if (other.takedamage) { // Hit something that bleeds
@@ -124,8 +124,8 @@ void() Touch_Projectile = { // [FUNCTION]
 		else if (self.classtype == CT_PROJ_MCOR2) self.dmg = DAMAGE_MANTICORETHRON + random();
 		else if (self.classtype == CT_PROJ_DARTARROW) self.dmg = DAMAGE_NGSPIKE;
 		else if (self.classtype == CT_PROJ_BOLT1) { // Special damage and sound effects for crossbow knights
-			if (random() < 0.3) sound (self, CHAN_WEAPON, "ad171/weapons/bolt_hit1.wav", 1, ATTN_NORM); // ting sound
-			else sound (self, CHAN_WEAPON, "ad171/weapons/bolt_hit4.wav", 1, ATTN_NORM); // flesh wound
+			if (random() < 0.3) sound(self, CHAN_WEAPON, "ad171/weapons/bolt_hit1.wav", 1, ATTN_NORM); // ting sound
+			else sound(self, CHAN_WEAPON, "ad171/weapons/bolt_hit4.wav", 1, ATTN_NORM); // flesh wound
 			if (other.classtype == self.owner.classtype) {
 				self.dmg = DAMAGE_BOLT0; // Reduce damage if hit another dcrossbow knight.
 			} else {
@@ -133,8 +133,8 @@ void() Touch_Projectile = { // [FUNCTION]
 				else self.dmg = DAMAGE_BOLT1; // Set to standard monster damage.
 			}
 		} else if (self.classtype == CT_PROJ_BOLT2) {
-			if (random() < 0.3) sound (self, CHAN_WEAPON, "ad171/weapons/bolt_hit1.wav", 1, ATTN_NORM); // ting sound
-			else sound (self, CHAN_WEAPON, "ad171/weapons/bolt_hit4.wav", 1, ATTN_NORM); // flesh wound
+			if (random() < 0.3) sound(self, CHAN_WEAPON, "ad171/weapons/bolt_hit1.wav", 1, ATTN_NORM); // ting sound
+			else sound(self, CHAN_WEAPON, "ad171/weapons/bolt_hit4.wav", 1, ATTN_NORM); // flesh wound
 			if (other.classtype == self.owner.classtype) {
 				self.dmg = DAMAGE_BOLT0; // Reduce the damage if the bolt has hit another dcrossbow knight
 			} else {
@@ -143,7 +143,7 @@ void() Touch_Projectile = { // [FUNCTION]
 			}
 		} else if (self.classtype == CT_PROJ_BLBOLT || self.classtype == CT_PROJ_BLBOLT2) self.dmg = DAMAGE_BOGLORD;
 		else if (self.classtype == CT_PROJ_FLESH || self.classtype == CT_PROJ_FLESHP) {
-			sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM); // Zombies have special impact sound
+			sound(self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM); // Zombies have special impact sound
 			self.dmg = DAMAGE_FLESH;
 		} else if (self.classtype == CT_PROJ_SCORP) { // Scorpion spikes cannot hurt other spider types.  This is to prevent the minion scorpion killing other minions
 			if (other.classgroup == self.owner.classgroup) self.dmg = 0;
@@ -430,12 +430,12 @@ void() Touch_Projectile = { // [FUNCTION]
 		// Some projectiles need to be left lying around for a while
 		if (self.bodyfadeaway) {
 			if (self.classtype == CT_PROJ_FLESH || self.classtype == CT_PROJ_FLESHP) 
-				sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM);
+				sound(self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM);
 			else if (self.classtype == CT_PROJ_SPID || self.classtype == CT_PROJ_WILLY || self.classtype == CT_PROJ_VORE || self.classtype == CT_PROJ_ELF)
-				sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
+				sound(self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
 			else if (self.classtype == CT_PROJ_BOLT1 || self.classtype == CT_PROJ_BOLT2 || self.classtype == CT_PROJ_DARTARROW) {
-				if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/bolt_hit2.wav", 1, ATTN_NORM);
-				else sound (self, CHAN_WEAPON, "ad171/weapons/bolt_hit3.wav", 1, ATTN_NORM);
+				if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/weapons/bolt_hit2.wav", 1, ATTN_NORM);
+				else sound(self, CHAN_WEAPON, "ad171/weapons/bolt_hit3.wav", 1, ATTN_NORM);
 			}
 				
 			self.velocity = self.avelocity = '0 0 0';
@@ -658,7 +658,7 @@ void() Touch_Grenade = { // [FUNCTION]
 			self.angles_y = anglemod(self.angles_y + 180);
 			self.velocity = -self.mangle;	// Reverse direction
 			self.mangle = self.velocity;	// Update new direction
-			sound (self, CHAN_WEAPON, self.noise, 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, self.noise, 1, ATTN_NORM);
 			if ( vlen(self.velocity) > 100 ) self.nextthink = time + LIFE_EGG; // Reset egg timer if still bouncing a lot
 		}
 	} else {
@@ -668,7 +668,7 @@ void() Touch_Grenade = { // [FUNCTION]
 		} else if (self.activate.takedamage == DAMAGE_AIM) { // Hit something that bleeds? (allows for grenade impact)
 			Explode_Grenade(); 
 		} else {
-			sound (self, CHAN_WEAPON, self.noise, 1, ATTN_NORM); // Bounce sound.  MOOM!
+			sound(self, CHAN_WEAPON, self.noise, 1, ATTN_NORM); // Bounce sound.  MOOM!
 			if (CheckZeroVector(self.velocity)) self.avelocity = '0 0 0'; // Stop spinning.
 		}
 	}
@@ -729,16 +729,16 @@ void() HIP_LaserTouch = { // [FUNCTION]
 				self.velocity = normalize (self.velocity);
 				self.velocity = (self.speed * self.velocity);
 				self.old_velocity = self.velocity;
-				if (self.flags & FL_ONGROUND) self.flags = (self.flags - FL_ONGROUND);
+				SUB_RemoveFlags(self,FL_ONGROUND);
 			} else {
 				BounceShot_Move();
 				BounceShot_Seek(); // Redirect to an enemy.
 			}
-			sound (self,CHAN_WEAPON,"hipnotic/weapons/laserric.wav",TRUE,ATTN_STATIC);
+			sound(self,CHAN_WEAPON,"hipnotic/weapons/laserric.wav",TRUE,ATTN_STATIC);
 			return;
 		}
 	}
-	sound (self,CHAN_WEAPON,SOUND_LASER_HIT,TRUE,ATTN_STATIC);
+	sound(self,CHAN_WEAPON,SOUND_LASER_HIT,TRUE,ATTN_STATIC);
 	remove (self);
 };
 
@@ -753,7 +753,7 @@ void() ProximityGrenadeTouch = { // [FUNCTION]
 	self.state = TRUE; // First touch
 	if (other.takedamage == DAMAGE_AIM) { ProximityGrenadeExplode(); self.think(); return; }
 
-	sound (self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
 	self.movetype = MOVETYPE_NONE;
 	setsize(self,'-8.000 -8.000 -8.000','8.000 8.000 8.000');
 };
@@ -900,7 +900,7 @@ void() PlasmaTouch = { // [FUNCTION]
    damg = (80.000 + (random () * 20.000));
    raddmg = 70;
    if (self.owner.classtype == CT_MONGREMLIN) { damg = damg * 0.5; raddmg = 35;}
-   sound (self,CHAN_WEAPON,"rogue/plasma/explode.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_WEAPON,"rogue/plasma/explode.wav",TRUE,ATTN_NORM);
    if ( other.health ) {
       T_Damage (other,self,self.owner,damg,DAMARMOR);
    }
@@ -938,7 +938,7 @@ void() beam_touch = { // [FUNCTION]
 			}
 		} else T_Damage (other, self, self.owner, totaldmg,DAMARMOR);
 	}
-	sound (self, CHAN_ITEM, "custents/turret/beamhit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_ITEM, "custents/turret/beamhit.wav", 1, ATTN_NORM);
 	BecomeBeamHit();
 };
 
@@ -948,7 +948,7 @@ void() Laser2_Touch = { // [FUNCTION]
 	if (other == self.owner) return;		// don't explode on owner
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 	
-	sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
+	sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - 8*normalize(self.velocity);
 	if (other.health) {
 		SpawnBlood (self.enemy, org,v_forward, 9,0);
@@ -1020,7 +1020,7 @@ void() AkArrow_Magic_Touch = { // [FUNCTION]
 		if (other.mass == MASS_SUPER) sped = sped / 2;
 		other.velocity = other.velocity + (self.movedir * sped);
 		if (other.flags & FL_ONGROUND) {
-			other.flags = other.flags - FL_ONGROUND;
+			SUB_RemoveFlags(other,FL_ONGROUND);
 			if (other.velocity_z < 150) other.velocity_z = 150;
 		}
     }
@@ -1051,8 +1051,8 @@ void() AkArrow_Wood_Touch = { // [FUNCTION]
     }
 
 	// Imbed into the surface.
-    if (random() < 0.5) sound (self, CHAN_WEAPON, "drake/archer/arrow2.wav", 1, ATTN_IDLE);
-    else sound (self, CHAN_WEAPON, "drake/archer/arrow3.wav", 1, ATTN_IDLE);
+    if (random() < 0.5) sound(self, CHAN_WEAPON, "drake/archer/arrow2.wav", 1, ATTN_IDLE);
+    else sound(self, CHAN_WEAPON, "drake/archer/arrow3.wav", 1, ATTN_IDLE);
 
     self.movetype = MOVETYPE_NONE;
     self.velocity = self.avelocity = '0 0 0';
@@ -1125,7 +1125,7 @@ void() Ice_Touch = { // [FUNCTION]
     }
     if (chunks) {
         spawn_touchblood (self, other, 10); // Ice chunks.
-        sound (self, CHAN_WEAPON, "drake/dragon/icehit.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "drake/dragon/icehit.wav", 1, ATTN_NORM);
     }
 
 	// Become a mini-shockwave if close enough to the wall.
@@ -1137,7 +1137,7 @@ void() Ice_Touch = { // [FUNCTION]
     spot = trace_endpos + trace_plane_normal * 2;
     self.angles = vectoangles(trace_plane_normal);
     self.angles_y = anglemod(self.angles_y + 180);
-    setorigin (self, spot);
+    setorigin(self, spot);
     self.alpha = 0;
     BecomeAnyExplosion(RING2_ICE, 3, "progs/drake/s_wave2.spr");
 };
@@ -1221,7 +1221,7 @@ void() Thor_Touch = { // [FUNCTION]
     if (other && other.takedamage) { // Hammers do not draw blood like edged weapons, so no spawn_touchblood. After all, this is why clerics in AD&D can use only blunt weapons. Hammer in melee may draw blood, but not when thrown.
         damage = 50;
         if (other.classname == "monster_zombie") damage = other.health + fabs(other.gibhealth * 1.1);
-        sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
 		if (GibFloorBody(trace_endpos,200)) {
 			hitCorpse = TRUE;
 		} else T_Damage(other, self, self.master, damage, DAMARMOR);
@@ -1268,13 +1268,13 @@ void() Thor_Touch = { // [FUNCTION]
             org = self.origin - 8*normalize(self.velocity);
             Tent_Point (TE_GUNSHOT, org);
 			if (GibFloorBody(self.origin,200)) {
-				sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+				sound(self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
 				return;
 			} else sound(self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
         }
 
 		if (GibFloorBody(self.origin,200)) {
-			sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
 			return;
 		}
 
@@ -1326,7 +1326,7 @@ void() Buriza_Touch = { // [FUNCTION]
     self.touch = SUB_Null; // Stack overflow prevention.
     T_RadiusDamage (self, self.master, 60, world, DAMAGEALL);
     self.origin = self.origin - 8*normalize(self.velocity);
-    sound (self, CHAN_AUTO, "drake/weapons/icewall.wav", 1, ATTN_NORM); // Don't spawn shockwaves like the dragons' iceballs.
+    sound(self, CHAN_AUTO, "drake/weapons/icewall.wav", 1, ATTN_NORM); // Don't spawn shockwaves like the dragons' iceballs.
     Particle_Explosion (self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2(self.origin, 32, 16);'.
     BecomeIcyExp();
 };
@@ -1348,7 +1348,7 @@ void() Fireball_Touch = { // [FUNCTION]
     } else FloorFire_SpawnCheck (self, 0.1);
 
     self.effects = self.effects | EF_MUZZLEFLASH;
-    if (self.noise) sound (self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
+    if (self.noise) sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
     BecomeExplosion();
 };
 
@@ -1377,7 +1377,7 @@ void() Firelink_Touch = { // [FUNCTION]
     T_Damage (other, self, self.master, damage, DAMARMOR);
     self.wait = time + 0.1;    // Wait until then to damage again.
     if (self.t_width < time) {
-        sound (self, CHAN_BODY, "drake/weapons/fwallhit.wav", 1, ATTN_NORM); // Play burning sounds.
+        sound(self, CHAN_BODY, "drake/weapons/fwallhit.wav", 1, ATTN_NORM); // Play burning sounds.
         self.t_width = time + 0.5;
     }
 };
@@ -1430,7 +1430,7 @@ void() faBladeTouch =  { // [FUNCTION]
 
    damg = random(8.00000,16.00000);
    if ( other.health ) T_Damage ( other, self, self.owner, damg, DAMARMOR);
-   sound ( self, CHAN_WEAPON, "hexen2/weapons/expsmall.wav", 1.00000, ATTN_NORM);
+   sound( self, CHAN_WEAPON, "hexen2/weapons/expsmall.wav", 1.00000, ATTN_NORM);
    self.origin = (self.origin - (8.00000 * normalize ( self.velocity)));
    //CreateGreenSmoke ( self.origin, '0.00000 0.00000 8.00000', (HX_FRAME_TIME * 4.00000));
    remove(self);
@@ -1445,7 +1445,7 @@ void() faSpellTouch = { // [FUNCTION]
 	damg = random(12,22);
 	if ( other.health ) T_Damage ( other, self, self.owner, damg, DAMARMOR);
 	T_RadiusDamage ( self, self.owner, damg, other, DAMAGEALL);
-	sound ( self, CHAN_WEAPON, "hexen2/weapons/explode.wav", 1.00000, ATTN_NORM);
+	sound( self, CHAN_WEAPON, "hexen2/weapons/explode.wav", 1.00000, ATTN_NORM);
 	self.origin = self.origin - (8 * normalize(self.velocity));
 	FlareGlitter();
 	remove(self);
@@ -1520,13 +1520,13 @@ void() Touch_HazardProjectile = {
 			if (self.part_soundtouch != "" && self.part_soundtimer < time) {
 				self.part_soundtimer = time + 0.3;
 				self.volume = 0.5 + (random() * 0.5);
-				sound (self, CHAN_WEAPON, self.part_soundtouch, self.volume, ATTN_FEET);
+				sound(self, CHAN_WEAPON, self.part_soundtouch, self.volume, ATTN_FEET);
 			}
 		}
 	} else {
 		// Any impact/miss sound defined?
 		if (self.part_soundmiss != "") {
-			sound (self, CHAN_WEAPON, self.part_soundmiss, 1, ATTN_FEET);
+			sound(self, CHAN_WEAPON, self.part_soundmiss, 1, ATTN_FEET);
 			// trigger sound once
 			self.part_soundmiss = "";
 		}
@@ -1571,8 +1571,32 @@ void() SmartBall_Touch = { // [FUNCTION]
     if (Reflected_Damage (COURAGE_DAMAGE)) return;     // Bounced off reflective shield.
     if (other.takedamage || (self.count >= 3) || (self.enemy.health <= 0)) { Touch_Missile(); return; } // Go BOOM!
 
-    sound (self, CHAN_WEAPON, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
     self.count = self.count + 1;
     self.think = SmartBall_Bounce;
     self.nextthink = time + 0.01;
+};
+
+void() lavaman_touch = {
+	local float damg;
+
+	if ( (other == self.owner) ) return ;
+	if ( (pointcontents (self.origin) == CONTENT_SKY) ) { remove (self); return ; }
+
+	damg = 40;
+	if (other.health && !(other.moditems & IT_ARTLAVASHIELD) && !(other.therm_finished > 0) && other.resist_fire < 1) {
+		if ( (other.classname == "monster_shambler") ) damg = (damg * 0.500);
+		if  (other.classname == "monster_boss" || other.classname == "monster_chthon") damg = 0;
+
+		if (other.resist_fire > 0) damg = damg * (1-other.resist_fire);
+		T_Damage (other,self,self.owner,damg, DAMARMOR);
+	}
+	T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
+	self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
+	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST,TE_EXPLOSION);
+	WriteCoord (MSG_BROADCAST,self.origin_x);
+	WriteCoord (MSG_BROADCAST,self.origin_y);
+	WriteCoord (MSG_BROADCAST,self.origin_z);
+	BecomeExplosion();
 };

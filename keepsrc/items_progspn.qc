@@ -66,7 +66,7 @@ void(entity targ) item_proglist_setup = { // [FUNCTION]
 	targ.nextthink = -1;				// Never fire think
 	targ.effects = 0;					// reset effects
 	targ.modelindex = 0;				// Make sure no model
-	setmodel (targ, "");				// invisible
+	setmodel(targ, "");				// invisible
 	setsize (targ, VEC_ORIGIN, VEC_ORIGIN);	// No size, no impact
 	targ.movetype = MOVETYPE_NONE;		// Stationary
 	targ.solid = SOLID_NOT;				// no world interaction
@@ -89,7 +89,7 @@ void() item_progspawn_animateskin = { // [FUNCTION]
 void(entity targ) item_progspawn_off = { // [FUNCTION]
 	targ.movetype = MOVETYPE_NONE;
 	targ.solid = SOLID_NOT;
-	setmodel (targ, "");
+	setmodel(targ, "");
 	setsize (targ, VEC_ORIGIN, VEC_ORIGIN);
 	if (targ.attachment) { // Turn off any ammo lids
 		setmodel(targ.attachment,"");
@@ -104,9 +104,9 @@ void(entity targ, entity spnlist) item_progspawn_on = { // [FUNCTION]
 	targ.movetype = MOVETYPE_NONE;
 	targ.solid = SOLID_TRIGGER;
 	targ.skin = targ.frame = 0;
-	setmodel (targ, spnlist.mdl);
+	setmodel(targ, spnlist.mdl);
 	setsize (targ, spnlist.bbmins, spnlist.bbmaxs);
-	setorigin (targ, targ.oldorigin);
+	setorigin(targ, targ.oldorigin);
 	targ.velocity = '0 0 0';
 	targ.angles = '0 0 0';
 	targ.state = STATE_ON;

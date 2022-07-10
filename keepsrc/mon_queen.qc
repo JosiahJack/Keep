@@ -155,7 +155,7 @@ void() 	redqueen_idle11 = [	$idle11,	redqueen_idle1 ] {
 	}
 };
 
-void() 	redqueen_bow1 = [	$bow1,		redqueen_bow2	] { self.alpha = 0.5;sound (self, CHAN_VOICE, "redfield/misc/queen_hum.wav", 1, ATTN_NORM); };
+void() 	redqueen_bow1 = [	$bow1,		redqueen_bow2	] { self.alpha = 0.5;sound(self, CHAN_VOICE, "redfield/misc/queen_hum.wav", 1, ATTN_NORM); };
 void() 	redqueen_bow2 = [	$bow2,		redqueen_bow3	] { self.alpha = 0.75;};
 void() 	redqueen_bow3 = [	$bow3,		redqueen_bow4	] { self.alpha = 1;};
 void() 	redqueen_bow4 = [	$bow4,		redqueen_bow5	] {};
@@ -198,30 +198,30 @@ void() 	redqueen_spell8 = [	$spell8,	redqueen_spell9	] { redqueen_drawq(0,1,1); 
 void() 	redqueen_spell9 = [	$spell9,	redqueen_spell10 ] { redqueen_drawq(1,1,1); };
 void() 	redqueen_spell10 = [	$spell10,	redqueen_spell11 ] { redqueen_drawq(2,2,1); };
 void() 	redqueen_spell11 = [	$spell11,	redqueen_spell12 ] { redqueen_drawq(3,3,1); };
-void() 	redqueen_spell12 = [	$spell12,	redqueen_spell13 ] { redqueen_drawq(4,4,1);self.skin = 1;};
-void() 	redqueen_spell13 = [	$spell13,	redqueen_spell14 ] { redqueen_drawq(5,5,1);self.skin = 0;};
+void() 	redqueen_spell12 = [	$spell12,	redqueen_spell13 ] { redqueen_drawq(4,4,1); self.skin = 1;};
+void() 	redqueen_spell13 = [	$spell13,	redqueen_spell14 ] { redqueen_drawq(5,5,1); self.skin = 0;};
 void() 	redqueen_spell14 = [	$spell14,	redqueen_spell15 ] { redqueen_drawq(6,6,1); };
 void() 	redqueen_spell15 = [	$spell15,	redqueen_spell16 ] { redqueen_drawq(7,7,1); };
 void() 	redqueen_spell16 = [	$spell16,	redqueen_spell17 ] { redqueen_drawq(8,7,1); };
 void() 	redqueen_spell17 = [	$spell17,	redqueen_spell18 ] { redqueen_drawq(9,7,1); };
-void() 	redqueen_spell18 = [	$spell18,	redqueen_spell19 ] { redqueen_drawq(10,8,1);self.skin = 1;};
-void() 	redqueen_spell19 = [	$spell19,	redqueen_spell20 ] { redqueen_drawq(11,8,1);self.skin = 0;};
+void() 	redqueen_spell18 = [	$spell18,	redqueen_spell19 ] { redqueen_drawq(10,8,1); self.skin = 1;};
+void() 	redqueen_spell19 = [	$spell19,	redqueen_spell20 ] { redqueen_drawq(11,8,1); self.skin = 0;};
 void() 	redqueen_spell20 = [	$spell20,	redqueen_spell21 ] { redqueen_drawq(12,9,1); };
 void() 	redqueen_spell21 = [	$spell21,	redqueen_spell22 ] { redqueen_drawq(13,9,1); };
 void() 	redqueen_spell22 = [	$spell22,	redqueen_spell23 ] { redqueen_drawq(14,0,1); };
-void() 	redqueen_spell23 = [	$spell23,	redqueen_spell24 ] { redqueen_drawq(15,0,1);sound (self, CHAN_WEAPON, "redfield/karasu/spell.wav", 0.5, ATTN_IDLE); };
+void() 	redqueen_spell23 = [	$spell23,	redqueen_spell24 ] { redqueen_drawq(15,0,1);sound(self, CHAN_WEAPON, "redfield/karasu/spell.wav", 0.5, ATTN_IDLE); };
 void() 	redqueen_spell24 = [	$spell24,	redqueen_spell25 ] { redqueen_drawq(16,0,1); };
 void() 	redqueen_spell25 = [	$spell25,	redqueen_spell26 ] { redqueen_drawq(17,0,1); };
 void() 	redqueen_spell26 = [	$spell26,	redqueen_spell27 ] { redqueen_drawq(18,0,1); };
 void() 	redqueen_spell27 = [	$spell27,	redqueen_spell28 ] { redqueen_drawq(19,0,0.5); };
-void()	redqueen_spell28 = [	$spell28,	redqueen_spell29 ] { redqueen_drawq(20,0,0.25);self.skin = 1;};
-void()	redqueen_spell29 = [	$spell28,	redqueen_idle1 	 ] { redqueen_reset_attachment();self.skin = 0;};
+void()	redqueen_spell28 = [	$spell28,	redqueen_spell29 ] { redqueen_drawq(20,0,0.25); self.skin = 1;};
+void()	redqueen_spell29 = [	$spell28,	redqueen_idle1 	 ] { redqueen_reset_attachment(); self.skin = 0;};
 
 void() monster_queen_precache = {
 	precache_model ("progs/redfield/red_queen.mdl");
 	precache_model ("progs/redfield/proj_rqspell.mdl");
-	precache_sound ("redfield/misc/queen_hum.wav");
-	precache_sound ("redfield/karasu/spell.wav");
+	precache_sound("redfield/misc/queen_hum.wav");
+	precache_sound("redfield/karasu/spell.wav");
 };
 
 // QUAKED monster_queen (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -254,6 +254,6 @@ void() monster_queen = {
 	self.takedamage = DAMAGE_NO;			// No pain/death triggers
 	self.movetype = MOVETYPE_NONE;			// Stationary
 	self.solid = SOLID_NOT;				// no world interaction
-	setmodel (self, "");				// invisible
+	setmodel(self, "");				// invisible
 	self.classtype = CT_MONQUEEN;
 };

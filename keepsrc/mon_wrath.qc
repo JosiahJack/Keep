@@ -130,7 +130,7 @@ void() wrath_attack = {
          wrath_at_c01();
       }
    }
-   sound (self,CHAN_VOICE,"rogue/wrath/watt.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_VOICE,"rogue/wrath/watt.wav",TRUE,ATTN_NORM);
 };
 
 void() wrath_pn_a01 = [ 55.000, wrath_pn_a02 ] {};
@@ -169,7 +169,7 @@ void(entity inflictor, entity attacker, float damage) wrath_pain = {
       wrath_pn_b01();
    }
    self.pain_finished = (time + 3);
-   sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
 
 void() wrath_die02 = [ 73.000, wrath_die03 ] {};
@@ -185,7 +185,7 @@ void() wrath_die15 = [ 86.000, wrath_die15 ] { wrath_deatheffects(TE_EXPLOSION);
 void() wrath_die01 = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
-	sound (self,CHAN_VOICE,"rogue/wrath/wdthc.wav",TRUE,ATTN_NORM);
+	sound(self,CHAN_VOICE,"rogue/wrath/wdthc.wav",TRUE,ATTN_NORM);
 
 	// Make sure body stays floating up where it finally dies
 	// and do not drop to the ground (reset by monster_death_use func)
@@ -267,7 +267,7 @@ void(float AttackNumber) WrathMissile = {
    missile.owner = self;
    missile.solid = SOLID_BBOX;
    missile.movetype = MOVETYPE_FLYMISSILE;
-   setmodel (missile,"progs/drake/w_ball.mdl");
+   setmodel(missile,"progs/drake/w_ball.mdl");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
    if ( (AttackNumber == 1) ) {
       org = ((self.origin + (v_forward * 20.000)) + (v_up * 12));
@@ -283,7 +283,7 @@ void(float AttackNumber) WrathMissile = {
          }
       }
    }
-   setorigin (missile,org);
+   setorigin(missile,org);
    missile.velocity = (dir * 400);
    missile.avelocity = '300.000 300.000 300.000';
    missile.enemy = self.enemy;
@@ -324,7 +324,7 @@ void() WrathMissileTouch = {
    WriteCoord (MSG_BROADCAST,self.origin_z);
    self.velocity = VEC_ORIGIN;
    self.touch = SUB_Null;
-   setmodel (self,"progs/drake/s_explod.spr");
+   setmodel(self,"progs/drake/s_explod.spr");
    self.solid = SOLID_NOT;
    s_explode1();
 };

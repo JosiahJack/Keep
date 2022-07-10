@@ -396,7 +396,7 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float 
                 vic.owner = targ;
                 vic.solid = targ.solid;
                 vic.takedamage = targ.takedamage;
-                setorigin (vic, p2);
+                setorigin(vic, p2);
                 setsize (vic, targ.mins, targ.maxs);
                 // Setting the enemy's owner to self lets traceline ignore
                 // the enemy, if it ignores self.
@@ -467,7 +467,7 @@ void() BounceShot_TraceNormal = {
     spot1 = self.origin - (16*self.movedir);
     spot2 = self.origin + (16*self.movedir);
     traceline (spot1, spot2, FALSE, self);  // see through other monsters
-    setorigin (self, trace_endpos);     //self.origin = trace_endpos;
+    setorigin(self, trace_endpos);     //self.origin = trace_endpos;
 };
 
 // The moves a missile after an impact.
@@ -548,7 +548,7 @@ void(vector st) M_FireSmart = { // [FUNCTION]
         if (trace_ent != self.enemy) up_z = 200;
     }
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_AUTO, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
+    sound(self, CHAN_AUTO, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
     launch_projectile(p1,dir,NO_SPIN,CT_PROJ_SMARTBALL,600);
     newmis.velocity = newmis.velocity + up;
 };
@@ -575,7 +575,7 @@ void(float offset) dprince_hazard = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.enemy.health < 1) return;
 
-	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 	if (skill <= SKILL_NORMAL) haz_loop = 1;

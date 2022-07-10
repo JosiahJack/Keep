@@ -28,7 +28,7 @@ void() axe_stand10 = [$axstand10,axe_stand11] { ai_stand(); };
 void() axe_stand11 = [$axstand11,axe_stand12] { ai_stand(); };
 void() axe_stand12 = [$axstand12,axe_stand1] { ai_stand(); };
 
-void() axe_walk1 = [$axrun1,axe_walk2] { if (random() < 0.2) sound (self, CHAN_VOICE, self.idle_sound, 1,  ATTN_IDLE); ai_walk(10); };
+void() axe_walk1 = [$axrun1,axe_walk2] { if (random() < 0.2) sound(self, CHAN_VOICE, self.idle_sound, 1,  ATTN_IDLE); ai_walk(10); };
 void() axe_walk2 = [$axrun2,axe_walk3] { ai_walk(10); };
 void() axe_walk3 = [$axrun3,axe_walk4] { ai_walk(15); };
 void() axe_walk4 = [$axrun4,axe_walk5] { ai_walk(10); };
@@ -36,35 +36,35 @@ void() axe_walk5 = [$axrun5,axe_walk6] { ai_walk(10); };
 void() axe_walk6 = [$axrun6,axe_walk1] { ai_walk(15); };
 
 
-void() axe_run1 = [$axrun1,axe_run2] { if (random() < 0.2) sound (self, CHAN_VOICE, self.idle_sound, 1,  ATTN_IDLE); ai_run(24); };
+void() axe_run1 = [$axrun1,axe_run2] { if (random() < 0.2) sound(self, CHAN_VOICE, self.idle_sound, 1,  ATTN_IDLE); ai_run(24); };
 void() axe_run2 = [$axrun2,axe_run3] { ai_run(45); };
 void() axe_run3 = [$axrun3,axe_run4] { ai_run(31); };
 void() axe_run4 = [$axrun4,axe_run5] { ai_run(20); };
 void() axe_run5 = [$axrun5,axe_run6] { ai_run(36); };
 void() axe_run6 = [$axrun6,axe_run1] { ai_run(45); };
 
-void() axe_atk1 = [$axatt1,axe_atk2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atk1 = [$axatt1,axe_atk2] { sound(self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atk2	= [$axatt2,axe_atk3] { ai_charge(28); ai_melee(); };
 void() axe_atk3	= [$axatt3,axe_atk4] { ai_charge(16); ai_melee(); };
 void() axe_atk4	= [$axatt4,axe_atk5] { ai_charge(0); ai_melee(); };
 void() axe_atk5	= [$axatt5,axe_atk6] { ai_charge(6); };
 void() axe_atk6	= [$axatt6,axe_run1] { ai_charge(8); };
 
-void() axe_atkb1 = [$axattb1,axe_atk2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atkb1 = [$axattb1,axe_atk2] { sound(self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atkb2 = [$axattb2,axe_atk3] { ai_charge(28); ai_melee(); };
 void() axe_atkb3 = [$axattb3,axe_atk4] { ai_charge(16); ai_melee(); };
 void() axe_atkb4 = [$axattb4,axe_atkb5] { ai_charge(0); };
 void() axe_atkb5 = [$axattb5,axe_atkb6] { ai_charge(6); };
 void() axe_atkb6 = [$axattb6,axe_run1] { ai_charge(8); };
 
-void() axe_atkc1 = [$axatt1,axe_atkc2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atkc1 = [$axatt1,axe_atkc2] { sound(self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atkc2 = [$axattc2,axe_atkc3] { ai_charge(28); };
 void() axe_atkc3 = [$axattc3,axe_atkc4] { ai_charge(16); ai_melee(); };
 void() axe_atkc4 = [$axattc4,axe_atkc5] { ai_charge(0); ai_melee(); };
 void() axe_atkc5 = [$axattc5,axe_atkc6] { ai_charge(6); };
 void() axe_atkc6 = [$axattc6,axe_run1] { ai_charge(8); };
 
-void() axe_atkd1 = [$axattd1,axe_atkd2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atkd1 = [$axattd1,axe_atkd2] { sound(self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atkd2 = [$axattd2,axe_atkd3] { ai_charge(28); ai_melee(); };
 void() axe_atkd3 = [$axattd3,axe_atkd4] { ai_charge(16); ai_melee(); };
 void() axe_atkd4 = [$axattd4,axe_atkd5] { ai_charge(0); };
@@ -98,7 +98,7 @@ void(entity inflictor, entity attacker, float damage)	axe_pain = {
 	if (self.pain_finished > time)
 		return;
 
-	sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 	axe_pain1();
 	self.pain_finished = time + 1;
 };
@@ -111,7 +111,7 @@ void() axe_die5	= [$axdeth5,axe_die6] {};
 void() axe_die6	= [$axdeth6,axe_die7] {};
 void() axe_die7	= [$axdeth7,axe_die8] {};
 void() axe_die8	= [$axdeth8,axe_die9] { monster_death_postcheck(); };
-void() axe_die9	= [$axdeth9,axe_die9] {};
+void() axe_die9	= [$axdeth9,axe_die9] { monster_deadbody_check(); };
 
 void() axe_die = {
 	// Pre-check routine to tidy up extra entities
@@ -119,7 +119,7 @@ void() axe_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		axe_die1();
 	}
 };
@@ -127,13 +127,13 @@ void() axe_die = {
 void() monster_ax_precache = {
 	precache_model ("progs/mon_axeman.mdl");
 	precache_model ("progs/h_knight.mdl");
-	precache_sound ("drake/axeman/adeath1.wav");
-	precache_sound ("drake/axeman/axe1.wav");
-	precache_sound ("drake/axeman/axe2.wav");
-	precache_sound ("quoth/dguard/idle.wav");
-	precache_sound ("quoth/dguard/pain1.wav");
-	precache_sound ("ad171/dknight/dfury_grunt4.wav");
-	precache_sound ("quoth/dguard/death2.wav");
+	precache_sound("drake/axeman/adeath1.wav");
+	precache_sound("drake/axeman/axe1.wav");
+	precache_sound("drake/axeman/axe2.wav");
+	precache_sound("quoth/dguard/idle.wav");
+	precache_sound("quoth/dguard/pain1.wav");
+	precache_sound("ad171/dknight/dfury_grunt4.wav");
+	precache_sound("quoth/dguard/death2.wav");
 };
 
 // monster_axeman (1 0 0) (-16 -16 -24) (16 16 40) Ambush, Ferocious axe-wielding maniac :)

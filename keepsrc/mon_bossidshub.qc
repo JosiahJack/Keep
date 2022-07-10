@@ -66,7 +66,6 @@ void() idshub_idle44 = [$idle44, idshub_idle45 ] {};
 void() idshub_idle45 = [$idle45, idshub_idle46 ] {};
 void() idshub_idle46 = [$idle46, idshub_idle1 ] {};
 
-//===========================================================================
 void() idshub_pain1 = [$shake1,  idshub_pain2 ] { lightstyle(0, "m"); };
 void() idshub_pain2 = [$shake2,  idshub_pain3 ] { lightstyle(0, "k"); };
 void() idshub_pain3 = [$shake3,  idshub_pain4 ] { lightstyle(0, "k"); };
@@ -107,8 +106,8 @@ void() finale_1 = {
 	if (!self.enemy) dprint("Cannot find teleporttrain");
 	else remove (self.enemy);
 
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "");
+	WriteByte(MSG_ALL, SVC_FINALE);
+	WriteString(MSG_ALL, "");
 
 	// Cycle through all players and reset them as below
 	self.enemy = find (world, classname, "player");
@@ -122,7 +121,7 @@ void() finale_1 = {
 		self.enemy.solid = SOLID_NOT;
 		self.enemy.movetype = MOVETYPE_NONE;
 		self.enemy.modelindex = 0;
-		setorigin (self.enemy, self.owner.origin);
+		setorigin(self.enemy, self.owner.origin);
 		self.enemy = find (self.enemy, classname, "player");
 	}	
 	
@@ -154,14 +153,14 @@ void() finale_3 = { // start shub thrashing wildly
 
 // Called after thrash animation (last frame)
 void() finale_4 = {
-	sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM); // Play exploding sound
+	sound(self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM); // Play exploding sound
 	self.oldorigin = self.origin;
 
 	// Setup temp entity for directional force for gibs
 	self.movelast = spawn();
 	self.movelast.oldorigin = self.origin - '0 0 -300';
-	setorigin (self.movelast, self.movelast.oldorigin);
-	setmodel (self.movelast, MODEL_BROKEN);
+	setorigin(self.movelast, self.movelast.oldorigin);
+	setmodel(self.movelast, MODEL_BROKEN);
 	self.enemy = self.movelast;
 
 	// loop through old one x/y/z space and throw tons of meat chunks	
@@ -186,8 +185,8 @@ void() finale_4 = {
 
 	// put a player model down
 	self.oldorigin = self.oldorigin - '32 264 0';
-	setorigin (self.movelast, self.oldorigin);
-	setmodel (self.movelast, MODEL_PLAYER);
+	setorigin(self.movelast, self.oldorigin);
+	setmodel(self.movelast, MODEL_PLAYER);
 	self.movelast.angles = '0 290 0';
 	self.movelast.frame = 1;
 

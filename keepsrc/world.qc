@@ -316,7 +316,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_sound("player/gasp2.wav");		// taking breath
 	precache_sound("player/h2odeath.wav");		// drowning death
 	precache_sound(SOUND_EMPTY);				// Empty sound
-	precache_sound(SOUND_TALK);				// talk message/trigger
+	precache_sound("misc/talk.wav");				// talk message/trigger
 	precache_sound("player/teledth1.wav");		// telefrag
 	precache_sound("misc/r_tele1.wav");		// teleport sounds
 	precache_sound("misc/r_tele2.wav");
@@ -738,7 +738,7 @@ void(entity ent) CopyToBodyQue = { // [FUNCTION]
 	bodyque_head.movetype = ent.movetype;
 	bodyque_head.velocity = ent.velocity;
 	bodyque_head.flags = 0;
-	setorigin (bodyque_head, ent.origin);
+	setorigin(bodyque_head, ent.origin);
 	setsize (bodyque_head, ent.mins, ent.maxs);
 	bodyque_head = bodyque_head.owner;
 };
@@ -766,7 +766,7 @@ void() trigger_onlyregistered_touch = { // [FUNCTION]
 	} else {
 		if (self.message != "") {
 			centerprint (other, self.message);
-			sound (other, CHAN_BODY, SOUND_TALK, 1, ATTN_NORM);
+			sound(other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM);
 		}
 	}
 };

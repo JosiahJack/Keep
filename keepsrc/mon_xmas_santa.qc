@@ -57,7 +57,7 @@ $frame base1 base2 base3 // (084 - 086) Misc modelling stuff
 // There is no blend animation for this to go from sitting to standing
 // Original MOD had this animation as a standing alternative
 // Really looked odd when the monster jumped straight to running so this isn't used yet.
-void() santa_lounge1 = [$lounge1, santa_lounge2 ] { monster_idle_sound();ai_stand(); };
+void() santa_lounge1 = [$lounge1, santa_lounge2 ] { monster_idle_sound(); ai_stand(); };
 void() santa_lounge2 = [$lounge2, santa_lounge3 ] { ai_stand(); };
 void() santa_lounge3 = [$lounge3, santa_lounge4 ] { ai_stand(); };
 void() santa_lounge4 = [$lounge4, santa_lounge5 ] { ai_stand(); };
@@ -100,26 +100,26 @@ void() santa_seated = {
 	else santa_seatB1();
 };
 
-void() santa_stand1 = [$stand1, santa_stand2 ] { monster_idle_sound();ai_stand(); };
+void() santa_stand1 = [$stand1, santa_stand2 ] { monster_idle_sound(); ai_stand(); };
 void() santa_stand2 = [$stand2, santa_stand3 ] { ai_stand(); };
 void() santa_stand3 = [$stand3, santa_stand4 ] { ai_stand(); };
 void() santa_stand4 = [$stand4, santa_stand5 ] { ai_stand(); };
 void() santa_stand5 = [$stand5, santa_stand6 ] { ai_stand(); };
 void() santa_stand6 = [$stand6, santa_stand1 ] { ai_stand(); };
 
-void() santa_walk1 = [$run1, santa_walk2 ] { monster_idle_sound();ai_walk(15);}
+void() santa_walk1 = [$run1, santa_walk2 ] { monster_idle_sound(); ai_walk(15);}
 void() santa_walk2 = [$run2, santa_walk3 ] { ai_walk(17); };
-void() santa_walk3 = [$run3, santa_walk4 ] { monster_footstep(FALSE);ai_walk(15); };
+void() santa_walk3 = [$run3, santa_walk4 ] { monster_footstep(FALSE); ai_walk(15); };
 void() santa_walk4 = [$run4, santa_walk5 ] { ai_walk(15); };
 void() santa_walk5 = [$run5, santa_walk6 ] { ai_walk(17); };
-void() santa_walk6 = [$run6, santa_walk1 ] { monster_footstep(FALSE);ai_walk(15); };
+void() santa_walk6 = [$run6, santa_walk1 ] { monster_footstep(FALSE); ai_walk(15); };
 
-void() santa_run1 = [$run1, santa_run2 ] { monster_idle_sound();ai_run(20);}
+void() santa_run1 = [$run1, santa_run2 ] { monster_idle_sound(); ai_run(20);}
 void() santa_run2 = [$run2, santa_run3 ] { ai_run(24); };
-void() santa_run3 = [$run3, santa_run4 ] { monster_footstep(FALSE);ai_run(20); };
+void() santa_run3 = [$run3, santa_run4 ] { monster_footstep(FALSE); ai_run(20); };
 void() santa_run4 = [$run4, santa_run5 ] { ai_run(20); };
 void() santa_run5 = [$run5, santa_run6 ] { ai_run(24); };
-void() santa_run6 = [$run6, santa_run1 ] { monster_footstep(FALSE);ai_run(20); };
+void() santa_run6 = [$run6, santa_run1 ] { monster_footstep(FALSE); ai_run(20); };
 
 // MELEE : Sack of Presents
 void() SantaMelee = {
@@ -178,7 +178,7 @@ void() Santa_FireSnow = {
 	// Lit up that barrel
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_SANTAPROJ + (skill * SPEED_SANTASKILL);
-	sound (self, CHAN_WEAPON, "xmas/santa/fire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "xmas/santa/fire.wav", 1, ATTN_NORM);	
 
 	// Keep tracking enemy origin (similar to wizards)
 	ai_trackenemy();
@@ -233,14 +233,12 @@ void() santa_painA3 = [$painA3, santa_painA4 ] {};
 void() santa_painA4 = [$painA4, santa_painA5 ] {};
 void() santa_painA5 = [$painA5, santa_run1 ] {};
 
-//----------------------------------------------------------------------
 void() santa_painB1 = [$painB1, santa_painB2 ] {};
 void() santa_painB2 = [$painB2, santa_painB3 ] {};
 void() santa_painB3 = [$painB3, santa_painB4 ] {};
 void() santa_painB4 = [$painB4, santa_painB5 ] {};
 void() santa_painB5 = [$painB5, santa_run1 ] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) santa_pain = {
 	// Good santa cannot feel pain or die
 	if (self.spawnflags & MON_SANTA_GOOD) return;
@@ -250,8 +248,8 @@ void(entity inflictor, entity attacker, float damage) santa_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.8) santa_painA1();
@@ -278,7 +276,6 @@ void() santa_die8 = [$death8, santa_die9] {};
 void() santa_die9 = [$death9, santa_die10] { monster_death_postcheck(); };
 void() santa_die10 = [$death10, santa_die10] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() santa_dieb1 = [$bdeath1, santa_dieb2] {};
 void() santa_dieb2 = [$bdeath2, santa_dieb3] { monster_check_gib(); };
 void() santa_dieb3 = [$bdeath3, santa_dieb4] { monster_check_gib();
@@ -290,7 +287,6 @@ void() santa_dieb7 = [$bdeath7, santa_dieb8] {};
 void() santa_dieb8 = [$bdeath8, santa_dieb9] { ai_back(4);monster_death_postcheck(); };
 void() santa_dieb9 = [$bdeath9, santa_dieb9] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() santa_die = {
 	// Good santa cannot feel pain or die
 	if (self.spawnflags & MON_SANTA_GOOD) return;
@@ -300,7 +296,7 @@ void() santa_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 
 		// Pick a random fall direction
 		if (random() > 0.5) santa_die1();
@@ -315,20 +311,20 @@ void() monster_xmas_santa_precache = {
 	precache_model ("progs/xmas/gib_santasack.mdl");
 	precache_model ("progs/xmas/gib_snowball.mdl");
 	precache_model (MODEL_PROJ_SNOWBALL);
-	precache_sound ("xmas/santa/good_hohoho.wav");
-	precache_sound ("xmas/santa/good_hohoho.wav");
-	precache_sound ("xmas/santa/good_saved.wav");
-	precache_sound ("xmas/santa/hohoho.wav");
-	precache_sound ("xmas/santa/laugh1.wav");
-	precache_sound ("xmas/santa/laugh3_com.wav");
-	precache_sound ("xmas/santa/hohoho.wav");
-	precache_sound ("xmas/santa/sight.wav");
-	precache_sound ("xmas/santa/sack_swing.wav"); // Attack melee/range
-	precache_sound ("xmas/santa/sack_hit.wav");
-	precache_sound ("xmas/santa/fire.wav");
-	precache_sound ("xmas/santa/pain1.wav");
-	precache_sound ("xmas/santa/pain2.wav");
-	precache_sound ("xmas/santa/death2.wav");
+	precache_sound("xmas/santa/good_hohoho.wav");
+	precache_sound("xmas/santa/good_hohoho.wav");
+	precache_sound("xmas/santa/good_saved.wav");
+	precache_sound("xmas/santa/hohoho.wav");
+	precache_sound("xmas/santa/laugh1.wav");
+	precache_sound("xmas/santa/laugh3_com.wav");
+	precache_sound("xmas/santa/hohoho.wav");
+	precache_sound("xmas/santa/sight.wav");
+	precache_sound("xmas/santa/sack_swing.wav"); // Attack melee/range
+	precache_sound("xmas/santa/sack_hit.wav");
+	precache_sound("xmas/santa/fire.wav");
+	precache_sound("xmas/santa/pain1.wav");
+	precache_sound("xmas/santa/pain2.wav");
+	precache_sound("xmas/santa/death2.wav");
 };
 
 // QUAKED monster_santa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -385,7 +381,7 @@ void() monster_xmas_santa = { // [ENTITY]
 	self.th_pain = santa_pain; // Pain/Death functions
 	self.th_die = santa_die;
 	self.meleerange = MONAI_MELEESANTA;
-	self.meleerangez = MONAI_MELEEZAXIS;
+	self.meleerangez = 48;
 
 	// Check for GOOD Santa setup?
 	if (self.spawnflags & MON_SANTA_GOOD) {

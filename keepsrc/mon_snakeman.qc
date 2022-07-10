@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Tan Sian Yue aka Bubbah, Coyote, Ken Turner
+// Attributions: Tan Sian Yue aka Bubbah, Coyote, Ken Turner, C. Bolin
 //
 //
 // Distribution / Copyright / Permissions 
@@ -164,33 +164,13 @@ void() snake_attack10 = [25, snake_run1] {
 	SUB_CheckRefire(snake_attack1);
 };
 
-void() snake_pain1 = [26, snake_pain2]
-{
-};
-
-void() snake_pain2 = [27, snake_pain3]
-{
-};
-
-void() snake_pain3 = [28, snake_pain4]
-{
-};
-
-void() snake_pain4 = [29, snake_pain5]
-{
-};
-
-void() snake_pain5 = [30, snake_pain6]
-{
-};
-
-void() snake_pain6 = [31, snake_pain7]
-{
-};
-
-void() snake_pain7 = [32, snake_run1]
-{
-};
+void() snake_pain1 = [26, snake_pain2] {};
+void() snake_pain2 = [27, snake_pain3] {};
+void() snake_pain3 = [28, snake_pain4] {};
+void() snake_pain4 = [29, snake_pain5] {};
+void() snake_pain5 = [30, snake_pain6] {};
+void() snake_pain6 = [31, snake_pain7] {};
+void() snake_pain7 = [32, snake_run1] {};
 
 void() snake_bpain1 = [52, snake_bpain2] {};
 void() snake_bpain2 = [53, snake_bpain3] {};
@@ -243,17 +223,8 @@ void(entity inflictor, entity attacker, float damage) snake_pain = {
 void() snake_die = {
 	monster_death_precheck();
 	self.enemy = world;
-
 	self.pain_finished = time + LARGE_TIMER;
-	if (self.gibbed) {
-		// Throw extra gibs
-		ThrowGib (25,1); // headmdl //2nd uzi
-		ThrowGib(12,1);
-		return;
-	}
-
 	if (!self.gibbed) {
-	
 		self.movetype = MOVETYPE_BOUNCE;
 		self.velocity_x = -50 + 100 * random();
 		self.velocity_y = -50 + 100 * random();

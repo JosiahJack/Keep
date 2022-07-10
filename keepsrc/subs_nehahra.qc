@@ -108,7 +108,7 @@ void() player_push = { // [FUNCTION]
 			if (chck < 10) self.origin_z = self.origin_z + 1;
 			self.velocity_x = other.velocity_x + 4 * random();
 			self.velocity_y = other.velocity_y + 4 * random();
-			if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self,FL_ONGROUND);
 		}
 	}
 }

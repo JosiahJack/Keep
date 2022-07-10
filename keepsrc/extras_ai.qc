@@ -71,7 +71,7 @@ void() SpawnTempGoal = { // [FUNCTION]
 		tmpgoal.health = 1;
 		tmpgoal.movetype = MOVETYPE_NONE;
 		tmpgoal.solid = SOLID_NOT;
-		setorigin (tmpgoal, self.goalentity.origin);
+		setorigin(tmpgoal, self.goalentity.origin);
 		setsize (tmpgoal, '-4 -4 -4 ', '4 4 4');
 		tmpgoal.view_ofs = ' 0 0 4 ';
 		tmpgoal.owner = self;
@@ -84,7 +84,7 @@ void() SpawnTempGoal = { // [FUNCTION]
 
 	tmppos = self.oldenemy.origin;
 	tmppos_z = self.origin_z - self.size_z;
-	setorigin (self.tempgoal, tmppos);
+	setorigin(self.tempgoal, tmppos);
 	self.goalentity = self.tempgoal;
 	self.movetarget = self.tempgoal;
 };

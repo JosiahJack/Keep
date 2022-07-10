@@ -64,8 +64,8 @@ void() trigger_damagethreshold = { // [ENTITY]
    self.classname = "damagethreshold";
    self.solid = SOLID_BSP;
    self.movetype = MOVETYPE_PUSH;
-   setorigin (self,self.origin);
-   setmodel (self,self.model);
+   setorigin(self,self.origin);
+   setmodel(self,self.model);
    setsize (self,self.mins,self.maxs);
    if ( (self.spawnflags & INVISIBLE) ) self.model = "";
    if ( !self.health ) self.health = 60.000;
@@ -82,8 +82,8 @@ void() func_breakawaywall = { // [ENTITY]
    self.classname = "breakaway";
    self.solid = SOLID_BSP;
    self.movetype = MOVETYPE_PUSH;
-   setorigin (self,self.origin);
-   setmodel (self,self.model);
+   setorigin(self,self.origin);
+   setmodel(self,self.model);
    setsize (self,self.mins,self.maxs);
    self.use = SUB_Remove;
 };

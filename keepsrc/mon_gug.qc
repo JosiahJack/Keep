@@ -245,9 +245,8 @@ void(float dist, float power, float clawdmg, float stime) gug_hit = {
 				}
 				if (head.classname == "player") {
 					head.gug_slapped = 1;
-					if (head.health <= 0) {
-						head.velocity = head.velocity + vec;
-					} else {
+					if (head.health <= 0) head.velocity = head.velocity + vec;
+					else {
 						dummy = spawn();
 						setsize(dummy, VEC_HULL_MIN, '16 16 40');
 						setorigin(dummy, head.origin + '0 0 1');
@@ -258,21 +257,16 @@ void(float dist, float power, float clawdmg, float stime) gug_hit = {
 						dummy.owner = head;
 						dummy.classname = "dummy";
 						head.spawnmaster = dummy;
-						if (dummy.flags & FL_ONGROUND)
-							dummy.flags = dummy.flags - FL_ONGROUND;
-
+						SUB_RemoveFlags(dummy,FL_ONGROUND);
 						dummy.velocity = head.velocity * 0.5 + vec;
 						if (vlen(dummy.velocity) > 600) {
 							dummy.velocity = normalize(dummy.velocity);
 							dummy.velocity = dummy.velocity * 600;
 						}
-						if (head.velocity_z > 400)
-							dummy.velocity_z = 400;
+						if (head.velocity_z > 400) dummy.velocity_z = 400;
 					}
 				} else {
-					if (head.flags & FL_ONGROUND)
-						head.flags = head.flags - FL_ONGROUND;
-
+					SUB_RemoveFlags(head,FL_ONGROUND);
 					head.velocity = head.velocity + vec * 1;
 				}
 			}
@@ -553,18 +547,14 @@ void() gug_quake_think = {
 			if (head.takedamage == DAMAGE_AIM && !(head.flags & FL_FLY)) {
 				org = head.origin + (head.mins + head.maxs) * 0.5;
 				points = 0.010000 * vlen(self.origin - org);
-				if (points < 0)
-					points = 0;
-
+				if (points < 0) points = 0;
 				points = TE_LIGHTNING3 - points;
 				if (points > 0) {
 					head.punchangle_x = (time - self.ltime) * random() * 4;
 					head.punchangle_y = (time - self.ltime) * random() * 4;
 					head.punchangle_z = (time - self.ltime) * random() * 4;
 					if (head.flags & FL_ONGROUND) {
-						if (head.flags & FL_MONSTER)
-							head.flags = head.flags - FL_ONGROUND;
-
+						if (head.flags & FL_MONSTER) SUB_RemoveFlags(head,FL_ONGROUND);
 						head.velocity = head.velocity + random() * '0 0 150';
 					}
 				}
@@ -705,7 +695,7 @@ void() gug_death37 = [236, gug_death38] {};
 void() gug_death38 = [237, gug_death39] {};
 void() gug_death39 = [238, gug_death40] {};
 void() gug_death40 = [239, gug_death41] { monster_death_postcheck(); };
-void() gug_death41 = [240, gug_death41] {};
+void() gug_death41 = [240, gug_death41] { monster_deadbody_check(); };
 
 void() gug_die = {
 	// Pre-check routine to tidy up extra entities
@@ -714,10 +704,6 @@ void() gug_die = {
 	if (!self.gibbed) {
 		sound(self, CHAN_VOICE, "quoth/gug/death.wav", 1, 0.5);
 		gug_death1();
-	} else {
-		ThrowGib (1,2);
-		ThrowGib (2,2);
-		ThrowGib (3,2);
 	}
 };
 

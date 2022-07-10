@@ -276,7 +276,7 @@ void() emit_particle = { // [FUNCTION]
 		angle_vec_y = angle_vec_y + self.circular_angle;
 		makevectors(angle_vec);
 		part.origin = self.origin + v_forward * self.part_vol_x;
-		setorigin (part, part.origin + self.part_ofs);
+		setorigin(part, part.origin + self.part_ofs);
 		self.circular_angle = anglemod(self.circular_angle + self.part_vol_y);
 	} else if (self.part_veltype == PARTICLE_ORIGIN_RANDCIRCLE) {
 		// Random circumference point around emitter (self)
@@ -284,7 +284,7 @@ void() emit_particle = { // [FUNCTION]
 		angle_vec_y = angle_vec_y + rint(random()*360);
 		makevectors(angle_vec);
 		part.origin = self.origin + v_forward * self.part_vol_x;
-		setorigin (part, part.origin + self.part_ofs);
+		setorigin(part, part.origin + self.part_ofs);
 	} else if (self.part_veltype == PARTICLE_ORIGIN_SPIRAL) {
 		// Spiral in/out around circumference point (self)
 		angle_vec = '0 0 0';
@@ -295,12 +295,12 @@ void() emit_particle = { // [FUNCTION]
 		if (self.part_vol_z == 0) self.lefty = 1; 
 		if (self.part_vol_z == self.part_vol_x) self.lefty = -1;
 		part.origin = self.origin + v_forward * self.part_vol_z;
-		setorigin (part, part.origin + self.part_ofs);
+		setorigin(part, part.origin + self.part_ofs);
 		self.circular_angle = anglemod(self.circular_angle + self.part_vol_y);
 	} else if (self.part_veltype == PARTICLE_ORIGIN_CENTER) {
 		// Explosion from central point (self)
 		part.origin = self.pemit_source.origin + self.part_ofs; // Always calculate from the center of original object
-		setorigin (part, part.origin);
+		setorigin(part, part.origin);
 	} else {
 		// Random volume point around particle (part)
 		if (self.pemit_source.bsporigin) { // Check if owner is a Bmodel? (different origin location)
@@ -314,7 +314,7 @@ void() emit_particle = { // [FUNCTION]
 		part.origin_x = part.origin_x + ( (random()*(self.part_vol_x*2)) - self.part_vol_x);
 		part.origin_y = part.origin_y + ( (random()*(self.part_vol_y*2)) - self.part_vol_y);
 		part.origin_z = part.origin_z + ( (random()*(self.part_vol_z*2)) - self.part_vol_z);
-		setorigin (part, part.origin);
+		setorigin(part, part.origin);
 	}
 	
 	// VELOCITY (Particle speed/direction - uses ANGLES key)
@@ -377,32 +377,32 @@ void(entity part_ent, float part_style) particle_style = { // [FUNCTION]
 	
 	ring_rand = random();
 	if (ring_rand < 0.4) {
-		if (part_style & PARTICLE_BURST_YELLOW) setmodel (part_ent, PART_DOTSML_GOLD);
-		else if (part_style & PARTICLE_BURST_GREEN) setmodel (part_ent, PART_DOTSML_LGREEN);
-		else if (part_style & PARTICLE_BURST_RED) setmodel (part_ent, PART_DOTSML_GREY);
-		else if (part_style & PARTICLE_BURST_BLUE) setmodel (part_ent, PART_DOTSML_BLUE);
-		else if (part_style & PARTICLE_BURST_DBLUE) setmodel (part_ent, PART_DOTSML_DBLUE);
-		else if (part_style & PARTICLE_BURST_PURPLE) setmodel (part_ent, PART_DOTSML_PURP);
-		else if (part_style & PARTICLE_BURST_FIRE) setmodel (part_ent, PART_TORCH1);
-		else setmodel (part_ent, PART_DOTSML_WHITE);
+		if (part_style & PARTICLE_BURST_YELLOW) setmodel(part_ent, PART_DOTSML_GOLD);
+		else if (part_style & PARTICLE_BURST_GREEN) setmodel(part_ent, PART_DOTSML_LGREEN);
+		else if (part_style & PARTICLE_BURST_RED) setmodel(part_ent, PART_DOTSML_GREY);
+		else if (part_style & PARTICLE_BURST_BLUE) setmodel(part_ent, PART_DOTSML_BLUE);
+		else if (part_style & PARTICLE_BURST_DBLUE) setmodel(part_ent, PART_DOTSML_DBLUE);
+		else if (part_style & PARTICLE_BURST_PURPLE) setmodel(part_ent, PART_DOTSML_PURP);
+		else if (part_style & PARTICLE_BURST_FIRE) setmodel(part_ent, PART_TORCH1);
+		else setmodel(part_ent, PART_DOTSML_WHITE);
 	} else if (ring_rand < 0.8) {
-		if (part_style & PARTICLE_BURST_YELLOW) setmodel (part_ent, PART_DOTSML_YELLOW);
-		else if (part_style & PARTICLE_BURST_GREEN) setmodel (part_ent, PART_DOTSML_GREEN);
-		else if (part_style & PARTICLE_BURST_RED) setmodel (part_ent, PART_DOTSML_RED);
-		else if (part_style & PARTICLE_BURST_BLUE) setmodel (part_ent, PART_DOTSML_GREY);
-		else if (part_style & PARTICLE_BURST_DBLUE) setmodel (part_ent, PART_DOTSML_DBLUE);
-		else if (part_style & PARTICLE_BURST_PURPLE) setmodel (part_ent, PART_DOTSML_GREY);
-		else if (part_style & PARTICLE_BURST_FIRE) setmodel (part_ent, PART_DOTSML_GOLD);
-		else setmodel (part_ent, PART_DOTSML_GREY);
+		if (part_style & PARTICLE_BURST_YELLOW) setmodel(part_ent, PART_DOTSML_YELLOW);
+		else if (part_style & PARTICLE_BURST_GREEN) setmodel(part_ent, PART_DOTSML_GREEN);
+		else if (part_style & PARTICLE_BURST_RED) setmodel(part_ent, PART_DOTSML_RED);
+		else if (part_style & PARTICLE_BURST_BLUE) setmodel(part_ent, PART_DOTSML_GREY);
+		else if (part_style & PARTICLE_BURST_DBLUE) setmodel(part_ent, PART_DOTSML_DBLUE);
+		else if (part_style & PARTICLE_BURST_PURPLE) setmodel(part_ent, PART_DOTSML_GREY);
+		else if (part_style & PARTICLE_BURST_FIRE) setmodel(part_ent, PART_DOTSML_GOLD);
+		else setmodel(part_ent, PART_DOTSML_GREY);
 	} else {
-		if (part_style & PARTICLE_BURST_YELLOW) setmodel (part_ent, PART_DOTMED_YELLOW);
-		else if (part_style & PARTICLE_BURST_GREEN) setmodel (part_ent, PART_DOTMED_GREEN);
-		else if (part_style & PARTICLE_BURST_RED) setmodel (part_ent, PART_DOTMED_RED);
-		else if (part_style & PARTICLE_BURST_BLUE) setmodel (part_ent, PART_DOTMED_BLUE);
-		else if (part_style & PARTICLE_BURST_DBLUE) setmodel (part_ent, PART_DOTMED_DBLUE);
-		else if (part_style & PARTICLE_BURST_PURPLE) setmodel (part_ent, PART_DOTMED_PURP);
-		else if (part_style & PARTICLE_BURST_FIRE) setmodel (part_ent, PART_DOTMED_GREY);
-		else setmodel (part_ent, PART_DOTMED_GREY);
+		if (part_style & PARTICLE_BURST_YELLOW) setmodel(part_ent, PART_DOTMED_YELLOW);
+		else if (part_style & PARTICLE_BURST_GREEN) setmodel(part_ent, PART_DOTMED_GREEN);
+		else if (part_style & PARTICLE_BURST_RED) setmodel(part_ent, PART_DOTMED_RED);
+		else if (part_style & PARTICLE_BURST_BLUE) setmodel(part_ent, PART_DOTMED_BLUE);
+		else if (part_style & PARTICLE_BURST_DBLUE) setmodel(part_ent, PART_DOTMED_DBLUE);
+		else if (part_style & PARTICLE_BURST_PURPLE) setmodel(part_ent, PART_DOTMED_PURP);
+		else if (part_style & PARTICLE_BURST_FIRE) setmodel(part_ent, PART_DOTMED_GREY);
+		else setmodel(part_ent, PART_DOTMED_GREY);
 	}
 	part.frame = rint(random()*3); // Random frame (sprite)
 };
@@ -459,7 +459,7 @@ void(vector ring_org, vector ring_dir, vector ring_rdir, float ring_rad, float r
 				circle_vec_y = circle_vec_y + (ring_angle * ring_loop);
 				makevectors(circle_vec);
 				part.origin = ring_org + (v_forward * ring_rad);
-				setorigin (part, part.origin);	
+				setorigin(part, part.origin);	
 				setsize(part, VEC_ORIGIN, VEC_ORIGIN); // Zero size and world interaction
 				
 				// Setup particle velocity with random element
@@ -483,13 +483,13 @@ void(entity part_ent, vector part_org, float expl_style) explosion_style = { // 
 		org_volume_x = crandom()*16;
 		org_volume_y = crandom()*16;
 		part_ent.origin = part_org + org_volume;
-		setorigin (part_ent, part_ent.origin);
+		setorigin(part_ent, part_ent.origin);
 
 		// Random chance of dead particles that are stationary on the ground
 		if (random() < 0.3) {
 			part_ent.velocity = '0 0 0';
-			if (random() < 0.5) setmodel (part_ent, PART_DOTSML_GREY);
-			else setmodel (part_ent, PART_DOTMED_GREY);
+			if (random() < 0.5) setmodel(part_ent, PART_DOTSML_GREY);
+			else setmodel(part_ent, PART_DOTMED_GREY);
 			part_ent.frame = rint(random()*3);
 		} else {
 			// Particles that explode up and out
@@ -510,7 +510,7 @@ void(entity part_ent, vector part_org, float expl_style) explosion_style = { // 
 		// Otherwise the particles are being used for a teleport
 		if (self.health < 0) part_ent.origin_z = part_org_z - MON_VIEWOFS;
 		else part_ent.origin_z = part_org_z - crandom()*MON_VIEWOFS;
-		setorigin (part_ent, part_ent.origin);
+		setorigin(part_ent, part_ent.origin);
 		part_ent.velocity_x = crandom()*8;
 		part_ent.velocity_y = crandom()*8;
 		part_ent.velocity_z = random()*25;
@@ -522,7 +522,7 @@ void(entity part_ent, vector part_org, float expl_style) explosion_style = { // 
 		part_ent.origin_x = part_org_x + crandom()*4;
 		part_ent.origin_y = part_org_y + crandom()*4;
 		part_ent.origin_z = part_org_z;
-		setorigin (part_ent, part_ent.origin);
+		setorigin(part_ent, part_ent.origin);
 		part_ent.velocity_x = crandom()*4;
 		part_ent.velocity_y = crandom()*4;
 		part_ent.velocity_z = random()*10;
@@ -534,7 +534,7 @@ void(entity part_ent, vector part_org, float expl_style) explosion_style = { // 
 		part_ent.origin_x = part_org_x + crandom()*8;
 		part_ent.origin_y = part_org_y + crandom()*8;
 		part_ent.origin_z = part_org_z - crandom()*MON_VIEWOFS;
-		setorigin (part_ent, part_ent.origin);
+		setorigin(part_ent, part_ent.origin);
 		part_ent.velocity_x = crandom()*8;
 		part_ent.velocity_y = crandom()*8;
 		part_ent.velocity_z = random()*35;
@@ -546,7 +546,7 @@ void(entity part_ent, vector part_org, float expl_style) explosion_style = { // 
 		part_ent.origin_x = part_org_x + crandom()*24;
 		part_ent.origin_y = part_org_y + crandom()*24;
 		part_ent.origin_z = part_org_z + random()*64;
-		setorigin (part_ent, part_ent.origin);
+		setorigin(part_ent, part_ent.origin);
 		part_ent.velocity_x = crandom()*16;
 		part_ent.velocity_y = crandom()*16;
 		part_ent.velocity_z = 8+random()*16;
@@ -555,7 +555,7 @@ void(entity part_ent, vector part_org, float expl_style) explosion_style = { // 
 	} else {
 		// default = explode outwards in all directions
 		part_ent.origin = part_org;
-		setorigin (part_ent, part_ent.origin);
+		setorigin(part_ent, part_ent.origin);
 		part_ent.velocity = vecrand(0,16,TRUE);
 		part_ent.avelocity = vecrand(100,200,FALSE);
 		part_ent.movetype = MOVETYPE_FLY;
@@ -740,7 +740,7 @@ void(vector e_org, vector e_dest, float e_qty, float e_time, float e_volume, flo
 			part.owner = self;
 			particle_style(part, p_style); // Pick sprite sizes
 			part.origin = e_org + rnd_vec; // Setup origin + direction
-			setorigin (part, part.origin);
+			setorigin(part, part.origin);
 			part.velocity = ((e_dest + rnd_vec) - e_org) * e_speed;
 			part.avelocity = vecrand(100,200,FALSE);
 			part.movetype = MOVETYPE_FLY;
@@ -789,7 +789,7 @@ void(vector debuff_center, float debuff_volsize, float debuff_qty, float debuff_
 			part.owner = self;
 			part.movetype = MOVETYPE_NOCLIP;
 			particle_style(part, debuff_style); // Setup correct particle type (sprite/model) based on ring colour
-			setorigin (part, debuff_org);
+			setorigin(part, debuff_org);
 			setsize (part, VEC_ORIGIN, VEC_ORIGIN); // Zero size and world interaction
 			part.velocity = vecrand(0,2,TRUE); // Setup particle velocity with random element
 			part.velocity_z = 8 + random()*24;
@@ -837,7 +837,7 @@ void(vector dust_center, float dust_qty, float dust_volsize, float dust_style) p
 			part.movetype = MOVETYPE_NOCLIP;
 			part.solid = SOLID_NOT;
 			particle_style(part, dust_style); // Setup correct particle type (sprite/model) based on ring colour
-			setorigin (part, dust_org);		
+			setorigin(part, dust_org);		
 			setsize (part, VEC_ORIGIN, VEC_ORIGIN); // Zero size and world interaction	
 			part.velocity = vecrand(0,35,TRUE); // Setup particle velocity with random element
 			part.velocity_z = -100 - random()*100;

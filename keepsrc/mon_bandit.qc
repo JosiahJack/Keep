@@ -68,7 +68,7 @@ void() bandit_short = {
 
 // SoE:  Shoot scene modified from shooting a gun to drawing a bow.
 void() bandit_atk1  = [$shoot1,   bandit_atk2    ] { ai_face(); };
-void() bandit_atk2  = [$shoot2,   bandit_atk3    ] { ai_face(); sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
+void() bandit_atk2  = [$shoot2,   bandit_atk3    ] { ai_face(); sound(self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
 void() bandit_atk3  = [$shoot3,   bandit_atk4    ] { ai_face(); };
 void() bandit_atk4  = [$shoot4,   bandit_atk5    ] { ai_face(); };
 void() bandit_atk5  = [$shoot5,   bandit_atk6    ] { ai_face(); };
@@ -106,9 +106,9 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
     if (SUB_IgnorePain ()) {
         self.pain_finished = time + 0.6;
         if (self.classtype == CT_MONBANDIT)
-            sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
         return;         // No pain anims in Nightmare.
     }
 
@@ -125,23 +125,23 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
         self.pain_finished = time + 0.6;
         army_pain1();
         if (self.classtype == CT_MONBANDIT)
-            sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
     } else if (r < p2) {
         self.pain_finished = time + 1.1;
         army_painb1();
         if (self.classtype == CT_MONBANDIT)
-            sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
     } else {
         self.pain_finished = time + 1.1;
         army_painc1();
         if (self.classtype == CT_MONBANDIT)
-            sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "drake/goblin/pain2.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "drake/goblin/pain2.wav", 1, ATTN_NORM);
     }
     damage = damage;  attacker = attacker;  // FrikQcc warning squelch!
 };
@@ -155,12 +155,12 @@ void() bandit_die = {
 	if (!self.gibbed) {
 		// regular death
 		if (self.classtype == CT_MONBANDIT) {
-			sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
 		} else {
 			if (random() < 0.5) {
-				sound (self, CHAN_VOICE, "drake/goblin/death1.wav", 1, ATTN_NORM);
+				sound(self, CHAN_VOICE, "drake/goblin/death1.wav", 1, ATTN_NORM);
 			} else {
-				sound (self, CHAN_VOICE, "drake/goblin/death2.wav", 1, ATTN_NORM);
+				sound(self, CHAN_VOICE, "drake/goblin/death2.wav", 1, ATTN_NORM);
 			}
 		}
 		if (random() < 0.5) army_die1();		// Forward
@@ -173,24 +173,24 @@ void() monster_bandit_precache = {
     precache_model ("progs/drake/arrow.mdl");
     precache_model ("progs/drake/bandit.mdl");
     precache_model ("progs/drake/h_bandit.mdl");
-    precache_sound ("drake/archer/arrow1.wav");
-    precache_sound ("drake/archer/arrow2.wav");
-    precache_sound ("drake/archer/arrow3.wav");
-    precache_sound ("drake/archer/arrowbrk.wav");
-    precache_sound ("drake/archer/arrowg.wav");
-    precache_sound ("drake/archer/draw.wav");
-    precache_sound ("soldier/death1.wav");
-    precache_sound ("soldier/idle.wav");
-    precache_sound ("soldier/pain1.wav");
-    precache_sound ("soldier/pain2.wav");
-    precache_sound ("soldier/sight1.wav");
-    precache_sound ("drake/goblin/death1.wav");
-    precache_sound ("drake/goblin/death2.wav");
-    precache_sound ("drake/goblin/idle1.wav");
-    precache_sound ("drake/goblin/idle2.wav");
-    precache_sound ("drake/goblin/pain1.wav");
-    precache_sound ("drake/goblin/pain2.wav");
-    precache_sound ("drake/goblin/sight1.wav");
+    precache_sound("drake/archer/arrow1.wav");
+    precache_sound("drake/archer/arrow2.wav");
+    precache_sound("drake/archer/arrow3.wav");
+    precache_sound("drake/archer/arrowbrk.wav");
+    precache_sound("drake/archer/arrowg.wav");
+    precache_sound("drake/archer/draw.wav");
+    precache_sound("soldier/death1.wav");
+    precache_sound("soldier/idle.wav");
+    precache_sound("soldier/pain1.wav");
+    precache_sound("soldier/pain2.wav");
+    precache_sound("soldier/sight1.wav");
+    precache_sound("drake/goblin/death1.wav");
+    precache_sound("drake/goblin/death2.wav");
+    precache_sound("drake/goblin/idle1.wav");
+    precache_sound("drake/goblin/idle2.wav");
+    precache_sound("drake/goblin/pain1.wav");
+    precache_sound("drake/goblin/pain2.wav");
+    precache_sound("drake/goblin/sight1.wav");
 };
 
 // QUAKED monster_bandit (1 0 0) (-16 -16 -24) (16 16 40) Ambush

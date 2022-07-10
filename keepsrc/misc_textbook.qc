@@ -337,7 +337,7 @@ void() info_book_on = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_TRIGGER;
 	if ( !(self.spawnflags & MISCBOOK_NOMODEL) ) {
-		setmodel (self, self.mdl);
+		setmodel(self, self.mdl);
 		self.skin = self.exactskin;
 	}
 
@@ -364,7 +364,7 @@ void() info_book_on = { // [FUNCTION]
 void() info_book_off =  { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	self.touch = self.think = SUB_Null; // Stop any touch/animations
 	if (self.attachment) { // Check if the screen is faded?
 		if (self.attachment.lip != 0) {

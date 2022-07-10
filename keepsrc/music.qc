@@ -99,7 +99,7 @@ void() SpawnStereo = { // [FUNCTION]
         stereo1.classname = "stereo1";
         stereo1.noise     = "";
         stereo1.lefty     = 0;
-        setorigin (stereo1, '-4000 -4000 -4000');
+        setorigin(stereo1, '-4000 -4000 -4000');
     }
 
 	// Other placed at the high end.
@@ -108,7 +108,7 @@ void() SpawnStereo = { // [FUNCTION]
         stereo2.movetype  = MOVETYPE_NONE;
         stereo2.solid     = SOLID_NOT;
         stereo2.classname = "stereo2";
-        setorigin (stereo2, '4000 4000 4000');
+        setorigin(stereo2, '4000 4000 4000');
     }
 };
 
@@ -177,9 +177,9 @@ void() InitMusic = { // [FUNCTION]
     music2 = world.noise2;
 
     music3 = world.noise3;
-    if (music1 != "") { abort = FALSE;  precache_sound (music1);}
-    if (music2 != "") { abort = FALSE;  precache_sound (music2);}
-    if (music3 != "") { abort = FALSE;  precache_sound (music3);}
+    if (music1 != "") { abort = FALSE;  precache_sound(music1);}
+    if (music2 != "") { abort = FALSE;  precache_sound(music2);}
+    if (music3 != "") { abort = FALSE;  precache_sound(music3);}
     if (abort) return; // No music to play.
 
     SpawnStereo();
@@ -244,7 +244,7 @@ void() tmusic_touch = { // [FUNCTION]
 void() trigger_music_spawn = { // [FUNCTION]
     if (!self.noise) { remove (self);  return;}
 
-    precache_sound (self.noise);
+    precache_sound(self.noise);
     if (self.targetname) self.use = tmusic_use;
     else self.touch = tmusic_touch;
 };

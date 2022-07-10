@@ -78,10 +78,10 @@ local   float   delta;
     delta = self.count * 3;
     if (self.dmg == 1) {
         startpos = self.origin + '0 0 24';
-        setorigin (self, self.origin + '0 0 8');
+        setorigin(self, self.origin + '0 0 8');
     } else {
         startpos = self.origin - '0 0 24';
-        setorigin (self, self.origin - '0 0 8');
+        setorigin(self, self.origin - '0 0 8');
     }
     DrawCircleXY(self.origin, 84 - delta, 105);
     DrawCircleXY(startpos, 64 - delta, 232);
@@ -160,7 +160,7 @@ void() StartTrogMagic = {
     Tboom.touch      = SUB_Null;
     Tboom.nextthink  = time + 1.1;
     Tboom.think      = TrogWarpMagic;       
-    setorigin (Tboom, spot);
+    setorigin(Tboom, spot);
     Mcircle.trigger_field = Tboom; // Link the two together.
 };
 
@@ -190,7 +190,7 @@ void() ai_repel = {
         self.enemy.velocity = self.enemy.velocity + dir;
     }
 
-    sound (self, CHAN_WEAPON, "drake/skullwiz/push.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "drake/skullwiz/push.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, 20, DAMARMOR);
 };
 
@@ -248,7 +248,7 @@ void() nemes_track = {
 // Spawns each magic missile launched by the nemesant.
 void(float ofs, float up, vector vec) nemes_shot = {
     hknight_shot(ofs);
-    setorigin (newmis, vec);
+    setorigin(newmis, vec);
     newmis.velocity  = normalize(newmis.velocity) * 600;
     if (self.enemy) { // Setup for homing sidewinders.
         newmis.enemy     = self.enemy;
@@ -345,9 +345,9 @@ void() nemes_idlesound = {
         // Use voice channel instead of auto -- don't want slain magi talking.
         wr = random();
         if (wr > 0.7) 
-            sound (self, CHAN_VOICE, "zerstorer/trog/tidle1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "zerstorer/trog/tidle1.wav", 1, ATTN_NORM);
         else if (wr < 0.3)
-            sound (self, CHAN_VOICE, "zerstorer/trog/tidle2.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "zerstorer/trog/tidle2.wav", 1, ATTN_NORM);
         self.waitmin = time + 10;
     }
 };
@@ -406,7 +406,7 @@ void() nemes_fast5  = [$attackb5,  nemes_fast6  ] {
     local   float   dist, boss, mask, zot;
 
     ai_face();
-    sound (self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
     if (self.waitmin < time + 1) self.waitmin = time + 1;
 
 	// The mage has more options when not bound by Zerstorer mode.
@@ -505,7 +505,7 @@ void() nemes_inviso4  = [$attack7,  nemes_inviso5  ] { ai_face(); nemes_sparks2(
 void() nemes_inviso5  = [$attack9,  nemes_inviso6  ] { ai_face(); nemes_sparks2('-15 31 28'); };
 void() nemes_inviso6  = [$attack10, nemes_inviso7  ] { ai_face(); nemes_sparks2('12 27 30'); };
 void() nemes_inviso7  = [$attack11, nemes_inviso8  ] { ai_face(); nemes_sparks2('22 3 30');
-    sound (self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
     spawn_tfog (self.origin);
     self.invisible_finished = time + 10;
 };
@@ -586,7 +586,7 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
     }
 
     self.pain_finished = time + 0.5;
-    sound (self, CHAN_VOICE, "zerstorer/trog/tpain.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "zerstorer/trog/tpain.wav", 1, ATTN_NORM);
     if (random()*70 > damage) return;         // didn't flinch
     if (SUB_IgnorePain ()) return;         // No pain anims in Nightmare.
     if (self.classname != "monster_nemesant") { // Make boss versions harder to flinch and stunlock.
@@ -599,8 +599,8 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
 };
 
 void() nemes_death1  = [$death1,  nemes_death2  ] {};
-void() nemes_death2  = [$death2,  nemes_death3  ] {};
-void() nemes_death3  = [$death3,  nemes_death4  ] { DropCoin(4); };
+void() nemes_death2  = [$death2,  nemes_death3  ] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() nemes_death3  = [$death3,  nemes_death4  ] { monster_check_gib(); DropCoin(4); };
 void() nemes_death4  = [$death4,  nemes_death5  ] {};
 void() nemes_death5  = [$death5,  nemes_death6  ] {};
 void() nemes_death6  = [$death6,  nemes_death7  ] {};
@@ -613,22 +613,21 @@ void() nemes_death12 = [$death12, nemes_death13 ] {};
 void() nemes_death13 = [$death13, nemes_death14 ] {};
 void() nemes_death14 = [$death14, nemes_death15 ] {};
 void() nemes_death15 = [$death15, nemes_death16 ] {};
-void() nemes_death16 = [$death16, nemes_death17 ] {};
-void() nemes_death17 = [$death17, nemes_death17 ] {};
+void() nemes_death16 = [$death16, nemes_death17 ] { monster_death_postcheck(); };
+void() nemes_death17 = [$death17, nemes_death17 ] { monster_deadbody_check(); };
 
 void() nemes_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-
 	if (!self.gibbed) {
         self.velocity_x = -200 + 400*random();
         self.velocity_y = -200 + 400*random();
         self.velocity_z = 200 + 100*random();   // PM:  Used to be 300.
-        self.flags = self.flags - (self.flags & FL_ONGROUND);
+        SUB_RemoveFlags(self,FL_ONGROUND);
         self.movetype = MOVETYPE_TOSS;
         if (random() < 0.5)
-            sound (self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
         nemes_death1();
     }
 };
@@ -648,27 +647,27 @@ void() monster_nemesant_precache = {
     precache_model ("progs/drake/h_drake.mdl");
     precache_model ("progs/h_wizard.mdl");
     precache_model ("progs/w_spike.mdl");
-    precache_sound ("hknight/attack1.wav");
-    precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
-    precache_sound ("zerstorer/trog/frblatck.wav");
-    precache_sound ("zerstorer/trog/frblfly.wav");
-    precache_sound ("zerstorer/trog/charge.wav");
-    precache_sound ("zerstorer/trog/bigboom.wav");
-    precache_sound ("zerstorer/trog/tdeath1.wav");
-    precache_sound ("zerstorer/trog/tdeath2.wav");
-    precache_sound ("zerstorer/trog/tidle1.wav");
-    precache_sound ("zerstorer/trog/tidle2.wav");
-    precache_sound ("zerstorer/trog/tpain.wav");
-    precache_sound ("zerstorer/trog/tsight1.wav");
-    precache_sound ("zerstorer/trog/tsight2.wav");
-    precache_sound ("drake/skullwiz/push.wav");       // Melee attack.
-    precache_sound ("wizard/hit.wav");        // used by c code
-    precache_sound ("wizard/wattack.wav");
-    precache_sound ("wizard/wdeath.wav");
-    precache_sound ("wizard/widle1.wav");
-    precache_sound ("wizard/widle2.wav");
-    precache_sound ("wizard/wpain.wav");
-    precache_sound ("wizard/wsight.wav");
+    precache_sound("hknight/attack1.wav");
+    precache_sound("hknight/hit.wav");    // used by C code, so don't sound2
+    precache_sound("zerstorer/trog/frblatck.wav");
+    precache_sound("zerstorer/trog/frblfly.wav");
+    precache_sound("zerstorer/trog/charge.wav");
+    precache_sound("zerstorer/trog/bigboom.wav");
+    precache_sound("zerstorer/trog/tdeath1.wav");
+    precache_sound("zerstorer/trog/tdeath2.wav");
+    precache_sound("zerstorer/trog/tidle1.wav");
+    precache_sound("zerstorer/trog/tidle2.wav");
+    precache_sound("zerstorer/trog/tpain.wav");
+    precache_sound("zerstorer/trog/tsight1.wav");
+    precache_sound("zerstorer/trog/tsight2.wav");
+    precache_sound("drake/skullwiz/push.wav");       // Melee attack.
+    precache_sound("wizard/hit.wav");        // used by c code
+    precache_sound("wizard/wattack.wav");
+    precache_sound("wizard/wdeath.wav");
+    precache_sound("wizard/widle1.wav");
+    precache_sound("wizard/widle2.wav");
+    precache_sound("wizard/wpain.wav");
+    precache_sound("wizard/wsight.wav");
 };
 
 // --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss

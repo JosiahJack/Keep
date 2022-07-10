@@ -89,7 +89,7 @@ void() GrappleTrack = { // [FUNCTION]
     if (self.state != 2) {
         self.velocity = '0 0 0';
         self.origin = Midpoint(self.enemy); // It's invisible, but we need this to make the sound come from the right spot.
-        setorigin (self, self.origin); // Move the hook along with the player.  
+        setorigin(self, self.origin); // Move the hook along with the player.  
 		d = self.dmg;
         if (self.master.tome_finished && self.enemy.flags & FLx_CREATURE) {
 			d = self.dmg * 2;
@@ -99,7 +99,7 @@ void() GrappleTrack = { // [FUNCTION]
             if ((self.master.perms & POW_VAMPIRE) && (!(self.enemy.classgroup & CG_ZOMBIE))) save = save + ceil(1.2 * save);
 			if (save > 0) T_Heal(self.master, save * d, FALSE);
 		}
-        sound (self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM); // Use Zerstorer's chainsaw grinding noise.
+        sound(self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM); // Use Zerstorer's chainsaw grinding noise.
         T_Damage (self.enemy, self, self.master, d, DAMARMOR);
         spray_x = 100 * crandom();
         spray_y = 100 * crandom();
@@ -132,7 +132,7 @@ void() GrappleAnchor = { // [FUNCTION]
         self.avelocity = '0 0 0';
     }
 
-    sound (self, CHAN_AUTO, sfx, 1, ATTN_NORM);
+    sound(self, CHAN_AUTO, sfx, 1, ATTN_NORM);
     if (other.takedamage) {
         spawn_touchblood (self,other,self.dmg);
         T_Damage (other, self, self.master, self.dmg, DAMARMOR);
@@ -195,7 +195,7 @@ void(entity attacker, vector start, vector dir) Grapple_Launch = { // [FUNCTION]
     newmis.nextthink= 0.01;
     newmis.distance = 1500; // Maximum cable range.
     newmis.frame    = 1;    // hook spread
-    setall (newmis,"progs/drake/hook.mdl",'0 0 0','0 0 0',start);
+    setall(newmis,"progs/drake/hook.mdl",'0 0 0','0 0 0',start);
     if (attacker) attacker.hook = newmis;
 };
 
@@ -203,7 +203,7 @@ void() W_FireGrapple = { // [FUNCTION]
     if (self.hook) return; // reject subsequent calls from player.qc
 
     self.punchangle_x = -2; // bump him
-    sound (self, CHAN_WEAPON, "drake/weapons/chain1.wav", 1, ATTN_NORM); // chain out sound (loops)
+    sound(self, CHAN_WEAPON, "drake/weapons/chain1.wav", 1, ATTN_NORM); // chain out sound(loops)
     makevectors(self.v_angle);
     Grapple_Launch (self, self.origin + v_forward * 16 + '0 0 16', v_forward);
 };

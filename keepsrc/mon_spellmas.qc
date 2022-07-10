@@ -105,10 +105,10 @@ void() spell_attacka1 = [7, spell_attacka2] { ai_face(); };
 void() spell_attacka2 = [8, spell_attacka3] { ai_face(); };
 void() spell_attacka3 = [9, spell_attacka4] { ai_face(); };
 void() spell_attacka4 = [10, spell_attacka5] { ai_face(); };
-void() spell_attacka5 = [11, spell_attacka6] { self.effects = EF_DIMLIGHT;ai_face(); };
+void() spell_attacka5 = [11, spell_attacka6] { self.effects = EF_DIMLIGHT; ai_face(); };
 void() spell_attacka6 = [12, spell_attacka7] { ai_face(); };
 void() spell_attacka7 = [13, spell_attacka8] { ai_face(); };
-void() spell_attacka8 = [14, spell_attacka9] { Spell_launch_lava();ai_face(); };
+void() spell_attacka8 = [14, spell_attacka9] { Spell_launch_lava(); ai_face(); };
 void() spell_attacka9 = [15, spell_run] { ai_face(); };
 
 void() Spell_push = {
@@ -182,8 +182,8 @@ void() spell_death18 = [46, spell_death19] {};
 void() spell_death19 = [47, spell_death20] {};
 void() spell_death20 = [48, spell_death21] {};
 void() spell_death21 = [49, spell_death22] {};
-void() spell_death22 = [50, spell_death23] { monster_death_postcheck(); };
-void() spell_death23 = [51, spell_death23] { monster_deadbody_check(); };
+void() spell_death22 = [50, spell_death23] {};
+void() spell_death23 = [51, spell_death23] { entity_remove(self,0.1); };
 
 void() spell_die = {
 	self.effects = 0;

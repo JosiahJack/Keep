@@ -358,9 +358,9 @@ void() weapon_touch = {
 	}
 	// weapon touch sound
 	if (self.classtype == CT_CHAINSAW) {
-		sound (other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
+		sound(other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
 	} else {
-		sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
+		sound(other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	}
 	sprint(other, "\n");
 	Safe_stuffcmd(other, "bf\n"); // Screen flash

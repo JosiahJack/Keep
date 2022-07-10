@@ -107,8 +107,8 @@ void() bane_shadow = { // [FUNCTION]
     ent.movetype = MOVETYPE_NONE;
     ent.velocity = '0 0 0';
     ent.touch    = SUB_Null;
-    setmodel (ent, self.model);
-    setorigin (ent, self.origin);
+    setmodel(ent, self.model);
+    setorigin(ent, self.origin);
     ent.solid    = SOLID_NOT;
     ent.angles   = self.angles;
     ent.frame    = self.frame;
@@ -144,13 +144,15 @@ void(string text) Bane_Speaks = {
 
     pl = find(world, classname, "player");
     while (pl) {
-        sound (pl, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+        sound(pl, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
         pl = find(pl, classname, "player");
     }
     bprint (text);
 };
 
 void() bane_die = {
+    // These .notdef glyphs below are the characters used by the engine for the
+    // orange (aka bold) text as seen in the console or special mod messages.
 	// ... You win... for now. (��� ���� ��� ��� ��� ��� ����)
 	// ... I'll be back! (��� ���� ��� ���� �� ����)
 	// ... I will return! (��� ���� ��� � ���� ������)
@@ -168,7 +170,7 @@ void() Bane_JumpTouch;
 void(float d) hk_charge;
 
 // We need these first three jump frame functions in case the Bane needs to jump again without selecting other random attacks.
-void() bane_jump1   = [$char_a1,  bane_jump2 ] { hk_charge(20); sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM); };
+void() bane_jump1   = [$char_a1,  bane_jump2 ] { hk_charge(20); sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM); };
 void() bane_jump2   = [$char_a2,  bane_jump3 ] { hk_charge(18); };
 void() bane_jump3   = [$char_a3,  bane_jump4 ] { hk_charge(16); };
 void() bane_jump4   = [$char_a4,  bane_jump5 ] {
@@ -198,7 +200,7 @@ void() Bane_JumpTouch = {
             if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
             if (( self.frame == $char_a4 ) || ( self.frame == $char_a5 )) {
                 self.frame = $char_a6;  // Go to a stab frame.
-                sound (self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
+                sound(self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
             }
         }
     }
@@ -253,7 +255,7 @@ void() magica_sword_chop = {
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
 
-    sound (self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
     makevectors(self.angles);
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -326,8 +328,8 @@ void() bane_storm4  = [ 0, bane_storm5  ] { // [FUNCTION]
         if (zot < 0.5) zot = 0.5;
         else LightZero_Set (13, self.delay, 0); // No bolt -- just flash and thunder.
 			
-        if (random() < 0.5) sound (self, CHAN_AUTO, "ambience/thunder1.wav", zot, ATTN_NONE);
-        else sound (self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", zot, ATTN_NONE);
+        if (random() < 0.5) sound(self, CHAN_AUTO, "ambience/thunder1.wav", zot, ATTN_NONE);
+        else sound(self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", zot, ATTN_NONE);
 			
         self.pain_finished = time + 5;
     }
@@ -355,7 +357,7 @@ void(float frmin, float frmax) bane_storm = { // [FUNCTION]
     local entity magic;
 
     magic = spawn();
-    setorigin (magic, self.origin);     // Sound comes from here.
+    setorigin(magic, self.origin);     // Sound comes from here.
     magic.nextthink = self.nextthink;   // Synch with sword chop anim.
     magic.think = bane_storm1;
     magic.owner = self;
@@ -367,7 +369,7 @@ void(float frmin, float frmax) bane_storm = { // [FUNCTION]
     magic.waitmin = frmin;
     magic.waitmax = frmax;
     magic.volume  = 0.5;    // 50% chance of no bolt after the first.
-    sound (magic, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+    sound(magic, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
     magic.pain_finished = time + 3;
     magic.attack_finished = 0;
     if (self) self.owner = magic;
@@ -433,7 +435,7 @@ void() darklord_magicb8  = [$magicb8,  darklord_magicb9  ] { hk_face(); hknight_
     org = self.origin + (v_forward*16) + (v_right*2) + (v_up*24);
     MakeFancy (org, X32_STAR_RED, 2);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
 //    SUB_AttackFinished (3);
     M_Reload (3);   // Three second delay before next salvo in non-NM.
 };
@@ -445,7 +447,7 @@ void() hknight_magicd1  = [$magica1,  hknight_magicd2  ] { hk_face(); };
 void() hknight_magicd2  = [$magica14, hknight_magicd3  ] { hk_face(); };
 void() hknight_magicd3  = [$magica13, hknight_magicd4  ] { hk_face(); };
 void() hknight_magicd4  = [$magica12, hknight_magicd5  ] { hk_face(); };
-void() hknight_magicd5  = [$magica11, hknight_magicd6  ] { hk_face(); sound (self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM); };
+void() hknight_magicd5  = [$magica11, hknight_magicd6  ] { hk_face(); sound(self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM); };
 void() hknight_magicd6  = [$magica10, hknight_magicd7  ] { hk_face(); };
 void() hknight_magicd7  = [$magica9,  hknight_magicd8  ] { hk_face(); M_Firewall(); };
 void() hknight_magicd8  = [$magica8,  hknight_magicd9  ] { hk_face(); };
@@ -504,7 +506,7 @@ void() clone_spawn = {
 
     kage = spawn();
     copyentity (self, kage);
-    setorigin (kage, self.origin);
+    setorigin(kage, self.origin);
     EntryPoint_Spawn (kage, self, self.origin, EntryPoint_Random);
     kage.targetname = kage.killtarget = kage.target = kage.target2 = "";
     kage.spawned    = TRUE;
@@ -598,9 +600,7 @@ void() lord_magic = {
         hknight_magicd1();     // Firewall
 };
 
-// FIXME:  Is this done aside from missing corpse scan/use?
-// Todo:
-// If close, use slam, charge, or melee; else, shoot or summon.
+// TODO: If close, use slam, charge, or melee; else, shoot or summon.
 void() darklord_magic = {
     local float dist;
 
@@ -665,7 +665,7 @@ void(float side) bane_melee = {
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
 
-    sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
+    sound(self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
     makevectors(self.angles);
     ldmg = 10 + 5*random();
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -708,7 +708,7 @@ void() bane_watk6  = [$w_attack10, bane_watk7  ] { hk_charge(3); ai_melee(); };
 void() bane_watk7  = [$w_attack11, bane_watk8  ] { monster_footstep(FALSE); hk_charge(2); ai_melee(); };
 void() bane_watk8  = [$w_attack13, bane_watk9  ] { hk_charge(2); ai_melee(); };
 void() bane_watk9  = [$w_attack14, bane_watk10 ] { hk_charge(0); };
-void() bane_watk10 = [$w_attack16, bane_watk11 ] { hk_charge(1);sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM); };
+void() bane_watk10 = [$w_attack16, bane_watk11 ] { hk_charge(1);sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM); };
 void() bane_watk11 = [$w_attack18, bane_watk12 ] { hk_charge(4); bane_melee(200); ai_melee(); };
 void() bane_watk12 = [$w_attack19, bane_watk13 ] { hk_charge(4); ai_melee(); };
 void() bane_watk13 = [$w_attack20, bane_watk14 ] { hk_charge(6); };
@@ -719,7 +719,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
     if (!self.waitmax) {
         if ((self.health <= self.waitmin) && ((self.enemy == attacker) || (self.oldenemy == attacker)) && (self.touch != Bane_JumpTouch) && (self.classname != self.master.classname) && (walkmove (0, 0))) { // Does Bane have the ace in the hole?  Is Bane fighting his enemy?  Is Bane not locked in motion?  Is Bane real?  Can the Bane move? "Bushin no Kage!\n"
             if (self.height) self.height = self.height | BANE_CLONE;
-            sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
             bane_painc1(); // Cloning will take a while, so no need to add to pain_finished.
             return;
         }
@@ -729,7 +729,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
             self.waitmax = 0;
             if (self.height)
                 self.height = self.height | BANE_RAGE;
-            sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
+            sound(self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
             bane_painc1();
             return;
         }
@@ -738,7 +738,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
 	// Normal pain code.
     if (self.pain_finished > time) return;
 
-    sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
     self.pain_finished = time + 1;
 
     if (self.touch == Bane_JumpTouch) return; // Don't interrupt attack anim.
@@ -766,7 +766,7 @@ void() baneknight_melee = {
     local float fast;
 
     self.meleeattack = self.meleeattack + 1;
-    sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
     fast = 1;
     if (!SUB_QuickAttack ())
         if (self.classname == "monster_hell_knight") fast = 0;
@@ -789,7 +789,7 @@ void() baneknight_melee = {
 };
 
 void() bane_win = {
-    sound (self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
+    sound(self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
     if (self.movetarget || self.charmer) self.th_walk();
     else self.th_stand();
 };
@@ -799,20 +799,20 @@ void() monster_hell_lord_precache = {
     precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
-    precache_sound ("hknight/attack1.wav");
-    precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
-    precache_sound ("hknight/slash1.wav");
-    precache_sound ("hknight/idle.wav");
-    precache_sound ("knight/sword1.wav");
-    precache_sound ("knight/sword2.wav");
+    precache_sound("hknight/attack1.wav");
+    precache_sound("hknight/hit.wav");    // used by C code, so don't sound2
+    precache_sound("hknight/slash1.wav");
+    precache_sound("hknight/idle.wav");
+    precache_sound("knight/sword1.wav");
+    precache_sound("knight/sword2.wav");
     precache_model ("progs/drake/lavarock.mdl");
-    precache_sound ("drake/archer/death2.wav");
-    precache_sound ("drake/archer/pain2.wav");
-    precache_sound ("drake/archer/sight2.wav");
-    precache_sound ("boss1/throw.wav");
-    precache_sound ("drake/weapons/fwall.wav");
-    precache_sound ("drake/weapons/fwallhit.wav");
-    precache_sound ("drake/weapons/fwalltap.wav");
+    precache_sound("drake/archer/death2.wav");
+    precache_sound("drake/archer/pain2.wav");
+    precache_sound("drake/archer/sight2.wav");
+    precache_sound("boss1/throw.wav");
+    precache_sound("drake/weapons/fwall.wav");
+    precache_sound("drake/weapons/fwallhit.wav");
+    precache_sound("drake/weapons/fwalltap.wav");
 };
 
 void() monster_hell_lord = { monster_hell_knight(); };
@@ -823,20 +823,20 @@ void() monster_hkboss_precache = {
     precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
-    precache_sound ("hknight/attack1.wav");
-    precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
-    precache_sound ("hknight/slash1.wav");
-    precache_sound ("hknight/idle.wav");
-    precache_sound ("knight/sword1.wav");
-    precache_sound ("knight/sword2.wav");
-    precache_sound ("hknight/death1.wav");
-    precache_sound ("hknight/pain1.wav");
-    precache_sound ("hknight/sight1.wav");
-    precache_sound ("drake/hknight/death1.wav");
-    precache_sound ("drake/hknight/sboom.wav");
-    precache_sound ("drake/hknight/sboom2.wav");
+    precache_sound("hknight/attack1.wav");
+    precache_sound("hknight/hit.wav");    // used by C code, so don't sound2
+    precache_sound("hknight/slash1.wav");
+    precache_sound("hknight/idle.wav");
+    precache_sound("knight/sword1.wav");
+    precache_sound("knight/sword2.wav");
+    precache_sound("hknight/death1.wav");
+    precache_sound("hknight/pain1.wav");
+    precache_sound("hknight/sight1.wav");
+    precache_sound("drake/hknight/death1.wav");
+    precache_sound("drake/hknight/sboom.wav");
+    precache_sound("drake/hknight/sboom2.wav");
     precache_model ("progs/drake/v_spike.mdl");       // Used by hkboss.
-    precache_sound ("drake/hkboss/iceball.wav");      // Used by hkboss.
+    precache_sound("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
 
 void() monster_hkboss = { monster_hell_knight(); }; // For Rapture.
@@ -982,6 +982,7 @@ void() darklord_fast8 = [$run8, darklord_fast1 ] { dk_fast(13); };
 void() dk_shield = {
     if (self.minion_count < 1) {
         if (self.flags & FL_GODMODE) {
+            SUB_RemoveFlags(self,FL_GODMODE);
             self.flags = self.flags - FL_GODMODE;   //(self.flags & FL_GODMODE);
             self.waitmax = time + 10;   // Give player time to attack.
         }
@@ -1010,7 +1011,7 @@ void(float d) dk_fast = {
 };
 
 void(float d) dk_charge = { hk_charge(d*2); };
-void() dk_idle_sound = { if (random() < 0.2) sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM); };
+void() dk_idle_sound = { if (random() < 0.2) sound(self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM); };
 
 void() darklord_slice1  = [$slice1,  darklord_slice2  ] { dk_idle_sound(); dk_charge(9); };
 void() darklord_slice2  = [$slice3,  darklord_slice3  ] { monster_footstep(FALSE); dk_charge(19); };
@@ -1039,7 +1040,7 @@ void() darklord_watk7  = [$w_attack11, darklord_watk8  ] { monster_footstep(FALS
 void() darklord_watk8  = [$w_attack13, darklord_watk9  ] { dk_charge(2); ai_melee(); };
 void() darklord_watk9  = [$w_attack14, darklord_watk10 ] { dk_charge(0); };
 void() darklord_watk10 = [$w_attack16, darklord_watk11 ] { dk_charge(1);
-    sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 };
 void() darklord_watk11 = [$w_attack18, darklord_watk12 ] { dk_charge(4); bane_melee(200); ai_melee(); };
 void() darklord_watk12 = [$w_attack19, darklord_watk13 ] { dk_charge(4); ai_melee(); };
@@ -1051,7 +1052,7 @@ void() darklord_melee = {
 
     self.meleeattack = self.meleeattack + 1;
 
-    sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
     if (self.meleeattack == 1)
         darklord_slice1();
     else if (self.meleeattack == 2)
@@ -1096,7 +1097,7 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
         self.effects    = 0;    // PM:  Erase shield, lights, and the rest.
 		self.jump_time  = 0;
 		self.zapper_time        = 0;
-        sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM); // Fake death.
+        sound(self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM); // Fake death.
         makevectors(self.angles);
         st = '-2 0 28';
         st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
@@ -1139,7 +1140,7 @@ void() darklord_die = {
 // regular death
     local   vector  st;
 
-    sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
 
     if (random() > 0.5)
         { st = '-2 0 28'; darklord_die1();}
@@ -1165,42 +1166,42 @@ void() monster_dark_lord_precache = {
     precache_model ("progs/drake/drggib02.mdl");
     precache_model ("progs/drake/drggib03.mdl");
     precache_model ("progs/drake/plasma.mdl");
-    precache_sound ("ambience/thunder1.wav");
-    precache_sound ("zerstorer/ambience/thunder2.wav");
-    precache_sound ("drake/bane/death.wav");
-    precache_sound ("drake/bane/growl.wav");
-    precache_sound ("drake/bane/laugh.wav");
-    precache_sound ("drake/bane/pain.wav");
-    precache_sound ("drake/bane/sight.wav");
-    precache_sound ("drake/bane/thunder.wav");
-    precache_sound ("hknight/slash1.wav");
-    precache_sound ("knight/sword1.wav");
-    precache_sound ("knight/sword2.wav");
-    precache_sound ("hipnotic/weapons/mjolhit.wav");
-    precache_sound ("drake/misc/dsslop.wav");
-    precache_sound ("drake/weapons/axhit.wav");
-	precache_sound ("drake/archer/sight2.wav");
-    precache_sound ("drake/bane/hit.wav");
-    precache_sound ("drake/darklord/death.wav");
-    precache_sound ("drake/darklord/idle1.wav");
-    precache_sound ("drake/darklord/pain.wav");
-    precache_sound ("drake/darklord/sight.wav");
-    precache_sound ("items/protect.wav");   // Powerup sound
-    precache_sound ("rogue/plasma/explode.wav");
-    precache_sound ("rogue/plasma/fire.wav");
-    precache_sound ("drake/skullwiz/gate.wav");   // For wrath summoning.
-	precache_sound ("hknight/attack1.wav");
-	precache_sound ("knight/sword2.wav");
-	precache_sound ("hknight/hit.wav");		
-    precache_sound ("rogue/dragon/see.wav");
-    precache_sound ("rogue/dragon/active.wav");
-    precache_sound ("rogue/dragon/attack.wav");
-    precache_sound ("drake/dragon/fly1.wav");
-    precache_sound ("drake/dragon/flywater.wav");
-    precache_sound ("rogue/dragon/pain.wav");
-    precache_sound ("rogue/dragon/death.wav");
-	precache_sound ("drake/dragon/fire.wav");
-    precache_sound ("shambler/smack.wav");
+    precache_sound("ambience/thunder1.wav");
+    precache_sound("zerstorer/ambience/thunder2.wav");
+    precache_sound("drake/bane/death.wav");
+    precache_sound("drake/bane/growl.wav");
+    precache_sound("drake/bane/laugh.wav");
+    precache_sound("drake/bane/pain.wav");
+    precache_sound("drake/bane/sight.wav");
+    precache_sound("drake/bane/thunder.wav");
+    precache_sound("hknight/slash1.wav");
+    precache_sound("knight/sword1.wav");
+    precache_sound("knight/sword2.wav");
+    precache_sound("hipnotic/weapons/mjolhit.wav");
+    precache_sound("drake/misc/dsslop.wav");
+    precache_sound("drake/weapons/axhit.wav");
+	precache_sound("drake/archer/sight2.wav");
+    precache_sound("drake/bane/hit.wav");
+    precache_sound("drake/darklord/death.wav");
+    precache_sound("drake/darklord/idle1.wav");
+    precache_sound("drake/darklord/pain.wav");
+    precache_sound("drake/darklord/sight.wav");
+    precache_sound("items/protect.wav");   // Powerup sound
+    precache_sound("rogue/plasma/explode.wav");
+    precache_sound("rogue/plasma/fire.wav");
+    precache_sound("drake/skullwiz/gate.wav");   // For wrath summoning.
+	precache_sound("hknight/attack1.wav");
+	precache_sound("knight/sword2.wav");
+	precache_sound("hknight/hit.wav");		
+    precache_sound("rogue/dragon/see.wav");
+    precache_sound("rogue/dragon/active.wav");
+    precache_sound("rogue/dragon/attack.wav");
+    precache_sound("drake/dragon/fly1.wav");
+    precache_sound("drake/dragon/flywater.wav");
+    precache_sound("rogue/dragon/pain.wav");
+    precache_sound("rogue/dragon/death.wav");
+	precache_sound("drake/dragon/fire.wav");
+    precache_sound("shambler/smack.wav");
 };
 
 // The Dark Lord  (Wraith in Black Armor, a bit like Tolkien's Nazgul)

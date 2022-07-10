@@ -169,7 +169,7 @@ void() Shade_MeatTouch = {
         remove (self);
     } else {
         // Make a little splat.
-        sound (self, CHAN_WEAPON, "wizard/hit.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "wizard/hit.wav", 1, ATTN_NORM);
         spawn_touchblood (self, other, 10);
 
         // Make the shot non-solid and check if it can become a zombie.
@@ -197,7 +197,7 @@ void() Shade_Meat = {
     dir = Aim_Ballistic(org,dir,sped,up,self.enemy,1,SHOT_TIME_BOUNCE,MOVETYPE_BOUNCE);
     dir = Maim_Scatter(dir,'0 0 0');
     mx = vlen(dir);
-    sound (self, CHAN_WEAPON, "drake/dragon/ice.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "drake/dragon/ice.wav", 1, ATTN_NORM);
     arc = 0.06;
     loop = 5; // Fire # of shots equal to max zombies.
     spread = (loop - 1) * arc;
@@ -248,9 +248,9 @@ void() shade_sfx_idle = {
 
 			r = random();
 			if (r < 0.5)
-				sound (self, CHAN_VOICE, "drake/shade/idle.wav", 1, ATTN_NORM);
+				sound(self, CHAN_VOICE, "drake/shade/idle.wav", 1, ATTN_NORM);
 			else
-				sound (self, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
+				sound(self, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
 
 			// Don't make any more noise for a while.
 			self.waitmin = time + 3;
@@ -317,8 +317,8 @@ void()  shadow_walk = {
 //  Run animation.  The nightshade flies quickly to find and close in on its target.
 void() shade_sfx_fly = {
     if (self.super_sound < time) { // Not while Quad is sounding.
-        if (self.waterlevel <= 1) sound (self, CHAN_BODY, "drake/shade/fly.wav", 1, ATTN_NORM); // Not while in the water.
-        else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME)) sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
+        if (self.waterlevel <= 1) sound(self, CHAN_BODY, "drake/shade/fly.wav", 1, ATTN_NORM); // Not while in the water.
+        else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME)) sound(self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     }
 }; 
 
@@ -433,8 +433,8 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
     if (self.pain_finished > time) return; // Same size, standard pain.
 
     self.pain_finished = time + 0.5; 
-    if (random() < 0.5) sound (self, CHAN_VOICE, "drake/shade/pain.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_VOICE, "drake/shade/pain2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound(self, CHAN_VOICE, "drake/shade/pain.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_VOICE, "drake/shade/pain2.wav", 1, ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
     if (self.waitmin > time) {
@@ -485,53 +485,38 @@ void() shadow_die14 = [$nova14, shadow_die15 ] {};
 void() shadow_die15 = [$nova15, shadow_die16 ] {};
 void() shadow_die16 = [$nova16, shadow_die17 ] {};
 void() shadow_die17 = [$nova17, shadow_die18 ] { shadow_boom(); };
-void() shadow_die18 = [$nova18, shadow_die18  ] { entity_hide (self); };
+void() shadow_die18 = [$nova18, shadow_die18  ] { entity_remove(self,0.1); };
 
-void() shadow_die_delayed = {
-    // If nightshade is invisible, Quake may not reveal it after movetype gets
-    // set to none below, unless we update the entity somehow.  Setorigin will
-    // force Quake to update the entity.
-    // Update:  Don't 'setorigin' during a touch frame.
-    //setorigin (self, self.origin);
-    shadow_die1();
-};
 void() shadow_die = {
-    //monster_death_precheck();
- 
-    //if (!self.gibbed) {
-        self.frame      = $nova1;
-        // Delay call to scene start because we use setorigin which may break links.
-        self.nextthink  = 0.01;
-        self.think      = shadow_die_delayed;
+    monster_death_precheck();
+    self.frame      = $nova1;
+    self.alpha      = 0.7;
+    self.movetype   = MOVETYPE_NONE;    // Freeze monster in place.
+    if (random() < 0.5) sound(self, CHAN_VOICE, "drake/shade/death2.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_VOICE, "drake/shade/death.wav", 1, ATTN_NORM);
 
-        self.alpha      = 0.7;
-        self.movetype   = MOVETYPE_NONE;    // Freeze monster in place.
-        if (random() < 0.5)
-            sound (self, CHAN_VOICE, "drake/shade/death2.wav", 1, ATTN_NORM);
-        else
-            sound (self, CHAN_VOICE, "drake/shade/death.wav", 1, ATTN_NORM);
-    //}
+    shadow_die1();
 };
 
 void() monster_nightshade_precache = {
     precache_model ("progs/drake/shade.mdl");
     precache_model ("progs/drake/soul.mdl");
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
-    precache_sound ("demon/dhit2.wav");
-    precache_sound ("drake/dragon/flywater.wav");
-    precache_sound ("drake/shade/death.wav");
-    precache_sound ("drake/shade/death2.wav");
-    precache_sound ("drake/shade/fly.wav");
-    precache_sound ("drake/shade/idle.wav");
-    precache_sound ("drake/shade/moan.wav");
-    precache_sound ("drake/shade/pain.wav");
-    precache_sound ("drake/shade/pain2.wav");
-    precache_sound ("drake/shade/screech.wav");
-    precache_sound ("drake/shade/sing.wav");
-    precache_sound ("drake/dragon/ice.wav");
-    precache_sound ("drake/shade/taunt.wav");
-    precache_sound ("wizard/hit.wav");   // used by C code, so don't sound2
-    precache_sound ("nehahra/wraith/soul.wav");
+    precache_sound("demon/dhit2.wav");
+    precache_sound("drake/dragon/flywater.wav");
+    precache_sound("drake/shade/death.wav");
+    precache_sound("drake/shade/death2.wav");
+    precache_sound("drake/shade/fly.wav");
+    precache_sound("drake/shade/idle.wav");
+    precache_sound("drake/shade/moan.wav");
+    precache_sound("drake/shade/pain.wav");
+    precache_sound("drake/shade/pain2.wav");
+    precache_sound("drake/shade/screech.wav");
+    precache_sound("drake/shade/sing.wav");
+    precache_sound("drake/dragon/ice.wav");
+    precache_sound("drake/shade/taunt.wav");
+    precache_sound("wizard/hit.wav");   // used by C code, so don't sound2
+    precache_sound("nehahra/wraith/soul.wav");
 };
 
 // --> QUAKED monster_nightshade (1 0 0) (-32 -32 -24) (32 32 32) Ambush x Souls
@@ -559,7 +544,7 @@ void() monster_nightshade = {
     self.th_pain    = shadow_pain;
     self.th_die     = shadow_die;
     self.th_checkattack   = Shade_CheckAttack;
-    self.gibondeath = TRUE;
+    self.gibhealth = MON_NEVERGIB;
 	if (self.deathstring == "") self.deathstring = " was etherialized by a Nightshade\n";
     shadow_speed();
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent

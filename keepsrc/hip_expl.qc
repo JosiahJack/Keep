@@ -94,8 +94,8 @@ void() exploder_fire = { // [FUNCTION]
    SUB_UseTargets();
    self = temp;
    other = self;
-   if ( (self.dmg < 120) ) sound (self,CHAN_AUTO,"drake/misc/shortexp.wav",self.volume,self.speed);
-   else sound (self,CHAN_AUTO,"drake/misc/longexpl.wav",self.volume,self.speed);
+   if ( (self.dmg < 120) ) sound(self,CHAN_AUTO,"drake/misc/shortexp.wav",self.volume,self.speed);
+   else sound(self,CHAN_AUTO,"drake/misc/longexpl.wav",self.volume,self.speed);
 
    T_RadiusDamage (self,self.owner,self.dmg,other,DAMAGEALL);
    if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Explosion(self.origin);
@@ -111,8 +111,8 @@ void() exploder_use = { // [FUNCTION]
 };
 
 void() func_exploder = { // [ENTITY]
-	precache_sound ("drake/misc/shortexp.wav");
-	precache_sound ("drake/misc/longexpl.wav");
+	precache_sound("drake/misc/shortexp.wav");
+	precache_sound("drake/misc/longexpl.wav");
 	self.classname = "exploder";
 	self.use = exploder_use;
 	if (!self.owner) self.owner = find(world, classname, self.netname); // If netname is set, this explosion won't harm the netname, useful for protecting bosses
@@ -145,7 +145,7 @@ void() multi_exploder_fire = { // [FUNCTION]
    expl.origin_x = (self.absmin_x + (random() * (self.absmax_x - self.absmin_x)));
    expl.origin_y = (self.absmin_y + (random() * (self.absmax_y - self.absmin_y)));
    expl.origin_z = (self.absmin_z + (random() * (self.absmax_z - self.absmin_z)));
-   sound (expl,CHAN_VOICE,"drake/misc/shortexp.wav",self.volume,self.speed);
+   sound(expl,CHAN_VOICE,"drake/misc/shortexp.wav",self.volume,self.speed);
    T_RadiusDamage (expl,self.owner,self.dmg,other,DAMAGEALL);
    if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Explosion(expl.origin);
    temp = self;
@@ -184,11 +184,11 @@ void() multi_exploder_use = { // [FUNCTION]
 };
 
 void() func_multi_exploder = { // [ENTITY]
-   precache_sound ("drake/misc/shortexp.wav");
-   precache_sound ("drake/misc/longexpl.wav");
+   precache_sound("drake/misc/shortexp.wav");
+   precache_sound("drake/misc/longexpl.wav");
    self.classname = "exploder";
    self.use = multi_exploder_use;
-   setmodel (self,self.model);
+   setmodel(self,self.model);
 	if (!self.owner) self.owner = find(world, classname, self.netname); // if netname is set, this explosion won't harm the netname, useful for protecting bosses
 	if (!self.owner) self.owner = find(world, targetname, self.netname);
    self.movetype = MOVETYPE_NONE;

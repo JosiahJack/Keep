@@ -239,7 +239,7 @@ void() zombiek_walk10	= [	$walk10,	zombiek_walk11] { ai_walk(1); };
 void() zombiek_walk11	= [	$walk11,	zombiek_walk12] { ai_walk(1); };
 void() zombiek_walk12	= [	$walk12,	zombiek_walk13] { ai_walk(1);monster_footstep(TRUE); };	// Scrapping Clubfoot
 void() zombiek_walk13	= [	$walk13,	zombiek_walk14] { ai_walk(1); };
-void() zombiek_walk14	= [	$walk14,	zombiek_walk1	] { zombie_sound(2);ai_walk(1); };
+void() zombiek_walk14	= [	$walk14,	zombiek_walk1	] { zombie_sound(2); ai_walk(1); };
 
 
 void() zombiek_run1		= [	$run1,		zombiek_run2	] {
@@ -266,7 +266,7 @@ void()	zombiek_attb1	= [	$attb2,		zombiek_attb6 ] { ai_face(); };
 void()	zombiek_attb6	= [	$attb6,		zombiek_attb8	] { ai_face(); };
 void()	zombiek_attb8	= [	$attb8,		zombiek_attb9	] { ai_face();zombie_sound(7); };
 void()	zombiek_attb9	= [	$attb9,		zombiek_attb10] { ai_face(); };
-void()	zombiek_attb10= [	$attb10,	zombiek_attb11] { ai_face();ai_melee(); };
+void()	zombiek_attb10= [	$attb10,	zombiek_attb11] { ai_face(); ai_melee(); };
 void()	zombiek_attb11= [	$attb11,	zombiek_attb12] { ai_melee(); };
 void()	zombiek_attb12= [	$attb12,	zombiek_attb13] { ai_melee(); };
 void()	zombiek_attb13= [	$attb13,	zombiek_attb14] {};
@@ -282,7 +282,7 @@ void()	zombiek_attc1	= [	$attc2,		zombiek_attc4	] { ai_face(); };
 void()	zombiek_attc4	= [	$attc4,		zombiek_attc5	] { ai_face(); };
 void()	zombiek_attc5	= [	$attc5,		zombiek_attc6	] { zombie_sound(7); ai_face(); };
 void()	zombiek_attc6	= [	$attc6,		zombiek_attc7	] { ai_face(); };
-void()	zombiek_attc7	= [	$attc7,		zombiek_attc8	] { ai_face();ai_melee(); };
+void()	zombiek_attc7	= [	$attc7,		zombiek_attc8	] { ai_face(); ai_melee(); };
 void()	zombiek_attc8	= [	$attc8,		zombiek_attc9	] { ai_melee(); };
 void()	zombiek_attc9	= [	$attc9,		zombiek_attc10] { ai_melee(); };
 void()	zombiek_attc10= [	$attc10,	zombiek_attc11] {};
@@ -396,7 +396,7 @@ void()	zombiek_paina8	= [	$paina8,		zombiek_paina9	] { ai_painforward(3); };
 void()	zombiek_paina9	= [	$paina9,		zombiek_paina10	] { ai_painforward(2);monster_footstep(FALSE); };
 void()	zombiek_paina10	= [	$paina10,		zombiek_paina11	] { ai_painforward(1); };
 void()	zombiek_paina11	= [	$paina11,		zombiek_paina12	] { ai_painforward(2); };
-void()	zombiek_paina12	= [	$paina12,		zombiek_run1	] { ai_painforward(1);self.inpain = 0;};
+void()	zombiek_paina12	= [	$paina12,		zombiek_run1	] { ai_painforward(1); self.inpain = 0;};
 
 //----------------------------------------------------------------------
 void()	zombiek_painb1	= [	$painb1,		zombiek_painb2	] { ai_painforward(8); };
@@ -470,7 +470,7 @@ void()	zombiek_paind14	= [	$paind14,		zombiek_paind15	] {};
 void()	zombiek_paind15	= [	$paind15,		zombiek_paind16	] {};
 void()	zombiek_paind16	= [	$paind16,		zombiek_paind17	] {};
 void()	zombiek_paind17	= [	$paind17,		zombiek_paind18	] {
-	monster_footstep(TRUE);ai_pain(1); };		// Scrapping feet sound while standing up
+	monster_footstep(TRUE); ai_pain(1); };		// Scrapping feet sound while standing up
 void()	zombiek_paind18	= [	$paind18,		zombiek_paind19	] { ai_pain(1); };
 void()	zombiek_paind19	= [	$paind19,		zombiek_paind20	] { ai_pain(1); };
 void()	zombiek_paind20	= [	$paind20,		zombiek_paind21	] { ai_pain(1); };
@@ -614,11 +614,9 @@ void() zombiek_wakeup	= {
 	}
 };
 
-//----------------------------------------------------------------------
 // Puts the zombie on the floor with a random Yaw rotation
 // IF frameno = MONAI_ZOMBIEFLR Setup on floor with use trigger
 // ELSE setup next think timer and wait for opportunity to get back up
-//----------------------------------------------------------------------
 void(float frameno) zombiek_onground = {	
 	self.health = self.max_health;	// reset health
 	self.inpain = 2;				// Lying on floor, no pain
@@ -714,11 +712,6 @@ void() zombiek_knockdown = {
 	}
 };
 
-void() zombiek_die = {
-	self.health = self.gibhealth; // Force gib
-	monster_death_precheck();
-};
-
 void() monster_zombiek_precache = {
 	precache_model("progs/ad171/mon_zombiek.mdl");
 	precache_model("progs/ad171/h_zombiek.mdl");
@@ -781,7 +774,7 @@ void() monster_zombiek = { // [ENTITY]
 	self.th_jump = zombiek_jump1;		// Leap attack
 	self.th_jumpexit = zombiek_jump9;	// Exit animation for jump
 	self.th_pain = zombiek_pain;
-	self.th_die = zombiek_die;
+	self.th_die = zombie_die;
 	self.th_wakeup = zombiek_wakeup;	// Get off floor
 	self.classtype = CT_MONZOMBIEK;
 	self.classgroup = CG_ZOMBIE;		// One big happy zombie family!

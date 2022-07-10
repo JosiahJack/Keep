@@ -135,9 +135,9 @@ void()	Tar_JumpTouch = {
 					T_Damage (other, self, self, ldmg, DAMARMOR); // Everything else gets the usual tarbaby thump!
 				}
 			}
-			sound (self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
 		}
-	} else sound (self, CHAN_WEAPON, "blob/land1.wav", 1, ATTN_NORM);
+	} else sound(self, CHAN_WEAPON, "blob/land1.wav", 1, ATTN_NORM);
 
 	// Is the tarbaby floating in the air?
 	if (!checkbottom(self)) {
@@ -193,7 +193,7 @@ void(entity inflictor, entity attacker, float damage) tbaby_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 	}
 };
 
@@ -210,7 +210,7 @@ void() tbaby_explode = {
 	self.deadflag = DEAD_FINISHED;
 	// Tarbabies explode when they die
 	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	sound (self, CHAN_BODY, "blob/death1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_BODY, "blob/death1.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8*normalize(self.velocity);
 	Tent_Point(TE_TAREXPLOSION,self.origin); // Hard coded explosion
 	
@@ -253,11 +253,11 @@ void() tbaby_die = {
 
 void() monster_tarbaby_precache = {
 	precache_model ("progs/qmaster/mon_tarbaby.mdl");
-	precache_sound ("blob/sight1.wav");
-	precache_sound ("blob/death1.wav");
-	precache_sound ("blob/hit1.wav");
-	precache_sound ("blob/land1.wav");
-	precache_sound ("rogue/blob/mytosis.wav");
+	precache_sound("blob/sight1.wav");
+	precache_sound("blob/death1.wav");
+	precache_sound("blob/hit1.wav");
+	precache_sound("blob/land1.wav");
+	precache_sound("rogue/blob/mytosis.wav");
 };
 
 //QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush x Lessjump

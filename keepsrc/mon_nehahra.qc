@@ -238,7 +238,7 @@ void() nehahra_damage = {
 	sound(self, CHAN_BODY, "nehahra/boss3/step1.wav", 1, ATTN_NONE);
 	if (random() < 0.2) {
 		if (self.enemy.flags & FL_MONSTER || self.enemy.flags & FL_CLIENT) {
-			if (self.enemy.flags & FL_ONGROUND) self.enemy.flags = self.enemy.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self.enemy,FL_ONGROUND);
 			self.enemy.origin_z = self.enemy.origin_z + 1;
 			self.enemy.velocity_z = ldmg * 0.4;
 		}
@@ -252,7 +252,7 @@ void() nehahra_field_goal = {
 	if (!nehahra_checkhit()) return;
 
 	if (self.enemy.flags & FL_MONSTER || self.enemy.flags & FL_CLIENT) {
-		if (mark.flags & FL_ONGROUND) mark.flags = mark.flags - FL_ONGROUND;
+		SUB_RemoveFlags(mark,FL_ONGROUND);
 		makevectors(self.angles);
 		mark.origin_z = mark.origin_z + 1;
 		mark.velocity = v_forward * 800 + '0 0 450';
@@ -428,7 +428,7 @@ void() nehahra_kick5 = [41, nehahra_kick6] {
 	makevectors(self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 300 + '0 0 450';
-	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
+	SUB_RemoveFlags(self,FL_ONGROUND);
 };
 void() nehahra_kick6 = [42, nehahra_kick7] { ai_face(); nehahra_damage(); nehahra_field_goal(); };
 void() nehahra_kick7 = [43, nehahra_kick8] { nehahra_damage(); nehahra_field_goal(); };
@@ -455,12 +455,10 @@ float(entity targ) visible_bsp = {
 };
 
 void() nehahra_die = [76, n_die2] {
-	self.health = -120;
-	SUB_UseTargets();
+	monster_death_precheck();
 	nehjet();
 	nehjet();
-	te_lavasplash(self.origin);
-	sound(self, CHAN_ITEM, "nehahra/boss3/nehdie2.wav", self.volume, ATTN_NONE);
+	Tent_LavaSplash(self.origin,0,"nehahra/boss3/nehdie2.wav");
 };
 
 void() n_die2 = [81, n_die3] { nehjet(); nehjet(); };
@@ -502,7 +500,7 @@ void() n_die27 = [85, n_die28] {
 		nehjet();
 	} else {
 		ambientsound(self.origin, "nehahra/ambience/sphum.wav", 1, ATTN_STATIC);
-		self.flags = self.flags - FL_ONGROUND;
+		SUB_RemoveFlags(self,FL_ONGROUND);
 		self.velocity_z = 800;
 		sound(self, CHAN_ITEM, "nehahra/boss3/nehdie3.wav", 1, ATTN_NONE);
 		ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
@@ -595,6 +593,7 @@ void() monster_nehahra = {
 	}
 	self.yaw_speed = 30;
 	if (self.health < 1) self.health = 2000;
+	self.gibhealth = MON_NEVERGIB;
 	self.pain_flinch = 200;
 	self.pain_longanim = FALSE;		// Resistant to axe slowing
 	self.pain_timeout = 2;			// HK pain threshold

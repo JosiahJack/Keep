@@ -86,7 +86,7 @@ void() morph_stab2 = {
 	dir = normalize ( dir );
 	makevectors(self.angles);
 	if ( dist <= 90 ) {
-		sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
+		sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	   	attackDamage = (random() * 10) + 20;
 		T_Damage (self.enemy, self, self, attackDamage,DAMARMOR);
 		SpawnBlood (self.enemy, self.enemy.origin, v_forward * 150, 14,0);
@@ -232,7 +232,7 @@ void(entity inflictor, entity attacker, float damage) morph_pain = {
 
 	painChoice = random();
 	self.pain_finished = time + 2;
-	sound (self, CHAN_VOICE, "rogue/guard/pain1.wav", 1, ATTN_NORM );
+	sound(self, CHAN_VOICE, "rogue/guard/pain1.wav", 1, ATTN_NORM );
 	if (painChoice > 0.6) self.think = morph_painB1;
 	else self.think = morph_painA1;
 
@@ -242,7 +242,7 @@ void(entity inflictor, entity attacker, float damage) morph_pain = {
 
 void() morph_die1 = [$mfdth01, morph_die2 ] {};
 void() morph_die2 = [$mfdth02, morph_die3 ] {};
-void() morph_die3 = [$mfdth03, morph_die4 ] {};
+void() morph_die3 = [$mfdth03, morph_die4 ] { self.solid = SOLID_NOT; };
 void() morph_die4 = [$mfdth04, morph_die5 ] {};
 void() morph_die5 = [$mfdth05, morph_die6 ] {};
 void() morph_die6 = [$mfdth06, morph_die7 ] {};
@@ -259,17 +259,17 @@ void() morph_die16 = [$mfdth16, morph_die17 ] {};
 void() morph_die17 = [$mfdth17, morph_die18 ] {};
 void() morph_die18 = [$mfdth18, morph_die19 ] {};
 void() morph_die19 = [$mfdth19, morph_die20 ] {};
-void() morph_die20 = [$mfdth20, morph_die21 ] {};
-void() morph_die21 = [$mfdth21, morph_die21 ] { remove(self); };
+void() morph_die20 = [$mfdth20, morph_die21 ] { monster_death_postcheck(); };
+void() morph_die21 = [$mfdth21, morph_die21 ] { entity_remove(self,0.1); };
 
 void() morph_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	sound(self,CHAN_VOICE,"rogue/guard/death.wav",1,ATTN_NORM);
-	self.solid = SOLID_NOT;
 	self.think = morph_die1;
 	self.nextthink = time + 0.1;
 };
 
-void() morph_wake1 = [$start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM ); };
+void() morph_wake1 = [$start01, morph_wake2 ] { sound( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM ); };
 void() morph_wake2 = [$start02, morph_wake3 ] {};
 void() morph_wake3 = [$start03, morph_wake4 ] {};
 void() morph_wake4 = [$start04, morph_wake5 ] {};
@@ -417,7 +417,7 @@ void() morph_minionspawn = {
 	theChild.enemy = self.enemy;
 	theChild.movetarget = self.movetarget;
 	theChild.goalentity = self.goalentity;
-	setorigin (theChild, theDest.origin);
+	setorigin(theChild, theDest.origin);
 	theChild.think = morph_setup;
 	theChild.nextthink = time + 0.1 + random()*0.2;
 };
@@ -433,10 +433,10 @@ void() monster_morph_precache = {
 	precache_model ("progs/rogue/mon_morph_az.mdl");
 	precache_model ("progs/rogue/mon_morph_eg.mdl");
 	precache_model ("progs/laser.mdl");
-	precache_sound ("enforcer/enfire.wav");
-	precache_sound ("rogue/guard/death.wav");
-	precache_sound ("rogue/guard/pain1.wav");
-	precache_sound ("rogue/guard/see1.wav");
+	precache_sound("enforcer/enfire.wav");
+	precache_sound("rogue/guard/death.wav");
+	precache_sound("rogue/guard/pain1.wav");
+	precache_sound("rogue/guard/see1.wav");
 };
 
 // monster_morph (1 0 0) (-16 -16 -24) (16 16 32) Ambush Aztec Egyptian Greek  The morphing monster.

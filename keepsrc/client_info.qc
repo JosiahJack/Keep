@@ -239,7 +239,7 @@ void() info_teleportinstant_dest = {
 	self.solid = SOLID_NOT; // Stuff from InitTrigger
 	self.movetype = MOVETYPE_NONE;
 	self.mdl = self.model;		// Save model for later
-	setmodel (self, self.mdl);	// set size and link into world
+	setmodel(self, self.mdl);	// set size and link into world
 	self.bbmins = self.mins;	// Save bmodel bounds for later
 	self.bbmaxs = self.maxs;
 	self.bsporigin = TRUE;

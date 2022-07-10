@@ -234,8 +234,7 @@ float CT_MONDKNIGHT = 220;		// HD Hell Knight (Death)
 float CT_MONDPRINCE = 221;		// HD Hell Knight (Prince)
 float CT_MONWARLORD = 222;		// Quake 1.5 Warlord
 float CT_MONQUEEN = 223;        // Redfield's friendly Queen
-
-
+float CT_MONRANGER = 224;       // Ranger, player-lookalike monster.
 float CT_MONDSERG = 225;		// HD Hell Knight (Sergeant)
 float CT_MONCOMM = 230;			// HD Hell Knight (Commander)
 

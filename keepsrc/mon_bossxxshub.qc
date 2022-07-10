@@ -57,7 +57,7 @@ void() xxshub_attack1 = {
 	
 	SUB_AttackFinished (2 + 2*random());
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/shub/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/shub/attack1.wav", 1, ATTN_NORM);
 
 	// Skill level adjustment
 	self.attack_speed = self.pos1_x + (skill*self.pos1_y);
@@ -94,7 +94,7 @@ void() xxshub_shakeframe = {
 	if (random() < 0.5) xxshub_shakeattack();
 	
 	if (self.walkframe == 0) {
-		sound (self, CHAN_WEAPON, "ad171/shub/attack2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/shub/attack2.wav", 1, ATTN_NORM);
 		self.effects = self.effects | EF_MUZZLEFLASH;
 	}
 	
@@ -145,8 +145,8 @@ void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 		if (damage > 30) SpawnProjectileSmoke(inflictor.origin, 200, 50, 250);
 		// random pick sound
 		if (random() < 0.5)
-			sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 	}
 };
 
@@ -195,7 +195,7 @@ void() xxshub_die = {
 	self.solid = SOLID_NOT;			// no longer need to block
 	self.max_health = MON_GIBEXPLOSION;
 
-	sound (self, CHAN_VOICE, "ad171/shub/death1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ad171/shub/death1.wav", 1, ATTN_NORM);
 	self.walkframe = self.count = 0;
 	xxshub_deathframe();
 };
@@ -211,7 +211,7 @@ void() xxshub_wakeup = {
 	Resist_ChangeType(self, FALSE);	// Default resistance
 
 	// Wakeup sound
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	
 	// Restore pain thresholds and timers
 	self.pain_flinch = 400;			// Shambler level
@@ -281,20 +281,20 @@ void() monster_shub_precache = {
 	precache_model ("progs/oldone.mdl");
 	precache_model (MODEL_PROJ_SHUB1);		// Large Homing Missile
 	precache_model (MODEL_PROJ_SHUB2);		// Large blob of blood
-	precache_sound ("ad171/shub/idle1.wav");
-	precache_sound ("ad171/shub/idle2.wav");
-	precache_sound ("ad171/shub/attack1.wav"); // Att1 : Homing missile
-	precache_sound ("ad171/shub/attack2.wav"); // Att2 : Grenade spam
-	precache_sound ("ad171/wraith/bounce.wav");
-	precache_sound ("ad171/shub/pain1.wav");
-	precache_sound ("ad171/shub/pain2.wav");
-	precache_sound ("ad171/shub/death1.wav");
-	precache_sound ("ad171/seeker/explode_major.wav");
-	precache_sound ("ad171/shub/sight1.wav");
-	precache_sound ("boss2/idle.wav"); // idle/sight not used
-	precache_sound ("boss2/sight.wav");
-	precache_sound ("boss2/death.wav"); // finale_3/finale_4 stages
-	precache_sound ("boss2/pop2.wav");
+	precache_sound("ad171/shub/idle1.wav");
+	precache_sound("ad171/shub/idle2.wav");
+	precache_sound("ad171/shub/attack1.wav"); // Att1 : Homing missile
+	precache_sound("ad171/shub/attack2.wav"); // Att2 : Grenade spam
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound("ad171/shub/pain1.wav");
+	precache_sound("ad171/shub/pain2.wav");
+	precache_sound("ad171/shub/death1.wav");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("ad171/shub/sight1.wav");
+	precache_sound("boss2/idle.wav"); // idle/sight not used
+	precache_sound("boss2/sight.wav");
+	precache_sound("boss2/death.wav"); // finale_3/finale_4 stages
+	precache_sound("boss2/pop2.wav");
 };
 
 // QUAKED monster_shub (1 0 0) (-128 -128 -24) (128 128 512)

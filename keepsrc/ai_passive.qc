@@ -231,17 +231,17 @@ void() UpdateCharmerGoal = {
    if ( (self.huntingcharmer == TRUE) ) {
       targ = spawn();
       self.trigger_field = targ;
-      setorigin (targ,self.charmer.origin);
+      setorigin(targ,self.charmer.origin);
       self.huntingcharmer = FL_SWIM;
       self.goalentity = targ;
    }
    if ( (self.huntingcharmer == FL_SWIM) ) {
       targ = self.trigger_field;
       traceline (self.origin,self.charmer.origin,TRUE,self);
-      if ( (trace_fraction == TRUE) ) setorigin (targ,self.charmer.origin);
+      if ( (trace_fraction == TRUE) ) setorigin(targ,self.charmer.origin);
    } else {
       targ = self.trigger_field;
-      setorigin (targ,(self.charmer.origin + (d * 300)));
+      setorigin(targ,(self.charmer.origin + (d * 300)));
    }
 };
 

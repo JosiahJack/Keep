@@ -944,17 +944,17 @@ void() PutClientInServer = {
 	else self.angles = spot.angles;
 	self.v_angle = self.angles;
 	self.fixangle = TRUE;				// Turn this way immediately
-	setmodel (self, MODEL_PLAYER_EYES); // Oh, this is a hack!
+	setmodel(self, MODEL_PLAYER_EYES); // Oh, this is a hack!
 	modelindex_eyes = self.modelindex;
-   	setmodel (self,"progs/hipnotic/playham.mdl");
+   	setmodel(self,"progs/hipnotic/playham.mdl");
   	modelindex_hammer = self.modelindex;
-	setmodel (self, "progs/drake/playham0.mdl");
+	setmodel(self, "progs/drake/playham0.mdl");
 	modelindex_hamout = self.modelindex;
-   	setmodel (self,"progs/drake/playsaw.mdl");
+   	setmodel(self,"progs/drake/playsaw.mdl");
   	modelindex_saw = self.modelindex;
-	setmodel (self, "");
+	setmodel(self, "");
 	modelindex_null = self.modelindex; // For vehicles to fully hide player more so than just eyes.
-	setmodel (self, MODEL_PLAYER);
+	setmodel(self, MODEL_PLAYER);
 	modelindex_player = self.modelindex;
 	if (!modelindex_eyes) modelindex_eyes = modelindex_player;
 	if (!modelindex_hammer) modelindex_hammer = modelindex_player;
@@ -1031,10 +1031,10 @@ void(entity targ) Client_LadderSounds = {
 	if (targ.entladder.sounds == 4) return;
 	
 	rndsound = random();
-	if (rndsound < 0.25 && targ.entladder.noise1)  sound (targ, CHAN_BODY, targ.entladder.noise1, 1, ATTN_NORM);
-	else if (rndsound < 0.5 && targ.entladder.noise2) sound (targ, CHAN_BODY, targ.entladder.noise2, 1, ATTN_NORM);
-	else if (rndsound < 0.75 && targ.entladder.noise3) sound (targ, CHAN_BODY, targ.entladder.noise3, 1, ATTN_NORM);
-	else if (targ.entladder.noise4) sound (targ, CHAN_BODY, targ.entladder.noise4, 1, ATTN_NORM);
+	if (rndsound < 0.25 && targ.entladder.noise1)  sound(targ, CHAN_BODY, targ.entladder.noise1, 1, ATTN_NORM);
+	else if (rndsound < 0.5 && targ.entladder.noise2) sound(targ, CHAN_BODY, targ.entladder.noise2, 1, ATTN_NORM);
+	else if (rndsound < 0.75 && targ.entladder.noise3) sound(targ, CHAN_BODY, targ.entladder.noise3, 1, ATTN_NORM);
+	else if (targ.entladder.noise4) sound(targ, CHAN_BODY, targ.entladder.noise4, 1, ATTN_NORM);
 };
 
 void() CheckFuncWaterDeath;
@@ -1174,8 +1174,8 @@ void() PlayerPreThink = {
 
 				if (self.swim_flag < time) {
 					self.swim_flag = time + 1;
-					if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM); // Play swimming sound
-					else sound (self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
+					if (random() < 0.5) sound(self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM); // Play swimming sound
+					else sound(self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
 				}
 				if (self.waterlevel < 2) self.velocity_z = self.velocity_z * 1.429; // This negates the engine's underwater speed penalty. 10/7 or 1.428571...
 			} else { self.velocity_z = 0; }
@@ -1219,7 +1219,7 @@ void() PlayerPreThink = {
 	} else if (self.onladder == LADDER_VEL) {
 		if (self.button2) { // Is jump key being pressed?
 			self.blockladder = time + 0.1;
-			self.flags = self.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self,FL_ONGROUND);
 			PlayerJump();
 		} else self.flags = self.flags | FL_JUMPRELEASED;
 		
@@ -1450,12 +1450,12 @@ void() PlayerPostThink = {
 	
 	if ((self.jump_flag < map_fallspeedlow) && (self.flags & FL_ONGROUND) && (self.health > 0)) {
 		if (self.watertype == CONTENT_WATER) { // Landed deep (waist high) in water
-			if (!(self.perms & POW_ARMORNINJA)) sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM); // Player hits water surface
+			if (!(self.perms & POW_ARMORNINJA)) sound(self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM); // Player hits water surface
 
 			// Check if damage can be applied after hitting water surface.  Cannot check jump flag velocity because player hit water
 			if (map_falldmgwater > 0 && !((self.perms & POW_ARMORNINJA) || self.water_blessed)) {
 				T_Damage (self, world, world, map_falldmgwater, DAMARMOR);
-				sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM); // Play on different channel so it does not conflict, land.wav  = light huh sound (floor impact and no damage)
+				sound(self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM); // Play on different channel so it does not conflict, land.wav  = light huh sound(floor impact and no damage)
 				self.deathtype = "falling";
 			}
 		}
@@ -1463,19 +1463,19 @@ void() PlayerPostThink = {
 			if (!((self.perms & POW_ARMORNINJA) || self.water_blessed)) { // Prevent fall damage with Ninja Armor or Water Shrine desecration
 				if (map_falldmg > 0) {
 					T_Damage (self, world, world, map_falldmg, DAMARMOR);
-					sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM); // land2.wav = heavy huh sound and nasty bone crunching sound
+					sound(self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM); // land2.wav = heavy huh sound and nasty bone crunching sound
 					self.deathtype = "falling";
 				}
-				else sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM); // land.wav  = light huh sound (floor impact and no damage)
+				else sound(self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM); // land.wav  = light huh sound(floor impact and no damage)
 			}
 		} else {
-			if (!(self.perms & POW_ARMORNINJA)) sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM); // land.wav  = light huh sound (floor impact and no damage)
+			if (!(self.perms & POW_ARMORNINJA)) sound(self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM); // land.wav  = light huh sound(floor impact and no damage)
 		}
 		self.jump_flag = 0;
 	}
 
 	if (self.touchedliquid < time && self.touchedsound != "") { // Check for any fake water exit sounds
-		sound (self, CHAN_BODY, self.touchedsound, 1, ATTN_NORM);
+		sound(self, CHAN_BODY, self.touchedsound, 1, ATTN_NORM);
 		self.touchedsound = "";
 	}
 	if (!(self.flags & FL_ONGROUND)) self.jump_flag = self.velocity_z; // If flying through the air, store player Z velocity in jump flag
@@ -1497,8 +1497,8 @@ void() PlayerJump = {
 		self.velocity_z = GetWaterRiseVelocity(self.watertype);
 		if (self.swim_flag < time) { // play swiming sound
 			self.swim_flag = time + 1;
-			if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
+			if (random() < 0.5) sound(self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
+			else sound(self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
 		}
 		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 		return;
@@ -1506,7 +1506,7 @@ void() PlayerJump = {
 
     if (self.wing_finished) { // Levitation
         if (self.wing_sound <= time) {
-            sound (self, CHAN_AUTO, "nehahra/player/flight.wav", 1, ATTN_NORM);
+            sound(self, CHAN_AUTO, "nehahra/player/flight.wav", 1, ATTN_NORM);
             self.wing_sound = time + 1;
         }
 		// Gravity reversal was the simplest method to implement.  Using fancy math to get reverse standard gravity can cause problems if the player gets hit with other effects that change gravity field.
@@ -1525,8 +1525,8 @@ void() PlayerJump = {
 			self.flags = self.flags - (self.flags & FL_ONGROUND); // Reset onground and jump boots ground flags, not needed anymore.
 			self.jumpboots_onground = FALSE; // Jumps boots don't really work until in the air.
 			self.jumpboots_airlvl = self.jumpboots_airmax; // Reset maximum amount of air jumps (for level 1-4 item)
-			if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); // Combination sound of original jump + jump boots
-			else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3A, 1, ATTN_NORM);
+			if (self.shroom_finished > time) sound(self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); // Combination sound of original jump + jump boots
+			else sound(self, CHAN_BODY, SOUND_ARTJUMPBOOTS3A, 1, ATTN_NORM);
 			self.velocity_z = self.velocity_z + map_jumpheight; // Start with original jump height
 			if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 		} else {	
@@ -1539,15 +1539,15 @@ void() PlayerJump = {
 				if (self.jumpboots_onground) self.jumpboots_airlvl = self.jumpboots_airmax; // If the player is falling, allow for air jumps and reset level
 				self.jumpboots_onground = FALSE;
 				self.jumpboots_airlvl = self.jumpboots_airlvl - 1; // Count down on maximum jump level
-				if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); // Whoosh, more power
-				else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3B, 1, ATTN_NORM);
+				if (self.shroom_finished > time) sound(self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); // Whoosh, more power
+				else sound(self, CHAN_BODY, SOUND_ARTJUMPBOOTS3B, 1, ATTN_NORM);
 				self.velocity_z = self.jumpboots_height; // Add jump boot height, different from basic jump
 				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 			} else {
 				// No more power!	
 				if (self.jumpboots_sound < time) { // played sound already?
 					self.jumpboots_sound = time + 0.2; // Don't play the sound constantly
-					sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3C, 1, ATTN_NORM); // clickty click
+					sound(self, CHAN_BODY, SOUND_ARTJUMPBOOTS3C, 1, ATTN_NORM); // clickty click
 				}
 			}
 		}
@@ -1567,10 +1567,10 @@ void() PlayerJump = {
 	} else if (self.onladder == LADDER_VEL) { // Velocity ladder jump logic
 		// Can't block onground or jumprelease flag conditions. 
 		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
-		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
+		SUB_RemoveFlags(self,FL_ONGROUND); // Don't stairwalk
 		self.button2 = 0;
-		if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); 
-		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
+		if (self.shroom_finished > time) sound(self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); 
+		else sound(self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
 		makevectors(self.v_angle); // Jump direction should be v_angle and not just up!
 		self.velocity = v_forward * (map_jumpheight*1);
 	} else {
@@ -1579,10 +1579,10 @@ void() PlayerJump = {
 		if (!(self.flags & FL_JUMPRELEASED)) return;	// don't pogo stick
 
 		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
-		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
+		SUB_RemoveFlags(self,FL_ONGROUND); // don't stairwalk
 		self.button2 = 0;
-		if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
+		if (self.shroom_finished > time) sound(self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
 		self.velocity_z = self.velocity_z + map_jumpheight;
 		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 	}
@@ -1596,9 +1596,9 @@ void() WaterMove = {
 
 	if (self.waterlevel != 3) {
 		if (self.air_finished < time) {
-			if (!self.air_blessed) sound (self, CHAN_VOICE, "player/gasp2.wav", 1, ATTN_NORM);
+			if (!self.air_blessed) sound(self, CHAN_VOICE, "player/gasp2.wav", 1, ATTN_NORM);
 		} else if (self.air_finished < time + 9) {
-			if (!self.air_blessed) sound (self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM);
+			if (!self.air_blessed) sound(self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM);
 		}
 		self.air_finished = time + WATER_AIR;
 		self.dmg = map_hazarddmg_x;
@@ -1613,8 +1613,8 @@ void() WaterMove = {
 	
 	if (!self.waterlevel) {
 		if (self.flags & FL_INWATER) {	
-			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM); // play leave water sound
-			self.flags = self.flags - FL_INWATER;
+			sound(self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM); // play leave water sound
+			SUB_RemoveFlags(self,FL_INWATER);
 		}
 		return;
 	}
@@ -1641,13 +1641,13 @@ void() WaterMove = {
 	if ( !(self.flags & FL_INWATER) ) {	 // player enter water sound
 		if (self.infuncwater) self.funcwaterdmg_finished = time + 1;
 		if (self.watertype == CONTENT_LAVA) {
-			sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
+			sound(self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
 			if (self.infuncwater) self.funcwaterdmg_finished = time + 0.2;
 		}
 		if (self.watertype == CONTENT_WATER)
-			sound (self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
+			sound(self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
 		if (self.watertype == CONTENT_SLIME)
-			sound (self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
 
 		self.flags = self.flags + FL_INWATER;
 		self.dmgtime = 0;
@@ -1728,7 +1728,7 @@ void() ClientDisconnect = {
 	bprint (" left the game with ");
 	bprint (ftos(self.frags));
 	bprint (" frags\n");
-	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
+	sound(self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 	sphere_remove(self);
 	// if (tag_token_owner == self) tag_token_drop(); // TODO: Add rogue's teamplay.qc stuff
 	// TeamDropFlagOfPlayer(self); // TODO: Add rogue's teamplay.qc stuff

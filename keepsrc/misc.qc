@@ -79,11 +79,11 @@ void() misc_lavaball_touch = { // [FUNCTION]
 	if (other.takedamage) { // Check for lava proections?
 		if (self.spawnflags & MISC_FBALLSLIME) {
 			if (other.resist_acid > 0) touchdmg = self.dmg * (1-other.resist_acid);
-			if (other.flags & FL_CLIENT && other.items & IT_SUIT) sound (other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM); // Play envirosuit protection sound
+			if (other.flags & FL_CLIENT && other.items & IT_SUIT) sound(other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM); // Play envirosuit protection sound
 			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		} else {
 			if (other.resist_fire > 0) touchdmg = self.dmg * (1-other.resist_fire); // Default = pain!
-			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM); // Play lava shield protection sound
+			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) sound(other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM); // Play lava shield protection sound
 			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		}
 	}
@@ -93,8 +93,8 @@ void() misc_lavaball_touch = { // [FUNCTION]
 void() misc_lavaball_fly = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 	
-	setmodel (self, self.mdl);
-	setorigin (self, self.oldorigin);
+	setmodel(self, self.mdl);
+	setorigin(self, self.oldorigin);
 	self.flags = 0; // Remove all fly/onground flags
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_TOSS;
@@ -197,8 +197,8 @@ void() misc_gibfountain_fly = { // [FUNCTION]
 		self.lefty = self.lefty -1;
 	}
 
-	if (self.noise1 != "" && random() < 0.5) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Only need to play throw/fire sound once per timer cycle
-	else sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.noise1 != "" && random() < 0.5) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Only need to play throw/fire sound once per timer cycle
+	else sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
 	self.nextthink = time + self.delay + (random() * self.wait);
 	self.think = misc_gibfountain_fly;
@@ -232,7 +232,7 @@ void() misc_gibfountain_on = { // [FUNCTION]
 // gib1frame  : Custom Gib 1 range to randomly pick from
 // gib2frame  : Custom Gib 2 range to randomly pick from
 // gib3frame  : Custom Gib 3 range to randomly pick from
-// gib1sound  : Custom Gib 1 Impact sound (0=Light flesh, 1=Heavy flesh, 5=Acid,
+// gib1sound  : Custom Gib 1 Impact sound(0=Light flesh, 1=Heavy flesh, 5=Acid,
 // gib2sound  : Custom Gib 2 Impact sound 10-12=Pebbles, 20=Wood, 40=Metal1, 
 // gib3sound  : Custom Gib 3 Impact sound 41=Metal2, 42=Chain, 50=Custom)
 // gib1soundx : Custom Gib 1 Impact WAV file (must set gib1sound=50)
@@ -301,11 +301,11 @@ void() misc_gibfountain = { // [ENTITY]
 		self.noise1 = "zerstorer/gibfnt/gf_sprt2.wav";
 	} else if (self.sounds == 4) self.noise = self.noise1 = SOUND_EMPTY;  // Empty sound files
 	
-	if (self.noise != "") precache_sound (self.noise); // Check if any custom sounds have been defined
-	if (self.noise1 != "") precache_sound (self.noise1);
-	if (self.gib1soundx != "") precache_sound (self.gib1soundx);
-	if (self.gib2soundx != "") precache_sound (self.gib2soundx);
-	if (self.gib3soundx != "") precache_sound (self.gib3soundx);
+	if (self.noise != "") precache_sound(self.noise); // Check if any custom sounds have been defined
+	if (self.noise1 != "") precache_sound(self.noise1);
+	if (self.gib1soundx != "") precache_sound(self.gib1soundx);
+	if (self.gib2soundx != "") precache_sound(self.gib2soundx);
+	if (self.gib3soundx != "") precache_sound(self.gib3soundx);
 	self.classtype = CT_MISCGIBF; // Entity defaults
 	self.classgroup = CG_MISCENT;
 	self.max_health = MON_GIBTARGET; // Special target system gibs
@@ -346,8 +346,8 @@ void() misc_bubble_split = { // [FUNCTION]
 	bubble.classname = self.classname;
 	bubble.classtype = CT_BUBBLE;
 	bubble.classgroup = CG_TEMPENT;
-	setmodel (bubble, self.mdl);
-	setorigin (bubble, self.origin);
+	setmodel(bubble, self.mdl);
+	setorigin(bubble, self.origin);
 	bubble.movetype = MOVETYPE_NOCLIP;
 	bubble.solid = SOLID_NOT;
 	bubble.velocity = self.velocity;
@@ -394,8 +394,8 @@ void() misc_bubble_spawn = { // [FUNCTION]
 	bubble.classtype = CT_BUBBLE;
 	bubble.classgroup = CG_TEMPENT;
 	bubble.owner = self;
-	setmodel (bubble, self.mdl);
-	setorigin (bubble, self.origin);
+	setmodel(bubble, self.mdl);
+	setorigin(bubble, self.origin);
 	bubble.movetype = MOVETYPE_NOCLIP;
 	bubble.solid = SOLID_NOT;
 	bubble.velocity = '0 0 15';
@@ -441,7 +441,7 @@ void() air_bubbles = { // [ENTITY]
 void() misc_drip_reset = { // [FUNCTION]
 	self.touch = SUB_Null;
 	self.frame = self.flags = 0;
-	setmodel (self, "");
+	setmodel(self, "");
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
@@ -476,9 +476,9 @@ void() misc_drip_touch_common = { // [FUNCTION]
 	setorigin(self,self.origin + '0 0 8'); // Was 12
 	if (!(self.spawnflags & MISC_DRIPSILENT)) { // play a random drip sound
 		self.lip = random() * 3;
-		if (self.lip < 1 && self.noise1 != "") sound (self, CHAN_AUTO, self.noise1, 1, ATTN_STATIC);
-		else if (self.lip < 2 && self.noise2 != "") sound (self, CHAN_AUTO, self.noise2, 1, ATTN_STATIC);
-		else if (self.noise3 != "") sound (self, CHAN_AUTO, self.noise3, 1, ATTN_STATIC);
+		if (self.lip < 1 && self.noise1 != "") sound(self, CHAN_AUTO, self.noise1, 1, ATTN_STATIC);
+		else if (self.lip < 2 && self.noise2 != "") sound(self, CHAN_AUTO, self.noise2, 1, ATTN_STATIC);
+		else if (self.noise3 != "") sound(self, CHAN_AUTO, self.noise3, 1, ATTN_STATIC);
 	}
 
 	if (other != self.owner && self.owner.dmg && other.takedamage) { // Damage if our owner has dmg set
@@ -509,8 +509,8 @@ void() misc_drip_water = { // [FUNCTION]
 void() misc_drip_spawn = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return; // Is the entity OFF or BLOCKED?
 
-	setorigin (self, self.oldorigin); // Move drip to start position and setup sprite	
-	setmodel (self, self.mdl);
+	setorigin(self, self.oldorigin); // Move drip to start position and setup sprite	
+	setmodel(self, self.mdl);
 	self.solid = SOLID_TRIGGER;
 	if (self.cnt) self.movetype = MOVETYPE_NOCLIP;
 	else self.movetype = MOVETYPE_FLY;
@@ -540,7 +540,7 @@ void() misc_drip_on = { // [FUNCTION]
 // -------- SPAWNFLAGS --------
 // BLOOD    : Blood red drips
 // SLIME    : Slime green drips
-// SILENT   : Don't make any drip sound (good for multiple drips)
+// SILENT   : Don't make any drip sound(good for multiple drips)
 // STARTOFF : Always Starts off and waits for trigger
 // -------- NOTES --------
 // Falling water drip with splash and sound. (Based on code from RRP by ijed)
@@ -794,7 +794,7 @@ void() misc_smoke_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	if (self.part_emitter) misc_particle_on(self.part_emitter); // Switch on particle emitter if was setup
 	if (self.mdl != "") { // Restore model/size/skin
-		setmodel (self, self.mdl);
+		setmodel(self, self.mdl);
 		setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 		self.skin = self.exactskin;
 		self.count = rint(random()*59);
@@ -905,14 +905,14 @@ void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
 	spark.solid = SOLID_TRIGGER;
 	if (self.gravity == 1) spark.gravity = 0.3;
 	if (rubicon) {
-		setmodel (spark, "progs/rrp/spark.mdl"); // Precached by world. Just in case.
+		setmodel(spark, "progs/rrp/spark.mdl"); // Precached by world. Just in case.
 		spark.velocity_x = -40 + random() * 80; // Use purely random direction for Rubicon.
 		spark.velocity_y = -40 + random() * 80;
 		spark.velocity_z = -40 + random() * 80;
 		spark.avelocity = '3000 3000 3000';
 	} else {
 		// AD uses different velocity and direction; supports movedir for pointing.
-		setmodel (spark, "progs/ad171/misc_spark.mdl"); // Precached by world. Used by lightning tome effects.
+		setmodel(spark, "progs/ad171/misc_spark.mdl"); // Precached by world. Used by lightning tome effects.
 		spark.velocity = vecrand(0,self.height,TRUE); // height defaults to 20
 		spark.velocity = spark.velocity + (dir * self.speed); // speed defaults to 40
 		spark.avelocity = '300 300 300';
@@ -920,7 +920,7 @@ void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
 
 	if (self.gravity != 1) spark.velocity_z = spark.velocity_z * self.gravity;
 
-	setorigin (spark, pos); // Weapons specify certain locations so pass value rather than use self.origin.
+	setorigin(spark, pos); // Weapons specify certain locations so pass value rather than use self.origin.
 	setsize (spark, VEC_ORIGIN, VEC_ORIGIN);
 	spark.classname = "spark";
 	spark.nextthink = time + 0.5 + 1.5*random();
@@ -957,7 +957,7 @@ void() misc_spark_spawn = { // [FUNCTION]
 		loopvar = loopvar - 1;
 	}
 	
-	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, 1, ATTN_STATIC); // Play any spark sound and switch ON any target lights
+	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_STATIC); // Play any spark sound and switch ON any target lights
 	if (self.target) { // Is there any target(s) to switch on, such as a light source to light up with spark emission.
 		SUB_UseTargets();
 		self.nextthink = time + 0.1 + random() * 0.2; // Setup timer to switch off
@@ -1004,7 +1004,7 @@ void() misc_spark = { // [ENTITY]
 	self.mdl = "progs/ad171/misc_spark.mdl";
 	precache_model (self.mdl);
 	if (self.sounds == 1) self.noise = "ad171/misc/spark.wav";
-	if (self.noise != "") precache_sound (self.noise);
+	if (self.noise != "") precache_sound(self.noise);
 	self.classtype = CT_MISCSPARK;
 	self.classgroup = CG_MISCENT;
 	self.solid = SOLID_NOT;				// No world interaction
@@ -1029,7 +1029,7 @@ void() misc_shake_think = { // [FUNCTION]
 	local float	d;
 
 	if (self.attack_finished < time || self.estate & ESTATE_BLOCK) { // Is the shaking over?
-		if (self.noise2) sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+		if (self.noise2) sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 		if (self.estate == ESTATE_ON) self.estate = ESTATE_OFF; // Check state before changing it, entity may be disabled
 		return;
 	}
@@ -1058,7 +1058,7 @@ void() misc_shake_think = { // [FUNCTION]
 
 void() misc_shake_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
-	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Play earthquake LOOP sound
+	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Play earthquake LOOP sound
 	self.attack_finished = time + self.wait;
 	self.nextthink = time + 0.1; // keep checking for players to shake!
 	self.think = misc_shake_think;
@@ -1089,8 +1089,8 @@ void() misc_shake = { // [ENTITY]
 		if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
 		if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
 	}
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	self.classtype = CT_MISCSHAKE;
 	self.classgroup = CG_MISCENT;
 	if (!self.dmg) self.dmg = 120;
@@ -1141,10 +1141,10 @@ void() misc_builtineffects_fire = { // [FUNCTION]
 	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
 		self.count == TE_LIGHTNING3) {
 		if (self.waitmin < time) { // Stop the sound constantly playing
-			sound (self.movetarget, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM); // Play lightning sound (LG weapon hit)
+			sound(self.movetarget, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM); // Play lightning sound(LG weapon hit)
 			self.waitmin = time + 0.6;
 		}
-	} else if (self.count == TE_LAVASPLASH) sound (self.movetarget, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
+	} else if (self.count == TE_LAVASPLASH) sound(self.movetarget, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
 	else if (self.count == TE_EXPLOSION || self.count == TE_TAREXPLOSION) sound(self.movetarget, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM); // Play original explosion sound
 
 	if (self.wait > 0) { // Continuous mode?
@@ -1198,7 +1198,7 @@ void() misc_builtineffects_setup = { // [FUNCTION]
 // Spawns a builtin particle effect, will toggle if active
 // Always starts off, requires triggers to activate
 void() misc_builtineffects = { // [ENTITY]
-	if (self.count == TE_LAVASPLASH) precache_sound ("boss1/out1.wav"); // Precache sounds for effects
+	if (self.count == TE_LAVASPLASH) precache_sound("boss1/out1.wav"); // Precache sounds for effects
 	self.classtype = CT_PARTICLEEMIT;
 	if (self.wait < 0) self.wait = 0;
 	if (self.delay < 0) self.delay = 0;

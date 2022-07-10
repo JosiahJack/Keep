@@ -10,52 +10,36 @@ DRAGON (Rogue)
 
 $base dragrest
 $skin dragskin
-
 $frame dragon6
-
 $frame drgfly01 drgfly02 drgfly03 drgfly04 
 $frame drgfly05 drgfly06 drgfly07 drgfly08
 $frame drgfly09 drgfly10 drgfly11 drgfly12 drgfly13
-
 $frame drgtrn01 drgtrn02 drgtrn03 drgtrn04 drgtrn05 drgtrn06
-
 $frame drgslh01 drgslh02 drgslh03 drgslh04 drgslh05 drgslh06
 $frame drgslh07 drgslh08 drgslh09 drgslh10 drgslh11 drgslh12 drgslh13
-
 $frame drgfir01 drgfir02 drgfir03 drgfir04 drgfir05
 $frame drgfir06 drgfir07 drgfir08 drgfir09 drgfir10
-
 $frame drgfix1a drgfix1b drgfix1c
 $frame drgfix2a drgfix2b drgfix2c
 $frame drgfix3a drgfix3b drgfix3c
 $frame drgfix4a drgfix4b drgfix4c
 $frame drgfix5a drgfix5b drgfix5c
 $frame drgfix6a drgfix6b drgfix6c drgfix6d
-
 $frame drgpan1a drgpan1b drgpan1c
 $frame drgpan2a drgpan2b drgpan2c
 $frame drgpan3a drgpan3b drgpan3c
 $frame drgpan4a drgpan4b drgpan4c
 $frame drgpan5a drgpan5b drgpan5c
 $frame drgpan6a drgpan6b drgpan6c
-
 $frame drgdth01 drgdth02 drgdth03 drgdth04 drgdth05 drgdth06
 $frame drgdth07 drgdth08 drgdth09 drgdth10 drgdth11 drgdth12
 $frame drgdth13 drgdth14 drgdth15 drgdth16 drgdth17 drgdth18
 $frame drgdth19 drgdth20 drgdth21
 
-//////////////////////////////////////
-// Prototypes found in my 'ryu.qc'
 float(float yaw, float dist) Wyrm_WalkMove;
 void() ryu_sfx_fly;
-//////////////////////////////////////
 void() hlorddragon_fireball;
 void() hlorddragon_melee1;
-
-//////////////////////////////////////
-// FIXME:  Use standard vars.
-.float  hlorddragonPainSequence;
-.vector hlorddragonLastVelocity;
 
 void() hlorddragon_check_attack = {
     local   vector  vec;
@@ -151,7 +135,7 @@ void(float dist) hlorddragon_move = {
                 // Aim high above the target's head.
                 temp_goal.origin = targ.origin;
                 temp_goal.origin_z = temp_goal.origin_z + targ.maxs_z;
-                setorigin (temp_goal, temp_goal.origin);
+                setorigin(temp_goal, temp_goal.origin);
 
                 self.enemy = temp_goal;
                 if (!oldEnemy) {   // Following a master, not an enemy.
@@ -162,7 +146,7 @@ void(float dist) hlorddragon_move = {
                     }
                 }
                 moveDir = self.origin;
-                QC_MoveToGoal (dist);
+                QC_MoveToGoal(dist,FALSE);
                 if (moveDir == self.origin) {
                     moveDir = self.origin;
                     Wyrm_WalkMove (self.angles_y, dist);
@@ -230,13 +214,13 @@ void(float dist) hlorddragon_move = {
 
 	// PM:  Don't use setorigin because of clipping problems.
     if (moveDir_z > 5)
-        ai_up (5);     //setorigin (self, self.origin + '0 0 5');
+        ai_up (5);     //setorigin(self, self.origin + '0 0 5');
     else if (moveDir_z < -5) 
-        ai_up (-5);    //setorigin (self, self.origin - '0 0 5');
+        ai_up (-5);    //setorigin(self, self.origin - '0 0 5');
 
     moveAngles = self.origin;
     Wyrm_WalkMove (self.angles_y, dist);
-    if (moveAngles == self.origin) QC_MoveToGoal (dist);
+    if (moveAngles == self.origin) QC_MoveToGoal(dist,FALSE);
     self.enemy = oldEnemy;
 };
 
@@ -276,44 +260,44 @@ void() hlorddragon_atk_f4= [$drgfix6c, hlorddragon_walk3  ] { hlorddragon_move(1
 
 void() hlorddragon_walk1 = [$drgfly01, hlorddragon_walk2 ] {
     if (self.dragonAttacking) dragon_stop_attack();          
-    self.th_missile=dragon_atk_a1;
-    self.hlorddragonPainSequence=1;
+    self.th_missile = dragon_atk_a1;
+    self.pain_longanim = 1;
     hlorddragon_move(17);
-    if (random() < 0.2) sound (self, CHAN_VOICE, "rogue/dragon/active.wav", 0.6, ATTN_IDLE);
+    if (random() < 0.2) sound(self, CHAN_VOICE, "rogue/dragon/active.wav", 0.6, ATTN_IDLE);
 };
 void() hlorddragon_walk2 = [$drgfly02, hlorddragon_walk3 ] { self.th_missile=SUB_Null; dragon_move(17); };
 void() hlorddragon_walk3 = [$drgfly03, hlorddragon_walk4 ] { 
     self.th_missile=hlorddragon_atk_b1; hlorddragon_move(17);
-    self.hlorddragonPainSequence=2;
+    self.pain_longanim=2;
 };
 void() hlorddragon_walk4 = [$drgfly04, hlorddragon_walk5 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
 void() hlorddragon_walk5 = [$drgfly05, hlorddragon_walk6 ] { 
     self.th_missile=dragon_atk_c1; hlorddragon_move(17);
-    self.hlorddragonPainSequence=3;
+    self.pain_longanim=3;
 };
 void() hlorddragon_walk6 = [$drgfly06, hlorddragon_walk7 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
 void() hlorddragon_walk7 = [$drgfly07, hlorddragon_walk8 ] {
     self.th_missile=dragon_atk_d1; hlorddragon_move(17);
-    self.hlorddragonPainSequence=4;
+    self.pain_longanim=4;
 };
 void() hlorddragon_walk8 = [$drgfly08, hlorddragon_walk9 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
 void() hlorddragon_walk9 = [$drgfly09, hlorddragon_walk10 ] {
     if (self.waterlevel <= 1) // Not while in water.
-        sound (self, CHAN_BODY, "drake/dragon/fly1.wav", 1, ATTN_NORM);
+        sound(self, CHAN_BODY, "drake/dragon/fly1.wav", 1, ATTN_NORM);
     else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME))
-        sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
+        sound(self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     self.th_missile=dragon_atk_e1; dragon_move(17);
-    self.dragonPainSequence=5;
+    self.pain_longanim=5;
 };
 void() hlorddragon_walk10 = [$drgfly10, hlorddragon_walk11 ] { self.th_missile=SUB_Null; hlorddragon_move(17); };
 void() hlorddragon_walk11 = [$drgfly11, hlorddragon_walk12 ] {
     self.th_missile=hlorddragon_atk_f1; hlorddragon_move(17);
-    self.hlorddragonPainSequence=6;
+    self.pain_longanim=6;
 };
 void() hlorddragon_walk12 = [$drgfly12, hlorddragon_walk13 ]
     { self.th_missile=SUB_Null; hlorddragon_move(17); };
 void() hlorddragon_walk13 = [$drgfly13, hlorddragon_walk1 ]
-    { self.th_missile=SUB_Null; hlorddragon_move(17); self.hlorddragonPainSequence=1;};
+    { self.th_missile=SUB_Null; hlorddragon_move(17); self.pain_longanim=1;};
 
 // ===========================================
 // dragon_fireball
@@ -325,7 +309,7 @@ void() hlorddragon_fireball = {
     local   float   fireType;
     local   float   sped;       // For the modified attacks.
     
-    sound (self, CHAN_VOICE, "rogue/dragon/attack.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "rogue/dragon/attack.wav", 1, ATTN_NORM);
 
     makevectors(self.angles);
     org = self.origin + v_forward*96 + v_up*16;
@@ -368,10 +352,10 @@ void() hlorddragon_fireball = {
 
         sped = random() * 300 + 900;    // For the fireballs.
         if (fireType) {
-			sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
             Meteor_Launch(self,org,dir,sped,90);
         } else {
-			sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
 			launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA, sped);
         }
         fireCount = fireCount - 1;
@@ -392,7 +376,7 @@ void() hlorddragon_tail = {
     if (dist < 250)
     {   // PM:  Added onground flag removal so monsters get thrown too.
         T_Damage (self.enemy, self, self, 30, DAMARMOR);
-        sound (self, CHAN_VOICE, "shambler/smack.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "shambler/smack.wav", 1, ATTN_NORM);
         if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER)) {
             dir = normalize (dir);
             self.enemy.flags = self.enemy.flags - (self.enemy.flags & FL_ONGROUND);
@@ -451,25 +435,25 @@ void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
 
     if (random() < 0.25) {
         dragon_stop_attack();
-        sound (self, CHAN_VOICE, "rogue/dragon/pain.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "rogue/dragon/pain.wav", 1, ATTN_NORM);
         self.pain_finished = time + 2;
-        if (self.hlorddragonPainSequence == 1)
+        if (self.pain_longanim == 1)
             self.think = hlorddragon_painA1;
-        else if (self.hlorddragonPainSequence == 2)
+        else if (self.pain_longanim == 2)
             self.think = hlorddragon_painF1;
-        else if (self.hlorddragonPainSequence == 3)
+        else if (self.pain_longanim == 3)
             self.think = hlorddragon_painE1;
-        else if (self.hlorddragonPainSequence == 4)
+        else if (self.pain_longanim == 4)
             self.think = hlorddragon_painD1;
-        else if (self.hlorddragonPainSequence == 5)
+        else if (self.pain_longanim == 5)
             self.think = hlorddragon_painC1;
-        else if (self.hlorddragonPainSequence == 6)
+        else if (self.pain_longanim == 6)
             self.think = hlorddragon_painB1;
     }
 };
 
 void() hlorddragon_boom = {
-    self.velocity = self.hlorddragonLastVelocity;
+    self.velocity = self.part_vel;
     ThrowGib(1,15);
     ThrowGib(2,15);
     ThrowGib(3,15);
@@ -483,18 +467,18 @@ void() hlorddragon_nuke = {
 
 	// Lavasplash particles form a box with a size of 270x270x64. 135 * 1.4142 = 190.9188.  So use 160 damage for explosion "radius" of 200.
     T_RadiusDamage (self, self, 160, self, DAMAGEALL); // Damage first, then effects. 
-    sound (self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
     Tent_LavaSplash(self.origin,-32,"boss/out1.wav");
     swap = self;
     self = spawn();
-    setorigin (self, swap.origin + '0 0 24');
+    setorigin(self, swap.origin + '0 0 24');
     WarpExplosion(); // The big fireball at the center.
     self = swap;
 };
 
 void() hlorddragon_parts = {
 	monster_ThrowGib();
-    sound (self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE);
+    sound(self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE);
 };
 
 void() hlorddragon_explode =  {
@@ -511,7 +495,7 @@ void() hlorddragon_explode =  {
     } else {
         makevectors(self.angles);
         self.velocity = self.velocity - 40 * v_up;
-        self.hlorddragonLastVelocity = self.velocity;
+        self.part_vel = self.velocity;
     }
 };
 
@@ -533,7 +517,7 @@ void() hlorddragon_death1  = [$drgdth01, hlorddragon_death2  ] {
     self.flags    = self.flags - (self.flags & FL_ONGROUND);
     setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX); // PM: Use the bigger hull2 size instead of hull.
     self.touch    = hlorddragon_squish;
-    sound (self, CHAN_VOICE, "rogue/dragon/death.wav", 1, ATTN_NONE);
+    sound(self, CHAN_VOICE, "rogue/dragon/death.wav", 1, ATTN_NONE);
     self.dragonAttacking = FALSE;
 };
 void() hlorddragon_death2  = [$drgdth02, hlorddragon_death3  ] { hlorddragon_explode(); };
@@ -599,7 +583,7 @@ void() darklord_thebeast = {
 	self.gib1mdl = "progs/drake/drggib01.mdl";
 	self.gib2mdl = "progs/drake/drggib02.mdl";
 	self.gib3mdl = "progs/drake/drggib03.mdl";
-	setmodel (self, "progs/drake/dragon.mdl");
+	setmodel(self, "progs/drake/dragon.mdl");
 	setsize (self, '-96 -96 -24', '96 96 96');
     self.mindex2    = self.modelindex;      // Remember new modelindex.
     self.dest1  = '-96 -96 -24';
@@ -614,7 +598,7 @@ void() darklord_thebeast = {
     self.th_die     = hlorddragon_death1;
     self.sight_sound = "rogue/dragon/see.wav";
 	self.hello_sound = ""; // no hello
-    self.hlorddragonPainSequence=1;
+    self.pain_longanim = 1; // Overload for the sequence to use, not for axehit.
     self.yaw_speed = 10;    // Hardwire this now!
     self.mass = 0;          // Now it's a huge massive dragon!
     self.bloodtype = BLOOD_RED;     // It's flesh and blood now.

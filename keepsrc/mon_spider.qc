@@ -71,7 +71,7 @@ $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20
 
 
-void() spider_idle1 = [$idle1, spider_idle2] { monster_idle_sound();ai_stand(); };
+void() spider_idle1 = [$idle1, spider_idle2] { monster_idle_sound(); ai_stand(); };
 void() spider_idle2 = [$idle2, spider_idle3] { ai_stand(); };
 void() spider_idle3 = [$idle3, spider_idle4] { ai_stand(); };
 void() spider_idle4 = [$idle4, spider_idle5] { ai_stand(); };
@@ -86,7 +86,7 @@ void() spider_idle12 = [$idle12, spider_idle13] { ai_stand(); };
 void() spider_idle13 = [$idle13, spider_idle1] { ai_stand(); };
 
 
-void() spider_walk1 = [$walk1, spider_walk2] { monster_idle_sound();ai_walk(4); };
+void() spider_walk1 = [$walk1, spider_walk2] { monster_idle_sound(); ai_walk(4); };
 void() spider_walk2 = [$walk3, spider_walk3] { monster_footstep(FALSE); ai_walk(3); };
 void() spider_walk3 = [$walk5, spider_walk4] { ai_walk(4); };
 void() spider_walk4 = [$walk7, spider_walk5] { ai_walk(5); };
@@ -154,7 +154,7 @@ void() spider_bite7= [$atkloop3, spider_bite8 ] { ai_face(); };
 void() spider_bite8 = [$atkloop5, spider_bite9 ] { voreling_melee(); };
 void() spider_bite9 = [$atkloop7, spider_bite10 ] {};
 void() spider_bite10 = [$atkloop9, spider_bite11 ] {
-	if (ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.enemy.health > 0 && self.health > 0) 
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0 && self.health > 0) 
 		self.think = spider_bite6;};
 // Exit bite attack loop
 void() spider_bite11 = [$atkup7, spider_bite12 ] {};
@@ -192,7 +192,7 @@ void() spider_leap9 = [$jump13, spider_leap10] { monster_footstep(FALSE); };
 void() spider_leap10 = [$jump15, spider_run1] { ai_resetangles(); };
 
 // CEILING SPIDERS - Idle/Drop/Touch/Land functions
-void()	spider_idleup1	= [	$idleup1,	spider_idleup2	] { monster_idle_sound();ai_stand(); };
+void()	spider_idleup1	= [	$idleup1,	spider_idleup2	] { monster_idle_sound(); ai_stand(); };
 void()	spider_idleup2	= [	$idleup2,	spider_idleup3	] { ai_stand(); };
 void()	spider_idleup3	= [	$idleup3,	spider_idleup4	] { ai_stand(); };
 void()	spider_idleup4	= [	$idleup4,	spider_idleup5	] { ai_stand(); };
@@ -211,11 +211,10 @@ void() spider_droptouch = {
 	if (!checkbottom(self)) {
 		// Is the spider standing on something?
 		if (self.flags & FL_ONGROUND) {
-			self.flags = self.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self,FL_ONGROUND);
 			self.origin_z = self.origin_z + 8;
 			setorigin(self, self.origin);		// raise up
 			self.attack_timer = time + 1;		// reset timer
-			
 			makevectors(self.angles);
 			self.velocity = v_forward * 100 + '0 0 200';
 		}
@@ -357,8 +356,8 @@ void(entity inflictor, entity attacker, float damage) spider_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -400,7 +399,7 @@ void() spider_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "drake/spider/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "drake/spider/death.wav", 1, ATTN_NORM);
 		spider_die1();
 	}
 };
@@ -415,10 +414,10 @@ void() monster_spider_precache = {
 	precache_model ("progs/ad171/h_spiderb.mdl");
 	precache_model ("progs/ad171/gib_spidlegb.mdl");
 	precache_model ("progs/ad171/gib_spidbodyb.mdl");
-	precache_sound ("ad171/spider/idle1.wav");
-	precache_sound ("ad171/spider/hiss2.wav");
-	precache_sound ("ad171/spider/idle1.wav");
-	precache_sound ("ad171/spider/hiss3.wav");
+	precache_sound("ad171/spider/idle1.wav");
+	precache_sound("ad171/spider/hiss2.wav");
+	precache_sound("ad171/spider/idle1.wav");
+	precache_sound("ad171/spider/hiss3.wav");
 	precache_sound("drake/spider/death.wav"); // death/pain/attack sounds
 	precache_sound("ad171/spider/pain1.wav");
 	precache_sound("ad171/spider/pain2.wav");
@@ -426,7 +425,7 @@ void() monster_spider_precache = {
 	precache_sound("ad171/spider/attackmunch.wav");
 	precache_sound("ad171/spider/attacktear.wav");
 	precache_sound("ad171/spider/jumpland.wav");
-	precache_sound ("ad171/spider/hiss1.wav");
+	precache_sound("ad171/spider/hiss1.wav");
 };
 
 void() setup_spider;
@@ -477,7 +476,7 @@ void() setup_spider = {
 	self.steptype = FS_TYPELIGHT;
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.blockudeath = TRUE;			// No humanoid death sound
-	self.meleerange = MONAI_MELEESPIDER;
+	self.meleerange = 60;
 	self.meleerangez = 0;
 	self.meleeoffset = '24 0 20';		// Bite attack offset
 	self.attack_offset = '14 0 8';		// Used by green spider, at jaws

@@ -82,10 +82,10 @@ void() trap_shooter_fire = { // [FUNCTION]
 		// Time for a new LG hit sound?
 		if (self.t_width < time) {
 			// Lower volume and attenuation just in case of several together
-			sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 			self.t_width = time + 0.6;
 		}
-	} else if (self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Fire projectile sound
+	} else if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Fire projectile sound
 
 	// Determine type of projectile shooter
 	if (self.classtype == CT_SPIKESHOOTER) {
@@ -215,7 +215,7 @@ void() trap_spikeshooter = { // [ENTITY]
 		if (!self.cnt) self.cnt = CT_PROJ_LASER;
 		if (!self.speed) self.speed = SPEED_LASER;
 		// Used for impact sound of laser
-		precache_sound (SOUND_LASER_HIT);
+		precache_sound(SOUND_LASER_HIT);
 	} else if (self.spawnflags & TRAP_WIZSPIKE) {
 		item_setupmodel(MODEL_PROJ_WIZ,0);
 		item_setupnoise("weapons/spike2.wav");
@@ -254,7 +254,7 @@ void() trap_spikeshooter = { // [ENTITY]
 		if (!self.speed) self.speed = SPEED_TRAPSPIKE;
 	}
 	precache_model (self.mdl);
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 
 	self.classtype = CT_SPIKESHOOTER;
 	if (self.wait <= 0) self.wait = 1;
@@ -299,7 +299,7 @@ void() trap_grenadeshooter = { // [ENTITY]
 	self.mdl = MODEL_PROJ_GRENADE;
 	precache_model (self.mdl);
 	self.noise = "weapons/grenade.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.spawnflags & TRAP_LARGEGRENADE) {
 		self.cnt = CT_PROJ_GL;
 		if (!self.speed) self.speed = SPEED_PLAYGRENADE;
@@ -348,29 +348,29 @@ void() trap_rocketshooter = { // [ENTITY]
 		self.mdl = MODEL_PROJ_LAVA;
 		precache_model (self.mdl);
 		self.noise = "boss1/throw.wav";
-		precache_sound (self.noise);
+		precache_sound(self.noise);
 		self.cnt = CT_PROJ_LAVA;
 		if (!self.speed) self.speed = SPEED_LAVABALL;
 	} else if (self.spawnflags & TRAP_FIREROCKET) {
 		self.mdl = MODEL_PROJ_GARGOYLE;
 		precache_model (self.mdl);
 		self.noise = "ad171/gargoyle/attack1.wav";
-		precache_sound (self.noise);
+		precache_sound(self.noise);
 		self.cnt = CT_PROJ_GARG;
 		if (!self.speed) self.speed = SPEED_GARGMISSILE;
 	} else if (self.spawnflags & TRAP_JIMROCKET) {
 		self.mdl = MODEL_PROJ_ROCKET;
 		precache_model (self.mdl);
 		self.noise = "weapons/sgun1.wav";
-		precache_sound (self.noise);
-		precache_sound ("quoth/dguard/hit.wav");
+		precache_sound(self.noise);
+		precache_sound("quoth/dguard/hit.wav");
 		self.cnt = CT_PROJ_JIM2;
 		if (!self.speed) self.speed = SPEED_RLPLAYER;
 	} else {
 		self.mdl = MODEL_PROJ_ROCKET;
 		precache_model (self.mdl);
 		self.noise = "weapons/sgun1.wav";
-		precache_sound (self.noise);
+		precache_sound(self.noise);
 		self.cnt = CT_PROJ_ROCKET;
 		if (!self.speed) self.speed = SPEED_RLPLAYER;
 	}
@@ -413,7 +413,7 @@ void() trap_rocketshooter = { // [ENTITY]
 // When triggered, fires a LIGHTNING at the target entity (can be blocked).  Use TOGGLE spawnflag and trigger to enable continuous mode.
 void() trap_lightningshooter = { // [ENTITY]
 	if (self.noise == "") self.noise = "weapons/lhit.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	self.classtype = CT_LIGHTSHOOTER;
 	if (self.wait <= 0) self.wait = 1;
 	if (self.delay < 0) self.delay = 0;
@@ -484,8 +484,8 @@ void() trap_gasshooter_spawn = { // [FUNCTION]
 	partemit.frame = partemit.cnt = 0;
 	partemit.movetype = MOVETYPE_FLY;	// Fly, no gravity, but contact
 	partemit.solid = SOLID_TRIGGER;		// collision, touch required
-	setmodel (partemit, self.mdl);
-	setorigin (partemit, self.origin);
+	setmodel(partemit, self.mdl);
+	setorigin(partemit, self.origin);
 	setsize (partemit, VEC_ORIGIN, VEC_ORIGIN);
 	partemit.oldorigin = vecrand(0,20,TRUE);
 	partemit.velocity = (self.movedir * self.speed) + partemit.oldorigin;
@@ -499,13 +499,13 @@ void() trap_gasshooter_spawn = { // [FUNCTION]
 		self.nextthink = time + self.wait;
 	} else { // Time to switch off
 		self.state = STATE_OFF;
-		sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	}
 };
 
 void() trap_gasshooter_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
-	if (self.state == STATE_ON) sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); // If gas shooter currently on, play switch off sound
+	if (self.state == STATE_ON) sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); // If gas shooter currently on, play switch off sound
 	else StopSound(self,CHAN_VOICE);
 
 	self.state = STATE_OFF;
@@ -520,7 +520,7 @@ void() trap_gasshooter_reset = { // [FUNCTION]
 void() trap_gasshooter_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.state = STATE_ON;
-	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.waitmin2 = time + self.waitmin;
 	trap_gasshooter_spawn();
 };
@@ -533,7 +533,7 @@ void() trap_gasshooter_use = { // [FUNCTION]
 
 	if (self.state == STATE_ON) {
 		self.state = STATE_OFF;
-		sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	} else trap_gasshooter_on();
 };
 
@@ -577,8 +577,8 @@ void() trap_gasshooter = { // [ENTITY]
 		self.noise2 = SOUND_EMPTY;
 	}
 	precache_model (self.mdl);
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
 	self.classtype = CT_GASSHOOTER;
 	self.solid = SOLID_NOT;				// No world interaction
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

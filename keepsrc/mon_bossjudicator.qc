@@ -439,7 +439,7 @@ void() judge_fistframe = {
 
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) {
-		sound (self, CHAN_WEAPON, "ad181/judge/smash_roar.wav", 1, ATTN_NORM); // Warn the player of impact
+		sound(self, CHAN_WEAPON, "ad181/judge/smash_roar.wav", 1, ATTN_NORM); // Warn the player of impact
 	} else if (self.walkframe == 6 && self.enemy) { // Sneaky distance check before floor smash (must have enemy as well)
 		self.enemydist = range_distance(self.enemy, FALSE); // Check if player outside of slam attack range
 		if (self.enemydist > MONAI_MELEEJUDGE) self.attack_sidestep = TRUE; // Cancel melee attack (fist smash ground)
@@ -592,7 +592,7 @@ void(float offset) judge_firemagicA = {
 	if (self.health < 1) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
 
 	// check for enemy origin (based on sight test)
 	// if cannot see enemy fire at last known location
@@ -623,7 +623,7 @@ void() judge_magicAframe = {
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) {
 		// Warn the player of firing magic spikes
-		sound (self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
 		self.frame = $magicA1;
 		// Glow ball of magic infront of sword
 		justice_setup_attachment();
@@ -682,7 +682,7 @@ void(float fire_explode) judge_fireflamewall = {
 	// SMALL EFFECTS
 	else {
 		// Quiet sfx + dust/smoke
-		sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
+		sound(self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
 		if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 	}
 
@@ -709,7 +709,7 @@ void() judge_flamewall = {
 	if (self.walkframe == 0) {
 		// Reset rage counter
 		self.attack_rage = 1;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
 	}
 	// BUILD up of attack ----------------------------------------
 	// STRIKE into ground ----------------------------------------
@@ -776,7 +776,7 @@ void(float offset) judge_firemagicB = {
 	if (self.health < 1) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
 
 	// Maximum speed, initial speed set in launch_projectile
 	self.attack_speed = SPEED_JUDGEMISSILE + (skill * SPEED_JUDGESKILL);
@@ -837,7 +837,7 @@ void() judge_magicBframe = {
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) {
 		// Warn the player of firing magic
-		sound (self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
 		self.attack_track = self.enemy.origin;
 	}
 	// Swinging arm backward
@@ -873,7 +873,7 @@ void() judge_flameline = {
 	// Do specific stuff on certain animation frames
 	// Check for last frame (exit) first!
 	if (self.walkframe == 0) { 
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
 	} else if (self.walkframe == 6) {
 		judge_fireflameline();
 	}
@@ -939,7 +939,7 @@ void() judge_jump2 = [$jump2, judge_jump3 ] {
 	ai_face();
 	// Same for Judge and Justice
 	self.touch = judge_JumpTouch;
-	sound (self, CHAN_WEAPON, "ad181/justice/leap1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad181/justice/leap1.wav", 1, ATTN_NORM);
 	if (self.classtype == CT_MONJUDGE)
 		self.jump_flag = time + MONAI_JUMPJUDGETIME;
 	else
@@ -1156,13 +1156,13 @@ void() judge_movesword = {
 	// Keep looping
 	self.nextthink = time + 0.1;
 	self.think = judge_movesword;
-	// Sword sound (defined beforehand)
+	// Sword sound(defined beforehand)
 	if (self.walkframe == 2) {
 		// Allow for sound override
 		if (self.blendsfx == JUDGE_SFXDRAW) {
-			sound (self, CHAN_WEAPON, "ad181/justice/sword_draw.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "ad181/justice/sword_draw.wav", 1, ATTN_NORM);
 		} else if (self.blendsfx == JUDGE_SFXSHEATH) {
-			sound (self, CHAN_WEAPON, "ad181/justice/sword_sheath.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "ad181/justice/sword_sheath.wav", 1, ATTN_NORM);
 		}
 		else if (self.blendsfx == JUDGE_SFXSWOOSH) SwordSwipeSound();
 	}
@@ -1308,7 +1308,7 @@ void() judge_summonframe = {
 	if (self.walkframe >= 0 && self.walkframe <= 3) {
 		self.frame = $summon1 + self.walkframe;
 		// Setup animation sound/loop counter
-		if (self.walkframe == 0) sound (self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
+		if (self.walkframe == 0) sound(self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
 	}
 	// MAIN loop -------------------------------------------
 	else if (self.walkframe >= 4 && self.walkframe <= 9) {
@@ -1373,7 +1373,7 @@ void(entity inflictor, entity attacker, float damage) judge_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		self.pain_finished = time + 2;
 		// Only do pain animation if required
 		if (self.pain_check == 1 || self.pain_check == 2) judge_painA1();
@@ -1382,11 +1382,11 @@ void(entity inflictor, entity attacker, float damage) judge_pain = {
 
 void() judge_dieA1 = [$deathA1, judge_dieA2 ] {};
 void() judge_dieA2 = [$deathA2, judge_dieA3 ] { monster_check_gib(); };
-void() judge_dieA3 = [$deathA3, judge_dieA4 ] { monster_check_gib();self.solid = SOLID_NOT;};
+void() judge_dieA3 = [$deathA3, judge_dieA4 ] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() judge_dieA4 = [$deathA4, judge_dieA5 ] {};
 void() judge_dieA5 = [$deathA5, judge_dieA6 ] {};
 void() judge_dieA6 = [$deathA6, judge_dieA7 ] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
 void() judge_dieA7 = [$deathA7, judge_dieA8 ] {};
 void() judge_dieA8 = [$deathA8, judge_dieA9 ] {};
 void() judge_dieA9 = [$deathA9, judge_dieA10 ] { monster_death_postcheck(); };
@@ -1395,12 +1395,12 @@ void() judge_dieA10 = [$deathA10, judge_dieA10 ] { monster_deadbody_check(); };
 //----------------------------------------------------------------------
 void() judge_dieB1 = [$deathB1, judge_dieB2 ] {};
 void() judge_dieB2 = [$deathB2, judge_dieB3 ] { monster_check_gib(); };
-void() judge_dieB3 = [$deathB3, judge_dieB4 ] { monster_check_gib();self.solid = SOLID_NOT;};
+void() judge_dieB3 = [$deathB3, judge_dieB4 ] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() judge_dieB4 = [$deathB4, judge_dieB5 ] {};
 void() judge_dieB5 = [$deathB5, judge_dieB6 ] {};
 void() judge_dieB6 = [$deathB6, judge_dieB7 ] {};
 void() judge_dieB7 = [$deathB7, judge_dieB8 ] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
 void() judge_dieB8 = [$deathB8, judge_dieB9 ] { monster_death_postcheck(); };
 void() judge_dieB9 = [$deathB9, judge_dieB9 ] { monster_deadbody_check(); };
 
@@ -1424,7 +1424,7 @@ void() judge_die = {
 	
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		if (random() > 0.5) judge_dieA1();
 		else judge_dieB1();
 	}
@@ -1752,21 +1752,21 @@ void() monster_justice_precache = {
 	PreCache_Flame(); // Flames + explosions
 	precache_model (MODEL_PROJ_JUDGER); // Projectile model
 	precache_model ("progs/ad181/s_judgemagic.spr");
-	precache_sound ("ad181/justice/idle1.wav");
-	precache_sound ("ad171/gibs/gibheavy.wav"); // Swing sword over head at player
-	precache_sound ("ad171/gibs/gibheavy2.wav");
-	precache_sound ("ad181/justice/magic_attack.wav"); // Arrow attack
-	precache_sound ("ad181/justice/magic_fire.wav");
-	precache_sound ("ad181/justice/flame_fire.wav");
-	precache_sound ("ad171/wraith/attack1.wav"); // Flame BURST attack
-	precache_sound ("ad181/justice/flame_fire.wav");
-	precache_sound ("ad171/wraith/attack1_explode.wav");
-	precache_sound ("ad181/justice/leap1.wav"); // Crazy leapin! (re-used from player)
-	precache_sound ("ad181/justice/sight1.wav");	
-	precache_sound ("ad181/justice/pain1.wav");
-	precache_sound ("ad181/justice/death1.wav");
-	precache_sound ("ad181/justice/sword_draw.wav"); // New sword sweep/slash sounds
-	precache_sound ("ad181/justice/sword_sheath.wav");
+	precache_sound("ad181/justice/idle1.wav");
+	precache_sound("ad171/gibs/gibheavy.wav"); // Swing sword over head at player
+	precache_sound("ad171/gibs/gibheavy2.wav");
+	precache_sound("ad181/justice/magic_attack.wav"); // Arrow attack
+	precache_sound("ad181/justice/magic_fire.wav");
+	precache_sound("ad181/justice/flame_fire.wav");
+	precache_sound("ad171/wraith/attack1.wav"); // Flame BURST attack
+	precache_sound("ad181/justice/flame_fire.wav");
+	precache_sound("ad171/wraith/attack1_explode.wav");
+	precache_sound("ad181/justice/leap1.wav"); // Crazy leapin! (re-used from player)
+	precache_sound("ad181/justice/sight1.wav");	
+	precache_sound("ad181/justice/pain1.wav");
+	precache_sound("ad181/justice/death1.wav");
+	precache_sound("ad181/justice/sword_draw.wav"); // New sword sweep/slash sounds
+	precache_sound("ad181/justice/sword_sheath.wav");
 };
 
 // QUAKED monster_justice (1 0 0) (-16 -16 -24) (16 16 56) Ambush

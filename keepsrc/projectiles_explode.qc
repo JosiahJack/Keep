@@ -222,8 +222,8 @@ void(vector spot) R_ExpSmall = { // [FUNCTION]
     local   entity  e;
 
     e = spawn();
-    setorigin (e, spot);
-    sound (e, CHAN_AUTO, "kinn/shuffler/expsmall.wav", 1, ATTN_NORM);
+    setorigin(e, spot);
+    sound(e, CHAN_AUTO, "kinn/shuffler/expsmall.wav", 1, ATTN_NORM);
 	entity_remove(e,3); // Kind of the point to delay removal before playing the sound
 };
 
@@ -262,7 +262,7 @@ void(float base, float add, string text) BecomeAnyExplosionSetup = { // [FUNCTIO
     self.movetype   = MOVETYPE_NONE;
     self.velocity   = '0 0 0';
     self.touch      = SUB_Null;
-    setmodel (self, text);
+    setmodel(self, text);
     self.solid      = SOLID_NOT;
     self.frame      = base;
     self.cnt        = base + add - 1;
@@ -285,7 +285,7 @@ void(vector spot, float base, float add, string text) MakeAnyExplosion = { // [F
     swap = self;
     self = spawn();
     setsize (self, '0 0 0', '0 0 0');        
-    setorigin (self, spot);
+    setorigin(self, spot);
     BecomeAnyExplosion (base, add, text);
     self = swap;
 };
@@ -315,7 +315,7 @@ void(vector spot) MakeIcyExp = { // [FUNCTION]
     iced.wait       = 0.1;
     iced.nextthink  = time + 0.1;
     iced.think      = s_explode_think;
-    setall (iced, "progs/drake/iceball.mdl", '0 0 0', '0 0 0', spot);
+    setall(iced, "progs/drake/iceball.mdl", '0 0 0', '0 0 0', spot);
 };
 
 // Modified Custents explosion, fast version; slow version was <7, 8, 10, 12, 14, 16, 18, 19, 20>.
@@ -339,7 +339,7 @@ void(string fx, void() thinkst) Explosion_Start = { // [FUNCTION]
     self.movetype   = MOVETYPE_NONE;
     self.velocity   = '0 0 0';
     self.touch      = SUB_Null;
-    setmodel (self, fx);
+    setmodel(self, fx);
     self.solid      = SOLID_NOT;
     thinkst();
 };
@@ -356,7 +356,7 @@ void() BecomeExplosion2 = { // [FUNCTION]
 
 // Like BecomeExplosion, but for Nemesants.  Some drake bosses use this for their post-mortem explosions.
 void() WarpExplosion = { // [FUNCTION]
-    sound (self, CHAN_AUTO, "zerstorer/trog/bigboom.wav", 1, ATTN_NORM);
+    sound(self, CHAN_AUTO, "zerstorer/trog/bigboom.wav", 1, ATTN_NORM);
     Tent_Point (TE_EXPLOSION, self.origin);
     FlameWave();       // PM:  New shockwave effect at ground zero.
     BecomeTheBigFire();    // Replaced old fireball mdl with big sprite.
@@ -503,7 +503,7 @@ void() OgreGrenadeExplode = { maphack_grenade(); }; // [FUNCTION]
 
 void() GrenadeExplode = { maphack_grenade(); }; // [FUNCTION]
 
-void() MonsterGrenadeSound = { sound (self, CHAN_WEAPON, "ad171/weapons/gl_loadshort.wav", 0.1+random()*0.5, ATTN_LOW); }; // [FUNCTION], play generic load grenade sound.
+void() MonsterGrenadeSound = { sound(self, CHAN_WEAPON, "ad171/weapons/gl_loadshort.wav", 0.1+random()*0.5, ATTN_LOW); }; // [FUNCTION], play generic load grenade sound.
 
 float() MonsterGrenadeSpeed = { return SPEED_MONGRENADE + (skill * SPEED_MONGLSKILL); }; // [FUNCTION], return generic attack speed.
 
@@ -563,7 +563,7 @@ void() SmallExplosion = { // [FUNCTION]
 // This causes to split into multiple small rockets, releasing its payload.
 void() Mirv_Split = { // [FUNCTION]
     Mirv_Reset();
-    sound (self, CHAN_WEAPON, "drake/weapons/mirv2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "drake/weapons/mirv2.wav", 1, ATTN_NORM);
     self.effects = self.effects | EF_MUZZLEFLASH;
     Mirv_Payload();
     BecomeExplosion();
@@ -591,7 +591,7 @@ void() lightning_orb_death = { // [FUNCTION]
 	light.impulse = 0.05; // Fast think for sprite animation.
 	light.use = SUB_Remove;
 	light.nextthink = self.nextthink = time + 0.1;
-	sound (light,CHAN_AUTO,"doom/bfg.wav",TRUE,ATTN_NORM); // death burst
+	sound(light,CHAN_AUTO,"doom/bfg.wav",TRUE,ATTN_NORM); // death burst
 	T_RadiusDamage(self, self.owner, 40,world,DAMAGEALL); // minor damage from exploding
 	SpawnOrbLightning(self.origin,250,0.4);
 	self.think = SUB_Remove;
@@ -656,7 +656,7 @@ void(float burstcharge) beam_water_burst = { // [FUNCTION]
 
 	current = world;
 
-	sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
 	do {
 		current = nextent(current);
 		if (current.takedamage) {
@@ -685,7 +685,7 @@ void() WeldExplode3 = [4, SUB_Remove] {}; // [FUNCTION]
 // Magic arrow explosion code.
 void() AkArrow_Explode = { // [FUNCTION]
     self.count = self.count & 3;
-    sound (self, CHAN_AUTO, "hexen2/weapons/explode.wav", 1, ATTN_NORM);
+    sound(self, CHAN_AUTO, "hexen2/weapons/explode.wav", 1, ATTN_NORM);
     Colored_Explosion (self.origin, self.count);
     BecomeFancy (X80_SPARK_ORANGE + (self.count * 6), 6);
 };
@@ -706,7 +706,7 @@ void() RyuPlasma_Explode = { // [FUNCTION]
 		T_Damage(self.enemy,self,self.owner,dmg2,DAMARMOR);
     }
     T_RadiusDamage(self,self.owner,self.dmg*0.7,self.enemy,DAMAGEALL); // Don't do radius damage to the other, because all the damage was done in the impact.
-    sound (self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);
+    sound(self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);
     setorigin(self, self.origin - 8*normalize(self.velocity)); // PM:  Do it right.
     Tent_Explosion2 (self.origin, 244, 3);
     RyuPlasma_Discharge();
@@ -859,8 +859,8 @@ void(entity ent, float color1, float color2) Particle_Cube = { // [FUNCTION]
 };
 
 void() Plasma_Fx = { // [FUNCTION]
-    if (random() < 0.5) sound (self, CHAN_AUTO, "drake/weapons/zap1.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_AUTO, "drake/weapons/zap2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound(self, CHAN_AUTO, "drake/weapons/zap1.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_AUTO, "drake/weapons/zap2.wav", 1, ATTN_NORM);
 
 	self.effects = EF_MUZZLEFLASH;
 	Particle_Explosion (self.origin, '6 9 2', '10 41 3');
@@ -876,7 +876,7 @@ void() Thor_Remove = { // [FUNCTION]
     if (thor) {
         thor.hammer_finished = 0;
         if (thor.items2 & IT2_MJOLNIR) { // Confirm ownership of hammer.
-            sound (thor, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
+            sound(thor, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
             if (thor.flags & FL_CLIENT) { // So far, only clients use ammo.
                 if (self.ammo_cells) thor.ammo_cells = thor.ammo_cells + self.ammo_cells; // Recover all unused cells.
 
@@ -919,8 +919,8 @@ void(float lo, float hi) Thor_Slam = { // [FUNCTION]
     base.struck_by_mjolnir = 1;
     base.think     = SUB_Remove;
     base.nextthink = time + 1;
-    sound (base, CHAN_AUTO, "hipnotic/weapons/mjolslap.wav", 1, ATTN_NORM);
-    sound (base, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+    sound(base, CHAN_AUTO, "hipnotic/weapons/mjolslap.wav", 1, ATTN_NORM);
+    sound(base, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
     if (self.flags & FL_CLIENT)
         makevectors(self.v_angle);
     else
@@ -964,8 +964,8 @@ void(entity who, vector spot) StaticFx = { // [FUNCTION]
 
     zap = random() * 2; // For sounds.  Was 3.
     who.effects = who.effects | EF_MUZZLEFLASH;
-    if (zap < 1) sound (who, CHAN_AUTO, "drake/weapons/zap1.wav", 1, ATTN_NORM);
-    else sound (who, CHAN_AUTO, "drake/weapons/zap2.wav", 1, ATTN_NORM);
+    if (zap < 1) sound(who, CHAN_AUTO, "drake/weapons/zap1.wav", 1, ATTN_NORM);
+    else sound(who, CHAN_AUTO, "drake/weapons/zap2.wav", 1, ATTN_NORM);
 
     MakeFancy (spot, X32_STAR_BLUE, 5);
 };
@@ -1064,7 +1064,7 @@ void(entity attacker, vector spot, float damage) DelayedFireDamage_Spawn = { // 
     newmis.volume   = attn;
     newmis.nextthink= time + 0.1;
     newmis.think    = DelayedFireDamage_Think;
-    setall (newmis, "", '0 0 0', '0 0 0', spot);
+    setall(newmis, "", '0 0 0', '0 0 0', spot);
 };
 
 void() BecomeBigBangExplosion = { // [FUNCTION]
@@ -1092,7 +1092,7 @@ void() BaronFireworks = { // [FUNCTION]
     newmis.movetype = MOVETYPE_NONE;
     newmis.solid = SOLID_NOT;
     newmis.classname = "fire";
-    setorigin (newmis, self.dest);
+    setorigin(newmis, self.dest);
     T_RadiusDamage(newmis,self,90,world,DAMAGEALL);
     sound(newmis,CHAN_AUTO,"zerstorer/trog/bigboom.wav",1,ATTN_NORM);
     DelayedFireDamage_Spawn(self,self.dest,60);
@@ -1126,7 +1126,7 @@ void(float ents) Ember_Shower = { // [FUNCTION]
             fire.delay      = time + 0.5 + random();    // Time when it fades.
             fire.touch      = SUB_Remove;
             fire.nextthink  = time + 0.1;
-            setall (fire, "progs/drake/flame2.mdl", '0 0 0', '0 0 0', self.origin);
+            setall(fire, "progs/drake/flame2.mdl", '0 0 0', '0 0 0', self.origin);
             ents = ents - 1;
             if (ents <= 0) return;
         }
@@ -1143,7 +1143,7 @@ void(entity ent) Smokey = { // [FUNCTION]
     newmis.wait       = time + 1 + random() * 2;
     newmis.nextthink  = 0.01;
     newmis.think      = Smokey_Think;
-    setall (newmis, "", '0 0 0', '0 0 0', VEC_ORIGIN);
+    setall(newmis, "", '0 0 0', '0 0 0', VEC_ORIGIN);
 };
 
 //  This creates steam that has the same velocity of the fireball that spawned it.
@@ -1153,7 +1153,7 @@ void(entity fire) Fireball_Steam = { // [FUNCTION]
 
     sped = vlen (fire.velocity) * 0.01;
     vel = normalize (fire.velocity) * sped;
-    sound (fire, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM);
+    sound(fire, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM);
     particle (fire.origin, vel, 1, 50);
 };
 
@@ -1209,7 +1209,7 @@ void() FlareGlitter = { // [FUNCTION]
     if (self.flags & FL_ONGROUND) newmis.nextthink = time + 0.1;
     else newmis.nextthink = time + 0.2;
     newmis.think = FlareGlitter_Think;
-    setall (newmis, "progs/drake/s_spark.spr", VEC_ORIGIN, VEC_ORIGIN, self.origin);
+    setall(newmis, "progs/drake/s_spark.spr", VEC_ORIGIN, VEC_ORIGIN, self.origin);
 };
 
 // Spawns an invisible spark generator.  Because we want the explosion
@@ -1258,7 +1258,7 @@ void() HazardProjectile_Exit = { HazardProjectile_Finished(self); };
 
 // Remove egg and throw gibs up as minion grows
 void() Explode_Egg = {
-	setmodel (self, "");
+	setmodel(self, "");
 	if (self.classgroup == CT_MONWRAITH) self.gib1mdl = MODEL_PROJ_WSHELL; 
 	else if (self.classgroup == CT_MONSHAL) self.gib1mdl = MODEL_PROJ_SSHELL; 
 	self.gib1frame = 9;
@@ -1313,7 +1313,7 @@ void() Hatch_Egg = {
 		else minion_spider(self.oldorigin, self.enemy);
 	} else if (self.owner.classtype == CT_MONSHAL || self.owner.classtype == CT_MONSHALBOSS) {
 		if (self.owner.classtype == CT_MONSHALBOSS) {
-			sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 			minion_voreling(self.oldorigin+'0 0 4', self.enemy);
 		} else {
 			minion_voreling(self.oldorigin, self.enemy);
@@ -1380,7 +1380,7 @@ void() death_puff = { // [FUNCTION]
     spot_z = random() * 0.5;
     spot = Anypoint(self,spot);
     puff = spawn();
-    setorigin (puff, spot);
+    setorigin(puff, spot);
     puff.effects = EF_MUZZLEFLASH;
     sound(puff,CHAN_AUTO,"hknight/hit.wav",1,ATTN_NORM);
     SUB_ThinkImmediate(puff,BecomeExplosion);
@@ -1402,13 +1402,13 @@ void(vector spot, float base, float add, string text, float toponly) ShockWave =
     ang_y = anglemod(ang_y + 180);
     wav1 = spawn(); // Top side.
     wav1.angles = ang;
-    setorigin (wav1, spot);
+    setorigin(wav1, spot);
 	
 	if (!toponly) { // Bottom side.
 		ang_x = anglemod(ang_x + 180);
 		wav2 = spawn();
 		wav2.angles = ang;
-		setorigin (wav2, spot);
+		setorigin(wav2, spot);
 	}
 	
     ts = self; // Thinking

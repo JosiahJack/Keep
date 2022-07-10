@@ -335,7 +335,7 @@ void() trigger_teleport_sound = { // [ENTITY]
 
 	if (self.fly_sound < time ) { // Play the sound if loop has finished or been reset
 		self.fly_sound = time + self.owner.waitmin;
-		sound (self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
+		sound(self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
 	}
 };
 
@@ -389,13 +389,13 @@ void() trigger_teleport_debug = { // [FUNCTION]
 	if (self.alpha) return;						// Alpha set already
 
 	self.alpha = self.waitmin3; // Reveal trigger surface
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize(self, self.bbmins, self.bbmaxs);
 
 	// Reveal destination surface, check for bmodel setup
 	if (self.goalentity.bsporigin) {
 		self.goalentity.alpha = self.waitmin3;
-		setmodel (self.goalentity, self.goalentity.mdl);
+		setmodel(self.goalentity, self.goalentity.mdl);
 		setsize(self.goalentity, self.goalentity.bbmins, self.goalentity.bbmaxs);
 	}
 };
@@ -575,7 +575,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 
 	spawn_tdeath(self.pos2, other); // Kill anything at teleporter destination
 	other.origin = self.pos2; // Move to new location
-	setorigin (other, other.origin);
+	setorigin(other, other.origin);
 	other.flags = other.flags - (other.flags & FL_ONGROUND); // Telporting entities need ground flag removed
 	self.dmg = trigger_dmgquery(); // Work out any teleport damage, based on skill level
 	if (self.dmg > 0) T_Damage (other, self, self, self.dmg, DAMARMOR);
@@ -628,7 +628,7 @@ void() trigger_teleport_setup = { // [FUNCTION]
 // speed   : forward momentum speed after teleporting (def=300)
 // volume  : teleporter hum sound volume (def=0.5)
 // noise   : custom sound to play when active (must be looped, def=hum1.wav)
-// waitmin : the length of the custom sound (def=3.622 for hum1.wav)
+// waitmin : the length of the custom sound(def=3.622 for hum1.wav)
 // waitmin2: Time between teleport sound/fx (def=0.2s) being played
 // waitmin3: Alpha value for debug lvl showing triggers ingame (def=0.75)
 // dmg     : damage from using the teleport trigger (def=0)
@@ -657,7 +657,7 @@ void() trigger_teleport = { // [ENTITY]
 	InitTrigger();
 	self.oldorigin = bmodel_origin(self); // True origin used for errors and debug info
 	if (self.noise == "") self.noise = "ambience/hum1.wav"; // Always pre-cache telporter teleporter sound
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	SUB_BoundVolume(0.5);
 	if (SUB_HideIfNoTarget()) return; // This is a critical error - teleporter going nowhere!?!
 
@@ -959,7 +959,7 @@ void() trigger_push_fire = { // [FUNCTION]
 			if (self.bmodel_act.flags & FL_CLIENT) {
 				if (self.bmodel_act.fly_sound < time) {
 					self.bmodel_act.fly_sound = time + 1.5;
-					sound (self.bmodel_act, CHAN_AUTO, self.noise, self.volume, ATTN_NORM); // Play wind sound for the player
+					sound(self.bmodel_act, CHAN_AUTO, self.noise, self.volume, ATTN_NORM); // Play wind sound for the player
 				}
 			}
 		}
@@ -999,7 +999,7 @@ void() trigger_push = { // [ENTITY]
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // Spawnflag 1 is used for something else (notouch duplicate).  No trigger damage functionality and always touchable!
 	if ( !(self.spawnflags & TRIG_PUSHSILENT) && self.noise == "") self.noise = "ambience/windfly.wav"; // Setup default wind sound if no custom sound found...
 	if (self.noise == "") self.noise = SOUND_EMPTY; // ...else if silent trigger, use misc/null.wav blank sound.
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.spawnflags & TRIG_PUSHARC) {
 		if (self.tetherrange <= 0) self.tetherrange = 512;
 		if (self.tetherdist <= 0) self.tetherdist = 32;
@@ -1099,7 +1099,7 @@ void() trigger_ladder_fire = { // [FUNCTION]
 // -------- KEYS --------
 // targetname : trigger entity (works with entity state system)
 // angle      : direction player must be facing to climb ladder (required)
-// waitmin    : time between climb sound (def = depends on sound type)
+// waitmin    : time between climb sound(def = depends on sound type)
 // speed      : velocity speed to climb ladder (def=160)
 // sounds     : 1=metal, 2=wood, 3=rope, 4=silent, 5=custom (def=wood)
 // noise1-4   : custom sounds to play when climbing ladder
@@ -1232,7 +1232,7 @@ void() trigger_fallspeed_fire = { // [FUNCTION]
 	// Check for any trigger events (noise/delay etc)
 	// Play the sound ON the activator and display message
 	if (self.message != "" && activator.flags & FL_CLIENT) centerprint (activator, self.message);
-	if (self.noise != "") sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	if (self.noise != "") sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 	if (HasTargets(self)) SUB_UseTargets(); 
 	
 	// Is the trigger repeatable?
@@ -1301,7 +1301,7 @@ void() trigger_maxhp_fire = { // [FUNCTION]
 	if (self.waitmin == FALSE) return; // No skill condition found, exit
 
 	if (self.message != "" && activator.flags & FL_CLIENT) centerprint (activator, self.message); // Check for any trigger events (noise/delay etc)
-	if (self.noise != "") sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the activator and display message
+	if (self.noise != "") sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the activator and display message
 	if (HasTargets(self)) SUB_UseTargets();
 	
 	// Is the trigger repeatable?
@@ -1435,7 +1435,7 @@ void() trigger_gravity_fire = { // [FUNCTION]
 		// Check for any sound events and re-trigger timer
 		if (self.noise2 != "" && self.lefty < time) {
 			self.lefty = time + self.waitmin;
-			sound (activator, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+			sound(activator, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 		}
 	}
 	
@@ -1683,7 +1683,7 @@ void() trigger_takeartifact_fire = { // [FUNCTION]
 		// Play the sound ON the activator
 		if (self.distance < time && self.noise != "") {
 			self.distance = time + self.waitmin3; // setup slow down timer
-			sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+			sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 		}
 
 		// Setup trigger to only work once?
@@ -1742,7 +1742,7 @@ void() trigger_giveitem_fire = { // [FUNCTION]
 	if (self.target == "") return;
 
 	stemp = self; activator = self.bmodel_act; // Save for later and reset activator
-	if (self.noise != "") sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the activator and display message
+	if (self.noise != "") sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the activator and display message
 	if (self.message != "") centerprint (activator, self.message);
 	self.enemy = find (world, targetname, self.target); // Search entity list for targets
 	while(self.enemy) {
@@ -2048,7 +2048,7 @@ void() trigger_monsterdrop_use = { // [FUNCTION]
 		if (self.oldenemy.flags & FL_MONSTER) { // only works with monsters
 			if (!(self.oldenemy.flags & (FL_FLY || FL_SWIM))) { // Double check for swim/fly types
 				if (self.oldenemy.flags & FL_ONGROUND) { // Got to be onground already
-					self.oldenemy.flags = self.oldenemy.flags - FL_ONGROUND; // Set monster in motion
+					SUB_RemoveFlags(self.oldenemy,FL_ONGROUND); // Set monster in motion
 					self.oldenemy.velocity_z = self.height;
 				}
 			}
@@ -2115,7 +2115,7 @@ void() trigger_monsterjump_fire = { // [FUNCTION]
 		self.bmodel_act.velocity_x = self.movedir_x * self.speed; // set XY even if not on ground, so the jump will clear lips
 		self.bmodel_act.velocity_y = self.movedir_y * self.speed;
 		if (self.bmodel_act.flags & FL_ONGROUND ) {
-			self.bmodel_act.flags = self.bmodel_act.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self.bmodel_act,FL_ONGROUND);
 			self.bmodel_act.velocity_z = self.height; // Do the jump.
 		}
 	}
@@ -2316,14 +2316,14 @@ void() trigger_heal_touch = { // [FUNCTION]
 	self.attack_finished = time + self.wait; // Do not constantly check healing, use wait
 	if (!T_Heal(other, self.healamount, 0)) return; // Can the pool heal the player?
 
-	sound (other, CHAN_BODY, self.noise, self.volume, ATTN_NORM); // Healing sound
+	sound(other, CHAN_BODY, self.noise, self.volume, ATTN_NORM); // Healing sound
 	if (self.max_health > 0) self.health = self.health - self.healamount; // Has the pool run out of health?
 	if (self.health < 1) { // Has the healing trigger expired?
 		if (self.lip < 2) centerprint (other, self.message2); // Only block message lip=1 healing 2=all messages
 		if (self.target2 != "") { trigger_strs(self.target2, other); self.target2 = "";} // Fire any targets once (finish of healing cycle)
 		entity_state_off(); // Switch off healing trigger
 	} else {
-		if (self.target != "") { trigger_strs(self.target, other);self.target = "";} // Fire any targets once (start of healing cycle)
+		if (self.target != "") { trigger_strs(self.target, other); self.target = "";} // Fire any targets once (start of healing cycle)
 		if (!self.lip) centerprint (other, self.message); // Display healing message (check for lip block)
 	}
 };	
@@ -2411,7 +2411,7 @@ void() trigger_tsound_touch = { // [FUNCTION]
 	if ( !(other.flags & FL_CLIENT) ) return;	// Only works with clients
 	if (other.health < 1 ) return;				// other is dead
 
-	if (other.touchedliquid < time) sound (other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
+	if (other.touchedliquid < time) sound(other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
 	other.touchedliquid = time + 0.1;
 	other.touchedsound = self.noise1;
 	self.attack_finished = time + 0.05;
@@ -2424,7 +2424,7 @@ void() trigger_tsound_on = { // [FUNCTION]
 	self.solid = SOLID_TRIGGER;
 	self.origin = self.oldorigin;
 	self.alpha = self.water_alpha;
-	if (self.spawnflags & TRIG_TSOUNDWGEO) setmodel (self, self.mdl);
+	if (self.spawnflags & TRIG_TSOUNDWGEO) setmodel(self, self.mdl);
 };
 
 void() trigger_tsound_fade = { // [FUNCTION]
@@ -2464,7 +2464,7 @@ void() trigger_tsound_syncalpha = { // [FUNCTION]
 	if (!(self.spawnflags & ENT_STARTOFF)) self.estate_on();
 };
 
-// QUAKED trigger_touchsound (.5 .5 .5) ? x x WORLDGEO DRAIN x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// QUAKED trigger_touchsound(.5 .5 .5) ? x x WORLDGEO DRAIN x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 // ------- KEYS --------
 // targetname : trigger entity (works with entity state system)
 // sounds     : 1=Water (def) 2=Slime 3=Lava 4=silent 5=custom

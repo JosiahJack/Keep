@@ -74,12 +74,12 @@ void(float no) Vomit_Meat = {
 
     up = random();
     Meat_Launch (org, dir);
-    if (up < 0.2) setmodel (newmis, "progs/gib1.mdl");
+    if (up < 0.2) setmodel(newmis, "progs/gib1.mdl");
     else { // Bigger gibs...
         newmis.dmg = random() * 15 + 15;
-        if (up < 0.4) setmodel (newmis, "progs/ad181/h_zombie.mdl");
-        else if (up < 0.7) setmodel (newmis, "progs/gib2.mdl");
-        else setmodel (newmis, "progs/gib3.mdl");
+        if (up < 0.4) setmodel(newmis, "progs/ad181/h_zombie.mdl");
+        else if (up < 0.7) setmodel(newmis, "progs/gib2.mdl");
+        else setmodel(newmis, "progs/gib3.mdl");
     }
     setsize(newmis,VEC_ORIGIN, VEC_ORIGIN);
 };
@@ -130,8 +130,8 @@ void() Vomit_Spawn = {
 	// Override normal ai with flying ai, since it is launched out of vomitus.
     newmis.enemy = self.enemy;
 	monster_bbox();
-	setmodel (newmis, "progs/qmaster/mon_tarbaby.mdl");
-	setorigin (newmis, self.origin);
+	setmodel(newmis, "progs/qmaster/mon_tarbaby.mdl");
+	setorigin(newmis, self.origin);
 	setsize (newmis, '-16 -16 -24', '16 16 40');
 	newmis.think = tbaby_jump5;
 	newmis.nextthink = time + 0.05;
@@ -155,7 +155,7 @@ void() vom_melee = {
 	// * Inflicts anywhere from 1 to 30 damage.
 	// * Life leech: 10% of damage inflicted is given back as health to vomitus.
 	// * 10% of eating the target's current weapon.
-    sound (self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
     // Update 6/17/2011:  Removed poison code.
     // if (random() < 0.1)     // Eat the player's weapon on a critical hit.
         // War_Steal (self, targ, "Vomitus ate your ");
@@ -212,7 +212,7 @@ void() vom_stand8 = [$walk2, vom_stand1 ] { ai_vomit_stand(); };
 
 void() vom_idle_sfx = {
 	// Yes, use attn_norm instead of attn_idle.
-    sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_plop.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "zerstorer/gibfnt/gf_plop.wav", 1, ATTN_NORM);
 };
 
 void() vom_walk1  = [$walk1,  vom_walk2  ] {
@@ -266,7 +266,7 @@ void() vom_end3 = [$attack13, vom_run1     ] { ai_face(); };
 
 void() vom_attack1  = [$attack1,  vom_attack2  ] {
     self.pain_finished = time + 1.2;    // Ignore pain during attack.
-    sound (self, CHAN_WEAPON, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_WEAPON, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
     ai_face();
 };
 void() vom_attack2  = [$attack2,  vom_attack3  ] { ai_face(); };
@@ -279,9 +279,9 @@ void() vom_attack8  = [$attack8,  vom_attack9  ] { ai_face(); };
 void() vom_attack9  = [$attack9,  vom_attack10 ] { ai_face(); };
 void() vom_attack10 = [$attack10, vom_attack11 ] { ai_face();
     if (random() < 0.5)
-        sound (self, CHAN_WEAPON, "drake/vomitus/flesh1.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "drake/vomitus/flesh1.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_WEAPON, "drake/vomitus/flesh2.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "drake/vomitus/flesh2.wav", 1, ATTN_NORM);
 
 	Vomit_Spawn();
 	self.think = vom_end1;
@@ -300,7 +300,7 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
     if (self.pain_finished > time) return; // don't make multiple pain sounds right after each other
 
     self.pain_finished = time + 2;
-    sound (self, CHAN_VOICE, "nehahra/vomit/groan.wav", 1, ATTN_NORM);        
+    sound(self, CHAN_VOICE, "nehahra/vomit/groan.wav", 1, ATTN_NORM);        
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
@@ -312,21 +312,20 @@ void(float dm) vom_gib = {
 	// PM:  Don't even think about calling T_RadiusDamage here!
 	// This is because gib functions may be called by T_Damage,
 	// which may be called within in T_RadiusDamage loop.
-	sound (self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
 	if (self.skin) {
 		// Meatwad
 		Tent_Explosion2 (self.origin, 64, 16);  // Last could be an 8.
-		ThrowGib (1,2);
-		ThrowGib (2,2);
-		ThrowGib (3,2);
+		ThrowGib(1,2);
+		ThrowGib(2,2);
+		ThrowGib(3,2);
 		ThrowGib(25,1);
 	} else {
 		// Tar mother
 		Tent_Point (TE_TAREXPLOSION, self.origin);
-		ThrowGib (11,6);
+		ThrowGib(11,6);
 	}
 };
-
 
 void() vom_die1  = [$death1,  vom_die2    ] {};
 void() vom_die2  = [$death2,  vom_die3    ] {};
@@ -345,31 +344,16 @@ void() vom_die14 = [$death14, vom_die15   ] {};
 void() vom_die15 = [$death15, vom_die16   ] {};
 void() vom_die16 = [$death15, vom_die16 ] {
     self.health = self.gibhealth - 1;
-    vom_gib (self.health);      // Pop into gibs.
+    vom_gib(self.health);      // Pop into gibs.
 	self.think = SUB_Remove;
 	self.nextthink = time + 0.1;
 };
 
 void() vom_die = {
-    sound (self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
+    sound(self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
     vom_die1();
 };
-
-// REVIVE - - - - - - - - - - - - - - -
-void() vom_revive1  = [$death14,  vom_revive2  ] {};
-void() vom_revive2  = [$death13,  vom_revive3  ] {};
-void() vom_revive3  = [$death12,  vom_revive4  ] {};
-void() vom_revive4  = [$death11,  vom_revive5  ] {};
-void() vom_revive5  = [$death10,  vom_revive6  ] {};
-void() vom_revive6  = [$death9,   vom_revive7  ] {};
-void() vom_revive7  = [$death8,   vom_revive8  ] {};
-void() vom_revive8  = [$death7,   vom_revive9  ] {};
-void() vom_revive9  = [$death6,   vom_revive10 ] {};
-void() vom_revive10 = [$death5,   vom_revive11 ] {};
-void() vom_revive11 = [$death4,   vom_revive12 ] {};
-void() vom_revive12 = [$death3,   vom_revive13 ] {};
-void() vom_revive13 = [$death2,   vom_revive14 ] {};
-void() vom_revive14 = [$death1,   vom_run1     ] {};
 
 void() monster_vomit_precache = {
     precache_model ("progs/drake/h_vomit.mdl");
@@ -381,24 +365,24 @@ void() monster_vomit_precache = {
     precache_model ("progs/gib2.mdl");
     precache_model ("progs/gib3.mdl");
 	precache_model ("progs/qmaster/mon_tarbaby.mdl");
-    precache_sound ("zerstorer/cube/bc_attck.wav");
-    precache_sound ("zerstorer/cube/bc_gulp.wav");
-    precache_sound ("blob/death1.wav");
-    precache_sound ("fish/bite.wav");
-    precache_sound ("nehahra/vomit/groan.wav");
-    precache_sound ("drake/vomitus/death.wav");
-    precache_sound ("drake/vomitus/flesh1.wav");
-    precache_sound ("drake/vomitus/flesh2.wav");
-    precache_sound ("zombie/z_miss.wav");
-    precache_sound ("zombie/z_hit.wav");
-    precache_sound ("blob/death1.wav");
-	precache_sound ("blob/hit1.wav");
-	precache_sound ("blob/land1.wav");
-	precache_sound ("blob/sight1.wav");
-	precache_sound ("rogue/blob/mytosis.wav");
-    precache_sound ("zerstorer/gibfnt/gf_plop.wav");
-    precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
-    precache_sound ("zerstorer/gibfnt/gf_sprt1.wav");
+    precache_sound("zerstorer/cube/bc_attck.wav");
+    precache_sound("zerstorer/cube/bc_gulp.wav");
+    precache_sound("blob/death1.wav");
+    precache_sound("fish/bite.wav");
+    precache_sound("nehahra/vomit/groan.wav");
+    precache_sound("drake/vomitus/death.wav");
+    precache_sound("drake/vomitus/flesh1.wav");
+    precache_sound("drake/vomitus/flesh2.wav");
+    precache_sound("zombie/z_miss.wav");
+    precache_sound("zombie/z_hit.wav");
+    precache_sound("blob/death1.wav");
+	precache_sound("blob/hit1.wav");
+	precache_sound("blob/land1.wav");
+	precache_sound("blob/sight1.wav");
+	precache_sound("rogue/blob/mytosis.wav");
+    precache_sound("zerstorer/gibfnt/gf_plop.wav");
+    precache_sound("zerstorer/gibfnt/gf_sbig.wav");
+    precache_sound("zerstorer/gibfnt/gf_sprt1.wav");
 };
 
 // QUAKED monster_vomit (1 0 0) (-32 -32 -24) (32 32 24) Ambush

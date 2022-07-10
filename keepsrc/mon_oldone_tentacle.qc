@@ -85,7 +85,7 @@ void(vector org, vector vec) oldone_attack = {
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLY;
 	newmis.solid = SOLID_BBOX;
-	setorigin (newmis, org);
+	setorigin(newmis, org);
 	newmis.velocity = vec * 3600;
 	newmis.angles = vectoangles(newmis.velocity);
 	newmis.velocity_z = 0;
@@ -113,7 +113,7 @@ void() oldone_atta16	= [	$attack16,	oldone_atta17	] { oldone_attack(self.origin,
 void() oldone_atta17	= [	$attack17,	oldone_atta18	] {};
 void() oldone_atta18	= [	$attack18,	oldone_atta19	] { ai_face(); };
 void() oldone_atta19	= [	$attack19,	oldone_atta20	] { ai_face(); };
-void() oldone_atta20	= [	$attack20,	oldone_atta21	] { ai_face();self.solid = SOLID_BBOX;};
+void() oldone_atta20	= [	$attack20,	oldone_atta21	] { ai_face(); self.solid = SOLID_BBOX;};
 void() oldone_atta21	= [	$attack21,	oldone_aim1	] { ai_face(); };
 
 void() oldone_die1		= [	$death1,	oldone_die2	] {};
@@ -134,7 +134,7 @@ void() oldone_die15		= [	$death15,	oldone_die16	] {};
 void() oldone_die16		= [	$death16,	oldone_die17	] { monster_death_postcheck(); };
 void() oldone_die17		= [	$death17,	oldone_die17	] { monster_deadbody_check(); };
 
-void(entity inflictor, entity attacker, float damage) oldone_pain = { sound (self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM); };
+void(entity inflictor, entity attacker, float damage) oldone_pain = { sound(self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM); };
 
 void() oldone_die = {
 	// Pre-check routine to tidy up extra entities
@@ -142,18 +142,9 @@ void() oldone_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
 		oldone_die1();
 	}
-};
-
-// Returns TRUE if a melee attack would hit right now
-float()	CheckoldoneMelee = {
-	if (enemy_range == RANGE_MELEE) {	// FIXME: check canreach
-		self.attack_state = AS_MELEE;
-		return TRUE;
-	}
-	return FALSE;
 };
 
 void() oldone_rise1		= [	$death17,	oldone_rise2	] { self.solid = SOLID_BBOX;};
@@ -165,9 +156,9 @@ void() oldone_rise6		= [	$death12,	oldone_aim1	] {	oldone_stand1(); };
 
 void() monster_oldone_tentacle_precache = {
 	precache_model ("progs/q15/oldone_tent.mdl");
-	precache_sound ("boss1/pain.wav");
-	precache_sound ("boss1/death.wav");
-	precache_sound ("shambler/fall.wav");
+	precache_sound("boss1/pain.wav");
+	precache_sound("boss1/death.wav");
+	precache_sound("shambler/fall.wav");
 };
 
 void() monster_oldone_tentacle = {

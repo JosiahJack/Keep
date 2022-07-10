@@ -76,14 +76,14 @@ void() spark_spawn = { // [FUNCTION]
 	
 	if (!(self.spawnflags & 2)) {
 		r = rint(random() * 3);	// play a random spark sound	
-		if (r == 1) sound (self, CHAN_AUTO, "misc/spark1.wav", 1, ATTN_NORM);
-		else if (r == 2) sound (self, CHAN_AUTO, "misc/spark2.wav", 1, ATTN_NORM);
-		else if (r == 0) sound (self, CHAN_AUTO, "misc/spark3.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_AUTO, "misc/spark4.wav", 1, ATTN_NORM);
+		if (r == 1) sound(self, CHAN_AUTO, "misc/spark1.wav", 1, ATTN_NORM);
+		else if (r == 2) sound(self, CHAN_AUTO, "misc/spark2.wav", 1, ATTN_NORM);
+		else if (r == 0) sound(self, CHAN_AUTO, "misc/spark3.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_AUTO, "misc/spark4.wav", 1, ATTN_NORM);
 	}
 
 	spark = spawn();
-	setorigin (spark, self.origin);
+	setorigin(spark, self.origin);
 	spark.solid = SOLID_NOT;
 	spark.movetype = MOVETYPE_BOUNCE;
 	spark.classname = "spark";
@@ -95,7 +95,7 @@ void() spark_spawn = { // [FUNCTION]
 	spark.attack_finished = time + random()*3; // random lifespan for sparks that aren't removed on touch
 	spark.think = spark_think;
 	spark.nextthink = time + 0.1;
-	setmodel (spark, "progs/spark.spr");
+	setmodel(spark, "progs/spark.spr");
 	setsize (spark, VEC_ORIGIN, VEC_ORIGIN);
 	self.nextthink = time +  (random() + self.wait);
 };
@@ -136,9 +136,9 @@ void(float ox) spawn_ngspark = { // [FUNCTION]
 	spark.touch = spark_touch;
 	spark.nextthink = time + random()*1;
 	spark.think = SUB_Remove;
-	setmodel (spark, "progs/spark.spr");
+	setmodel(spark, "progs/spark.spr");
 	setsize (spark, VEC_ORIGIN, VEC_ORIGIN);		
-	setorigin (spark, self.origin + v_forward*36 + v_right*ox);
+	setorigin(spark, self.origin + v_forward*36 + v_right*ox);
 };
 
 void() sound_start = { // [FUNCTION]
@@ -149,7 +149,7 @@ void() sound_start = { // [FUNCTION]
 
 void() sound_pause = { // [FUNCTION]
 	// play the shutoff wav if we got one, then hang around until next use
-	if (self.noise1 != "") sound (self, CHAN_VOICE, self.noise1, self.volume, self.distance);
+	if (self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, self.distance);
 	self.nextthink = -1;
 	self.use = sound_start;
 };
@@ -159,13 +159,13 @@ void() sound_play = { // [FUNCTION]
 		self.state = self.count;		
 		sound_pause();
 		return;
-	} else sound (self, CHAN_VOICE, self.noise, self.volume, self.distance);
+	} else sound(self, CHAN_VOICE, self.noise, self.volume, self.distance);
 
 	if (self.count > 0) self.state = self.state - 1; // reduce repititions by 1 if not infinite
 	self.nextthink = time + (random()*self.cnt) + self.pausetime; // Set next play time
 };
 
-// QUAKED fx_sound (0 .5 .8) (-8 -8 -8) (8 8 8) ? START_ON
+// QUAKED fx_sound(0 .5 .8) (-8 -8 -8) (8 8 8) ? START_ON
 // Plays any sound with an optional (different) shutoff sound.
 // Can trigger on/off, repeat, play n times, randomize, all sorts of fun stuff...
 // "noise"			Path to the sound - example: "misc/null.wav"
@@ -184,7 +184,7 @@ void() sound_play = { // [FUNCTION]
 // This won't stop Quake from muting the sound when it's nolonger in range, but at least it will start
 // up again when it comes back into range (although it starts at the next loop time, so long sounds may
 // still act weird).
-// If you need a triggered looping sound (that can't be turned off once started) use fx_ambientsound.
+// If you need a triggered looping sound(that can't be turned off once started) use fx_ambientsound.
 void() fx_sound = { // [ENTITY]
 	if (self.noise == "") self.noise = "drake/misc/secret2.wav";
 	precache_sound(self.noise);

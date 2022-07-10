@@ -193,13 +193,13 @@ void() iceg_knock9 = [$knock9, iceg_knock10 ] { iceg_mcharge(7); };
 void() iceg_knock10 = [$knock10, iceg_knock11 ] { iceg_mcharge(6); };
 void() iceg_knock11 = [$knock11, iceg_knock12 ] { iceg_mcharge(5);monster_footstep(FALSE); };
 void() iceg_knock12 = [$knock12, iceg_knock13 ] { iceg_mcharge(5);
-	sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE); };
+	sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE); };
 void() iceg_knock13 = [$knock13, iceg_knock14 ] { iceg_mcharge(4); };
 void() iceg_knock14 = [$knock14, iceg_knock15 ] { iceg_mcharge(3); };
 void() iceg_knock15 = [$knock15, iceg_knock16 ] { iceg_mcharge(2); };
 void() iceg_knock16 = [$knock16, iceg_knock17 ] { iceg_mcharge(1);
 	self.meleehitsound = "ad171/golem/melee_punch.wav";
-	self.meleecontact = TRUE;ai_meleesmash(30);
+	self.meleecontact = TRUE; ai_meleesmash(30);
 	// If punch made contact, lift the enemy off ground
 	if (self.meleecontact == FALSE) {
 		self.pos1 = self.enemy.origin - self.origin;
@@ -354,20 +354,20 @@ void(entity targ) iceg_icestorm = {
 		}
 
 		if (self.lip < 0.25) 
-			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames1.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames1.wav", 1, ATTN_IDLE);
 		else if (self.lip  < 0.5)
-			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames2.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames2.wav", 1, ATTN_IDLE);
 		else if (self.lip  < 0.75)
-			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames3.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames3.wav", 1, ATTN_IDLE);
 		else
-			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames4.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames4.wav", 1, ATTN_IDLE);
 	} else {
 		if (self.lip < 0.3) 
-			sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard1.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard1.wav", 1, ATTN_IDLE);
 		else if (self.lip  < 0.6)
-			sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard2.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard2.wav", 1, ATTN_IDLE);
 		else
-			sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard3.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard3.wav", 1, ATTN_IDLE);
 	}
 	
 	// Make sure facing the right direction
@@ -401,33 +401,33 @@ void(entity targ) iceg_icestorm = {
 
 void() iceg_magtime = { self.nextthink = time + 0.05;};
 
-void() iceg_magic1 = [$magic1, iceg_magic2 ] { iceg_magtime();ai_face();
+void() iceg_magic1 = [$magic1, iceg_magic2 ] { iceg_magtime(); ai_face();
 	self.pain_finished = time + 1.5;
 	if (self.classtype == CT_MONLAVAGOLEM) sound(self,CHAN_WEAPON,"ne_ruins/h2golem/fireslam.wav",1,ATTN_NORM);
 	else sound(self,CHAN_WEAPON,"ad171/golem/icestorm.wav",1,ATTN_NORM);
 };
 void() iceg_magic2 = [$magic2, iceg_magic3 ] { iceg_magtime(); };
-void() iceg_magic3 = [$magic3, iceg_magic4 ] { iceg_magtime();ai_face(); };
+void() iceg_magic3 = [$magic3, iceg_magic4 ] { iceg_magtime(); ai_face(); };
 void() iceg_magic4 = [$magic4, iceg_magic5 ] { iceg_magtime(); };
-void() iceg_magic5 = [$magic5, iceg_magic6 ] { iceg_magtime();ai_face(); };
-void() iceg_magic6 = [$magic6, iceg_magic7 ] { iceg_magtime();ai_face(); };
-void() iceg_magic7 = [$magic7, iceg_magic8 ] { iceg_magtime();ai_face(); };
+void() iceg_magic5 = [$magic5, iceg_magic6 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic6 = [$magic6, iceg_magic7 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic7 = [$magic7, iceg_magic8 ] { iceg_magtime(); ai_face(); };
 void() iceg_magic8 = [$magic8, iceg_magic9 ] { iceg_magtime(); };
-void() iceg_magic9 = [$magic9, iceg_magic10 ] { iceg_magtime();ai_face(); };
-void() iceg_magic10 = [$magic10, iceg_magic11 ] { iceg_magtime();ai_face(); };
-void() iceg_magic11 = [$magic11, iceg_magic12 ] { iceg_magtime();ai_face(); };
-void() iceg_magic12 = [$magic12, iceg_magic13 ] { iceg_magtime();ai_face(); };
+void() iceg_magic9 = [$magic9, iceg_magic10 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic10 = [$magic10, iceg_magic11 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic11 = [$magic11, iceg_magic12 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic12 = [$magic12, iceg_magic13 ] { iceg_magtime(); ai_face(); };
 void() iceg_magic13 = [$magic13, iceg_magic14 ] { iceg_magtime();iceg_icestorm(self.enemy); };
-void() iceg_magic14 = [$magic14, iceg_magic15 ] { iceg_magtime();ai_face(); };
+void() iceg_magic14 = [$magic14, iceg_magic15 ] { iceg_magtime(); ai_face(); };
 void() iceg_magic15 = [$magic15, iceg_magic16 ] { iceg_magtime();iceg_icestorm(self.enemy); };
-void() iceg_magic16 = [$magic16, iceg_magic17 ] { iceg_magtime();ai_face(); };
+void() iceg_magic16 = [$magic16, iceg_magic17 ] { iceg_magtime(); ai_face(); };
 void() iceg_magic17 = [$magic17, iceg_magic18 ] { iceg_magtime();iceg_icestorm(self.enemy); };
-void() iceg_magic18 = [$magic18, iceg_magic19 ] { iceg_magtime();ai_face(); };
-void() iceg_magic19 = [$magic19, iceg_magic20 ] { iceg_magtime();ai_face();
+void() iceg_magic18 = [$magic18, iceg_magic19 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic19 = [$magic19, iceg_magic20 ] { iceg_magtime(); ai_face();
 	if (skill > SKILL_NORMAL) iceg_icestorm(self.enemy);
 };
-void() iceg_magic20 = [$magic20, iceg_magic21 ] { iceg_magtime();ai_face(); };
-void() iceg_magic21 = [$magic21, iceg_magic22 ] { iceg_magtime();ai_face();
+void() iceg_magic20 = [$magic20, iceg_magic21 ] { iceg_magtime(); ai_face(); };
+void() iceg_magic21 = [$magic21, iceg_magic22 ] { iceg_magtime(); ai_face();
 	if (skill > SKILL_HARD) iceg_icestorm(self.enemy);
 };
 void() iceg_magic22 = [$magic22, iceg_magic23 ] { iceg_magtime(); };
@@ -498,7 +498,7 @@ void() iceg_footstomp = { self.nextthink = time + 0.05;};
 void() iceg_stomp1 = [$stomp1, iceg_stomp2 ] { iceg_footstomp();
 	self.pain_finished = time + self.pain_timeout;};
 void() iceg_stomp2 = [$stomp2, iceg_stomp3 ] { iceg_footstomp();
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_IDLE); };
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_IDLE); };
 void() iceg_stomp3 = [$stomp3, iceg_stomp4 ] { iceg_footstomp(); };
 void() iceg_stomp4 = [$stomp4, iceg_stomp5 ] { iceg_footstomp(); };
 void() iceg_stomp5 = [$stomp5, iceg_stomp6 ] { iceg_footstomp();monster_idle_sound(); };
@@ -654,7 +654,7 @@ void() iceg_waveboundary = {
 		// Time to blow stuff up, switch on resistance and roar!
 		self.style = ICEG_PHASE3;
 		Resist_ChangeType(self, TRUE);
-		sound (self, CHAN_WEAPON, "ad171/golem/icestorm.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/golem/icestorm.wav", 1, ATTN_NORM);
 		// Start turning towards target (using walk animation)
 		self.walkframe = 0;
 		iceg_turnframe();
@@ -674,8 +674,8 @@ void(entity inflictor, entity attacker, float damage) iceg_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 	}
 };
 
@@ -736,12 +736,11 @@ void() iceg_death22 = [$death22, iceg_startfade] {
 };
 
 void() iceg_die = {
-	self.deadflag = DEAD_DEAD;	// Nour bites the dust
+	self.deadflag = DEAD_DEAD;
 	self.effects = 0;			// Remove effects on death
 	self.style = ICEG_PHASE4;	// Heavy Water
 	self.max_health = MON_GIBEXPLOSION;
-
-	sound (self, CHAN_BODY, "ne_ruins/h2golem/death.wav", 1, ATTN_NORM);
+	sound(self,CHAN_BODY,"ne_ruins/h2golem/death.wav",1,ATTN_NORM);
 	self.solid = SOLID_NOT;
 	iceg_death1();
 };
@@ -784,12 +783,12 @@ void() iceg_wake1 = [$birth1, iceg_wake2 ] {
 	if (self.classtype == CT_MONLAVAGOLEM) sound(self,CHAN_BODY,"tronyn/wightattack1.wav",1,ATTN_NORM);
 	else sound(self,CHAN_BODY,"ne_ruins/h2golem/brkfree.wav",1,ATTN_NORM);
 };
-void() iceg_wake2 = [$birth2, iceg_wake3 ] { iceg_birth();ai_forward(2); };
-void() iceg_wake3 = [$birth3, iceg_wake4 ] { iceg_birth();ai_forward(3); };
-void() iceg_wake4 = [$birth4, iceg_wake5 ] { iceg_birth();ai_forward(4); };
-void() iceg_wake5 = [$birth5, iceg_wake6 ] { iceg_birth();ai_forward(3); };
-void() iceg_wake6 = [$birth6, iceg_wake7 ] { iceg_birth();ai_forward(3); };
-void() iceg_wake7 = [$birth7, iceg_wake8 ] { iceg_birth();ai_forward(1); };
+void() iceg_wake2 = [$birth2, iceg_wake3 ] { iceg_birth(); ai_forward(2); };
+void() iceg_wake3 = [$birth3, iceg_wake4 ] { iceg_birth(); ai_forward(3); };
+void() iceg_wake4 = [$birth4, iceg_wake5 ] { iceg_birth(); ai_forward(4); };
+void() iceg_wake5 = [$birth5, iceg_wake6 ] { iceg_birth(); ai_forward(3); };
+void() iceg_wake6 = [$birth6, iceg_wake7 ] { iceg_birth(); ai_forward(3); };
+void() iceg_wake7 = [$birth7, iceg_wake8 ] { iceg_birth(); ai_forward(1); };
 void() iceg_wake8 = [$birth8, iceg_wake9 ] { iceg_birth();monster_footstep(FALSE); };
 void() iceg_wake9 = [$birth9, iceg_wake10 ] { iceg_birth(); };
 void() iceg_wake10 = [$birth10, iceg_wake11 ] { iceg_birth(); };
@@ -801,21 +800,21 @@ void() iceg_wake15 = [$birth15, iceg_wake16 ] { iceg_birth(); };
 void() iceg_wake16 = [$birth16, iceg_tranB1 ] { iceg_birth(); };
 
 void() iceg_tranB1 = [$tranB1, iceg_tranB2 ] {
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	iceg_birth();
 	ai_forward(8);
 };
-void() iceg_tranB2 = [$tranB2, iceg_tranB3 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB3 = [$tranB3, iceg_tranB4 ] { iceg_birth();ai_forward(5);monster_idle_sound(); };
-void() iceg_tranB4 = [$tranB4, iceg_tranB5 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB5 = [$tranB5, iceg_tranB6 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB6 = [$tranB6, iceg_tranB7 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB7 = [$tranB7, iceg_tranB8 ] { iceg_birth();ai_forward(5);monster_idle_sound(); };
-void() iceg_tranB8 = [$tranB8, iceg_tranB9 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB9 = [$tranB9, iceg_tranB10 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB10 = [$tranB10, iceg_tranB11 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB11 = [$tranB11, iceg_tranB12 ] { iceg_birth();ai_forward(5); };
-void() iceg_tranB12 = [$tranB12, iceg_tranB13 ] { iceg_birth();ai_forward(5); };
+void() iceg_tranB2 = [$tranB2, iceg_tranB3 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB3 = [$tranB3, iceg_tranB4 ] { iceg_birth(); ai_forward(5);monster_idle_sound(); };
+void() iceg_tranB4 = [$tranB4, iceg_tranB5 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB5 = [$tranB5, iceg_tranB6 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB6 = [$tranB6, iceg_tranB7 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB7 = [$tranB7, iceg_tranB8 ] { iceg_birth(); ai_forward(5);monster_idle_sound(); };
+void() iceg_tranB8 = [$tranB8, iceg_tranB9 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB9 = [$tranB9, iceg_tranB10 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB10 = [$tranB10, iceg_tranB11 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB11 = [$tranB11, iceg_tranB12 ] { iceg_birth(); ai_forward(5); };
+void() iceg_tranB12 = [$tranB12, iceg_tranB13 ] { iceg_birth(); ai_forward(5); };
 void() iceg_tranB13 = [$tranB13, iceg_tranB13 ] {
 	monster_footstep(FALSE);
 	self.takedamage = DAMAGE_YES;	// Can take damage
@@ -929,7 +928,7 @@ void() monster_icegolem_precache = {
 	precache_sound("ne_ruins/h2golem/pain1.wav");
 	precache_sound("ne_ruins/h2golem/pain2.wav");
 	precache_sound("ne_ruins/h2golem/death.wav");
-	precache_sound ("ad171/golem/sight.wav");
+	precache_sound("ad171/golem/sight.wav");
 };
 
 // QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)

@@ -77,7 +77,7 @@
 .vector		gibpartoffset;		// Offset to origin (center of particles)
 float GIB_IMPACT_LIGHT = 0;		// Light fleshy impact (default)
 float GIB_IMPACT_HEAVY = 1;		// Heavy fleshy impact
-float GIB_IMPACT_ACID = 5;		// Fleshy acid burning sound (dangerous)
+float GIB_IMPACT_ACID = 5;		// Fleshy acid burning sound(dangerous)
 float GIB_IMPACT_STONE = 10;	// Light stones dropping
 float GIB_IMPACT_STONE2 = 11;	// Dropping pebbles
 float GIB_IMPACT_STONE3 = 12;	// Dropping pebbles
@@ -485,7 +485,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		// Bounce like a grenade have trigger/touch impact
 		gibitem.movetype = MOVETYPE_BOUNCE;
 		gibitem.solid = SOLID_TRIGGER;
-		setmodel (gibitem, gibitem.mdl);
+		setmodel(gibitem, gibitem.mdl);
 		// Allow for custom bounding box for gib models
 		if (!(CheckZeroVector(self.gibmins))) setsize (gibitem, self.gibmins, self.gibmaxs);
 		else setsize (gibitem, VEC_ORIGIN, VEC_ORIGIN);
@@ -566,12 +566,12 @@ void() monster_ThrowGib = {
 		sound(self, CHAN_VOICE, GIB_SOUND_SDEATH, 1, ATTN_NORM);
 	else {
 		self.lip = random() * 4;
-		if (self.lip < 1) sound (self, CHAN_VOICE, GIB1_SOUND, 1, ATTN_NORM);
-		else if (self.lip < 2) sound (self, CHAN_VOICE, GIB3_SOUND, 1, ATTN_NORM);
+		if (self.lip < 1) sound(self, CHAN_VOICE, GIB1_SOUND, 1, ATTN_NORM);
+		else if (self.lip < 2) sound(self, CHAN_VOICE, GIB3_SOUND, 1, ATTN_NORM);
 		else {
 			// Is the monster humanoid? (udeath is the original id gib sound)
-			if (self.blockudeath) sound (self, CHAN_VOICE, GIB5_SOUND, 1, ATTN_NORM);
-			else sound (self, CHAN_VOICE, GIB_SOUND_UDEATH, 1, ATTN_NORM);
+			if (self.blockudeath) sound(self, CHAN_VOICE, GIB5_SOUND, 1, ATTN_NORM);
+			else sound(self, CHAN_VOICE, GIB_SOUND_UDEATH, 1, ATTN_NORM);
 		}
 	}	
 	// Some monsters have special death setups
@@ -686,6 +686,14 @@ void() monster_ThrowGib = {
 		ThrowGib(12,1 + rint(random()*3)); // Dark green chunks.
 		ThrowGib(13,1);
 		ThrowGib(14,1 + rint(random()*3));
+	} else if (self.classtype == CT_MONGUG) {
+		ThrowGib(1,2);
+		ThrowGib(2,2);
+		ThrowGib(3,2);
+	} else if (self.classtype == CT_MONSNAKEMAN) {
+		// Throw extra gibs
+		ThrowGib(25,1); // headmdl //2nd uzi
+		ThrowGib(12,1);
 	} else {
 		// Default humanoid explosion
 		if (random()<0.5) ThrowGib(2, 2);
@@ -745,7 +753,7 @@ float() Gib_Eaten = {
 		else sprint(other, " bones!\n");
 		Safe_stuffcmd(other, "bf\n");
 		bones = bones + self.count;
-		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+		sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 		entity_hide(self); // Remove the gib
 	}	
     if (self.healamount < 1) return FALSE;   // Gib has no food value.
@@ -760,7 +768,7 @@ float() Gib_Eaten = {
 
     if (self.headmdl != "") { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
     	// The big crunch when eating a head!
-        sound (other, CHAN_ITEM, "zerstorer/cube/bc_gulp.wav", 1, ATTN_NORM);
+        sound(other, CHAN_ITEM, "zerstorer/cube/bc_gulp.wav", 1, ATTN_NORM);
         gibs = 3;
         while (gibs > 0) {
             SpawnMeatSpray (self,other, 100 * crandom()); // Throw some meat chunks.
@@ -777,7 +785,7 @@ float() Gib_Eaten = {
         self.nextthink  = 0.01;
         self.think      = RemoveGib;
     } else {
-    	sound (other, CHAN_ITEM, "zerstorer/cube/bc_attck.wav", 1, ATTN_NORM);
+    	sound(other, CHAN_ITEM, "zerstorer/cube/bc_attck.wav", 1, ATTN_NORM);
         remove (self);
     }
     Safe_stuffcmd (other, "bf\n");

@@ -114,7 +114,7 @@ void() misc_explobox_on = { // [FUNCTION]
 		self.solid = SOLID_BBOX;
 		self.movetype = MOVETYPE_NONE;
 	}
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	if (self.classname != "misc_biobox_l" || self.classname != "misc_biobox_s" || self.classname != "misc_plasmabox_l" || self.classname != "misc_plasmabox_s") self.skin = self.skin_override*2; // Set skin unless using special misc_biobox or plasmabox from Quoth
 	setsize(self, self.bbmins, self.bbmaxs);
 	self.th_die = misc_explod_fire;
@@ -134,7 +134,7 @@ void() misc_explobox_off =  { // [FUNCTION]
 
 void() misc_explobox_setup = { // [FUNCTION]
 	if (self.noise == "") self.noise = SOUND_REXP3;
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	self.classtype = CT_EXPLO_BOX;
 	self.classgroup = CG_MISCENT;
 	if (self.health < 1) self.health = 15;		// ID def = 20
@@ -147,7 +147,7 @@ void() misc_explobox_setup = { // [FUNCTION]
 
 	if (self.bsporigin) { // Setup exploding model
 		self.mdl = self.model;		// Save model for later
-		setmodel (self, self.mdl);	// set size and link into world
+		setmodel(self, self.mdl);	// set size and link into world
 		self.bbmins = self.mins;	// Save bmodel bounds for later
 		self.bbmaxs = self.maxs;
 	} else {
@@ -173,7 +173,7 @@ void() misc_explobox_setup = { // [FUNCTION]
 
 		// Temporarily enable model/bbox for collision test.  Finalize box location (check drop to floor)
 		if ( !(self.spawnflags & ITEM_FLOATING) ) {
-			setmodel (self, self.mdl);
+			setmodel(self, self.mdl);
 			setsize(self, self.bbmins, self.bbmaxs);
 			self.solid = SOLID_BBOX;
 			self.movetype = MOVETYPE_TOSS;	
@@ -204,7 +204,7 @@ void() misc_explobox_setup = { // [FUNCTION]
 // -------- KEYS --------
 // target        : trigger events when box explodes
 // skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
-// noise         : Explosion sound (def=weapons/r_exp3.wav)
+// noise         : Explosion sound(def=weapons/r_exp3.wav)
 // health        : Amount of health before exploding (def=15)
 // dmg           : Override radius damage (def=160)
 // -------- SPAWNFLAGS --------
@@ -226,7 +226,7 @@ void() misc_explobox = { // [ENTITY]
 // -------- KEYS --------
 // target        : trigger events when box explodes
 // skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
-// noise         : Explosion sound (def=weapons/r_exp3.wav)
+// noise         : Explosion sound(def=weapons/r_exp3.wav)
 // health        : Amount of health before exploding (def=15)
 // dmg           : Override radius damage (def=160)
 // -------- SPAWNFLAGS --------
@@ -254,7 +254,7 @@ void() misc_barrel = { // [ENTITY]
 // Exploding box (bmodel)
 // -------- KEYS --------
 // target      : trigger events when box explodes
-// noise       : Explosion sound (def=weapons/r_exp3.wav)
+// noise       : Explosion sound(def=weapons/r_exp3.wav)
 // health      : Amount of health before exploding (def=15)
 // dmg         : Override radius damage (def=160)
 // _dirt       : -1 = will be excluded from dirtmapping
@@ -291,7 +291,7 @@ void() misc_biobox_l = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_bio_l.bsp";
 	precache_model (self.mdl);
 	precache_model ("progs/quoth/polypgib.mdl");
-	precache_sound ("quoth/drole/explode3.wav");
+	precache_sound("quoth/drole/explode3.wav");
 	self.noise = "quoth/drole/explode3.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 64';
@@ -305,7 +305,7 @@ void() misc_biobox_s = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_bio_s.bsp";
 	precache_model (self.mdl);
 	precache_model ("progs/quoth/polypgib.mdl");
-	precache_sound ("quoth/drole/explode3.wav");
+	precache_sound("quoth/drole/explode3.wav");
 	self.noise = "quoth/drole/explode3.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';
@@ -318,7 +318,7 @@ void() misc_biobox_s = { // [ENTITY]
 void() misc_plasmabox_l = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_plas_l.bsp";
 	precache_model (self.mdl);
-	precache_sound ("rogue/plasma/explode.wav");
+	precache_sound("rogue/plasma/explode.wav");
 	self.noise = "rogue/plasma/explode.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 64';
@@ -331,7 +331,7 @@ void() misc_plasmabox_l = { // [ENTITY]
 void() misc_plasmabox_s = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_plas_s.bsp";
 	precache_model (self.mdl);
-	precache_sound ("rogue/plasma/explode.wav");
+	precache_sound("rogue/plasma/explode.wav");
 	self.noise = "rogue/plasma/explode.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';

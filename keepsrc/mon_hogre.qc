@@ -97,7 +97,7 @@ void() hogre_walkB7	= [	$walkB7,	hogre_walkB8	] { ai_walk(6); };
 void() hogre_walkB8	= [	$walkB8,	hogre_walkB9	] { ai_walk(7); hogre_sound(1); };
 void() hogre_walkB9	= [	$walkB9,	hogre_walkB10	] { ai_walk(6); };
 void() hogre_walkB10= [	$walkB10,	hogre_walkB11	] { ai_walk(2); };
-void() hogre_walkB11= [	$walkB11,	hogre_walkB12	] { monster_footstep(FALSE);ai_walk(0); };
+void() hogre_walkB11= [	$walkB11,	hogre_walkB12	] { monster_footstep(FALSE); ai_walk(0); };
 void() hogre_walkB12= [	$walkB12,	hogre_walk1	] { ai_walk(4); };
 
 
@@ -133,13 +133,13 @@ void() hogre_swing1	= [	$swing1,	hogre_swing2	] { ai_charge(10);hogre_sound(2); 
 void() hogre_swing2	= [	$swing2,	hogre_swing3	] { ai_charge(10); };
 void() hogre_swing3	= [	$swing3,	hogre_swing4	] { ai_charge(6); };
 void() hogre_swing4	= [	$swing4,	hogre_swing5	] { ai_charge(6); };
-void() hogre_swing5	= [	$swing5,	hogre_swing6	] { ai_charge(7); chainsaw(0,1);self.angles_y = self.angles_y + random()*25;};
-void() hogre_swing6	= [	$swing6,	hogre_swing7	] { ai_forward(7); chainsaw(200,1);self.angles_y = self.angles_y + random()* 25;};
+void() hogre_swing5	= [	$swing5,	hogre_swing6	] { ai_charge(7); chainsaw(0,1); self.angles_y = self.angles_y + random()*25;};
+void() hogre_swing6	= [	$swing6,	hogre_swing7	] { ai_forward(7); chainsaw(200,1); self.angles_y = self.angles_y + random()* 25;};
 void() hogre_swing7	= [	$swing7,	hogre_swing8	] { ai_forward(4); chainsaw(0,1);monster_footstep(FALSE); self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing8	= [	$swing8,	hogre_swing9	] { ai_forward(4); chainsaw(0,1);self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing9	= [	$swing9,	hogre_swing10 ] { ai_forward(4); chainsaw(0,1);self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing10= [	$swing10,	hogre_swing11 ] { ai_forward(4); chainsaw(-200,1);self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing11= [	$swing11,	hogre_swing12 ] { ai_forward(4); chainsaw(0,1);self.angles_y = self.angles_y + random()* 25;};
+void() hogre_swing8	= [	$swing8,	hogre_swing9	] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
+void() hogre_swing9	= [	$swing9,	hogre_swing10 ] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
+void() hogre_swing10= [	$swing10,	hogre_swing11 ] { ai_forward(4); chainsaw(-200,1); self.angles_y = self.angles_y + random()* 25;};
+void() hogre_swing11= [	$swing11,	hogre_swing12 ] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
 void() hogre_swing12= [	$swing12,	hogre_swing13 ] { ai_face(); };
 void() hogre_swing13= [	$swing13,	hogre_swing14 ] { ai_face(); };
 void() hogre_swing14= [	$swing14,	hogre_run1	] { ai_face(); };
@@ -240,7 +240,7 @@ void()	hogre_painC9 = [	$painC9,	hogre_painC10	] {};
 void()	hogre_painC10= [	$painC10,	hogre_painC11	] { monster_footstep(FALSE); };
 void()	hogre_painC11= [	$painC11,	hogre_painC12	] {};
 void()	hogre_painC12= [	$painC12,	hogre_painC13	] {};
-void()	hogre_painC13= [	$painC13,	hogre_painC14	] { monster_footstep(FALSE);ai_forward(3); };
+void()	hogre_painC13= [	$painC13,	hogre_painC14	] { monster_footstep(FALSE); ai_forward(3); };
 void()	hogre_painC14= [	$painC14,	hogre_painC15	] { ai_forward(4); };
 void()	hogre_painC15= [	$painC15,	hogre_painC16	] { ai_forward(4); };
 void()	hogre_painC16= [	$painC16,	hogre_painC17	] { ai_forward(5); };
@@ -252,7 +252,7 @@ void(entity inflictor, entity attacker, float damage) hogre_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 	
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
@@ -284,8 +284,8 @@ void(entity inflictor, entity attacker, float damage) hogre_pain = {
 
 // (146 - 155) deathSilly (comedy death)
 void()	hogre_dieS1	= [	$deathS1,	hogre_dieS2	] { ai_forward(14); };
-void()	hogre_dieS2	= [	$deathS2,	hogre_dieS3	] { monster_check_gib();ai_forward(14); };
-void()	hogre_dieS3	= [	$deathS3,	hogre_dieS4	] { monster_check_gib();ai_forward(3); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	hogre_dieS2	= [	$deathS2,	hogre_dieS3	] { monster_check_gib(); ai_forward(14); };
+void()	hogre_dieS3	= [	$deathS3,	hogre_dieS4	] { monster_check_gib(); ai_forward(3); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogre_dieS4	= [	$deathS4,	hogre_dieS5	] { ai_forward(1); };
 void()	hogre_dieS5	= [	$deathS5,	hogre_dieS6	] { ai_forward(1); };
 void()	hogre_dieS6	= [	$deathS6,	hogre_dieS7	] { ai_forward(1); };
@@ -296,8 +296,8 @@ void()	hogre_dieS10= [	$deathS10,	hogre_dieS10] { monster_deadbody_check(); };
 
 // (156 - 165) deathA (Forward)
 void()	hogre_dieA1	= [	$deathA1,	hogre_dieA2	] { ai_forward(14); };
-void()	hogre_dieA2	= [	$deathA2,	hogre_dieA3	] { monster_check_gib();ai_forward(14); };
-void()	hogre_dieA3	= [	$deathA3,	hogre_dieA4	] { monster_check_gib();ai_forward(3);self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	hogre_dieA2	= [	$deathA2,	hogre_dieA3	] { monster_check_gib(); ai_forward(14); };
+void()	hogre_dieA3	= [	$deathA3,	hogre_dieA4	] { monster_check_gib(); ai_forward(3); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogre_dieA4	= [	$deathA4,	hogre_dieA5	] { ai_forward(1); };
 void()	hogre_dieA5	= [	$deathA5,	hogre_dieA6	] { ai_forward(1); };
 void()	hogre_dieA6	= [	$deathA6,	hogre_dieA7	] { ai_forward(1); };
@@ -308,8 +308,8 @@ void()	hogre_dieA10= [	$deathA10,	hogre_dieA10] { monster_deadbody_check(); };
 
 // (166 - 179) deathB (Backward)
 void()	hogre_dieB1	= [	$deathB1,	hogre_dieB2	] { ai_back(4); };
-void()	hogre_dieB2	= [	$deathB2,	hogre_dieB3	] { monster_check_gib();ai_back(10); };
-void()	hogre_dieB3	= [	$deathB3,	hogre_dieB4	] { monster_check_gib();ai_back(3);self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	hogre_dieB2	= [	$deathB2,	hogre_dieB3	] { monster_check_gib(); ai_back(10); };
+void()	hogre_dieB3	= [	$deathB3,	hogre_dieB4	] { monster_check_gib(); ai_back(3); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogre_dieB4	= [	$deathB4,	hogre_dieB5	] { ai_back(1); };
 void()	hogre_dieB5	= [	$deathB5,	hogre_dieB6	] {};
 void()	hogre_dieB6	= [	$deathB6,	hogre_dieB7	] {};
@@ -327,7 +327,7 @@ void() hogre_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
 		self.lip = random();
 		if (self.lip < 0.05) hogre_dieS1();
 		else if (self.lip < 0.5) hogre_dieA1();
@@ -336,10 +336,10 @@ void() hogre_die = {
 };
 
 void(float soundtype) hogre_sound = {
-	if (soundtype == 1) sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
-	else if (soundtype == 2) sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-	else if (soundtype == 3) sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound (self, CHAN_WEAPON, "ad171/ogre/ogleap.wav", 1, ATTN_NORM);
+	if (soundtype == 1) sound(self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+	else if (soundtype == 2) sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
+	else if (soundtype == 3) sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
+	else if (soundtype == 4) sound(self, CHAN_WEAPON, "ad171/ogre/ogleap.wav", 1, ATTN_NORM);
 };
 
 // Special wakeup animation for attacking/breaking something infront
@@ -380,14 +380,14 @@ void() monster_hogre_precache = {
 	precache_model ("progs/ad171/gib_ogfoot1.mdl");
 	precache_model ("progs/ad171/gib_ogfoot2.mdl");
 	precache_model ("progs/ad171/w_ogregl.mdl");
-	precache_sound ("ogre/ogidle.wav");
-	precache_sound ("ogre/ogidle2.wav");
-	precache_sound ("ogre/ogdrag.wav"); // Chainsaw scrap on floor sound
-	precache_sound ("ogre/ogdth.wav"); // Death sound
-	precache_sound ("ogre/ogpain1.wav"); // Pain
-	precache_sound ("ogre/ogsawatk.wav"); // Attack
-	precache_sound ("ad171/ogre/ogleap.wav"); // Leap Attack
-	precache_sound ("ogre/ogwake.wav");
+	precache_sound("ogre/ogidle.wav");
+	precache_sound("ogre/ogidle2.wav");
+	precache_sound("ogre/ogdrag.wav"); // Chainsaw scrap on floor sound
+	precache_sound("ogre/ogdth.wav"); // Death sound
+	precache_sound("ogre/ogpain1.wav"); // Pain
+	precache_sound("ogre/ogsawatk.wav"); // Attack
+	precache_sound("ad171/ogre/ogleap.wav"); // Leap Attack
+	precache_sound("ogre/ogwake.wav");
 };
 
 //QUAKED monster_hogre (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM

@@ -1,6 +1,5 @@
 void() player_run;
 void(vector p1, vector p2, entity from, float damage) LightningDamage;
-void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage;
 void(float reload) W_Reload;
 
 //   SPHERE #techdebt to remove it when no longer necessary
@@ -26,9 +25,9 @@ void() MakeSphere = {
 	sphere.solid = SOLID_NOT;
 	sphere.movetype = MOVETYPE_NONE;
 	
-	setmodel (sphere, "progs/aoa/sphere.mdl");
+	setmodel(sphere, "progs/aoa/sphere.mdl");
 	setsize (sphere, '0 0 0', '0 0 0');
-	setorigin (sphere, self.origin);
+	setorigin(sphere, self.origin);
 	sphere.attack_finished = time + 10;
 	
 	sphere.nextthink = time + 0.1;
@@ -68,7 +67,7 @@ void() sword1Attack3 = [34, sword1Attack4]
 	if (self.tome_finished) //Tome of Power:every attack launches a fire projectile. #tomeflag
 	{
 		SwordMagic(1);
-		sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 	}
 };
 
@@ -84,7 +83,7 @@ void() sword1Attack5 = [36, sword2Attack1]
 	W_Reload(0.6);
 };
 
-void() sword2Attack1 = [37, sword2Attack2] { self.weaponframe = 7;sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM); };
+void() sword2Attack1 = [37, sword2Attack2] { self.weaponframe = 7;sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM); };
 void() sword2Attack2 = [38, sword2Attack3] { self.weaponframe = 8;};
 void() sword2Attack3 = [39, sword2Attack4]
 {
@@ -93,7 +92,7 @@ void() sword2Attack3 = [39, sword2Attack4]
 	if (self.tome_finished) //Tome of Power:every attack launches a fire projectile. #tomeflag #tomeflag
 	{
 		SwordMagic(1);
-		sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 	}
 };
 void() sword2Attack4 = [40, sword2Attack5] { self.weaponframe = 10;};
@@ -120,7 +119,7 @@ void() sword3Attack5 = [47, sword3Attack6]
 {
 	self.weaponframe = 17;
 	SwordSwing(3);
-	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
 void() sword3Attack6 = [0, sword3Attack7] { self.weaponframe = 18;};
 void() sword3Attack7 = [1, sword3Attack8]
@@ -133,7 +132,7 @@ void() sword3Attack7 = [1, sword3Attack8]
 		if (self.currentammo <0)
 			self.currentammo = self.ammo_elemental = 0;
 	}
-	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
 
 void() sword3Attack8 = [2, player_run] { self.weaponframe = 20;};
@@ -212,25 +211,20 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 	}
 };
 
-void() W_FireScimitar = //the first attack in the scimitar's combo
-{
+void() W_FireScimitar = { //the first attack in the scimitar's combo
 	local vector lungeDirection;
+
 	W_Reload(0.6);
-	
-	if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+	if (random() < 0.5) sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
+	else sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 	makevectors(self.v_angle);
 	lungeDirection = v_forward;
 	lungeDirection_z = 0;
 	lungeDirection = normalize(lungeDirection);
-	
-	if (self.flags & FL_ONGROUND)
-	{
+	if (self.flags & FL_ONGROUND) {
 		self.velocity =  lungeDirection*650 + '0 0 75';
-		
-		if (self.tome_finished) // #techdebt #tomeflag
-			self.velocity = self.velocity * 1.5;
-		self.flags = self.flags - FL_ONGROUND;
+		if (self.tome_finished) self.velocity = self.velocity * 1.5;
+		SUB_RemoveFlags(self,FL_ONGROUND);
 	}
 	sword1Attack1();
 };
@@ -269,7 +263,7 @@ void(float attackNumber) SwordSwing = {
 			T_Damage(targets, self, self, damage, DAMARMOR);
 			SpawnBlood(targets, (self.origin*2 + targets.origin)/3, '0 0 0', 20,0);
 			hitsTarget = TRUE;
-			sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+			sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 		}
 		targets = targets.chain;
 	}
@@ -285,12 +279,12 @@ void(float attackNumber) SwordSwing = {
 	{
 		trace_ent.axhitme = 1;
 		SpawnBlood(trace_ent, dir, dir-org, 20,0);
-		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,trace_endpos);
-		sound (self, CHAN_WEAPON, "aoa/axhit3.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "aoa/axhit3.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -320,9 +314,9 @@ void(float projectileNumber) SwordMagic = {
 	glow.angles = vectoangles(glow.velocity);
 	
 	org = self.origin + v_forward*8 + v_up*20 + v_right*3;
-	setmodel (glow, "progs/aoa/glow.mdl");
+	setmodel(glow, "progs/aoa/glow.mdl");
 	setsize (glow, '0 0 0', '0 0 0');
-	setorigin (glow, org);
+	setorigin(glow, org);
 	glow.frame = projectileNumber - 1;
 	glow.avelocity = '-500 0 0';
 	glow.touch = GlowTouch;
@@ -427,16 +421,16 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 		T_Damage (trace_ent, self, self, damage, DAMARMOR);
 		local float randy;
 		if (randy > 0.7)
-			sound (self, CHAN_VOICE, "aoa/rapier_meat.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "aoa/rapier_meat.wav", 1, ATTN_NORM);
 		else if (randy > 0.35)
-			sound (self, CHAN_VOICE, "aoa/rapier_meat2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "aoa/rapier_meat2.wav", 1, ATTN_NORM);
 		else 
-			sound (self, CHAN_VOICE, "aoa/rapier_meat3.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "aoa/rapier_meat3.wav", 1, ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,org);
-		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
+		sound(self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
 };
 
@@ -467,12 +461,12 @@ void(float damage) GhostRapierAttack = //the projected sword does this attack th
 		if (trace_ent.classname == "monster_shambler")
 			damage = damage * 1.5;
 		T_Damage(trace_ent, self, self, damage, DAMARMOR);
-		sound (self, CHAN_WEAPON, "aoa/acidhit.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "aoa/acidhit.wav", 1, ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,trace_endpos);
-		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
+		sound(self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
 };
 
@@ -494,7 +488,7 @@ void() RapierSpinAttack = {
 	}
 	if (hitTarget == TRUE)
 	{
-		sound (self, CHAN_WEAPON, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -518,14 +512,14 @@ void(vector org, float radius) FindEnemy = {
 void() ghostRapierTouch = {
 	local vector displacement;
 	displacement = self.origin + normalize(self.velocity)*-8;
-	setorigin (self, displacement);
+	setorigin(self, displacement);
 	self.velocity = '0 0 0';
 	if (other.takedamage && other != self.owner && other != world)
 	{
 		T_Damage(other, self, self.owner, 20, DAMARMOR);
 		SpawnBlood(other, other.origin, '0 0 0', 20,0);
 		self.touch = SUB_Null;
-		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
+		sound(self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
 };
 void() W_FireRapier = {
@@ -584,7 +578,7 @@ void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] { self.frame =
 void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] { self.frame = 12;};
 void() ChainLightningAnimation13 = [0, player_run] { self.frame = 13;};
 
-void() IceAttack1 =	[107, IceAttack2] { if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();W_Reload(0.8); };
+void() IceAttack1 =	[107, IceAttack2] { if (time < self.attack_finished) return; self.weaponframe = 1;IceProjectiles();W_Reload(0.8); };
 void() IceAttack2 =	[108, IceAttack3] { self.weaponframe = 1;};
 void() IceAttack3 =	[109, IceAttack4] { self.weaponframe = 2;};
 void() IceAttack4 =	[110, IceAttack5] { self.weaponframe = 3;};
@@ -644,9 +638,9 @@ void() T_BoulderTouch = {
 	}
 
 	if (speed > 200)
-		sound (self, CHAN_WEAPON, "aoa/fastboulder.wav", 1, ATTN_NORM);//fast impact sound
+		sound(self, CHAN_WEAPON, "aoa/fastboulder.wav", 1, ATTN_NORM);//fast impact sound
 	else
-		sound (self, CHAN_WEAPON, "aoa/slowboulder.wav", 1, ATTN_NORM);//slow impact sound
+		sound(self, CHAN_WEAPON, "aoa/slowboulder.wav", 1, ATTN_NORM);//slow impact sound
 
 	self.velocity = self.velocity * 0.5;
 
@@ -685,7 +679,7 @@ void() LaunchBoulder = {
 void() ChainedLightning = {
 	local float damage;
 	
-	sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 	traceline(self.origin, self.enemy.origin, FALSE, self);
 	Tent_Beam(TE_LIGHTNING1,self,self.origin,trace_endpos);
 	damage = 30;
@@ -707,7 +701,7 @@ void(entity target) LightningTarget = //called once per target of the storm, up 
 	cloud.owner = self.owner;
 	cloud.nextthink = time;
 	cloud.think = ChainedLightning;	
-	setorigin (cloud, self.origin);
+	setorigin(cloud, self.origin);
 };
 
 void() StormFindTargets = {
@@ -739,33 +733,30 @@ void() StormFindTargets = {
 	self.think = SUB_Remove;
 };
 
-void() W_FireChainLightning = //direct hitscan damage, then lightning chains from there 0.2 seconds later
-{
+void() W_FireChainLightning = { //direct hitscan damage, then lightning chains from there 0.2 seconds later
 	local vector org, terminus, stormOrigin;
 	local entity storm;
 
-	W_Reload(0.7);
-		
+	W_Reload(0.7);	
 	makevectors(self.v_angle);
 	org = self.origin + '0 0 8' + v_forward*12 + v_right*10;
 	traceline(org, org+v_forward*640, TRUE, self);
 	terminus = trace_endpos;
 	Tent_Beam(TE_LIGHTNING1,self,org,terminus);
-	PlayerLightningDamage(org,terminus,self,40);
+	LightningDamage(org,terminus,self,40);
 	SpawnBlood(trace_ent,terminus,vecrand(5,50,TRUE),20,225);
 	stormOrigin = terminus + '0 0 20';
 	storm = spawn();
 	storm.owner = self;
 	storm.classgroup = CG_PROJALL;
-	setmodel (storm, "progs/aoa/tessla.mdl");
+	setmodel(storm, "progs/aoa/tessla.mdl");
 	setsize (storm, '0 0 0', '0 0 0');
-	setorigin (storm, stormOrigin);
+	setorigin(storm, stormOrigin);
 	storm.movetype = MOVETYPE_NONE;
 	storm.solid = SOLID_NOT;
 	storm.nextthink = time + 0.3;
 	storm.think = StormFindTargets;
-	//sound (self, CHAN_WEAPON, "aoa/thndr.wav", 1, ATTN_NORM);
-	sound (self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
 };
 	
 void() IceSpikeTouch = {
@@ -777,7 +768,7 @@ void() IceSpikeTouch = {
 		SpawnBlood(self, self.origin, self.velocity, 4,0);
 	}	
 
-	sound (self, CHAN_AUTO, "hknight/hit.wav", 0.5, ATTN_NORM);
+	sound(self, CHAN_AUTO, "hknight/hit.wav", 0.5, ATTN_NORM);
 	remove(self);
 };
 	
@@ -796,9 +787,9 @@ void(float vertical, float horizontal) IceSpikeProjectile = {
 	IceSpike.velocity = v_forward*900 - v_up*vertical*8 - v_right*horizontal*8 + spread('5 5 5');
 	IceSpike.angles = vectoangles(IceSpike.velocity);
 	IceSpike.avelocity_z = crandom()*1000;
-	setmodel (IceSpike, "progs/aoa/icespike.mdl"); //remember to precache
+	setmodel(IceSpike, "progs/aoa/icespike.mdl"); //remember to precache
 	setsize (IceSpike, '0 0 0', '0 0 0');
-	setorigin (IceSpike, self.origin + v_up* (16 + vertical) + v_forward*8 + v_right*horizontal);
+	setorigin(IceSpike, self.origin + v_up* (16 + vertical) + v_forward*8 + v_right*horizontal);
 	IceSpike.nextthink = time + 1.2;
 	IceSpike.think = SUB_Remove;
 };
@@ -816,13 +807,13 @@ void(float offset) IceSpread = {
 void() W_FireIce = {
 	IceAttack1(); //trigger animation
 	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1; 	//consume ammo
-	//trigger sound sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 0.7, ATTN_NORM);
+	//trigger sound sound(self, CHAN_WEAPON, "aoa/iceattack.wav", 0.7, ATTN_NORM);
 };
 
 void() IceProjectiles = {
 	W_Reload(0.9);
 	
-	sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
 
 	//24 projectiles IceSpikeProjectile();
 	IceSpread(24);
@@ -955,7 +946,7 @@ void() StaffDetonate4 = [112, player_run] { self.weaponframe =12;};
 
 void() VoidExplosion = {
 
-	sound (self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	local entity GreenEmbers, GreenEmbers2, GreenEmbers3;
 	
 	makevectors(self.velocity);
@@ -963,27 +954,27 @@ void() VoidExplosion = {
 	GreenEmbers = spawn();
 	GreenEmbers.classgroup = CG_PROJALL;
 	GreenEmbers.angles = vectoangles(v_right* 10);
-	setmodel (GreenEmbers, "progs/aoa/greenembers.mdl");
+	setmodel(GreenEmbers, "progs/aoa/greenembers.mdl");
 	setsize (GreenEmbers, '0 0 0', '0 0 0');
-	setorigin (GreenEmbers, self.origin + spread('5 5 5'));
+	setorigin(GreenEmbers, self.origin + spread('5 5 5'));
 	GreenEmbers.nextthink = time + 0.05;
 	GreenEmbers.think = embers1;
 	
 	GreenEmbers2 = spawn();
 	GreenEmbers2.classgroup = CG_PROJALL;
 	GreenEmbers2.angles = vectoangles(v_right*-10);
-	setmodel (GreenEmbers2, "progs/aoa/greenembers.mdl");
+	setmodel(GreenEmbers2, "progs/aoa/greenembers.mdl");
 	setsize (GreenEmbers2, '0 0 0', '0 0 0');
-	setorigin (GreenEmbers2, self.origin + spread('5 5 5'));
+	setorigin(GreenEmbers2, self.origin + spread('5 5 5'));
 	GreenEmbers2.nextthink = time + 0.05;
 	GreenEmbers2.think = embers1;
 	
 	GreenEmbers3 = spawn();
 	GreenEmbers3.classgroup = CG_PROJALL;
 	GreenEmbers3.angles = vectoangles(v_forward*10);
-	setmodel (GreenEmbers3, "progs/aoa/greenembers.mdl");
+	setmodel(GreenEmbers3, "progs/aoa/greenembers.mdl");
 	setsize (GreenEmbers3, '0 0 0', '0 0 0');
-	setorigin (GreenEmbers3, self.origin + spread('5 5 5'));
+	setorigin(GreenEmbers3, self.origin + spread('5 5 5'));
 	GreenEmbers3.nextthink = time + 0.05;
 	GreenEmbers3.think = embers1;
 
@@ -1046,13 +1037,13 @@ void() DetonateVoidShards = {
 	if (FoundATarget == TRUE)
 	{
 		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 4;
-		sound (self, CHAN_WEAPON, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	}
 };
 
 void() VoidShardTouch = {
 	// trigger sound
-	// sound (self, CHAN_AUTO, "aoa/staffhit.wav", 1, ATTN_NORM); #techdebt
+	// sound(self, CHAN_AUTO, "aoa/staffhit.wav", 1, ATTN_NORM); #techdebt
 	GreenExplosion();
 	BlueExplosion();
 	if (self.owner.tome_finished)
@@ -1130,9 +1121,9 @@ void() VoidStaffProjectile = {
 	}
 	VoidShard.angles = spread('180 180 180');
 	VoidShard.avelocity = spread('180 180 180');
-	setmodel (VoidShard, "progs/aoa/void_shard.mdl");
+	setmodel(VoidShard, "progs/aoa/void_shard.mdl");
 	setsize (VoidShard, '0 0 0', '0 0 0');
-	setorigin (VoidShard, self.origin + v_forward*8 + v_up*14 + v_right *3);
+	setorigin(VoidShard, self.origin + v_forward*8 + v_up*14 + v_right *3);
 	VoidShard.attack_finished = time + 4;
 	
 	VoidShard.nextthink = time + 0.03;
@@ -1200,7 +1191,7 @@ void() ShrapnelTouch = {
 		soundFile = "weapons/ric3.wav";
 	
 	if (soundVariance > 0.4)
-		sound (self, CHAN_WEAPON, soundFile, 0.5, ATTN_NORM);
+		sound(self, CHAN_WEAPON, soundFile, 0.5, ATTN_NORM);
 	
 	if (self.count <= 0) //after a number (self.count) bounces, delete shrapnel
 		remove(self);
@@ -1222,7 +1213,7 @@ void(vector direction) FlakShrapnel = {
 	shrapnel.avelocity = spread('50 50 50');
 	
 
-	setmodel (shrapnel, "progs/aoa/proj_flak_shrapnel.mdl");
+	setmodel(shrapnel, "progs/aoa/proj_flak_shrapnel.mdl");
 	setsize (shrapnel, '0 0 0', '0 0 0');
 	setorigin(shrapnel, self.origin + direction);
 	shrapnel.touch = ShrapnelTouch;
@@ -1314,7 +1305,7 @@ void() LaunchFlakShell = {
 	
 	setmodel(flak, "progs/aoa/proj_flak_shell.mdl");
 	setsize (flak, '0 0 0', '0 0 0');
-	setorigin (flak, self.origin + '0 0 15' + v_forward*8 + v_right*5);
+	setorigin(flak, self.origin + '0 0 15' + v_forward*8 + v_right*5);
 	
 	flak.nextthink = time + 1.2;
 	flak.think = FlakExplode;
@@ -1336,7 +1327,7 @@ void() MaceSwing;
 
 void() CastDrainHealth;
 
-void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.6); }; //th
+void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound(self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.6); }; //th
 void() MaceSwing2 =	[	120,	MaceSwing3	] { self.weaponframe=2;};
 void() MaceSwing3 =	[	121,	MaceSwing4	] { self.weaponframe=3; MaceSwing(); };
 void() MaceSwing4 =	[	122,	MaceSwing5	] { self.weaponframe=4;};
@@ -1350,7 +1341,7 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 	}
 };
 
-void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.7); };
+void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound(self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.7); };
 void() MaceBackhand2 =	[	126,	MaceBackhand3	] { self.weaponframe=7;MaceSwing(); };
 void() MaceBackhand3 =	[	127,	MaceBackhand4	] { self.weaponframe=8;};
 void() MaceBackhand4 =	[	128,	MaceBackhand5	] { self.weaponframe=9;};
@@ -1396,9 +1387,9 @@ void(vector location) DrainHealthEffect = {
 	FX.movetype = MOVETYPE_NONE;
 	FX.solid = SOLID_NOT;
 	
-	setmodel (FX, "progs/aoa/bloodembers.mdl");
+	setmodel(FX, "progs/aoa/bloodembers.mdl");
 	setsize (FX, '0 0 0', '1000 1000 1000');
-	setorigin (FX, location);
+	setorigin(FX, location);
 	FX.frame = 0;
 
 	FX.nextthink = time + 0.05;
@@ -1411,9 +1402,9 @@ void(vector location) DrainHealthEffect = {
 	FX2.solid = SOLID_NOT;
 
 	
-	setmodel (FX2, "progs/aoa/bloodsphere.mdl");
+	setmodel(FX2, "progs/aoa/bloodsphere.mdl");
 	setsize (FX2, '0 0 0', '0 0 0');
-	setorigin (FX2, location);
+	setorigin(FX2, location);
 	FX2.frame = 0;
 
 	FX2.nextthink = time + 0.025;
@@ -1447,7 +1438,7 @@ void() CastDrainHealth = {
 	}
 	makevectors(self.v_angle);
 	DrainHealthEffect(self.origin + ignoreVertical(v_forward)*30);
-	sound (self, CHAN_WEAPON, "aoa/hhs.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "aoa/hhs.wav", 1, ATTN_NORM);
 };
 
 
@@ -1464,38 +1455,29 @@ void() MaceLungeTouch = {
 void() W_FireMace = {
 	local vector lunge;
 	MaceSwing1(); 	//trigger animation
+	if ((self.flags & FL_ONGROUND)) return;
 
-	if (!(self.flags & FL_ONGROUND))
-	{
-		return;		
-	}
-	sound (self, CHAN_VOICE, "qmaster/player/jump.wav", 1, ATTN_NORM);
-
-	self.flags = self.flags - FL_ONGROUND;
+	sound(self, CHAN_VOICE, "qmaster/player/jump.wav", 1, ATTN_NORM);
 	makevectors(self.v_angle);
 	lunge = '0 0 300';
 	//centerprint(self, ftos(v_forward_z));
-	if (v_forward_z < 0)
-	{	
+	if (v_forward_z < 0) {	
 		lunge = lunge + ignoreVertical(v_forward*4 + v_up)*600;
-	}
-	else
-	{
+	} else {
 		lunge = lunge + normalize(v_forward)*300 + ignoreVertical(v_forward*10 + v_up)*300;
 	}
 	self.touch = MaceLungeTouch;
-		
 	self.velocity = lunge;
 };
 
 void(vector org, entity victim) MaceSwingHits = {
 	local float damage;
 	
-	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	traceline(org, victim.origin +'0 0 10', TRUE, self);
 	particle(trace_endpos, '0 0 2', 73, 10);
 	SpawnBlood(victim, org, '0 0 1', 10,0);
-	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	if (victim.classgroup == CG_ZOMBIE)
 	{
 		damage = 100; //bonus damage to zombies, but cannot drain health from zombies
@@ -1534,14 +1516,14 @@ void() MaceSwing = //executes the attack part. Melee changed from traceline to f
 
 	if (hitSomething == TRUE)
 	{
-		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 	traceline (source, source + v_forward*70, FALSE, self);
 	
 	if (trace_fraction != 1 && hitSomething == FALSE)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,trace_endpos);
-		sound (self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
 	}
 };	
 	
@@ -1565,7 +1547,7 @@ void()	GungnirAttack1 = 	[144, GungnirAttack2		]
 {
 	//setPlayerModel ("progs/player.mdl");
 	self.weaponframe = 1;
-	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
 	W_Reload(0.9);
 };
 void()	GungnirAttack2 = 	[145, GungnirAttack3		]	{ self.weaponframe = 2;GungnirPrimary(); };
@@ -1608,7 +1590,7 @@ void() DiveTargetFollow = //this loop ensures that the reticle is where the play
 	dest = org + ignoreVertical(v_forward)*400 + v_forward*300 + '0 0 -400';
 	traceline(org, dest, TRUE, self);
 	
-	setorigin (self, trace_endpos);
+	setorigin(self, trace_endpos);
 	
 	self.nextthink = time + 0.01;
 	self.think = DiveTargetFollow;
@@ -1627,7 +1609,7 @@ void() SpawnDiveTarget = //spawns the reticle which shows the player where they 
 	
 	target.attack_finished = time + 0.5;
 	
-	setmodel (target, "progs/aoa/divetarget.mdl");
+	setmodel(target, "progs/aoa/divetarget.mdl");
 	setsize(target, '0 0 0', '0 0 0');
 	setorigin(target, self.origin);
 	
@@ -1644,7 +1626,7 @@ void()	GungnirJump1 = 	[143, GungnirJump2		]
 	{
 		self.velocity = '0 0 550';
 	}
-	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
 };
 void() GungnirJump2 = [143, GungnirJump3] { self.weaponframe = 4;GungnirPrimary();SpawnDiveTarget(); };
 void() GungnirJump3 = [143, GungnirJump4] { self.weaponframe = 4;};
@@ -1694,7 +1676,7 @@ void() ImpaleTouch = {
 
 	makevectors(self.v_angle);
 	explosionCenter = self.origin + ignoreVertical(v_forward)*20;
-	sound (self, CHAN_AUTO, "shambler/sboom.wav", 1, ATTN_NORM); //needs a new sound #techdebt
+	sound(self, CHAN_AUTO, "shambler/sboom.wav", 1, ATTN_NORM); //needs a new sound #techdebt
 	Tent_Point(TE_TAREXPLOSION,explosionCenter);
 	makevectors(self.v_angle);
 	enemies = findradius(explosionCenter, 300);
@@ -1702,7 +1684,7 @@ void() ImpaleTouch = {
 		if ( (HasLOS(enemies, self)) && ((enemies.movetype == MOVETYPE_STEP)
 			|| (enemies.movetype == MOVETYPE_WALK)) ) { //if 'enemies' entity is in line of sight, and is not NONE, NOCLIP, or PUSH, then:
 			blastDirection = ignoreVertical(normalize(enemies.origin - self.origin)) *600 + '0 0 225' + '0 0 100'*random();
-			enemies.flags = enemies.flags - FL_ONGROUND;
+			SUB_RemoveFlags(enemies,FL_ONGROUND);
 			enemies.velocity = blastDirection;
 			Tent_Point(TE_TELEPORT,enemies.origin);
 		}
@@ -1751,7 +1733,7 @@ void() VortexTouch = { // [FUNCTION]
 };
 
 void(entity victim) ZapEnemy = { // [FUNCTION]
-	if (random() > 0.65) sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+	if (random() > 0.65) sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 	traceline(self.origin, victim.origin, FALSE, self);
 	Tent_Beam(TE_LIGHTNING2,self,self.origin,trace_endpos);
 	LightningDamage(self.origin, trace_endpos, self.owner, 15);	
@@ -1761,7 +1743,7 @@ void() VortexThink = { // [FUNCTION]
 	local entity victims;
 	local vector gravity;
 	
-	sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);	
 	if (vlen(self.velocity) > 50) self.velocity = self.velocity * 0.95;
 	else self.velocity = '0 0 0';
 	
@@ -1781,7 +1763,7 @@ void() VortexThink = { // [FUNCTION]
 	}
 	if (time > self.attack_finished) remove(self); // Delete if past expiry.
 
-	if (self.frame == 1) sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);
+	if (self.frame == 1) sound(self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);
 	if (self.frame == 23) self.frame = 0;
 	else self.frame = self.frame + 1;
 
@@ -1813,9 +1795,9 @@ void() LaunchVortex = { // [FUNCTION] #EyeOfOdin
 	vortex.nextthink = time + 0.2;
 	vortex.think = VortexThink;
 	vortex.effects = vortex.effects | EF_DIMLIGHT;
-	setmodel (vortex, "progs/aoa/vortex.mdl");
+	setmodel(vortex, "progs/aoa/vortex.mdl");
 	setsize (vortex, '-16 -16 0', '0 0 0');
-	setorigin (vortex, org);
+	setorigin(vortex, org);
 };
 
 
@@ -1833,14 +1815,14 @@ void() SparkTouch = {
 	{
 		SpawnBlood (other, self.origin, spread('100 100 100'), 25,0);
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 	else
 	{	// hit wall
 		particle (self.origin, '0 0 0', 158, 10);
 		particle (self.origin, '0 0 0', 156, 10);
 		particle (self.origin, '0 0 0', 154, 10);
-		sound (self, CHAN_AUTO, "player/axhit2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "player/axhit2.wav", 1, ATTN_NORM);
 	}
 	remove(self);
 };
@@ -1880,8 +1862,8 @@ void() GungnirPrimary = {
 		spark.solid = SOLID_BBOX;
 		spark.velocity = normalize(v_forward)*1000;
 		spark.angles = vectoangles(spark.velocity);
-		setmodel (spark, "progs/aoa/spark.mdl");
-		setorigin (spark, self.origin + v_up*12 + v_right*8 + v_forward*25);
+		setmodel(spark, "progs/aoa/spark.mdl");
+		setorigin(spark, self.origin + v_up*12 + v_right*8 + v_forward*25);
 		setsize (spark, '0 0 0', '0 0 0');
 		spark.dmg = 40;
 	}
@@ -1895,15 +1877,15 @@ void() GungnirPrimary = {
 			if (trace_ent.classgroup == CG_ZOMBIE)
 				T_Damage(trace_ent, self, self, 400, DAMARMOR);
 			T_Damage (trace_ent, self, self, 50, DAMARMOR);
-			sound (self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
-			sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 		}
 		else
 		{	// hit wall
 			particle (trace_endpos, '0 0 0', 154, 15);
 			particle (trace_endpos, '0 0 0', 156, 15);
 			particle (trace_endpos, '0 0 0', 158, 15);
-			sound (self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
 		}
 	}
 };
@@ -1967,7 +1949,7 @@ void() GauntletOrbTouch = {
 		if (other.classname == "monster_shambler")
 			self.dmg = self.dmg *2;
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 	remove(self);
 };
@@ -2050,7 +2032,7 @@ void() AttackWithGreyOrbs =
 		target.dmg = 100;
 		target.attack_finished = time + 3;
 		
-		setmodel (target, "progs/aoa/greyorbprojectile.mdl");
+		setmodel(target, "progs/aoa/greyorbprojectile.mdl");
 
 
 	}
@@ -2069,7 +2051,7 @@ void() BloodTornadoSeek = //converts blood orbs into grey blood orbs, in prepara
 	
 	self.solid = SOLID_NOT;
 	
-	setmodel (self, "progs/aoa/greyorb.mdl");//#techdebt I should leverage different skins, rather than different models.
+	setmodel(self, "progs/aoa/greyorb.mdl");//#techdebt I should leverage different skins, rather than different models.
 	self.classname = "GreyBloodOrb";
 	
 	makevectors(self.owner.v_angle);
@@ -2141,8 +2123,7 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 		remove(self);
 		return;
 	}
-	if (time > self.attack_finished) //at expiry, turn into armor
-	{
+	if (time > self.attack_finished) { //at expiry, turn into armor
 		TurnIntoArmor();
 		return;
 	}
@@ -2154,16 +2135,14 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 		return;
 	}
 	contents = pointcontents(self.origin);
-	if (contents == -3 || contents == -4 || contents == -5)
-	{
+	if (contents == -3 || contents == -4 || contents == -5) {
 		remove(self);
 		return;
 	}
 	
-	if (self.flags & FL_ONGROUND) //make sure bits don't get stuck on the ground as they orbit
-	{
-		self.flags = self.flags - FL_ONGROUND;
-		setorigin (self, self.origin + '0 0 1');
+	if (self.flags & FL_ONGROUND) { //make sure bits don't get stuck on the ground as they orbit
+		SUB_RemoveFlags(self,FL_ONGROUND);
+		setorigin(self, self.origin + '0 0 1');
 	}
 	
 	makevectors(self.owner.v_angle);
@@ -2172,48 +2151,34 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 
 	makevectors(vectoangles (toOwner - self.origin)); //make orb face the player's "blood clot" location, where the blood orbs congregate
 	
-	if (distance < 60)
-	{
+	if (distance < 60) {
 		self.velocity = self.velocity*(0.85) + normalize(toOwner - self.origin)*500 *(distance / 30) + spread('20 20 20');
-	}
-	else
-	{
+	} else {
 		self.velocity = self.velocity*(0.85) + normalize(toOwner - self.origin)*500 + spread('90 90 90');
-
 	}
 	self.avelocity = self.avelocity + spread('3 3 3');
 	self.nextthink = time + 0.045 + random()*0.01;
 	self.think = GauntletBloodOrbit;
 };
 
-void() GauntletBloodReturn = //used to move the blood orbs from the victim back to the attacker. As they get close, this loop changes to GauntletBloodOrbit(), which will make the orbs circle the player
-{
-	
-	if (vlen(self.origin - self.owner.origin) > 70)//fly toward self.owner until it gets within 70
-	{
+void() GauntletBloodReturn = { //used to move the blood orbs from the victim back to the attacker. As they get close, this loop changes to GauntletBloodOrbit(), which will make the orbs circle the player
+	if (vlen(self.origin - self.owner.origin) > 70) { //fly toward self.owner until it gets within 70
 		self.velocity = normalize( self.owner.origin - self.origin + '0 0 20'+ spread('50 50 80') )*350;
-	}
-	else
-	{
+	} else {
 		self.nextthink = time;
 		self.think = GauntletBloodOrbit;
 		return;
 	}
 	
-	if (self.frame == 9)
-		self.frame = 0;
-	else
-		self.frame = self.frame + 1;
+	if (self.frame == 9) self.frame = 0;
+	else self.frame = self.frame + 1;
 	
 	self.nextthink = time + 0.1;
 	self.think = GauntletBloodReturn;
-	if (time > self.attack_finished)
-		remove(self);
+	if (time > self.attack_finished) remove(self);
 };
 
-void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by gauntlet's hitscan attack. They will seek the player
-{
-
+void(entity victim) GauntletDrainSpell = { //spawns orbs of blood at enemy hit by gauntlet's hitscan attack. They will seek the player
 	local entity FlyingBlood;
 
 	FlyingBlood = spawn();
@@ -2225,17 +2190,14 @@ void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by 
 	FlyingBlood.solid = SOLID_TRIGGER;
 	FlyingBlood.dmg = 4;
 	FlyingBlood.attack_finished = time + 15;
-
 	FlyingBlood.velocity = normalize(self.origin - self.owner.origin) * 300 + '0 0 30' + spread('100 100 60'); //fly sort of towards owner
 	FlyingBlood.angles = vectoangles(spread('100 100 100'));
 	self.avelocity = spread('360 360 360');
 	FlyingBlood.attack_offset = spread('5 5 4');
 	FlyingBlood.touch = SUB_Null;
-
-	setmodel (FlyingBlood, "progs/aoa/bloodorb_small.mdl");
+	setmodel(FlyingBlood, "progs/aoa/bloodorb_small.mdl");
 	setsize (FlyingBlood, '0 0 0', '0 0 0');		
-	setorigin (FlyingBlood, victim.origin + '0 0 18');
-	
+	setorigin(FlyingBlood, victim.origin + '0 0 18');
 	FlyingBlood.nextthink = time + 0.2;
 	FlyingBlood.think = GauntletBloodReturn;
 };

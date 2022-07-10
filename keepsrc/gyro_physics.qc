@@ -37,6 +37,8 @@
 // on specific entities.
 //=============================================================================
 
+void(entity targ, float fl) SUB_RemoveFlags;
+
 //----- Activate a Physics Object --------------------
 void(entity e, float mass) Gyro_Object_Activate = {
 	local float	reactive;
@@ -811,7 +813,7 @@ void() Gyro_RunPhysics = {
 			if (movespeed > (gyro_framegrav * GYRO_TICKRATE * 1.2)) {
 				if (gyrohead.velocity_z < 0) gyrohead.velocity_z = 0 - gyrohead.velocity_z;
 				if (gyrohead.velocity_z < 100) gyrohead.velocity_z = 100;
-				gyrohead.flags = gyrohead.flags - FL_ONGROUND;
+				SUB_RemoveFlags(gyrohead,FL_ONGROUND);
 			} else {
 				gyrohead.velocity = '0 0 0';
 				gyrohead.avelocity = '0 0 0';

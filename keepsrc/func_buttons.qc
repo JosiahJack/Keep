@@ -78,7 +78,7 @@ void() func_button_done = { // [FUNCTION]
 void() func_button_return = { // [FUNCTION]
 	self.state = STATE_DOWN; // Should the state be set outside of estate check?
 	if (self.estate & ESTATE_BLOCK) return;
-	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 	SUB_CalcMove (self.pos1, self.yaw_speed, func_button_done); // Add - return speed can now be different, yaw_speed = speed if nothing defined.
 };
 
@@ -109,7 +109,7 @@ void() func_button_fire = { // [FUNCTION]
 	}
 
 	self.state = STATE_UP;
-	sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 	SUB_CalcMove (self.pos2, self.speed, func_button_wait);
 };
 
@@ -146,7 +146,7 @@ void() func_button_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setorigin(self, self.pos1); // Reset health, state and frame back to default
 	self.state = STATE_BOTTOM;
 	self.think = SUB_Null;
@@ -164,7 +164,7 @@ void() func_button_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	StopSound(self,CHAN_VOICE); // Reset health, position and frame back to default
 	self.takedamage = DAMAGE_NO;
 	setorigin(self, self.pos1);
@@ -220,8 +220,8 @@ void() func_button = { // [ENTITY]
 	else if (self.sounds == 2) self.noise = "buttons/switch02.wav";
 	else if (self.sounds == 3) self.noise = "buttons/switch04.wav";
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
-	precache_sound (self.noise);
-	if (self.noise1 != "") precache_sound (self.noise1);
+	precache_sound(self.noise);
+	if (self.noise1 != "") precache_sound(self.noise1);
 	SUB_BoundVolume(1);
 	self.classtype = CT_FUNCBUTTON;
 	self.classgroup = CG_FUNCMOVER;
@@ -236,8 +236,8 @@ void() func_button = { // [ENTITY]
 	self.state = STATE_BOTTOM;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setmodel (self, self.mdl); // Add bmodel to world and work out movement positions
-	setorigin (self, self.origin);
+	setmodel(self, self.mdl); // Add bmodel to world and work out movement positions
+	setorigin(self, self.origin);
 	setsize (self, self.mins , self.maxs);
 	self.pos1 = self.origin;
 	self.oldorigin = bmodel_origin(self);

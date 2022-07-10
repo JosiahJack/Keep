@@ -1299,16 +1299,10 @@ void(float xoff, float yoff, float zoff, float xoff2, float yoff2, float zoff2) 
 	local vector position2;
 	local float dist;
 	makevectors(self.angles);
-	if (self.enemy.vermis_grabbed != 1)
-	{
-		return;
-	}
-	if (self.enemy.flags & FL_ONGROUND)
-	{
-		self.enemy.flags = self.enemy.flags - FL_ONGROUND;
-	}
-	if (xoff == 666)
-	{
+	if (self.enemy.vermis_grabbed != 1) return;
+
+	SUB_RemoveFlags(self.enemy,FL_ONGROUND);
+	if (xoff == 666) {
 		xoff = self.enemy.origin_x;
 		yoff = self.enemy.origin_y;
 		zoff = self.enemy.origin_z;
@@ -1508,138 +1502,74 @@ void(entity inflictor, entity attacker, float damage) vermis_pain = {
 	return;
 };
 
-void() vermis_death1 = [162, vermis_death2]
-{
-};
+void() vermis_death1 = [162, vermis_death2] {};
 
-void() vermis_death2 = [163, vermis_death3]
-{
-};
+void() vermis_death2 = [163, vermis_death3] {};
 
-void() vermis_death3 = [164, vermis_death4]
-{
-};
+void() vermis_death3 = [164, vermis_death4] {};
 
-void() vermis_death4 = [165, vermis_death5]
-{
-};
+void() vermis_death4 = [165, vermis_death5] {};
 
-void() vermis_death5 = [166, vermis_death6]
-{
-};
+void() vermis_death5 = [166, vermis_death6] {};
 
-void() vermis_death6 = [167, vermis_death7]
-{
-};
+void() vermis_death6 = [167, vermis_death7] {};
 
-void() vermis_death7 = [168, vermis_death8]
-{
-};
+void() vermis_death7 = [168, vermis_death8] {};
 
-void() vermis_death8 = [169, vermis_death9]
-{
-};
+void() vermis_death8 = [169, vermis_death9] {};
 
-void() vermis_death9 = [170, vermis_death10]
-{
-};
+void() vermis_death9 = [170, vermis_death10] {};
 
-void() vermis_death10 = [171, vermis_death11]
-{
-};
+void() vermis_death10 = [171, vermis_death11] {};
 
-void() vermis_death11 = [172, vermis_death12]
-{
-};
+void() vermis_death11 = [172, vermis_death12] {};
 
-void() vermis_death12 = [173, vermis_death13]
-{
-};
+void() vermis_death12 = [173, vermis_death13] {};
 
-void() vermis_death13 = [174, vermis_death14]
-{
-};
+void() vermis_death13 = [174, vermis_death14] {};
 
-void() vermis_death14 = [175, vermis_death15]
-{
-};
+void() vermis_death14 = [175, vermis_death15] {};
 
-void() vermis_death15 = [176, vermis_death16]
-{
-};
+void() vermis_death15 = [176, vermis_death16] {};
 
-void() vermis_death16 = [177, vermis_death17]
-{
-};
+void() vermis_death16 = [177, vermis_death17] {};
 
-void() vermis_death17 = [178, vermis_death18]
-{
-};
+void() vermis_death17 = [178, vermis_death18] {};
 
-void() vermis_death18 = [179, vermis_death19]
-{
-};
+void() vermis_death18 = [179, vermis_death19] {};
 
-void() vermis_death19 = [180, vermis_death20]
-{
-};
+void() vermis_death19 = [180, vermis_death20] {};
 
-void() vermis_death20 = [181, vermis_death21]
-{
-};
+void() vermis_death20 = [181, vermis_death21] {};
 
-void() vermis_death21 = [182, vermis_death22]
-{
-};
+void() vermis_death21 = [182, vermis_death22] {};
 
-void() vermis_death22 = [183, vermis_death23]
-{
-};
+void() vermis_death22 = [183, vermis_death23] {};
 
-void() vermis_death23 = [184, vermis_death24]
-{
-};
+void() vermis_death23 = [184, vermis_death24] {};
 
-void() vermis_death24 = [185, vermis_death25]
-{
-};
+void() vermis_death24 = [185, vermis_death25] {};
 
-void() vermis_death25 = [186, vermis_death26]
-{
-};
+void() vermis_death25 = [186, vermis_death26] {};
 
-void() vermis_death26 = [187, vermis_death27]
-{
-};
+void() vermis_death26 = [187, vermis_death27] {};
 
-void() vermis_death27 = [188, vermis_death28]
-{
-};
+void() vermis_death27 = [188, vermis_death28] {};
 
-void() vermis_death28 = [189, vermis_death29]
-{
-};
+void() vermis_death28 = [189, vermis_death29] {};
 
 void() vermis_death29 = [190, vermis_death30]
 {
 	self.movetype = MOVETYPE_NOCLIP;
 };
 
-void() vermis_death30 = [191, vermis_death31]
-{
-};
+void() vermis_death30 = [191, vermis_death31] {};
 
-void() vermis_death31 = [192, vermis_death32]
-{
-};
+void() vermis_death31 = [192, vermis_death32] {};
 
-void() vermis_death32 = [193, vermis_death33]
-{
-};
+void() vermis_death32 = [193, vermis_death33] {};
 
-void() vermis_death33 = [194, vermis_death34]
-{
-};
+void() vermis_death33 = [194, vermis_death34] {};
 
 void() vermis_death34 = [195, vermis_death35]
 {
@@ -1680,11 +1610,12 @@ void() vermis_death49 = [210, vermis_death50] {};
 void() vermis_death50 = [211, vermis_death51] {};
 void() vermis_death51 = [210, vermis_death52] {};
 void() vermis_death52 = [209, vermis_death47] {
-	if (self.inv == 1) self.think = SUB_Remove;
+	if (self.inv == 1) entity_remove(self,0.1);
 	self.inv = 1;
 };
 
 void() vermis_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	sound(self, CHAN_WEAPON, "quoth/vermis/death.wav", 1, 0);
 	self.solid = SOLID_NOT;
 	if (self.enemy) self.enemy.vermis_grabbed = 0;
@@ -1713,7 +1644,8 @@ void() monster_vermis = {
 	self.mdl = "progs/quoth/vermis.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_NOCLIP;
-	self.health = 3000;
+	if (self.health <= 0) self.health = 3000;
+	self.gibhealth = MON_NEVERGIB;
 	if (self.coiled != 0) {
 		self.th_stand = vermis_coil1;
 		setsize(self, '-64 -64 -512', '64 64 -64');

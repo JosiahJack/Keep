@@ -67,8 +67,8 @@ void() trap_lightning_use = { // [FUNCTION]
    local entity temp;
 
    if ( (time >= self.pausetime) ) {
-      if (self.spawnflags & LIGHTNING_BOOM) sound (self,CHAN_AUTO,"weapons/lstart.wav",TRUE,ATTN_NORM);
-      else sound (self,CHAN_AUTO,"weapons/lhit.wav",TRUE,ATTN_NORM);
+      if (self.spawnflags & LIGHTNING_BOOM) sound(self,CHAN_AUTO,"weapons/lstart.wav",TRUE,ATTN_NORM);
+      else sound(self,CHAN_AUTO,"weapons/lhit.wav",TRUE,ATTN_NORM);
 
       if (self.classname == "trap_lightning_triggered") self.pausetime = (time + 0.100);
    }
@@ -166,8 +166,8 @@ void() trap_lightning_triggered = { // [ENTITY]
 
    self.cnt = FALSE;
    self.use = trap_lightning_use;
-   precache_sound ("weapons/lhit.wav");
-   precache_sound ("weapons/lstart.wav");
+   precache_sound("weapons/lhit.wav");
+   precache_sound("weapons/lstart.wav");
    self.huntingcharmer = self.nextthink;
    self.think = lightning_firstthink;
    self.nextthink = (time + 0.250);
@@ -261,7 +261,7 @@ void() trap_tesla_think = { // [FUNCTION]
       self.think = trap_tesla_think;
       trap_tesla_scan();
       if ( (self.tesla_numtargets > FALSE) ) {
-         if ( (self.wait > FALSE) ) sound (self,CHAN_AUTO,"hipnotic/misc/tesla.wav",TRUE,ATTN_NORM);
+         if ( (self.wait > FALSE) ) sound(self,CHAN_AUTO,"hipnotic/misc/tesla.wav",TRUE,ATTN_NORM);
          self.attack_state = TRUE;
          self.nextthink = (time + self.wait);
          return ;
@@ -272,7 +272,7 @@ void() trap_tesla_think = { // [FUNCTION]
       if ( (self.attack_state == TRUE) ) {
          trap_tesla_scan();
          while ( (self.tesla_numtargets > FALSE) ) {
-            sound (self,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
+            sound(self,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
             SpawnTeslaLightning (self.tesla_target);
             self.tesla_target = self.tesla_target.next_ent;
             self.tesla_numtargets = (self.tesla_numtargets - TRUE);
@@ -297,8 +297,8 @@ void() trap_tesla_think = { // [FUNCTION]
 };
 
 void() trap_tesla_coil = { // [ENTITY]
-   precache_sound ("hipnotic/misc/tesla.wav");
-   precache_sound ("hipnotic/weapons/mjolhit.wav");
+   precache_sound("hipnotic/misc/tesla.wav");
+   precache_sound("hipnotic/weapons/mjolhit.wav");
    if ( (self.wait == FALSE) ) self.wait = FL_SWIM;
    if ( (self.dmg == FALSE) ) self.dmg = (FL_SWIM + (MOVETYPE_FLY * cvar ("skill")));
    if ( (self.duration == FALSE) ) self.duration = CONTENT_EMPTY;

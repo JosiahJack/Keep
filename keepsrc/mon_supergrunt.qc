@@ -70,7 +70,7 @@ void() sgrunt_stand = {
 void() sgrunt_swagger1 = [74, sgrunt_swagger2 ] 
 {
 	if (random() < 0.1)
-		sound (self, CHAN_VOICE, "sgrunt/infidle1.wav", 1, ATTN_IDLE);
+		sound(self, CHAN_VOICE, "sgrunt/infidle1.wav", 1, ATTN_IDLE);
 
 	ai_walk(7);
 };
@@ -242,16 +242,16 @@ void() sgrunt_fire_loop = [194, sgrunt_fire_loop]
 	}	
 };
 
-void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face_last();ai_forward(5); };
-void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face_last();ai_back(1); };
-void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face_last();ai_back(1); };
+void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face_last(); ai_forward(5); };
+void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face_last(); ai_back(1); };
+void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face_last(); ai_back(1); };
 void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face_last();sound(self, CHAN_WEAPON, "sgrunt/infatck3.wav", 1, ATTN_NORM); };
-void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face_last();ai_back(1); };
-void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face_last();ai_forward(1); };
-void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face_last();ai_forward(1); };
-void() sgrunt_fire8 = [191, sgrunt_fire9] { ai_face_last();ai_forward(2); };
-void() sgrunt_fire9 = [192, sgrunt_fire10] { ai_face_last();ai_back(2); };
-void() sgrunt_fire10 = [193, sgrunt_fire11] { ai_face_last();ai_back(4); };
+void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face_last(); ai_back(1); };
+void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face_last(); ai_forward(1); };
+void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face_last(); ai_forward(1); };
+void() sgrunt_fire8 = [191, sgrunt_fire9] { ai_face_last(); ai_forward(2); };
+void() sgrunt_fire9 = [192, sgrunt_fire10] { ai_face_last(); ai_back(2); };
+void() sgrunt_fire10 = [193, sgrunt_fire11] { ai_face_last(); ai_back(4); };
 void() sgrunt_fire11 = [194, sgrunt_fire12] {
 	ai_forward(1);
 	self.cnt = 10 + random()*10;	// number of shots to fire
@@ -261,9 +261,9 @@ void() sgrunt_fire11 = [194, sgrunt_fire12] {
 	else
 		sgrunt_fire_loop();
 };
-void() sgrunt_fire12 = [195, sgrunt_fire13] { ai_face();ai_forward(6); };
-void() sgrunt_fire13 = [196, sgrunt_fire14] { ai_face();ai_back(1); };
-void() sgrunt_fire14 = [197, sgrunt_fire15] { ai_face();ai_back(2); };
+void() sgrunt_fire12 = [195, sgrunt_fire13] { ai_face(); ai_forward(6); };
+void() sgrunt_fire13 = [196, sgrunt_fire14] { ai_face(); ai_back(1); };
+void() sgrunt_fire14 = [197, sgrunt_fire15] { ai_face(); ai_back(2); };
 void() sgrunt_fire15 = [198, sgrunt_run1] {
 	local vector spot1, spot2;
 	local float r;
@@ -307,17 +307,17 @@ void() sgrunt_wallop = {
 		
 	ldmg = (random() + random() + random()) * 20;
 	T_Damage (self.enemy, self, self, ldmg,DAMARMOR);
-	sound (self, CHAN_WEAPON, "sgrunt/melee2.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "sgrunt/melee2.wav", 1, ATTN_NORM);
 };
 
-void() sgrunt_smash1 = [199, sgrunt_smash2] { ai_face();ai_forward(3); };
-void() sgrunt_smash2 = [200, sgrunt_smash3] { ai_face();ai_back(7);sound(self, CHAN_WEAPON, "sgrunt/infatck2.wav", 1, ATTN_NORM); };
-void() sgrunt_smash3 = [201, sgrunt_smash4] { ai_face();ai_forward(1); };
-void() sgrunt_smash4 = [202, sgrunt_smash5] { ai_face();ai_forward(9); };
-void() sgrunt_smash5 = [203, sgrunt_smash6] { ai_face();ai_forward(6); };
-void() sgrunt_smash6 = [204, sgrunt_smash7] { ai_face();ai_forward(9);sgrunt_wallop(); };
-void() sgrunt_smash7 = [205, sgrunt_smash8] { ai_face();ai_back(7); };
-void() sgrunt_smash8 = [206, sgrunt_run1] { ai_face();ai_back(4); };
+void() sgrunt_smash1 = [199, sgrunt_smash2] { ai_face(); ai_forward(3); };
+void() sgrunt_smash2 = [200, sgrunt_smash3] { ai_face(); ai_back(7);sound(self, CHAN_WEAPON, "sgrunt/infatck2.wav", 1, ATTN_NORM); };
+void() sgrunt_smash3 = [201, sgrunt_smash4] { ai_face(); ai_forward(1); };
+void() sgrunt_smash4 = [202, sgrunt_smash5] { ai_face(); ai_forward(9); };
+void() sgrunt_smash5 = [203, sgrunt_smash6] { ai_face(); ai_forward(6); };
+void() sgrunt_smash6 = [204, sgrunt_smash7] { ai_face(); ai_forward(9);sgrunt_wallop(); };
+void() sgrunt_smash7 = [205, sgrunt_smash8] { ai_face(); ai_back(7); };
+void() sgrunt_smash8 = [206, sgrunt_run1] { ai_face(); ai_back(4); };
 
 
 void() sgrunt_damage_skin = {
@@ -386,7 +386,7 @@ void() sgrunt_die12 = [136, sgrunt_die13] { ai_forward(1); };
 void() sgrunt_die13 = [137, sgrunt_die14] { ai_back(2); };
 void() sgrunt_die14 = [138, sgrunt_die15] { ai_forward(2); };
 void() sgrunt_die15 = [139, sgrunt_die16] { ai_forward(2); };
-void() sgrunt_die16 = [140, sgrunt_die17] { ai_forward(7);self.solid = SOLID_NOT;DropBackpack(); };
+void() sgrunt_die16 = [140, sgrunt_die17] { ai_forward(7); self.solid = SOLID_NOT;DropBackpack(); };
 void() sgrunt_die17 = [141, sgrunt_die18] { ai_forward(9); };
 void() sgrunt_die18 = [142, sgrunt_die19] { ai_forward(6);BDW_BodyDropSound(); };
 void() sgrunt_die19 = [143, sgrunt_die20] { ai_back(3);monster_death_postcheck(); };
@@ -414,7 +414,7 @@ void() sgrunt_bdie16 = [160, sgrunt_bdie17] { sgrunt_death_plasma('14 24 30'); }
 void() sgrunt_bdie17 = [161, sgrunt_bdie18] { ai_forward(2);sgrunt_death_plasma('11 27 27'); };
 void() sgrunt_bdie18 = [162, sgrunt_bdie19] { ai_forward(3);sgrunt_death_plasma('17 22 26'); };
 void() sgrunt_bdie19 = [163, sgrunt_bdie20] { ai_forward(4);sgrunt_death_plasma('18 19 24'); };
-void() sgrunt_bdie20 = [164, sgrunt_bdie21] { ai_back(12);self.solid = SOLID_NOT;DropBackpack();sgrunt_death_plasma('13 18 35'); };
+void() sgrunt_bdie20 = [164, sgrunt_bdie21] { ai_back(12); self.solid = SOLID_NOT;DropBackpack();sgrunt_death_plasma('13 18 35'); };
 void() sgrunt_bdie21 = [165, sgrunt_bdie22] { ai_back(9);sgrunt_death_plasma('-2 18 38'); };
 void() sgrunt_bdie22 = [166, sgrunt_bdie23] { ai_back(10);sgrunt_death_plasma('-15 15 28'); };
 void() sgrunt_bdie23 = [167, sgrunt_bdie24] { ai_back(10);BDW_BodyDropSound();sgrunt_death_plasma('-27 16 12'); };	//fire end
@@ -458,18 +458,18 @@ void() monster_super_grunt_precache = {
 	precache_model("progs/kinn/head2.mdl");
 	precache_model("progs/kinn/s_plasgr.spr");	// super grunt commander plasma shot
 	precache_model("progs/kinn/s_plasgx.spr");	// super grunt commander plasma explosion
-	precache_sound ("sgrunt/infidle1.wav");	
-	precache_sound ("sgrunt/infpain1.wav");	
-	precache_sound ("sgrunt/infpain2.wav");	
-	precache_sound ("sgrunt/infsght1.wav");	
-	precache_sound ("sgrunt/infsrch1.wav");
-	precache_sound ("sgrunt/infatck1.wav");
-	precache_sound ("sgrunt/infatck2.wav");
-	precache_sound ("sgrunt/infatck3.wav");
-	precache_sound ("sgrunt/melee2.wav");
-	precache_sound ("sgrunt/hovatck1.wav");
-	precache_sound ("kinn/gibs/ut2gib1.wav");		
-	precache_sound ("drake/weapons/plasma1.wav");
+	precache_sound("sgrunt/infidle1.wav");	
+	precache_sound("sgrunt/infpain1.wav");	
+	precache_sound("sgrunt/infpain2.wav");	
+	precache_sound("sgrunt/infsght1.wav");	
+	precache_sound("sgrunt/infsrch1.wav");
+	precache_sound("sgrunt/infatck1.wav");
+	precache_sound("sgrunt/infatck2.wav");
+	precache_sound("sgrunt/infatck3.wav");
+	precache_sound("sgrunt/melee2.wav");
+	precache_sound("sgrunt/hovatck1.wav");
+	precache_sound("kinn/gibs/ut2gib1.wav");		
+	precache_sound("drake/weapons/plasma1.wav");
 };
 
 void() monster_super_grunt = {

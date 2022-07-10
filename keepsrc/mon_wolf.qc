@@ -55,7 +55,7 @@ $frame die11 die12 die13 die14 die15 die16
 
 void() wolf_howl1	= [	$howl1,		wolf_howl2	] {
 	self.pain_finished = time + 2;
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	ai_stand();
 };
 void() wolf_howl2	= [	$howl2,		wolf_howl3	] { ai_stand(); };
@@ -178,14 +178,6 @@ void() wolf_setup_attachment = {
 	}
 };
 
-void() wolf_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.state = FALSE;
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-};
-
 //Setup sword blur model effect
 void(float blframe, float blalpha) wolf_blur = {
 	if (self.health < 1) return;
@@ -228,7 +220,7 @@ void() wolf_slash1	= [	$slash1,	wolf_slash2	] { ai_face(); wolf_reset_attachment
 void() wolf_slash2	= [	$slash2,	wolf_slash3	] { ai_face(); };
 void() wolf_slash3	= [	$slash3,	wolf_slash4	] { ai_face(); };
 void() wolf_slash4	= [	$slash4,	wolf_slash5	] { ai_chargenoturn(0); wolf_blur(10, 0.2); wolf_melee();
-sound (self, CHAN_WEAPON, "redfield/wolf/sword_slash.wav", 1, ATTN_NORM); };
+sound(self, CHAN_WEAPON, "redfield/wolf/sword_slash.wav", 1, ATTN_NORM); };
 void() wolf_slash5	= [	$slash5,	wolf_slash6	] { ai_chargenoturn(0); wolf_blur(11, 0.2); wolf_melee(); };
 void() wolf_slash6	= [	$slash6,	wolf_slash7	] { ai_chargenoturn(0); wolf_blur(12, 0.1); wolf_melee(); };
 void() wolf_slash7	= [	$slash7,	wolf_slash8	] { ai_chargenoturn(0); wolf_reset_attachment(); };
@@ -245,7 +237,7 @@ void() wolf_slash17	= [	$slash17,	wolf_run1	] { ai_chargenoturn(0); };
 
 void() wolf_spin1	= [	$spin1,		wolf_spin2	] { ai_chargenoturn(0); wolf_reset_attachment(); };
 void() wolf_spin2	= [	$spin2,		wolf_spin3	] { ai_chargenoturn(0);
-sound (self, CHAN_WEAPON, "redfield/wolf/sword_spin.wav", 1, ATTN_NORM); };
+sound(self, CHAN_WEAPON, "redfield/wolf/sword_spin.wav", 1, ATTN_NORM); };
 void() wolf_spin3	= [	$spin3,		wolf_spin4	] { ai_chargenoturn(0); };
 void() wolf_spin4	= [	$spin4,		wolf_spin5	] { ai_chargenoturn(0); wolf_melee(); };
 void() wolf_spin5	= [	$spin5,		wolf_spin6	] { ai_chargenoturn(0); };
@@ -293,7 +285,7 @@ void() wolf_moonsword = {
 void() wolf_shoot1	= [	$shoot1,	wolf_shoot2	] { ai_face(); };
 void() wolf_shoot2	= [	$shoot2,	wolf_shoot3	] { ai_face(); };
 void() wolf_shoot3	= [	$shoot3,	wolf_shoot4	] { ai_face(); moonsword_charge('16 -72 28','0 -116 32');
-sound (self, CHAN_WEAPON, "redfield/wolf/moonsword.wav", 1, ATTN_NORM); };
+sound(self, CHAN_WEAPON, "redfield/wolf/moonsword.wav", 1, ATTN_NORM); };
 void() wolf_shoot4	= [	$shoot4,	wolf_shoot5	] { ai_face(); moonsword_charge('0 -76 32','-24 -116 40'); self.skin = 1;};
 void() wolf_shoot5	= [	$shoot5,	wolf_shoot6	] { ai_face(); };
 void() wolf_shoot6	= [	$shoot6,	wolf_shoot7	] { wolf_moonsword(); };
@@ -344,7 +336,7 @@ void(entity inflictor, entity attacker, float damage) wolf_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
 		if (self.pain_check == 1) wolf_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -356,7 +348,7 @@ void(entity inflictor, entity attacker, float damage) wolf_pain = {
 };
 
 void() wolf_die1	= [	$die1,		wolf_die2	] {};
-void() wolf_die2	= [	$die2,		wolf_die3	] { sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM); };
+void() wolf_die2	= [	$die2,		wolf_die3	] { sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM); };
 void() wolf_die3	= [	$die3,		wolf_die4	] {};
 void() wolf_die4	= [	$die4,		wolf_die5	] {};
 void() wolf_die5	= [	$die5,		wolf_die6	] {};
@@ -375,23 +367,16 @@ self.effects = self.effects | EF_MUZZLEFLASH;};
 void() wolf_die15	= [	$die15,		wolf_die16	] { self.alpha = 0.05;
 self.effects = self.effects | EF_MUZZLEFLASH;};
 void() wolf_die16	= [	$die16,		wolf_die16	] {
-// Stop thinking and hide entity (prevent wolf_death15 loop)
-self.nextthink = LARGE_TIMER;
-self.think = SUB_Null;
-entity_hide(self);
+	// Stop thinking and hide entity (prevent wolf_death15 loop)
+	self.nextthink = LARGE_TIMER;
+	self.think = SUB_Null;
+	entity_hide(self);
 };
 
 void() wolf_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// Make sure attachments are removed
-	wolf_remove_attachment();
-
-	// regular death
-	if (!self.gibbed) {
-		wolf_die1();
-	}
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	SUB_RemoveAttachment(); // Make sure attachments are removed
+	if (!self.gibbed) wolf_die1();
 };
 
 void() monster_wolf_precache = {
@@ -399,14 +384,14 @@ void() monster_wolf_precache = {
 	precache_model (MODEL_PROJ_MOONSWORD);
 	precache_model (MODEL_BLUR_WOLF);
 	precache_model (SEXP_ICE_BIG);		// Shard impact (ne_ruin)
-	precache_sound ("redfield/wolf/snarl.wav");
-	precache_sound ("redfield/wolf/moonsword.wav");
-	precache_sound ("redfield/wolf/sword_spin.wav");
-	precache_sound ("redfield/wolf/sword_slash.wav");
-	precache_sound ("redfield/wolf/w_pain.wav");
-	precache_sound ("redfield/wolf/d_howl.wav");
-	precache_sound ("redfield/wolf/s_howl.wav");
-	precache_sound ("drake/weapons/plasma1.wav");
+	precache_sound("redfield/wolf/snarl.wav");
+	precache_sound("redfield/wolf/moonsword.wav");
+	precache_sound("redfield/wolf/sword_spin.wav");
+	precache_sound("redfield/wolf/sword_slash.wav");
+	precache_sound("redfield/wolf/w_pain.wav");
+	precache_sound("redfield/wolf/d_howl.wav");
+	precache_sound("redfield/wolf/s_howl.wav");
+	precache_sound("drake/weapons/plasma1.wav");
 };
 
 // QUAKED monster_wolf (1 0 0) (-128 -128 -24) (128 128 128) Ambush

@@ -49,11 +49,11 @@ void() carniv_projectile_rock_touch = {
 	if (other.takedamage) {
 		spawn_touchblood (self, other, 25);
 
-		sound (self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.6, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.6, ATTN_NORM);
  
 		vel = dir * 200;
 		if (self.enemy.flags & FL_ONGROUND) {
-			self.enemy.flags = self.enemy.flags - FL_ONGROUND;
+			SUB_RemoveFlags(self.enemy,FL_ONGROUND);
 			vel_z = 200 * 0.75;
 		}
 		self.enemy.velocity = self.enemy.velocity + vel;			// apply velocity (pushback)
@@ -64,7 +64,7 @@ void() carniv_projectile_rock_touch = {
 	} else {
 		// wall
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), detonate, '0 0 0', 1);	
-		sound (self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.8, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.8, ATTN_NORM);
 	}
 
 	remove(self);
@@ -77,7 +77,7 @@ void() carniv_projectile_rock_homing = {
 
 	if (self.origin == self.oldorigin)					// when it got stuck
 	{
-		sound (self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.7, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.7, ATTN_NORM);
 		T_RadiusDamage (self, self.owner, 20 + 5, self.owner, DAMAGEALL);
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), self.origin, '0 0 0', 1);	
 		remove (self);
@@ -120,8 +120,8 @@ void() carniv_projectile_flame_touch = {
 			// checks if carniveans projectile impact inflame the player
 			if (random() <= 0.3) {
 				ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
-				sound (other, CHAN_AUTO, "player/inflame.wav", 1, ATTN_NORM); 		// play ignition sound
-				sound (other, 120, "zombie/corpse_fire.wav", 1, ATTN_NORM); 	       	// play fire loop sound
+				sound(other, CHAN_AUTO, "player/inflame.wav", 1, ATTN_NORM); 		// play ignition sound
+				sound(other, 120, "zombie/corpse_fire.wav", 1, ATTN_NORM); 	       	// play fire loop sound
 			}
 		}
 	} else { // wall
@@ -142,15 +142,13 @@ void() carniv_projectile = {
 	missile.classname = "carniv_projectile";
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
-
 	makevectors(self.angles);
-	setorigin (missile, self.origin + v_right * -12 + v_up * 8 + v_forward * 7);
-
+	setorigin(missile, self.origin + v_right * -12 + v_up * 8 + v_forward * 7);
 	if (random() <= 0.6) {
-		setmodel (missile, "progs/k_spike.mdl");		// flame / explosive model
+		setmodel(missile, "progs/k_spike.mdl");		// flame / explosive model
 		if (ext_dppart) missile.traileffectnum = particleeffectnum("TR_AFRITSPIKE_RED");
 		missile.cnt = 1;
-		sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 		missile.velocity = normalize ((self.enemy.origin + '0 0 7') - missile.origin);
 		missile.velocity = missile.velocity * 666;					// rocket: 1000
 		missile.angles = vectoangles(missile.velocity);
@@ -158,7 +156,7 @@ void() carniv_projectile = {
 		missile.nextthink = time + 5;
 		missile.think = SUB_Remove;
 	} else {
-		setmodel (missile, "progs/q15/carniv_rocks.mdl");		// rock / rubble model
+		setmodel(missile, "progs/q15/carniv_rocks.mdl");		// rock / rubble model
 		missile.scale = 0.4;
 		missile.cnt = 2;
 		sound(self, CHAN_WEAPON, "q15/carnivean/rock_throw.wav", 1, ATTN_NORM);
@@ -174,20 +172,6 @@ void() carniv_projectile = {
 	setsize(missile, '0 0 0', '0 0 0');
 };
 
-/*
-void() carniv_stand1 = [ 0, carniv_stand2 ] { ai_stand();
-	carniv_idle_sound(); };
-void() carniv_stand2 = [ 1, carniv_stand3 ] { ai_stand(); };
-void() carniv_stand3 = [ 2, carniv_stand4 ] { ai_stand(); };
-void() carniv_stand4 = [ 3, carniv_stand5 ] { ai_stand(); };
-void() carniv_stand5 = [ 4, carniv_stand6 ] { ai_stand(); };
-void() carniv_stand6 = [ 5, carniv_stand7 ] { ai_stand(); };
-void() carniv_stand7 = [ 6, carniv_stand8 ] { ai_stand(); };
-void() carniv_stand8 = [ 7, carniv_stand9 ] { ai_stand(); };
-void() carniv_stand9 = [ 8, carniv_stand10 ] { ai_stand(); };
-*/
-
-///// Stand
 void() carniv_stand = [ 9, carniv_stand1 ] { ai_stand(); carniv_idle_sound(); };
 void() carniv_stand1 = [ 10, carniv_stand2 ] { ai_stand(); };
 void() carniv_stand2 = [ 11, carniv_stand3 ] { ai_stand(); };
@@ -228,16 +212,6 @@ void() carniv_stand36 = [ 45, carniv_stand37 ] { ai_stand(); };
 void() carniv_stand37 = [ 46, carniv_stand38 ] { ai_stand(); };
 void() carniv_stand38 = [ 47, carniv_stand ] { ai_stand(); };
 
-/*
-void() carniv_stand39 = [ 48, carniv_stand40 ] { ai_stand(); };
-void() carniv_stand40 = [ 49, carniv_stand41 ] { ai_stand(); };
-void() carniv_stand41 = [ 50, carniv_stand42 ] { ai_stand(); };
-void() carniv_stand42 = [ 51, carniv_stand43 ] { ai_stand(); };
-void() carniv_stand43 = [ 52, carniv_stand44 ] { ai_stand(); };
-void() carniv_stand44 = [ 53, carniv_stand ] { ai_stand(); };
-*/
-
-///// Walk
 void() carniv_walk1 = [ 54, carniv_walk2 ] { ai_walk(9); carniv_idle_sound(); };
 void() carniv_walk2 = [ 55, carniv_walk3 ] { ai_walk(2); };
 void() carniv_walk3 = [ 56, carniv_walk4 ] { ai_walk(4); };
@@ -251,7 +225,6 @@ void() carniv_walk10 = [ 63, carniv_walk11 ] { ai_walk(3); };
 void() carniv_walk11 = [ 64, carniv_walk12 ] { ai_walk(10); carniv_footsteps (0.9); };
 void() carniv_walk12 = [ 65, carniv_walk1 ] { ai_walk(14); };
 
-///// Run
 void() carniv_run1 = [ 54, carniv_run2 ] { self.nextthink = (time + 0.08); ai_run(10); carniv_idle_sound(); };
 void() carniv_run2 = [ 55, carniv_run3 ] { self.nextthink = (time + 0.08); ai_run(3); };
 void() carniv_run3 = [ 56, carniv_run4 ] { self.nextthink = (time + 0.08); ai_run(5); };
@@ -265,7 +238,6 @@ void() carniv_run10 = [ 63, carniv_run11 ] { self.nextthink = (time + 0.08); ai_
 void() carniv_run11 = [ 64, carniv_run12 ] { self.nextthink = (time + 0.08); ai_run(11); carniv_footsteps(0.8); };
 void() carniv_run12 = [ 65, carniv_run1 ] { self.nextthink = (time + 0.08); ai_run(15); };
 
-//// Melee
 void() carniv_swing1 = [ 74, carniv_swing2 ] { ai_charge(10); };
 void() carniv_swing2 = [ 75, carniv_swing3 ] { ai_charge(5); };
 void() carniv_swing3 = [ 76, carniv_swing4 ] { ai_charge(4); };
@@ -352,11 +324,11 @@ void() carniv_die1 = [ 107, carniv_die2 ] { ai_back(10); };
 void() carniv_die2 = [ 108, carniv_die3 ] { ai_back(6); };
 void() carniv_die3 = [ 109, carniv_die4 ] { ai_back(5); self.solid = SOLID_NOT;};
 void() carniv_die4 = [ 110, carniv_die5 ] { ai_back(4); };
-void() carniv_die5 = [ 111, carniv_die6 ] { sound (self, CHAN_AUTO, "demon/fall_backwards.wav", 1, ATTN_NORM); }; 
+void() carniv_die5 = [ 111, carniv_die6 ] { sound(self, CHAN_AUTO, "demon/fall_backwards.wav", 1, ATTN_NORM); }; 
 void() carniv_die6 = [ 112, carniv_die7 ] {};
 void() carniv_die7 = [ 113, carniv_die8 ] {};
 void() carniv_die8 = [ 114, carniv_die9 ] {};
-void() carniv_die9 = [ 115, carniv_die10 ] { sound (self, CHAN_AUTO, "demon/fall_backwards.wav", 0.7, ATTN_NORM); }; 
+void() carniv_die9 = [ 115, carniv_die10 ] { sound(self, CHAN_AUTO, "demon/fall_backwards.wav", 0.7, ATTN_NORM); }; 
 void() carniv_die10 = [ 116, carniv_die11 ] {};
 void() carniv_die11 = [ 117, carniv_die12 ] {};
 void() carniv_die12 = [ 118, carniv_die13 ] {};
@@ -377,12 +349,12 @@ void() carniv_die26 = [ 132, carniv_die27 ] {};
 void() carniv_die27 = [ 133, carniv_die28 ] {};
 void() carniv_die28 = [ 134, carniv_die29 ] {};
 void() carniv_die29 = [ 135, carniv_die30 ] {};
-void() carniv_die30 = [ 136, carniv_die31 ] {};
-void() carniv_die31 = [ 137, carniv_die31 ] {};
+void() carniv_die30 = [ 136, carniv_die31 ] { monster_death_postcheck(); };
+void() carniv_die31 = [ 137, carniv_die31 ] { monster_deadbody_check(); };
 
 void() carniv_bdie1 = [ 138, carniv_bdie2 ] { ai_back(3); };
 void() carniv_bdie2 = [ 139, carniv_bdie3 ] { ai_back(3); };
-void() carniv_bdie3 = [ 140, carniv_bdie4 ] { ai_back(3);self.solid = SOLID_NOT;};
+void() carniv_bdie3 = [ 140, carniv_bdie4 ] { ai_back(3); self.solid = SOLID_NOT;};
 void() carniv_bdie4 = [ 141, carniv_bdie5 ] { ai_back(2);carniv_footsteps(0.8); };
 void() carniv_bdie5 = [ 142, carniv_bdie6 ] { ai_back(2); };
 void() carniv_bdie6 = [ 143, carniv_bdie7 ] { ai_back(2); };
@@ -395,7 +367,7 @@ void() carniv_bdie12 = [ 149, carniv_bdie13 ] { ai_back(1); };
 void() carniv_bdie13 = [ 150, carniv_bdie14 ] { ai_back(3); };
 void() carniv_bdie14 = [ 151, carniv_bdie15 ] { ai_back(3); };
 void() carniv_bdie15 = [ 152, carniv_bdie16 ] { ai_back(3); };
-void() carniv_bdie16 = [ 153, carniv_bdie17 ] { sound (self, CHAN_AUTO, "demon/fall_backwards.wav", 1, ATTN_NORM); }; 
+void() carniv_bdie16 = [ 153, carniv_bdie17 ] { sound(self, CHAN_AUTO, "demon/fall_backwards.wav", 1, ATTN_NORM); }; 
 void() carniv_bdie17 = [ 154, carniv_bdie18 ] {};
 void() carniv_bdie18 = [ 155, carniv_bdie19 ] {};
 void() carniv_bdie19 = [ 156, carniv_bdie20 ] {};
@@ -418,8 +390,8 @@ void() carniv_bdie35 = [ 172, carniv_bdie36 ] {};
 void() carniv_bdie36 = [ 173, carniv_bdie37 ] {};
 void() carniv_bdie37 = [ 174, carniv_bdie38 ] {};
 void() carniv_bdie38 = [ 175, carniv_bdie39 ] {};
-void() carniv_bdie39 = [ 176, carniv_bdie40 ] {};
-void() carniv_bdie40 = [ 177, carniv_bdie40 ] {};
+void() carniv_bdie39 = [ 176, carniv_bdie40 ] { monster_death_postcheck(); };
+void() carniv_bdie40 = [ 177, carniv_bdie40 ] { monster_deadbody_check(); };
 
 ///////  Death
 void() carniv_die = {

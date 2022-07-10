@@ -55,7 +55,7 @@ void() SuperDamageSound = { // [FUNCTION]
 	if (self.super_sound >= time) return;
 
 	self.super_sound = time + 1;
-	sound (self,CHAN_BODY,SOUND_ARTQUAD3,1,ATTN_NORM);
+	sound(self,CHAN_BODY,SOUND_ARTQUAD3,1,ATTN_NORM);
 };
 
 float() frame_pause = { return (intermission_running > 0 || cinematic_running > 0 || cutscene > 0); }; // [FUNCTION]
@@ -177,7 +177,7 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 
 	if (self.in_a_vehicle) {
 		if (self.idletimer <= time) { // Reuse saw idle time for engine noises
-			sound (self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
+			sound(self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
 			self.idletimer = time + 0.5;
 		}		
 		return;
@@ -580,11 +580,11 @@ void() player_xbow1 = [105,player_xbow2] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	self.weaponframe=1;
-    if (self.tome_finished) sound (self, CHAN_WEAPON, "drake/necro/att_a2.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_WEAPON, "drake/necro/att_a.wav", 1, ATTN_NORM);
+    if (self.tome_finished) sound(self, CHAN_WEAPON, "drake/necro/att_a2.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_WEAPON, "drake/necro/att_a.wav", 1, ATTN_NORM);
 };
 void() player_xbow2 = [106,player_xbow3] { if (frame_pause()) return; self.weaponframe=2; W_FireIceCrossbow(); }; // [FUNCTION]
-void() player_xbow3 = [106,player_run] { if (frame_pause()) return; self.weaponframe=3; sound (self, CHAN_WEAPON, "drake/weapons/xbowdraw.wav", 1, ATTN_IDLE); }; // [FUNCTION]
+void() player_xbow3 = [106,player_run] { if (frame_pause()) return; self.weaponframe=3; sound(self, CHAN_WEAPON, "drake/weapons/xbowdraw.wav", 1, ATTN_IDLE); }; // [FUNCTION]
 
 // Mjolnir
 void() player_hammer4t = [ 122,  player_hammer5  ] { playham_frame(35,4); }; // [FUNCTION]
@@ -685,7 +685,7 @@ void() death_bubble_spawn = { // [FUNCTION]
 	bubble.classname = "bubble";
 	bubble.solid = SOLID_NOT;
 	bubble.movetype = MOVETYPE_NOCLIP;
-	setmodel (bubble, SBUBBLE_DROWN);
+	setmodel(bubble, SBUBBLE_DROWN);
 	bubble.frame = bubble.cnt = 0;
 	if (self.owner.flags & FL_CLIENT) {
 		tmp_vec_up = self.owner.maxs * 0.5;
@@ -693,9 +693,9 @@ void() death_bubble_spawn = { // [FUNCTION]
 		tmp_vec_up = self.owner.origin + tmp_vec_up;
 		tmp_forward = self.owner.maxs_x * 0.5;
 		makevectors(self.owner.angles);
-		setorigin (bubble, tmp_vec_up + v_forward * tmp_forward);// pOx - moved this infront a bit
+		setorigin(bubble, tmp_vec_up + v_forward * tmp_forward);// pOx - moved this infront a bit
 	} else {
-		setorigin (bubble, self.owner.origin + '0 0 24');
+		setorigin(bubble, self.owner.origin + '0 0 24');
 	}
 	setsize (bubble, '-8 -8 -8', '8 8 8');
 	bubble.velocity = '0 0 15';
@@ -714,7 +714,7 @@ void(float num_bubbles) death_bubbles = { // [FUNCTION]
 	bubble_spawner.owner = self;
 	bubble_spawner.air_finished = 0;
 	bubble_spawner.bubble_count = num_bubbles;
-	setorigin (bubble_spawner, self.origin);
+	setorigin(bubble_spawner, self.origin);
 	bubble_spawner.nextthink = time + 0.1;
 	bubble_spawner.think = death_bubble_spawn;
 };
@@ -727,23 +727,23 @@ void() PainSound = { // [FUNCTION]
 	self.pain_finished = time + 0.5;
 
 	if (damage_attacker.classname == "teledeath") {
-		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+		sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
 	} else if (self.watertype == CONTENT_WATER && self.waterlevel == 3) { // water pain sounds
 		death_bubbles(1);
-		if (random() > 0.5) sound (self, CHAN_VOICE, "player/drown1.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "player/drown2.wav", 1, ATTN_NORM);
+		if (random() > 0.5) sound(self, CHAN_VOICE, "player/drown1.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, "player/drown2.wav", 1, ATTN_NORM);
 	} else if (self.watertype == CONTENT_SLIME) { // slime pain sounds
 		// FIX ME	put in some steam here
-		if (random() > 0.5) sound (self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
+		if (random() > 0.5) sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
 	} else if (self.watertype == CONTENT_LAVA) {
-		if (random() > 0.5) sound (self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
+		if (random() > 0.5) sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
 	} else {
 		// ax pain sound
 		if (self.axhitme == 1) {
 			self.axhitme = 0;
-			sound (self, CHAN_VOICE, SOUND_AXE_PLAYER, 1, ATTN_NORM); // Player been hit by an axe (MP thing)
+			sound(self, CHAN_VOICE, SOUND_AXE_PLAYER, 1, ATTN_NORM); // Player been hit by an axe (MP thing)
 		} else {
 			self.lip = rint((random() * 5) + 1);
 			if (self.lip == 1) self.noise = "player/pain1.wav";
@@ -753,26 +753,26 @@ void() PainSound = { // [FUNCTION]
 			else if (self.lip == 5) self.noise = "player/pain5.wav";
 			else self.noise = "player/pain6.wav";
 
-			sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 		}
 	}
 };
 
-void()	player_pain1 =	[35,	player_pain2	] { PainSound();self.weaponframe=0;}; // [FUNCTION]
+void()	player_pain1 =	[35,	player_pain2	] { PainSound(); self.weaponframe=0;}; // [FUNCTION]
 void()	player_pain2 =	[36,	player_pain3	] {}; // [FUNCTION]
 void()	player_pain3 =	[37,	player_pain4	] {}; // [FUNCTION]
 void()	player_pain4 =	[38,	player_pain5	] {}; // [FUNCTION]
 void()	player_pain5 =	[39,	player_pain6	] {}; // [FUNCTION]
 void()	player_pain6 =	[40,	player_run	] {}; // [FUNCTION]
 
-void()	player_axpain1 =	[29,	player_axpain2	] { PainSound();self.weaponframe=0;}; // [FUNCTION]
+void()	player_axpain1 =	[29,	player_axpain2	] { PainSound(); self.weaponframe=0;}; // [FUNCTION]
 void()	player_axpain2 =	[30,	player_axpain3	] {}; // [FUNCTION]
 void()	player_axpain3 =	[31,	player_axpain4	] {}; // [FUNCTION]
 void()	player_axpain4 =	[32,	player_axpain5	] {}; // [FUNCTION]
 void()	player_axpain5 =	[33,	player_axpain6	] {}; // [FUNCTION]
 void()	player_axpain6 =	[34,	player_run	] {}; // [FUNCTION]
 
-void() player_sawpain1 = [11, player_sawpain2] { PainSound();self.weaponframe=0;}; // [FUNCTION]
+void() player_sawpain1 = [11, player_sawpain2] { PainSound(); self.weaponframe=0;}; // [FUNCTION]
 void() player_sawpain2 = [12, player_sawpain3] {}; // [FUNCTION]
 void() player_sawpain3 = [13, player_sawpain4] {}; // [FUNCTION]
 void() player_sawpain4 = [14, player_sawpain5] {}; // [FUNCTION]
@@ -893,7 +893,7 @@ void() player_death_sound = { // [FUNCTION]
 		else if (self.lip == 5) self.noise = "player/death5.wav";
 		else self.noise = "player/death1.wav";
 	}
-	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
+	sound(self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
 };
 
 void() player_gib = { // [FUNCTION]
@@ -919,11 +919,11 @@ void() player_gib = { // [FUNCTION]
 	self.avelocity_y = 200 + random() * 200;
 	self.angles = '0 0 0';
 	self.angles_y = self.ideal_yaw = random() * 360;
-	if (damage_attacker.classname == "teledeath") sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);  // Play GIB death sound
-	else if (damage_attacker.classname == "teledeath2") sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+	if (damage_attacker.classname == "teledeath") sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);  // Play GIB death sound
+	else if (damage_attacker.classname == "teledeath2") sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
 	else {
-		if (random() < 0.5) sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
-		else sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
+		if (random() < 0.5) sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
+		else sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
 	}
 };
 

@@ -81,8 +81,8 @@ void(float d) ai_nehwraith_walk = { // [FUNCTION]
 		if (random() < 0.1) T_Heal(self, 1, FALSE);
 	} else {
 		if (self.attack_state == AS_FLEEING) { // self.enemy only in Nehahra.
-			sound (self, CHAN_VOICE, "nehahra/wraith/speak.wav", 1, ATTN_IDLE);
-			sound (self.enemy, CHAN_VOICE, "nehahra/wraith/speak.wav", 1, ATTN_IDLE);
+			sound(self, CHAN_VOICE, "nehahra/wraith/speak.wav", 1, ATTN_IDLE);
+			sound(self.enemy, CHAN_VOICE, "nehahra/wraith/speak.wav", 1, ATTN_IDLE);
 			self.attack_state = AS_CHASING;
 		}
 	}
@@ -120,7 +120,7 @@ void(float d) ai_nehwraith_run = { // [FUNCTION]
 		if (self.enemy.classtype == CT_SOUL) {
 			if (vlen(self.enemy.origin - self.origin) < 300) { nehwraith_souls1(); return; }
 		} else {
-			if (!SUB_BBoxInOccupied(self.bbmins, self.bbmaxs, self.origin)) {
+			if (!SUB_BBoxInOccupied(self,self.bbmins,self.bbmaxs,self.origin)) {
 				self.solid = SOLID_SLIDEBOX;
 				self.movetype = MOVETYPE_STEP;
 				self.alpha = 1;
@@ -218,15 +218,15 @@ void(float ofs) nehwraith_shot = { // [FUNCTION]
     newmis.worldtype = TE_KNIGHTSPIKE;
     newmis.classname = "knightspike";
     if (self.alpha < 1) { // Wraith
-        sound (self, CHAN_WEAPON, "nehahra/baron/throb.wav", 1, ATTN_NORM);
+        sound(self, CHAN_WEAPON, "nehahra/baron/throb.wav", 1, ATTN_NORM);
         setmodel(newmis, "progs/nehahra/wr_spike.mdl");
         setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
         if (self.classtype == CT_MONDREADWRAITH) newmis.velocity = normalize(newmis.velocity)*600;
         else if (self.frame >= 94 && self.frame <= 96) newmis.velocity = normalize(newmis.velocity)*450;
         else newmis.velocity = normalize(newmis.velocity)*300; // Assume shots were sweated out passively.
     } else {
-        sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
-        setmodel (newmis, "progs/k_spike.mdl");
+        sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+        setmodel(newmis, "progs/k_spike.mdl");
         setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
         if (self.classtype == CT_MONWRATHOVERLORD) newmis.velocity = normalize(newmis.velocity)*450;
         else newmis.velocity = normalize(newmis.velocity)*300;
@@ -384,8 +384,8 @@ void(entity inflictor, entity attacker, float damage) nehwraith_pain = { // [FUN
 
 	self.pain_finished = time + 5;
     if (self.health < WRAITH_HP_CRITICAL) self.attack_state = AS_FLEEING; // Run away only if using soul ai.  Makes 100% kills too hard if wraith gets away.
-    if (random() < 0.5)  sound (self, CHAN_VOICE, "nehahra/wraith/growl2.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, "nehahra/wraith/idle2.wav", 1, ATTN_NORM);
+    if (random() < 0.5)  sound(self, CHAN_VOICE, "nehahra/wraith/growl2.wav", 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, "nehahra/wraith/idle2.wav", 1, ATTN_NORM);
 
 	if (self.alpha < 1 && ((inflictor.flags & FLx_CREATURE) || (attacker.flags & FLx_CREATURE))) { nehwraith_materialize(); return; } // Change from ghost to corporeal.
     if (SUB_IgnorePain()) return; // No pain anims in Nightmare.
@@ -418,8 +418,8 @@ void() nehwraith_die = { // [FUNCTION]
     self.modelindex = self.mindex2;
     self.takedamage = DAMAGE_NO;
     self.movetype = MOVETYPE_NONE;  // Freeze monster in place.
-    if (random() < 0.2) sound (self, CHAN_VOICE, "nehahra/wraith/talk3.wav", 1, ATTN_NORM);
-    else sound (self, CHAN_VOICE, "nehahra/wraith/call.wav", 1, ATTN_NORM);
+    if (random() < 0.2) sound(self, CHAN_VOICE, "nehahra/wraith/talk3.wav", 1, ATTN_NORM);
+    else sound(self, CHAN_VOICE, "nehahra/wraith/call.wav", 1, ATTN_NORM);
 };
 
 void() monster_voidwraith_precache = { // [FUNCTION]

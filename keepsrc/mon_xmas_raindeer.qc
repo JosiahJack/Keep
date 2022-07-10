@@ -43,15 +43,15 @@ $frame run1 run2 run3 run4 run5 run6 run7 run8 // (015 - 022) Running/Charge att
 $frame altar1 // (023 - 023) Static death pose - on altar (need skin 1)
 $frame base1 base2 // (024 - 025) Misc modelling stuff
 
-void() raind_idlefeet1 = [$idlefeet1, raind_idlefeet2 ] { monster_footstep(FALSE);ai_stand(); };
+void() raind_idlefeet1 = [$idlefeet1, raind_idlefeet2 ] { monster_footstep(FALSE); ai_stand(); };
 void() raind_idlefeet2 = [$idlefeet2, raind_idlefeet3 ] { ai_stand(); };
-void() raind_idlefeet3 = [$idlefeet3, raind_idlefeet4 ] { monster_footstep(FALSE);ai_stand(); };
+void() raind_idlefeet3 = [$idlefeet3, raind_idlefeet4 ] { monster_footstep(FALSE); ai_stand(); };
 void() raind_idlefeet4 = [$idlefeet4, raind_idlefeet5 ] { ai_stand(); };
 void() raind_idlefeet5 = [$idlefeet5, raind_idlefeet6 ] { ai_stand(); };
 void() raind_idlefeet6 = [$idlefeet6, raind_idlefeet7 ] { ai_stand(); };
 void() raind_idlefeet7 = [$idlefeet7, raind_stand1 ] { ai_stand(); };
 
-void() raind_stand1 = [$stand1, raind_stand2 ] { monster_idle_sound();ai_stand(); };
+void() raind_stand1 = [$stand1, raind_stand2 ] { monster_idle_sound(); ai_stand(); };
 void() raind_stand2 = [$stand1, raind_stand3 ] { ai_stand(); };
 void() raind_stand3 = [$stand2, raind_stand4 ] { ai_stand(); };
 void() raind_stand4 = [$stand2, raind_stand5 ] { ai_stand(); };
@@ -64,23 +64,23 @@ void() raind_stand8 = [$stand4, raind_stand1 ] {
 };
 
 
-void() raind_walk1 = [$run5, raind_walk2 ] { monster_idle_sound();ai_walk(8); };
+void() raind_walk1 = [$run5, raind_walk2 ] { monster_idle_sound(); ai_walk(8); };
 void() raind_walk2 = [$run6, raind_walk3 ] { ai_walk(5); };
 void() raind_walk3 = [$run7, raind_walk4 ] { ai_walk(10); };
-void() raind_walk4 = [$run8, raind_walk5 ] { monster_footstep(FALSE);ai_walk(5); };
+void() raind_walk4 = [$run8, raind_walk5 ] { monster_footstep(FALSE); ai_walk(5); };
 void() raind_walk5 = [$run1, raind_walk6 ] { ai_walk(8); };
 void() raind_walk6 = [$run2, raind_walk7 ] { ai_walk(13); };
 void() raind_walk7 = [$run3, raind_walk8 ] { ai_walk(5); };
-void() raind_walk8 = [$run4, raind_walk1 ] { monster_footstep(FALSE);ai_walk(8); };
+void() raind_walk8 = [$run4, raind_walk1 ] { monster_footstep(FALSE); ai_walk(8); };
 
-void() raind_run1 = [$run5, raind_run2 ] { monster_idle_sound();ai_run(15); };
+void() raind_run1 = [$run5, raind_run2 ] { monster_idle_sound(); ai_run(15); };
 void() raind_run2 = [$run6, raind_run3 ] { ai_run(10); };
 void() raind_run3 = [$run7, raind_run4 ] { ai_run(20); };
-void() raind_run4 = [$run8, raind_run5 ] { monster_footstep(FALSE);ai_run(10); };
+void() raind_run4 = [$run8, raind_run5 ] { monster_footstep(FALSE); ai_run(10); };
 void() raind_run5 = [$run1, raind_run6 ] { ai_run(15); };
 void() raind_run6 = [$run2, raind_run7 ] { ai_run(25); };
 void() raind_run7 = [$run3, raind_run8 ] { ai_run(10); };
-void() raind_run8 = [$run4, raind_run1 ] { monster_footstep(FALSE);ai_run(15); };
+void() raind_run8 = [$run4, raind_run1 ] { monster_footstep(FALSE); ai_run(15); };
 
 // MELEE : Antler attack
 void() raind_melee = {
@@ -129,9 +129,9 @@ void(vector sideofs) raind_attack = {
 
 	// Cycle between attack sounds
 	if (self.lefty == 0) 
-		sound (self, CHAN_WEAPON, "xmas/raindeer/attack1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "xmas/raindeer/attack1.wav", 1, ATTN_NORM);
 	else
-		sound (self, CHAN_WEAPON, "xmas/raindeer/attack2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "xmas/raindeer/attack2.wav", 1, ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 
 	// turn and face your enemy!
@@ -172,14 +172,13 @@ void() raind_pain2 = [$rattack2, raind_pain3 ] { ai_pain(4); };
 void() raind_pain3 = [$rattack3, raind_pain4 ] {};
 void() raind_pain4 = [$rattack4, raind_run1 ] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) raind_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) raind_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -217,12 +216,12 @@ void() monster_xmas_raindeer_precache = {
 	precache_model (MODEL_PROJ_RAIND); // Snowy Rockets
 	precache_model ("progs/xmas/gib_rdleg1.mdl"); // Legs
 	precache_model ("progs/xmas/gib_rdrockpack.mdl"); // Rocket Packs
-	precache_sound ("xmas/raindeer/idle.wav");
-	precache_sound ("xmas/raindeer/sight.wav");
-	precache_sound ("xmas/raindeer/attack1.wav"); // Alternating rocket firing sound
-	precache_sound ("xmas/raindeer/attack2.wav");
-	precache_sound ("xmas/raindeer/hit.wav");
-	precache_sound ("xmas/raindeer/death.wav");
+	precache_sound("xmas/raindeer/idle.wav");
+	precache_sound("xmas/raindeer/sight.wav");
+	precache_sound("xmas/raindeer/attack1.wav"); // Alternating rocket firing sound
+	precache_sound("xmas/raindeer/attack2.wav");
+	precache_sound("xmas/raindeer/hit.wav");
+	precache_sound("xmas/raindeer/death.wav");
 };
 
 // QUAKED monster_xmas_raindeer (0.5 0.75 0) (-16 -16 -24) (16 16 40) Ambush
@@ -260,7 +259,7 @@ void() monster_xmas_raindeer = { // [ENTITY]
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = OgreCheckAttack;
 	self.meleerange = MONAI_MELEERAINDEER;
-	self.meleerangez = MONAI_MELEEZAXIS;
+	self.meleerangez = 48;
 	self.th_stand = raind_stand1;
 	self.th_walk = raind_walk1;
 	self.th_run = raind_run1;

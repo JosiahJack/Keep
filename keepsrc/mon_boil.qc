@@ -28,7 +28,7 @@ void() boil_stand15 = [$stand15, boil_stand16 ] { ai_stand(); };
 void() boil_stand16 = [$stand16, boil_stand1 ] { ai_stand(); };
 
 void() boil_walk1 = [$walk1, boil_walk2 ] { monster_idle_sound(); ai_walk(0); };
-void() boil_walk2 = [$walk2, boil_walk3 ] { monster_footstep(TRUE);ai_walk(3); };
+void() boil_walk2 = [$walk2, boil_walk3 ] { monster_footstep(TRUE); ai_walk(3); };
 void() boil_walk3 = [$walk3, boil_walk4 ] { ai_walk(4); };
 void() boil_walk4 = [$walk4, boil_walk5 ] { ai_walk(3); };
 void() boil_walk5 = [$walk5, boil_walk6 ] { ai_walk(3); };
@@ -37,7 +37,7 @@ void() boil_walk7 = [$walk7, boil_walk8 ] { ai_walk(1); };
 void() boil_walk8 = [$walk8, boil_walk9 ] { ai_walk(2); };
 
 void() boil_walk9 = [$walk9, boil_walk10 ] { ai_walk(0); };
-void() boil_walk10 = [$walk10, boil_walk11 ] { monster_footstep(TRUE);ai_walk(3); };
+void() boil_walk10 = [$walk10, boil_walk11 ] { monster_footstep(TRUE); ai_walk(3); };
 void() boil_walk11 = [$walk11, boil_walk12 ] { ai_walk(1); };
 void() boil_walk12 = [$walk12, boil_walk13 ] { ai_walk(2); };
 void() boil_walk13 = [$walk13, boil_walk14 ] { ai_walk(3); };
@@ -45,18 +45,18 @@ void() boil_walk14 = [$walk14, boil_walk15 ] { ai_walk(3); };
 void() boil_walk15 = [$walk15, boil_walk16 ] { ai_walk(2); };
 void() boil_walk16 = [$walk16, boil_walk1 ] { ai_walk(2); };
 
-void() boil_run1 = [$run1, boil_run2 ] { monster_footstep(TRUE);ai_run(4); };
+void() boil_run1 = [$run1, boil_run2 ] { monster_footstep(TRUE); ai_run(4); };
 void() boil_run2 = [$run2, boil_run3 ] { monster_idle_sound(); ai_run(16); };
 void() boil_run3 = [$run3, boil_run4 ] { ai_run(8); };
 void() boil_run4 = [$run4, boil_run5 ] { ai_run(4); };
-void() boil_run5 = [$run5, boil_run6 ] { monster_footstep(TRUE);ai_run(4); };
+void() boil_run5 = [$run5, boil_run6 ] { monster_footstep(TRUE); ai_run(4); };
 void() boil_run6 = [$run6, boil_run7 ] { ai_run(16); };
 void() boil_run7 = [$run7, boil_run8 ] { ai_run(8); };
 void() boil_run8 = [$run8, boil_run1 ] { ai_run(4); };
 
 // Running Boil Explosive Attack
 void() boil_expl1 = [$explode1, boil_expl2 ] { ai_face();
-	sound (self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
 void() boil_expl2 = [$explode2, boil_expl3 ] { ai_face(); };
 void() boil_expl3 = [$explode3, boil_expl4 ] { ai_face(); };
 void() boil_expl4 = [$explode4, boil_expl5 ] { ai_face(); };
@@ -102,7 +102,7 @@ void() boil_checktarget = {
 void() boil_squirtblood = {
 	if (self.waitmin < time) {
 		self.waitmin = time + self.wait + random() * self.wait;
-		sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_IDLE);
+		sound(self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_IDLE);
 		
 		SpawnProjectileMeat(self,self.origin,self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
 		// Randomly spawn an extra gib of flesh
@@ -118,7 +118,7 @@ void() boil_hoba2 = [$hobA2, boil_hoba3 ] { boil_checktarget(); };
 void() boil_hoba3 = [$hobA3, boil_hoba4 ] { self.nextthink = self.nextthink + random()*0.2; boil_checktarget(); };
 void() boil_hoba4 = [$hobA2, boil_hoba1 ] { boil_checktarget(); };
 
-void() boil_HexpA1 = [$hobA2, boil_HexpA2 ] { sound (self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
+void() boil_HexpA1 = [$hobA2, boil_HexpA2 ] { sound(self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
 void() boil_HexpA2 = [$hobA3, boil_HexpA3 ] {};
 void() boil_HexpA3 = [$hobA4, boil_HexpA4 ] {};
 void() boil_HexpA4 = [$hobA5, boil_HexpA5 ] {};
@@ -133,7 +133,7 @@ void() boil_hobb2 = [$hobB2, boil_hobb3 ] { boil_checktarget(); };
 void() boil_hobb3 = [$hobB3, boil_hobb4 ] { self.nextthink = self.nextthink + random()*0.2; boil_checktarget(); };
 void() boil_hobb4 = [$hobB2, boil_hobb1 ] { boil_checktarget(); };
 
-void() boil_HexpB1 = [$hobB2, boil_HexpB2 ] { sound (self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
+void() boil_HexpB1 = [$hobB2, boil_HexpB2 ] { sound(self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
 void() boil_HexpB2 = [$hobB3, boil_HexpB3 ] {};
 void() boil_HexpB3 = [$hobB4, boil_HexpB4 ] {};
 void() boil_HexpB4 = [$hobB5, boil_HexpB5 ] {};
@@ -221,7 +221,7 @@ void() boil_die = {
 	self.max_health = MON_GIBFOUNTAIN;
 	monster_death_precheck();
 	// New gib + loud explosion sound
-	sound (self, CHAN_AUTO, "ad171/zombie/boil_explode.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "ad171/zombie/boil_explode.wav", 1, ATTN_NORM);
 	// Delay the t_radius explosion for one frame
 	// Just in case several are standing next to each other
 	// otherwise there will be a runaway crash loop
@@ -231,12 +231,12 @@ void() boil_die = {
 
 void() monster_boil_precache = {
 	precache_model ("progs/ad171/mon_boil.mdl");
-	precache_sound ("ad171/zombie/boil_idle1.wav");
-	precache_sound ("ad171/zombie/boil_idle2.wav");
-	precache_sound ("ad171/zombie/boil_sight.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-	precache_sound ("ad171/zombie/boil_windup.wav");
-	precache_sound ("ad171/zombie/boil_explode.wav");
+	precache_sound("ad171/zombie/boil_idle1.wav");
+	precache_sound("ad171/zombie/boil_idle2.wav");
+	precache_sound("ad171/zombie/boil_sight.wav");
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound("ad171/zombie/boil_windup.wav");
+	precache_sound("ad171/zombie/boil_explode.wav");
 	precache_poisongibs();			// precache gibs
 };
 

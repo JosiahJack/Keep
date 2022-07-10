@@ -2,12 +2,12 @@ void() play_sound_use = { // [FUNCTION]
    if ( (self.spawnflags & TRUE) ) {
       if ( (self.state == FALSE) ) {
          self.state = TRUE;
-         sound (self,self.impulse,self.noise,self.volume,self.speed);
+         sound(self,self.impulse,self.noise,self.volume,self.speed);
       } else {
          self.state = FALSE;
-         sound (self,self.impulse,"misc/null.wav",self.volume,self.speed);
+         sound(self,self.impulse,"misc/null.wav",self.volume,self.speed);
       }
-   } else sound (self,self.impulse,self.noise,self.volume,self.speed);
+   } else sound(self,self.impulse,self.noise,self.volume,self.speed);
 };
 
 void() PlaySoundThink = { // [FUNCTION]
@@ -20,8 +20,8 @@ void() PlaySoundThink = { // [FUNCTION]
 };
 
 void() play_sound_triggered = { // [ENTITY]
-   precache_sound (self.noise);
-   precache_sound ("misc/null.wav");
+   precache_sound(self.noise);
+   precache_sound("misc/null.wav");
    if ( (self.volume <= 0) ) self.volume = 1;
    if ( (self.speed == 0) ) self.speed = 1;
    if ( (self.speed < 0) ) self.speed = 0;
@@ -105,7 +105,7 @@ void() effect_finale_use = { // [FUNCTION]
       pl.solid = SOLID_NOT;
       pl.movetype = MOVETYPE_NONE;
       pl.modelindex = FALSE;
-      setorigin (pl,pos.origin);
+      setorigin(pl,pos.origin);
       pl.origin = pos.origin;
       pl.oldorigin = pos.origin;
       UpdateCamera(pl,pl);
@@ -122,7 +122,7 @@ void() effect_finale_use = { // [FUNCTION]
 void() effect_finale = { // [ENTITY]
    if ( deathmatch ) { remove(self); return; }
 
-   setorigin (self,self.origin);
+   setorigin(self,self.origin);
    self.angles = self.mangle;
    self.use = effect_finale_use;
    self.state = FALSE;

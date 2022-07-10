@@ -36,8 +36,6 @@
 // Useful utility functions for use by Drake mod features.
 //=============================================================================
 
-float(float yaw, float dist) noclip_move;
-void(float dist) noclip_goal;
 float(entity ent, vector spot, float damage) HasReflection;
 
 //----------------------------------WAND MATHS---------------------------------
@@ -95,27 +93,38 @@ float(float t) SUB_tan = { local vector v;  v = CoST(t);  return v_z;};
 void(entity ent, float chan) StopSound = { sound(ent,chan,SOUND_EMPTY,1,ATTN_NONE); };
 
 // Based on 'SV_StepDirection'.  Use this only for big multi-hulled monsters such as dragons.
-float(float yaw, float dist) QC_StepDir = {
+float(float yaw, float dist, float noclip) QC_StepDir = {
 	local vector spot;
 
     self.ideal_yaw = yaw;
     ChangeYaw();
-	spot = self.origin;
-	if (walkmove (yaw, dist)) { // First, move self.  If successful, see if self is facing ideal.  If not, snap self back.
-		if (!FacingIdeal ()) setorigin (self, spot); // Didn't turn enough so don't move.  
-		return TRUE;
-	} 
+    spot = self.origin;
+    if (noclip) {
+        if (FacingIdeal()) {
+            noclip_move(yaw,dist);
+            return TRUE;
+        } else {
+            setorigin(self, spot); // Didn't turn enough so don't move.
+            return FALSE;
+        }
+    } else {
+
+        if (walkmove (yaw, dist)) { // First, move self.  If successful, see if self is facing ideal.  If not, snap self back.
+            if (!FacingIdeal()) setorigin(self, spot); // Didn't turn enough so don't move.  
+            return TRUE;
+        }
+    }
     return FALSE;
 };
 
 // Based on 'SV_NewChaseDir'.
-void(float dist) QC_NewChaseDir = {
+void(float dist, float noclip) QC_NewChaseDir = {
     local vector delta;
     local float d1, d2, old, back, turn, ax, ay, end, next;
 
     old = floor (self.ideal_yaw / 45);  // IIRC, int chops off decimals.
-    old = anglemod (old * 45);
-    back = anglemod (old - 180);
+    old = anglemod(old * 45);
+    back = anglemod(old - 180);
     delta = self.goalentity.origin - self.origin;
     if (delta_x > 10) d1 = 0;
     else if (delta_x < -10) d1 = 180;
@@ -137,7 +146,7 @@ void(float dist) QC_NewChaseDir = {
 			}
 
 			if (turn != back) {
-				if (QC_StepDir (turn, dist)) return;
+                if (QC_StepDir (turn, dist,noclip)) return;
 			}
 		}
     }
@@ -147,14 +156,19 @@ void(float dist) QC_NewChaseDir = {
     ay = fabs(delta_y);
     if ((random() < 0.333) || (ay > ax)) { turn = d1; d1 = d2; d2 = turn;}
 
-    if (d1 != -1)
-        if (d1 != back)
-            if (QC_StepDir(d1,dist)) return;
-    if (d2 != -1)
-        if (d2 != back)
-            if (QC_StepDir(d2,dist)) return;
+    if (d1 != -1) {
+        if (d1 != back) {
+            if (QC_StepDir(d1,dist,noclip)) return;
+        }
+    }
+    if (d2 != -1) {
+        if (d2 != back) {
+            if (QC_StepDir(d2,dist,noclip)) return;
+        }
+    }
 
-    if (old != -1 && QC_StepDir(old,dist)) return; // No direct path to goal, so pick another way.
+    // No direct path to goal, so pick another way.
+    if (old != -1 && QC_StepDir(old,dist,noclip)) return;
 
     if (random() < 0.5) {
 		turn = 0; end = 315; next = 45;
@@ -163,12 +177,12 @@ void(float dist) QC_NewChaseDir = {
 	}
 
     while (turn <= end) {
-        if ((turn != back) && QC_StepDir (turn, dist)) return;
+        if ((turn != back) && QC_StepDir(turn,dist,FALSE)) return;
 
         turn = turn + next;
     }
 
-    if ((back != -1) && QC_StepDir (back, dist)) return;
+    if ((back != -1) && QC_StepDir(back,dist,FALSE)) return;
 
     self.ideal_yaw = old; // Can't move.
 };
@@ -189,12 +203,26 @@ float(float dist) QC_CloseEnough = {
 // This tries to emulate movetogoal for multiple bboxes acting as a unit.  This
 // is probably a very slow function compared to other functions.  However, it
 // is not noticable at all with a modern computer.
-void(float dist) QC_MoveToGoal = {
-	if (self.goalentity && QC_CloseEnough(dist)) return; // If next step hits enemy, stop.
+void(float dist, float noclip) QC_MoveToGoal = {
+    // If next step hits enemy, stop... but only if wraith is not in a wall.
+    // Why?  Because the wraith can't attack effectively if pinned in the wall.
+    if (noclip && self.enemy) {
+        // Noclip entities have full, unrestricted 3D movement.
+        if (QC_CloseEnough(dist)) {
+            if (InOpenOrLiquid(self.origin)) { self.velocity = '0 0 0'; return;}
+        }
+    }
+
+    // If next step hits goal, stop.
+	if (self.goalentity && !noclip) {
+        if (QC_CloseEnough(dist)) return;
+    }
 
 	// Bump around...
-    if (random() < 0.333) QC_NewChaseDir(dist);
-    else if (!QC_StepDir (self.ideal_yaw,dist)) QC_NewChaseDir(dist);
+    if (random() < 0.333) QC_NewChaseDir(dist,noclip);
+    else {
+        if (!QC_StepDir(self.ideal_yaw,dist,noclip)) QC_NewChaseDir(dist,FALSE);
+    }
 };
 
 // Checks if entity 'e' is a missile.
@@ -205,11 +233,14 @@ float(entity e) IsMissile = {
     return TRUE;
 };
 
-//  Safe Message Functions
+// Safe Message Functions
 // These are for functions that display messages and are used by clients
 // (players) and non-clients (monsters).  Such functions include item pickups
 // and powerup countdowns.
-void(entity ent, string text) Safe_stuffcmd = { if (ent.flags & FL_CLIENT) stuffcmd(ent, text); }; // The server crashes if it attempts a stuffcmd on a non-client.
+// The server crashes if it attempts a stuffcmd on a non-client.
+void(entity ent, string text) Safe_stuffcmd = {
+    if (ent.flags & FL_CLIENT) stuffcmd(ent, text);
+};
 
 // Use this to centerprint a message to everyone.
 void(string text, string noise, entity act) Mass_Centerprint = {
@@ -219,7 +250,7 @@ void(string text, string noise, entity act) Mass_Centerprint = {
 
 	if (coop <= 0 && act.flags & FL_CLIENT) {
         if (noise != "") sound(pc,CHAN_VOICE,noise,1,ATTN_NORM);
-        else sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM); // Default noise = classic boop boop sound
+        else sound(pc,CHAN_VOICE,"misc/talk.wav",1,ATTN_NORM); // Default noise = classic boop boop sound
         centerprint(act,text);
         return;
     }
@@ -227,7 +258,7 @@ void(string text, string noise, entity act) Mass_Centerprint = {
     pc = find (world, classname, "player");
     while(pc) {
         if (noise != "") sound(pc,CHAN_VOICE,noise,1,ATTN_NORM);
-        else sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM); // Default noise = classic boop boop sound
+        else sound(pc,CHAN_VOICE,"misc/talk.wav",1,ATTN_NORM); // Default noise = classic boop boop sound
         centerprint_builtin(pc, text); // Confirm pc status.
         pc = find (pc, classname, "player");
     }
@@ -316,7 +347,7 @@ void() InitMoveBox = {
     dprint("\b[SETUP]\b Drake movebox is now setup for large monsters\n");
 };
 
-//  Noclip Movement -- Used by wraiths and other such ghostly monsters.
+// Noclip Movement -- Used by wraiths and other such ghostly monsters.
 // This is 'walkmove' for monsters with noclip movement.  Based on
 // 'SV_movestep'.  Noclip entities are capable of unrestricted 3D movement.
 // NOTE:  This function *always* returns TRUE.
@@ -337,98 +368,33 @@ float(float yaw, float dist) noclip_move = {
     return TRUE;
 };
 
-// Based on 'SV_StepDirection'.
-// Originally float type, but noclip movement cannot be blocked.
-void(float yaw, float dist) noclip_step = {
-    self.ideal_yaw = yaw;
-    ChangeYaw();
-
-    if (FacingIdeal())
-        noclip_move(yaw, dist);
-    else
-        self.velocity = '0 0 0';    // Didn't turn enough so don't move.
-};
-
-// Based on 'SV_NewChaseDir'.
-void(float dist) noclip_chase = {
-    local   vector  delta;
-    local   float   d1, d2, old, back, turn, ax, ay;
-
-    old = floor (self.ideal_yaw / 45);  // IIRC, int chops off decimals.
-    old = anglemod (old * 45);
-    back = anglemod (old - 180);
-
-    delta = self.goalentity.origin - self.origin;
-    if (delta_x > 10)
-        d1 = 0;
-    else if (delta_x < -10)
-        d1 = 180;
-    else
-        d1 = -1;
-    if (delta_y < -10)
-        d2 = 270;
-    else if (delta_y > 10)
-        d2 = 90;
-    else
-        d2 = -1;
-
-	// Try direct route.
-    if (d1 != -1)
-        if (d2 != -1) {
-        if (d1 == 0)
-            { if (d2 == 90) turn = 45; else turn = 315;}
-        else
-            { if (d2 == 90) turn = 135; else turn = 215;}
-
-        if (turn != back) { noclip_step (turn, dist); return;}
-    }
-
-	// Try other directions.
-    ax = fabs(delta_x);
-    ay = fabs(delta_y);
-    if ((random() < 0.333) || (ay > ax))
-        { turn = d1; d1 = d2; d2 = turn;}
-
-    if (d1 != -1)
-        if (d1 != back)
-            { noclip_step (d1, dist); return;}
-    if (d2 != -1)
-        if (d2 != back)
-            { noclip_step (d2, dist); return;}
-
-	// No direct path to goal, so pick another way.
-    noclip_step(old, dist);
-};
-
-// This is 'movetogoal' for monsters with noclip movement.  Based on 'SV_MoveToGoal'.
-void(float dist) noclip_goal = {
-	// Noclip entities have full, unrestricted 3D movement.
-
-	// If next step hits enemy, stop... but only if wraith is not in a wall.  Why?  Because the wraith can't attack effectively if pinned in the wall.
-    if (self.enemy)
-        if (QC_CloseEnough (dist))
-            if (pointcontents (self.origin) != CONTENT_SOLID) { self.velocity = '0 0 0'; return;}
-
-    if (random() < 0.333 && self.goalentity.classtype != CT_PATHCORNER)
-        noclip_chase(dist);
-    else
-        noclip_step(self.ideal_yaw, dist);
-};
-
-// Like findradius, except the chain includes entities with solid_not.  Useful when you want explosions and the like to gib non-solid corpses.
+// Like findradius, except the chain includes entities with solid_not.  Useful
+// when you want explosions and the like to gib non-solid corpses.
+// Modified to match the dist calculation used in the engine code. -Qmaster
 entity(vector org, float radius) QC_FindRadius = {
-    local   entity  e, head;
-    local   vector  spot;
+    local entity  e, head;
+    local vector  spot;
+    local float rad, d, lensq;
 
+    rad = radius * radius;
     head = world;
-    e = nextent (world);
+    e = nextent(world);
     while (e) {
-        spot = e.origin + (e.mins + e.maxs)*0.5;
-        if (vlen(org - spot) <= radius) {
-            e.chain = head;
-            head = e;
-        }
-        e = nextent (e);
+        d = org_x - (e.origin_x + (e.mins_x + e.maxs_x)*0.5);
+        d = d * d;
+        if (d > rad) continue;
+
+        d = org_y - (e.origin_y + (e.mins_y + e.maxs_y)*0.5);
+        d = d * d;
+        if (d > rad) continue;
+
+        d = org_z - (e.origin_z + (e.mins_z + e.maxs_z)*0.5);
+        d = d * d;
+        if (d > rad) continue;
+
+        e.chain = head;
+        head = e;
+        e = nextent(e);
     }
     return head;
 };
@@ -504,7 +470,7 @@ void(entity ent) ReflectSound = {
 	if (ent.mirror_sound >= time) return;
 
 	ent.mirror_sound = time + 2;    // t+1 boings too much.
-	sound (ent, CHAN_ITEM, "drake/items/reflect3.wav", 1, ATTN_NORM);
+	sound(ent, CHAN_ITEM, "drake/items/reflect3.wav", 1, ATTN_NORM);
 };
 
 // Checks if entity 'e' can grunt in pain.
@@ -543,97 +509,69 @@ float(entity ent, vector spot) UseCourage = {
     return FALSE;
 };
 
-// Point Contents Checks.  This checks if a bbox is inside a wall or sky.  The bbox's origin and corners are checked.  If any one points is within a solid or sky, TRUE is returned.
+// Point Contents Checks.  This checks if a bbox is inside a wall or sky.  The
+// bbox's origin and corners are checked.  If any one points is within a solid
+// or sky, TRUE is returned.
 float(vector vmin, vector vmax, vector spot) BoxInWall = {
     local   vector  p;
     local   float   content;
 
     // Check origin.
     p = spot;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     // Check bbox faces.
     // Order:  1)-00  2)+00  3)0-0  4)0+0  5)00-  6)00+
     p_x = spot_x + vmin_x;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmax_x;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p = spot;
     p_y = spot_y + vmin_y;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_y = spot_y + vmax_y;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p = spot;
     p_z = spot_z + vmin_z;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_z = spot_z + vmax_z;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     // Check bbox corners.
     // Order:  1)+++  2)-++  3)+-+  4)--+  5)++-  6)-+-  7)+--  8)---
     p_x = spot_x + vmax_x;
     p_y = spot_y + vmax_y;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmin_x;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmax_x;
     p_y = spot_y + vmin_y;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmin_x;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmax_x;
     p_y = spot_y + vmax_y;
     p_z = spot_z + vmin_z;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmin_x;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmax_x;
     p_y = spot_y + vmin_y;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     p_x = spot_x + vmin_x;
-    content = pointcontents(p);
-    if (content == CONTENT_SOLID)  return TRUE;
-    if (content == CONTENT_SKY)    return TRUE;
+    if (!InOpenOrLiquid(p)) return TRUE;
 
     return FALSE;
 };
@@ -732,18 +670,19 @@ float() EntryPoint_Path = {
 //  Checks if a given point is clear for occupation.
 float(vector spot) EntryPoint_Test = {
 	// Move the dummy to a test point.
-    setorigin (self, spot);
+    setorigin(self, spot);
     self.flags = self.flags - (self.flags & FL_ONGROUND);
 
 	// Test the point.
     if (self.flags & (FL_FLY | FL_SWIM)) {
-        if (BoxInWall (self.mins, self.maxs, spot)) return FALSE; // Note:  These only detect walls, not creatures.
+        if (BoxInWall(self.mins, self.maxs, spot)) return FALSE; // Note:  These only detect walls, not creatures.
 
-        if (self.flags & FL_SWIM)
-            if (pointcontents(spot) > CONTENT_WATER) return FALSE;   // Fish must be in the water.
+        if (self.flags & FL_SWIM) {
+            if (!InLiquid(spot)) return FALSE;   // Fish must be in the liquid.
+        }
 
         // The past two checks look for walls, not creatures.  This check will hit both walls and creature.
-        if (BoxInThing (self.mins, self.maxs, spot, self.owner)) return FALSE;
+        if (BoxInThing(self.mins, self.maxs, spot, self.owner)) return FALSE;
     } else {
         droptofloor();
         if (!walkmove (0,0)) return FALSE;
@@ -757,7 +696,8 @@ float(vector spot) EntryPoint_Test = {
     return TRUE; // Got one!
 };
 
-// Selects one of twelve points equidistant from the beacon.  Used for summoning a monster to its master.
+// Selects one of twelve points equidistant from the beacon.  Used for summoning
+// a monster to its master.
 float() EntryPoint_Circle = {
     local   float   cos0, cos30, cos60;
     local   vector  spot, org;
@@ -848,7 +788,9 @@ float(float r, float m, vector ofs) EntryPoint_Randomize_Ex = {
     return FALSE;
 };
 
-float(float r, float m) EntryPoint_Randomize = { return EntryPoint_Randomize_Ex (r, m, VEC_360); };
+float(float r, float m) EntryPoint_Randomize = {
+    return EntryPoint_Randomize_Ex (r, m, VEC_360);
+};
 
 //  Selects a random point between close and medium range.
 float() EntryPoint_Random = { return EntryPoint_Randomize_Ex (400, 100, VEC_360); };
@@ -874,7 +816,6 @@ float() EntryPoint_One = { return EntryPoint_Test (self.origin); };
 
 // Make a dummy entity to test the entry points so the entity to be teleported need not be moved around.
 float(entity ent, entity targ, vector spot, float() func) EntryPoint_Spawn = {
-
     local   entity  test;
     local   entity  os;         // os = old self
     local   float   success;
@@ -888,9 +829,9 @@ float(entity ent, entity targ, vector spot, float() func) EntryPoint_Spawn = {
     test.owner     = ent;       // Lets dummy pass through entity at will.
     test.enemy     = targ;      // Beacon entity.
     test.flags     = ent.flags & (FL_FLY | FL_SWIM);
-    setmodel (test, "");   // invisible
+    setmodel(test, "");   // invisible
     setsize (test, ent.mins, ent.maxs);
-    setorigin (test, spot);
+    setorigin(test, spot);
 
 	// We are ready to find an entry point.
 	os = self;
@@ -899,7 +840,7 @@ float(entity ent, entity targ, vector spot, float() func) EntryPoint_Spawn = {
 	self = os;
 
 	// Done testing, so use any found entry point and remove the dummy.
-    if (success) setorigin (ent, test.origin);
+    if (success) setorigin(ent, test.origin);
     remove (test);
 
     return success; // Our work here is done.
@@ -909,7 +850,7 @@ float(entity ent, entity targ, vector spot, float() func) EntryPoint_Spawn = {
 // Like EntryPoint_Test, but ignores creatures and beacon LoS.
 float() EntryPoint_BossCube = {
 	// Move the dummy to a test point.
-	setorigin (self, self.origin);
+	setorigin(self, self.origin);
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	droptofloor();     // Do this even if creature can fly or swim.
 

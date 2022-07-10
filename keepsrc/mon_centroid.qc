@@ -8,7 +8,7 @@ void(float ox) SCOURGE_FireSpikes = {
 	src = (((self.origin - '0.000 0.000 19.000') + (v_right * ox)) + (v_forward * 14.000));
 	vec = (self.enemy.origin - src);
 	vec = normalize (vec);
-	sound (self,CHAN_WEAPON,"weapons/rocket1i.wav",TRUE,ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",TRUE,ATTN_NORM);
 	if (self.spawnflags & MONCENTROID_LAVASPIK)
 		launch_projectile(src,vec,NO_SPIN,CT_PROJ_LAVANG,600);
 	else
@@ -28,7 +28,7 @@ void() Attack_With_Tail = {
 
 	ldmg = (((random () + random ()) + random ()) * 15.000);
 	T_Damage (self.enemy,self,self,ldmg,DAMARMOR);
-	sound (self,CHAN_WEAPON,"shambler/smack.wav",TRUE,ATTN_NORM);
+	sound(self,CHAN_WEAPON,"shambler/smack.wav",TRUE,ATTN_NORM);
 	SpawnMeatSpray (self.enemy,self,50);
 };
 
@@ -47,18 +47,18 @@ void() scourge_think = {
 		trig.movetype = MOVETYPE_NONE;
 		trig.modelindex = FALSE;
 		trig.model = "";
-		trig.lastvictim = self;
+		trig.owner = self;
 		trig.think = ScourgeTriggerThink;
 		trig.touch = ScourgeTriggerTouch;
 		trig.nextthink = ((time + 0.100) + random ());
-		setorigin (trig,self.origin);
-		self.lastvictim = trig;
+		setorigin(trig,self.origin);
+		self.attachment = trig;
 		self.state = TRUE;
 	}
 	if (((self.spawnsilent == FALSE) && (self.spawnmulti == TRUE))) {
 		StopSound(self,CHAN_BODY);
 	} else {
-		if (((self.spawnsilent == TRUE) && (self.spawnmulti == FALSE))) sound (self,CHAN_BODY,"hipnotic/scourge/walk.wav",TRUE,ATTN_IDLE);
+		if (((self.spawnsilent == TRUE) && (self.spawnmulti == FALSE))) sound(self,CHAN_BODY,"hipnotic/scourge/walk.wav",TRUE,ATTN_IDLE);
 	}
 	self.spawnmulti = self.spawnsilent;
 };
@@ -94,7 +94,7 @@ void() scourge_stand12 = [ 11.000, scourge_stand1 ] { ai_stand(); scourge_think(
 
 void() scourge_walk1 = [ 12.000, scourge_walk2 ] {
    if ( (random () < 0.100) )
-      sound (self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
+      sound(self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
 
    self.spawnsilent = TRUE;
    scourge_think();
@@ -108,7 +108,7 @@ void() scourge_walk6 = [ 17.000, scourge_walk1 ] { ai_walk (8); };
 
 void() scourge_run1 = [ 12.000, scourge_run2 ] {
 	if ( (random () < 0.100) )
-	sound (self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
+	sound(self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
 	self.spawnsilent = TRUE;
 	scourge_think();
 	ai_run (18.000); };
@@ -184,7 +184,7 @@ void() scourge_melee1 = [ 20.000, scourge_melee2 ] {
 void() scourge_melee2 = [ 21.000, scourge_melee3 ] { ai_charge (MOVETYPE_WALK); };
 void() scourge_melee3 = [ 22.000, scourge_melee4 ] { ai_charge (FL_SWIM); };
 void() scourge_melee4 = [ 23.000, scourge_melee5 ] { ai_charge (FL_SWIM); };
-void() scourge_melee5 = [ 24.000, scourge_melee6 ] { sound (self,CHAN_WEAPON,"hipnotic/scourge/tailswng.wav",TRUE,ATTN_NORM); ai_charge (MOVETYPE_WALK); };
+void() scourge_melee5 = [ 24.000, scourge_melee6 ] { sound(self,CHAN_WEAPON,"hipnotic/scourge/tailswng.wav",TRUE,ATTN_NORM); ai_charge (MOVETYPE_WALK); };
 void() scourge_melee6 = [ 25.000, scourge_melee7 ] { ai_charge (TRUE); };
 void() scourge_melee7 = [ 26.000, scourge_melee8 ] { Attack_With_Tail(); };
 void() scourge_melee8 = [ 27.000, scourge_melee9 ] { ai_face(); };
@@ -201,7 +201,7 @@ void() scourge_pain5 = [ 35.000, scourge_run1  ] {};
 void(entity inflictor, entity attacker, float damage) scourge_pain = {
    if (self.pain_finished > time) return;
 
-   sound (self,CHAN_VOICE,"hipnotic/scourge/pain.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_VOICE,"hipnotic/scourge/pain.wav",TRUE,ATTN_NORM);
    self.pain_finished = (time + FL_SWIM);
    scourge_pain1();
 };
@@ -209,42 +209,32 @@ void(entity inflictor, entity attacker, float damage) scourge_pain = {
 void() scourge_die1 = [ 36.000, scourge_die2 ] { self.spawnsilent = FALSE; scourge_think(); };
 void() scourge_die2 = [ 37.000, scourge_die3 ] {};
 void() scourge_die3 = [ 38.000, scourge_die4 ] { self.solid = SOLID_NOT; self.bodyonflr = MON_ONFLR;};
-void() scourge_die4 = [ 39.000, scourge_die5 ] {};
-void() scourge_die5 = [ 40.000, scourge_die5 ] {};
+void() scourge_die4 = [ 39.000, scourge_die5 ] { monster_death_postcheck(); };
+void() scourge_die5 = [ 40.000, scourge_die5 ] { monster_deadbody_check(); };
 
 void() scourge_die = {
-   remove (self.lastvictim);
-   self.spawnsilent = FALSE;
-   scourge_think();
-   if ( (self.health < -35.000) ) {
-      sound (self,CHAN_VOICE,"player/udeath.wav",TRUE,ATTN_NORM);
-      ThrowGib (25,1); // headmdl
-      ThrowGib (1,1);
-      ThrowGib (2,1);
-      ThrowGib (3,1);
-	  remove(self);
-      return;
-   }
-
-   sound (self,CHAN_VOICE,"hipnotic/scourge/pain2.wav",TRUE,ATTN_NORM);
-   scourge_die1();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	SUB_RemoveAttachment();
+	self.spawnsilent = FALSE;
+	scourge_think();
+	if (!self.gibbed) {
+		sound(self,CHAN_VOICE,"hipnotic/scourge/pain2.wav",TRUE,ATTN_NORM);
+		scourge_die1();
+	}
 };
 
 void() scourge_melee = { scourge_melee1(); SUB_AttackFinished ((FL_SWIM * random ())); };
 
 void() ScourgeTriggerThink = {
-   local entity targ;
-
-   if ( (self.lastvictim.health <= FALSE) ) { remove(self); return; }
-
-   targ = self.lastvictim;
-   makevectors(targ.angles);
-   setorigin (self,(targ.origin + (v_forward * 300.000)));
-   self.nextthink = (time + 0.100);
+	self.think = ScourgeTriggerThink;
+	if (self.owner.health <= 0) entity_remove(self,0.1);
+	makevectors(self.owner.angles);
+	setorigin(self,self.owner.origin + (v_forward * 300));
+	self.nextthink = (time + 0.1);
 };
 
 void() ScourgeTriggerTouch = {
-   local entity targ, tempent;
+   local entity tempent;
    local vector dir;
 
 	if (other.flags & FLx_CREATURE) return;
@@ -252,16 +242,15 @@ void() ScourgeTriggerTouch = {
 
 	if (self.air_finished < time) {
 		self.air_finished = time + 1.5;
-		targ = self.lastvictim;
-		if (targ.health <= FALSE) { remove(self); return; }
+		if (self.owner.health <= 0) { entity_remove(self,0.1); return; }
 
-		dir = (targ.origin - other.origin);
+		dir = (self.owner.origin - other.origin);
 		dir = normalize (dir);
 		if ((dir * normalize(other.velocity)) < 0.800) return;
 
 		if (time > self.duration) {
 			tempent = self;
-			self = targ;
+			self = self.owner;
 			if ( (random () < 0.500) ) {
 				scourge_strafeleft1();
 			} else {

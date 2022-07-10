@@ -124,7 +124,7 @@ void() item_coin_touch = {
 void() item_coin_setup = {
    if (self.noise == "") self.noise = "drake/items/money.wav";
 
-   precache_sound (self.noise);
+   precache_sound(self.noise);
    self.touch = item_touch;
    self.touch2 = item_coin_touch;
    self.bbmins = VEC_HULL_MIN;
@@ -176,7 +176,7 @@ void() item_bone = {
 	precache_model (self.mdl);
 	if (self.noise == "") self.noise = "quoth/polyp/gibsplt1.wav";
 	if (!self.count) self.count = 1;
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	self.touch = item_touch;
 	self.touch2 = item_bone_touch;
 	self.bbmins = VEC_HULL_MIN;
@@ -202,7 +202,7 @@ void(float c) DropCoin = {
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
 	self.noise = "drake/items/money.wav";
-	setmodel (item, "progs/qmaster/coinitem.mdl");
+	setmodel(item, "progs/qmaster/coinitem.mdl");
 	setsize (item, VEC_HULL_MIN, VEC_HULL_MAX);
 	item.touch = item_touch;
 	item.touch2 = item_coin_touch;

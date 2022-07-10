@@ -50,7 +50,7 @@ float TRIG_ALWAYTOUCH = 32768; // Added by functions, no map entity interaction.
 // Used by lots of different triggers for standard sounds
 void() trigger_bmodel_sounds = { // [FUNCTION]
 	if (self.sounds == 1) self.noise = "misc/secret.wav";
-	else if (self.sounds == 2) self.noise = SOUND_TALK;
+	else if (self.sounds == 2) self.noise = "misc/talk.wav";
 	else if (self.sounds == 3) self.noise = "misc/trigger1.wav";
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
 	else if (self.sounds == 6) self.noise = RND_SURPRISENEG;
@@ -133,7 +133,7 @@ void() trigger_bmodel_fire = { // [FUNCTION]
 		if (self.count <= 0) self.wait = -1;
 	}
 
-	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the trigger, NOT the activator
+	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the trigger, NOT the activator
 
 	// One of the downside to trigger_multi and trigger_once is that they reset the activator global variable each time they are used.
 	// This can causes problems with triggers that require client references for centerprint/sound cues (like trigger_secret)
@@ -293,7 +293,7 @@ float() check_bmodel_notouch = { // [FUNCTION]
 	// Cannot have a no touch AND no targetname setup!!!
 	if (self.spawnflags & TRIG_NOTOUCH && self.targetname == "" && self.health < 1) {
 		dprint("\b[TRIGGER]\b NO touch + NO targetname!\n");
-		setmodel (self, self.model);
+		setmodel(self, self.model);
 		self.oldorigin = bmodel_origin(self);
 		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
 		entity_hide(self);

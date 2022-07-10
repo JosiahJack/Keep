@@ -214,7 +214,7 @@ void(vector spot,entity targ, float sprtype) shrine_magic_beam = { // [FUNCTION]
 	partic = spawn();
 	partic.solid = SOLID_NOT;
 	partic.movetype = MOVETYPE_NOCLIP;
-	setmodel (partic, s);
+	setmodel(partic, s);
 	setsize(partic,'0 0 0', '0 0 0');
 	spot_x = spot_x + (crandom() * 8);
 	spot_y = spot_y + (crandom() * 8);

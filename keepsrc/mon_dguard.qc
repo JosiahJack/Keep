@@ -291,13 +291,10 @@ void()	dguard_atkB21= [	$w_attack22,		dguard_run1	] { ai_charge(5); };
 // Attack 2a - Smash (chop overhead to ground)
 // Attack 2b - W_Attack (two handed slashing attack)
 void() dguard_melee = {
-	local float		len;
+	local float	len;
 
-	// decide if now is a good swing time
-	len = vlen(self.enemy.origin + self.enemy.view_ofs - (self.origin + self.view_ofs));
-	
 	// Close melee attack 1a, 1b (slice and char_a)
-	if ( len < MONAI_MELEEKNIGHT ) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		// Randomly pick between attacks
 		if (random() > 0.5) dguard_atk1();
 		else dguard_atkB1();
@@ -333,7 +330,7 @@ void(entity inflictor, entity attacker, float damage)	dguard_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dguard_painA1();		// classic, body recoil
@@ -347,20 +344,20 @@ void(entity inflictor, entity attacker, float damage)	dguard_pain = {
 
 
 void()	dguard_dieA1	= [	$deathA1,	dguard_dieA2	] { ai_forward(5); };
-void()	dguard_dieA2	= [	$deathA2,	dguard_dieA3	] { monster_check_gib();ai_forward(8); };
+void()	dguard_dieA2	= [	$deathA2,	dguard_dieA3	] { monster_check_gib(); ai_forward(8); };
 void()	dguard_dieA3	= [	$deathA3,	dguard_dieA4	] { monster_check_gib();
 	self.solid = SOLID_NOT; ai_forward(7); };
 void()	dguard_dieA4	= [	$deathA4,	dguard_dieA5	] {};
 void()	dguard_dieA5	= [	$deathA5,	dguard_dieA6	] {};
 void()	dguard_dieA6	= [	$deathA6,	dguard_dieA7	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
 void()	dguard_dieA7	= [	$deathA7,	dguard_dieA8	] {};
 void()	dguard_dieA8	= [	$deathA8,	dguard_dieA9	] { ai_forward(10); };
 void()	dguard_dieA9	= [	$deathA9,	dguard_dieA10	] { ai_forward(11); };
 void()	dguard_dieA10	= [	$deathA10,	dguard_dieA11	] {};
 void()	dguard_dieA11	= [	$deathA11,	dguard_dieA12	] { monster_death_postcheck(); };
 void()	dguard_dieA12	= [	$deathA12,	dguard_dieA12	] { monster_deadbody_check(); };
-//----------------------------------------------------------------------
+
 void()	dguard_dieB1	= [	$deathB1,	dguard_dieB2	] {};
 void()	dguard_dieB2	= [	$deathB2,	dguard_dieB3	] { monster_check_gib(); };
 void()	dguard_dieB3	= [	$deathB3,	dguard_dieB4	] { monster_check_gib();
@@ -371,7 +368,7 @@ void()	dguard_dieB6	= [	$deathB6,	dguard_dieB7	] {};
 void()	dguard_dieB7	= [	$deathB7,	dguard_dieB8	] {};
 void()	dguard_dieB8	= [	$deathB8,	dguard_dieB9	] {};
 void()	dguard_dieB9	= [	$deathB9,	dguard_dieB10	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
 void()	dguard_dieB10	= [	$deathB10,	dguard_dieB11	] {};
 void()	dguard_dieB11	= [	$deathB11,	dguard_dieB12	] {};
 void()	dguard_dieB12	= [	$deathB12,	dguard_dieB13	] {};
@@ -383,14 +380,14 @@ void()	dguard_dieB17	= [	$deathB17,	dguard_dieB18	] {};
 void()	dguard_dieB18	= [	$deathB18,	dguard_dieB19	] {};
 void()	dguard_dieB19	= [	$deathB19,	dguard_dieB20	] { monster_death_postcheck(); };
 void()	dguard_dieB20	= [	$deathB20,	dguard_dieB20	] { monster_deadbody_check(); };
-//----------------------------------------------------------------------
+
 void()	dguard_dieC1	= [	$deathC1,	dguard_dieC2	] { ai_forward(5); };
-void()	dguard_dieC2	= [	$deathC2,	dguard_dieC3	] { monster_check_gib();ai_forward(8); };
+void()	dguard_dieC2	= [	$deathC2,	dguard_dieC3	] { monster_check_gib(); ai_forward(8); };
 void()	dguard_dieC3	= [	$deathC3,	dguard_dieC4	] { monster_check_gib();
 	self.solid = SOLID_NOT; ai_forward(7); };
 void()	dguard_dieC4	= [	$deathC4,	dguard_dieC5	] {};
 void()	dguard_dieC5	= [	$deathC5,	dguard_dieC6	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
 void()	dguard_dieC6	= [	$deathC6,	dguard_dieC7	] {};
 void()	dguard_dieC7	= [	$deathC7,	dguard_dieC8	] {};
 void()	dguard_dieC8	= [	$deathC8,	dguard_dieC9	] { ai_forward(10); };
@@ -400,7 +397,7 @@ void()	dguard_dieC11	= [	$deathC11,	dguard_dieC12	] {};
 void()	dguard_dieC12	= [	$deathC12,	dguard_dieC13	] {};
 void()	dguard_dieC13	= [	$deathC13,	dguard_dieC14	] { monster_death_postcheck(); };
 void()	dguard_dieC14	= [	$deathC14,	dguard_dieC14	] { monster_deadbody_check(); };
-//----------------------------------------------------------------------
+
 // The sideways death happens to quick and looks odd when finished
 // Skipping this death sequence
 void()	dguard_dieD1	= [	$deathD1,	dguard_dieD2	] {};
@@ -412,7 +409,7 @@ void()	dguard_dieD5	= [	$deathD5,	dguard_dieD6	] {};
 void()	dguard_dieD6	= [	$deathD6,	dguard_dieD7	] {};
 void()	dguard_dieD7	= [	$deathD7,	dguard_dieD8	] {};
 void()	dguard_dieD8	= [	$deathD8,	dguard_dieD9	] {
-	sound (self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
 void()	dguard_dieD9	= [	$deathD9,	dguard_dieD10	] {};
 void()	dguard_dieD10	= [	$deathD10,	dguard_dieD11	] {};
 void()	dguard_dieD11	= [	$deathD11,	dguard_dieD12	] {};
@@ -427,7 +424,7 @@ void() dguard_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
 		if (random() > 0.75) dguard_dieC1();				// Forward - platoon like
 		else if (random() > 0.5) dguard_dieA1();		// Forward - standard
 		else dguard_dieB1();												// Backward - standard

@@ -190,7 +190,7 @@ void() deathguard_die8 = [49, deathguard_die9] { ai_forward(10); };
 void() deathguard_die9 = [50, deathguard_die10] { ai_forward(11); };
 void() deathguard_die10 = [51, deathguard_die11] {};
 void() deathguard_die11 = [52, deathguard_die12] { monster_death_postcheck(); };
-void() deathguard_die12 = [53, deathguard_die12] { self.nextthink = time + 0.1; };
+void() deathguard_die12 = [53, deathguard_die12] { monster_deadbody_check(); };
 
 void() deathguard_dieb1 = [54, deathguard_dieb2] { sound(self, CHAN_VOICE, "quoth/dguard/death1.wav", 1, ATTN_NORM); };
 void() deathguard_dieb2 = [55, deathguard_dieb3] { monster_check_gib(); };
@@ -200,17 +200,13 @@ void() deathguard_dieb5 = [58, deathguard_dieb6] {};
 void() deathguard_dieb6 = [59, deathguard_dieb7] {};
 void() deathguard_dieb7 = [60, deathguard_dieb8] {};
 void() deathguard_dieb8 = [61, deathguard_dieb9] { monster_death_postcheck(); };
-void() deathguard_dieb9 = [62, deathguard_dieb9] { self.nextthink = time + 0.1; };
+void() deathguard_dieb9 = [62, deathguard_dieb9] { monster_deadbody_check(); };
 
 void() deathguard_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-
 	if (!self.gibbed) {
-		if (random() > 0.5) {
-			deathguard_die1();
-		} else {
-			deathguard_dieb1();
-		}
+		if (random() > 0.5) deathguard_die1();
+		else deathguard_dieb1();
 	}
 };
 

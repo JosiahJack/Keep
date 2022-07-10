@@ -49,7 +49,7 @@ void() enforcer_spawnshieldfx = {
 	shieldfx = spawn();
 	shieldfx.owner = self;
 	shieldfx.movetype = MOVETYPE_NONE;
-	setorigin (shieldfx, self.origin);
+	setorigin(shieldfx, self.origin);
 	setsize( shieldfx, '0 0 0', '0 0 0');
 	shieldfx.nextthink = time + 0.05;
 	shieldfx.think = enforcer_shieldthink;
@@ -80,7 +80,7 @@ void() enforcer_fireparticlebeam = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
-	sound (self, CHAN_WEAPON, "lunaran/enforcer/me_fire1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "lunaran/enforcer/me_fire1.wav", 1, ATTN_NORM);
 	go = vlen(self.enemy.origin - org) / 400;
 	mep = self.enemy.velocity;
 	mep_z = 0;
@@ -98,8 +98,8 @@ void() enforcer_fireparticlebeam = {
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 	missile.effects = EF_DIMLIGHT; 
-	setmodel (missile, "progs/travail/laser2.mdl");
-	setorigin (missile, org);
+	setmodel(missile, "progs/travail/laser2.mdl");
+	setorigin(missile, org);
 	setsize (missile, '0 0 0', '0 0 0');		
 	missile.velocity = lead * 500;
 	missile.angles = vectoangles(missile.velocity);
@@ -134,7 +134,7 @@ void() enforcer_firerocket = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
-	sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 	go = vlen(self.enemy.origin - org) / 500;
 	mep = self.enemy.velocity;
 	mep_z = 0;
@@ -151,9 +151,9 @@ void() enforcer_firerocket = {
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
 	missile.classname = "missile";
-	setmodel (missile, "progs/missile.mdl");
+	setmodel(missile, "progs/missile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');		
-	setorigin (missile, self.origin + v_forward*12 + '0 0 8');
+	setorigin(missile, self.origin + v_forward*12 + '0 0 8');
 	missile.velocity = lead * 400;
 	missile.angles = vectoangles(missile.velocity);
 	missile.touch = enforcer_missiletouch;
@@ -172,7 +172,7 @@ void(float offset) enforcer_fireknight = {
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1;
 	self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_ENFHKN,self.attack_speed);
-	sound (self, CHAN_WEAPON, "zerstorer/weapons/rocket1i.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "zerstorer/weapons/rocket1i.wav", 1, ATTN_NORM);
 };
 
 void()	menf_atk1	= [	$attack1,	menf_atk2	] { ai_face(); };
@@ -212,8 +212,8 @@ void()	menf_gatk1	= [	$attack1,	menf_gatk2	] { ai_face(); };
 void()	menf_gatk2	= [	$attack2,	menf_gatk3	] { ai_face(); };
 void()	menf_gatk3	= [	$attack3,	menf_gatk4	] { ai_face(); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
-void()	menf_gatk4	= [	$attack4,	menf_gatk5	] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
-void()	menf_gatk5	= [	$attack5,	menf_gatk6	] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	menf_gatk4	= [	$attack4,	menf_gatk5	] { ai_face(); self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	menf_gatk5	= [	$attack5,	menf_gatk6	] { ai_face(); self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
 void()	menf_gatk6	= [	$attack6,	menf_gatk7	] { ai_face(); 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector(self.attack_offset);
 	MonsterFireGrenade(self.pos1, self.enemy.origin); };

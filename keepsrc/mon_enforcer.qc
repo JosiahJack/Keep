@@ -5,35 +5,33 @@ $cd id1/models/enforcer
 $origin 0 -6 24
 $base base		
 $skin skin
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6
 $frame attack7 attack8 attack9 attack10
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14
-
 $frame fdeath1 fdeath2 fdeath3 fdeath4 fdeath5 fdeath6 fdeath7 fdeath8
 $frame fdeath9 fdeath10 fdeath11
-
 $frame paina1 paina2 paina3 paina4
-
 $frame painb1 painb2 painb3 painb4 painb5
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
-
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8
 $frame paind9 paind10 paind11 paind12 paind13 paind14 paind15 paind16
 $frame paind17 paind18 paind19
 
 float ENFORCER_LAVANG = 8192;
+float MEGA_ENF = 2;
+float ULTRA_ENF = 4;
 
+void enforcer_updateshield();
+void menf_ratk1();
+void menf_zatk1();
+void menf_gatk1();
+void menf_atk1();
+void enf_atk1();
 
 void()	enf_stand1	= [	$stand1,	enf_stand2	] { monster_idle_sound(); ai_stand(); };
 void()	enf_stand2	= [	$stand2,	enf_stand3	] { ai_stand(); };
@@ -42,7 +40,6 @@ void()	enf_stand4	= [	$stand4,	enf_stand5	] { ai_stand(); };
 void()	enf_stand5	= [	$stand5,	enf_stand6	] { ai_stand(); };
 void()	enf_stand6	= [	$stand6,	enf_stand7	] { ai_stand(); };
 void()	enf_stand7	= [	$stand7,	enf_stand1	] { ai_stand(); };
-
 
 void()	enf_walk1	= [	$walk1,		enf_walk2	] { monster_idle_sound(); ai_walk(2); };
 void()	enf_walk2	= [	$walk2,		enf_walk3	] { monster_footstep(FALSE); ai_walk(4); };
@@ -78,16 +75,6 @@ void()	lth_walk14	= [	$walk14,	lth_walk15	] { ai_walk(3); };
 void()	lth_walk15	= [	$walk15,	lth_walk16	] { ai_walk(4); };
 void()	lth_walk16	= [	$walk16,	lth_walk1	] { ai_walk(2); };
 
-float MEGA_ENF = 2;
-float ULTRA_ENF = 4;
-void enforcer_updateshield();
-void menf_ratk1();
-void menf_zatk1();
-void menf_gatk1();
-void menf_atk1();
-void enf_atk1();
-
-
 void()	enf_run1	= [	$run1,		enf_run2	] { monster_idle_sound(); ai_run(18); };
 void()	enf_run2	= [	$run2,		enf_run3	] { ai_run(14); enforcer_updateshield(); };
 void()	enf_run3	= [	$run3,		enf_run4	] { monster_footstep(FALSE); ai_run(7); enforcer_updateshield(); };
@@ -122,7 +109,7 @@ void() enforcer_fire = {
 	if (!self.enemy) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
@@ -130,7 +117,7 @@ void() enforcer_fire = {
 };
 
 void()	enf_atk1	= [	$attack1,	enf_atk2	] {};
-void()	enf_atk2	= [	$attack2,	enf_atk3	] { monster_footstep(FALSE);ai_face(); };
+void()	enf_atk2	= [	$attack2,	enf_atk3	] { monster_footstep(FALSE); ai_face(); };
 void()	enf_atk3	= [	$attack3,	enf_atk4	] { ai_face(); };
 void()	enf_atk4	= [	$attack4,	enf_atk5	] { ai_face(); };
 void()	enf_atk5	= [	$attack5,	enf_atk6	] { ai_face(); };
@@ -150,7 +137,7 @@ void() defender_ssg = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "quoth/defender/ssgfire.wav", 1, ATTN_NORM);	
+	sound(self, CHAN_WEAPON, "quoth/defender/ssgfire.wav", 1, ATTN_NORM);	
 	
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ)) 
@@ -161,8 +148,8 @@ void() defender_ssg = {
 	}
 };
 
-void()	def_atkssg1	= [	$attack1,	def_atkssg2	] { sound (self, CHAN_WEAPON, "quoth/defender/ssgcock.wav", 1, ATTN_NORM); };
-void()	def_atkssg2	= [	$attack2,	def_atkssg3	] { monster_footstep(FALSE);ai_face(); };
+void()	def_atkssg1	= [	$attack1,	def_atkssg2	] { sound(self, CHAN_WEAPON, "quoth/defender/ssgcock.wav", 1, ATTN_NORM); };
+void()	def_atkssg2	= [	$attack2,	def_atkssg3	] { monster_footstep(FALSE); ai_face(); };
 void()	def_atkssg3	= [	$attack3,	def_atkssg4	] { ai_face(); };
 void()	def_atkssg4	= [	$attack4,	def_atkssg5	] { ai_face(); };
 void()	def_atkssg5	= [	$attack5,	def_atkssg6	] { ai_face(); };
@@ -174,12 +161,12 @@ void()	def_atkssg9	= [	$attack9,	def_atkssg10] { ai_face(); };
 void()	def_atkssg10= [	$attack10,	enf_run1	] { SUB_CheckRefire (def_atkssg1); };
 
 void()	def_atkgl1	= [	$attack1,	def_atkgl2	] { ai_face(); };
-void()	def_atkgl2	= [	$attack2,	def_atkgl3	] { monster_footstep(FALSE);ai_face(); };
+void()	def_atkgl2	= [	$attack2,	def_atkgl3	] { monster_footstep(FALSE); ai_face(); };
 void()	def_atkgl3	= [	$attack3,	def_atkgl4	] { ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl4	= [	$attack4,	def_atkgl5	] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl5	= [	$attack5,	def_atkgl6	] { ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	def_atkgl4	= [	$attack4,	def_atkgl5	] { ai_face(); self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	def_atkgl5	= [	$attack5,	def_atkgl6	] { ai_face(); self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
 void()	def_atkgl6	= [	$attack6,	def_atkgl7	] { ai_face();
 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector(self.attack_offset);
@@ -197,7 +184,7 @@ void() eliminator_fire = {
 	if (!self.enemy) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
@@ -205,8 +192,8 @@ void() eliminator_fire = {
 };
 
 void()	elim_atk1	= [	$attack1,	elim_atk2	] {
-	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
-void()	elim_atk2	= [	$attack2,	elim_atk3	] { monster_footstep(FALSE);ai_face(); };
+	sound(self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+void()	elim_atk2	= [	$attack2,	elim_atk3	] { monster_footstep(FALSE); ai_face(); };
 void()	elim_atk3	= [	$attack3,	elim_atk4	] { ai_face(); };
 void()	elim_atk4	= [	$attack4,	elim_atk5	] { ai_face(); };
 void()	elim_atk5	= [	$attack5,	elim_atk6	] { ai_face(); };
@@ -271,13 +258,11 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
-
-
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 
 		if (self.classtype == CT_MONSUPERENFORCER) { lth_paina1(); return; }
 
@@ -319,7 +304,7 @@ void()	enf_die14	= [	$death14,	enf_die14	] { monster_deadbody_check(); };
 
 void()	enf_fdie1	= [	$fdeath1,	enf_fdie2	] {};
 void()	enf_fdie2	= [	$fdeath2,	enf_fdie3	] { monster_check_gib(); };
-void()	enf_fdie3	= [	$fdeath3,	enf_fdie4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	enf_fdie3	= [	$fdeath3,	enf_fdie4	] { monster_check_gib(); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	enf_fdie4	= [	$fdeath4,	enf_fdie5	] {};
 void()	enf_fdie5	= [	$fdeath5,	enf_fdie6	] {};
 void()	enf_fdie6	= [	$fdeath6,	enf_fdie7	] {};
@@ -340,14 +325,14 @@ void() enf_die = {
 	if (!self.gibbed) {
 		if (self.classtype == CT_MONENF_ULTRA) {
 			r = random();
-			if (r < 0.333)		sound (self, CHAN_VOICE, "lunaran/enforcer/ue_die1.wav", 1, ATTN_NORM);
-			else if (r < 0.666)	sound (self, CHAN_VOICE, "lunaran/enforcer/ue_die2.wav", 1, ATTN_NORM);
-			else 				sound (self, CHAN_VOICE, "lunaran/enforcer/ue_die3.wav", 1, ATTN_NORM);
+			if (r < 0.333)		sound(self, CHAN_VOICE, "lunaran/enforcer/ue_die1.wav", 1, ATTN_NORM);
+			else if (r < 0.666)	sound(self, CHAN_VOICE, "lunaran/enforcer/ue_die2.wav", 1, ATTN_NORM);
+			else 				sound(self, CHAN_VOICE, "lunaran/enforcer/ue_die3.wav", 1, ATTN_NORM);
 		} else if (self.classtype == CT_MONENF_GUNNER) {
-			if (random() < 0.5)	sound (self, CHAN_VOICE, "drake/gunner/death1.wav", 1, ATTN_NORM);
-			else				sound (self, CHAN_VOICE, "drake/gunner/death2.wav", 1, ATTN_NORM);
+			if (random() < 0.5)	sound(self, CHAN_VOICE, "drake/gunner/death1.wav", 1, ATTN_NORM);
+			else				sound(self, CHAN_VOICE, "drake/gunner/death2.wav", 1, ATTN_NORM);
 		} else {
-			sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
 		}
 
 		if (self.classtype == CT_MONSUPERENFORCER) {
@@ -433,13 +418,13 @@ void() monster_enforcer_precache = {
 	precache_sound("enforcer/sight3.wav");
 	precache_sound("enforcer/sight4.wav");
 	precache_sound("enforcer/death1.wav");
-    precache_sound ("drake/gunner/death1.wav");
-    precache_sound ("drake/gunner/death2.wav");
-    precache_sound ("drake/gunner/idle.wav");
-    precache_sound ("drake/gunner/pain1.wav");
-    precache_sound ("drake/gunner/pain2.wav");
-    precache_sound ("drake/gunner/sight.wav");
-    precache_sound ("drake/weapons/dsshotgn.wav");    // Doom shotgun sound.
+    precache_sound("drake/gunner/death1.wav");
+    precache_sound("drake/gunner/death2.wav");
+    precache_sound("drake/gunner/idle.wav");
+    precache_sound("drake/gunner/pain1.wav");
+    precache_sound("drake/gunner/pain2.wav");
+    precache_sound("drake/gunner/sight.wav");
+    precache_sound("drake/weapons/dsshotgn.wav");    // Doom shotgun sound.
 };
 
 // QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -474,9 +459,9 @@ void() monster_base_enforcer = {
 	if (!self.steptype) self.steptype = FS_TYPEHEAVY;		// heavy player
 	if (CheckZeroVector(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
 	Resist_ChangeType(self,-1);// Always reset Ammo Resistance to be consistent
-	if (self.classtype == CT_MONELIMATOR) { self.resist_cells = 0.5;self.resist_plasma = 0.5;}
-	if (self.classtype == CT_MONDEFENDER) { self.resist_rockets = 0.5;self.resist_multi_rockets = 0.5;}
-	if (self.classtype == CT_MONENF_MEGA) { self.resist_cells = 0.75;self.resist_plasma = 0.75;}
+	if (self.classtype == CT_MONELIMATOR) { self.resist_cells = 0.5; self.resist_plasma = 0.5;}
+	if (self.classtype == CT_MONDEFENDER) { self.resist_rockets = 0.5; self.resist_multi_rockets = 0.5;}
+	if (self.classtype == CT_MONENF_MEGA) { self.resist_cells = 0.75; self.resist_plasma = 0.75;}
 	if (!self.th_stand) self.th_stand = enf_stand1;
 	if (!self.th_walk) self.th_walk = enf_walk1;
 	if (!self.th_run) self.th_run = enf_run1;
@@ -628,7 +613,7 @@ void() super_enforcer_fire = {
 };
 
 void()	lth_run1	= [	$run1  ,	lth_run2	] {
-if (random() < 0.2) sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
+if (random() < 0.2) sound(self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
 ai_run(18); };
 void()	lth_run2	= [	$run2  ,	lth_run3	] { ai_run(14); };
 void()	lth_run3	= [	$run3  ,	lth_run4	] { ai_run(7); };

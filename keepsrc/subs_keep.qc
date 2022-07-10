@@ -175,10 +175,10 @@ vector(vector a, vector b) vec_multiply_elementwise = { // [FUNCTION]
 // Too commonly used, so I made a helper function for randomly picking and playing a whoosh.
 void() SwordSwipeSound = { // [FUNCTION]
 	self.lip = random();
-	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "ad171/weapons/sword2b.wav", 1, ATTN_NORM);
+	if (self.lip < 0.25) sound(self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
+	else if (self.lip < 0.5) sound(self, CHAN_WEAPON, "ad171/weapons/sword2a.wav", 1, ATTN_NORM);
+	else if (self.lip < 0.75) sound(self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
+	else sound(self, CHAN_WEAPON, "ad171/weapons/sword2b.wav", 1, ATTN_NORM);
 };
  
 float() SUB_HideIfNoTargetname = { // [FUNCTION]
@@ -275,6 +275,10 @@ void() SUB_RemoveAttachments = { // [FUNCTION]
 	SUB_RemoveAttachment();
 	SUB_RemoveAttachment2();
 	SUB_RemoveAttachment3();
+};
+
+void(entity targ, float fl) SUB_RemoveFlags = { // [FUNCTION]
+	if (targ.flags & fl) targ.flags = targ.flags - (targ.flags & fl);
 };
 
 void() SUB_CalcAngleMoveDone =  { // [FUNCTION]
@@ -536,4 +540,9 @@ float(entity targ) StoneArmored = {
 	if (targ.classgroup == CG_STONE) return TRUE;
 	if (targ.gibtype == GIBTYPE_STONE) return TRUE;
 	return FALSE;
+};
+
+vector(entity targ) SUB_EntityOrigin = {
+	if (targ.bsporigin) return = bmodel_origin(targ);
+	else return targ.origin;
 };

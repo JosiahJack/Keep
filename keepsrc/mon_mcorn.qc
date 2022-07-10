@@ -69,7 +69,7 @@ void() mcorn_tailswipe = {
 			else T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 		}
 
-		sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
+		sound(self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
 		SpawnMeatSpray (self, self.enemy, -150);
 		SpawnMeatSpray (self, self.enemy, -175);
 	}
@@ -153,7 +153,7 @@ void() mcorn_projectiles = {
 // Projectile spit attack
 void() mcorn_atk1	= [	56,	mcorn_atk2	] { ai_face(); };
 void() mcorn_atk2	= [	57,	mcorn_atk3	] { ai_face(); };
-void() mcorn_atk3	= [	58,	mcorn_atk4	] { ai_face();sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack1.wav", 1, ATTN_NORM); };
+void() mcorn_atk3	= [	58,	mcorn_atk4	] { ai_face();sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack1.wav", 1, ATTN_NORM); };
 void() mcorn_atk4	= [	59,	mcorn_atk5	] { ai_face(); };
 void() mcorn_atk5	= [	60,	mcorn_atk6	] {};
 void() mcorn_atk6	= [	61,	mcorn_atk7	] { mcorn_fire(); };
@@ -166,10 +166,10 @@ void() mcorn_atka2	= [	68,	mcorn_atka3	] { ai_face(); };
 void() mcorn_atka3	= [	69,	mcorn_atka4	] { ai_charge(2); };
 void() mcorn_atka4	= [	70,	mcorn_atka5	] {
 	ai_charge(4);
-	if (random() < 0.5) sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
 };
-void() mcorn_atka5	= [	71,	mcorn_atka6	] { mcorn_tailswipe();ai_charge(2); };
+void() mcorn_atka5	= [	71,	mcorn_atka6	] { mcorn_tailswipe(); ai_charge(2); };
 void() mcorn_atka6	= [	72,	mcorn_atka7	] { ai_face(); };
 void() mcorn_atka7	= [	73,	mcorn_atka8	] { ai_face(); };
 void() mcorn_atka8	= [	74,	mcorn_atka9	] { ai_face(); };
@@ -183,7 +183,7 @@ void() mcorn_atka13	= [	79,	mcorn_run1	] { ai_face(); };
 void() mcorn_atkb1	= [	80,	mcorn_atkb2	] {};
 void() mcorn_atkb2	= [	81,	mcorn_atkb3	] {};
 void() mcorn_atkb3	= [	82,	mcorn_atkb4	] {};
-void() mcorn_atkb4	= [	83,	mcorn_atkb5	] { sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack4.wav", 1, ATTN_NORM); };
+void() mcorn_atkb4	= [	83,	mcorn_atkb5	] { sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack4.wav", 1, ATTN_NORM); };
 void() mcorn_atkb5	= [	84,	mcorn_atkb6	] { mcorn_barrage(); };
 void() mcorn_atkb6	= [	85,	mcorn_atkb7	] {};
 void() mcorn_atkb7	= [	86,	mcorn_run1	] { ai_face(); };
@@ -191,10 +191,10 @@ void() mcorn_atkb7	= [	86,	mcorn_run1	] { ai_face(); };
 void() mcorn_leap1	= [  80, mcorn_leap2	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
-	if (self.skin == 1) sound (self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
+	if (self.skin == 1) sound(self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
 	else {
-		if (random() < 0.5) sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
-		else				sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
+		else				sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
 	}
 };
 void() mcorn_leap2	= [  81, mcorn_leap3	] { ai_face();monster_footstep(FALSE); };
@@ -243,11 +243,11 @@ void(entity inflictor, entity attacker, float damage) mcorn_pain = {
 
 	r = random();
 	if (r < 0.333) {
-		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain3.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain3.wav", 1, ATTN_NORM);
 	} else if (r < 0.666) {
-		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain2.wav", 1, ATTN_NORM);
 	} else {
-		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain1.wav", 1, ATTN_NORM);
 	}
 
 	if (random() < 0.5) mcorn_paina1();
@@ -302,7 +302,7 @@ void() mcorn_die = {
 	ghoster.solid = SOLID_NOT;
 	ghoster.think = mcorn_ghostthink;
 	ghoster.nextthink = time + 10 + (random() * 10);
-	setorigin (ghoster,self.origin);
+	setorigin(ghoster,self.origin);
 
 	// regular death
 	if (!self.gibbed) {
@@ -317,29 +317,29 @@ void() monster_mcorn_precache = {
 	precache_model ("progs/madfox/proj_mcornflame.mdl");
 	precache_model ("progs/q15/s_spike.mdl");
 	precache_model ("progs/madfox/h_manticore.mdl");
-	precache_sound ("qmaster/manticore/mon_manticore_attack1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_attack2.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_attack3.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_attack4.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_death1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_death2.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_ghostcall1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_ghostcall2.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_gib.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_idle1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_idle2.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_idle3.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_idle4.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_pain1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_pain2.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_pain3.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_sight1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_sight2.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_sight3.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_sight4.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_step1.wav");
-	precache_sound ("qmaster/manticore/mon_manticore_step2.wav");
-	precache_sound ("demon/dhit2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_attack1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_attack2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_attack3.wav");
+	precache_sound("qmaster/manticore/mon_manticore_attack4.wav");
+	precache_sound("qmaster/manticore/mon_manticore_death1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_death2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_ghostcall1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_ghostcall2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_gib.wav");
+	precache_sound("qmaster/manticore/mon_manticore_idle1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_idle2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_idle3.wav");
+	precache_sound("qmaster/manticore/mon_manticore_idle4.wav");
+	precache_sound("qmaster/manticore/mon_manticore_pain1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_pain2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_pain3.wav");
+	precache_sound("qmaster/manticore/mon_manticore_sight1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_sight2.wav");
+	precache_sound("qmaster/manticore/mon_manticore_sight3.wav");
+	precache_sound("qmaster/manticore/mon_manticore_sight4.wav");
+	precache_sound("qmaster/manticore/mon_manticore_step1.wav");
+	precache_sound("qmaster/manticore/mon_manticore_step2.wav");
+	precache_sound("demon/dhit2.wav");
 };
 
 /*QUAKED monster_mcorn (1 0 0) (-32 -32 -24) (32 32 40) Ambush*/

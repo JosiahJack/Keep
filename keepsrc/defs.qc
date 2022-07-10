@@ -387,7 +387,6 @@ float 	developer;
 .float		volume;
 
 float(float yaw, float dist) noclip_move;
-void(float dist) noclip_goal;
 
 // builtin functions
 void(vector ang)	makevectors		= #1;	// sets v_forward, etc globals
@@ -453,6 +452,9 @@ void(float to, entity s) WriteEntity	= #59;
 // void(float f) bWriteAngle			= #64;
 // void(string s) bWriteString			= #65;
 // void(entity e) bWriteEntity 			= #66;
+
+void(float dist, float noclip) QC_MoveToGoal;
+
 void(float step) movetogoal_builtin 	= #67;
 void(float step) movetogoal = {
 	// Save origin for cinematic camera angle interpolation.  This does not cope
@@ -461,7 +463,7 @@ void(float step) movetogoal = {
 	if (self.attack_state == AS_TURRET) return;
 	if (self.movespeed < 0) return;
 	if (self.tetherlock == TRUE) return;
-	if (self.movetype == MOVETYPE_NOCLIP) noclip_goal(step); // Ghostly
+	if (self.movetype == MOVETYPE_NOCLIP) QC_MoveToGoal(step,TRUE); // Ghostly
 	movetogoal_builtin(step);
 };
 string(string s) precache_file			= #68; // Only in world.qc. No effect

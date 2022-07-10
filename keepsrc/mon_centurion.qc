@@ -34,7 +34,7 @@ void() centurionhover = {
 	}
 };
 
-void()	cent_stand1	= [	$stand1,	cent_stand2	] { centurionhover();monster_idle_sound();ai_stand(); };
+void()	cent_stand1	= [	$stand1,	cent_stand2	] { centurionhover();monster_idle_sound(); ai_stand(); };
 void()	cent_stand2	= [	$stand2,	cent_stand3	] { ai_stand(); };
 void()	cent_stand3	= [	$stand3,	cent_stand4	] { ai_stand(); };
 void()	cent_stand4	= [	$stand4,	cent_stand5	] { ai_stand(); };
@@ -45,7 +45,7 @@ void()	cent_stand8	= [	$stand8,	cent_stand1	] { ai_stand(); };
 
 
 void()	cent_walk1	= [	$stand1,	cent_walk2	] {
-	centurionhover();monster_idle_sound();ai_walk(4); };
+	centurionhover();monster_idle_sound(); ai_walk(4); };
 void()	cent_walk2	= [	$stand2,	cent_walk3	] { ai_walk(4); };
 void()	cent_walk3	= [	$stand3,	cent_walk4	] { ai_walk(4); };
 void()	cent_walk4	= [	$stand4,	cent_walk5	] { ai_walk(4); };
@@ -74,7 +74,7 @@ void() cent_fire = {
 	local vector org, vec;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	// Fire plasma projectile at players feet
@@ -83,7 +83,7 @@ void() cent_fire = {
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
-void()	cent_atk1	= [	$attack1,	cent_atk2	] { sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+void()	cent_atk1	= [	$attack1,	cent_atk2	] { sound(self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
 void()	cent_atk2	= [	$attack2,	cent_atk3	] { ai_face(); };
 void()	cent_atk3	= [	$attack3,	cent_atk4	] { ai_face(); };
 void()	cent_atk4	= [	$attack4,	cent_atk5	] { ai_face(); };
@@ -147,8 +147,8 @@ void(entity inflictor, entity attacker, float damage) cent_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 	
 		// Not using long pain animation (need to be agile)
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -171,7 +171,7 @@ void() cent_crash = {
 		}
 		// Once on ground, thud sound and no more smoke
 		if (self.flags & FL_ONGROUND) {
-			sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
 			self.state = FALSE;
 		}
 	}
@@ -179,7 +179,7 @@ void() cent_crash = {
 
 void()	cent_die1	= [	$death1,	cent_die2	] { cent_crash(); };
 void()	cent_die2	= [	$death2,	cent_die3	] { monster_check_gib();cent_crash(); };
-void()	cent_die3	= [	$death3,	cent_die4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash(); };
+void()	cent_die3	= [	$death3,	cent_die4	] { monster_check_gib(); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash(); };
 void()	cent_die4	= [	$death4,	cent_die5	] { cent_crash(); };
 void()	cent_die5	= [	$death5,	cent_die6	] { cent_crash(); };
 void()	cent_die6	= [	$death6,	cent_die7	] { cent_crash(); };
@@ -189,31 +189,30 @@ void()	cent_die9	= [	$death9,	cent_die10	] { cent_crash(); };
 void()	cent_die10	= [	$death10,	cent_die11	] { cent_crash(); };
 void()	cent_die11	= [	$death11,	cent_die12	] { cent_crash(); };
 void()	cent_die12	= [	$death12,	cent_die13	] { cent_crash(); };
-void()	cent_die13	= [	$death13,	cent_die14	] { monster_death_postcheck();cent_crash(); };
+void()	cent_die13	= [	$death13,	cent_die14	] { monster_death_postcheck(); cent_crash(); };
 void()	cent_die14	= [	$death14,	cent_die14	] { monster_deadbody_check(); };
 
 void()	cent_fdie1	= [	$fdeath1,	cent_fdie2	] { cent_crash(); };
 void()	cent_fdie2	= [	$fdeath2,	cent_fdie3	] { monster_check_gib();cent_crash(); };
-void()	cent_fdie3	= [	$fdeath3,	cent_fdie4	] { monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash(); };
+void()	cent_fdie3	= [	$fdeath3,	cent_fdie4	] { monster_check_gib(); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash(); };
 void()	cent_fdie4	= [	$fdeath4,	cent_fdie5	] { cent_crash(); };
 void()	cent_fdie5	= [	$fdeath5,	cent_fdie6	] { cent_crash(); };
 void()	cent_fdie6	= [	$fdeath6,	cent_fdie7	] { cent_crash(); };
 void()	cent_fdie7	= [	$fdeath7,	cent_fdie8	] { cent_crash(); };
 void()	cent_fdie8	= [	$fdeath8,	cent_fdie9	] { cent_crash(); };
 void()	cent_fdie9	= [	$fdeath9,	cent_fdie10	] { cent_crash(); };
-void()	cent_fdie10	= [	$fdeath10,	cent_fdie11	] { monster_death_postcheck();cent_crash(); };
+void()	cent_fdie10	= [	$fdeath10,	cent_fdie11	] { monster_death_postcheck(); cent_crash(); };
 void()	cent_fdie11	= [	$fdeath11,	cent_fdie11	] { monster_deadbody_check(); };
 
 void() cent_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
-
 	StopSound(self,CHAN_ITEM); // Kill hoverboard sound
 	
 	// regular death
 	if (!self.gibbed) {
 		self.state = TRUE;
-		sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
 		// Make sure Centurion falls to the ground (like wizards)
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
@@ -230,19 +229,19 @@ void() monster_centurion_precache = {
 	precache_model ("progs/ad171/mon_centurion.mdl");
 	precache_model ("progs/ad171/h_centurion.mdl");
 	precache_model (MODEL_PROJ_PLASMA);
-	precache_sound ("enforcer/death1.wav");
-	precache_sound ("enforcer/pain1.wav");
-	precache_sound ("enforcer/pain2.wav");
-	precache_sound ("enforcer/idle1.wav");
-	precache_sound ("enforcer/sight1.wav");
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
-	precache_sound ("ad171/enforcer/elim_pg_load.wav"); // Extra load/fire sounds (from Quoth MOD)
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-	precache_sound ("ad171/enforcer/cent_hover.wav"); // Originally from rubicon2 (re-processed)
-	precache_sound (GIB_SOUND_WOOD);
+	precache_sound("enforcer/death1.wav");
+	precache_sound("enforcer/pain1.wav");
+	precache_sound("enforcer/pain2.wav");
+	precache_sound("enforcer/idle1.wav");
+	precache_sound("enforcer/sight1.wav");
+	precache_sound("enforcer/sight2.wav");
+	precache_sound("enforcer/sight3.wav");
+	precache_sound("enforcer/sight4.wav");
+	precache_sound("ad171/enforcer/elim_pg_load.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound(SOUND_PLASMA_FIRE);
+	precache_sound(SOUND_PLASMA_HIT);
+	precache_sound("ad171/enforcer/cent_hover.wav"); // Originally from rubicon2 (re-processed)
+	precache_sound(GIB_SOUND_WOOD);
 	precache_poisongibs();			// precache gibs
 	precache_model (MODEL_PROJ_PLASMAGRN);
 };

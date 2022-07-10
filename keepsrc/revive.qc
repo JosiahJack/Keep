@@ -194,7 +194,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 		killed_monsters = killed_monsters - 1; // Ahh, nasty reviver hurting my stats!
 	}
 	update_hud_totals(HUD_MONSTERS);
-	sound (self, CHAN_AUTO, "drake/misc/dsslop.wav", 1, ATTN_NORM); // Play classic arch-vile resurrection sound.
+	sound(self, CHAN_AUTO, "drake/misc/dsslop.wav", 1, ATTN_NORM); // Play classic arch-vile resurrection sound.
 	self.pain_finished  = time + 3;  // Don't interrupt ressurection reanimation.
 	clear_trigstrs(self); // Sever all targeting links.
 	self.use = SUB_Null;

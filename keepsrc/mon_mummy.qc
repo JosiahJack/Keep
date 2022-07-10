@@ -35,7 +35,7 @@ void() mummy_walk18 = [ 32.000, mummy_walk19 ] { ai_walk (0); };
 void() mummy_walk19 = [ 33.000, mummy_walk1 ] {
    ai_walk (0);
    if ( (random () < 0.200) )
-      sound (self,CHAN_VOICE,"zombie/z_idle.wav",TRUE,ATTN_IDLE);
+      sound(self,CHAN_VOICE,"zombie/z_idle.wav",TRUE,ATTN_IDLE);
 };
 
 void() mummy_run1 = [ 34.000, mummy_run2 ] {
@@ -61,10 +61,10 @@ void() mummy_run17 = [ 50.000, mummy_run18 ] { ai_run (6); };
 void() mummy_run18 = [ 51.000, mummy_run1 ] {
    ai_run (16);
    if ( (random () < 0.200) )
-      sound (self,CHAN_VOICE,"zombie/z_idle.wav",TRUE,ATTN_IDLE);
+      sound(self,CHAN_VOICE,"zombie/z_idle.wav",TRUE,ATTN_IDLE);
 
    if ( (random () > 0.800) )
-      sound (self,CHAN_VOICE,"zombie/z_idle1.wav",TRUE,ATTN_IDLE);
+      sound(self,CHAN_VOICE,"zombie/z_idle1.wav",TRUE,ATTN_IDLE);
 };
 
 void() mummyGrenadeTouch = {
@@ -76,11 +76,11 @@ void() mummyGrenadeTouch = {
    if ( other.takedamage ) {
       mummyDamage = (15 + (random () * 15));
       T_Damage (other,self,self.owner,mummyDamage,DAMARMOR);
-      sound (self,CHAN_WEAPON,"zombie/z_hit.wav",TRUE,ATTN_NORM);
+      sound(self,CHAN_WEAPON,"zombie/z_hit.wav",TRUE,ATTN_NORM);
       remove (self);
       return;
    }
-   sound (self,CHAN_WEAPON,"zombie/z_miss.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_WEAPON,"zombie/z_miss.wav",TRUE,ATTN_NORM);
    self.velocity = VEC_ORIGIN;
    self.avelocity = VEC_ORIGIN;
    self.touch = SUB_Remove;
@@ -90,7 +90,7 @@ void(vector st) mummyFireGrenade = {
    local entity missile;
    local vector org;
 
-   sound (self,CHAN_WEAPON,"zombie/z_shot1.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_WEAPON,"zombie/z_shot1.wav",TRUE,ATTN_NORM);
    missile = spawn();
 	missile.classgroup = CG_PROJALL;
    missile.owner = self;
@@ -105,9 +105,9 @@ void(vector st) mummyFireGrenade = {
    missile.touch = mummyGrenadeTouch;
    missile.nextthink = (time + 2.500);
    missile.think = SUB_Remove;
-   setmodel (missile,"progs/zom_gib.mdl");
+   setmodel(missile,"progs/zom_gib.mdl");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (missile,org);
+   setorigin(missile,org);
 };
 
 void() mummy_atta1 = [ 52.000, mummy_atta2 ] { ai_face(); };
@@ -176,7 +176,7 @@ void() mummy_missile = {
    }
 };
 
-void() mummy_paina1 = [ 91.000, mummy_paina2 ] { sound (self,CHAN_VOICE,"zombie/z_pain.wav",TRUE,ATTN_NORM); };
+void() mummy_paina1 = [ 91.000, mummy_paina2 ] { sound(self,CHAN_VOICE,"zombie/z_pain.wav",TRUE,ATTN_NORM); };
 void() mummy_paina2 = [ 92.000, mummy_paina3 ] { ai_painforward (3); };
 void() mummy_paina3 = [ 93.000, mummy_paina4 ] { ai_painforward (1); };
 void() mummy_paina4 = [ 94.000, mummy_paina5 ] { ai_pain (1); };
@@ -189,7 +189,7 @@ void() mummy_paina10 = [ 100.000, mummy_paina11 ] {};
 void() mummy_paina11 = [ 101.000, mummy_paina12 ] {};
 void() mummy_paina12 = [ 102.000, mummy_run1 ] {};
 
-void() mummy_painb1 = [ 103.000, mummy_painb2 ] { sound (self,CHAN_VOICE,"zombie/z_pain1.wav",TRUE,ATTN_NORM); };
+void() mummy_painb1 = [ 103.000, mummy_painb2 ] { sound(self,CHAN_VOICE,"zombie/z_pain1.wav",TRUE,ATTN_NORM); };
 void() mummy_painb2 = [ 104.000, mummy_painb3 ] { ai_pain (2); };
 void() mummy_painb3 = [ 105.000, mummy_painb4 ] { ai_pain (8); };
 void() mummy_painb4 = [ 106.000, mummy_painb5 ] { ai_pain (6); };
@@ -197,7 +197,7 @@ void() mummy_painb5 = [ 107.000, mummy_painb6 ] { ai_pain (2); };
 void() mummy_painb6 = [ 108.000, mummy_painb7 ] {};
 void() mummy_painb7 = [ 109.000, mummy_painb8 ] {};
 void() mummy_painb8 = [ 110.000, mummy_painb9 ] {};
-void() mummy_painb9 = [ 111.000, mummy_painb10 ] { sound (self,CHAN_BODY,"zombie/z_fall.wav",TRUE,ATTN_NORM); };
+void() mummy_painb9 = [ 111.000, mummy_painb10 ] { sound(self,CHAN_BODY,"zombie/z_fall.wav",TRUE,ATTN_NORM); };
 void() mummy_painb10 = [ 112.000, mummy_painb11 ] {};
 void() mummy_painb11 = [ 113.000, mummy_painb12 ] {};
 void() mummy_painb12 = [ 114.000, mummy_painb13 ] {};
@@ -218,7 +218,7 @@ void() mummy_painb26 = [ 128.000, mummy_painb27 ] {};
 void() mummy_painb27 = [ 129.000, mummy_painb28 ] {};
 void() mummy_painb28 = [ 130.000, mummy_run1 ] {};
 
-void() mummy_painc1 = [ 131.000, mummy_painc2 ] { sound (self,CHAN_VOICE,"zombie/z_pain1.wav",TRUE,ATTN_NORM); };
+void() mummy_painc1 = [ 131.000, mummy_painc2 ] { sound(self,CHAN_VOICE,"zombie/z_pain1.wav",TRUE,ATTN_NORM); };
 void() mummy_painc2 = [ 132.000, mummy_painc3 ] {};
 void() mummy_painc3 = [ 133.000, mummy_painc4 ] { ai_pain (3); };
 void() mummy_painc4 = [ 134.000, mummy_painc5 ] { ai_pain (1); };
@@ -237,7 +237,7 @@ void() mummy_painc16 = [ 146.000, mummy_painc17 ] {};
 void() mummy_painc17 = [ 147.000, mummy_painc18 ] {};
 void() mummy_painc18 = [ 148.000, mummy_run1 ] {};
 
-void() mummy_paind1 = [ 149.000, mummy_paind2 ] { sound (self,CHAN_VOICE,"zombie/z_pain.wav",TRUE,ATTN_NORM); };
+void() mummy_paind1 = [ 149.000, mummy_paind2 ] { sound(self,CHAN_VOICE,"zombie/z_pain.wav",TRUE,ATTN_NORM); };
 void() mummy_paind2 = [ 150.000, mummy_paind3 ] {};
 void() mummy_paind3 = [ 151.000, mummy_paind4 ] {};
 void() mummy_paind4 = [ 152.000, mummy_paind5 ] {};
@@ -251,7 +251,7 @@ void() mummy_paind11 = [ 159.000, mummy_paind12 ] {};
 void() mummy_paind12 = [ 160.000, mummy_paind13 ] {};
 void() mummy_paind13 = [ 161.000, mummy_run1 ] {};
 
-void() mummy_paine1 = [ 162.000, mummy_paine2 ] { sound (self,CHAN_VOICE,"zombie/z_pain.wav",TRUE,ATTN_NORM); };
+void() mummy_paine1 = [ 162.000, mummy_paine2 ] { sound(self,CHAN_VOICE,"zombie/z_pain.wav",TRUE,ATTN_NORM); };
 void() mummy_paine2 = [ 163.000, mummy_paine3 ] { ai_pain (8); };
 void() mummy_paine3 = [ 164.000, mummy_paine4 ] { ai_pain (5); };
 void() mummy_paine4 = [ 165.000, mummy_paine5 ] { ai_pain (3); };
@@ -261,12 +261,12 @@ void() mummy_paine7 = [ 168.000, mummy_paine8 ] { ai_pain (1); };
 void() mummy_paine8 = [ 169.000, mummy_paine9 ] { ai_pain (1); };
 void() mummy_paine9 = [ 170.000, mummy_paine10 ] { ai_pain (2); };
 void() mummy_paine10 = [ 171.000, mummy_paine11 ] {
-   sound (self,CHAN_BODY,"zombie/z_fall.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_BODY,"zombie/z_fall.wav",TRUE,ATTN_NORM);
    self.solid = SOLID_NOT;
 };
 void() mummy_paine11 = [ 172.000, mummy_paine12 ] { self.nextthink = (self.nextthink + 5); };
 void() mummy_paine12 = [ 173.000, mummy_paine13 ] {
-   sound (self,CHAN_VOICE,"zombie/z_idle.wav",TRUE,ATTN_IDLE);
+   sound(self,CHAN_VOICE,"zombie/z_idle.wav",TRUE,ATTN_IDLE);
    setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
    self.solid = SOLID_SLIDEBOX;
    if ( !walkmove (FALSE,FALSE) ) {
@@ -295,13 +295,8 @@ void() mummy_paine29 = [ 190.000, mummy_paine30 ] {};
 void() mummy_paine30 = [ 191.000, mummy_run1 ] {};
 
 void() mummy_die = {
-   self.health = -35.000;
-   sound (self,CHAN_VOICE,"zombie/z_gib.wav",TRUE,ATTN_NORM);
-   ThrowGib (25,1); // headmdl
-   ThrowGib (1,2);
-   ThrowGib (2,2);
-   ThrowGib (3,2);
-   self.gibbed = TRUE;
+	self.health = self.gibhealth; // Force gib
+	monster_death_precheck();
 };
 
 void(entity inflictor, entity attacker, float take) mummy_pain = {
@@ -349,16 +344,16 @@ void() monster_mummy_precache = {
 	precache_model ("progs/rogue/mon_mummy.mdl");
 	precache_model ("progs/ad181/h_zombie.mdl");
 	precache_model ("progs/zom_gib.mdl");
-	precache_sound ("zombie/z_idle.wav");
-	precache_sound ("zombie/z_idle1.wav");
-	precache_sound ("zombie/z_shot1.wav");
-	precache_sound ("zombie/z_gib.wav");
-	precache_sound ("zombie/z_pain.wav");
-	precache_sound ("zombie/z_pain1.wav");
-	precache_sound ("zombie/z_fall.wav");
-	precache_sound ("zombie/z_miss.wav");
-	precache_sound ("zombie/z_hit.wav");
-	precache_sound ("zombie/idle_w2.wav");
+	precache_sound("zombie/z_idle.wav");
+	precache_sound("zombie/z_idle1.wav");
+	precache_sound("zombie/z_shot1.wav");
+	precache_sound("zombie/z_gib.wav");
+	precache_sound("zombie/z_pain.wav");
+	precache_sound("zombie/z_pain1.wav");
+	precache_sound("zombie/z_fall.wav");
+	precache_sound("zombie/z_miss.wav");
+	precache_sound("zombie/z_hit.wav");
+	precache_sound("zombie/idle_w2.wav");
 };
 
 void() monster_mummy = {

@@ -55,7 +55,7 @@ void() func_door_secret_touch = { // [FUNCTION]
 	self.attack_finished = time + 2;
 	if (self.message) {
 		centerprint (other, self.message);
-		sound (other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
+		sound(other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
 	}
 };
 
@@ -151,7 +151,7 @@ void() func_door_secret_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.velocity = '0 0 0';
 	if ( self.spawnflags & SECRET_OPEN_ONCE ) { // trigger once doors?
 		if (self.state == STATE_TOP) self.max_health = 0; // if the door is open, do nothing
@@ -174,7 +174,7 @@ void() func_door_secret_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	self.velocity = '0 0 0';
 	StopSound(self,CHAN_VOICE); // Reset health, position and frame back to default
 	self.takedamage = DAMAGE_NO;
@@ -228,7 +228,7 @@ void() func_door_secret_blocked = {
 // message   : centerprint message when touched (removed when opened)
 // sounds    : 1 =  medieval 2 = metal 3 = base(def) 4 = Silent 5 = custom
 // locksounds: 0 = talktalk 1 = short rattle, 2 = medium rattle, 3 = long rattle
-// noise     : custom sound - door locked sound (targetname+message)
+// noise     : custom sound - door locked sound(targetname+message)
 // noise1    : custom sound - Open
 // noise2    : custom sound - Opening (looping)
 // noise3    : custom sound - Closed
@@ -249,11 +249,7 @@ void() func_door_secret_blocked = {
 // A Door (bmodel) with 2 states and multiple stages
 void() func_door_secret = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
-	
-	if (self.noise == "") self.noise = SOUND_EMPTY; // Setup all empty/silent sound files first
-	if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
-	if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
-	if (self.noise3 == "") self.noise3 = SOUND_EMPTY;
+
 	if (self.sounds == 0 || self.sounds == 3) { // Default = 3 - Medieval
 		self.noise1 = "doors/basesec2.wav";
 		self.noise2 = "doors/basesec1.wav";
@@ -267,21 +263,7 @@ void() func_door_secret = { // [ENTITY]
 		self.noise2 = "doors/airdoor1.wav";
 		self.noise3 = "doors/airdoor2.wav";
 	}
-	if (self.noise == "") self.noise = SOUND_TALK; // locked sound (targetname + message)
-	if (self.locksounds == 1) self.noise = "ad171/doors/rattle1.wav";
-	else if (self.locksounds == 2) self.noise = "ad171/doors/rattle2.wav";
-	else if (self.locksounds == 3) self.noise = "ad171/doors/rattle6.wav";
-	else if (self.locksounds == 13) self.noise = "misc/trigger1.wav";
-	else if (self.locksounds == 14) self.noise = SOUND_EMPTY; 
-	else if (self.locksounds == 16) self.noise = RND_SURPRISENEG;
-	else if (self.locksounds == 21) self.noise = "ad171/doors/rattle_tech1.wav";
-	else if (self.locksounds == 22) self.noise = "ad171/doors/rattle_tech2.wav";
-	else if (self.locksounds == 23) self.noise = "ad171/doors/rattle_tech3.wav";
-	else if (self.locksounds == 24) self.noise = "ad171/doors/rattle_tech4.wav";
-	precache_sound (self.noise);
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	keyuser_sounds_precache();
 	SUB_BoundVolume(1);
 	self.classtype = CT_FUNCSECDOOR;
 	self.classgroup = CG_FUNCMOVER;
@@ -298,9 +280,9 @@ void() func_door_secret = { // [ENTITY]
 	self.state = STATE_BOTTOM;
 	self.movetype = MOVETYPE_PUSH; // Add sec door to world to work out movement
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.dest0 = self.origin;
-	setorigin (self, self.origin);	
+	setorigin(self, self.origin);	
 	setsize (self, self.mins , self.maxs);
 	if (check_nightmare() == TRUE) return; // Check for spawning conditions (nightmare, coop).  Needs to exist after entity has been added to work for BSPorigin.
 	if (check_coop() == TRUE) return;

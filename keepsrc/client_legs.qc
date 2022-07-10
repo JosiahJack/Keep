@@ -63,7 +63,7 @@ void() player_legs_animation = {
 		self.angles_x = 15;		// legs must not change x-angles together with player�s view
 		if (autocvar_player_legs_model == 1) {
 			if (self.owner.items & IT_SUIT)
-				setmodel (self, "progs/q15/player_legs1_suit.mdl");
+				setmodel(self, "progs/q15/player_legs1_suit.mdl");
 			else
 				setmodel(self, "progs/q15/player_legs1.mdl");			
 		} else setmodel(self, "progs/q15/player_legs2.mdl");

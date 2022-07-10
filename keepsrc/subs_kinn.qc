@@ -38,6 +38,7 @@
 
 void() BDW_SpriteGenericLoop;
 void() BDW_SpriteGenericPlayOnce;
+float(vector vmin, vector vmax, vector spot) BoxInWall;
 
 // Loops a sprite animation.  self.idleweaponframe represents the total number of frames in the animation. Frames are numbered 
 // starting from 0, so the last frame in the animation is actually (self.idleweaponframe - 1). Useful for missiles.
@@ -115,29 +116,30 @@ void(entity e) BDW_TouchRemove = { // [FUNCTION]
 // returned.
 // bdw - this is a variant of the bbox function to be found in chaos test qc
 // i have replaced the "head" entity with world, and the box entity with generic coordinates
-float(vector box_mins, vector box_maxs, vector spot) SUB_BBoxTraceCheck = { // [FUNCTION]
+// I mixed the two for maximum compatibility.  -Qmaster
+float(entity head, vector box_mins, vector box_maxs, vector spot) SUB_BBoxTraceCheck = { // [FUNCTION]
 	local vector p1, p2;
 
 	// Check for obstacles inside the bbox.
 	// Order:  1)--- to +++    2)+-- to -++    3)++- to --+    4)-+- to +-+
 	p1 = spot + box_mins;
 	p2 = spot + box_maxs;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1_x = spot_x + box_maxs_x;
 	p2_x = spot_x + box_mins_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1_y = spot_y + box_maxs_y;
 	p2_y = spot_y + box_mins_y;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1_x = spot_x + box_mins_x;
 	p2_x = spot_x + box_maxs_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	// Check for obstacles along the bbox boundaries.
@@ -146,149 +148,68 @@ float(vector box_mins, vector box_maxs, vector spot) SUB_BBoxTraceCheck = { // [
 	//         9)+++ to -++   10)-++ to --+   11)--+ to -+-   12)-+- to +++
 	p1 = p2 = spot + box_maxs;
 	p2_z = spot_z + box_mins_z;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1_x = p2_x = spot_x + box_mins_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1_y = p2_y = spot_y + box_mins_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1_x = p2_x = spot_x + box_maxs_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2 = spot + box_mins;
 	p2_x = spot_x + box_maxs_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2;
 	p2_y = spot_y + box_maxs_y;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2;
 	p2_x = spot_x + box_mins_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2;
 	p2_y = spot_y + box_mins_y;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2 = spot + box_maxs;
 	p2_x = spot_x + box_mins_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2;
 	p2_y = spot_y + box_mins_y;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2;
 	p2_x = spot_x + box_maxs_x;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	if (trace_fraction < 1)  return FALSE;
 
 	p1 = p2;
 	p2_y = spot_y + box_maxs_y;
-	traceline (p1, p2, FALSE, world);
+	traceline (p1, p2, FALSE, head);
 	return (trace_fraction == 1);
-};
-
-
-// SUB_BBoxInWall
-// This checks if a bbox is inside a wall or sky.  The bbox's origin
-// and corners are checked.  If any one points is within a solid or sky,
-// TRUE is returned.
-// bdw - variant - see above
-float(vector box_mins, vector box_maxs, vector spot) SUB_BBoxInWall = { // [FUNCTION]
-    local vector p;
-
-	// Check origin.
-	p = spot;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	// Check bbox faces.
-	// Order:  1)-00  2)+00  3)0-0  4)0+0  5)00-  6)00+
-	p_x = spot_x + box_mins_x;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_maxs_x;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p = spot;
-	p_y = spot_y + box_mins_y;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_y = spot_y + box_maxs_y;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p = spot;
-	p_z = spot_z + box_mins_z;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_z = spot_z + box_maxs_z;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	// Check bbox corners.
-	// Order:  1)+++  2)-++  3)+-+  4)--+  5)++-  6)-+-  7)+--  8)---
-	p_x = spot_x + box_maxs_x;
-	p_y = spot_y + box_maxs_y;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_mins_x;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_maxs_x;
-	p_y = spot_y + box_mins_y;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_mins_x;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_maxs_x;
-	p_y = spot_y + box_maxs_y;
-	p_z = spot_z + box_mins_z;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_mins_x;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_maxs_x;
-	p_y = spot_y + box_mins_y;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	if (pointcontents(p) == CONTENT_SKY)    return TRUE;
-
-	p_x = spot_x + box_mins_x;
-	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
-	return (pointcontents(p) == CONTENT_SKY);
 };
 
 // SUB_BBoxInOccupied
 // This checks if the spot is empty or occupied by a solid.
 // bdw - variant - see above. this a very rigorous way of checking whether
-// a given bbox is in an occupied space - use it for shuffler spawning, hell knight teleporting etc.
-float(vector box_mins, vector box_maxs, vector spot) SUB_BBoxInOccupied = { // [FUNCTION]
-    if (SUB_BBoxInWall(box_mins, box_maxs, spot))  return TRUE; // If a wall or other solid is in the way, the monster can't respawn here.
-	return !SUB_BBoxTraceCheck(box_mins, box_maxs, spot); // Check if other obstacles such as entities are occupying the space.
+// a given bbox is in an occupied space - use it for shuffler spawning, hell
+// knight teleporting etc.
+float(entity head, vector box_mins, vector box_maxs, vector spot) SUB_BBoxInOccupied = { // [FUNCTION]
+    if (BoxInWall(box_mins,box_maxs,spot)) return TRUE; // If a wall or other solid is in the way, the monster can't respawn here.
+	return !SUB_BBoxTraceCheck(head,box_mins,box_maxs,spot); // Check if other obstacles such as entities are occupying the space.
 };

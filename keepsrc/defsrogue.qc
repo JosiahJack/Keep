@@ -38,9 +38,6 @@
 
 float earthquake_active;
 float earthquake_intensity;
-
-.vector dragonLastVelocity;
-.vector elevatorDestination;
 .float ammo_lava_nails;
 .float ammo_multi_rockets;
 .float ammo_plasma;

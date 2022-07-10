@@ -155,7 +155,7 @@ void() func_shadow = {
 	self.bsporigin = TRUE;
 	self.angles = '0 0 0';
 	self.mdl = self.model;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.oldorigin = bmodel_origin(self); // Add bmodel to world and find origin location
 	
 	// Check if switchable shadow (lightmap) has been defined
@@ -163,7 +163,7 @@ void() func_shadow = {
 	if (self.switchshadstyle == 0) { dprint("\b[FUNC_SHADOW]\b Missing _switchableshadow entity key! Set to 32.\n"); self.switchshadstyle = 32; }
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, ""); // The Shadow bmodels need to be invisible
+	setmodel(self, ""); // The Shadow bmodels need to be invisible
 
 	// Check for fading function
 	if (self.spawnflags & FUNC_SHADOW_FADING) {

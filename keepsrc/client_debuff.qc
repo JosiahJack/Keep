@@ -320,16 +320,16 @@ void() ClientDeBuff = {
 			else {
 				// Play heartbeat only for bleeding/healing
 				if (self.bleeding) 
-					sound (self, CHAN_VOICE, SOUND_HEARTBEAT, 1, ATTN_IDLE);
+					sound(self, CHAN_VOICE, SOUND_HEARTBEAT, 1, ATTN_IDLE);
 				// Re-use player pain sounds
 				else if (self.poisoned) {
-					if (random() < 0.5) sound (self, CHAN_VOICE, "player/pain2.wav", 1, ATTN_IDLE);
-					else sound (self, CHAN_VOICE, "player/pain3.wav", 1, ATTN_IDLE);
+					if (random() < 0.5) sound(self, CHAN_VOICE, "player/pain2.wav", 1, ATTN_IDLE);
+					else sound(self, CHAN_VOICE, "player/pain3.wav", 1, ATTN_IDLE);
 				}
 				// Play on the same channel as player pain
 				else if (self.burning) {
-					if (random() < 0.5) sound (self, CHAN_VOICE, "player/pain1.wav", 1, ATTN_IDLE);
-					else sound (self, CHAN_VOICE, "player/pain4.wav", 1, ATTN_IDLE);
+					if (random() < 0.5) sound(self, CHAN_VOICE, "player/pain1.wav", 1, ATTN_IDLE);
+					else sound(self, CHAN_VOICE, "player/pain4.wav", 1, ATTN_IDLE);
 				}
 			}
 		}
@@ -381,9 +381,9 @@ void(entity targ) BleedDeBuff = {
 
 	// Pick a random player sound
 	pain_type = rint(random() * 3);
-	if (pain_type < 1) sound (targ, CHAN_VOICE, "player/pain4.wav", 1, ATTN_NORM);
-	else if (pain_type < 2) sound (targ, CHAN_VOICE, "player/pain5.wav", 1, ATTN_NORM);
-	else sound (targ, CHAN_VOICE, "player/pain6.wav", 1, ATTN_NORM);
+	if (pain_type < 1) sound(targ, CHAN_VOICE, "player/pain4.wav", 1, ATTN_NORM);
+	else if (pain_type < 2) sound(targ, CHAN_VOICE, "player/pain5.wav", 1, ATTN_NORM);
+	else sound(targ, CHAN_VOICE, "player/pain6.wav", 1, ATTN_NORM);
 
 	// Work out maximum bleed HP (remove MH excess)
 	targ.bleeding_qty = targ.health;

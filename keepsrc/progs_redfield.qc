@@ -148,7 +148,7 @@ void() godray_alpha_inc = { // [FUNCTION]
 void() misc_godray_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	if (self.mdl != "") { // Restore model/size/skin
-		setmodel (self, self.mdl);
+		setmodel(self, self.mdl);
 		setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 		godray_alpha_dec();
 	}
@@ -181,7 +181,7 @@ void() saluteknight_hold = { // [FUNCTION]
 void() saluteknight_transition = { // [FUNCTION]
 	self.frame = self.frame + 1;
 	if (self.frame >= 121) {
-		sound (self, CHAN_VOICE, "redfield/misc/armor_clink.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "redfield/misc/armor_clink.wav", 1, ATTN_NORM);
 		saluteknight_hold();
 		return;
 	}
@@ -216,7 +216,7 @@ void() misc_saluteknight_setup = { // [FUNCTION]
 void() misc_saluteknight = { // [ENTITY]
 	self.mdl = "progs/ad171/mon_knight.mdl";
 	precache_model (self.mdl);
-	precache_sound ("redfield/misc/armor_clink.wav");
+	precache_sound("redfield/misc/armor_clink.wav");
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.nextthink = time + 0.1;
@@ -236,7 +236,7 @@ void() oldone_animate = { // [FUNCTION]
 	if (self.alpha < 1) self.alpha = self.alpha + 0.1;
 	if (self.count > 9) self.frame = self.frame + 1;
 	if (self.frame == 4) {
-		sound (self, CHAN_VOICE, "redfield/karasu/spell.wav", 1, ATTN_IDLE);
+		sound(self, CHAN_VOICE, "redfield/karasu/spell.wav", 1, ATTN_IDLE);
 		check_oldoneTrig();		
 	}
 	if (self.frame > 63) self.frame = 44;
@@ -248,7 +248,7 @@ void() misc_oldone_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	// Restore model/size/skin
 	if (self.mdl != "") {
-		setmodel (self, self.mdl);
+		setmodel(self, self.mdl);
 		setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 		self.count = 0;
 		self.alpha = 0.1;
@@ -269,7 +269,7 @@ void() misc_oldone_setup = { // [FUNCTION]
 void() misc_intro_oldone = { // [ENTITY]
 	self.mdl = "progs/redfield/intro/old_one.mdl";
 	precache_model (self.mdl);
-	precache_sound ("redfield/karasu/spell.wav");
+	precache_sound("redfield/karasu/spell.wav");
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.nextthink = time + 0.1;
@@ -281,14 +281,14 @@ void() misc_intro_oldone = { // [ENTITY]
 void() wolfscene_animate = { // [FUNCTION]
 	if (self.alpha < 1) self.alpha = self.alpha + 0.2;
 	self.frame = self.frame + 1;
-	if (self.frame == 13) sound (self, CHAN_VOICE, "redfield/wolf/s_howl.wav", 1, ATTN_NORM);
+	if (self.frame == 13) sound(self, CHAN_VOICE, "redfield/wolf/s_howl.wav", 1, ATTN_NORM);
 	if (self.frame == 48) {
-		sound (self, CHAN_EXTRA1, "demon/dland2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_EXTRA1, "demon/dland2.wav", 1, ATTN_NORM);
 		local entity ds;
 		self.owner = spawn();
 		ds = self.owner;
-		setmodel (ds, "progs/redfield/big_dust.mdl");
-		setorigin (ds, self.origin + '192 -176 -96');
+		setmodel(ds, "progs/redfield/big_dust.mdl");
+		setorigin(ds, self.origin + '192 -176 -96');
 		ds.angles = self.angles;
 		ds.alpha = 0.5;
 		ds.nextthink = time + 0.4;
@@ -316,8 +316,8 @@ void() misc_wolfscene = { // [ENTITY]
 	self.mdl = "progs/redfield/wolf_cutscene.mdl";
 	precache_model (self.mdl);
 	precache_model ("progs/redfield/big_dust.mdl");
-	precache_sound ("redfield/wolf/s_howl.wav");
-	precache_sound ("demon/dland2.wav");
+	precache_sound("redfield/wolf/s_howl.wav");
+	precache_sound("demon/dland2.wav");
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.nextthink = time + 0.1;
@@ -384,8 +384,8 @@ void() misc_huntress_spawn = { // [ENTITY]
 	precache_model (self.mdl);
 	self.headmdl = "progs/redfield/huntress/rakuyo.mdl";
 	precache_model (self.headmdl);
-	precache_sound ("redfield/huntress/sight.wav");
-	precache_sound ("redfield/huntress/ching.wav");
+	precache_sound("redfield/huntress/sight.wav");
+	precache_sound("redfield/huntress/ching.wav");
 	self.attachment = spawn();
 	self.attachment.classtype = CT_ATTACHMENT;
 	setmodel(self.attachment, "");
@@ -409,8 +409,8 @@ void() barmaid_animate = { // [FUNCTION]
 
 	if (self.frame == 40) {
 		if (random() < 0.65) {
-			if (random() < 0.5) sound (self, CHAN_EXTRA1, "redfield/misc/barmaid_hum.wav", 1, ATTN_IDLE);
-			else sound (self, CHAN_EXTRA1, "redfield/misc/barmaid_hum2.wav", 1, ATTN_IDLE);
+			if (random() < 0.5) sound(self, CHAN_EXTRA1, "redfield/misc/barmaid_hum.wav", 1, ATTN_IDLE);
+			else sound(self, CHAN_EXTRA1, "redfield/misc/barmaid_hum2.wav", 1, ATTN_IDLE);
 		}
 	}
 	if (self.frame > 144) self.frame = 0;
@@ -457,8 +457,8 @@ void() misc_barmaid = { // [ENTITY]
 	precache_model (self.mdl);
 	precache_model ("progs/redfield/barmaid/barmaid_legs.mdl");
 	precache_model ("progs/redfield/barmaid/barmaid_head.mdl");
-	precache_sound ("redfield/misc/barmaid_hum.wav");
-	precache_sound ("redfield/misc/barmaid_hum2.wav");
+	precache_sound("redfield/misc/barmaid_hum.wav");
+	precache_sound("redfield/misc/barmaid_hum2.wav");
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.nextthink = time + 0.1;
@@ -754,7 +754,7 @@ void() misc_ufo = { // [ENTITY]
 	self.mdl = "progs/redfield/ufo.mdl";
 	precache_model (self.mdl);
 	precache_model ("progs/redfield/ufo_beam.mdl");
-	precache_sound ("redfield/misc/ufo_beam.wav");
+	precache_sound("redfield/misc/ufo_beam.wav");
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.nextthink = time + 0.1;
@@ -822,7 +822,7 @@ void() misc_grass = { // [ENTITY]
 		self.mdl = "progs/redfield/grass1.mdl";
 		precache_model (self.mdl);
 	}
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.solid = SOLID_NOT;				// No world interaction
 	self.movetype = MOVETYPE_NONE;			// No collision
 	self.frame = rint(random() * 34);
@@ -832,7 +832,7 @@ void() misc_grass = { // [ENTITY]
 
 void() bell_loop = { // [FUNCTION]
 	self.frame = self.frame + 1;
-	if (self.frame == 3) { sound (self, CHAN_EXTRA1, "redfield/misc/bell_toll.wav", 1, ATTN_NORM);}
+	if (self.frame == 3) { sound(self, CHAN_EXTRA1, "redfield/misc/bell_toll.wav", 1, ATTN_NORM);}
 	if (self.frame > 29) {
 		self.frame = 0;
 		return;
@@ -855,7 +855,7 @@ void() misc_bell_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize(self, self.bbmins, self.bbmaxs);
 	self.th_pain = misc_bell_toll;
 	self.takedamage = DAMAGE_AIM;
@@ -885,7 +885,7 @@ void() misc_bell_setup = { // [FUNCTION]
 void() misc_bellredfield = { // [ENTITY]
 	self.mdl = "progs/redfield/tower_bell.mdl";	
 	precache_model (self.mdl);
-	precache_sound ("redfield/misc/bell_toll.wav");
+	precache_sound("redfield/misc/bell_toll.wav");
 	self.frame = 0;
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';
@@ -900,12 +900,12 @@ void() misc_vase_break = { // [FUNCTION]
 	self.estate_off(); // Switch off everything
 	
 	// Play breaking sound
-	if (random() < 0.2) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.35) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact2.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.5) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact3.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.65) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact4.wav", 1, ATTN_IDLE);}
-	else if (random() < 0.8) { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact5.wav", 1, ATTN_IDLE);}
-	else { sound (self, CHAN_EXTRA2, "ad171/break/ceramic_impact6.wav", 1, ATTN_IDLE);}
+	if (random() < 0.2) { sound(self, CHAN_EXTRA2, "ad171/break/ceramic_impact.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.35) { sound(self, CHAN_EXTRA2, "ad171/break/ceramic_impact2.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.5) { sound(self, CHAN_EXTRA2, "ad171/break/ceramic_impact3.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.65) { sound(self, CHAN_EXTRA2, "ad171/break/ceramic_impact4.wav", 1, ATTN_IDLE);}
+	else if (random() < 0.8) { sound(self, CHAN_EXTRA2, "ad171/break/ceramic_impact5.wav", 1, ATTN_IDLE);}
+	else { sound(self, CHAN_EXTRA2, "ad171/break/ceramic_impact6.wav", 1, ATTN_IDLE);}
 
 	if (ext_dppart) pointparticles(particleeffectnum(DPP_TEBSMOKE), self.origin, '0 0 0', 1); //DP smoke effects
 	if (self.target != "") trigger_strs(self.target, other); // Check for any explosion triggers
@@ -940,19 +940,19 @@ void() misc_vase_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setsize(self, self.bbmins, self.bbmaxs);
 	self.th_die = misc_vase_break;
 	self.takedamage = DAMAGE_AIM;
 };
 
 void() misc_vase_setup = { // [FUNCTION]
-	precache_sound ("ad171/break/ceramic_impact.wav");
-	precache_sound ("ad171/break/ceramic_impact2.wav");
-	precache_sound ("ad171/break/ceramic_impact3.wav");
-	precache_sound ("ad171/break/ceramic_impact4.wav");
-	precache_sound ("ad171/break/ceramic_impact5.wav");
-	precache_sound ("ad171/break/ceramic_impact6.wav");
+	precache_sound("ad171/break/ceramic_impact.wav");
+	precache_sound("ad171/break/ceramic_impact2.wav");
+	precache_sound("ad171/break/ceramic_impact3.wav");
+	precache_sound("ad171/break/ceramic_impact4.wav");
+	precache_sound("ad171/break/ceramic_impact5.wav");
+	precache_sound("ad171/break/ceramic_impact6.wav");
 	self.gib1mdl = "progs/redfield/gib1_vase.mdl";
 	self.gib2mdl = "progs/redfield/gib2_vase.mdl";
 	self.gib3mdl = "progs/redfield/gib3_vase.mdl";

@@ -58,7 +58,7 @@ void()	demon1_run6	= [	$run6,		demon1_run1	] { ai_run(36); };
 // Standardized layout (matching ai_melee (ai.qc)
 // Added each claw attack checks enemy distance (before no check)
 // Added z depth check on attacks +/- 64 units
-// Added claw miss sound (borrowed HK slash sound)
+// Added claw miss sound(borrowed HK slash sound)
 // Changed some explicit values to constant variables
 void(float side) Demon_Claw = {
 	local float ldmg;
@@ -75,11 +75,11 @@ void(float side) Demon_Claw = {
 	// same goes for enemies that cannot be damaged (world geo mostly)
 	if (!ai_checkmelee(MONAI_MELEEDEMON,FALSE) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
+		if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
+		else sound(self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
 	} else {
 		if (self.poisonous) PoisonDeBuff(self.enemy); // Check for poisonous attribute (new poison version)
-		sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
+		sound(self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
 		ldmg = 10 + 5*random();
 		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
@@ -148,7 +148,7 @@ void() Demon_JumpTouch = {
 void()	demon1_jump1	= [	$leap1,		demon1_jump2	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
-	sound (self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
 };
 void()	demon1_jump2	= [	$leap2,		demon1_jump3	] { ai_face(); };
 void()	demon1_jump3	= [	$leap3,		demon1_jump4	] { ai_face(); };
@@ -194,7 +194,7 @@ void(entity inflictor, entity attacker, float damage) demon1_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) demon1_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -222,7 +222,7 @@ void() demon1_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "demon/ddeath.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "demon/ddeath.wav", 1, ATTN_NORM);
 		demon1_death1();
 	}
 };
@@ -235,12 +235,12 @@ void() monster_demon1_precache = {
 	precache_model ("progs/ad171/gib_dmtail.mdl");
 	precache_model ("progs/ad171/gib_dmclaw1.mdl");		// Always precache extra models
 	precache_model ("progs/ad171/gib_dmclaw2.mdl");		// regardless if picked or not
-	precache_sound ("demon/idle1.wav");
-	precache_sound ("demon/dpain1.wav");
-	precache_sound ("demon/ddeath.wav");
-	precache_sound ("demon/dhit2.wav");
-	precache_sound ("demon/djump.wav");
-	precache_sound ("demon/sight2.wav");
+	precache_sound("demon/idle1.wav");
+	precache_sound("demon/dpain1.wav");
+	precache_sound("demon/ddeath.wav");
+	precache_sound("demon/dhit2.wav");
+	precache_sound("demon/djump.wav");
+	precache_sound("demon/sight2.wav");
 };
 
 /*======================================================================

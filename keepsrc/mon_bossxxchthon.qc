@@ -51,7 +51,7 @@ void(vector orgofs) xxchthon_missile = {
 	// No enemy or player dead?
 	if (!self.enemy) return;
 	
-	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
 	makevectors(offang);
 	org = self.origin + attack_vector(orgofs);
@@ -145,7 +145,7 @@ void() xxchthon_shakeframe = {
 //----------------------------------------------------------------------
 void() xxchthon_shake = {
 	// Start roaring and shaking
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	Resist_ChangeType(self, TRUE);
 	self.walkframe = self.count = self.inpain = 0;
 	xxchthon_shakeframe();
@@ -165,7 +165,7 @@ void(entity inflictor, entity attacker, float damage) xxchthon_pain = {
 	if (damage > 30) SpawnProjectileSmoke(inflictor.origin, 200, 50, 250);
 	// The pain sound not linked to animation, so less useful
 	if (random() < 0.2 && damage > 30)
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 };
 
 // DEATH - Fall down and explode
@@ -215,13 +215,13 @@ void() xxchthon_die = {
 	self.solid = SOLID_NOT;			// no longer need to block
 	self.max_health = MON_GIBEXPLOSION;
 
-	sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
 	xxchthon_death1();
 };
 
 // RISE up from the swirling liquid
 void() xxchthon_rise1	= [	$rise1, xxchthon_rise2 ] { xxchthon_lavasplash(); };
-void() xxchthon_rise2	= [	$rise2, xxchthon_rise3 ] { sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
+void() xxchthon_rise2	= [	$rise2, xxchthon_rise3 ] { sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
 void() xxchthon_rise3	= [	$rise3, xxchthon_rise4 ] {};
 void() xxchthon_rise4	= [	$rise4, xxchthon_rise5 ] { ai_face(); };
 void() xxchthon_rise5	= [	$rise5, xxchthon_rise6 ] {};
@@ -300,9 +300,9 @@ void() monster_chthon_precache = {
 	precache_sound("ad171/chthon/death1.wav");
 	precache_sound("ad171/chthon/sight1.wav");
 	precache_sound("ad171/chthon/lavasplash.wav");
-	precache_sound ("ad171/chthon/idle1.wav");
-	precache_sound ("ad171/chthon/attack1.wav"); // Attack/throw/electric sound
-	precache_sound ("ad171/wraith/bounce.wav");
+	precache_sound("ad171/chthon/idle1.wav");
+	precache_sound("ad171/chthon/attack1.wav"); // Attack/throw/electric sound
+	precache_sound("ad171/wraith/bounce.wav");
 };
 
 // QUAKED monster_chthon (1 0 0) (-128 -128 -24) (128 128 256)

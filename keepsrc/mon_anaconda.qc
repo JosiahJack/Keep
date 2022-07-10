@@ -1,3 +1,45 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Tan Sian Yue aka Bubbah, Coyote, Ken Turner, L. Pope
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+//
+// Implements: Anaconda
+//
+// Description:
+// The Anaconda monster created as a demo in anticipation of the movie of the
+// same name. (This may or may not be a reskin of the Virtus CD lava worm).
+//
+// Also has coils that are to simulate the Anaconda being intertwined through
+// the level.
+//=============================================================================
+
 void anacdoom_1();
 void anacdoom_2();
 void anacdoom_3();
@@ -752,30 +794,33 @@ void() anacdoom_1 = {
 	local entity pos, pl, timer;
 
 	if (self.spawnflags & ANAC_INTERMISSION) {
-		intermission_exittime = time + 10000000;
-		intermission_running = 1;
-		pos = find(world, classname, "info_intermission");
-		WriteByte(MSG_ALL, SVC_FINALE);
-	//	Keeping for posterity here WriteString(MSG_ALL, "Congratulations, soldier...\nYou've single handedly destroyed the\nvile Anaconda beast and all her\nspawn... Good work..\n\n-CREDITS-\nQUAKE(r) is a registered\ntrademark of Id Software, Inc.\nQUAKE(r) Scrag,Rottfish,Ogre characters\n& Textures included within this product\n(c)1996 Id Software, Inc.\nAll Rights reserved.\nLevel design: S.Thoms aka. MAGICMAN\nAnaconda skin: L.Pope\nSnakeman skin: C.Bolin\nSnakeModels+Code: S.Y.Tan aka. BUBBAH\nLevel Concept by:\nPrecision Entertainment, Inc.\n");
-		WriteString(MSG_ALL, self.message);
-		pl = find(world, classname, "player");
-		while (pl != world) {
-			pl.angles = pos.mangle;
-			pl.takedamage = DAMAGE_NO;
-			pl.solid = SOLID_NOT;
-			pl.movetype = MOVETYPE_NONE;
-			pl.modelindex = MOVETYPE_NONE;
-			setorigin(pl, pos.origin);
-			pl = find(pl, classname, "player");
-		}
+		// Keeping message for posterity here (munged): WriteString(MSG_ALL, "
+		// Congratulations, soldier...\n
+		// You've single handedly destroyed the\n
+		// vile Anaconda beast and all her\n
+		// spawn... Good work..\n
+		// \n
+		// -CREDITS-\n
+		// QUAKE(r) is a registered\n
+		// trademark of Id Software, Inc.\n
+		// QUAKE(r) Scrag,Rottfish,Ogre characters\n
+		// & Textures included within this product\n
+		// (c)1996 Id Software, Inc.\n
+		// All Rights reserved.\n
+		// Level design: S.Thoms aka. MAGICMAN\n
+		// Anaconda skin: L.Pope\n
+		// Snakeman skin: C.Bolin\n
+		// SnakeModels+Code: S.Y.Tan aka. BUBBAH\n
+		// Level Concept by:\nPrecision Entertainment, Inc.\n");
 
 		// Kill all the coils...anaconda is spread everywhere!
-		pl = find(world, classname, "monster_coil");
-		while (pl != world) {
+		pl = find(world,classname,"monster_coil");
+		while (pl) {
 			pl.think = coil_explode;
 			pl.nextthink = time + 0.1;
-			pl = find(pl, classname, "player");
+			pl = find(pl,classname,"player");
 		}
+		trigger_changelevel_finish();
 	}
 	timer = spawn();
 	setorigin(timer,self.origin);

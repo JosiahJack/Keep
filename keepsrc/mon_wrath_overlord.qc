@@ -58,7 +58,7 @@ void() overlord_teleport = {
    org = (theDest.origin + (FL_MONSTER * v_forward));
    spawn_tfog (org);
    spawn_tdeath (theDest.origin,self);
-   setorigin (self,theDest.origin);
+   setorigin(self,theDest.origin);
    self.flags = (self.flags - (self.flags & FL_ONGROUND));
 };
 
@@ -154,7 +154,7 @@ void() overlord_smash = {
       return ;
 
    smashDmg = (20.000 + (random () * MOVETYPE_BOUNCE));
-   sound (self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
    T_Damage (self.enemy,self,self,smashDmg,DAMARMOR);
    delta = normalize (((self.enemy.origin - self.origin) + self.enemy.view_ofs));
    SpawnBlood (self.enemy, (self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
@@ -222,7 +222,7 @@ void(entity inflictor, entity attacker, float damage) overlord_pain = {
       overlord_pn_b01();
    }
    self.pain_finished = (time + FL_SWIM);
-   sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
 
 void(string gibName) ol_toss = {
@@ -235,7 +235,7 @@ void(string gibName) ol_toss = {
 	flingVelocity = (flingVelocity + (v_right * ((random () * 200.000) - 100.000)));
 
 	myGib = spawn();
-	setmodel (myGib,gibName);
+	setmodel(myGib,gibName);
 	setsize (myGib,VEC_ORIGIN,VEC_ORIGIN);
 	myGib.movetype = MOVETYPE_BOUNCE;
 	myGib.classtype = CT_TEMPGIB;
@@ -268,13 +268,7 @@ void() overlord_die15 = [ 104.000, overlord_die16 ] { self.nextthink = (time + 0
 void() overlord_die16 = [ 105.000, overlord_die17 ] { self.nextthink = (time + 0.050); };
 void() overlord_die17 = [ 106.000, overlord_die18 ] {
    self.model = "";
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION2);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   WriteByte (MSG_BROADCAST,FALSE);
-   WriteByte (MSG_BROADCAST,MOVETYPE_STEP);
+   Tent_Explosion2(self.origin,0,4);
    ol_toss ("progs/drake/s_wrtgb2.mdl");
    ol_toss ("progs/drake/s_wrtgb3.mdl");
    ol_toss ("progs/rogue/wrthgib1.mdl");
@@ -284,13 +278,7 @@ void() overlord_die17 = [ 106.000, overlord_die18 ] {
 };
 
 void() overlord_die18 = [ 107.000, overlord_die19 ] {
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION2);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   WriteByte (MSG_BROADCAST,FALSE);
-   WriteByte (MSG_BROADCAST,MOVETYPE_STEP);
+   Tent_Explosion2(self.origin,0,4);
    ThrowGib(1,2);
    ThrowGib(2,2);
    ThrowGib(3,2);
@@ -298,17 +286,11 @@ void() overlord_die18 = [ 107.000, overlord_die19 ] {
 };
 
 void() overlord_die19 = [ 107.000, overlord_die19 ] {
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION2);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   WriteByte (MSG_BROADCAST,FALSE);
-   WriteByte (MSG_BROADCAST,MOVETYPE_STEP);
+   Tent_Explosion2(self.origin,0,4);
    ThrowGib(1,2);
    ThrowGib(2,2);
    ThrowGib(3,2);
-   remove (self);
+   entity_remove(self,0.1);
 };
 
 void() monster_super_wrath_precache = {

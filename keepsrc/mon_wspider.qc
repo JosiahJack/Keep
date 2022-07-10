@@ -59,13 +59,13 @@ void() spid_walk10 = [9, spid_walk1] { sound(self, CHAN_VOICE, "spider/tap.wav",
 void() spid_run1 = [0, spid_run2] { if (random() < 0.2) sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
 void() spid_run2 = [2, spid_run3] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
 void() spid_run3 = [4, spid_run4] { ai_run(12); };
-void() spid_run4 = [6, spid_run5] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE);ai_run(12); };
+void() spid_run4 = [6, spid_run5] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
 void() spid_run5 = [8, spid_run6] { ai_run(12); };
-void() spid_run6 = [0, spid_run7] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE);ai_run(12); };
+void() spid_run6 = [0, spid_run7] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
 void() spid_run7 = [2, spid_run8] { ai_run(12); };
-void() spid_run8 = [4, spid_run9] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE);ai_run(12); };
+void() spid_run8 = [4, spid_run9] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
 void() spid_run9 = [6, spid_run10] { ai_run(12); };
-void() spid_run10 = [8, spid_run1] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE);ai_run(12); };
+void() spid_run10 = [8, spid_run1] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
 
 void() spid_attack1 = [0, spid_attack2] { sound(self, CHAN_VOICE, "rogue/wrath/watt.wav", 1, ATTN_NORM); ai_charge(12); };
 void() spid_attack2 = [2, spid_attack3] { ai_charge(12); };
@@ -161,7 +161,7 @@ void() spid_jump = {
 	makevectors(self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = (v_forward * self.jumpdist_x) + ('0 0 1' * self.jumpdist_z);
-	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
+	SUB_RemoveFlags(self,FL_ONGROUND);
 };
 
 void() spid_attack = {

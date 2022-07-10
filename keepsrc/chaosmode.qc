@@ -402,8 +402,8 @@ float() health_checkrandomizer = {
 		}
 		rnd_displaydebug();	// Show console info
 	} else if (self.spawnflags & H_MEGA) {
-		precache_sound ((self.noise1 = SOUND_ARTSUIT1)); // Precache extra files for later
-		precache_sound ((self.noise2 = SOUND_ARTSUIT2));
+		precache_sound((self.noise1 = SOUND_ARTSUIT1)); // Precache extra files for later
+		precache_sound((self.noise2 = SOUND_ARTSUIT2));
 	}
 	
 	if (self.randomized > 0 && self.th_randfunc) { // Randomizer function setup?
@@ -473,9 +473,9 @@ float() armour_checkrandomizer = {
 		}
 		rnd_displaydebug(); // Show console info
 	} else if (self.classname == "item_armorInv") {
-		precache_sound ((self.noise1 = SOUND_ARTBLASTBELT1)); // Precache extra files for later
-		precache_sound ((self.noise2 = SOUND_ARTBLASTBELT2));
-		precache_sound ((self.noise3 = SOUND_ARTBLASTBELT3));
+		precache_sound((self.noise1 = SOUND_ARTBLASTBELT1)); // Precache extra files for later
+		precache_sound((self.noise2 = SOUND_ARTBLASTBELT2));
+		precache_sound((self.noise3 = SOUND_ARTBLASTBELT3));
 	}
 	
 	if (self.randomized > 0 && self.th_randfunc) { // Randomizer function setup?
@@ -520,21 +520,21 @@ float() artifact_checkrandomizer = {
 			self.classname = "item_artifact_invulnerability";
 			self.th_randfunc = item_artifact_invulnerability;
 		} else { // DEFAULT = Env Suit
-			precache_sound (SOUND_ARTJUMPBOOTS1); // Precache jump boots for combo pickup reward
-			precache_sound (SOUND_ARTJUMPBOOTS2); // sounds 3a-3c are used in client.qc (lines 915+)
-			precache_sound (SOUND_ARTJUMPBOOTS3A);	// First jump
-			precache_sound (SOUND_ARTJUMPBOOTS3B);	// Second
-			precache_sound (SOUND_ARTJUMPBOOTS3C);	// No more			
+			precache_sound(SOUND_ARTJUMPBOOTS1); // Precache jump boots for combo pickup reward
+			precache_sound(SOUND_ARTJUMPBOOTS2); // sounds 3a-3c are used in client.qc (lines 915+)
+			precache_sound(SOUND_ARTJUMPBOOTS3A);	// First jump
+			precache_sound(SOUND_ARTJUMPBOOTS3B);	// Second
+			precache_sound(SOUND_ARTJUMPBOOTS3C);	// No more			
 		}
 		rnd_displaydebug(); // Show console info
 	} else if (self.classname == "item_artifact_invulnerability") {
-		precache_sound (SOUND_ARTLSHIELD1); // Precache lava shield for combo pickup reward
-		precache_sound (SOUND_ARTLSHIELD2);
-		precache_sound (SOUND_ARTLSHIELD3);
+		precache_sound(SOUND_ARTLSHIELD1); // Precache lava shield for combo pickup reward
+		precache_sound(SOUND_ARTLSHIELD2);
+		precache_sound(SOUND_ARTLSHIELD3);
 	} else if (self.classname == "item_artifact_super_damage") {
-		precache_sound (SOUND_ARTBLASTBELT1); // Precache blast belt for combo pickup reward
-		precache_sound (SOUND_ARTBLASTBELT2);
-		precache_sound (SOUND_ARTBLASTBELT3);
+		precache_sound(SOUND_ARTBLASTBELT1); // Precache blast belt for combo pickup reward
+		precache_sound(SOUND_ARTBLASTBELT2);
+		precache_sound(SOUND_ARTBLASTBELT3);
 	}
 
 	if (self.randomized > 0 && self.th_randfunc) { // Randomizer function setup?

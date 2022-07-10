@@ -63,7 +63,7 @@ void() spikemine_Home = {
 			head = head.chain;
 		}
 		if ( (selected != world) )
-		sound (self,CHAN_VOICE,"hipnotic/items/spikmine.wav",TRUE,ATTN_NORM);
+		sound(self,CHAN_VOICE,"hipnotic/items/spikmine.wav",TRUE,ATTN_NORM);
 
 		self.enemy = selected;
 		self.search_time = (time + 1.300);
@@ -98,7 +98,7 @@ void() spikemine_Touch = {
 	StopSound(self,CHAN_VOICE);
 	self.velocity = VEC_ORIGIN;
 	self.touch = SUB_Null;
-	setmodel (self,"progs/drake/s_explod.spr");
+	setmodel(self,"progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
 	s_explode1();
 };
@@ -113,7 +113,7 @@ void() spike_mine_first_think = {
 
 void() monster_spikemine_precache = {
 	precache_model ("progs/hipnotic/mon_spikmine.mdl");
-	precache_sound ("hipnotic/items/spikmine.wav");
+	precache_sound("hipnotic/items/spikmine.wav");
 };
 
 void() monster_spikemine = {
@@ -121,7 +121,7 @@ void() monster_spikemine = {
 
 	self.mdl = "progs/hipnotic/mon_spikmine.mdl";
 	precache_monster(self.classname);
-	setmodel (self,"progs/hipnotic/mon_spikmine.mdl");
+	setmodel(self,"progs/hipnotic/mon_spikmine.mdl");
 	setsize (self,'-16 -16 -24', '16 16 16'); //MonTiny
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_FLYMISSILE;

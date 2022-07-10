@@ -305,8 +305,8 @@ void() tjump_touch = { // [FUNCTION]
 
 	// Up, up, and away!
     if (!(self.spawnflags & PUSH_CURRENT)) { // First sound overrides jump sound.  Second sound is standard push sound.
-        sound (other, CHAN_BODY, "rogue/runes/end1.wav", 1, ATTN_NORM);
-        sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+        sound(other, CHAN_BODY, "rogue/runes/end1.wav", 1, ATTN_NORM);
+        sound(other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
     }
 
     if (self.speed) { // Unlike trigger_monsterjump, jump at a direction 'other' is facing.
@@ -323,8 +323,8 @@ void() tjump_touch = { // [FUNCTION]
 // --> QUAKED trigger_jump (.5 .5 .5) ? PUSH_ONCE PUSH_CURRENT PUSH_JUMP_ONLY
 // Pushes the player up
 void() trigger_jump_spawn = { // [FUNCTION]
-    precache_sound ("ambience/windfly.wav");
-    precache_sound ("rogue/runes/end1.wav");       // Bounce sound.
+    precache_sound("ambience/windfly.wav");
+    precache_sound("rogue/runes/end1.wav");       // Bounce sound.
 
     // 'InitTrigger' already done elsewhere.
     self.touch = tjump_touch;
@@ -361,8 +361,8 @@ void() play_meatspray = { // [FUNCTION]
 
 	if (self.fly_sound != 1) return;
 
-	if (random() < 0.5) sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 };
 
 void() meat_shower = { self.use = play_meatspray; }; // [ENTITY]
@@ -376,7 +376,7 @@ void() trigger_dive_touch = { // [FUNCTION]
         if (other.classname == "player") {
             if (other.fly_sound < time) {
                 other.fly_sound = time + 1.5;
-                if (!(self.spawnflags & PUSH_CURRENT)) sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+                if (!(self.spawnflags & PUSH_CURRENT)) sound(other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
             }
         }
     }
@@ -430,7 +430,7 @@ void() trigger_usekey_skeleton = { // [ENTITY]
    self.use = keytrigger_use;
    self.touch = keytrigger_touch;
    if (!self.items) self.items = IT2_KEY_SKELETON;
-   precache_sound ("doors/runetry.wav");
+   precache_sound("doors/runetry.wav");
    self.noise3 = "doors/runetry.wav";
    InitTrigger();
 };
@@ -502,7 +502,7 @@ void() func_slidebox = { // [ENTITY]
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_SLIDEBOX;
 	self.use = func_wall_use;
-	setmodel (self,self.model);
+	setmodel(self,self.model);
 };
 
 void() conv_touch = { // [FUNCTION]

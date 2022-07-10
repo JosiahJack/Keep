@@ -114,10 +114,10 @@ void() func_pushable_movement = { // [FUNCTION]
 		// CHAN_AUTO to allow for sound blending
 		self.meleeattack = self.lefty;
 		if (self.meleeattack == 1) 
-			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NORM);
+			sound(self, CHAN_AUTO, self.noise1, 1, ATTN_NORM);
 		else if (self.meleeattack == 2) 
-			sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NORM);
-		else sound (self, CHAN_AUTO, self.noise3, 1, ATTN_NORM);
+			sound(self, CHAN_AUTO, self.noise2, 1, ATTN_NORM);
+		else sound(self, CHAN_AUTO, self.noise3, 1, ATTN_NORM);
 	}	
 
 	// Remove onground flag so bmodel can move
@@ -345,7 +345,7 @@ void() func_pushable_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	// Switch off impact particles
 	self.takedamage = DAMAGE_NO;
 };
@@ -359,7 +359,7 @@ void() func_pushable_on = { // [FUNCTION]
 
 	self.estate = ESTATE_ON;
 	func_pushable_push();
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	
 	// Setup touch fade controller
 	if (!self.attachment) func_pushable_controller_setup();
@@ -456,9 +456,9 @@ void() func_pushable = { // [ENTITY]
 	}
 	
 	// Cache all sounds
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
 	self.classtype = CT_FUNCPUSHABLE;
 	self.classgroup = CG_BREAKABLE;
 	self.bsporigin = TRUE;

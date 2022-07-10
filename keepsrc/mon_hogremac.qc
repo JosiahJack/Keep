@@ -91,7 +91,7 @@ void() hogremac_walkB8	= [	$walkB8,	hogremac_walkB9	] { ai_walk(7);
 	if (random() < 0.1) hogremac_sound(1); };
 void() hogremac_walkB9	= [	$walkB9,	hogremac_walkB10] { ai_walk(6); };
 void() hogremac_walkB10	= [	$walkB10,	hogremac_walkB11] { ai_walk(2); };
-void() hogremac_walkB11	= [	$walkB11,	hogremac_walkB12] { monster_footstep(FALSE);ai_walk(0); };
+void() hogremac_walkB11	= [	$walkB11,	hogremac_walkB12] { monster_footstep(FALSE); ai_walk(0); };
 void() hogremac_walkB12	= [	$walkB12,	hogremac_walk1	] { ai_walk(0); };
 
 
@@ -128,7 +128,7 @@ void() hogremac_swing3	= [	$swing3,	hogremac_swing4	] { ai_charge(6); };
 void() hogremac_swing4	= [	$swing4,	hogremac_swing5	] { ai_charge(6); };
 void() hogremac_swing5	= [	$swing5,	hogremac_swing6	] { ai_charge(7); };
 void() hogremac_swing6	= [	$swing6,	hogremac_swing7	] { ai_forward(7);
-	self.meleecontact = TRUE;ai_meleesmash(20);self.meleecontact = FALSE;};
+	self.meleecontact = TRUE; ai_meleesmash(20); self.meleecontact = FALSE;};
 void() hogremac_swing7	= [	$swing7,	hogremac_swing8	] { ai_forward(4);monster_footstep(FALSE); };
 void() hogremac_swing8	= [	$swing8,	hogremac_swing9	] { ai_forward(4); };
 void() hogremac_swing9	= [	$swing9,	hogremac_swing10 ] { ai_forward(4); };
@@ -149,11 +149,11 @@ void() hogremac_smash7	= [	$smash7,	hogremac_smash8	] { ai_charge(5); };
 void() hogremac_smash8	= [	$smash8,	hogremac_smash9	] { ai_face();monster_footstep(FALSE); };
 void() hogremac_smash9	= [	$smash9,	hogremac_smash10 ] { ai_face(); };
 void() hogremac_smash10= [	$smash10,	hogremac_smash11 ] { ai_face();
-	self.meleecontact = TRUE;ai_meleesmash(30);self.meleecontact = FALSE;
+	self.meleecontact = TRUE; ai_meleesmash(30); self.meleecontact = FALSE;
 	makevectors(self.angles);				// Put impact infront of ogre
 	self.finalangle = self.origin + (v_forward * 56) + (-v_up * 22);
 	particle_explode(self.finalangle, 24, 0.5, PARTICLE_BURST_FIRE, PARTICLE_BURST_SHOCKWAVE); 
-	sound (self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);
+	sound(self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);
 };
 void() hogremac_smash11= [	$smash11,	hogremac_smash12 ] {};
 void() hogremac_smash12= [	$smash12,	hogremac_smash13 ] {};
@@ -167,59 +167,6 @@ void() hogremac_melee = {
 	if (self.lip < 0.5) hogremac_smash1();
 	else hogremac_swing1();
 };
-
-/*======================================================================
- Jump forward (leaving ground) and do heavy damage
-======================================================================
-void() hogre_leap11;
-void() hogre_JumpTouch = {
-	local float ldmg;
-	
-	if (self.health <= 0) return;
-	ai_jumpbreakable(30);			// Damage any breakables
-
-	self.touch = SUB_Null;			// No more touching
-	self.think = hogre_leap11;		// Exit frame
-
-	if ( CanDamage(other, self) ) {
-		if ( vlen(self.velocity) > 300 ) {
-		  ldmg = 20 + 10*random();
-			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
-			spawn_touchblood (self, self.enemy, ldmg*3);
-		}
-	}
-	// Next timer
-	self.nextthink = time + 0.1;
-};
-
-//----------------------------------------------------------------------
-void()	hogre_leap1	= [	$leap1,	hogre_leap2	] { ai_charge(5);hogre_sound(4);
-	self.jump_flag = time + MONAI_JUMPHOGRETIME;
-	self.pain_finished = time + 1;};
-void()	hogre_leap2	= [	$leap2,	hogre_leap3	] { ai_charge(12); };
-void()	hogre_leap3	= [	$leap3,	hogre_leap4	] { ai_charge(12); };
-void()	hogre_leap4	= [	$leap4,	hogre_leap5	] { ai_charge(15); };
-void()	hogre_leap5	= [	$leap5,	hogre_leap6	] { ai_charge(7); };
-void()	hogre_leap6	= [	$leap6,	hogre_leap7	] { ai_charge(14); };
-void()	hogre_leap7	= [	$leap7,	hogre_leap8	] { ai_charge(13);
-	self.touch = hogre_JumpTouch;
-	makevectors(self.angles);
-	self.origin_z = self.origin_z + 1;
-	self.velocity = v_forward * 350 + '0 0 200';
-	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
-};
-void()	hogre_leap8	= [	$leap8,	hogre_leap9	] { ai_face(); };	// Inflight frames
-void()	hogre_leap9	= [	$leap9,	hogre_leap10] { ai_face(); };
-void()	hogre_leap10= [	$leap10,hogre_leap10] { ai_face(); };
-
-//----------------------------------------------------------------------
-void()	hogre_leap11	= [	$leap11,	hogre_leap12	] { chainsaw(0,2); };
-void()	hogre_leap12	= [	$leap12,	hogre_leap13	] { chainsaw(0,1.75); };
-void()	hogre_leap13	= [	$leap13,	hogre_leap14	] { chainsaw(0,1.5); };
-void()	hogre_leap14	= [	$leap14,	hogre_leap15	] {};
-void()	hogre_leap15	= [	$leap15,	hogre_run1	] {};
-*/
 
 /*======================================================================
  OgreFireGrenade (use version in mon_ogre.qc)
@@ -278,7 +225,7 @@ void()	hogremac_painC9 = [	$painC9,	hogremac_painC10] {};
 void()	hogremac_painC10= [	$painC10,	hogremac_painC11] { monster_footstep(FALSE); };
 void()	hogremac_painC11= [	$painC11,	hogremac_painC12] {};
 void()	hogremac_painC12= [	$painC12,	hogremac_painC13] {};
-void()	hogremac_painC13= [	$painC13,	hogremac_painC14] { monster_footstep(FALSE);ai_forward(3); };
+void()	hogremac_painC13= [	$painC13,	hogremac_painC14] { monster_footstep(FALSE); ai_forward(3); };
 void()	hogremac_painC14= [	$painC14,	hogremac_painC15] { ai_forward(4); };
 void()	hogremac_painC15= [	$painC15,	hogremac_painC16] { ai_forward(4); };
 void()	hogremac_painC16= [	$painC16,	hogremac_painC17] { ai_forward(5); };
@@ -291,7 +238,7 @@ void(entity inflictor, entity attacker, float damage) hogremac_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 	
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
@@ -323,12 +270,10 @@ void(entity inflictor, entity attacker, float damage) hogremac_pain = {
 	}
 };
 
-//----------------------------------------------------------------------
 // deathA (Forward)
-//----------------------------------------------------------------------
 void()	hogremac_dieA1	= [	$deathA1,	hogremac_dieA2	] { ai_forward(14); };
-void()	hogremac_dieA2	= [	$deathA2,	hogremac_dieA3	] { monster_check_gib();ai_forward(14); };
-void()	hogremac_dieA3	= [	$deathA3,	hogremac_dieA4	] { monster_check_gib();ai_forward(3);
+void()	hogremac_dieA2	= [	$deathA2,	hogremac_dieA3	] { monster_check_gib(); ai_forward(14); };
+void()	hogremac_dieA3	= [	$deathA3,	hogremac_dieA4	] { monster_check_gib(); ai_forward(3);
 	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogremac_dieA4	= [	$deathA4,	hogremac_dieA5	] { ai_forward(1); };
 void()	hogremac_dieA5	= [	$deathA5,	hogremac_dieA6	] { ai_forward(1); };
@@ -336,14 +281,12 @@ void()	hogremac_dieA6	= [	$deathA6,	hogremac_dieA7	] { ai_forward(1); };
 void()	hogremac_dieA7	= [	$deathA7,	hogremac_dieA8	] {};
 void()	hogremac_dieA8	= [	$deathA8,	hogremac_dieA9	] { hogremac_sound(3); };	// Chainsaw hits floor
 void()	hogremac_dieA9	= [	$deathA9,	hogremac_dieA10	] { monster_death_postcheck(); };
-void()	hogremac_dieA10	= [	$deathA10,	hogremac_dieA10	] {};
+void()	hogremac_dieA10	= [	$deathA10,	hogremac_dieA10	] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 // deathB (Backward)
-//----------------------------------------------------------------------
 void()	hogremac_dieB1	= [	$deathB1,	hogremac_dieB2	] { ai_back(4); };
-void()	hogremac_dieB2	= [	$deathB2,	hogremac_dieB3	] { monster_check_gib();ai_back(10); };
-void()	hogremac_dieB3	= [	$deathB3,	hogremac_dieB4	] { monster_check_gib();ai_back(3);
+void()	hogremac_dieB2	= [	$deathB2,	hogremac_dieB3	] { monster_check_gib(); ai_back(10); };
+void()	hogremac_dieB3	= [	$deathB3,	hogremac_dieB4	] { monster_check_gib(); ai_back(3);
 	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogremac_dieB4	= [	$deathB4,	hogremac_dieB5	] { ai_back(1); };
 void()	hogremac_dieB5	= [	$deathB5,	hogremac_dieB6	] {};
@@ -355,24 +298,24 @@ void()	hogremac_dieB10= [	$deathB10,	hogremac_dieB11] {};
 void()	hogremac_dieB11= [	$deathB11,	hogremac_dieB12] {};
 void()	hogremac_dieB12= [	$deathB12,	hogremac_dieB13] {};
 void()	hogremac_dieB13= [	$deathB13,	hogremac_dieB14] { monster_death_postcheck(); };
-void()	hogremac_dieB14= [	$deathB14,	hogremac_dieB14] {};
+void()	hogremac_dieB14= [	$deathB14,	hogremac_dieB14] { monster_deadbody_check(); };
 
 void() hogremac_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
 		if (self.lip < 0.5) hogremac_dieA1();
 		else hogremac_dieB1();
 	}
 };
 
 void(float soundtype) hogremac_sound = {
-	if (soundtype == 1) sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
-	else if (soundtype == 2) sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-	else if (soundtype == 3) sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);
+	if (soundtype == 1) sound(self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+	else if (soundtype == 2) sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
+	else if (soundtype == 3) sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
+	else if (soundtype == 4) sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);
 };
 
 // Special wakeup animation for attacking/breaking something infront

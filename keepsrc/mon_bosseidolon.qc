@@ -174,7 +174,7 @@ void(vector rockofs, float rockframe) Setup_attackA = {
 		self.attachment.solid = SOLID_NOT;
 		setmodel(self.attachment, self.attachment.mdl);
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-		sound (self, CHAN_WEAPON, "ad171/eidolon/attacka.wav", 1, ATTN_NORM); // Start throwing rock sound
+		sound(self, CHAN_WEAPON, "ad171/eidolon/attacka.wav", 1, ATTN_NORM); // Start throwing rock sound
 	}
 
 	makevectors(self.angles); // Turn towards enemy and update model attachment
@@ -249,7 +249,7 @@ void() eidolon_attackC2 = {
 	
 	// Start demon roar and then rocks!?!
 	if (self.frame == $breath4)
-		sound (self, CHAN_WEAPON, "ad171/eidolon/attackc.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/eidolon/attackc.wav", 1, ATTN_NORM);
 	
 	// Rock breath!?!
 	if (self.frame > $breath17 && self.frame < $breath35)
@@ -280,8 +280,8 @@ void(vector rockofs, float rockframe) Setup_attackE = {
 		self.attachment.skin = 1;
 
 		// Start long growl
-		sound (self, CHAN_VOICE, "ad171/eidolon/attacke.wav", 1, ATTN_NORM);
-		sound (self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ad171/eidolon/attacke.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
 	}
 	
 	if (rockframe == 7) {
@@ -413,7 +413,7 @@ void(entity inflictor, entity attacker, float damage) eidolon_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.7) eidolon_painA1();	// Short recoil
@@ -479,7 +479,7 @@ void() eidolon_die2 = {
 	// Cycle through end phase
 	self.lip = self.lip + 1;
 	self.nextthink = time + 0.1;	// Slow down to regular time
-	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 26) sound(self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
 	if (self.lip > 40) eidolon_explode();
 };
 
@@ -491,7 +491,7 @@ void() eidolon_die = {
 	SUB_FinishAttachment();	// Remove any attachments
 	SUB_RemoveAttachments();
 	monster_death_precheck();
-	sound (self, CHAN_VOICE, "ne_ruins/eidolon/death.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "ne_ruins/eidolon/death.wav", 1, ATTN_NORM);
 	self.think = eidolon_die1; // Explosions should wait a bit
 	self.nextthink = time + self.ticktimer;
 };
@@ -515,7 +515,7 @@ void() eidolon_free2 = {
 
 void() eidolon_free1 = [$howl1, eidolon_free2 ] {
 	self.takedamage = DAMAGE_YES;		// Enable resistance effects
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	self.walkframe = 0;
 };
 

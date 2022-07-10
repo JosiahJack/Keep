@@ -75,7 +75,7 @@ void()	ring_grow7	=	[6,		SUB_Remove] {};
 
 void() shal_boss_stand     = [      $walk1,       shal_boss_stand    ] { ai_stand(); };
 
-void() shal_boss_walk1     = [      $walk2,       shal_boss_walk2    ] { if (random() < 0.2) sound (self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE); ai_walk(6); };
+void() shal_boss_walk1     = [      $walk2,       shal_boss_walk2    ] { if (random() < 0.2) sound(self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE); ai_walk(6); };
 void() shal_boss_walk2     = [      $walk3,       shal_boss_walk3    ] { ai_walk(4); };
 void() shal_boss_walk3     = [      $walk4,       shal_boss_walk4    ] { ai_walk(0); };
 void() shal_boss_walk4     = [      $walk5,       shal_boss_walk5    ] { ai_walk(0); };
@@ -88,7 +88,7 @@ void() shal_boss_walk10    = [      $walk11,      shal_boss_walk11   ] { ai_walk
 void() shal_boss_walk11    = [      $walk12,      shal_boss_walk12   ] { ai_walk(4); };
 void() shal_boss_walk12    = [      $walk1,       shal_boss_walk1    ] { ai_walk(5); };
 
-void() shal_boss_run1     = [      $walk2,       shal_boss_run2    ] { if (random() < 0.2) sound (self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE); ai_run(6); };
+void() shal_boss_run1     = [      $walk2,       shal_boss_run2    ] { if (random() < 0.2) sound(self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE); ai_run(6); };
 void() shal_boss_run2     = [      $walk3,       shal_boss_run3    ] { ai_run(14); };
 void() shal_boss_run3     = [      $walk4,       shal_boss_run4    ] { ai_run(0);shambler_walking_quake(); };
 void() shal_boss_run4     = [      $walk5,       shal_boss_run5    ] { ai_run(0); };
@@ -104,8 +104,8 @@ void() shal_boss_run12    = [      $walk1,       shal_boss_run1    ] { ai_run(15
 void() shal_boss_jump1     = [      $attack11,       shal_boss_jump2    ] { ai_face(); };
 void() shal_boss_jump2     = [      $attack10,       shal_boss_jump3    ] { ai_face();shambler_walking_quake(); };
 void() shal_boss_jump3     = [      $attack9,       shal_boss_jump4    ] { ai_face(); };
-void() shal_boss_jump4     = [      $attack4,       shal_boss_jump5    ] { ai_face();sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
-void() shal_boss_jump5     = [      $attack3,       shal_boss_jump6    ] { ai_face();self.enemy.punchangle_x = -2;self.velocity = '0 0 500';};
+void() shal_boss_jump4     = [      $attack4,       shal_boss_jump5    ] { ai_face();sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
+void() shal_boss_jump5     = [      $attack3,       shal_boss_jump6    ] { ai_face(); self.enemy.punchangle_x = -2; self.velocity = '0 0 500';};
 void() shal_boss_jump6     = [      $attack2,       shal_boss_jump7    ] { ai_face(); };
 void() shal_boss_jump7     = [      $attack1,       shal_boss_jump8    ] { ai_face(); };
 void() shal_boss_jump8     = [      $jump2,       shal_boss_jump9    ] { ai_face(); };
@@ -116,10 +116,10 @@ void() shal_boss_jump12    = [      $jump2,       shal_boss_jump13   ] { ai_face
 void() shal_boss_jump13    = [      $jump1,       shal_boss_jump14   ] { ai_face(); };
 void() shal_boss_jump14    = [      $jump2,       shal_boss_jump15   ] { ai_face(); };
 void() shal_boss_jump15    = [      $jump1,       shal_boss_jump16   ] { ai_face();ShalBossNova(); };
-void() shal_boss_jump16    = [      $jump2,       shal_boss_run1     ] { ai_face();self.enemy.punchangle_y = -8;};
+void() shal_boss_jump16    = [      $jump2,       shal_boss_run1     ] { ai_face(); self.enemy.punchangle_y = -8;};
 
 void() shal_boss_attack1     = [      $attack1,       shal_boss_attack2    ] { if (self.health < 1200 && crandom() < 0.2 && enemy_range == RANGE_MELEE) shal_boss_jump1();
-sound (self, CHAN_VOICE, "q15/shalrath/bossattack.wav", 1, ATTN_NORM);
+sound(self, CHAN_VOICE, "q15/shalrath/bossattack.wav", 1, ATTN_NORM);
 ai_face();
 };
 void() shal_boss_attack2     = [      $attack2,       shal_boss_attack3    ] { ai_face(); };
@@ -159,44 +159,41 @@ void() Shal_Gib = {
 		sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 };
 
-void() shal_boss_death1      = [      $puff1,        shal_boss_death2     ] { sound (self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM); };
+void() shal_boss_death1      = [      $puff1,        shal_boss_death2     ] { sound(self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM); };
 void() shal_boss_death2      = [      $puff2,        shal_boss_death3     ] {};
 void() shal_boss_death3      = [      $puff3,        shal_boss_death4     ] {};
 void() shal_boss_death4      = [      $puff4,        shal_boss_death5     ] {};
-void() shal_boss_death5      = [      $puff5,        shal_boss_death6     ] { sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
+void() shal_boss_death5      = [      $puff5,        shal_boss_death6     ] { sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
 void() shal_boss_death6      = [      $puff6,        shal_boss_death7     ] {};
 void() shal_boss_death7      = [      $puff7,        shal_boss_death8     ] {};
-void() shal_boss_death8      = [      $puff8,        shal_boss_death9     ] { sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
+void() shal_boss_death8      = [      $puff8,        shal_boss_death9     ] { sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
 void() shal_boss_death9      = [      $puff9,        shal_boss_death10     ] {};
 void() shal_boss_death10      = [      $puff10,        shal_boss_death11     ] {};
-void() shal_boss_death11      = [      $puff11,        shal_boss_death12     ] { sound (self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM); };
+void() shal_boss_death11      = [      $puff11,        shal_boss_death12     ] { sound(self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM); };
 void() shal_boss_death12      = [      $puff12,        shal_boss_death13     ] {};
-void() shal_boss_death13      = [      $puff13,        shal_boss_death14     ] { sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
+void() shal_boss_death13      = [      $puff13,        shal_boss_death14     ] { sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM); };
 void() shal_boss_death14      = [      $puff14,        shal_boss_death15     ] {};
 void() shal_boss_death15      = [      $puff15,        shal_boss_death16     ] {};
-void() shal_boss_death16      = [      16,        shal_boss_death17     ] { Shal_Gib();setmodel (self, "progs/q15/shalrath_death.mdl"); setsize (self, '-46 -40 -24', '46 40 100'); };
+void() shal_boss_death16      = [      16,        shal_boss_death17     ] { Shal_Gib();setmodel(self, "progs/q15/shalrath_death.mdl"); setsize (self, '-46 -40 -24', '46 40 100'); };
 void() shal_boss_death17      = [      16,        shal_boss_death18    ] {};
 void() shal_boss_death18      = [      17,        shal_boss_death19    ] {};
 void() shal_boss_death19      = [      18,        shal_boss_death20    ] {};
 void() shal_boss_death20     = [      19,        shal_boss_death21    ] {};
 void() shal_boss_death21     = [      20,        shal_boss_death22    ] {};
 void() shal_boss_death22     = [      21,        shal_boss_death23    ] {};
-void() shal_boss_death23     = [      22,        shal_boss_death23    ] {
-	self.model = ""; // hide real monster
-	self.think = SUB_Null; // don't repeat the last death frame for eternity (monsters)
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
-};
+void() shal_boss_death23     = [      22,        shal_boss_death23    ] { entity_remove(self,0.1); };
 
 void(entity inflictor, entity attacker, float damage) shalrath_boss_pain = {
 	if (self.pain_finished > time) return;
 
-	sound (self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM);
 	shal_boss_pain1();
 	self.pain_finished = time + 3;
 };
 
 void() shalrath_boss_die = {
-	sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
+	sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);
 	shal_boss_death1();
 	self.solid = SOLID_NOT;
 };
@@ -216,12 +213,12 @@ void() ShalBossMissile = {
 	flytime = dist * 0.002;
 	if (flytime < 0.1) flytime = 0.1;
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "q15/shalrath/bossattack2.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/shalrath/bossattack2.wav", 1, ATTN_NORM);
 	missile = spawn();
 	missile.owner = self;
 	missile.solid = SOLID_BBOX;
 	missile.movetype = MOVETYPE_FLYMISSILE;
-	setmodel (missile, "progs/v_spike.mdl");
+	setmodel(missile, "progs/v_spike.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	missile.origin = self.origin + '0 0 60';
 	missile.velocity = dir * 400;
@@ -249,8 +246,8 @@ void() ShalBossGrenade = {
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;	
 	makevectors(self.angles);
-	sound (self, CHAN_WEAPON, "q15/shalrath/voregren.wav", 1, ATTN_NORM);
-	sound (self, CHAN_ITEM, "q15/shalrath/voretick.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/shalrath/voregren.wav", 1, ATTN_NORM);
+	sound(self, CHAN_ITEM, "q15/shalrath/voretick.wav", 1, ATTN_NORM);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
 	nozdistancedelta = distancedelta;  //copy to no height distance vector 
 	nozdistancedelta_z = 0;  //remove height 
@@ -262,10 +259,10 @@ void() ShalBossGrenade = {
 	missile.touch = ShalBossGrenadeTouch;
 	missile.nextthink = time + 2.2;	// set missile duration
 	missile.think = ShalBossGrenadeExplode;
-	setmodel (missile, "progs/v_spike.mdl");
+	setmodel(missile, "progs/v_spike.mdl");
 	setsize (missile, '0 0 0', '0 0 0');	
 	missile.scale = 1.2;	
-	setorigin (missile, self.origin + '0 0 60');
+	setorigin(missile, self.origin + '0 0 60');
 };
 
 void() ShalBossNova = {
@@ -276,7 +273,7 @@ void() ShalBossNova = {
 	missile.solid = SOLID_BBOX;
 	missile.nextthink = time + .2;
 	missile.think = ShalBossNovaTouch;
-	setorigin (missile, self.origin + '0 0 -117');
+	setorigin(missile, self.origin + '0 0 -117');
 };
 
 void() ShalBossHome = {
@@ -297,16 +294,16 @@ void() ShalBossMissileTouch = {
 
 	if (other.classname == "monster_zombie") T_Damage (other, self, self, 110, DAMARMOR);
 	if (other.classname == "monster_voreling") {
-		sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
 	} else {
 		//T_RadiusDamage (self, self.owner, 40, world);
 		T_Damage (other, self, self, 25,DAMARMOR);
-		sound (self, CHAN_WEAPON, "q15/shalrath/voreball.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "q15/shalrath/voreball.wav", 1, ATTN_NORM);
 		if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
 	}
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
-	setmodel (self, "progs/drake/s_explod.spr");
+	setmodel(self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
 	s_explode1();
 };
@@ -317,7 +314,7 @@ void() ShalBossGrenadeTouch = {
 	self.velocity = self.velocity * 1.4;
 	if (other.classname == "monster_zombie") T_Damage (other, self, self, 110,DAMARMOR);
 	if (other.classname == "monster_voreling") {
-		sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
 	} else if (other.takedamage == DAMAGE_AIM) {
 		ShalBossGrenadeExplode();
 		return;
@@ -325,11 +322,11 @@ void() ShalBossGrenadeTouch = {
 };
 
 void() ShalBossGrenadeExplode = {
-	sound (self, CHAN_WEAPON, "q15/shalrath/voreexp.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/shalrath/voreexp.wav", 1, ATTN_NORM);
 	if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
 	T_RadiusDamage (self, self.owner, 90, world, DAMAGEALL);
 	self.touch = SUB_Null;
-	setmodel (self, "progs/drake/s_explod.spr");
+	setmodel(self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
 	s_explode1();
 };
@@ -357,12 +354,12 @@ void() ShalBossNovaTouch = {
 		}
 		shockwavefind = shockwavefind.chain; // go to next enemy
 	}
-	sound (self, CHAN_AUTO, "q15/shalrath/earthshake.wav", 1, ATTN_NONE);
+	sound(self, CHAN_AUTO, "q15/shalrath/earthshake.wav", 1, ATTN_NONE);
 	if (ext_dppart) pointparticles(particleeffectnum("vore_shockwave"), self.origin, '0 0 0', 1);
 	if (shockwavefind.classname == "player") self.owner.enemy.punchangle_x = -10;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
-	setmodel (self, "progs/q15/ring_shockwave.mdl");
+	setmodel(self, "progs/q15/ring_shockwave.mdl");
 	self.scale = 6;
 	self.solid = SOLID_NOT;
 	ring_grow1();
@@ -380,7 +377,7 @@ void() shal_boss_spawner = {
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
 	makevectors(self.angles);	
-	sound (self, CHAN_WEAPON, "q15/shalrath/firesum.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/shalrath/firesum.wav", 1, ATTN_NORM);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
 	nozdistancedelta = distancedelta;  //copy to no height distance vector 
 	nozdistancedelta_z = 0;  //remove height 
@@ -396,10 +393,10 @@ void() shal_boss_spawner = {
 	// set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = Hatch_Egg;				// Eventually hatch
-	setmodel (missile, "progs/ad171/proj_shalshell.mdl");
+	setmodel(missile, "progs/ad171/proj_shalshell.mdl");
 	missile.scale = 3;	
 	setsize (missile, missile.bbmins, missile.bbmaxs);
-	setorigin (missile, self.origin);
+	setorigin(missile, self.origin);
 };
 
 void() monster_shalrath_boss_precache = {

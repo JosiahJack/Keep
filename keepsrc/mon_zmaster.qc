@@ -77,7 +77,7 @@ float(entity testent) corpse_status;
 void()	zmaster_stand1	= [	$stand1,	zmaster_stand2	] {
 	zmaster_find_easy_victim();
 	if (self.effects != 0) {
-		sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 		self.effects = 0;
 	}
 	if (random() < 0.2) zm_idle_sound();
@@ -94,7 +94,7 @@ void()	zmaster_stand9	= [	$stand9,	zmaster_stand1	] { ai_stand(); };
 
 void()	zmaster_walk1	= [	$walk1,		zmaster_walk2	] {
 	if (self.effects != 0) {
-		sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 		self.effects = 0;
 	}
 	if (random() < 0.2) zm_idle_sound();
@@ -110,7 +110,7 @@ void()	zmaster_walk7	= [	$walk7,		zmaster_walk8	] { ai_walk(2); };
 void()	zmaster_walk8	= [	$walk8,		zmaster_walk9	] { ai_walk(3); };
 void()	zmaster_walk9	= [	$walk9,		zmaster_walk10	] { ai_walk(3); };
 void()	zmaster_walk10	= [	$walk10,	zmaster_walk11	] { ai_walk(4); };
-void()	zmaster_walk11	= [	$walk11,	zmaster_walk12	] { footFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);ai_walk(3); };
+void()	zmaster_walk11	= [	$walk11,	zmaster_walk12	] { footFall("custents/zmaster/echo.wav", 0.2, 1, 0.8); ai_walk(3); };
 void()	zmaster_walk12	= [	$walk12,	zmaster_walk13	] { ai_walk(4); };
 void()	zmaster_walk13	= [	$walk13,	zmaster_walk14	] { ai_walk(6); };
 void()	zmaster_walk14	= [	$walk14,	zmaster_walk15	] { ai_walk(2); };
@@ -121,7 +121,7 @@ void()	zmaster_walk18	= [	$walk18,	zmaster_walk19	] { ai_walk(3); };
 void()	zmaster_walk19	= [	$walk19,	zmaster_walk20	] { ai_walk(3); };
 void()	zmaster_walk20	= [	$walk20,	zmaster_walk1	] { ai_walk(2); };
 
-void()	zmaster_pain1	= [	$pain1,		zmaster_pain2	] { sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM); };
+void()	zmaster_pain1	= [	$pain1,		zmaster_pain2	] { sound(self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM); };
 void()	zmaster_pain2	= [	$pain2,		zmaster_pain3	] {};
 void()	zmaster_pain3	= [	$pain3,		zmaster_pain4	] {};
 void()	zmaster_pain4	= [	$pain4,		zmaster_pain5	] {};
@@ -130,7 +130,7 @@ void()	zmaster_pain5	= [	$pain5,		zmaster_run1	] {};
 void()	zmaster_die1	= [	$death1,	zmaster_die2	] { ai_forward(10); };
 void()	zmaster_die2	= [	$death2,	zmaster_die3	] { ai_forward(8); };
 void()	zmaster_die3	= [	$death3,	zmaster_die4	]
-{ self.solid = SOLID_NOT;ai_forward(7); };
+{ self.solid = SOLID_NOT; ai_forward(7); };
 void()	zmaster_die4	= [	$death4,	zmaster_die5	] {};
 void()	zmaster_die5	= [	$death5,	zmaster_die6	] {};
 void()	zmaster_die6	= [	$death6,	zmaster_die7	] {};
@@ -154,7 +154,7 @@ void()	zmaster_dieb9	= [	$deathb9,	zmaster_dieb9	] {};
 void() zmaster_die = {
 	// check for gib
 	if (self.health < -40) {
-		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		ThrowHead ("progs/custents/h_zmastr.mdl", self.health);
 		ThrowGib ("progs/custents//h_axzomb.mdl", self.health);
 		ThrowGib ("progs/custents/h_axzomb.mdl", self.health);
@@ -166,7 +166,7 @@ void() zmaster_die = {
 	}
 
 	// play death sound when not hit by arrow
-	sound (self, CHAN_VOICE, "custents/zmaster/death.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "custents/zmaster/death.wav", 1, ATTN_NORM);
 
 	// regular death
 	if (random() > 0.5)
@@ -206,7 +206,7 @@ void(float offseth, float offsetv) zmaster_shot = {
 	setup_missile(firemis, 0.2 + random()*2, zmaster_start_seeker, M_Spike_Touch, 1, 1);
 	target_missile(firemis, self.enemy.origin, 5);
 	firemis.enemy = self.enemy;
-	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
 
 // looks for any nearby corpses or zombies to take over
@@ -244,11 +244,11 @@ float() zmaster_find_easy_victim = {
 	if (found_one && enemyold != self.enemy)	{
 		FoundTarget();
 		if (self.effects == 0) {
-			sound (self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
 			self.effects = EF_BRIGHTFIELD;
 		}
 		self.oldenemy = enemyold;
-		sound (self, CHAN_VOICE, "custents/zmaster/toreturn.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "custents/zmaster/toreturn.wav", 1, ATTN_NORM);
 		self.currentammo = time + 4;
 	}
 	return found_one;
@@ -288,7 +288,7 @@ void() zmaster_zombify = {
 		self.ammo_shells = 0; // death counter
 		self.solid = SOLID_SLIDEBOX;
 		self.movetype = MOVETYPE_STEP;
-		setmodel (self, "progs/custents/axzombie.mdl");
+		setmodel(self, "progs/custents/axzombie.mdl");
 		setsize (self, '-16 -16 -24', '16 16 40');
 		self.takedamage = DAMAGE_AIM;
 		self.th_stand = zombie_stand1;
@@ -316,7 +316,7 @@ void() zmaster_zombify = {
 		self.solid = SOLID_SLIDEBOX;
 		self.movetype = MOVETYPE_STEP;
 
-		setmodel (self, "progs/custents/axzombie.mdl");
+		setmodel(self, "progs/custents/axzombie.mdl");
 		setsize (self, '-16 -16 -24', '16 16 40');
 
 		self.takedamage = DAMAGE_AIM;
@@ -345,19 +345,19 @@ void() zmaster_zombify = {
 void()	zmaster_magica1 = [	$magica1,	zmaster_magica2	] {
 	ai_face();
 	if (self.effects != EF_BRIGHTFIELD)
-		sound (self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
 };
 void()	zmaster_magica2 = [	$magica1,	zmaster_magica3	] {
 	ai_face();
 	self.effects = EF_BRIGHTFIELD;
 	self.nextthink = time + 0.25;
 };
-void()	zmaster_magica3 = [	$magica1,	zmaster_magica4	] { self.nextthink = time + 0.5;ai_face(); };
-void()	zmaster_magica4 = [	$magica2,	zmaster_magica5	] { self.nextthink = time + 0.15;ai_face(); };
-void()	zmaster_magica5 = [	$magica3,	zmaster_magica6	] { self.nextthink = time + 0.15;ai_face(); };
-void()	zmaster_magica6 = [	$magica4,	zmaster_magica7	] { self.nextthink = time + 0.15;ai_face(); };
+void()	zmaster_magica3 = [	$magica1,	zmaster_magica4	] { self.nextthink = time + 0.5; ai_face(); };
+void()	zmaster_magica4 = [	$magica2,	zmaster_magica5	] { self.nextthink = time + 0.15; ai_face(); };
+void()	zmaster_magica5 = [	$magica3,	zmaster_magica6	] { self.nextthink = time + 0.15; ai_face(); };
+void()	zmaster_magica6 = [	$magica4,	zmaster_magica7	] { self.nextthink = time + 0.15; ai_face(); };
 void()	zmaster_magica7 = [	$magica5,	zmaster_magica8	] {
-	sound (self, CHAN_VOICE, "custents/zmaster/energize.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "custents/zmaster/energize.wav", 1, ATTN_NORM);
 	self.nextthink = time + 0.15;
 	ai_face();
 	self.effects = self.effects | EF_DIMLIGHT;
@@ -433,10 +433,10 @@ void()	zmaster_magicb13 = [	$magicb13,	zmaster_run1] { ai_face(); };
 void() zm_idle_sound = {
 	if (random() < 0.2 && self.currentammo < time) {
 		if (random() < 0.5) {
-			sound (self, CHAN_VOICE, "custents/zmaster/idle1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "custents/zmaster/idle1.wav", 1, ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
-			sound (self, CHAN_VOICE, "custents/zmaster/idle2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "custents/zmaster/idle2.wav", 1, ATTN_NORM);
 			self.currentammo = time + 1.5;
 		}
 	}
@@ -470,7 +470,7 @@ void() zmaster_melee = {
 void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 	if (self.pain_finished > time) return;
 
-	sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM);
 	if (time - self.pain_finished > 5) {	// always go into pain frame if it has been a while
 		zmaster_pain1();
 		self.pain_finished = time + 1;
@@ -553,7 +553,7 @@ void(float dist) zmaster_run = {
 	}
 	if (self.effects != 0) {
 		if (self.enemy.classname != "monster_zombie" && self.enemy.classname != "monster_axzombie" && !corpse_status(self.enemy)) {
-			sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 			self.effects = 0;
 		}
 	} else if ((self.enemy.classname == "monster_zombie" || self.enemy.classname == "monster_axzombie") && self.enemy.owner != world) {
@@ -581,7 +581,7 @@ void(float dist) zmaster_run = {
 			self.enemy = self.oldenemy;
 			self.oldenemy = world;
 			HuntTarget();
-			sound (self, CHAN_VOICE, "custents/zmaster/comnback.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "custents/zmaster/comnback.wav", 1, ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
 			if (self.movetarget)

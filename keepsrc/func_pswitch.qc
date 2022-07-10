@@ -61,7 +61,7 @@ void() func_pswitch_return = { // [FUNCTION]
 	if (self.state == STATE_DOWN) {
 		if (self.presstimersound < time) {
 			self.presstimersound = time + 1;
-			sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // 2nd movement sound - going up
+			sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // 2nd movement sound - going up
 		}
 		self.ltime = time;
 		self.state = STATE_MOVING;
@@ -98,7 +98,7 @@ void() func_pswitch_use = { // [FUNCTION]
 	if (self.state == STATE_UP) { // Move pressure pad into down position
 		if (self.presstimersound < time) {
 			self.presstimersound = time + 1;
-			sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // 1st movement sound - going down
+			sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // 1st movement sound - going down
 		}
 		self.ltime = time;
 		self.state = STATE_MOVING;
@@ -116,7 +116,7 @@ void() func_pswitch_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	setorigin(self, self.pos1);
 	self.state = STATE_UP; // Reset state and frame back to default
 	self.frame = 0;
@@ -129,7 +129,7 @@ void() func_pswitch_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel (self, "");
+	setmodel(self, "");
 	StopSound(self,CHAN_VOICE); // Reset position and frame back to default
 	setorigin(self, self.pos1);
 	self.state = STATE_UP;
@@ -167,9 +167,9 @@ void() func_pressureswitch = { // [ENTITY]
 	else if (self.sounds == 2) self.noise = "buttons/switch02.wav";
 	else if (self.sounds == 3) self.noise = "buttons/switch04.wav";
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.noise1 == "") self.noise1 = self.noise;
-	precache_sound (self.noise1);
+	precache_sound(self.noise1);
 	SUB_BoundVolume(1);
 	self.classtype = CT_FUNCPSWITCH;
 	self.classgroup = CG_FUNCMOVER;
@@ -186,7 +186,7 @@ void() func_pressureswitch = { // [ENTITY]
 	self.presstype = self.presstimersound = 0; // Reset all pressure switch variables
 	self.movetype = MOVETYPE_PUSH; // Setup the pressure switch two different state positions.  Got to add switch to world for bmodel size parameter.
 	self.solid = SOLID_BSP;
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
 	if (self.spawnflags & BUTTON_STARTDIS && self.targetname == "") { // Cannot have a pressure switch start off or disabled with no targetname, how can it be actived!?!

@@ -248,7 +248,7 @@ void() camera_controller_think = { // [FUNCTION]
 			// Center print message to display?
 			if (cam_focus.message) {
 				centerprint(cam_client, cam_focus.message);
-				sound (cam_client, CHAN_VOICE, cam_focus.noise, 1, ATTN_NORM); // Default talk sound (using sounds entity key)
+				sound(cam_client, CHAN_VOICE, cam_focus.noise, 1, ATTN_NORM); // Default talk sound(using sounds entity key)
 			}
 		}
 		// Wait for player input or timer
@@ -330,7 +330,7 @@ void() camera_controller_think = { // [FUNCTION]
 			cam_player.frame = 0;
 
 			// Restore player core parameters
-			setmodel (cam_client, MODEL_PLAYER);
+			setmodel(cam_client, MODEL_PLAYER);
 			modelindex_player = cam_client.modelindex;
 			setsize (cam_client, cam_client.bbmins, cam_client.bbmaxs);
 			cam_client.solid = SOLID_SLIDEBOX;
@@ -630,7 +630,7 @@ void() misc_camera_use = { // [FUNCTION]
 
 	if (coop > 0) { // Cinematics don't work with COOP?
 		centerprint(self.enemy, self.message2); // There is a default message, but really this is something the mapper should (override) setup on the first camera.
-		sound (self.enemy, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Default talk sound (using sounds entity key) // return; // Let's just see what happens shall we? -Qmaster
+		sound(self.enemy, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Default talk sound(using sounds entity key) // return; // Let's just see what happens shall we? -Qmaster
 	}
 
 	cam_focus = self;

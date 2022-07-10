@@ -163,13 +163,13 @@ void() item_respawn = { // [FUNCTION]
 			particle_explode(self.origin + self.respawn_ofs, RESPAWN_PARTICLES*2, RESPAWN_EXPTIME, self.respawn_style, self.respawn_style); 
 	}
 	
-	sound (self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM); // Classic quake re-spawn sound
+	sound(self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM); // Classic quake re-spawn sound
 	self.alpha = 1;
 	self.estate_reset();
 };
 
 // Re-direction for map hacks (not used normally)
-void() SUB_regen = { sound (self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM); item_reset(); }; // [FUNCTION]
+void() SUB_regen = { sound(self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM); item_reset(); }; // [FUNCTION]
 
 void() alphafade_item_respawn = { // [FUNCTION]
 	if (self.waitmin > time) {
@@ -689,7 +689,7 @@ void() item_health_potion = { item_healthvial(); } // [ENTITY] From drake, redir
 
 // KEYS (Silver, Gold and Custom)
 void() key_touchbindmsg = { // [FUNCTION]
-	sound (self.enemy, CHAN_VOICE, SOUND_TALK, 1, ATTN_NORM);
+	sound(self.enemy,CHAN_VOICE,"misc/talk.wav",1,ATTN_NORM);
 	centerprint(self.enemy, "Press 'i' Key to open Inventory\nTo see what \bArcane keys\b you have!\n");
 };
 
@@ -882,7 +882,7 @@ void() item_keyx = { // [ENTITY]
 // targetname   : toggle state (use trigger ent for exact state)
 // mdl          : model name to load/display (progs/model.mdl)
 // netname      : XXX Part of pickup string "You got the XXX"
-// noise1       : Custom pickup sound (def=weapons/lock4.wav)
+// noise1       : Custom pickup sound(def=weapons/lock4.wav)
 // pos1         : Pickup bounding box minimum (def=-16 -16 -24)
 // pos2         : Pickup bounding box maximum (def=16 16 32)
 // bodyfadeaway : Model will fade away on pickup
@@ -1293,8 +1293,8 @@ void() BackpackTouch = { // [FUNCTION]
 		}		
 	}
 	sprint(other, " from a backpack\n");
-	if (self.perms & IT_CHAINSAW) sound (other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
-	else sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
+	if (self.perms & IT_CHAINSAW) sound(other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
+	else sound(other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 
 	// Check ammo limts, change to best weapon and set ammo type
@@ -1407,7 +1407,7 @@ void() DropBackpack = { // [FUNCTION]
 	item.flags = FL_ITEM;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setmodel (item, MODEL_BACKPACK);
+	setmodel(item, MODEL_BACKPACK);
 	setsize (item,VEC_ITEM_MIN, '16 16 56');
 	item.touch = item_touch;
 	item.touch2 = BackpackTouch;
@@ -1588,7 +1588,7 @@ void() DropHealthpack = { // [FUNCTION]
 	item.flags = FL_ITEM;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setmodel (item, item.mdl);
+	setmodel(item, item.mdl);
 	item.bbmins = VEC_ITEM_MIN;
 	item.bbmaxs = VEC_ITEM_MAX;
 	setsize(item, item.bbmins, item.bbmaxs);
@@ -1689,7 +1689,7 @@ void() circuitboard_touch = { // [FUNCTION]
 void() item_circuitboard = { // [ENTITY]
 	item_setupmodel("progs/rrp/fromitz.mdl",0);
 	item_setupnoise("items/protect.wav");
-	setmodel (self, self.mdl);
+	setmodel(self, self.mdl);
 	self.touch2 = circuitboard_touch;
 	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
 	self.classtype = CT_CIRCUIT;
@@ -1713,7 +1713,7 @@ void() mariomushroom_touch = { // [FUNCTION]
 	other.shroom_finished = time + self.cnt;
 	sound(other,CHAN_VOICE,"qmaster/items/smb_powerup.wav",1,ATTN_NORM);
 	other.velocity_z = other.velocity_z + 360; // pop up
-	other.flags = other.flags - FL_ONGROUND;
+	SUB_RemoveFlags(other,FL_ONGROUND);
 	other.view_ofs = '0 0 72';
 	other.legsattachment.scale = 2;
 	other.scale = 2;
@@ -1725,17 +1725,17 @@ void() mariomushroom_touch = { // [FUNCTION]
 void() item_mariomushroom = { // [ENTITY]
 	item_setupmodel("progs/madfox/mushroom_item.mdl",0);
 	setmodel(self, self.mdl);
-	precache_sound ("qmaster/items/smb_powerup.wav");
-	precache_sound ("qmaster/items/smb_bowserfalls.wav");
-	precache_sound ("qmaster/items/smb_stomp.wav");
-	precache_sound ("qmaster/player/jumpmario.wav");
+	precache_sound("qmaster/items/smb_powerup.wav");
+	precache_sound("qmaster/items/smb_bowserfalls.wav");
+	precache_sound("qmaster/items/smb_stomp.wav");
+	precache_sound("qmaster/player/jumpmario.wav");
 	self.netname = "A Strange Shroom";
 	if (self.cnt <=0) self.cnt = 60;
 	self.frame = rint(random()*4);
 	self.touch2 = mariomushroom_touch;
 	self.scale = 2;
 	self.solid = SOLID_TRIGGER;
-	setmodel (self,self.mdl);
+	setmodel(self,self.mdl);
 	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
 	self.estate_use = item_on;
 	self.classtype = CT_SHROOM;

@@ -9,7 +9,7 @@ void() bobbingwater_think = {
    ang_z = FALSE;
    makevectors(ang);
    self.origin_z = (v_forward_z * self.cnt);
-   setorigin (self,self.origin);
+   setorigin(self,self.origin);
    self.ltime = time;
    self.nextthink = (time + 0.020);
 };
@@ -18,7 +18,7 @@ void() func_bobbingwater = {
    self.angles = VEC_ORIGIN;
    self.movetype = MOVETYPE_STEP;
    self.solid = SOLID_NOT;
-   setmodel (self,self.model);
+   setmodel(self,self.model);
    self.think = bobbingwater_think;
    self.count = FALSE;
    self.cnt = (self.size_z / FL_SWIM);

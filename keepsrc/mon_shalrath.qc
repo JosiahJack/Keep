@@ -119,7 +119,7 @@ void() shalrath_remove_attachment = {
 // RANGE ATTACK 1 - Homing Missile Attack
 void() ShalMissile = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "shalrath/attack2.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "shalrath/attack2.wav", 1, ATTN_NORM);
 	self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
 	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
 };
@@ -186,7 +186,7 @@ void(vector eggofs, float eggframe) Setup_ShalrathEgg = {
 		self.attachment.solid = SOLID_NOT;
 
 		self.pain_finished = time + 1;
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 	}
 	// Double check for pain interruption
 	else if (self.attachment.state == STATE_OFF) return;
@@ -272,7 +272,7 @@ void(entity inflictor, entity attacker, float damage) shal_pain = {
 	
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) shal_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -285,7 +285,7 @@ void(entity inflictor, entity attacker, float damage) shal_pain = {
 
 void() shal_death1 = [$death1, shal_death2 ] {};
 void() shal_death2 = [$death2, shal_death3 ] { monster_check_gib(); };
-void() shal_death3 = [$death3, shal_death4 ] { monster_check_gib();self.solid = SOLID_NOT;};
+void() shal_death3 = [$death3, shal_death4 ] { monster_check_gib(); self.solid = SOLID_NOT;};
 void() shal_death4 = [$death4, shal_death5 ] {};
 void() shal_death5 = [$death5, shal_death6 ] {};
 void() shal_death6 = [$death6, shal_death7 ] { monster_death_postcheck(); };
@@ -297,7 +297,7 @@ void() shal_die = {
 
 	// Normal death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);
 		shal_death1();
 	}
 };
@@ -315,15 +315,15 @@ void() monster_shalrath_precache = {
 	precache_model (MODEL_PROJ_VORE);			// Spit Projectile
 	precache_model ("progs/ad171/mon_voreling.mdl");
 	precache_model ("progs/q15/gib_voreleg.mdl"); // Has added frame
-	precache_sound ("shalrath/idle.wav");
-	precache_sound ("shalrath/death.wav");
-	precache_sound ("shalrath/pain.wav");
-	precache_sound ("shalrath/attack.wav");	// Start of attack
-	precache_sound ("shalrath/attack2.wav");	// Firing missile
-	precache_sound ("ad171/wraith/attack3.wav");	// Minions
-	precache_sound ("ad171/wraith/bounce.wav");		// Egg bounce
-	precache_sound ("shalrath/sight.wav");
-	precache_sound ("quoth/voreling/idle.wav");
+	precache_sound("shalrath/idle.wav");
+	precache_sound("shalrath/death.wav");
+	precache_sound("shalrath/pain.wav");
+	precache_sound("shalrath/attack.wav");	// Start of attack
+	precache_sound("shalrath/attack2.wav");	// Firing missile
+	precache_sound("ad171/wraith/attack3.wav");	// Minions
+	precache_sound("ad171/wraith/bounce.wav");		// Egg bounce
+	precache_sound("shalrath/sight.wav");
+	precache_sound("quoth/voreling/idle.wav");
 	precache_sound("quoth/voreling/death.wav");
 	precache_sound("quoth/voreling/pain.wav");
 	precache_sound("ad171/wraith/bounce.wav");	// Spit misses
@@ -332,7 +332,7 @@ void() monster_shalrath_precache = {
 	precache_sound("quoth/voreling/bite.wav");
 	precache_sound("ad171/voreling/attacktear.wav");
 	precache_sound("quoth/voreling/land.wav");
-	precache_sound ("quoth/voreling/sight.wav");
+	precache_sound("quoth/voreling/sight.wav");
 	if (ext_dppart) particleeffectnum(DPP_TEVORESPIKE); 
 };
 
