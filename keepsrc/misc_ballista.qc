@@ -145,7 +145,7 @@ void() BalBoltTouch =  {
     if (other.takedamage) {
         if (other != self.goalentity && !CheckZeroVector(self.velocity)) {
             self.goalentity = other;
-            dir = normalize ( self.velocity);
+            dir = normalize (self.velocity);
             traceline ( (self.origin - (dir * 25.00000)), (self.origin + (dir * 25)), FALSE, self);
             if (other.flags & FLx_CREATURE) {
                 SpawnMeatSpray(self,trace_ent,(crandom() * 300));

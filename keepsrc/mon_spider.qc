@@ -155,7 +155,7 @@ void() spider_bite8 = [$atkloop5, spider_bite9 ] { voreling_melee(); };
 void() spider_bite9 = [$atkloop7, spider_bite10 ] {};
 void() spider_bite10 = [$atkloop9, spider_bite11 ] {
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0 && self.health > 0) 
-		self.think = spider_bite6;};
+		self.think = spider_bite6; };
 // Exit bite attack loop
 void() spider_bite11 = [$atkup7, spider_bite12 ] {};
 void() spider_bite12 = [$atkup5, spider_run1 ] {};
@@ -296,7 +296,7 @@ void() spider_wakeup = {
 
 // MINION - Grow and spin up from nothing
 
-void() spider_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() spider_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() spider_grow1 = [$grow1, spider_grow2 ] {};
 void() spider_grow2 = [$grow2, spider_grow3 ] { spider_growangle(); };
 void() spider_grow3 = [$grow3, spider_grow4 ] { spider_growangle(); };
@@ -356,8 +356,8 @@ void(entity inflictor, entity attacker, float damage) spider_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -367,7 +367,7 @@ void(entity inflictor, entity attacker, float damage) spider_pain = {
 				self.axhitme = 0;
 			}
 			// Different types of pain animations based on current attack
-			if ( self.frame > $atkup8 && self.frame < $atkloop10 ) spider_painu1();
+			if (self.frame > $atkup8 && self.frame < $atkloop10 ) spider_painu1();
 			else spider_paind1();
 		}
 	}
@@ -377,7 +377,7 @@ void(entity inflictor, entity attacker, float damage) spider_pain = {
 void() spider_die1		= [	$death1,	spider_die2	] {};
 void() spider_die2		= [	$death3,	spider_die3	] { monster_check_gib(); };
 void() spider_die3		= [	$death5,	spider_die4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() spider_die4		= [	$death7,	spider_die5	] {};
 void() spider_die5		= [	$death9,	spider_die6	] {};
 void() spider_die6		= [	$death11,	spider_die7	] {};
@@ -399,7 +399,7 @@ void() spider_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "drake/spider/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/spider/death.wav",1,ATTN_NORM);
 		spider_die1();
 	}
 };
@@ -539,7 +539,7 @@ void(vector minion_org, entity minion_targ) minion_spider = {
 	local entity minion;
 	
 	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (!InOpenOrLiquid(minion_org)) return;
 	
 	update_minioncount(self.owner, 1);		// Update spawn counters
 	minion = spawn();

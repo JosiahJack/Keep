@@ -96,7 +96,7 @@ void() raind_melee = {
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	sound(self, CHAN_WEAPON, "xmas/raindeer/hit.wav", TRUE, TRUE);
+	sound(self,CHAN_WEAPON,"xmas/raindeer/hit.wav", TRUE, TRUE);
 
 	// Antler attack is weak (1-9)
 	ldmg = (random() + random() + random()) * 3;
@@ -129,9 +129,9 @@ void(vector sideofs) raind_attack = {
 
 	// Cycle between attack sounds
 	if (self.lefty == 0) 
-		sound(self, CHAN_WEAPON, "xmas/raindeer/attack1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"xmas/raindeer/attack1.wav",1,ATTN_NORM);
 	else
-		sound(self, CHAN_WEAPON, "xmas/raindeer/attack2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"xmas/raindeer/attack2.wav",1,ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 
 	// turn and face your enemy!
@@ -178,7 +178,7 @@ void(entity inflictor, entity attacker, float damage) raind_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) raind_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery

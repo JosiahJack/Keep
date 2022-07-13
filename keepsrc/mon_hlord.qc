@@ -144,7 +144,7 @@ void(string text) Bane_Speaks = {
 
     pl = find(world, classname, "player");
     while (pl) {
-        sound(pl, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+        sound(pl,CHAN_VOICE, "misc/talk.wav",1,ATTN_NORM);
         pl = find(pl, classname, "player");
     }
     bprint (text);
@@ -170,11 +170,11 @@ void() Bane_JumpTouch;
 void(float d) hk_charge;
 
 // We need these first three jump frame functions in case the Bane needs to jump again without selecting other random attacks.
-void() bane_jump1   = [$char_a1,  bane_jump2 ] { hk_charge(20); sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM); };
+void() bane_jump1   = [$char_a1,  bane_jump2 ] { hk_charge(20); sound(self,CHAN_WEAPON,"hknight/slash1.wav",1,ATTN_NORM); };
 void() bane_jump2   = [$char_a2,  bane_jump3 ] { hk_charge(18); };
 void() bane_jump3   = [$char_a3,  bane_jump4 ] { hk_charge(16); };
 void() bane_jump4   = [$char_a4,  bane_jump5 ] {
-    if (self.health <= 0) { self.touch = SUB_Null;  self.think = hknight_die1;  return;}
+    if (self.health <= 0) { self.touch = SUB_Null;  self.think = hknight_die1;  return; }
     ai_face();
     self.touch = Bane_JumpTouch; // Bane is a bbeg, so don't bother with invisibility shenanigans.  Ditto for the dark lord.
     makevectors(self.angles);
@@ -182,9 +182,9 @@ void() bane_jump4   = [$char_a4,  bane_jump5 ] {
     self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 // Standard demon jumps reach level ground in about 0.5 sec in normal g.
-void() bane_jump5   = [$char_a5,  bane_jump6 ] { self.nextthink = time + 0.5;};
+void() bane_jump5   = [$char_a5,  bane_jump6 ] { self.nextthink = time + 0.5; };
 // If three seconds pass, assume stuck then jump again.
-void() bane_jump6   = [$char_a6,  bane_jump1 ] { self.nextthink = time + 3;};
+void() bane_jump6   = [$char_a6,  bane_jump1 ] { self.nextthink = time + 3; };
 void() bane_jump7   = [$char_a8,  hknight_char_a10 ] {};
 
 void() Bane_JumpTouch = {
@@ -198,9 +198,9 @@ void() Bane_JumpTouch = {
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
             T_Damage (other, self, self, ldmg, DAMARMOR);    
             if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
-            if (( self.frame == $char_a4 ) || ( self.frame == $char_a5 )) {
+            if ((self.frame == $char_a4 ) || (self.frame == $char_a5 )) {
                 self.frame = $char_a6;  // Go to a stab frame.
-                sound(self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
+                sound(self,CHAN_WEAPON,"drake/weapons/axhit.wav",1,ATTN_NORM);
             }
         }
     }
@@ -255,7 +255,7 @@ void() magica_sword_chop = {
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
 
-    sound(self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/weapons/axhit.wav",1,ATTN_NORM);
     makevectors(self.angles);
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -276,8 +276,8 @@ void() bane_storm_end = { // [FUNCTION]
     SUB_Remove();
 };
 
-void() bane_storm1  = [ 0, bane_storm2  ] { self.nextthink = time + 0.3;}; // [FUNCTION]
-void() bane_storm2  = [ 0, bane_storm3  ] { self.nextthink = time + 0.4; self.dest = self.enemy.origin;}; // [FUNCTION]
+void() bane_storm1  = [ 0, bane_storm2  ] { self.nextthink = time + 0.3; }; // [FUNCTION]
+void() bane_storm2  = [ 0, bane_storm3  ] { self.nextthink = time + 0.4; self.dest = self.enemy.origin; }; // [FUNCTION]
 void() bane_storm3  = [ 0, bane_storm4  ] { // [FUNCTION]
     if (self.owner.frame <= self.waitmin || self.owner.frame >= self.waitmax) { self.think = bane_storm_end; return; } // Abort if spellcasting was interrupted.
 };
@@ -328,15 +328,15 @@ void() bane_storm4  = [ 0, bane_storm5  ] { // [FUNCTION]
         if (zot < 0.5) zot = 0.5;
         else LightZero_Set (13, self.delay, 0); // No bolt -- just flash and thunder.
 			
-        if (random() < 0.5) sound(self, CHAN_AUTO, "ambience/thunder1.wav", zot, ATTN_NONE);
-        else sound(self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", zot, ATTN_NONE);
+        if (random() < 0.5) sound(self,CHAN_AUTO,"ambience/thunder1.wav", zot,ATTN_NONE);
+        else sound(self,CHAN_AUTO,"zerstorer/ambience/thunder2.wav", zot,ATTN_NONE);
 			
         self.pain_finished = time + 5;
     }
     bane_storm_target();
     self.attack_finished = time + self.delay;
 };
-void() bane_storm5 = [ 0, bane_storm6    ] { LightZero_Set (12, self.delay, -4); self.nextthink = self.attack_finished;}; // [FUNCTION]
+void() bane_storm5 = [ 0, bane_storm6    ] { LightZero_Set (12, self.delay, -4); self.nextthink = self.attack_finished; }; // [FUNCTION]
 void() bane_storm6 = [ 0, bane_storm_end ] { // [FUNCTION]
     if (self.owner.deadflag >= DEAD_DEAD) return; // Spell is broken.
 
@@ -369,7 +369,7 @@ void(float frmin, float frmax) bane_storm = { // [FUNCTION]
     magic.waitmin = frmin;
     magic.waitmax = frmax;
     magic.volume  = 0.5;    // 50% chance of no bolt after the first.
-    sound(magic, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+    sound(magic,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
     magic.pain_finished = time + 3;
     magic.attack_finished = 0;
     if (self) self.owner = magic;
@@ -399,7 +399,7 @@ void() darklord_magica3  = [$magica3,  darklord_magica4  ] { hk_face(); };
 void() darklord_magica4  = [$magica4,  darklord_magica5  ] { hk_face(); };
 void() darklord_magica5  = [$magica5,  darklord_magica6  ] { hk_face();
     ReflectorShield (self);
-    sound(self, 6, "items/protect.wav", 1, ATTN_NORM);
+    sound(self, 6, "items/protect.wav",1,ATTN_NORM);
     self.pain_finished = time + 1;      // Uninterruptable by this point.
 };
 void() darklord_magica6  = [$magica6,  darklord_magica7  ] { hk_face(); };
@@ -435,7 +435,7 @@ void() darklord_magicb8  = [$magicb8,  darklord_magicb9  ] { hk_face(); hknight_
     org = self.origin + (v_forward*16) + (v_right*2) + (v_up*24);
     MakeFancy (org, X32_STAR_RED, 2);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound(self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"rogue/plasma/fire.wav",1,ATTN_NORM);
 //    SUB_AttackFinished (3);
     M_Reload (3);   // Three second delay before next salvo in non-NM.
 };
@@ -447,7 +447,7 @@ void() hknight_magicd1  = [$magica1,  hknight_magicd2  ] { hk_face(); };
 void() hknight_magicd2  = [$magica14, hknight_magicd3  ] { hk_face(); };
 void() hknight_magicd3  = [$magica13, hknight_magicd4  ] { hk_face(); };
 void() hknight_magicd4  = [$magica12, hknight_magicd5  ] { hk_face(); };
-void() hknight_magicd5  = [$magica11, hknight_magicd6  ] { hk_face(); sound(self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM); };
+void() hknight_magicd5  = [$magica11, hknight_magicd6  ] { hk_face(); sound(self,CHAN_WEAPON,"drake/weapons/fwalltap.wav",1,ATTN_NORM); };
 void() hknight_magicd6  = [$magica10, hknight_magicd7  ] { hk_face(); };
 void() hknight_magicd7  = [$magica9,  hknight_magicd8  ] { hk_face(); M_Firewall(); };
 void() hknight_magicd8  = [$magica8,  hknight_magicd9  ] { hk_face(); };
@@ -476,7 +476,7 @@ void() bane_magicd4  = [$magica12, bane_magicd5  ] { ai_ritual(); };
 void() bane_magicd5  = [$magica11, bane_magicd6  ] { ai_ritual(); };
 void() bane_magicd6  = [$magica10, bane_magicd7  ] { ai_ritual(); };
 void() bane_magicd7  = [$magica9,  bane_magicd8  ] { ai_ritual(); };
-void() bane_magicd8  = [$magica8,  bane_magicd12 ] { ai_ritual(); self.fallen = world;};
+void() bane_magicd8  = [$magica8,  bane_magicd12 ] { ai_ritual(); self.fallen = world; };
 //void() bane_magicd9  = [$magica7,  bane_magicd10  ] {};
 //void() bane_magicd10 = [$magica6,  bane_magicd11 ] {};
 //void() bane_magicd11 = [$magica5,  bane_magicd12 ] {};
@@ -588,7 +588,7 @@ void() lord_magic = {
     add = 1;
     opt = 2;
     if (M_FirewallCheck()) opt = opt + 1;
-    if (M_MeteorCheck ('50 0 112')) { add = 0;  opt = opt + 1;} // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
+    if (M_MeteorCheck ('50 0 112')) { add = 0;  opt = opt + 1; } // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
     r = random() * opt + add;
     if (r <= 1)
         hknight_magica1();     // Meteor
@@ -608,12 +608,12 @@ void() darklord_magic = {
 	//    if (self.minion_count < skill)
 	//        if (random() < 0.1)
 	//    if (random() < (skill - self.minion_count) * 0.1)
-    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) { darklord_magicd1();  return;}
+    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) { darklord_magicd1();  return; }
 
 	// Attacking...
     dist = vlen(self.enemy.origin - self.origin);
     if (dist <= DARKLORD_NEAR) {
-        if (self.waitmin < time) { darklord_magica1();  return;} // Thor's hand.
+        if (self.waitmin < time) { darklord_magica1();  return; } // Thor's hand.
 
         CheckForCharge();
         if (self.frame == $char_a1 || self.frame == $char_b1) return;
@@ -641,12 +641,12 @@ void() hkboss_magic = {
 void() bane_magic = {
     if (random() < 0.25) {
         if (CheckBaneJump ()) { // PM:  Jumping done at charge anim.  However, if enemy is low enough that CheckForCharge would abort, then we can check for jumping.
-            if (self.origin_z - self.enemy.origin_z > 20) { bane_jump1();  return;} // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
-            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) { bane_magice1();  return;} // If enemy is above and using new AI, try to teleport to higher ground occasionally.
+            if (self.origin_z - self.enemy.origin_z > 20) { bane_jump1();  return; } // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
+            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) { bane_magice1();  return; } // If enemy is above and using new AI, try to teleport to higher ground occasionally.
         }
 	}
 
-    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin,self.enemy)) { bane_magica1(); return;} // Start a thunderstorm!
+    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin,self.enemy)) { bane_magica1(); return; } // Start a thunderstorm!
 
 	// Spray some fireballs.
     if (random() <= 0.5)
@@ -665,7 +665,7 @@ void(float side) bane_melee = {
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
 
-    sound(self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
+    sound(self,CHAN_WEAPON,"drake/bane/hit.wav",1,ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
     makevectors(self.angles);
     ldmg = 10 + 5*random();
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -708,7 +708,7 @@ void() bane_watk6  = [$w_attack10, bane_watk7  ] { hk_charge(3); ai_melee(); };
 void() bane_watk7  = [$w_attack11, bane_watk8  ] { monster_footstep(FALSE); hk_charge(2); ai_melee(); };
 void() bane_watk8  = [$w_attack13, bane_watk9  ] { hk_charge(2); ai_melee(); };
 void() bane_watk9  = [$w_attack14, bane_watk10 ] { hk_charge(0); };
-void() bane_watk10 = [$w_attack16, bane_watk11 ] { hk_charge(1);sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM); };
+void() bane_watk10 = [$w_attack16, bane_watk11 ] { hk_charge(1);sound(self,CHAN_WEAPON,"knight/sword2.wav",1,ATTN_NORM); };
 void() bane_watk11 = [$w_attack18, bane_watk12 ] { hk_charge(4); bane_melee(200); ai_melee(); };
 void() bane_watk12 = [$w_attack19, bane_watk13 ] { hk_charge(4); ai_melee(); };
 void() bane_watk13 = [$w_attack20, bane_watk14 ] { hk_charge(6); };
@@ -719,7 +719,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
     if (!self.waitmax) {
         if ((self.health <= self.waitmin) && ((self.enemy == attacker) || (self.oldenemy == attacker)) && (self.touch != Bane_JumpTouch) && (self.classname != self.master.classname) && (walkmove (0, 0))) { // Does Bane have the ace in the hole?  Is Bane fighting his enemy?  Is Bane not locked in motion?  Is Bane real?  Can the Bane move? "Bushin no Kage!\n"
             if (self.height) self.height = self.height | BANE_CLONE;
-            sound(self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/bane/pain.wav",1,ATTN_NORM);
             bane_painc1(); // Cloning will take a while, so no need to add to pain_finished.
             return;
         }
@@ -729,7 +729,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
             self.waitmax = 0;
             if (self.height)
                 self.height = self.height | BANE_RAGE;
-            sound(self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/bane/pain.wav",1,ATTN_NORM);
             bane_painc1();
             return;
         }
@@ -738,7 +738,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
 	// Normal pain code.
     if (self.pain_finished > time) return;
 
-    sound(self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "drake/bane/pain.wav",1,ATTN_NORM);
     self.pain_finished = time + 1;
 
     if (self.touch == Bane_JumpTouch) return; // Don't interrupt attack anim.
@@ -747,9 +747,9 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
     if ((!self.waitmax) && (self.enemy)) {
 		if (walkmove (0, 0)) {
 			if (self.liquidbase <= CONTENT_SLIME) { // If caught in deadly environment, warp out!
-				if (!attacker) { bane_painc1(); return;} // Attacker is world when damaged by slime/lava.
+				if (!attacker) { bane_painc1(); return; } // Attacker is world when damaged by slime/lava.
 			}
-			if (random() < 0.1) { bane_painc1();  return;} // Warp occasionally.
+			if (random() < 0.1) { bane_painc1();  return; } // Warp occasionally.
 		}
 	}
 
@@ -766,7 +766,7 @@ void() baneknight_melee = {
     local float fast;
 
     self.meleeattack = self.meleeattack + 1;
-    sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"hknight/slash1.wav",1,ATTN_NORM);
     fast = 1;
     if (!SUB_QuickAttack ())
         if (self.classname == "monster_hell_knight") fast = 0;
@@ -789,7 +789,7 @@ void() baneknight_melee = {
 };
 
 void() bane_win = {
-    sound(self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
+    sound(self,CHAN_VOICE, "drake/bane/laugh.wav",1,ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
     if (self.movetarget || self.charmer) self.th_walk();
     else self.th_stand();
 };
@@ -991,27 +991,27 @@ void() dk_shield = {
         if (!(self.flags & FL_GODMODE)) {
             self.flags = self.flags | FL_GODMODE;
             ReflectorShield (self);
-            sound(self, 6, "items/protect.wav", 1, ATTN_NORM);
+            sound(self, 6, "items/protect.wav",1,ATTN_NORM);
         }
     }
 };
 
 void(float d) dk_slow = {
-    if (!self.enemy) { darklord_fast1();  return;}
-    if (!visible (self.enemy)) { darklord_fast1();  return;}
+    if (!self.enemy) { darklord_fast1();  return; }
+    if (!visible (self.enemy)) { darklord_fast1();  return; }
     dk_shield();
     ai_run(d);
 };
 
 void(float d) dk_fast = {
 	if (self.enemy)
-		if (visible (self.enemy)) { darklord_run1();  return;}
+		if (visible (self.enemy)) { darklord_run1();  return; }
     dk_shield();
     ai_run(d);
 };
 
 void(float d) dk_charge = { hk_charge(d*2); };
-void() dk_idle_sound = { if (random() < 0.2) sound(self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM); };
+void() dk_idle_sound = { if (random() < 0.2) sound(self,CHAN_VOICE, "drake/darklord/idle1.wav",1,ATTN_NORM); };
 
 void() darklord_slice1  = [$slice1,  darklord_slice2  ] { dk_idle_sound(); dk_charge(9); };
 void() darklord_slice2  = [$slice3,  darklord_slice3  ] { monster_footstep(FALSE); dk_charge(19); };
@@ -1040,7 +1040,7 @@ void() darklord_watk7  = [$w_attack11, darklord_watk8  ] { monster_footstep(FALS
 void() darklord_watk8  = [$w_attack13, darklord_watk9  ] { dk_charge(2); ai_melee(); };
 void() darklord_watk9  = [$w_attack14, darklord_watk10 ] { dk_charge(0); };
 void() darklord_watk10 = [$w_attack16, darklord_watk11 ] { dk_charge(1);
-    sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"knight/sword2.wav",1,ATTN_NORM);
 };
 void() darklord_watk11 = [$w_attack18, darklord_watk12 ] { dk_charge(4); bane_melee(200); ai_melee(); };
 void() darklord_watk12 = [$w_attack19, darklord_watk13 ] { dk_charge(4); ai_melee(); };
@@ -1048,11 +1048,11 @@ void() darklord_watk13 = [$w_attack20, darklord_watk14 ] { dk_charge(6); };
 void() darklord_watk14 = [$w_attack22, hknight_run1] { dk_charge(10); };
 
 void() darklord_melee = {
-    if (self.waitmin < time) { darklord_magica1(); return;}
+    if (self.waitmin < time) { darklord_magica1(); return; }
 
     self.meleeattack = self.meleeattack + 1;
 
-    sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"hknight/slash1.wav",1,ATTN_NORM);
     if (self.meleeattack == 1)
         darklord_slice1();
     else if (self.meleeattack == 2)
@@ -1097,7 +1097,7 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
         self.effects    = 0;    // PM:  Erase shield, lights, and the rest.
 		self.jump_time  = 0;
 		self.zapper_time        = 0;
-        sound(self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM); // Fake death.
+        sound(self,CHAN_VOICE, "drake/darklord/death.wav",1,ATTN_NORM); // Fake death.
         makevectors(self.angles);
         st = '-2 0 28';
         st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
@@ -1140,12 +1140,12 @@ void() darklord_die = {
 // regular death
     local   vector  st;
 
-    sound(self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "drake/darklord/death.wav",1,ATTN_NORM);
 
     if (random() > 0.5)
-        { st = '-2 0 28'; darklord_die1();}
+        { st = '-2 0 28'; darklord_die1(); }
     else
-        { st = '-3 0 33'; darklord_dieb1();}
+        { st = '-3 0 33'; darklord_dieb1(); }
     makevectors(self.angles);
     st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     Rocket_Explosion2 (st, 32, 5);

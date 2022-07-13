@@ -79,11 +79,11 @@ void() misc_lavaball_touch = { // [FUNCTION]
 	if (other.takedamage) { // Check for lava proections?
 		if (self.spawnflags & MISC_FBALLSLIME) {
 			if (other.resist_acid > 0) touchdmg = self.dmg * (1-other.resist_acid);
-			if (other.flags & FL_CLIENT && other.items & IT_SUIT) sound(other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM); // Play envirosuit protection sound
+			if (other.flags & FL_CLIENT && other.items & IT_SUIT) sound(other,CHAN_ITEM,SOUND_ARTSUIT3, 0.5,ATTN_NORM); // Play envirosuit protection sound
 			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		} else {
 			if (other.resist_fire > 0) touchdmg = self.dmg * (1-other.resist_fire); // Default = pain!
-			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) sound(other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM); // Play lava shield protection sound
+			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) sound(other,CHAN_ITEM,SOUND_ARTLSHIELD3, 0.5,ATTN_NORM); // Play lava shield protection sound
 			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		}
 	}
@@ -197,8 +197,8 @@ void() misc_gibfountain_fly = { // [FUNCTION]
 		self.lefty = self.lefty -1;
 	}
 
-	if (self.noise1 != "" && random() < 0.5) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Only need to play throw/fire sound once per timer cycle
-	else sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.noise1 != "" && random() < 0.5) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM); // Only need to play throw/fire sound once per timer cycle
+	else sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 
 	self.nextthink = time + self.delay + (random() * self.wait);
 	self.think = misc_gibfountain_fly;
@@ -209,8 +209,8 @@ void() misc_gibfountain_on = { // [FUNCTION]
 	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // Spawn delay is no longer required, remove it
 	if (self.lip) { // Display spawn direction with angle model
 		self.lip = FALSE; // Once only
-		if (self.target != "") TargetMovedir(self, FALSE); // Movement target only, no need to check other targets
-		spawn_arrow(self.origin, vectoangles(self.movedir), 0);
+		if (self.target != "") TargetMovedir(self,FALSE); // Movement target only, no need to check other targets
+		spawn_marker(self.origin,vectoangles(self.movedir),1,0);
 	}
 
 	misc_gibfountain_fly(); // Start spewing (no delay so it can be triggered properly)
@@ -451,20 +451,20 @@ void() misc_drip_reset = { // [FUNCTION]
 };
 
 // splash animation (runs at 20fps)
-void() s_splash1 = [0, s_splash2] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash2 = [1, s_splash3] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash3 = [2, s_splash4] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash4 = [3, s_splash5] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash5 = [4, s_splash6] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splash6 = [5, misc_drip_reset] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash1 = [0, s_splash2] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splash2 = [1, s_splash3] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splash3 = [2, s_splash4] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splash4 = [3, s_splash5] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splash5 = [4, s_splash6] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splash6 = [5, misc_drip_reset] { self.nextthink = time+0.05; }; // [FUNCTION]
 
 // splash animation (runs at 20fps)
-void() s_splashremoves1 = [0, s_splashremoves2] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves2 = [1, s_splashremoves3] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves3 = [2, s_splashremoves4] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves4 = [3, s_splashremoves5] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves5 = [4, s_splashremoves6] { self.nextthink = time+0.05;}; // [FUNCTION]
-void() s_splashremoves6 = [5, SUB_Remove] { self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves1 = [0, s_splashremoves2] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splashremoves2 = [1, s_splashremoves3] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splashremoves3 = [2, s_splashremoves4] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splashremoves4 = [3, s_splashremoves5] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splashremoves5 = [4, s_splashremoves6] { self.nextthink = time+0.05; }; // [FUNCTION]
+void() s_splashremoves6 = [5, SUB_Remove] { self.nextthink = time+0.05; }; // [FUNCTION]
 
 // Effects common to both drips that remove themselves and drips that move back to the start point.
 void() misc_drip_touch_common = { // [FUNCTION]
@@ -476,9 +476,9 @@ void() misc_drip_touch_common = { // [FUNCTION]
 	setorigin(self,self.origin + '0 0 8'); // Was 12
 	if (!(self.spawnflags & MISC_DRIPSILENT)) { // play a random drip sound
 		self.lip = random() * 3;
-		if (self.lip < 1 && self.noise1 != "") sound(self, CHAN_AUTO, self.noise1, 1, ATTN_STATIC);
-		else if (self.lip < 2 && self.noise2 != "") sound(self, CHAN_AUTO, self.noise2, 1, ATTN_STATIC);
-		else if (self.noise3 != "") sound(self, CHAN_AUTO, self.noise3, 1, ATTN_STATIC);
+		if (self.lip < 1 && self.noise1 != "") sound(self,CHAN_AUTO,self.noise1,1,ATTN_STATIC);
+		else if (self.lip < 2 && self.noise2 != "") sound(self,CHAN_AUTO,self.noise2,1,ATTN_STATIC);
+		else if (self.noise3 != "") sound(self,CHAN_AUTO,self.noise3,1,ATTN_STATIC);
 	}
 
 	if (other != self.owner && self.owner.dmg && other.takedamage) { // Damage if our owner has dmg set
@@ -594,7 +594,7 @@ void() misc_drip = { // [ENTITY]
 	self.height = pointcontents(self.origin); // Check point content for wierd setups (inside liquids/solids)
 	if (self.height < CONTENT_SOLID) {
 		dprint ("\b[MISCDRIP]\b Spawned inside liquid!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	} else if (self.height == CONTENT_SOLID) self.origin_z = self.origin_z - 2; // If flush against a ceiling, move slightly down
@@ -879,10 +879,10 @@ void() misc_smoke = { // [ENTITY]
 	self.think = misc_smoke_setup;
 };
 
-void() misc_sparks_fade1 = [0, misc_sparks_fade2] { self.alpha = 0.8; self.nextthink = time + 0.05;}; // [FUNCTION]
-void() misc_sparks_fade2 = [0, misc_sparks_fade3] { self.alpha = 0.6; self.nextthink = time + 0.05;}; // [FUNCTION]
-void() misc_sparks_fade3 = [0, misc_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05;}; // [FUNCTION]
-void() misc_sparks_fade4 = [0, SUB_Remove       ] { self.alpha = 0.2; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade1 = [0, misc_sparks_fade2] { self.alpha = 0.8; self.nextthink = time + 0.05; }; // [FUNCTION]
+void() misc_sparks_fade2 = [0, misc_sparks_fade3] { self.alpha = 0.6; self.nextthink = time + 0.05; }; // [FUNCTION]
+void() misc_sparks_fade3 = [0, misc_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05; }; // [FUNCTION]
+void() misc_sparks_fade4 = [0, SUB_Remove       ] { self.alpha = 0.2; self.nextthink = time + 0.05; }; // [FUNCTION]
 
 void() misc_spark_switchoff = { // [FUNCTION]
 	SUB_UseTargets(); // Always switch off trigger (lights)
@@ -957,7 +957,7 @@ void() misc_spark_spawn = { // [FUNCTION]
 		loopvar = loopvar - 1;
 	}
 	
-	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_STATIC); // Play any spark sound and switch ON any target lights
+	if (self.noise != "") sound(self,CHAN_VOICE, self.noise,1,ATTN_STATIC); // Play any spark sound and switch ON any target lights
 	if (self.target) { // Is there any target(s) to switch on, such as a light source to light up with spark emission.
 		SUB_UseTargets();
 		self.nextthink = time + 0.1 + random() * 0.2; // Setup timer to switch off
@@ -1029,7 +1029,7 @@ void() misc_shake_think = { // [FUNCTION]
 	local float	d;
 
 	if (self.attack_finished < time || self.estate & ESTATE_BLOCK) { // Is the shaking over?
-		if (self.noise2) sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+		if (self.noise2) sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 		if (self.estate == ESTATE_ON) self.estate = ESTATE_OFF; // Check state before changing it, entity may be disabled
 		return;
 	}
@@ -1058,7 +1058,7 @@ void() misc_shake_think = { // [FUNCTION]
 
 void() misc_shake_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
-	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Play earthquake LOOP sound
+	if (self.noise1) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM); // Play earthquake LOOP sound
 	self.attack_finished = time + self.wait;
 	self.nextthink = time + 0.1; // keep checking for players to shake!
 	self.think = misc_shake_think;
@@ -1141,11 +1141,11 @@ void() misc_builtineffects_fire = { // [FUNCTION]
 	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
 		self.count == TE_LIGHTNING3) {
 		if (self.waitmin < time) { // Stop the sound constantly playing
-			sound(self.movetarget, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM); // Play lightning sound(LG weapon hit)
+			sound(self.movetarget,CHAN_WEAPON,"weapons/lhit.wav",1,ATTN_NORM); // Play lightning sound(LG weapon hit)
 			self.waitmin = time + 0.6;
 		}
-	} else if (self.count == TE_LAVASPLASH) sound(self.movetarget, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
-	else if (self.count == TE_EXPLOSION || self.count == TE_TAREXPLOSION) sound(self.movetarget, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM); // Play original explosion sound
+	} else if (self.count == TE_LAVASPLASH) sound(self.movetarget,CHAN_BODY,"boss1/out1.wav",1,ATTN_NORM);
+	else if (self.count == TE_EXPLOSION || self.count == TE_TAREXPLOSION) sound(self.movetarget,CHAN_WEAPON,SOUND_REXP3,1,ATTN_NORM); // Play original explosion sound
 
 	if (self.wait > 0) { // Continuous mode?
 		self.think = misc_builtineffects_fire;
@@ -1170,7 +1170,7 @@ void() misc_builtineffects_setup = { // [FUNCTION]
 	
 	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || self.count == TE_LIGHTNING3 && !self.movetarget) { // Lightning effects need source and target to work.  Check target is valid before trying to setup this effect.
 			dprint("\b[MISC_EFFECTS]\b Missing target for lightning\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			remove(self);
 	}
 

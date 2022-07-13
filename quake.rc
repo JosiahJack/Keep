@@ -1,28 +1,52 @@
-//-----------------------------------------------------------
-// MOD    : Keep Mod
-// Date   : September 9, 2017
-// Author : Qmaster and everyone else
-// Notes  : Special MOD config file (should not be deleted)
-//          All player config options go in autoexec.cfg
-//-----------------------------------------------------------
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All, Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Implements: Mod Configuration File (DO NOT DELETE ME!)
+//
+// Description:
+// Loads in the default configuration, user configuration, and runs any user
+// or developer set console commands to configure the mod to behave the way the
+// user wants.
+//=============================================================================
+
 // load the base configuration
 exec default.cfg
 
-//-----------------------------------------------------------
 // load the last saved configuration
 exec config.cfg
 
-//-----------------------------------------------------------
 // All the artwork and levels are designed for pixel filtering
 // I recommend you try this setting, the artwork will be crisp
 // and the textures will feel vibrant and alive
-//-----------------------------------------------------------
 gl_texturemode GL_NEAREST_MIPMAP_LINEAR
 
-//-----------------------------------------------------------
 // Only enable this setting if you are developing for the MOD
 // They are not necessary for normal play throughs
-//-----------------------------------------------------------
 //developer "1"
 //gl_clear 1
 //gl_overbright 1
@@ -33,20 +57,17 @@ gl_texturemode GL_NEAREST_MIPMAP_LINEAR
 //crosshair 1
 //scr_showfps 0
 
-//-----------------------------------------------------------
 // This is a collection of engine specific stuff
 // Fitz/QS/MarkV : has really low limits (max_edicts)
 // DP : Use original lightning bolt models (cl_beams_polygons)
 // QS/MarkV : r_shadow exclusion stuff
-//-----------------------------------------------------------
-max_edicts 8192
 r_useportalculling 0
 cl_beams_polygons 0
 r_noshadow_list "progs/flame2.mdl,progs/flame.mdl,progs/bolt1.mdl,progs/bolt2.mdl,progs/bolt3.mdl,progs/laser.mdl,progs/wizard.mdl,progs/mon_gargoyle.mdl,progs/mon_gaunt.mdl,progs/mon_wraith.mdl,progs/mon_lostsoul.mdl,progs/misc_radar64.mdl,progs/misc_radar96.mdl,progs/misc_radar128.mdl,progs/misc_tutstatue.mdl"
 
-//-----------------------------------------------------------
 // New commands for this MOD
-//-----------------------------------------------------------
+// Impulse 77  - Cycle through weapon slot on keyboard key 0 (the 10th)
+// Impulse 90  - Cycle through weapon slot on keyboard key 9 (the  9th)
 // Impulse 100 - Toggle auto aim (0.93 <> 1.00)
 // Impulse 105 - Toggle player projectile size
 // Impulse 110 - Toggle Z aware monsters
@@ -164,11 +185,15 @@ alias upglg "impulse 210"
 //  132096 = particles ON & Projectile Shotgun OFF (1024 + 131072)
 //  263168 = particles ON & Shotgun casings OFF (1024 + 262144)
 // 1049600 = particles ON & Enemy/player footsteps OFF (1024 + 1048576)
+//
+// Default here is projectile shotguns off, Drake musice is
+// allowed, and path corner developer arrows off (ugly when
+// testing mods and wanting to take screenshots/playtest).
 //-----------------------------------------------------------
-temp1 196608
+temp1 2293760
 
 // Turn custom HUD on/off (-1=off, 0=on, 1+=diff layouts)
-scratch1 1
+scratch1 0
 
 // Random seed for specialty modes (must be > 0)
 scratch2 0
@@ -181,19 +206,20 @@ scratch4 0
 
 // Default to 1st person so vehicle system 3rd person use is correct.
 chase_active 0
-//-----------------------------------------------------------
+
+// Particles look tiny on large resolutions
+r_part_density 2
+
+// Ambient sounds are broken when this is set to "qw" (default)
+cl_loopbackprotocol qss
+
 // run a user script file if present (user settings)
 exec autoexec.cfg
 
-//-----------------------------------------------------------
 // stuff command line statements
 // Maps won't load without max_edicts
 // developer mode should be off by default
-//-----------------------------------------------------------
 stuffcmds
 
-r_part_density 4
-
-//-----------------------------------------------------------
 // start demos if not already running a server
 startdemos demo1 demo2 demo3

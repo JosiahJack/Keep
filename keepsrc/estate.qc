@@ -139,7 +139,7 @@ void(string targstr) trigger_entitystate_target = {
 };
 
 void() trigger_entitystate_fire = {
-	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play any trigger sounds
+	if (self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play any trigger sounds
 	if (self.target != "") trigger_entitystate_target(self.target);
 	if (self.target2 != "") trigger_entitystate_target(self.target2);
 	if (self.target3 != "") trigger_entitystate_target(self.target3);

@@ -57,7 +57,7 @@ void() xxshub_attack1 = {
 	
 	SUB_AttackFinished (2 + 2*random());
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "ad171/shub/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/shub/attack1.wav",1,ATTN_NORM);
 
 	// Skill level adjustment
 	self.attack_speed = self.pos1_x + (skill*self.pos1_y);
@@ -94,7 +94,7 @@ void() xxshub_shakeframe = {
 	if (random() < 0.5) xxshub_shakeattack();
 	
 	if (self.walkframe == 0) {
-		sound(self, CHAN_WEAPON, "ad171/shub/attack2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/shub/attack2.wav",1,ATTN_NORM);
 		self.effects = self.effects | EF_MUZZLEFLASH;
 	}
 	
@@ -129,11 +129,11 @@ void() xxshub_attack2 = {
 // PAIN (ignored, just keeps on firing)
 void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 	// Shub been hit, wakeup and start attacking
-	if (self.style == SHUB_PHASE1) { self.use(); return;}
+	if (self.style == SHUB_PHASE1) { self.use(); return; }
 	self.pain_finished = time + 2 + random()*2;
 
 	// Check for boss wave trigger events
-	if (SUB_BossWaveCheck(0)) { self.th_missile(); return;}
+	if (SUB_BossWaveCheck(0)) { self.th_missile(); return; }
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -145,8 +145,8 @@ void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 		if (damage > 30) SpawnProjectileSmoke(inflictor.origin, 200, 50, 250);
 		// random pick sound
 		if (random() < 0.5)
-			sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 	}
 };
 
@@ -195,7 +195,7 @@ void() xxshub_die = {
 	self.solid = SOLID_NOT;			// no longer need to block
 	self.max_health = MON_GIBEXPLOSION;
 
-	sound(self, CHAN_VOICE, "ad171/shub/death1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ad171/shub/death1.wav",1,ATTN_NORM);
 	self.walkframe = self.count = 0;
 	xxshub_deathframe();
 };
@@ -211,7 +211,7 @@ void() xxshub_wakeup = {
 	Resist_ChangeType(self, FALSE);	// Default resistance
 
 	// Wakeup sound
-	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_NORM);
 	
 	// Restore pain thresholds and timers
 	self.pain_flinch = 400;			// Shambler level

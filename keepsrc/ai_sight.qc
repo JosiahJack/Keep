@@ -56,7 +56,7 @@ float(entity targ, vector org_source, vector org_targ) check_liquidblock_generic
 		if (pc_source != pc_targ) return TRUE; // Are point content different? (like water/air)
 		if (trace_inopen && trace_inwater) {
 			if (targ.classtype == CT_MONRYU || targ.classtype == CT_MONWYRM) {
-				if (Ryu_BlockCrossfire()){
+				if (Ryu_BlockCrossfire()) {
 					if (vlen(org_targ - org_source) > 120) return FALSE;
 				}
 			} else return TRUE; // Standard traceline check (not 100% reliable)
@@ -88,7 +88,7 @@ float(entity source, entity targ, vector s_offset, vector t_offset, float nomons
 	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will
 	// draw a diamond model where the AI is looking.
 	if ((targ.debuglvl || source.debuglvl) && developer > 1) {
-		if (!debugent1) debugent1 = spawn_devmarker(targ.origin);
+		if (!debugent1) debugent1 = spawn_devmarker(targ.origin,MODEL_BROKEN);
 		debugspot1 = vectoangles(source.origin - trace_endpos);
 		makevectors(debugspot1);
 		debugspot2 = trace_endpos + (v_up * -16) + (v_forward * 50);
@@ -158,7 +158,7 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 	else if (trace_ent != world) tr_leftmon = 1;
 
 	if (self.debuglvl && developer > 1) {
-		if (!debugent2) debugent2 = spawn_devmarker(spot3);
+		if (!debugent2) debugent2 = spawn_devmarker(spot3,MODEL_BROKEN);
 		setorigin(debugent2, trace_endpos);
 	}
 		
@@ -170,7 +170,7 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 	else if (trace_ent != world) tr_rightmon = 1;
 
 	if (self.debuglvl && developer > 1) {
-		if (!debugent3) debugent3 = spawn_devmarker(spot3);
+		if (!debugent3) debugent3 = spawn_devmarker(spot3,MODEL_BROKEN);
 		setorigin(debugent3, trace_endpos);
 	}
 
@@ -373,7 +373,7 @@ void() FoundTarget = {
 	// Check for Liquid surface block entity key if the monster has range attack, can NOW see through liquid surface
 	if (self.liquidblock == TRUE && self.th_missile) self.liquidblock = FALSE;
 
-	if ( self.charmed ) {
+	if (self.charmed ) {
 		if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) && !(IsInsane(self))) {
 			self.enemy = world;
 			return;
@@ -482,7 +482,7 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 			if (head.health > 0) {
 				if (!Invisible(head)) {
 					if (findopposing) {
-						if (!Align_Match(self,head)){
+						if (!Align_Match(self,head)) {
 							if (head.alignment != NEUTRAL) {
 								// Nested visible() to improve performance by
 								// not checking visibility of dead potential
@@ -531,7 +531,6 @@ float() FindTarget = { // [FUNCTION]
 	local float r, dist, charmdist,charmmaxdist, charmrand;
 
 	if (self.health < 1) return FALSE;	// Dead monsters don't hunt!
-	if (frame_pause() && !coop) return FALSE; // If cinematic is running in singleplayer, no sight checks
 
 	// Wraith AI - - - -
     if (self.movetype == MOVETYPE_NOCLIP) {  // Most monsters aren't wraiths.

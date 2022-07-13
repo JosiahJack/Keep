@@ -97,7 +97,7 @@ void() ogre_walk3	= [	$walk3,		ogre_walk4	] { monster_idle_sound(); ai_walk(2); 
 void() ogre_walk4	= [	$walk4,		ogre_walk5	] { ai_walk(2); };
 void() ogre_walk5	= [	$walk5,		ogre_walk6	] { ai_walk(2); };
 void() ogre_walk6	= [	$walk6,		ogre_walk7	] { ai_walk(5);
-if (random() < 0.1) sound(self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE); };
+if (random() < 0.1) sound(self,CHAN_VOICE, "ogre/ogdrag.wav",1,ATTN_IDLE); };
 void() ogre_walk7	= [	$walk7,		ogre_walk8	] { ai_walk(3); };
 void() ogre_walk8	= [	$walk8,		ogre_walk9	] { ai_walk(2); };
 void() ogre_walk9	= [	$walk9,		ogre_walk10	] { monster_footstep(FALSE); ai_walk(3); };
@@ -154,12 +154,12 @@ void() ogre_swing5	= [	$swing5,		ogre_swing6	] {
 	chainsaw(0,1);
 	self.angles_y = self.angles_y + random()*25;
 };
-void() ogre_swing6	= [	$swing6,		ogre_swing7	] { chainsaw(200,1); self.angles_y = self.angles_y + random()* 25;};
-void() ogre_swing7	= [	$swing7,		ogre_swing8	] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
-void() ogre_swing8	= [	$swing8,		ogre_swing9	] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
-void() ogre_swing9	= [	$swing9,		ogre_swing10 ] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
-void() ogre_swing10	= [	$swing10,		ogre_swing11 ] { chainsaw(-200,1); self.angles_y = self.angles_y + random()* 25;};
-void() ogre_swing11	= [	$swing11,		ogre_swing12 ] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
+void() ogre_swing6	= [	$swing6,		ogre_swing7	] { chainsaw(200,1); self.angles_y = self.angles_y + random()* 25; };
+void() ogre_swing7	= [	$swing7,		ogre_swing8	] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
+void() ogre_swing8	= [	$swing8,		ogre_swing9	] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
+void() ogre_swing9	= [	$swing9,		ogre_swing10 ] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
+void() ogre_swing10	= [	$swing10,		ogre_swing11 ] { chainsaw(-200,1); self.angles_y = self.angles_y + random()* 25; };
+void() ogre_swing11	= [	$swing11,		ogre_swing12 ] { chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
 void() ogre_swing12	= [	$swing12,		ogre_swing13 ] { ai_charge(3); };
 void() ogre_swing13	= [	$swing13,		ogre_swing14 ] { ai_charge(8); };
 void() ogre_swing14	= [	$swing14,		ogre_run1	] { ai_charge(9); };
@@ -175,13 +175,13 @@ void() ogre_smash8	= [	$smash8,		ogre_smash9	] { ai_charge(10); chainsaw(0,1); }
 void() ogre_smash9	= [	$smash9,		ogre_smash10 ] { monster_footstep(FALSE); ai_charge(13); chainsaw(0,1); };
 void() ogre_smash10	= [	$smash10,		ogre_smash11 ] { chainsaw(1,1); };
 void() ogre_smash11	= [	$smash11,		ogre_smash12 ] { ai_charge(2); chainsaw(0,1);
-self.nextthink = self.nextthink + random()*0.2;};	// slight variation
+self.nextthink = self.nextthink + random()*0.2; };	// slight variation
 void() ogre_smash12	= [	$smash12,		ogre_smash13 ] { ai_charge(0); };
 void() ogre_smash13	= [	$smash13,		ogre_smash14 ] { ai_charge(4); };
 void() ogre_smash14	= [	$smash14,		ogre_run1	] { ai_charge(12); };
 
 void() ogre_melee = {
-	sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ogre/ogsawatk.wav",1,ATTN_NORM);
 	if (random() > 0.5) ogre_smash1();
 	else ogre_swing1();
 };
@@ -270,7 +270,7 @@ void(entity inflictor, entity attacker, float damage) ogre_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (self.pain_sound != "") sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		if (self.pain_sound != "") sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 	
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
@@ -333,9 +333,8 @@ void()	ogre_bdie10	= [	$bdeath10,	ogre_bdie10	] { monster_deadbody_check(); };
 
 void() ogre_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogre/ogdth.wav",1,ATTN_NORM);
 		self.lip = random();
 		if (self.lip < 0.5) ogre_die1();
 		else ogre_bdie1();
@@ -364,7 +363,7 @@ void() ogre_flappyfish = {
 	self.frame = OGREFISH_FISHY + self.walkframe;
 
 	// Check for special frame conditions
-	if (self.walkframe == 0) sound(self, CHAN_VOICE, "ad171/ogre/ogrefish_flappy.wav", 1, ATTN_NORM);
+	if (self.walkframe == 0) sound(self,CHAN_VOICE, "ad171/ogre/ogrefish_flappy.wav",1,ATTN_NORM);
 	
 	// Move frame forward, check for conditions
 	self.walkframe = self.walkframe + 1;
@@ -383,9 +382,9 @@ void() ogre_catchfish = {
 
 	// Check for special frame conditions
 	if (self.walkframe == 6)
-		sound(self, CHAN_VOICE, "ad171/ogre/ogrefish_out.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ad171/ogre/ogrefish_out.wav",1,ATTN_NORM);
 	if (self.walkframe == 24)
-		sound(self, CHAN_VOICE, "ad171/ogre/ogrefish_in.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ad171/ogre/ogrefish_in.wav",1,ATTN_NORM);
 	
 	// Move frame forward, check for conditions
 	self.walkframe = self.walkframe + 1;
@@ -417,7 +416,7 @@ void() ogre_fishing = {
 		}
 		// Classic ogre idle + water
 		else if (self.lip < 0.3) 
-			sound(self, CHAN_VOICE, "ad171/ogre/ogrefish_idle.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "ad171/ogre/ogrefish_idle.wav",1,ATTN_NORM);
 	}
 	
 	if (self.idlebusy == FALSE) {

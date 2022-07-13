@@ -376,7 +376,7 @@ float(entity e, string key) infokeyf = #0; /*
 		Identical to regular infokey, but returns it as a float instead of creating new tempstrings. */
 
 float(string) stof = #81;
-#define unicast(pl,reli) do{ msg_entity = pl; multicast('0 0 0', reli?MULITCAST_ONE_R:MULTICAST_ONE);}while(0)
+#define unicast(pl,reli) do{ msg_entity = pl; multicast('0 0 0', reli?MULITCAST_ONE_R:MULTICAST_ONE); }while(0)
 void(vector where, float set) multicast = #82; /*
 		Once the MSG_MULTICAST network message buffer has been filled with data, this builtin is used to dispatch it to the given target, filtering by pvs for reduced network bandwidth. */
 

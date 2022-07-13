@@ -148,7 +148,7 @@ void()	dsergeant_standC24	= [	$standC24,	dsergeant_stand1	] { ai_stand(); };
 
 // skipped 7 frames to reduce the animation down to 2.4s (10fps)
 void()	dsergeant_standD1	= [	$standD1,	dsergeant_standD2	] { ai_stand();
-	sound(self, CHAN_VOICE, "ad171/dknight/dserg_hbreath.wav", 1,  ATTN_IDLE); };
+	sound(self,CHAN_VOICE, "ad171/dknight/dserg_hbreath.wav", 1,  ATTN_IDLE); };
 void()	dsergeant_standD2	= [	$standD2,	dsergeant_standD3	] { ai_stand(); };
 void()	dsergeant_standD3	= [	$standD4,	dsergeant_standD4	] { ai_stand(); };
 void()	dsergeant_standD4	= [	$standD6,	dsergeant_standD5	] { ai_stand(); };
@@ -191,7 +191,7 @@ void()	dsergeant_stand12	= [	$stand12,	dsergeant_stand1	] {
 		self.idlebusy = TRUE; 
 		// Make sure the idle animations don't repeat in a row
 		self.lefty = self.lip;
-		while (self.lefty == self.lip) { self.lefty = rint(random()*4);}
+		while (self.lefty == self.lip) { self.lefty = rint(random()*4); }
 		self.lip = self.lefty;
 		if (self.lip < 1) self.think = dsergeant_standD1;				// Big Sigh
 		else if (self.lip < 2) self.think = dsergeant_standC1;	// Look at weapon
@@ -359,7 +359,7 @@ void() SergMissile = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "ad171/dknight/dserg_magic.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/dknight/dserg_magic.wav",1,ATTN_NORM);
 	self.attack_speed = SPEED_SERGMISSILE + (skill * SPEED_SERGSKILL);
 	makevectors(self.angles);
 	launch_projectile(self.origin + attack_vector(self.attack_offset),'0 0 10',NO_SPIN,CT_PROJ_SERG,self.attack_speed);
@@ -407,7 +407,7 @@ void(entity inflictor, entity attacker, float damage)	dsergeant_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dsergeant_painA1();	// classic, body recoil
@@ -432,7 +432,7 @@ void()	dsergeant_die3	= [	$death3,	dsergeant_die4	] { monster_check_gib();
 void()	dsergeant_die4	= [	$death4,	dsergeant_die5	] {};
 void()	dsergeant_die5	= [	$death5,	dsergeant_die6	] {};
 void()	dsergeant_die6	= [	$death6,	dsergeant_die7	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_CHAIN, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_CHAIN,1,ATTN_NORM); };
 void()	dsergeant_die7	= [	$death7,	dsergeant_die8	] {};
 void()	dsergeant_die8	= [	$death8,	dsergeant_die9	] { ai_forward(10); };
 void()	dsergeant_die9	= [	$death9,	dsergeant_die10	] { ai_forward(11); };
@@ -443,14 +443,14 @@ void()	dsergeant_die12	= [	$death12,	dsergeant_die12	] { monster_deadbody_check(
 void()	dsergeant_dieb1	= [	$deathb1,	dsergeant_dieb2	] {};
 void()	dsergeant_dieb2	= [	$deathb2,	dsergeant_dieb3	] { monster_check_gib(); };
 void()	dsergeant_dieb3	= [	$deathb3,	dsergeant_dieb4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void()	dsergeant_dieb4	= [	$deathb4,	dsergeant_dieb5	] {};
 void()	dsergeant_dieb5	= [	$deathb5,	dsergeant_dieb6	] {};
 void()	dsergeant_dieb6	= [	$deathb6,	dsergeant_dieb7	] {};
 void()	dsergeant_dieb7	= [	$deathb7,	dsergeant_dieb8	] {};
 void()	dsergeant_dieb8	= [	$deathb8,	dsergeant_dieb9	] {};
 void()	dsergeant_dieb9	= [	$deathb9,	dsergeant_dieb10	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_CHAIN, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_CHAIN,1,ATTN_NORM); };
 void()	dsergeant_dieb10	= [	$deathb10,	dsergeant_dieb11	] {};
 void()	dsergeant_dieb11	= [	$deathb11,	dsergeant_dieb12	] {};
 void()	dsergeant_dieb12	= [	$deathb12,	dsergeant_dieb13	] {};
@@ -469,7 +469,7 @@ void() dsergeant_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "hknight/death1.wav",1,ATTN_NORM);
 		if (random() > 0.5) dsergeant_die1();
 		else dsergeant_dieb1();
 	}
@@ -477,13 +477,13 @@ void() dsergeant_die = {
 
 void(float soundtype) dsergeant_grunt_sound = {
 	if (soundtype == DSERG_SOUND_SIDESWING)
-		sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt2.wav",1,ATTN_NORM);
 	else if (soundtype == DSERG_SOUND_OVERSMASH)
-		sound(self, CHAN_WEAPON, "ad171/dknight/dfury_leap.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/dknight/dfury_leap.wav",1,ATTN_NORM);
 	else {
 		self.weaponswitch = 0.6 + random()*0.4;
-		if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt3.wav", self.weaponswitch, ATTN_NORM);
-		else sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt4.wav", self.weaponswitch, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt3.wav", self.weaponswitch,ATTN_NORM);
+		else sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt4.wav", self.weaponswitch,ATTN_NORM);
 	}
 };
 

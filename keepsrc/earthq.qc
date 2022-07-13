@@ -82,7 +82,7 @@ void() earthquake = { // [ENTITY]
 void() info_earthquake = { earthquake(); }; // [ENTITY]
 
 void() earthquake_touch = { // [FUNCTION]
-   if ( self.delay ) {
+   if (self.delay ) {
       if ( (self.attack_finished < time) ) {
          sound(self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NORM);
          self.attack_finished = (time + TRUE);
@@ -105,7 +105,7 @@ void() trigger_earthquake = { // [ENTITY]
    self.weapon = self.weapon * 0.5;
    self.delay = TRUE;
    self.touch = earthquake_touch;
-   if ( self.targetname ) {
+   if (self.targetname ) {
       self.use = earthquake_use;
       self.delay = FALSE;
    }

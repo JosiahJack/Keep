@@ -65,7 +65,7 @@ void() func_plat_hit_bottom = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_BOTTOM;
-	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM);
 };
 
 void() plat_hit_bottom = { func_plat_hit_bottom(); }; // [FUNCTION], Re-direction for map hacks (not used normally)
@@ -74,7 +74,7 @@ void() func_plat_go_down = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_DOWN;
-	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 	SUB_CalcMove (self.pos2, self.speed, func_plat_hit_bottom);
 };
 
@@ -82,7 +82,7 @@ void() func_plat_hit_top = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_TOP;
-	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM);
 	self.think = func_plat_go_down;
 	self.nextthink = self.ltime + 3;
 };
@@ -91,7 +91,7 @@ void() func_plat_go_up = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.state = STATE_UP;
-	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 	SUB_CalcMove (self.pos1, self.speed, func_plat_hit_top);
 };
 

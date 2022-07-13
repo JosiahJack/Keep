@@ -101,7 +101,7 @@ void() nour_slideframe = {
 		if (self.style != NOUR_PHASE2) return;
 
 		// Check for boss wave trigger events
-		if (SUB_BossWaveCheck(0)) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(0)) { self.th_summon(); return; }
 	}
 	
 	// Dead monster?
@@ -135,7 +135,7 @@ void() nour_runframe = {
 		if (self.style != NOUR_PHASE2) return;
 
 		// Check for boss wave trigger events
-		if (SUB_BossWaveCheck(0)) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(0)) { self.th_summon(); return; }
 	}
 	
 	if (self.health < 1) return;
@@ -206,7 +206,7 @@ void(vector offset) nour_spike = {
 
 void() nour_atta1	= [	$shota1, nour_atta2] { ai_face();
 	self.pain_finished = time + 1;
-	sound(self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/nour/attack1.wav",1,ATTN_NORM);
 };
 void() nour_atta2	= [$shota2, nour_atta3] { ai_face(); };
 void() nour_atta3	= [$shota3, nour_atta4] { ai_face(); };
@@ -229,7 +229,7 @@ void(vector bombofs) Fire_NourBomb = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/nour/attack1.wav",1,ATTN_NORM);
 	ai_face();
 	makevectors(self.angles);
 	org = self.origin + attack_vector(bombofs);
@@ -262,7 +262,7 @@ void(vector bombofs, float bombframe) Setup_NourBomb = {
 		self.attachment.skin = 0;
 
 		// Start growing bomb sound
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack3.wav",1,ATTN_NORM);
 	}
 
 	// Turn towards enemy and update model attachment
@@ -278,7 +278,7 @@ void(vector bombofs, float bombframe) Setup_NourBomb = {
 	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_YELLOW, 0);
 };
 
-void() nour_attb1	= [$shotb1, nour_attb2] { ai_face(); self.pain_finished = time + 1.5;};
+void() nour_attb1	= [$shotb1, nour_attb2] { ai_face(); self.pain_finished = time + 1.5; };
 void() nour_attb2	= [$shotb2, nour_attb3] { ai_face(); };
 void() nour_attb3	= [$shotb3, nour_attb4] { ai_face(); };
 void() nour_attb4	= [$shotb4, nour_attb5] { ai_face(); };
@@ -374,7 +374,7 @@ void(vector minofs, float minframe) Setup_NourMin = {
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
 		self.attachment.skin = 1;
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM); // Start Spawning sound
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack3.wav",1,ATTN_NORM); // Start Spawning sound
 	} 
 
 	Setup_NourMinChain(minofs,minframe);
@@ -468,7 +468,7 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		// Check for boss wave trigger events
-		if (SUB_BossWaveCheck(0)) { self.th_summon(); return;}
+		if (SUB_BossWaveCheck(0)) { self.th_summon(); return; }
 	}
 
 	// Check all pain conditions and set up what to do next
@@ -476,7 +476,7 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.8) nour_paina1();		// Short recoil right
@@ -528,18 +528,18 @@ void(float partcol) nour_lightningdeath = {
 
 	// Cycle through end phase
 	self.lip = self.lip + 1;
-	if (self.lip == 26) sound(self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 26) sound(self,CHAN_AUTO,"ad171/eidolon/implode_death.wav",1,ATTN_NONE);
 	if (self.lip == 40) nour_explode();
 };
 
 void() nour_die1 = [$death1, nour_die2 ] {};
 void() nour_die2 = [$death2, nour_die3 ] {};
-void() nour_die3 = [$death3, nour_die4 ] { self.solid = SOLID_NOT;};
+void() nour_die3 = [$death3, nour_die4 ] { self.solid = SOLID_NOT; };
 void() nour_die4 = [$death4, nour_die5 ] {};
 void() nour_die5 = [$death5, nour_die6 ] {};
 void() nour_die6 = [$death6, nour_die7 ] {};
 void() nour_die7 = [$death7, nour_die8 ] {};
-void() nour_die8 = [$death8, nour_die9 ] { self.lip = 0;};
+void() nour_die8 = [$death8, nour_die9 ] { self.lip = 0; };
 void() nour_die9 = [$death9, nour_die9 ] {
 	if (random() < 0.2) Fire_NourPlasma('0 0 -16'); // Check for a random bolt of plasma
 	nour_lightningdeath(PARTICLE_BURST_BLUE); // No more Nour!
@@ -620,9 +620,9 @@ void() nour_readyframe = {
 void() nour_revealframe = {
 	// Beginning of animation block
 	if (self.walkframe == 3) 
-		sound(self, CHAN_BODY, "ad171/nour/reveal.wav", 1, ATTN_NORM);
+		sound(self,CHAN_BODY,"ad171/nour/reveal.wav",1,ATTN_NORM);
 	else if (self.walkframe == 23)
-		sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
 	
 	if (self.movetarget2 != world) { 
 		// Work out remaining distance to go
@@ -682,7 +682,7 @@ void() nour_awake = {
 	// Setup minion chain entity system
 	if (nour_minionsetup()) {
 		dprint("\b[NOUR]\b Cannot create minion chain!\n");
-		spawn_marker(self.origin+'0 0 32', SPNMARK_YELLOW);
+		spawn_marker(self.origin+'0 0 32','0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}
@@ -698,13 +698,13 @@ void() nour_awake = {
 	// Does the tether entity exist?
 	if (!self.movelast) {
 		dprint("\b[NOUR]\b Tether target not found!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}
 
 	// Show BOSS tetherpoint
-	spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
+	spawn_marker(self.movelast.origin+'0 0 8','0 0 0',0,SPNMARK_RED);
 	
 	// If message2 is not defined?
 	if (self.message2 == "") {
@@ -725,7 +725,7 @@ void() nour_awake = {
 		self.movetarget2 = find(world,targetname,self.message2);
 		if (!self.movetarget2) {
 			dprint("\b[NOUR]\b Missing spawn destination!\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			entity_hide(self);
 			return;
 		}

@@ -79,12 +79,12 @@ void() GrappleTrack = { // [FUNCTION]
     local vector spray;
 	local float save, d;
 
-    if (self != self.master.hook) { remove(self);  return;} // PM:  Not using this hook.
-    if (!self.state || self.master.health <= 0 || !self.modelindex) { GrappleReset();  return;} // Drop the hook if owner is dead or has released the button.  Update 7/11/09:  ...or has left the level.
-    if (frame_pause() && (self.master.flags & FL_CLIENT)) { GrappleReset();  return;} // Player always drop the hook during a cutscene or intermission.
-    if (GrappleCutCheck ()) { GrappleReset(); return;} // PM:  Must have a clear path between hook and source.  Do this here instead of the grapple check because this is called only 10/sec while the other is called more often than that.
-	if (self.state != 2 && self.enemy.solid <= SOLID_TRIGGER) { GrappleReset();  return;} // Release insubstantial targets.
-	if (self.state != 2 && self.enemy.teleport_time > time) { GrappleReset();  return;} // Player teleported away from the grapple.
+    if (self != self.master.hook) { remove(self);  return; } // PM:  Not using this hook.
+    if (!self.state || self.master.health <= 0 || !self.modelindex) { GrappleReset();  return; } // Drop the hook if owner is dead or has released the button.  Update 7/11/09:  ...or has left the level.
+    if (frame_pause() && (self.master.flags & FL_CLIENT)) { GrappleReset();  return; } // Player always drop the hook during a cutscene or intermission.
+    if (GrappleCutCheck ()) { GrappleReset(); return; } // PM:  Must have a clear path between hook and source.  Do this here instead of the grapple check because this is called only 10/sec while the other is called more often than that.
+	if (self.state != 2 && self.enemy.solid <= SOLID_TRIGGER) { GrappleReset();  return; } // Release insubstantial targets.
+	if (self.state != 2 && self.enemy.teleport_time > time) { GrappleReset();  return; } // Player teleported away from the grapple.
 
     if (self.state != 2) {
         self.velocity = '0 0 0';
@@ -99,7 +99,7 @@ void() GrappleTrack = { // [FUNCTION]
             if ((self.master.perms & POW_VAMPIRE) && (!(self.enemy.classgroup & CG_ZOMBIE))) save = save + ceil(1.2 * save);
 			if (save > 0) T_Heal(self.master, save * d, FALSE);
 		}
-        sound(self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM); // Use Zerstorer's chainsaw grinding noise.
+        sound(self,CHAN_WEAPON,"zerstorer/weapons/sawguts.wav",1,ATTN_NORM); // Use Zerstorer's chainsaw grinding noise.
         T_Damage (self.enemy, self, self.master, d, DAMARMOR);
         spray_x = 100 * crandom();
         spray_y = 100 * crandom();
@@ -114,7 +114,7 @@ void() GrappleAnchor = { // [FUNCTION]
     local vector org;
     local string sfx;
 
-    if (InSky(self.origin)) { GrappleReset(); return;}
+    if (InSky(self.origin)) { GrappleReset(); return; }
     if (Reflected_Damage(self.dmg)) return;
 
     if (!self.dmg) self.dmg = 10;
@@ -132,7 +132,7 @@ void() GrappleAnchor = { // [FUNCTION]
         self.avelocity = '0 0 0';
     }
 
-    sound(self, CHAN_AUTO, sfx, 1, ATTN_NORM);
+    sound(self,CHAN_AUTO,sfx,1,ATTN_NORM);
     if (other.takedamage) {
         spawn_touchblood (self,other,self.dmg);
         T_Damage (other, self, self.master, self.dmg, DAMARMOR);
@@ -163,7 +163,7 @@ void() GrappleAnchor = { // [FUNCTION]
 };
 
 void() Grapple_Think = { // [FUNCTION]
-    if (self.delay < time) { GrappleReset(); return;}
+    if (self.delay < time) { GrappleReset(); return; }
 
     if (GrappleCutCheck()) {
         GrappleSever (self);
@@ -203,7 +203,7 @@ void() W_FireGrapple = { // [FUNCTION]
     if (self.hook) return; // reject subsequent calls from player.qc
 
     self.punchangle_x = -2; // bump him
-    sound(self, CHAN_WEAPON, "drake/weapons/chain1.wav", 1, ATTN_NORM); // chain out sound(loops)
+    sound(self,CHAN_WEAPON,"drake/weapons/chain1.wav",1,ATTN_NORM); // chain out sound(loops)
     makevectors(self.v_angle);
     Grapple_Launch (self, self.origin + v_forward * 16 + '0 0 16', v_forward);
 };
@@ -278,7 +278,7 @@ void() GrappleService = { // [FUNCTION]
 	}
     if (targ) {
         makevectors(self.angles);
-        vel = self.hook.origin - ( self.origin + (v_up * 16 * (!self.button2)) + (v_forward * 16)); // The jump button bumps the player up a little bit.
+        vel = self.hook.origin - (self.origin + (v_up * 16 * (!self.button2)) + (v_forward * 16)); // The jump button bumps the player up a little bit.
         if (targ == self) mx = SPEED_HOOK;
         else { // Pulling target toward attacker.
 			mx = 350;

@@ -125,7 +125,7 @@ void(float muzzle) floyd_fire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_FLOYDBOLT + (skill * SPEED_FLOYDSKILL);
-	sound(self, CHAN_WEAPON, "rrp/floyd/fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"rrp/floyd/fire.wav",1,ATTN_NORM);
 	muzoff = '0 0 0'; muzoff_y = muzzle; // Create left/right laser vector
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset + muzoff);
@@ -202,7 +202,7 @@ void(entity inflictor, entity attacker, float damage) floyd_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 
 		// Rolling around on floor?
 		if (self.spawnflags & MON_FLOYDROLL) return;
@@ -257,11 +257,11 @@ void() floyd_die = {
 	if (self.spawnflags & MON_FLOYDROLL) ExplosiveGibDeath(self.death_sound2,2,4,4);
 	else {
 		// Check for a quick gib death
-		if ( self.health < -35 || self.gibondeath) self.gibbed = TRUE;
+		if (self.health < -35 || self.gibondeath) self.gibbed = TRUE;
 		
 		// regular death (no head model)
 		if (!self.gibbed) {
-			sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 			floyd_death2();
 		}
 		// Quick explosion with head model

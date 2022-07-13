@@ -5,13 +5,13 @@ void() dlord_idle_sound;
 void() dguard_hit = {
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
-			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"quoth/dguard/slmiss1.wav",1,ATTN_NORM);
 		} else {
-			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"quoth/dguard/slmiss2.wav",1,ATTN_NORM);
 		}
 		return;
 	}
-	sound(self, CHAN_WEAPON, "quoth/dguard/slhit.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"quoth/dguard/slhit.wav",1,ATTN_NORM);
 	T_Damage(self.enemy, self, self, 30,DAMARMOR);
 	// Check for poisonous attribute (new poison version)
 	if (self.poisonous) PoisonDeBuff(self.enemy);
@@ -156,7 +156,7 @@ void() dlord_run6 = [34, dlord_run7] { ai_run(25); };
 void() dlord_run7 = [35, dlord_run8] { ai_run(21); };
 void() dlord_run8 = [36, dlord_run1] { ai_run(13); };
 
-void() dlord_pain1 = [37, dlord_pain2] { sound(self, CHAN_VOICE, "quoth/dlord/pain.wav", 1, ATTN_NORM); shieldon(); };
+void() dlord_pain1 = [37, dlord_pain2] { sound(self,CHAN_VOICE, "quoth/dlord/pain.wav",1,ATTN_NORM); shieldon(); };
 void() dlord_pain2 = [38, dlord_pain3] {};
 void() dlord_pain3 = [39, dlord_pain4] {};
 void() dlord_pain4 = [40, dlord_pain5] {};
@@ -191,9 +191,9 @@ void() dlord_die = {
 
 	self.effects = 0;
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "quoth/dlord/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/dlord/death.wav",1,ATTN_NORM);
 		if (random() > 0.5) { dlord_die1();
-		} else { dlord_dieb1();}
+		} else { dlord_dieb1(); }
 	}
 };
 
@@ -235,7 +235,7 @@ void() dlord_magicd9 = [101, dlord_magicd10] {
 			dlord_shot(1);
 		}
 	}
-	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 	self.dlord_firecnt = self.dlord_firecnt + 1;
 	shieldoff();
 	SUB_DLordCheckRefire(dlord_magicd8);
@@ -251,7 +251,7 @@ void() dlord_magica3 = [81, dlord_magica4] { ai_face(); shieldoff(); };
 void() dlord_magica4 = [82, dlord_magica5] { ai_face(); shieldoff(); };
 void() dlord_magica5 = [83, dlord_magica6] { ai_face(); shieldoff(); };
 void() dlord_magica6 = [84, dlord_magica7] { ai_face(); shieldoff(); };
-void() dlord_magica7 = [85, dlord_magica8] { dlord_light(40); sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM); shieldoff(); };
+void() dlord_magica7 = [85, dlord_magica8] { dlord_light(40); sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM); shieldoff(); };
 void() dlord_magica8 = [86, dlord_magica9] { dlord_light(25); shieldoff(); };
 void() dlord_magica9 = [87, dlord_magica10] { dlord_light(0); dguard_hit(); shieldoff(); };
 void() dlord_magica10 = [88, dlord_magica11] { dlord_light(-20); shieldoff(); };
@@ -294,7 +294,7 @@ void() dlord_smash3 = [124, dlord_smash4] { ai_charge(9); };
 void() dlord_smash4 = [125, dlord_smash5] { ai_charge(TE_TELEPORT); };
 void() dlord_smash5 = [126, dlord_smash6] { ai_charge(TE_LAVASPLASH); ai_melee(); };
 void() dlord_smash6 = [127, dlord_smash7] { ai_charge(TE_WIZSPIKE); ai_melee(); };
-void() dlord_smash7 = [128, dlord_smash8] { ai_charge(TE_EXPLOSION2); ai_melee(); };
+void() dlord_smash7 = [128, dlord_smash8] { ai_charge(12); ai_melee(); };
 void() dlord_smash8 = [129, dlord_smash9] { ai_charge(2); ai_melee(); };
 void() dlord_smash9 = [130, dlord_smash10] { ai_charge(3); ai_melee(); };
 void() dlord_smash10 = [131, dlord_smash11] { ai_charge(0); };
@@ -325,17 +325,17 @@ void() dlord_watk22 = [154, dlord_run1] { ai_charge(3); };
 
 void() dlord_idle_sound = {
 	if (random() < 0.2)
-		sound(self, CHAN_VOICE, "quoth/dlord/idle.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/dlord/idle.wav",1,ATTN_NORM);
 };
 
 void(entity inflictor, entity attacker, float damage) dlord_pain = {
 	if (self.pain_finished > time) return;
 
-	sound(self, CHAN_VOICE, "quoth/dlord/pain.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "quoth/dlord/pain.wav",1,ATTN_NORM);
 
 	if (random() * 50 > damage) return;
 
-	self.pain_finished = time + TE_EXPLOSION2;
+	self.pain_finished = time + 12;
 	dlord_pain1();
 };
 

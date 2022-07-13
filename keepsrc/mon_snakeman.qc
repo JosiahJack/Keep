@@ -61,7 +61,7 @@ void() snake_stand11 = [11, snake_stand12] { ai_stand(); };
 void() snake_stand12 = [10, snake_stand] { ai_stand(); };
 
 void() snake_walk1 = [0, snake_walk2] {
-	if (random() < 0.2) sound(self, CHAN_VOICE, "hipnotic/scourge/idle.wav", 1, ATTN_IDLE);
+	if (random() < 0.2) sound(self,CHAN_VOICE, "hipnotic/scourge/idle.wav",1,ATTN_IDLE);
 	ai_walk(FL_SWIM);
 };
 void() snake_walk2 = [1, snake_walk3] { ai_walk(MOVETYPE_WALK); };
@@ -83,10 +83,10 @@ void() snake_walk16 = [15, snake_walk1] { ai_walk(1); };
 void() snake_run1 = [0, snake_run2] {
 	if (self.health < 0) return;
 	if (self.wait2) {
-		sound(self, CHAN_VOICE, "hipnotic/scourge/sight.wav", 1, ATTN_IDLE);
+		sound(self,CHAN_VOICE, "hipnotic/scourge/sight.wav",1,ATTN_IDLE);
 		self.wait2 = FALSE;
 	} else {
-		if (random() < 0.2) sound(self, CHAN_VOICE, "hipnotic/scourge/idle.wav", 1, ATTN_IDLE);
+		if (random() < 0.2) sound(self,CHAN_VOICE, "hipnotic/scourge/idle.wav",1,ATTN_IDLE);
 	}
 	self.attack_state = AS_SLIDING;
 	ai_run(FL_CLIENT);
@@ -129,7 +129,7 @@ void() snake_run8 = [14, snake_run1]
 };
 
 void() snake_attack1 = [16, snake_attack6] {
-	sound(self, CHAN_VOICE, "hipnotic/scourge/idle.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "hipnotic/scourge/idle.wav",1,ATTN_NORM);
 	ai_face();
 };
 
@@ -208,7 +208,7 @@ void() snake_dead6 = [51, snake_dead6] { monster_deadbody_check(); };
 void(entity inflictor, entity attacker, float damage) snake_pain = {
 	if (self.pain_finished > time) return;
 
-	sound(self, CHAN_VOICE, "ogre/ogpain1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ogre/ogpain1.wav",1,ATTN_NORM);
 	self.velocity_x = -50 - 50 * random();
 	self.velocity_y = 0;
 	self.velocity_z = MOVETYPE_FLY + FL_SWIM * random();
@@ -233,7 +233,7 @@ void() snake_die = {
 		self.avelocity_y = -200 + 400 * random();
 		self.avelocity_z = 0;
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
-		sound(self, CHAN_VOICE, "hipnotic/scourge/pain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "hipnotic/scourge/pain2.wav",1,ATTN_NORM);
 		if (random() > 0.5) {
 			snake_death1();
 		} else {
@@ -253,7 +253,7 @@ void(float offset) SnakeMissile = {
 	vec = normalize(v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5) * 0.1;
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE);
-	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 };
 
 void() monster_snakeman_precache = {

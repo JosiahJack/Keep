@@ -966,7 +966,7 @@ void() MinotaurCheckAttack = {
 			// Mid Range attack (JUMP) Not spawning dark version
 			if (self.minion_name == "" && random() < 0.35) {
 				// Jumped recently, facing right direction and not blocked?
-				if (JumpAttackValid()){
+				if (JumpAttackValid()) {
 					SUB_AttackFinished (random()); // Block any range attacks for a while
 					JumpTouchReset();
 					self.th_jump();
@@ -1519,7 +1519,7 @@ void() Shade_CheckAttack = {
     if (time < self.attack_finished) return;
 
     // Determine the chance that the nightshade will attack.
-    if (enemy_range == RANGE_MELEE) { self.attack_finished = 0; chance = 0.9;}
+    if (enemy_range == RANGE_MELEE) { self.attack_finished = 0; chance = 0.9; }
     else if (enemy_range == RANGE_NEAR) // Short range (120-500)
         chance = 0.2;
     else

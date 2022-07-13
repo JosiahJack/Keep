@@ -55,7 +55,7 @@ void() func_door_secret_touch = { // [FUNCTION]
 	self.attack_finished = time + 2;
 	if (self.message) {
 		centerprint (other, self.message);
-		sound(other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
+		sound(other,CHAN_BODY,self.noise, self.volume,ATTN_NORM);
 	}
 };
 
@@ -65,13 +65,13 @@ void() func_door_secret_done = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	if (self.spawnflags & SECRET_ALWAYS_SHOOT) self.takedamage = DAMAGE_YES; // Add back takedamage if door is suppose to be shootable!
-	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM);
 };
 
 void() func_door_secret_move6 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
-	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM);
 	SUB_CalcMove(self.dest0, self.speed, func_door_secret_done);
 };
 
@@ -81,14 +81,14 @@ void() func_door_secret_move5 = { // [FUNCTION]
 
 	self.nextthink = self.ltime + 1.0;
 	self.think = func_door_secret_move6;
-	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM);
 };
 
 // Move backward...
 void() func_door_secret_move4 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
-	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM);
 	SUB_CalcMove(self.dest1, self.yaw_speed, func_door_secret_move5);		
 };
 
@@ -96,7 +96,7 @@ void() func_door_secret_move4 = { // [FUNCTION]
 void() func_door_secret_move3 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
-	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM);
 	if (!(self.spawnflags & SECRET_OPEN_ONCE)) {
 		self.nextthink = self.ltime + self.wait;
 		self.think = func_door_secret_move4;
@@ -107,7 +107,7 @@ void() func_door_secret_move3 = { // [FUNCTION]
 void() func_door_secret_move2 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
-	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM);
 	SUB_CalcMove(self.dest2, self.yaw_speed, func_door_secret_move3);
 };
 
@@ -117,7 +117,7 @@ void() func_door_secret_move1 = { // [FUNCTION]
 
 	self.nextthink = self.ltime + 1.0;
 	self.think = func_door_secret_move2;
-	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM);
 };
 
 
@@ -132,10 +132,10 @@ void() func_door_secret_use = { // [FUNCTION]
 		self.velocity = '0 0 0';
 		self.message = ""; // no more touch message and fire targets
 		SUB_UseTargets();
-		sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Make a sound, wait a little...
+		sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Make a sound, wait a little...
 		self.nextthink = self.ltime + 0.1;
 		SUB_CalcMove(self.dest1, self.speed, func_door_secret_move1); // Start FIRST move (t_width)
-		sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM);
 	}
 };
 
@@ -153,7 +153,7 @@ void() func_door_secret_on = { // [FUNCTION]
 	self.solid = SOLID_BSP;
 	setmodel(self, self.mdl);
 	self.velocity = '0 0 0';
-	if ( self.spawnflags & SECRET_OPEN_ONCE ) { // trigger once doors?
+	if (self.spawnflags & SECRET_OPEN_ONCE ) { // trigger once doors?
 		if (self.state == STATE_TOP) self.max_health = 0; // if the door is open, do nothing
 	} else {
 		// Reset health, state and frame back to default
@@ -181,7 +181,7 @@ void() func_door_secret_off = { // [FUNCTION]
 	self.think = SUB_Null;
 	
 	
-	if ( self.spawnflags & SECRET_OPEN_ONCE ) { // trigger once door?
+	if (self.spawnflags & SECRET_OPEN_ONCE ) { // trigger once door?
 		
 		if (self.state == STATE_TOP) setorigin(self, self.dest2); // if the door is moving, go to final position
 	} else {

@@ -189,7 +189,7 @@ void() open9 = [ 119, rilke1  ] { if (random() < 0.5)self.idletimer = time + 5 +
 void() test1 = [ 40, test2  ] {
 	sound(self,CHAN_AUTO,"ad171/ambience/switch_2.wav",1,ATTN_NORM);
 };
-void() test2 = [ 41, test3  ] { if (self.enemy) self.count = self.enemy.health;};
+void() test2 = [ 41, test3  ] { if (self.enemy) self.count = self.enemy.health; };
 void() test3 = [ 42, test4  ] {
 	local vector dir;
 
@@ -257,7 +257,7 @@ void() fault3 = [ 87,  fault4  ] { ThrowGib(2,1); };
 void() fault4 = [ 88,  fault5  ] { ThrowGib(3,1); };
 void() fault5 = [ 89,  fault6  ] {};
 void() fault6 = [ 90,  fault7  ] { ThrowGib(1,1); };
-void() fault7 = [ 91,  fault8  ] { self.solid = SOLID_NOT; self.takedamage = DAMAGE_NO;};
+void() fault7 = [ 91,  fault8  ] { self.solid = SOLID_NOT; self.takedamage = DAMAGE_NO; };
 void() fault8 = [ 92,  fault9  ] {};
 void() fault9 = [ 93,  fault10 ] {};
 void() fault10 = [ 94,  fault11 ] { ThrowGib(2,1); };
@@ -392,7 +392,7 @@ void() flytrap_close5 = [	18 , flytrap_close6] {};
 void() flytrap_close6 = [	19 , flytrap_close7] {};
 void() flytrap_close7 = [	20 , flytrap_close8] {};
 void() flytrap_close8 = [	21 , flytrap_close9] {};
-void() flytrap_close9 = [	22 , flytrap_close10] { self.takedamage = DAMAGE_NO;};
+void() flytrap_close9 = [	22 , flytrap_close10] { self.takedamage = DAMAGE_NO; };
 void() flytrap_close10 = [	23 , flytrap_close11] {};
 void() flytrap_close11 = [	24 , flytrap_close12] {};
 void() flytrap_close12 = [	25 , flytrap_close13] {};
@@ -400,7 +400,7 @@ void() flytrap_close13 = [	26 , flytrap_close14] {};
 void() flytrap_close14 = [	27 , flytrap_close15] {};
 void() flytrap_close15 = [	28 , flytrap_digest1] {};
 
-void() flytrap_digest1 = [	29 , flytrap_digest2] { self.takedamage = DAMAGE_NO;}
+void() flytrap_digest1 = [	29 , flytrap_digest2] { self.takedamage = DAMAGE_NO; }
 void() flytrap_digest2 = [	30 , flytrap_digest3] {};
 void() flytrap_digest3 = [	31 , flytrap_digest4] {};
 void() flytrap_digest4 = [	32 , flytrap_digest5] {};
@@ -496,7 +496,7 @@ void() flytrap_death1 = [ 108, flytrap_death2 ] {};
 void() flytrap_death2 = [ 109,  flytrap_death3  ] {};
 void() flytrap_death3 = [ 110,  flytrap_death4  ] {};
 void() flytrap_death4 = [ 111,  flytrap_death5  ] {};
-void() flytrap_death5 = [ 112,  flytrap_death6  ] { self.solid = SOLID_NOT; self.takedamage = DAMAGE_NO;};
+void() flytrap_death5 = [ 112,  flytrap_death6  ] { self.solid = SOLID_NOT; self.takedamage = DAMAGE_NO; };
 void() flytrap_death6 = [ 113,  flytrap_death7  ] {};
 void() flytrap_death7 = [ 114,  flytrap_death8 ] {};
 void() flytrap_death8 = [ 115,  flytrap_death9 ] {};

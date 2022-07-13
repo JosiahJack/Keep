@@ -103,7 +103,7 @@ void() exploder_fire = { // [FUNCTION]
 };
 
 void() exploder_use = { // [FUNCTION]
-   if ( self.delay ) {
+   if (self.delay ) {
       self.nextthink = (time + self.delay);
       self.delay = FALSE;
       self.think = exploder_fire;

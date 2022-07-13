@@ -128,16 +128,16 @@ void()	elena_taunt10	= [	$taunt10,	elena_taunt11	] { ai_stand(); rakuyo_run(); }
 void()	elena_taunt11	= [	$taunt11,	elena_taunt12	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt12	= [	$taunt12,	elena_taunt13	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt13	= [	$taunt13,	elena_taunt14	] { ai_stand(); rakuyo_run(); };
-void()	elena_taunt14	= [	$taunt14,	elena_taunt15	] { ai_stand(); rakuyo_run(); self.skin = 1;};
-void()	elena_taunt15	= [	$taunt15,	elena_taunt16	] { ai_stand(); rakuyo_run(); self.skin = 0; sound(self, CHAN_WEAPON, "redfield/huntress/ching.wav", 1, ATTN_NORM); };
+void()	elena_taunt14	= [	$taunt14,	elena_taunt15	] { ai_stand(); rakuyo_run(); self.skin = 1; };
+void()	elena_taunt15	= [	$taunt15,	elena_taunt16	] { ai_stand(); rakuyo_run(); self.skin = 0; sound(self,CHAN_WEAPON,"redfield/huntress/ching.wav",1,ATTN_NORM); };
 void()	elena_taunt16	= [	$taunt16,	elena_taunt17	] { ai_stand(); elena_particles('20 0 24',6,0.5,64,512);  rakuyo_run(); };
 void()	elena_taunt17	= [	$taunt17,	elena_taunt18	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt18	= [	$taunt18,	elena_taunt19	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt19	= [	$taunt19,	elena_taunt20	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt20	= [	$taunt20,	elena_taunt21	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt21	= [	$taunt21,	elena_taunt22	] { ai_stand(); rakuyo_run(); };
-void()	elena_taunt22	= [	$taunt22,	elena_taunt23	] { ai_stand(); rakuyo_run(); self.skin = 1;};
-void()	elena_taunt23	= [	$taunt23,	elena_taunt24	] { ai_stand(); rakuyo_run(); self.skin = 0;};
+void()	elena_taunt22	= [	$taunt22,	elena_taunt23	] { ai_stand(); rakuyo_run(); self.skin = 1; };
+void()	elena_taunt23	= [	$taunt23,	elena_taunt24	] { ai_stand(); rakuyo_run(); self.skin = 0; };
 void()	elena_taunt24	= [	$taunt24,	elena_taunt25	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt25	= [	$taunt25,	elena_taunt26	] { ai_stand(); rakuyo_run(); };
 void()	elena_taunt26	= [	$taunt26,	elena_taunt27	] { ai_stand(); rakuyo_run(); };
@@ -166,7 +166,7 @@ void()	elena_idleb1	= [	$idleb1,	elena_idleb2	] { ai_stand(); self.skin = 0; rak
 hunt_idletime = 0;
 };
 void()	elena_idleb2	= [	$idleb2,	elena_idleb3	] { ai_stand(); elena_usegun(0); rakuyo_run();
-sound(self, CHAN_WEAPON, "redfield/huntress/pistol_cock.wav", 1, ATTN_NORM);
+sound(self,CHAN_WEAPON,"redfield/huntress/pistol_cock.wav",1,ATTN_NORM);
 };
 void()	elena_idleb3	= [	$idleb3,	elena_idleb4	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
 void()	elena_idleb4	= [	$idleb4,	elena_idleb5	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
@@ -176,8 +176,8 @@ void()	elena_idleb7	= [	$idleb7,	elena_idleb8	] { ai_stand(); elena_usegun(1); r
 void()	elena_idleb8	= [	$idleb8,	elena_idleb9	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
 void()	elena_idleb9	= [	$idleb9,	elena_idleb10	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
 void()	elena_idleb10	= [	$idleb10,	elena_idleb11	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
-void()	elena_idleb11	= [	$idleb11,	elena_idleb12	] { ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 1;};
-void()	elena_idleb12	= [	$idleb12,	elena_idleb13	] { ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 0;};
+void()	elena_idleb11	= [	$idleb11,	elena_idleb12	] { ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 1; };
+void()	elena_idleb12	= [	$idleb12,	elena_idleb13	] { ai_stand(); elena_usegun(1); rakuyo_run(); self.skin = 0; };
 void()	elena_idleb13	= [	$idleb13,	elena_idleb14	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
 void()	elena_idleb14	= [	$idleb14,	elena_idleb15	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
 void()	elena_idleb15	= [	$idleb15,	elena_idleb16	] { ai_stand(); elena_usegun(1); rakuyo_run(); };
@@ -192,8 +192,8 @@ void()	elena_idle2	= [	$idle2,		elena_idle3	] { ai_stand(); rakuyo_run(); };
 void()	elena_idle3	= [	$idle3,		elena_idle4	] { ai_stand(); rakuyo_run(); };
 void()	elena_idle4	= [	$idle4,		elena_idle5	] { ai_stand(); rakuyo_run(); };
 void()	elena_idle5	= [	$idle5,		elena_idle6	] { ai_stand(); rakuyo_run(); };
-void()	elena_idle6	= [	$idle6,		elena_idle7	] { ai_stand(); rakuyo_run(); self.skin = 1;};
-void()	elena_idle7	= [	$idle7,		elena_idle8	] { ai_stand(); rakuyo_run(); self.skin = 0;};
+void()	elena_idle6	= [	$idle6,		elena_idle7	] { ai_stand(); rakuyo_run(); self.skin = 1; };
+void()	elena_idle7	= [	$idle7,		elena_idle8	] { ai_stand(); rakuyo_run(); self.skin = 0; };
 void()	elena_idle8	= [	$idle8,		elena_idle9	] { ai_stand(); rakuyo_run(); };
 void()	elena_idle9	= [	$idle9,		elena_idle10	] { ai_stand(); rakuyo_run(); };
 void()	elena_idle10	= [	$idle10,	elena_idle11	] { ai_stand(); rakuyo_run(); };
@@ -251,22 +251,22 @@ void()	elena_transa4	= [	$transa4,	elena_transa5	] { rakuyo_run(); };
 void()	elena_transa5	= [	$transa5,	elena_transa6	] { rakuyo_run(); };
 void()	elena_transa6	= [	$transa6,	elena_transa7	] { rakuyo_run(); };
 void()	elena_transa7	= [	$transa7,	elena_transa8	] { rakuyo_run(); self.attachment.skin = 1;
-sound(self, CHAN_VOICE, "redfield/huntress/stabbed.wav", 1, ATTN_NORM);
+sound(self,CHAN_VOICE, "redfield/huntress/stabbed.wav",1,ATTN_NORM);
 spawn_touchblood(self, other, 24); 
 };
-void()	elena_transa8	= [	$transa8,	elena_transa9	] { rakuyo_run(); self.skin = 1;};
+void()	elena_transa8	= [	$transa8,	elena_transa9	] { rakuyo_run(); self.skin = 1; };
 void()	elena_transa9	= [	$transa9,	elena_transa10	] { ai_back(4); rakuyo_run(); };
 void()	elena_transa10	= [	$transa10,	elena_transa11	] { rakuyo_run(); };
 void()	elena_transa11	= [	$transa11,	elena_transa12	] { rakuyo_run(); };
 void()	elena_transa12	= [	$transa12,	elena_transa13	] { rakuyo_run(); };
 void()	elena_transa13	= [	$transa13,	elena_transa14	] { rakuyo_run(); };
 void()	elena_transa14	= [	$transa14,	elena_transa15	] { rakuyo_run(); };
-void()	elena_transa15	= [	$transa15,	elena_transa16	] { rakuyo_run(); self.skin = 0;};
+void()	elena_transa15	= [	$transa15,	elena_transa16	] { rakuyo_run(); self.skin = 0; };
 void()	elena_transa16	= [	$transa16,	elena_transa17	] { rakuyo_run(); };
 void()	elena_transa17	= [	$transa17,	elena_transa18	] { rakuyo_run(); };
 void()	elena_transa18	= [	$transa18,	elena_transa19	] { rakuyo_run(); };
 void()	elena_transa19	= [	$transa19,	elena_transa20	] { rakuyo_run();
-sound(self, CHAN_VOICE, "redfield/huntress/blood_scream.wav", 1, ATTN_NORM);
+sound(self,CHAN_VOICE, "redfield/huntress/blood_scream.wav",1,ATTN_NORM);
 local entity eb;
 self.owner = spawn();
 eb = self.owner;
@@ -304,7 +304,7 @@ float() elena_Phase2Check = {
 };
 
 void() elena_Phase2Run = {
-	if (elena_Phase2Check() == TRUE) { elena_transa1(); return;}
+	if (elena_Phase2Check() == TRUE) { elena_transa1(); return; }
 };
 
 void() elena_PhaseGate = {
@@ -376,7 +376,7 @@ void()	elena_blast17	= [	$blast17,	elena_blast18	] {
 
 	rakuyo_run();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "redfield/huntress/fireball.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"redfield/huntress/fireball.wav",1,ATTN_NORM);
 	self.owner = spawn();
 	fb = self.owner;
 	setmodel(fb, MODEL_FIREBLAST);
@@ -435,7 +435,7 @@ float() elena_Phase3Check = {
 };
 
 void() elena_Phase3Run = {
-	if (elena_Phase3Check() == TRUE) { elena_blast1(); return;}
+	if (elena_Phase3Check() == TRUE) { elena_blast1(); return; }
 };
 
 void() check_FireTrig =
@@ -481,7 +481,7 @@ void() elena_melee = {
 	// No check if meleehitsound is defined or not
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,self.meleehitsound,1,ATTN_NORM);
 	}
 };
 	
@@ -527,7 +527,7 @@ self.jump_flag = time + MONAI_JUMPELENATIME;
 };
 void()	elena_spin2	= [	$spin2,		elena_spin3	] { ai_face(); rakuyo_run(); };
 void()	elena_spin3	= [	$spin3,		elena_spin4	] { ai_face(); rakuyo_run();
-	sound(self, CHAN_WEAPON, "redfield/huntress/spin.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"redfield/huntress/spin.wav",1,ATTN_NORM);
 };
 void()	elena_spin4	= [	$spin4,		elena_spin5	] { ai_face(); rakuyo_run(); };
 void()	elena_spin5	= [	$spin5,		elena_spin6	] {
@@ -595,7 +595,7 @@ void()	elena_spin13	= [	$spin13,	elena_spin14	] { monster_footstep(FALSE);
 self.owner.frame = 8; 
 self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-	sound(self, CHAN_VOICE, "redfield/huntress/landing_scream.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "redfield/huntress/landing_scream.wav",1,ATTN_NORM);
 };
 void()	elena_spin14	= [	$spin14,	elena_spin15	] { rakuyo_run(); elena_melee();
 local entity ds;
@@ -631,7 +631,7 @@ rakuyo_run();
 Melee Attacks
 =============================================================================*/
 //----------------------------------------------------------------------
-void()	elena_slashb1	= [	$slashb1,	elena_slashb2	] { ai_charge(4); rakuyo_run(); self.skin = 0;};
+void()	elena_slashb1	= [	$slashb1,	elena_slashb2	] { ai_charge(4); rakuyo_run(); self.skin = 0; };
 void()	elena_slashb2	= [	$slashb2,	elena_slashb3	] { ai_charge(8); rakuyo_run(); };
 void()	elena_slashb3	= [	$slashb3,	elena_slashb4	] { ai_charge(2); rakuyo_run(); };
 void()	elena_slashb4	= [	$slashb4,	elena_slashb5	] { ai_charge(3); rakuyo_run(); };
@@ -645,9 +645,9 @@ slb = self.owner;
 setmodel(slb, MODEL_ELENASLSH);
 setorigin(slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4;}
-	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1;}
-	else { slb.skin = 1; slb.alpha = 0.8;}
+if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4; }
+	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1; }
+	else { slb.skin = 1; slb.alpha = 0.8; }
 slb.frame = 1;
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
@@ -656,7 +656,7 @@ void()	elena_slashb8	= [	$slashb8,	elena_slashb9	] { ai_charge(1); rakuyo_run();
 void()	elena_slashb9	= [	$slashb9,	elena_run1	] { ai_charge(1); rakuyo_run(); };
 
 //===========================================================================
-void()	elena_slasha1	= [	$slasha1,	elena_slasha2	] { ai_charge(4); rakuyo_run(); self.skin = 0;};
+void()	elena_slasha1	= [	$slasha1,	elena_slasha2	] { ai_charge(4); rakuyo_run(); self.skin = 0; };
 void()	elena_slasha2	= [	$slasha2,	elena_slasha3	] { ai_charge(8); rakuyo_run(); };
 void()	elena_slasha3	= [	$slasha3,	elena_slasha4	] { ai_charge(2); rakuyo_run(); };
 void()	elena_slasha4	= [	$slasha4,	elena_slasha5	] { ai_charge(3); rakuyo_run(); };
@@ -670,9 +670,9 @@ slb = self.owner;
 setmodel(slb, MODEL_ELENASLSH);
 setorigin(slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4;}
-	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1;}
-	else { slb.skin = 1; slb.alpha = 0.8;}
+if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4; }
+	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1; }
+	else { slb.skin = 1; slb.alpha = 0.8; }
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
 };
@@ -680,11 +680,11 @@ void()	elena_slasha8	= [	$slasha8,	elena_run1	] { ai_charge(1); rakuyo_run();
 	if (ai_checkmelee(MONAI_ELENAFRONT, FALSE) && self.enemy.health > 0) self.think = elena_slashb1;
 };
 
-void()	elena_stab1	= [	$stab1,		elena_stab2	] { ai_charge(2); rakuyo_run(); self.skin = 0;};
+void()	elena_stab1	= [	$stab1,		elena_stab2	] { ai_charge(2); rakuyo_run(); self.skin = 0; };
 void()	elena_stab2	= [	$stab2,		elena_stab3	] { ai_charge(8); rakuyo_run();
 	local entity spr;
 
-	sound(self, CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5, ATTN_IDLE);
+	sound(self,CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5,ATTN_IDLE);
 	self.owner = spawn();
 	spr = self.owner;
 	setmodel(spr, MODEL_ELENASPR);
@@ -702,10 +702,10 @@ void()	elena_stab8	= [	$stab8,		elena_stab9	] { ai_chargenoturn(0); elena_melee(
 void()	elena_stab9	= [	$stab9,		elena_stab10	] { ai_chargenoturn(0); rakuyo_run(); };
 void()	elena_stab10	= [	$stab10,	elena_run1	] { ai_charge(1); rakuyo_run(); };
 
-void()	elena_cross1	= [	$cross1,		elena_cross2	] { ai_charge(2); rakuyo_run(); self.skin = 0;};
+void()	elena_cross1	= [	$cross1,		elena_cross2	] { ai_charge(2); rakuyo_run(); self.skin = 0; };
 void()	elena_cross2	= [	$cross2,		elena_cross3	] { ai_charge(8); rakuyo_run(); };
 void()	elena_cross3	= [	$cross3,		elena_cross4	] { ai_charge(8); rakuyo_run();
-	sound(self, CHAN_EXTRA1, "redfield/huntress/ching.wav", 0.5, ATTN_IDLE); };
+	sound(self,CHAN_EXTRA1, "redfield/huntress/ching.wav", 0.5,ATTN_IDLE); };
 void()	elena_cross4	= [	$cross4,		elena_cross5	] { ai_chargenoturn(12); rakuyo_run(); elena_melee();
 SwordSwipeSound(); };
 void()	elena_cross5	= [	$cross5,		elena_cross6	] { ai_chargenoturn(2); self.meleecontact = TRUE; ai_meleesmash(10);
@@ -716,9 +716,9 @@ slb = self.owner;
 setmodel(slb, MODEL_ELENASLSH);
 setorigin(slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4;}
-	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1;}
-	else { slb.skin = 1; slb.alpha = 0.8;}
+if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4; }
+	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1; }
+	else { slb.skin = 1; slb.alpha = 0.8; }
 slb.frame = 2;
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
@@ -767,7 +767,7 @@ void(entity inflictor, entity attacker, float damage) elena_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);	
 		if (self.pain_check == 1) elena_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -785,7 +785,7 @@ void() elena_shootgun = {
 	if (!self.enemy) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "redfield/huntress/pistol.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"redfield/huntress/pistol.wav",1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize((self.enemy.origin + '0 0 -8') - self.origin);
@@ -795,13 +795,13 @@ void() elena_shootgun = {
 
 void()	elena_shoot1	= [	$shoot1,	elena_shoot2	] { self.skin = 0; rakuyo_run(); };
 void()	elena_shoot2	= [	$shoot2,	elena_shoot3	] { ai_face(); elena_usegun(0); rakuyo_run();
-	sound(self, CHAN_WEAPON, "redfield/huntress/pistol_cock.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/huntress/pistol_cock.wav",1,ATTN_NORM); };
 void()	elena_shoot3	= [	$shoot3,	elena_shoot4	] { ai_face(); elena_usegun(1); rakuyo_run(); };
 void()	elena_shoot4	= [	$shoot4,	elena_shoot5	] { ai_face(); elena_usegun(1); rakuyo_run(); };
 void()	elena_shoot5	= [	$shoot5,	elena_shoot6	] { ai_face(); elena_usegun(1); rakuyo_run(); };
 void()	elena_shoot6	= [	$shoot6,	elena_shoot7	] { ai_face(); elena_usegun(1); elena_shootgun();
 	rakuyo_run();
-	sound(self, CHAN_WEAPON, "redfield/huntress/pistol.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/huntress/pistol.wav",1,ATTN_NORM); };
 void()	elena_shoot7	= [	$shoot7,	elena_shoot8	] { self.skin = 1; elena_usegun(1);
 	rakuyo_run();
 	local entity gs;
@@ -890,7 +890,7 @@ void()	elena_spear4	= [	$spear4,	elena_spear5	] { ai_face(); rakuyo_run(); };
 void()	elena_spear5	= [	$spear5,	elena_spear6	] { ai_face(); rakuyo_run(); };
 void()	elena_spear6	= [	$spear6,	elena_spear7	] { ai_face(); rakuyo_run(); };
 void()	elena_spear7	= [	$spear7,	elena_spear8	] { ai_face(); rakuyo_run();
-	sound(self, CHAN_WEAPON, "redfield/huntress/spears.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/huntress/spears.wav",1,ATTN_NORM); };
 void()	elena_spear8	= [	$spear8,	elena_spear9	] { ai_face(); rakuyo_run(); };
 void()	elena_spear9	= [	$spear9,	elena_spear10	] { ai_face(); rakuyo_run(); };
 void()	elena_spear10	= [	$spear10,	elena_spear11	] { ai_face(); rakuyo_run(); };
@@ -921,7 +921,7 @@ void()	elena_spear18	= [	$spear18,	elena_spear19	] { ai_face(); rakuyo_run();
 void()	elena_spear19	= [	$spear19,	elena_spear20	] { rakuyo_run(); };
 void()	elena_spear20	= [	$spear20,	elena_spear21	] { rakuyo_run(); };
 void()	elena_spear21	= [	$spear21,	elena_spear22	] { rakuyo_run(); elena_particles('20 0 24',6,0.5,4,512);
-	sound(self, CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5, ATTN_IDLE); };
+	sound(self,CHAN_EXTRA1, "redfield/huntress/chingb.wav", 0.5,ATTN_IDLE); };
 void()	elena_spear22	= [	$spear22,	elena_spear23	] { rakuyo_run(); };
 void()	elena_spear23	= [	$spear23,	elena_spear24	] { rakuyo_run(); };
 void()	elena_spear24	= [	$spear24,	elena_spear25	] { rakuyo_run(); };
@@ -936,7 +936,7 @@ void() elena_choose_atk = {
 	delta = self.enemy.origin - self.origin;
 
 	if (vlen(delta) < MONAI_ELENARANGE) { 
-		if (phase_Counter < 1) { elena_shoot1();}
+		if (phase_Counter < 1) { elena_shoot1(); }
 		else {
 			if (random() < 0.6) elena_spear1();
 				else elena_shoot1();
@@ -953,7 +953,7 @@ void() elena_wakeup = {
 
 	// No longer need taunt spawnflag, remove it
 	if (self.spawnflags & MON_HUNTRESS_TAUNT) {
-	self.spawnflags = self.spawnflags - (self.spawnflags & MON_HUNTRESS_TAUNT);}
+	self.spawnflags = self.spawnflags - (self.spawnflags & MON_HUNTRESS_TAUNT); }
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.use = SUB_Null;				// no re-trigger
 	
@@ -975,7 +975,7 @@ void()	elena_die5	= [	$death5,	elena_die6	] { self.skin = 0; rakuyo_run(); };
 void()	elena_die6	= [	$death6,	elena_die7	] { rakuyo_run(); };
 void()	elena_die7	= [	$death7,	elena_die8	] { rakuyo_run(); };
 void()	elena_die8	= [	$death8,	elena_die9	] { rakuyo_run();
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALB,1,ATTN_NORM); };
 void()	elena_die9	= [	$death9,	elena_die10	] { ai_forward(5); rakuyo_run(); };
 void()	elena_die10	= [	$death10,	elena_die11	] { ai_forward(4); self.skin = 1; rakuyo_run(); };
 void()	elena_die11	= [	$death11,	elena_die12	] { self.skin = 2; rakuyo_run(); };
@@ -1002,7 +1002,7 @@ void() elena_die = {
 	SUB_FinishAttachment2();
 	SUB_RemoveAttachment2(); // Make sure Evelyn pistol is removed
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		elena_die1(); // regular death
 	}
 };

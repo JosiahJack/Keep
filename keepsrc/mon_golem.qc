@@ -159,7 +159,7 @@ void() golem_run22 = [$run22, golem_run23 ] { golem_ai_run(); };
 void() golem_run23 = [$run23, golem_run1 ] { golem_ai_run(); };
 
 // MELEE - Punch or Pound the ground with fist
-void(float dist) golem_mcharge = { ai_charge(dist); self.nextthink = time + 0.05;};
+void(float dist) golem_mcharge = { ai_charge(dist); self.nextthink = time + 0.05; };
 
 void() golem_punch1 = [$punch1, golem_punch2 ] { golem_mcharge(5); };
 void() golem_punch2 = [$punch2, golem_punch3 ] { golem_mcharge(5); };
@@ -170,7 +170,7 @@ void() golem_punch6 = [$punch6, golem_punch7 ] { golem_mcharge(5); };
 void() golem_punch7 = [$punch7, golem_punch8 ] { golem_mcharge(5); };
 void() golem_punch8 = [$punch8, golem_punch9 ] { golem_mcharge(5); };
 void() golem_punch9 = [$punch9, golem_punch10 ] { golem_mcharge(5);
-	sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE); };
+	sound(self,CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav",1,ATTN_IDLE); };
 void() golem_punch10 = [$punch10, golem_punch11 ] { golem_mcharge(4); };
 void() golem_punch11 = [$punch11, golem_punch12 ] { golem_mcharge(3);monster_footstep(FALSE); };
 void() golem_punch12 = [$punch12, golem_punch13 ] { golem_mcharge(2);
@@ -200,7 +200,7 @@ void() golem_pound6 = [$pound6, golem_pound7 ] { golem_mcharge(5); };
 void() golem_pound7 = [$pound7, golem_pound8 ] { golem_mcharge(5); };
 void() golem_pound8 = [$pound8, golem_pound9 ] { golem_mcharge(5); };
 void() golem_pound9 = [$pound9, golem_pound10 ] { golem_mcharge(5);
-	sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE); };
+	sound(self,CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav",1,ATTN_IDLE); };
 void() golem_pound10 = [$pound10, golem_pound11 ] { golem_mcharge(4); };
 void() golem_pound11 = [$pound11, golem_pound12 ] { golem_mcharge(3);monster_footstep(FALSE); };
 void() golem_pound12 = [$pound12, golem_pound13 ] { golem_mcharge(2);
@@ -233,7 +233,7 @@ void() golem_knock9 = [$knock9, golem_knock10 ] { golem_mcharge(7); };
 void() golem_knock10 = [$knock10, golem_knock11 ] { golem_mcharge(6); };
 void() golem_knock11 = [$knock11, golem_knock12 ] { golem_mcharge(5);monster_footstep(FALSE); };
 void() golem_knock12 = [$knock12, golem_knock13 ] { golem_mcharge(5);
-	sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE); };
+	sound(self,CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav",1,ATTN_IDLE); };
 void() golem_knock13 = [$knock13, golem_knock14 ] { golem_mcharge(4); };
 void() golem_knock14 = [$knock14, golem_knock15 ] { golem_mcharge(3); };
 void() golem_knock15 = [$knock15, golem_knock16 ] { golem_mcharge(2); };
@@ -270,12 +270,12 @@ void() golem_knock24 = [$knock24, golem_run1 ] {
 	}
 };
 
-void() golem_footstomp = { self.nextthink = time + 0.05;};
+void() golem_footstomp = { self.nextthink = time + 0.05; };
 
 void() golem_stomp1 = [$stomp1, golem_stomp2 ] { golem_footstomp();
-	self.pain_finished = time + self.pain_timeout;};
+	self.pain_finished = time + self.pain_timeout; };
 void() golem_stomp2 = [$stomp2, golem_stomp3 ] { golem_footstomp();
-	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_IDLE); };
+	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_IDLE); };
 void() golem_stomp3 = [$stomp3, golem_stomp4 ] { golem_footstomp(); };
 void() golem_stomp4 = [$stomp4, golem_stomp5 ] { golem_footstomp(); };
 void() golem_stomp5 = [$stomp5, golem_stomp6 ] { golem_footstomp();monster_idle_sound(); };
@@ -361,11 +361,11 @@ void() golem_rockstorm = {
 	}
 };
 
-void() golem_magtime = { self.nextthink = time + 0.05;};
+void() golem_magtime = { self.nextthink = time + 0.05; };
 
 void() golem_magic1 = [$magic1, golem_magic2 ] { golem_magtime(); ai_face();
 	self.pain_finished = time + 1.5;
-	sound(self, CHAN_WEAPON, "ad171/golem/rockstorm.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/golem/rockstorm.wav",1,ATTN_NORM);
 };
 void() golem_magic2 = [$magic2, golem_magic3 ] { golem_magtime(); };
 void() golem_magic3 = [$magic3, golem_magic4 ] { golem_magtime(); ai_face(); };
@@ -419,8 +419,8 @@ void(entity inflictor, entity attacker, float damage) golem_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			if (self.lip < 0.4) golem_painB1();	// Long
 			else golem_painA1();				// Short
@@ -436,7 +436,7 @@ void(entity inflictor, entity attacker, float damage) golem_pain = {
 
 void() golem_death1	= [$death1, golem_death2 ] {};
 void() golem_death2	= [$death2, golem_death3 ] {};
-void() golem_death3	= [$death3, golem_death4 ] { ai_forward(1); self.solid = SOLID_NOT;};
+void() golem_death3	= [$death3, golem_death4 ] { ai_forward(1); self.solid = SOLID_NOT; };
 void() golem_death4	= [$death4, golem_death5 ] { ai_forward(3); };
 void() golem_death5	= [$death5, golem_death6 ] { ai_forward(3); };
 void() golem_death6	= [$death6, golem_death7 ] { ai_forward(6); };
@@ -468,7 +468,7 @@ void() golem_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "ne_ruins/h2golem/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ne_ruins/h2golem/death.wav",1,ATTN_NORM);
 		golem_death1();
 	}
 };
@@ -500,7 +500,7 @@ void() golem_wakefinished = {
 	golem_birth();					// more rubble
 };
 
-void() golem_wake1 = [$birth1, golem_wake2 ] { golem_birth();sound(self, CHAN_BODY, "ne_ruins/h2golem/brkfree.wav", 1, ATTN_NORM); };
+void() golem_wake1 = [$birth1, golem_wake2 ] { golem_birth();sound(self,CHAN_BODY,"ne_ruins/h2golem/brkfree.wav",1,ATTN_NORM); };
 void() golem_wake2 = [$birth2, golem_wake3 ] { golem_birth(); ai_forward(2); };
 void() golem_wake3 = [$birth3, golem_wake4 ] { golem_birth(); ai_forward(3); };
 void() golem_wake4 = [$birth4, golem_wake5 ] { golem_birth(); ai_forward(4); };
@@ -557,7 +557,7 @@ void() golem_statue = {
 		}
 		self.lip = self.pos1_x + rint(random()*self.pos1_z);
 		if (new_frame) {
-			sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
 			self.frame = self.lip;
 		}
 	}

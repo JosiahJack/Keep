@@ -48,7 +48,7 @@ void() light_fluoropost_dead = { // [FUNCTION]
 	precache_model ("progs/q15/lightp.mdl");
 	deadlight = spawn();
 	precache_sound("ambience/buzz1.wav");
-	ambientsound(self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
+	ambientsound(self.origin, "ambience/buzz1.wav", 0.5,ATTN_STATIC);
 	setmodel(deadlight, "progs/q15/lightp.mdl");
 	deadlight.skin = 1;
 	deadlight.origin_z = self.origin_z;
@@ -71,7 +71,7 @@ void() light_break = { // [FUNCTION]
 
 	self.takedamage = DAMAGE_NO;
 	self.classname = "light_destruct";
-	sound(self, CHAN_VOICE, "misc/lightbrk.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "misc/lightbrk.wav",1,ATTN_NORM);
 	center = (self.absmin + self.absmax) * 0.5;		// added to bring the explosion to the center of the explo_box model
 	setorigin(self, (self.absmin + self.absmax) * 0.5);
 	T_RadiusDamage (self, self, 5, world,DAMAGEALL);
@@ -82,7 +82,7 @@ void() light_break = { // [FUNCTION]
 void() light_det = { // [FUNCTION]
 	light_fluoropost_dead();
 	lightstyle(self.style, "b");
-	ambientsound(self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
+	ambientsound(self.origin, "ambience/buzz1.wav", 0.5,ATTN_STATIC);
 	self.think = light_break;
 	self.nextthink = time;
 	if (other.flags & FL_CLIENT) activator = other;
@@ -107,7 +107,7 @@ void() light_fluoropost = { // [ENTITY]
 	if (self.health == 20) {
 		lightstyle(self.style, "m");
 		precache_sound("ambience/fl_hum1.wav");
-		ambientsound(self.origin, "ambience/fl_hum1.wav", 0.5, ATTN_STATIC);
+		ambientsound(self.origin, "ambience/fl_hum1.wav", 0.5,ATTN_STATIC);
 	}
 };
 
@@ -127,7 +127,7 @@ void() light_ceil_dead = { // [FUNCTION]
 	setsize(deadlight, '-8 -8 -8', '8 8 8');
 	deadlight.movetype = MOVETYPE_NONE;
 	precache_sound("ambience/buzz1.wav");
-	ambientsound(self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
+	ambientsound(self.origin, "ambience/buzz1.wav", 0.5,ATTN_STATIC);
 	oldz = self.origin_z;
 	droptofloor();
 	if (oldz - self.origin_z > 250) {
@@ -173,7 +173,7 @@ void() light_ceil = { // [ENTITY]
 	self.takedamage = DAMAGE_YES;
 	if (self.health == 20) {
 		lightstyle(self.style, "m");
-		ambientsound(self.origin, "misc/siren.wav", 0.5, ATTN_STATIC);
+		ambientsound(self.origin, "misc/siren.wav", 0.5,ATTN_STATIC);
 	}
 };
 
@@ -191,7 +191,7 @@ void() light_fix_dead = { // [FUNCTION]
 		setmodel(deadlight, "progs/q15/lightfixalt.mdl");
 	}
 	precache_sound("ambience/buzz1.wav");
-	ambientsound(self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
+	ambientsound(self.origin, "ambience/buzz1.wav", 0.5,ATTN_STATIC);
 	deadlight.skin = 1;
 	deadlight.origin_z = self.origin_z;
 	deadlight.origin_x = self.origin_x;
@@ -229,7 +229,7 @@ void() light_fix = { // [ENTITY]
 	if (self.health == 20) {
 		lightstyle(self.style, "m");
 		precache_sound("ambience/fl_hum1.wav");
-		ambientsound(self.origin, "ambience/fl_hum1.wav", 0.5, ATTN_STATIC);
+		ambientsound(self.origin, "ambience/fl_hum1.wav", 0.5,ATTN_STATIC);
 	}
 };
 
@@ -247,7 +247,7 @@ void() actor_throw = { // [FUNCTION]
 	setsize (newmis, '-16 -16 -24', '16 16 40');
 	setorigin(newmis, self.oldorigin + self.view_ofs);
 	setmodel(self, "progs/null.spr");
-	if (self.noise) sound(newmis, CHAN_AUTO, self.noise, 1, ATTN_NORM);
+	if (self.noise) sound(newmis,CHAN_AUTO,self.noise,1,ATTN_NORM);
 	if (ext_dppart && self.partname) newmis.traileffectnum = particleeffectnum(self.partname);
 	newmis.angles = self.angles;
 	newmis.movetype = MOVETYPE_TOSS;

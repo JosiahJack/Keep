@@ -161,11 +161,11 @@ void() info_teleport_angle = {
 		self.dest1 = self.dest1 - self.view_ofs;				// Update Z axis for any editor offset information
 		self.movedir = normalize(self.dest2 - self.dest1);		// Create directional vector from source to target
 		self.mangle = vectoangles(self.movedir);				// Convert vector direction to angles
-		spawn_arrow(self.dest1, self.mangle, SPNMARK_YELLOW);	// Spawn a dev marker for visual reasons
+		spawn_marker(self.dest1, self.mangle,1,SPNMARK_YELLOW);	// Spawn a dev marker for visual reasons
 	} else {
 		dprint("\b[INFO_TELE]\b angletarget is missing!\n"); // Display console error and diamond in game
-		if (self.bsporigin) spawn_marker(self.oldorigin, SPNMARK_YELLOW);
-		else spawn_marker(self.origin, SPNMARK_YELLOW);
+		if (self.bsporigin) spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
+		else spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		
 		self.angletarget = ""; // Reset angletarget field, its broken and not needed
 	}
@@ -192,7 +192,7 @@ void() info_teleport_destination = {
 
 	if (self.teledest < 0) { // Check for destination number errors
 		dprint("\b[INFO_TELE]\b Dest value cannot be negative, set to 0.\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.teledest = 0;
 	}
 
@@ -250,7 +250,7 @@ void() info_teleportinstant_dest = {
 
 	if (self.teledest < 0) { // Check for destination number errors
 		dprint("\b[INFO_TELE]\b Dest value cannot be negative\n");
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		self.teledest = 0;
 	}
 

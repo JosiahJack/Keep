@@ -73,7 +73,7 @@ void() trap_lightning_use = { // [FUNCTION]
       if (self.classname == "trap_lightning_triggered") self.pausetime = (time + 0.100);
    }
 
-   if ( self.target ) {
+   if (self.target ) {
       p1 = self.origin;
       p2 = self.enemy.origin;
    } else {

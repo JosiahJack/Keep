@@ -50,7 +50,7 @@ float ANAC_INTERMISSION = 2;
 // Secondary coils of the anaconda, because we long
 void() coil_stand1 = [30, coil_stand1] { ai_stand(); };
 
-void() coil_rise = [0, coil_rise02] { sound(self, CHAN_WEAPON, "boss1/out1.wav", CHAN_WEAPON, ATTN_NORM); };
+void() coil_rise = [0, coil_rise02] { sound(self,CHAN_WEAPON,"boss1/out1.wav",CHAN_WEAPON,ATTN_NORM); };
 void() coil_rise02 = [1, coil_rise03] {};
 void() coil_rise03 = [2, coil_rise04] {};
 void() coil_rise04 = [3, coil_rise05] {};
@@ -205,7 +205,7 @@ void() Bite_Touch = {
 	if (other.health) {
 		SpawnBlood(other,org, self.velocity * 0.2, 15,0);
 		T_Damage(other, self, self.owner, 30,DAMARMOR);
-		sound(self, CHAN_VOICE, "demon/dhit2.wav", ATTN_NORM, ATTN_IDLE);
+		sound(self,CHAN_VOICE, "demon/dhit2.wav",ATTN_NORM,ATTN_IDLE);
 		self.gib1mdl = "progs/gib1.mdl";
 		ThrowGib(11, 1);
 	} else {
@@ -238,7 +238,7 @@ void(float offset) AnacMissile = {
 	setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.avelocity = '200 100 300';
 	newmis.velocity = vec * 1000;
-	sound(self, CHAN_WEAPON, "doors/airdoor2.wav", CHAN_WEAPON, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"doors/airdoor2.wav",CHAN_WEAPON,ATTN_NORM);
 	newmis.touch = Bite_Touch;
 	newmis.nextthink = time + 0.2;
 	newmis.think = SUB_Remove;
@@ -251,14 +251,14 @@ void() anac_fall1 = [81, anac_fall2] {};
 void() anac_fall2 = [82, anac_fall3] {};
 void() anac_fall3 = [83, anac_fall4] {};
 void() anac_fall4 = [84, anac_fall5] {};
-void() anac_fall5 = [85, anac_down] { sound(self, CHAN_WEAPON, "boss1/out1.wav", CHAN_WEAPON, ATTN_NORM); };
+void() anac_fall5 = [85, anac_down] { sound(self,CHAN_WEAPON,"boss1/out1.wav",CHAN_WEAPON,ATTN_NORM); };
 void() anac_fall6 = [86, anac_fall7] {};
 void() anac_fall7 = [87, anac_fall8] {};
 void() anac_fall8 = [88, anac_fall9] {};
-void() anac_fall9 = [89, anac_stand1] { self.th_run = anac_awake;};
+void() anac_fall9 = [89, anac_stand1] { self.th_run = anac_awake; };
 
-void() anac_rise = [0, anac_rise02] { sound(self, CHAN_WEAPON, "boss1/out1.wav", CHAN_WEAPON, ATTN_NORM); };
-void() anac_rise02 = [1, anac_rise03] { sound(self, CHAN_VOICE, "boss1/sight1.wav", ATTN_NORM, ATTN_NORM); };
+void() anac_rise = [0, anac_rise02] { sound(self,CHAN_WEAPON,"boss1/out1.wav",CHAN_WEAPON,ATTN_NORM); };
+void() anac_rise02 = [1, anac_rise03] { sound(self,CHAN_VOICE, "boss1/sight1.wav",ATTN_NORM,ATTN_NORM); };
 void() anac_rise03 = [2, anac_rise04] {};
 void() anac_rise04 = [3, anac_rise05] {};
 void() anac_rise05 = [4, anac_rise06] {};
@@ -446,7 +446,7 @@ void() anac_hmmm = {
 void() anac_attk = [108, anac_attk1]
 {
 	ai_face();
-	sound(self, CHAN_VOICE, "hknight/idle.wav", ATTN_NORM, ATTN_NORM);
+	sound(self,CHAN_VOICE, "hknight/idle.wav",ATTN_NORM,ATTN_NORM);
 };
 
 void() anac_attk1 = [109, anac_attk2]
@@ -492,7 +492,7 @@ void() anac_attk7 = [115, anac_attk8]
 void() anac_attk8 = [116, anac_attk9]
 {
 	anac_missile('100 0 200');
-	sound(self, CHAN_VOICE, "boss2/pop2.wav", ATTN_NORM, ATTN_NONE);
+	sound(self,CHAN_VOICE, "boss2/pop2.wav",ATTN_NORM,ATTN_NONE);
 	ai_face();
 	ai_forward(20);
 };
@@ -603,8 +603,8 @@ void() anac_eat = [90, anac_eat1]
 {
 	ai_charge(SVC_INTERMISSION);
 	ai_face();
-	sound(self, CHAN_VOICE, "hknight/idle.wav", ATTN_NORM, ATTN_NORM);
-	sound(self, CHAN_WEAPON, "zombie/z_shot1.wav", CHAN_WEAPON, ATTN_NORM);
+	sound(self,CHAN_VOICE, "hknight/idle.wav",ATTN_NORM,ATTN_NORM);
+	sound(self,CHAN_WEAPON,"zombie/z_shot1.wav",CHAN_WEAPON,ATTN_NORM);
 };
 
 void() anac_eat1 = [91, anac_eat2]
@@ -664,8 +664,8 @@ void() anac_eat9 = [99, anac_eat10]
 {
 	ai_charge(-10);
 	ai_face();
-	sound(self, CHAN_VOICE, "hknight/idle.wav", ATTN_NORM, ATTN_NORM);
-	sound(self, CHAN_WEAPON, "zombie/z_shot1.wav", CHAN_WEAPON, ATTN_NORM);
+	sound(self,CHAN_VOICE, "hknight/idle.wav",ATTN_NORM,ATTN_NORM);
+	sound(self,CHAN_WEAPON,"zombie/z_shot1.wav",CHAN_WEAPON,ATTN_NORM);
 };
 
 void() anac_eat10 = [100, anac_eat11]
@@ -848,7 +848,7 @@ void() anacdoom_4 = {
 	local float x,y,z,r;
 
 	oldo = self.origin;
-	sound(self, CHAN_VOICE, "boss2/pop2.wav", ATTN_NORM, ATTN_NONE);
+	sound(self,CHAN_VOICE, "boss2/pop2.wav",ATTN_NORM,ATTN_NONE);
 	z = 16;
 	self.gib1mdl = self.owner.gib1mdl;
 	self.gib2mdl = self.owner.gib2mdl;
@@ -889,7 +889,7 @@ void() anacdoom_4 = {
 void() anac_explode1 = [6, anac_explode2] { self.takedamage = DAMAGE_NO; };
 void() anac_explode2 = [6, anac_explode2] {
 	T_RadiusDamage(self, self, 20, world,DAMAGEALL);
-	sound(self, CHAN_VOICE, "blob/death1.wav", ATTN_NORM, ATTN_NORM);
+	sound(self,CHAN_VOICE, "blob/death1.wav",ATTN_NORM,ATTN_NORM);
 	self.origin = self.origin - MOVETYPE_NOCLIP * normalize(self.velocity);
 	Tent_Point(TE_TAREXPLOSION,self.origin);
 	self.gibbed = TRUE;

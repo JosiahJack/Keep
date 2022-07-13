@@ -439,28 +439,28 @@ var
 
 void() maxstep = {
 	if (random() < 0.4) {
-		sound(self, CHAN_AUTO, "nehahra/max/step2.wav", 0.7, ATTN_NORM);
+		sound(self,CHAN_AUTO,"nehahra/max/step2.wav", 0.7,ATTN_NORM);
 		return;
 	}
-	sound(self, CHAN_AUTO, "nehahra/max/step3.wav", 0.7, ATTN_NORM);
+	sound(self,CHAN_AUTO,"nehahra/max/step3.wav", 0.7,ATTN_NORM);
 };
 
 void() max_painsound1 = {
 	local float num;
 
 	num = random();
-	if (num < 0.333) sound(self, CHAN_VOICE, "nehahra/max/pain1.wav", 1, ATTN_NORM);
-	else if (num < 0.666) { sound(self, CHAN_VOICE, "nehahra/max/pain2.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "nehahra/max/pain3.wav", 1, ATTN_NORM);
+	if (num < 0.333) sound(self,CHAN_VOICE, "nehahra/max/pain1.wav",1,ATTN_NORM);
+	else if (num < 0.666) { sound(self,CHAN_VOICE, "nehahra/max/pain2.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "nehahra/max/pain3.wav",1,ATTN_NORM);
 };
 
 void() max_painsound2 = {
 	local float num;
 
 	num = random();
-	if (num < 0.333) sound(self, CHAN_VOICE, "nehahra/max/mpain1.wav", 1, ATTN_NORM);
-	else if (num < 0.666) { sound(self, CHAN_VOICE, "nehahra/max/mpain2.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "nehahra/max/mpain3.wav", 1, ATTN_NORM);
+	if (num < 0.333) sound(self,CHAN_VOICE, "nehahra/max/mpain1.wav",1,ATTN_NORM);
+	else if (num < 0.666) { sound(self,CHAN_VOICE, "nehahra/max/mpain2.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "nehahra/max/mpain3.wav",1,ATTN_NORM);
 };
 
 void() max_painsound = {
@@ -890,7 +890,7 @@ void() max_light3 = {
 {
   #62 max_light4;
   ai_face();
-  sound(self, CHAN_BODY, "nehahra/gaunt/boom.wav", 1, ATTN_NORM);
+  sound(self,CHAN_BODY,"nehahra/gaunt/boom.wav",1,ATTN_NORM);
   ai_threats();
 }
 
@@ -900,7 +900,7 @@ void() max_light4 = {
   ai_face();
   max_backorcharge();
   if (random() < 0.5) {
-    sound(self, CHAN_BODY, "weapons/lhit.wav", 1, ATTN_NORM);
+    sound(self,CHAN_BODY,"weapons/lhit.wav",1,ATTN_NORM);
     }
   MaxRedLightning();
   ai_threats();
@@ -925,7 +925,7 @@ void() max_light6 = {
   #63 max_light7;
   ai_face();
   ai_back(10);
-  sound(self, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "weapons/lhit.wav",1,ATTN_NORM);
   ai_threats();
 }
 
@@ -986,7 +986,7 @@ void() max_shalrath4() = {
   ai_face();
   self.velocity_z = 300;
   Handle_threats();
-  sound(self, CHAN_VOICE, "shalrath/attack2.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "shalrath/attack2.wav",1,ATTN_NORM);
 };
 
 void() max_shalrath5() = {
@@ -1033,10 +1033,10 @@ void() max_run = {
     self.frolic = time + 2;
     if (random() < 0.2 && !visible(self.enemy)) {
       if (random() < 0.3) {
-        sound(self, CHAN_VOICE, "nehahra/max/laugh2.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "nehahra/max/laugh2.wav",1,ATTN_NORM);
         }
       else {
-        sound(self, CHAN_VOICE, "nehahra/max/laugh.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "nehahra/max/laugh.wav",1,ATTN_NORM);
         }
       }
     }
@@ -1241,10 +1241,10 @@ void() max_throw = {
   self.walkframe = self.walkframe + 1;
   if (self.walkframe == 6) {
     if (random() < 0.2) {
-      sound(self.enemy, CHAN_BODY, "nehahra/archg/lift3.wav", 1, ATTN_NORM);
+      sound(self.enemy,CHAN_BODY,"nehahra/archg/lift3.wav",1,ATTN_NORM);
       }
     else {
-      sound(self.enemy, CHAN_BODY, "nehahra/archg/lift.wav", 1, ATTN_NORM);
+      sound(self.enemy,CHAN_BODY,"nehahra/archg/lift.wav",1,ATTN_NORM);
       }
     if (random() < 0.6 && visible(self.enemy)) {
       self.walkframe = self.walkframe - 1;
@@ -1432,7 +1432,7 @@ void() MaxRedLightning() = {
 void() max_s_light1 = [60, max_s_light2] {
 	ai_face();
 	ai_threats();
-	sound(self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"shambler/sattck1.wav",1,ATTN_NORM);
 }
 
 void() max_s_light2 = {
@@ -1445,7 +1445,7 @@ void() max_s_light3 = {
   #62 max_s_light4;
   ai_face();
   ai_threats();
-  sound(self, CHAN_ITEM, "shambler/sboom.wav", 1, ATTN_NORM);
+  sound(self,CHAN_ITEM,"shambler/sboom.wav",1,ATTN_NORM);
 };
 
 void() max_s_light4 = {
@@ -1454,7 +1454,7 @@ void() max_s_light4 = {
   ai_threats();
   max_backorcharge();
   if (random() < 0.5) {
-    sound(self, CHAN_BODY, "weapons/lhit.wav", 1, ATTN_NORM);
+    sound(self,CHAN_BODY,"weapons/lhit.wav",1,ATTN_NORM);
     }
   self.effects = self.effects | EF_MUZZLEFLASH;
 };
@@ -1478,7 +1478,7 @@ void() max_s_light6 = {
   ai_face();
   ai_back(10);
   ai_threats();
-  sound(self, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "weapons/lhit.wav",1,ATTN_NORM);
 };
 
 void() max_s_light7 = {
@@ -1602,7 +1602,7 @@ var
  v : Vector;
 {
   if (pointcontents(self.origin) == CONTENT_LAVA) {
-    sound(self, CHAN_AUTO, "nehahra/weapons/sprocket.wav", 0.5, ATTN_NORM);
+    sound(self,CHAN_AUTO,"nehahra/weapons/sprocket.wav", 0.5,ATTN_NORM);
     self.think = Sub_remove;
     self.nextthink = time + 2;
     return;
@@ -1613,9 +1613,9 @@ var
     else {
       self.pain_finished = time + 0.2;
       if (random() < 0.9) {
-        sound(self, CHAN_ITEM, "nehahra/weapons/sprfall2.wav", 0.8, ATTN_NORM);
+        sound(self,CHAN_ITEM,"nehahra/weapons/sprfall2.wav", 0.8,ATTN_NORM);
         } else {
-        sound(self, CHAN_ITEM, "nehahra/weapons/sprfall1.wav", 0.8, ATTN_NORM);
+        sound(self,CHAN_ITEM,"nehahra/weapons/sprfall1.wav", 0.8,ATTN_NORM);
         }
       }
     }
@@ -1628,7 +1628,7 @@ var
   if (self.pain_finished > time) {
     } else {
     self.pain_finished = time + 0.2;
-    sound(other, CHAN_WEAPON, "nehahra/weapons/sprfall2.wav", 0.8, ATTN_NORM);
+    sound(other,CHAN_WEAPON,"nehahra/weapons/sprfall2.wav", 0.8,ATTN_NORM);
     }
   v_x = other.velocity_x * WEAPON_ROCKET + 20 * random();
   v_y = other.velocity_y * WEAPON_ROCKET + 20 * random();
@@ -1884,7 +1884,7 @@ void() throwsomerub = {
   ThrowRubble("progs/nehahra/rubble4.mdl", -10);
   ThrowRubble("progs/nehahra/rubble6.mdl", -20);
   ThrowRubble("progs/nehahra/rubble1.mdl", -10);
-  sound(self, CHAN_AUTO, "nehahra/wall/wall01.wav", 1, ATTN_NONE);
+  sound(self,CHAN_AUTO,"nehahra/wall/wall01.wav",1,ATTN_NONE);
   self.think = Sub_remove;
   self.nextthink = time + 2;
 }
@@ -1894,12 +1894,12 @@ void() finalesnds = {
 
 	num = random();
 	if (num < 0.2) {
-		sound(self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", 1, ATTN_NONE);
+		sound(self,CHAN_AUTO,"zerstorer/ambience/thunder2.wav",1,ATTN_NONE);
 	} else {
 		if (num < 0.5)
-			sound(self, CHAN_AUTO, "nehahra/sets/set4_2.wav", 1, ATTN_NONE);
+			sound(self,CHAN_AUTO,"nehahra/sets/set4_2.wav",1,ATTN_NONE);
 		else
-			sound(self, CHAN_AUTO, "nehahra/sets/set4_1.wav", 1, ATTN_NONE);
+			sound(self,CHAN_AUTO,"nehahra/sets/set4_1.wav",1,ATTN_NONE);
 	}
 	self.think = finalesnds;
 	self.nextthink = time + 3;
@@ -2019,12 +2019,12 @@ var
   if (head.health < 1) {
     if (head.watertype == -5) {
       if (random() < 0.4) {
-        sound(head, CHAN_VOICE, "nehahra/max/lava1.wav", 1, ATTN_NORM);
+        sound(head,CHAN_VOICE, "nehahra/max/lava1.wav",1,ATTN_NORM);
         self.charmer.talk_finished = time + 3;
         remove(self);
         return;
         }
-      sound(head, CHAN_VOICE, "nehahra/max/lava2.wav", 1, ATTN_NORM);
+      sound(head,CHAN_VOICE, "nehahra/max/lava2.wav",1,ATTN_NORM);
       self.charmer.talk_finished = time + 3;
       remove(self);
       return;
@@ -2083,7 +2083,7 @@ var
 void() becomeearthquake = {
 	local entity head;
 
-	sound(self, CHAN_AUTO, "nehahra/quake/inv3.wav", 1, ATTN_NONE);
+	sound(self,CHAN_AUTO,"nehahra/quake/inv3.wav",1,ATTN_NONE);
 	self.cnt = self.cnt + 1;
 	if (self.cnt > 8) {
 		head = find(world, classname, "player");

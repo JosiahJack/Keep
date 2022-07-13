@@ -214,7 +214,7 @@ void() zombiek_stand15	= [	$stand15,		zombiek_stand1	] {
 		self.idlebusy = TRUE;
 		// Make sure the idle animations don't repeat in a row
 		self.lefty = self.lip;
-		while (self.lefty == self.lip) { self.lefty = rint(random()*4);}
+		while (self.lefty == self.lip) { self.lefty = rint(random()*4); }
 		self.lip = self.lefty;
 		if (self.lip < 1) self.think = zombiek_standB1;				// Pick brains!
 		else if (self.lip < 2) self.think = zombiek_standE1;	// Look BOTH
@@ -375,7 +375,7 @@ void()	zombiek_jump9	= [	$atta9,		zombiek_jump10] { ai_melee(); };
 void()	zombiek_jump10= [	$atta10,	zombiek_jump11] { ai_melee(); };
 void()	zombiek_jump11= [	$atta11,	zombiek_jump12] {};
 void()	zombiek_jump12= [	$atta12,	zombiek_jump13] {
-	if (random() < 0.5) self.think = zombiek_jump15;};	// quick recovery
+	if (random() < 0.5) self.think = zombiek_jump15; };	// quick recovery
 void()	zombiek_jump13= [	$atta13,	zombiek_jump14] {};
 void()	zombiek_jump14= [	$atta14,	zombiek_jump16] {};
 void()	zombiek_jump15= [	$atta15,	zombiek_jump16] {};
@@ -396,7 +396,7 @@ void()	zombiek_paina8	= [	$paina8,		zombiek_paina9	] { ai_painforward(3); };
 void()	zombiek_paina9	= [	$paina9,		zombiek_paina10	] { ai_painforward(2);monster_footstep(FALSE); };
 void()	zombiek_paina10	= [	$paina10,		zombiek_paina11	] { ai_painforward(1); };
 void()	zombiek_paina11	= [	$paina11,		zombiek_paina12	] { ai_painforward(2); };
-void()	zombiek_paina12	= [	$paina12,		zombiek_run1	] { ai_painforward(1); self.inpain = 0;};
+void()	zombiek_paina12	= [	$paina12,		zombiek_run1	] { ai_painforward(1); self.inpain = 0; };
 
 //----------------------------------------------------------------------
 void()	zombiek_painb1	= [	$painb1,		zombiek_painb2	] { ai_painforward(8); };
@@ -461,7 +461,7 @@ void()	zombiek_paind7	= [	$paind7,		zombiek_paind8	] { ai_painforward(2); };
 void()	zombiek_paind8	= [	$paind8,		zombiek_paind9	] {};
 void()	zombiek_paind9	= [	$paind9,		zombiek_paind10	] {};
 void()	zombiek_paind10	= [	$paind10,		zombiek_paind11	] { zombie_sound(5); };
-void()	zombiek_paind11	= [	$paind11,		zombiek_paind12	] { self.solid = SOLID_NOT;};
+void()	zombiek_paind11	= [	$paind11,		zombiek_paind12	] { self.solid = SOLID_NOT; };
 void()	zombiek_paind12	= [	$paind12,		zombiek_paind12	] { zombiek_onground(MONAI_ZOMBIEUPD); };
 
 // Start of get up sequence
@@ -507,7 +507,7 @@ void()	zombiek_paine6	= [	$paine6,		zombiek_paine7	] { ai_pain(2); };
 void()	zombiek_paine7	= [	$paine7,		zombiek_paine8	] { ai_pain(2); };
 void()	zombiek_paine8	= [	$paine8,		zombiek_paine9	] {};
 void()	zombiek_paine9	= [	$paine9,		zombiek_paine10	] {};
-void()	zombiek_paine10	= [	$paine10,		zombiek_paine11	] { self.solid = SOLID_NOT;};
+void()	zombiek_paine10	= [	$paine10,		zombiek_paine11	] { self.solid = SOLID_NOT; };
 void()	zombiek_paine11	= [	$paine11,		zombiek_paine12	] { zombie_sound(5); };
 void()	zombiek_paine12	= [	$paine12,		zombiek_paine12	] { zombiek_onground(MONAI_ZOMBIEUPE); };
 

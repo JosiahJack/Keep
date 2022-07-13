@@ -50,7 +50,7 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb = { // [FUNCTION
 		if (targ.ammo_cells < 0) targ.ammo_cells = 0;
 		//Update_PowerArmor (targ);
 		Particle_Cube (targ, 241, 241);
-		sound(targ, CHAN_AUTO, "zerstorer/me/me_fire1.wav", 1, ATTN_NORM);
+		sound(targ,CHAN_AUTO,"zerstorer/me/me_fire1.wav",1,ATTN_NORM);
 	}
     return save;
 };
@@ -59,35 +59,35 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb = { // [FUNCTION
 void(entity ent) PowerArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent,CHAN_VOICE, "misc/talk.wav",1,ATTN_NORM);
     centerprint (ent, "Power Armor!\nPress 'L' to toggle.\nUses cells when hit.");
 };
 
 void(entity ent) BerserkerArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent,CHAN_VOICE, "misc/talk.wav",1,ATTN_NORM);
     centerprint (ent, "Demonhide Armor!\nPress 'K' to expend for Quad Damage!\nKills repair armor while equipped.");
 };
 
 void(entity ent) SpiritArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent,CHAN_VOICE, "misc/talk.wav",1,ATTN_NORM);
     centerprint (ent, "Spirit Shroud!\nPress 'J' to expend for Invisibility!");
 };
 
 void(entity ent) DragonArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent,CHAN_VOICE, "misc/talk.wav",1,ATTN_NORM);
     centerprint (ent, "Dragon Armor!\nPress 'H' to expend for Invulnerability.");
 };
 
 void(entity ent) OnyxArmor_Awaken = { // [FUNCTION]
     if (!(other.flags & FL_CLIENT)) return;
 
-    sound(ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    sound(ent,CHAN_VOICE, "misc/talk.wav",1,ATTN_NORM);
     centerprint (ent, "Onyx Armor!\nAll damage permanently halved!");
 };
 
@@ -119,7 +119,7 @@ void() armor_touch = { // [FUNCTION]
 	sprint(other, "You got the ");
 	sprint(other, self.netname);
 	sprint(other, "\n");
-	if (self.noise != SOUND_EMPTY) sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	if (self.noise != SOUND_EMPTY) sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	activator = other;
 	SUB_UseTargets();

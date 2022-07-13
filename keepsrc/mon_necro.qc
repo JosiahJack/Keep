@@ -69,13 +69,13 @@ void() acolyte_fire = {
 // the fireball may bounce up to the nemesant standard of three times without
 // exploding.  What 'hits' does is change the bounces to 3 - hits.
 void(float hits) sorcerer_fire =
-    { M_FireSmart ('8 -5 12');  newmis.count = hits;};
+    { M_FireSmart ('8 -5 12');  newmis.count = hits; };
 
 void(vector st) warlock_fire = {
     local   vector  org, dir, vec;
     local   entity  targ;       // Lead shots toward this target.
 
-    sound(self, CHAN_WEAPON, "drake/necro/att_w.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/necro/att_w.wav",1,ATTN_NORM);
     self.effects = self.effects | EF_MUZZLEFLASH;
 
     targ = world;
@@ -102,7 +102,7 @@ void(vector st) warlock_fire = {
     NecroBolt_Launch(org,dir);
 // Update:  Secondary bolts from necro boss can spawn monsters.
     if (self.classtype == CT_MONNECRO)
-        if ( self.frame == $Hatak8 )
+        if (self.frame == $Hatak8 )
             newmis.think = NecroBolt_Summon;
 };
 
@@ -119,9 +119,9 @@ void() necro_idlesound = {
     // Use voice channel instead of auto -- don't want slain magi talking.
         wr = random();
         if (wr > 0.7) 
-            sound(self, CHAN_VOICE, "drake/necro/idle1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/necro/idle1.wav",1,ATTN_NORM);
         else if (wr < 0.3)
-            sound(self, CHAN_VOICE, "drake/necro/idle2.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/necro/idle2.wav",1,ATTN_NORM);
         self.waitmin = time + 10;
     }
 };
@@ -224,7 +224,7 @@ void() necro_activate_special;
 
 void() necro1_cast1  = [$Siatak1,  necro1_cast2  ] { ai_face(); };
 void() necro1_cast2  = [$Siatak5,  necro1_cast3  ] { ai_face(); };
-void() necro1_cast3  = [$Siatak6,  necro1_cast4  ] { ai_face(); self.nextthink = time + 0.2;};
+void() necro1_cast3  = [$Siatak6,  necro1_cast4  ] { ai_face(); self.nextthink = time + 0.2; };
 void() necro1_cast4  = [$Siatak11, necro1_cast5  ] { ai_face(); necro_activate_special(); };
 void() necro1_cast5  = [$Siatak12, necro1_run1   ] { ai_face(); };
 
@@ -451,7 +451,7 @@ void() necro1_melee1 = [$Siatak2,  necro1_melee2 ] { ai_charge(3);
         self.cnt = 0;
 };
 void() necro1_melee2 = [$Siatak4,  necro1_melee3 ] {
-    sound(self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"knight/sword1.wav",1,ATTN_NORM);
     ai_charge(0); ai_melee();
 };
 void() necro1_melee3 = [$Siatak6,  necro1_melee4 ] { ai_charge(3); ai_melee(); };
@@ -485,7 +485,7 @@ void() necro1_melee = {
 };
 
 void() necro1_attack1  = [$Siatak1,  necro1_attack2  ] { ai_face(); };
-void() necro1_attack2  = [$Siatak5,  necro1_attack3  ] { ai_face(); self.cnt = 0;};
+void() necro1_attack2  = [$Siatak5,  necro1_attack3  ] { ai_face(); self.cnt = 0; };
 void() necro1_attack3  = [$Siatak6,  necro1_attack4  ] { ai_face();
     if (!self.cnt)
     {   // Set refire count.
@@ -495,9 +495,9 @@ void() necro1_attack3  = [$Siatak6,  necro1_attack4  ] { ai_face();
             self.cnt = 1;
     }
     if (self.cnt)
-        sound(self, CHAN_WEAPON, "drake/necro/att_a2.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/necro/att_a2.wav",1,ATTN_NORM);
     else
-        sound(self, CHAN_WEAPON, "drake/necro/att_a.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/necro/att_a.wav",1,ATTN_NORM);
     acolyte_fire();
 // Make small poison cloud.  'makevectors' called in above function.
     local   vector  org;
@@ -584,7 +584,7 @@ void() necro3_melee = {
 // most of the time.
     if (!InMeleeRange (80))
         if (random() < 0.6)     // 40% chance per frame to attack.
-            { ai_charge (16);  return;}
+            { ai_charge (16);  return; }
     necro3_attack1();
 };
 
@@ -664,13 +664,13 @@ void() necro_activate_special = {
 				if (damage > 120) damage = 120; // limit damage so it's not crazy hard when we explode a monster_boglord for instance
 				Tent_Explosion2 (self.origin, rgb, 16);
 				if (sfx == 1)
-					sound(self, CHAN_AUTO, "drake/necro/pop1.wav", 1, ATTN_NORM);
+					sound(self,CHAN_AUTO,"drake/necro/pop1.wav",1,ATTN_NORM);
 				else if (sfx == 2)
-					sound(self, CHAN_AUTO, "drake/necro/pop2.wav", 1, ATTN_NORM);
+					sound(self,CHAN_AUTO,"drake/necro/pop2.wav",1,ATTN_NORM);
 				else if (sfx == 3)
-					sound(self, CHAN_AUTO, "drake/necro/pop3.wav", 1, ATTN_NORM);
+					sound(self,CHAN_AUTO,"drake/necro/pop3.wav",1,ATTN_NORM);
 				else
-					sound(self, CHAN_AUTO, "drake/necro/pop4.wav", 1, ATTN_NORM);
+					sound(self,CHAN_AUTO,"drake/necro/pop4.wav",1,ATTN_NORM);
 				T_RadiusDamage(self, swap, damage, self, DAMAGEALL);
 			}
 			self = swap;
@@ -694,7 +694,7 @@ void() necro4_attack = {
         if (!self.enemy.curse_type)
         if (random() < 0.5) {
             self.worldtype = NSA_CURSE;
-            sound(self, CHAN_AUTO, "drake/necro/curse.wav", 1, ATTN_NORM);
+            sound(self,CHAN_AUTO,"drake/necro/curse.wav",1,ATTN_NORM);
             necro_cast();
             return;
         }
@@ -733,7 +733,7 @@ void() necro4_attack = {
             }
             if (self.fallen) {
                 self.worldtype = NSA_CORPSE_EXPLOSION;
-                sound(self, CHAN_AUTO, "drake/necro/pop.wav", 1, ATTN_NORM);
+                sound(self,CHAN_AUTO,"drake/necro/pop.wav",1,ATTN_NORM);
                 necro_cast();
                 return;
             }
@@ -781,7 +781,7 @@ void() necro4_attack = {
         // Now see if necro will summon something.
             if (self.worldtype)
             {
-                sound(self, CHAN_AUTO, "drake/necro/summon.wav", 1, ATTN_NORM);
+                sound(self,CHAN_AUTO,"drake/necro/summon.wav",1,ATTN_NORM);
                 necro_cast();
                 return;
             }
@@ -837,7 +837,7 @@ void() necro3_pain6  = [$Hpain8,  necro3_run1   ] { necro_telepain(); };
 void() necro_painswitch = {
     if (self.height == NECRO_ACOLYTE)
         necro1_pain1();
-//    else if (( self.frame >= $Siatak1 ) && ( self.frame <= $Siwait12 ))
+//    else if ((self.frame >= $Siatak1 ) && (self.frame <= $Siwait12 ))
 //        necro1_pain1();
     else if (self.height == NECRO_SORCERER)
         necro2_pain1();
@@ -868,7 +868,7 @@ float() Necro_WeaponBroke = {
 
 	// Sickle head.
     if (head) {
-        sound(self, CHAN_AUTO, "kinn/misc/metalbrk.wav", 1, ATTN_NORM);
+        sound(self,CHAN_AUTO,"kinn/misc/metalbrk.wav",1,ATTN_NORM);
         vel = VelocityForDamage (0);
         spin_x = random()*600;
         spin_y = random()*600;
@@ -888,7 +888,7 @@ float() Necro_WeaponBroke = {
 
 	// Shaft.
     if (shaft) {
-        sound(self, CHAN_AUTO, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
+        sound(self,CHAN_AUTO,"drake/misc/woodbrk.wav",1,ATTN_NORM);
         vel = VelocityForDamage (0);
         vel = vel + v_right*50;
         spin_x = random()*600;
@@ -923,7 +923,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
     if (Necro_WeaponBroke ()) {
 		// Must go into pain for weapon breaking effects to look right.
         self.pain_finished = time + 1;
-        sound(self, CHAN_VOICE, "drake/necro/pain1.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "drake/necro/pain1.wav",1,ATTN_NORM);
         necro_painswitch();
         return;
     }
@@ -931,7 +931,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
     if (self.pain_finished > time)
         return;   // Don't make multiple pain sounds right after each other.
 
-    sound(self, CHAN_VOICE, "drake/necro/pain1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "drake/necro/pain1.wav",1,ATTN_NORM);
     self.pain_finished = time + 1;      // time + 0.5 is too short.
 
     if (random()*50 > damage)       // Was flat 40.
@@ -970,9 +970,9 @@ void() necro_die = {
 
 	if (!self.gibbed) {
 		if (random() < 0.5)
-			sound(self, CHAN_VOICE, "drake/necro/death1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/necro/death1.wav",1,ATTN_NORM);
 		else
-			sound(self, CHAN_VOICE, "drake/necro/death2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/necro/death2.wav",1,ATTN_NORM);
 		necro_die1();
 	}
 };

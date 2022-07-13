@@ -40,7 +40,7 @@ void() bandit_fire = {
     org = self.origin + dir;
     dir = self.enemy.origin + dir;
     dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,world,'0 0 0',1);
-    sound(self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/archer/arrowg.wav",1,ATTN_NORM);
     // PM:  Assumes skin is 0 or 1.  If 2+, rewrite!
     if (self.ryuflags & RYU_REBEL)
         artype = 0;     // Rebel arrows are stronger.
@@ -59,7 +59,7 @@ void() bandit_short = {
         traceline (p1, p2, 2, self);
         if (trace_ent != self.enemy) {
 			if ((trace_fraction < 1) && (trace_ent.flags & FLx_CREATURE) && (self.enemy.solid <= SOLID_TRIGGER || Align_Match(self,trace_ent) || trace_ent.enemy == self || trace_ent == self.oldenemy)) {
-				StopSound(self, CHAN_WEAPON);
+				StopSound(self,CHAN_WEAPON);
 				self.think = army_run1;
 			}
 		}
@@ -68,7 +68,7 @@ void() bandit_short = {
 
 // SoE:  Shoot scene modified from shooting a gun to drawing a bow.
 void() bandit_atk1  = [$shoot1,   bandit_atk2    ] { ai_face(); };
-void() bandit_atk2  = [$shoot2,   bandit_atk3    ] { ai_face(); sound(self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
+void() bandit_atk2  = [$shoot2,   bandit_atk3    ] { ai_face(); sound(self,CHAN_WEAPON,"drake/archer/draw.wav",1,ATTN_NORM); };
 void() bandit_atk3  = [$shoot3,   bandit_atk4    ] { ai_face(); };
 void() bandit_atk4  = [$shoot4,   bandit_atk5    ] { ai_face(); };
 void() bandit_atk5  = [$shoot5,   bandit_atk6    ] { ai_face(); };
@@ -106,9 +106,9 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
     if (SUB_IgnorePain ()) {
         self.pain_finished = time + 0.6;
         if (self.classtype == CT_MONBANDIT)
-            sound(self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "soldier/pain1.wav",1,ATTN_NORM);
         else
-            sound(self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/goblin/pain1.wav",1,ATTN_NORM);
         return;         // No pain anims in Nightmare.
     }
 
@@ -117,31 +117,31 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
     
     r = random();
     if (self.ryuflags & RYU_REBEL)
-        { p1 = 0.85; p2 = 0.925;}
+        { p1 = 0.85; p2 = 0.925; }
     else
-        { p1 = 0.2;  p2 = 0.6;}
+        { p1 = 0.2;  p2 = 0.6; }
 
     if ((r < p1) && !SUB_IgnorePain()) {
         self.pain_finished = time + 0.6;
         army_pain1();
         if (self.classtype == CT_MONBANDIT)
-            sound(self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "soldier/pain1.wav",1,ATTN_NORM);
         else
-            sound(self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/goblin/pain1.wav",1,ATTN_NORM);
     } else if (r < p2) {
         self.pain_finished = time + 1.1;
         army_painb1();
         if (self.classtype == CT_MONBANDIT)
-            sound(self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "soldier/pain2.wav",1,ATTN_NORM);
         else
-            sound(self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/goblin/pain1.wav",1,ATTN_NORM);
     } else {
         self.pain_finished = time + 1.1;
         army_painc1();
         if (self.classtype == CT_MONBANDIT)
-            sound(self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "soldier/pain2.wav",1,ATTN_NORM);
         else
-            sound(self, CHAN_VOICE, "drake/goblin/pain2.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "drake/goblin/pain2.wav",1,ATTN_NORM);
     }
     damage = damage;  attacker = attacker;  // FrikQcc warning squelch!
 };
@@ -155,12 +155,12 @@ void() bandit_die = {
 	if (!self.gibbed) {
 		// regular death
 		if (self.classtype == CT_MONBANDIT) {
-			sound(self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "soldier/death1.wav",1,ATTN_NORM);
 		} else {
 			if (random() < 0.5) {
-				sound(self, CHAN_VOICE, "drake/goblin/death1.wav", 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, "drake/goblin/death1.wav",1,ATTN_NORM);
 			} else {
-				sound(self, CHAN_VOICE, "drake/goblin/death2.wav", 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, "drake/goblin/death2.wav",1,ATTN_NORM);
 			}
 		}
 		if (random() < 0.5) army_die1();		// Forward

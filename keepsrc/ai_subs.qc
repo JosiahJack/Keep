@@ -412,7 +412,7 @@ void() ai_melee = {
 	// This is trigger_once per melee combat swing
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		if (self.meleehitsound != "") sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		if (self.meleehitsound != "") sound(self,CHAN_WEAPON,self.meleehitsound,1,ATTN_NORM);
 	}
 };
 
@@ -451,7 +451,7 @@ void(float dmg_multiplier) ai_meleesmash = {
 	// This is trigger_once per melee combat swing
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		if (self.meleehitsound) sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		if (self.meleehitsound) sound(self,CHAN_WEAPON,self.meleehitsound,1,ATTN_NORM);
 	}
 };
 
@@ -484,7 +484,7 @@ void() ai_melee_side = {
 	// No check if meleehitsound is defined or not
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,self.meleehitsound,1,ATTN_NORM);
 	}
 };
 
@@ -517,7 +517,7 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 	self.effects = self.effects | EF_MUZZLEFLASH;
 
 	// Play impact sound and work out where the impact is going to happen
-	if (self.meleehitsound != "") sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_IDLE);
+	if (self.meleehitsound != "") sound(self,CHAN_WEAPON,self.meleehitsound,1,ATTN_IDLE);
 	makevectors(self.angles);
 	// Replaced this crazy mess with function attack_vector
 	//impact = self.origin + v_forward*imp_vec_x + v_right*imp_vec_y + v_up*imp_vec_z;
@@ -719,7 +719,7 @@ void(float dist) ai_run_side = {
 // PM:  Renamed to 'ai_run_strafe', and added float argument 'dist'.
 //
 // For guaranteed circle-strafing, do the following:
-//  { ai_face(); ai_run_side(dist); ai_face();}
+//  { ai_face(); ai_run_side(dist); ai_face(); }
 //
 // The above description, which describes circle-strafing, is only true if enemy_yaw updates each frame, which is true only if this is called from
 // ai_run.  If called directly, enemy_yaw probably will not be set, and the monster will simply move to the side.
@@ -743,15 +743,15 @@ void(entity destEnt, float radius, vector offset) ai_orbit = {
       return;
    }
 
-   if ( (self.orbitPosition == FALSE) ) {
+   if (self.orbitPosition == 0) {
       dir = ((destEnt.origin + offset) - self.origin);
       dir_x = (dir_x + radius);
    } else {
-      if ( (self.orbitPosition == TRUE) ) {
+      if (self.orbitPosition == 1) {
          dir = ((destEnt.origin + offset) - self.origin);
          dir_y = (dir_y + radius);
       } else {
-         if ( (self.orbitPosition == FL_SWIM) ) {
+         if (self.orbitPosition == 2) {
             dir = ((destEnt.origin + offset) - self.origin);
             dir_x = (dir_x - radius);
          } else {
@@ -831,7 +831,7 @@ void(float scratch_noise) ai_melee_carnivean = {
 		SpawnMeatSpray(self, self.enemy, crandom () * 100);	// spawn a little gore
 	}
 
-	if (scratch_noise) sound(self, CHAN_AUTO, "demon/dhit2.wav", 0.5, ATTN_NORM);
+	if (scratch_noise) sound(self,CHAN_AUTO,"demon/dhit2.wav", 0.5,ATTN_NORM);
 };
 
 void() ai_melee_torment = {
@@ -853,7 +853,7 @@ void() ai_floatmove_start = {
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_STEP;
 	self.oldorigin = self.origin;
-	self.flags = self.flags - (self.flags & FL_ONGROUND);
+	SUB_RemoveFlags(self,FL_ONGROUND);
 };
 
 // Wrap movement code in this hot shtuff for making scrags do sick drifts
@@ -894,12 +894,13 @@ void(float dist) ai_floatmove_finish = {
 		
 	self.movetype = MOVETYPE_FLY;
 	move = self.origin - self.oldorigin;
-	if (pointcontents(self.origin) == CONTENT_SOLID) { // fish have short bounding boxes, which in quake physics land means they can noclip through ceilings
+	if (!InOpenOrLiquid(self.origin)) { // fish have short bounding boxes, which in quake physics land means they can noclip through ceilings
 		setorigin(self, self.oldorigin);
 		self.velocity = '0 0 0';
 		return;
 	}
 
+	// Good thing no one changes step height to be larger than 16 right...right?
 	if (vlen(move) > dist + 16) { self.velocity = '0 0 0'; return; } // probably touched a teleporter, so don't try to velocity interp
 	
 	interv = mathlib_max(0.01, self.nextthink - time);

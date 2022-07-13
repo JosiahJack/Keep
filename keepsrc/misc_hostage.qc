@@ -99,7 +99,7 @@ void(entity inflictor, entity attacker, float take) actor_pain = { // [FUNCTION]
     actor_pain1();
 };
 
-void() actor_shot1 = [$shotatt1,  actor_shot2  ] { self.effects = self.effects | EF_MUZZLEFLASH;}; // [FUNCTION]
+void() actor_shot1 = [$shotatt1,  actor_shot2  ] { self.effects = self.effects | EF_MUZZLEFLASH; }; // [FUNCTION]
 void() actor_shot2 = [$shotatt2,  actor_shot3  ] {}; // [FUNCTION]
 void() actor_shot3 = [$shotatt3,  actor_shot4  ] {}; // [FUNCTION]
 void() actor_shot4 = [$shotatt4,  actor_shot5  ] {}; // [FUNCTION]
@@ -129,9 +129,9 @@ void() ActorDie = { // [FUNCTION]
 		self.frame = 0;
 		monster_ThrowGib();
 		self.deadflag = DEAD_DEAD;
-		if (damage_attacker.classname == "teledeath")	sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
-		else if (random() < 0.5)						sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
-		else											sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
+		if (damage_attacker.classname == "teledeath")	sound(self,CHAN_VOICE, "player/teledth1.wav",1,ATTN_NONE);
+		else if (random() < 0.5)						sound(self,CHAN_VOICE, "player/gib.wav",1,ATTN_NONE);
+		else											sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NONE);
 		return;
 	}
 
@@ -147,7 +147,7 @@ void() ActorDie = { // [FUNCTION]
 };
 
 void() actor_stand1 = [$stand1, actor_stand1 ] { // [FUNCTION]
-    if (self.pausetime < time) { actor_run(); return;}
+    if (self.pausetime < time) { actor_run(); return; }
 
     if (self.walkframe >= 5) self.walkframe = 0;
     self.frame = $stand1 + self.walkframe;
@@ -210,13 +210,13 @@ void() Actor_fire = { // [FUNCTION]
 	if (self.spawnflags & ZEREND_ROCKETS) {
         makevectors(self.v_angle);
         org = self.origin + v_forward*8 + '0 0 16';
-        sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NONE);
+        sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NONE);
 		self.finalangle = vecrand(100,200,FALSE);
 		launch_projectile(self.origin,self.movedir,self.finalangle,CT_PROJ_ROCKET,self.speed);
         newmis.velocity = dir * 800;
         newmis.touch = SUB_Remove;      // The Zerstorer cannot be harmed.
     } else {
-        sound(self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM);    
+        sound(self,CHAN_WEAPON,"weapons/guncock.wav",1,ATTN_NORM);    
         FireBullets (8, '0.1 0.1 0');
     }
 	W_Reload(1);
@@ -303,7 +303,7 @@ void() actor_sf64start = { // [FUNCTION]
 // ACTOR_DEAD(1) makes the actor a non-living entity until triggered.  It will affect monster-count, and will attack the player after it has been triggered.  (specially made for 'da*ned')
 // TRIGGER_SPAWN(64) causes the actor to not spawn until it is triggered.  If "style" is set for the actor it will cause a teleport-splash when it spawns.
 void() misc_hostage = { // [ENTITY]
-    if (deathmatch || coop) { remove (self); return;}
+    if (deathmatch || coop) { remove (self); return; }
 
     self.origin             = self.origin + '0 0 56';
     self.classname          = self.netname  = "actor";
@@ -359,13 +359,13 @@ void() ActorJump = { // [FUNCTION]
 
         if (self.swim_flag < time) { // play swiming sound
             self.swim_flag = time + 1;
-            if (random() < 0.5) sound(self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
-            else				sound(self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
+            if (random() < 0.5) sound(self,CHAN_BODY,"misc/water1.wav",1,ATTN_NORM);
+            else				sound(self,CHAN_BODY,"misc/water2.wav",1,ATTN_NORM);
         }
         return;
     }
 
-    sound(self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
+    sound(self,CHAN_BODY,"player/plyrjmp8.wav",1,ATTN_NORM);
     SUB_RemoveFlags(self,FL_ONGROUND);
     setorigin(self, self.origin + '0 0 2');
     self.velocity_z = self.velocity_z + 270;

@@ -185,16 +185,16 @@ void() eel_attack12 = [ 5, eel_run1 ] {
    eel_melee();
 };
 
-void() eel_attack2_1 = [$eswim1, eel_attack2_2 ] { self.skin = 1; ai_face();sound(self, CHAN_VOICE, "rogue/eel/eatt1.wav", 1, ATTN_NORM); };
-void() eel_attack2_2 = [$eswim2, eel_attack2_3 ] { self.skin = 2; ai_face(); self.effects = self.effects | EF_MUZZLEFLASH;};
+void() eel_attack2_1 = [$eswim1, eel_attack2_2 ] { self.skin = 1; ai_face();sound(self,CHAN_VOICE, "rogue/eel/eatt1.wav",1,ATTN_NORM); };
+void() eel_attack2_2 = [$eswim2, eel_attack2_3 ] { self.skin = 2; ai_face(); self.effects = self.effects | EF_MUZZLEFLASH; };
 void() eel_attack2_3 = [$eswim3, eel_attack2_4 ] { self.skin = 3; ai_face(); };
-void() eel_attack2_4 = [$eswim4, eel_attack2_5 ] { self.skin = 4; ai_face(); self.effects = self.effects | EF_MUZZLEFLASH;};
+void() eel_attack2_4 = [$eswim4, eel_attack2_5 ] { self.skin = 4; ai_face(); self.effects = self.effects | EF_MUZZLEFLASH; };
 void() eel_attack2_5 = [$eswim5, eel_attack2_6 ] { self.skin = 5; ai_face(); };
 void() eel_attack2_6 = [$eswim6, eel_attack2_7 ] { self.skin = 4; ai_face(); eel_plasma(); };
-void() eel_attack2_7 = [$eswim1, eel_attack2_8 ] { self.skin = 5;};
-void() eel_attack2_8 = [$eswim2, eel_attack2_9 ] { self.skin = 4;};
-void() eel_attack2_9 = [$eswim3, eel_attack2_10 ] { self.skin = 3;};
-void() eel_attack2_10 = [$eswim4, eel_attack2_11 ] { self.skin = 2;};
+void() eel_attack2_7 = [$eswim1, eel_attack2_8 ] { self.skin = 5; };
+void() eel_attack2_8 = [$eswim2, eel_attack2_9 ] { self.skin = 4; };
+void() eel_attack2_9 = [$eswim3, eel_attack2_10 ] { self.skin = 3; };
+void() eel_attack2_10 = [$eswim4, eel_attack2_11 ] { self.skin = 2; };
 void() eel_attack2_11 = [$eswim5, eel_attack2_12 ] { self.skin = 1; ai_face(); };
 void() eel_attack2_12 = [$eswim6, eel_run1 ] { self.skin = 0; ai_face(); };
 

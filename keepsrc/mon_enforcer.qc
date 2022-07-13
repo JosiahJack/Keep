@@ -109,7 +109,7 @@ void() enforcer_fire = {
 	if (!self.enemy) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,SOUND_LASER_FIRE,1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
@@ -137,7 +137,7 @@ void() defender_ssg = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "quoth/defender/ssgfire.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"quoth/defender/ssgfire.wav",1,ATTN_NORM);	
 	
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ)) 
@@ -148,7 +148,7 @@ void() defender_ssg = {
 	}
 };
 
-void()	def_atkssg1	= [	$attack1,	def_atkssg2	] { sound(self, CHAN_WEAPON, "quoth/defender/ssgcock.wav", 1, ATTN_NORM); };
+void()	def_atkssg1	= [	$attack1,	def_atkssg2	] { sound(self,CHAN_WEAPON,"quoth/defender/ssgcock.wav",1,ATTN_NORM); };
 void()	def_atkssg2	= [	$attack2,	def_atkssg3	] { monster_footstep(FALSE); ai_face(); };
 void()	def_atkssg3	= [	$attack3,	def_atkssg4	] { ai_face(); };
 void()	def_atkssg4	= [	$attack4,	def_atkssg5	] { ai_face(); };
@@ -184,7 +184,7 @@ void() eliminator_fire = {
 	if (!self.enemy) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,SOUND_PLASMA_FIRE,1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
@@ -192,7 +192,7 @@ void() eliminator_fire = {
 };
 
 void()	elim_atk1	= [	$attack1,	elim_atk2	] {
-	sound(self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"ad171/enforcer/elim_pg_load.wav",1,ATTN_NORM); };
 void()	elim_atk2	= [	$attack2,	elim_atk3	] { monster_footstep(FALSE); ai_face(); };
 void()	elim_atk3	= [	$attack3,	elim_atk4	] { ai_face(); };
 void()	elim_atk4	= [	$attack4,	elim_atk5	] { ai_face(); };
@@ -261,8 +261,8 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 
 		if (self.classtype == CT_MONSUPERENFORCER) { lth_paina1(); return; }
 
@@ -325,14 +325,14 @@ void() enf_die = {
 	if (!self.gibbed) {
 		if (self.classtype == CT_MONENF_ULTRA) {
 			r = random();
-			if (r < 0.333)		sound(self, CHAN_VOICE, "lunaran/enforcer/ue_die1.wav", 1, ATTN_NORM);
-			else if (r < 0.666)	sound(self, CHAN_VOICE, "lunaran/enforcer/ue_die2.wav", 1, ATTN_NORM);
-			else 				sound(self, CHAN_VOICE, "lunaran/enforcer/ue_die3.wav", 1, ATTN_NORM);
+			if (r < 0.333)		sound(self,CHAN_VOICE, "lunaran/enforcer/ue_die1.wav",1,ATTN_NORM);
+			else if (r < 0.666)	sound(self,CHAN_VOICE, "lunaran/enforcer/ue_die2.wav",1,ATTN_NORM);
+			else 				sound(self,CHAN_VOICE, "lunaran/enforcer/ue_die3.wav",1,ATTN_NORM);
 		} else if (self.classtype == CT_MONENF_GUNNER) {
-			if (random() < 0.5)	sound(self, CHAN_VOICE, "drake/gunner/death1.wav", 1, ATTN_NORM);
-			else				sound(self, CHAN_VOICE, "drake/gunner/death2.wav", 1, ATTN_NORM);
+			if (random() < 0.5)	sound(self,CHAN_VOICE, "drake/gunner/death1.wav",1,ATTN_NORM);
+			else				sound(self,CHAN_VOICE, "drake/gunner/death2.wav",1,ATTN_NORM);
 		} else {
-			sound(self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "enforcer/death1.wav",1,ATTN_NORM);
 		}
 
 		if (self.classtype == CT_MONSUPERENFORCER) {
@@ -459,9 +459,9 @@ void() monster_base_enforcer = {
 	if (!self.steptype) self.steptype = FS_TYPEHEAVY;		// heavy player
 	if (CheckZeroVector(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
 	Resist_ChangeType(self,-1);// Always reset Ammo Resistance to be consistent
-	if (self.classtype == CT_MONELIMATOR) { self.resist_cells = 0.5; self.resist_plasma = 0.5;}
-	if (self.classtype == CT_MONDEFENDER) { self.resist_rockets = 0.5; self.resist_multi_rockets = 0.5;}
-	if (self.classtype == CT_MONENF_MEGA) { self.resist_cells = 0.75; self.resist_plasma = 0.75;}
+	if (self.classtype == CT_MONELIMATOR) { self.resist_cells = 0.5; self.resist_plasma = 0.5; }
+	if (self.classtype == CT_MONDEFENDER) { self.resist_rockets = 0.5; self.resist_multi_rockets = 0.5; }
+	if (self.classtype == CT_MONENF_MEGA) { self.resist_cells = 0.75; self.resist_plasma = 0.75; }
 	if (!self.th_stand) self.th_stand = enf_stand1;
 	if (!self.th_walk) self.th_walk = enf_walk1;
 	if (!self.th_run) self.th_run = enf_run1;
@@ -613,7 +613,7 @@ void() super_enforcer_fire = {
 };
 
 void()	lth_run1	= [	$run1  ,	lth_run2	] {
-if (random() < 0.2) sound(self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
+if (random() < 0.2) sound(self,CHAN_VOICE, "enforcer/idle1.wav",1,ATTN_IDLE);
 ai_run(18); };
 void()	lth_run2	= [	$run2  ,	lth_run3	] { ai_run(14); };
 void()	lth_run3	= [	$run3  ,	lth_run4	] { ai_run(7); };

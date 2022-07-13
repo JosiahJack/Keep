@@ -280,7 +280,7 @@ void() lost_charge_touch = {
 
 void()	lost_charge1 = {
 	// Play hiss sound, sighted enemy, charging
-	sound(self, CHAN_WEAPON, "ad171/lostsoul/charge.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"ad171/lostsoul/charge.wav",1,ATTN_NORM);	
 	
 	self.count = 0;				// reset start of animation block
 	lost_flymode();				// allow velocity updates
@@ -337,7 +337,7 @@ void() lost_bite = {
 	// Can the target bleed?
 	if (enemy_targ.takedamage < 1) return;
 
-	sound(self, CHAN_WEAPON, "ad171/lostsoul/bite.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/lostsoul/bite.wav",1,ATTN_NORM);
 
 	// Lost Soul bite is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -381,7 +381,7 @@ void() lost_melee1 = {
 };
 
 // MINION - Grow and spin up from nothing
-void() lost_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() lost_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() lost_grow1 = [$grow1, lost_grow2 ] {};
 void() lost_grow2 = [$grow2, lost_grow3 ] { lost_growangle(); };
 void() lost_grow3 = [$grow3, lost_grow4 ] { lost_growangle(); };
@@ -455,7 +455,7 @@ void(entity inflictor, entity attacker, float damage) lost_pain = {
 	if (self.state != LOST_STATE_PAIN) {
 		// Stop all velocity and reset movetype
 		lost_stepmode();
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 	}
 
 	// Work out which direction the damage came from (enemy)
@@ -569,7 +569,7 @@ void() setup_lostsoul = {
 void(vector minion_org, entity minion_targ) minion_lostsoul = {
 	local entity minion;
 
-	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
+	if (!InOpenOrLiquid(minion_org)) return; // Check if there is space to spawn entity
 	
 	update_minioncount(self, 1);			// Self = skull wizard, there is no egg.  Update spawn counters.
 	minion = spawn();

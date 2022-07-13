@@ -68,7 +68,7 @@ void() s_explode5 = [4,	s_explode6] {}; // [FUNCTION]
 void() s_explode6 = [5,	SUB_Remove] {}; // [FUNCTION]
 
 void() s_explode_think = { // [FUNCTION]
-    if (self.frame >= self.cnt) { SUB_Remove();  return;}
+    if (self.frame >= self.cnt) { SUB_Remove();  return; }
 
     self.frame = self.frame + 1;
     self.nextthink = time + self.wait;
@@ -177,7 +177,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion = { // [FU
 
 	// Play any explosion sounds on temporary entity
 	if (self.owner.classtype == CT_MONEEL) expl_sound = "ad171/eel/impact1.wav";
-	if (expl_sound != "") sound(newmis, CHAN_WEAPON, expl_sound, 1, ATTN_NORM);
+	if (expl_sound != "") sound(newmis,CHAN_WEAPON,expl_sound,1,ATTN_NORM);
 };
 
 // Use SpawnExplosion where possible as it copes with DP effects better.
@@ -214,7 +214,7 @@ void(vector spot) R_Exp3 = { // [FUNCTION]
 
     e = spawn();
     setorigin(e, spot);
-    sound(e,CHAN_AUTO, "weapons/r_exp3.wav", 1, ATTN_NORM);
+    sound(e,CHAN_AUTO,"weapons/r_exp3.wav",1,ATTN_NORM);
 	entity_remove(e,3); // Kind of the point to delay removal before playing the sound
 };
 
@@ -223,7 +223,7 @@ void(vector spot) R_ExpSmall = { // [FUNCTION]
 
     e = spawn();
     setorigin(e, spot);
-    sound(e, CHAN_AUTO, "kinn/shuffler/expsmall.wav", 1, ATTN_NORM);
+    sound(e,CHAN_AUTO,"kinn/shuffler/expsmall.wav",1,ATTN_NORM);
 	entity_remove(e,3); // Kind of the point to delay removal before playing the sound
 };
 
@@ -356,7 +356,7 @@ void() BecomeExplosion2 = { // [FUNCTION]
 
 // Like BecomeExplosion, but for Nemesants.  Some drake bosses use this for their post-mortem explosions.
 void() WarpExplosion = { // [FUNCTION]
-    sound(self, CHAN_AUTO, "zerstorer/trog/bigboom.wav", 1, ATTN_NORM);
+    sound(self,CHAN_AUTO,"zerstorer/trog/bigboom.wav",1,ATTN_NORM);
     Tent_Point (TE_EXPLOSION, self.origin);
     FlameWave();       // PM:  New shockwave effect at ground zero.
     BecomeTheBigFire();    // Replaced old fireball mdl with big sprite.
@@ -413,7 +413,7 @@ void() Particle_Bullet = { // [FUNCTION]
 // * used by Eliminator (enforcer), Soldier and Minotaur
 void() Particle_Plasma = { // [FUNCTION]
 	if (self.waitmin > time) return; // projectile has touched something
-	if (self.attack_finished < time) { entity_remove(self, 0.1); return;} // Projectile has run out of time
+	if (self.attack_finished < time) { entity_remove(self, 0.1); return; } // Projectile has run out of time
 	
 	// Generate sprite particles? DP not active?
 	if (random() < 0.5 && !ext_dppart) {
@@ -503,7 +503,7 @@ void() OgreGrenadeExplode = { maphack_grenade(); }; // [FUNCTION]
 
 void() GrenadeExplode = { maphack_grenade(); }; // [FUNCTION]
 
-void() MonsterGrenadeSound = { sound(self, CHAN_WEAPON, "ad171/weapons/gl_loadshort.wav", 0.1+random()*0.5, ATTN_LOW); }; // [FUNCTION], play generic load grenade sound.
+void() MonsterGrenadeSound = { sound(self,CHAN_WEAPON,"ad171/weapons/gl_loadshort.wav", 0.1+random()*0.5,ATTN_LOW); }; // [FUNCTION], play generic load grenade sound.
 
 float() MonsterGrenadeSpeed = { return SPEED_MONGRENADE + (skill * SPEED_MONGLSKILL); }; // [FUNCTION], return generic attack speed.
 
@@ -563,7 +563,7 @@ void() SmallExplosion = { // [FUNCTION]
 // This causes to split into multiple small rockets, releasing its payload.
 void() Mirv_Split = { // [FUNCTION]
     Mirv_Reset();
-    sound(self, CHAN_WEAPON, "drake/weapons/mirv2.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/weapons/mirv2.wav",1,ATTN_NORM);
     self.effects = self.effects | EF_MUZZLEFLASH;
     Mirv_Payload();
     BecomeExplosion();
@@ -656,7 +656,7 @@ void(float burstcharge) beam_water_burst = { // [FUNCTION]
 
 	current = world;
 
-	sound(self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",1,ATTN_NORM);
 	do {
 		current = nextent(current);
 		if (current.takedamage) {
@@ -685,7 +685,7 @@ void() WeldExplode3 = [4, SUB_Remove] {}; // [FUNCTION]
 // Magic arrow explosion code.
 void() AkArrow_Explode = { // [FUNCTION]
     self.count = self.count & 3;
-    sound(self, CHAN_AUTO, "hexen2/weapons/explode.wav", 1, ATTN_NORM);
+    sound(self,CHAN_AUTO,"hexen2/weapons/explode.wav",1,ATTN_NORM);
     Colored_Explosion (self.origin, self.count);
     BecomeFancy (X80_SPARK_ORANGE + (self.count * 6), 6);
 };
@@ -706,7 +706,7 @@ void() RyuPlasma_Explode = { // [FUNCTION]
 		T_Damage(self.enemy,self,self.owner,dmg2,DAMARMOR);
     }
     T_RadiusDamage(self,self.owner,self.dmg*0.7,self.enemy,DAMAGEALL); // Don't do radius damage to the other, because all the damage was done in the impact.
-    sound(self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);
+    sound(self,CHAN_AUTO,"rogue/plasma/explode.wav",1,ATTN_NORM);
     setorigin(self, self.origin - 8*normalize(self.velocity)); // PM:  Do it right.
     Tent_Explosion2 (self.origin, 244, 3);
     RyuPlasma_Discharge();
@@ -716,7 +716,7 @@ void() RyuPlasma_Explode = { // [FUNCTION]
 // Iceballs used by white wyrm.
 // Iceball explosion effects, called by Touch_Missile.
 void() Iceball_Explode = { // [FUNCTION]
-    sound(self, CHAN_AUTO,"drake/weapons/shatter.wav",1,ATTN_NORM);
+    sound(self,CHAN_AUTO,"drake/weapons/shatter.wav",1,ATTN_NORM);
     Tent_Explosion2(self.origin,32,16);
     ShockWave(self.origin,RING_ICE,3,"progs/drake/s_wave.spr",FALSE);
     BecomeIcyExp();
@@ -727,7 +727,7 @@ void() mine2 = [ 2, mine3    ] { // [FUNCTION]
     local float pc;
 
     pc = pointcontents(self.origin);
-    if (pc == CONTENT_LAVA) { IceMine_Explode(); return;}
+    if (pc == CONTENT_LAVA) { IceMine_Explode(); return; }
 
     if (self.delay > time) self.think = mine2;
     if (self.flags & FL_ONGROUND) return;     // Attached to the ground.
@@ -744,7 +744,7 @@ void() mine2 = [ 2, mine3    ] { // [FUNCTION]
 void() mine3 = [ 3, SUB_Null ] { IceMine_Explode(); }; // [FUNCTION]
 
 void() IceMine_Explode = { // [FUNCTION]
-    if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world;}
+    if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world; }
     self.touch = SUB_Null;      // Stack overflow prevention.
 	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
 	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_CENTER); // Particle explosion drifting upward
@@ -756,7 +756,7 @@ void() IceMine_Explode = { // [FUNCTION]
 
 // Treat destroyed mines as barrels.
 void() IceMine_Die = { // [FUNCTION]
-    if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world;}
+    if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world; }
     self.th_die= SUB_Null;      // Don't 'die' again if damaged more.
     self.touch = SUB_Null;      // Stack overflow prevention.
     self.solid = SOLID_NOT;
@@ -859,8 +859,8 @@ void(entity ent, float color1, float color2) Particle_Cube = { // [FUNCTION]
 };
 
 void() Plasma_Fx = { // [FUNCTION]
-    if (random() < 0.5) sound(self, CHAN_AUTO, "drake/weapons/zap1.wav", 1, ATTN_NORM);
-    else sound(self, CHAN_AUTO, "drake/weapons/zap2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound(self,CHAN_AUTO,"drake/weapons/zap1.wav",1,ATTN_NORM);
+    else sound(self,CHAN_AUTO,"drake/weapons/zap2.wav",1,ATTN_NORM);
 
 	self.effects = EF_MUZZLEFLASH;
 	Particle_Explosion (self.origin, '6 9 2', '10 41 3');
@@ -876,7 +876,7 @@ void() Thor_Remove = { // [FUNCTION]
     if (thor) {
         thor.hammer_finished = 0;
         if (thor.items2 & IT2_MJOLNIR) { // Confirm ownership of hammer.
-            sound(thor, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
+            sound(thor,CHAN_ITEM,"weapons/lock4.wav",1,ATTN_NORM);
             if (thor.flags & FL_CLIENT) { // So far, only clients use ammo.
                 if (self.ammo_cells) thor.ammo_cells = thor.ammo_cells + self.ammo_cells; // Recover all unused cells.
 
@@ -919,8 +919,8 @@ void(float lo, float hi) Thor_Slam = { // [FUNCTION]
     base.struck_by_mjolnir = 1;
     base.think     = SUB_Remove;
     base.nextthink = time + 1;
-    sound(base, CHAN_AUTO, "hipnotic/weapons/mjolslap.wav", 1, ATTN_NORM);
-    sound(base, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+    sound(base,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",1,ATTN_NORM);
+    sound(base,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",1,ATTN_NORM);
     if (self.flags & FL_CLIENT)
         makevectors(self.v_angle);
     else
@@ -964,8 +964,8 @@ void(entity who, vector spot) StaticFx = { // [FUNCTION]
 
     zap = random() * 2; // For sounds.  Was 3.
     who.effects = who.effects | EF_MUZZLEFLASH;
-    if (zap < 1) sound(who, CHAN_AUTO, "drake/weapons/zap1.wav", 1, ATTN_NORM);
-    else sound(who, CHAN_AUTO, "drake/weapons/zap2.wav", 1, ATTN_NORM);
+    if (zap < 1) sound(who,CHAN_AUTO,"drake/weapons/zap1.wav",1,ATTN_NORM);
+    else sound(who,CHAN_AUTO,"drake/weapons/zap2.wav",1,ATTN_NORM);
 
     MakeFancy (spot, X32_STAR_BLUE, 5);
 };
@@ -1153,7 +1153,7 @@ void(entity fire) Fireball_Steam = { // [FUNCTION]
 
     sped = vlen (fire.velocity) * 0.01;
     vel = normalize (fire.velocity) * sped;
-    sound(fire, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM);
+    sound(fire,CHAN_AUTO,"player/slimbrn2.wav",1,ATTN_NORM);
     particle (fire.origin, vel, 1, 50);
 };
 
@@ -1313,7 +1313,7 @@ void() Hatch_Egg = {
 		else minion_spider(self.oldorigin, self.enemy);
 	} else if (self.owner.classtype == CT_MONSHAL || self.owner.classtype == CT_MONSHALBOSS) {
 		if (self.owner.classtype == CT_MONSHALBOSS) {
-			sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"ad171/wraith/attack3.wav",1,ATTN_NORM);
 			minion_voreling(self.oldorigin+'0 0 4', self.enemy);
 		} else {
 			minion_voreling(self.oldorigin, self.enemy);
@@ -1420,3 +1420,31 @@ void(vector spot, float base, float add, string text, float toponly) ShockWave =
 
 // Used by exploding barrels and MIRVs.  Yes, add 7 instead of 8.
 void() FlameWave = { ShockWave(self.origin,RING_FIRE,7,"progs/drake/s_wave.spr",FALSE); }; // [FUNCTION]
+
+void() ink_think = {
+    if (random() < 0.5) T_RadiusDamage(self,self,16,world,DAMAGEALL);
+    if (random() < 0.5) {
+		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
+		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
+    }
+    self.velocity = self.velocity * 0.95;
+	if (self.delay < time) {
+		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
+		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
+		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
+		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
+		self.think = SUB_Remove;
+	}
+
+};
+
+void() ink_stand1 = [1, ink_stand2] { ink_think(); };  
+void() ink_stand2 = [2, ink_stand3] { ink_think(); };  
+void() ink_stand3 = [1, ink_stand4] { ink_think(); };  
+void() ink_stand4 = [3, ink_stand5] { ink_think(); };
+void() ink_stand5 = [13,ink_stand6] { ink_think(); };  
+void() ink_stand6 = [3, ink_stand7] { ink_think(); };  
+void() ink_stand7 = [14,ink_stand8] { ink_think(); };  
+void() ink_stand8 = [15,ink_stand9] { ink_think(); }; 
+void() ink_stand9 = [14,ink_stand10] { ink_think(); };  
+void() ink_stand10 = [16,ink_stand1] { ink_think(); };

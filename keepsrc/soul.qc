@@ -77,7 +77,7 @@ void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
 
     self.nextthink = time + 0.05;
     if (self.wait <= time) {
-        sound(self, CHAN_BODY, "nehahra/wraith/soul.wav", 1, ATTN_IDLE);
+        sound(self,CHAN_BODY,"nehahra/wraith/soul.wav",1,ATTN_IDLE);
         self.wait = random() * 60 + time;
     }
 
@@ -116,8 +116,8 @@ void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
         StopSound(self,CHAN_BODY);
 		self.cnt = -1;
         T_Heal(reaper,50,TRUE);
-        if (reaper.classtype == CT_MONSHADE) sound(reaper, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
-        else sound(reaper, CHAN_VOICE, "nehahra/wraith/rych1.wav", 1, ATTN_IDLE);
+        if (reaper.classtype == CT_MONSHADE) sound(reaper,CHAN_VOICE, "drake/shade/taunt.wav",1,ATTN_NORM);
+        else sound(reaper,CHAN_VOICE, "nehahra/wraith/rych1.wav",1,ATTN_IDLE);
 
         Soul_Remove();
     }
@@ -150,8 +150,8 @@ void(entity ent) Soul_Spawn = { // [FUNCTION]
 
 void(string sfx) ai_wraith = { // [FUNCTION]
 	if (self.attack_state == AS_FLEEING) {
-		sound(self, CHAN_VOICE, sfx, 1, ATTN_IDLE);
-		sound(self.enemy, CHAN_VOICE, sfx, 1, ATTN_IDLE);
+		sound(self,CHAN_VOICE, sfx,1,ATTN_IDLE);
+		sound(self.enemy,CHAN_VOICE, sfx,1,ATTN_IDLE);
 		self.attack_state = AS_STRAIGHT;
 	}
 };
@@ -161,7 +161,7 @@ void() aether_out1 = { // [FUNCTION], Phase out start.
     self.solid      = SOLID_NOT;
     self.takedamage = DAMAGE_NO;
     self.effects    = self.effects | EF_DIMLIGHT;
-    sound(self, CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
+    sound(self,CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
     self.th_melee   = SUB_Null;
     self.th_missile = SUB_Null;
 };
@@ -177,7 +177,7 @@ void() aether_in1 = { // [FUNCTION], Phase in start.
     self.effects    = self.effects | EF_DIMLIGHT;
     self.flags      = self.flags - (self.flags & FL_NOTARGET);
     self.modelindex = self.mindex2;
-    sound(self, CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
+    sound(self,CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
 };
 
 void(void() hth, void() miss) aether_in2 = { // [FUNCTION], Phase in end.
@@ -202,7 +202,7 @@ float() Wraith_FindSoul = { // [FUNCTION]
         if (head.classtype == CT_SOUL) {
 			if (!head.owner || (head.owner == self)) {
 				d = vlen(head.origin - self.origin);
-				if (d < dist) { targ = head;  dist = d;}
+				if (d < dist) { targ = head;  dist = d; }
 			}
 		}
         head = head.chain;
@@ -220,11 +220,11 @@ float() Wraith_FindSoul = { // [FUNCTION]
         if ((head.flags & FL_MONSTER) && head.health <= 0) {
 			if (!head.gibbed && !head.gorging) { // Got one!
 				if (self.classtype == CT_MONSHADE) { // Use voice channel to override others.
-					sound(self, CHAN_VOICE, "drake/shade/screech.wav", 1, ATTN_NORM);
-					sound(head, 6, "drake/shade/screech.wav", 1, ATTN_IDLE);
+					sound(self,CHAN_VOICE, "drake/shade/screech.wav",1,ATTN_NORM);
+					sound(head, 6, "drake/shade/screech.wav",1,ATTN_IDLE);
 				} else { // Nehahra used item channel for selection.
-					sound(self, CHAN_ITEM, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
-					sound(head, 6, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
+					sound(self,CHAN_ITEM,"nehahra/wraith/select.wav",1,ATTN_IDLE);
+					sound(head, 6, "nehahra/wraith/select.wav",1,ATTN_IDLE);
 				}
 				Soul_Spawn(head);
 				self.enemy = newmis;

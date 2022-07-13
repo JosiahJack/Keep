@@ -49,7 +49,7 @@ void() turret_shoot = { // [FUNCTION]
 	local vector ang;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "enforcer/enfire.wav",1,ATTN_NORM);
 	ang = vectoangles(self.enemy.origin - self.origin); //calculate pitch based on the enemy's position, but clamp it to a narrow range
 	if (ang_x > 180) ang_x = ang_x - 360;	
 	if (ang_x > TURRET_MAX_PITCH) ang_x = TURRET_MAX_PITCH;
@@ -61,7 +61,7 @@ void() turret_shoot = { // [FUNCTION]
 
 void() turret_helper_think = { // [FUNCTION]
 	self.nextthink = time + 0.2;
-	if ( self.owner.state != TURRET_STATE_ACTIVE) return;
+	if (self.owner.state != TURRET_STATE_ACTIVE) return;
 	if (!FindTarget()) return; // Find enemy.
 
 	self.yaw_speed = (50 + skill * 20) * 0.2;
@@ -69,14 +69,14 @@ void() turret_helper_think = { // [FUNCTION]
 	turret_shoot(); //shoot if enemy is in sight (even if facing wrong way)
 };
 
-void() turret_hit_bottom = { sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); self.state = TURRET_STATE_INACTIVE; }; // [FUNCTION]
+void() turret_hit_bottom = { sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM); self.state = TURRET_STATE_INACTIVE; }; // [FUNCTION]
 
-void() turret_go_down = { sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); self.state = TURRET_STATE_DEACTIVATING; SUB_CalcMove (self.pos1, self.speed, turret_hit_bottom); }; // [FUNCTION]
+void() turret_go_down = { sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM); self.state = TURRET_STATE_DEACTIVATING; SUB_CalcMove (self.pos1, self.speed, turret_hit_bottom); }; // [FUNCTION]
 
-void() turret_hit_top = { sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); self.state = TURRET_STATE_ACTIVE; }; // [FUNCTION]
+void() turret_hit_top = { sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM); self.state = TURRET_STATE_ACTIVE; }; // [FUNCTION]
 
 void() turret_go_up = { // [FUNCTION]
-	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 	self.state = TURRET_STATE_ACTIVATING;
 	SUB_CalcMove (self.pos2, self.speed, turret_hit_top);
 };

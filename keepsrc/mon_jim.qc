@@ -53,7 +53,7 @@ void(float fstate) jim_update = {
 	if (self.t_width < time) {
 		self.t_width = time + 0.9;
 		// Play on auto channel so it overlaps with existing sound
-		sound(self, CHAN_AUTO, "quoth/bob/hover.wav", 0.3, ATTN_WEAPON);
+		sound(self,CHAN_AUTO,"quoth/bob/hover.wav", 0.3,ATTN_WEAPON);
 	}
 
 	// Time for an idle sound?
@@ -188,7 +188,7 @@ void() jim_laser = {
 	if ( visxray(self,self.enemy, self.attack_offset, '0 0 12', FALSE) ) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"enforcer/enfire.wav",1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
@@ -210,7 +210,7 @@ void() jim_rocket = {
 	if ( visxray(self,self.enemy, self.attack_offset, '0 0 -12', FALSE) ) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"quoth/soldier/rocket.wav",1,ATTN_NORM);	
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
@@ -249,8 +249,8 @@ void() jim_attack = {
 //----------------------------------------------------------------------------
 void() jim_fire1 = [$idle1, jim_fire2 ] { jim_update(JS_IDLE);
 	if (self.classtype == CT_MONJIM) 
-		sound(self, CHAN_WEAPON, "quoth/bob/fire.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "ad171/jim/rocket_load.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"quoth/bob/fire.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"ad171/jim/rocket_load.wav",1,ATTN_NORM);
 };
 void() jim_fire2 = [$idle1, jim_fire3 ] { jim_update(JS_IDLE);jim_attack();
 	if (skill < SKILL_HARD) jim_vel(0.4);
@@ -327,8 +327,8 @@ void(entity inflictor, entity attacker, float damage) jim_pain = {
 	self.velocity = '0 0 0';
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 	self.inpain = 0;
 	
 	// Work out which direction the damage came from (enemy)
@@ -430,7 +430,7 @@ void() jim_die = {
 	// Second function accents the spiral (1s forward movement)
 	// Third final impact (touch function goes here as well)
 	//
-	sound(self, CHAN_VOICE, "quoth/bob/death.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "quoth/bob/death.wav",1,ATTN_NORM);
 	self.solid = SOLID_NOT;			// No world colision
 	self.movetype = MOVETYPE_FLY;	// Free velocity movement
 	self.touch = jim_is_dead;		// still can touch stuff

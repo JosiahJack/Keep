@@ -70,7 +70,7 @@ void() sgrunt_stand = {
 void() sgrunt_swagger1 = [74, sgrunt_swagger2 ] 
 {
 	if (random() < 0.1)
-		sound(self, CHAN_VOICE, "sgrunt/infidle1.wav", 1, ATTN_IDLE);
+		sound(self,CHAN_VOICE, "sgrunt/infidle1.wav",1,ATTN_IDLE);
 
 	ai_walk(7);
 };
@@ -127,7 +127,7 @@ void() sgrunt_plasma_touch = {
 	setmodel(self, "progs/kinn/s_plasgx.spr");
 
 	// make sound
-	sound(self, CHAN_VOICE, "drake/weapons/plasma1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "drake/weapons/plasma1.wav",1,ATTN_NORM);
 };
 
 void(vector org, vector dir) sgrunt_spawn_plasma = {
@@ -135,7 +135,7 @@ void(vector org, vector dir) sgrunt_spawn_plasma = {
 	local float f;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "sgrunt/hovatck1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"sgrunt/hovatck1.wav",1,ATTN_NORM);
 
 	plasma = spawn();
 	plasma.classname = "plasma";
@@ -222,7 +222,7 @@ void() sgrunt_fire_loop = [194, sgrunt_fire_loop]
 	local	vector	dir;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "sgrunt/infatck1.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"sgrunt/infatck1.wav",1,ATTN_NORM);	
 
 	// fire somewhat behind the player, so a dodging player is harder to hit
 	if (ai_face_last())
@@ -245,7 +245,7 @@ void() sgrunt_fire_loop = [194, sgrunt_fire_loop]
 void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face_last(); ai_forward(5); };
 void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face_last(); ai_back(1); };
 void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face_last(); ai_back(1); };
-void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face_last();sound(self, CHAN_WEAPON, "sgrunt/infatck3.wav", 1, ATTN_NORM); };
+void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face_last();sound(self,CHAN_WEAPON,"sgrunt/infatck3.wav",1,ATTN_NORM); };
 void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face_last(); ai_back(1); };
 void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face_last(); ai_forward(1); };
 void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face_last(); ai_forward(1); };
@@ -307,11 +307,11 @@ void() sgrunt_wallop = {
 		
 	ldmg = (random() + random() + random()) * 20;
 	T_Damage (self.enemy, self, self, ldmg,DAMARMOR);
-	sound(self, CHAN_WEAPON, "sgrunt/melee2.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"sgrunt/melee2.wav",1,ATTN_NORM);
 };
 
 void() sgrunt_smash1 = [199, sgrunt_smash2] { ai_face(); ai_forward(3); };
-void() sgrunt_smash2 = [200, sgrunt_smash3] { ai_face(); ai_back(7);sound(self, CHAN_WEAPON, "sgrunt/infatck2.wav", 1, ATTN_NORM); };
+void() sgrunt_smash2 = [200, sgrunt_smash3] { ai_face(); ai_back(7);sound(self,CHAN_WEAPON,"sgrunt/infatck2.wav",1,ATTN_NORM); };
 void() sgrunt_smash3 = [201, sgrunt_smash4] { ai_face(); ai_forward(1); };
 void() sgrunt_smash4 = [202, sgrunt_smash5] { ai_face(); ai_forward(9); };
 void() sgrunt_smash5 = [203, sgrunt_smash6] { ai_face(); ai_forward(6); };
@@ -363,10 +363,10 @@ void(entity inflictor, entity attacker, float damage) sgrunt_pain = {
 	self.pain_finished = time + 2;
 
 	if (random() < 0.5) {
-		sound(self, CHAN_VOICE, "sgrunt/infpain1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "sgrunt/infpain1.wav",1,ATTN_NORM);
 		sgrunt_paina1();
 	} else {
-		sound(self, CHAN_VOICE, "sgrunt/infpain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "sgrunt/infpain2.wav",1,ATTN_NORM);
 		sgrunt_painb1();
 	}
 };
@@ -432,7 +432,7 @@ void() sgrunt_die =  {
 		sgrunt_damage_skin();
 
 		// regular death
-		sound(self, CHAN_VOICE, "kinn/gibs/ut2gib1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "kinn/gibs/ut2gib1.wav",1,ATTN_NORM);
 
 		// head explodes on death...
 		makevectors(self.angles);

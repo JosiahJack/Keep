@@ -78,13 +78,12 @@ void(vector orgofs) idchthon_missile = {
 	local float projlen;
 
 	// No enemy, player dead or intermission/cinematic?
-	if (!self.enemy || self.enemy.health < 1 || 
-		intermission_running > 0 || cinematic_running > 0 || cutscene > 0) {
+	if (!self.enemy || self.enemy.health < 1 || frame_pause()) {
 		self.th_stand();
 		return;
 	}
 	
-	sound(self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/chthon/attack1.wav",1,ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
 	makevectors(offang);
 	org = self.origin + attack_vector(orgofs);
@@ -147,7 +146,7 @@ void() idchthon_missile22	= [	$attack22, idchthon_missile23 ] { idchthon_face();
 void() idchthon_missile23	= [	$attack23, idchthon_missile1 ] { idchthon_face(); };
 
 void() idchthon_rise1	= [	$rise1, idchthon_rise2 ] {};
-void() idchthon_rise2	= [	$rise2, idchthon_rise3 ] { sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM); };
+void() idchthon_rise2	= [	$rise2, idchthon_rise3 ] { sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_NORM); };
 void() idchthon_rise3	= [	$rise3, idchthon_rise4 ] {};
 void() idchthon_rise4	= [	$rise4, idchthon_rise5 ] { ai_face(); };
 void() idchthon_rise5	= [	$rise5, idchthon_rise6 ] {};
@@ -269,7 +268,7 @@ void() lightning_use = {
 	le1.nextthink = -1;
 	le2.nextthink = -1;
 	lightning_end = time + 1;
-	sound(self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);  // vanilla id1 sound
+	sound(self,CHAN_VOICE, "misc/power.wav",1,ATTN_NORM);  // vanilla id1 sound
 	lightning_fire();		
 
 	
@@ -278,7 +277,7 @@ void() lightning_use = {
 
 	self.enemy = activator;
 	if (le1.state == STATE_TOP && self.health > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		self.health = self.health - 1; // advance the boss pain if down
 		if (self.health >= 2) idchthon_shocka1();
 		else if (self.health == 1) idchthon_shockb1();
@@ -287,7 +286,7 @@ void() lightning_use = {
 };
 
 void() idchthon_death1 = [$death1, idchthon_death2] {
-sound(self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM); };
+sound(self,CHAN_VOICE, "ad171/chthon/death1.wav",1,ATTN_NORM); };
 void() idchthon_death2 = [$death2, idchthon_death3] {};
 void() idchthon_death3 = [$death3, idchthon_death4] {};
 void() idchthon_death4 = [$death4, idchthon_death5] {};

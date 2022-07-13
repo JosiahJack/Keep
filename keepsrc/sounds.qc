@@ -57,7 +57,7 @@ void() ambient_sound_setup = { // [FUNCTION]
 };
 
 void() ambientsound_trigger_start = { // [FUNCTION]
-	sound(self, CHAN_AUTO, self.noise, self.volume, self.distance);
+	sound(self,CHAN_AUTO,self.noise, self.volume, self.distance);
 };
 
 // QUAKED ambient_custom_loop (0.3 0.1 0.6) (-16 -16 -8) (16 16 8) x
@@ -164,7 +164,7 @@ void() ambient_generalpurpose = { // [ENTITY]
 	if (self.noise == "") {
 		dprint("\b[AMBIENT_SOUND]\b Missing sound file at ");
 		dprint(vtos(self.origin)); dprint("\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}
@@ -293,7 +293,7 @@ void() ambient_custom_sound = { // [ENTITY]
 	if (self.noise == "") {
 		dprint("\b[AMBIENT_SOUND]\b Missing sound file at ");
 		dprint(vtos(self.origin)); dprint("\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}

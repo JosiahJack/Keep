@@ -243,13 +243,13 @@ void() rotate_entity_think = {
 
 	t = time - self.ltime;
 	self.ltime = time;
-	if ( self.state == RSTATE_SPEEDINGUP ) {
+	if (self.state == RSTATE_SPEEDINGUP ) {
 		self.count = self.count + self.cnt * t;
-		if ( self.count > 1 ) self.count = 1;
+		if (self.count > 1 ) self.count = 1;
 		t = t * self.count; // get rate of rotation
-	} else if ( self.state == RSTATE_SLOWINGDOWN ) {
+	} else if (self.state == RSTATE_SLOWINGDOWN ) {
 		self.count = self.count - self.cnt * t;
-		if ( self.count < 0 ) {
+		if (self.count < 0 ) {
 			RotateTargetsFinal();
 			self.state = RSTATE_INACTIVE;
 			self.think = SUB_Null;
@@ -306,13 +306,13 @@ void() rotate_entity_firstthink = {
 
 // Creates an entity that continually rotates.  Can be toggled on and off if targeted.
 void() func_rotate_entity = {
-	if (!self.target) { dprint("\b[ROT TRAIN]\b missing target!\n"); return;}
+	if (!self.target) { dprint("\b[ROT TRAIN]\b missing target!\n"); return; }
 
 	self.solid    = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	setmodel(self, self.model);
-	setsize( self, self.mins, self.maxs );
-	if ( self.speed != 0 ) self.cnt = 1 / self.speed;
+	setsize(self, self.mins, self.maxs );
+	if (self.speed != 0 ) self.cnt = 1 / self.speed;
 	self.think = rotate_entity_firstthink;
 	self.nextthink = time + 0.1;
 	self.ltime = time;
@@ -357,9 +357,9 @@ void() rotate_train_think = {
 
 	t = time - self.ltime;
 	self.ltime = time;
-	if ( ( self.endtime ) && ( time >= self.endtime ) ) {
+	if ( (self.endtime ) && ( time >= self.endtime ) ) {
 		self.endtime = 0;
-		if ( self.state == RSTATE_MOVE ) {
+		if (self.state == RSTATE_MOVE ) {
 			setorigin(self, self.finaldest);
 			self.velocity = '0 0 0';
 		}
@@ -367,27 +367,27 @@ void() rotate_train_think = {
 	} else {
 		timeelapsed = (time - self.cnt) * self.duration;
 		if ( timeelapsed > 1 ) timeelapsed = 1;
-		setorigin( self, self.dest1 + ( self.dest2 * timeelapsed ) );
+		setorigin(self, self.dest1 + (self.dest2 * timeelapsed ) );
 	}
-	self.angles = self.angles + ( self.rotate * t );
-	self.angles = SUB_NormalizeAngles( self.angles );
+	self.angles = self.angles + (self.rotate * t );
+	self.angles = SUB_NormalizeAngles(self.angles );
 	RotateTargets();
 	self.nextthink = time + 0.02;
 };
 
 void() rotate_train_use = {
 	if (self.think1 != rotate_train_find) {
-		if ( self.velocity != '0 0 0' ) return;		// already activated
-		if ( self.think1 ) self.think1();
+		if (self.velocity != '0 0 0' ) return;		// already activated
+		if (self.think1 ) self.think1();
 	}
 };
 
 void() rotate_train_wait = {
 	self.state = RSTATE_WAIT;
-	if ( self.goalentity.noise ) sound(self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.goalentity.noise ) sound(self,CHAN_VOICE, self.goalentity.noise,1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 
-	if ( self.goalentity.spawnflags & TRAIN_ANGLES ) {
+	if (self.goalentity.spawnflags & TRAIN_ANGLES ) {
 		self.rotate = '0 0 0';
 		self.angles = self.finalangle;
 	}
@@ -399,8 +399,8 @@ void() rotate_train_wait = {
 
 void() rotate_train_stop = {
 	self.state = RSTATE_STOP;
-	if ( self.goalentity.noise ) sound(self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.goalentity.noise ) sound(self,CHAN_VOICE, self.goalentity.noise,1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 
 	if (self.goalentity.spawnflags & TRAIN_ANGLES) {
 		self.rotate = '0 0 0';
@@ -422,7 +422,7 @@ void() rotate_train_next = {
 	targ = find (world, targetname, self.path);
 	if (targ.classname != "path_rotate") dprint("\b[ROT TRAIN]\b func_rotate_train next target is not path_rotate\n");
 	if (self.goalentity.noise1) self.noise1 = self.goalentity.noise1;
-	sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 	self.goalentity = targ;
 	self.path = targ.target;
 	if (!self.path ) dprint("\b[ROT TRAIN]\b func_rotate_train no next target\n");
@@ -450,7 +450,7 @@ void() rotate_train_next = {
 	if ( current.spawnflags & TRAIN_SET_DAMAGE ) SetDamageOnTargets( current.dmg );
 
 	if ( current.speed == -1 ) {
-		setorigin( self, targ.origin ); // Teleport instantly to the next path_corner
+		setorigin(self, targ.origin ); // Teleport instantly to the next path_corner
 		self.endtime = self.ltime + 0.01;
 		SetTargetOrigin();
 		if ( targ.spawnflags & TRAIN_ANGLES ) self.angles = targ.angles;
@@ -578,10 +578,10 @@ void() rotate_door_group_reversedirection;
 void() movewall_touch = {
 	if (time < self.owner.attack_finished) return;
 
-	if ( self.dmg ) {
+	if (self.dmg ) {
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
-	} else if ( self.owner.dmg ) {
+	} else if (self.owner.dmg ) {
 		T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	}
@@ -594,18 +594,18 @@ void() movewall_blocked = {
 
 	self.owner.attack_finished = time + 0.5;
 
-	if ( self.owner.classname == "func_rotate_door" ) {
+	if (self.owner.classname == "func_rotate_door" ) {
 		temp = self;
 		self = self.owner;
 		rotate_door_group_reversedirection();
 		self = temp;
 	}
 
-	if ( self.dmg ) {
+	if (self.dmg ) {
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	}
-	else if ( self.owner.dmg ) {
+	else if (self.owner.dmg ) {
 		T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	}
@@ -635,7 +635,7 @@ void() func_movewall = {
 	
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
-	if ( self.spawnflags & MOVEWALL_NONBLOCKING ) self.solid = SOLID_NOT;
+	if (self.spawnflags & MOVEWALL_NONBLOCKING ) self.solid = SOLID_NOT;
 	else {
 		self.solid = SOLID_BSP;
 		self.blocked = movewall_blocked;
@@ -643,7 +643,7 @@ void() func_movewall = {
 	
 	if (self.spawnflags & MOVEWALL_TOUCH) self.touch = movewall_touch;
 	setmodel(self,self.model);
-	if ( !( self.spawnflags & MOVEWALL_VISIBLE ) ) self.model = "";
+	if ( !(self.spawnflags & MOVEWALL_VISIBLE ) ) self.model = "";
 	self.think = movewall_think;
 	self.nextthink = time + 0.02;
 	self.ltime = time;
@@ -670,19 +670,19 @@ void() rotate_object_move = {
 	if (ent.classname == "info_rotate") {
 		// Move origin to new location
 		self.oldorigin = ent.origin;
-		setorigin( self, self.oldorigin );
+		setorigin(self, self.oldorigin );
 	}
 };
 
 void() rotate_object = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
-	if (!self.target) { dprint("\b[ROT OBJECT]\b missing target!\n"); return;}
+	if (!self.target) { dprint("\b[ROT OBJECT]\b missing target!\n"); return; }
 	self.classname = "rotate_object";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.bsporigin = TRUE;		// bmodel origin 0,0,0
 	setmodel(self,self.model);
-	setsize( self, self.mins, self.maxs );
+	setsize(self, self.mins, self.maxs );
 	
 	// Check for a target (info_rotate) to move the object
 	if (self.target2 != "") {
@@ -699,14 +699,14 @@ void() rotate_door_think2 = {
 	self.ltime = time;	
 	self.frame = 1 - self.frame; // change to alternate textures
 	self.angles = self.dest;
-	if ( self.state == RSTATE_OPENING ) self.state = RSTATE_OPEN;
+	if (self.state == RSTATE_OPENING ) self.state = RSTATE_OPEN;
 	else {
-		if ( self.spawnflags & DOOR_STAYOPEN ) { rotate_door_group_reversedirection(); return; }
+		if (self.spawnflags & DOOR_STAYOPEN ) { rotate_door_group_reversedirection(); return; }
 		
 		self.state = RSTATE_CLOSED;
 	}
 
-	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise3,1,ATTN_NORM);
 	self.think = SUB_Null;
 	RotateTargetsFinal();
 };
@@ -717,7 +717,7 @@ void() rotate_door_think = {
 	t = time - self.ltime;
 	self.ltime = time;
 	if ( time < self.endtime ) {
-		self.angles = self.angles + ( self.rotate * t );
+		self.angles = self.angles + (self.rotate * t );
 		RotateTargets();
 	} else {
 		self.angles = self.dest;
@@ -741,23 +741,23 @@ void() rotate_door_reversedirection = {
 		self.dest = self.dest1;
 		self.state = RSTATE_CLOSING;
 	}
-	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-	self.rotate = ( self.dest - start ) * ( 1 / self.speed );
+	sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
+	self.rotate = (self.dest - start ) * ( 1 / self.speed );
 	self.think = rotate_door_think;
 	self.nextthink = time + 0.02;
-	self.endtime = time + self.speed - ( self.endtime - time );
+	self.endtime = time + self.speed - (self.endtime - time );
 	self.ltime = time;
 };
 
 void() rotate_door_group_reversedirection = {
 	local string name;
 
-	if ( self.group ) {
+	if (self.group ) {
 		name = self.group;
 		self = find( world, group, name);
-		while( self ) {
+		while(self ) {
 			rotate_door_reversedirection(); // Tell all associated rotaters to reverse direction
-			self = find( self, group, name);
+			self = find(self, group, name);
 		}
 	} else rotate_door_reversedirection();
 };
@@ -765,7 +765,7 @@ void() rotate_door_group_reversedirection = {
 void() rotate_door_use = {
 	local vector start;
 
-	if ( ( self.state != RSTATE_OPEN ) && ( self.state != RSTATE_CLOSED ) ) return;
+	if ( (self.state != RSTATE_OPEN ) && (self.state != RSTATE_CLOSED ) ) return;
 
 	if ( !self.cnt ) {
 		self.cnt = 1;
@@ -773,7 +773,7 @@ void() rotate_door_use = {
 	}
 
 	self.frame = 1 - self.frame; // change to alternate textures
-	if ( self.state == RSTATE_CLOSED ) {
+	if (self.state == RSTATE_CLOSED ) {
 		start = self.dest1;
 		self.dest = self.dest2;
 		self.state = RSTATE_OPENING;
@@ -783,8 +783,8 @@ void() rotate_door_use = {
 		self.state = RSTATE_CLOSING;
 	}
 
-	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-	self.rotate = ( self.dest - start ) * ( 1 / self.speed );
+	sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
+	self.rotate = (self.dest - start ) * ( 1 / self.speed );
 	self.think = rotate_door_think;
 	self.nextthink = time + 0.01;
 	self.endtime = time + self.speed;
@@ -804,7 +804,7 @@ void() rotate_door_use = {
 // -------- NOTES --------
 // Rotating door moving around a point of rotation
 void() func_rotate_door = {
-	if (!self.target) { dprint("\b[ROT DOOR]\b missing target!\n"); return;}
+	if (!self.target) { dprint("\b[ROT DOOR]\b missing target!\n"); return; }
 
 	self.dest1 = '0 0 0';
 	self.dest2 = self.angles;
@@ -812,7 +812,7 @@ void() func_rotate_door = {
 	if ( !self.speed ) self.speed = 2; // default to 2 seconds
 	self.cnt = 0;
 	if (!self.dmg) self.dmg = 2;
-	else if ( self.dmg < 0 ) self.dmg = 0;
+	else if (self.dmg < 0 ) self.dmg = 0;
 	if (self.sounds == 0) self.sounds = 1;
 	if (self.sounds == 1) {
 		self.noise1 = "doors/latch2.wav";
@@ -837,8 +837,8 @@ void() func_rotate_door = {
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	setmodel(self, self.model);
-	setorigin( self, self.origin );
-	setsize( self, self.mins, self.maxs );
+	setorigin(self, self.origin );
+	setsize(self, self.mins, self.maxs );
 	self.state = RSTATE_CLOSED;
 	self.use = rotate_door_use;
 	self.think = SUB_Null;

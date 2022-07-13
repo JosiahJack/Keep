@@ -41,7 +41,7 @@ $frame claw1 claw2 claw3 claw4 claw5 // (001 - 005) Fast Claw attack
 $frame attack1 attack2 attack3 // (006 - 008) Fast Nail Attack
 $frame base1 base2 // (009 - 010) Misc modelling stuff
 
-void() snowm_stand1 = [$stand1, snowm_stand2 ] { monster_idle_sound(); ai_stand();}
+void() snowm_stand1 = [$stand1, snowm_stand2 ] { monster_idle_sound(); ai_stand(); }
 void() snowm_stand2 = [$stand1, snowm_stand3 ] { ai_stand(); };
 void() snowm_stand3 = [$stand1, snowm_stand4 ] { ai_stand(); };
 void() snowm_stand4 = [$stand1, snowm_stand5 ] { ai_stand(); };
@@ -50,7 +50,7 @@ void() snowm_stand6 = [$stand1, snowm_stand7 ] { ai_stand(); };
 void() snowm_stand7 = [$stand1, snowm_stand8 ] { ai_stand(); };
 void() snowm_stand8 = [$stand1, snowm_stand1 ] { ai_stand(); };
 
-void() snowm_walk1 = [$stand1, snowm_walk2 ] { monster_idle_sound(); ai_walk(0);}
+void() snowm_walk1 = [$stand1, snowm_walk2 ] { monster_idle_sound(); ai_walk(0); }
 void() snowm_walk2 = [$stand1, snowm_walk3 ] { ai_walk(0); };
 void() snowm_walk3 = [$stand1, snowm_walk4 ] { ai_walk(0); };
 void() snowm_walk4 = [$stand1, snowm_walk5 ] { ai_walk(0); };
@@ -59,7 +59,7 @@ void() snowm_walk6 = [$stand1, snowm_walk7 ] { ai_walk(0); };
 void() snowm_walk7 = [$stand1, snowm_walk8 ] { ai_walk(0); };
 void() snowm_walk8 = [$stand1, snowm_walk1 ] { ai_walk(0); };
 
-void() snowm_run1 = [$stand1, snowm_run2 ] { monster_idle_sound(); ai_run(0);}
+void() snowm_run1 = [$stand1, snowm_run2 ] { monster_idle_sound(); ai_run(0); }
 void() snowm_run2 = [$stand1, snowm_run3 ] { ai_run(0); };
 void() snowm_run3 = [$stand1, snowm_run4 ] { ai_run(0); };
 void() snowm_run4 = [$stand1, snowm_run5 ] { ai_run(0); };
@@ -79,7 +79,7 @@ void() SnowmMelee = {
 	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return; // Too far away
 	if (!self.enemy.takedamage) return; // Can the target bleed?
 
-	sound(self, CHAN_WEAPON, "xmas/snowman/claw.wav", TRUE, TRUE);
+	sound(self,CHAN_WEAPON,"xmas/snowman/claw.wav", TRUE, TRUE);
 	ldmg = (random() + random() + random()) * 5; // Claw attack is good (1-15)
 	if (ldmg < 1) ldmg = 1;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -109,7 +109,7 @@ void() SnowmFireNails = {
 	// Light up face, setup projectile speed and play fire sound
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_NAILSNOWMPROJ + (skill * SPEED_NAILSNOWMSKILL);
-	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"xmas/snowman/nail_fire.wav",1,ATTN_NORM);
 
 	// turn and face your enemy!
 	makevectors(self.angles);
@@ -146,8 +146,8 @@ void(entity inflictor, entity attacker, float damage) snowm_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		if (self.pain_check == 1) snowm_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -162,8 +162,8 @@ void() snowm_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// There is no death animation
-	if (random() < 0.5) sound(self, CHAN_BODY, self.death_sound, 1, ATTN_NORM);
-	else sound(self, CHAN_BODY, self.death_sound2, 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_BODY,self.death_sound,1,ATTN_NORM);
+	else sound(self,CHAN_BODY,self.death_sound2,1,ATTN_NORM);
 	ExplosiveGibDeath(self.death_sound,0,0,0);
 };
 

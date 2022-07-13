@@ -54,9 +54,9 @@ void() SentinelFire = {
 	if (self.attack_finished < time) {
 		if (self.enemy == world || !enemy_vis) return;
 		if (self.spawnflags & 4) {
-			sound(self, CHAN_WEAPON, "quoth/sentinel/nail.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"quoth/sentinel/nail.wav",1,ATTN_NORM);
 		} else {
-			sound(self, CHAN_WEAPON, "quoth/sentinel/laser.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"quoth/sentinel/laser.wav",1,ATTN_NORM);
 		}
 		self.attack_finished = time + self.wait;
 		makevectors(self.angles);
@@ -116,7 +116,7 @@ void(entity inflictor, entity attacker, float damage) sentinel_pain = {
 	monster_pain_check(attacker, damage);
 
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		sentinel_pain1();
 		self.pain_finished = time + 2;
 	}
@@ -148,7 +148,7 @@ void() sentinel_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	sound(self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ad171/seeker/explode_major.wav",1,ATTN_NORM);
 	self.solid = SOLID_NOT;
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);

@@ -76,10 +76,10 @@ void() spark_spawn = { // [FUNCTION]
 	
 	if (!(self.spawnflags & 2)) {
 		r = rint(random() * 3);	// play a random spark sound	
-		if (r == 1) sound(self, CHAN_AUTO, "misc/spark1.wav", 1, ATTN_NORM);
-		else if (r == 2) sound(self, CHAN_AUTO, "misc/spark2.wav", 1, ATTN_NORM);
-		else if (r == 0) sound(self, CHAN_AUTO, "misc/spark3.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_AUTO, "misc/spark4.wav", 1, ATTN_NORM);
+		if (r == 1) sound(self,CHAN_AUTO,"misc/spark1.wav",1,ATTN_NORM);
+		else if (r == 2) sound(self,CHAN_AUTO,"misc/spark2.wav",1,ATTN_NORM);
+		else if (r == 0) sound(self,CHAN_AUTO,"misc/spark3.wav",1,ATTN_NORM);
+		else sound(self,CHAN_AUTO,"misc/spark4.wav",1,ATTN_NORM);
 	}
 
 	spark = spawn();
@@ -149,7 +149,7 @@ void() sound_start = { // [FUNCTION]
 
 void() sound_pause = { // [FUNCTION]
 	// play the shutoff wav if we got one, then hang around until next use
-	if (self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, self.distance);
+	if (self.noise1 != "") sound(self,CHAN_VOICE, self.noise1, self.volume, self.distance);
 	self.nextthink = -1;
 	self.use = sound_start;
 };
@@ -159,7 +159,7 @@ void() sound_play = { // [FUNCTION]
 		self.state = self.count;		
 		sound_pause();
 		return;
-	} else sound(self, CHAN_VOICE, self.noise, self.volume, self.distance);
+	} else sound(self,CHAN_VOICE, self.noise, self.volume, self.distance);
 
 	if (self.count > 0) self.state = self.state - 1; // reduce repititions by 1 if not infinite
 	self.nextthink = time + (random()*self.cnt) + self.pausetime; // Set next play time

@@ -347,8 +347,6 @@ float CT_PROJ_FABLADE = 396;	// Fallen Angel ninja blade attack
 float CT_PROJ_FASPELL = 397;	// Fallen Angel green shard attack
 float CT_ELENABLAST = 398;		// Targets for Elena fireblast trigger
 float CT_PROJ_FIREWORK = 399;	// Fireworks
-
-// Class Types for all projectiles in game (there is a lot!)
 float CT_PROJ_TRACE = 400;		// Tracer shot (true aim)
 float CT_PROJ_SMARTBALL = 401;	// Nemesant bouncing fire ball
 float CT_PROJ_TRACEPART = 402;	// Tracer shot (extra particles)
@@ -513,6 +511,7 @@ float CT_ARTVITALITY = 580;		// Vitality +25 Max Health
 float CT_ARTSPHERE = 581;		// Vengeance Sphere
 float CT_THROWHAM = 582;        // Thrown Mjolnir hammer
 float CT_PROJ_WIZBOSS = 583;    // Lava ball of the Lava Scrag
+float CT_PROJ_INK = 584;        // Octopus Ink
 
 float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power
@@ -701,5 +700,13 @@ float CT_TRIGMONBREAK = 985;	// Trigger monster/breakable together
 float CT_TRIGMONKILL = 986;		// Trigger monster to be killed
 float CT_TRIGMONATT = 987;		// Trigger monster to attack something
 float CT_TRIGMONATTACK = 988;	// Trigger monster to attack something
+
+
+
+
+
+
+
+
 
 float CT_TRIGVOID = 999;		// Skybox garbage collector!

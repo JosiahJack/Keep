@@ -145,7 +145,7 @@ void() newboss_sink7 = [2, newboss_sink8]
 
 void() newboss_sink8 = [1, newboss_newplace]
 {
-	sound(self, CHAN_WEAPON, "boss1/out1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"boss1/out1.wav",1,ATTN_NORM);
 };
 
 void() newboss_idle1 = [16, newboss_idle2]
@@ -226,7 +226,7 @@ void() newboss_missile9 = [8, newboss_idle1]
 	newboss_face();
 };
 
-void() newboss_hurt1 = [17, newboss_hurt2] { self.passive_state = FALSE;};
+void() newboss_hurt1 = [17, newboss_hurt2] { self.passive_state = FALSE; };
 void() newboss_hurt2 = [18, newboss_hurt3] {};
 void() newboss_hurt3 = [19, newboss_hurt4] {};
 void() newboss_hurt4 = [20, newboss_idle1] {};
@@ -330,7 +330,7 @@ void() newboss_death12 = [28, newboss_death12] {
 
 void() newboss_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
-	sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "boss1/death.wav",1,ATTN_NORM);
 	newboss_death1();
 };
 
@@ -370,7 +370,7 @@ void(vector p) newboss_missile = {
 	newmis.velocity = vec * 300;
 	newmis.classtype = CT_PROJ_FIRETOP;
 	newmis.touch = Touch_Missile;
-	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 	if (self.enemy.health <= 0) newboss_idle1();
 };
 

@@ -280,7 +280,7 @@ float (float y1, float y2) angcomp = {
 
 // Returns the lesser of two (or more) numbers
 float (float a, float b) mathlib_min = {
-	if (a<b)return a;
+	if (a<b) return a;
 	else	return b;
 };
 
@@ -301,7 +301,7 @@ float (float a, float b, float c, float d, float e, float f, float g, float h) m
 
 // Returns the greater of two (or more) numbers
 float (float a, float b) mathlib_max = {
-	if (a>b)return a;
+	if (a>b) return a;
 	else	return b;
 };
 float (float a, float b, float c) mathlib_max3 = {
@@ -576,7 +576,7 @@ vector(entity e, vector a) Anypoint = {
 };
 
 // Returns the center of the entity 'e'.
-vector(entity e) Midpoint = { return e.origin + (e.mins + e.maxs)*0.5;};
+vector(entity e) Midpoint = { return e.origin + (e.mins + e.maxs)*0.5; };
 
 // Returns upper-mid point of a creature, or center of an object.
 // Used for aiming by NPCs.
@@ -695,7 +695,7 @@ vector(vector dir, float ang) Dir_Randomize = {
 };
 
 // Emulate 'P_Random' from Doom/Heretic source.  Returns an integer from 0 to 255.
-float() prandom = { return (random() * 256) & 255;};
+float() prandom = { return (random() * 256) & 255; };
 
 // Damage when hit by a rocket directly.  Emulates 100-120 when d = 120.  Does 83.333% to 100% damage
 float(float d) SUB_RandomDamage = { return d / 6 * (5 + random()); };

@@ -97,7 +97,7 @@ void() revive_gibbed = { // [FUNCTION]
 	local float dist, spd;
 	local vector dir;
 
-	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
+	if (InSky(self.origin)) { entity_remove(self, 0.1); return; }
 	if (self.touchedvoid) return;	
 
 	dist = vlen(self.pos1 - self.origin);
@@ -148,7 +148,7 @@ float() CanSelfRevive = { // [FUNCTION]
 	if (self.health > 0) return FALSE; // Only revive the dead!
 	if (self.gorging) return FALSE; // Don't revive monsters who are being eaten by gremlins currently.
 	if (self.touchedvoid) return FALSE;
-	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return FALSE;}
+	if (InSky(self.origin)) { entity_remove(self, 0.1); return FALSE; }
 
     if (self.modelindex) {
 		return SelfHasRoom();
@@ -194,7 +194,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 		killed_monsters = killed_monsters - 1; // Ahh, nasty reviver hurting my stats!
 	}
 	update_hud_totals(HUD_MONSTERS);
-	sound(self, CHAN_AUTO, "drake/misc/dsslop.wav", 1, ATTN_NORM); // Play classic arch-vile resurrection sound.
+	sound(self,CHAN_AUTO,"drake/misc/dsslop.wav",1,ATTN_NORM); // Play classic arch-vile resurrection sound.
 	self.pain_finished  = time + 3;  // Don't interrupt ressurection reanimation.
 	clear_trigstrs(self); // Sever all targeting links.
 	self.use = SUB_Null;

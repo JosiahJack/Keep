@@ -137,13 +137,13 @@ void() misc_camera_bezier_debug = { // [FUNCTION]
 
 	self.attachment2 = find(world, targetname, self.controltarget); // Find the bezier curve CONTROL point
 	self.attachment3 = find(world, targetname, self.target); // Find the bezier curve END point
-	spawn_marker(self.origin, SPNMARK_RED); // Display debug markers for start/control/end locations
-	spawn_marker(self.attachment2.origin, SPNMARK_GREEN);
-	spawn_marker(self.attachment3.origin, SPNMARK_RED);
+	spawn_marker(self.origin,'0 0 0',0,SPNMARK_RED); // Display debug markers for start/control/end locations
+	spawn_marker(self.attachment2.origin,'0 0 0',0,SPNMARK_GREEN);
+	spawn_marker(self.attachment3.origin,'0 0 0',0,SPNMARK_RED);
 	self.cnt = 0.1;
 	while (self.cnt < 1) { // Loop through 10 points on each bezier curve
 		self.finalangle = bezier_curve(self.origin, self.attachment2.origin, self.attachment3.origin, 1, self.cnt); // Work out bezier curve vector position
-		spawn_marker(self.finalangle, SPNMARK_YELLOW); // Spawn debug marker (yellow is wrong colour!)
+		spawn_marker(self.finalangle,'0 0 0',0,SPNMARK_YELLOW); // Spawn debug marker (yellow is wrong colour!)
 		self.cnt = self.cnt + 0.1;
 	}
 };
@@ -177,7 +177,9 @@ void() camera_controller_think = { // [FUNCTION]
 			if (cam_focus.modeltarget != "") { // Check for special player location entity
 				self.attachment = find(world, targetname, cam_focus.modeltarget);
 				if (self.attachment) { // Found the target entity?
-					if (developer > 0 && !self.nodebuginfo) spawn_marker(self.attachment.origin, SPNMARK_RED); // Spawn a dev marker (can be blocked)
+					if (developer > 0 && !self.nodebuginfo) {
+						spawn_marker(self.attachment.origin,'0 0 0',0,SPNMARK_RED); // Spawn a dev marker (can be blocked)
+					}
 					if (self.attachment.classtype == CT_MISCTELEPORT) { // Info_teleport_destination are fined tuned for trig_teleport
 						self.attachment.origin = self.attachment.origin - '0 0 27';
 						self.attachment.angles = self.attachment.mangle;
@@ -190,7 +192,9 @@ void() camera_controller_think = { // [FUNCTION]
 		if (cam_focus.returntarget != "") {
 			self.attachment2 = find(world, targetname, cam_focus.returntarget);
 			if (self.attachment2) { // Found the target entity?
-				if (developer > 0 && !self.nodebuginfo) spawn_marker(self.attachment2.origin, SPNMARK_RED); // Spawn a dev marker (can be blocked)
+				if (developer > 0 && !self.nodebuginfo) {
+					spawn_marker(self.attachment2.origin,'0 0 0',0,SPNMARK_RED); // Spawn a dev marker (can be blocked)
+				}
 				// Info_teleport_destination are fined tuned for trig_teleport
 				if (self.attachment2.classtype == CT_MISCTELEPORT) {
 					self.attachment2.origin = self.attachment2.origin - '0 0 27';
@@ -248,7 +252,7 @@ void() camera_controller_think = { // [FUNCTION]
 			// Center print message to display?
 			if (cam_focus.message) {
 				centerprint(cam_client, cam_focus.message);
-				sound(cam_client, CHAN_VOICE, cam_focus.noise, 1, ATTN_NORM); // Default talk sound(using sounds entity key)
+				sound(cam_client,CHAN_VOICE, cam_focus.noise,1,ATTN_NORM); // Default talk sound(using sounds entity key)
 			}
 		}
 		// Wait for player input or timer
@@ -453,7 +457,7 @@ void() camera_controller_think = { // [FUNCTION]
 					if (self.movetarget) { // Angle target found?
 						cam_focus.angles = vectoangles(self.movedir); // Convert direction vector to angles
 						if (!cam_focus.cam_debugarrow && !self.nodebuginfo) { // Spawn a debug arrow if devmode (only once)
-							spawn_arrow(cam_focus.origin, cam_focus.angles, 3);
+							spawn_marker(cam_focus.origin, cam_focus.angles,1,3);
 							cam_focus.cam_debugarrow = TRUE;
 						}
 
@@ -617,8 +621,7 @@ void() camera_controller_setup = { // [FUNCTION]
 };
 
 void() misc_camera_use = { // [FUNCTION]
-	if (intermission_running > 0) return; // Cannot use camera's during intermission
-	if (cinematic_running > 0 || cutscene > 0) return; // Stop if cinematic running already
+	if (frame_pause()) return; // Stop if cinematic/intermission running.
 
 	self.enemy = world; // Find client first
 	if (other.flags & FL_CLIENT) self.enemy = other;
@@ -630,7 +633,7 @@ void() misc_camera_use = { // [FUNCTION]
 
 	if (coop > 0) { // Cinematics don't work with COOP?
 		centerprint(self.enemy, self.message2); // There is a default message, but really this is something the mapper should (override) setup on the first camera.
-		sound(self.enemy, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Default talk sound(using sounds entity key) // return; // Let's just see what happens shall we? -Qmaster
+		sound(self.enemy,CHAN_VOICE, self.noise,1,ATTN_NORM); // Default talk sound(using sounds entity key) // return; // Let's just see what happens shall we? -Qmaster
 	}
 
 	cam_focus = self;

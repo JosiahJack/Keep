@@ -68,7 +68,7 @@ void() Quake_Think = [0, Quake_Think] { // [FUNCTION]
     local vector org, dir;
     local float radius, magnitude, dist, frac, up, upper, damage, dizzy; // Richter for magnitude  
 
-    if (self.delay <= time) { sound(self, CHAN_VOICE, "hipnotic/misc/quakeend.wav", 1, ATTN_NORM); remove (self); return; }
+    if (self.delay <= time) { sound(self,CHAN_VOICE, "hipnotic/misc/quakeend.wav",1,ATTN_NORM); remove (self); return; }
 
     self.count = self.count + 1;
     frac = (self.delay - time) / self.wait; // Fraction, from 0 to 1.

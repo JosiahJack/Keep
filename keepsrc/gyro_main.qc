@@ -378,7 +378,6 @@ void() Gyro_Run = {
 		gyro_framegrav = cvar("sv_gravity"); // Set Per-Frame Globals
 		gyro_framemaxvel = cvar("sv_maxvelocity");
 		gyro_framemaxvelneg = 0.0 - gyro_framemaxvel;
-		
 		Gyro_RunForces();
 		Gyro_RunPhysics();
 		

@@ -30,7 +30,7 @@ $frame paind17 paind18 paind19
 void() centurionhover = {
 	if (self.waitmin < time) {
 		self.waitmin = time + 4 + random()*4;
-		sound(self, CHAN_ITEM, "ad171/enforcer/cent_hover.wav", 1, ATTN_IDLE);
+		sound(self,CHAN_ITEM,"ad171/enforcer/cent_hover.wav",1,ATTN_IDLE);
 	}
 };
 
@@ -74,7 +74,7 @@ void() cent_fire = {
 	local vector org, vec;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,SOUND_PLASMA_FIRE,1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	// Fire plasma projectile at players feet
@@ -83,7 +83,7 @@ void() cent_fire = {
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
-void()	cent_atk1	= [	$attack1,	cent_atk2	] { sound(self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+void()	cent_atk1	= [	$attack1,	cent_atk2	] { sound(self,CHAN_WEAPON,"ad171/enforcer/elim_pg_load.wav",1,ATTN_NORM); };
 void()	cent_atk2	= [	$attack2,	cent_atk3	] { ai_face(); };
 void()	cent_atk3	= [	$attack3,	cent_atk4	] { ai_face(); };
 void()	cent_atk4	= [	$attack4,	cent_atk5	] { ai_face(); };
@@ -147,8 +147,8 @@ void(entity inflictor, entity attacker, float damage) cent_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 	
 		// Not using long pain animation (need to be agile)
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -171,7 +171,7 @@ void() cent_crash = {
 		}
 		// Once on ground, thud sound and no more smoke
 		if (self.flags & FL_ONGROUND) {
-			sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,GIB_SOUND_WOOD,1,ATTN_NORM);
 			self.state = FALSE;
 		}
 	}
@@ -212,7 +212,7 @@ void() cent_die = {
 	// regular death
 	if (!self.gibbed) {
 		self.state = TRUE;
-		sound(self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "enforcer/death1.wav",1,ATTN_NORM);
 		// Make sure Centurion falls to the ground (like wizards)
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();

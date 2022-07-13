@@ -38,7 +38,7 @@
 //=============================================================================
 
 //  This makes an entity do a think function right now.  From Drake.
-void(entity ent, void() thinkst) SUB_ThinkImmediate = {
+void(entity ent, void() thinkst) SUB_ThinkImmediate = { // [FUNCTION]
     local entity swap;
 
     swap = self;
@@ -91,20 +91,30 @@ vector (float dm) VelocityForDamage = { // [FUNCTION]
 	v_x = 100 * crandom();
 	v_y = 100 * crandom();
 	v_z = 200 + 100 * random();
-	if (dm > -50) {
-		v = v * 0.7;
-	} else {
-		if (dm > -200) {
-			v = v * 2;
-		} else {
-			v = v * 10;
-		}
-	}
-	return v;
+	if (dm > -50) return v * 0.7;
+	if (dm > -200) return v * 2;
+	return v * 10;
 };
 
-// InSky not made since AD's check_skycontent is more robust and uses different advanced engine features.
-float(vector spot) InSky = { return (pointcontents(spot) == CONTENT_SKY); }; // [FUNCTION]
+// Check for contact with sky brushes.  Use pointcontent() for Typical/Enhanced
+// Quake engines.  Use new FTE string functions and surface check for FTE/DP.
+// This was check_skycontent in AD.  Renamed to align with the others and save
+// on characters used.
+float(vector spot) InSky = { // [FUNCTION]
+	local float surfnum;
+	local string texturename;
+
+	// Projectile owner exeception (bad FPS for large maps).
+	if (self.owner.proj_noskycheck == TRUE) return FALSE;
+	else if (ext_dpsurf) {
+		surfnum = getsurfacenearpoint(world,spot);
+		if (surfnum >= 0) {
+			texturename = getsurfacetexture(world,surfnum);
+			if (strncasecmp(texturename,"SKY",3) == 0) return TRUE;
+		}
+	} else if (pointcontents(spot) == CONTENT_SKY) return TRUE;
+	return FALSE;
+};
 float(vector spot) InAir = { return (pointcontents(spot) == CONTENT_EMPTY); }; // [FUNCTION]
 float(vector spot) InSolid = { return (pointcontents(spot) == CONTENT_SOLID); }; // [FUNCTION]
 float(vector spot) InWater = { return (pointcontents(spot) == CONTENT_WATER); }; // [FUNCTION]
@@ -140,11 +150,11 @@ float(float amount) SUB_NudgeSelfPlacement = { // [FUNCTION]
 		else if (shift == 4) vec_y = amount * -1; // Move out of wall south
 		else vec_z = amount * -1; // Lower from out of ceiling
 		vec = vec + self.origin;
-		pconts = pointcontents(vec);
-		if (pconts != CONTENT_SOLID && pconts != CONTENT_SKY) {
+		if (InOpenOrLiquid(vec)) {
 			setorigin(self,vec);
 			return TRUE; // Freed
 		}
+
 		shift = shift + 1;
 	}
 
@@ -175,10 +185,10 @@ vector(vector a, vector b) vec_multiply_elementwise = { // [FUNCTION]
 // Too commonly used, so I made a helper function for randomly picking and playing a whoosh.
 void() SwordSwipeSound = { // [FUNCTION]
 	self.lip = random();
-	if (self.lip < 0.25) sound(self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound(self, CHAN_WEAPON, "ad171/weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound(self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "ad171/weapons/sword2b.wav", 1, ATTN_NORM);
+	if (self.lip < 0.25) sound(self,CHAN_WEAPON,"ad171/weapons/sword1a.wav",1,ATTN_NORM);
+	else if (self.lip < 0.5) sound(self,CHAN_WEAPON,"ad171/weapons/sword2a.wav",1,ATTN_NORM);
+	else if (self.lip < 0.75) sound(self,CHAN_WEAPON,"ad171/weapons/sword1b.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"ad171/weapons/sword2b.wav",1,ATTN_NORM);
 };
  
 float() SUB_HideIfNoTargetname = { // [FUNCTION]
@@ -186,7 +196,7 @@ float() SUB_HideIfNoTargetname = { // [FUNCTION]
 		dprint("\b");
 		dprint(self.classname);
 		dprint("\b targetname missing\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return TRUE;
 	}
@@ -198,7 +208,7 @@ float() SUB_HideIfNoTarget = { // [FUNCTION]
 		dprint("\b");
 		dprint(self.classname);
 		dprint("\b target missing\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return TRUE;
 	}
@@ -545,4 +555,8 @@ float(entity targ) StoneArmored = {
 vector(entity targ) SUB_EntityOrigin = {
 	if (targ.bsporigin) return = bmodel_origin(targ);
 	else return targ.origin;
+};
+
+vector(entity targ) AbsBoundsCenter = {
+	return ((targ.absmin + targ.absmax) * 0.5);
 };

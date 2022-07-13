@@ -78,7 +78,7 @@ void() func_button_done = { // [FUNCTION]
 void() func_button_return = { // [FUNCTION]
 	self.state = STATE_DOWN; // Should the state be set outside of estate check?
 	if (self.estate & ESTATE_BLOCK) return;
-	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	if (self.noise1) sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM);
 	SUB_CalcMove (self.pos1, self.yaw_speed, func_button_done); // Add - return speed can now be different, yaw_speed = speed if nothing defined.
 };
 
@@ -109,7 +109,7 @@ void() func_button_fire = { // [FUNCTION]
 	}
 
 	self.state = STATE_UP;
-	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 	SUB_CalcMove (self.pos2, self.speed, func_button_wait);
 };
 
@@ -248,14 +248,14 @@ void() func_button = { // [ENTITY]
 	
 	if (self.spawnflags & BUTTON_STARTDIS && self.targetname == "") { // Cannot have a button start off or disabled with no targetname, how can it be actived!?!  Just use a plain wall otherwise.
 		dprint("\b[BUTTON]\b Starting DISABLED with no targetname!\n");
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}
 	
 	if (self.spawnflags & ENT_STARTOFF && self.targetname == "") {
 		dprint("\b[BUTTON]\b Starting OFF with no targetname!\n");
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}	

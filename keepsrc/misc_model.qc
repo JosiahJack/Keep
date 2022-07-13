@@ -181,11 +181,11 @@ void() misc_model_use = { // [FUNCTION]
 		if (self.frameloop == MMLOOP_TOGGLE) { // Toggle cannot switch off animation state because other types (frame/skin/rotate) maybe active and animating.
 			if (self.state == STATE_ON) { // TOGGLE OFF frame loop ONLY!
 				self.waitmin = 0;
-				if (self.noise2 != "") sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play OFF sound
+				if (self.noise2 != "") sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM); // Play OFF sound
 			} else { // TOGGLE ON
 				self.state = STATE_ON;	// Animation active
 				self.waitmin = -1;		// Constant loop
-				if (self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play ON sound
+				if (self.noise1 != "") sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Play ON sound
 			}
 		} else if (self.frameloop == MMLOOP_CONSTANT) { // Always switch ON animation
 			self.state = STATE_ON;	// Animation active
@@ -205,11 +205,11 @@ void() misc_model_use = { // [FUNCTION]
 		if (self.skinloop == MMLOOP_TOGGLE) { // Toggle cannot switch off animation state because other types.  (frame/skin/rotate) maybe active and animating.
 			if (self.state == STATE_ON) { // TOGGLE OFF skin loop ONLY!
 				self.waitmin2 = 0;
-				if (self.noise2 != "") sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play OFF sound
+				if (self.noise2 != "") sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM); // Play OFF sound
 			} else { // TOGGLE ON
 				self.state = STATE_ON; // Animation active
 				self.waitmin2 = -1; // Constant loop
-				if (self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play ON sound
+				if (self.noise1 != "") sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Play ON sound
 			}
 		} else if (self.skinloop == MMLOOP_CONSTANT) { // Only switch on for constant if inactive
 			self.state = STATE_ON;	// Animation active
@@ -231,11 +231,11 @@ void() misc_model_use = { // [FUNCTION]
 		if (self.rotateloop == MMLOOP_TOGGLE) { // Toggle cannot switch off animation state because other types.  (frame/skin/rotate) maybe active and animating.
 			if (self.state == STATE_ON) { // TOGGLE OFF rotation loop ONLY!
 				self.waitmin3 = 0;
-				if (self.noise2 != "") sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play OFF sound
+				if (self.noise2 != "") sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM); // Play OFF sound
 			} else { // TOGGLE ON
 				self.state = STATE_ON;	// Animation active
 				self.waitmin3 = -1;		// Constant loop
-				if (self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play ON sound
+				if (self.noise1 != "") sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Play ON sound
 			}
 		} else if (self.rotateloop == MMLOOP_CONSTANT) { // Only switch on for constant if inactive
 			self.state = STATE_ON;	// Animation active
@@ -252,7 +252,7 @@ void() misc_model_use = { // [FUNCTION]
 	}
 
 	if (self.yaw_speed > 0 && self.state == STATE_OFF) self.state = STATE_ON; // Any movement required for loop? If active, ignore retry
-	if (trigsound == TRUE && self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for TRIGGER sound
+	if (trigsound == TRUE && self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Check for TRIGGER sound
 	if (self.state == STATE_ON) misc_model_loop(); // Are there any animation loops setup?
 };
 
@@ -267,7 +267,7 @@ void() misc_model_loopreset =  { self.waitmin = self.waitmin2 = self.waitmin3 = 
 void() misc_model_on = { // [FUNCTION]
 	local float checkanim;
 	
-	if (self.spawnflags & MISC_MOVEMENT) spawn_marker(self.origin+'0 0 16', 3); // Highlight movement models with dev diamond above model
+	if (self.spawnflags & MISC_MOVEMENT) spawn_marker(self.origin+'0 0 16','0 0 0',0,3); // Highlight movement models with dev diamond above model
 	
 	// Check if there is any spawn/on delay setup.  Useful for delay spawning models on to platform/doors.
 	if (self.delay > 0) {

@@ -98,8 +98,8 @@ void() player_push = { // [FUNCTION]
 
   	if (self.pain_finished < time) {
 		self.pain_finished = time + 0.4;
-		if (self.event == "stone") sound(self, 7, "nehahra/wall/statslid.wav", 1, ATTN_NORM);
-		else sound(self, 7, "nehahra/wall/barslide.wav", 1, ATTN_NORM);
+		if (self.event == "stone") sound(self, 7, "nehahra/wall/statslid.wav",1,ATTN_NORM);
+		else sound(self, 7, "nehahra/wall/barslide.wav",1,ATTN_NORM);
     }
 	if (walkmove(other.angles_y, 2) == FALSE) {
 		meas = other.origin_z + 3;

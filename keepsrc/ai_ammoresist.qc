@@ -151,15 +151,15 @@ void(entity targ, float artype) Resist_ChangeType = {
 void(entity targ, string hitsound) Resist_Sound = {
 	if (hitsound != "") {
 		if (hitsound == SOUND_AXE_STONE) {
-			sound(targ, CHAN_WEAPON, hitsound, 1, ATTN_NORM);
+			sound(targ,CHAN_WEAPON,hitsound,1,ATTN_NORM);
 		} else {
 			if (targ.health > 0 && targ.pain_finished < time) {
 				targ.pain_finished = time + 0.3 + random();
 				if (hitsound != targ.pain_sound) {
-					if (targ.pain_sound != "") sound(targ, CHAN_VOICE, targ.pain_sound, 1, ATTN_NORM);
-					else sound(targ, CHAN_VOICE, hitsound, 1, ATTN_NORM);
+					if (targ.pain_sound != "") sound(targ,CHAN_VOICE, targ.pain_sound,1,ATTN_NORM);
+					else sound(targ,CHAN_VOICE, hitsound,1,ATTN_NORM);
 				} else {
-					sound(targ, CHAN_VOICE, hitsound, 1, ATTN_NORM);
+					sound(targ,CHAN_VOICE, hitsound,1,ATTN_NORM);
 				}
 			}
 		}
@@ -180,7 +180,7 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 	}
 
 	if (type == AM_SHELLS) {
-		if (targ.resist_shells < 1){
+		if (targ.resist_shells < 1) {
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 			SpawnBlood(targ, org, vel*0.2, rint(damage*targ.resist_shells),0); // Drastically reduced blood particles
 		}

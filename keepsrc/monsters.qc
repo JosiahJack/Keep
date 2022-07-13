@@ -131,16 +131,16 @@ void() monster_idle_sound = {
 	// Is the monster active in combat (special idle sound)
 	if (self.enemy && self.idle_soundcom != "") {
 		if (self.idle_soundcom2 != "") {
-			if (random() < 0.5) sound(self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
-			else sound(self, CHAN_VOICE, self.idle_soundcom2, 1, ATTN_NORM);
-		} else sound(self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self,CHAN_VOICE, self.idle_soundcom,1,ATTN_NORM);
+			else sound(self,CHAN_VOICE, self.idle_soundcom2,1,ATTN_NORM);
+		} else sound(self,CHAN_VOICE, self.idle_soundcom,1,ATTN_NORM);
 	} else {
 		// setup each monster with unique idle sounds (easier and quicker)
 		if (self.idle_sound2 != "" && self.idle_sound != "") {
-			if (random() < 0.5) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
-			else sound(self, CHAN_VOICE, self.idle_sound2, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
+			else sound(self,CHAN_VOICE, self.idle_sound2,1,ATTN_NORM);
 		} else {
-			if (self.idle_sound) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+			if (self.idle_sound) sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
 		}
 	}
 };
@@ -153,12 +153,16 @@ void() monster_sightsound = {
 
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
-	if (self.classtype == CT_MONINQUISITOR) { sound(self, CHAN_BODY, "drake/archer/sight2.wav", 1, ATTN_NONE); self.sight_timeout = time + MON_SIGHTSOUND; return;}
+
+	if (self.classtype == CT_MONINQUISITOR) {
+		sound(self,CHAN_BODY,"drake/archer/sight2.wav",1,ATTN_NONE);
+		self.sight_timeout = time + MON_SIGHTSOUND;
+		return;
+	}
 	if (!(self.sight_sound)) return;
+
 	self.monster_awake = TRUE;
 	if (self.spawnflags & MON_SPAWN_NOSIGHT) return;
-	if (intermission_running > 0) return;
-	if ((cinematic_running > 0 || cutscene > 0) && !coop) return;
 
 	// Only do a sight sound when necessary, otherwise it overlaps and gets messy	
 	if (self.sight_timeout < time) {
@@ -166,7 +170,7 @@ void() monster_sightsound = {
 
 		if ((self.master || self.owner || self.charmed) && !self.enemy && !(self.master == self)) {
 			if (self.hello_sound) {
-				sound(self, CHAN_BODY, self.hello_sound, 1, ATTN_NORM);
+				sound(self,CHAN_BODY,self.hello_sound,1,ATTN_NORM);
 				return;
 			}
 		}
@@ -175,25 +179,25 @@ void() monster_sightsound = {
 		// The id enforcer has four sight sounds, which is a bit excessive
 		// Check through sight strings to find out quantity
 		if (self.sight_count == 2) {
-			if (rsnd < 0.5) sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else sound(self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
+			if (rsnd < 0.5) sound(self,CHAN_BODY,self.sight_sound,1,ATTN_NORM);
+			else sound(self,CHAN_BODY,self.sight_sound2,1,ATTN_NORM);
 		}
 		else if (self.sight_count == 3) {
-			if (rsnd < 0.3) sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else if (rsnd < 0.6) sound(self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
-			else sound(self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
+			if (rsnd < 0.3) sound(self,CHAN_BODY,self.sight_sound,1,ATTN_NORM);
+			else if (rsnd < 0.6) sound(self,CHAN_BODY,self.sight_sound2,1,ATTN_NORM);
+			else sound(self,CHAN_BODY,self.sight_sound3,1,ATTN_NORM);
 		}
 		else if (self.sight_count == 4) {
-			if (rsnd < 0.25) sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else if (rsnd < 0.5) sound(self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
-			else if (rsnd < 0.75) sound(self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
-			else sound(self, CHAN_BODY, self.sight_sound4, 1, ATTN_NORM);
+			if (rsnd < 0.25) sound(self,CHAN_BODY,self.sight_sound,1,ATTN_NORM);
+			else if (rsnd < 0.5) sound(self,CHAN_BODY,self.sight_sound2,1,ATTN_NORM);
+			else if (rsnd < 0.75) sound(self,CHAN_BODY,self.sight_sound3,1,ATTN_NORM);
+			else sound(self,CHAN_BODY,self.sight_sound4,1,ATTN_NORM);
 		} else if (self.classtype == CT_MONNEMESANT || self.classtype == CT_MONNEMESANTBOSS) {
 			rsnd = random();			
-			if (rsnd < 0.5) sound(self, CHAN_BODY, "zerstorer/trog/tsight1.wav", 1, ATTN_NORM);
-			else sound(self, CHAN_BODY, "zerstorer/trog/tsight2.wav", 1, ATTN_NORM);
+			if (rsnd < 0.5) sound(self,CHAN_BODY,"zerstorer/trog/tsight1.wav",1,ATTN_NORM);
+			else sound(self,CHAN_BODY,"zerstorer/trog/tsight2.wav",1,ATTN_NORM);
 		}
-		else sound(self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
+		else sound(self,CHAN_BODY,self.sight_sound,1,ATTN_NORM);
 	}
 };
 
@@ -327,8 +331,8 @@ void(float altfoot) monster_footstep = {
 	}
 	
 	// Play the sound(large feet need to be heard further away)
-	if (footstep == FS_TYPELARGE) sound(self, CHAN_FEET, footstepwav, footvol, ATTN_FEETL);
-	else sound(self, CHAN_FEET, footstepwav, footvol, ATTN_FEET);
+	if (footstep == FS_TYPELARGE) sound(self,CHAN_FEET, footstepwav, footvol,ATTN_FEETL);
+	else sound(self,CHAN_FEET, footstepwav, footvol,ATTN_FEET);
 };
 
 // PRE/POST CHECK conditions for monster death
@@ -766,7 +770,7 @@ void() monster_spawn = {
 			setsize(self, '-16 -16 -24', '16 16 0');
 		} else {
 			dprint("\b[MONSTER]\b Trying to place on ceiling, no space!\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			remove(self);
 			return;
 		}
@@ -818,7 +822,7 @@ void() monster_spawn = {
 				dprint ("\b[STUCK]\b "); dprint (self.classname);
 				dprint (" at "); dprint (vtos(self.origin));
 				dprint ("\n");
-				spawn_marker(self.origin, SPNMARK_YELLOW);
+				spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 				monster_remove_kill(self, FALSE, TRUE);
 				return;
 			}
@@ -1018,7 +1022,7 @@ float() monster_checkspawn = {
 	} // This will break progression if monster is used with a counter
 
 	// Check for spawning (entity keys) conditions (nightmare, coop).  Uses entity_hide instead of remove(self) - done in check
-	if (check_nightmare() == TRUE){
+	if (check_nightmare() == TRUE) {
 		if (HasTargets(self)) {
 			dprint("WARNING: Hiding monster on nightmare but monster has target! ");
 			dprint(vtos(self.origin));
@@ -1071,7 +1075,6 @@ void() monster_start = {
 		if (self.meleerangez < 0) self.meleerangez = 0;
 	}
 	if (!self.classgroup) self.classgroup = CG_MONSTERS;
-	// if (self.no_zaware && developer > 0 && !query_configflag(SVR_DEVHELPER)) spawn_marker(self.origin+'0 0 32', SPNMARK_WHITE); // Highlight monsters with forced no_zaware entity key
 	monster_bbox(); // Setup bounding box based on presets
 
 	if (self.spawnflags & MON_SPAWN_DELAY && self.targetname == "") { // Cannot delay spawn a monster if nothing can trigger it!?!
@@ -1113,10 +1116,21 @@ void() monster_start = {
 		if (self.spawndelay != 0) {
 			if (self.spawndelay < 0) self.spawndelay = 0.1 + random()*0.4;
 		}
-		self.use = monster_spawndelay;	
-		monster_devmarker(self); // Display debug diamonds
+		self.use = monster_spawndelay;
+		if (query_configflag(SVR_DEVHELPER)) return;
+		if (developer <= 0) return;
+
+		self.movetype = MOVETYPE_NONE;
+		self.solid = SOLID_NOT;
+		setmodel(self,MODEL_BROKEN); // Display debug diamonds
+		if (self.nomonstercount == 1) self.skin = SPNMARK_GREEN;
+		else if (self.delaymonstercount == 1) self.skin = SPNMARK_GREEN;
+		else self.skin = SPNMARK_BLUE;
+		self.frame = 0;		
 	} else {
-		self.nextthink = time + 0.1 + random()*0.4; // Variable start delay on all monsters to reduce packet errors
+		self.nextthink = time + 0.1 + random()*0.4; // Variable start delay on
+													// all monsters to reduce
+													// packet errors.  Min 0.1.
 		self.think = monster_spawn;
 	}
 };

@@ -124,13 +124,7 @@ void() ending_remove_stuff = { // [FUNCTION]
 
    }
    curEnt = find (world,classname,"item_time_core");
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION2);
-   WriteCoord (MSG_BROADCAST,curEnt.origin_x);
-   WriteCoord (MSG_BROADCAST,curEnt.origin_y);
-   WriteCoord (MSG_BROADCAST,curEnt.origin_z);
-   WriteByte (MSG_BROADCAST,230.000);
-   WriteByte (MSG_BROADCAST,MOVETYPE_FLY);
+   Tent_Explosion2(curEnt.origin,230,5);
    curEnt.think = SUB_Remove;
    curEnt.nextthink = (time + 0.100);
 };

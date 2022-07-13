@@ -171,7 +171,7 @@ void()	karasu_idleb24	= [	$idleb24,	karasu_idleb1	] {
 	ai_stand();
 };
 
-void()	karasu_walk1	= [	$walk1,		karasu_walk2	] { ai_walk(2); self.skin = 0;};
+void()	karasu_walk1	= [	$walk1,		karasu_walk2	] { ai_walk(2); self.skin = 0; };
 void()	karasu_walk2	= [	$walk2,		karasu_walk3	] { ai_walk(5); };
 void()	karasu_walk3	= [	$walk3,		karasu_walk4	] { monster_footstep(FALSE); ai_walk(5); };
 void()	karasu_walk4	= [	$walk4,		karasu_walk5	] { ai_walk(4); };
@@ -207,7 +207,7 @@ void()	karasu_spell4	= [	$spell4,	karasu_spell5	] {};
 void()	karasu_spell5	= [	$spell5,	karasu_spell6	] {
 	local entity r;
 
-	sound(self, CHAN_WEAPON, "redfield/karasu/spell.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"redfield/karasu/spell.wav",1,ATTN_NORM);
 	self.owner = spawn();
 	r = self.owner;
 	setmodel(r, MODEL_PROJ_KSPELL);
@@ -226,13 +226,13 @@ void()	karasu_spell12	= [	$spell12,	karasu_spell13	] {};
 void()	karasu_spell13	= [	$spell13,	karasu_spell14	] {};
 void()	karasu_spell14	= [	$spell14,	karasu_spell15	] {};
 void()	karasu_spell15	= [	$spell15,	karasu_spell16	] {};
-void()	karasu_spell16	= [	$spell16,	karasu_spell17	] { self.meleeattack = self.meleeattack + 1;};
+void()	karasu_spell16	= [	$spell16,	karasu_spell17	] { self.meleeattack = self.meleeattack + 1; };
 void()	karasu_spell17	= [	$spell17,	karasu_spell6	] { spell_Transition(); };
 void()	karasu_spell18	= [	$spell18,	karasu_spell19	] {};
 void()	karasu_spell19	= [	$spell19,	karasu_spell20	] {};
-void()	karasu_spell20	= [	$spell20,	karasu_spell21	] { ai_back(4); self.skin = 0;};
+void()	karasu_spell20	= [	$spell20,	karasu_spell21	] { ai_back(4); self.skin = 0; };
 void()	karasu_spell21	= [	$spell21,	karasu_spell22	] {
-	sound(self, CHAN_VOICE, "redfield/karasu/taunt.wav", 1, ATTN_NONE);
+	sound(self,CHAN_VOICE, "redfield/karasu/taunt.wav",1,ATTN_NONE);
 	ai_back(5);
 };
 void()	karasu_spell22	= [	$spell22,	karasu_run1	] {
@@ -244,7 +244,7 @@ void()	karasu_spell22	= [	$spell22,	karasu_run1	] {
 //Finsh the spell at the sixth cycle
 void() spell_Transition = {	
 	if (self.meleeattack < 2)
-		sound(self, CHAN_VOICE, "redfield/karasu/chant.wav", 1, ATTN_IDLE);
+		sound(self,CHAN_VOICE, "redfield/karasu/chant.wav",1,ATTN_IDLE);
 	else if (self.meleeattack > 5)
 		karasu_spell18();
 };
@@ -256,7 +256,7 @@ float() karasu_SpellCheck = {
 };
 
 void() karasu_SpellRun = {
-	if (karasu_SpellCheck() == TRUE) { karasu_spell1(); return;}
+	if (karasu_SpellCheck() == TRUE) { karasu_spell1(); return; }
 };
 
 void() check_SpellTrig =
@@ -289,7 +289,7 @@ void()	karasu_strike1	= [	$strike1,	karasu_strike2	] { ai_charge(4); };
 void()	karasu_strike2	= [	$strike2,	karasu_strike3	] { ai_charge(10); };
 void()	karasu_strike3	= [	$strike3,	karasu_strike4	] { monster_footstep(FALSE); ai_charge(8); };
 void()	karasu_strike4	= [	$strike4,	karasu_strike5	] { ai_charge(8);
-	sound(self, CHAN_VOICE, "redfield/karasu/melee_strike.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_VOICE, "redfield/karasu/melee_strike.wav",1,ATTN_NORM); };
 void()	karasu_strike5	= [	$strike5,	karasu_strike6	] { ai_charge(4); };
 void()	karasu_strike6	= [	$strike6,	karasu_strike7	] { ai_charge(2); };
 void()	karasu_strike7	= [	$strike7,	karasu_strike8	] { monster_footstep(FALSE); ai_charge(0); ai_melee(); };
@@ -299,7 +299,7 @@ void()	karasu_strike10	= [	$strike10,	karasu_run1	] { ai_charge(4); };
 
 //----------------------------------------------------------------------
 void()	karasu_kick1	= [	$kick1,		karasu_kick2	] { ai_charge(4);
-	sound(self, CHAN_VOICE, "redfield/karasu/melee_strike.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_VOICE, "redfield/karasu/melee_strike.wav",1,ATTN_NORM); };
 void()	karasu_kick2	= [	$kick2,		karasu_kick3	] { ai_charge(0); };
 void()	karasu_kick3	= [	$kick3,		karasu_kick4	] { ai_charge(0); ai_melee(); };
 void()	karasu_kick4	= [	$kick4,		karasu_kick5	] { ai_charge(0); ai_melee(); };
@@ -324,7 +324,7 @@ void() karasu_choosemelee = {
 };
 
 void()	karasu_pain1	= [	$pain1,		karasu_pain2	] { self.skin = 0;karasu_SpellRun();
-	sound(self, CHAN_VOICE, "redfield/karasu/pain.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "redfield/karasu/pain.wav",1,ATTN_NORM);
 };
 void()	karasu_pain2	= [	$pain2,		karasu_pain3	] {};
 void()	karasu_pain3	= [	$pain3,		karasu_pain4	] {};
@@ -349,7 +349,7 @@ void(entity inflictor, entity attacker, float damage) karasu_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);	
 		if (self.pain_check == 1) karasu_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -458,11 +458,11 @@ void(vector leftofs, vector rightofs, float spframe, float spalpha) karasu_charg
 
 void()	karasu_beam1	= [	$beam1,		karasu_beam2	] { ai_face();karasu_reset_attachment();
 	self.lefty = 0;
-	sound(self, CHAN_WEAPON, "redfield/karasu/beam_charge.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/karasu/beam_charge.wav",1,ATTN_NORM); };
 void()	karasu_beam2	= [	$beam2,		karasu_beam3	] { ai_face(); };
 void()	karasu_beam3	= [	$beam3,		karasu_beam4	] { ai_face(); };
 void()	karasu_beam4	= [	$beam4,		karasu_beam5	] { ai_face(); };
-void()	karasu_beam5	= [	$beam5,		karasu_beam6	] { ai_face();karasu_charging('21 -12 19','21 12 19',0,0.4); self.skin = 2;};
+void()	karasu_beam5	= [	$beam5,		karasu_beam6	] { ai_face();karasu_charging('21 -12 19','21 12 19',0,0.4); self.skin = 2; };
 void()	karasu_beam6	= [	$beam6,		karasu_beam7	] { karasu_charging('21 -11 21','21 11 21',1,0.6); };
 void()	karasu_beam7	= [	$beam7,		karasu_beam8	] { karasu_charging('21 -10 23','21 10 23',2,0.8); };
 void()	karasu_beam8	= [	$beam8,		karasu_beam9	] { karasu_charging('21 -9 25','21 9 25',3,1);
@@ -471,7 +471,7 @@ void()	karasu_beam8	= [	$beam8,		karasu_beam9	] { karasu_charging('21 -9 25','21
 		kbeam_shoot('0 48 16');
 	} else kbeam_shoot('0 -48 16');
 	
-	sound(self, CHAN_WEAPON, "redfield/karasu/beam.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/karasu/beam.wav",1,ATTN_NORM); };
 void()	karasu_beam9	= [	$beam9,		karasu_beam10	] { karasu_charging('21 -9 25','21 9 25',3,1);
 	if (self.lefty == 1) kbeam_shoot('0 24 16');
 	else kbeam_shoot('0 -24 16');
@@ -485,7 +485,7 @@ void()	karasu_beam12	= [	$beam12,	karasu_beam13	] { karasu_charging('21 -9 25','
 	if (self.lefty == 1) kbeam_shoot('0 -48 16');
 	else kbeam_shoot('0 48 16');
 };
-void()	karasu_beam13	= [	$beam13,	karasu_run1	] { karasu_reset_attachment(); self.skin = 0;};
+void()	karasu_beam13	= [	$beam13,	karasu_run1	] { karasu_reset_attachment(); self.skin = 0; };
 
 // RANGE ATTACK 2 - Lightning Blast (Hitscan)
 void() klight_shoot = {
@@ -531,14 +531,14 @@ void(vector leftofsb, vector rightofsb) karasu_litcharge = {
 
 
 void()	karasu_lightning1	= [	$lightning1,		karasu_lightning2	] { ai_face();
-	sound(self, CHAN_WEAPON, "redfield/karasu/light_charge.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/karasu/light_charge.wav",1,ATTN_NORM); };
 void()	karasu_lightning2	= [	$lightning2,		karasu_lightning3	] { ai_face(); };
-void()	karasu_lightning3	= [	$lightning3,		karasu_lightning4	] { ai_face();karasu_litcharge('16 -8 16','16 8 16'); self.skin = 1;};
+void()	karasu_lightning3	= [	$lightning3,		karasu_lightning4	] { ai_face();karasu_litcharge('16 -8 16','16 8 16'); self.skin = 1; };
 void()	karasu_lightning4	= [	$lightning4,		karasu_lightning5	] { ai_face();karasu_litcharge('18 -6 18','18 6 18'); };
 void()	karasu_lightning5	= [	$lightning5,		karasu_lightning6	] { karasu_litcharge('18 -6 25','18 6 25'); };
 void()	karasu_lightning6	= [	$lightning6,		karasu_lightning7	] { karasu_litcharge('21 -14 30','21 14 30'); };
 void()	karasu_lightning7	= [	$lightning7,		karasu_lightning8	] { karasu_litcharge('20 -22 38','20 22 38');klight_shoot();
-sound(self, CHAN_WEAPON, "redfield/karasu/light_bolt.wav", 1, ATTN_NORM);
+sound(self,CHAN_WEAPON,"redfield/karasu/light_bolt.wav",1,ATTN_NORM);
 local entity o;
 ai_face();
 self.owner = spawn();
@@ -547,11 +547,11 @@ setmodel(o, MODEL_PROJ_KLIGHT);
 setorigin(o, self.origin);
 o.angles = self.angles;
 o.nextthink = time + 0.3;
-o.think = SUB_Remove;};
+o.think = SUB_Remove; };
 void()	karasu_lightning8	= [	$lightning8,		karasu_lightning9	] { karasu_litcharge('20 -22 38','20 22 38');klight_shoot(); };
 void()	karasu_lightning9	= [	$lightning9,		karasu_lightning10	] { klight_shoot(); };
 void()	karasu_lightning10	= [	$lightning10,		karasu_lightning11	] {};
-void()	karasu_lightning11	= [	$lightning11,		karasu_run1		] { self.skin = 0;};
+void()	karasu_lightning11	= [	$lightning11,		karasu_run1		] { self.skin = 0; };
 
 
 // RANGE ATTACK 3 - Rings - from Golem rock storm
@@ -607,15 +607,15 @@ void() karasu_rocks = {
 };
 
 void()	karasu_rocks1	= [	$rocks1,	karasu_rocks2	] { ai_face(); self.pain_finished = time + 1.5;
-	sound(self, CHAN_WEAPON, "redfield/karasu/hotrings.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"redfield/karasu/hotrings.wav",1,ATTN_NORM); };
 void()	karasu_rocks2	= [	$rocks2,	karasu_rocks3	] { ai_face(); };
 void()	karasu_rocks3	= [	$rocks3,	karasu_rocks4	] { ai_face(); };
 void()	karasu_rocks4	= [	$rocks4,	karasu_rocks5	] { ai_face(); };
 void()	karasu_rocks5	= [	$rocks5,	karasu_rocks6	] { ai_face(); };
-void()	karasu_rocks6	= [	$rocks6,	karasu_rocks7	] { karasu_rocks(); self.skin = 3;};
+void()	karasu_rocks6	= [	$rocks6,	karasu_rocks7	] { karasu_rocks(); self.skin = 3; };
 void()	karasu_rocks7	= [	$rocks7,	karasu_rocks8	] { karasu_rocks(); };
 void()	karasu_rocks8	= [	$rocks8,	karasu_rocks9	] { karasu_rocks(); };
-void()	karasu_rocks9	= [	$rocks9,	karasu_rocks10	] { self.skin = 0;};
+void()	karasu_rocks9	= [	$rocks9,	karasu_rocks10	] { self.skin = 0; };
 void()	karasu_rocks10	= [	$rocks10,	karasu_rocks11	] {};
 void()	karasu_rocks11	= [	$rocks11,	karasu_rocks12	] {};
 void()	karasu_rocks12	= [	$rocks12,	karasu_rocks13	] {};
@@ -634,9 +634,9 @@ void() karasu_choose_atk = {
 	}
 };
 	
-void()	karasu_die1	= [	$death1,	karasu_die2	] { ai_forward(5); self.skin = 0;};
+void()	karasu_die1	= [	$death1,	karasu_die2	] { ai_forward(5); self.skin = 0; };
 void()	karasu_die2	= [	$death2,	karasu_die3	] { ai_forward(4); };
-void()	karasu_die3	= [	$death3,	karasu_die4	] { sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+void()	karasu_die3	= [	$death3,	karasu_die4	] { sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 	self.solid = SOLID_NOT; ai_forward(7); };
 void()	karasu_die4	= [	$death4,	karasu_die5	] {};
 void()	karasu_die5	= [	$death5,	karasu_die6	] {};
@@ -652,14 +652,14 @@ void()	karasu_die12	= [	$death12,	karasu_die13	] { ai_forward(5); };
 void()	karasu_die13	= [	$death13,	karasu_die14	] {};
 void()	karasu_die14	= [	$death14,	karasu_die15	] {};
 void()	karasu_die15	= [	$death15,	karasu_die16	] {
-	sound(self, CHAN_FEET, GIBHIT1_METALSOUND, 1, ATTN_FEETL); };
+	sound(self,CHAN_FEET, GIBHIT1_METALSOUND,1,ATTN_FEETL); };
 void()	karasu_die16	= [	$death16,	karasu_die17	] {
 	particle_explode(self.origin + '0 0 -16', 64, 1+random()*0.5, PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
 };
 void()	karasu_die17	= [	$death17,	karasu_die18	] {};
-void()	karasu_die18	= [	$death18,	karasu_die19	] { self.alpha = 0.8;};
-void()	karasu_die19	= [	$death18,	karasu_die20	] { self.alpha = 0.6; self.skin = 4;};
-void()	karasu_die20	= [	$death18,	karasu_die21	] { self.alpha = 0.4;};
+void()	karasu_die18	= [	$death18,	karasu_die19	] { self.alpha = 0.8; };
+void()	karasu_die19	= [	$death18,	karasu_die20	] { self.alpha = 0.6; self.skin = 4; };
+void()	karasu_die20	= [	$death18,	karasu_die21	] { self.alpha = 0.4; };
 void()	karasu_die21	= [	$death18,	karasu_die22	] { self.alpha = 0.2;
 	self.effects = self.effects | EF_MUZZLEFLASH;
 };

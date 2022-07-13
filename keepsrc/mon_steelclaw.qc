@@ -157,8 +157,8 @@ void() steelc_melee = {
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/spider/attackmunch.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "ad171/spider/attacktear.wav", TRUE, TRUE);
+	if (random() < 0.5) sound(self,CHAN_WEAPON,"ad171/spider/attackmunch.wav", TRUE, TRUE);
+	else sound(self,CHAN_WEAPON,"ad171/spider/attacktear.wav", TRUE, TRUE);
 
 	// Spider bite (damage 1-9) is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -173,7 +173,7 @@ void() steelc_bite9;
 void() steelc_bite1 = [$atkup1, steelc_bite2 ] { ai_face(); };
 void() steelc_bite2 = [$atkup5, steelc_bite3 ] { ai_face(); };
 void() steelc_bite3 = [$atkup7, steelc_bite4 ] { ai_face();
-	if (!ai_checkmelee(60,FALSE) && self.health > 0) self.think = steelc_bite9;};
+	if (!ai_checkmelee(60,FALSE) && self.health > 0) self.think = steelc_bite9; };
 void() steelc_bite4 = [$atkloop1, steelc_bite5 ] { ai_face(); };
 void() steelc_bite5 = [$atkloop3, steelc_bite6 ] { ai_face(); };
 void() steelc_bite6 = [$atkloop5, steelc_bite7 ] { steelc_melee(); };
@@ -185,8 +185,8 @@ void() steelc_leap1 = [$jump1, steelc_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much
 	if (random() > 0.5) {
 		self.volume = 0.5 + (random()*0.5);
-		if (self.lefty < 1) sound(self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", self.volume, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", self.volume, ATTN_NORM);
+		if (self.lefty < 1) sound(self,CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", self.volume,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", self.volume,ATTN_NORM);
 		self.lefty = 1 - self.lefty;
 	}
 };
@@ -240,8 +240,8 @@ void(entity inflictor, entity attacker, float damage) steelc_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -251,7 +251,7 @@ void(entity inflictor, entity attacker, float damage) steelc_pain = {
 				self.axhitme = 0;
 			}
 			// Different types of pain animations based on current attack
-			if ( self.frame > $atkup8 && self.frame < $atkloop10 ) steelc_painu1();
+			if (self.frame > $atkup8 && self.frame < $atkloop10 ) steelc_painu1();
 			else steelc_paind1();
 		}
 	}
@@ -259,7 +259,7 @@ void(entity inflictor, entity attacker, float damage) steelc_pain = {
 
 void() steelc_die1 = [$death1, steelc_die2] {};
 void() steelc_die2 = [$death3, steelc_die3] { monster_check_gib(); };
-void() steelc_die3 = [$death5, steelc_die4] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() steelc_die3 = [$death5, steelc_die4] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() steelc_die4 = [$death7, steelc_die5] {};
 void() steelc_die5 = [$death9, steelc_die6] {};
 void() steelc_die6 = [$death11, steelc_die7] {};
@@ -272,7 +272,7 @@ void() steelc_die = {
 	self.max_health = MON_NOGIBVELOCITY; // Gibs don't bounce far
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		steelc_die1(); // regular death
 	}
 };

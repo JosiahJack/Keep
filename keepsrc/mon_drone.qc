@@ -3,7 +3,7 @@ void() DLaser_Touch = {
 	if (other == self.owner) return;
 
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
-	sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
+	sound(self,CHAN_WEAPON,SOUND_LASER_HIT,1,ATTN_STATIC);
 	org = self.origin - FL_CLIENT * normalize(self.velocity);
 	if (other.health) {
 		SpawnBlood(other,org, self.velocity * 0.2, 15,0);
@@ -13,7 +13,7 @@ void() DLaser_Touch = {
 };
 
 void(vector org, vector vec) LaunchDLaser = {
-	sound(self, CHAN_WEAPON, "drake/drone/enfire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"drake/drone/enfire.wav",1,ATTN_NORM);
 	vec = normalize(vec);
 	newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
@@ -37,7 +37,7 @@ void(float offset) drone_fire = {
 	ouch = MOVETYPE_STEP - skill;
 	ouch1 = MOVETYPE_STEP * random();
 	if (self.ammo_shells < ouch && ouch1 < ouch && self.health < 200) {
-		sound(self, CHAN_VOICE, "drake/drone/drngasp.wav", 0.6, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/drone/drngasp.wav", 0.6,ATTN_NORM);
 		self.ammo_shells = self.ammo_shells + 1;
 		return;
 	}
@@ -71,7 +71,7 @@ void() drn_stand4 = [21, drn_stand5]
 	}
 	if (crandom() > 0.5)
 	{
-		sound(self, CHAN_VOICE, "drake/drone/drnidle.wav", 0.6, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/drone/drnidle.wav", 0.6,ATTN_NORM);
 	}
 };
 
@@ -111,11 +111,11 @@ void() drn_stand10 = [18, drn_stand1]
 	{
 		if (crandom() > 0.5)
 		{
-			sound(self, CHAN_VOICE, "drake/drone/drnidle2.wav", 0.6, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drnidle2.wav", 0.6,ATTN_NORM);
 		}
 		else
 		{
-			sound(self, CHAN_VOICE, "drake/drone/drnidle.wav", 0.6, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drnidle.wav", 0.6,ATTN_NORM);
 		}
 	}
 };
@@ -149,7 +149,7 @@ void() drn_walk5 = [22, drn_walk6]
 	}
 	if (crandom() > 0.5)
 	{
-		sound(self, CHAN_VOICE, "drake/drone/drnidle.wav", 0.6, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/drone/drnidle.wav", 0.6,ATTN_NORM);
 	}
 };
 
@@ -184,11 +184,11 @@ void() drn_walk10 = [18, drn_walk1]
 	{
 		if (crandom() > 0.5)
 		{
-			sound(self, CHAN_VOICE, "drake/drone/drnidle2.wav", 0.6, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drnidle2.wav", 0.6,ATTN_NORM);
 		}
 		else
 		{
-			sound(self, CHAN_VOICE, "drake/drone/drnidle.wav", 0.6, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drnidle.wav", 0.6,ATTN_NORM);
 		}
 	}
 };
@@ -220,11 +220,11 @@ void() drn_runa5 = [22, drn_runa6]
 	{
 		if (self.health < 200)
 		{
-			sound(self, CHAN_VOICE, "drake/drone/drngasp.wav", 0.6, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drngasp.wav", 0.6,ATTN_NORM);
 		}
 		else
 		{
-			sound(self, CHAN_VOICE, "drake/drone/drnhunt.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drnhunt.wav",1,ATTN_NORM);
 		}
 	}
 };
@@ -245,9 +245,9 @@ void() drn_runa10 = [18, drn_run] {
 	ai_run(13);
 	if (crandom() > 0.5) {
 		if (self.health < 100) {
-			sound(self, CHAN_VOICE, "drake/drone/drngasp2.wav", 0.6, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drngasp2.wav", 0.6,ATTN_NORM);
 		} else {
-			sound(self, CHAN_VOICE, "drake/drone/drnhunt.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/drone/drnhunt.wav",1,ATTN_NORM);
 		}
 	}
 };
@@ -256,12 +256,12 @@ void() drn_runb1 = [18, drn_runb2] { ai_run_slide(13); };
 void() drn_runb2 = [19, drn_runb3] { ai_run_slide(13); };
 void() drn_runb3 = [20, drn_runb4] { ai_run_slide(13); };
 void() drn_runb4 = [21, drn_runb5] { ai_run_slide(13); };
-void() drn_runb5 = [22, drn_runb6] { ai_run_slide(13); if (crandom() > 0.5) sound(self, CHAN_VOICE, "drake/drone/drnhunt.wav", 1, ATTN_NORM); };
+void() drn_runb5 = [22, drn_runb6] { ai_run_slide(13); if (crandom() > 0.5) sound(self,CHAN_VOICE, "drake/drone/drnhunt.wav",1,ATTN_NORM); };
 void() drn_runb6 = [23, drn_runb7] { ai_run_slide(13); };
 void() drn_runb7 = [24, drn_runb8] { ai_run_slide(13); };
 void() drn_runb8 = [25, drn_runb9] { ai_run_slide(13); };
 void() drn_runb9 = [26, drn_runb10] { ai_run_slide(13); };
-void() drn_runb10 = [18, drn_run]  { ai_run_slide(13); if (crandom() > 0.5) sound(self, CHAN_VOICE, "drake/drone/drnhunt.wav", 1, ATTN_NORM); };
+void() drn_runb10 = [18, drn_run]  { ai_run_slide(13); if (crandom() > 0.5) sound(self,CHAN_VOICE, "drake/drone/drnhunt.wav",1,ATTN_NORM); };
 
 void() drn_run = {
 	if (random() < 0.5)
@@ -303,9 +303,9 @@ void() drn_painb5 = [36, drn_run] {};
 
 void(entity inflictor, entity attacker, float damage) drn_pain = {
 	if (random() > 0.75) {
-		sound(self, CHAN_VOICE, "drake/drone/drnpain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/drone/drnpain2.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "drake/drone/drnpain.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/drone/drnpain.wav",1,ATTN_NORM);
 	}
 	ThrowGib(13,rint(random() * 2));
 	
@@ -318,7 +318,7 @@ void(entity inflictor, entity attacker, float damage) drn_pain = {
 
 void() drn_die1 = [32, drn_die2] {
 	self.takedamage = DAMAGE_NO;
-	sound(self, CHAN_VOICE, "drake/drone/drndeth.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "drake/drone/drndeth.wav",1,ATTN_NORM);
 	self.solid = SOLID_NOT;			// No world colision
 	self.movetype = MOVETYPE_FLY;	// Free velocity movement
 	self.velocity_x = -200 + 400 * random();

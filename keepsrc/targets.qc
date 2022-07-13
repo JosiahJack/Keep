@@ -77,10 +77,10 @@ void() trigger_relay_fire = { // [FUNCTION]
 			if (self.endstate > 0 && self.state != self.endstate) { // Is the current state the final position?
 				self.state = self.endstate;
 				if (self.state == TRIG_RELAYSW1) {
-					sound(self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
+					sound(self,CHAN_BODY,self.noise1, self.volume,ATTN_NORM);
 					self.target = self.noise3;
 				} else {
-					sound(self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
+					sound(self,CHAN_BODY,self.noise2, self.volume,ATTN_NORM);
 					self.target = self.noise4;
 				}
 
@@ -93,15 +93,15 @@ void() trigger_relay_fire = { // [FUNCTION]
 		// Setup repeat wait/delay timers and play trigger state sounds.  The noise1/noise2 are setup with empty sounds if not defined.
 		if (self.state == TRIG_RELAYSW1) {
 			self.nextthink = time + self.wait + (random() * self.delay);
-			sound(self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
+			sound(self,CHAN_BODY,self.noise1, self.volume,ATTN_NORM);
 		} else {
 			self.nextthink = time + self.wait2 + (random() * self.delay2);
-			sound(self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
+			sound(self,CHAN_BODY,self.noise2, self.volume,ATTN_NORM);
 		}
 		self.think = trigger_relay_fire; // Keep on looping
 	} else {
 		if (self.wait < 0) self.attack_finished = time + LARGE_TIMER; // Setup to trigger once?
-		if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play any trigger sounds
+		if (self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play any trigger sounds
 	}
 	
 	// Randomly pick between target/target2.  SUB_UseTargets will fire both target strings if found the random choices need to be stored elsewhere (noise3/4)
@@ -186,7 +186,7 @@ void() trigger_relay = { // [ENTITY]
 
 	if (self.targetname == "" && !(self.spawnflags & TRIG_REPEATTARGET)) { // Special case, can't use SUB_CheckTargetname
 		dprint("\b[TRIG_RELAY]\b targetname missing!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}
@@ -300,7 +300,7 @@ void() trigger_counter_use = { // [FUNCTION]
 		else if ( !(self.spawnflags & TRIG_COUNTNOMESSAGE) ) centerprint(activator, "Sequence completed!");
 	}	
 	
-	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // If sound defined, play sound
+	if (self.noise != "") sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM); // If sound defined, play sound
 
 	// This is a big problem with the trigger_counter entity, it does not update
 	// the activator global variable and does not wake up enemies correctly.
@@ -484,7 +484,7 @@ void() trigger_timer = { // [ENTITY]
 	// check timers are in the right order
 	if ((self.waitmin2 > 0 && self.waitmin2 <= self.waitmin) || (self.waitmin3 > 0 && self.waitmin3 <= self.waitmin) || (self.waitmin3 > 0 && self.waitmin3 <= self.waitmin2) ) {
 		dprint("\b[TIMER]\b Event times out of sync!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}
@@ -651,7 +651,7 @@ void() trigger_playerparticles = { // [ENTITY]
 
 	// Cannot work without particle setup
 	if (self.noise == "") {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[TRIG_PLAYPART]\b particle name missing!\n");
 		remove(self);
 		return;
@@ -695,14 +695,14 @@ void() trigger_lightstyle_use = { // [FUNCTION]
 void() trigger_lightstyle_setup = { // [FUNCTION]
 	// Need to check style and remap values are within range FIRST.  Will be serious crash because its an index for fixed size array
 	if (self.style < 0 || self.style >= LIGHT_MAXLIGHTSTYLE) {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[TRIG_LS]\b light style ("); dprint(ftos(self.style));
 		dprint(") out of range at location");
 		dprint(vtos(self.origin));
 		dprint(". Set to 0\n");
 		self.style = 0;
 	} else if (self.customstyle_remap < 0 || self.customstyle_remap >= LIGHT_MAXLIGHTSTYLE) {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[TRIG_LS]\b remap style ("); dprint(ftos(self.customstyle_remap));
 		dprint(") out of range!\n");
 		remove(self);
@@ -722,7 +722,7 @@ void() trigger_lightstyle_setup = { // [FUNCTION]
 	} else self.enemy = world; // No target light defined
 
 	if (self.customstyle_remap > 0 && self.customstyle_remap == self.style) { // Style has to be different to re-map
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[TRIG_LS]\b remap and style are the same!\n");
 		remove(self);
 		return;
@@ -755,7 +755,7 @@ void() trigger_lightstyle = { // [ENTITY]
 
 	// Custom remap or string are required
 	if (self.customstyle_remap < 1 && self.customstyle_string == "") {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[TRIG_LS]\b remap or string missing!\n");
 		remove(self);
 		return;
@@ -770,7 +770,7 @@ void() trigger_clientmsg_use = { // [FUNCTION]
 	msg_entity = self;
 	WriteByte (MSG_ALL, SVC_CENTERPRINT); // Write message to all clients
 	WriteString (MSG_ALL, self.message);
-	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // If any sounds defined play them at entity source
+	if (self.noise != "") sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM); // If any sounds defined play them at entity source
 };
 
 // QUAKED trigger_clientmsg (0.5 0.5 0) (-8 -8 -16) (8 8 16) x

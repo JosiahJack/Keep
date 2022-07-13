@@ -53,7 +53,7 @@ void() trigger_bmodel_sounds = { // [FUNCTION]
 	else if (self.sounds == 2) self.noise = "misc/talk.wav";
 	else if (self.sounds == 3) self.noise = "misc/trigger1.wav";
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
-	else if (self.sounds == 6) self.noise = RND_SURPRISENEG;
+	else if (self.sounds == 6) self.noise = "kinn/bdwsound/basss.wav";
 	else if (self.sounds == 7) self.noise = "drake/misc/secret2.wav";
 
 	if (self.noise != "") precache_sound(self.noise); // precache any sounds that have been defined
@@ -107,12 +107,12 @@ void() trigger_bmodel_inview = { // [FUNCTION]
 void() trigger_bmodel_fire = { // [FUNCTION]
 	if (self.attack_finished > time) return; // Is the trigger blocked? (trigger_once)
 	
-	if (self.spawnflags & TRIG_DEVMODE && developer == 0) { // Check for developer mode only triggers
+	if (self.spawnflags & TRIG_DEVMODE && developer <= 0) { // Check for developer mode only triggers
 		if (self.classtype == CT_TRIGONCE || self.classtype == CT_TRIGMULTI) return; // This feature only work for ONCE/MULTIPLE triggers
 	}
 	
 	// The Shotgun and Axe upgrades can make maps too easy, allow for triggers to not fire if the key is TRUE and inventory empty
-	if ( self.bmodel_act.flags & FL_CLIENT ) {
+	if (self.bmodel_act.flags & FL_CLIENT ) {
 		if (self.upgrade_axe && !(self.bmodel_act.moditems & IT_UPGRADE_AXE)) return;
 		if (self.upgrade_ssg && !(self.bmodel_act.moditems & IT_UPGRADE_SSG) ) return;
 		if (self.upgrade_lg && !(self.bmodel_act.moditems & IT_UPGRADE_LG) ) return;
@@ -133,7 +133,7 @@ void() trigger_bmodel_fire = { // [FUNCTION]
 		if (self.count <= 0) self.wait = -1;
 	}
 
-	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the trigger, NOT the activator
+	if (self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play the sound ON the trigger, NOT the activator
 
 	// One of the downside to trigger_multi and trigger_once is that they reset the activator global variable each time they are used.
 	// This can causes problems with triggers that require client references for centerprint/sound cues (like trigger_secret)
@@ -295,7 +295,7 @@ float() check_bmodel_notouch = { // [FUNCTION]
 		dprint("\b[TRIGGER]\b NO touch + NO targetname!\n");
 		setmodel(self, self.model);
 		self.oldorigin = bmodel_origin(self);
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return TRUE;
 	} else return FALSE;

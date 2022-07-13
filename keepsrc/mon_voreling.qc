@@ -196,13 +196,13 @@ void() voreling_melee = {
 	if (!self.enemy.takedamage) return; // Can the target bleed?
 
 	if (self.classtype == CT_MONSPIDER) {
-		if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/spider/attackmunch.wav", TRUE, TRUE);
-		else sound(self, CHAN_WEAPON, "ad171/spider/attacktear.wav", TRUE, TRUE);
+		if (random() < 0.5) sound(self,CHAN_WEAPON,"ad171/spider/attackmunch.wav", TRUE, TRUE);
+		else sound(self,CHAN_WEAPON,"ad171/spider/attacktear.wav", TRUE, TRUE);
 	} else {
-		if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bitestrt.wav", TRUE, TRUE);
+		if (random() < 0.5) sound(self,CHAN_VOICE, "quoth/voreling/bitestrt.wav", TRUE, TRUE);
 		else {
-			if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bite.wav", TRUE, TRUE);
-			else sound(self, CHAN_VOICE, "ad171/voreling/attacktear.wav", TRUE, TRUE);
+			if (random() < 0.5) sound(self,CHAN_VOICE, "quoth/voreling/bite.wav", TRUE, TRUE);
+			else sound(self,CHAN_VOICE, "ad171/voreling/attacktear.wav", TRUE, TRUE);
 		}
 	}
 
@@ -218,7 +218,7 @@ void()	voreling_bite3	= [	$bite3, voreling_bite4 ] { ai_face(); };
 void()	voreling_bite4 = [	$bite4, voreling_bite5 ] { voreling_melee(); };
 void()	voreling_bite5 = [	$bite5, voreling_bite6 ] {};
 void()	voreling_bite6 = [	$bite6, voreling_bite7 ] {
-	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = voreling_bite2;}; // Exit bite attack loop
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = voreling_bite2; }; // Exit bite attack loop
 void()	voreling_bite7	= [	$bite7, voreling_run1	] {};
 
 void()	Voreling_JumpTouch = {
@@ -369,7 +369,7 @@ void() voreling_wakeup = {
 };
 
 // MINION - Grow and spin up from nothing
-void() voreling_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() voreling_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() voreling_grow1 = [$grow1, voreling_grow2 ] {};
 void() voreling_grow2 = [$grow2, voreling_grow3 ] { voreling_growangle(); };
 void() voreling_grow3 = [$grow3, voreling_grow4 ] { voreling_growangle(); };
@@ -424,7 +424,7 @@ void(entity inflictor, entity attacker, float damage) voreling_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1) voreling_pain1();
@@ -439,14 +439,14 @@ void(entity inflictor, entity attacker, float damage) voreling_pain = {
 
 void() voreling_die1 = [	$death1, voreling_die2	] {};
 void() voreling_die2 = [	$death2, voreling_die3	] { monster_check_gib(); };
-void() voreling_die3 = [	$death3, voreling_die4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() voreling_die3 = [	$death3, voreling_die4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() voreling_die4 = [	$death4, voreling_die5	] {};
 void() voreling_die5 = [	$death5, voreling_die6	] { monster_death_postcheck(); };
 void() voreling_die6 = [	$death6, voreling_die6	] { monster_deadbody_check(); };
 
 void() voreling_dieB1 = [	$deathB1, voreling_dieB2	] {};
 void() voreling_dieB2 = [	$deathB2, voreling_dieB3	] { monster_check_gib(); };
-void() voreling_dieB3 = [	$deathB3, voreling_dieB4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() voreling_dieB3 = [	$deathB3, voreling_dieB4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() voreling_dieB4 = [	$deathB4, voreling_dieB5	] {};
 void() voreling_dieB5 = [	$deathB5, voreling_dieB6	] {};
 void() voreling_dieB6 = [	$deathB6, voreling_dieB7	] { monster_death_postcheck(); };
@@ -457,7 +457,7 @@ void() voreling_die = {
 	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE; // Has the voreling died while on the ceiling?
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) { // regular death
-		sound(self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/voreling/death.wav",1,ATTN_NORM);
 		if (random() < 0.6) voreling_die1();
 		else voreling_dieB1();
 	}
@@ -617,7 +617,7 @@ void(vector minion_org, entity minion_targ) minion_voreling = {
 	local entity minion;
 
 	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (!InOpenOrLiquid(minion_org)) return;
 	
 	update_minioncount(self.owner, 1);		// Update spawn counters
 	minion = spawn();

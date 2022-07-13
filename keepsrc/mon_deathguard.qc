@@ -1,20 +1,20 @@
 void() deathguard_hit = {
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
-			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"quoth/dguard/slmiss1.wav",1,ATTN_NORM);
 		} else {
-			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"quoth/dguard/slmiss2.wav",1,ATTN_NORM);
 		}
 		return;
 	}
-	sound(self, CHAN_WEAPON, "quoth/dguard/slhit.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"quoth/dguard/slhit.wav",1,ATTN_NORM);
 	T_Damage(self.enemy, self, self, 30,DAMARMOR);
 
 	// Check for poisonous blades!
 	if (self.poisonous) PoisonDeBuff(self.enemy);
 };
 
-void() deathguard_slash1 = [79, deathguard_slash2] { sound(self, CHAN_VOICE, "quoth/dguard/slash.wav", 1, ATTN_NORM); ai_face(); ai_forward(1); };
+void() deathguard_slash1 = [79, deathguard_slash2] { sound(self,CHAN_VOICE, "quoth/dguard/slash.wav",1,ATTN_NORM); ai_face(); ai_forward(1); };
 void() deathguard_slash2 = [80, deathguard_slash3] { ai_face(); ai_forward(1); };
 void() deathguard_slash3 = [81, deathguard_slash4] { ai_face(); ai_forward(1); monster_footstep(FALSE); };
 void() deathguard_slash4 = [82, deathguard_slash5] { ai_face(); ai_forward(1); };
@@ -42,9 +42,9 @@ void(float dmgamount) dg_slice = {
 void() deathguard_charge1 = [106, deathguard_charge2] {
 	ai_charge(24);
 	if (random() < 0.5) {
-		sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "knight/sword1.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "knight/sword2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "knight/sword2.wav",1,ATTN_NORM);
 	}
 };
 void() deathguard_charge2 = [107, deathguard_charge3] { ai_charge(29); };
@@ -56,9 +56,9 @@ void() deathguard_charge6 = [111, deathguard_run1] { ai_charge(20); dg_slice(2);
 void() deathguard_slowcharge1 = [112, deathguard_slowcharge2] {
 	ai_charge(13);
 	if (random() < 0.5) {
-		sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "knight/sword1.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "knight/sword2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "knight/sword2.wav",1,ATTN_NORM);
 	}
 };
 void() deathguard_slowcharge2 = [113, deathguard_slowcharge3] { ai_charge(14); };
@@ -82,7 +82,7 @@ void() dg_fireball_touch = {
 	}
 	org = self.origin - 8 * normalize(self.velocity);
 	Tent_Explosion(org);
-	sound(self, CHAN_VOICE, "quoth/dguard/hit.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "quoth/dguard/hit.wav",1,ATTN_NORM);
 	T_RadiusDamage(self, self.owner, 40, other,DAMAGEALL);
 	if (other.classgroup == CG_ZOMBIE) T_Damage(other, self, self.owner, 120,DAMARMOR); // gib zombies!
 	else T_Damage(other, self, self.owner, 27 + 2 * random(),DAMARMOR);
@@ -127,7 +127,7 @@ void() deathguard_fire4 = [96, deathguard_fire5] { ai_shotcheck(); ai_face(); };
 void() deathguard_fire5 = [97, deathguard_fire6] { ai_shotcheck(); ai_face(); };
 void() deathguard_fire6 = [98, deathguard_fire7] { ai_shotcheck(); ai_face(); };
 void() deathguard_fire7 = [99, deathguard_fire8] { ai_shotcheck(); ai_face(); };
-void() deathguard_fire8 = [100, deathguard_fire9] { ai_shotcheck(); ai_face(); sound(self, CHAN_VOICE, "ad171/dknight/dserg_magic.wav", 1, ATTN_NORM); };
+void() deathguard_fire8 = [100, deathguard_fire9] { ai_shotcheck(); ai_face(); sound(self,CHAN_VOICE, "ad171/dknight/dserg_magic.wav",1,ATTN_NORM); };
 void() deathguard_fire9 = [101, deathguard_fire10] { ai_shotcheck(); ai_face(); deathguard_shot(); };
 void() deathguard_fire10 = [102, deathguard_fire11] { ai_face(); };
 void() deathguard_fire11 = [103, deathguard_fire12] { ai_face(); };
@@ -173,13 +173,13 @@ void() deathguard_run5 = [33, deathguard_run6] { ai_run(18); monster_footstep(FA
 void() deathguard_run6 = [34, deathguard_run7] { ai_run(29); };
 void() deathguard_run7 = [35, deathguard_run8] { ai_run(25); };
 void() deathguard_run8 = [36, deathguard_run1] { ai_run(17); };
-void() deathguard_pain1 = [37, deathguard_pain2] { sound(self, CHAN_VOICE, "quoth/dguard/pain1.wav", 1, ATTN_NORM); };
+void() deathguard_pain1 = [37, deathguard_pain2] { sound(self,CHAN_VOICE, "quoth/dguard/pain1.wav",1,ATTN_NORM); };
 void() deathguard_pain2 = [38, deathguard_pain3] { monster_footstep(FALSE); };
 void() deathguard_pain3 = [39, deathguard_pain4] {};
 void() deathguard_pain4 = [40, deathguard_pain5] {};
 void() deathguard_pain5 = [41, deathguard_run1] {};
 
-void() deathguard_die1 = [42, deathguard_die2] { ai_forward(10); sound(self, CHAN_VOICE, "quoth/dguard/death2.wav", 1, ATTN_NORM); };
+void() deathguard_die1 = [42, deathguard_die2] { ai_forward(10); sound(self,CHAN_VOICE, "quoth/dguard/death2.wav",1,ATTN_NORM); };
 void() deathguard_die2 = [43, deathguard_die3] { monster_check_gib(); ai_forward(8); };
 void() deathguard_die3 = [44, deathguard_die4] { monster_check_gib(); ai_forward(7); };
 void() deathguard_die4 = [45, deathguard_die5] { self.solid = SOLID_NOT; };
@@ -192,10 +192,10 @@ void() deathguard_die10 = [51, deathguard_die11] {};
 void() deathguard_die11 = [52, deathguard_die12] { monster_death_postcheck(); };
 void() deathguard_die12 = [53, deathguard_die12] { monster_deadbody_check(); };
 
-void() deathguard_dieb1 = [54, deathguard_dieb2] { sound(self, CHAN_VOICE, "quoth/dguard/death1.wav", 1, ATTN_NORM); };
+void() deathguard_dieb1 = [54, deathguard_dieb2] { sound(self,CHAN_VOICE, "quoth/dguard/death1.wav",1,ATTN_NORM); };
 void() deathguard_dieb2 = [55, deathguard_dieb3] { monster_check_gib(); };
 void() deathguard_dieb3 = [56, deathguard_dieb4] { monster_check_gib(); };
-void() deathguard_dieb4 = [57, deathguard_dieb5] { self.solid = SOLID_NOT;};
+void() deathguard_dieb4 = [57, deathguard_dieb5] { self.solid = SOLID_NOT; };
 void() deathguard_dieb5 = [58, deathguard_dieb6] {};
 void() deathguard_dieb6 = [59, deathguard_dieb7] {};
 void() deathguard_dieb7 = [60, deathguard_dieb8] {};
@@ -214,9 +214,9 @@ void(entity inflictor, entity attacker, float damage) deathguard_pain = {
 	if (self.pain_finished > time) return;
 
 	if (random() > 0.5) {
-		sound(self, CHAN_VOICE, "quoth/dguard/pain1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/dguard/pain1.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "quoth/dguard/pain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/dguard/pain2.wav",1,ATTN_NORM);
 	}
 
 	if (random() * 30 > damage) return;

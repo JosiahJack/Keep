@@ -123,7 +123,7 @@ void() dreadlord_appear18 = [$aether1,  overlord_run1      ] { aether_in2(overlo
 
 void() dreadlord_souls1  = [$attackb1,  dreadlord_souls2  ] {
 	ai_face();
-    sound(self, CHAN_VOICE, "wraith/talk1.wav", 1, ATTN_IDLE);
+    sound(self,CHAN_VOICE, "wraith/talk1.wav",1,ATTN_IDLE);
     self.gorging = TRUE;
     if (!self.takedamage && self.modelindex) self.takedamage = DAMAGE_AIM; // If skipping phasing anim to attack, make sure wraith can take damage.
 
@@ -155,7 +155,7 @@ void(float d) ai_wraith2_walk = {
         if (ai_wraith2 (0, FALSE)) return;
 
         if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
-        if ( self.frame == $walk1 )
+        if (self.frame == $walk1 )
             wraith_idle_sfx();
     }
     ai_walk(d);
@@ -217,7 +217,7 @@ float() overlord_smash = {
 
     smashDmg = 20 + random() * 10;
     
-    sound(self, CHAN_WEAPON, "s_wrath/smash.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"s_wrath/smash.wav",1,ATTN_NORM);
     T_Damage (self.enemy, self, self, smashDmg);
     delta = normalize (self.enemy.origin - self.origin + self.enemy.view_ofs);
     SpawnBlood(self.enemy,self.enemy.origin - delta * 30, delta * -100, smashDmg, 0);
@@ -284,7 +284,7 @@ void() overlord_drain7 = [$attackb1,  overlord_run1   ] { ai_charge(self.speed);
 
 void() overlord_magic1  = [$magic1,  overlord_magic2  ] {
     if (!self.skin)
-        sound(self, CHAN_VOICE, "wrath/watt.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "wrath/watt.wav",1,ATTN_NORM);
     ai_shield_off(); ai_charge(self.speed); };
 void() overlord_magic2  = [$magic2,  overlord_magic3  ] { ai_charge(self.speed); };
 void() overlord_magic3  = [$magic3,  overlord_magic4  ] { ai_charge(self.speed); };
@@ -317,7 +317,7 @@ void() overlord_attack = {
 //- - - - - - - - -
 // If skipping phasing anim to attack, make sure wraith can take damage.
     if (!self.takedamage)
-        if (( self.frame >= $form1 ) && ( self.frame <= $form19 ))
+        if ((self.frame >= $form1 ) && (self.frame <= $form19 ))
             self.takedamage = DAMAGE_AIM;
 //- - - - - - - - -
     ai_shield_off();
@@ -326,7 +326,7 @@ void() overlord_attack = {
 //- - - - - - - - -
     if (r < 0.33)
     {
-        if ( self.frame == $attack10 )
+        if (self.frame == $attack10 )
             overlord_axe2();
         else
             overlord_axe1();
@@ -340,7 +340,7 @@ void() overlord_attack = {
 void() overlord_refire = {
     if (self.enemy.health > 0)
         if (visible (self.enemy))
-            { overlord_attack();  return;}
+            { overlord_attack();  return; }
     overlord_run1();
 };
 
@@ -376,7 +376,7 @@ void() overlord_pain = {
 // Go to a pain frame.
     ai_shield_off();
     self.pain_finished = time + 2;
-    sound(self, CHAN_VOICE, "wrath/wpain.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "wrath/wpain.wav",1,ATTN_NORM);
     if (r < 0.15)
         overlord_pain1();
     else 
@@ -420,7 +420,7 @@ void() ol_toss_loop = {
 void() overlord_die1  = [$death2,  overlord_die2  ] {
     if (Shattered()) return;
     self.flags = self.flags | FL_FLY;   // Don't fall!
-    sound(self, CHAN_VOICE, "wrath/wdthc.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "wrath/wdthc.wav",1,ATTN_NORM);
     // PM:  If ethereal, make them solid when killed.
     if (self.movetype == MOVETYPE_NOCLIP) {
         self.alpha = 0;
@@ -549,7 +549,7 @@ void() dreadlord_pain = {
 	// Now do the standard pain routine.
     ai_shield_off();
     self.pain_finished = time + 2;
-    sound(self, CHAN_VOICE, "wraith/growl2.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "wraith/growl2.wav",1,ATTN_NORM);
     self.velocity = '0 0 0';
     if (r < 0.15) dreadlord_pain1();
     else dreadlord_painb1();
@@ -567,9 +567,9 @@ void() dreadlord_die = [$deathb1,  dreadlord_die1] {
 	self.flags = self.flags | FL_FLY;
     self.movetype = MOVETYPE_NONE;  // Freeze monster in place.
     if (random() < 0.2)
-        sound(self, CHAN_VOICE, "wraith/talk3.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "wraith/talk3.wav",1,ATTN_NORM);
     else
-        sound(self, CHAN_VOICE, "wraith/call.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "wraith/call.wav",1,ATTN_NORM);
 };
 // Use setorigin to force relink in case model is still not visible.
 // Just don't call it in the same frame of a th_die call in case of loop.

@@ -127,9 +127,9 @@ void() wyrm_glide = {
 	} else left = 0;
     ChangeYaw();
     if (fabs(ofs) <= self.yaw_speed)
-        { ryu_untilt();  left = 1;}
+        { ryu_untilt();  left = 1; }
     else
-        { ryu_tilt (left, 32);  left = 0;  sped = 20;}
+        { ryu_tilt (left, 32);  left = 0;  sped = 20; }
 
 	// Forward movement.
     swap = self.enemy;
@@ -167,14 +167,14 @@ void(entity targ) wyrm_move = {
 	// Change angles.
     ofs = anglemod(self.angles_y - self.ideal_yaw);
     if (ofs >= 180)
-        { left = 1;  ofs = ofs - 360;}
+        { left = 1;  ofs = ofs - 360; }
     else
         left = 0;
     ChangeYaw();
     if (fabs(ofs) <= self.yaw_speed)
         ryu_untilt();
     else
-        { ryu_tilt (left, sped);  sped = 20;}
+        { ryu_tilt (left, sped);  sped = 20; }
 
 	// Forward movement.
     swap = self.enemy;
@@ -261,7 +261,7 @@ void() Ryu_Bite = {
     // Update 4/23/2009:  Do 15-20 damage for standard.  Wyrms multiply damage.
     damage = 15 + random()*5;
     if (self.spawnflags & SPAWN_WYRM) damage = damage * 4; // Moot since wyrms can't bite.
-    sound(self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"demon/dhit2.wav",1,ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
     SpawnMeatSpray(self, self.enemy,(crandom() * 200) - 100); // Throw a piece of meat from the dragon's head (mouth).
 };
@@ -431,7 +431,7 @@ void() Ryu_Shot_Fire = {
         if (self.waterlevel > 1) {
             // Dragon is deep enough in water so discharge.
             // Note:  Discharge is weak, so just fizzle harmlessly.
-            sound(self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
+            sound(self,CHAN_WEAPON,"misc/power.wav",1,ATTN_NORM); // vanilla id1 sound
             self.shots_left = 0;
             return;
         }
@@ -487,9 +487,9 @@ void() ryu_sfx_fly = {
     // Not while Quad is sounding.
     if (self.super_sound < time) {
         if (self.waterlevel <= 1)     // Not while in the water.
-            sound(self, CHAN_BODY, "drake/dragon/fly.wav", 1, ATTN_NORM);
+            sound(self,CHAN_BODY,"drake/dragon/fly.wav",1,ATTN_NORM);
         else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME))
-            sound(self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
+            sound(self,CHAN_BODY,"drake/dragon/flywater.wav",1,ATTN_NORM);
     }
 };
 
@@ -498,22 +498,22 @@ void() ryu_sfx_fire = {
 
     type = self.worldtype & RYU_ELEMENTS;
     if (type == RYU_USE_FIRE)
-        sound(self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/dragon/fire.wav",1,ATTN_NORM);
     else if (type == RYU_USE_ACID)
-        sound(self, CHAN_WEAPON, "drake/dragon/acid.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/dragon/acid.wav",1,ATTN_NORM);
     else if (type == RYU_USE_LITE) {
         if (self.worldtype & RYU_BOMB)
-            sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+            sound(self,CHAN_WEAPON,"weapons/lstart.wav",1,ATTN_NORM);
         else {
-            sound(self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
-            sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+            sound(self,CHAN_WEAPON,"weapons/lhit.wav",1,ATTN_NORM);
+            sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
         }
     }
     else if (type == RYU_USE_ICE)
-        sound(self, CHAN_WEAPON, "drake/imp/shard.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/imp/shard.wav",1,ATTN_NORM);
 };
 
-void() ryu_sfx_idle = { sound(self, CHAN_VOICE, "drake/dragon/idle1.wav", 1, ATTN_NORM); };
+void() ryu_sfx_idle = { sound(self,CHAN_VOICE, "drake/dragon/idle1.wav",1,ATTN_NORM); };
 
 //  Fly animation forward.  Used for stand, walk, and run anims.
 //  Stand = Dragon hovers in place.   Walk  = The dragon slowly glides along its path.   Run   = The dragon flies quickly toward the enemy.
@@ -529,7 +529,7 @@ void() wyrm_fly_anim = {
 
     self.frame = $fly1 + fadd;
     self.walkframe = self.walkframe + 1;
-    if ( self.frame == $fly8 ) ryu_sfx_fly();
+    if (self.frame == $fly8 ) ryu_sfx_fly();
 };
 
 void() ryu_stand1 = [$fly1, ryu_stand1  ] { wyrm_fly_anim(); ai_stand(); };
@@ -548,7 +548,7 @@ void() wyrm_fly   = [$fly1, wyrm_fly    ] {
 		if (self.charmer || self.movetarget) wyrm_glide();
 	}
 
-    if ( self.frame == $fly1 ) ai_stand(); // just updates seeing an enemy
+    if (self.frame == $fly1 ) ai_stand(); // just updates seeing an enemy
 };
 
 void() wyrm_start = {
@@ -583,7 +583,7 @@ void() dragon_bite13 = [$attack5,  dragon_bite14 ] { ryu_melee(); };
 void() dragon_bite14 = [$attack4,  dragon_bite15 ] { ryu_melee(); };
 void() dragon_bite15 = [$attack3,  dragon_bite16 ] { ryu_melee(); };
 void() dragon_bite16 = [$attack2,  dragon_bite17 ] { ryu_melee(); Ryu_Bite(); };
-void() dragon_bite17 = [$attack1,  ryu_go     ] { ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0;};
+void() dragon_bite17 = [$attack1,  ryu_go     ] { ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0; };
 
 // Check if missile attack is effective or not.
 float(float chance) Ryu_CanBite = {
@@ -685,15 +685,15 @@ void() Ryu_SetAttack = {
         if (self.worldtype == RYU_USE_LITE) {
             shots = ((shots / 2) & 255) + ((random() * 2 * (shots & 1)) & 1);
             self.height = 10;   // Same damage as shambler bolt.
-            if (shots > 12) { self.height = shots; shots = 10; fts = 5;}
+            if (shots > 12) { self.height = shots; shots = 10; fts = 5; }
         } else {
             // Damage.
             self.height = 9;
             // Special:  If too many shots, cap number and increase damage.
             if (self.worldtype == RYU_USE_FIRE)
-                { if (shots > 18) { self.height = shots / 2; shots = 18;}}
+                { if (shots > 18) { self.height = shots / 2; shots = 18; }}
             else
-                { if (shots > 9) { self.height = shots; shots = 9;}}
+                { if (shots > 9) { self.height = shots; shots = 9; }}
             // Ice check.
             if (self.worldtype == RYU_USE_ICE) multi = TRUE;
         }
@@ -803,9 +803,9 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
     }
 
 	if (random() < 0.5)
-		sound(self, CHAN_VOICE, "drake/dragon/pain1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/dragon/pain1.wav",1,ATTN_NORM);
 	else
-		sound(self, CHAN_VOICE, "drake/dragon/pain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "drake/dragon/pain2.wav",1,ATTN_NORM);
 
     if ((random() * 400) > damage) return; // didn't flinch
     if (damage < self.max_health * 0.01) return; // Damage dealt is too low to cause flinching.
@@ -858,7 +858,7 @@ void() dragon_die = {
         self.velocity_z =  100 + 100*random();
         self.flags = self.flags - (self.flags & FL_ONGROUND);
         self.movetype = MOVETYPE_TOSS;
-        sound(self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "drake/dragon/death1.wav",1,ATTN_NORM);
         if (random() < 0.5) {
     	    // Shove it up a little for the fallback death anim.
             self.velocity_z = 250 + 100*random();
@@ -889,14 +889,14 @@ void() wyrm_explode = {
     org = self.origin;
     makevectors(self.angles);
     vx = v_forward;  vy = v_right;  vz = v_up;
-    sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NORM);
     // Throw dragon parts first.  They will be thrown from a point relative to the body instead of randomly.
     // Since we do not want to update corpse origin, don't use setorigin.
     self.origin = org - vy*72 - vz*20;
 	ThrowGib(11, 1);
     self.origin = org + vy*72 - vz*20;
     ThrowGib(12, 1);
-    if ( self.frame == $deathb6 )
+    if (self.frame == $deathb6 )
         self.origin = org - vx*72 - vz*20;
     else
         self.origin = org + vx*72 - vz*20;
@@ -906,7 +906,7 @@ void() wyrm_explode = {
     ThrowGib(3,2);
 
     // Throw the head.  Now we can set origin for real.
-    if ( self.frame == $deathb6 )
+    if (self.frame == $deathb6 )
         org = org + (vx * 88);
     else
         org = org - (vx * 88);
@@ -934,7 +934,7 @@ void() wyrm_die1  = [$death1,  wyrm_die2  ] {
 	self.reviveframeend = $death1;
 };
 void() wyrm_die2  = [$death2,  wyrm_die3  ] {};
-void() wyrm_die3  = [$death3,  wyrm_die4  ] { self.solid      = SOLID_NOT;};
+void() wyrm_die3  = [$death3,  wyrm_die4  ] { self.solid      = SOLID_NOT; };
 void() wyrm_die4  = [$death4,  wyrm_die5  ] {};
 void() wyrm_die5  = [$death5,  wyrm_die6  ] { DropCoin(4); };
 void() wyrm_die6  = [$death6,  wyrm_die7  ] { death_puff(); };
@@ -944,9 +944,9 @@ void() wyrm_die9  = [$death9,  wyrm_die10 ] {};
 void() wyrm_die10 = [$death10, wyrm_die11 ] {};
 void() wyrm_die11 = [$death11, wyrm_die12 ] { death_puff(); };
 void() wyrm_die12 = [$death12, wyrm_die13 ] { DropCoin(2); };
-void() wyrm_die13 = [$death13, wyrm_die14 ] { death_puff(); self.nextthink = time + 0.2;};
-void() wyrm_die14 = [$death13, wyrm_die15 ] { death_puff(); self.nextthink = time + 0.3;};
-void() wyrm_die15 = [$death13, wyrm_die16 ] { death_puff(); self.nextthink = time + 0.2;};
+void() wyrm_die13 = [$death13, wyrm_die14 ] { death_puff(); self.nextthink = time + 0.2; };
+void() wyrm_die14 = [$death13, wyrm_die15 ] { death_puff(); self.nextthink = time + 0.3; };
+void() wyrm_die15 = [$death13, wyrm_die16 ] { death_puff(); self.nextthink = time + 0.2; };
 void() wyrm_die16 = [$death13, wyrm_die16 ] { death_puff(); wyrm_countdown(); };
 
 void() wyrm_dieb1  = [$deathb1,  wyrm_dieb2  ] {
@@ -957,10 +957,10 @@ void() wyrm_dieb2  = [$deathb2,  wyrm_dieb3  ] {};
 void() wyrm_dieb3  = [$deathb3,  wyrm_dieb4  ] {};
 void() wyrm_dieb4  = [$deathb4,  wyrm_dieb5  ] {};
 void() wyrm_dieb5  = [$deathb5,  wyrm_dieb6  ] { DropCoin(4); };
-void() wyrm_dieb6  = [$deathb6,  wyrm_dieb7  ] { death_puff(); self.nextthink = time + 0.5;};
-void() wyrm_dieb7  = [$deathb6,  wyrm_dieb8  ] { death_puff(); self.nextthink = time + 0.4;};
-void() wyrm_dieb8  = [$deathb6,  wyrm_dieb9  ] { death_puff(); self.nextthink = time + 0.3;};
-void() wyrm_dieb9  = [$deathb6,  wyrm_dieb10 ] { death_puff(); DropCoin(2); self.nextthink = time + 0.2;};
+void() wyrm_dieb6  = [$deathb6,  wyrm_dieb7  ] { death_puff(); self.nextthink = time + 0.5; };
+void() wyrm_dieb7  = [$deathb6,  wyrm_dieb8  ] { death_puff(); self.nextthink = time + 0.4; };
+void() wyrm_dieb8  = [$deathb6,  wyrm_dieb9  ] { death_puff(); self.nextthink = time + 0.3; };
+void() wyrm_dieb9  = [$deathb6,  wyrm_dieb10 ] { death_puff(); DropCoin(2); self.nextthink = time + 0.2; };
 void() wyrm_dieb10 = [$deathb6,  wyrm_dieb10 ] { death_puff(); wyrm_countdown(); };
 
 // Special death for the dragon king.
@@ -975,7 +975,7 @@ void() wyrm_die = {
     self.velocity_y = -200 + 400*random();
     self.velocity_z =  100 + 100*random();
     SUB_RemoveFlags(self,FL_ONGROUND);
-    sound(self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NONE); // The wyrm is a boss, so use full volume.
+    sound(self,CHAN_VOICE, "drake/dragon/death1.wav",1,ATTN_NONE); // The wyrm is a boss, so use full volume.
     if (random() < 0.5) {
         self.velocity_z = 250 + 100*random(); // Shove it up a little for the fallback death anim.
         wyrm_die1();

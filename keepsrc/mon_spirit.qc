@@ -134,7 +134,7 @@ void()	spirit_laugh2	= [	$laugh2,	spirit_laugh3	] { ai_stand(); spirit_glow(); }
 void()	spirit_laugh3	= [	$laugh3,	spirit_laugh4	] { ai_stand(); spirit_glow(); };
 void()	spirit_laugh4	= [	$laugh4,	spirit_laugh5	] { ai_stand(); spirit_glow(); };
 void()	spirit_laugh5	= [	$laugh5,	spirit_laugh6	] { ai_stand(); spirit_glow();
-	sound(self, CHAN_VOICE, "redfield/spirit/idle_laugh.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "redfield/spirit/idle_laugh.wav",1,ATTN_NORM);
 };
 void()	spirit_laugh6	= [	$laugh6,	spirit_laugh7	] { ai_stand(); spirit_glow(); };
 void()	spirit_laugh7	= [	$laugh7,	spirit_laugh8	] { ai_stand(); spirit_glow(); };
@@ -216,7 +216,7 @@ void() spirit_ifin1 = {
 	// Always phase in facing the enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	self.angles_y = self.ideal_yaw;
-	sound(self, CHAN_AUTO, "redfield/spirit/spin_laugh.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"redfield/spirit/spin_laugh.wav",1,ATTN_NORM);
 	self.bodyphased = MONAI_SPIRITSOLID;
 	self.takedamage = DAMAGE_AIM;
 	self.skin = 1;
@@ -349,7 +349,7 @@ void() spirit_checkfadelist = {
 void() spirit_spin1	= [$spin1,	spirit_spin2    ] {
 	self.pain_finished = time + 1.2;			// no pain during teleportation
 	self.attack_finished = 2 + random();			// pause before next attack
-	sound(self, CHAN_VOICE, "redfield/spirit/fadeout.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "redfield/spirit/fadeout.wav",1,ATTN_NORM);
 	spirit_glow();
 };
 void() spirit_spin2	= [  $spin2,	spirit_spin3 ] { spirit_glow(); };
@@ -437,7 +437,7 @@ void(vector leftofsb, vector rightofsb) spirit_charge = {
 void()	spirit_scream1	= [	$scream1,	spirit_scream2	] { ai_charge(18); spirit_alphacontrol();
 	// Cannot be interrupted
 	self.pain_finished = time + 2;
-	if (self.health > 0) sound(self, CHAN_WEAPON, "redfield/spirit/scream.wav", 1, ATTN_NORM);
+	if (self.health > 0) sound(self,CHAN_WEAPON,"redfield/spirit/scream.wav",1,ATTN_NORM);
 	spirit_glow();
 };
 void()	spirit_scream2	= [	$scream2,	spirit_scream3	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
@@ -544,7 +544,7 @@ void() spirit_wakeup = {
 };
 
 
-void()	spirit_pain1	= [	$pain1,		spirit_pain2	] { sound(self, CHAN_VOICE, "redfield/spirit/pain.wav", 1, ATTN_NORM);
+void()	spirit_pain1	= [	$pain1,		spirit_pain2	] { sound(self,CHAN_VOICE, "redfield/spirit/pain.wav",1,ATTN_NORM);
 spirit_glow();
 };
 void()	spirit_pain2	= [	$pain2,		spirit_pain3	] { ai_back(2); spirit_glow(); };
@@ -566,7 +566,7 @@ void(entity inflictor, entity attacker, float damage) spirit_pain = {
 	self.skin = 0;
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) spirit_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -578,7 +578,7 @@ void(entity inflictor, entity attacker, float damage) spirit_pain = {
 };
 
 void()	spirit_death1	= [	$death1,	spirit_death2	] { self.skin = 0; spirit_glow();
-	sound(self, CHAN_VOICE, "redfield/spirit/death.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "redfield/spirit/death.wav",1,ATTN_NORM);
 };
 void()	spirit_death2	= [	$death2,	spirit_death3	] { spirit_glow(); };
 void()	spirit_death3	= [	$death3,	spirit_death4	] { self.solid = SOLID_NOT; spirit_glow(); };
@@ -607,7 +607,7 @@ void() spirit_die = {
 	// This is really a gib death without the gibs!
 	if (self.health < -45) {
 		// Play gib death sound
-		sound(self, CHAN_VOICE, "redfield/spirit/deathb.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "redfield/spirit/deathb.wav",1,ATTN_NORM);
 		self.origin = self.origin + '0 0 24';
 		Tent_Explosion2(self.origin,1,15);
 		self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
@@ -626,9 +626,9 @@ void() spirit_die = {
 
 void() spirit_sword_sound = {
 	self.weaponstate = random();
-	if (self.weaponstate < 0.35) sound(self, CHAN_WEAPON, "redfield/spirit/slash1.wav", 1, ATTN_NORM);
-	else if (self.weaponstate < 0.65) sound(self, CHAN_WEAPON, "redfield/spirit/slash2.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "redfield/spirit/slash3.wav", 1, ATTN_NORM);
+	if (self.weaponstate < 0.35) sound(self,CHAN_WEAPON,"redfield/spirit/slash1.wav",1,ATTN_NORM);
+	else if (self.weaponstate < 0.65) sound(self,CHAN_WEAPON,"redfield/spirit/slash2.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"redfield/spirit/slash3.wav",1,ATTN_NORM);
 };
 
 void() monster_spirit_precache = {

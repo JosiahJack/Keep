@@ -220,7 +220,7 @@ void(entity targ) PlayLavaShieldSound = { // [FUNCTION]
 		if (targ.lavashield_volume > 0) {
 			targ.volume = (0.5 + random() * 0.5) * targ.lavashield_volume;
 			if (targ.volume > 1) targ.volume = 1; // Make sure volume is within range (will get errors)
-			sound(targ, CHAN_ITEM, SOUND_ARTLSHIELD3, targ.volume, ATTN_NORM);
+			sound(targ,CHAN_ITEM,SOUND_ARTLSHIELD3, targ.volume,ATTN_NORM);
 		}
 		targ.lavashield_sound = time + 2;
 	}
@@ -233,7 +233,7 @@ void(entity targ) PlayBlastBeltSound = { // [FUNCTION]
 		if (targ.blastbelt_volume > 0) {
 			targ.volume = (0.5 + random() * 0.5) * targ.blastbelt_volume;
 			if (targ.volume > 1) targ.volume = 1; // Make sure volume is within range (will get errors)
-			sound(targ, CHAN_ITEM, SOUND_ARTBLASTBELT3, targ.volume, ATTN_NORM);
+			sound(targ,CHAN_ITEM,SOUND_ARTBLASTBELT3, targ.volume,ATTN_NORM);
 		}
 		targ.blastbelt_sound = time + 2;
 	}
@@ -243,7 +243,7 @@ void(entity targ) PlayPentagramSound = { // [FUNCTION]
 	if (!(targ.flags & FL_CLIENT)) return; // Only works for the player because of sounds.
 	
 	if (targ.invincible_sound < time) { // Time for another sound reminder?
-		sound(targ, CHAN_ITEM, SOUND_ARTPENT3, 1, ATTN_NORM);
+		sound(targ,CHAN_ITEM,SOUND_ARTPENT3,1,ATTN_NORM);
 		targ.invincible_sound = time + 2;
 	}
 };
@@ -282,7 +282,7 @@ void() ClientPowerups = { // [FUNCTION]
 	// Invisibility (Gold Ring) - Flash screen 3s before running out
 	if (self.invisible_finished > 0) {
 		if (self.invisible_sound < time) { // sound and screen flash when items starts to run out
-			sound(self, CHAN_AUTO, SOUND_ARTINV3, 0.5, ATTN_IDLE);
+			sound(self,CHAN_AUTO,SOUND_ARTINV3, 0.5,ATTN_IDLE);
 			self.invisible_sound = time + ((random() * 3) + 1);
 		}
 
@@ -290,7 +290,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.invisible_time == 1) {
 				sprint(self, "Ring of Shadows magic is fading\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTINV2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTINV2,1,ATTN_NORM);
 				self.invisible_time = time + 1;
 			}
 			
@@ -323,7 +323,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.rad_time == 1) {
 				sprint(self, "Air supply in Biosuit expiring\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTSUIT2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTSUIT2,1,ATTN_NORM);
 				self.rad_time = time + 1;
 			}
 
@@ -342,7 +342,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.therm_time == 1) {
 				sprint(self, "Thermal protection suit is expiring\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTSUIT2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTSUIT2,1,ATTN_NORM);
 				self.therm_time = time + 1;
 			}
 
@@ -361,7 +361,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.lavashield_time == 1) {
 				sprint(self, "Aegis is falling apart!\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTLSHIELD2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTLSHIELD2,1,ATTN_NORM);
 				self.lavashield_time = time + 1;
 			}
 
@@ -396,12 +396,12 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.waterlevel == 3) {
 				// Under water sound with bubbbles
 				self.volume = 0.5 + random() * 0.5;
-				sound(self, CHAN_ITEM, SOUND_ARTWETS3, self.volume, ATTN_IDLE);
+				sound(self,CHAN_ITEM,SOUND_ARTWETS3, self.volume,ATTN_IDLE);
 				self.wetsuit_sound = time + 4;
 			} else {
 				// Different sound when not in the water (faster)
 				self.volume = 0.4 + random() * 0.4;
-				sound(self, CHAN_ITEM, SOUND_ARTWETS3B, self.volume, ATTN_IDLE);
+				sound(self,CHAN_ITEM,SOUND_ARTWETS3B, self.volume,ATTN_IDLE);
 				self.wetsuit_sound = time + 3 + random();
 			}
 		}
@@ -411,7 +411,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.wetsuit_time == 1) {
 				sprint(self, "Air supply in Wet suit expiring\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTWETS2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTWETS2,1,ATTN_NORM);
 				self.wetsuit_time = time + 1;
 			}
 
@@ -429,7 +429,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.invincible_time == 1) {
 				sprint(self, "Protection is almost burned out\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTPENT2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTPENT2,1,ATTN_NORM);
 				self.invincible_time = time + 1;
 			}
 
@@ -447,7 +447,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.super_time == 1) {
 				sprint(self, "Quad Damage is wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTQUAD2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTQUAD2,1,ATTN_NORM);
 				self.super_time = time + 1;
 			}	  
 			if (self.super_time < time) {
@@ -464,7 +464,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.blastbelt_time == 1) {
 				sprint(self, "Blast belt is failing\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTBLASTBELT2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTBLASTBELT2,1,ATTN_NORM);
 				self.blastbelt_time = time + 1;
 			}
 
@@ -484,7 +484,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.jumpboots_time == 1) {
 				sprint(self, "Jump Boots are wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTJUMPBOOTS2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTJUMPBOOTS2,1,ATTN_NORM);
 				self.jumpboots_time = time + 1;
 			}
 
@@ -503,7 +503,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.sharpshoot_time == 1) {
 				sprint(self, "Sharpshooter has almost gone\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTSHARP2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTSHARP2,1,ATTN_NORM);
 				self.sharpshoot_time = time + 1;
 			}
 			if (self.sharpshoot_time < time) {
@@ -520,7 +520,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.nailpiercer_time == 1) {
 				sprint(self, "Nail Piercer is wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, SOUND_ARTNAILP2, 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,SOUND_ARTNAILP2,1,ATTN_NORM);
 				self.nailpiercer_time = time + 1;
 			}
 
@@ -538,7 +538,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.wing_time == 1) {
 				sprint(self, "Boots of Levitation are fading\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, "zerstorer/ambience/wingend.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"zerstorer/ambience/wingend.wav",1,ATTN_NORM);
 				self.wing_time = time + 1;
 			}
 
@@ -555,7 +555,7 @@ void() ClientPowerups = { // [FUNCTION]
 			if (self.tome_time == 1) {
 				sprint(self, "Tome of Power is wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound(self, CHAN_AUTO, "drake/items/tomepow2.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"drake/items/tomepow2.wav",1,ATTN_NORM);
 				self.tome_time = time + 1;
 			}
  

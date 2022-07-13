@@ -69,7 +69,7 @@ void() misc_model_on = {
 		if (!droptofloor()) {
 			dprint ("\n\b[Model]\b "); dprint (self.mdl);
 			dprint (" stuck at ("); dprint (vtos(self.origin)); dprint (")\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			remove(self);
 			return;
 		} 
@@ -111,7 +111,7 @@ void() misc_model = {
 		if (self.model != "") {
 			self.mdl = self.model; // if .model was accidentally used and mdl is not set, use .model instead
 		} else {
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			remove(self);
 			return;
 		}

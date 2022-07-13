@@ -75,11 +75,11 @@ void(float side) Demon_Claw = {
 	// same goes for enemies that cannot be damaged (world geo mostly)
 	if (!ai_checkmelee(MONAI_MELEEDEMON,FALSE) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_WEAPON,"ad171/weapons/sword1a.wav",1,ATTN_NORM);
+		else sound(self,CHAN_WEAPON,"ad171/weapons/sword1b.wav",1,ATTN_NORM);
 	} else {
 		if (self.poisonous) PoisonDeBuff(self.enemy); // Check for poisonous attribute (new poison version)
-		sound(self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
+		sound(self,CHAN_WEAPON,"demon/dhit2.wav",1,ATTN_NORM); // Melee claw hit sound
 		ldmg = 10 + 5*random();
 		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
@@ -148,7 +148,7 @@ void() Demon_JumpTouch = {
 void()	demon1_jump1	= [	$leap1,		demon1_jump2	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
-	sound(self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "demon/djump.wav",1,ATTN_NORM);
 };
 void()	demon1_jump2	= [	$leap2,		demon1_jump3	] { ai_face(); };
 void()	demon1_jump3	= [	$leap3,		demon1_jump4	] { ai_face(); };
@@ -194,7 +194,7 @@ void(entity inflictor, entity attacker, float damage) demon1_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) demon1_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -208,7 +208,7 @@ void(entity inflictor, entity attacker, float damage) demon1_pain = {
 void()	demon1_death1	= [	$death1, demon1_death2 ] {};
 void()	demon1_death2	= [	$death2, demon1_death3 ] { monster_check_gib(); };
 void()	demon1_death3	= [	$death3, demon1_death4 ] { monster_check_gib();
-self.solid = SOLID_NOT;};
+self.solid = SOLID_NOT; };
 void()	demon1_death4	= [	$death4, demon1_death5 ] {};
 void()	demon1_death5	= [	$death5, demon1_death6 ] {};
 void()	demon1_death6	= [	$death6, demon1_death7 ] {};
@@ -222,7 +222,7 @@ void() demon1_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "demon/ddeath.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "demon/ddeath.wav",1,ATTN_NORM);
 		demon1_death1();
 	}
 };

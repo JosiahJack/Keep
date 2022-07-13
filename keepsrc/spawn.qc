@@ -954,13 +954,13 @@ void(string mname) BeMonsterFromString = {
 
 // A code way to spawn minions
 void(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
-	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
+	if (!InOpenOrLiquid(minion_org)) return; // Check if there is space to spawn entity
 	
 	update_minioncount(self,1);				// Update spawn counters.  Self = minotaur, there is no egg
 	newmis = spawn();
 	BeMonsterFromString(monstername);
 	setorigin(newmis, minion_org);			// Move to new location
-	if (developer > 0) spawn_marker(minion_org, SPNMARK_YELLOW);
+	if (developer > 0) spawn_marker(minion_org,'0 0 0',0,SPNMARK_YELLOW);
 	newmis.owner = self;					// Spawner Parent Link
 	newmis.enemy = minion_targ;				// Target to attack
 	newmis.infightextra = self.infightextra;
@@ -1040,7 +1040,7 @@ void() func_spawn = {
 	if (self.wait == 0) self.wait = 0.1;
 	else if (self.wait < 0) self.wait = 0;
 
-	if (!self.cnt){
+	if (!self.cnt) {
 		if (self.count) self.cnt = self.count;
 		else self.cnt = 1;
 	}

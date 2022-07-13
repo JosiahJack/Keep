@@ -154,7 +154,7 @@ void(float melee_attack, float side) sham_meleeattack = {
 	// If this is infighting do more damage as it will look more impressive
 	// Also if this damage is enough to kill in a single blow, gib for effect
 	if (melee_attack == SHAM_MSMASH) {
-		sound(self, CHAN_VOICE, self.meleehitsound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.meleehitsound,1,ATTN_NORM);
 		if (self.enemy.flags & FL_MONSTER) dmg_multiplier = dmg_multiplier * 2;
 		ldmg = (random() + random() + random()) * (40*dmg_multiplier);
 		if (self.enemy.health < ldmg || (self.classtype == CT_MONSHAMVILE && self.enemy.classgroup == CG_ZOMBIE && self.enemy.classtype != CT_MONMUMMY)) ldmg = ldmg*3; // Gib it!  Sha'Vile always gibs poor zombies.
@@ -162,7 +162,7 @@ void(float melee_attack, float side) sham_meleeattack = {
 		SpawnMeatSpray (self, self.enemy, crandom() * 100); // Lots of blood and gore
 		SpawnMeatSpray (self, self.enemy, crandom() * 100);
 	} else if (melee_attack == SHAM_MCLAW) { // Shambler side swipe (left/right and half damage)
-		sound(self, CHAN_VOICE, self.meleehitsound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.meleehitsound,1,ATTN_NORM);
 		ldmg = (random() + random() + random()) * 20;
 		if (self.classtype == CT_MONSHAMVILE && (self.enemy.health < ldmg || (self.enemy.classgroup == CG_ZOMBIE && self.enemy.classtype != CT_MONMUMMY))) ldmg = ldmg*3; // Sha'Vile should gib more!  Sha'Vile always gibs poor zombies.
 		T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
@@ -170,7 +170,7 @@ void(float melee_attack, float side) sham_meleeattack = {
 	}
 };
 
-void() sham_smash1     = [      $smash1,       sham_smash2    ] { sound(self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(2); };
+void() sham_smash1     = [      $smash1,       sham_smash2    ] { sound(self,CHAN_VOICE, "shambler/melee1.wav",1,ATTN_NORM); ai_charge(2); };
 void() sham_smash2     = [      $smash2,       sham_smash3    ] { monster_footstep(FALSE); ai_charge(6); };
 void() sham_smash3     = [      $smash3,       sham_smash4    ] { ai_charge(6); };
 void() sham_smash4     = [      $smash4,       sham_smash5    ] { ai_charge(5); };
@@ -183,7 +183,7 @@ void() sham_smash10    = [      $smash10,      sham_smash11   ] { sham_meleeatta
 void() sham_smash11    = [      $smash11,      sham_smash12   ] { ai_charge(5); };
 void() sham_smash12    = [      $smash12,      sham_run1	   ] { ai_charge(4); };
 
-void() sham_swingl1	= [      $swingl1,      sham_swingl2   ] { sound(self, CHAN_VOICE, "shambler/melee2.wav", 1, ATTN_NORM); ai_charge(5); };
+void() sham_swingl1	= [      $swingl1,      sham_swingl2   ] { sound(self,CHAN_VOICE, "shambler/melee2.wav",1,ATTN_NORM); ai_charge(5); };
 void() sham_swingl2 = [      $swingl2,      sham_swingl3   ] { monster_footstep(FALSE); ai_charge(3); };
 void() sham_swingl3 = [      $swingl3,      sham_swingl4   ] { ai_charge(7); };
 void() sham_swingl4 = [      $swingl4,      sham_swingl5   ] { ai_charge(3); };
@@ -192,9 +192,9 @@ void() sham_swingl6 = [      $swingl6,      sham_swingl7   ] { ai_charge(9); };
 void() sham_swingl7 = [      $swingl7,      sham_swingl8   ] { ai_charge(5); sham_meleeattack(SHAM_MCLAW,250); };
 void() sham_swingl8 = [      $swingl8,      sham_swingl9   ] { ai_charge(4); };
 void() sham_swingl9 = [      $swingl9,      sham_run1  ] { ai_charge(8);
-if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingr1;};
+if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingr1; };
 
-void() sham_swingr1	= [      $swingr1,      sham_swingr2   ] { sound(self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(1); };
+void() sham_swingr1	= [      $swingr1,      sham_swingr2   ] { sound(self,CHAN_VOICE, "shambler/melee1.wav",1,ATTN_NORM); ai_charge(1); };
 void() sham_swingr2	= [      $swingr2,      sham_swingr3   ] { monster_footstep(FALSE); ai_charge(8); };
 void() sham_swingr3 = [      $swingr3,      sham_swingr4   ] { ai_charge(14); };
 void() sham_swingr4 = [      $swingr4,      sham_swingr5   ] { ai_charge(7); };
@@ -203,10 +203,10 @@ void() sham_swingr6 = [      $swingr6,      sham_swingr7   ] { ai_charge(6); };
 void() sham_swingr7 = [      $swingr7,      sham_swingr8   ] { ai_charge(6); sham_meleeattack(SHAM_MCLAW,-250); };
 void() sham_swingr8 = [      $swingr8,      sham_swingr9   ] { ai_charge(3); };
 void() sham_swingr9 = [      $swingr9,      sham_run1  ] { ai_charge(10);
-if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingl1;};
+if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingl1; };
 
 // Quickened attacks -- custom addition for meaner monsters. From Drake for Sha'Vile.
-void() sham_csmash1  = [$smash2,   sham_csmash2  ] { sound(self, CHAN_VOICE, "drake/shamvile/melee3.wav", 1, ATTN_NORM); ai_charge(6); };
+void() sham_csmash1  = [$smash2,   sham_csmash2  ] { sound(self,CHAN_VOICE, "drake/shamvile/melee3.wav",1,ATTN_NORM); ai_charge(6); };
 void() sham_csmash2  = [$smash4,   sham_csmash3  ] { monster_footstep(FALSE); ai_charge(14); };
 void() sham_csmash3  = [$smash6,   sham_csmash4  ] { ai_charge(5); };
 void() sham_csmash4  = [$smash8,   sham_csmash5  ] { ai_charge(0); };
@@ -214,21 +214,21 @@ void() sham_csmash5  = [$smash9,   sham_csmash6  ] { ai_charge(0); };
 void() sham_csmash6  = [$smash10,  sham_csmash7  ] { sham_meleeattack(SHAM_MSMASH,0); };
 void() sham_csmash7  = [$smash12,  sham_run1     ] { ai_charge(9); };
 
-void() sham_cswingl1 = [$swingl2,  sham_cswingl2 ] { sound(self, CHAN_VOICE, "drake/shamvile/melee4.wav", 1, ATTN_NORM); ai_charge(8); };
+void() sham_cswingl1 = [$swingl2,  sham_cswingl2 ] { sound(self,CHAN_VOICE, "drake/shamvile/melee4.wav",1,ATTN_NORM); ai_charge(8); };
 void() sham_cswingl2 = [$swingl4,  sham_cswingl3 ] { monster_footstep(FALSE); ai_charge(10); };
 void() sham_cswingl3 = [$swingl5,  sham_cswingl4 ] { ai_charge(7); };
 void() sham_cswingl4 = [$swingl6,  sham_cswingl5 ] { ai_charge(9); };
 void() sham_cswingl5 = [$swingl7,  sham_cswingl6 ] { ai_charge(5);  sham_meleeattack(SHAM_MCLAW,250); };
 void() sham_cswingl6 = [$swingl9,  sham_run1     ] { ai_charge(12);
-if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingr1;};
+if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingr1; };
 
-void() sham_cswingr1 = [$swingr2,  sham_cswingr2 ] { sound(self, CHAN_VOICE, "drake/shamvile/melee3.wav", 1, ATTN_NORM); ai_charge(9); };
+void() sham_cswingr1 = [$swingr2,  sham_cswingr2 ] { sound(self,CHAN_VOICE, "drake/shamvile/melee3.wav",1,ATTN_NORM); ai_charge(9); };
 void() sham_cswingr2 = [$swingr4,  sham_cswingr3 ] { monster_footstep(FALSE); ai_charge(21); };
 void() sham_cswingr3 = [$swingr5,  sham_cswingr4 ] { ai_charge(3); };
 void() sham_cswingr4 = [$swingr6,  sham_cswingr5 ] { ai_charge(6); };
 void() sham_cswingr5 = [$swingr7,  sham_cswingr6 ] { ai_charge(6);  sham_meleeattack(SHAM_MCLAW,-250); };
 void() sham_cswingr6 = [$swingr9,  sham_run1     ] { ai_charge(6);
-if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingl1;};
+if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingl1; };
 
 void() sham_melee = {
 	self.meleeattack = random();
@@ -354,14 +354,14 @@ void() VileMagicThink = {
 
     if (self.cnt) {
         self.cnt = 0;
-        sound(self.owner.enemy, CHAN_AUTO, "drake/shamvile/burn.wav", 1, ATTN_NORM);
+        sound(self.owner.enemy,CHAN_AUTO,"drake/shamvile/burn.wav",1,ATTN_NORM);
     }
     MakeFlame(self.owner.enemy);
     self.lefty = !self.lefty;
     if (self.lefty) MakeFlame(self.owner.enemy);
 };
 
-void() sham_magic1 = [$magic1, sham_magic2 ] { ai_face(); sound(self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM); }; // PM:  dsvilatk.wav from Doom2 is nice for the Vile variant, but nsoe2 uses many sounds, so stick with the basic shambler sound.
+void() sham_magic1 = [$magic1, sham_magic2 ] { ai_face(); sound(self,CHAN_WEAPON,"shambler/sattck1.wav",1,ATTN_NORM); }; // PM:  dsvilatk.wav from Doom2 is nice for the Vile variant, but nsoe2 uses many sounds, so stick with the basic shambler sound.
 void() sham_magic2 = [$magic2, sham_magic3 ] {
 	if (self.classtype == CT_MONSHAMVILE) ai_face();
 	else sham_casting('0 43 61','16 -4 75',0);
@@ -423,7 +423,7 @@ void() sham_magic6 = [$magic6, sham_magic9 ] {
 	if (self.classtype == CT_MONSHAMVILE) { shamvile_magic6(); return; }
 
 	sham_lightning();
-	sound(self, CHAN_WEAPON, "shambler/sboom.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"shambler/sboom.wav",1,ATTN_NORM);
 };
 void() sham_magic9 = [$magic9, sham_magic10 ] { sham_lightning(); };
 void() sham_magic10= [$magic10,sham_magic11 ] { sham_lightning();monster_footstep(FALSE); };
@@ -473,7 +473,7 @@ void(entity inflictor, entity attacker, float damage) sham_pain = {
 	SUB_FinishAttachments(); // Hide all attachments
 	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 	if (self.pain_check > 0) { // Any pain animation/sound required?
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) sham_pain1();
 		else if (self.pain_check == 2) {
 			self.pain_finished = time + 0.6; // reset axe hit and setup short pain recovery
@@ -486,7 +486,7 @@ void(entity inflictor, entity attacker, float damage) sham_pain = {
 void() sham_death1  = [$death1,  sham_death2  ] {};
 void() sham_death2  = [$death2,  sham_death3  ] { monster_check_gib(); };
 void() sham_death3  = [$death3,  sham_death4  ] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() sham_death4  = [$death4,  sham_death5  ] {};
 void() sham_death5  = [$death5,  sham_death6  ] {};
 void() sham_death6  = [$death6,  sham_death7  ] {};
@@ -503,7 +503,7 @@ void() sham_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE,self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE,self.death_sound,1,ATTN_NORM);
 		sham_death1();
 	}
 };
@@ -512,7 +512,7 @@ void() sham_die = {
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
 void() sham_wakeup1 = [$smash7,		sham_wakeup2 ] {
-	sound(self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_VOICE, "shambler/melee1.wav",1,ATTN_NORM); };
 void() sham_wakeup2 = [$smash9,		sham_wakeup3 ] {};
 void() sham_wakeup3 = [$smash10,	sham_wakeup4 ] {};
 void() sham_wakeup4 = [$smash11,	sham_wakeup5 ] {};

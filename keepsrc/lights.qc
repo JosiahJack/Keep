@@ -121,7 +121,7 @@ void() play_light_sound = { // [FUNCTION]
 	
 	self.think = play_light_sound;
 	self.nextthink = time + self.owner.waitmin;
-	sound(self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
+	sound(self,CHAN_VOICE, self.owner.noise, self.owner.volume,ATTN_STATIC);
 };
 
 void() setup_light_sound = { // [FUNCTION]
@@ -135,7 +135,7 @@ void() setup_light_sound = { // [FUNCTION]
 			self.attachment.think = play_light_sound;
 		}
 		else {
-			ambientsound(self.origin, self.noise, self.volume, ATTN_QUIET);
+			ambientsound(self.origin, self.noise, self.volume,ATTN_QUIET);
 		}
 	}
 };
@@ -217,7 +217,7 @@ void() light_customstyle_finish = { // [FUNCTION]
 	// Check for style errors above compiler light boundary.  Only for lights with style range issues + customstyles remap/string.
 	if (self.style >= mapstyle_start && self.targetname == "") {
 		// The light entity is using a style number in the compiler generated (they always have targetname) target light zone.
-		spawn_marker(self.origin, SPNMARK_YELLOW); // If this issue is left, weird things will start happening to lightstyles, highlight error to mapper.
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW); // If this issue is left, weird things will start happening to lightstyles, highlight error to mapper.
 		dprint("\b[LIGHT]\b style ("); dprint(ftos(self.style));
 		dprint(") cannot be used, error!  Don't use 12 - 62 for self.style!\n");
 		remove(self);
@@ -226,7 +226,7 @@ void() light_customstyle_finish = { // [FUNCTION]
 
 	// Style has to be different to re-map
 	if (self.customstyle_remap > 0 && self.customstyle_remap == self.style) {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[LIGHT]\b remap and style are the same!\n");
 		remove(self);
 		return;
@@ -273,14 +273,14 @@ void() light_customstyle_finish = { // [FUNCTION]
 void() light_customstyle_start = { // [FUNCTION]
 	// Need to check style and remap values are within range FIRST.  Will be serious crash because its an index for fixed size array.
 	if (self.style < 0 || self.style >= LIGHT_MAXLIGHTSTYLE) {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[LIGHT]\b light style ("); dprint(ftos(self.style));
 		dprint(") out of range at location");
 		dprint(vtos(self.origin));
 		dprint(". Set to 0\n");
 		self.style = 0;
 	} else if (self.customstyle_remap < 0 || self.customstyle_remap >= LIGHT_MAXLIGHTSTYLE) {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		dprint("\b[LIGHT]\b customstyle_remap ("); dprint(ftos(self.customstyle_remap));
 		dprint(") out of range at location");
 		dprint(vtos(self.origin));

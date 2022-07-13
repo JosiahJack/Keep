@@ -123,7 +123,7 @@ float(entity decider, entity targ) Align_NonHostile = { // [FUNCTION]
     local entity pat;
 
 	if (Align_Match(decider, targ) && !(IsInsane(decider))) return TRUE; // Same team
-	if (decider.flags & FL_MONSTER){
+	if (decider.flags & FL_MONSTER) {
 		if (decider.enemy == targ) return FALSE;
 		if (targ.enemy == decider) return FALSE;
 	}

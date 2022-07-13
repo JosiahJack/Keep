@@ -9,7 +9,7 @@ float DT_ROOM_C    = 4.000;
 float DRAGON_ROGUE = 2;
 
 void() dragon_stop_attack = {
-	if (self.dragonAttacking == FALSE)return;
+	if (self.dragonAttacking == FALSE) return;
 
 	self.attack_finished = (time + (random () * 2) );
 	if (self.classtype == CT_MONWYRM) {
@@ -175,7 +175,7 @@ void() dragon_atk_f3 = [ 60.000, dragon_atk_f4 ] { dragon_move (17.000); dragon_
 void() dragon_atk_f4 = [ 60.000, dragon_walk3 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
 void() dragon_walk1 = [ 1.000, dragon_walk2 ] {
-   if ( self.dragonAttacking )
+   if (self.dragonAttacking )
       dragon_stop_attack();
 
    self.th_missile = dragon_atk_a1;
@@ -520,7 +520,7 @@ void() dragon_activate = {
       dprint (vtos (self.origin));
       dprint ("\n");
    }
-   if ( self.target ) {
+   if (self.target ) {
       self.movetarget = find (world,targetname,self.target);
       self.goalentity = self.movetarget;
       if ( !self.movetarget ) {
@@ -529,7 +529,7 @@ void() dragon_activate = {
          dprint ("\n");
       }
    }
-   if ( self.targetname )
+   if (self.targetname )
       self.use = dragon_use;
    else
       dragon_use();

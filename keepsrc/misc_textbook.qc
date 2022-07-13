@@ -162,7 +162,7 @@ void()	book_closing9 =	[$opening2, book_closing10	] {}; // [FUNCTION]
 void()	book_closing10= [$opening1, book_closed1	] {}; // [FUNCTION]
 
 // Book always open (final stage of book)
-void()	book_stayopen1 = [$open1, book_stayopen2 ] { self.state = MISCBOOK_STAYOPEN;}; // [FUNCTION]
+void()	book_stayopen1 = [$open1, book_stayopen2 ] { self.state = MISCBOOK_STAYOPEN; }; // [FUNCTION]
 void()	book_stayopen2 = [$open2, book_stayopen3 ] {}; // [FUNCTION]
 void()	book_stayopen3 = [$open3, book_stayopen4 ] {}; // [FUNCTION]
 void()	book_stayopen4 = [$open4, book_stayopen5 ] {}; // [FUNCTION]
@@ -185,7 +185,7 @@ void() book_finish = { // [FUNCTION]
 };
 
 // Book is open (waiting to close)
-void()	book_open1 = [$open1, book_open2 ] { self.state = MISCBOOK_OPEN;}; // [FUNCTION]
+void()	book_open1 = [$open1, book_open2 ] { self.state = MISCBOOK_OPEN; }; // [FUNCTION]
 void()	book_open2 = [$open2, book_open3 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 void()	book_open3 = [$open3, book_open4 ] {}; // [FUNCTION]
 void()	book_open4 = [$open4, book_open5 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
@@ -197,7 +197,7 @@ void()	book_open9 = [$open9, book_open10 ] {}; // [FUNCTION]
 void()	book_open10= [$open10, book_open1 ] { if (self.wait < time) book_finish(); }; // [FUNCTION]
 
 // Book opening (closed -> open)
-void()	book_opening1 =	[$opening1, book_opening2 ] { self.state = MISCBOOK_OPENING;}; // [FUNCTION]
+void()	book_opening1 =	[$opening1, book_opening2 ] { self.state = MISCBOOK_OPENING; }; // [FUNCTION]
 void()	book_opening2 =	[$opening2, book_opening3 ] {}; // [FUNCTION]
 void()	book_opening3 =	[$opening3, book_opening4 ] {}; // [FUNCTION]
 void()	book_opening4 =	[$opening4, book_opening5 ] {}; // [FUNCTION]
@@ -283,8 +283,7 @@ void() info_book_touch = { // [FUNCTION]
 	local float book_yaw, book_angle1, book_angle2, play_yaw, play_angle;
 
 	if (self.estate & ESTATE_BLOCK) return;
-	if (intermission_running > 0) return;		// intermission or finale
-	if (cinematic_running > 0 || cutscene > 0 || other.in_a_vehicle > 0) return;
+	if (frame_pause() || other.in_a_vehicle > 0) return;
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if (other.health < 1) return;
 		
@@ -426,7 +425,7 @@ void() info_book_setup = { // [FUNCTION]
 		if (!self.attachment || self.attachment.classtype != CT_STORYCONTROL)
 		{
 			dprint("\b[STORYBOOK]\b Missing controller!\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			entity_hide(self);
 			return;
 		}
@@ -523,14 +522,14 @@ void() info_bookcont_setup = { // [FUNCTION]
 	storychap = find(world, targetname, self.target);
 	if (!storychap) {
 		dprint("\b[STORYCTRL]\b Missing start chapter!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		return;
 	}
 
 	// Can only link to story chapter entities
 	if (storychap.classtype != CT_STORYCHAPTER) {
 		dprint("\b[STORYCTRL]\b First chapter wrong entity!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		return;
 	}
 	
@@ -541,7 +540,7 @@ void() info_bookcont_setup = { // [FUNCTION]
 	
 	// Work through list
 	while (storychap) {
-		spawn_marker(storychap.origin, SPNMARK_BLUE); // Visual debug for chapters
+		spawn_marker(storychap.origin,'0 0 0',0,SPNMARK_BLUE); // Visual debug for chapters
 		prevchap.oldenemy = storychap; // Link chapters and move forward
 		prevchap = storychap;
 		self.count = self.count + 1;
@@ -551,7 +550,7 @@ void() info_bookcont_setup = { // [FUNCTION]
 	
 	prevchap.oldenemy = prevchap; // Point final chapter at itself
 	self.estate = ESTATE_ON; // Controller finally active
-	spawn_marker(self.origin, SPNMARK_GREEN); // Visual debug for controller
+	spawn_marker(self.origin,'0 0 0',0,SPNMARK_GREEN); // Visual debug for controller
 	dprint("\b[STORYCTRL]\b Chapters found ("); // Console message for chapters found
 	dprint(ftos(self.count));
 	dprint(")\n");
@@ -572,7 +571,7 @@ void() misc_textstoryctrl = { // [ENTITY]
 	self.estate = ESTATE_OFF;
 	if (self.target == "") { // Not using SUB_HideIfNoTarget, special case that doesn't hide and prints unique message.
 		dprint("\b[STORYCTRL]\b Missing story start!\n"); 
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		return;
 	}
 	

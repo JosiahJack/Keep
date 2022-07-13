@@ -188,7 +188,7 @@ void()	dknight_stand12	= [	$stand12,	dknight_stand1	] {
 		self.idlebusy = TRUE; 
 		// Make sure the idle animations don't repeat in a row
 		self.lefty = self.lip;
-		while (self.lefty == self.lip) { self.lefty = rint(random()*4);}
+		while (self.lefty == self.lip) { self.lefty = rint(random()*4); }
 		self.lip = self.lefty;
 		if (self.lip < 1) self.think = dknight_standD1;			// Scratch chin
 		else if (self.lip < 2) self.think = dknight_standC1;	// Look at weapon
@@ -410,7 +410,7 @@ void(entity inflictor, entity attacker, float damage)	dknight_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dknight_painA1();	// classic, body recoil
@@ -436,7 +436,7 @@ void()	dknight_die3	= [	$death3,	dknight_die4	] { monster_check_gib();
 void()	dknight_die4	= [	$death4,	dknight_die5	] {};
 void()	dknight_die5	= [	$death5,	dknight_die6	] {};
 void()	dknight_die6	= [	$death6,	dknight_die7	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALA,1,ATTN_NORM); };
 void()	dknight_die7	= [	$death7,	dknight_die8	] {};
 void()	dknight_die8	= [	$death8,	dknight_die9	] { ai_forward(10); };
 void()	dknight_die9	= [	$death9,	dknight_die10	] { ai_forward(11); };
@@ -448,14 +448,14 @@ void()	dknight_die12	= [	$death12,	dknight_die12	] { monster_deadbody_check(); }
 void()	dknight_dieb1	= [	$deathb1,	dknight_dieb2	] {};
 void()	dknight_dieb2	= [	$deathb2,	dknight_dieb3	] { monster_check_gib(); };
 void()	dknight_dieb3	= [	$deathb3,	dknight_dieb4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void()	dknight_dieb4	= [	$deathb4,	dknight_dieb5	] {};
 void()	dknight_dieb5	= [	$deathb5,	dknight_dieb6	] {};
 void()	dknight_dieb6	= [	$deathb6,	dknight_dieb7	] {};
 void()	dknight_dieb7	= [	$deathb7,	dknight_dieb8	] {};
 void()	dknight_dieb8	= [	$deathb8,	dknight_dieb9	] {};
 void()	dknight_dieb9	= [	$deathb9,	dknight_dieb10	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALB,1,ATTN_NORM); };
 void()	dknight_dieb10	= [	$deathb10,	dknight_dieb11	] {};
 void()	dknight_dieb11	= [	$deathb11,	dknight_dieb12	] {};
 void()	dknight_dieb12	= [	$deathb12,	dknight_dieb13	] {};
@@ -475,7 +475,7 @@ void() dknight_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		if (random() > 0.5) dknight_die1();
 		else dknight_dieb1();
 	}
@@ -509,8 +509,8 @@ void() dknight_ghost_particle = {
 	if (self.idletimer < time) {
 		self.idletimer = time + 7 + (random() * 3);
 		self.lefty = 1 - self.lefty;
-		if (self.lefty) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.idle_sound2, 1, ATTN_NORM);
+		if (self.lefty) sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.idle_sound2,1,ATTN_NORM);
 	}
 };
 

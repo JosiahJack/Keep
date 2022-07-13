@@ -106,7 +106,7 @@ void() info_command_use = { command_use(); }; // [FUNCTION]
 void() info_command = { // [ENTITY]
 	if (self.message == "") {
 		dprint("\b[INFO_CMD]\b Message cmd missing!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}
@@ -305,8 +305,8 @@ void() tjump_touch = { // [FUNCTION]
 
 	// Up, up, and away!
     if (!(self.spawnflags & PUSH_CURRENT)) { // First sound overrides jump sound.  Second sound is standard push sound.
-        sound(other, CHAN_BODY, "rogue/runes/end1.wav", 1, ATTN_NORM);
-        sound(other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+        sound(other,CHAN_BODY,"rogue/runes/end1.wav",1,ATTN_NORM);
+        sound(other,CHAN_AUTO,"ambience/windfly.wav",1,ATTN_NORM);
     }
 
     if (self.speed) { // Unlike trigger_monsterjump, jump at a direction 'other' is facing.
@@ -361,8 +361,8 @@ void() play_meatspray = { // [FUNCTION]
 
 	if (self.fly_sound != 1) return;
 
-	if (random() < 0.5) sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_VOICE, "player/gib.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NORM);
 };
 
 void() meat_shower = { self.use = play_meatspray; }; // [ENTITY]
@@ -376,7 +376,7 @@ void() trigger_dive_touch = { // [FUNCTION]
         if (other.classname == "player") {
             if (other.fly_sound < time) {
                 other.fly_sound = time + 1.5;
-                if (!(self.spawnflags & PUSH_CURRENT)) sound(other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+                if (!(self.spawnflags & PUSH_CURRENT)) sound(other,CHAN_AUTO,"ambience/windfly.wav",1,ATTN_NORM);
             }
         }
     }
@@ -394,7 +394,7 @@ void() trigger_dive_spawn = { // [FUNCTION]
     precache_sound("ambience/windfly.wav");
     self.touch = trigger_dive_touch;
     if (!self.speed) self.speed = -500;
-    if (self.targetname) { self.solid = SOLID_NOT; self.use = push_use2;}
+    if (self.targetname) { self.solid = SOLID_NOT; self.use = push_use2; }
 };
 
 void() trigger_dive = { InitTrigger();  trigger_dive_spawn(); }; // [ENTITY]

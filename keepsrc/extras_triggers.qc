@@ -153,7 +153,7 @@ void() trig_shake_think = { // [FUNCTION]
 
 	if (self.attack_finished < time) { // Done
 		self.nextthink = -1;
-		if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+		if (self.noise1) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 		return;
 	}
 
@@ -181,7 +181,7 @@ void() trig_shake_think = { // [FUNCTION]
 void() trig_shake_use = { // [FUNCTION]
 	if (self.attack_finished > time) return;// already active
 
-	if (self.noise) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.noise) sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.attack_finished = time + self.wait;
 	self.nextthink = time + 0.01; // Start...
 };

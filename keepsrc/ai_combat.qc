@@ -371,7 +371,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	if (attacker.super_damage_finished > 0 && targ.classtype != CT_MONINQUISITOR) {
 		damage = ceil(damage * 4); // check for quad damage powerup on the attacker
-		if (self.dmg == 18 && self.buddy) { self.buddy.dmg = 0; dprint("Nerfed a buddy nail\n");} // Nerf double copper super nails, last one there is a rotten egg! Allows for both to start at 18 and get quadded up to gib a zombie.
+		if (self.dmg == 18 && self.buddy) { self.buddy.dmg = 0; dprint("Nerfed a buddy nail\n"); } // Nerf double copper super nails, last one there is a rotten egg! Allows for both to start at 18 and get quadded up to gib a zombie.
 	}
 	if (attacker.curse_type == CURSE_WEAKEN) damage = damage * 0.5;
 	if (targ.spirit_blessed) damage = damage * 0.25; // 25% Protection of the Watchers from Spirit Shrine desecration
@@ -483,7 +483,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 					saveperms = PowerArmor_Absorb(targ,take,TRUE); // only does something if damage is greater than 2
 				} else {
 					targ.powershield_active = FALSE;
-					sound(targ, CHAN_AUTO, "zerstorer/me/me_soff.wav", 1, ATTN_NORM);
+					sound(targ,CHAN_AUTO,"zerstorer/me/me_soff.wav",1,ATTN_NORM);
 				}
 			}
 		}
@@ -516,15 +516,18 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// figure momentum add
 	// This is what gives Rocket Jumps its Velocity!
 	if (inflictor && targ && (targ.movetype == MOVETYPE_WALK || (targ.flags & FL_CLIENT))) {
-		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
+		dir = targ.origin - AbsBoundsCenter(inflictor);
 		dir = normalize(dir);
-		dir = dir*damage*8;
+		dir = dir * damage * 8;
 		if (targ.mass == MASS_SUPER) dir = dir*0.5; // Harder to shove.
 		damage_velocity = dir;
 		targ.velocity = targ.velocity + dir;
 
 		// Wand knockback
-		if (attacker.weapon == IT2_CROSS && !attacker.selfweaponismoditems || attacker.tome_finished) {
+		if ((attacker.weapon == IT2_CROSS && !attacker.selfweaponismoditems)
+			|| (attacker.weapon == IT_MACE && attacker.selfweaponismoditems)
+			|| (attacker.weapon == IT2_MJOLNIR && !attacker.selfweaponismoditems)
+			|| attacker.tome_finished) {
 			float z_add = 150;
 			if (attacker.tome_finished) z_add = z_add * 2;
 			if (targ.mass == MASS_SUPER) z_add = z_add * 0.5;
@@ -723,7 +726,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			// Demon, Shambler, Shalrath and Wizard all have high flinch values
 			if (self.pain_flinch > 40) flinch = 40;
 			else flinch = self.pain_flinch + 1;
-			if (self.dmgcombined < flinch) { self = oldself; return;}
+			if (self.dmgcombined < flinch) { self = oldself; return; }
 		}
 
 		self.pain_finished = time + self.pain_timeout; // Block pain re-trigger event
@@ -775,7 +778,7 @@ float(entity targ, entity attacker, entity ignore, float checkclass) T_RadiusCan
 // attacker - (self.owner) = monster/player OR (self) = direct attack
 // ignore   - (other) = Original target OR (world) = no exceptions
 void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage = {
-	local float points;
+	local float points, range;
 	local entity head;
 	local vector org, imporg, dir;
 
@@ -788,11 +791,11 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 	head = findradius(imporg,damage+40);
 	points = damage;
 	while (head) {
-		if (T_RadiusCanDamage(head,attacker,ignore,checkclass)){
+		if (T_RadiusCanDamage(head,attacker,ignore,checkclass)) {
 			// This formula is using bounding box size which means the damage amount is lower if the monster is larger
 			// It should really be based on bounding box edge not monster origin
 			org = head.origin + (head.mins + head.maxs)*0.5;
-			points = 0.5*vlen (imporg - org);
+			points = 0.5 * vlen(imporg - org);
 			points = SUB_ClampFloat(points,0,points); // Only saturate negative.
 			points = damage - points;
 			if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
@@ -906,7 +909,7 @@ void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
 	if (targ == attacker) return;
 	if (targ.flags & FL_CLIENT) return;
 
-	sound(targ, CHAN_ITEM, "drake/weapons/freeze.wav", 1, ATTN_NORM);
+	sound(targ,CHAN_ITEM,"drake/weapons/freeze.wav",1,ATTN_NORM);
 	Particle_Cube(self, 1, 41);
     targ.oldenemy = attacker;
     targ.enemy = world;

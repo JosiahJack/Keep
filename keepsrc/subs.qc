@@ -39,7 +39,6 @@
 //=============================================================================
 
 void() SUB_CalcMoveDone;
-void(vector marker_org, float marker_type) spawn_marker;
 void(entity thekilled, entity attacker) AddToKills;
 void(entity targ) AddToTotals;
 void(string text, string noise, entity act) Mass_Centerprint;
@@ -431,7 +430,7 @@ void() play_teleport = { // [FUNCTION]
 	else if (self.lip < 3) self.noise = "misc/r_tele3.wav";
 	else if (self.lip < 4) self.noise = "misc/r_tele4.wav";
 	else self.noise = "misc/r_tele5.wav";
-	sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.nextthink = time + 2;	// Allow time for the sound to finish
 	self.think = SUB_Remove;	// tidy up function
 };
@@ -469,7 +468,7 @@ void() tdeath_touch = { // [FUNCTION]
 	}
 
 	// Sudden death incoming ...
-	if (other.health){
+	if (other.health) {
 		if (other.perms & POW_ARMORCHAOS) {
 			other.perms = other.perms - (other.perms & POW_ARMORCHAOS); // use it up
 			other.health = 1;

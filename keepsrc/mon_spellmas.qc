@@ -55,7 +55,7 @@ void(float dist) spell_ai = {
 
 void() spell_walk1 = [0, spell_walk2] {
 	self.effects = MSG_BROADCAST;
-	if (random() < 0.2) sound(self, CHAN_VOICE, "boss2/idle.wav", EQ_RANDOM, ATTN_IDLE);
+	if (random() < 0.2) sound(self,CHAN_VOICE, "boss2/idle.wav", EQ_RANDOM,ATTN_IDLE);
 	spell_ai(TE_LIGHTNING2);
 };
 void() spell_walk2 = [1, spell_walk3] { spell_ai(4); };
@@ -73,7 +73,7 @@ void() spell_run = { self.style = 3;spell_walk1(); };
 void() Spell_MissileTouch = {
 	local float damg;
 	if (other == self.owner) return;
-	if (pointcontents(self.origin) == CONTENT_SKY){ remove(self);return;}
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self);return; }
 	damg = 50 + random() * 20;
 	if (other.health) T_Damage(other, self, self.owner, damg,DAMARMOR);
 	T_RadiusDamage(self, self.owner, 120, other,DAMAGEALL);
@@ -85,7 +85,7 @@ void() Spell_MissileTouch = {
 void() Spell_launch_lava = {
 	local vector vec;
 
-	sound(self, CHAN_WEAPON, "shalrath/attack2.wav", EQ_RANDOM, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"shalrath/attack2.wav", EQ_RANDOM,ATTN_NORM);
 	vec = self.enemy.origin - self.origin;
 	vec = normalize(vec - '0 0 148');
 	newmis = spawn();
@@ -119,7 +119,7 @@ void() Spell_push = {
 	delta = self.enemy.origin - self.origin;
 	ldmg = random() * 25;
 	T_Damage(self.enemy, self, self, ldmg,DAMARMOR);
-	sound(self, CHAN_WEAPON, "wizard/wsight.wav", EQ_RANDOM, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"wizard/wsight.wav", EQ_RANDOM,ATTN_NORM);
 	self.enemy.flags = self.enemy.flags - (self.enemy.flags & FL_ONGROUND);
 	self.enemy.velocity = delta * TE_LAVASPLASH;
 	self.enemy.velocity_z = 100;
@@ -166,7 +166,7 @@ void() spell_death2 = [30, spell_death3] {};
 void() spell_death3 = [31, spell_death4] {};
 void() spell_death4 = [32, spell_death5] {};
 void() spell_death5 = [33, spell_death6] {};
-void() spell_death6 = [34, spell_death7] { self.solid = SOLID_NOT;};
+void() spell_death6 = [34, spell_death7] { self.solid = SOLID_NOT; };
 void() spell_death7 = [35, spell_death8] {};
 void() spell_death8 = [36, spell_death9] {};
 void() spell_death9 = [37, spell_death10] {};
@@ -191,7 +191,7 @@ void() spell_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "blob/death1.wav",1,ATTN_NORM);
 		spell_death1();
 	}
 };

@@ -298,7 +298,7 @@ void() func_togglewall_touch = { // [FUNCTION]
 	if (other.takedamage == DAMAGE_NO) return;
 
 	self.attack_finished = (time + self.wait);
-	sound(other, CHAN_ITEM, self.noise2, self.volume, ATTN_NORM);
+	sound(other,CHAN_ITEM,self.noise2, self.volume,ATTN_NORM);
 	if (self.dmg > 0) T_Damage(other, self, self, self.dmg, DAMARMOR);
 };
 
@@ -316,7 +316,7 @@ void() func_togglewall_on = { // [FUNCTION]
 	self.solid = SOLID_BSP;
 	setmodel(self, self.mdl);
 	self.model = ""; // Make bmodel surface invisible
-	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM);
 };
 
 void() func_togglewall_off = { // [FUNCTION]
@@ -324,7 +324,7 @@ void() func_togglewall_off = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	setmodel(self, "");
-	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 };
 
 // QUAKED func_togglewall (0 .5 .8) ? STARTOFF x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
@@ -387,7 +387,7 @@ void() func_episodegate_touch = { // [FUNCTION]
 	// Got a message to display with bmodel on?
 	if (self.message != "") {
 		centerprint(other, self.message);
-		sound(other, CHAN_AUTO, self.noise, 1, ATTN_NORM); // Uses default talktalk sound
+		sound(other,CHAN_AUTO,self.noise,1,ATTN_NORM); // Uses default talktalk sound
 		self.attack_finished = time + 2; // Slowdown touch functionality
 	}
 };
@@ -506,7 +506,7 @@ void() func_laser_on = { // [FUNCTION]
 
 	// Only play the ON sound and display message when not spawning
 	if (self.waitmin == TRUE) {
-		if (self.sound_emitter && self.noise1 != "") sound(self.sound_emitter, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play sound on extra emitter if sounds been defined
+		if (self.sound_emitter && self.noise1 != "") sound(self.sound_emitter,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Play sound on extra emitter if sounds been defined
 		if (activator.flags & FL_CLIENT && self.message != "") centerprint(activator,self.message);
 		if (self.wait == TRUE) self.message = "";
 	} else self.waitmin = TRUE;
@@ -533,7 +533,7 @@ void() func_laser_on = { // [FUNCTION]
 void() func_laser_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF; // Switch laser to active
 	if (self.waitmin == TRUE) { // Only play the OFF sound and display message when not spawning
-		if (self.sound_emitter && self.noise2 != "") sound(self.sound_emitter, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play sound on extra emitter if sounds been defined
+		if (self.sound_emitter && self.noise2 != "") sound(self.sound_emitter,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM); // Play sound on extra emitter if sounds been defined
 		if (activator.flags & FL_CLIENT && self.message2 != "") centerprint(activator,self.message2);
 		if (self.wait == TRUE) self.message2 = "";
 	} else self.waitmin = TRUE;
@@ -672,7 +672,7 @@ void() func_chaos_touch = { // [FUNCTION]
 
 	func_chaos_check(); // Force quick update
 	if (self.target2 != "") trigger_strs(self.target2, other); // Any other targets to fire when touch/damaged
-	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Play touch sound regardless of chaos change
+	sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM); // Play touch sound regardless of chaos change
 };
 
 void() func_skill_check = { // [FUNCTION]
@@ -724,7 +724,7 @@ void() func_skill_touch = { // [FUNCTION]
 	
 	// Play touch sound regardless of skill change
 	if (self.pausetime < time) {
-		sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM);
 		self.pausetime = time + 1;	// No constant sound
 	}	
 };
@@ -746,7 +746,7 @@ void() func_skill_on = { // [FUNCTION]
 };
 
 void() func_skill_finishmove = { // [FUNCTION]
-	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Stop sound, ON and particles!
+	sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Stop sound, ON and particles!
 	self.ltime = time; // Need to reset local entity time, otherwise timer is broken it because of the SUB_CalcMove function changes it.
 	self.estate_on();
 };
@@ -755,7 +755,7 @@ void() func_skill_startmove = { // [FUNCTION]
 	self.estate_use = SUB_Null; // Trigger once functionality
 	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // Remove any start off / disable spawnflags
 	self.spawnflags = self.spawnflags - (self.spawnflags & FUNC_SKILLSTARTDIS);
-	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM); // Play movement sound and move pillar into place
+	sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM); // Play movement sound and move pillar into place
 	SUB_CalcMove (self.pos2, self.speed, func_skill_finishmove);
 };
 

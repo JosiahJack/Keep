@@ -171,7 +171,7 @@ void() skullw_tfin1 = [$tele9, skullw_tfin2 ] {
 	// Always phase in facing the enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	self.angles_y = self.ideal_yaw;
-	sound(self, CHAN_AUTO, "ad171/skullwiz/blinkin.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"ad171/skullwiz/blinkin.wav",1,ATTN_NORM);
 };
 void() skullw_tfin2 = [$tele7, skullw_tfin3 ] { ai_face(); };
 void() skullw_tfin3 = [$tele5, skullw_tfin4 ] { ai_face(); };
@@ -303,8 +303,8 @@ void() skullw_checkblinklist = {
 // touch book and phase out
 void() skullw_tele1	= [$spellB3,	skullw_tele2    ] {
 	self.pain_finished = time + 1;				// no pain during teleportation
-	if (random() < 0.5) sound(self, CHAN_VOICE, "ad171/skullwiz/blinkspk1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "ad171/skullwiz/blinkspk2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_VOICE, "ad171/skullwiz/blinkspk1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "ad171/skullwiz/blinkspk2.wav",1,ATTN_NORM);
 };
 void() skullw_tele2	= [$spellB5,	skullw_tele3 ] {};
 void() skullw_tele3	= [$spellB7,	skullw_tele4 ] {};
@@ -315,7 +315,7 @@ void() skullw_tele8	= [$tele1,		skullw_tele9 ] {
 	self.solid = SOLID_NOT;
 	self.bodyphased = MONAI_SKULLWINVIS;
 	particle_explode(self.origin, 100, 1, self.part_style, PARTICLE_BURST_SKULLUP);
-	sound(self, CHAN_VOICE, "ad171/skullwiz/blinkout.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ad171/skullwiz/blinkout.wav",1,ATTN_NORM);
 };
 void() skullw_tele9	= [$tele3,	skullw_tele10 ] {};
 void() skullw_tele10= [$tele5,	skullw_tele11 ] {};
@@ -335,8 +335,8 @@ void(vector orgofs) skullw_fire = {
 
 	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/skullwiz/skull1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "ad171/skullwiz/skull2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_WEAPON,"ad171/skullwiz/skull1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"ad171/skullwiz/skull2.wav",1,ATTN_NORM);
 
 	makevectors(self.angles);
 	org = self.origin + attack_vector(orgofs);
@@ -347,7 +347,7 @@ void(vector orgofs) skullw_fire = {
 };
 
 void() skullw_attack1	= [	$spellA3,	skullw_attack2    ] {
-sound(self, CHAN_VOICE, "ad171/skullwiz/attack.wav", 1, ATTN_NORM); };
+sound(self,CHAN_VOICE, "ad171/skullwiz/attack.wav",1,ATTN_NORM); };
 void() skullw_attack2	= [	$spellA5,	skullw_attack3	] { ai_face(); };
 void() skullw_attack3	= [	$spellA7,	skullw_attack4	] { ai_face(); };
 void() skullw_attack4	= [	$spellA10,	skullw_attack5	] { ai_face(); };
@@ -386,7 +386,7 @@ void() skullw_guardian = {
 	// Remove projectile
 	entity_remove(self, 1);
 	// Play explosion sound
-	sound(self, CHAN_WEAPON, "quoth/dguard/hit.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"quoth/dguard/hit.wav",1,ATTN_NORM);
 	
 	// Apply any direct damage and poison effect
 	if (other.takedamage) {
@@ -492,12 +492,12 @@ void(vector orgofs, float dbframe) skullw_sumball = {
 // Block monster pain function so that the summons is completed
 //----------------------------------------------------------------------
 void() skullw_summon1 = [$summon1, skullw_summon2 ] {
-	ai_face(); self.pain_finished = time + 2;};
+	ai_face(); self.pain_finished = time + 2; };
 void() skullw_summon2 = [$summon3, skullw_summon3 ] {
 	ai_face();skullw_sumball('22 -2 6',0); };
 void() skullw_summon3 = [$summon5, skullw_summon4 ] {
 	ai_face(); skullw_sumball('23 -3 7',1);
-	sound(self, CHAN_BODY, "ad171/skullwiz/summon.wav", 1, ATTN_NORM);
+	sound(self,CHAN_BODY,"ad171/skullwiz/summon.wav",1,ATTN_NORM);
 	/* The touch trigger is created early (4 frames) so its gets
 	// a chance for a client to touch its bounding box
 	// This is a giant trigger area to catch speedy players
@@ -655,8 +655,8 @@ void(entity inflictor, entity attacker, float damage) skullw_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			if (random() < 0.85) skullw_painA1();	// classic, body recoil
 			else skullw_painB1();					// Really long version
@@ -666,7 +666,7 @@ void(entity inflictor, entity attacker, float damage) skullw_pain = {
 
 
 void() skullw_fadeaway = {
-	//	sound(self, CHAN_BODY, "ad171/skullwiz/fadeaway.wav", 1, ATTN_NORM);
+	//	sound(self,CHAN_BODY,"ad171/skullwiz/fadeaway.wav",1,ATTN_NORM);
 	// Particle burst upwards as robes fade away
 	//particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);	//ijed: why call attention to a post-post death sequence?
 	self.think = model_fade;
@@ -684,7 +684,7 @@ void() skullw_explode = {
 
 void()	skullw_death1	= [	$death2,	skullw_death2	] { ai_face(); };
 void()	skullw_death2	= [	$death3,	skullw_death3	] { ai_face(); };
-void()	skullw_death3	= [	$death4,	skullw_death4	] { ai_face(); self.solid = SOLID_NOT;};
+void()	skullw_death3	= [	$death4,	skullw_death4	] { ai_face(); self.solid = SOLID_NOT; };
 void()	skullw_death4	= [	$death5,	skullw_death5	] { ai_face(); };
 void()	skullw_death5	= [	$death6,	skullw_death6	] { skullw_explode(); };
 void()	skullw_death6	= [	$death7,	skullw_death7	] {};
@@ -702,7 +702,7 @@ void()	skullw_death14	= [	$death15,	skullw_death14] {
 };
 
 void() skullw_die = {
-	sound(self, CHAN_VOICE, "ad171/skullwiz/death.wav", 1, ATTN_NORM); // Play fade away/death sound
+	sound(self,CHAN_VOICE, "ad171/skullwiz/death.wav",1,ATTN_NORM); // Play fade away/death sound
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	skullw_remove_attachment();
 

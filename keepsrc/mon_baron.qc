@@ -53,11 +53,11 @@ float() baron_sword_drawn = {
 };
 
 // PM:  Unsheath sound is loud, so keep the volume down.
-void() baron_draw_sound = { sound(self, CHAN_WEAPON, "drake/weapons/unsheath.wav", 0.5, ATTN_IDLE); };
+void() baron_draw_sound = { sound(self,CHAN_WEAPON,"drake/weapons/unsheath.wav", 0.5,ATTN_IDLE); };
 
 void() baron_idle1  = [$draw5,  baron_idle2  ] { ai_stand(); };
 void() baron_idle2  = [$draw4,  baron_idle3  ] { ai_stand(); };
-void() baron_idle3  = [$draw3,  baron_idle4  ] { sound(self, CHAN_WEAPON, "drake/weapons/sheath.wav", 0.5, ATTN_IDLE); ai_stand(); };
+void() baron_idle3  = [$draw3,  baron_idle4  ] { sound(self,CHAN_WEAPON,"drake/weapons/sheath.wav", 0.5,ATTN_IDLE); ai_stand(); };
 void() baron_idle4  = [$draw2,  baron_idle5  ] { ai_stand(); };
 void() baron_idle5  = [$draw1,  baron_idle6  ] { ai_stand(); };
 void() baron_idle6  = [$idle1,  baron_idle7  ] { ai_stand(); };
@@ -154,7 +154,7 @@ void() baron_win = {
         r = random();
         if (r >= 0.3) {
             if (r < 0.6) {
-				sound(self, CHAN_VOICE, "nehahra/baron/idle.wav", 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, "nehahra/baron/idle.wav",1,ATTN_NORM);
                 self.walkframe = 5;
                 baron_look6();
             } else {
@@ -209,12 +209,12 @@ void() baron_skip2  = [$blam4,  baron_blam10 ] { ai_charge(6); };
 
 // Update:  Nehahra used ai_charge(3).  My guess of 2 was close, but wrong.
 void() baron_blam1  = [$blam1,  baron_blam2  ] { ai_charge(3); };
-void() baron_blam2  = [$blam2,  baron_blam3  ] { ai_charge(3); if (self.level) self.think = baron_skip1;};
+void() baron_blam2  = [$blam2,  baron_blam3  ] { ai_charge(3); if (self.level) self.think = baron_skip1; };
 void() baron_blam3  = [$blam3,  baron_blam4  ] { ai_charge(3); };
 void() baron_blam4  = [$blam4,  baron_blam5  ] { ai_charge(3); };
 void() baron_blam5  = [$blam5,  baron_blam6  ] { ai_charge(3); baron_sword(); };
 void() baron_blam6  = [$blam6,  baron_blam7  ] { ai_charge(3); baron_sword(); };
-void() baron_blam7  = [$blam5,  baron_blam8  ] { ai_charge(3); if (self.level) self.think = baron_skip2;};
+void() baron_blam7  = [$blam5,  baron_blam8  ] { ai_charge(3); if (self.level) self.think = baron_skip2; };
 void() baron_blam8  = [$blam4,  baron_blam9  ] { ai_charge(3); };
 void() baron_blam9  = [$blam3,  baron_blam10 ] { ai_charge(3); };
 void() baron_blam10 = [$blam2,  baron_blam11 ] { ai_charge(3); baron_sword(); };
@@ -255,7 +255,7 @@ void() baron_fist = {
         if (!self.level) self.think = baron_throw1; // Bosses won't dally around.  Unlike Nehahra, do extended anim only on a hit.
     }
 
-    sound(self, CHAN_WEAPON, "nehahra/baron/smash.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"nehahra/baron/smash.wav",1,ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
 	SpawnMeatSpray(self, self.enemy,crandom() * 150);
 	SpawnMeatSpray(self, self.enemy,crandom() * 150);
@@ -303,7 +303,7 @@ void() baron_melee = {
         else self.think = baron_blam1;
 	}
 
-    sound(self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"nehahra/baron/woosh.wav",1,ATTN_NORM);
     self.think();
 };
 
@@ -321,7 +321,7 @@ void() Baron_Ice = {
     local vector org, dir, err, base;
     local float loop;
 
-    sound(self, CHAN_WEAPON, "drake/imp/shard.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/imp/shard.wav",1,ATTN_NORM);
     err = '6 4.5 0';     // arctan(err) = '0.105 0.0787 0'.
     loop = random() * 3 + 6;
     base = self.enemy.origin;
@@ -379,7 +379,7 @@ void() Baron_Earth = {
     local vector org, dir, err, base;
     local float loop;
 
-    sound(self, CHAN_WEAPON, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/misc/wallbrk.wav",1,ATTN_NORM);
     err = '6 6 0';
     loop = random() * 3 + 5;
     base = self.enemy.origin;
@@ -406,7 +406,7 @@ void() Geyser_Erupt = {
     setorigin(self, org);
 
     T_RadiusDamage (self, self.owner, 60, world, DAMAGEALL);
-    sound(self, CHAN_WEAPON, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/misc/wallbrk.wav",1,ATTN_NORM);
 	ShockWave (self.origin, RING_QUAKE, 5, "progs/drake/s_wave.spr",FALSE);
 
 	// Do rock spray from below.
@@ -541,7 +541,7 @@ void() baron_slam = {
     traceline (org, org - '0 0 42', TRUE, self);
     org2 = trace_endpos;
     if ((trace_fraction < 1) || (pointcontents(org2) == CONTENT_SOLID)) {
-        sound(self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/weapons/fwalltap.wav",1,ATTN_NORM);
         if (self.level == BARON_FIRE) {
 			ShockWave(org2 + '0 0 4', RING_FIRE, 2, "progs/drake/s_wave.spr",TRUE);
             self.effects = self.effects | EF_MUZZLEFLASH;
@@ -566,7 +566,7 @@ void() baron_slam = {
     }
 };
 
-void() baron_slam1  = [$smack1,  baron_slam2  ] { sound(self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin;};
+void() baron_slam1  = [$smack1,  baron_slam2  ] { sound(self,CHAN_WEAPON,"nehahra/baron/woosh.wav",1,ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin; };
 void() baron_slam2  = [$smack2,  baron_slam3  ] { ai_charge(2); };
 void() baron_slam3  = [$smack3,  baron_slam4  ] { ai_charge(2); };
 void() baron_slam4  = [$smack4,  baron_slam5  ] { ai_charge(2); };
@@ -579,10 +579,10 @@ void() baron_slam10 = [$smack10, baron_slam11 ] { ai_charge(2); };
 void() baron_slam11 = [$smack11, baron_slam12 ] { ai_charge(2); };
 void() baron_slam12 = [$smack12, baron_run    ] { ai_charge(2); };
 
-void() baron_cast1  = [$magica7,  baron_cast2  ] { sound(self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM); ai_face(); self.dest = self.enemy.origin;};
-void() baron_cast2  = [$magica6,  baron_cast3  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
-void() baron_cast3  = [$magica5,  baron_cast4  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
-void() baron_cast4  = [$magica4,  baron_cast5  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
+void() baron_cast1  = [$magica7,  baron_cast2  ] { sound(self,CHAN_WEAPON,"nehahra/baron/woosh.wav",1,ATTN_NORM); ai_face(); self.dest = self.enemy.origin; };
+void() baron_cast2  = [$magica6,  baron_cast3  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2; };
+void() baron_cast3  = [$magica5,  baron_cast4  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2; };
+void() baron_cast4  = [$magica4,  baron_cast5  ] { ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2; };
 void() baron_cast5  = [$magica3,  baron_cast6  ] { ai_face();
     if (self.level == BARON_WATER) RainStorm();
     else if (self.level == BARON_FIRE) BaronFireworks();
@@ -614,7 +614,7 @@ void() baron_point1  = [$point1,  baron_point2  ] { ai_face();
 void() baron_point2  = [$point2,  baron_point3  ] { ai_face(); };
 void() baron_point3  = [$point3,  baron_point4  ] { ai_face(); };
 void() baron_point4  = [$point4,  baron_point5  ] { ai_face(); };
-void() baron_point5  = [$point5,  baron_point6  ] { ai_face(); if (self.level == BARON_AIR) sound(self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM); };
+void() baron_point5  = [$point5,  baron_point6  ] { ai_face(); if (self.level == BARON_AIR) sound(self,CHAN_WEAPON,"rogue/plasma/fire.wav",1,ATTN_NORM); };
 void() baron_point6  = [$point6,  baron_point7  ] { ai_face();
     if (self.level == BARON_EARTH)
         Baron_Earth();  //'16 2 20');
@@ -661,7 +661,7 @@ void(float offset) baron_shot = {
     if (self.level == BARON_EARTH) {
         launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
         // Old damage was 15, but use superspike's 18.
-        sound(self, CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
+        sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
     } else if (self.level == BARON_WATER) {
         Baron_Ice_Launch(org,vec,600);
         sound(self,CHAN_WEAPON,"drake/baron/icefire.wav",1,ATTN_NORM);
@@ -714,13 +714,13 @@ void() baron_magic = {
             if (!super_active)
                 if (self.waitmax < time)    // Don't combo from gust.
                     if (random() < 0.5) //0.33)
-                        { baron_slam1();  return;}
+                        { baron_slam1();  return; }
 
             if (self.waitmax < time)
                 if (UpIsSky (self.enemy.origin,self.enemy))
                     opt = opt + 1;
             if (self.waterlevel < 2)
-                { add = 0;  opt = opt + 1;  yes = 1;}
+                { add = 0;  opt = opt + 1;  yes = 1; }
 
             r = random() * opt + add;
             if ((r <= 1) && yes)
@@ -751,7 +751,7 @@ void() baron_magic = {
             if (self.waitmax < time) {
                 if (!super_active)
                     if (random() < 0.5) //0.33)
-                        if ((self.level != BARON_EARTH) || BaronGolem_Check ()) { baron_cast1();  return;}
+                        if ((self.level != BARON_EARTH) || BaronGolem_Check ()) { baron_cast1();  return; }
                 if (self.level == BARON_EARTH) {
                     if (QuakeHurts(self.enemy)) opt = opt + 1; // Enemy hurt by quake?
                 } else {
@@ -786,7 +786,7 @@ void() baron_magic = {
 // sequence as a bit different than Nehahra.
 void() baron_jumptouch;
 
-void() baron_jump1  = [$jump6,  baron_jump2  ] { ai_face(); self.waitmin = 5;};
+void() baron_jump1  = [$jump6,  baron_jump2  ] { ai_face(); self.waitmin = 5; };
 void() baron_jump2  = [$jump5,  baron_jump3  ] { ai_face(); };
 void() baron_jump3  = [$jump4,  baron_jump4  ] {
     ai_face();
@@ -821,8 +821,8 @@ void() baron_jump4  = [$jump3,  baron_jump5  ] {
     self.flags = self.flags - (self.flags & FL_ONGROUND);
     self.nextthink = time + 0.2;
 };
-void() baron_jump5  = [$jump2,  baron_jump6  ] { self.nextthink = time + 0.2;};
-void() baron_jump6  = [$jump1,  baron_jump7  ] { self.nextthink = time + 3;};
+void() baron_jump5  = [$jump2,  baron_jump6  ] { self.nextthink = time + 0.2; };
+void() baron_jump6  = [$jump1,  baron_jump7  ] { self.nextthink = time + 3; };
 void() baron_jump7  = [$jump4,  baron_jump4  ] {};
 
 void() baron_land1  = [$jump4,  baron_land2  ] {};
@@ -840,7 +840,7 @@ void() baron_jumptouch = {
     if (self.health <= 0) return;
 
 	// PM:  Check for leaping slash attack.
-    if ( self.frame != $blam6 )
+    if (self.frame != $blam6 )
     if (other)
     if (other == self.enemy) { // Hurt only the intended target.
         if ( vlen(self.velocity) > 300 ) {
@@ -855,14 +855,14 @@ void() baron_jumptouch = {
             T_Damage (other, self, self, ldmg,DAMARMOR);
             if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
 
-            if (( self.frame == $jump2 ) || ( self.frame == $jump3 )) {   // Got an early hit.
+            if ((self.frame == $jump2 ) || (self.frame == $jump3 )) {   // Got an early hit.
                 self.nextthink = time + 3;
                 self.think = baron_jump7;
             }
             SpawnMeatSpray(self, self.enemy,crandom() * 150); // Throw 2 pieces of meat.
 			SpawnMeatSpray(self, self.enemy,crandom() * 150);
             self.frame = $blam6;  // Go to a stab frame.
-            sound(self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
+            sound(self,CHAN_WEAPON,"drake/weapons/axhit.wav",1,ATTN_NORM);
         }
     }
 
@@ -878,7 +878,7 @@ void() baron_jumptouch = {
     }
 
     self.touch = SUB_Null;
-    if ( self.frame == $blam6 ) {   // We smacked the target with the leaping slash.
+    if (self.frame == $blam6 ) {   // We smacked the target with the leaping slash.
         self.state = TRUE;      // Follow up with fist smash.
         self.think = baron_blam7;
     } else {
@@ -887,7 +887,7 @@ void() baron_jumptouch = {
         if (self.enemy)
         if (CanDamage (self.enemy, self))
         if (InMeleeRange (100)) {
-            sound(self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM);
+            sound(self,CHAN_WEAPON,"nehahra/baron/woosh.wav",1,ATTN_NORM);
             self.state = TRUE;
             self.think = baron_blam6;
         }
@@ -921,7 +921,7 @@ void() baron_missile = {
     if (!(self.spawnflags & BSF_NO_JUMP))
         if (range(self.enemy) != RANGE_MELEE)   // range check not in Nehahra.
             if (random() < 0.3)     // Me: 0.2, Nehahra/Rapture: 0.3.
-                if (baron_tracejump (self.angles, 400, '0 0 300')) { baron_jump1();  return;}
+                if (baron_tracejump (self.angles, 400, '0 0 300')) { baron_jump1();  return; }
 
     baron_magic();
 };
@@ -940,7 +940,7 @@ void(entity inflictor, entity attacker, float damage) baron_pain = {
         return;
 
     self.pain_finished = time + 1;
-    sound(self, CHAN_VOICE, "nehahra/baron/bpain1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "nehahra/baron/bpain1.wav",1,ATTN_NORM);
     if (self.touch == baron_jumptouch)
         return;     // can't flinch while jumping
     if ((random() * 30) > damage)   // Me: 40, Neh: 30.  I'll go 30.
@@ -960,7 +960,7 @@ void() baron_diea1  = [$diea1,  baron_diea2  ] {
 	self.reviveframestart = $diea6;
 	self.reviveframeend = $diea1;
 };
-void() baron_diea2  = [$diea2,  baron_diea3  ] { ai_forward(2); monster_check_gib(); self.solid = SOLID_NOT;};
+void() baron_diea2  = [$diea2,  baron_diea3  ] { ai_forward(2); monster_check_gib(); self.solid = SOLID_NOT; };
 void() baron_diea3  = [$diea3,  baron_diea4  ] { ai_back(2); monster_check_gib(); };
 void() baron_diea4  = [$diea4,  baron_diea5  ] { ai_back(6); };
 void() baron_diea5  = [$diea5,  baron_diea6  ] { ai_back(2); monster_death_postcheck(); };
@@ -970,7 +970,7 @@ void() baron_dieb1  = [$dieb1,  baron_dieb2  ] {
 	self.reviveframestart = $dieb6;
 	self.reviveframeend = $dieb1;
 };
-void() baron_dieb2  = [$dieb2,  baron_dieb3  ] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() baron_dieb2  = [$dieb2,  baron_dieb3  ] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() baron_dieb3  = [$dieb3,  baron_dieb4  ] { ai_forward(7); monster_check_gib(); };
 void() baron_dieb4  = [$dieb4,  baron_dieb5  ] {};
 void() baron_dieb5  = [$dieb5,  baron_dieb6  ] { ai_forward(20); monster_death_postcheck(); };
@@ -981,7 +981,7 @@ void() baron_die = {
 
     // regular death
     if (!self.gibbed) {
-        sound(self, CHAN_VOICE, "drake/baron/death.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "drake/baron/death.wav",1,ATTN_NORM);
         if (random() < 0.5)     // Nehahra uses 0.3.
             baron_diea1();
         else

@@ -131,7 +131,7 @@ void() mino_run = {
 };
 
 // Short howl animation to switch to rage mode
-void() mino_howl1 = [$howl1, mino_howl2 ] { sound(self, CHAN_WEAPON, "kinn/shuffler/big1.wav", 1, ATTN_NORM); };
+void() mino_howl1 = [$howl1, mino_howl2 ] { sound(self,CHAN_WEAPON,"kinn/shuffler/big1.wav",1,ATTN_NORM); };
 void() mino_howl2 = [$howl3, mino_howl3 ] {};
 void() mino_howl3 = [$howl5, mino_howl4 ] {};
 void() mino_howl4 = [$howl7, mino_howl5 ] {};
@@ -155,11 +155,11 @@ void(float side) mino_claw = {
 
 	if (!ai_checkmelee(MONAI_MELEEMINOTAUR,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		sound(self, CHAN_WEAPON, "ad171/minotaur/swipe.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/minotaur/swipe.wav",1,ATTN_NORM);
 	} else {
 		// Melee claw hit sound
-		if (self.lefty) sound(self, CHAN_WEAPON, "ad171/minotaur/strike1.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_WEAPON, "ad171/minotaur/strike2.wav", 1, ATTN_NORM);
+		if (self.lefty) sound(self,CHAN_WEAPON,"ad171/minotaur/strike1.wav",1,ATTN_NORM);
+		else sound(self,CHAN_WEAPON,"ad171/minotaur/strike2.wav",1,ATTN_NORM);
 		self.lefty = 1 - self.lefty;
 		ldmg = 12 + 6*random();
 		// Rage attack is once per animation frame, more deadly
@@ -257,7 +257,7 @@ void() mino_gore2 = [$gore4, mino_gore3 ] { ai_charge(28);monster_footstep(FALSE
 void() mino_gore3 = [$gore6, mino_gore4 ] { ai_charge(26);mino_claw(-250); };
 void() mino_gore4 = [$gore8, mino_gore5 ] { ai_charge(34); };
 void() mino_gore5 = [$gore10, mino_gore6 ] { ai_charge(28);monster_footstep(FALSE); };
-void() mino_gore6 = [$gore12, mino_run ] { ai_charge(26); if (self.spawnflags & 2) { ShufflerCheckForSlap(0); self.nextthink = time + 0.05;} };
+void() mino_gore6 = [$gore12, mino_run ] { ai_charge(26); if (self.spawnflags & 2) { ShufflerCheckForSlap(0); self.nextthink = time + 0.05; } };
 
 void() mino_melee = {
 	if (self.attack_rage) mino_gore1(); // Switch to a faster more deadly melee attack if in rage mode
@@ -307,8 +307,8 @@ void() mino_JumpTouch = {
 void() mino_jump1 = [$jump1, mino_jump2 ] {
 	self.jump_flag = time + MONAI_JUMPMINOTIME;
 	// Use combat idle grunt sounds (can get annoying otherwise)
-	if (random() < 0.5) sound(self, CHAN_VOICE, self.idle_soundcom, 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, self.idle_soundcom2, 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_VOICE, self.idle_soundcom,1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, self.idle_soundcom2,1,ATTN_NORM);
 };
 void() mino_jump2 = [$jump3, mino_jump3 ] { ai_face(); };
 void() mino_jump3 = [$jump5, mino_jump4 ] { ai_face(); };
@@ -466,7 +466,7 @@ void(vector orgofs, float angofs) minotaur_fire = {
 
 // Main projectile plasma/poison attack of both types of minotaur
 void() mino_magic1 = [$magic1, mino_magic2 ] { ai_face();
-	if (random() < 3) sound(self, CHAN_BODY, "ad171/minotaur/attack1start.wav", 1, ATTN_NORM); };
+	if (random() < 3) sound(self,CHAN_BODY,"ad171/minotaur/attack1start.wav",1,ATTN_NORM); };
 void() mino_magic2 = [$magic3, mino_magic3 ] { minotaur_hands('34 0 44','-20 30 20',0); };
 void() mino_magic3 = [$magic5, mino_magic4 ] { minotaur_hands('30 -12 64','-20 44 28',1); };
 void() mino_magic4 = [$magic7, mino_magic5 ] { minotaur_hands('15 -16 88','-10 56 48',2); };
@@ -475,7 +475,7 @@ void() mino_magic6 = [$magic11, mino_magic7 ] { minotaur_hands('16 -36 72','-12 
 void() mino_magic7 = [$magic13, mino_magic8 ] { minotaur_hands('36 -20 56','24 32 68',5); };
 
 void() mino_magic8 = [$magic15, mino_magic9 ] {
-	sound(self, CHAN_WEAPON, "kinn/shuffler/fireblt.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"kinn/shuffler/fireblt.wav",1,ATTN_NORM);
 	minotaur_hands('40 -3 46','40 1 44',6);minotaur_fire('40 0 45',-2); };
 void() mino_magic9 = [$magic17, mino_magic10 ] { ai_back(8);
 	minotaur_hands('32 -2 44','32 2 44',5);minotaur_fire('32 0 44',-1); };
@@ -496,7 +496,7 @@ void() mino_magic13 = [$magic25, mino_magic14 ] {
 	// Spawn a mist of blue/green particles where projectiles came from
 	particle_explode(self.finalangle, 50, 3, self.part_style, PARTICLE_BURST_MINOTAUR);
 	// Random chance of final growl at player
-	if (random() < 0.3) sound(self, CHAN_BODY, "ad171/minotaur/attack1end.wav", 1, ATTN_NORM);
+	if (random() < 0.3) sound(self,CHAN_BODY,"ad171/minotaur/attack1end.wav",1,ATTN_NORM);
 };
 void() mino_magic14 = [$magic27, mino_magic15 ] {};
 void() mino_magic15 = [$magic29, mino_magic16 ] { ai_face(); };
@@ -532,9 +532,9 @@ void(float dbframe) mino_sumball = {
 // Raise up head and howl at the sky and spawn green particles from body
 // Always check if there is space to spawn a gargoyle first
 // Block monster pain function so that the summons is completed
-void() mino_summon1 = [$howl1, mino_summon2 ] { ai_face(); self.pain_finished = time + 2;};
+void() mino_summon1 = [$howl1, mino_summon2 ] { ai_face(); self.pain_finished = time + 2; };
 void() mino_summon2 = [$howl3, mino_summon3 ] { ai_face(); };
-void() mino_summon3 = [$howl5, mino_summon4 ] { ai_face();mino_sumeffect();sound(self, CHAN_BODY, "kinn/shuffler/big1.wav", 1, ATTN_NORM); };
+void() mino_summon3 = [$howl5, mino_summon4 ] { ai_face();mino_sumeffect();sound(self,CHAN_BODY,"kinn/shuffler/big1.wav",1,ATTN_NORM); };
 void() mino_summon4 = [$howl7, mino_summon5 ] { mino_sumeffect(); };
 void() mino_summon5 = [$howl9, mino_summon6 ] { mino_sumeffect(); };
 void() mino_summon6 = [$howl11, mino_summon7 ] { mino_sumeffect(); };
@@ -623,7 +623,7 @@ void() mino_pain8 = [$pain8, mino_run ] {};
 
 // (141) Stationary - shake head/arms
 // Block the pain and then start charging like crazy
-void() mino_shake1 = [$shake1, mino_shake2 ] { self.pain_finished = time + 2;};
+void() mino_shake1 = [$shake1, mino_shake2 ] { self.pain_finished = time + 2; };
 void() mino_shake2 = [$shake3, mino_shake3 ] {};
 void() mino_shake3 = [$shake5, mino_shake4 ] {};
 void() mino_shake4 = [$shake7, mino_shake5 ] {};
@@ -646,8 +646,8 @@ void(entity inflictor, entity attacker, float damage) mino_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 
 		if (self.pain_check == 1) {
 			// Minion spawning minotaur always goes short pain cycle
@@ -670,7 +670,7 @@ void(entity inflictor, entity attacker, float damage) mino_pain = {
 void() mino_death1 = [$death1, mino_death2 ] {};
 void() mino_death2 = [$death3, mino_death3 ] { ai_forward(2);monster_check_gib(); };
 void() mino_death3 = [$death5, mino_death4 ] { ai_forward(4);monster_check_gib();
-self.solid = SOLID_NOT;};
+self.solid = SOLID_NOT; };
 void() mino_death4 = [$death7, mino_death5 ] { ai_forward(8); };
 void() mino_death5 = [$death9, mino_death6 ] { ai_forward(10); };
 void() mino_death6 = [$death11, mino_death7 ] { ai_forward(11); };
@@ -691,7 +691,7 @@ void() mino_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "kinn/shuffler/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "kinn/shuffler/death.wav",1,ATTN_NORM);
 		mino_death1();
 	}
 };

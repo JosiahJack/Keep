@@ -66,11 +66,11 @@ void() rebel_fire = { // [FUNCTION]
     org = self.origin + dir;
     dir = self.enemy.origin + dir;
     dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,self.enemy,'0 0 0',1);
-    sound(self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/archer/arrowr.wav",1,ATTN_NORM);
     AkArrow_Launch (org, dir, 0);
 };
 
-void() rebel_atk1  = [$attack1,  rebel_atk2  ] { ai_face(); self.shots_left = 2;}; // [FUNCTION]
+void() rebel_atk1  = [$attack1,  rebel_atk2  ] { ai_face(); self.shots_left = 2; }; // [FUNCTION]
 void() rebel_atk2  = [$attack2,  rebel_atk3  ] { ai_face(); }; // [FUNCTION]
 void() rebel_atk3  = [$attack3,  rebel_atk4  ] { ai_face(); }; // [FUNCTION]
 void() rebel_atk4  = [$attack4,  rebel_atk6  ] { ai_face(); }; // [FUNCTION]

@@ -59,19 +59,19 @@ void() RyanscissorhandsChecks = //called to ensure that the proper player model 
 void(float projectileNumber) SwordMagic;
 void(float attackNumber) SwordSwing;
 
-void() sword1Attack1 = [32, sword1Attack2] { self.weaponframe = 1;};
-void() sword1Attack2 = [33, sword1Attack3] { self.weaponframe = 2;};
+void() sword1Attack1 = [32, sword1Attack2] { self.weaponframe = 1; };
+void() sword1Attack2 = [33, sword1Attack3] { self.weaponframe = 2; };
 void() sword1Attack3 = [34, sword1Attack4]
 {
 	self.weaponframe = 3;SwordSwing(1);
 	if (self.tome_finished) //Tome of Power:every attack launches a fire projectile. #tomeflag
 	{
 		SwordMagic(1);
-		sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM);
 	}
 };
 
-void() sword1Attack4 = [35, sword1Attack5] { self.weaponframe = 4;};
+void() sword1Attack4 = [35, sword1Attack5] { self.weaponframe = 4; };
 void() sword1Attack5 = [36, sword2Attack1]
 {
 	self.weaponframe = 5;
@@ -83,8 +83,8 @@ void() sword1Attack5 = [36, sword2Attack1]
 	W_Reload(0.6);
 };
 
-void() sword2Attack1 = [37, sword2Attack2] { self.weaponframe = 7;sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM); };
-void() sword2Attack2 = [38, sword2Attack3] { self.weaponframe = 8;};
+void() sword2Attack1 = [37, sword2Attack2] { self.weaponframe = 7;sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM); };
+void() sword2Attack2 = [38, sword2Attack3] { self.weaponframe = 8; };
 void() sword2Attack3 = [39, sword2Attack4]
 {
 	self.weaponframe = 9;
@@ -92,11 +92,11 @@ void() sword2Attack3 = [39, sword2Attack4]
 	if (self.tome_finished) //Tome of Power:every attack launches a fire projectile. #tomeflag #tomeflag
 	{
 		SwordMagic(1);
-		sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM);
 	}
 };
-void() sword2Attack4 = [40, sword2Attack5] { self.weaponframe = 10;};
-void() sword2Attack5 = [41, sword2Attack6] { self.weaponframe = 11;};
+void() sword2Attack4 = [40, sword2Attack5] { self.weaponframe = 10; };
+void() sword2Attack5 = [41, sword2Attack6] { self.weaponframe = 11; };
 void() sword2Attack6 = [42, sword3Attack1]
 {
 	self.weaponframe = 12;
@@ -114,14 +114,14 @@ void() sword3Attack1 = [43, sword3Attack3]
 	
 
 };
-void() sword3Attack3 = [45, sword3Attack5] { self.weaponframe = 15;};
+void() sword3Attack3 = [45, sword3Attack5] { self.weaponframe = 15; };
 void() sword3Attack5 = [47, sword3Attack6]
 {
 	self.weaponframe = 17;
 	SwordSwing(3);
-	sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM);
 };
-void() sword3Attack6 = [0, sword3Attack7] { self.weaponframe = 18;};
+void() sword3Attack6 = [0, sword3Attack7] { self.weaponframe = 18; };
 void() sword3Attack7 = [1, sword3Attack8]
 {
 	self.weaponframe = 19;
@@ -132,10 +132,10 @@ void() sword3Attack7 = [1, sword3Attack8]
 		if (self.currentammo <0)
 			self.currentammo = self.ammo_elemental = 0;
 	}
-	sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM);
 };
 
-void() sword3Attack8 = [2, player_run] { self.weaponframe = 20;};
+void() sword3Attack8 = [2, player_run] { self.weaponframe = 20; };
 
 void(entity inflictor, entity attacker, float damage, float radius, entity ignore, float checkclass) T_RadiusDamageAOA = // radius and damage are now independent arguments with falloff damage being mostly linear, and doesn't hurt attacker. I might extend it further to pass "damage_attacker" boolean "float"
 {
@@ -215,8 +215,8 @@ void() W_FireScimitar = { //the first attack in the scimitar's combo
 	local vector lungeDirection;
 
 	W_Reload(0.6);
-	if (random() < 0.5) sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE1,1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM);
 	makevectors(self.v_angle);
 	lungeDirection = v_forward;
 	lungeDirection_z = 0;
@@ -263,7 +263,7 @@ void(float attackNumber) SwordSwing = {
 			T_Damage(targets, self, self, damage, DAMARMOR);
 			SpawnBlood(targets, (self.origin*2 + targets.origin)/3, '0 0 0', 20,0);
 			hitsTarget = TRUE;
-			sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 		}
 		targets = targets.chain;
 	}
@@ -279,12 +279,12 @@ void(float attackNumber) SwordSwing = {
 	{
 		trace_ent.axhitme = 1;
 		SpawnBlood(trace_ent, dir, dir-org, 20,0);
-		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,trace_endpos);
-		sound(self, CHAN_WEAPON, "aoa/axhit3.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"aoa/axhit3.wav",1,ATTN_NORM);
 	}
 };
 
@@ -356,7 +356,7 @@ void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
 };
 void() GhostRapierAnimation9 = [9, GhostRapierAnimation10] {};
 void() GhostRapierAnimation10 = [10, GhostRapierAnimation11] {};
-void() GhostRapierAnimation11 = [11, GhostRapierAnimation12] { sound(self, CHAN_AUTO, "aoa/radius.wav", 1, ATTN_NORM); };
+void() GhostRapierAnimation11 = [11, GhostRapierAnimation12] { sound(self,CHAN_AUTO,"aoa/radius.wav",1,ATTN_NORM); };
 void() GhostRapierAnimation12 = [12, GhostRapierAnimation13] { RapierSpinAttack(); };
 void() GhostRapierAnimation13 = [13, GhostRapierAnimation14] {};
 void() GhostRapierAnimation14 = [14, GhostRapierAnimation14] { remove(self); };
@@ -366,10 +366,10 @@ void() RapierAnimation1 = [33, RapierAnimation2] { self.weaponframe = 1;SwordSwi
 void() RapierAnimation2 = [34, RapierAnimation3] { self.weaponframe = 2;RapierAttack(); };
 void() RapierAnimation3 = [33, RapierAnimation4] { self.weaponframe = 3;SwordSwipeSound(); };
 void() RapierAnimation4 = [34, RapierAnimation5] { self.weaponframe = 4;RapierAttack(); };
-void() RapierAnimation5 = [36, RapierAnimation6] { self.weaponframe = 5;};
+void() RapierAnimation5 = [36, RapierAnimation6] { self.weaponframe = 5; };
 void() RapierAnimation6 = [32, RapierAnimation7] { self.weaponframe = 6;SwordSwipeSound(); };
 void() RapierAnimation7 = [34, RapierAnimation8] { self.weaponframe = 7;RapierAttack(); };
-void() RapierAnimation8 = [0, RapierAnimation9] { self.weaponframe = 8;};
+void() RapierAnimation8 = [0, RapierAnimation9] { self.weaponframe = 8; };
 void() RapierAnimation9 = [1, RapierAnimation10]
 {
 	self.weaponframe = 9;
@@ -383,11 +383,11 @@ void() RapierAnimation9 = [1, RapierAnimation10]
 		W_Reload(0.8);
 	}
 };
-void() RapierAnimation10 = [2, RapierAnimation11] { self.weaponframe = 10;};
-void() RapierAnimation11 = [3, RapierAnimation12] { self.weaponframe = 11;};
-void() RapierAnimation12 = [4, RapierAnimation13] { self.weaponframe = 12;};
-void() RapierAnimation13 = [5, RapierAnimation14] { self.weaponframe = 13;};
-void() RapierAnimation14 = [0, player_run] { self.weaponframe = 14;};
+void() RapierAnimation10 = [2, RapierAnimation11] { self.weaponframe = 10; };
+void() RapierAnimation11 = [3, RapierAnimation12] { self.weaponframe = 11; };
+void() RapierAnimation12 = [4, RapierAnimation13] { self.weaponframe = 12; };
+void() RapierAnimation13 = [5, RapierAnimation14] { self.weaponframe = 13; };
+void() RapierAnimation14 = [0, player_run] { self.weaponframe = 14; };
 
 void() rapierParticle = {
 	self.nextthink = time + 0.05;
@@ -421,16 +421,16 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 		T_Damage (trace_ent, self, self, damage, DAMARMOR);
 		local float randy;
 		if (randy > 0.7)
-			sound(self, CHAN_VOICE, "aoa/rapier_meat.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "aoa/rapier_meat.wav",1,ATTN_NORM);
 		else if (randy > 0.35)
-			sound(self, CHAN_VOICE, "aoa/rapier_meat2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "aoa/rapier_meat2.wav",1,ATTN_NORM);
 		else 
-			sound(self, CHAN_VOICE, "aoa/rapier_meat3.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "aoa/rapier_meat3.wav",1,ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,org);
-		sound(self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
+		sound(self,CHAN_VOICE, "aoa/axhit3.wav", 0.5,ATTN_NORM);
 	}
 };
 
@@ -461,12 +461,12 @@ void(float damage) GhostRapierAttack = //the projected sword does this attack th
 		if (trace_ent.classname == "monster_shambler")
 			damage = damage * 1.5;
 		T_Damage(trace_ent, self, self, damage, DAMARMOR);
-		sound(self, CHAN_WEAPON, "aoa/acidhit.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"aoa/acidhit.wav",1,ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
 		Tent_Point(TE_GUNSHOT,trace_endpos);
-		sound(self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
+		sound(self,CHAN_VOICE, "aoa/axhit3.wav", 0.5,ATTN_NORM);
 	}
 };
 
@@ -488,7 +488,7 @@ void() RapierSpinAttack = {
 	}
 	if (hitTarget == TRUE)
 	{
-		sound(self, CHAN_WEAPON, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"aoa/melee_meat.wav",1,ATTN_NORM);
 	}
 };
 
@@ -519,7 +519,7 @@ void() ghostRapierTouch = {
 		T_Damage(other, self, self.owner, 20, DAMARMOR);
 		SpawnBlood(other, other.origin, '0 0 0', 20,0);
 		self.touch = SUB_Null;
-		sound(self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
+		sound(self,CHAN_VOICE, "aoa/axhit3.wav", 0.5,ATTN_NORM);
 	}
 };
 void() W_FireRapier = {
@@ -564,25 +564,25 @@ Ice Storm by ryanscissorhands		#ice #chain #ryanscissorhands //#ice1
 void() W_FireChainLightning;
 void() IceProjectiles;
 
-void() ChainLightningAnimation1 = [0, ChainLightningAnimation2] { self.frame = 1;};
-void() ChainLightningAnimation2 = [0, ChainLightningAnimation3] { self.frame = 2;};
-void() ChainLightningAnimation3 = [0, ChainLightningAnimation4] { self.frame = 3;};
-void() ChainLightningAnimation4 = [0, ChainLightningAnimation5] { self.frame = 4;};
-void() ChainLightningAnimation5 = [0, ChainLightningAnimation6] { self.frame = 5;};
-void() ChainLightningAnimation6 = [0, ChainLightningAnimation7] { self.frame = 6;};
-void() ChainLightningAnimation7 = [0, ChainLightningAnimation8] { self.frame = 7;};
-void() ChainLightningAnimation8 = [0, ChainLightningAnimation9] { self.frame = 8;};
-void() ChainLightningAnimation9 = [0, ChainLightningAnimation10] { self.frame = 9;};
-void() ChainLightningAnimation10 = [0, ChainLightningAnimation11] { self.frame = 10;};
-void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] { self.frame = 11;};
-void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] { self.frame = 12;};
-void() ChainLightningAnimation13 = [0, player_run] { self.frame = 13;};
+void() ChainLightningAnimation1 = [0, ChainLightningAnimation2] { self.frame = 1; };
+void() ChainLightningAnimation2 = [0, ChainLightningAnimation3] { self.frame = 2; };
+void() ChainLightningAnimation3 = [0, ChainLightningAnimation4] { self.frame = 3; };
+void() ChainLightningAnimation4 = [0, ChainLightningAnimation5] { self.frame = 4; };
+void() ChainLightningAnimation5 = [0, ChainLightningAnimation6] { self.frame = 5; };
+void() ChainLightningAnimation6 = [0, ChainLightningAnimation7] { self.frame = 6; };
+void() ChainLightningAnimation7 = [0, ChainLightningAnimation8] { self.frame = 7; };
+void() ChainLightningAnimation8 = [0, ChainLightningAnimation9] { self.frame = 8; };
+void() ChainLightningAnimation9 = [0, ChainLightningAnimation10] { self.frame = 9; };
+void() ChainLightningAnimation10 = [0, ChainLightningAnimation11] { self.frame = 10; };
+void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] { self.frame = 11; };
+void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] { self.frame = 12; };
+void() ChainLightningAnimation13 = [0, player_run] { self.frame = 13; };
 
 void() IceAttack1 =	[107, IceAttack2] { if (time < self.attack_finished) return; self.weaponframe = 1;IceProjectiles();W_Reload(0.8); };
-void() IceAttack2 =	[108, IceAttack3] { self.weaponframe = 1;};
-void() IceAttack3 =	[109, IceAttack4] { self.weaponframe = 2;};
-void() IceAttack4 =	[110, IceAttack5] { self.weaponframe = 3;};
-void() IceAttack5 =	[111, IceAttack6] { self.weaponframe = 4;};
+void() IceAttack2 =	[108, IceAttack3] { self.weaponframe = 1; };
+void() IceAttack3 =	[109, IceAttack4] { self.weaponframe = 2; };
+void() IceAttack4 =	[110, IceAttack5] { self.weaponframe = 3; };
+void() IceAttack5 =	[111, IceAttack6] { self.weaponframe = 4; };
 void() IceAttack6 =	[112, IceAttack7]
 {
 	self.weaponframe = 3;
@@ -594,10 +594,10 @@ void() IceAttack6 =	[112, IceAttack7]
 	W_Reload(0.8);
 };
 
-void() IceAttack7 =	[113, IceAttack8] { self.weaponframe = 2;};
+void() IceAttack7 =	[113, IceAttack8] { self.weaponframe = 2; };
 void() IceAttack8 =	[114, IceAttack9] { self.weaponframe = 1;W_FireChainLightning(); };
-void() IceAttack9 =	[115, IceAttack10] { self.weaponframe = 2;};
-void() IceAttack10 =	[116, IceAttack11] { self.weaponframe = 3;};
+void() IceAttack9 =	[115, IceAttack10] { self.weaponframe = 2; };
+void() IceAttack10 =	[116, IceAttack11] { self.weaponframe = 3; };
 void() IceAttack11 =	[117, IceAttack12]
 {
 	self.weaponframe = 4;
@@ -609,11 +609,11 @@ void() IceAttack11 =	[117, IceAttack12]
 	W_Reload(1);
 };
 
-void() IceAttack12 = [113, IceAttack13] { self.weaponframe = 3;};
-void() IceAttack13 = [114, IceAttack14] { self.weaponframe = 2;};
-void() IceAttack14 = [115, IceAttack15] { self.weaponframe = 1;};
+void() IceAttack12 = [113, IceAttack13] { self.weaponframe = 3; };
+void() IceAttack13 = [114, IceAttack14] { self.weaponframe = 2; };
+void() IceAttack14 = [115, IceAttack15] { self.weaponframe = 1; };
 void() IceAttack15 = [116, IceAttack16] { self.weaponframe = 2;LaunchBoulder(); };
-void() IceAttack16 = [117, player_run] { self.weaponframe = 3;};
+void() IceAttack16 = [117, player_run] { self.weaponframe = 3; };
 
 void() T_BoulderTouch = {	
 	local float speed;
@@ -638,9 +638,9 @@ void() T_BoulderTouch = {
 	}
 
 	if (speed > 200)
-		sound(self, CHAN_WEAPON, "aoa/fastboulder.wav", 1, ATTN_NORM);//fast impact sound
+		sound(self,CHAN_WEAPON,"aoa/fastboulder.wav",1,ATTN_NORM);//fast impact sound
 	else
-		sound(self, CHAN_WEAPON, "aoa/slowboulder.wav", 1, ATTN_NORM);//slow impact sound
+		sound(self,CHAN_WEAPON,"aoa/slowboulder.wav",1,ATTN_NORM);//slow impact sound
 
 	self.velocity = self.velocity * 0.5;
 
@@ -672,14 +672,14 @@ void() LaunchBoulder = {
 	
 	boulder.nextthink = time + 3;
 	boulder.think = SUB_Remove;
-	sound(self, CHAN_WEAPON, "aoa/rockattack.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"aoa/rockattack.wav",1,ATTN_NORM);
 
 };
 
 void() ChainedLightning = {
 	local float damage;
 	
-	sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
 	traceline(self.origin, self.enemy.origin, FALSE, self);
 	Tent_Beam(TE_LIGHTNING1,self,self.origin,trace_endpos);
 	damage = 30;
@@ -756,7 +756,7 @@ void() W_FireChainLightning = { //direct hitscan damage, then lightning chains f
 	storm.solid = SOLID_NOT;
 	storm.nextthink = time + 0.3;
 	storm.think = StormFindTargets;
-	sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/lstart.wav",1,ATTN_NORM);
 };
 	
 void() IceSpikeTouch = {
@@ -768,7 +768,7 @@ void() IceSpikeTouch = {
 		SpawnBlood(self, self.origin, self.velocity, 4,0);
 	}	
 
-	sound(self, CHAN_AUTO, "hknight/hit.wav", 0.5, ATTN_NORM);
+	sound(self,CHAN_AUTO,"hknight/hit.wav", 0.5,ATTN_NORM);
 	remove(self);
 };
 	
@@ -807,13 +807,13 @@ void(float offset) IceSpread = {
 void() W_FireIce = {
 	IceAttack1(); //trigger animation
 	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1; 	//consume ammo
-	//trigger sound sound(self, CHAN_WEAPON, "aoa/iceattack.wav", 0.7, ATTN_NORM);
+	//trigger sound sound(self,CHAN_WEAPON,"aoa/iceattack.wav", 0.7,ATTN_NORM);
 };
 
 void() IceProjectiles = {
 	W_Reload(0.9);
 	
-	sound(self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"aoa/iceattack.wav",1,ATTN_NORM);
 
 	//24 projectiles IceSpikeProjectile();
 	IceSpread(24);
@@ -854,10 +854,10 @@ void()	embers16	= [	15,	embers16	] { remove(self); };
 
 
 void() StaffShot1 = [113, StaffShot2] { self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9); };
-void() StaffShot2 = [114, StaffShot3] { self.weaponframe =2;};
-void() StaffShot3 = [115, StaffShot4] { self.weaponframe =3;};
-void() StaffShot4 = [116, StaffShot5] { self.weaponframe =4;};
-void() StaffShot5 = [117, StaffShot6] { self.weaponframe =5;};
+void() StaffShot2 = [114, StaffShot3] { self.weaponframe =2; };
+void() StaffShot3 = [115, StaffShot4] { self.weaponframe =3; };
+void() StaffShot4 = [116, StaffShot5] { self.weaponframe =4; };
+void() StaffShot5 = [117, StaffShot6] { self.weaponframe =5; };
 void() StaffShot6 = [118, StaffShot7]
 {
 	self.weaponframe = 6;
@@ -868,10 +868,10 @@ void() StaffShot6 = [118, StaffShot7]
 	}
 };
 void() StaffShot7 = [113, StaffShot8] { self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9); };
-void() StaffShot8 = [114, StaffShot9] { self.weaponframe =2;};
-void() StaffShot9 = [115, StaffShot10] { self.weaponframe =3;};
-void() StaffShot10 = [116, StaffShot11] { self.weaponframe =4;};
-void() StaffShot11 = [117, StaffWait1] { self.weaponframe =5;};
+void() StaffShot8 = [114, StaffShot9] { self.weaponframe =2; };
+void() StaffShot9 = [115, StaffShot10] { self.weaponframe =3; };
+void() StaffShot10 = [116, StaffShot11] { self.weaponframe =4; };
+void() StaffShot11 = [117, StaffWait1] { self.weaponframe =5; };
 
 void() StaffWait1 = [7, StaffWait2] 
 {
@@ -939,14 +939,14 @@ void() StaffWait6 = [12, player_run]
 	
 };
 
-void() StaffDetonate1 = [107, StaffDetonate3] { self.weaponframe =9;};
-void() StaffDetonate2 = [109, StaffDetonate3] { self.weaponframe =10;};
-void() StaffDetonate3 = [111, StaffDetonate4] { self.weaponframe =11;};
-void() StaffDetonate4 = [112, player_run] { self.weaponframe =12;};
+void() StaffDetonate1 = [107, StaffDetonate3] { self.weaponframe =9; };
+void() StaffDetonate2 = [109, StaffDetonate3] { self.weaponframe =10; };
+void() StaffDetonate3 = [111, StaffDetonate4] { self.weaponframe =11; };
+void() StaffDetonate4 = [112, player_run] { self.weaponframe =12; };
 
 void() VoidExplosion = {
 
-	sound(self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ad171/seeker/explode_major.wav",1,ATTN_NORM);
 	local entity GreenEmbers, GreenEmbers2, GreenEmbers3;
 	
 	makevectors(self.velocity);
@@ -1037,13 +1037,13 @@ void() DetonateVoidShards = {
 	if (FoundATarget == TRUE)
 	{
 		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 4;
-		sound(self, CHAN_WEAPON, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/seeker/explode_major.wav",1,ATTN_NORM);
 	}
 };
 
 void() VoidShardTouch = {
 	// trigger sound
-	// sound(self, CHAN_AUTO, "aoa/staffhit.wav", 1, ATTN_NORM); #techdebt
+	// sound(self,CHAN_AUTO,"aoa/staffhit.wav",1,ATTN_NORM); #techdebt
 	GreenExplosion();
 	BlueExplosion();
 	if (self.owner.tome_finished)
@@ -1093,7 +1093,7 @@ void() VoidShardTrace = {
 void() VoidStaffProjectile = {
 	if (self.currentammo < 1) return;
 
-	sound(self, CHAN_WEAPON, "aoa/staffshot.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"aoa/staffshot.wav",1,ATTN_NORM);
 	
 	self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 1;
 	
@@ -1150,7 +1150,7 @@ Flak Cannon		#flak	#ryanscissorhands
 void() LaunchFlakShell;
 void() DetonateFlakShell;
 
-void() ShrapnelShot1 = [0, ShrapnelShot2] { self.weaponframe = 1;sound(self, CHAN_WEAPON, "aoa/flakshot.wav", 1.0, ATTN_NORM); };
+void() ShrapnelShot1 = [0, ShrapnelShot2] { self.weaponframe = 1;sound(self,CHAN_WEAPON,"aoa/flakshot.wav", 1.0,ATTN_NORM); };
 void() ShrapnelShot2 = [0, ShrapnelShot3]
 {
 	self.weaponframe = 2;
@@ -1160,11 +1160,11 @@ void() ShrapnelShot2 = [0, ShrapnelShot3]
 		LaunchFlakShell();
 
 };
-void() ShrapnelShot3 = [0, ShrapnelShot4] { self.weaponframe = 3;};
-void() ShrapnelShot4 = [0, ShrapnelShot5] { self.weaponframe = 4;};
-void() ShrapnelShot5 = [0, ShrapnelShot6] { self.weaponframe = 5;};
-void() ShrapnelShot6 = [0, ShrapnelShot7] { self.weaponframe = 6;};
-void() ShrapnelShot7 = [0, player_run] { self.weaponframe = 0;};
+void() ShrapnelShot3 = [0, ShrapnelShot4] { self.weaponframe = 3; };
+void() ShrapnelShot4 = [0, ShrapnelShot5] { self.weaponframe = 4; };
+void() ShrapnelShot5 = [0, ShrapnelShot6] { self.weaponframe = 5; };
+void() ShrapnelShot6 = [0, ShrapnelShot7] { self.weaponframe = 6; };
+void() ShrapnelShot7 = [0, player_run] { self.weaponframe = 0; };
 
 void() ShrapnelTouch = {
 	local float soundVariance;
@@ -1191,7 +1191,7 @@ void() ShrapnelTouch = {
 		soundFile = "weapons/ric3.wav";
 	
 	if (soundVariance > 0.4)
-		sound(self, CHAN_WEAPON, soundFile, 0.5, ATTN_NORM);
+		sound(self,CHAN_WEAPON,soundFile, 0.5,ATTN_NORM);
 	
 	if (self.count <= 0) //after a number (self.count) bounces, delete shrapnel
 		remove(self);
@@ -1327,10 +1327,10 @@ void() MaceSwing;
 
 void() CastDrainHealth;
 
-void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound(self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.6); }; //th
-void() MaceSwing2 =	[	120,	MaceSwing3	] { self.weaponframe=2;};
+void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound(self,CHAN_WEAPON,"weapons/ax1.wav",1,ATTN_NORM);W_Reload(0.6); }; //th
+void() MaceSwing2 =	[	120,	MaceSwing3	] { self.weaponframe=2; };
 void() MaceSwing3 =	[	121,	MaceSwing4	] { self.weaponframe=3; MaceSwing(); };
-void() MaceSwing4 =	[	122,	MaceSwing5	] { self.weaponframe=4;};
+void() MaceSwing4 =	[	122,	MaceSwing5	] { self.weaponframe=4; };
 void() MaceSwing5 =	[	123,	MaceBackhand1	]
 {
 	self.weaponframe=5;
@@ -1341,11 +1341,11 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 	}
 };
 
-void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound(self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.7); };
+void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound(self,CHAN_WEAPON,"weapons/ax1.wav",1,ATTN_NORM);W_Reload(0.7); };
 void() MaceBackhand2 =	[	126,	MaceBackhand3	] { self.weaponframe=7;MaceSwing(); };
-void() MaceBackhand3 =	[	127,	MaceBackhand4	] { self.weaponframe=8;};
-void() MaceBackhand4 =	[	128,	MaceBackhand5	] { self.weaponframe=9;};
-void() MaceBackhand5 =	[	129,	MaceBackhand6	] { self.weaponframe=0;};
+void() MaceBackhand3 =	[	127,	MaceBackhand4	] { self.weaponframe=8; };
+void() MaceBackhand4 =	[	128,	MaceBackhand5	] { self.weaponframe=9; };
+void() MaceBackhand5 =	[	129,	MaceBackhand6	] { self.weaponframe=0; };
 void() MaceBackhand6 =	[	0,	DrainHealth1	]
 {
 	self.weaponframe=0;
@@ -1357,8 +1357,8 @@ void() MaceBackhand6 =	[	0,	DrainHealth1	]
 };
 
 void() DrainHealth1 =	[112, DrainHealth2]	{ self.weaponframe = 10;W_Reload(1.2); };  
-void() DrainHealth2 =	[115, DrainHealth3]	{ self.weaponframe = 11;}; 
-void() DrainHealth3 =	[118, DrainHealth4]	{ self.weaponframe = 12;}; 
+void() DrainHealth2 =	[115, DrainHealth3]	{ self.weaponframe = 11; }; 
+void() DrainHealth3 =	[118, DrainHealth4]	{ self.weaponframe = 12; }; 
 void() DrainHealth4 =	[118, player_run]	{ self.weaponframe = 13;CastDrainHealth(); }; 
 
 void() drain1Frames = {
@@ -1432,13 +1432,13 @@ void() CastDrainHealth = {
 		{
 			//aoaprint("Draining from a ", NearbyEnemies.classname, ".\n");
 			DrainHealth(NearbyEnemies, self);
-			sound(NearbyEnemies, CHAN_WEAPON, "aoa/drainhealth.wav", 1, ATTN_NORM);
+			sound(NearbyEnemies,CHAN_WEAPON,"aoa/drainhealth.wav",1,ATTN_NORM);
 		}
 		NearbyEnemies = NearbyEnemies.chain;
 	}
 	makevectors(self.v_angle);
 	DrainHealthEffect(self.origin + ignoreVertical(v_forward)*30);
-	sound(self, CHAN_WEAPON, "aoa/hhs.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"aoa/hhs.wav",1,ATTN_NORM);
 };
 
 
@@ -1446,7 +1446,7 @@ void() MaceLungeTouch = {
 	if (other.takedamage && !(self.flags & FL_ONGROUND))
 	{
 		T_Damage(other, self, self, 25, DAMARMOR);
-		sound(self, CHAN_VOICE, "ad171/weapons/axe_wood.wav", 1.0, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ad171/weapons/axe_wood.wav", 1.0,ATTN_NORM);
 		SpawnBlood(other, (self.origin - other.origin)/2 + '0 0 20', self.velocity, 20,0);
 	}
 	self.touch = SUB_Null;
@@ -1457,11 +1457,11 @@ void() W_FireMace = {
 	MaceSwing1(); 	//trigger animation
 	if ((self.flags & FL_ONGROUND)) return;
 
-	sound(self, CHAN_VOICE, "qmaster/player/jump.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "qmaster/player/jump.wav",1,ATTN_NORM);
 	makevectors(self.v_angle);
 	lunge = '0 0 300';
 	//centerprint(self, ftos(v_forward_z));
-	if (v_forward_z < 0) {	
+	if (v_forward_z < 0) {
 		lunge = lunge + ignoreVertical(v_forward*4 + v_up)*600;
 	} else {
 		lunge = lunge + normalize(v_forward)*300 + ignoreVertical(v_forward*10 + v_up)*300;
@@ -1473,62 +1473,43 @@ void() W_FireMace = {
 void(vector org, entity victim) MaceSwingHits = {
 	local float damage;
 	
-	sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	traceline(org, victim.origin +'0 0 10', TRUE, self);
 	particle(trace_endpos, '0 0 2', 73, 10);
 	SpawnBlood(victim, org, '0 0 1', 10,0);
-	sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
-	if (victim.classgroup == CG_ZOMBIE)
-	{
-		damage = 100; //bonus damage to zombies, but cannot drain health from zombies
-	}
-	else
-	{
-		TriggerHeal(self, 5, 100);// entity target, float hlth, float maxHealth. Heals self 5, capped at 100
-	}
+	sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
+	if (victim.classgroup == CG_ZOMBIE) damage = 100; //bonus damage to zombies, but cannot drain health from zombies
+	else TriggerHeal(self,5,100);// entity target, float hlth, float maxHealth. Heals self 5, capped at 100
 	
 	damage = 45;//regular attack
-	if (self.tome_finished)
-		damage = 90; //double damage during Tome of Power
-	T_Damage(victim, self, self, damage, DAMARMOR);
+	if (self.tome_finished) damage = 90; //double damage during Tome of Power
+	T_Damage(victim,self,self,damage,DAMARMOR);
 
 };
 
-void() MaceSwing = //executes the attack part. Melee changed from traceline to findradius for sweeping attack area
-{
+void() MaceSwing = { //executes the attack part. Melee changed from traceline to findradius for sweeping attack area
 	local	vector	source;
 	local entity targets;
 	local float hitSomething;
 	hitSomething = FALSE;
 	makevectors(self.v_angle);
 	source = self.origin + '0 0 16' + v_forward*8;
-	
-	targets = findradius(source + v_forward*35 + '0 0 -10', 40);
-	while(targets)
-	{
-		if (targets.takedamage && targets != self && targets.health >0)
-		{
+	targets = findradius(source + v_forward*35 + '0 0 -10', 80); // Was 40, upped to match knight swing. -Qmaster
+	while(targets) {
+		if (targets.takedamage && targets != self && targets.health >0) {
 			hitSomething = TRUE;
 			MaceSwingHits(source, targets);
 		}
 		targets = targets.chain;
 	}
 
-	if (hitSomething == TRUE)
-	{
-		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
-	}
+	if (hitSomething) sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	traceline (source, source + v_forward*70, FALSE, self);
-	
-	if (trace_fraction != 1 && hitSomething == FALSE)
-	{	// hit wall
+	if (trace_fraction != 1 && hitSomething == FALSE) { // hit wall
 		Tent_Point(TE_GUNSHOT,trace_endpos);
-		sound(self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"player/axhit2.wav",1,ATTN_NORM);
 	}
 };	
-	
-
-
 //=========================================END OF MACE================================
 
 /*
@@ -1547,14 +1528,14 @@ void()	GungnirAttack1 = 	[144, GungnirAttack2		]
 {
 	//setPlayerModel ("progs/player.mdl");
 	self.weaponframe = 1;
-	sound(self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"aoa/swing2.wav",1,ATTN_NORM);
 	W_Reload(0.9);
 };
 void()	GungnirAttack2 = 	[145, GungnirAttack3		]	{ self.weaponframe = 2;GungnirPrimary(); };
-void()	GungnirAttack3 = 	[146, GungnirAttack4		]	{ self.weaponframe = 3;};
-void()	GungnirAttack4 = 	[147, GungnirAttack5		]	{ self.weaponframe = 0;};
-void()	GungnirAttack5 = 	[7, GungnirAttack6		]	{ self.weaponframe = 0;};
-void()	GungnirAttack6 = 	[8, GungnirAttack7		]	{ self.weaponframe = 0;};
+void()	GungnirAttack3 = 	[146, GungnirAttack4		]	{ self.weaponframe = 3; };
+void()	GungnirAttack4 = 	[147, GungnirAttack5		]	{ self.weaponframe = 0; };
+void()	GungnirAttack5 = 	[7, GungnirAttack6		]	{ self.weaponframe = 0; };
+void()	GungnirAttack6 = 	[8, GungnirAttack7		]	{ self.weaponframe = 0; };
 void()	GungnirAttack7 = 	[9, GungnirJump1]
 {
 	self.weaponframe = 0;
@@ -1568,11 +1549,11 @@ void()	GungnirAttack7 = 	[9, GungnirJump1]
 };
 
 //Launch Vortex
-void()	GungnirVortex1 = 	[145, GungnirVortex2		]	{ self.weaponframe = 1;};
-void()	GungnirVortex2 = 	[146, GungnirVortex3		]	{ self.weaponframe = 1;};
-void()	GungnirVortex3 = 	[147, GungnirVortex4		]	{ self.weaponframe = 5;};
-void()	GungnirVortex4 = 	[146, GungnirVortex5		]	{ self.weaponframe = 6;};
-void()	GungnirVortex5 = 	[146, GungnirVortex6		]	{ self.weaponframe = 7;};
+void()	GungnirVortex1 = 	[145, GungnirVortex2		]	{ self.weaponframe = 1; };
+void()	GungnirVortex2 = 	[146, GungnirVortex3		]	{ self.weaponframe = 1; };
+void()	GungnirVortex3 = 	[147, GungnirVortex4		]	{ self.weaponframe = 5; };
+void()	GungnirVortex4 = 	[146, GungnirVortex5		]	{ self.weaponframe = 6; };
+void()	GungnirVortex5 = 	[146, GungnirVortex6		]	{ self.weaponframe = 7; };
 void()	GungnirVortex6 = 	[148, player_run]	{ self.weaponframe = 8;LaunchVortex(); };
 
 void() DiveTargetFollow = //this loop ensures that the reticle is where the player is aiming, and is ultimately going to dive
@@ -1626,17 +1607,17 @@ void()	GungnirJump1 = 	[143, GungnirJump2		]
 	{
 		self.velocity = '0 0 550';
 	}
-	sound(self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"aoa/swing2.wav",1,ATTN_NORM);
 };
 void() GungnirJump2 = [143, GungnirJump3] { self.weaponframe = 4;GungnirPrimary();SpawnDiveTarget(); };
-void() GungnirJump3 = [143, GungnirJump4] { self.weaponframe = 4;};
-void() GungnirJump4 = [143, GungnirJump5] { self.weaponframe = 4;};
-void() GungnirJump5 = [143, GungnirDive1] { self.weaponframe = 4;};
+void() GungnirJump3 = [143, GungnirJump4] { self.weaponframe = 4; };
+void() GungnirJump4 = [143, GungnirJump5] { self.weaponframe = 4; };
+void() GungnirJump5 = [143, GungnirDive1] { self.weaponframe = 4; };
 
 //dive attack
 void() GungnirDive1 = [143, GungnirDive2] { self.weaponframe = 6;GungnirDive(); };
-void() GungnirDive2 = [143, GungnirDive3] { self.weaponframe = 6;};
-void() GungnirDive3 = [143, GungnirDive4] { self.weaponframe = 6;};
+void() GungnirDive2 = [143, GungnirDive3] { self.weaponframe = 6; };
+void() GungnirDive3 = [143, GungnirDive4] { self.weaponframe = 6; };
 void() GungnirDive4 = [143, player_run]
 {
 	self.weaponframe = 0;
@@ -1676,7 +1657,7 @@ void() ImpaleTouch = {
 
 	makevectors(self.v_angle);
 	explosionCenter = self.origin + ignoreVertical(v_forward)*20;
-	sound(self, CHAN_AUTO, "shambler/sboom.wav", 1, ATTN_NORM); //needs a new sound #techdebt
+	sound(self,CHAN_AUTO,"shambler/sboom.wav",1,ATTN_NORM); //needs a new sound #techdebt
 	Tent_Point(TE_TAREXPLOSION,explosionCenter);
 	makevectors(self.v_angle);
 	enemies = findradius(explosionCenter, 300);
@@ -1733,7 +1714,7 @@ void() VortexTouch = { // [FUNCTION]
 };
 
 void(entity victim) ZapEnemy = { // [FUNCTION]
-	if (random() > 0.65) sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+	if (random() > 0.65) sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
 	traceline(self.origin, victim.origin, FALSE, self);
 	Tent_Beam(TE_LIGHTNING2,self,self.origin,trace_endpos);
 	LightningDamage(self.origin, trace_endpos, self.owner, 15);	
@@ -1743,7 +1724,7 @@ void() VortexThink = { // [FUNCTION]
 	local entity victims;
 	local vector gravity;
 	
-	sound(self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_AUTO,"aoa/vortex.wav",1,ATTN_NORM);	
 	if (vlen(self.velocity) > 50) self.velocity = self.velocity * 0.95;
 	else self.velocity = '0 0 0';
 	
@@ -1763,7 +1744,7 @@ void() VortexThink = { // [FUNCTION]
 	}
 	if (time > self.attack_finished) remove(self); // Delete if past expiry.
 
-	if (self.frame == 1) sound(self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);
+	if (self.frame == 1) sound(self,CHAN_AUTO,"aoa/vortex.wav",1,ATTN_NORM);
 	if (self.frame == 23) self.frame = 0;
 	else self.frame = self.frame + 1;
 
@@ -1815,14 +1796,14 @@ void() SparkTouch = {
 	{
 		SpawnBlood (other, self.origin, spread('100 100 100'), 25,0);
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	}
 	else
 	{	// hit wall
 		particle (self.origin, '0 0 0', 158, 10);
 		particle (self.origin, '0 0 0', 156, 10);
 		particle (self.origin, '0 0 0', 154, 10);
-		sound(self, CHAN_AUTO, "player/axhit2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_AUTO,"player/axhit2.wav",1,ATTN_NORM);
 	}
 	remove(self);
 };
@@ -1877,15 +1858,15 @@ void() GungnirPrimary = {
 			if (trace_ent.classgroup == CG_ZOMBIE)
 				T_Damage(trace_ent, self, self, 400, DAMARMOR);
 			T_Damage (trace_ent, self, self, 50, DAMARMOR);
-			sound(self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
-			sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"blob/hit1.wav",1,ATTN_NORM);
+			sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 		}
 		else
 		{	// hit wall
 			particle (trace_endpos, '0 0 0', 154, 15);
 			particle (trace_endpos, '0 0 0', 156, 15);
 			particle (trace_endpos, '0 0 0', 158, 15);
-			sound(self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"player/axhit2.wav",1,ATTN_NORM);
 		}
 	}
 };
@@ -1910,7 +1891,7 @@ void()	RGaunt1 = [		115,		RGaunt2	]
 	AttackWithGreyOrbs(); //any orbs generated with tome are now projectiles.
 	W_Reload(0.4);
 };
-void()	RGaunt2 = [		117,		RGaunt3	] { self.weaponframe=2;};
+void()	RGaunt2 = [		117,		RGaunt3	] { self.weaponframe=2; };
 
 void()	RGaunt3 = [		118,		LGaunt1	]
 {
@@ -1930,7 +1911,7 @@ void()	LGaunt1 = [		115,		LGaunt2	]
 	W_Reload(0.4);
 };
 
-void() LGaunt2 = [117, LGaunt3] { self.weaponframe=4;};
+void() LGaunt2 = [117, LGaunt3] { self.weaponframe=4; };
 
 void()	LGaunt3 = [		118,		RGaunt1	]
 {
@@ -1949,7 +1930,7 @@ void() GauntletOrbTouch = {
 		if (other.classname == "monster_shambler")
 			self.dmg = self.dmg *2;
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-		sound(self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+		sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	}
 	remove(self);
 };
@@ -2096,7 +2077,7 @@ void() TurnIntoArmor = {
 		self.owner.armorvalue = self.owner.armorvalue + 2;
 	if (self.owner.armortype < 0.5)
 		self.owner.armortype = 0.5;
-	sound(self, CHAN_VOICE, "aoa/mildarmor.wav", 0.5, ATTN_NORM);
+	sound(self,CHAN_VOICE, "aoa/mildarmor.wav", 0.5,ATTN_NORM);
 	remove(self);	
 };
 
@@ -2163,7 +2144,7 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 
 void() GauntletBloodReturn = { //used to move the blood orbs from the victim back to the attacker. As they get close, this loop changes to GauntletBloodOrbit(), which will make the orbs circle the player
 	if (vlen(self.origin - self.owner.origin) > 70) { //fly toward self.owner until it gets within 70
-		self.velocity = normalize( self.owner.origin - self.origin + '0 0 20'+ spread('50 50 80') )*350;
+		self.velocity = normalize(self.owner.origin - self.origin + '0 0 20'+ spread('50 50 80') )*350;
 	} else {
 		self.nextthink = time;
 		self.think = GauntletBloodOrbit;
@@ -2221,16 +2202,16 @@ void(float RightOffset) GauntletBeam = //triggers attack and visual effect, alte
 	if (RightOffset > 0)
 	{
 		if (randy > 0.5)
-			sound(self, CHAN_WEAPON, "aoa/sanguinator_atk1.wav", 0.7, ATTN_NORM); //gauntlet_att.wav"
+			sound(self,CHAN_WEAPON,"aoa/sanguinator_atk1.wav", 0.7,ATTN_NORM); //gauntlet_att.wav"
 		else 
-			sound(self, CHAN_WEAPON, "aoa/sanguinator_atk2.wav", 0.7, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"aoa/sanguinator_atk2.wav", 0.7,ATTN_NORM);
 	}
 	else
 	{
 		if (randy > 0.5)
-			sound(self, CHAN_WEAPON, "aoa/sanguinator_atk2.wav", 0.7, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"aoa/sanguinator_atk2.wav", 0.7,ATTN_NORM);
 		else 
-			sound(self, CHAN_WEAPON, "aoa/sanguinator_atk3.wav", 0.7, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"aoa/sanguinator_atk3.wav", 0.7,ATTN_NORM);
 	}
 		
 	makevectors(self.v_angle);
@@ -2246,7 +2227,7 @@ void(float RightOffset) GauntletBeam = //triggers attack and visual effect, alte
 	{	
 		GauntletDrainSpell(trace_ent);
 		MakeBeam(org, dir, "progs/aoa/drainhit.mdl", 0.3);
-		sound(self, CHAN_VOICE, "aoa/heartbeat.wav", 1, ATTN_NORM);//play heartbeat sound when it hits a target
+		sound(self,CHAN_VOICE, "aoa/heartbeat.wav",1,ATTN_NORM);//play heartbeat sound when it hits a target
 	}
 	else
 	{

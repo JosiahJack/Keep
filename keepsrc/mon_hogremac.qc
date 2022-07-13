@@ -128,7 +128,7 @@ void() hogremac_swing3	= [	$swing3,	hogremac_swing4	] { ai_charge(6); };
 void() hogremac_swing4	= [	$swing4,	hogremac_swing5	] { ai_charge(6); };
 void() hogremac_swing5	= [	$swing5,	hogremac_swing6	] { ai_charge(7); };
 void() hogremac_swing6	= [	$swing6,	hogremac_swing7	] { ai_forward(7);
-	self.meleecontact = TRUE; ai_meleesmash(20); self.meleecontact = FALSE;};
+	self.meleecontact = TRUE; ai_meleesmash(20); self.meleecontact = FALSE; };
 void() hogremac_swing7	= [	$swing7,	hogremac_swing8	] { ai_forward(4);monster_footstep(FALSE); };
 void() hogremac_swing8	= [	$swing8,	hogremac_swing9	] { ai_forward(4); };
 void() hogremac_swing9	= [	$swing9,	hogremac_swing10 ] { ai_forward(4); };
@@ -153,7 +153,7 @@ void() hogremac_smash10= [	$smash10,	hogremac_smash11 ] { ai_face();
 	makevectors(self.angles);				// Put impact infront of ogre
 	self.finalangle = self.origin + (v_forward * 56) + (-v_up * 22);
 	particle_explode(self.finalangle, 24, 0.5, PARTICLE_BURST_FIRE, PARTICLE_BURST_SHOCKWAVE); 
-	sound(self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);
+	sound(self,CHAN_WEAPON,"ad171/ogre/ham_hit.wav",1,ATTN_IDLE);
 };
 void() hogremac_smash11= [	$smash11,	hogremac_smash12 ] {};
 void() hogremac_smash12= [	$smash12,	hogremac_smash13 ] {};
@@ -238,7 +238,7 @@ void(entity inflictor, entity attacker, float damage) hogremac_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 	
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
@@ -305,17 +305,17 @@ void() hogremac_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogre/ogdth.wav",1,ATTN_NORM);
 		if (self.lip < 0.5) hogremac_dieA1();
 		else hogremac_dieB1();
 	}
 };
 
 void(float soundtype) hogremac_sound = {
-	if (soundtype == 1) sound(self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
-	else if (soundtype == 2) sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-	else if (soundtype == 3) sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);
+	if (soundtype == 1) sound(self,CHAN_VOICE, "ogre/ogdrag.wav",1,ATTN_IDLE);
+	else if (soundtype == 2) sound(self,CHAN_WEAPON,"ogre/ogsawatk.wav",1,ATTN_NORM);
+	else if (soundtype == 3) sound(self,CHAN_WEAPON,GIB_SOUND_WOOD,1,ATTN_NORM);
+	else if (soundtype == 4) sound(self,CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav",1,ATTN_IDLE);
 };
 
 // Special wakeup animation for attacking/breaking something infront

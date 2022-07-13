@@ -45,7 +45,7 @@ $frame swoopend9 swoopend10 swoopend11 swoopend12 swoopend13 swoopend14 swoopend
 $frame swoopout1 swoopout2 swoopout3 swoopout4 swoopout5 swoopout6 swoopout7 swoopout8
 $frame swoopout9 swoopout10 swoopout11 swoopout12 swoopout13 swoopout14 swoopout15
 
-void() gargoylewings = { sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
+void() gargoylewings = { sound(self,CHAN_ITEM,"ad171/gargoyle/wings1.wav",1,ATTN_IDLE); };
 
 void()	garg_idle1	= [	$fly2,	garg_idle2	] { monster_idle_sound(); ai_stand(); };
 void()	garg_idle2	= [	$fly4,	garg_idle3	] { ai_stand(); };
@@ -119,7 +119,7 @@ void(float fbframe, vector fbofs) garg_fbupdate = {
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		sound(self, CHAN_WEAPON, "ad171/gargoyle/attack1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/gargoyle/attack1.wav",1,ATTN_NORM);
 	}
 
 	ai_face();					// Turn towards enemy
@@ -208,7 +208,7 @@ void() gargoyle_wakeup = {
 };
 
 void() gargoyle_statue = {
-	if (random() < MON_IDLE_SOUND) sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+	if (random() < MON_IDLE_SOUND) sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
 	
  	self.think = gargoyle_statue;
  	self.nextthink = time + 5 + random()*5;
@@ -217,7 +217,7 @@ void() gargoyle_statue = {
 
 // MINION - Grow and spin up from nothing
 
-void() gargoyle_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() gargoyle_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() gargoyle_grow1 = [$grow1, gargoyle_grow2 ] {};
 void() gargoyle_grow2 = [$grow2, gargoyle_grow3 ] { gargoyle_growangle(); };
 void() gargoyle_grow3 = [$grow3, gargoyle_grow4 ] { gargoyle_growangle(); };
@@ -278,8 +278,8 @@ void(entity inflictor, entity attacker, float damage) garg_pain = {
 
 		// Any pain animation/sound required?
 		if (self.pain_check > 0) {
-			if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-			else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+			else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 			if (self.pain_check == 1 || self.pain_check == 2) {
 				garg_pain1();
 			}
@@ -289,7 +289,7 @@ void(entity inflictor, entity attacker, float damage) garg_pain = {
 
 void()	garg_death1	= [	$death1,	garg_death2	] {};
 void()	garg_death2	= [	$death3,	garg_death3	] { monster_check_gib(); };
-void()	garg_death3	= [	$death5,	garg_death4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void()	garg_death3	= [	$death5,	garg_death4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void()	garg_death4	= [	$death7,	garg_death5	] {};
 void()	garg_death5	= [	$death9,	garg_death6	] {};
 void()	garg_death6	= [	$death11,	garg_death7	] {};
@@ -324,7 +324,7 @@ void() garg_die = {
 	
 	// If not gibbed, then drop to ground
 	if (!self.gibbed) { 
-		sound(self, CHAN_VOICE, "ad171/gargoyle/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ad171/gargoyle/death1.wav",1,ATTN_NORM);
 		self.flags = FL_MONSTER;				// reset all flag conditions
 		self.movetype = MOVETYPE_TOSS;			// Affected by gravity
 		self.velocity_x = -200 + 400*random();
@@ -490,7 +490,7 @@ void(vector minion_org, entity minion_targ) minion_gargoyle = {
 	local entity minion;
 
 	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (!InOpenOrLiquid(minion_org)) return;
 	
 	// Self = minotaur, there is no egg 
 	update_minioncount(self, 1);			// Update spawn counters

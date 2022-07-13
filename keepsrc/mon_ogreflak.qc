@@ -80,7 +80,7 @@ void() FlakTouch = {
 
 	if (other.takedamage) {	// hit something that bleeds	
 		spawn_touchblood(self, other, self.dmg);
-		sound(self, CHAN_VOICE, "weapons/skotch.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "weapons/skotch.wav",1,ATTN_NORM);
 		if (other.spikecount) { // not the first one...
 			other.spikecount = other.spikecount + self.dmg;	
 			remove(self);
@@ -117,9 +117,9 @@ void() BDW_OgreFireFlak = {
 	flakcount = 8;
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (self.spawnflags & MONOGRE_LAVAFLAK) {
-		sound(self, CHAN_WEAPON, "qmaster/ogre/wnalfire_lava.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"qmaster/ogre/wnalfire_lava.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_WEAPON, "kinn/ogre/wnalfire.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"kinn/ogre/wnalfire.wav",1,ATTN_NORM);
 	}
 	ang = vectoangles(self.enemy.origin - self.origin);
 	makevectors(ang);	

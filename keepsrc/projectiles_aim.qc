@@ -145,7 +145,7 @@ vector(vector p1, vector p2, float sped, entity targ) Aim_Lead = {
 	// Check if target's vertical velocity should be ignored.
     xyz = TRUE;
     // if (!wired)
-        if (Aim_IgnoreZ (targ)) { xyz = FALSE; tv_z = 0;}
+        if (Aim_IgnoreZ (targ)) { xyz = FALSE; tv_z = 0; }
 
 	// Calculate the time it takes for a missile to reach a given spot,
 	// then calculate where the moving target will be after that amount of time.
@@ -406,17 +406,17 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float 
 		// One
         d1 = TraceBallistic (p1, v1*sped + vup, FALSE, self, fuse, p2, mtype);
         if (trace_ent == vic) {
-			if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic);}
+			if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic); }
             return v1;      // ONE!
         }
 		// Two
         d2 = TraceBallistic (p1, v2*sped + vup, FALSE, self, fuse, p2, mtype);
         if (trace_ent == vic) {
-			if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic);}
+			if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic); }
             return v2; // TWO!
         }
         // If we didn't eliminate the dummy target yet, remove it now.
-        if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic);}
+        if (vic != self.enemy) { self.enemy.owner = oown;  remove (vic); }
     } else {   // No target to hit, so simply aim at the given point.
         d1 = TraceBallistic (p1, v1*sped + vup, FALSE, self, fuse, p2, mtype);
         d2 = TraceBallistic (p1, v2*sped + vup, FALSE, self, fuse, p2, mtype);
@@ -482,7 +482,7 @@ void() BounceShot_Move = {
 // This updates the velocity and angles of a missile.  Needed for
 // rebounding shots.  Used by pulse rifle and Hip's laser cannon.
 void() BounceShot_Think = {
-    if (time > self.delay) { remove (self); return;}
+    if (time > self.delay) { remove (self); return; }
 
     self.flags      = self.flags - (self.flags & FL_ONGROUND);
     self.velocity   = self.dest;    //old_velocity;
@@ -548,7 +548,7 @@ void(vector st) M_FireSmart = { // [FUNCTION]
         if (trace_ent != self.enemy) up_z = 200;
     }
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound(self, CHAN_AUTO, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
+    sound(self,CHAN_AUTO,"zerstorer/trog/frblfly.wav", 0.6,ATTN_NORM);
     launch_projectile(p1,dir,NO_SPIN,CT_PROJ_SMARTBALL,600);
     newmis.velocity = newmis.velocity + up;
 };
@@ -575,7 +575,7 @@ void(float offset) dprince_hazard = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.enemy.health < 1) return;
 
-	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 	if (skill <= SKILL_NORMAL) haz_loop = 1;
@@ -615,7 +615,7 @@ void() OgreFireADNails = {
 	loopvar = 0;
 	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
 	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
-	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"xmas/snowman/nail_fire.wav",1,ATTN_NORM);
 	makevectors(self.angles); // turn and face your enemy!
 	org = self.origin + attack_vector(self.attack_offset);
 	if (self.attack_count <= 0) self.attack_count = 5; // Shoot something!
@@ -689,4 +689,24 @@ void(vector org, float type) M_LaunchFlameWall = {
 	else self.part_exitpuff = TRUE;
 	// target, origin, v_forward, colour, size, lifetime, speed
 	Launch_Flame(self,org,dir,type,-1,fire_life,SPEED_FLAME);
+};
+
+void() M_FireOctopusInk = {
+	local vector org, dir, vec;
+	local float loopvar;
+
+	if (self.health < 1) return; // Check for death?
+
+	loopvar = 0;
+	self.attack_speed = 200 + (skill * 25);
+	sound(self,CHAN_WEAPON,"tronyn/mon_anglerfish_bite.wav",1,ATTN_NORM);
+	makevectors(self.angles); // turn and face your enemy!
+	org = self.origin + attack_vector(self.attack_offset);
+	if (self.attack_count <= 0) self.attack_count = 3; // Shoot something!
+	while (loopvar < self.attack_count) { // Loop through the nail burst (all at once)
+		vec = (crandom()*20)*v_right + (crandom()*20)*v_up; // Random circle spread pattern
+		dir = normalize((self.enemy.origin + vec) - org);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_INK,self.attack_speed); // Generate a red hot nail projectile
+		loopvar = loopvar + 1;
+	}
 };

@@ -182,7 +182,7 @@ void() misc_explobox_setup = { // [FUNCTION]
 			if (pointcontents(self.origin) == CONTENT_SOLID) {
 				dprint (self.classname);
 				dprint (" stuck at ("); dprint (vtos(self.origin)); dprint (")\n");
-				spawn_marker(self.origin, SPNMARK_YELLOW);
+				spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 				remove(self);
 				return;
 			}

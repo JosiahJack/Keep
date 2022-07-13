@@ -48,7 +48,7 @@ void() InquisitorCheckSetDown = {
 };
 
 // Fly 105-119
-void()	inquisitor_run1	= [105,		inquisitor_run2	] { flat_goal(13);InquisitorCheckSetDown(); self.gravity = 0; self.movetype = MOVETYPE_FLY;};
+void()	inquisitor_run1	= [105,		inquisitor_run2	] { flat_goal(13);InquisitorCheckSetDown(); self.gravity = 0; self.movetype = MOVETYPE_FLY; };
 void()	inquisitor_run2	= [106,		inquisitor_run3	] { flat_goal(13);InquisitorCheckSetDown(); };
 void()	inquisitor_run3	= [107,		inquisitor_run4	] { flat_goal(13);InquisitorCheckSetDown(); };
 void()	inquisitor_run4	= [108,		inquisitor_run5	] { flat_goal(13);InquisitorCheckSetDown(); };
@@ -87,9 +87,9 @@ void() inquisitor_wavetargets = {
 	if (self.health > 0) {
 		// Check for wave boundary triggers
 		self.noise = "";
-		if (self.bosswave == 1) { self.noise = self.noise1; self.noise1 = "";}
-		else if (self.bosswave == 2) { self.noise = self.noise2; self.noise2 = "";}
-		else if (self.bosswave == 3) { self.noise = self.noise3; self.noise3 = "";}
+		if (self.bosswave == 1) { self.noise = self.noise1; self.noise1 = ""; }
+		else if (self.bosswave == 2) { self.noise = self.noise2; self.noise2 = ""; }
+		else if (self.bosswave == 3) { self.noise = self.noise3; self.noise3 = ""; }
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") trigger_strs(self.noise, self);
@@ -111,13 +111,13 @@ void()	inquisitor_flightland11= [162,inquisitor_flightland12] { ai_down(4); };
 void()	inquisitor_flightland12= [163,inquisitor_flightland13] { ai_down(4); };
 void()	inquisitor_flightland13= [164,inquisitor_flightland14] { ai_down(4); };
 void()	inquisitor_flightland14= [165,inquisitor_flightland15] { ai_down(4); };
-void()	inquisitor_flightland15= [166,inquisitor_flightland16] { ai_down(4); self.movetype = MOVETYPE_STEP;};
+void()	inquisitor_flightland15= [166,inquisitor_flightland16] { ai_down(4); self.movetype = MOVETYPE_STEP; };
 void()	inquisitor_flightland16= [167,inquisitor_standrun1] { ai_down(4); };
 
 void() InquisitorCheckAttack;
 
 // StandRun 70-72
-void()	inquisitor_standrun1= [70,		inquisitor_standrun2 ] { ai_run(0); InquisitorCheckAttack();  self.gravity = 1;};
+void()	inquisitor_standrun1= [70,		inquisitor_standrun2 ] { ai_run(0); InquisitorCheckAttack();  self.gravity = 1; };
 void()	inquisitor_standrun2= [71,		inquisitor_standrun3 ] { ai_run(0); };
 void()	inquisitor_standrun3= [72,		inquisitor_standrun1 ] { ai_run(0); };
 
@@ -169,7 +169,7 @@ void()	inquisitor_magica7 = [6,	inquisitor_magica8	] { ai_face(); ai_down(4); };
 void()	inquisitor_magica8 = [7,	inquisitor_magica9	] { ai_face(); ai_down(4); };
 void()	inquisitor_magica9 = [8,	inquisitor_magica10	] { ai_face(); ai_down(4); };
 void()	inquisitor_magica10= [9,	inquisitor_magica11	] { ai_face(); ai_down(4); ai_shockwave(MONAI_STOMPIMPACT, MONAI_STOMPDAMAGE, MONAI_STOMPICERADIUS, MONAI_STOMPUP, 100); };
-void()	inquisitor_magica11= [10,inquisitor_magica12	] { ai_face();inquisitor_stormcloud(); ai_down(4); 	sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); };
+void()	inquisitor_magica11= [10,inquisitor_magica12	] { ai_face();inquisitor_stormcloud(); ai_down(4); 	sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE); };
 void()	inquisitor_magica12= [11,inquisitor_magica13	] { ai_face();inquisitor_stormcloud(); ai_down(4); };
 void()	inquisitor_magica13= [12,inquisitor_standrun1] { ai_face();inquisitor_stormcloud(); ai_down(4); };
 
@@ -226,7 +226,7 @@ void() inquisitor_fireflamewall = {
 	eorg = org + attack_vector('16 0 16'); // Setup explosion origin (infront)
 	
 	// Quiet sfx + dust/smoke
-	sound(self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"ad181/justice/flame_fire.wav",1,ATTN_NORM);	
 	if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 	M_LaunchFlameWall(org,FLAME_GREEN);
 };
@@ -296,12 +296,12 @@ void()	inquisitor_magicc29= [49,inquisitor_magicc30] { ai_face(); ai_down(4); };
 void()	inquisitor_magicc30= [50,inquisitor_standrun1]  { ai_face(); ai_down(4); };
 
 void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] { setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL); self.nextthink = time + 0.15; };
-void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound(world, CHAN_AUTO, "quoth/gug/bile.wav", 1, ATTN_NONE);  self.nextthink = time + 0.15;};
+void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound(world,CHAN_AUTO,"quoth/gug/bile.wav",1,ATTN_NONE);  self.nextthink = time + 0.15; };
 void() inquisitor_bbomb_die3 = [2,inquisitor_bbomb_die4] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 14); self.nextthink = time + 0.15; };
-void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die5] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 12); self.nextthink = time + 0.15;};
-void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die6] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 10); self.nextthink = time + 0.15;};
-void() inquisitor_bbomb_die6 = [5,inquisitor_bbomb_die7] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 8); self.nextthink = time + 0.15;};
-void() inquisitor_bbomb_die7 = [6,inquisitor_bbomb_die7] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 6); entity_remove(self, 0.1); return;};
+void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die5] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 12); self.nextthink = time + 0.15; };
+void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die6] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 10); self.nextthink = time + 0.15; };
+void() inquisitor_bbomb_die6 = [5,inquisitor_bbomb_die7] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 8); self.nextthink = time + 0.15; };
+void() inquisitor_bbomb_die7 = [6,inquisitor_bbomb_die7] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 6); entity_remove(self, 0.1); return; };
 
 void() inquisitor_bbomb_burstcheck = {
 	if (self.attack_finished < time) {
@@ -310,10 +310,10 @@ void() inquisitor_bbomb_burstcheck = {
 	}
 };
 
-void() inquisitor_bbomb_charge1 = [8,inquisitor_bbomb_charge2] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15;};
-void() inquisitor_bbomb_charge2 = [7,inquisitor_bbomb_charge3] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15;};
-void() inquisitor_bbomb_charge3 = [6,inquisitor_bbomb_charge4] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15;};
-void() inquisitor_bbomb_charge4 = [5,inquisitor_bbomb_die1] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15;};
+void() inquisitor_bbomb_charge1 = [8,inquisitor_bbomb_charge2] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15; };
+void() inquisitor_bbomb_charge2 = [7,inquisitor_bbomb_charge3] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15; };
+void() inquisitor_bbomb_charge3 = [6,inquisitor_bbomb_charge4] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15; };
+void() inquisitor_bbomb_charge4 = [5,inquisitor_bbomb_die1] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15; };
 
 void() inquisitor_bilebomb_at_enemys_feet = {
 	local entity missile;
@@ -437,7 +437,7 @@ void()	inquisitor_pain28= [126,inquisitor_pain29] {};
 void()	inquisitor_pain29= [127,inquisitor_pain30] {};
 void()	inquisitor_pain30= [128,inquisitor_pain31] {};
 void()	inquisitor_pain31= [129,inquisitor_pain32] {};
-void()	inquisitor_pain32= [130,inquisitor_pain33] { inquisitor_shieldoff(); self.turrettimer = time + (random() * 15) + 8;};
+void()	inquisitor_pain32= [130,inquisitor_pain33] { inquisitor_shieldoff(); self.turrettimer = time + (random() * 15) + 8; };
 void()	inquisitor_pain33= [131,inquisitor_pain34] { SUB_RemoveFlags(self,FL_ONGROUND); };
 void()	inquisitor_pain34= [132,inquisitor_pain35] { ai_up(2); };
 void()	inquisitor_pain35= [133,inquisitor_pain36] { ai_up(3); };

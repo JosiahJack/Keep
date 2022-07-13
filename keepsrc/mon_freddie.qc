@@ -104,10 +104,10 @@ void(vector weapofs) fred_fireweapon = {
 
 	// Switch projectile type based on spawnflag
 	if (self.spawnflags & MON_FREDDIE_LASER) {
-		sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
+		sound(self,CHAN_WEAPON,"enforcer/enfire.wav",1,ATTN_NORM);	
 		launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,self.attack_speed);
 	} else {
-		sound(self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
 		launch_projectile(org,dir,NO_SPIN,CT_PROJ_MONNG,self.attack_speed);
 	}
 };
@@ -115,7 +115,7 @@ void(vector weapofs) fred_fireweapon = {
 // Start the initial wind up of the weapon first
 void() fred_sfire1 = [$sfire1, fred_sfire2 ] { ai_face();
 	self.pain_finished = time + 0.5 + (skill*0.5);
-	sound(self, CHAN_WEAPON, "quoth/edie/stfire.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"quoth/edie/stfire.wav",1,ATTN_NORM); };
 void() fred_sfire2 = [$sfire2, fred_sfire3 ] { ai_face(); };
 void() fred_sfire3 = [$sfire3, fred_sfire4 ] { ai_face(); };
 void() fred_sfire4 = [$sfire4, fred_sfire5 ] { ai_face(); };
@@ -159,13 +159,13 @@ void() fred_sfire13 = [$sfire13, fred_sfire14 ] { fred_standfire('45 -12 23'); }
 void() fred_sfire14 = [$sfire14, fred_sfire15 ] { fred_standfire('42 -12 25'); };
 void() fred_sfire15 = [$sfire15, fred_sfire16 ] { fred_standfire('42 -14 23');
 	// Always double check health before changing think
-	if (self.health > 0 && skill == SKILL_EASY) self.think = self.th_charge;};
+	if (self.health > 0 && skill == SKILL_EASY) self.think = self.th_charge; };
 void() fred_sfire16 = [$sfire16, fred_sfire17 ] { fred_standfire('38 -14 27'); };
 void() fred_sfire17 = [$sfire17, fred_sfire18 ] { fred_standfire('38 -17 26'); };
 void() fred_sfire18 = [$sfire18, fred_sfire19 ] { fred_standfire('36 -17 28'); };
 void() fred_sfire19 = [$sfire19, fred_sfire20 ] { fred_standfire('36 -17 26');
 	// Always double check health before changing think
-	if (self.health > 0 && skill == SKILL_NORMAL) self.think = self.th_charge;};
+	if (self.health > 0 && skill == SKILL_NORMAL) self.think = self.th_charge; };
 void() fred_sfire20 = [$sfire20, fred_sfire21 ] { fred_standfire('30 -17 28'); };
 void() fred_sfire21 = [$sfire21, fred_sfire22 ] { fred_standfire('30 -18 25'); };
 void() fred_sfire22 = [$sfire22, fred_sfire23 ] { fred_standfire('25 -18 27'); };
@@ -194,22 +194,22 @@ void() fred_runframe = {
 	else if (self.walkframe == 1) monster_footstep(FALSE);
 	else if (self.walkframe == 10) monster_footstep(FALSE);
 
-	if (self.walkframe == 0) { self.distance = 24; self.attack_offset = '50 -20 32';}
-	else if (self.walkframe == 1) { self.distance = 19; self.attack_offset = '43 -18 33';}
-	else if (self.walkframe == 2) { self.distance = 1; self.attack_offset = '53 -20 27';}
-	else if (self.walkframe == 3) { self.distance = 2; self.attack_offset = '47 -19 31';}
-	else if (self.walkframe == 4) { self.distance = 5; self.attack_offset = '54 -17 29';}
-	else if (self.walkframe == 5) { self.distance = 10; self.attack_offset = '47 -17 35';}
-	else if (self.walkframe == 6) { self.distance = 5; self.attack_offset = '53 -15 32';}
-	else if (self.walkframe == 7) { self.distance = 5; self.attack_offset = '47 -15 36';}
-	else if (self.walkframe == 8) { self.distance = 24; self.attack_offset = '50 -13 32';}
-	else if (self.walkframe == 9) { self.distance = 19; self.attack_offset = '46 -15 33';}
-	else if (self.walkframe == 10) { self.distance = 1; self.attack_offset = '51 -14 33';}
-	else if (self.walkframe == 11) { self.distance = 2; self.attack_offset = '47 -14 32';}
-	else if (self.walkframe == 12) { self.distance = 5; self.attack_offset = '52 -14 33';}
-	else if (self.walkframe == 13) { self.distance = 10; self.attack_offset = '47 -14 36';}
-	else if (self.walkframe == 14) { self.distance = 5; self.attack_offset = '49 -14 35';}
-	else if (self.walkframe == 15) { self.distance = 5; self.attack_offset = '45 -15 34';}
+	if (self.walkframe == 0) { self.distance = 24; self.attack_offset = '50 -20 32'; }
+	else if (self.walkframe == 1) { self.distance = 19; self.attack_offset = '43 -18 33'; }
+	else if (self.walkframe == 2) { self.distance = 1; self.attack_offset = '53 -20 27'; }
+	else if (self.walkframe == 3) { self.distance = 2; self.attack_offset = '47 -19 31'; }
+	else if (self.walkframe == 4) { self.distance = 5; self.attack_offset = '54 -17 29'; }
+	else if (self.walkframe == 5) { self.distance = 10; self.attack_offset = '47 -17 35'; }
+	else if (self.walkframe == 6) { self.distance = 5; self.attack_offset = '53 -15 32'; }
+	else if (self.walkframe == 7) { self.distance = 5; self.attack_offset = '47 -15 36'; }
+	else if (self.walkframe == 8) { self.distance = 24; self.attack_offset = '50 -13 32'; }
+	else if (self.walkframe == 9) { self.distance = 19; self.attack_offset = '46 -15 33'; }
+	else if (self.walkframe == 10) { self.distance = 1; self.attack_offset = '51 -14 33'; }
+	else if (self.walkframe == 11) { self.distance = 2; self.attack_offset = '47 -14 32'; }
+	else if (self.walkframe == 12) { self.distance = 5; self.attack_offset = '52 -14 33'; }
+	else if (self.walkframe == 13) { self.distance = 10; self.attack_offset = '47 -14 36'; }
+	else if (self.walkframe == 14) { self.distance = 5; self.attack_offset = '49 -14 35'; }
+	else if (self.walkframe == 15) { self.distance = 5; self.attack_offset = '45 -15 34'; }
 
 	// Run + Fire time?
 	if (self.attack_timer) {
@@ -248,7 +248,7 @@ void(float side) fred_blade = {
 	// Can the target bleed? - generate blood
 	if (!CanDamage (self.enemy, self)) return;
 	
-	sound(self, CHAN_WEAPON, "quoth/edie/mangle.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"quoth/edie/mangle.wav",1,ATTN_NORM);
 	ldmg = (random() + random() + random()) * 20;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, side);
@@ -258,7 +258,7 @@ void(float side) fred_blade = {
 // Alternative ending of melee attack (chance of extra damage)
 //----------------------------------------------------------------------
 void() fred_bswing1 = [$bswing1, fred_bswing2 ] { ai_faceforward(20);
-	sound(self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"quoth/edie/sawstart.wav",1,ATTN_NORM); };
 void() fred_bswing2 = [$bswing2, fred_bswing3 ] { ai_faceforward(12); };
 void() fred_bswing3 = [$bswing3, fred_bswing4 ] { ai_faceforward(4); };
 void() fred_bswing4 = [$bswing4, fred_bswing5 ] { ai_faceforward(2);monster_footstep(FALSE); };
@@ -276,20 +276,20 @@ void() fred_bswing14 = [$bswing14, fred_run ] { ai_faceforward(10); };
 // Start of melee attack
 //----------------------------------------------------------------------
 void() fred_fswing1 = [$fswing1, fred_fswing2 ] { ai_faceforward(8);
-	sound(self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"quoth/edie/sawstart.wav",1,ATTN_NORM); };
 void() fred_fswing2 = [$fswing2, fred_fswing3 ] { ai_faceforward(16); monster_footstep(FALSE); };
 void() fred_fswing3 = [$fswing3, fred_fswing4 ] { ai_faceforward(10);
-		self.nextthink = time + 0.09;};
+		self.nextthink = time + 0.09; };
 void() fred_fswing4 = [$fswing4, fred_fswing5 ] { ai_faceforward(4);
 		self.nextthink = time + 0.08; monster_footstep(FALSE); };
 void() fred_fswing5 = [$fswing5, fred_fswing6 ] { ai_faceforward(2);
-		self.nextthink = time + 0.07;};
+		self.nextthink = time + 0.07; };
 void() fred_fswing6 = [$fswing6, fred_fswing7 ] { ai_faceforward(1);
-		self.nextthink = time + 0.07;};
+		self.nextthink = time + 0.07; };
 void() fred_fswing7 = [$fswing7, fred_fswing8 ] { ai_faceforward(1);
-		self.nextthink = time + 0.06;};
+		self.nextthink = time + 0.06; };
 void() fred_fswing8 = [$fswing8, fred_fswing9 ] { ai_faceforward(2);fred_blade(-200);
-		self.nextthink = time + 0.05;};
+		self.nextthink = time + 0.05; };
 void() fred_fswing9 = [$fswing9, fred_fswing10 ] { ai_faceforward(2); };
 void() fred_fswing10 = [$fswing10, fred_fswing11 ] { ai_faceforward(2); };
 void() fred_fswing11 = [$fswing11, fred_fswinge1 ] {
@@ -343,12 +343,12 @@ void(entity inflictor, entity attacker, float damage) fred_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		if (random() < 0.2) {
-			sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 			self.pain_finished = time + 3 + random()*2;
 			fred_pain1();
 		}
 		else {
-			sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 			self.pain_finished = time + 2 + random()*2;
 			fred_painb1();
 		}
@@ -359,7 +359,7 @@ void(entity inflictor, entity attacker, float damage) fred_pain = {
 void() fred_death1 = [$death1, fred_death2 ] {};
 void() fred_death2 = [$death2, fred_death3 ] { monster_check_gib(); };
 void() fred_death3 = [$death3, fred_death4 ] { monster_check_gib();
-self.solid = SOLID_NOT;};
+self.solid = SOLID_NOT; };
 void() fred_death4 = [$death4, fred_death5 ] {};
 void() fred_death5 = [$death5, fred_death6 ] {};
 void() fred_death6 = [$death6, fred_death7 ] {};
@@ -399,7 +399,7 @@ void() fred_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "quoth/edie/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/edie/death.wav",1,ATTN_NORM);
 		fred_death1();
 	}
 };

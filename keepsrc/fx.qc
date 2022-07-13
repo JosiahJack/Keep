@@ -173,7 +173,7 @@ void(entity source, entity targ, float damage) spawn_touchblood = { // [FUNCTION
 void() MeatSprayThink = { // [FUNCTION]
     local   vector  dir;
 
-    if (self.delay <= time) { remove(self); return;}
+    if (self.delay <= time) { remove(self); return; }
 
     dir = normalize (self.velocity);
     particle (self.origin, dir, self.bloodtype, 10);
@@ -270,10 +270,10 @@ void() Shattered = { // [FUNCTION]
 // 'waitmin' = slow color, 'waitmax' = fast color.
 void(entity shot, float rgb) Laser_Color = { // [FUNCTION]
     shot.skin = rgb;
-    if (rgb == 3) { shot.waitmin = 9;  shot.waitmax = 41;} // Blue
-    else if (rgb == 2) { shot.waitmin = 105;  shot.waitmax = 193;} // Yellow
-    else if (rgb == 1) { shot.waitmin = 73;  shot.waitmax = 225;} // Red
-    else { shot.skin = 0;  shot.waitmin = 97;  shot.waitmax = 233;} // Orange.  Replaced 225 with 97 to stop blood in some ports.
+    if (rgb == 3) { shot.waitmin = 9;  shot.waitmax = 41; } // Blue
+    else if (rgb == 2) { shot.waitmin = 105;  shot.waitmax = 193; } // Yellow
+    else if (rgb == 1) { shot.waitmin = 73;  shot.waitmax = 225; } // Red
+    else { shot.skin = 0;  shot.waitmin = 97;  shot.waitmax = 233; } // Orange.  Replaced 225 with 97 to stop blood in some ports.
 };
 
 // PM:  Moved circle drawing code from Zerstorer's misc.qc to here.
@@ -583,13 +583,13 @@ void() misc_raincloud = { // [ENTITY]
 	spawn_raincloud();
 };
 
-void() skyl_stand1	= [  0,	skyl_stand2  ] { self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
+void() skyl_stand1	= [  0,	skyl_stand2  ] { self.effects = EF_BRIGHTLIGHT; }; // [FUNCTION]
 void() skyl_stand2	= [  1,	skyl_stand3  ] {}; // [FUNCTION]
-void() skyl_stand3	= [  2,	skyl_stand4  ] { self.effects = 0;}; // [FUNCTION]
-void() skyl_stand4	= [  3,	skyl_stand5  ] { self.effects = EF_BRIGHTLIGHT;}; // [FUNCTION]
+void() skyl_stand3	= [  2,	skyl_stand4  ] { self.effects = 0; }; // [FUNCTION]
+void() skyl_stand4	= [  3,	skyl_stand5  ] { self.effects = EF_BRIGHTLIGHT; }; // [FUNCTION]
 void() skyl_stand5	= [  4,	skyl_stand6  ] {}; // [FUNCTION]
 void() skyl_stand6	= [  5,	skyl_stand7  ] {}; // [FUNCTION]
-void() skyl_stand7	= [  6,	skyl_stand8  ] { if (!(self.spawnflags & 2)) { sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); } }; // [FUNCTION]
+void() skyl_stand7	= [  6,	skyl_stand8  ] { if (!(self.spawnflags & 2)) { sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE); } }; // [FUNCTION]
 void() skyl_stand8	= [  7,	skyl_stand1  ] { self.effects = 0; self.nextthink = time + self.wait + (random() * self.waitmax); }; //time  lightning appears time + your time, [FUNCTION]
 
 void() model_skylight = { // [ENTITY]
@@ -721,7 +721,7 @@ void big_bang() = { // [FUNCTION]
 	local vector newo;
 	local float x, y, z;
 
-	if (self.wait == 1) sound(self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NONE);
+	if (self.wait == 1) sound(self,CHAN_VOICE, "boss2/pop2.wav",1,ATTN_NONE);
 	x = random() * 128 - 64;
 	y = random() * 128 - 64;
 	z = random() * 128 - 64;
@@ -746,7 +746,7 @@ void() nehahra_deathbeams = { // [FUNCTION]
 	local entity mark;
 	local vector vec;
 
-	sound(self, CHAN_AUTO, "nehahra/sets/set2_4.wav", 1, ATTN_NONE);
+	sound(self,CHAN_AUTO,"nehahra/sets/set2_4.wav",1,ATTN_NONE);
 	mark = spawn();
 	mark.solid = SOLID_NOT;
 	mark.fullbright = 1;
@@ -789,7 +789,7 @@ void() nehjet = { // [FUNCTION]
 void() throwgibs = { // [FUNCTION]
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
-	sound(self, CHAN_AUTO, "player/udeath.wav", 1, ATTN_NONE);
+	sound(self,CHAN_AUTO,"player/udeath.wav",1,ATTN_NONE);
 	ThrowGib(1, 1);
 	ThrowGib(2, 2);
 	ThrowGib(3, 1);

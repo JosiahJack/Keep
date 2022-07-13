@@ -46,7 +46,7 @@ void() clock_setpos = { // [FUNCTION]
    pos = (seconds / self.count);
    pos = (pos - floor (pos));
    ang = (360.000 * pos);
-   if ( self.event ) {
+   if (self.event ) {
       if ( (self.ltime > ang) ) {
          temp = self.target;
          self.target = self.event;

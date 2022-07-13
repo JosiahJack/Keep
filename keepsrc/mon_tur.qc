@@ -190,7 +190,7 @@ void() tur_launch = {
 	makevectors(v1);
 	v1 = v_forward;
 	if (self.spawnflags & FL_SWIM) {
-		sound(self, CHAN_WEAPON, "drake/drone/enfire.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"drake/drone/enfire.wav",1,ATTN_NORM);
 		if (self.ammo_cells & 1) {
 			launch_projectile(self.origin + v_right*14,v1,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 		} else {
@@ -198,7 +198,7 @@ void() tur_launch = {
 		}
 		self.attack_finished = time + 0.2;
 	} else {
-		sound(self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "weapons/spike2.wav",1,ATTN_NORM);
 		if (self.ammo_cells & 1) {
 			launch_projectile(self.origin + v_right*14,v1,NO_SPIN,CT_PROJ_SNG,SPEED_TRAPSPIKE);
 		} else {

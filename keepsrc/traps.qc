@@ -82,10 +82,10 @@ void() trap_shooter_fire = { // [FUNCTION]
 		// Time for a new LG hit sound?
 		if (self.t_width < time) {
 			// Lower volume and attenuation just in case of several together
-			sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 			self.t_width = time + 0.6;
 		}
-	} else if (self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Fire projectile sound
+	} else if (self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Fire projectile sound
 
 	// Determine type of projectile shooter
 	if (self.classtype == CT_SPIKESHOOTER) {
@@ -499,13 +499,13 @@ void() trap_gasshooter_spawn = { // [FUNCTION]
 		self.nextthink = time + self.wait;
 	} else { // Time to switch off
 		self.state = STATE_OFF;
-		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 	}
 };
 
 void() trap_gasshooter_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
-	if (self.state == STATE_ON) sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); // If gas shooter currently on, play switch off sound
+	if (self.state == STATE_ON) sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM); // If gas shooter currently on, play switch off sound
 	else StopSound(self,CHAN_VOICE);
 
 	self.state = STATE_OFF;
@@ -520,7 +520,7 @@ void() trap_gasshooter_reset = { // [FUNCTION]
 void() trap_gasshooter_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.state = STATE_ON;
-	sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 	self.waitmin2 = time + self.waitmin;
 	trap_gasshooter_spawn();
 };
@@ -533,7 +533,7 @@ void() trap_gasshooter_use = { // [FUNCTION]
 
 	if (self.state == STATE_ON) {
 		self.state = STATE_OFF;
-		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 	} else trap_gasshooter_on();
 };
 

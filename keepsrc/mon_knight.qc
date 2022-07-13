@@ -231,7 +231,7 @@ void(entity inflictor, entity attacker, float damage)	knight_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) knight_pain1();	// classic, body recoil
@@ -250,7 +250,7 @@ void(entity inflictor, entity attacker, float damage)	knight_pain = {
 
 void()	knight_die1	= [	$death1,	knight_die2	] {};
 void()	knight_die2	= [	$death2,	knight_die3	] { monster_check_gib(); };
-void()	knight_die3	= [	$death3,	knight_die4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void()	knight_die3	= [	$death3,	knight_die4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void()	knight_die4	= [	$death4,	knight_die5	] {};
 void()	knight_die5	= [	$death5,	knight_die6	] {};
 void()	knight_die6	= [	$death6,	knight_die7	] {};
@@ -261,7 +261,7 @@ void()	knight_die10= [	$death10,	knight_die10] { monster_deadbody_check(); };
 
 void()	knight_dieb1	= [	$deathb1,	knight_dieb2	] {};
 void()	knight_dieb2	= [	$deathb2,	knight_dieb3	] { monster_check_gib(); };
-void()	knight_dieb3	= [	$deathb3,	knight_dieb4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void()	knight_dieb3	= [	$deathb3,	knight_dieb4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void()	knight_dieb4	= [	$deathb4,	knight_dieb5	] {};
 void()	knight_dieb5	= [	$deathb5,	knight_dieb6	] {};
 void()	knight_dieb6	= [	$deathb6,	knight_dieb7	] {};
@@ -276,7 +276,7 @@ void() knight_die = {
 
 	// regular des
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		if (random() > 0.5) knight_die1();		// Forward - standard
 		else knight_dieb1();									// Backward - standard
 	}
@@ -317,7 +317,7 @@ void() knight_statue = {
 		}
 		self.lip = self.pos1_x + rint(random()*self.pos1_z);
 		if (new_frame) {
-			sound(self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
 			self.frame = self.lip;
 		}
 	}

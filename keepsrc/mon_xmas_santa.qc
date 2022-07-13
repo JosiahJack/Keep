@@ -85,7 +85,7 @@ void() santa_trigger = {
 	
 	self.waitmin = LARGE_TIMER;
 	self.use = SUB_Null;
-	sound(self, CHAN_WEAPON, self.noise2, 1, ATTN_NORM); // "My dear boy, you saved me!"
+	sound(self,CHAN_WEAPON,self.noise2,1,ATTN_NORM); // "My dear boy, you saved me!"
 	SUB_UseTargets(); // Fire all triggers/sounds/messages
 	self.think = model_fade; // Fade out santa (+delete model)
 	self.nextthink = time + 2 + random();
@@ -107,14 +107,14 @@ void() santa_stand4 = [$stand4, santa_stand5 ] { ai_stand(); };
 void() santa_stand5 = [$stand5, santa_stand6 ] { ai_stand(); };
 void() santa_stand6 = [$stand6, santa_stand1 ] { ai_stand(); };
 
-void() santa_walk1 = [$run1, santa_walk2 ] { monster_idle_sound(); ai_walk(15);}
+void() santa_walk1 = [$run1, santa_walk2 ] { monster_idle_sound(); ai_walk(15); }
 void() santa_walk2 = [$run2, santa_walk3 ] { ai_walk(17); };
 void() santa_walk3 = [$run3, santa_walk4 ] { monster_footstep(FALSE); ai_walk(15); };
 void() santa_walk4 = [$run4, santa_walk5 ] { ai_walk(15); };
 void() santa_walk5 = [$run5, santa_walk6 ] { ai_walk(17); };
 void() santa_walk6 = [$run6, santa_walk1 ] { monster_footstep(FALSE); ai_walk(15); };
 
-void() santa_run1 = [$run1, santa_run2 ] { monster_idle_sound(); ai_run(20);}
+void() santa_run1 = [$run1, santa_run2 ] { monster_idle_sound(); ai_run(20); }
 void() santa_run2 = [$run2, santa_run3 ] { ai_run(24); };
 void() santa_run3 = [$run3, santa_run4 ] { monster_footstep(FALSE); ai_run(20); };
 void() santa_run4 = [$run4, santa_run5 ] { ai_run(20); };
@@ -135,7 +135,7 @@ void() SantaMelee = {
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	sound(self, CHAN_WEAPON, "xmas/santa/sack_hit.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"xmas/santa/sack_hit.wav",1,ATTN_NORM);
 
 	// Sack attack is strong (1-60)
 	ldmg = (random() + random() + random()) * 20;
@@ -154,7 +154,7 @@ void() santa_sack2 = [$sack2, santa_sack3 ] {};
 void() santa_sack3 = [$sack3, santa_sack4 ] { ai_face(); };
 void() santa_sack4 = [$sack4, santa_sack5 ] { ai_face();
 	// This sound is exactly 0.4s long, with hit to complete
-	sound(self, CHAN_WEAPON, "xmas/santa/sack_swing.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"xmas/santa/sack_swing.wav",1,ATTN_NORM);
 };
 void() santa_sack5 = [$sack5, santa_sack6 ] { ai_charge(10); };
 void() santa_sack6 = [$sack6, santa_sack7 ] { ai_charge(10); };
@@ -178,7 +178,7 @@ void() Santa_FireSnow = {
 	// Lit up that barrel
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_SANTAPROJ + (skill * SPEED_SANTASKILL);
-	sound(self, CHAN_WEAPON, "xmas/santa/fire.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"xmas/santa/fire.wav",1,ATTN_NORM);	
 
 	// Keep tracking enemy origin (similar to wizards)
 	ai_trackenemy();
@@ -202,7 +202,7 @@ void() Santa_FireSnow = {
 
 void() santa_snow1 = [$attack1, santa_snow2 ] { ai_trackenemy();
 	// First 0.2s is repeatable to get machine gun sound
-	sound(self, CHAN_WEAPON, "xmas/santa/fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"xmas/santa/fire.wav",1,ATTN_NORM);
 };
 void() santa_snow2 = [$attack2, santa_snow3 ] { ai_trackenemy(); };
 void() santa_snow3 = [$attack3, santa_snow4 ] { Santa_FireSnow(); };
@@ -248,8 +248,8 @@ void(entity inflictor, entity attacker, float damage) santa_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.8) santa_painA1();
@@ -267,7 +267,7 @@ void(entity inflictor, entity attacker, float damage) santa_pain = {
 void() santa_die1 = [$death1, santa_die2] {};
 void() santa_die2 = [$death2, santa_die3] { monster_check_gib(); };
 void() santa_die3 = [$death3, santa_die4] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() santa_die4 = [$death4, santa_die5] {};
 void() santa_die5 = [$death5, santa_die6] {};
 void() santa_die6 = [$death6, santa_die7] {};
@@ -279,7 +279,7 @@ void() santa_die10 = [$death10, santa_die10] { monster_deadbody_check(); };
 void() santa_dieb1 = [$bdeath1, santa_dieb2] {};
 void() santa_dieb2 = [$bdeath2, santa_dieb3] { monster_check_gib(); };
 void() santa_dieb3 = [$bdeath3, santa_dieb4] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() santa_dieb4 = [$bdeath4, santa_dieb5] {};
 void() santa_dieb5 = [$bdeath5, santa_dieb6] {};
 void() santa_dieb6 = [$bdeath6, santa_dieb7] {};
@@ -296,7 +296,7 @@ void() santa_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 
 		// Pick a random fall direction
 		if (random() > 0.5) santa_die1();
@@ -388,7 +388,7 @@ void() monster_xmas_santa = { // [ENTITY]
 		// No targetname = no trigger!
 		if (self.targetname == "") {
 			dprint("\b[GOOD SANTA]\b Missing targetname name!\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			return;
 		}
 		// Setup default rescue message

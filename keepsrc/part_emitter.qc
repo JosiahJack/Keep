@@ -920,7 +920,7 @@ float(entity pe_ent) misc_particle_style = { // [FUNCTION]
 		dprint("\b[PEMITTER]\b Style no ("); dprint(ftos(pe_ent.part_style));
 		dprint(") not valid!\n");
 		pe_ent.part_style = PARTICLE_STYLE_EMPTY;	// empty definition
-		spawn_marker(pe_ent.origin, SPNMARK_YELLOW);// Visual problem
+		spawn_marker(pe_ent.origin,'0 0 0',0,SPNMARK_YELLOW);// Visual problem
 	}
 	return pe_ent.part_style; // return any error conditions; 0=ERROR
 };
@@ -964,7 +964,7 @@ void() misc_particle_use = { // [FUNCTION]
 			else emit_particle();
 		}
 	} else {
-		spawn_arrow(self.origin,'-90 0 0',0);
+		spawn_marker(self.origin,'-90 0 0',1,0);
 		misc_particle_off(self);
 	}
 };
@@ -1068,7 +1068,7 @@ void() misc_particle_copytemplate = { // [FUNCTION]
 	// Is the particle template missing?
 	if (!self.owner) {
 		dprint("\b[MISC_PARTICLE]\b Missing target template!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		return;
 	}
 
@@ -1233,7 +1233,7 @@ void() misc_particle = { // [ENTITY]
 	else if (self.message == "PSKILL") self.part_style = PARTICLE_STYLE_PSKILL;
 	else if (self.message == "SRING") self.part_style = PARTICLE_STYLE_SRING;
 	else if (self.message == "SUIT") self.part_style = PARTICLE_STYLE_SUIT;
-	else { dprint("\b[MISC_PARTICLE]\b Missing particle style!\n"); spawn_marker(self.origin, SPNMARK_YELLOW); return; }
+	else { dprint("\b[MISC_PARTICLE]\b Missing particle style!\n"); spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW); return; }
 
 	self.nextthink = time + 0.1 + random(); // Back through emitter function
 	self.think = misc_particle_setup;
@@ -1332,7 +1332,7 @@ void() misc_weather = { // [ENTITY]
 	self.bbmins = self.mins; // Save the brush bounding box for later
 	self.bbmaxs = self.maxs;
 	self.oldorigin = bmodel_origin(self);
-	spawn_marker(self.oldorigin,0);
+	spawn_marker(self.oldorigin,'0 0 0',0,0);
 	self.solid = SOLID_NOT; // hide volume, no longer needed
 	if (!self.count) self.count = rint((vlen(self.bbmaxs - self.bbmins)*0.1)); // Setup default particle count based on volume - 10% of the volume size as particle count
 	if (!self.speed) self.speed = 30; // Change for variable wind change
@@ -1493,7 +1493,7 @@ void() misc_particle_trail_on = { // [FUNCTION]
 		else {
 			// Target entity not valid - results in error.  Need a (moving) target for trails to be active
 			dprint("\b[PART_TRAIL]\b target entity not valid!\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			entity_hide(self);
 			return;		
 		}
@@ -1532,7 +1532,7 @@ void() misc_particle_trail = { // [ENTITY]
 	if (self.part_style < PARTICLE_TRAIL_YELLOW || 
 		self.part_style > PARTICLE_TRAIL_WHITE) {
 		dprint("\b[PART_TRAIL]\b type and colour missing!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;		
 	}

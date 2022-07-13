@@ -52,10 +52,10 @@ void() VermisFoundTarget = {
 	self.goalentity = self.enemy;
 	if (self.coiled != 0) {
 		self.think = vermis_wake1;
-		sound(self, CHAN_VOICE, "quoth/vermis/sight.wav", 1, 0.4);
+		sound(self,CHAN_VOICE, "quoth/vermis/sight.wav", 1, 0.4);
 	} else {
 		self.think = vermis_trans1;
-		sound(self, CHAN_VOICE, "quoth/vermis/sight2.wav", 1, 0.4);
+		sound(self,CHAN_VOICE, "quoth/vermis/sight2.wav", 1, 0.4);
 	}
 	self.th_stand = vermis_idle1;
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
@@ -1038,7 +1038,7 @@ void() vermis_spore_explode = {
 	{
 		T_Damage(other, self, self.owner, 24 + 2 * random(),DAMARMOR);
 	}
-	sound(self, CHAN_VOICE, "quoth/vermis/pop.wav", 0.6, 1.5);
+	sound(self,CHAN_VOICE, "quoth/vermis/pop.wav", 0.6, 1.5);
 	WriteByte(0, SVC_TEMPENTITY);
 	WriteByte(0, TE_TAREXPLOSION);
 	WriteCoord(0, self.origin_x);
@@ -1063,17 +1063,17 @@ void() vermis_spore_touch = {
 	rndsnd = random();
 	if (rndsnd < 0.33)
 	{
-		sound(self, CHAN_VOICE, "quoth/vermis/splash1.wav", 1, 1.7);
+		sound(self,CHAN_VOICE, "quoth/vermis/splash1.wav", 1, 1.7);
 	}
 	else
 	{
 		if (rndsnd < 0.66)
 		{
-			sound(self, CHAN_VOICE, "quoth/vermis/splash2.wav", 1, 1.7);
+			sound(self,CHAN_VOICE, "quoth/vermis/splash2.wav", 1, 1.7);
 		}
 		else
 		{
-			sound(self, CHAN_VOICE, "quoth/vermis/splash3.wav", 1, 1.7);
+			sound(self,CHAN_VOICE, "quoth/vermis/splash3.wav", 1, 1.7);
 		}
 	}
 	if (self.velocity == VEC_ORIGIN)
@@ -1155,7 +1155,7 @@ void() vermis_shoot1 = [122, vermis_shoot2]
 {
 	ai_vermis_face();
 	ai_shotcheck();
-	sound(self, CHAN_WEAPON, "quoth/vermis/spore.wav", 1, 0.5);
+	sound(self,CHAN_WEAPON,"quoth/vermis/spore.wav", 1, 0.5);
 };
 
 void() vermis_shoot2 = [123, vermis_shoot3]
@@ -1286,11 +1286,11 @@ void(float xoff, float yoff, float zoff) vermis_grab = {
 	if (dist < 155)
 	{
 		self.enemy.vermis_grabbed = 1;
-		sound(self, CHAN_VOICE, "quoth/vermis/grabbed.wav", 1, 0.5);
+		sound(self,CHAN_VOICE, "quoth/vermis/grabbed.wav", 1, 0.5);
 		T_Damage(self.enemy, self, self, SVC_FINALE + 4 * random(),DAMARMOR);
 		return;
 	}
-	sound(self, CHAN_VOICE, "quoth/vermis/grndhit.wav", 1, 0.5);
+	sound(self,CHAN_VOICE, "quoth/vermis/grndhit.wav", 1, 0.5);
 };
 
 void(float xoff, float yoff, float zoff, float xoff2, float yoff2, float zoff2) vermis_move = {
@@ -1381,7 +1381,7 @@ void() vermis_grab1 = [142, vermis_grab2]
 	self.yaw_speed = 25;
 	ai_vermis_face();
 	ai_shotcheck();
-	sound(self, CHAN_AUTO, "quoth/vermis/grab.wav", 1, 0.5);
+	sound(self,CHAN_AUTO,"quoth/vermis/grab.wav", 1, 0.5);
 };
 
 void() vermis_grab2 = [143, vermis_grab3]
@@ -1616,7 +1616,7 @@ void() vermis_death52 = [209, vermis_death47] {
 
 void() vermis_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
-	sound(self, CHAN_WEAPON, "quoth/vermis/death.wav", 1, 0);
+	sound(self,CHAN_WEAPON,"quoth/vermis/death.wav", 1, 0);
 	self.solid = SOLID_NOT;
 	if (self.enemy) self.enemy.vermis_grabbed = 0;
 	vermis_death1();

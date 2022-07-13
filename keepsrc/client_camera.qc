@@ -59,7 +59,7 @@ void() SetupIntermissionCamera = {
 		// Cycle through all intermission cameras and link them together
 		while(intercam) {
 			// first camera in chain? setup first and previous camera
-			if (!prevcam) { camera_ent = intercam; camera_ent.count = 0;}
+			if (!prevcam) { camera_ent = intercam; camera_ent.count = 0; }
 			else prevcam.owner = intercam;
 
 			// Save current camera to previous ready for loop

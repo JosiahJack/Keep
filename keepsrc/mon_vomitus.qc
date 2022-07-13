@@ -155,7 +155,7 @@ void() vom_melee = {
 	// * Inflicts anywhere from 1 to 30 damage.
 	// * Life leech: 10% of damage inflicted is given back as health to vomitus.
 	// * 10% of eating the target's current weapon.
-    sound(self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "fish/bite.wav",1,ATTN_NORM);
     // Update 6/17/2011:  Removed poison code.
     // if (random() < 0.1)     // Eat the player's weapon on a critical hit.
         // War_Steal (self, targ, "Vomitus ate your ");
@@ -187,13 +187,13 @@ void(float dist) ai_vomit_run  = {
     if (close) {
 	   if (self.gorging) {
 		   if ((self.enemy.health <= 0) && (self.enemy.solid == SOLID_NOT))
-			   { walkmove (self.angles_y, dist);  return;}
+			   { walkmove (self.angles_y, dist);  return; }
 		   if (self.enemy.touch == TouchGib)
-			   { walkmove (self.angles_y, dist);  return;}
+			   { walkmove (self.angles_y, dist);  return; }
 	   } else {
             // Move over the fallen zombie and crush it for an instakill.
             if (IsZombieDown (self.enemy))
-                { walkmove (self.angles_y, dist);  return;}
+                { walkmove (self.angles_y, dist);  return; }
             // Turn around so it can bite the target while on the run.
             if (self.enemy) ai_face();
         }
@@ -212,7 +212,7 @@ void() vom_stand8 = [$walk2, vom_stand1 ] { ai_vomit_stand(); };
 
 void() vom_idle_sfx = {
 	// Yes, use attn_norm instead of attn_idle.
-    sound(self, CHAN_VOICE, "zerstorer/gibfnt/gf_plop.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "zerstorer/gibfnt/gf_plop.wav",1,ATTN_NORM);
 };
 
 void() vom_walk1  = [$walk1,  vom_walk2  ] {
@@ -266,7 +266,7 @@ void() vom_end3 = [$attack13, vom_run1     ] { ai_face(); };
 
 void() vom_attack1  = [$attack1,  vom_attack2  ] {
     self.pain_finished = time + 1.2;    // Ignore pain during attack.
-    sound(self, CHAN_WEAPON, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"zerstorer/gibfnt/gf_sprt1.wav",1,ATTN_NORM);
     ai_face();
 };
 void() vom_attack2  = [$attack2,  vom_attack3  ] { ai_face(); };
@@ -279,9 +279,9 @@ void() vom_attack8  = [$attack8,  vom_attack9  ] { ai_face(); };
 void() vom_attack9  = [$attack9,  vom_attack10 ] { ai_face(); };
 void() vom_attack10 = [$attack10, vom_attack11 ] { ai_face();
     if (random() < 0.5)
-        sound(self, CHAN_WEAPON, "drake/vomitus/flesh1.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/vomitus/flesh1.wav",1,ATTN_NORM);
     else
-        sound(self, CHAN_WEAPON, "drake/vomitus/flesh2.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"drake/vomitus/flesh2.wav",1,ATTN_NORM);
 
 	Vomit_Spawn();
 	self.think = vom_end1;
@@ -300,7 +300,7 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
     if (self.pain_finished > time) return; // don't make multiple pain sounds right after each other
 
     self.pain_finished = time + 2;
-    sound(self, CHAN_VOICE, "nehahra/vomit/groan.wav", 1, ATTN_NORM);        
+    sound(self,CHAN_VOICE, "nehahra/vomit/groan.wav",1,ATTN_NORM);        
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
@@ -312,7 +312,7 @@ void(float dm) vom_gib = {
 	// PM:  Don't even think about calling T_RadiusDamage here!
 	// This is because gib functions may be called by T_Damage,
 	// which may be called within in T_RadiusDamage loop.
-	sound(self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "blob/death1.wav",1,ATTN_NORM);
 	if (self.skin) {
 		// Meatwad
 		Tent_Explosion2 (self.origin, 64, 16);  // Last could be an 8.
@@ -329,7 +329,7 @@ void(float dm) vom_gib = {
 
 void() vom_die1  = [$death1,  vom_die2    ] {};
 void() vom_die2  = [$death2,  vom_die3    ] {};
-void() vom_die3  = [$death3,  vom_die4    ] { self.solid = SOLID_NOT;};
+void() vom_die3  = [$death3,  vom_die4    ] { self.solid = SOLID_NOT; };
 void() vom_die4  = [$death4,  vom_die5    ] { DropCoin(2); };
 void() vom_die5  = [$death5,  vom_die6    ] {};
 void() vom_die6  = [$death6,  vom_die7    ] { DropCoin(3); };
@@ -351,7 +351,7 @@ void() vom_die16 = [$death15, vom_die16 ] {
 
 void() vom_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
-    sound(self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "drake/vomitus/death.wav",1,ATTN_NORM);
     vom_die1();
 };
 

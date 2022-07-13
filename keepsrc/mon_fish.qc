@@ -85,7 +85,7 @@ void() fish_melee = {
 		
 	// Fish bites man!
 	ldmg = (random() + random()) * 3;
-	sound(self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "fish/bite.wav",1,ATTN_NORM);
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 	
 	// Spawn some touch blood (no explicit direction)
@@ -165,7 +165,7 @@ void() fish_die = {
 	// regular death
 	if (!self.gibbed) {
 		self.walkframe = 0;
-		sound(self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "fish/death.wav",1,ATTN_NORM);
 		if (self.spawnflags & MON_FISH_SMALL) f_deathS1();
 		else f_death1();
 	}

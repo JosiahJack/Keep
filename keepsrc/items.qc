@@ -163,13 +163,13 @@ void() item_respawn = { // [FUNCTION]
 			particle_explode(self.origin + self.respawn_ofs, RESPAWN_PARTICLES*2, RESPAWN_EXPTIME, self.respawn_style, self.respawn_style); 
 	}
 	
-	sound(self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM); // Classic quake re-spawn sound
+	sound(self,CHAN_VOICE, SOUND_RESPAWN,1,ATTN_NORM); // Classic quake re-spawn sound
 	self.alpha = 1;
 	self.estate_reset();
 };
 
 // Re-direction for map hacks (not used normally)
-void() SUB_regen = { sound(self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM); item_reset(); }; // [FUNCTION]
+void() SUB_regen = { sound(self,CHAN_VOICE, SOUND_RESPAWN,1,ATTN_NORM); item_reset(); }; // [FUNCTION]
 
 void() alphafade_item_respawn = { // [FUNCTION]
 	if (self.waitmin > time) {
@@ -235,7 +235,7 @@ void() item_use = { // [FUNCTION]
 		if (self.attack_finished > time) return;
 
 		// Was item setup to be floating?
-		if (self.spawnflags & ITEM_FLOATING){
+		if (self.spawnflags & ITEM_FLOATING) {
 			// Removed checkbottom check, it often fails and leaves items floating in midair when they should fall
 			// A quick toss of the item instead
 			self.movetype = MOVETYPE_TOSS;	
@@ -246,7 +246,7 @@ void() item_use = { // [FUNCTION]
 };
 
 void() item_touch = { // [FUNCTION]
-	if (self.touchedvoid) { entity_hide(self); return;}
+	if (self.touchedvoid) { entity_hide(self); return; }
 	if (self.estate & ESTATE_BLOCK) return;
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
@@ -311,7 +311,7 @@ void() item_restore = { // [FUNCTION]
 };
 
 void() item_delay = { // [FUNCTION]
-	if (self.touchedvoid) { entity_hide(self); return;}
+	if (self.touchedvoid) { entity_hide(self); return; }
 	if (self.estate == ESTATE_DISABLE) return;
 	
 	// Check for Axe / Shotgun / LG upgrade monster spawn exceptions?
@@ -452,7 +452,7 @@ void() item_start = { // [FUNCTION]
 	if (self.upgrade_axe || self.upgrade_ssg) {
 		if ( !(self.spawnflags & ENT_STARTOFF) ) {
 			dprint("\b[ITEM]\b need spawn delay for axe/shotgun\n");
-			spawn_marker(self.origin, SPNMARK_YELLOW);
+			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			remove(self);
 			return;
 		}
@@ -532,7 +532,7 @@ void() health_touch = { // [FUNCTION]
 	sprint(other, "You receive ");
 	sprint(other, ftos(self.healamount));
 	sprint(other, " health\n");
-	if (self.noise != SOUND_EMPTY) sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	if (self.noise != SOUND_EMPTY) sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	activator = other;
 	SUB_UseTargets();
@@ -705,7 +705,7 @@ void() key_touch = { // [FUNCTION]
 	sprint(other, "You got the ");
 	sprint(other, self.netname);
 	sprint(other,"\n");
-	if (self.noise != SOUND_EMPTY) sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	if (self.noise != SOUND_EMPTY) sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd(other, "bf\n");
 	
 	// Add key to player inventory (items / customkey)
@@ -906,7 +906,7 @@ void() item_custom_touch = { // [FUNCTION]
 	sprint(other, "You got the ");
 	sprint(other, self.netname);
 	sprint(other,"\n");
-	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd(other, "bf\n");
 	activator = other;
 	SUB_UseTargets();
@@ -1293,8 +1293,8 @@ void() BackpackTouch = { // [FUNCTION]
 		}		
 	}
 	sprint(other, " from a backpack\n");
-	if (self.perms & IT_CHAINSAW) sound(other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
-	else sound(other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
+	if (self.perms & IT_CHAINSAW) sound(other,CHAN_ITEM,"zerstorer/weapons/sawidle.wav",1,ATTN_NORM);
+	else sound(other,CHAN_ITEM,"weapons/lock4.wav",1,ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 
 	// Check ammo limts, change to best weapon and set ammo type
@@ -1680,7 +1680,7 @@ void() circuitboard_touch = { // [FUNCTION]
 
 	Safe_stuffcmd(other, "bf\n");
 	centerprint(other, "You got a 17-centimeter Fromitz board!");
-	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	activator = other;
 	SUB_UseTargets();
 	remove(self);

@@ -129,7 +129,7 @@ void(float dist) ai_walk = {
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
 	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
-		if (Ryu_HatesWater ()) {
+		if (Ryu_HatesWater()) {
 			if (self.waterlevel) {
 				if (Ryu_LeaveWater(self.speed)) return;
 				// Dragon could not rise toward air.  If in walk mode, increase speed in the hope of finding another way toward air faster.
@@ -154,7 +154,7 @@ void(float dist) ai_walk = {
 	if (self.temperament == TEMPRA_COWARDLY && self.charmer) dist = dist * 2.5;
 	else if (self.temperament == TEMPRA_CALM && self.charmer) dist = dist * 2;
 	movedist = dist;
-	movetogoal(dist);
+	movetogoal(dist); // Overloaded in defs.qc
 };
 
 void() CheckAttack;
@@ -217,7 +217,7 @@ void(float dist) ai_run = {
 					self.think = self.th_walk;
 				} else self.think = self.th_stand;
 			}
-			if (winner && self.th_win) { self.th_win(); return;}   // We have a winner!
+			if (winner && self.th_win) { self.th_win(); return; }   // We have a winner!
 
 			if (self.movetarget || self.charmer)
 				self.th_walk();
@@ -372,9 +372,9 @@ void(float dist) ai_run = {
 			// to fly up and away for whatever reason.
 			e = self.enemy;
 			self.enemy = world;
-			movetogoal (dist);
+			movetogoal(dist);
 			self.enemy = e;
-			Ryu_VerticalSlide (dist, self.enemy);
+			Ryu_VerticalSlide(dist, self.enemy);
 			return;
 		}
 		ai_run_slide (dist); return; // normal
@@ -391,21 +391,17 @@ void(float dist) ai_run = {
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
 		dist = self.speed;
 		if (enemy_range == RANGE_NEAR && QC_CloseEnough (dist)) dist = SPEED_RYU_MIN;
-		movetogoal(dist);
 	} else{
 		if (self.classtype == CT_MONSHADE) {
-			if (self.velocity == '0 0 0')
-				movetogoal (SPEED_RYU_MIN);
-			else
-				movetogoal (self.speed);
+			if (self.velocity == '0 0 0') dist = SPEED_RYU_MIN;
+			else dist = self.speed;
 
 			// Check if in strafe mode.
 			if (self.attack_state == AS_SLIDING) {
 				Ryu_VerticalSlide (self.speed, self.enemy);
 				if (pointcontents (self.origin) == CONTENT_SOLID) self.attack_state = AS_STRAIGHT;
 			}
-		} else {
-			movetogoalplus(dist); // head straight towards the enemy...unless of course I am a turret!
 		}
 	}
+	movetogoal(dist); // Head straight towards the enemy...unless of course I am a turret!
 };

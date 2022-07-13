@@ -47,7 +47,7 @@ void() particlefield_XZ = { // [FUNCTION]
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
 
    self.ltime = (time + 0.250);
-   if ( self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+   if (self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return ;
    start = (self.dest1 + self.origin);
    end = (self.dest2 + self.origin);
@@ -69,7 +69,7 @@ void() particlefield_YZ = { // [FUNCTION]
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
 
    self.ltime = (time + 0.250);
-   if ( self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+   if (self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return;
    start = (self.dest1 + self.origin);
    end = (self.dest2 + self.origin);
@@ -93,7 +93,7 @@ void() particlefield_XY = { // [FUNCTION]
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
 
    self.ltime = (time + 0.250);
-   if ( self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
+   if (self.noise ) sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return ;
    start = (self.dest1 + self.origin);
    end = (self.dest2 + self.origin);
@@ -150,6 +150,6 @@ void() func_particlefield = { // [ENTITY]
          self.dest1_y = ((self.dest1_y + self.dest2_y) / FL_SWIM);
       }
    }
-   if ( self.noise ) precache_sound(self.noise);
+   if (self.noise ) precache_sound(self.noise);
    self.ltime = time;
 };

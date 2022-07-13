@@ -189,7 +189,7 @@ void() dog_atta1	= [	$attack1,	dog_atta2	] { ai_charge(10); };
 void() dog_atta2	= [	$attack2,	dog_atta3	] { ai_charge(10); };
 void() dog_atta3	= [	$attack3,	dog_atta4	] { ai_charge(10); };
 void() dog_atta4	= [	$attack4,	dog_atta5	] {
-sound(self, CHAN_VOICE, "dog/dattack1.wav", 1, ATTN_NORM);
+sound(self,CHAN_VOICE, "dog/dattack1.wav",1,ATTN_NORM);
 dog_bite(); };
 void() dog_atta5	= [	$attack5,	dog_atta6	] { ai_charge(10); };
 void() dog_atta6	= [	$attack6,	dog_atta7	] { ai_charge(10); };
@@ -307,7 +307,7 @@ void(entity inflictor, entity attacker, float damage)	dog_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
 			if (random() > 0.5) dog_pain1();
@@ -323,7 +323,7 @@ void(entity inflictor, entity attacker, float damage)	dog_pain = {
 void() dog_die1		= [	$death1,	dog_die2	] {};
 void() dog_die2		= [	$death2,	dog_die3	] { monster_check_gib(); };
 void() dog_die3		= [	$death3,	dog_die4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() dog_die4		= [	$death4,	dog_die5	] {};
 void() dog_die5		= [	$death5,	dog_die6	] {};
 void() dog_die6		= [	$death6,	dog_die7	] {};
@@ -335,7 +335,7 @@ void() dog_die9		= [	$death9,	dog_die9	] { monster_deadbody_check(); };
 void() dog_dieb1		= [	$deathb1,	dog_dieb2	] {};
 void() dog_dieb2		= [	$deathb2,	dog_dieb3	] { monster_check_gib(); };
 void() dog_dieb3		= [	$deathb3,	dog_dieb4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() dog_dieb4		= [	$deathb4,	dog_dieb5	] {};
 void() dog_dieb5		= [	$deathb5,	dog_dieb6	] {};
 void() dog_dieb6		= [	$deathb6,	dog_dieb7	] {};
@@ -350,7 +350,7 @@ void() dog_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "dog/ddeath.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "dog/ddeath.wav",1,ATTN_NORM);
 
 		if (random() > 0.5) dog_die1();
 		else dog_dieb1();
@@ -369,7 +369,7 @@ void(vector st) Dog_Fire = {
 };
 
 void() dog_fire1  = [$attack1, dog_fire2  ] { ai_face(); };
-void() dog_fire2  = [$attack3, dog_fire3  ] { ai_face(); sound(self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM); Dog_Fire('25 2 6'); };
+void() dog_fire2  = [$attack3, dog_fire3  ] { ai_face(); sound(self,CHAN_WEAPON,"drake/dragon/fire.wav",1,ATTN_NORM); Dog_Fire('25 2 6'); };
 void() dog_fire3  = [$attack3, dog_fire4  ] { ai_face(); Dog_Fire('25 2 6'); };
 void() dog_fire4  = [$attack2, dog_fire5  ] { ai_face(); Dog_Fire('25 2 2'); };
 void() dog_fire5  = [$attack1, dog_run1   ] { ai_face(); };

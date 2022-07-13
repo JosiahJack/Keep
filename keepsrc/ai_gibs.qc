@@ -259,10 +259,22 @@ vector(float gibforce) DirectionForDamage = {
 	return gvel;
 };
 
+void() RemoveGib_Final = {
+	self.think = SUB_Null;
+	self.touch = SUB_Null;
+	self.classtype = 0;
+	self.classgroup = 0;
+	Gyro_Object_ClearPhysics(self);
+};
+
 void() RemoveGib = {
-	self.think = model_fade; // Fade away model, if active (default)
-	if (self.owner.classtype == CT_MISCGIBF || self.owner.classgroup == CG_TEMPENT) self.nextthink = time + 0.1;
-	else self.nextthink = time + 20;
+	if (self.owner.classtype == CT_MISCGIBF || self.owner.classgroup == CG_TEMPENT) {
+		self.think = model_fade; // Fade away model, if active (default)
+		self.nextthink = time + 10;
+	} else {
+		self.think = RemoveGib_Final;
+		self.nextthink = time + 20;
+	}
 	self.ltime = self.nextthink;
 };
 
@@ -302,7 +314,7 @@ float() Gib_Eaten;
 void() TouchGib = {
 	local vector dir;
 
-	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return; } // Always check for sky and void functions first
+	if (InSky(self.origin)) { entity_remove(self, 0.1); return; } // Always check for sky and void functions first
 	if (self.touchedvoid) return; // Marked for removal
     if (Gib_Eaten()) return; // This will remove self if TRUE.
 
@@ -372,7 +384,7 @@ void() TouchGib = {
 			}
 		}
 	}
-	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, self.volume); // Has any impact sounds been defined?
+	if (self.noise != "") sound(self,CHAN_VOICE, self.noise, 1, self.volume); // Has any impact sounds been defined?
 	if (other.flags & FLx_CREATURE) {
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
 		self.velocity_x = self.velocity_x + other.velocity_x*2;
@@ -558,20 +570,20 @@ void() monster_ThrowGib = {
 
 	// New gib sounds.  Zombies have special gib sound because they always go that way!  Stone enemies are just a pile of rubble and dust!
 	if (self.classgroup == CG_ZOMBIE)
-		sound(self, CHAN_VOICE, "zombie/z_gib.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "zombie/z_gib.wav",1,ATTN_NORM);
 	else if (self.classtype == CT_MONMANTICORE || self.classtype == CT_MONLICHFIEND) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_death1.wav", 1, ATTN_NORM);
-		else				sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_gib.wav", 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, "qmaster/manticore/mon_manticore_death1.wav",1,ATTN_NORM);
+		else				sound(self,CHAN_VOICE, "qmaster/manticore/mon_manticore_gib.wav",1,ATTN_NORM);
 	} else if (self.gibtype == GIBTYPE_STONE)
-		sound(self, CHAN_VOICE, GIB_SOUND_SDEATH, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, GIB_SOUND_SDEATH,1,ATTN_NORM);
 	else {
 		self.lip = random() * 4;
-		if (self.lip < 1) sound(self, CHAN_VOICE, GIB1_SOUND, 1, ATTN_NORM);
-		else if (self.lip < 2) sound(self, CHAN_VOICE, GIB3_SOUND, 1, ATTN_NORM);
+		if (self.lip < 1) sound(self,CHAN_VOICE, GIB1_SOUND,1,ATTN_NORM);
+		else if (self.lip < 2) sound(self,CHAN_VOICE, GIB3_SOUND,1,ATTN_NORM);
 		else {
 			// Is the monster humanoid? (udeath is the original id gib sound)
-			if (self.blockudeath) sound(self, CHAN_VOICE, GIB5_SOUND, 1, ATTN_NORM);
-			else sound(self, CHAN_VOICE, GIB_SOUND_UDEATH, 1, ATTN_NORM);
+			if (self.blockudeath) sound(self,CHAN_VOICE, GIB5_SOUND,1,ATTN_NORM);
+			else sound(self,CHAN_VOICE, GIB_SOUND_UDEATH,1,ATTN_NORM);
 		}
 	}	
 	// Some monsters have special death setups
@@ -723,7 +735,7 @@ void() monster_ThrowGib = {
 	newmis.bbmins = self.bbmins;
 	newmis.bbmaxs = self.bbmaxs;
 	newmis.pos1 = self.origin; // Respawn point
-	entity_hide (self); // Finally hide monster
+	entity_hide(self); // Finally hide monster
 };
 
 // Check health for gib condition, and gib if so
@@ -733,7 +745,7 @@ void() monster_check_gib = {
 	if (self.touchedvoid) { entity_hide(self); return; }
 	if (self.gibbed) return; // Can only gib a monster once!
 	if (self.gibondeath) self.health = self.gibhealth; // Make sure gibondeath has gib velocity (health value)
-	if ( self.health < (self.gibhealth + 1) || self.gibondeath) { // Is it time to throw a gib party?
+	if (self.health < (self.gibhealth + 1) || self.gibondeath) { // Is it time to throw a gib party?
 		monster_ThrowGib();
 		monster_gibrandomizer();
 	}
@@ -753,7 +765,7 @@ float() Gib_Eaten = {
 		else sprint(other, " bones!\n");
 		Safe_stuffcmd(other, "bf\n");
 		bones = bones + self.count;
-		sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+		sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 		entity_hide(self); // Remove the gib
 	}	
     if (self.healamount < 1) return FALSE;   // Gib has no food value.
@@ -768,7 +780,7 @@ float() Gib_Eaten = {
 
     if (self.headmdl != "") { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
     	// The big crunch when eating a head!
-        sound(other, CHAN_ITEM, "zerstorer/cube/bc_gulp.wav", 1, ATTN_NORM);
+        sound(other,CHAN_ITEM,"zerstorer/cube/bc_gulp.wav",1,ATTN_NORM);
         gibs = 3;
         while (gibs > 0) {
             SpawnMeatSpray (self,other, 100 * crandom()); // Throw some meat chunks.
@@ -785,7 +797,7 @@ float() Gib_Eaten = {
         self.nextthink  = 0.01;
         self.think      = RemoveGib;
     } else {
-    	sound(other, CHAN_ITEM, "zerstorer/cube/bc_attck.wav", 1, ATTN_NORM);
+    	sound(other,CHAN_ITEM,"zerstorer/cube/bc_attck.wav",1,ATTN_NORM);
         remove (self);
     }
     Safe_stuffcmd (other, "bf\n");

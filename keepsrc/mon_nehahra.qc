@@ -19,7 +19,7 @@ void() nehahra_checkvolume = {
 void() nehahra_bspdamage = {
 	if (self.enemy.classname == "player") return;
 	T_Damage(self.enemy, self, self, 2000, DAMARMOR);
-	sound(self, CHAN_BODY, "nehahra/boss3/step1.wav", 1, ATTN_NONE);
+	sound(self,CHAN_BODY,"nehahra/boss3/step1.wav",1,ATTN_NONE);
 };
 
 float() neh_findbsp = {
@@ -235,7 +235,7 @@ void() nehahra_damage = {
 	random();
 	ldmg = (random() + random() + random()) * 100;
 	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
-	sound(self, CHAN_BODY, "nehahra/boss3/step1.wav", 1, ATTN_NONE);
+	sound(self,CHAN_BODY,"nehahra/boss3/step1.wav",1,ATTN_NONE);
 	if (random() < 0.2) {
 		if (self.enemy.flags & FL_MONSTER || self.enemy.flags & FL_CLIENT) {
 			SUB_RemoveFlags(self.enemy,FL_ONGROUND);
@@ -340,8 +340,8 @@ void() nehahra_goal = [52, nehahra_goal] {
 	}
 	if (self.walkframe == 5 || self.walkframe == 10) {
 		nehahra_checkvolume();
-		sound(self, CHAN_BODY, "nehahra/boss3/step2.wav", self.volume, ATTN_NONE);
-		if (random() < 0.2) sound(self, CHAN_VOICE, "nehahra/boss3/neh1.wav", self.volume, ATTN_NONE);
+		sound(self,CHAN_BODY,"nehahra/boss3/step2.wav", self.volume,ATTN_NONE);
+		if (random() < 0.2) sound(self,CHAN_VOICE, "nehahra/boss3/neh1.wav", self.volume,ATTN_NONE);
 	}
 };
 
@@ -368,18 +368,18 @@ void() nehahra_sounds =  {
 	nehahra_checkvolume();
 	num = random();
 	if (num < 0.3) {
-		sound(self, CHAN_ITEM, "nehahra/boss3/neh1.wav", self.volume, ATTN_NONE);
+		sound(self,CHAN_ITEM,"nehahra/boss3/neh1.wav", self.volume,ATTN_NONE);
 	} else {
 		if (num < 0.7)
-			sound(self, CHAN_ITEM, "nehahra/boss3/neh2.wav", self.volume, ATTN_NONE);
+			sound(self,CHAN_ITEM,"nehahra/boss3/neh2.wav", self.volume,ATTN_NONE);
 		else
-			sound(self, CHAN_BODY, "nehahra/boss3/neh3.wav", self.volume, ATTN_NONE);
+			sound(self,CHAN_BODY,"nehahra/boss3/neh3.wav", self.volume,ATTN_NONE);
 	}
 };
 
 void() nehahra_smash1 = [45, nehahra_smash2] { ai_charge(32); };
 void() nehahra_smash2 = [46, nehahra_smash3] { ai_charge(32); };
-void() nehahra_smash3 = [47, nehahra_smash4] { ai_charge(FL_INWATER); nehahra_checkvolume(); sound(self, CHAN_BODY, "nehahra/boss3/swing.wav", self.volume, ATTN_NONE); };
+void() nehahra_smash3 = [47, nehahra_smash4] { ai_charge(FL_INWATER); nehahra_checkvolume(); sound(self,CHAN_BODY,"nehahra/boss3/swing.wav", self.volume,ATTN_NONE); };
 void() nehahra_smash4 = [48, nehahra_smash5] { ai_charge(32); };
 void() nehahra_smash5 = [49, nehahra_smash6] { ai_charge(32); };
 void() nehahra_smash6 = [50, nehahra_smash7] { ai_face(); };
@@ -398,7 +398,7 @@ void() nehbsp_smash5 = [49, nehbsp_smash6] {
 	ai_charge(32);
 	face_bsp(self.enemy);
 	nehahra_checkvolume();
-	sound(self, CHAN_BODY, "nehahra/boss3/swing.wav", self.volume, ATTN_NONE);
+	sound(self,CHAN_BODY,"nehahra/boss3/swing.wav", self.volume,ATTN_NONE);
 };
 void() nehbsp_smash6 = [50, nehbsp_smash7] { face_bsp(self.enemy); };
 void() nehbsp_smash7 = [51, nehbsp_smash8] { face_bsp(self.enemy); nehahra_bspdamage(); };
@@ -494,15 +494,15 @@ void() n_die26 = [86, n_die27] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150
 void() n_die27 = [85, n_die28] {
 	self.cnt = self.cnt + 1;
 	if (self.cnt < 5) {
-		if (self.cnt == 3) sound(self, CHAN_ITEM, "nehahra/boss3/nehdie1.wav", 1, ATTN_NONE);
+		if (self.cnt == 3) sound(self,CHAN_ITEM,"nehahra/boss3/nehdie1.wav",1,ATTN_NONE);
 		nehjet();
 		nehjet();
 		nehjet();
 	} else {
-		ambientsound(self.origin, "nehahra/ambience/sphum.wav", 1, ATTN_STATIC);
+		ambientsound(self.origin, "nehahra/ambience/sphum.wav",1,ATTN_STATIC);
 		SUB_RemoveFlags(self,FL_ONGROUND);
 		self.velocity_z = 800;
-		sound(self, CHAN_ITEM, "nehahra/boss3/nehdie3.wav", 1, ATTN_NONE);
+		sound(self,CHAN_ITEM,"nehahra/boss3/nehdie3.wav",1,ATTN_NONE);
 		ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 		ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 		ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
@@ -522,7 +522,7 @@ void() n_die28 = [90, n_die29] {
 };
 void() n_die29 = [91, n_die30] {
 	Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150');
-	sound(self, CHAN_AUTO, "nehahra/boss3/nehdie4.wav", 1, ATTN_NONE);
+	sound(self,CHAN_AUTO,"nehahra/boss3/nehdie4.wav",1,ATTN_NONE);
 	Tent_Point(TE_LAVASPLASH,self.origin);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);

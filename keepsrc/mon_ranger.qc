@@ -192,7 +192,7 @@ void(void() thinkst) ranger_break = {
     else if (!visible (self.enemy)) self.think = thinkst;
 };
 
-void() sfx_axe = { sound(self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); };
+void() sfx_axe = { sound(self,CHAN_WEAPON,"axeman/axe1.wav",1,ATTN_NORM); };
 
 // NOTE:  Modified axe attacks to be like CoE's axeman instead of player.
 // FIXME:  Change attacks to be more like the Bane's.
@@ -271,7 +271,7 @@ void() ranger_axer = {
     M_Reload (0.5);
 };
 
-entity() Ranger_Target = { if (skill >= 2) return self.enemy; return world;};
+entity() Ranger_Target = { if (skill >= 2) return self.enemy; return world; };
 
 void() ranger_shotgun = {
     local vector p1, p2;
@@ -344,7 +344,7 @@ void(float lite) ranger_laser = {
     if (lite)
         if ((self.war & WAR_LASER_CANNON) || (lite != 1))   // Blech!
             if (!visible (self.enemy))
-                { self.think = ranger_run; return;}
+                { self.think = ranger_run; return; }
 
     targ = Ranger_Target();
     up = self.enemy.maxs_z - self.enemy.mins_z - 2;
@@ -415,7 +415,7 @@ void() ranger_rocket = {
 
     M_FireBuriza (p1, p2, targ,VEC_ORIGIN);
 };
-void() ranger_rock1  = [$rockatt1,  ranger_rock2  ] { ai_face();ranger_rocket(); self.effects = self.effects | EF_MUZZLEFLASH;};
+void() ranger_rock1  = [$rockatt1,  ranger_rock2  ] { ai_face();ranger_rocket(); self.effects = self.effects | EF_MUZZLEFLASH; };
 void() ranger_rock2  = [$rockatt2,  ranger_rock3  ] { ai_face(); };
 void() ranger_rock3  = [$rockatt3,  ranger_rock4  ] { ai_face(); };
 void() ranger_rock4  = [$rockatt4,  ranger_rock5  ] { ai_face(); };
@@ -619,8 +619,8 @@ void() ranger_fire = {
 
     if (self.arsenal & (WAR_LASER_CANNON | WAR_BLASTER)) {
         if (RangerUse_Laser (dist)) {
-            if (self.arsenal & WAR_LASER_CANNON) { self.war = WAR_LASER_CANNON; ranger_lc1();}
-            else { self.war = WAR_BLASTER; ranger_laser1();}
+            if (self.arsenal & WAR_LASER_CANNON) { self.war = WAR_LASER_CANNON; ranger_lc1(); }
+            else { self.war = WAR_BLASTER; ranger_laser1(); }
             return;
         }
     }
@@ -803,7 +803,7 @@ void() ranger_die = {
         else //if (r == 4)
             sfx = "player/death4.wav";
     }
-    sound(self, CHAN_VOICE, sfx, 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, sfx,1,ATTN_NORM);
 
     if (self.war == WAR_AXE)
     {
@@ -824,9 +824,9 @@ void() ranger_die = {
 };
 
 void(float hello) ranger_sight = {
-    if (hello) sound(self, CHAN_VOICE, "ranger/idle.wav", 1, ATTN_NORM);
-    else if (random() < 0.5) sound(self, CHAN_VOICE, "ranger/sight1.wav", 1, ATTN_NORM);
-    else sound(self, CHAN_VOICE, "ranger/sight2.wav", 1, ATTN_NORM);
+    if (hello) sound(self,CHAN_VOICE, "ranger/idle.wav",1,ATTN_NORM);
+    else if (random() < 0.5) sound(self,CHAN_VOICE, "ranger/sight1.wav",1,ATTN_NORM);
+    else sound(self,CHAN_VOICE, "ranger/sight2.wav",1,ATTN_NORM);
 };
 
 void() monster_ranger_precache = {

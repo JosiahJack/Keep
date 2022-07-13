@@ -159,7 +159,7 @@ void(entity target, float hlth, float maxHealth) TriggerHeal = {
 		target.health = target.health + hlth;
 	else
 		target.health = maxHealth;
-	sound(target, CHAN_AUTO, "aoa/heal.wav", 0.6, ATTN_NORM);
+	sound(target,CHAN_AUTO,"aoa/heal.wav", 0.6,ATTN_NORM);
 };
 
 /*

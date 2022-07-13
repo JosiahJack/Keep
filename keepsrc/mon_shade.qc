@@ -145,7 +145,7 @@ void() Shade_MeatSummon = {
 //  is removed.  Otherwise, it remains for a few seconds before it is
 //  removed permanently or it becomes a zombie.
 void() Shade_MeatMiss = {
-    if (!(self.flags & FL_ONGROUND)) { remove (self); return;}    // Didn't touch ground, remove it.
+    if (!(self.flags & FL_ONGROUND)) { remove (self); return; }    // Didn't touch ground, remove it.
 
 	// Let the missile's blood trail fade before spawning a monster.
     self.avelocity = '0 0 0';     // On the ground -- stop spinning.
@@ -159,7 +159,7 @@ void() Shade_MeatMiss = {
 //  A gib inflicts damage on contact.  If the gib misses, it may
 //  form into a zombie later.
 void() Shade_MeatTouch = {
-    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return;}
+    if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return; }
     if (Reflected ()) return;
     
     // hit something that bleeds
@@ -169,7 +169,7 @@ void() Shade_MeatTouch = {
         remove (self);
     } else {
         // Make a little splat.
-        sound(self, CHAN_WEAPON, "wizard/hit.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"wizard/hit.wav",1,ATTN_NORM);
         spawn_touchblood (self, other, 10);
 
         // Make the shot non-solid and check if it can become a zombie.
@@ -197,7 +197,7 @@ void() Shade_Meat = {
     dir = Aim_Ballistic(org,dir,sped,up,self.enemy,1,SHOT_TIME_BOUNCE,MOVETYPE_BOUNCE);
     dir = Maim_Scatter(dir,'0 0 0');
     mx = vlen(dir);
-    sound(self, CHAN_WEAPON, "drake/dragon/ice.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/dragon/ice.wav",1,ATTN_NORM);
     arc = 0.06;
     loop = 5; // Fire # of shots equal to max zombies.
     spread = (loop - 1) * arc;
@@ -248,9 +248,9 @@ void() shade_sfx_idle = {
 
 			r = random();
 			if (r < 0.5)
-				sound(self, CHAN_VOICE, "drake/shade/idle.wav", 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, "drake/shade/idle.wav",1,ATTN_NORM);
 			else
-				sound(self, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, "drake/shade/taunt.wav",1,ATTN_NORM);
 
 			// Don't make any more noise for a while.
 			self.waitmin = time + 3;
@@ -272,7 +272,7 @@ void(float in) shadow_phase = {
 
 void() shade_stand = {
     if (self.spawnflags & SPAWN_SOUL) {
-        if (Wraith_FindSoul()) { self.th_run();  return;}
+        if (Wraith_FindSoul()) { self.th_run();  return; }
 	}
 
     ai_stand();
@@ -295,7 +295,7 @@ void()  shadow_stand = {
 //  The nightshade phases out and moves along its path.
 void(float d) shade_walk = {
     if (self.spawnflags & SPAWN_SOUL) {
-        if (Wraith_FindSoul ()) { self.th_run();  return;}
+        if (Wraith_FindSoul ()) { self.th_run();  return; }
 	}
     ai_walk(d);
 };
@@ -317,8 +317,8 @@ void()  shadow_walk = {
 //  Run animation.  The nightshade flies quickly to find and close in on its target.
 void() shade_sfx_fly = {
     if (self.super_sound < time) { // Not while Quad is sounding.
-        if (self.waterlevel <= 1) sound(self, CHAN_BODY, "drake/shade/fly.wav", 1, ATTN_NORM); // Not while in the water.
-        else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME)) sound(self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
+        if (self.waterlevel <= 1) sound(self,CHAN_BODY,"drake/shade/fly.wav",1,ATTN_NORM); // Not while in the water.
+        else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME)) sound(self,CHAN_BODY,"drake/dragon/flywater.wav",1,ATTN_NORM);
     }
 }; 
 
@@ -366,18 +366,18 @@ void()  shadow_bite13 = [$attack5,  shadow_bite14 ] { dark_melee(); };
 void()  shadow_bite14 = [$attack4,  shadow_bite15 ] { dark_melee(); };
 void()  shadow_bite15 = [$attack3,  shadow_bite16 ] { dark_melee(); };
 void()  shadow_bite16 = [$attack2,  shadow_bite17 ] { dark_melee(); Ryu_Bite(); };
-void()  shadow_bite17 = [$attack1,  shadow_run1   ] { dark_melee(); self.attack_state = AS_STRAIGHT;};
+void()  shadow_bite17 = [$attack1,  shadow_run1   ] { dark_melee(); self.attack_state = AS_STRAIGHT; };
 
 void() shadow_strike = {
     self.alpha = 0.7;
     self.attack_state = AS_STRAIGHT;    // Nightshade does not strafe.
     traceline(self.origin, self.enemy.origin, TRUE, self); // If path crosses contents, use only the bite.
     if (trace_inopen)
-        if (trace_inwater) { shadow_bite1();  return;}
+        if (trace_inwater) { shadow_bite1();  return; }
 
     // If close enough, it may bite or shoot.
     if (random() < 0.8)
-        if (InMeleeRange (120)) { shadow_bite1();  return;}
+        if (InMeleeRange (120)) { shadow_bite1();  return; }
 
     self.th_missile(); // Fire away instead.
 };
@@ -433,8 +433,8 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
     if (self.pain_finished > time) return; // Same size, standard pain.
 
     self.pain_finished = time + 0.5; 
-    if (random() < 0.5) sound(self, CHAN_VOICE, "drake/shade/pain.wav", 1, ATTN_NORM);
-    else sound(self, CHAN_VOICE, "drake/shade/pain2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound(self,CHAN_VOICE, "drake/shade/pain.wav",1,ATTN_NORM);
+    else sound(self,CHAN_VOICE, "drake/shade/pain2.wav",1,ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
     if (self.waitmin > time) {
@@ -492,8 +492,8 @@ void() shadow_die = {
     self.frame      = $nova1;
     self.alpha      = 0.7;
     self.movetype   = MOVETYPE_NONE;    // Freeze monster in place.
-    if (random() < 0.5) sound(self, CHAN_VOICE, "drake/shade/death2.wav", 1, ATTN_NORM);
-    else sound(self, CHAN_VOICE, "drake/shade/death.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound(self,CHAN_VOICE, "drake/shade/death2.wav",1,ATTN_NORM);
+    else sound(self,CHAN_VOICE, "drake/shade/death.wav",1,ATTN_NORM);
 
     shadow_die1();
 };

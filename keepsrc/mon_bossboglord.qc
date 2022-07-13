@@ -156,10 +156,10 @@ void() bogl_smash1  = [$smash1,  bogl_smash2 ] { ai_charge(2);
 	if (self.meleeattack > 2) self.meleeattack = 0;
 	// Never play the same melee sound twice
 	if (self.meleeattack == 0) {
-		sound(self, CHAN_VOICE, "ad171/boglord/melee1.wav", 1, ATTN_NORM);}
+		sound(self,CHAN_VOICE, "ad171/boglord/melee1.wav",1,ATTN_NORM); }
 	else if (self.meleeattack == 1) {
-		sound(self, CHAN_VOICE, "ad171/boglord/melee2.wav", 1, ATTN_NORM);}
-	else { sound(self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);}
+		sound(self,CHAN_VOICE, "ad171/boglord/melee2.wav",1,ATTN_NORM); }
+	else { sound(self,CHAN_VOICE, "ad171/boglord/melee3.wav",1,ATTN_NORM); }
 };
 void() bogl_smash2  = [$smash2,  bogl_smash3 ] { monster_footstep(FALSE);
 	bogl_slimeball('21 70 60','32 -53 64',0,6); };
@@ -191,7 +191,7 @@ void() bogl_lightning = {
 
 	// Setup skill based attack speed
 	self.attack_speed = SPEED_BLORDBOLT + (skill * SPEED_BLORDSKILL);
-	sound(self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"ad171/gaunt/plasma_fire.wav",1,ATTN_NORM);	
 
 	// Aim around player
 	makevectors(self.angles);
@@ -271,7 +271,7 @@ void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
 
 void() bogl_magic1 = [$magic1, bogl_magic2 ] { ai_face();
 	self.pain_finished = time + 1;
-	sound(self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"ad171/boglord/attack2.wav",1,ATTN_NORM); };
 void() bogl_magic2 = [$magic2, bogl_magic3 ] { bogl_casting('0 53 86','21 -10 102',0); };
 void() bogl_magic3 = [$magic3, bogl_magic4 ] { bogl_casting('-16 50 95','11 0 108',1); };
 void() bogl_magic4 = [$magic4, bogl_magic5 ] { monster_footstep(FALSE); bogl_casting('-28 48 100','6 3 110',2); };
@@ -311,8 +311,8 @@ void(entity inflictor, entity attacker, float damage) bogl_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) bogl_pain1();
 	}
 };
@@ -320,7 +320,7 @@ void(entity inflictor, entity attacker, float damage) bogl_pain = {
 // Classic death pose! Dead Boggy!
 void() bogl_death1  = [$death1,  bogl_death2  ] {};
 void() bogl_death2  = [$death2,  bogl_death3  ] { monster_check_gib(); };
-void() bogl_death3  = [$death3,  bogl_death4  ] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() bogl_death3  = [$death3,  bogl_death4  ] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() bogl_death4  = [$death4,  bogl_death5  ] {};
 void() bogl_death5  = [$death5,  bogl_death6  ] {};
 void() bogl_death6  = [$death6,  bogl_death7  ] {};
@@ -348,7 +348,7 @@ void() bogl_die = {
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
 void() bogl_wakeup1 = [$smash7,		bogl_wakeup2 ] {};
-void() bogl_wakeup2 = [$smash8,		bogl_wakeup3 ] { sound(self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM); };
+void() bogl_wakeup2 = [$smash8,		bogl_wakeup3 ] { sound(self,CHAN_VOICE, "ad171/boglord/melee3.wav",1,ATTN_NORM); };
 void() bogl_wakeup3 = [$smash9,		bogl_wakeup4 ] {};
 void() bogl_wakeup4 = [$smash10,	bogl_wakeup5 ] {};
 void() bogl_wakeup5 = [$smash11,	bogl_wakeup6 ] {};

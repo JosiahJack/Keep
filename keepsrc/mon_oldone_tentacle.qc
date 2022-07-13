@@ -73,7 +73,7 @@ void() groundSmash = {
 	shake.think = screenshake;
 	shake.attack_finished = time + .3;
 	shake.nextthink = time + 0.2;
-	sound(self, CHAN_AUTO, "shambler/fall.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"shambler/fall.wav",1,ATTN_NORM);
 	T_RadiusDamage (self, self.owner, 50, self.owner, DAMAGEALL);
 	remove(self);
 	//if (ext_dppart) pointparticles(particleeffectnum("rocket_explo_classic"), shake.origin, '0 0 0', 1);
@@ -108,18 +108,18 @@ void() oldone_atta11	= [	$attack11,	oldone_atta12	] { ai_face(); };
 void() oldone_atta12	= [	$attack12,	oldone_atta13	] { ai_face(); };
 void() oldone_atta13	= [	$attack13,	oldone_atta14	] { ai_face(); };
 void() oldone_atta14	= [	$attack14,	oldone_atta15	] { ai_face(); };
-void() oldone_atta15	= [	$attack15,	oldone_atta16	] { self.solid = SOLID_NOT;};
+void() oldone_atta15	= [	$attack15,	oldone_atta16	] { self.solid = SOLID_NOT; };
 void() oldone_atta16	= [	$attack16,	oldone_atta17	] { oldone_attack(self.origin, self.enemy.origin - self.origin); };
 void() oldone_atta17	= [	$attack17,	oldone_atta18	] {};
 void() oldone_atta18	= [	$attack18,	oldone_atta19	] { ai_face(); };
 void() oldone_atta19	= [	$attack19,	oldone_atta20	] { ai_face(); };
-void() oldone_atta20	= [	$attack20,	oldone_atta21	] { ai_face(); self.solid = SOLID_BBOX;};
+void() oldone_atta20	= [	$attack20,	oldone_atta21	] { ai_face(); self.solid = SOLID_BBOX; };
 void() oldone_atta21	= [	$attack21,	oldone_aim1	] { ai_face(); };
 
 void() oldone_die1		= [	$death1,	oldone_die2	] {};
 void() oldone_die2		= [	$death2,	oldone_die3	] { monster_check_gib(); };
 void() oldone_die3		= [	$death3,	oldone_die4	] { monster_check_gib(); };
-void() oldone_die4		= [	$death4,	oldone_die5	] { self.solid = SOLID_NOT;};
+void() oldone_die4		= [	$death4,	oldone_die5	] { self.solid = SOLID_NOT; };
 void() oldone_die5		= [	$death5,	oldone_die6	] {};
 void() oldone_die6		= [	$death6,	oldone_die7	] {};
 void() oldone_die7		= [	$death7,	oldone_die8	] {};
@@ -134,7 +134,7 @@ void() oldone_die15		= [	$death15,	oldone_die16	] {};
 void() oldone_die16		= [	$death16,	oldone_die17	] { monster_death_postcheck(); };
 void() oldone_die17		= [	$death17,	oldone_die17	] { monster_deadbody_check(); };
 
-void(entity inflictor, entity attacker, float damage) oldone_pain = { sound(self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM); };
+void(entity inflictor, entity attacker, float damage) oldone_pain = { sound(self,CHAN_VOICE, "boss1/pain.wav",1,ATTN_NORM); };
 
 void() oldone_die = {
 	// Pre-check routine to tidy up extra entities
@@ -142,12 +142,12 @@ void() oldone_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "boss1/death.wav",1,ATTN_NORM);
 		oldone_die1();
 	}
 };
 
-void() oldone_rise1		= [	$death17,	oldone_rise2	] { self.solid = SOLID_BBOX;};
+void() oldone_rise1		= [	$death17,	oldone_rise2	] { self.solid = SOLID_BBOX; };
 void() oldone_rise2		= [	$death16,	oldone_rise3	] {};
 void() oldone_rise3		= [	$death15,	oldone_rise4	] {};
 void() oldone_rise4		= [	$death14,	oldone_rise5	] {};

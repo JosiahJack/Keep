@@ -81,7 +81,7 @@ void() treasure_touch = { // [FUNCTION]
     sprint(other, self.netname);
     sprint(other, "\n");
     Safe_stuffcmd(other, "bf\n");
-    sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+    sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
     if (!self.healamount) self.healamount = 5;
     if (self.healtype)
         T_Heal(other, self.healamount, TRUE); // Reward with max hp increase -- not in SoE!
@@ -107,9 +107,9 @@ void() item_treasure = { // [ENTITY]
 		self.spawnflags = self.spawnflags | 1;
 
     self.classname = "item_treasure";
-    if (self.spawnflags & 1) { self.frame = 0;  self.healamount = 5;}
-    else if (self.spawnflags & 2) { self.frame = 2;  self.healamount = 20;}
-    else { self.frame = 1;  self.healamount = 10;}
+    if (self.spawnflags & 1) { self.frame = 0;  self.healamount = 5; }
+    else if (self.spawnflags & 2) { self.frame = 2;  self.healamount = 20; }
+    else { self.frame = 1;  self.healamount = 10; }
     if (self.healtype) {
         if (self.worldtype) self.th_win = gem_pulse;
         self.netname = "a gem";

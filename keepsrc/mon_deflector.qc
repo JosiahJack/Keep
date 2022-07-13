@@ -81,11 +81,11 @@ void() deflect_shieldoff = {
 };
 
 void() deflect_shieldsound_on = {
-	sound(self, CHAN_ITEM, "ad181/deflector/shield_on.wav", 1, ATTN_NORM);
+	sound(self,CHAN_ITEM,"ad181/deflector/shield_on.wav",1,ATTN_NORM);
 };
 
 void() deflect_shieldsound_off = {
-	sound(self, CHAN_ITEM, "ad181/deflector/shield_off.wav", 1, ATTN_NORM);
+	sound(self,CHAN_ITEM,"ad181/deflector/shield_off.wav",1,ATTN_NORM);
 };
 
 void() deflect_shieldparticle = {
@@ -247,7 +247,7 @@ void(float fire_explode) deflect_fireflame = {
 	if (self.health < 1) return;
 
 	// Whooshing attack sound
-	sound(self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad181/justice/flame_fire.wav",1,ATTN_NORM);
 	
 	// Facing angle
 	ai_face();
@@ -312,16 +312,16 @@ void() deflect_flameframe = {
 		self.think = self.th_run;
 	} else if (self.walkframe == 0) { self.frame = $attack1; 
 		self.attack_switch = self.attack_timer = 0;
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack1.wav",1,ATTN_NORM);
 	} else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
 		deflect_shieldoff(); deflect_shieldsound_off();
-	} else if (self.walkframe == 2) { self.frame = $attack3; ai_face();}
+	} else if (self.walkframe == 2) { self.frame = $attack3; ai_face(); }
 	// MAIN ATTACK LOOP ---------------------------------------------------
 	else if (self.walkframe == 3) { self.frame = $attack14; ai_face();
 		// Sprite Count = Base (X) * (Skill * Y) Maximum = Z
 		self.attack_count = SpriteCount_Flame(self.proj_attqty);
-	} else if (self.walkframe == 4) { self.frame = $attack15; ai_face();}
-	else if (self.walkframe == 5) { self.frame = $attack16; deflect_fireflame(TRUE);}
+	} else if (self.walkframe == 4) { self.frame = $attack15; ai_face(); }
+	else if (self.walkframe == 5) { self.frame = $attack16; deflect_fireflame(TRUE); }
 	else if (self.walkframe >= 6) {
 		// Keep counting down flame attacks (3/5/7 sets)
 		self.attack_count = self.attack_count - 1;
@@ -362,7 +362,7 @@ void(float sideang) deflect_fireplasma = {
 	// Keep adding up projectile counter
 	self.attack_count = self.attack_count + 1;
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,SOUND_PLASMA_FIRE,1,ATTN_NORM);
 	self.attack_speed = SPEED_DEFLECTBOLT + (skill * SPEED_DEFLECTBSKILL);
 	ai_trackenemy();
 	makevectors(self.angles);
@@ -382,17 +382,17 @@ void() deflect_plasmaframe = {
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) { self.frame = $attack1; ai_face();
 		self.attack_count = self.attack_switch = self.attack_timer = 0;
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack1.wav",1,ATTN_NORM);
 	} else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
 		self.attack_track = SUB_orgEnemyTarget();
 		deflect_shieldoff(); deflect_shieldsound_off();
-	} else if (self.walkframe == 2) { self.frame = $attack3; ai_trackenemy();}
-	else if (self.walkframe == 3) { self.frame = $attack14; ai_trackenemy();} // MAIN ATTACK LOOP
-	else if (self.walkframe == 4) { self.frame = $attack15; deflect_fireplasma(0);}
-	else if (self.walkframe == 5) { self.frame = $attack16; ai_trackenemy();}
-	else if (self.walkframe == 6) { self.frame = $attack17; deflect_fireplasma(-1);}
-	else if (self.walkframe == 7) { self.frame = $attack18; ai_trackenemy();}
-	else if (self.walkframe == 8) { self.frame = $attack19; deflect_fireplasma(1);}
+	} else if (self.walkframe == 2) { self.frame = $attack3; ai_trackenemy(); }
+	else if (self.walkframe == 3) { self.frame = $attack14; ai_trackenemy(); } // MAIN ATTACK LOOP
+	else if (self.walkframe == 4) { self.frame = $attack15; deflect_fireplasma(0); }
+	else if (self.walkframe == 5) { self.frame = $attack16; ai_trackenemy(); }
+	else if (self.walkframe == 6) { self.frame = $attack17; deflect_fireplasma(-1); }
+	else if (self.walkframe == 7) { self.frame = $attack18; ai_trackenemy(); }
+	else if (self.walkframe == 8) { self.frame = $attack19; deflect_fireplasma(1); }
 	else if (self.walkframe >= 9) {
 		// Has burst mode been switched off?
 		if (self.attack_rage == FALSE) self.attack_count = self.proj_attqty_z+1;
@@ -431,7 +431,7 @@ void(float sideang) deflect_fire_rocket = {
 	if (!self.enemy) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"ad181/deflector/rocket_fire.wav",1,ATTN_NORM);	
 
 	// Maximum speed, initial speed set in launch_projectile
 	self.attack_speed = SPEED_DEFLECTROCKET + (skill * SPEED_DEFLECTRSKILL);
@@ -459,7 +459,7 @@ void() deflect_rocketframe = {
 		self.frame = $attackp1;
 		self.pain_finished = time + 1;
 		self.attack_track = SUB_orgEnemyTarget();
-		sound(self, CHAN_WEAPON, "ad181/deflector/rocket_load.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad181/deflector/rocket_load.wav",1,ATTN_NORM);
 	}
 	else if (self.walkframe == 1) { 
 		ai_trackenemy(); self.frame = $attackp2;
@@ -551,8 +551,8 @@ void(entity inflictor, entity attacker, float damage) deflect_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 
 		// Turn off shield
 		deflect_shieldoff();
@@ -620,11 +620,11 @@ void() deflect_die = {
 		// Typical forward/backward death + unique sound
 		if (random() > 0.5) {
 			deflect_die1();
-			sound(self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.death_sound2,1,ATTN_NORM);
 		}
 		else {
 			deflect_fdie1();
-			sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		}
 	}
 };

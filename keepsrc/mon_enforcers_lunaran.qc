@@ -30,7 +30,7 @@ void() enforcer_shieldthink = {
 	org = self.owner.origin;
 	self.angles = '0 0 0';
 	self.origin = org;	// apparently I'm not supposed to do that
-	strength = floor( self.owner.armorvalue / 8 );
+	strength = floor(self.owner.armorvalue / 8 );
 	if (strength > 0) {
 		for (i = 0; i < 5; i++) {
 			self.angles_x = time * 140;
@@ -80,7 +80,7 @@ void() enforcer_fireparticlebeam = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
-	sound(self, CHAN_WEAPON, "lunaran/enforcer/me_fire1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"lunaran/enforcer/me_fire1.wav",1,ATTN_NORM);
 	go = vlen(self.enemy.origin - org) / 400;
 	mep = self.enemy.velocity;
 	mep_z = 0;
@@ -134,7 +134,7 @@ void() enforcer_firerocket = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
-	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 	go = vlen(self.enemy.origin - org) / 500;
 	mep = self.enemy.velocity;
 	mep_z = 0;
@@ -172,7 +172,7 @@ void(float offset) enforcer_fireknight = {
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1;
 	self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_ENFHKN,self.attack_speed);
-	sound(self, CHAN_WEAPON, "zerstorer/weapons/rocket1i.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"zerstorer/weapons/rocket1i.wav",1,ATTN_NORM);
 };
 
 void()	menf_atk1	= [	$attack1,	menf_atk2	] { ai_face(); };

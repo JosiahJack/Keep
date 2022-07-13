@@ -81,7 +81,7 @@ void() func_explobsp = { // [ENTITY]
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	setmodel(self, self.model);
-   	setsize( self, self.mins, self.maxs );
+   	setsize(self, self.mins, self.maxs );
 	precache_sound("weapons/r_exp3.wav");
 	if (!self.health) self.health = 20;
 	if (!self.dmg) self.dmg = 160;
@@ -95,7 +95,7 @@ void() func_explobsp = { // [ENTITY]
 
 void() breakaway_break = { // [FUNCTION]
 	self.takedamage = DAMAGE_NO;
-	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
+	if (self.noise1) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);	
 	activator = damage_attacker;
 	self.delay = 0.01;// Don't fire targets right away, since they might be inside
 	SUB_UseTargets();
@@ -106,7 +106,7 @@ void() breakaway_break = { // [FUNCTION]
 };
 
 void(entity inflictor, entity attacker, float damage) breakaway_hurt = { // [FUNCTION]
-	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
+	if (self.noise1) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);	
 	if (self.spawnflags & HEAL) { self.health = self.max_health; return; }
 	
 	if (!self.frame && self.health <= self.frags) self.frame = 1;
@@ -129,7 +129,7 @@ void() func_breakaway = { // [ENTITY]
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	setmodel(self, self.model);
-   	setsize( self, self.mins, self.maxs );
+   	setsize(self, self.mins, self.maxs );
 	if (self.noise)	precache_sound(self.noise);
 	if (self.noise1) precache_sound(self.noise1);
 	if (!self.health) self.health = 20;

@@ -911,7 +911,7 @@ void() display_monsqty = {
 			if (entlist.cooponly == TRUE) as_cooponly = as_cooponly + 1;
 			if (entlist.nightmare && skill != SKILL_NIGHTMARE) { // Is the monster designed for nightmare skill only?
 				// Easier to do nothing
-			} else if (entlist.cooponly && coop == FALSE) { // Is the monster designed for coop only?
+			} else if (entlist.cooponly && coop == 0) { // Is the monster designed for coop only?
 				// Easier to do nothing
 			} else {
 				// Total monsters in map might be different to HUD.  Exceptions = nomonstercount, delaymonstercount
@@ -1131,6 +1131,7 @@ void() NextSecretCamera = {
 };
 
 void() CheckSecretCamera = {
+	if (intermission_running > 0) return;
 	if (impulse_playeronly()) return;		// Player only
 	if (!secloc_running) return;
 	if (self.waitmin > time) return;		// delay input

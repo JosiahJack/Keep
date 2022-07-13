@@ -108,7 +108,7 @@ void() gug_stand80 = [81, gug_choosestand] { ai_stand(); };
 void() gug_choosestand = {
 	local float rnd;
 	if (random() < 0.3)
-		sound(self, CHAN_FEET, self.idle_sound, 1, 0.7);
+		sound(self,CHAN_FEET, self.idle_sound, 1, 0.7);
 
 	rnd = random();
 	if (rnd < 0.25) {
@@ -132,15 +132,15 @@ void() gug_step_sound = {
 
 	rnd = random();
 	if (rnd < 0.25) {
-		sound(self, CHAN_FEET, "quoth/gug/step1.wav", 1, 0.7);
+		sound(self,CHAN_FEET, "quoth/gug/step1.wav", 1, 0.7);
 	} else {
 		if (rnd < 0.5) {
-			sound(self, CHAN_FEET, "quoth/gug/step2.wav", 1, 0.7);
+			sound(self,CHAN_FEET, "quoth/gug/step2.wav", 1, 0.7);
 		} else {
 			if (rnd < 0.75) {
-				sound(self, CHAN_FEET, "quoth/gug/step3.wav", 1, 0.7);
+				sound(self,CHAN_FEET, "quoth/gug/step3.wav", 1, 0.7);
 			} else {
-				sound(self, CHAN_FEET, "quoth/gug/step4.wav", 1, 0.7);
+				sound(self,CHAN_FEET, "quoth/gug/step4.wav", 1, 0.7);
 			}
 		}
 	}
@@ -240,7 +240,7 @@ void(float dist, float power, float clawdmg, float stime) gug_hit = {
 					T_Damage(head, self, self, clawdmg * 0.25,DAMARMOR);
 				}
 				if (self.gug_slapped == 0) {
-					sound(self, CHAN_WEAPON, "shambler/smack.wav", 1, ATTN_NORM);
+					sound(self,CHAN_WEAPON,"shambler/smack.wav",1,ATTN_NORM);
 					self.gug_slapped = 1;
 				}
 				if (head.classname == "player") {
@@ -278,7 +278,7 @@ void(float dist, float power, float clawdmg, float stime) gug_hit = {
 
 void() gug_swingl1 = [106, gug_swingl2] { ai_gug_swing(22, 25); gug_step_sound(); };
 void() gug_swingl2 = [107, gug_swingl3] { ai_gug_swing(20, 26); };
-void() gug_swingl3 = [108, gug_swingl4] { ai_gug_swing(18, 25); sound(self, CHAN_WEAPON, "quoth/gug/throw.wav", 1, ATTN_NORM); };
+void() gug_swingl3 = [108, gug_swingl4] { ai_gug_swing(18, 25); sound(self,CHAN_WEAPON,"quoth/gug/throw.wav",1,ATTN_NORM); };
 void() gug_swingl4 = [109, gug_swingl5] { ai_gug_swing(16, 25); };
 void() gug_swingl5 = [110, gug_swingl6] { ai_gug_swing(18, 24); gug_step_sound(); };
 void() gug_swingl6 = [111, gug_swingl7] { ai_gug_swing(16, 24); };
@@ -296,7 +296,7 @@ void() gug_swingl13 = [118, gug_swingl14] {
 	if (dist > 170)
 		self.think = gug_run1;
 };
-void() gug_swingl14 = [119, gug_swingl15] { ai_gug_swing(1, 14); sound(self, CHAN_BODY, "quoth/gug/throw.wav", 1, ATTN_NORM); };
+void() gug_swingl14 = [119, gug_swingl15] { ai_gug_swing(1, 14); sound(self,CHAN_BODY,"quoth/gug/throw.wav",1,ATTN_NORM); };
 void() gug_swingl15 = [120, gug_swingl16] { ai_gug_swing(1, 25); };
 void() gug_swingl16 = [121, gug_swingl17] { ai_gug_swing(2, 27); };
 void() gug_swingl17 = [122, gug_swingl18] { ai_gug_swing(22, 28); gug_step_sound(); };
@@ -309,7 +309,7 @@ void() gug_swingl23 = [128, gug_run1] { ai_gug_swing(18, 20); };
 
 void() gug_swingr1 = [129, gug_swingr2] { ai_gug_swing(22, 25); gug_step_sound(); };
 void() gug_swingr2 = [130, gug_swingr3] { ai_gug_swing(20, 26); };
-void() gug_swingr3 = [131, gug_swingr4] { ai_gug_swing(18, 25); sound(self, CHAN_BODY, "quoth/gug/throw.wav", 1, ATTN_NORM); };
+void() gug_swingr3 = [131, gug_swingr4] { ai_gug_swing(18, 25); sound(self,CHAN_BODY,"quoth/gug/throw.wav",1,ATTN_NORM); };
 void() gug_swingr4 = [132, gug_swingr5] { ai_gug_swing(16, 25); };
 void() gug_swingr5 = [133, gug_swingr6] { ai_gug_swing(18, 24); gug_step_sound(); };
 void() gug_swingr6 = [134, gug_swingr7] { ai_gug_swing(16, 24); };
@@ -328,7 +328,7 @@ void() gug_swingr13 = [141, gug_swingr14] {
 		self.think = gug_run1;
 	}
 };
-void() gug_swingr14 = [142, gug_swingr15] { ai_gug_swing(1, 14); sound(self, CHAN_WEAPON, "quoth/gug/throw.wav", 1, ATTN_NORM); };
+void() gug_swingr14 = [142, gug_swingr15] { ai_gug_swing(1, 14); sound(self,CHAN_WEAPON,"quoth/gug/throw.wav",1,ATTN_NORM); };
 void() gug_swingr15 = [143, gug_swingr16] { ai_gug_swing(1, 25); };
 void() gug_swingr16 = [144, gug_swingr17] { ai_gug_swing(2, 27); };
 void() gug_swingr17 = [145, gug_swingr18] { ai_gug_swing(22, 28); gug_step_sound(); };
@@ -382,7 +382,7 @@ void() BileFragTouch = {
 	WriteCoord(0, org_z);
 	WriteByte(0, 240);
 	WriteByte(0, AS_MELEE);
-	sound(self, CHAN_WEAPON, "quoth/gug/bile.wav", 0.5 + 0.5 * random(), 0.8);
+	sound(self,CHAN_WEAPON,"quoth/gug/bile.wav", 0.5 + 0.5 * random(), 0.8);
 	BecomeBileExplosion();
 };
 
@@ -433,7 +433,7 @@ void() BileBombTouch = {
 	WriteCoord(0, org_z);
 	WriteByte(0, 240);
 	WriteByte(0, AS_MELEE);
-	sound(self, CHAN_WEAPON, "quoth/gug/bile.wav", 1, 0.8);
+	sound(self,CHAN_WEAPON,"quoth/gug/bile.wav", 1, 0.8);
 	BecomeBileExplosion();
 };
 
@@ -570,7 +570,7 @@ void(float stime) gug_quake = {
 	local entity qent;
 
 	self.t_width = time + 4.5;
-	sound(self, CHAN_AUTO, "quoth/gug/gquake.wav", 1, ATTN_NONE);
+	sound(self,CHAN_AUTO,"quoth/gug/gquake.wav",1,ATTN_NONE);
 	qent = spawn();
 	qent.owner = self;
 	qent.movetype = MOVETYPE_NONE;
@@ -702,13 +702,13 @@ void() gug_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "quoth/gug/death.wav", 1, 0.5);
+		sound(self,CHAN_VOICE, "quoth/gug/death.wav", 1, 0.5);
 		gug_death1();
 	}
 };
 
 void() gug_melee = {
-	sound(self, CHAN_VOICE, "quoth/gug/swipe.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "quoth/gug/swipe.wav",1,ATTN_NORM);
 	if (self.state == 0)
 		self.state = ceil(2 * random());
 
@@ -729,9 +729,9 @@ void() gug_missile = {
 	dist = vlen(self.enemy.origin - self.origin);
 	if (random() < 0.8 || self.t_width > time) {
 		gug_bile1();
-		sound(self, CHAN_BODY, "quoth/gug/bileatk.wav", 1, 0.7);
+		sound(self,CHAN_BODY,"quoth/gug/bileatk.wav", 1, 0.7);
 	} else {
-		sound(self, CHAN_BODY, "quoth/gug/quakeatk.wav", 1, 0.7);
+		sound(self,CHAN_BODY,"quoth/gug/quakeatk.wav", 1, 0.7);
 		gug_quake1();
 	}
 	return;
@@ -754,7 +754,7 @@ void(entity inflictor, entity attacker, float damage) gug_pain = {
 	if (random() * 400 > damage && damage > 55)
 		return;
 
-	sound(self, CHAN_VOICE, "quoth/gug/pain.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "quoth/gug/pain.wav",1,ATTN_NORM);
 	self.pain_finished = time + AS_MELEE;
 	gug_pain1();
 };

@@ -115,15 +115,15 @@ void()	frag_standb11= [	$rach11,frag_standb12	] { ai_stand(); frog_mode(); };
 void()	frag_standb12= [	$rach12,frag_stand1	] { ai_stand(); };
 
 // Harmlessly eat a fly (same anim as attacking though).
-void()	frag_flyatack1	= [	$artk1, frag_flyatack2	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack2	= [	$artk2, frag_flyatack3	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack3	= [	$artk3, frag_flyatack4	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack4	= [	$artk4, frag_flyatack5	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack5	= [	$artk5, frag_flyatack6	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack6	= [	$artk6, frag_flyatack7	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack7	= [	$artk7, frag_flyatack8	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack8	= [	$artk8, frag_flyatack9	] { self.nextthink = time + 0.05;};
-void()	frag_flyatack9	= [	$artk9, frag_stand1	] { self.nextthink = time + 0.05;};
+void()	frag_flyatack1	= [	$artk1, frag_flyatack2	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack2	= [	$artk2, frag_flyatack3	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack3	= [	$artk3, frag_flyatack4	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack4	= [	$artk4, frag_flyatack5	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack5	= [	$artk5, frag_flyatack6	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack6	= [	$artk6, frag_flyatack7	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack7	= [	$artk7, frag_flyatack8	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack8	= [	$artk8, frag_flyatack9	] { self.nextthink = time + 0.05; };
+void()	frag_flyatack9	= [	$artk9, frag_stand1	] { self.nextthink = time + 0.05; };
 
 void()	frag_walk1	= [	$walk1, 	frag_walk2	] { ai_walk(1); if (random() < 0.5) self.think = frag_walkb1; frog_mode(); };
 void()	frag_walk2	= [	$walk2, 	frag_walk3	] { ai_walk(3);monster_idle_sound(); frog_mode(); };
@@ -203,15 +203,15 @@ void()	frag_swim10	= [	$swim10, 	frag_swim11	] { ai_fish_movement("ai_run",16); 
 void()	frag_swim11	= [	$swim11, 	frag_swim12	] { ai_fish_movement("ai_run",10); frog_mode(); };
 void()	frag_swim12	= [	$swim12, 	frag_swim1	] { ai_fish_movement("ai_run",4); frog_mode(); };
 
-void()	frag_atack1	= [	$artk1, 	frag_atack2	] { self.nextthink = time + 0.05;};
-void()	frag_atack2	= [	$artk2, 	frag_atack3	] { self.nextthink = time + 0.05;};
-void()	frag_atack3	= [	$artk3, 	frag_atack4	] { self.nextthink = time + 0.05;};
-void()	frag_atack4	= [	$artk4, 	frag_atack5	] { self.nextthink = time + 0.05;};
-void()	frag_atack5	= [	$artk5, 	frag_atack6	] { ai_melee(); self.nextthink = time + 0.05;};
-void()	frag_atack6	= [	$artk6, 	frag_atack7	] { self.nextthink = time + 0.05;};
-void()	frag_atack7	= [	$artk7, 	frag_atack8	] { ai_melee(); self.nextthink = time + 0.05;};
-void()	frag_atack8	= [	$artk8, 	frag_atack9	] { self.nextthink = time + 0.05;};
-void()	frag_atack9	= [	$artk9, 	frag_run1	] { self.nextthink = time + 0.05;};
+void()	frag_atack1	= [	$artk1, 	frag_atack2	] { self.nextthink = time + 0.05; };
+void()	frag_atack2	= [	$artk2, 	frag_atack3	] { self.nextthink = time + 0.05; };
+void()	frag_atack3	= [	$artk3, 	frag_atack4	] { self.nextthink = time + 0.05; };
+void()	frag_atack4	= [	$artk4, 	frag_atack5	] { self.nextthink = time + 0.05; };
+void()	frag_atack5	= [	$artk5, 	frag_atack6	] { ai_melee(); self.nextthink = time + 0.05; };
+void()	frag_atack6	= [	$artk6, 	frag_atack7	] { self.nextthink = time + 0.05; };
+void()	frag_atack7	= [	$artk7, 	frag_atack8	] { ai_melee(); self.nextthink = time + 0.05; };
+void()	frag_atack8	= [	$artk8, 	frag_atack9	] { self.nextthink = time + 0.05; };
+void()	frag_atack9	= [	$artk9, 	frag_run1	] { self.nextthink = time + 0.05; };
 
 void() frag_jump1 = [       $jump1,        frag_jump2        ] {
 	if (lefty) {
@@ -269,15 +269,15 @@ void()	frag_pain8	= [	$pain8, 	frag_run1	] {};
 void(entity inflictor, entity attacker, float damage) frag_pain = {
 	if (self.pain_finished > time) return;
 	
-	sound(self, CHAN_VOICE, "knight/khurt.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "knight/khurt.wav",1,ATTN_NORM);
 	frag_pain1();
 	self.pain_finished = time + 1;
 };
 
 void() frag_grounddie2;
 
-void() frag_die1 = [       $death1,        frag_die2        ] { monster_check_gib();if (pointcontents(self.origin) > CONTENT_WATER) { self.think = frag_grounddie2;}};
-void() frag_die2 = [       $death2,        frag_die3        ] { self.solid = SOLID_NOT;};	
+void() frag_die1 = [       $death1,        frag_die2        ] { monster_check_gib();if (pointcontents(self.origin) > CONTENT_WATER) { self.think = frag_grounddie2; }};
+void() frag_die2 = [       $death2,        frag_die3        ] { self.solid = SOLID_NOT; };	
 void() frag_die3 = [       $death3,        frag_die4        ] {};
 void() frag_die4 = [       $death4,        frag_die5        ] {};
 void() frag_die5 = [       $death5,        frag_die6        ] {};
@@ -290,12 +290,12 @@ void() frag_die11 = [      $death11,       frag_die12       ] {};
 void() frag_die12 = [      $death12,       frag_die13       ] { monster_death_postcheck(); };
 void() frag_die13 = [      $death13,       frag_die13       ] { monster_deadbody_check(); };
 
-void() frag_grounddie2 = [       $death2,        frag_grounddie3] { self.solid = SOLID_NOT;};	
+void() frag_grounddie2 = [       $death2,        frag_grounddie3] { self.solid = SOLID_NOT; };	
 void() frag_grounddie3 = [       $death4,        frag_grounddie4] {};
 void() frag_grounddie4 = [       $death6,        frag_grounddie5] {};
 void() frag_grounddie5 = [       $death8,        frag_grounddie6] {};
 void() frag_grounddie6 = [      $death10,       frag_grounddie7 ] {};
-void() frag_grounddie7 = [      $death12,       frag_grounddie8 ] { monster_death_postcheck();sound(self, CHAN_VOICE, "quoth/voreling/land.wav", 1, ATTN_NORM); };
+void() frag_grounddie7 = [      $death12,       frag_grounddie8 ] { monster_death_postcheck();sound(self,CHAN_VOICE, "quoth/voreling/land.wav",1,ATTN_NORM); };
 void() frag_grounddie8 = [      $death13,       frag_grounddie8 ] { monster_deadbody_check(); };
 
 void() frag_die = {
@@ -304,8 +304,8 @@ void() frag_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		if (pointcontents(self.origin) <= CONTENT_WATER) sound(self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
+		if (pointcontents(self.origin) <= CONTENT_WATER) sound(self,CHAN_VOICE, "fish/death.wav",1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "quoth/voreling/death.wav",1,ATTN_NORM);
 		frag_die1();
 	}
 };

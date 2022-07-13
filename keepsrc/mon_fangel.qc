@@ -17,7 +17,7 @@ float() fangel_check_incoming =  {
    }
    if ( (random() > ((0.40000 + (skill / 10.00000)) + (self.skin / 10.00000))) ) return (FALSE);
 
-   item = findradius ( self.origin, 384.00000);
+   item = findradius (self.origin, 384.00000);
    while ( item ) {
       if (item.owner.classname == "player" && IsMissile(item)) {
          vec = normalize ( ((self.origin - item.origin) + self.view_ofs));
@@ -42,10 +42,10 @@ float FANGEL_STAGE_SIDESTEP   =  3.00000;
 void  ()fangel_check_wing =  {
 	local float chance, visib;
 
-	visib = visible ( self.enemy);
+	visib = visible (self.enemy);
 	if ( ((self.monster_stage == FANGEL_STAGE_FLY) && (random() < 0.50000))) visib = FALSE;
 	if (visib) {
-		enemy_range = range ( self.enemy);
+		enemy_range = range (self.enemy);
 			if (time > self.attack_finished) {
 				if (enemy_range != RANGE_FAR) {
 					chance = 0.5;
@@ -133,9 +133,9 @@ void  ()fangel_wait =  {
       if ( (((random() * 100.00000) < 5.00000) && (self.t_width < time)) ) {
          self.t_width = (time + 7.00000);
          if (self.classname == "monster_fallen_angel_lord") {
-            sound( self, CHAN_AUTO, "hexen2/fangel/ambi2.wav", (0.5 + (random() * 0.5)), ATTN_NORM);
+            sound(self,CHAN_AUTO,"hexen2/fangel/ambi2.wav", (0.5 + (random() * 0.5)),ATTN_NORM);
          } else {
-            sound( self, CHAN_AUTO, "hexen2/fangel/ambi1.wav", (0.5 + (random() * 0.5)), ATTN_NORM);
+            sound(self,CHAN_AUTO,"hexen2/fangel/ambi1.wav", (0.5 + (random() * 0.5)),ATTN_NORM);
          }
       }
    }
@@ -215,7 +215,7 @@ void  (float thrust)fangel_fly =  {
 void()fangel_float =  {
    self.monster_duration = (self.monster_duration - 1.00000);
    ai_face ();
-   enemy_range = range ( self.enemy);
+   enemy_range = range (self.enemy);
    if ( ((enemy_range <= RANGE_NEAR) && (random() < 0.25000)) ) {
       self.monster_duration = 0.00000;
    } else {
@@ -262,7 +262,7 @@ void(float thrust) fangel_move = {
 
 void() fangel_hand_fire = {
    ai_face();
-   sound( self, CHAN_WEAPON, "hexen2/fangel/hand.wav", 1.00000, ATTN_NORM);
+   sound(self,CHAN_WEAPON,"hexen2/fangel/hand.wav", 1.00000,ATTN_NORM);
    do_faSpell('10 -4 8',400);
    do_faSpell('10 -4 8',300);
 };
@@ -270,8 +270,8 @@ void() fangel_hand_fire = {
 
 void  ()fangel_wing_fire =  {
    ai_face();
-   sound( self, CHAN_WEAPON, "hexen2/fangel/wing.wav", 1.00000, ATTN_NORM);
-   makevectors( self.angles);
+   sound(self,CHAN_WEAPON,"hexen2/fangel/wing.wav", 1.00000,ATTN_NORM);
+   makevectors(self.angles);
    do_faBlade ( '8.00000 6.00000 4.00000', 360.00000, (v_right * 2.00000));
    do_faBlade ( '-8.00000 6.00000 4.00000', 360.00000, (v_right * -2.00000));
 
@@ -335,7 +335,7 @@ void() fangel_block21 = [20, fangel_flyframes_check] {
 void() fangel_death6;
 
 void() fangel_death_effects = {
-	traceline ( self.origin, (self.origin - '0 0 250'), FALSE, self);
+	traceline (self.origin, (self.origin - '0 0 250'), FALSE, self);
 	if (vlen(self.origin - trace_endpos) < 128) particle(trace_endpos, '0 0 25', 225, 80); 
 	//if ( ((self.frame == 27.00000) && !(self.flags & FL_ONGROUND)) ) {
 		//self.think = fangel_death6;
@@ -366,7 +366,7 @@ void() fangel_death17 = [37, fangel_death18] { fangel_death_effects(); };
 void() fangel_death18 = [38, fangel_death19] { fangel_death_effects(); };
 void() fangel_death19 = [39, fangel_death20] { fangel_death_effects(); };
 void() fangel_death20 = [40, fangel_death21] { fangel_death_effects(); };
-void() fangel_death21 = [41, fangel_death22] { fangel_death_effects(); self.movetype = MOVETYPE_STEP;};
+void() fangel_death21 = [41, fangel_death22] { fangel_death_effects(); self.movetype = MOVETYPE_STEP; };
 void() fangel_death22 = [42, fangel_death23] { fangel_death_effects(); };
 void() fangel_death23 = [43, fangel_death24] { fangel_death_effects(); };
 void() fangel_death24 = [44, fangel_death25] { fangel_death_effects(); };
@@ -379,9 +379,9 @@ void() fangel_death30 = [50, fangel_death31] {
 	fangel_death_effects();
 	self.solid = SOLID_NOT;
 	if ( (self.classname == "monster_fallen_angel") ) {
-		sound( self, CHAN_WEAPON, "hexen2/fangel/death.wav", 1.00000, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"hexen2/fangel/death.wav", 1.00000,ATTN_NORM);
 	} else {
-		sound( self, CHAN_WEAPON, "hexen2/fangel/death2.wav", 1.00000, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"hexen2/fangel/death2.wav", 1.00000,ATTN_NORM);
 	}
 };
 void() fangel_death31 = [51, fangel_death32] { fangel_death_effects(); };
@@ -510,7 +510,7 @@ void() fangel_paincheck = {
 	self.frame = self.splash_time;
 };
 
-void() fangel_painframes1 = [133, fangel_painframes2] { fangel_paincheck();sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM); };
+void() fangel_painframes1 = [133, fangel_painframes2] { fangel_paincheck();sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM); };
 void() fangel_painframes2 = [134, fangel_painframes3] { fangel_paincheck(); };
 void() fangel_painframes3 = [135, fangel_painframes4] { fangel_paincheck(); };
 void() fangel_painframes4 = [136, fangel_painframes5] { fangel_paincheck(); };
@@ -546,7 +546,7 @@ void() fangel_fly20 = [204, fangel_fly21] {
 	ai_face();
 	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
 	else {
-		sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/lstart.wav",1,ATTN_NORM);
 		gaunt_lightning(0);
 	}
 };
@@ -560,13 +560,13 @@ void() fangel_fly22 = [206, fangel_fly23] { ai_face();
 	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
 	else gaunt_lightning(0);
 };
-void() fangel_fly23 = [207, fangel_fly24] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
-void() fangel_fly24 = [208, fangel_fly25] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0);}};
-void() fangel_fly25 = [209, fangel_fly26] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
-void() fangel_fly26 = [210, fangel_fly27] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0);}};
-void() fangel_fly27 = [211, fangel_fly28] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
-void() fangel_fly28 = [212, fangel_fly29] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0);}};
-void() fangel_fly29 = [213, fangel_fly30] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1);}};
+void() fangel_fly23 = [207, fangel_fly24] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1); }};
+void() fangel_fly24 = [208, fangel_fly25] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0); }};
+void() fangel_fly25 = [209, fangel_fly26] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1); }};
+void() fangel_fly26 = [210, fangel_fly27] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0); }};
+void() fangel_fly27 = [211, fangel_fly28] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1); }};
+void() fangel_fly28 = [212, fangel_fly29] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(0); }};
+void() fangel_fly29 = [213, fangel_fly30] { ai_face(); if (self.classname == "monster_fallen_angel_lord") { gaunt_lightning(1); }};
 void() fangel_fly30 = [214, fangel_flyframes_check] {
 	ai_face();
 	if ( (random() < 0.25000) ) {
@@ -589,9 +589,9 @@ void  (entity inflictor, entity attacker, float damage)fangel_pain =  {
    }
    if ( (((self.frame >= 71.00000) && (self.frame <= 73.00000)) || ((self.frame >= 86.00000) && (self.frame <= 88.00000))) ) {
       if ( (self.classname == "monster_fallen_angel") ) {
-         sound( self, CHAN_WEAPON, "hexen2/fangel/pain.wav", 1.00000, ATTN_NORM);
+         sound(self,CHAN_WEAPON,"hexen2/fangel/pain.wav", 1.00000,ATTN_NORM);
       } else {
-         sound( self, CHAN_WEAPON, "hexen2/fangel/pain2.wav", 1.00000, ATTN_NORM);
+         sound(self,CHAN_WEAPON,"hexen2/fangel/pain2.wav", 1.00000,ATTN_NORM);
       }
       self.splash_time = self.frame;
       fangel_painframes1();

@@ -84,9 +84,9 @@ vector(float theta) CoST = {
 };
 
 // Trigonometric functions.  Different than builtins, DON'T CHANGE/REMOVE!!
-float(float t) SUB_cos = { local vector v;  v = CoSine(t);  return v_x;};
-float(float t) SUB_sin = { local vector v;  v = CoSine(t);  return v_y;};
-float(float t) SUB_tan = { local vector v;  v = CoST(t);  return v_z;};
+float(float t) SUB_cos = { local vector v;  v = CoSine(t);  return v_x; };
+float(float t) SUB_sin = { local vector v;  v = CoSine(t);  return v_y; };
+float(float t) SUB_tan = { local vector v;  v = CoST(t);  return v_z; };
 //--------------------------------END WAND MATHS-------------------------------
 
 // Stops the current sound that is playing on the specified channel by playing an empty sound.
@@ -154,7 +154,7 @@ void(float dist, float noclip) QC_NewChaseDir = {
 	// Try other directions.
     ax = fabs(delta_x);
     ay = fabs(delta_y);
-    if ((random() < 0.333) || (ay > ax)) { turn = d1; d1 = d2; d2 = turn;}
+    if ((random() < 0.333) || (ay > ax)) { turn = d1; d1 = d2; d2 = turn; }
 
     if (d1 != -1) {
         if (d1 != back) {
@@ -209,7 +209,7 @@ void(float dist, float noclip) QC_MoveToGoal = {
     if (noclip && self.enemy) {
         // Noclip entities have full, unrestricted 3D movement.
         if (QC_CloseEnough(dist)) {
-            if (InOpenOrLiquid(self.origin)) { self.velocity = '0 0 0'; return;}
+            if (InOpenOrLiquid(self.origin)) { self.velocity = '0 0 0'; return; }
         }
     }
 
@@ -470,7 +470,7 @@ void(entity ent) ReflectSound = {
 	if (ent.mirror_sound >= time) return;
 
 	ent.mirror_sound = time + 2;    // t+1 boings too much.
-	sound(ent, CHAN_ITEM, "drake/items/reflect3.wav", 1, ATTN_NORM);
+	sound(ent,CHAN_ITEM,"drake/items/reflect3.wav",1,ATTN_NORM);
 };
 
 // Checks if entity 'e' can grunt in pain.

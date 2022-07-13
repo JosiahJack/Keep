@@ -23,7 +23,7 @@ void() Attack_With_Tail = {
 
 	ai_face();
 	delta = (self.enemy.origin - self.origin);
-	if (vlen(delta) > 100.000)return;
+	if (vlen(delta) > 100.000) return;
 	if (!CanDamage (self.enemy,self)) return;
 
 	ldmg = (((random () + random ()) + random ()) * 15.000);
@@ -79,7 +79,7 @@ void() ai_turn_in_place = {
    }
 };
 
-void() scourge_stand1 = [ 0.000, scourge_stand2 ] { ai_stand(); scourge_think(); self.spawnsilent = FALSE;};
+void() scourge_stand1 = [ 0.000, scourge_stand2 ] { ai_stand(); scourge_think(); self.spawnsilent = FALSE; };
 void() scourge_stand2 = [ 1.000, scourge_stand3 ] { ai_stand(); scourge_think(); };
 void() scourge_stand3 = [ 2.000, scourge_stand4 ] { ai_stand(); scourge_think(); };
 void() scourge_stand4 = [ 3.000, scourge_stand5 ] { ai_stand(); scourge_think(); };
@@ -208,7 +208,7 @@ void(entity inflictor, entity attacker, float damage) scourge_pain = {
 
 void() scourge_die1 = [ 36.000, scourge_die2 ] { self.spawnsilent = FALSE; scourge_think(); };
 void() scourge_die2 = [ 37.000, scourge_die3 ] {};
-void() scourge_die3 = [ 38.000, scourge_die4 ] { self.solid = SOLID_NOT; self.bodyonflr = MON_ONFLR;};
+void() scourge_die3 = [ 38.000, scourge_die4 ] { self.solid = SOLID_NOT; self.bodyonflr = MON_ONFLR; };
 void() scourge_die4 = [ 39.000, scourge_die5 ] { monster_death_postcheck(); };
 void() scourge_die5 = [ 40.000, scourge_die5 ] { monster_deadbody_check(); };
 

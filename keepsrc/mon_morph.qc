@@ -86,7 +86,7 @@ void() morph_stab2 = {
 	dir = normalize ( dir );
 	makevectors(self.angles);
 	if ( dist <= 90 ) {
-		sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
+		sound(self,CHAN_WEAPON,SOUND_LASER_HIT,1,ATTN_STATIC);
 	   	attackDamage = (random() * 10) + 20;
 		T_Damage (self.enemy, self, self, attackDamage,DAMARMOR);
 		SpawnBlood (self.enemy, self.enemy.origin, v_forward * 150, 14,0);
@@ -181,7 +181,7 @@ void() morph_fire = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
-	dir = normalize ( self.enemy.origin - self.origin ) ;
+	dir = normalize (self.enemy.origin - self.origin ) ;
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 	if ( vlen (self.enemy.origin - self.origin) > 400 ) {
 		launch_projectile(org,(dir + v_right * 0.04),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
@@ -227,12 +227,12 @@ void(entity inflictor, entity attacker, float damage) morph_pain = {
 	local float painChoice;
 
 	if (random() > 0.1) { morph_minionspawn(); return; }
-	if (self.pain_finished > time)return;
+	if (self.pain_finished > time) return;
 	if (random() > 0.25) return;
 
 	painChoice = random();
 	self.pain_finished = time + 2;
-	sound(self, CHAN_VOICE, "rogue/guard/pain1.wav", 1, ATTN_NORM );
+	sound(self,CHAN_VOICE, "rogue/guard/pain1.wav",1,ATTN_NORM );
 	if (painChoice > 0.6) self.think = morph_painB1;
 	else self.think = morph_painA1;
 
@@ -269,7 +269,7 @@ void() morph_die = {
 	self.nextthink = time + 0.1;
 };
 
-void() morph_wake1 = [$start01, morph_wake2 ] { sound( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM ); };
+void() morph_wake1 = [$start01, morph_wake2 ] { sound(self,CHAN_VOICE, "rogue/guard/see1.wav",1,ATTN_NORM ); };
 void() morph_wake2 = [$start02, morph_wake3 ] {};
 void() morph_wake3 = [$start03, morph_wake4 ] {};
 void() morph_wake4 = [$start04, morph_wake5 ] {};
@@ -304,7 +304,7 @@ void() morph_wake31 = [$start31, morph_stand1 ] {
 	self.solid = SOLID_SLIDEBOX;
 	self.takedamage = DAMAGE_AIM;
 	self.skin = self.skin - 1;
-	if ( self.owner ) {
+	if (self.owner ) {
 		self.enemy = self.owner.enemy;
 		self.movetarget = self.owner.movetarget;
 		self.goalentity = self.owner.goalentity;
@@ -334,7 +334,7 @@ void() morph_setup = {
 	self.frame = $start01;
 	self.effects = self.effects | EF_DIMLIGHT;
 	if (self.health < 1) self.health = 2000;
-	if ( self.owner ) {
+	if (self.owner ) {
 		self.effects = 0;
 		self.health = 200;
 		self.spawnflags = self.owner.spawnflags;
@@ -391,7 +391,7 @@ void() morph_setup = {
 
 void() morph_use = {
 	self.enemy = activator;
-	if ( self.delay ) {
+	if (self.delay ) {
         	self.think = morph_wake1;
         	self.nextthink = time + self.delay;
     	} else {

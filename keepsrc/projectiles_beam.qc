@@ -114,8 +114,8 @@ void(float fx, string m, entity src, vector start, vector end, float length, flo
 	local entity beam, lastbeam;
 	local vector turnangle, midpoint;
 
-	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return;} // Normal vanilla beams, use if src moves!
-	if (!m) { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
+	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return; } // Normal vanilla beams, use if src moves!
+	if (!m) { Tent_Beam(TE_BEAM,src, start,end); return; } // Vanilla beam
 	if (num_beams >= MAX_BEAMS) { // Exceeded max qc beams
 		dprint("Beam effect list overflow! More than ");
 		dprint(ftos(MAX_BEAMS));
@@ -284,7 +284,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FU
 			LightningSparks(litmaker.origin,6,FALSE,'0 0 0');
 			dmg = dmg * 2; // Double damage
 			if (trace_ent.health < dmg) { // Monster go pop!
-				sound(litmaker,CHAN_AUTO,"rrp/misc/spark.wav", 1, ATTN_STATIC);
+				sound(litmaker,CHAN_AUTO,"rrp/misc/spark.wav",1,ATTN_STATIC);
 				LightningSparks(litmaker.origin,30,TRUE,'0 0 0');
 			}
 		}
@@ -345,7 +345,7 @@ void(entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNCT
 void() HIP_SpawnMjolnirBase = { // [FUNCTION]
 	local entity light, stemp;
 
-	if (self.tome_finished) { Thor_Slam(30,80); return;}
+	if (self.tome_finished) { Thor_Slam(30,80); return; }
 
 	light = spawn();
 	light.origin = trace_endpos;
@@ -547,15 +547,15 @@ void() BecomeBeamHit = { // [FUNCTION]
 	beamhit1();
 };
 
-void() beamring1 =	[1,		beamring2] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring2 =	[2,		beamring3] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring3 =	[4,		beamring4] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring4 =	[6,		beamring5] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring5 =	[8,		beamring6] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring6 =	[10,	beamring7] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring7 =	[12,	beamring8] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring8 =	[14,	beamring9] { self.nextthink = time + 0.05;}; // [FUNCTION]
-void() beamring9 =	[16,	SUB_Remove] { self.nextthink = time + 0.05;}; // [FUNCTION]
+void() beamring1 =	[1,		beamring2] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring2 =	[2,		beamring3] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring3 =	[4,		beamring4] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring4 =	[6,		beamring5] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring5 =	[8,		beamring6] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring6 =	[10,	beamring7] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring7 =	[12,	beamring8] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring8 =	[14,	beamring9] { self.nextthink = time + 0.05; }; // [FUNCTION]
+void() beamring9 =	[16,	SUB_Remove] { self.nextthink = time + 0.05; }; // [FUNCTION]
 
 void() d_beamring1 =	[2,		d_beamring2] {}; // [FUNCTION]
 void() d_beamring2 =	[4,		d_beamring3] {}; // [FUNCTION]
@@ -655,8 +655,8 @@ float(entity targ, entity inflictor, entity attacker, float damage, vector spot,
         if (targ.flags & FL_CLIENT) Tent_Beam(TE_LIGHTNING2, targ, end, spot);
         else Tent_Beam(TE_LIGHTNING2, targ, spot, end);
 
-        if (bang == 2) sound(inflictor, CHAN_VOICE, "weapons/lstart.wav", 1, ATTN_NORM);
-        else if (bang) sound(inflictor, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
+        if (bang == 2) sound(inflictor,CHAN_VOICE, "weapons/lstart.wav",1,ATTN_NORM);
+        else if (bang) sound(inflictor,CHAN_VOICE, "weapons/lhit.wav",1,ATTN_NORM);
 
         end = trace_endpos; // Use where bolt hit for blood spot.
         if (targ.bodyonflr == MON_ONFLR) {
@@ -768,7 +768,7 @@ void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_
 
 				if (targ.health < damage) { // Monster go pop!
 					iter = 0;
-					sound(self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
+					sound(self,CHAN_AUTO,"rrp/misc/spark.wav",1,ATTN_STATIC);
 					while (iter < 30) {
 						dir = safe_client_forward();
 						make_spark(targ.origin, dir, FALSE); // False to use direction.
@@ -946,7 +946,7 @@ float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
     }
     if (hits) {
         if (!shots) shots = 255; // Set maximum hits an attacker may score.
-        if (!lightzero_finished) sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+        if (!lightzero_finished) sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
         LightZero_Set(-1,dur,-2);
         self.divine_hits = shots; // Number of bolts in slam, so match that.
     }
@@ -995,7 +995,7 @@ void(vector start, vector dir, float damage, float radius, float ang) DeathRay =
 void() Thor_Pulse = { // [FUNCTION]
 	local vector pak;
 
-    if (self.count < 1) { remove (self);  return;}
+    if (self.count < 1) { remove (self);  return; }
 
     self.nextthink = time + 0.2;
     self.count = self.count - 1;

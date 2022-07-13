@@ -198,7 +198,7 @@ void() item_progspawn_touch = { // [FUNCTION]
 	// SELF.OWNER.MOVETARGET = Entity of NEXT item
 	// SELF.OWNER.TARGET2 = Targetname of all spawn marker(s)	
 
-	if (self.touchedvoid) { entity_hide(self); return;} // Duplicate of item_touch functionality
+	if (self.touchedvoid) { entity_hide(self); return; } // Duplicate of item_touch functionality
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
 	if (self.state == STATE_OFF) return; // Has been used ONCE already or disabled?
@@ -304,25 +304,25 @@ void() item_proglist_controller_setup = { // [FUNCTION]
 	// ERROR check if entity key is defined on all of list?
 	if (error_ekey) {
 		dprint("\b[PROG_LIST]\b missing progspawnlist key!\n");
-		spawn_marker(self.movetarget.origin, SPNMARK_YELLOW);
+		spawn_marker(self.movetarget.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.state = STATE_OFF;
 	}
 	// ERROR check if prog list contains wrong entity types?
 	if (error_flag) {
 		dprint("\b[PROG_LIST]\b wrong entity type!\n");
-		spawn_marker(self.movetarget.origin, SPNMARK_YELLOW);
+		spawn_marker(self.movetarget.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.state = STATE_OFF;
 	}
 	// ERROR check if progression list ONLY has 1 item
 	if (self.waitmin == 1) {
 		dprint("\b[PROG_LIST]\b Only 1 item in list!\n");
-		spawn_marker(self.movetarget.origin, SPNMARK_YELLOW);
+		spawn_marker(self.movetarget.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.state = STATE_OFF;
 	}
 	// ERROR check if 2nd item in list actually exists?
 	if (self.waitmin == 1 && error_targ) {
 		dprint("\b[PROG_LIST]\b 2nd list item missing!\n");
-		spawn_marker(self.movetarget.origin, SPNMARK_YELLOW);
+		spawn_marker(self.movetarget.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.state = STATE_OFF;
 	}
 	// WARNINGS if extra spawnflags are used on items
@@ -331,7 +331,7 @@ void() item_proglist_controller_setup = { // [FUNCTION]
 	// ERROR check if spawn markers contain wrong entity types?
 	if (error_spawn) {
 		dprint("\b[PROG_SPN]\b wrong entity type!\n");
-		spawn_marker(self.movetarget.origin, SPNMARK_YELLOW);
+		spawn_marker(self.movetarget.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.state = STATE_OFF;
 	}
 	// ERROR check if list & spawn totals match up?
@@ -339,7 +339,7 @@ void() item_proglist_controller_setup = { // [FUNCTION]
 		dprint("\b[TOTAL]\b List ("); dprint(ftos(self.waitmin));
 		dprint(") Spn ("); dprint(ftos(self.waitmin2));
 		dprint(") Dont match!\n");
-		spawn_marker(self.movetarget.origin, SPNMARK_YELLOW);
+		spawn_marker(self.movetarget.origin,'0 0 0',0,SPNMARK_YELLOW);
 		self.state = STATE_OFF;
 	}
 
@@ -391,7 +391,7 @@ void() item_progspawn_setup = { // [FUNCTION]
 	if (SUB_HideIfNoTarget()) return; // Target has to point to first item in list!
 
 	self.movetarget = find(world, targetname, self.target); // Find target entity (Does entity actually exist!)
-	if (!self.movetarget) { dprint("\b[PROG_SPN]\b missing target entity!\n"); spawn_marker(self.origin, SPNMARK_YELLOW); entity_hide(self); return; }
+	if (!self.movetarget) { dprint("\b[PROG_SPN]\b missing target entity!\n"); spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW); entity_hide(self); return; }
 
 	self.state = STATE_ON; // Spawn location ready for items
 	item_proglist_controller(); // Setup and enable controller entity

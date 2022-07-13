@@ -55,7 +55,7 @@ $frame die11 die12 die13 die14 die15 die16
 
 void() wolf_howl1	= [	$howl1,		wolf_howl2	] {
 	self.pain_finished = time + 2;
-	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_NORM);
 	ai_stand();
 };
 void() wolf_howl2	= [	$howl2,		wolf_howl3	] { ai_stand(); };
@@ -107,7 +107,7 @@ void() wolf_walk10	= [	$walk10 ,	wolf_walk11	] { ai_walk(24); };
 void() wolf_walk11	= [	$walk11 ,	wolf_walk12	] { ai_walk(24); };
 void() wolf_walk12	= [	$walk12 ,	wolf_walk1	] { ai_walk(24); };
 
-void() wolf_run1	= [	$walk1  ,	wolf_run2	] { monster_footstep(FALSE); ai_run(34); self.skin = 0;};
+void() wolf_run1	= [	$walk1  ,	wolf_run2	] { monster_footstep(FALSE); ai_run(34); self.skin = 0; };
 void() wolf_run2	= [	$walk2  ,	wolf_run3	] { ai_run(34); };
 void() wolf_run3	= [	$walk3  ,	wolf_run4	] { monster_footstep(FALSE); ai_run(34); };
 void() wolf_run4	= [	$walk4  ,	wolf_run5	] { ai_run(34); };
@@ -220,7 +220,7 @@ void() wolf_slash1	= [	$slash1,	wolf_slash2	] { ai_face(); wolf_reset_attachment
 void() wolf_slash2	= [	$slash2,	wolf_slash3	] { ai_face(); };
 void() wolf_slash3	= [	$slash3,	wolf_slash4	] { ai_face(); };
 void() wolf_slash4	= [	$slash4,	wolf_slash5	] { ai_chargenoturn(0); wolf_blur(10, 0.2); wolf_melee();
-sound(self, CHAN_WEAPON, "redfield/wolf/sword_slash.wav", 1, ATTN_NORM); };
+sound(self,CHAN_WEAPON,"redfield/wolf/sword_slash.wav",1,ATTN_NORM); };
 void() wolf_slash5	= [	$slash5,	wolf_slash6	] { ai_chargenoturn(0); wolf_blur(11, 0.2); wolf_melee(); };
 void() wolf_slash6	= [	$slash6,	wolf_slash7	] { ai_chargenoturn(0); wolf_blur(12, 0.1); wolf_melee(); };
 void() wolf_slash7	= [	$slash7,	wolf_slash8	] { ai_chargenoturn(0); wolf_reset_attachment(); };
@@ -237,7 +237,7 @@ void() wolf_slash17	= [	$slash17,	wolf_run1	] { ai_chargenoturn(0); };
 
 void() wolf_spin1	= [	$spin1,		wolf_spin2	] { ai_chargenoturn(0); wolf_reset_attachment(); };
 void() wolf_spin2	= [	$spin2,		wolf_spin3	] { ai_chargenoturn(0);
-sound(self, CHAN_WEAPON, "redfield/wolf/sword_spin.wav", 1, ATTN_NORM); };
+sound(self,CHAN_WEAPON,"redfield/wolf/sword_spin.wav",1,ATTN_NORM); };
 void() wolf_spin3	= [	$spin3,		wolf_spin4	] { ai_chargenoturn(0); };
 void() wolf_spin4	= [	$spin4,		wolf_spin5	] { ai_chargenoturn(0); wolf_melee(); };
 void() wolf_spin5	= [	$spin5,		wolf_spin6	] { ai_chargenoturn(0); };
@@ -285,13 +285,13 @@ void() wolf_moonsword = {
 void() wolf_shoot1	= [	$shoot1,	wolf_shoot2	] { ai_face(); };
 void() wolf_shoot2	= [	$shoot2,	wolf_shoot3	] { ai_face(); };
 void() wolf_shoot3	= [	$shoot3,	wolf_shoot4	] { ai_face(); moonsword_charge('16 -72 28','0 -116 32');
-sound(self, CHAN_WEAPON, "redfield/wolf/moonsword.wav", 1, ATTN_NORM); };
-void() wolf_shoot4	= [	$shoot4,	wolf_shoot5	] { ai_face(); moonsword_charge('0 -76 32','-24 -116 40'); self.skin = 1;};
+sound(self,CHAN_WEAPON,"redfield/wolf/moonsword.wav",1,ATTN_NORM); };
+void() wolf_shoot4	= [	$shoot4,	wolf_shoot5	] { ai_face(); moonsword_charge('0 -76 32','-24 -116 40'); self.skin = 1; };
 void() wolf_shoot5	= [	$shoot5,	wolf_shoot6	] { ai_face(); };
 void() wolf_shoot6	= [	$shoot6,	wolf_shoot7	] { wolf_moonsword(); };
 void() wolf_shoot7	= [	$shoot7,	wolf_shoot8	] {};
 void() wolf_shoot8	= [	$shoot8,	wolf_shoot9	] {};
-void() wolf_shoot9	= [	$shoot9,	wolf_shoot10	] { self.skin = 0;};
+void() wolf_shoot9	= [	$shoot9,	wolf_shoot10	] { self.skin = 0; };
 void() wolf_shoot10	= [	$shoot10,	wolf_run1	] {};
 
 // Only functions when monster spawns standing -- No walking / path corners.  Currently need solution to this problem so long as taunt animations are used
@@ -301,7 +301,7 @@ void() wolf_wakeup = {
 
 	// No longer need howl spawnflag, remove it
 	if (self.spawnflags & MON_WOLF_HOWL) {
-	self.spawnflags = self.spawnflags - (self.spawnflags & MON_WOLF_HOWL);}
+	self.spawnflags = self.spawnflags - (self.spawnflags & MON_WOLF_HOWL); }
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.use = SUB_Null;				// no re-trigger
 	
@@ -315,7 +315,7 @@ void() wolf_wakeup = {
 	wolf_wake1();
 };
 
-void() wolf_pain1	= [	$pain1,		wolf_pain2	] { self.skin = 0;};
+void() wolf_pain1	= [	$pain1,		wolf_pain2	] { self.skin = 0; };
 void() wolf_pain2	= [	$pain2,		wolf_pain3	] {};
 void() wolf_pain3	= [	$pain3,		wolf_pain4	] { ai_back(16); };
 void() wolf_pain4	= [	$pain4,		wolf_pain5	] {};
@@ -336,7 +336,7 @@ void(entity inflictor, entity attacker, float damage) wolf_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);	
 		if (self.pain_check == 1) wolf_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -348,24 +348,24 @@ void(entity inflictor, entity attacker, float damage) wolf_pain = {
 };
 
 void() wolf_die1	= [	$die1,		wolf_die2	] {};
-void() wolf_die2	= [	$die2,		wolf_die3	] { sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM); };
+void() wolf_die2	= [	$die2,		wolf_die3	] { sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM); };
 void() wolf_die3	= [	$die3,		wolf_die4	] {};
 void() wolf_die4	= [	$die4,		wolf_die5	] {};
 void() wolf_die5	= [	$die5,		wolf_die6	] {};
 void() wolf_die6	= [	$die6,		wolf_die7	] {};
 void() wolf_die7	= [	$die7,		wolf_die8	] {
 particle_explode(self.origin + '0 0 -8', 96, 0.5+random()*0.5, PARTICLE_BURST_DBLUE, PARTICLE_BURST_UPWARD); };
-void() wolf_die8	= [	$die8,		wolf_die9	] { self.solid = SOLID_NOT; self.skin = 2; self.alpha = 0.9;};
-void() wolf_die9	= [	$die9,		wolf_die10	] { self.alpha = 0.75;};
-void() wolf_die10	= [	$die10,		wolf_die11	] { self.alpha = 0.6;};
-void() wolf_die11	= [	$die11,		wolf_die12	] { self.skin = 3; self.alpha = 0.5;};
+void() wolf_die8	= [	$die8,		wolf_die9	] { self.solid = SOLID_NOT; self.skin = 2; self.alpha = 0.9; };
+void() wolf_die9	= [	$die9,		wolf_die10	] { self.alpha = 0.75; };
+void() wolf_die10	= [	$die10,		wolf_die11	] { self.alpha = 0.6; };
+void() wolf_die11	= [	$die11,		wolf_die12	] { self.skin = 3; self.alpha = 0.5; };
 void() wolf_die12	= [	$die12,		wolf_die13	] { self.alpha = 0.4;
 particle_explode(self.origin + '0 0 48', 64, 1+random()*0.5, PARTICLE_BURST_DBLUE, PARTICLE_BURST_UPWARD); };
-void() wolf_die13	= [	$die13,		wolf_die14	] { self.alpha = 0.25;};
+void() wolf_die13	= [	$die13,		wolf_die14	] { self.alpha = 0.25; };
 void() wolf_die14	= [	$die14,		wolf_die15	] { self.skin = 4; self.alpha = 0.1;
-self.effects = self.effects | EF_MUZZLEFLASH;};
+self.effects = self.effects | EF_MUZZLEFLASH; };
 void() wolf_die15	= [	$die15,		wolf_die16	] { self.alpha = 0.05;
-self.effects = self.effects | EF_MUZZLEFLASH;};
+self.effects = self.effects | EF_MUZZLEFLASH; };
 void() wolf_die16	= [	$die16,		wolf_die16	] {
 	// Stop thinking and hide entity (prevent wolf_death15 loop)
 	self.nextthink = LARGE_TIMER;

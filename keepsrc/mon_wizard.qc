@@ -125,11 +125,11 @@ void() Wiz_FastFire = {
 		vec = normalize(dst - self.origin);
 		self.attack_speed = SPEED_WIZSPIKE + (skill * SPEED_WIZSKILL);
 		if (self.owner.classtype == CT_MONWIZBOSS) {
-			sound(self, CHAN_WEAPON, "anevil/wizboss/wattack.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"anevil/wizboss/wattack.wav",1,ATTN_NORM);
 			launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZBOSS,self.attack_speed);
 			newmis.classname = "knightspike"; // Firey impact for lava ball spit.
 		} else {
-			sound(self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"wizard/wattack.wav",1,ATTN_NORM);
 			launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZ,self.attack_speed);
 		}
 		newmis.owner = self.owner;
@@ -142,7 +142,7 @@ void() Wiz_FastFire = {
 // This code is hoping the player will strafe into the second shot
 void() Wiz_StartFast = {
 	if (self.classtype == CT_MONWIZBOSS) sound(self,CHAN_WEAPON,"anevil/wizboss/wattack.wav",1,ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"wizard/wattack.wav",1,ATTN_NORM);
 	self.v_angle = self.angles;
 	makevectors(self.angles);
 	newmis = spawn();
@@ -202,7 +202,7 @@ void(entity inflictor, entity attacker, float damage) wiz_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) wiz_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -215,7 +215,7 @@ void(entity inflictor, entity attacker, float damage) wiz_pain = {
 
 void()	wiz_death1	= [	$death1,		wiz_death2	] {};
 void()	wiz_death2	= [	$death2,		wiz_death3	] { monster_check_gib(); };
-void()	wiz_death3	= [	$death3,		wiz_death4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void()	wiz_death3	= [	$death3,		wiz_death4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void()	wiz_death4	= [	$death4,		wiz_death5	] {};
 void()	wiz_death5	= [	$death5,		wiz_death6	] {};
 void()	wiz_death6	= [	$death6,		wiz_death7	] {};
@@ -227,7 +227,7 @@ void() wiz_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) { 
-		sound(self, CHAN_VOICE, "wizard/wdeath.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "wizard/wdeath.wav",1,ATTN_NORM);
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
@@ -385,7 +385,7 @@ void() setup_wizard = {
 void(vector minion_org, entity minion_targ, float minion_sflag) minion_wizard = {
 	local entity minion;
 
-	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
+	if (!InOpenOrLiquid(minion_org)) return; // Check if there is space to spawn entity
 	
 	// Self = minotaur, there is no egg 
 	update_minioncount(self, 1);			// Update spawn counters	

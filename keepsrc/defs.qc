@@ -454,6 +454,7 @@ void(float to, entity s) WriteEntity	= #59;
 // void(entity e) bWriteEntity 			= #66;
 
 void(float dist, float noclip) QC_MoveToGoal;
+void(float dist) movetogoalplus;
 
 void(float step) movetogoal_builtin 	= #67;
 void(float step) movetogoal = {
@@ -464,7 +465,8 @@ void(float step) movetogoal = {
 	if (self.movespeed < 0) return;
 	if (self.tetherlock == TRUE) return;
 	if (self.movetype == MOVETYPE_NOCLIP) QC_MoveToGoal(step,TRUE); // Ghostly
-	movetogoal_builtin(step);
+	//else if (self.flags & FL_SWIM) movetogoalplus(step);
+	else movetogoal_builtin(step);
 };
 string(string s) precache_file			= #68; // Only in world.qc. No effect
                                                // except for -copy.

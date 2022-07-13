@@ -240,7 +240,7 @@ void() gaunt_fast7 = [50, gaunt_fast8] { gaunt_strafe(); gaunt_lightning_fx(6); 
 void() gaunt_fast8 = [51, gaunt_fast9] { gaunt_strafe(); gaunt_lightning_fx(7); };
 void() gaunt_fast9 = [52, gaunt_fast10] { gaunt_strafe(); gaunt_lightning_fx(8); };
 void() gaunt_fast10 = [53, gaunt_fast11] { gaunt_strafe(); gaunt_lightning_fx(9); };
-void() gaunt_fast11 = [54, gaunt_fast12] { sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM); gaunt_lightning(1); remove(self.owner); };
+void() gaunt_fast11 = [54, gaunt_fast12] { sound(self,CHAN_WEAPON,"weapons/lstart.wav",1,ATTN_NORM); gaunt_lightning(1); remove(self.owner); };
 void() gaunt_fast12 = [55, gaunt_fast13] { gaunt_lightning(0); };
 void() gaunt_fast13 = [56, gaunt_fast14] { gaunt_lightning(1); };
 void() gaunt_fast14 = [57, gaunt_fast15] { gaunt_lightning(0); };
@@ -249,14 +249,14 @@ void() gaunt_fast16 = [59, gaunt_fast17] {};
 void() gaunt_fast17 = [60, gaunt_fast18] {};
 void() gaunt_fast18 = [61, gaunt_fast19] {};
 void() gaunt_fast19 = [62, gaunt_fast20] {};
-void() gaunt_fast20 = [63, gaunt_run1] { ai_face(); self.attack_state = AS_STRAIGHT;};
+void() gaunt_fast20 = [63, gaunt_run1] { ai_face(); self.attack_state = AS_STRAIGHT; };
 
 // RANGE - Plasma from arc infront
 void() gaunt_plasma = {
 	local vector org, dir;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/gaunt/plasma_fire.wav",1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(SUB_orgEnemyTarget() - self.origin);
@@ -288,7 +288,7 @@ void(float elecframe) gaunt_elecupdate = {
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		sound(self, CHAN_WEAPON, "ad171/gaunt/plasma_start.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/gaunt/plasma_start.wav",1,ATTN_NORM);
 	}
 
 	ai_face();					// Turn towards enemy
@@ -403,7 +403,7 @@ void(entity inflictor, entity attacker, float damage) gaunt_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			if (self.lip < 0.4) gaunt_painB1();	// Long
 			else gaunt_painA1();				// Short
@@ -414,7 +414,7 @@ void(entity inflictor, entity attacker, float damage) gaunt_pain = {
 void() gaunt_deathA1 = [$deathA1, gaunt_deathA2 ] {};
 void() gaunt_deathA2 = [$deathA2, gaunt_deathA3 ] { monster_check_gib(); };
 void() gaunt_deathA3 = [$deathA3, gaunt_deathA4 ] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() gaunt_deathA4 = [$deathA4, gaunt_deathA5 ] {};
 void() gaunt_deathA5 = [$deathA5, gaunt_deathA6 ] {};
 void() gaunt_deathA6 = [$deathA6, gaunt_deathA7 ] {};
@@ -424,7 +424,7 @@ void() gaunt_deathA8 = [$deathA8, gaunt_deathA8 ] { monster_deadbody_check(); };
 void() gaunt_deathB1 = [$deathB1, gaunt_deathB2 ] {};
 void() gaunt_deathB2 = [$deathB2, gaunt_deathB3 ] { monster_check_gib(); };
 void() gaunt_deathB3 = [$deathB3, gaunt_deathB4 ] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() gaunt_deathB4 = [$deathB4, gaunt_deathB5 ] {};
 void() gaunt_deathB5 = [$deathB5, gaunt_deathB6 ] {};
 void() gaunt_deathB6 = [$deathB6, gaunt_deathB7 ] {};
@@ -456,7 +456,7 @@ void() gaunt_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "quoth/gaunt/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/gaunt/death.wav",1,ATTN_NORM);
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
@@ -500,7 +500,7 @@ void() gaunt_charge5 = [76, gaunt_charge2] { gaunt_flyswoop(); };
 
 void(float thespeed) gaunt_flyup = { self.movetype = MOVETYPE_FLYMISSILE; self.velocity_z = thespeed; };
 
-void() gaunt_precharge1 = [64, gaunt_precharge2] { gaunt_flyup(SVC_INTERMISSION); self.pain_finished = time + SECRET_1ST_DOWN;};
+void() gaunt_precharge1 = [64, gaunt_precharge2] { gaunt_flyup(SVC_INTERMISSION); self.pain_finished = time + SECRET_1ST_DOWN; };
 void() gaunt_precharge2 = [65, gaunt_precharge3] { gaunt_flyup(40); };
 void() gaunt_precharge3 = [66, gaunt_precharge4] { gaunt_flyup(50); };
 void() gaunt_precharge4 = [67, gaunt_precharge5] { gaunt_flyup(60); };

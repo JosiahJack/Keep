@@ -62,9 +62,9 @@ void() item_rallycar_touch = { // [FUNCTION]
 	cvar_set("scratch2",ftos(encode(cvar("chase_active"),boundedChase,0)));
 	localcmd("chase_active 1\n");
 	localcmd("chase_back 128\n"); // evil!  It's okay.  It's okay, we saved it in scratch2
-	if (self.vehicle_index == 3) sound(self, CHAN_AUTO, "qrally/ray/engstart.wav", 1, ATTN_STATIC);
-	else if (self.vehicle_index == 4) sound(self, CHAN_AUTO, "qrally/start2.wav", 1, ATTN_STATIC);
-	else sound(self, CHAN_AUTO, "qrally/start.wav", 1, ATTN_STATIC);
+	if (self.vehicle_index == 3) sound(self,CHAN_AUTO,"qrally/ray/engstart.wav",1,ATTN_STATIC);
+	else if (self.vehicle_index == 4) sound(self,CHAN_AUTO,"qrally/start2.wav",1,ATTN_STATIC);
+	else sound(self,CHAN_AUTO,"qrally/start.wav",1,ATTN_STATIC);
 	remove(self);
 };
 

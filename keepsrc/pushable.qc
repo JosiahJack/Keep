@@ -114,10 +114,10 @@ void() func_pushable_movement = { // [FUNCTION]
 		// CHAN_AUTO to allow for sound blending
 		self.meleeattack = self.lefty;
 		if (self.meleeattack == 1) 
-			sound(self, CHAN_AUTO, self.noise1, 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,self.noise1,1,ATTN_NORM);
 		else if (self.meleeattack == 2) 
-			sound(self, CHAN_AUTO, self.noise2, 1, ATTN_NORM);
-		else sound(self, CHAN_AUTO, self.noise3, 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,self.noise2,1,ATTN_NORM);
+		else sound(self,CHAN_AUTO,self.noise3,1,ATTN_NORM);
 	}	
 
 	// Remove onground flag so bmodel can move
@@ -223,7 +223,7 @@ void(entity inflictor, entity attacker, float damage) func_pushable_pain = { // 
 	local float loop_count;
 	local vector vel;
 
-	if (!(self.spawnflags & PUSH_DAMAGE)) { self.health = MEGADEATH; return;} // default = Pushables cannot die
+	if (!(self.spawnflags & PUSH_DAMAGE)) { self.health = MEGADEATH; return; } // default = Pushables cannot die
 	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
 
 	// Something is trying to wear down the pushable with damage
@@ -237,7 +237,7 @@ void(entity inflictor, entity attacker, float damage) func_pushable_pain = { // 
 };
 
 void() func_pushable_death = { // [FUNCTION]
-	if (!(self.spawnflags & PUSH_DAMAGE)) { self.health = MEGADEATH; return;} // default = Pushables cannot die
+	if (!(self.spawnflags & PUSH_DAMAGE)) { self.health = MEGADEATH; return; } // default = Pushables cannot die
 	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
 
 	self.oldorigin = bmodel_origin(self); // Work out current bmodel origin

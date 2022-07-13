@@ -133,13 +133,13 @@ void() hogre_swing1	= [	$swing1,	hogre_swing2	] { ai_charge(10);hogre_sound(2); 
 void() hogre_swing2	= [	$swing2,	hogre_swing3	] { ai_charge(10); };
 void() hogre_swing3	= [	$swing3,	hogre_swing4	] { ai_charge(6); };
 void() hogre_swing4	= [	$swing4,	hogre_swing5	] { ai_charge(6); };
-void() hogre_swing5	= [	$swing5,	hogre_swing6	] { ai_charge(7); chainsaw(0,1); self.angles_y = self.angles_y + random()*25;};
-void() hogre_swing6	= [	$swing6,	hogre_swing7	] { ai_forward(7); chainsaw(200,1); self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing7	= [	$swing7,	hogre_swing8	] { ai_forward(4); chainsaw(0,1);monster_footstep(FALSE); self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing8	= [	$swing8,	hogre_swing9	] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing9	= [	$swing9,	hogre_swing10 ] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing10= [	$swing10,	hogre_swing11 ] { ai_forward(4); chainsaw(-200,1); self.angles_y = self.angles_y + random()* 25;};
-void() hogre_swing11= [	$swing11,	hogre_swing12 ] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25;};
+void() hogre_swing5	= [	$swing5,	hogre_swing6	] { ai_charge(7); chainsaw(0,1); self.angles_y = self.angles_y + random()*25; };
+void() hogre_swing6	= [	$swing6,	hogre_swing7	] { ai_forward(7); chainsaw(200,1); self.angles_y = self.angles_y + random()* 25; };
+void() hogre_swing7	= [	$swing7,	hogre_swing8	] { ai_forward(4); chainsaw(0,1);monster_footstep(FALSE); self.angles_y = self.angles_y + random()* 25; };
+void() hogre_swing8	= [	$swing8,	hogre_swing9	] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
+void() hogre_swing9	= [	$swing9,	hogre_swing10 ] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
+void() hogre_swing10= [	$swing10,	hogre_swing11 ] { ai_forward(4); chainsaw(-200,1); self.angles_y = self.angles_y + random()* 25; };
+void() hogre_swing11= [	$swing11,	hogre_swing12 ] { ai_forward(4); chainsaw(0,1); self.angles_y = self.angles_y + random()* 25; };
 void() hogre_swing12= [	$swing12,	hogre_swing13 ] { ai_face(); };
 void() hogre_swing13= [	$swing13,	hogre_swing14 ] { ai_face(); };
 void() hogre_swing14= [	$swing14,	hogre_run1	] { ai_face(); };
@@ -156,7 +156,7 @@ void() hogre_smash8	= [	$smash8,	hogre_smash9	] { ai_face(); chainsaw(0,1); };
 void() hogre_smash9	= [	$smash9,	hogre_smash10 ] { ai_face(); chainsaw(0,1); };
 void() hogre_smash10= [	$smash10,	hogre_smash11 ] { ai_face(); chainsaw(0,1); };
 void() hogre_smash11= [	$smash11,	hogre_smash12 ] { ai_face(); chainsaw(0,1);
-self.nextthink = self.nextthink + random()*0.2;};	// slight variation
+self.nextthink = self.nextthink + random()*0.2; };	// slight variation
 void() hogre_smash12= [	$smash12,	hogre_smash13 ] { ai_face(); };
 void() hogre_smash13= [	$smash13,	hogre_smash14 ] { ai_face(); };
 void() hogre_smash14= [	$smash14,	hogre_run1	] { ai_face(); };
@@ -252,7 +252,7 @@ void(entity inflictor, entity attacker, float damage) hogre_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 	
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
@@ -327,7 +327,7 @@ void() hogre_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogre/ogdth.wav",1,ATTN_NORM);
 		self.lip = random();
 		if (self.lip < 0.05) hogre_dieS1();
 		else if (self.lip < 0.5) hogre_dieA1();
@@ -336,10 +336,10 @@ void() hogre_die = {
 };
 
 void(float soundtype) hogre_sound = {
-	if (soundtype == 1) sound(self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
-	else if (soundtype == 2) sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-	else if (soundtype == 3) sound(self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound(self, CHAN_WEAPON, "ad171/ogre/ogleap.wav", 1, ATTN_NORM);
+	if (soundtype == 1) sound(self,CHAN_VOICE, "ogre/ogdrag.wav",1,ATTN_IDLE);
+	else if (soundtype == 2) sound(self,CHAN_WEAPON,"ogre/ogsawatk.wav",1,ATTN_NORM);
+	else if (soundtype == 3) sound(self,CHAN_WEAPON,GIB_SOUND_WOOD,1,ATTN_NORM);
+	else if (soundtype == 4) sound(self,CHAN_WEAPON,"ad171/ogre/ogleap.wav",1,ATTN_NORM);
 };
 
 // Special wakeup animation for attacking/breaking something infront

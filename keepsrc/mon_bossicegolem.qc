@@ -193,7 +193,7 @@ void() iceg_knock9 = [$knock9, iceg_knock10 ] { iceg_mcharge(7); };
 void() iceg_knock10 = [$knock10, iceg_knock11 ] { iceg_mcharge(6); };
 void() iceg_knock11 = [$knock11, iceg_knock12 ] { iceg_mcharge(5);monster_footstep(FALSE); };
 void() iceg_knock12 = [$knock12, iceg_knock13 ] { iceg_mcharge(5);
-	sound(self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE); };
+	sound(self,CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav",1,ATTN_IDLE); };
 void() iceg_knock13 = [$knock13, iceg_knock14 ] { iceg_mcharge(4); };
 void() iceg_knock14 = [$knock14, iceg_knock15 ] { iceg_mcharge(3); };
 void() iceg_knock15 = [$knock15, iceg_knock16 ] { iceg_mcharge(2); };
@@ -354,20 +354,20 @@ void(entity targ) iceg_icestorm = {
 		}
 
 		if (self.lip < 0.25) 
-			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames1.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/firegug/flames1.wav",1,ATTN_IDLE);
 		else if (self.lip  < 0.5)
-			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames2.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/firegug/flames2.wav",1,ATTN_IDLE);
 		else if (self.lip  < 0.75)
-			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames3.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/firegug/flames3.wav",1,ATTN_IDLE);
 		else
-			sound(self, CHAN_WEAPON, "ne_ruins/firegug/flames4.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/firegug/flames4.wav",1,ATTN_IDLE);
 	} else {
 		if (self.lip < 0.3) 
-			sound(self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard1.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/h2golem/iceshard1.wav",1,ATTN_IDLE);
 		else if (self.lip  < 0.6)
-			sound(self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard2.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/h2golem/iceshard2.wav",1,ATTN_IDLE);
 		else
-			sound(self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard3.wav", 1, ATTN_IDLE);
+			sound(self,CHAN_WEAPON,"ne_ruins/h2golem/iceshard3.wav",1,ATTN_IDLE);
 	}
 	
 	// Make sure facing the right direction
@@ -399,7 +399,7 @@ void(entity targ) iceg_icestorm = {
 	else launch_projectile(org,dir,NO_SPIN,CT_PROJ_ICEG1,self.attack_speed);
 };
 
-void() iceg_magtime = { self.nextthink = time + 0.05;};
+void() iceg_magtime = { self.nextthink = time + 0.05; };
 
 void() iceg_magic1 = [$magic1, iceg_magic2 ] { iceg_magtime(); ai_face();
 	self.pain_finished = time + 1.5;
@@ -493,12 +493,12 @@ void() iceg_ceilingrubble = {
 	self.attachment.nextthink = time + 0.05;
 };
 
-void() iceg_footstomp = { self.nextthink = time + 0.05;};
+void() iceg_footstomp = { self.nextthink = time + 0.05; };
 
 void() iceg_stomp1 = [$stomp1, iceg_stomp2 ] { iceg_footstomp();
-	self.pain_finished = time + self.pain_timeout;};
+	self.pain_finished = time + self.pain_timeout; };
 void() iceg_stomp2 = [$stomp2, iceg_stomp3 ] { iceg_footstomp();
-	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_IDLE); };
+	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_IDLE); };
 void() iceg_stomp3 = [$stomp3, iceg_stomp4 ] { iceg_footstomp(); };
 void() iceg_stomp4 = [$stomp4, iceg_stomp5 ] { iceg_footstomp(); };
 void() iceg_stomp5 = [$stomp5, iceg_stomp6 ] { iceg_footstomp();monster_idle_sound(); };
@@ -654,7 +654,7 @@ void() iceg_waveboundary = {
 		// Time to blow stuff up, switch on resistance and roar!
 		self.style = ICEG_PHASE3;
 		Resist_ChangeType(self, TRUE);
-		sound(self, CHAN_WEAPON, "ad171/golem/icestorm.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/golem/icestorm.wav",1,ATTN_NORM);
 		// Start turning towards target (using walk animation)
 		self.walkframe = 0;
 		iceg_turnframe();
@@ -674,8 +674,8 @@ void(entity inflictor, entity attacker, float damage) iceg_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 	}
 };
 
@@ -800,7 +800,7 @@ void() iceg_wake15 = [$birth15, iceg_wake16 ] { iceg_birth(); };
 void() iceg_wake16 = [$birth16, iceg_tranB1 ] { iceg_birth(); };
 
 void() iceg_tranB1 = [$tranB1, iceg_tranB2 ] {
-	sound(self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_NORM);
 	iceg_birth();
 	ai_forward(8);
 };
@@ -872,7 +872,7 @@ void() iceg_setup = {
 		dprint ("\b[STUCK]\b "); dprint (self.classname);
 		dprint (" at "); dprint (vtos(self.origin));
 		dprint ("\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 	}
 
@@ -883,9 +883,8 @@ void() iceg_setup = {
 			dprint("\b[ICEG]\b Tether marker with targetname: ");
 			dprint(self.tethertarget);
 			dprint(", not path_corner!\n");
-			// spawn_marker(self.movelast.origin, SPNMARK_YELLOW);
 			self.movelast = world;
-		} else spawn_marker(self.movelast.origin, SPNMARK_GREEN);
+		} else spawn_marker(self.movelast.origin,'0 0 0',0,SPNMARK_GREEN);
 
 		if (!self.tetherrange) self.tetherrange = MONAI_MAXICEG; // Setup default tetherrange
 	}

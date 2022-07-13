@@ -55,7 +55,7 @@ $frame painb1 painb2 painb3 painb4 painb5
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 
 void() pyro_soundreset = {
-	if (self.attack_finished > time) sound(self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM); // Turn off flame sound
+	if (self.attack_finished > time) sound(self,CHAN_WEAPON,self.noise4,1,ATTN_NORM); // Turn off flame sound
 	else StopSound(self,CHAN_WEAPON); // Play sound anyway to be sure the channel is silent
 };
 
@@ -96,7 +96,7 @@ void()	pyro_run8	= [	$run8,	pyro_run1	] { ai_run(11 * 1.5); };
 void()	pyro_atk1	= [	$attack1,	pyro_atk2	] { ai_face(); };
 void()	pyro_atk2	= [	$attack3,	pyro_atk3	] { ai_face(); };
 void()	pyro_atk3	= [	$attack5,	pyro_atk4	] { ai_face();
-	sound(self, CHAN_WEAPON, self.noise3, 1, ATTN_NORM);	// ON
+	sound(self,CHAN_WEAPON,self.noise3,1,ATTN_NORM);	// ON
 	pyro_fire(); // FIRE! FIRE! FIRE!
 	self.attack_finished = time + 0.3;
 };
@@ -107,7 +107,7 @@ void()	pyro_atk4	= [	$attack5,	pyro_atk5	] { ai_face();
 		self.think = pyro_atk4;
 };
 void()	pyro_atk5	= [	$attack10,	pyro_run1	] { ai_face();
-	sound(self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);	// OFF
+	sound(self,CHAN_WEAPON,self.noise4,1,ATTN_NORM);	// OFF
 	SUB_CheckRefire(pyro_atk1);
 };
 
@@ -138,8 +138,8 @@ void(entity inflictor, entity attacker, float damage) pyro_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random();
-		if (self.lip < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (self.lip < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 	
 		// Not using long pain animation (need to be agile)
 		if (self.pain_check == 1) {
@@ -191,7 +191,7 @@ void() pyro_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities 
 	pyro_soundreset();
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "enforcer/death1.wav",1,ATTN_NORM);
 		if (random() > 0.5) pyro_die1(); // regular death
 		else pyro_fdie1();
 	}

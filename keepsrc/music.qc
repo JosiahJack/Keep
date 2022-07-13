@@ -137,8 +137,8 @@ void(string text, float dur) PlayMusic = { // [FUNCTION]
 		stereo1.lefty = 0;
     }
 
-    if (stereo1) sound(stereo1, 7, text, 1, ATTN_NONE);
-    if (stereo2) sound(stereo2, 7, text, 1, ATTN_NONE);
+    if (stereo1) sound(stereo1, 7, text,1,ATTN_NONE);
+    if (stereo2) sound(stereo2, 7, text,1,ATTN_NONE);
     if (dur) {
         stereo1.nextthink = time + dur;
         stereo1.think     = ReplayMusic;
@@ -177,9 +177,9 @@ void() InitMusic = { // [FUNCTION]
     music2 = world.noise2;
 
     music3 = world.noise3;
-    if (music1 != "") { abort = FALSE;  precache_sound(music1);}
-    if (music2 != "") { abort = FALSE;  precache_sound(music2);}
-    if (music3 != "") { abort = FALSE;  precache_sound(music3);}
+    if (music1 != "") { abort = FALSE;  precache_sound(music1); }
+    if (music2 != "") { abort = FALSE;  precache_sound(music2); }
+    if (music3 != "") { abort = FALSE;  precache_sound(music3); }
     if (abort) return; // No music to play.
 
     SpawnStereo();
@@ -199,7 +199,7 @@ void() InitMusic = { // [FUNCTION]
     stereo1.nextthink = time + 0.2;     // Wait until other stuff spawns.
     stereo1.think     = MusicStart_Think;
     dprint("\b[WORLD]\b Drake music system initialized");
-    if (music1 != "") { dprint(" with tracks "); dprint(music1); dprint(", "); dprint(music2);  dprint(", "); dprint(music3);}
+    if (music1 != "") { dprint(" with tracks "); dprint(music1); dprint(", "); dprint(music2);  dprint(", "); dprint(music3); }
     dprint("\n");
 };
 
@@ -242,7 +242,7 @@ void() tmusic_touch = { // [FUNCTION]
 };
 
 void() trigger_music_spawn = { // [FUNCTION]
-    if (!self.noise) { remove (self);  return;}
+    if (!self.noise) { remove (self);  return; }
 
     precache_sound(self.noise);
     if (self.targetname) self.use = tmusic_use;

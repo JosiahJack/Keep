@@ -133,7 +133,7 @@ void() path_corner_setuparrow = {
 
 	if (!self.alpha) self.alpha = 0.35; // Setup default alpha for arrows
 	if (self.spawnflags & PATHC_BACKLINK) { // Draw back link arrow
-		self.attachment3 = path_corner_spawnarrow( self.mdl, self.oldorigin+'0 0 -8');
+		self.attachment3 = path_corner_spawnarrow(self.mdl, self.oldorigin+'0 0 -8');
 		self.movedir = normalize(self.movetarget3.oldorigin - self.oldorigin);
 		self.attachment3.angles = vectoangles(self.movedir);
 	} else {
@@ -144,7 +144,7 @@ void() path_corner_setuparrow = {
 		if (self.spawnflags & PATHC_TARGET1) self.oldenemy = self.movetarget;
 		else self.oldenemy = self;
 		
-		self.attachment3 = path_corner_spawnarrow( self.mdl, self.oldorigin+'0 0 -8');
+		self.attachment3 = path_corner_spawnarrow(self.mdl, self.oldorigin+'0 0 -8');
 		self.movedir = normalize(self.oldenemy.oldorigin - self.oldorigin);
 		self.attachment3.angles = vectoangles(self.movedir);
 		makevectors(self.movedir);
@@ -153,7 +153,7 @@ void() path_corner_setuparrow = {
 	
 	// Draw route choice 1 (target)
 	if (self.spawnflags & PATHC_TARGET1) {
-		self.attachment = path_corner_spawnarrow( self.headmdl, self.oldorigin);
+		self.attachment = path_corner_spawnarrow(self.headmdl, self.oldorigin);
 		self.movedir = normalize(self.movetarget.oldorigin - self.oldorigin);
 		self.attachment.angles = vectoangles(self.movedir);
 	} else {
@@ -163,7 +163,7 @@ void() path_corner_setuparrow = {
 		// There is no forward link, so use back link instead
 		if (self.spawnflags & PATHC_BACKLINK) self.oldenemy = self.movetarget3;
 		else self.oldenemy = self;
-		self.attachment = path_corner_spawnarrow( self.headmdl, self.oldorigin);
+		self.attachment = path_corner_spawnarrow(self.headmdl, self.oldorigin);
 		self.movedir = normalize(self.oldenemy.oldorigin - self.oldorigin);
 		self.attachment.angles = vectoangles(self.movedir);
 		makevectors(self.movedir);
@@ -172,7 +172,7 @@ void() path_corner_setuparrow = {
 	
 	// Draw route choice 2 (target2)
 	if (self.spawnflags & PATHC_TARGET2) {
-		self.attachment2 = path_corner_spawnarrow( self.headmdl, self.oldorigin);
+		self.attachment2 = path_corner_spawnarrow(self.headmdl, self.oldorigin);
 		self.movedir = normalize(self.movetarget2.oldorigin - self.oldorigin);
 		self.attachment2.angles = vectoangles(self.movedir);
 	}
@@ -393,7 +393,7 @@ void() path_corner_touch = {
 
 	// If ogre, play chainsaw drag sound(50% of the time)
 	if (other.classtype == CT_MONOGRE || other.classtype == CT_MONHOGRE) {
-		if (random() > 0.5) sound(other, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+		if (random() > 0.5) sound(other,CHAN_VOICE, "ogre/ogdrag.wav",1,ATTN_IDLE);
 	}
 
 	// Fire any event targets (activator = monster)
@@ -462,7 +462,7 @@ void() path_corner = {
 	// Really need to prevent path corners with no targetname otherwise it will cause problems with linking later
 	if (self.targetname == "") {
 		dprint("\b[PATH_CORNER]\b Missing targetname!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}

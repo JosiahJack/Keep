@@ -65,7 +65,7 @@ local   float   delta;
 
     // Update 6/6/10:  Fizzle check.
     // Assumes the nemesant is the attacker.  If not, change the conditions!
-    if (( self.owner.frame >= $pain1 ) || (self.owner.health < 1)) {
+    if ((self.owner.frame >= $pain1 ) || (self.owner.health < 1)) {
         // The spell fizzles!
         super_active = 0;
         StopSound(self,CHAN_WEAPON);
@@ -148,7 +148,7 @@ void() StartTrogMagic = {
     Mcircle.nextthink  = time + 0.01;
     Mcircle.think      = DoCircles;      
     setorigin(Mcircle, spot);
-    sound(Mcircle, CHAN_WEAPON, "zerstorer/trog/charge.wav", 1, ATTN_NORM);
+    sound(Mcircle,CHAN_WEAPON,"zerstorer/trog/charge.wav",1,ATTN_NORM);
 
     // Explosion entity.
     spot = self.enemy.origin + '0 0 24';
@@ -190,7 +190,7 @@ void() ai_repel = {
         self.enemy.velocity = self.enemy.velocity + dir;
     }
 
-    sound(self, CHAN_WEAPON, "drake/skullwiz/push.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/skullwiz/push.wav",1,ATTN_NORM);
     T_Damage (self.enemy, self, self, 20, DAMARMOR);
 };
 
@@ -220,7 +220,7 @@ void() nemes_track = {
     local vector vec;
     local float up, old, delta;
 
-    if (self.delay <= time) { remove (self); return;}
+    if (self.delay <= time) { remove (self); return; }
 
     up = (self.cnt & 7) * 45;
     up = SUB_sin(up) * 5;       // Other sidewinder code uses cosine.
@@ -332,7 +332,7 @@ void() check_tele = {
         // Update:  Drake uses self.master for true ownership, since
         // reflection code changes owner when used.
         if (head.master == self.enemy) {
-            if (IsMissile (head)) { tele_attack(); return;}
+            if (IsMissile (head)) { tele_attack(); return; }
         }
         head = head.chain;
     }
@@ -345,9 +345,9 @@ void() nemes_idlesound = {
         // Use voice channel instead of auto -- don't want slain magi talking.
         wr = random();
         if (wr > 0.7) 
-            sound(self, CHAN_VOICE, "zerstorer/trog/tidle1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "zerstorer/trog/tidle1.wav",1,ATTN_NORM);
         else if (wr < 0.3)
-            sound(self, CHAN_VOICE, "zerstorer/trog/tidle2.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "zerstorer/trog/tidle2.wav",1,ATTN_NORM);
         self.waitmin = time + 10;
     }
 };
@@ -393,9 +393,9 @@ void() TrogAttackFinished = {
     if (self.attack_finished)   // Repel hack -- set at zero bypasses delay.
         SUB_AttackFinished (2);
     if (enemy_range >= RANGE_MID || !enemy_vis)
-        { self.attack_state = AS_STRAIGHT; self.think = nemes_run1;}
+        { self.attack_state = AS_STRAIGHT; self.think = nemes_run1; }
     else
-        { self.attack_state = AS_SLIDING; self.think = nemes_side1;}
+        { self.attack_state = AS_SLIDING; self.think = nemes_side1; }
 };
 
 void() nemes_fast1  = [$attackb1,  nemes_fast2  ] { ai_face(); };
@@ -406,7 +406,7 @@ void() nemes_fast5  = [$attackb5,  nemes_fast6  ] {
     local   float   dist, boss, mask, zot;
 
     ai_face();
-    sound(self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "zerstorer/trog/frblatck.wav",1,ATTN_NORM);
     if (self.waitmin < time + 1) self.waitmin = time + 1;
 
 	// The mage has more options when not bound by Zerstorer mode.
@@ -505,7 +505,7 @@ void() nemes_inviso4  = [$attack7,  nemes_inviso5  ] { ai_face(); nemes_sparks2(
 void() nemes_inviso5  = [$attack9,  nemes_inviso6  ] { ai_face(); nemes_sparks2('-15 31 28'); };
 void() nemes_inviso6  = [$attack10, nemes_inviso7  ] { ai_face(); nemes_sparks2('12 27 30'); };
 void() nemes_inviso7  = [$attack11, nemes_inviso8  ] { ai_face(); nemes_sparks2('22 3 30');
-    sound(self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "zerstorer/trog/frblatck.wav",1,ATTN_NORM);
     spawn_tfog (self.origin);
     self.invisible_finished = time + 10;
 };
@@ -517,7 +517,7 @@ void() nemes_sboom1  = [$attack1,  nemes_sboom2  ] { ai_face(); };
 void() nemes_sboom2  = [$attack2,  nemes_sboom3  ] { ai_face(); };
 void() nemes_sboom3  = [$attack3,  nemes_sboom4  ] { ai_face(); };
 void() nemes_sboom4  = [$attack4,  nemes_sboom5  ] { ai_face();
-    if (super_active) { self.think = nemes_fast1;  return;} // Someone else started it first -- use alt. instead.
+    if (super_active) { self.think = nemes_fast1;  return; } // Someone else started it first -- use alt. instead.
     StartTrogMagic();
 };
 void() nemes_sboom5  = [$attack5,  nemes_sboom6  ] { ai_face(); };
@@ -542,7 +542,7 @@ void() Nemesant_Attack = {
             nemes_inviso1(); // If hurt badly enough, cast invisibility sometimes.
             return;
         }
-        if (self.count <= 1) { nemes_summon1();  return;} // Summon monsters to fight.
+        if (self.count <= 1) { nemes_summon1();  return; } // Summon monsters to fight.
     }
 
 	// Use quick attack instead of super attack if...
@@ -581,12 +581,12 @@ void() nemes_pain6  = [$pain6,  nemes_run1   ] {};
 
 void(entity inflictor, entity attacker, float damage) nemes_pain = {
     if (self.pain_finished > time) return;
-    if (( self.frame >= $attack1 ) && ( self.frame <= $attack15 )) { // Casting the big spell, so be resistant to pain like the arch-vile.
+    if ((self.frame >= $attack1 ) && (self.frame <= $attack15 )) { // Casting the big spell, so be resistant to pain like the arch-vile.
         if (prandom() > 10) return;     // Failed to break its concentration.
     }
 
     self.pain_finished = time + 0.5;
-    sound(self, CHAN_VOICE, "zerstorer/trog/tpain.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "zerstorer/trog/tpain.wav",1,ATTN_NORM);
     if (random()*70 > damage) return;         // didn't flinch
     if (SUB_IgnorePain ()) return;         // No pain anims in Nightmare.
     if (self.classname != "monster_nemesant") { // Make boss versions harder to flinch and stunlock.
@@ -599,7 +599,7 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
 };
 
 void() nemes_death1  = [$death1,  nemes_death2  ] {};
-void() nemes_death2  = [$death2,  nemes_death3  ] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() nemes_death2  = [$death2,  nemes_death3  ] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() nemes_death3  = [$death3,  nemes_death4  ] { monster_check_gib(); DropCoin(4); };
 void() nemes_death4  = [$death4,  nemes_death5  ] {};
 void() nemes_death5  = [$death5,  nemes_death6  ] {};
@@ -625,9 +625,9 @@ void() nemes_die = {
         SUB_RemoveFlags(self,FL_ONGROUND);
         self.movetype = MOVETYPE_TOSS;
         if (random() < 0.5)
-            sound(self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "zerstorer/trog/tdeath1.wav",1,ATTN_NORM);
         else
-            sound(self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
+            sound(self,CHAN_VOICE, "zerstorer/trog/tdeath2.wav",1,ATTN_NORM);
         nemes_death1();
     }
 };

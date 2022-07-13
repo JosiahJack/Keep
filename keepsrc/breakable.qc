@@ -306,7 +306,7 @@ void() breakable_particle = { // [FUNCTION]
 };
 
 void() breakable_touch = { // [FUNCTION]
-	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
+	if (InSky(self.origin)) { entity_remove(self, 0.1); return; }
 	if (self.touchedvoid) { entity_remove(self,0.1); return; }
 	if (other.classtype == CT_FUNCBREAKOBJ) return;	// Ignore other breakables
 	if (other.solid == SOLID_TRIGGER) return;		// Ignore trigger fields
@@ -327,10 +327,10 @@ void() breakable_touch = { // [FUNCTION]
 		self.count = self.count - 1;
 		if (!(self.owner.spawnflags & BREAK_NOSOUND)) {
 			self.lip = random()*self.owner.brkimpqty; // Randomize impact sound
-			if (self.lip < 1) sound(self, CHAN_VOICE, self.owner.noise1, 1, ATTN_BREAK);
-			else if (self.lip < 2) sound(self, CHAN_VOICE, self.owner.noise2, 1, ATTN_BREAK);
-			else if (self.lip < 3) sound(self, CHAN_VOICE, self.owner.noise3, 1, ATTN_BREAK);
-			else sound(self, CHAN_VOICE, self.owner.noise4, 1, ATTN_BREAK);
+			if (self.lip < 1) sound(self,CHAN_VOICE, self.owner.noise1,1,ATTN_BREAK);
+			else if (self.lip < 2) sound(self,CHAN_VOICE, self.owner.noise2,1,ATTN_BREAK);
+			else if (self.lip < 3) sound(self,CHAN_VOICE, self.owner.noise3,1,ATTN_BREAK);
+			else sound(self,CHAN_VOICE, self.owner.noise4,1,ATTN_BREAK);
 		}
 	}
 };
@@ -348,7 +348,7 @@ void() funcbreakable_use = { // [FUNCTION]
 	if (self.waitmin == TRUE) return;	// Trigger once block
 
 	// Play initial breaking sound(exception - silent spawnflag)
-	if (!(self.spawnflags & BREAK_SILENT)) sound(self.attachment, CHAN_BODY, self.noise, 1, ATTN_NORM);
+	if (!(self.spawnflags & BREAK_SILENT)) sound(self.attachment,CHAN_BODY,self.noise,1,ATTN_NORM);
 
 	// Hide breakable func model (ignore if point entity)
 	if (self.classtype == CT_FUNCBREAK) {

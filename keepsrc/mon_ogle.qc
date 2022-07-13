@@ -58,26 +58,26 @@ void() ogle_mining_sound = {
 	r = random();
 	if (self.spawnflags & OGLE_FLESHMINING) {
 		if (r < 0.5) {
-			sound(self, CHAN_VOICE, "ogle/pickflesh.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "ogle/pickflesh.wav",1,ATTN_NORM);
 			return;
 		} else {
-			sound(self, CHAN_VOICE, "ogle/hammerflesh.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "ogle/hammerflesh.wav",1,ATTN_NORM);
 			return;
 		}
 	}
 
 	if (r < 0.17) {
-		sound(self, CHAN_VOICE, "ogle/hammer1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/hammer1.wav",1,ATTN_NORM);
 	} else if (r < 0.33) {
-		sound(self, CHAN_VOICE, "ogle/hammer2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/hammer2.wav",1,ATTN_NORM);
 	} else if (r < 0.5) {
-		sound(self, CHAN_VOICE, "ogle/pick1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/pick1.wav",1,ATTN_NORM);
 	} else if (r < 0.67) {
-		sound(self, CHAN_VOICE, "ogle/pick2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/pick2.wav",1,ATTN_NORM);
 	} else if (r < 0.83) {
-		sound(self, CHAN_VOICE, "ogle/spike1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/spike1.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "ogle/spike2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/spike2.wav",1,ATTN_NORM);
 	}
 };
 
@@ -86,11 +86,11 @@ void() ogle_cheer_sound = {
 	r = random();
 
 	if (r < 0.33) {
-		sound(self, CHAN_VOICE, "ogle/cheer1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/cheer1.wav",1,ATTN_NORM);
 	} else if (r < 0.66) {
-		sound(self, CHAN_VOICE, "ogle/cheer2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/cheer2.wav",1,ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "ogle/cheer3.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ogle/cheer3.wav",1,ATTN_NORM);
 	}
 };
 
@@ -99,14 +99,14 @@ void() ogle_relax_to_standa1	= [0, ogle_relax_to_standa2	] {};
 void() ogle_relax_to_standa2	= [1, ogle_relax_to_standa3	] {};
 void() ogle_relax_to_standa3	= [2, ogle_relax_to_standa4	] {};
 void() ogle_relax_to_standa4	= [3, ogle_relax_to_standa5	] {};
-void() ogle_relax_to_standa5	= [4, ogle_relax_to_standa6	] { self.state = OGLE_STANDING;};
+void() ogle_relax_to_standa5	= [4, ogle_relax_to_standa6	] { self.state = OGLE_STANDING; };
 void() ogle_relax_to_standa6	= [5, ogle_relax_to_standa7	] {};
 void() ogle_relax_to_standa7	= [6, ogle_stand1			] {};
 
 void() ogle_relax_to_standb1	= [7, ogle_relax_to_standb2	] {};
 void() ogle_relax_to_standb2	= [8, ogle_relax_to_standb3	] {};
 void() ogle_relax_to_standb3	= [9, ogle_relax_to_standb4	] {};
-void() ogle_relax_to_standb4	= [10,ogle_relax_to_standb5] { self.state = OGLE_STANDING;};
+void() ogle_relax_to_standb4	= [10,ogle_relax_to_standb5] { self.state = OGLE_STANDING; };
 void() ogle_relax_to_standb5	= [11,ogle_relax_to_standb6] {};
 void() ogle_relax_to_standb6	= [12,ogle_stand1			] {};
 
@@ -127,11 +127,11 @@ void() ogle_hammera1;
 void() ogle_stand_to_work1	= [12, ogle_stand_to_work2	] {};
 void() ogle_stand_to_work2	= [11, ogle_stand_to_work3	] {};
 void() ogle_stand_to_work3	= [10, ogle_stand_to_work4	] {};
-void() ogle_stand_to_work4	= [9,ogle_stand_to_work5] { self.state = OGLE_STANDING;};
+void() ogle_stand_to_work4	= [9,ogle_stand_to_work5] { self.state = OGLE_STANDING; };
 void() ogle_stand_to_work5	= [8,ogle_stand_to_work6] {};
 void() ogle_stand_to_work6	= [7,ogle_hammerlowa1			] { if (random() < 0.05) ogle_hammera1(); };
 
-void() ogle_whippedtowork1	= [22, ogle_whippedtowork2	] { self.state = OGLE_MINING;};
+void() ogle_whippedtowork1	= [22, ogle_whippedtowork2	] { self.state = OGLE_MINING; };
 void() ogle_whippedtowork2	= [23, ogle_whippedtowork3	] {};
 void() ogle_whippedtowork3	= [24, ogle_whippedtowork4	] {};
 void() ogle_whippedtowork4	= [25, ogle_whippedtowork5	] {};
@@ -145,14 +145,14 @@ void() ogle_whippedtowork5	= [26, ogle_hammera1	] { if (random() < 0.25) ogle_mi
 
 // ... moving on to frame 43 then
 
-void() ogle_whippainshort1	= [43, ogle_whippainshort2	] { self.state = OGLE_MINING;};
+void() ogle_whippainshort1	= [43, ogle_whippainshort2	] { self.state = OGLE_MINING; };
 void() ogle_whippainshort2	= [44, ogle_whippainshort3	] {};
 void() ogle_whippainshort3	= [45, ogle_whippainshort4	] {};
 void() ogle_whippainshort4	= [46, ogle_whippainshort5	] {};
 void() ogle_whippainshort5	= [47, ogle_whippainshort6	] {};
 void() ogle_whippainshort6	= [48, ogle_positionchisel1	] { if (random() < 0.25) ogle_mine(); };
 
-void() ogle_positionchisel1	= [49, ogle_positionchisel2	] { ai_stand(); self.state = OGLE_MINING;};
+void() ogle_positionchisel1	= [49, ogle_positionchisel2	] { ai_stand(); self.state = OGLE_MINING; };
 void() ogle_positionchisel2	= [50, ogle_positionchisel3	] { ai_stand(); };
 void() ogle_positionchisel3	= [51, ogle_positionchisel4	] { ai_stand(); };
 void() ogle_positionchisel4	= [52, ogle_positionchisel5	] { ai_stand(); };
@@ -177,7 +177,7 @@ void() ogle_positionchisel12 = [60, ogle_hammera4	] { ai_stand(); }; // transiti
 
 // ... moving on to frame 77 then
 
-void() ogle_run1 = [77, ogle_run2	] { ai_run(8); self.state = FALSE;};
+void() ogle_run1 = [77, ogle_run2	] { ai_run(8); self.state = FALSE; };
 void() ogle_run2 = [78, ogle_run3	] { ai_run(10); };
 void() ogle_run3 = [79, ogle_run4	] { ai_run(14); };
 void() ogle_run4 = [80, ogle_run5	] { ai_run(12); };
@@ -213,7 +213,7 @@ void() ogle_hammera9 = [117, ogle_hammera1	] { ai_stand(); };
 
 void() ogle_wipebrow1;
 
-void() ogle_hammerb1 = [118, ogle_hammerb2	] { ai_stand(); self.state = OGLE_MINING;};
+void() ogle_hammerb1 = [118, ogle_hammerb2	] { ai_stand(); self.state = OGLE_MINING; };
 void() ogle_hammerb2 = [119, ogle_hammerb3	] { ai_stand(); };
 void() ogle_hammerb3 = [120, ogle_hammerb4	] { ai_stand(); };
 void() ogle_hammerb4 = [121, ogle_hammerb5	] { ai_stand(); };
@@ -230,8 +230,8 @@ void() ogle_hammerb14= [131, ogle_hammerb15	] { ai_stand(); };
 void() ogle_hammerb15= [132, ogle_wipebrow1	] { ai_stand();ogle_mining_sound(); if (random() < 0.8) ogle_hammerb1(); };
 
 void() ogle_wipebrow1 = [133, ogle_wipebrow2	] { ai_stand(); };
-void() ogle_wipebrow2 = [134, ogle_wipebrow3	] { ai_stand(); self.state = OGLE_STANDING;};
-void() ogle_wipebrow3 = [135, ogle_wipebrow4	] { ai_stand();sound(self, CHAN_VOICE, "ogle/wipebrow.wav", 1, ATTN_NORM); };
+void() ogle_wipebrow2 = [134, ogle_wipebrow3	] { ai_stand(); self.state = OGLE_STANDING; };
+void() ogle_wipebrow3 = [135, ogle_wipebrow4	] { ai_stand();sound(self,CHAN_VOICE, "ogle/wipebrow.wav",1,ATTN_NORM); };
 void() ogle_wipebrow4 = [136, ogle_wipebrow5	] { ai_stand(); };
 void() ogle_wipebrow5 = [137, ogle_wipebrow6	] { ai_stand(); };
 void() ogle_wipebrow6 = [138, ogle_wipebrow7	] { ai_stand(); };
@@ -246,7 +246,7 @@ void() ogle_paina1 = [145, 	ogle_paina2] {};
 void() ogle_paina2 = [146, 	ogle_paina3] {};
 void() ogle_paina3 = [147, 	ogle_paina4] {};
 void() ogle_paina4 = [148, 	ogle_run1] {
-	if (self.state == OGLE_PUSHING){
+	if (self.state == OGLE_PUSHING) {
 		if (random() < 0.8 && (self.health > (self.max_health/2))) ogle_pushcart1(); // Good chance they'll keep pushing the cart if they are healthy
 	}
 };
@@ -270,7 +270,7 @@ void() ogle_hammerlowb5 = [160, ogle_hammerlowb6	] { ai_stand(); };
 void() ogle_hammerlowb6 = [161, ogle_hammerlowb7	] { ai_stand(); };
 void() ogle_hammerlowb7 = [162, ogle_hammerlowa1	] { ai_stand();if (random() < 0.2) ogle_mine(); };
 
-void() ogle_wipebrowlow1 = [163, ogle_wipebrowlow2	] { ai_stand(); self.state = OGLE_STANDING;};
+void() ogle_wipebrowlow1 = [163, ogle_wipebrowlow2	] { ai_stand(); self.state = OGLE_STANDING; };
 void() ogle_wipebrowlow2 = [164, ogle_wipebrowlow3	] { ai_stand(); };
 void() ogle_wipebrowlow3 = [165, ogle_wipebrowlow4	] { ai_stand();ogle_mining_sound(); };
 void() ogle_wipebrowlow4 = [166, ogle_wipebrowlow5	] { ai_stand(); };
@@ -278,7 +278,7 @@ void() ogle_wipebrowlow5 = [167, ogle_wipebrowlow6	] { ai_stand(); };
 void() ogle_wipebrowlow6 = [168, ogle_wipebrowlow7	] { ai_stand(); };
 void() ogle_wipebrowlow7 = [169, ogle_wipebrowlow8	] { ai_stand(); };
 void() ogle_wipebrowlow8 = [170, ogle_wipebrowlow9	] { ai_stand(); };
-void() ogle_wipebrowlow9 = [171, ogle_wipebrowlow10	] { ai_stand(); self.state = OGLE_MINING;};
+void() ogle_wipebrowlow9 = [171, ogle_wipebrowlow10	] { ai_stand(); self.state = OGLE_MINING; };
 void() ogle_wipebrowlow10= [172, ogle_hammerlowa1	] { ai_stand();if (random() < 0.2) ogle_mine(); };
 
 void() ogle_walk1;
@@ -292,7 +292,7 @@ void() ogle_pushcart6 = [178, ogle_pushcart7	] { ai_walk(4);monster_footstep(FAL
 void() ogle_pushcart7 = [179, ogle_pushcart8	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
 void() ogle_pushcart8 = [180, ogle_pushcart1	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
 
-void() ogle_leaning1 = [181, ogle_leaning2] { ai_stand(); self.state = OGLE_LEANING;};
+void() ogle_leaning1 = [181, ogle_leaning2] { ai_stand(); self.state = OGLE_LEANING; };
 void() ogle_leaning2 = [182, ogle_leaning3] { ai_stand(); };
 void() ogle_leaning3 = [183, ogle_leaning4] { ai_stand(); };
 void() ogle_leaning4 = [184, ogle_leaning5] { ai_stand(); };
@@ -332,7 +332,7 @@ void() ogle_leaning_wipebrow1 = [203, ogle_leaning_wipebrow2] {};
 void() ogle_leaning_wipebrow2 = [204, ogle_leaning_wipebrow3] {};
 void() ogle_leaning_wipebrow3 = [205, ogle_leaning_wipebrow4] {};
 void() ogle_leaning_wipebrow4 = [206, ogle_leaning_wipebrow5] {};
-void() ogle_leaning_wipebrow5 = [207, ogle_leaning_wipebrow6] { sound(self, CHAN_VOICE, "ogle/wipebrow.wav", 1, ATTN_NORM); };
+void() ogle_leaning_wipebrow5 = [207, ogle_leaning_wipebrow6] { sound(self,CHAN_VOICE, "ogle/wipebrow.wav",1,ATTN_NORM); };
 void() ogle_leaning_wipebrow6 = [208, ogle_leaning_wipebrow7] {};
 void() ogle_leaning_wipebrow7 = [209, ogle_leaning_wipebrow8] {};
 void() ogle_leaning_wipebrow8 = [210, ogle_leaning_wipebrow9] {};
@@ -390,8 +390,8 @@ void(entity inflictor, entity attacker, float damage) ogle_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random () < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random () < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 
 		if (self.state == OGLE_LEANING) {
 			ogle_leaning_pain1();
@@ -428,7 +428,7 @@ void() ogle_chargea3 = [226, ogle_chargea4	] { ai_charge(10); };
 void() ogle_chargea4 = [227, ogle_chargea5	] { ai_charge(10); };
 void() ogle_chargea5 = [228, ogle_chargea6	] { ai_charge(10); };
 void() ogle_chargea6 = [229, ogle_chargea7	] { ai_charge(12); };
-void() ogle_chargea7 = [230, ogle_chargea8	] { ai_charge(12);sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM); };
+void() ogle_chargea7 = [230, ogle_chargea8	] { ai_charge(12);sound(self,CHAN_VOICE, "knight/sword1.wav",1,ATTN_NORM); };
 void() ogle_chargea8 = [231, ogle_chargea9	] { ai_charge(18); ai_melee(); };
 void() ogle_chargea9 = [232, ogle_run1	] { ai_charge(14); ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
 
@@ -438,7 +438,7 @@ void() ogle_chargeb3 = [235, ogle_chargeb4	] { ai_charge(10); };
 void() ogle_chargeb4 = [236, ogle_chargeb5	] { ai_charge(10); };
 void() ogle_chargeb5 = [237, ogle_chargeb6	] { ai_charge(10); };
 void() ogle_chargeb6 = [238, ogle_chargeb7	] { ai_charge(12); };
-void() ogle_chargeb7 = [239, ogle_chargeb8	] { ai_charge(12);sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM); };
+void() ogle_chargeb7 = [239, ogle_chargeb8	] { ai_charge(12);sound(self,CHAN_VOICE, "knight/sword1.wav",1,ATTN_NORM); };
 void() ogle_chargeb8 = [240, ogle_chargeb9	] { ai_charge(18); ai_melee(); };
 void() ogle_chargeb9 = [233, ogle_run1	] { ai_charge(14); ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
 
@@ -449,7 +449,7 @@ void() ogle_charge = {
 
 void() ogle_death1 = [241, ogle_death2	] {};
 void() ogle_death2 = [242, ogle_death3	] { monster_check_gib(); };
-void() ogle_death3 = [243, ogle_death4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() ogle_death3 = [243, ogle_death4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() ogle_death4 = [244, ogle_death5	] {};
 void() ogle_death5 = [245, ogle_death6	] {};
 void() ogle_death6 = [246, ogle_death7	] {};
@@ -466,7 +466,7 @@ void() ogle_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) { 
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		ogle_death1();
 	}
 };

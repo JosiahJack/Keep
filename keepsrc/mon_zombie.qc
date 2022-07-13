@@ -251,7 +251,7 @@ void() zombie_paina8	= [	$paina8,	zombie_paina9	] {};
 void() zombie_paina9	= [	$paina9,	zombie_paina10	] {};
 void() zombie_paina10	= [	$paina10,	zombie_paina11	] {};
 void() zombie_paina11	= [	$paina11,	zombie_paina12	] {};
-void() zombie_paina12	= [	$paina12,	zombie_run1		] { self.inpain = 0;};
+void() zombie_paina12	= [	$paina12,	zombie_run1		] { self.inpain = 0; };
 
 //----------------------------------------------------------------------
 void() zombie_painc1	= [	$painc1,	zombie_painc2	] {};
@@ -291,14 +291,14 @@ void() zombie_paind13	= [	$paind13,	zombie_run1	] {};
 //----------------------------------------------------------------------
 // Fall down - B : random pain, E : large amount of damage
 //----------------------------------------------------------------------
-void() zombie_painb1	= [	$painb1,	zombie_painb2	] { self.inpain = 2;};
+void() zombie_painb1	= [	$painb1,	zombie_painb2	] { self.inpain = 2; };
 void() zombie_painb2	= [	$painb2,	zombie_painb3	] { ai_pain(2); };
 void() zombie_painb3	= [	$painb3,	zombie_painb4	] { ai_pain(8); };
 void() zombie_painb4	= [	$painb4,	zombie_painb5	] { ai_pain(6); };
 void() zombie_painb5	= [	$painb5,	zombie_painb6	] { ai_pain(2); };
 void() zombie_painb6	= [	$painb6,	zombie_painb7	] {};
 void() zombie_painb7	= [	$painb7,	zombie_painb8	] { zombie_sound(5); };
-void() zombie_painb8	= [	$painb8,	zombie_painb9	] { self.solid = SOLID_NOT;};
+void() zombie_painb8	= [	$painb8,	zombie_painb9	] { self.solid = SOLID_NOT; };
 void() zombie_painb9	= [	$painb9,	zombie_painb9	] {
 	zombie_onground(MONAI_ZOMBIEUPB); };
 
@@ -330,7 +330,7 @@ void() zombie_painb28	= [	$painb28,	zombie_run1		] {
 };
 
 //----------------------------------------------------------------------
-void() zombie_paine1	= [	$paine1,	zombie_paine2	] { self.inpain = 2;};
+void() zombie_paine1	= [	$paine1,	zombie_paine2	] { self.inpain = 2; };
 void() zombie_paine2	= [	$paine2,	zombie_paine3	] { ai_pain(8); };
 void() zombie_paine3	= [	$paine3,	zombie_paine4	] { ai_pain(5); };
 void() zombie_paine4	= [	$paine4,	zombie_paine5	] { ai_pain(3); };
@@ -340,7 +340,7 @@ void() zombie_paine7	= [	$paine7,	zombie_paine8	] { ai_pain(1); };
 void() zombie_paine8	= [	$paine8,	zombie_paine9	] { ai_pain(1); };
 void() zombie_paine9	= [	$paine9,	zombie_paine10	] { ai_pain(2); };
 void() zombie_paine10	= [	$paine10,	zombie_paine11	] { zombie_sound(5); };
-void() zombie_paine11	= [	$paine11,	zombie_paine12	] { self.solid = SOLID_NOT;};
+void() zombie_paine11	= [	$paine11,	zombie_paine12	] { self.solid = SOLID_NOT; };
 void() zombie_paine12	= [	$paine12,	zombie_paine12	] {
 	zombie_onground(MONAI_ZOMBIEUPE); };
 
@@ -498,13 +498,13 @@ void(float type) zombie_sound = {
 		if (self.lip < 0.2) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
 	} else if (type == 3 && self.idletimer < time) {
 	 	self.idletimer = time + 1 + (random()*2);
-		if (self.lip < 0.2) sound(self, CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
-		if (self.lip > 0.8) sound(self, CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
+		if (self.lip < 0.2) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
+		if (self.lip > 0.8) sound(self,CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
 	} else if (type == 4) {
-		if (self.lip < 0.25) sound(self,CHAN_VOICE,self.pain_sound, 1,ATTN_NORM);
+		if (self.lip < 0.25) sound(self,CHAN_VOICE,self.pain_sound,1,ATTN_NORM);
 		else if (self.lip < 0.5) sound(self,CHAN_VOICE,self.pain_sound2,1,ATTN_NORM);
 	} else if (type == 5) {
-		sound(self, CHAN_BODY,"zombie/z_fall.wav",1,ATTN_NORM);
+		sound(self,CHAN_BODY,"zombie/z_fall.wav",1,ATTN_NORM);
 	} else if (type == 6) {
 		if (self.lip < 0.5) sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
 		else sound(self,CHAN_VOICE,"zombie/z_idle1.wav",1,ATTN_IDLE);
@@ -520,11 +520,11 @@ void() zombie_die = {
 };
 
 void() zombie_cruc1	= [$cruc_1,zombie_cruc2] { zombie_sound(1); };
-void() zombie_cruc2	= [$cruc_2,zombie_cruc3] { self.nextthink = time + 0.1 + random()*0.1;};
-void() zombie_cruc3	= [$cruc_3,zombie_cruc4] { self.nextthink = time + 0.1 + random()*0.1;};
-void() zombie_cruc4	= [$cruc_4,zombie_cruc5] { self.nextthink = time + 0.1 + random()*0.1;};
-void() zombie_cruc5	= [$cruc_5,zombie_cruc6] { self.nextthink = time + 0.1 + random()*0.1;};
-void() zombie_cruc6	= [$cruc_6,zombie_cruc1] { self.nextthink = time + 0.1 + random()*0.1;};
+void() zombie_cruc2	= [$cruc_2,zombie_cruc3] { self.nextthink = time + 0.1 + random()*0.1; };
+void() zombie_cruc3	= [$cruc_3,zombie_cruc4] { self.nextthink = time + 0.1 + random()*0.1; };
+void() zombie_cruc4	= [$cruc_4,zombie_cruc5] { self.nextthink = time + 0.1 + random()*0.1; };
+void() zombie_cruc5	= [$cruc_5,zombie_cruc6] { self.nextthink = time + 0.1 + random()*0.1; };
+void() zombie_cruc6	= [$cruc_6,zombie_cruc1] { self.nextthink = time + 0.1 + random()*0.1; };
 
 void(entity inflictor, entity attacker, float damage) zombie_cruc_pain = {
 	self.health = self.max_health;				// reset health	

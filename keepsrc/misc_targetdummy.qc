@@ -101,7 +101,7 @@ void() misc_targetdummy_stand = { // [FUNCTION]
 void(entity inflictor, entity attacker, float damage) misc_targetdummy_pain = { // [FUNCTION]
 	self.pain_finished = 0; // want all damage to go through pain function, reset timer
 	if (self.pain_check < time) { // Play a pain sound every second
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		self.pain_check = time + 1;
 	}
 	
@@ -350,7 +350,7 @@ void() misc_targetnumber = { // [ENTITY]
 	// Double check digit quantities are within range
 	if (self.pos1_x > 4 || self.pos1_y > 3) {
 		dprint("\b[MISCNUM]\b pos1 limited to '4 3 0'\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 	}
 	
 	// Setup lower part of number (1-3 decimal places, 4=dot always)

@@ -178,7 +178,7 @@ void() train_ext_playstopsound = { // [FUNCTION]
 		cchain = self.child;
 		while(cchain) {	
 			if (cchain.cshift) // func_watertrain
-				if (cchain.noise1) sound(cchain, CHAN_VOICE, cchain.noise1, 1, ATTN_NORM);	
+				if (cchain.noise1) sound(cchain,CHAN_VOICE, cchain.noise1,1,ATTN_NORM);	
 			cchain = cchain.child;
 		}
 	}
@@ -187,7 +187,7 @@ void() train_ext_playstopsound = { // [FUNCTION]
 void() train_ext_playtravelsound = { // [FUNCTION]
 	local entity cchain;
 	
-	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 	if (!self.cshift) { // play child sounds
 		cchain = self.child;
 		while(cchain) {	
@@ -201,7 +201,7 @@ void() train_ext_playtravelsound = { // [FUNCTION]
 void() train_ext_playchangedirsound = { // [FUNCTION], Doesn't mute CHAN_VOICE
 	local entity cchain;
 	
-	if (self.noise4) sound(self, CHAN_BODY, self.noise4, 1, ATTN_NORM);
+	if (self.noise4) sound(self,CHAN_BODY,self.noise4,1,ATTN_NORM);
 	if (!self.cshift) { // play child sounds
 		cchain = self.child;
 		while(cchain) {
@@ -215,7 +215,7 @@ void() train_ext_playchangedirsound = { // [FUNCTION], Doesn't mute CHAN_VOICE
 void() train_ext_playwrongwaysound = { // [FUNCTION]
 	local entity cchain;
 	
-	if (self.noise5) sound(self, CHAN_VOICE, self.noise5, 1, ATTN_NORM);
+	if (self.noise5) sound(self,CHAN_VOICE, self.noise5,1,ATTN_NORM);
 	if (!self.cshift) { // play child sounds
 		cchain = self.child;
 		while(cchain) {

@@ -179,7 +179,7 @@ void() func_door_hit_bottom = { // [FUNCTION]
 	if (self.midstart) self.midstart = FALSE; // Always reset midstart flag (its not longer needed)
 	if (self.estate == ESTATE_OFF) return;
 
-	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM);
 	self.state = STATE_BOTTOM;
 	self.frame = 1 - self.frame;	//switch textures
 };
@@ -193,7 +193,7 @@ void() func_door_go_down = { // [FUNCTION]
 		self.health = self.max_health;
 	}
 	self.state = STATE_DOWN;
-	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM);
 	SUB_CalcMove (self.pos1, self.yaw_speed, func_door_hit_bottom); // Add - return speed can now be different, yaw_speed = speed if nothing defined
 };
 
@@ -201,7 +201,7 @@ void() func_door_go_down = { // [FUNCTION]
 void() func_door_hit_top = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
-	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM);
 	self.state = STATE_TOP;
 	if (self.spawnflags & DOOR_TOGGLE) return; // don't come down automatically
 
@@ -216,7 +216,7 @@ void() func_door_go_up = { // [FUNCTION]
 	if (self.state == STATE_TOP) { self.nextthink = self.ltime + self.wait; return; } // reset top wait time
 
 	if (self.angletarget != "") func_door_angletarget(); // Check for custom movement using angletarget (entity target)
-	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
+	sound(self,CHAN_VOICE, self.noise2, self.volume,ATTN_NORM);
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, func_door_hit_top);
 	SUB_UseTargets();
@@ -235,7 +235,7 @@ void() func_door_fire = { // [FUNCTION]
 			if (self.state != STATE_DOWN) func_door_go_down(); // Don't keep re-triggering midstart doors.  Let the door reset back to pos1 (start position).
 			self = self.enemy;
 			if (self == world) self = starte; // Prevent endless world loops
-		} while ( self != starte );
+		} while (self != starte );
 		self = oself;
 		return;
 	}
@@ -248,7 +248,7 @@ void() func_door_fire = { // [FUNCTION]
 		}
 	}
 
-	if (self.items) sound(self, CHAN_VOICE, self.noise4, self.volume, ATTN_NORM); // play use key sound
+	if (self.items) sound(self,CHAN_VOICE, self.noise4, self.volume,ATTN_NORM); // play use key sound
 	self.message = "";		// no more message
 	if (self.spawnflags & DOOR_TOGGLE) {
 		if (self.state == STATE_UP || self.state == STATE_TOP) {
@@ -257,7 +257,7 @@ void() func_door_fire = { // [FUNCTION]
 				func_door_go_down();
 				self = self.enemy;
 				if (self == world) self = starte; // Prevent endless world loops
-			} while ( self != starte );
+			} while (self != starte );
 			self = oself;
 			return;
 		}
@@ -350,7 +350,7 @@ void(void() th_activate, entity attempter) keyuser_attempt = {
 	if (self.items == 0) { // Does the door require any keys?
 		if (self.owner.message != "") { // Any touch message to display?
 			centerprint (attempter, self.owner.message);
-			sound(attempter, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Use custom lock sound(default = talktalk)
+			sound(attempter,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Use custom lock sound(default = talktalk)
 		}
 	} else { // Check door for keys (silver/gold/custom)
 		if (self.customkey == 5) { // Handle support for 'Any Key' option.  Itemset 0 = self.items, 1 = self.items2, 2 = self.moditems, 3 = self.perms
@@ -376,8 +376,8 @@ void(void() th_activate, entity attempter) keyuser_attempt = {
 				} // Currently no keys in perms so no need to check it.
 			} else { // Still locked.
 				key_message(2,0,attempter,FALSE);
-				if (self.locksounds > 0) sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for locksounds override
-				else sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Default lock sound for silver/gold keys
+				if (self.locksounds > 0) sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Check for locksounds override
+				else sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM); // Default lock sound for silver/gold keys
 				return;
 			}
 		} else {
@@ -388,8 +388,8 @@ void(void() th_activate, entity attempter) keyuser_attempt = {
 						key_message(1,IT2_KEY_SKELETON,attempter,TRUE);
 					} else { // Still locked.
 						key_message(2,self.moditems,attempter,FALSE);
-						if (self.locksounds > 0) sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for locksounds override
-						else sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Default lock sound(based on worldspawn)
+						if (self.locksounds > 0) sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Check for locksounds override
+						else sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM); // Default lock sound(based on worldspawn)
 						return;
 					}
 				} else { // Opened!
@@ -403,8 +403,8 @@ void(void() th_activate, entity attempter) keyuser_attempt = {
 						key_message(1,IT2_KEY_SKELETON,attempter,TRUE);
 					} else { // Still locked.
 						key_message(0,self.owner.items,attempter,FALSE);
-						if (self.locksounds > 0) sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for locksounds override
-						else sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Default lock sound for silver/gold keys
+						if (self.locksounds > 0) sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Check for locksounds override
+						else sound(self,CHAN_VOICE, self.noise3, self.volume,ATTN_NORM); // Default lock sound for silver/gold keys
 						return;
 					}
 				} else { // Opened!
@@ -514,16 +514,16 @@ void() keyuser_sounds_precache = {
 	else if (self.locksounds == 3) self.noise = "ad171/doors/rattle6.wav";
 	else if (self.locksounds == 13) self.noise = "misc/trigger1.wav";
 	else if (self.locksounds == 14) self.noise = SOUND_EMPTY; 
-	else if (self.locksounds == 16) self.noise = RND_SURPRISENEG;
+	else if (self.locksounds == 16) self.noise = "kinn/bdwsound/basss.wav";
 	else if (self.locksounds == 21) self.noise = "ad171/doors/rattle_tech1.wav";
 	else if (self.locksounds == 22) self.noise = "ad171/doors/rattle_tech2.wav";
 	else if (self.locksounds == 23) self.noise = "ad171/doors/rattle_tech3.wav";
 	else if (self.locksounds == 24) self.noise = "ad171/doors/rattle_tech4.wav";
-	precache_sound(self.noise);
-	precache_sound(self.noise1);
-	precache_sound(self.noise2);
-	precache_sound(self.noise3);
-	precache_sound(self.noise4);
+	if (self.noise != "") precache_sound(self.noise);
+	if (self.noise1 != "") precache_sound(self.noise1);
+	if (self.noise2 != "") precache_sound(self.noise2);
+	if (self.noise3 != "") precache_sound(self.noise3);
+	if (self.noise4 != "") precache_sound(self.noise4);
 };
 
 void() keyuser_setup = { // [FUNCTION]
@@ -664,7 +664,7 @@ void() func_door = { // [ENTITY]
 	// Disable this feature, reverse lifts can be setup easily if needed
 	if (self.angletarget != "" && self.spawnflags & DOOR_START_OPEN) {
 		dprint("\b[FUNC_DOOR]\b angletarget + start open not supported!\n");
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}
@@ -772,7 +772,7 @@ void() trigger_doorstate_setup = { // [FUNCTION]
 	
 	// Found any errors with setup?
 	if (self.lefty == FALSE) {
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}

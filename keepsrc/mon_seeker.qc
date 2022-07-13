@@ -90,10 +90,10 @@ float SEEKER_FIRE = 2;
 float SEEKER_DIE = 3;
 
 // Spark effect from missing arm joint.  Low chance out of combat (idle state).
-void()	seek_sparks_fade1 = [0, seek_sparks_fade2] { self.alpha = 0.8; self.nextthink = time + 0.05;};
-void()	seek_sparks_fade2 = [0, seek_sparks_fade3] { self.alpha = 0.6; self.nextthink = time + 0.05;};
-void()	seek_sparks_fade3 = [0, seek_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05;};
-void()	seek_sparks_fade4 = [0, SUB_Remove] { self.alpha = 0.2; self.nextthink = time + 0.05;};
+void()	seek_sparks_fade1 = [0, seek_sparks_fade2] { self.alpha = 0.8; self.nextthink = time + 0.05; };
+void()	seek_sparks_fade2 = [0, seek_sparks_fade3] { self.alpha = 0.6; self.nextthink = time + 0.05; };
+void()	seek_sparks_fade3 = [0, seek_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05; };
+void()	seek_sparks_fade4 = [0, SUB_Remove] { self.alpha = 0.2; self.nextthink = time + 0.05; };
 
 void() seek_spark = {
 	local float loopvar;
@@ -106,7 +106,7 @@ void() seek_spark = {
 	
 	// Light flash and sparky sound
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_BODY, self.noise3, 1, ATTN_STATIC);
+	sound(self,CHAN_BODY,self.noise3,1,ATTN_STATIC);
 	makevectors(self.angles);
 	
 	// Change origin and spark direction for each arm
@@ -291,7 +291,7 @@ void() seek_punch = {
 	if (!ai_checkmelee(MONAI_MELEESEEKER,MONAI_MELEEZTALL)) return;// Too far away
 
 	// Melee hit sound
-	sound(self, CHAN_WEAPON, "ad171/seeker/punch1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/seeker/punch1.wav",1,ATTN_NORM);
 	ldmg = (random() + random() + random()) * 20;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, -150);
@@ -300,7 +300,7 @@ void() seek_punch = {
 
 void() seek_melee1 = [$punch1, seek_melee2 ] { ai_face();
 	self.pain_finished = time + 1;	// Block pain animation
-	sound(self, CHAN_VOICE, "ad171/seeker/melee1.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_VOICE, "ad171/seeker/melee1.wav",1,ATTN_NORM); };
 void() seek_melee2 = [$punch2, seek_melee3 ] { ai_charge(15); };
 void() seek_melee3 = [$punch3, seek_melee4 ] { ai_charge(20); };
 void() seek_melee4 = [$punch4, seek_melee5 ] { ai_charge(25); };
@@ -323,14 +323,14 @@ void(vector offset) seek_armattack = {
 	if (visxray(self,self.enemy, offset, '0 0 0', FALSE)) {
 		if (self.weaponstate == TRUE) {
 			if (skill > SKILL_NORMAL) {
-				sound(self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
+				sound(self,CHAN_WEAPON,SOUND_PLASMA_FIRE,1,ATTN_NORM);
 				launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA, self.attack_speed);
 			} else {
-				sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
+				sound(self,CHAN_WEAPON,"enforcer/enfire.wav",1,ATTN_NORM);	
 				launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER, self.attack_speed);
 			}
 		} else {
-			sound(self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
+			sound(self,CHAN_WEAPON,"quoth/soldier/rocket.wav",1,ATTN_NORM);	
 			launch_projectile(org,dir,NO_SPIN,CT_PROJ_SEEKER,self.attack_speed);
 		}
 	}
@@ -375,12 +375,12 @@ void() seek_fireframe = {
 		if (self.enemydist < MONAI_RANGESWSEEKER) {
 			// Upgrade lasers to plasma with hard skill+
 			if (skill > SKILL_NORMAL) 
-				sound(self, CHAN_VOICE, "ad171/seeker/range_plasma.wav", 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, "ad171/seeker/range_plasma.wav",1,ATTN_NORM);
 			// Lasers at close range ONLY
-			else sound(self, CHAN_VOICE, "ad171/seeker/range_laser.wav", 1, ATTN_NORM);
+			else sound(self,CHAN_VOICE, "ad171/seeker/range_laser.wav",1,ATTN_NORM);
 			self.weaponstate = TRUE;
 		} else {
-			sound(self, CHAN_VOICE, "quoth/soldier/load.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "quoth/soldier/load.wav",1,ATTN_NORM);
 			self.weaponstate = FALSE;
 		}
 	}
@@ -424,8 +424,8 @@ void(entity inflictor, entity attacker, float damage) seek_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 
 		// There are no checks for shadow axe damage (pain_check = 1/2)
 		if (self.state == SEEKER_ARMS_BOTH) {
@@ -521,7 +521,7 @@ void() seek_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// Long death sound with comedy bing at the end!
-	sound(self, CHAN_VOICE, "ad171/seeker/death1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ad171/seeker/death1.wav",1,ATTN_NORM);
 	// reset custom origins for body/arm gib parts
 	self.gib1origin = self.gib2origin = '0 0 0';
 	self.max_health = MON_GIBFOUNTAIN;
@@ -572,7 +572,7 @@ void() seek_wakeup = {
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_SEEK_SHIELD);
 	
 	// Switch off shield sound
-	sound(self, CHAN_WEAPON, "ad171/ambience/power_off.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/ambience/power_off.wav",1,ATTN_NORM);
 	// Switch OFF any particle emitter
 	if (self.part_emitter) misc_particle_off(self.part_emitter);
 	

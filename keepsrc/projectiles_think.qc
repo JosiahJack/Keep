@@ -67,7 +67,7 @@ void() Think_Projectile = { // [FUNCTION]
 void() Steer_HomingMissile = { // [FUNCTION]
 	if (self.enemy.health < 1) { entity_remove(self, random() * 3); return; } // If tracking enemies dies or end level? remove homing missiles
 
-	if (intermission_running > 0 || cinematic_running > 0 || cutscene > 0) self.no_trackondeath = NEGATIVE;
+	if (frame_pause()) self.no_trackondeath = NEGATIVE;
 	if (self.waitmin < time) self.owner = self; // After 1s let homing missiles impact on ower
 	if (self.owner.health < 1 && self.no_trackondeath == TRUE) self.no_trackondeath = NEGATIVE; // Stop missile tracking if owner is dead and mode is enabled
 	if (self.no_trackondeath == NEGATIVE) return; // Has projectile tracking been disabled?
@@ -83,15 +83,14 @@ void() Steer_HomingMissile = { // [FUNCTION]
 void() Steer_LimitedMissile = { // [FUNCTION]
 	local float veclen, vecdist;
 	
-	if (intermission_running > 0) { Puff_Missile(); return; } // No tracking during intermission / cinematic
-	if (cinematic_running > 0) { Puff_Missile(); return; }
+	if (frame_pause()) { Puff_Missile(); return; } // No tracking during intermission / cinematic
 	if (self.attack_finished < time) { // Remove projectile after a certain time limit
 		if (self.part_qctrail == 0) Puff_Missile(); // Do nothing if controlled via custom particle trail
 		return;
 	}
 
 	// play sound when starting the missile in flight
-	if (self.attack_instant == TRUE && self.noise1 != "") sound(self, CHAN_WEAPON, self.noise1, 1, ATTN_NORM);
+	if (self.attack_instant == TRUE && self.noise1 != "") sound(self,CHAN_WEAPON,self.noise1,1,ATTN_NORM);
 	self.attack_instant = FALSE; // Only play first sound once
 
 	// Stop steering if attacker or enemy is dead
@@ -105,7 +104,7 @@ void() Steer_LimitedMissile = { // [FUNCTION]
 	// Time = 0.2 * ( 5 + skill * 5) 
 	// EASY = 1s, NORMAL = 2s, HARD = 3s, NM = 4s
 	self.count = self.count + 1;
-	if ( self.count > (5 + (skill*5)) ) self.attack_disabled = TRUE;
+	if (self.count > (5 + (skill*5)) ) self.attack_disabled = TRUE;
 	if (!self.attack_disabled) {
 		// Steering rocket towards the enemy PART 1
 		// First check - Is the rocket too close to the enemy?
@@ -554,7 +553,7 @@ void() beam_generate = { // [FUNCTION]
 	beamseg.touch = beam_touch;
 	beamseg.think = SUB_Remove;
 	beamseg.nextthink = time + 6;
-	sound(self.owner, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
+	sound(self.owner,CHAN_WEAPON,"weapons/lstart.wav",1,ATTN_NORM);
 	self.currentammo = self.currentammo / 2;
 	if ((self.owner.flags & FL_CLIENT) && self.deadflag == DEAD_NO) {
 		self.owner.punchangle_x = -6;
@@ -602,9 +601,9 @@ void() BFGTracerThink = { // [FUNCTION]
 };
 
 void() Echo_Think = { // [FUNCTION]
-    if ((!intermission_running && !cutscene && !cinematic_running)
-        && ((self.owner.button0 || self.tome_finished || self.owner.perms & POW_DOUBLE))
-        && (self.owner.health > 0)) {
+    if (frame_pause()) { remove(self); return; }
+
+    if (((self.owner.button0 || self.tome_finished || self.owner.perms & POW_DOUBLE)) && (self.owner.health > 0)) {
         SUB_ThinkImmediate(self.owner, self.think1);
     }
     remove(self);
@@ -617,7 +616,7 @@ void(float rgb, float density, float full) Meteor_Trail = { // [FUNCTION]
 };
 
 void() AkArrow_Think = { // [FUNCTION]
-    if (self.delay <= time) { remove (self); return;}
+    if (self.delay <= time) { remove (self); return; }
 
     self.speed   = vlen (self.velocity);
     self.movedir = self.dest = normalize (self.velocity);
@@ -641,10 +640,10 @@ void() Axe_Watch = { // [FUNCTION]
 void() RyuPlasma_Think = { // [FUNCTION]
     local float pc;
 
-    if (self.delay <= time) { remove (self);  return;}
+    if (self.delay <= time) { remove (self);  return; }
 
     pc = pointcontents(self.origin);
-    if ((pc <= CONTENT_WATER) && (pc >= CONTENT_LAVA)) { RyuPlasma_Explode();  return;}
+    if ((pc <= CONTENT_WATER) && (pc >= CONTENT_LAVA)) { RyuPlasma_Explode();  return; }
 
     particle(self.origin, self.velocity * 0.005, 9, self.waitmin);   //2
     particle(self.origin, self.velocity * 0.01, 41, self.waitmax);   //4
@@ -653,7 +652,7 @@ void() RyuPlasma_Think = { // [FUNCTION]
 
 //  Acid -- Used by scrag and green dragon.
 void() Acid_Think = { // [FUNCTION]
-    if (self.delay <= time) { remove (self); return;}
+    if (self.delay <= time) { remove (self); return; }
 
     self.angles = vectoangles (self.velocity);
     self.nextthink = time + 0.1;
@@ -661,8 +660,8 @@ void() Acid_Think = { // [FUNCTION]
 
 void() Ice_Think = { // [FUNCTION]
     Meteor_Trail (39, 2, FALSE);    // Function in 'fire.qc'.
-    if (self.delay <= time) { remove (self); return;}
-    if (pointcontents(self.origin) == CONTENT_LAVA) { remove (self); return;}
+    if (self.delay <= time) { remove (self); return; }
+    if (pointcontents(self.origin) == CONTENT_LAVA) { remove (self); return; }
 
     self.nextthink = time + 0.1;
 };
@@ -671,7 +670,7 @@ void() Ice_Think = { // [FUNCTION]
 void() Iceball_Think = { // [FUNCTION]
     Meteor_Trail (39, 2, TRUE); // Bigger ice chunks, so spawn a beam of frost.
 	self.think = Iceball_Think;
-    if ((self.delay > time) && (pointcontents(self.origin) != CONTENT_LAVA)) { self.nextthink = time + 0.1;  return;}
+    if ((self.delay > time) && (pointcontents(self.origin) != CONTENT_LAVA)) { self.nextthink = time + 0.1;  return; }
 
     Touch_Missile(); // Time to blow up.
 };
@@ -838,7 +837,7 @@ void() Sidewinder_Think = { // [FUNCTION]
     vec_x = 0 - vec_x;
     makevectors(vec);
     self.velocity = v_forward * sped;
-    if (self.lefty & 1) { self.lefty = 2; self.nextthink = time + 0.1;}
+    if (self.lefty & 1) { self.lefty = 2; self.nextthink = time + 0.1; }
     else self.nextthink = time + 0.2;
 };
 
@@ -1041,7 +1040,7 @@ void(entity inflictor, float damage) Hammer_Block = { // [FUNCTION]
 
 // Super Grenades from Drake
 void() SuperGrenade_Think = { // [FUNCTION]
-    if (self.delay <= time) { Explode_Grenade();  return;}
+    if (self.delay <= time) { Explode_Grenade();  return; }
 
     self.angles = vectoangles (self.velocity);
     self.nextthink = time + 0.05;
@@ -1092,8 +1091,8 @@ void() TraceExploShell_Think = { // [FUNCTION]
 void() FrozenThink = { // [FUNCTION]
 	if (self.health < self.cnt) {
 		self.count = self.count + (self.cnt - self.health);
-		if (self.health < self.gibhealth || self.health < 600) { sound(self, CHAN_ITEM, "drake/weapons/shatter.wav", 1, ATTN_NORM); Shattered(); return; }
-		sound(self, CHAN_ITEM, "drake/weapons/icehit.wav", 1, ATTN_NORM);
+		if (self.health < self.gibhealth || self.health < 600) { sound(self,CHAN_ITEM,"drake/weapons/shatter.wav",1,ATTN_NORM); Shattered(); return; }
+		sound(self,CHAN_ITEM,"drake/weapons/icehit.wav",1,ATTN_NORM);
 	}
 	self.cnt = self.health;
 	self.think = FrozenThink;
@@ -1101,7 +1100,7 @@ void() FrozenThink = { // [FUNCTION]
 };
 
 void() Buriza_Think = { // [FUNCTION]
-    if (self.delay <= time) { remove (self); return;}
+    if (self.delay <= time) { remove (self); return; }
 
     self.nextthink = time + 0.05;
     self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -1168,7 +1167,7 @@ void() Burn_Burn = { // [FUNCTION]
         // the pain sounds done first before tampering with the flame.
         if (!self.deadflag) {
             self.dmg = self.dmg - damage;
-            if (self.dmg < 1) { Burn_Null(targ); return;}
+            if (self.dmg < 1) { Burn_Null(targ); return; }
         }
         // The fire can burn again after a moment.
         // Note:  findradius is called once per burning entity, and that
@@ -1186,11 +1185,11 @@ void() Burn_Think = { // [FUNCTION]
     local float pc;
 
     targ = self.owner;
-    if (!targ) { remove (self); return;}
+    if (!targ) { remove (self); return; }
 
     self.nextthink = time + 0.100;
 	self.think = Burn_Think;
-    if (targ.burner != self) { Burn_Null (targ); return;} // This should not happen.
+    if (targ.burner != self) { Burn_Null (targ); return; } // This should not happen.
 
 	//if (self.walkframe >= self.pos2_y) self.walkframe = self.pos2_x;
 	//else self.walkframe = self.walkframe + 1;
@@ -1209,13 +1208,13 @@ void() Burn_Think = { // [FUNCTION]
         setorigin(self, spot);
         if (InLiquid(spot)) { // Hide the flame and make steam in its place.  Hiss!!
 			setmodel(self, "");
-			sound(self, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,"player/slimbrn2.wav",1,ATTN_NORM);
 			particle(spot, '0 0 100', 1, 50); 
         } else Burn_Burn(); // Flame is not in the water, keep burning until it's out of fuel.
     } else { // Standard burn mode.
-        if (targ.health < 1) { Smokey(targ); Burn_Null(targ); return;} // If enemy is dead, snuff current flame and create smoker that puffs smoke and a few embers for a second or two.
-        if (self.dmg < 1) { Burn_Null(targ); return;} // Out of fuel, snuff.
-        if (ImmuneToBurning(targ)) { Burn_Null(targ); return;} // Target suddenly can't burn, snuff.
+        if (targ.health < 1) { Smokey(targ); Burn_Null(targ); return; } // If enemy is dead, snuff current flame and create smoker that puffs smoke and a few embers for a second or two.
+        if (self.dmg < 1) { Burn_Null(targ); return; } // Out of fuel, snuff.
+        if (ImmuneToBurning(targ)) { Burn_Null(targ); return; } // Target suddenly can't burn, snuff.
 
         spot = Burn_Point (targ);
         setorigin(self, spot); // Move the flame.
@@ -1224,7 +1223,7 @@ void() Burn_Think = { // [FUNCTION]
             self.cnt = 1; // Flame disappears instead of exploding.
             Burn_Null(targ); // Snuff it. Sever link between flame and its victim.
             if (pc >= CONTENT_SLIME) { 
-                sound(targ, CHAN_AUTO, "player/slimbrn2.wav", 1, ATTN_NORM); // Sizzle
+                sound(targ,CHAN_AUTO,"player/slimbrn2.wav",1,ATTN_NORM); // Sizzle
 				particle (spot, '0 0 100', 1, 50); // In water or slime, make some steam too.  In lava or sky, just disappear.
             } return;
         }
@@ -1281,7 +1280,7 @@ void() Fireball_Update = { // [FUNCTION]
 
 //  This gradually shrinks the fireball into nothing as it flies.
 void() Fireball_Fade = { // [FUNCTION]
-    if (self.frame >= self.delay) { remove (self);  return;}
+    if (self.frame >= self.delay) { remove (self);  return; }
 
     self.frame = self.frame + 1;
     Fireball_Update();
@@ -1313,8 +1312,8 @@ void() Meteor_Think = { // [FUNCTION]
     }
     Meteor_Trail (rgb, density, TRUE); // Particle trail.
     Fireball_Update(); 
-    if (self.dmg <= 0) { Meteor_Fizzle(self); return;} // Fizzle if it lost all power.
-    if (self.delay < time) { Meteor_Explode(); return;} // The fireball will explode after a period of time.
+    if (self.dmg <= 0) { Meteor_Fizzle(self); return; } // Fizzle if it lost all power.
+    if (self.delay < time) { Meteor_Explode(); return; } // The fireball will explode after a period of time.
 
     self.nextthink  = time + 0.1; // Fire is still burning, check again.
 };
@@ -1335,10 +1334,10 @@ void() Firewall_Think = { // [FUNCTION]
     local float pc;
     local vector spot;
 
-    if (self.delay <= time) { remove (self);  return;}   // Time's up.
+    if (self.delay <= time) { remove (self);  return; }   // Time's up.
 
     pc = pointcontents (self.origin);
-    if (pc == CONTENT_SOLID) { remove (self);  return;}   // In the void.
+    if (pc == CONTENT_SOLID) { remove (self);  return; }   // In the void.
 
 	if (self.classgroup == CG_PROJCELLS) {
 		// Spawn a lightning bolt.
@@ -1383,7 +1382,7 @@ void() faspell_frames = { // [FUNCTION]
 	self.spell_angle += random(32,42);
 	if (self.spell_angle >= 360) self.spell_angle -= 360.00000;
 	if (self.count < 6) self.count += 0.60000;
-	makevectors( self.angles);
+	makevectors(self.angles);
 	posA = ((v_right * mathlib_sin(self.spell_angle)) * self.count);
 	posB = ((v_right * mathlib_sin(old_angle)) * old_count);
 	new_posA = (posA - posB);
@@ -1447,7 +1446,7 @@ void() Animate_HazardProjectile = {
 		self.part_exitbusy = TRUE;
 	}
 	// Projectile has run out of time (cope with hazard counters)
-	if (self.attack_finished < time) { HazardProjectile_Finished(self); return;}
+	if (self.attack_finished < time) { HazardProjectile_Finished(self); return; }
 	
 	// Animate sprite
 	self.walkframe = self.walkframe + 1;
@@ -1456,7 +1455,7 @@ void() Animate_HazardProjectile = {
 	
 	// Keep playing ambient sound
 	if (self.noise != "" && self.volume < time) {
-		sound(self, CHAN_AUTO, self.noise, 0.3, ATTN_IDLE);
+		sound(self,CHAN_AUTO,self.noise, 0.3,ATTN_IDLE);
 		self.volume = time + 1;
 	}
 
@@ -1484,9 +1483,8 @@ void() Animate_HazardProjectile = {
 
 void() Fire_Trail = {
 	local float trblocked, trstepup;
-	
-	// Is the flame trail active?
-	if (self.count < 0) return;
+
+	if (self.count < 0) return; // Flame trail inactive
 	
 	// Check if the hazard projectile limit exists and has been reached?
 	if ( !(HazardProjectile_CheckLimit(self.owner,1)) ) trblocked = TRUE;
@@ -1497,15 +1495,15 @@ void() Fire_Trail = {
 		// Is next position is solid world/geo?
 		if (InSolid(self.pos2)) {
 			// Check maximum step height is available?
-			if (InAir(self.pos2 + self.finaldest)) {
+			if (InAir(self.pos2 + self.finaldest)) { // Fire must have air.
 				// Trace down from maximum step height to find new pos
 				traceline(self.pos2 + self.finaldest, self.pos2, TRUE, self);
 				self.pos2 = trace_endpos + '0 0 8';
 				trstepup = TRUE;
 			} else trblocked = TRUE; // Max step height is solid geo/world
 		}
-		// Is next position solid, liquid or sky?
-		if (!InAir(self.pos2)) {
+		
+		if (!InAir(self.pos2)) { // Is next position solid, liquid or sky?
 			trblocked = TRUE;
 		} else {
 			// Can previous position see next position? nothing blocking
@@ -1515,7 +1513,7 @@ void() Fire_Trail = {
 			else {
 				traceline(self.pos2, self.pos2 - (self.finaldest*2), TRUE, self); // Find ground below next step point
 				self.t_length = fabs(self.pos1_z - trace_endpos_z); // Check distance between step points
-				if ( self.t_length > (self.owner.proj_trstep+8)) trblocked = TRUE; // Can only step up or down a certain distance
+				if (self.t_length > (self.owner.proj_trstep+8)) trblocked = TRUE; // Can only step up or down a certain distance
 				if (!InAir(trace_endpos)) trblocked = TRUE; // Check final position is not solid,liquid or sky
 			}
 		}
@@ -1562,7 +1560,7 @@ void() pyroflame_think = {
 
 //  Smart Fireballs -- Used by nemesant (and SoE sorcerer).
 void() SmartBall_Think = { // [FUNCTION]
-    if (self.delay <= time) { remove(self); return;}
+    if (self.delay <= time) { remove(self); return; }
 
     self.angles = vectoangles(self.velocity);
 	// Changed particle count from 25 at 10/sec to 10 at 20/sec.  2000 speed rocket trails spawn 11 at about 50/sec.
@@ -1654,7 +1652,7 @@ void() tornado1 = [ 0, tornado1 ] { // [FUNCTION]
 
     if (self.t_width < time) {
         self.t_width = time + 1;
-        sound(self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
+        sound(self,CHAN_AUTO,"drake/baron/tornado.wav",1,ATTN_NORM);
     }
     Tornado_Attack();
     self.height = (self.height + 3) & 7;

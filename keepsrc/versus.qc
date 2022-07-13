@@ -71,7 +71,7 @@ void(entity targ) set_teamsurvivor = {
 		targ.versustype = VT_SURVIVOR;
 		targ.alignment = GOOD;
 	} else {
-		if (developer) {
+		if (developer > 0) {
 			targ.versustype = VT_SURVIVOR;
 			targ.alignment = GOOD;
 		} else {
@@ -85,7 +85,7 @@ void(entity targ) set_teamgamemaster = {
 		targ.versustype = VT_GAMEMASTER;
 		targ.alignment = EVIL;
 	} else {
-		if (developer) {
+		if (developer > 0) {
 			targ.versustype = VT_GAMEMASTER;
 			targ.alignment = EVIL;
 		} else {
@@ -96,12 +96,12 @@ void(entity targ) set_teamgamemaster = {
 
 // Let's Survivors know how many coins they have collected to use for purchasing weapons, items, doors, etc.
 void() print_coins = {
-	if ((coop < 3 || (coop > 2 && self.versustype == VT_SURVIVOR)) || developer) centerprint2(self,"Coin total: ",ftos(coins));
+	if ((coop < 3 || (coop > 2 && self.versustype == VT_SURVIVOR)) || developer > 0) centerprint2(self,"Coin total: ",ftos(coins));
 };
 
 // Let's Gamemasters know how many gibs they have collected to use for purchasing more monsters or events.
 void() print_bones = {
-	if ((coop > 2 && self.versustype == VT_GAMEMASTER) || developer) centerprint2(self,"Gib total: ",ftos(bones));
+	if ((coop > 2 && self.versustype == VT_GAMEMASTER) || developer > 0) centerprint2(self,"Gib total: ",ftos(bones));
 };
 
 void() item_coin_touch = {
@@ -114,7 +114,7 @@ void() item_coin_touch = {
    else sprint(other, " coins!\n");
    Safe_stuffcmd(other, "bf\n");
    coins = coins + self.count;
-   sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+   sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
    activator = other;
    SUB_UseTargets();
    item_finished();
@@ -164,7 +164,7 @@ void() item_bone_touch = {
 	else sprint(other, " bones!\n");
 	Safe_stuffcmd(other, "bf\n");
 	bones = bones + self.count;
-	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	activator = other;
 	SUB_UseTargets();
 	item_finished();

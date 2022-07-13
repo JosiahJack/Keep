@@ -77,7 +77,7 @@ float(entity testent) corpse_status;
 void()	zmaster_stand1	= [	$stand1,	zmaster_stand2	] {
 	zmaster_find_easy_victim();
 	if (self.effects != 0) {
-		sound(self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"items/protect2.wav",1,ATTN_NORM);
 		self.effects = 0;
 	}
 	if (random() < 0.2) zm_idle_sound();
@@ -94,7 +94,7 @@ void()	zmaster_stand9	= [	$stand9,	zmaster_stand1	] { ai_stand(); };
 
 void()	zmaster_walk1	= [	$walk1,		zmaster_walk2	] {
 	if (self.effects != 0) {
-		sound(self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"items/protect2.wav",1,ATTN_NORM);
 		self.effects = 0;
 	}
 	if (random() < 0.2) zm_idle_sound();
@@ -121,7 +121,7 @@ void()	zmaster_walk18	= [	$walk18,	zmaster_walk19	] { ai_walk(3); };
 void()	zmaster_walk19	= [	$walk19,	zmaster_walk20	] { ai_walk(3); };
 void()	zmaster_walk20	= [	$walk20,	zmaster_walk1	] { ai_walk(2); };
 
-void()	zmaster_pain1	= [	$pain1,		zmaster_pain2	] { sound(self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM); };
+void()	zmaster_pain1	= [	$pain1,		zmaster_pain2	] { sound(self,CHAN_VOICE, "custents/zmaster/pain.wav",1,ATTN_NORM); };
 void()	zmaster_pain2	= [	$pain2,		zmaster_pain3	] {};
 void()	zmaster_pain3	= [	$pain3,		zmaster_pain4	] {};
 void()	zmaster_pain4	= [	$pain4,		zmaster_pain5	] {};
@@ -142,7 +142,7 @@ void()	zmaster_die11	= [	$death11,	zmaster_die12	] {};
 void()	zmaster_die12	= [	$death12,	zmaster_die12	] {};
 
 void()	zmaster_dieb1	= [	$deathb1,	zmaster_dieb2	] {};
-void()	zmaster_dieb2	= [	$deathb2,	zmaster_dieb3	] { self.solid = SOLID_NOT;};
+void()	zmaster_dieb2	= [	$deathb2,	zmaster_dieb3	] { self.solid = SOLID_NOT; };
 void()	zmaster_dieb3	= [	$deathb3,	zmaster_dieb4	] {};
 void()	zmaster_dieb4	= [	$deathb4,	zmaster_dieb5	] {};
 void()	zmaster_dieb5	= [	$deathb5,	zmaster_dieb6	] {};
@@ -154,7 +154,7 @@ void()	zmaster_dieb9	= [	$deathb9,	zmaster_dieb9	] {};
 void() zmaster_die = {
 	// check for gib
 	if (self.health < -40) {
-		sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NORM);
 		ThrowHead ("progs/custents/h_zmastr.mdl", self.health);
 		ThrowGib ("progs/custents//h_axzomb.mdl", self.health);
 		ThrowGib ("progs/custents/h_axzomb.mdl", self.health);
@@ -166,7 +166,7 @@ void() zmaster_die = {
 	}
 
 	// play death sound when not hit by arrow
-	sound(self, CHAN_VOICE, "custents/zmaster/death.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "custents/zmaster/death.wav",1,ATTN_NORM);
 
 	// regular death
 	if (random() > 0.5)
@@ -206,7 +206,7 @@ void(float offseth, float offsetv) zmaster_shot = {
 	setup_missile(firemis, 0.2 + random()*2, zmaster_start_seeker, M_Spike_Touch, 1, 1);
 	target_missile(firemis, self.enemy.origin, 5);
 	firemis.enemy = self.enemy;
-	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 };
 
 // looks for any nearby corpses or zombies to take over
@@ -244,11 +244,11 @@ float() zmaster_find_easy_victim = {
 	if (found_one && enemyold != self.enemy)	{
 		FoundTarget();
 		if (self.effects == 0) {
-			sound(self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"items/protect.wav",1,ATTN_NORM);
 			self.effects = EF_BRIGHTFIELD;
 		}
 		self.oldenemy = enemyold;
-		sound(self, CHAN_VOICE, "custents/zmaster/toreturn.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "custents/zmaster/toreturn.wav",1,ATTN_NORM);
 		self.currentammo = time + 4;
 	}
 	return found_one;
@@ -345,7 +345,7 @@ void() zmaster_zombify = {
 void()	zmaster_magica1 = [	$magica1,	zmaster_magica2	] {
 	ai_face();
 	if (self.effects != EF_BRIGHTFIELD)
-		sound(self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"items/protect.wav",1,ATTN_NORM);
 };
 void()	zmaster_magica2 = [	$magica1,	zmaster_magica3	] {
 	ai_face();
@@ -357,7 +357,7 @@ void()	zmaster_magica4 = [	$magica2,	zmaster_magica5	] { self.nextthink = time +
 void()	zmaster_magica5 = [	$magica3,	zmaster_magica6	] { self.nextthink = time + 0.15; ai_face(); };
 void()	zmaster_magica6 = [	$magica4,	zmaster_magica7	] { self.nextthink = time + 0.15; ai_face(); };
 void()	zmaster_magica7 = [	$magica5,	zmaster_magica8	] {
-	sound(self, CHAN_VOICE, "custents/zmaster/energize.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "custents/zmaster/energize.wav",1,ATTN_NORM);
 	self.nextthink = time + 0.15;
 	ai_face();
 	self.effects = self.effects | EF_DIMLIGHT;
@@ -396,9 +396,9 @@ void()	zmaster_magica14 = [	$magica11,	zmaster_magica15	] {};
 void()	zmaster_magica15 = [	$magica11,	zmaster_magica16	] { self.effects = EF_DIMLIGHT + EF_BRIGHTFIELD; };
 void()	zmaster_magica16 = [	$magica11,	zmaster_magica17	] { self.nextthink = time + 0.75; }; // Slower than 0.1 think on an enemy?? That's a new one. -Qmaster
 void()	zmaster_magica17 = [	$magica12,	zmaster_magica18	] { self.effects = self.effects - EF_DIMLIGHT; self.nextthink = time + self.endtime; };
-void()	zmaster_magica18 = [	$magica13,	zmaster_magica19	] { self.nextthink = time + self.endtime;};
-void()	zmaster_magica19 = [	$magica14,	zmaster_magica20	] { self.nextthink = time + self.endtime;};
-void()	zmaster_magica20 = [	$magica1,	zmaster_magica21	] { self.nextthink = time + self.endtime;};
+void()	zmaster_magica18 = [	$magica13,	zmaster_magica19	] { self.nextthink = time + self.endtime; };
+void()	zmaster_magica19 = [	$magica14,	zmaster_magica20	] { self.nextthink = time + self.endtime; };
+void()	zmaster_magica20 = [	$magica1,	zmaster_magica21	] { self.nextthink = time + self.endtime; };
 void()	zmaster_magica21 = [	$pain5,	zmaster_run1	] {
 	if (self.endtime == 0.2)
 		self.nextthink =time + 1;
@@ -433,10 +433,10 @@ void()	zmaster_magicb13 = [	$magicb13,	zmaster_run1] { ai_face(); };
 void() zm_idle_sound = {
 	if (random() < 0.2 && self.currentammo < time) {
 		if (random() < 0.5) {
-			sound(self, CHAN_VOICE, "custents/zmaster/idle1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "custents/zmaster/idle1.wav",1,ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
-			sound(self, CHAN_VOICE, "custents/zmaster/idle2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "custents/zmaster/idle2.wav",1,ATTN_NORM);
 			self.currentammo = time + 1.5;
 		}
 	}
@@ -470,7 +470,7 @@ void() zmaster_melee = {
 void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 	if (self.pain_finished > time) return;
 
-	sound(self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "custents/zmaster/pain.wav",1,ATTN_NORM);
 	if (time - self.pain_finished > 5) {	// always go into pain frame if it has been a while
 		zmaster_pain1();
 		self.pain_finished = time + 1;
@@ -553,7 +553,7 @@ void(float dist) zmaster_run = {
 	}
 	if (self.effects != 0) {
 		if (self.enemy.classname != "monster_zombie" && self.enemy.classname != "monster_axzombie" && !corpse_status(self.enemy)) {
-			sound(self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"items/protect2.wav",1,ATTN_NORM);
 			self.effects = 0;
 		}
 	} else if ((self.enemy.classname == "monster_zombie" || self.enemy.classname == "monster_axzombie") && self.enemy.owner != world) {
@@ -581,7 +581,7 @@ void(float dist) zmaster_run = {
 			self.enemy = self.oldenemy;
 			self.oldenemy = world;
 			HuntTarget();
-			sound(self, CHAN_VOICE, "custents/zmaster/comnback.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "custents/zmaster/comnback.wav",1,ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
 			if (self.movetarget)

@@ -61,7 +61,7 @@ void() func_pswitch_return = { // [FUNCTION]
 	if (self.state == STATE_DOWN) {
 		if (self.presstimersound < time) {
 			self.presstimersound = time + 1;
-			sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // 2nd movement sound - going up
+			sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // 2nd movement sound - going up
 		}
 		self.ltime = time;
 		self.state = STATE_MOVING;
@@ -98,7 +98,7 @@ void() func_pswitch_use = { // [FUNCTION]
 	if (self.state == STATE_UP) { // Move pressure pad into down position
 		if (self.presstimersound < time) {
 			self.presstimersound = time + 1;
-			sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // 1st movement sound - going down
+			sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // 1st movement sound - going down
 		}
 		self.ltime = time;
 		self.state = STATE_MOVING;
@@ -192,7 +192,7 @@ void() func_pressureswitch = { // [ENTITY]
 	if (self.spawnflags & BUTTON_STARTDIS && self.targetname == "") { // Cannot have a pressure switch start off or disabled with no targetname, how can it be actived!?!
 		dprint("\b[PSWITCH]\b Starting DISABLED with no targetname!\n");
 		self.oldorigin = bmodel_origin(self);
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}

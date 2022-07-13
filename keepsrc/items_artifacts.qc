@@ -271,7 +271,7 @@ void() artifact_touch = { // [FUNCTION]
 		sprint(other, self.netname);
 	}
 	sprint(other,"\n");
-	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM); // Pickup sound
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM); // Pickup sound
 	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	other.items = other.items | self.items; // Update player items
 	other.items2 = other.items2 | self.items2;
@@ -329,7 +329,7 @@ void() sigil_touch = { // [FUNCTION]
 	if (query_configflag(self.customkey)) return;
 	
 	centerprint3( other, "You got ", self.netname, "!");
-	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	update_configflag(self.customkey, TRUE); // Add rune to server! not player
 	if (other.flags & FL_CLIENT) other.serverflagstemp = other.serverflagstemp | self.customkey;
@@ -392,7 +392,7 @@ void() tomeofpower_touch = { // [FUNCTION]
 	sprint(other, "You got the ");
 	sprint(other, self.netname);
 	sprint(other,"\n");
-	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	other.tome_finished = time + self.cnt;
 	activator = other;

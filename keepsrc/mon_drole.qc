@@ -216,12 +216,12 @@ void(float side) drole_claw = {
 
 	if (!ai_checkmelee(MONAI_MELEEDROLE1,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		sound(self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"quoth/drole/swipe.wav",1,ATTN_NORM);
 	}
 	else {
 		// Melee claw hit sound
-		if (random() < 0.5) sound(self, CHAN_WEAPON, "quoth/drole/strike1.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_WEAPON, "quoth/drole/strike2.wav", 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_WEAPON,"quoth/drole/strike1.wav",1,ATTN_NORM);
+		else sound(self,CHAN_WEAPON,"quoth/drole/strike2.wav",1,ATTN_NORM);
 		ldmg = 12 + 6*random();
 		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
@@ -237,7 +237,7 @@ void() drole_clawL1;
 
 void() drole_clawR1 = [$clawR1, drole_clawR2 ] { drole_charge(27); };
 void() drole_clawR2 = [$clawR2, drole_clawR3 ] { drole_charge(26);
-sound(self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM); };
+sound(self,CHAN_WEAPON,"quoth/drole/swipe.wav",1,ATTN_NORM); };
 void() drole_clawR3 = [$clawR3, drole_clawR4 ] { monster_footstep(FALSE);drole_charge(30); };
 void() drole_clawR4 = [$clawR4, drole_clawR5 ] { drole_charge(28); };
 void() drole_clawR5 = [$clawR5, drole_clawR6 ] { drole_charge(27);drole_claw(-250); };
@@ -249,14 +249,14 @@ void() drole_clawR10 = [$clawR10, drole_clawR11 ] { drole_charge(26); };
 void() drole_clawR11 = [$clawR11, drole_clawR12 ] { monster_footstep(FALSE);drole_charge(30);drole_claw(-250); };
 void() drole_clawR12 = [$clawR12, drole_clawR13 ] { drole_charge(28); };
 void() drole_clawR13 = [$clawR13, drole_clawR14 ] { drole_charge(27); };
-void() drole_clawR14 = [$clawR14, drole_clawR15 ] { drole_charge(26);sound(self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM); };
+void() drole_clawR14 = [$clawR14, drole_clawR15 ] { drole_charge(26);sound(self,CHAN_WEAPON,"quoth/drole/swipe.wav",1,ATTN_NORM); };
 void() drole_clawR15 = [$clawR15, drole_clawR16 ] { monster_footstep(FALSE);drole_charge(30); };
 void() drole_clawR16 = [$clawR16, drole_run ] { drole_charge(28);
 	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && visible(self.enemy)) drole_clawL1();
 };
 
 void() drole_clawL1 = [$clawL1, drole_clawL2 ] { drole_charge(27); };
-void() drole_clawL2 = [$clawL2, drole_clawL3 ] { drole_charge(26);sound(self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM); };
+void() drole_clawL2 = [$clawL2, drole_clawL3 ] { drole_charge(26);sound(self,CHAN_WEAPON,"quoth/drole/swipe.wav",1,ATTN_NORM); };
 void() drole_clawL3 = [$clawL3, drole_clawL4 ] { monster_footstep(FALSE);drole_charge(30); };
 void() drole_clawL4 = [$clawL4, drole_clawL5 ] { drole_charge(28); };
 void() drole_clawL5 = [$clawL5, drole_clawL6 ] { drole_charge(27);drole_claw(250); };
@@ -269,7 +269,7 @@ void() drole_clawL11 = [$clawL11, drole_clawL12 ] { monster_footstep(FALSE);drol
 void() drole_clawL12 = [$clawL12, drole_clawL13 ] { drole_charge(28); };
 void() drole_clawL13 = [$clawL13, drole_clawL14 ] { drole_charge(27); };
 void() drole_clawL14 = [$clawL14, drole_clawL15 ] { drole_charge(26);
-sound(self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM); };
+sound(self,CHAN_WEAPON,"quoth/drole/swipe.wav",1,ATTN_NORM); };
 void() drole_clawL15 = [$clawL15, drole_clawL16 ] { monster_footstep(FALSE);drole_charge(30); };
 void() drole_clawL16 = [$clawL16, drole_run ] { drole_charge(28);
 	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && visible(self.enemy)) drole_clawR1();
@@ -285,9 +285,9 @@ void() drole_melee = {
 // * Over time (4 frames) the rocket speeds up (linked to animation)
 // * requires special projectile and new th_updmissile function
 // * Has a different explosion sound(does not play rocket default)
-void() drole_rocket1 = [ 1, drole_rocket2 ] { self.nextthink = time + 0.2;};
-void() drole_rocket2 = [ 2, drole_rocket3 ] { self.velocity = self.velocity * 1.5;};
-void() drole_rocket3 = [ 3, drole_rocket4 ] { self.velocity = self.velocity * 1.5;};
+void() drole_rocket1 = [ 1, drole_rocket2 ] { self.nextthink = time + 0.2; };
+void() drole_rocket2 = [ 2, drole_rocket3 ] { self.velocity = self.velocity * 1.5; };
+void() drole_rocket3 = [ 3, drole_rocket4 ] { self.velocity = self.velocity * 1.5; };
 void() drole_rocket4 = [ 3, SUB_Remove ] {
 	self.nextthink = time + 5;
 	if (skill == SKILL_EASY) self.velocity = self.velocity * 3.5;
@@ -309,7 +309,7 @@ void() drole_fire = {
 };
 
 void() drole_magic1 = [$magic1, drole_magic2 ] { ai_face();
-sound(self, CHAN_WEAPON, "quoth/drole/fire.wav", 1, ATTN_NORM); };
+sound(self,CHAN_WEAPON,"quoth/drole/fire.wav",1,ATTN_NORM); };
 void() drole_magic2 = [$magic2, drole_magic3 ] { ai_face(); };
 void() drole_magic3 = [$magic3, drole_magic4 ] { ai_face(); };
 void() drole_magic4 = [$magic4, drole_magic5 ] { drole_fire(); };
@@ -332,8 +332,8 @@ void(entity inflictor, entity attacker, float damage) drole_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (self.attack_rage) sound(self, CHAN_VOICE, "quoth/drole/sight2.wav", 0.5, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		if (self.attack_rage) sound(self,CHAN_VOICE, "quoth/drole/sight2.wav", 0.5,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 
 		if (self.pain_check == 1) drole_pain1();
 		else if (self.pain_check == 2) {
@@ -348,7 +348,7 @@ void(entity inflictor, entity attacker, float damage) drole_pain = {
 void() drole_death1 = [$death1, drole_death2 ] {};
 void() drole_death2 = [$death2, drole_death3 ] { monster_check_gib(); };
 void() drole_death3 = [$death3, drole_death4 ] { monster_check_gib();
-self.solid = SOLID_NOT;};
+self.solid = SOLID_NOT; };
 void() drole_death4 = [$death4, drole_death5 ] {};
 void() drole_death5 = [$death5, drole_death6 ] {};
 void() drole_death6 = [$death6, drole_death7 ] {};
@@ -378,7 +378,7 @@ void() drole_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "quoth/drole/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "quoth/drole/death.wav",1,ATTN_NORM);
 		drole_death1();
 	}
 };

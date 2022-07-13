@@ -304,25 +304,25 @@ void(entity attacker, float damage) servo_pain = {
 	}
 };
 
-void() servo_die1 = [ 0, servo_die2] { self.nextthink = time + 1;};
+void() servo_die1 = [ 0, servo_die2] { self.nextthink = time + 1; };
 void() servo_die2 = [ 1, servo_die3] {};
 void() servo_die3 = [ 2, servo_die4] {};
 void() servo_die4 = [ 3, servo_die5] {};
 void() servo_die5 = [ 4, servo_die6] {};
 void() servo_die6 = [ 5, servo_die7] {};
 void() servo_die7 = [ 6, servo_die8] {};
-void() servo_die8 = [ 7, servo_die9] { sound(self, CHAN_VOICE, "custents/mech/metal.wav", 1, ATTN_NORM); };
+void() servo_die8 = [ 7, servo_die9] { sound(self,CHAN_VOICE, "custents/mech/metal.wav",1,ATTN_NORM); };
 void() servo_die9 = [ 8, servo_die10] {};
 void() servo_die10 = [ 9, servo_die11] {};
 void() servo_die11 = [ 10, servo_die12] {};
-void() servo_die12 = [ 11, servo_die13] { sound(self, CHAN_VOICE, "custents/mech/metal.wav", 0.75, ATTN_NORM); };
+void() servo_die12 = [ 11, servo_die13] { sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.75,ATTN_NORM); };
 void() servo_die13 = [ 12, servo_die14] {};
-void() servo_die14 = [ 13, servo_die15] { sound(self, CHAN_VOICE, "custents/mech/metal.wav", 0.5, ATTN_NORM); };
+void() servo_die14 = [ 13, servo_die15] { sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.5,ATTN_NORM); };
 void() servo_die15 = [ 14, servo_die16] {};
-void() servo_die16 = [ 15, servo_die17] { sound(self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM); };
+void() servo_die16 = [ 15, servo_die17] { sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.25,ATTN_NORM); };
 void() servo_die17 = [ 15, servo_die17] {};
 
-void() servo_gibbed1 = [ 16, servo_gibbed2] { self.nextthink = time + 1;};
+void() servo_gibbed1 = [ 16, servo_gibbed2] { self.nextthink = time + 1; };
 void() servo_gibbed2 = [ 17, servo_gibbed3] {};
 void() servo_gibbed3 = [ 18, servo_gibbed4] {};
 void() servo_gibbed4 = [ 19, servo_gibbed5] {};
@@ -344,12 +344,12 @@ void() servo_gibbed6 = [ 21, servo_gibbed7] {
 	self.skin = tmpself.skin;
 	ThrowGib (25,1); // headmdl "progs/custents/h_servo.mdl"
 	self.velocity = v_forward*300 + '0 0 250';
-	sound(self, CHAN_VOICE, "drake/misc/shortexp.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_VOICE, "drake/misc/shortexp.wav",1,ATTN_NORM);	
 };
 void() servo_gibbed7 = [ 22, servo_gibbed8] {};
 void() servo_gibbed8 = [ 23, servo_gibbed9] {};
 void() servo_gibbed9 = [ 24, servo_gibbed10]
-{ sound(self, CHAN_VOICE, "custents/mech/metal.wav", 0.75, ATTN_NORM); };
+{ sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.75,ATTN_NORM); };
 void() servo_gibbed10 = [ 25, servo_gibbed11] {};
 void() servo_gibbed11 = [ 26, servo_gibbed12] {};
 void() servo_gibbed12 = [ 27, servo_gibbed13] {};
@@ -360,16 +360,16 @@ void() servo_gibbed16 = [ 31, servo_gibbed17] {};
 void() servo_gibbed17 = [ 32, servo_gibbed18] {};
 void() servo_gibbed18 = [ 33, servo_gibbed19] {};
 void() servo_gibbed19 = [ 34, servo_gibbed20]
-{ sound(self, CHAN_VOICE, "custents/mech/metal.wav", 0.5, ATTN_NORM); };
+{ sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.5,ATTN_NORM); };
 void() servo_gibbed20 = [ 35, servo_gibbed21] {};
 void() servo_gibbed21 = [ 36, servo_gibbed22] {};
 void() servo_gibbed22 = [ 37, servo_gibbed23] {};
-void() servo_gibbed23 = [ 38, servo_gibbed24] { sound(self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM); };
+void() servo_gibbed23 = [ 38, servo_gibbed24] { sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.25,ATTN_NORM); };
 void() servo_gibbed24 = [ 38, servo_gibbed24] {};
 
 void() servo_die = {
 	self.solid = SOLID_NOT;
-	sound(self, CHAN_VOICE, "custents/mech/pow_dn.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "custents/mech/pow_dn.wav",1,ATTN_NORM);
 	remove(self.aiment);
 	setmodel(self, "progs/custents/servodie.mdl");
 
@@ -406,7 +406,7 @@ void() servo_attack = {
 	}
 	self.lefty = 1 - self.lefty;
 
-	sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"enforcer/enfire.wav",1,ATTN_NORM);
 
 	FireLaser(org, dir, 2);
 };
@@ -488,7 +488,7 @@ void(entity targent) cservo_control_on = {
 	Safe_stuffcmd(targent, "wait\n");
 	targent.camofs = '0 160 40';
 	sprint(targent, "Press F7 to Toggle the Apoc Cam\n");
-	sound(self, CHAN_VOICE, "custents/mech/pow_up.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "custents/mech/pow_up.wav",1,ATTN_NORM);
 };
 
 void(entity targent) cservo_control_off= {
@@ -589,7 +589,7 @@ void() cservo_attack= {
 	dir = normalize(targ - org);
 	FireLaser(org, dir, 4);
 
-	sound(self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"enforcer/enfire.wav",1,ATTN_NORM);
 
 	self.attack_finished = time + 0.15;
 	self.movetarget.owner.attack_finished = time + 1;

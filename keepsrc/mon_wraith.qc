@@ -333,7 +333,7 @@ void() wraith_debuff_trail = {
 	tent.think = wraith_debuff_shrink;	// Animate manually
 	tent.nextthink = time + 0.1;
 	Tent_Explosion(self.finaldest); // Generate particle explosion (+ sound effect)
-	sound(tent, CHAN_WEAPON, "quoth/drole/explode3.wav", 1, ATTN_NORM); // Play original explosion sound
+	sound(tent,CHAN_WEAPON,"quoth/drole/explode3.wav",1,ATTN_NORM); // Play original explosion sound
 	wraith_debuff_explode(self.finaldest); // Large circular flame explosion
 };
 
@@ -363,7 +363,7 @@ void(vector orgofs, float dbframe) wraith_debuff = {
 	
 	if (dbframe == 0) {
 		self.pain_finished = time + 1.1;
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack1.wav",1,ATTN_NORM);
 
 		// Setup halo/glow models around wraith (5% larger)
 		setorigin(self.attachment3, self.origin);
@@ -444,7 +444,7 @@ void(vector orgofs, float nbframe) wraith_nailball = {
 		else self.attachment.skin = BALL_NAIL_COL1;
 
 		self.pain_finished = time + 1;
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack2.wav",1,ATTN_NORM);
 	}
 	
 	// Turn towards enemy and make vector
@@ -531,7 +531,7 @@ void(vector eggofs, float eggframe) Setup_WraithEgg = {
 
 		// Present wraith from going into pain during egg cycle
 		self.pain_finished = time + 1;
-		sound(self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/wraith/attack3.wav",1,ATTN_NORM);
 		// Should be visible during spawn minion cycle
 		self.skin = self.exactskin + 1;
 		self.alpha = WRAITH_ALPHAFIRE;
@@ -642,7 +642,7 @@ void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) wraith_painA1();
@@ -695,7 +695,7 @@ void() wraith_death15 = [$death15, wraith_death15] { wrath_deatheffects(TE_EXPLO
 void() wraith_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
-	sound(self, CHAN_VOICE, "ad171/wraith/death1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "ad171/wraith/death1.wav",1,ATTN_NORM);
 	self.skin = self.exactskin; // Make sure fire wraith skin/alpha is reset on pain/death
 	self.alpha = WRAITH_ALPHA;
 	SUB_RemoveAttachments(); // Make sure any attachments are removed

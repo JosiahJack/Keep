@@ -111,8 +111,8 @@ void(float side) pinch_melee = {
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "ad171/scorpion/clawattack1.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "ad171/scorpion/clawattack2.wav", TRUE, TRUE);
+	if (self.meleeattack < 1) sound(self,CHAN_WEAPON,"ad171/scorpion/clawattack1.wav", TRUE, TRUE);
+	else sound(self,CHAN_WEAPON,"ad171/scorpion/clawattack2.wav", TRUE, TRUE);
 	self.meleeattack = 1 - self.meleeattack;
 
 	// Scorpion claw = 1-12 Damage
@@ -135,8 +135,8 @@ void()	pinch_claw10 = [	$attackB20,		pinch_run1 ] {};
 
 // TAIL FUNCTION (range)
 void() pinch_tailsound = {
-	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "ad171/scorpion/tailfire1.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "ad171/scorpion/tailfire2.wav", TRUE, TRUE);
+	if (self.meleeattack < 1) sound(self,CHAN_WEAPON,"ad171/scorpion/tailfire1.wav", TRUE, TRUE);
+	else sound(self,CHAN_WEAPON,"ad171/scorpion/tailfire2.wav", TRUE, TRUE);
 	self.meleeattack = 1 - self.meleeattack;
 };
 
@@ -165,8 +165,8 @@ void(vector tailofs) pinch_tailspike = {
 }
 
 void()	pinch_tail1	= [	$attackA2,		pinch_tail2	] { ai_face();
-	if (self.lefty < 1) sound(self, CHAN_VOICE, "ad171/scorpion/tailattack1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "ad171/scorpion/tailattack2.wav", 1, ATTN_NORM);
+	if (self.lefty < 1) sound(self,CHAN_VOICE, "ad171/scorpion/tailattack1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "ad171/scorpion/tailattack2.wav",1,ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 };
 void()	pinch_tail2	= [	$attackA4,		pinch_tail3	] { ai_face(); };
@@ -193,7 +193,7 @@ void()	pinch_jumptouch = {
 	// Do not damage other scorpions with jump attacks
 	// Prevents packs from killing themselves
 	if (self.classgroup != other.classgroup && other.takedamage) {
-		sound(self, CHAN_VOICE, "ad171/scorpion/jumphit.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "ad171/scorpion/jumphit.wav",1,ATTN_NORM);
 		if (Align_DamageModifier(other,self,1, TRUE)) BleedDeBuff(other);
 		spawn_touchblood (self, self.enemy, 100);
 	}
@@ -213,8 +213,8 @@ void()	pinch_jumptouch = {
 
 void() pinch_leap1	= [	$attackC1, pinch_leap2	] { ai_face();
 	self.jump_flag = time + MONAI_JUMPSCORPTIME;
-	if (self.lefty < 1) sound(self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", 1, ATTN_NORM);
+	if (self.lefty < 1) sound(self,CHAN_VOICE, "ad171/scorpion/jumpattack1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "ad171/scorpion/jumpattack2.wav",1,ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 };
 void() pinch_leap2	= [	$attackC3, pinch_leap3	] { ai_face(); };
@@ -259,7 +259,7 @@ void() pinch_leap13	= [	$attackC18, pinch_leap14] {
 void() pinch_leap14	= [	$attackC20, pinch_run1 ] {};
 
 // MINION - Grow and spin up from nothing
-void() pinch_growangle = { self.angles_y = self.angles_y + self.lefty;};
+void() pinch_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() pinch_grow1 = [$grow1, pinch_grow2 ] {};
 void() pinch_grow2 = [$grow2, pinch_grow3 ] { pinch_growangle(); };
 void() pinch_grow3 = [$grow3, pinch_grow4 ] { pinch_growangle(); };
@@ -310,8 +310,8 @@ void(entity inflictor, entity attacker, float damage) pinch_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 		self.pain_finished = time + 1;
 
 		if (self.pain_check == 1 || self.pain_check == 2) {
@@ -324,7 +324,7 @@ void(entity inflictor, entity attacker, float damage) pinch_pain = {
 
 void() pinch_die1		= [	$death1,	pinch_die2	] {};
 void() pinch_die2		= [	$death3,	pinch_die3	] { monster_check_gib(); };
-void() pinch_die3		= [	$death5,	pinch_die4	] { monster_check_gib(); self.solid = SOLID_NOT;};
+void() pinch_die3		= [	$death5,	pinch_die4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() pinch_die4		= [	$death7,	pinch_die5	] {};
 void() pinch_die5		= [	$death9,	pinch_die6	] {};
 void() pinch_die6		= [	$death11,	pinch_die7	] {};
@@ -338,7 +338,7 @@ void() pinch_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
  
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		pinch_die1(); // regular death
 	}
 };
@@ -474,7 +474,7 @@ void(vector minion_org, entity minion_targ) minion_scorpion = {
 	local entity minion;
 	
 	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (!InOpenOrLiquid(minion_org)) return;
 	
 	update_minioncount(self.owner, 1);		// Update spawn counters
 	

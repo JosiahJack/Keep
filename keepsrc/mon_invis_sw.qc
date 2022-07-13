@@ -53,7 +53,7 @@ void() sword_sound = {
 	self.count = self.count + 1;
 	if (self.count > 3) {
 		if (random() < 0.3) {
-			sound(self, CHAN_VOICE, "redfield/sword/die.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "redfield/sword/die.wav",1,ATTN_NORM);
 			self.count = 0;
 		}
 	} else return;

@@ -335,7 +335,7 @@ void() trigger_teleport_sound = { // [ENTITY]
 
 	if (self.fly_sound < time ) { // Play the sound if loop has finished or been reset
 		self.fly_sound = time + self.owner.waitmin;
-		sound(self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
+		sound(self,CHAN_VOICE, self.owner.noise, self.owner.volume,ATTN_STATIC);
 	}
 };
 
@@ -538,14 +538,14 @@ void() trigger_teleport_touch = { // [FUNCTION]
 		
 		// Spawn diamond markers for impact/exit
 		if (self.debuglvl == 1) {
-			spawn_marker(self.pos1, SPNMARK_YELLOW);
-			spawn_marker(self.pos2, SPNMARK_BLUE);
+			spawn_marker(self.pos1,'0 0 0',0,SPNMARK_YELLOW);
+			spawn_marker(self.pos2,'0 0 0',0,SPNMARK_BLUE);
 		} else if (self.debuglvl >= 2) { // Spawn model arrows for impact/exit
 			makevectors(self.dest0);
 			self.pos5 = -v_forward * 32; // Project source angle backwards to create space for arrow
-			spawn_arrow(self.pos1 + self.pos5, self.dest0, SPNMARK_YELLOW);
+			spawn_marker(self.pos1 + self.pos5, self.dest0,1,SPNMARK_YELLOW);
 			self.pos6 = vectoangles(other.velocity); // Spawn exit arrow using velocity (actual direction)
-			spawn_arrow(self.pos2, self.pos6, SPNMARK_YELLOW);
+			spawn_marker(self.pos2, self.pos6,1,SPNMARK_YELLOW);
 		}
 
 		// Show original, new and destination angles
@@ -591,7 +591,7 @@ void() trigger_teleport_setup = { // [FUNCTION]
 	self.goalentity = find (world, targetname, self.target); // Finds the FIRST teleporter target in entity list
 	if (!self.goalentity) {
 		dprint("\b[TRIG_TELEPORT]\b Cannot find target\n");
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		entity_hide(self);
 		return;
 	}
@@ -603,14 +603,14 @@ void() trigger_teleport_setup = { // [FUNCTION]
 		if (self.goalentity.classtype != CT_MISCTELINSTANT) {
 			dprint("\b[TRIG_TELEPORT]\b Wrong Entity (");
 			dprint(self.goalentity.classname); dprint(")\n");
-			spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+			spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		}
 	} else {
 		// Default teleporter requires correct dest entity
 		if (self.goalentity.classtype != CT_MISCTELEPORT) {
 			dprint("\b[TRIG_TELEPORT]\b Wrong Entity (");
 			dprint(self.goalentity.classname); dprint(")\n");
-			spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+			spawn_marker(self.oldorigin,'0 0 0',0,SPNMARK_YELLOW);
 		}
 	}
 
@@ -905,7 +905,7 @@ float() trigger_pushable = { // [FUNCTION]
 	if (self.bmodel_act.classgroup == CG_PROJGRENADES) {
 		return TRUE; // Cool feature is that it will push grenades!
 	}
-	if ((self.spawnflags & 8) && AffectedByPhysics(self.bmodel_act)){
+	if ((self.spawnflags & 8) && AffectedByPhysics(self.bmodel_act)) {
 		return TRUE;  // Qmaster added spawnflag to affect all physical objects
 					  // such as particles, rockets, etc.
 	}
@@ -959,7 +959,7 @@ void() trigger_push_fire = { // [FUNCTION]
 			if (self.bmodel_act.flags & FL_CLIENT) {
 				if (self.bmodel_act.fly_sound < time) {
 					self.bmodel_act.fly_sound = time + 1.5;
-					sound(self.bmodel_act, CHAN_AUTO, self.noise, self.volume, ATTN_NORM); // Play wind sound for the player
+					sound(self.bmodel_act,CHAN_AUTO,self.noise, self.volume,ATTN_NORM); // Play wind sound for the player
 				}
 			}
 		}
@@ -1018,7 +1018,7 @@ void() trigger_ladder_fire = { // [FUNCTION]
 
 	if (self.estate & ESTATE_BLOCK) return;
 	if ( !(self.bmodel_act.flags & FL_CLIENT) ) return; // Ladders ONLY work with players.
-	if ( self.bmodel_act.health < 1 ) return;
+	if (self.bmodel_act.health < 1 ) return;
 	if (self.bmodel_act.waterlevel > 1) return; // Don't stick underwater, or in the middle of a waterjump
 	if (self.bmodel_act.flags & FL_WATERJUMP) return;
 	if (self.bmodel_act.blockladder > time) return; // Is Ladder functionality blocked? (timer set in client)
@@ -1050,14 +1050,14 @@ void() trigger_ladder_fire = { // [FUNCTION]
 			self.bmodel_act.flags = self.bmodel_act.flags - (self.bmodel_act.flags & FL_ONGROUND); // Cannot go upward if onground flag active, engine would override z velocity.
 			vel_z = fabs(self.bmodel_act.v_angle_x)*self.pos1_y; // Go faster when facing up (speed def=6)
 			if (vel_z < self.pos2_z) vel_z = self.pos2_z; // Minimum velocity (only facing up, def vel=90)
-		} else if ( self.bmodel_act.v_angle_x >= self.pos2_y && fvel<0 ) { // Up (facing down, angle def=15)
+		} else if (self.bmodel_act.v_angle_x >= self.pos2_y && fvel<0 ) { // Up (facing down, angle def=15)
 			self.bmodel_act.flags = self.bmodel_act.flags - (self.bmodel_act.flags & FL_ONGROUND); // Cannot go upward if onground flag active
 			vel_z = self.bmodel_act.v_angle_x*self.pos1_z; // Go slower when facing down (speed def=4)
 		} else if (self.bmodel_act.v_angle_x <= self.pos2_y && fvel<0 ) { // Down (facing up/forward, angle def=15)
 			vel = vel + self.movedir*self.distance; // Push the player TOWARDS the ladder to stop falling off
 			vel_z = fabs(self.bmodel_act.v_angle_x)*-self.pos1_y; // Go faster when facing up (speed was org=-5, changed to -6)
 			if (vel_z > -self.pos2_z) vel_z = -self.pos2_z; // Minimum velocity (only facing up, org vel=-80)
-		} else if ( self.bmodel_act.v_angle_x >= self.pos2_y && fvel>0 ) { // Down (facing down, angle def=15)		
+		} else if (self.bmodel_act.v_angle_x >= self.pos2_y && fvel>0 ) { // Down (facing down, angle def=15)		
 			vel = vel - self.movedir*self.distance; // Push the player TOWARDS the ladder to stop falling off
 			vel_z = self.bmodel_act.v_angle_x*-self.pos1_z; // Go slower when facing down (speed def=-4)
 		} else {
@@ -1125,7 +1125,7 @@ void() trigger_ladder = { // [ENTITY]
 	if (developer > 0) { // Show facing angle
 		self.oldorigin = bmodel_origin(self) - (self.movedir*40); // Move origin back away from ladder
 		self.finalangle = vectoangles(self.movedir); // Convert movedir back into an angle
-		spawn_arrow(self.oldorigin, self.finalangle, 0); // Show debug arrow
+		spawn_marker(self.oldorigin,self.finalangle,1,0); // Show debug arrow
 	}
 
 	// Default = wood
@@ -1232,7 +1232,7 @@ void() trigger_fallspeed_fire = { // [FUNCTION]
 	// Check for any trigger events (noise/delay etc)
 	// Play the sound ON the activator and display message
 	if (self.message != "" && activator.flags & FL_CLIENT) centerprint (activator, self.message);
-	if (self.noise != "") sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	if (self.noise != "") sound(activator,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 	if (HasTargets(self)) SUB_UseTargets(); 
 	
 	// Is the trigger repeatable?
@@ -1301,7 +1301,7 @@ void() trigger_maxhp_fire = { // [FUNCTION]
 	if (self.waitmin == FALSE) return; // No skill condition found, exit
 
 	if (self.message != "" && activator.flags & FL_CLIENT) centerprint (activator, self.message); // Check for any trigger events (noise/delay etc)
-	if (self.noise != "") sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the activator and display message
+	if (self.noise != "") sound(activator,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play the sound ON the activator and display message
 	if (HasTargets(self)) SUB_UseTargets();
 	
 	// Is the trigger repeatable?
@@ -1435,7 +1435,7 @@ void() trigger_gravity_fire = { // [FUNCTION]
 		// Check for any sound events and re-trigger timer
 		if (self.noise2 != "" && self.lefty < time) {
 			self.lefty = time + self.waitmin;
-			sound(activator, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+			sound(activator,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 		}
 	}
 	
@@ -1546,8 +1546,8 @@ void() trigger_velocity_fire = { // [FUNCTION]
 		// Spawn debug vector angle markers (throttle to 0.5s intervals)
 		if (self.attack_timer < time) {
 			self.attack_timer = time + 0.5;
-			spawn_arrow(self.bmodel_act.origin, self.pos4, 0);
-			spawn_arrow(self.bmodel_act.origin, self.pos6, 4);
+			spawn_marker(self.bmodel_act.origin, self.pos4,1,0);
+			spawn_marker(self.bmodel_act.origin, self.pos6,1,4);
 		}
 
 		self.lip = v_forward * self.pos5; // Dot product (cos) between angle vectors.  Use the same logic from the AI infront function.  1= perfect angle, 0 or less = 90+ angle difference
@@ -1683,7 +1683,7 @@ void() trigger_takeartifact_fire = { // [FUNCTION]
 		// Play the sound ON the activator
 		if (self.distance < time && self.noise != "") {
 			self.distance = time + self.waitmin3; // setup slow down timer
-			sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+			sound(activator,CHAN_VOICE, self.noise, self.volume,ATTN_NORM);
 		}
 
 		// Setup trigger to only work once?
@@ -1742,7 +1742,7 @@ void() trigger_giveitem_fire = { // [FUNCTION]
 	if (self.target == "") return;
 
 	stemp = self; activator = self.bmodel_act; // Save for later and reset activator
-	if (self.noise != "") sound(activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play the sound ON the activator and display message
+	if (self.noise != "") sound(activator,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play the sound ON the activator and display message
 	if (self.message != "") centerprint (activator, self.message);
 	self.enemy = find (world, targetname, self.target); // Search entity list for targets
 	while(self.enemy) {
@@ -2316,14 +2316,14 @@ void() trigger_heal_touch = { // [FUNCTION]
 	self.attack_finished = time + self.wait; // Do not constantly check healing, use wait
 	if (!T_Heal(other, self.healamount, 0)) return; // Can the pool heal the player?
 
-	sound(other, CHAN_BODY, self.noise, self.volume, ATTN_NORM); // Healing sound
+	sound(other,CHAN_BODY,self.noise, self.volume,ATTN_NORM); // Healing sound
 	if (self.max_health > 0) self.health = self.health - self.healamount; // Has the pool run out of health?
 	if (self.health < 1) { // Has the healing trigger expired?
 		if (self.lip < 2) centerprint (other, self.message2); // Only block message lip=1 healing 2=all messages
-		if (self.target2 != "") { trigger_strs(self.target2, other); self.target2 = "";} // Fire any targets once (finish of healing cycle)
+		if (self.target2 != "") { trigger_strs(self.target2, other); self.target2 = ""; } // Fire any targets once (finish of healing cycle)
 		entity_state_off(); // Switch off healing trigger
 	} else {
-		if (self.target != "") { trigger_strs(self.target, other); self.target = "";} // Fire any targets once (start of healing cycle)
+		if (self.target != "") { trigger_strs(self.target, other); self.target = ""; } // Fire any targets once (start of healing cycle)
 		if (!self.lip) centerprint (other, self.message); // Display healing message (check for lip block)
 	}
 };	
@@ -2411,7 +2411,7 @@ void() trigger_tsound_touch = { // [FUNCTION]
 	if ( !(other.flags & FL_CLIENT) ) return;	// Only works with clients
 	if (other.health < 1 ) return;				// other is dead
 
-	if (other.touchedliquid < time) sound(other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
+	if (other.touchedliquid < time) sound(other,CHAN_BODY,self.noise, self.volume,ATTN_NORM);
 	other.touchedliquid = time + 0.1;
 	other.touchedsound = self.noise1;
 	self.attack_finished = time + 0.05;
@@ -2440,7 +2440,7 @@ void() trigger_tsound_fade = { // [FUNCTION]
     } else self.nextthink = time + FADEMODEL_TIME; // Keep on loop (using minimum QS time segment)
 };
 
-void() trigger_tsound_drain = { sound(self, CHAN_AUTO, self.owner.noise2, self.owner.volume, ATTN_NORM); }; // [FUNCTION], Used as a think.
+void() trigger_tsound_drain = { sound(self,CHAN_AUTO,self.owner.noise2, self.owner.volume,ATTN_NORM); }; // [FUNCTION], Used as a think.
 
 void() trigger_tsound_disable = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;

@@ -178,7 +178,7 @@ void()	dprince_stand12	= [	$stand12,	dprince_stand1	] {
 		self.idlebusy = TRUE; 
 		// Make sure the idle animations don't repeat in a row
 		self.lefty = self.lip;
-		while (self.lefty == self.lip) { self.lefty = rint(random()*4);}
+		while (self.lefty == self.lip) { self.lefty = rint(random()*4); }
 		self.lip = self.lefty;
 		if (self.lip < 1) self.think = dprince_standD1;			// Scratch chin
 		else if (self.lip < 2) self.think = dprince_standC1;	// Look at weapon
@@ -324,7 +324,7 @@ void() dprince_rocket = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;	
-	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 
 	// Re-use spike projectile speeds
 	// Maximum speed, initial speed set in launch_projectile
@@ -412,7 +412,7 @@ void(entity inflictor, entity attacker, float damage) dprince_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.85) dprince_painA1();	// classic, body recoil
@@ -437,7 +437,7 @@ void()	dprince_die3	= [	$death3,	dprince_die4	] { monster_check_gib();
 void()	dprince_die4	= [	$death4,	dprince_die5	] {};
 void()	dprince_die5	= [	$death5,	dprince_die6	] {};
 void()	dprince_die6	= [	$death6,	dprince_die7	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALA,1,ATTN_NORM); };
 void()	dprince_die7	= [	$death7,	dprince_die8	] {};
 void()	dprince_die8	= [	$death8,	dprince_die9	] { ai_forward(10); };
 void()	dprince_die9	= [	$death9,	dprince_die10	] { ai_forward(11); };
@@ -448,14 +448,14 @@ void()	dprince_die12	= [	$death12,	dprince_die12	] { monster_deadbody_check(); }
 void()	dprince_dieb1	= [	$deathb1,	dprince_dieb2	] {};
 void()	dprince_dieb2	= [	$deathb2,	dprince_dieb3	] { monster_check_gib(); };
 void()	dprince_dieb3	= [	$deathb3,	dprince_dieb4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void()	dprince_dieb4	= [	$deathb4,	dprince_dieb5	] {};
 void()	dprince_dieb5	= [	$deathb5,	dprince_dieb6	] {};
 void()	dprince_dieb6	= [	$deathb6,	dprince_dieb7	] {};
 void()	dprince_dieb7	= [	$deathb7,	dprince_dieb8	] {};
 void()	dprince_dieb8	= [	$deathb8,	dprince_dieb9	] {};
 void()	dprince_dieb9	= [	$deathb9,	dprince_dieb10	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALB,1,ATTN_NORM); };
 void()	dprince_dieb10	= [	$deathb10,	dprince_dieb11	] {};
 void()	dprince_dieb11	= [	$deathb11,	dprince_dieb12	] {};
 void()	dprince_dieb12	= [	$deathb12,	dprince_dieb13	] {};
@@ -473,7 +473,7 @@ void() dprince_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		if (random() > 0.5) dprince_die1();
 		else dprince_dieb1();
 	}

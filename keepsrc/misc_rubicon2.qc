@@ -75,7 +75,7 @@ void() make_sparks = { // [FUNCTION]
 			i = i + 1;
 		}
 
-		if (self.sounds == 1) sound(self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
+		if (self.sounds == 1) sound(self,CHAN_AUTO,"rrp/misc/spark.wav",1,ATTN_STATIC);
 		SUB_UseTargets();
 		self.nextthink = time + 0.1 + random() * 0.1;
 		self.think = spark_turnofflight;

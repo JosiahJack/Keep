@@ -58,7 +58,9 @@ void() SuperDamageSound = { // [FUNCTION]
 	sound(self,CHAN_BODY,SOUND_ARTQUAD3,1,ATTN_NORM);
 };
 
-float() frame_pause = { return (intermission_running > 0 || cinematic_running > 0 || cutscene > 0); }; // [FUNCTION]
+float() frame_pause = { // [FUNCTION]
+	return (intermission_running > 0 || cinematic_running > 0 || cutscene > 0);
+};
 
 // Grapple
 void() player_grapple1 = [114,player_grapple2] { if (frame_pause()) return; self.weaponframe = 1; W_FireGrapple(); }; // [FUNCTION]
@@ -67,15 +69,15 @@ void() player_grapple3 = [116,player_grapple3] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	self.weaponframe = 2;
-    if (!self.hook || self.hook.count) { player_grapple5(); return;} // Done.
+    if (!self.hook || self.hook.count) { player_grapple5(); return; } // Done.
     if (vlen(self.hook.origin - self.origin) >= HOOK_NEAR && self.hook.state && Grapple_Pull_Me()) player_grapple4(); // Time to fly.
 };
 void() player_grapple4 = [ 73, player_grapple4 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	self.weaponframe = 2;
-    if (!self.hook || self.hook.count) { player_grapple5(); return;}   // Done.
-    if ((vlen(self.hook.origin - self.origin) < HOOK_NEAR) || !self.hook.state) { player_grapple3(); return;}
+    if (!self.hook || self.hook.count) { player_grapple5(); return; }   // Done.
+    if ((vlen(self.hook.origin - self.origin) < HOOK_NEAR) || !self.hook.state) { player_grapple3(); return; }
     if (!Grapple_Pull_Me()) player_grapple3(); // Did target gain weight all of a sudden?
 };
 void() player_grapple5 = [ 112, player_run   ] { if (frame_pause()) return; self.weaponframe = 1; }; // [FUNCTION]
@@ -88,30 +90,30 @@ void() player_grapple5 = [ 112, player_run   ] { if (frame_pause()) return; self
 // Axe C	Original - 1,2,3,4		New - 17,18,20,21		c3,c4,c6,c7
 // Axe D	Original - 5,6,7,8		New - 24,25,26,28		d3,d4,d5,d7
 // Axe E	Original - x,x,x,x		New - 31,32,34,35		e3,e4,e6,e7
-void()	player_axe1 =	[119, player_axe2	] { if (!frame_pause()) self.weaponframe=1;}; // [FUNCTION]
-void()	player_axe2 =	[120, player_axe3	] { if (!frame_pause()) self.weaponframe=2;}; // [FUNCTION]
+void()	player_axe1 =	[119, player_axe2	] { if (!frame_pause()) self.weaponframe=1; }; // [FUNCTION]
+void()	player_axe2 =	[120, player_axe3	] { if (!frame_pause()) self.weaponframe=2; }; // [FUNCTION]
 void()	player_axe3 =	[121, player_axe4	] { if (!frame_pause()) self.weaponframe=3;W_FireAxe(); }; // [FUNCTION]
-void()	player_axe4 =	[122, player_run	] { if (!frame_pause()) self.weaponframe=4;}; // [FUNCTION]
+void()	player_axe4 =	[122, player_run	] { if (!frame_pause()) self.weaponframe=4; }; // [FUNCTION]
 
-void()	player_axeb1 =	[125, player_axeb2	] { if (!frame_pause()) self.weaponframe=5;}; // [FUNCTION]
-void()	player_axeb2 =	[126, player_axeb3	] { if (!frame_pause()) self.weaponframe=6;}; // [FUNCTION]
+void()	player_axeb1 =	[125, player_axeb2	] { if (!frame_pause()) self.weaponframe=5; }; // [FUNCTION]
+void()	player_axeb2 =	[126, player_axeb3	] { if (!frame_pause()) self.weaponframe=6; }; // [FUNCTION]
 void()	player_axeb3 =	[127, player_axeb4	] { if (!frame_pause()) self.weaponframe=7;W_FireAxe(); }; // [FUNCTION]
-void()	player_axeb4 =	[128, player_run	] { if (!frame_pause()) self.weaponframe=8;}; // [FUNCTION]
+void()	player_axeb4 =	[128, player_run	] { if (!frame_pause()) self.weaponframe=8; }; // [FUNCTION]
 
-void()	player_axec1 =	[131, player_axec2	] { if (!frame_pause()) self.weaponframe=9;}; // [FUNCTION]
-void()	player_axec2 =	[132, player_axec3	] { if (!frame_pause()) self.weaponframe=10;}; // [FUNCTION]
+void()	player_axec1 =	[131, player_axec2	] { if (!frame_pause()) self.weaponframe=9; }; // [FUNCTION]
+void()	player_axec2 =	[132, player_axec3	] { if (!frame_pause()) self.weaponframe=10; }; // [FUNCTION]
 void()	player_axec3 =	[133, player_axec4	] { if (!frame_pause()) self.weaponframe=11;W_FireAxe(); }; // [FUNCTION]
-void()	player_axec4 =	[134, player_run	] { if (!frame_pause()) self.weaponframe=12;}; // [FUNCTION]
+void()	player_axec4 =	[134, player_run	] { if (!frame_pause()) self.weaponframe=12; }; // [FUNCTION]
 
-void()	player_axed1 =	[137, player_axed2	] { if (!frame_pause()) self.weaponframe=13;}; // [FUNCTION]
-void()	player_axed2 =	[138, player_axed3	] { if (!frame_pause()) self.weaponframe=14;}; // [FUNCTION]
+void()	player_axed1 =	[137, player_axed2	] { if (!frame_pause()) self.weaponframe=13; }; // [FUNCTION]
+void()	player_axed2 =	[138, player_axed3	] { if (!frame_pause()) self.weaponframe=14; }; // [FUNCTION]
 void()	player_axed3 =	[139, player_axed4	] { if (!frame_pause()) self.weaponframe=15;W_FireAxe(); }; // [FUNCTION]
-void()	player_axed4 =	[140, player_run	] { if (!frame_pause()) self.weaponframe=16;}; // [FUNCTION]
+void()	player_axed4 =	[140, player_run	] { if (!frame_pause()) self.weaponframe=16; }; // [FUNCTION]
 
-void()	player_axee1 =	[137, player_axee2	] { if (!frame_pause()) self.weaponframe=17;}; // [FUNCTION]
-void()	player_axee2 =	[138, player_axee3	] { if (!frame_pause()) self.weaponframe=18;}; // [FUNCTION]
+void()	player_axee1 =	[137, player_axee2	] { if (!frame_pause()) self.weaponframe=17; }; // [FUNCTION]
+void()	player_axee2 =	[138, player_axee3	] { if (!frame_pause()) self.weaponframe=18; }; // [FUNCTION]
 void()	player_axee3 =	[139, player_axee4	] { if (!frame_pause()) self.weaponframe=19;W_FireAxe(); }; // [FUNCTION]
-void()	player_axee4 =	[140, player_run	] { if (!frame_pause()) self.weaponframe=20;}; // [FUNCTION]
+void()	player_axee4 =	[140, player_run	] { if (!frame_pause()) self.weaponframe=20; }; // [FUNCTION]
 
 void() player_axeoldc1 = [ 131.000, player_axeoldc2 ] { if (!frame_pause())  self.weaponframe = 1; }; // [FUNCTION]
 void() player_axeoldc2 = [ 132.000, player_axeoldc3 ] { if (!frame_pause())  self.weaponframe = 2; }; // [FUNCTION]
@@ -139,12 +141,12 @@ void(float fr, float wf) playham_frame = { // [FUNCTION]
 void() player_saw1 = [ 26, player_saw2 ] { if (!frame_pause()) self.weaponframe = 5; W_FireSaw(); }; // [FUNCTION]
 void() player_saw2 = [ 27, player_saw3 ] { // [FUNCTION]
 	if (!frame_pause()) playham_frame(27,2);
-    if (!self.button0) { player_run(); return;}
+    if (!self.button0) { player_run(); return; }
 };
 void() player_saw3 = [ 105, player_saw4 ] { if (!frame_pause()) playham_frame(26,3); W_FireSaw(); }; // [FUNCTION]
 void() player_saw4 = [ 106, player_saw5 ] { // [FUNCTION]
 	if (!frame_pause()) playham_frame(27,4);
-    if (!self.button0) { player_run();return;}
+    if (!self.button0) { player_run();return; }
 };
 void() player_saw5 = [ 105, player_saw6 ] { if (!frame_pause()) playham_frame(26,5); W_FireSaw(); }; // [FUNCTION]
 void() player_saw6 = [ 106, player_run  ] { if (!frame_pause()) playham_frame(27,6); }; // [FUNCTION]
@@ -177,7 +179,7 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 
 	if (self.in_a_vehicle) {
 		if (self.idletimer <= time) { // Reuse saw idle time for engine noises
-			sound(self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
+			sound(self,CHAN_AUTO,"zerstorer/weapons/sawridle.wav", 0.5,ATTN_NORM);
 			self.idletimer = time + 0.5;
 		}		
 		return;
@@ -194,10 +196,10 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 		 || (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems && self.ammo_cells > 0)) {
 		if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 			if (random() < 0.5) {
-				sound(self, CHAN_AUTO, "tronyn/lightning_component_electrified.wav", 0.4, ATTN_NORM);
+				sound(self,CHAN_AUTO,"tronyn/lightning_component_electrified.wav", 0.4,ATTN_NORM);
 				self.idletimer = time + 1.59; // In Drake, the frames are grouped, so play sound periodically.
 			} else {
-				sound(self, CHAN_AUTO, "tronyn/lightning_rod_electrified.wav", 0.4, ATTN_NORM);
+				sound(self,CHAN_AUTO,"tronyn/lightning_rod_electrified.wav", 0.4,ATTN_NORM);
 				self.idletimer = time + 2.41; // In Drake, the frames are grouped, so play sound periodically.
 			}
 		}	
@@ -207,7 +209,7 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 		if (self.perms & IT_CHAINSAW) { // Check for chainsaw first because it needs a different player model.
 			if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 				if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
-					sound(self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.4, ATTN_NORM);
+					sound(self,CHAN_AUTO,"zerstorer/weapons/sawridle.wav", 0.4,ATTN_NORM);
 					self.idletimer = time + 0.5 + random() * 0.2; // In Drake, the frames are grouped, so play sound periodically.
 				}
 			}
@@ -281,22 +283,22 @@ void()	player_sg5 =	[117, player_sg1	] { if (!frame_pause()) self.weaponframe=5;
 
 // Airfist fire animation.
 // For the external view we use the rocket fire animation with the recoil part lengthened.
-void() player_airgun1   = [107, player_airgun2  ] { if (!frame_pause()) self.weaponframe=1;}; // [FUNCTION]
-void() player_airgun2   = [108, player_airgun3  ] { if (!frame_pause()) self.weaponframe=2;}; // [FUNCTION]
-void() player_airgun3   = [109, player_airgun4  ] { if (!frame_pause()) self.weaponframe=3;}; // [FUNCTION]
-void() player_airgun4   = [109, player_airgun5  ] { if (!frame_pause()) self.weaponframe=4;}; // [FUNCTION]
-void() player_airgun5   = [110, player_airgun6  ] { if (!frame_pause()) self.weaponframe=5;}; // [FUNCTION]
-void() player_airgun6   = [110, player_airgun7  ] { if (!frame_pause()) self.weaponframe=6;}; // [FUNCTION]
-void() player_airgun7   = [111, player_airgun8  ] { if (!frame_pause()) self.weaponframe=7;}; // [FUNCTION]
-void() player_airgun8   = [112, player_run  ] { if (!frame_pause()) self.weaponframe = 7;}; // [FUNCTION]
+void() player_airgun1   = [107, player_airgun2  ] { if (!frame_pause()) self.weaponframe=1; }; // [FUNCTION]
+void() player_airgun2   = [108, player_airgun3  ] { if (!frame_pause()) self.weaponframe=2; }; // [FUNCTION]
+void() player_airgun3   = [109, player_airgun4  ] { if (!frame_pause()) self.weaponframe=3; }; // [FUNCTION]
+void() player_airgun4   = [109, player_airgun5  ] { if (!frame_pause()) self.weaponframe=4; }; // [FUNCTION]
+void() player_airgun5   = [110, player_airgun6  ] { if (!frame_pause()) self.weaponframe=5; }; // [FUNCTION]
+void() player_airgun6   = [110, player_airgun7  ] { if (!frame_pause()) self.weaponframe=6; }; // [FUNCTION]
+void() player_airgun7   = [111, player_airgun8  ] { if (!frame_pause()) self.weaponframe=7; }; // [FUNCTION]
+void() player_airgun8   = [112, player_run  ] { if (!frame_pause()) self.weaponframe = 7; }; // [FUNCTION]
 
 // Airfist failed fire animation.
 // For the external view we use the nail gun fire animation.
-void() player_failedairgun1   = [103, player_failedairgun2  ] { if (!frame_pause()) self.weaponframe=6;}; // [FUNCTION]
-void() player_failedairgun2   = [104, player_failedairgun3  ] { if (!frame_pause()) self.weaponframe=7;}; // [FUNCTION]
-void() player_failedairgun3   = [104, player_run  ] { if (!frame_pause()) self.weaponframe=7;}; // [FUNCTION]
+void() player_failedairgun1   = [103, player_failedairgun2  ] { if (!frame_pause()) self.weaponframe=6; }; // [FUNCTION]
+void() player_failedairgun2   = [104, player_failedairgun3  ] { if (!frame_pause()) self.weaponframe=7; }; // [FUNCTION]
+void() player_failedairgun3   = [104, player_run  ] { if (!frame_pause()) self.weaponframe=7; }; // [FUNCTION]
 
-void()	player_ssgreset =	[113, player_supersg2	] { if (!frame_pause()) self.weaponframe=1;}; // [FUNCTION]
+void()	player_ssgreset =	[113, player_supersg2	] { if (!frame_pause()) self.weaponframe=1; }; // [FUNCTION]
 
 void()	player_supersg1 =	[113, player_supersg2	] { // [FUNCTION]
 	if (frame_pause()) return;
@@ -314,7 +316,7 @@ void()	player_supersg6 =	[118, player_supersg1	] { // [FUNCTION]
 
 	self.weaponframe=6;
 	if (self.ammo_shells < 2) {
-		if (self.ammo_shells == 1){
+		if (self.ammo_shells == 1) {
 			if ((self.items & IT_SHOTGUN) || (self.perms & IT_BLASTER)) {
 				self.weapon = IT_SHOTGUN;
 				W_SetCurrentAmmo(self);
@@ -442,7 +444,7 @@ void() player_light2   = [106, player_light1  ] { // [FUNCTION]
 void() player_tbolt = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
 
-    if (!self.button0 || (frame_pause())) { player_run();  return;}
+    if (!self.button0 || (frame_pause())) { player_run();  return; }
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weapon == IT2_CHAINLIGHTNING && !self.selfweaponismoditems) {
@@ -483,11 +485,11 @@ void() player_rocket1 = [107,player_rocket2] { // [FUNCTION]
 	self.weaponframe=FIRE_WEAPON_FRAME;
 	W_FireRocket();
 };
-void() player_rocket2   = [108, player_rocket3  ] { if (!frame_pause())  self.weaponframe=2;}; // [FUNCTION]
-void() player_rocket3   = [109, player_rocket4  ] { if (!frame_pause())  self.weaponframe=3;}; // [FUNCTION]
-void() player_rocket4   = [110, player_rocket5  ] { if (!frame_pause())  self.weaponframe=4;}; // [FUNCTION]
-void() player_rocket5   = [111, player_rocket6  ] { if (!frame_pause())  self.weaponframe=5;}; // [FUNCTION]
-void() player_rocket6   = [112, player_rocket1  ] { if (!frame_pause())  self.weaponframe=6;}; // [FUNCTION]
+void() player_rocket2   = [108, player_rocket3  ] { if (!frame_pause())  self.weaponframe=2; }; // [FUNCTION]
+void() player_rocket3   = [109, player_rocket4  ] { if (!frame_pause())  self.weaponframe=3; }; // [FUNCTION]
+void() player_rocket4   = [110, player_rocket5  ] { if (!frame_pause())  self.weaponframe=4; }; // [FUNCTION]
+void() player_rocket5   = [111, player_rocket6  ] { if (!frame_pause())  self.weaponframe=5; }; // [FUNCTION]
+void() player_rocket6   = [112, player_rocket1  ] { if (!frame_pause())  self.weaponframe=6; }; // [FUNCTION]
 
 void() player_multi_rocket1   = [107, player_multi_rocket2  ] { // [FUNCTION]
 	if (frame_pause()) return;
@@ -496,11 +498,11 @@ void() player_multi_rocket1   = [107, player_multi_rocket2  ] { // [FUNCTION]
 	self.weaponframe=1;
 	W_FireMultiRocket();
 };
-void() player_multi_rocket2   = [108, player_multi_rocket3  ] { if (!frame_pause())   self.weaponframe=2;}; // [FUNCTION]
-void() player_multi_rocket3   = [109, player_multi_rocket4  ] { if (!frame_pause())   self.weaponframe=3;}; // [FUNCTION]
-void() player_multi_rocket4   = [110, player_multi_rocket5  ] { if (!frame_pause())   self.weaponframe=4;}; // [FUNCTION]
-void() player_multi_rocket5   = [111, player_multi_rocket6  ] { if (!frame_pause())   self.weaponframe=5;}; // [FUNCTION]
-void() player_multi_rocket6   = [112, player_multi_rocket1  ] { if (!frame_pause())   self.weaponframe=6;}; // [FUNCTION]
+void() player_multi_rocket2   = [108, player_multi_rocket3  ] { if (!frame_pause())   self.weaponframe=2; }; // [FUNCTION]
+void() player_multi_rocket3   = [109, player_multi_rocket4  ] { if (!frame_pause())   self.weaponframe=3; }; // [FUNCTION]
+void() player_multi_rocket4   = [110, player_multi_rocket5  ] { if (!frame_pause())   self.weaponframe=4; }; // [FUNCTION]
+void() player_multi_rocket5   = [111, player_multi_rocket6  ] { if (!frame_pause())   self.weaponframe=5; }; // [FUNCTION]
+void() player_multi_rocket6   = [112, player_multi_rocket1  ] { if (!frame_pause())   self.weaponframe=6; }; // [FUNCTION]
 
 // Same as player_rock* except weaponframe stays at 0.  This is because the stinger viewmodel only has one frame.
 // Update 9/5/09:  Spawn another entity for muzzleflash to bypass Qrack flash.
@@ -522,11 +524,11 @@ void() player_grenade1   = [107, player_grenade2  ] { // [FUNCTION]
 	self.weaponframe=IDLE_WEAPON_FRAME;
 	W_FireGrenade();
 };
-void() player_grenade2   = [108, player_grenade3  ] { if (!frame_pause())  self.weaponframe=2;}; // [FUNCTION]
-void() player_grenade3   = [109, player_grenade4  ] { if (!frame_pause())  self.weaponframe=3;}; // [FUNCTION]
-void() player_grenade4   = [110, player_grenade5  ] { if (!frame_pause())  self.weaponframe=4;}; // [FUNCTION]
-void() player_grenade5   = [111, player_grenade6  ] { if (!frame_pause())  self.weaponframe=5;}; // [FUNCTION]
-void() player_grenade6   = [112, player_grenade1  ] { if (!frame_pause())  self.weaponframe=6;}; // [FUNCTION]
+void() player_grenade2   = [108, player_grenade3  ] { if (!frame_pause())  self.weaponframe=2; }; // [FUNCTION]
+void() player_grenade3   = [109, player_grenade4  ] { if (!frame_pause())  self.weaponframe=3; }; // [FUNCTION]
+void() player_grenade4   = [110, player_grenade5  ] { if (!frame_pause())  self.weaponframe=4; }; // [FUNCTION]
+void() player_grenade5   = [111, player_grenade6  ] { if (!frame_pause())  self.weaponframe=5; }; // [FUNCTION]
+void() player_grenade6   = [112, player_grenade1  ] { if (!frame_pause())  self.weaponframe=6; }; // [FUNCTION]
 
 void() player_prox_grenade1   = [107, player_prox_grenade2  ] { // [FUNCTION]
 	if (frame_pause()) return;
@@ -535,11 +537,11 @@ void() player_prox_grenade1   = [107, player_prox_grenade2  ] { // [FUNCTION]
 	self.weaponframe=IDLE_WEAPON_FRAME;
 	W_FireProximityGrenade();
 };
-void() player_prox_grenade2   = [108, player_prox_grenade3  ] { if (!frame_pause())  self.weaponframe=2;}; // [FUNCTION]
-void() player_prox_grenade3   = [109, player_prox_grenade4  ] { if (!frame_pause())  self.weaponframe=3;}; // [FUNCTION]
-void() player_prox_grenade4   = [110, player_prox_grenade5  ] { if (!frame_pause())  self.weaponframe=4;}; // [FUNCTION]
-void() player_prox_grenade5   = [111, player_prox_grenade6  ] { if (!frame_pause())  self.weaponframe=5;}; // [FUNCTION]
-void() player_prox_grenade6   = [112, player_prox_grenade1  ] { if (!frame_pause())  self.weaponframe=6;}; // [FUNCTION]
+void() player_prox_grenade2   = [108, player_prox_grenade3  ] { if (!frame_pause())  self.weaponframe=2; }; // [FUNCTION]
+void() player_prox_grenade3   = [109, player_prox_grenade4  ] { if (!frame_pause())  self.weaponframe=3; }; // [FUNCTION]
+void() player_prox_grenade4   = [110, player_prox_grenade5  ] { if (!frame_pause())  self.weaponframe=4; }; // [FUNCTION]
+void() player_prox_grenade5   = [111, player_prox_grenade6  ] { if (!frame_pause())  self.weaponframe=5; }; // [FUNCTION]
+void() player_prox_grenade6   = [112, player_prox_grenade1  ] { if (!frame_pause())  self.weaponframe=6; }; // [FUNCTION]
 
 void() player_multi_grenade1   = [107, player_multi_grenade2  ] { // [FUNCTION]
 	if (frame_pause()) return;
@@ -548,11 +550,11 @@ void() player_multi_grenade1   = [107, player_multi_grenade2  ] { // [FUNCTION]
 	self.weaponframe=IDLE_WEAPON_FRAME;
 	W_FireMultiGrenade();
 };
-void() player_multi_grenade2   = [108, player_multi_grenade3  ] { if (!frame_pause()) self.weaponframe=2;}; // [FUNCTION]
-void() player_multi_grenade3   = [109, player_multi_grenade4  ] { if (!frame_pause()) self.weaponframe=3;}; // [FUNCTION]
-void() player_multi_grenade4   = [110, player_multi_grenade5  ] { if (!frame_pause()) self.weaponframe=4;}; // [FUNCTION]
-void() player_multi_grenade5   = [111, player_multi_grenade6  ] { if (!frame_pause()) self.weaponframe=5;}; // [FUNCTION]
-void() player_multi_grenade6   = [112, player_multi_grenade1  ] { if (!frame_pause()) self.weaponframe=6;}; // [FUNCTION]
+void() player_multi_grenade2   = [108, player_multi_grenade3  ] { if (!frame_pause()) self.weaponframe=2; }; // [FUNCTION]
+void() player_multi_grenade3   = [109, player_multi_grenade4  ] { if (!frame_pause()) self.weaponframe=3; }; // [FUNCTION]
+void() player_multi_grenade4   = [110, player_multi_grenade5  ] { if (!frame_pause()) self.weaponframe=4; }; // [FUNCTION]
+void() player_multi_grenade5   = [111, player_multi_grenade6  ] { if (!frame_pause()) self.weaponframe=5; }; // [FUNCTION]
+void() player_multi_grenade6   = [112, player_multi_grenade1  ] { if (!frame_pause()) self.weaponframe=6; }; // [FUNCTION]
 
 void() player_crossbow1  = [1, player_crossbow2] { // [FUNCTION]
 	if (frame_pause()) return;
@@ -562,12 +564,12 @@ void() player_crossbow1  = [1, player_crossbow2] { // [FUNCTION]
 	if (self.ammo_poison > 0) W_Fire_Crossbow_Poison();
 	else W_Fire_Crossbow();
 };
-void() player_crossbow2  = [2, player_crossbow3] { if (!frame_pause()) self.weaponframe = 2;}; // [FUNCTION]
-void() player_crossbow3  = [3, player_crossbow4] { if (!frame_pause()) self.weaponframe = 3;}; // [FUNCTION]
-void() player_crossbow4  = [4, player_crossbow5] { if (!frame_pause()) self.weaponframe = 4;}; // [FUNCTION]
-void() player_crossbow5  = [5, player_crossbow6] { if (!frame_pause()) self.weaponframe = 5;}; // [FUNCTION]
-void() player_crossbow6  = [6, player_crossbow7] { if (!frame_pause()) self.weaponframe = 6;}; // [FUNCTION]
-void() player_crossbow7  = [0, player_crossbow8] { if (!frame_pause()) self.weaponframe = 0;}; // [FUNCTION]
+void() player_crossbow2  = [2, player_crossbow3] { if (!frame_pause()) self.weaponframe = 2; }; // [FUNCTION]
+void() player_crossbow3  = [3, player_crossbow4] { if (!frame_pause()) self.weaponframe = 3; }; // [FUNCTION]
+void() player_crossbow4  = [4, player_crossbow5] { if (!frame_pause()) self.weaponframe = 4; }; // [FUNCTION]
+void() player_crossbow5  = [5, player_crossbow6] { if (!frame_pause()) self.weaponframe = 5; }; // [FUNCTION]
+void() player_crossbow6  = [6, player_crossbow7] { if (!frame_pause()) self.weaponframe = 6; }; // [FUNCTION]
+void() player_crossbow7  = [0, player_crossbow8] { if (!frame_pause()) self.weaponframe = 0; }; // [FUNCTION]
 void() player_crossbow8  = [0, player_crossbow1] { // [FUNCTION]
 	if (frame_pause()) return;
 
@@ -580,19 +582,19 @@ void() player_xbow1 = [105,player_xbow2] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	self.weaponframe=1;
-    if (self.tome_finished) sound(self, CHAN_WEAPON, "drake/necro/att_a2.wav", 1, ATTN_NORM);
-    else sound(self, CHAN_WEAPON, "drake/necro/att_a.wav", 1, ATTN_NORM);
+    if (self.tome_finished) sound(self,CHAN_WEAPON,"drake/necro/att_a2.wav",1,ATTN_NORM);
+    else sound(self,CHAN_WEAPON,"drake/necro/att_a.wav",1,ATTN_NORM);
 };
 void() player_xbow2 = [106,player_xbow3] { if (frame_pause()) return; self.weaponframe=2; W_FireIceCrossbow(); }; // [FUNCTION]
-void() player_xbow3 = [106,player_run] { if (frame_pause()) return; self.weaponframe=3; sound(self, CHAN_WEAPON, "drake/weapons/xbowdraw.wav", 1, ATTN_IDLE); }; // [FUNCTION]
+void() player_xbow3 = [106,player_run] { if (frame_pause()) return; self.weaponframe=3; sound(self,CHAN_WEAPON,"drake/weapons/xbowdraw.wav",1,ATTN_IDLE); }; // [FUNCTION]
 
 // Mjolnir
 void() player_hammer4t = [ 122,  player_hammer5  ] { playham_frame(35,4); }; // [FUNCTION]
 void() player_mjolnir4t= [ 134, player_mjolnir5 ] { playham_frame(41,4); }; // [FUNCTION]
 
 // Mjolnir no cells simple swing
-void() player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1); self.nextthink = time + 0.05;}; // [FUNCTION]
-void() player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2); self.nextthink = time + 0.05;}; // [FUNCTION]
+void() player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1); self.nextthink = time + 0.05; }; // [FUNCTION]
+void() player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2); self.nextthink = time + 0.05; }; // [FUNCTION]
 void() player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
@@ -601,8 +603,8 @@ void() player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 	self.nextthink = time + 0.05;
 };
 void() player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir(); }; // [FUNCTION]
-void() player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
-void() player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05;}; // [FUNCTION]
+void() player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05; }; // [FUNCTION]
+void() player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05; }; // [FUNCTION]
 
 // Mjolnir standard throw
 void() player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]
@@ -648,7 +650,7 @@ void() player_laser4 = [ 103.000, player_laser1 ] { // [FUNCTION]
 
 // LASER - - - - - -
 // Sets up timings for blaster and auto shotgun.
-void() player_startblast = { self.baha_time = time;  self.nextthink = time + 4/30;}; // [FUNCTION]
+void() player_startblast = { self.baha_time = time;  self.nextthink = time + 4/30; }; // [FUNCTION]
 
 void(float fr) player_blaster = { // [FUNCTION]
     local float am;
@@ -666,10 +668,10 @@ void() player_blast2  = [ 104, player_blast3  ] { if (self.attack_finished < tim
 void() player_blast3  = [ 103, player_blast2  ] { if (self.attack_finished < time)player_blaster(1); }; // [FUNCTION]
 
 // Magic wand from Drake
-void() player_wand1 = [103, player_wand2 ] { if (!frame_pause()) self.weaponframe=1; self.effects = self.effects | EF_MUZZLEFLASH;}; // [FUNCTION]
-void() player_wand2 = [104, player_wand3 ] { if (!frame_pause()) self.weaponframe=2;}; // [FUNCTION]
-void() player_wand3 = [104, player_wand4 ] { if (!frame_pause()) self.weaponframe=3;}; // [FUNCTION]
-void() player_wand4 = [104, player_wand5 ] { if (!frame_pause()) self.weaponframe=4;}; // [FUNCTION]
+void() player_wand1 = [103, player_wand2 ] { if (!frame_pause()) self.weaponframe=1; self.effects = self.effects | EF_MUZZLEFLASH; }; // [FUNCTION]
+void() player_wand2 = [104, player_wand3 ] { if (!frame_pause()) self.weaponframe=2; }; // [FUNCTION]
+void() player_wand3 = [104, player_wand4 ] { if (!frame_pause()) self.weaponframe=3; }; // [FUNCTION]
+void() player_wand4 = [104, player_wand5 ] { if (!frame_pause()) self.weaponframe=4; }; // [FUNCTION]
 void() player_wand5 = [104, player_run   ] { if (!self.button0) player_run(); }; // [FUNCTION]
 
 // Only used for the player when they die.  Added check for extras_r4/r5 water volumes.
@@ -727,23 +729,23 @@ void() PainSound = { // [FUNCTION]
 	self.pain_finished = time + 0.5;
 
 	if (damage_attacker.classname == "teledeath") {
-		sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+		sound(self,CHAN_VOICE, "player/teledth1.wav",1,ATTN_NONE);
 	} else if (self.watertype == CONTENT_WATER && self.waterlevel == 3) { // water pain sounds
 		death_bubbles(1);
-		if (random() > 0.5) sound(self, CHAN_VOICE, "player/drown1.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "player/drown2.wav", 1, ATTN_NORM);
+		if (random() > 0.5) sound(self,CHAN_VOICE, "player/drown1.wav",1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "player/drown2.wav",1,ATTN_NORM);
 	} else if (self.watertype == CONTENT_SLIME) { // slime pain sounds
 		// FIX ME	put in some steam here
-		if (random() > 0.5) sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
+		if (random() > 0.5) sound(self,CHAN_VOICE, "player/lburn1.wav",1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "player/lburn2.wav",1,ATTN_NORM);
 	} else if (self.watertype == CONTENT_LAVA) {
-		if (random() > 0.5) sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
+		if (random() > 0.5) sound(self,CHAN_VOICE, "player/lburn1.wav",1,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "player/lburn2.wav",1,ATTN_NORM);
 	} else {
 		// ax pain sound
 		if (self.axhitme == 1) {
 			self.axhitme = 0;
-			sound(self, CHAN_VOICE, SOUND_AXE_PLAYER, 1, ATTN_NORM); // Player been hit by an axe (MP thing)
+			sound(self,CHAN_VOICE, SOUND_AXE_PLAYER,1,ATTN_NORM); // Player been hit by an axe (MP thing)
 		} else {
 			self.lip = rint((random() * 5) + 1);
 			if (self.lip == 1) self.noise = "player/pain1.wav";
@@ -753,26 +755,26 @@ void() PainSound = { // [FUNCTION]
 			else if (self.lip == 5) self.noise = "player/pain5.wav";
 			else self.noise = "player/pain6.wav";
 
-			sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 		}
 	}
 };
 
-void()	player_pain1 =	[35,	player_pain2	] { PainSound(); self.weaponframe=0;}; // [FUNCTION]
+void()	player_pain1 =	[35,	player_pain2	] { PainSound(); self.weaponframe=0; }; // [FUNCTION]
 void()	player_pain2 =	[36,	player_pain3	] {}; // [FUNCTION]
 void()	player_pain3 =	[37,	player_pain4	] {}; // [FUNCTION]
 void()	player_pain4 =	[38,	player_pain5	] {}; // [FUNCTION]
 void()	player_pain5 =	[39,	player_pain6	] {}; // [FUNCTION]
 void()	player_pain6 =	[40,	player_run	] {}; // [FUNCTION]
 
-void()	player_axpain1 =	[29,	player_axpain2	] { PainSound(); self.weaponframe=0;}; // [FUNCTION]
+void()	player_axpain1 =	[29,	player_axpain2	] { PainSound(); self.weaponframe=0; }; // [FUNCTION]
 void()	player_axpain2 =	[30,	player_axpain3	] {}; // [FUNCTION]
 void()	player_axpain3 =	[31,	player_axpain4	] {}; // [FUNCTION]
 void()	player_axpain4 =	[32,	player_axpain5	] {}; // [FUNCTION]
 void()	player_axpain5 =	[33,	player_axpain6	] {}; // [FUNCTION]
 void()	player_axpain6 =	[34,	player_run	] {}; // [FUNCTION]
 
-void() player_sawpain1 = [11, player_sawpain2] { PainSound(); self.weaponframe=0;}; // [FUNCTION]
+void() player_sawpain1 = [11, player_sawpain2] { PainSound(); self.weaponframe=0; }; // [FUNCTION]
 void() player_sawpain2 = [12, player_sawpain3] {}; // [FUNCTION]
 void() player_sawpain3 = [13, player_sawpain4] {}; // [FUNCTION]
 void() player_sawpain4 = [14, player_sawpain5] {}; // [FUNCTION]
@@ -893,7 +895,7 @@ void() player_death_sound = { // [FUNCTION]
 		else if (self.lip == 5) self.noise = "player/death5.wav";
 		else self.noise = "player/death1.wav";
 	}
-	sound(self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
+	sound(self,CHAN_VOICE, self.noise,1,ATTN_NONE);
 };
 
 void() player_gib = { // [FUNCTION]
@@ -919,11 +921,11 @@ void() player_gib = { // [FUNCTION]
 	self.avelocity_y = 200 + random() * 200;
 	self.angles = '0 0 0';
 	self.angles_y = self.ideal_yaw = random() * 360;
-	if (damage_attacker.classname == "teledeath") sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);  // Play GIB death sound
-	else if (damage_attacker.classname == "teledeath2") sound(self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+	if (damage_attacker.classname == "teledeath") sound(self,CHAN_VOICE, "player/teledth1.wav",1,ATTN_NONE);  // Play GIB death sound
+	else if (damage_attacker.classname == "teledeath2") sound(self,CHAN_VOICE, "player/teledth1.wav",1,ATTN_NONE);
 	else {
-		if (random() < 0.5) sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
-		else sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
+		if (random() < 0.5) sound(self,CHAN_VOICE, "player/gib.wav",1,ATTN_NONE);
+		else sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NONE);
 	}
 };
 

@@ -274,7 +274,7 @@ void()  library_shsh = {
     ai_face_objekt();
     }
   if (self.walkframe == 10) {
-    sound(self, CHAN_VOICE, "archg/shsh.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "archg/shsh.wav",1,ATTN_NORM);
     }
   ai_library();
 }
@@ -352,7 +352,7 @@ var
 
 void()  library_itemmad = {
 {
-  sound(self, CHAN_VOICE, "archg/mykey.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "archg/mykey.wav",1,ATTN_NORM);
 }
 
 void()  ai_library = {
@@ -410,7 +410,7 @@ void() cart_boom = {
   ThrowGib(13, floor(random() * 2));
   self.gib3skin = SUB_ClampFloat(floor(random() * 9),0,8);
   ThrowGib(13, floor(random() * 2));
-  sound(self, CHAN_ITEM, "nehahra/wall/woodbrk.wav", 1, ATTN_IDLE);
+  sound(self,CHAN_ITEM,"nehahra/wall/woodbrk.wav",1,ATTN_IDLE);
   self.think = SUB_Remove;
   self.nextthink = time + 0.05;
 };
@@ -541,11 +541,11 @@ void() oglib_cartsound = {
   if (random() > 0.3) return;
   num = random();
   if (num < 0.2) {
-    sound(self, CHAN_AUTO, "nehahra/ogre/cart1.wav", 1, ATTN_IDLE);
+    sound(self,CHAN_AUTO,"nehahra/ogre/cart1.wav",1,ATTN_IDLE);
   } else if (num < 0.7) {
-    sound(self, CHAN_AUTO, "nehahra/ogre/cart2.wav", 1, ATTN_IDLE);
+    sound(self,CHAN_AUTO,"nehahra/ogre/cart2.wav",1,ATTN_IDLE);
   } else {
-    sound(self, CHAN_AUTO, "nehahra/ogre/cart3.wav", 1, ATTN_IDLE);
+    sound(self,CHAN_AUTO,"nehahra/ogre/cart3.wav",1,ATTN_IDLE);
   }
 };
 

@@ -69,6 +69,7 @@
 //=============================================================================
 
 float EASEUNDERCURRENT = 16;
+
 void() 	liquid_movetopos2;
 void() 	liquid_movetopos1;
 
@@ -94,15 +95,15 @@ void() CheckFuncWaterDeath = { // [FUNCTION]
 };
 
 void() liquid_playmovesound = { // [FUNCTION]
-	if (self.noise != "") sound(self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
+	if (self.noise != "") sound(self.aiment,CHAN_VOICE, self.noise, 1.0,ATTN_NORM);
 };
 
 void() liquid_playreturnsound = { // [FUNCTION]
-	if (self.noise1 != "") sound(self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
+	if (self.noise1 != "") sound(self.aiment,CHAN_VOICE, self.noise1, 1.0,ATTN_NORM);
 };
 
 void() liquid_playstopsound = { // [FUNCTION]
-	if (self.noise2 != "") sound(self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
+	if (self.noise2 != "") sound(self.aiment,CHAN_VOICE, self.noise2, 1.0,ATTN_NORM);
 };
 
 void() liquid_at_pos1 = { // [FUNCTION]
@@ -171,7 +172,7 @@ void(entity entToDrown) liquid_drown = { // [FUNCTION]
 	if (entToDrown.bodyonflr == MON_ONFLR) return;
 	
 	if (entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN) {
-		sound(self, CHAN_BODY, "player/drown1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_BODY,"player/drown1.wav",1,ATTN_NORM);
 		death_bubbles(5);
 		// drowning damage formula 5*(x^2/10 + 1) // (khreathor)
 		entToDrown.drown_dmg = 5 * (entToDrown.drown_cnt * entToDrown.drown_cnt * 0.1 + 1);

@@ -107,7 +107,7 @@ void(float jump, float destroy) TakePlayerOutOfVehicle = { // [FUNCTION]
 	self.button2 = 0;
 	if (jump) {
 		if (self.shroom_finished > time) sound(self,CHAN_BODY,"qmaster/player/jumpmario.wav",1,ATTN_NORM);
-		else sound(self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
+		else sound(self,CHAN_BODY,SOUND_PLAYER_JUMP,1,ATTN_NORM); // player jumping sound
 
 		self.velocity_z = self.velocity_z + map_jumpheight;
 		makevectors(self.v_angle);
@@ -139,7 +139,7 @@ void() rally_left30 = [6, rally_left30] {};
 void() steer_centre = [11, steer_centre] { self.weaponframe = 5; };
 
 void() steer_right10 = [12, steer_right10] { self.weaponframe = 6; };
-void() steer_right20 = [13, steer_right20] { self.weaponframe = 7;};
+void() steer_right20 = [13, steer_right20] { self.weaponframe = 7; };
 void() steer_right30 = [14, steer_right30] { self.weaponframe = 8; };
 void() steer_right40 = [15, steer_right40] { self.weaponframe = 9; };
 
@@ -686,8 +686,8 @@ void() DestroyVehicle = {
 	makevectors(self.veh_body.angles);
 	self.veh_dir = v_forward;
 	MoveWheels();
-	sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_STATIC);
-	sound(self, CHAN_BODY, "player/lburn2.wav", 1, ATTN_STATIC);
+	sound(self,CHAN_VOICE, "player/lburn1.wav",1,ATTN_STATIC);
+	sound(self,CHAN_BODY,"player/lburn2.wav",1,ATTN_STATIC);
 	self.deathtype = "rolled_car";
 	if (self.health > 0)
 	{
@@ -946,28 +946,28 @@ float() MoveTail = {
 					}
 					if (fabs(self.veh_body.angles_z) < 60)
 					{
-						sound(self, CHAN_ITEM, "qrally/ray/susp1.wav", vol, ATTN_STATIC);
+						sound(self,CHAN_ITEM,"qrally/ray/susp1.wav", vol,ATTN_STATIC);
 					}
 					rand = random();
 					if (rand < 0.4)
 					{
-						sound(self, CHAN_WEAPON, "qrally/bangbang.wav", vol, ATTN_STATIC);
+						sound(self,CHAN_WEAPON,"qrally/bangbang.wav", vol,ATTN_STATIC);
 					}
 					else
 					{
 						if (rand < 0.6)
 						{
-							sound(self, CHAN_WEAPON, "qrally/process/bang01.wav", vol, ATTN_STATIC);
+							sound(self,CHAN_WEAPON,"qrally/process/bang01.wav", vol,ATTN_STATIC);
 						}
 						else
 						{
 							if (rand < 0.8)
 							{
-								sound(self, CHAN_WEAPON, "qrally/process/bang02.wav", vol, ATTN_STATIC);
+								sound(self,CHAN_WEAPON,"qrally/process/bang02.wav", vol,ATTN_STATIC);
 							}
 							else
 							{
-								sound(self, CHAN_WEAPON, "qrally/process/bang03.wav", vol, ATTN_STATIC);
+								sound(self,CHAN_WEAPON,"qrally/process/bang03.wav", vol,ATTN_STATIC);
 							}
 						}
 					}
@@ -990,7 +990,7 @@ float() MoveTail = {
 		makevectors(self.veh_body.angles);
 		if (v_up_z < 0.2)
 		{
-			sound(self, CHAN_AUTO, "qrally/process/rolltest.wav", 1, ATTN_STATIC);
+			sound(self,CHAN_AUTO,"qrally/process/rolltest.wav",1,ATTN_STATIC);
 			self.deathtype = "rolled_car";
 			T_Damage(self, world, world, 2);
 			if (self.health < 0)
@@ -1157,17 +1157,17 @@ float() MoveTail = {
 			{
 				if (self.current_surface == SURF_MUD)
 				{
-					sound(self, CHAN_AUTO, "qrally/skidmud.wav", vol * 0.4, ATTN_STATIC);
+					sound(self,CHAN_AUTO,"qrally/skidmud.wav", vol * 0.4,ATTN_STATIC);
 					rand = random();
 					if (self.slide_time > time - SNDLEN_SLIDE * 2 && rand < 0.3 && self.classname == "player")
 					{
 						if (rand < 0.15)
 						{
-							sound(self, CHAN_AUTO, "qrally/process/drft02.wav", vol, ATTN_STATIC);
+							sound(self,CHAN_AUTO,"qrally/process/drft02.wav", vol,ATTN_STATIC);
 						}
 						else
 						{
-							sound(self, CHAN_AUTO, "qrally/ray/skidgrav.wav", vol, ATTN_STATIC);
+							sound(self,CHAN_AUTO,"qrally/ray/skidgrav.wav", vol,ATTN_STATIC);
 						}
 					}
 				}
@@ -1176,19 +1176,19 @@ float() MoveTail = {
 					rand = random() * 3;
 					if (rand <= 1)
 					{
-						sound(self, CHAN_AUTO, "qrally/ray/screech1.wav", vol, ATTN_STATIC);
+						sound(self,CHAN_AUTO,"qrally/ray/screech1.wav", vol,ATTN_STATIC);
 					}
 					else
 					{
 						if (rand <= 2)
 						{
-							sound(self, CHAN_AUTO, "qrally/ray/screech2.wav", vol, ATTN_STATIC);
+							sound(self,CHAN_AUTO,"qrally/ray/screech2.wav", vol,ATTN_STATIC);
 						}
 						else
 						{
 							if (rand <= 3)
 							{
-								sound(self, CHAN_AUTO, "qrally/ray/screech3.wav", vol, ATTN_STATIC);
+								sound(self,CHAN_AUTO,"qrally/ray/screech3.wav", vol,ATTN_STATIC);
 							}
 						}
 					}
@@ -1596,31 +1596,31 @@ void(entity veh1, entity veh2) CarCollision = {
 	rnd = random() * 5;
 	if (rnd < 1)
 	{
-		sound(self, CHAN_AUTO, "qrally/nexus/wall.wav", 1, ATTN_NORM);
+		sound(self,CHAN_AUTO,"qrally/nexus/wall.wav",1,ATTN_NORM);
 	}
 	else
 	{
 		if (rnd < 2)
 		{
-			sound(self, CHAN_AUTO, "qrally/ray/crash2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,"qrally/ray/crash2.wav",1,ATTN_NORM);
 		}
 		else
 		{
 			if (rnd < 3)
 			{
-				sound(self, CHAN_AUTO, "qrally/ray/crash3.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"qrally/ray/crash3.wav",1,ATTN_NORM);
 			}
 			else
 			{
 				if (rnd < 4)
 				{
-					sound(self, CHAN_AUTO, "qrally/ray/crash4.wav", 1, ATTN_NORM);
+					sound(self,CHAN_AUTO,"qrally/ray/crash4.wav",1,ATTN_NORM);
 				}
 				else
 				{
 					if (rnd < 5)
 					{
-						sound(self, CHAN_AUTO, "qrally/ray/crash5.wav", 1, ATTN_NORM);
+						sound(self,CHAN_AUTO,"qrally/ray/crash5.wav",1,ATTN_NORM);
 					}
 				}
 			}
@@ -1742,7 +1742,7 @@ void(float vel_speed) CheckForCollision = {
 						self.currentammo = 0;
 					}
 				}
-				sound(self, CHAN_AUTO, "qrally/process/elect02.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"qrally/process/elect02.wav",1,ATTN_NORM);
 				self.veh_body.effects = self.veh_body.effects | EF_DIMLIGHT;
 				W_Attack();
 			}
@@ -1753,13 +1753,13 @@ void(float vel_speed) CheckForCollision = {
 					T_Damage(self, world, world, 30);
 					if (random() < 0.5)
 					{
-						sound(self, CHAN_AUTO, "qrally/dude/sevpain1.wav", 1, ATTN_NORM);
+						sound(self,CHAN_AUTO,"qrally/dude/sevpain1.wav",1,ATTN_NORM);
 					}
 					else
 					{
-						sound(self, CHAN_AUTO, "qrally/dude/sevpain2.wav", 1, ATTN_NORM);
+						sound(self,CHAN_AUTO,"qrally/dude/sevpain2.wav",1,ATTN_NORM);
 					}
-					sound(self, CHAN_AUTO, "qrally/ray/crash5.wav", 1, ATTN_NORM);
+					sound(self,CHAN_AUTO,"qrally/ray/crash5.wav",1,ATTN_NORM);
 					centerprint(self, "Whiplash damage!");
 				}
 				else
@@ -1768,7 +1768,7 @@ void(float vel_speed) CheckForCollision = {
 				}
 				CarGibs(trace_endpos - v_forward * 6, self.velocity * 0.75 + '0 0 150', vol * 4);
 				checkHealth();
-				sound(self, CHAN_AUTO, crash_snd, vol, ATTN_STATIC);
+				sound(self,CHAN_AUTO,crash_snd, vol,ATTN_STATIC);
 			}
 			if (trace_ent != world)
 			{
@@ -1817,7 +1817,7 @@ void(float vel_speed) CheckForCollision = {
 						self.currentammo = 0;
 					}
 				}
-				sound(self, CHAN_AUTO, "qrally/process/elect02.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"qrally/process/elect02.wav",1,ATTN_NORM);
 				self.veh_body.effects = self.veh_body.effects | EF_DIMLIGHT;
 				W_Attack();
 			}
@@ -1825,7 +1825,7 @@ void(float vel_speed) CheckForCollision = {
 			{
 				T_Damage(self, world, world, vol * 4);
 				CarGibs(trace_endpos - dir * 4, self.velocity * 0.75 + '0 0 150', vol * 4);
-				sound(self, CHAN_AUTO, crash_snd, vol, ATTN_STATIC);
+				sound(self,CHAN_AUTO,crash_snd, vol,ATTN_STATIC);
 				checkHealth();
 			}
 			if (trace_ent != world)
@@ -1875,7 +1875,7 @@ void(float vel_speed) CheckForCollision = {
 						self.currentammo = 0;
 					}
 				}
-				sound(self, CHAN_AUTO, "qrally/process/elect02.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"qrally/process/elect02.wav",1,ATTN_NORM);
 				self.veh_body.effects = self.veh_body.effects | EF_DIMLIGHT;
 				W_Attack();
 			}
@@ -1884,7 +1884,7 @@ void(float vel_speed) CheckForCollision = {
 				T_Damage(self, world, world, vol * 4);
 				CarGibs(trace_endpos - dir * 4, self.velocity * 0.75 + '0 0 150', vol * 4);
 				checkHealth();
-				sound(self, CHAN_AUTO, crash_snd, vol, ATTN_STATIC);
+				sound(self,CHAN_AUTO,crash_snd, vol,ATTN_STATIC);
 			}
 			if (trace_ent != world)
 			{
@@ -1920,11 +1920,11 @@ void(float vel_speed) CheckForCollision = {
 			{
 				if (vspeed > 550)
 				{
-					sound(self, 6, "qrally/engine/rev/highrev2.wav", 0.75, ATTN_NORM);
+					sound(self, 6, "qrally/engine/rev/highrev2.wav", 0.75,ATTN_NORM);
 				}
 				else
 				{
-					sound(self, 6, "qrally/engine/rev/highrev.wav", 0.75, ATTN_NORM);
+					sound(self, 6, "qrally/engine/rev/highrev.wav", 0.75,ATTN_NORM);
 				}
 				self.last_rev = time;
 			}
@@ -1933,7 +1933,7 @@ void(float vel_speed) CheckForCollision = {
 		{
 			if (lspeed < 250)
 			{
-				sound(self, 6, "qrally/engine/rev/takeoff.wav", 0.75, ATTN_NORM);
+				sound(self, 6, "qrally/engine/rev/takeoff.wav", 0.75,ATTN_NORM);
 				self.last_rev = time;
 			}
 		}
@@ -1944,21 +1944,21 @@ void(float vel_speed) CheckForCollision = {
 		{
 			if (vspeed > 800 && vspeed < 950)
 			{
-				sound(self, 5, "qrally/engine/rev/backrev2.wav", 0.75, ATTN_NORM);
+				sound(self, 5, "qrally/engine/rev/backrev2.wav", 0.75,ATTN_NORM);
 				self.last_backrev = time;
 			}
 			else
 			{
 				if (vspeed > 600 && vspeed < 750)
 				{
-					sound(self, 5, "qrally/engine/rev/backrev.wav", 0.75, ATTN_NORM);
+					sound(self, 5, "qrally/engine/rev/backrev.wav", 0.75,ATTN_NORM);
 					self.last_backrev = time;
 				}
 				else
 				{
 					if (vspeed > 400 && vspeed < 550)
 					{
-						sound(self, 5, "qrally/engine/rev/backrev3.wav", 0.75, ATTN_NORM);
+						sound(self, 5, "qrally/engine/rev/backrev3.wav", 0.75,ATTN_NORM);
 						self.last_backrev = time;
 					}
 				}
@@ -2534,7 +2534,7 @@ void(float vel_speed) DoEngineNoises = {
 			{
 				if (deathmatch < 10 || self.lastmove_z > 0)
 				{
-					sound(self, CHAN_VOICE, self.SAMP_ENGINE1, 1, 1);
+					sound(self,CHAN_VOICE, self.SAMP_ENGINE1, 1, 1);
 				}
 				else
 				{
@@ -2551,7 +2551,7 @@ void(float vel_speed) DoEngineNoises = {
 			{
 				if (deathmatch < 10 || self.lastmove_z > 0)
 				{
-					sound(self, CHAN_BODY, self.SAMP_ENGINE2, 1, 1);
+					sound(self,CHAN_BODY,self.SAMP_ENGINE2, 1, 1);
 				}
 				else
 				{
@@ -2571,41 +2571,41 @@ void(float vel_speed) DoEngineNoises = {
 			{
 				self.last_rev = time;
 				if (self.car_index == 4) {
-					sound(self, CHAN_WEAPON, "qrally/rev3.wav", 1, ATTN_STATIC);
+					sound(self,CHAN_WEAPON,"qrally/rev3.wav",1,ATTN_STATIC);
 					self.last_rev = time - 0.5;
 				} else {
 					if (self.car_index == 3) {
-						sound(self, CHAN_WEAPON, "qrally/rev4.wav", 1, ATTN_STATIC);
+						sound(self,CHAN_WEAPON,"qrally/rev4.wav",1,ATTN_STATIC);
 					} else {
-						sound(self, CHAN_WEAPON, "qrally/rev2.wav", 1, ATTN_STATIC);
+						sound(self,CHAN_WEAPON,"qrally/rev2.wav",1,ATTN_STATIC);
 					}
 				}
 			}
 			if (self.last_idle < time - SNDLEN_IDLE && (self.racing_flags & QR_START_READY) && self.ignition_time < time - SNDLEN_IGNITION) {
 				if (self.car_index == 1) {
-					sound(self, CHAN_VOICE, "qrally/engine/aa01.wav", 0.4, ATTN_STATIC);
-					sound(self, CHAN_BODY, "qrally/engine/aa01.wav", 0, ATTN_STATIC);
+					sound(self,CHAN_VOICE, "qrally/engine/aa01.wav", 0.4,ATTN_STATIC);
+					sound(self,CHAN_BODY,"qrally/engine/aa01.wav", 0,ATTN_STATIC);
 				} else {
 					if (self.car_index == 2) {
-						sound(self, CHAN_VOICE, "qrally/engine/suidle.wav", 0.4, ATTN_STATIC);
-						sound(self, CHAN_BODY, "qrally/engine/suidle.wav", 0, ATTN_STATIC);
+						sound(self,CHAN_VOICE, "qrally/engine/suidle.wav", 0.4,ATTN_STATIC);
+						sound(self,CHAN_BODY,"qrally/engine/suidle.wav", 0,ATTN_STATIC);
 					} else {
 						if (self.car_index == 3) {
-							sound(self, CHAN_VOICE, "qrally/engine/aa01.wav", 0.4, ATTN_STATIC);
-							sound(self, CHAN_BODY, "qrally/engine/aa01.wav", 0, ATTN_STATIC);
+							sound(self,CHAN_VOICE, "qrally/engine/aa01.wav", 0.4,ATTN_STATIC);
+							sound(self,CHAN_BODY,"qrally/engine/aa01.wav", 0,ATTN_STATIC);
 						} else {
 							if (self.car_index == 4) {
 								if (self.veh_body.skin == 0) {
-									sound(self, CHAN_VOICE, "qrally/engine/test01.wav", 0.4, ATTN_STATIC);
-									sound(self, CHAN_BODY, "qrally/engine/test01.wav", 0, ATTN_STATIC);
+									sound(self,CHAN_VOICE, "qrally/engine/test01.wav", 0.4,ATTN_STATIC);
+									sound(self,CHAN_BODY,"qrally/engine/test01.wav", 0,ATTN_STATIC);
 								} else {
-									sound(self, CHAN_VOICE, "qrally/engine/ma01.wav", 0.4, ATTN_STATIC);
-									sound(self, CHAN_BODY, "qrally/engine/ma01.wav", 0, ATTN_STATIC);
+									sound(self,CHAN_VOICE, "qrally/engine/ma01.wav", 0.4,ATTN_STATIC);
+									sound(self,CHAN_BODY,"qrally/engine/ma01.wav", 0,ATTN_STATIC);
 								}
 							} else {
 								if (self.car_index == 5) {
-									sound(self, CHAN_VOICE, "qrally/engine/tri01.wav", 0.4, ATTN_STATIC);
-									sound(self, CHAN_BODY, "qrally/engine/tri01.wav", 0, ATTN_STATIC);
+									sound(self,CHAN_VOICE, "qrally/engine/tri01.wav", 0.4,ATTN_STATIC);
+									sound(self,CHAN_BODY,"qrally/engine/tri01.wav", 0,ATTN_STATIC);
 								}
 							}
 						}
@@ -3136,9 +3136,9 @@ void() VehiclePreThink = {
 
 	if (self.misc_flags & MISC_HORN_ON && self.horn_time < time - SNDLEN_HORN) {
 		if (self.car_index < 3) {
-			sound(self, CHAN_AUTO, "qrally/meepmeep.wav", 1, ATTN_STATIC);
+			sound(self,CHAN_AUTO,"qrally/meepmeep.wav",1,ATTN_STATIC);
 		} else {
-			sound(self, CHAN_AUTO, "qrally/nexus/horn.wav", 1, ATTN_STATIC);
+			sound(self,CHAN_AUTO,"qrally/nexus/horn.wav",1,ATTN_STATIC);
 		}
 		self.horn_time = time;
 	}
@@ -3164,7 +3164,7 @@ void() VehiclePreThink = {
 			}
 		} else {
 			if (v_up_z > 0.5) {
-				if (!(self.use_surface_angle)) sound(self, CHAN_AUTO, "demon/dland2.wav", 0.5, ATTN_STATIC);
+				if (!(self.use_surface_angle)) BDW_BodyDropSound();
 				self.use_surface_angle = 1;
 				self.veh_body.angles_z = 0;
 			} else {
@@ -3197,9 +3197,9 @@ void() VehiclePreThink = {
 		self.velocity = normalize(self.velocity) * aspeed;
 		if (mspeed < MAX_SPEED / 2 && self.last_slide < time - SNDLEN_SLIDE && self.last_speed < mspeed && vel_speed > 100 && !hold_flag && !(self.reversing)) {
 			if (self.current_surface == SURF_MUD) {
-				sound(self, CHAN_AUTO, "qrally/skidmud.wav", 0.8, ATTN_STATIC);
+				sound(self,CHAN_AUTO,"qrally/skidmud.wav", 0.8,ATTN_STATIC);
 			} else {
-				sound(self, CHAN_AUTO, "qrally/ray/screech4.wav", 0.8, ATTN_STATIC);
+				sound(self,CHAN_AUTO,"qrally/ray/screech4.wav", 0.8,ATTN_STATIC);
 			}
 			self.last_slide = time;
 		}
@@ -3446,9 +3446,9 @@ void() CheckDriverReady = {
 	if (self.racing_flags & QR_START_READY) return;
 	self.racing_flags = self.racing_flags | QR_START_READY;
 	if (first_engine_start == 0) first_engine_start = time;
-	if (self.car_index == 3) sound(self, CHAN_AUTO, "qrally/ray/engstart.wav", 1, ATTN_STATIC);
-	if (self.car_index == 4) sound(self, CHAN_AUTO, "qrally/start2.wav", 1, ATTN_STATIC);
-	if (self.car_index == 4) sound(self, CHAN_AUTO, "qrally/start.wav", 1, ATTN_STATIC);
+	if (self.car_index == 3) sound(self,CHAN_AUTO,"qrally/ray/engstart.wav",1,ATTN_STATIC);
+	if (self.car_index == 4) sound(self,CHAN_AUTO,"qrally/start2.wav",1,ATTN_STATIC);
+	if (self.car_index == 4) sound(self,CHAN_AUTO,"qrally/start.wav",1,ATTN_STATIC);
 	self.ignition_time = time;
 	plyr = find(world, classname, "player");
 	while (plyr != world) {
@@ -3527,7 +3527,7 @@ void() PreRaceMsg = {
 			plyr = find(world, classname, "player");
 			while (plyr != world) {
 				centerprint(plyr, "GO!");
-				sound(plyr, CHAN_ITEM, "qrally/voice/gotst01.wav", 1, ATTN_STATIC);
+				sound(plyr,CHAN_ITEM,"qrally/voice/gotst01.wav",1,ATTN_STATIC);
 				commentary(plyr, "qrally/voice/gotst01.wav");
 				plyr.last_lap_time = time;
 				plyr.time_remaining = TIMETRIAL_STARTTIME;
@@ -3746,7 +3746,7 @@ void() CheckLaps = {
 				bprint(" has WON the race!\n");
 				if (other.classname == "player")
 				{
-					sound(other, CHAN_ITEM, "qrally/voice/win3.wav", 1, ATTN_NORM);
+					sound(other,CHAN_ITEM,"qrally/voice/win3.wav",1,ATTN_NORM);
 					centerprint(other, "You have WON the race!");
 				}
 			}
@@ -3815,7 +3815,7 @@ void() CheckFastestLap = {
 		sprint(other, "\n");
 		stuffcmd(other, "bf\n");
 	}
-	sound(other, CHAN_ITEM, "qrally/lapcom.wav", 1, ATTN_STATIC);
+	sound(other,CHAN_ITEM,"qrally/lapcom.wav",1,ATTN_STATIC);
 	if (time - other.last_lap_time < other.fastest_lap)
 	{
 		other.fastest_lap = time - other.last_lap_time;
@@ -3838,42 +3838,26 @@ void() CheckFastestLap = {
 
 void() startfinish_touch = {
 	local string laps_left;
-	if (!(other.classname == "player" || other.classname == "rally_bot"))
-	{
+
+	if (!(other.classname == "player" || other.classname == "rally_bot")) {
 		return;
 	}
-	if (other.racing_flags & QR_NOT_RACING)
-	{
-		return;
-	}
-	if (other.racing_flags & QR_FINISHED_RACE)
-	{
-		return;
-	}
-	if (rally_type_index > 2)
-	{
-		return;
-	}
-	if (other.last_marker_num != self.ammo_shells)
-	{
-		return;
-	}
+	if (other.racing_flags & QR_NOT_RACING) return;
+	if (other.racing_flags & QR_FINISHED_RACE) return;
+	if (rally_type_index > 2) return;
+	if (other.last_marker_num != self.ammo_shells) return;
+
 	other.last_marker_num = 0;
 	CheckFastestLap();
 	other.last_lap_time = time;
-	if (rally_type_index == 3)
-	{
+	if (rally_type_index == 3) {
 		other.frags = other.frags + FRAGS_PER_LAP;
-	}
-	else
-	{
+	} else {
 		other.last_lap = other.last_lap + 1;
 		CheckLaps();
-		if (!(global_racing_flags & QR_FINISHED_RACE))
-		{
+		if (!(global_racing_flags & QR_FINISHED_RACE)) {
 			laps_left = ftos(self.ammo_nails - other.last_lap);
-			if (other.classname == "player")
-			{
+			if (other.classname == "player") {
 				sprint(other, laps_left);
 				sprint(other, " laps left\n");
 			}
@@ -3894,8 +3878,7 @@ void() flag_think = {
 };
 
 void() spawn_marker_flag = {
-	local entity flag;
-	local entity oself;
+	local entity flag, oself;
 
 	if (racing_type != RT_TIME_TRIAL) return;
 
@@ -4290,7 +4273,7 @@ void() cone_touch = {
 	pos = other.origin - other.veh_dir * 48;
 	if (vlen(self.origin - pos) > 64) return;
 
-	sound(self, CHAN_AUTO, "qrally/process/htcone01.wav", 1, ATTN_STATIC);
+	sound(self,CHAN_AUTO,"qrally/process/htcone01.wav",1,ATTN_STATIC);
 	self.velocity = other.velocity * 1.5;
 	self.velocity_z = 200;
 	self.avelocity_x = random() * 500;
@@ -4398,7 +4381,7 @@ void() stopsign_touch = {
 		self.solid = SOLID_NOT;
 		return;
 	}
-	sound(self, CHAN_AUTO, "qrally/process/htcone01.wav", 1, ATTN_STATIC);
+	sound(self,CHAN_AUTO,"qrally/process/htcone01.wav",1,ATTN_STATIC);
 	oldself = self;
 	setorigin(self, oldself.origin + '0 0 32');
 	setmodel(self, "progs/qrally/stoptop.mdl");

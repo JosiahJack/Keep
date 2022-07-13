@@ -44,7 +44,7 @@ float TRAIN_TOUCH = 8;
 float TRAIN_REVERSE = 32;
 
 void() func_train_stop = { // [FUNCTION]
-	if ( self.sounds > 0 && self.noise != "") sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound and switch state OFF
+	if (self.sounds > 0 && self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play stop sound and switch state OFF
 	self.velocity = self.avelocity = '0 0 0';
 	self.state = STATE_OFF;
 };
@@ -72,7 +72,7 @@ void() func_train_pause = { // [FUNCTION]
 	else {
 		if (self.wait > 0 ) { // Is wait setup to pause the train?
 			self.nextthink = self.ltime + self.wait + (self.delay * random());
-			if ( self.sounds > 0 ) sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound if setup
+			if (self.sounds > 0 ) sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play stop sound if setup
 			self.velocity = self.avelocity = '0 0 0'; // Stop any movement or rotation
 		} else self.nextthink = self.ltime + 0.1; // ID logic - 1 frame pause at each path_corner.  This is a default in the ID (plats.qc, line 242) code!  Hence why there is a NOPAUSE option on path corners.
 
@@ -88,7 +88,7 @@ void() func_train_next = { // [FUNCTION]
 	else if (self.state == STATE_OFF) return;
 
 	// I suppose this is where the train logic goes off the rails!  Two types of routing logic exists, random or exact path choices.
-	if ( self.movetarget.spawnflags & PATHC_TARGET2) { // Only do extra logic routing if alternative route exists
+	if (self.movetarget.spawnflags & PATHC_TARGET2) { // Only do extra logic routing if alternative route exists
 		// Exact logic paths ALWAYS overriding any choice or defaults.  This will even send a train back the way it came if selected.  This route logic mode will always change direction flow.
 		if (self.movetarget.spawnflags & PATHC_EXACT) {
 			if (self.movetarget.state == STATE_ROUTE2) { // Alternative forward route
@@ -147,7 +147,7 @@ void() func_train_next = { // [FUNCTION]
 
 	if (!self.goalentity) func_train_stop(); // If no route entity found, then stop.
 	else { // Route found so setup final details and move towards next corner.
-		if ( self.sounds > 0 && self.noise1 != "") sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
+		if (self.sounds > 0 && self.noise1 != "") sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
 		self.finaldest = func_train_origin(self.goalentity); // Work out NEXT path_corner origin
 		if (self.movetarget.speed > 0) self.distance = self.movetarget.speed; // Check if CURRENT path_corner for a different speed
 		else self.distance = self.speed;
@@ -215,7 +215,7 @@ void() func_train_resume = { // [FUNCTION]
 	if (self.goalentity.classtype != CT_PATHCORNER) self.estate_fire(); // Final destionation not setup correctly, move on
 	pc_dist = fabs(vlen(self.finaldest - self.origin));
 	if (pc_dist > 0) {
-		if ( self.sounds > 0) sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
+		if (self.sounds > 0) sound(self,CHAN_VOICE, self.noise1, self.volume,ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
 		if (self.classtype == CT_SAWBLADE) { // Setup sawblades to keep spinning
 			if (self.movedir_x > 0 || self.movedir_y > 0 || self.movedir_z > 0) self.avelocity = -self.v_angle;
 			else self.avelocity = self.v_angle;
@@ -402,7 +402,7 @@ void() func_train = { // [ENTITY]
 	}
 	
 	// There are two types of func_trains (bmodel or point entities).  Setup train collision / block damage.
-	if ( self.spawnflags & TRAIN_MODEL ) {
+	if (self.spawnflags & TRAIN_MODEL ) {
 		setmodel(self, self.model);			// Setup bmodel for origin
 		self.dest0 = bmodel_origin(self);		// Calculate reset location
 		self.finaldest = self.dest0;			// Save reset location

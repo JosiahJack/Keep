@@ -38,7 +38,7 @@ Void function hknight_rush2();
   #167 hknight_rush3;
   ai_face();
   ai_melee();
-  sound(self, CHAN_DAMAUL, "nehahra/sets/dml1_4.wav", 1, ATTN_NORM);
+  sound(self,CHAN_DAMAUL, "nehahra/sets/dml1_4.wav",1,ATTN_NORM);
 }
 
 Void function hknight_rush3();
@@ -62,7 +62,7 @@ Void function hknight_rush4();
   #169 hknight_rush1;
   ai_face();
   ai_melee();
-  sound(self, CHAN_DAMAUL, "nehahra/sets/dml1_4.wav", 1, ATTN_NORM);
+  sound(self,CHAN_DAMAUL, "nehahra/sets/dml1_4.wav",1,ATTN_NORM);
 }
 
 Void function ai_knightrush();
@@ -286,7 +286,7 @@ Void function hknight_run8();
 Void function hknight_pain1();
 {
   #37 hknight_pain2;
-  sound(self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "hknight/pain1.wav",1,ATTN_NORM);
 }
 
 Void function hknight_pain2();
@@ -464,7 +464,7 @@ void() hknight_die = {
 	if (self.classtype == CT_MONBEARD) self.lives = self.lives - 1;
 
 	if (self.health < -40) {
-		sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NORM);
 		if (self.classtype == CT_MONBEARD) {
 			ThrowHead("progs/gib3.mdl", self.health);
 		}
@@ -476,7 +476,7 @@ void() hknight_die = {
 		ThrowGib("progs/gib3.mdl", self.health);
 		return;
 	}
-	sound(self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "hknight/death1.wav",1,ATTN_NORM);
 	if (self.classtype == CT_MONBEARD) { hknight_dieb1(); return; }
 
 	if (random() > 0.5) {
@@ -670,7 +670,7 @@ Void function hknight_rushdecide();
   if (self.origin_z == self.enemy.origin_z) {
     if (strategy_move < 2) {
       strategy_move = 1;
-      sound(self, CHAN_BODY, "nehahra/sets/set2_4.wav", 1, ATTN_NONE);
+      sound(self,CHAN_BODY,"nehahra/sets/set2_4.wav",1,ATTN_NONE);
       ai_face();
       self.yaw_speed = 5;
       hknight_rush1();
@@ -1103,7 +1103,7 @@ Void function hknight_watk22();
 Void function hk_idle_sound();
 {
   if (random() < 0.2) {
-    sound(self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "hknight/idle.wav",1,ATTN_NORM);
     }
 }
 
@@ -1112,7 +1112,7 @@ Void function hknight_pain(attacker : Object; damage : Real);
   if (self.pain_finished > time) {
     exit;
     }
-  sound(self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "hknight/pain1.wav",1,ATTN_NORM);
   if (time - self.pain_finished > MOVETYPE_FLY) {
     hknight_pain1();
     self.pain_finished = time + 1;
@@ -1134,7 +1134,7 @@ Void function hknight_melee();
       }
     }
   self.meleeattack = self.meleeattack + 1;
-  sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
+  sound(self,CHAN_WEAPON,"hknight/slash1.wav",1,ATTN_NORM);
   if (self.meleeattack == 1) {
     hknight_slice1();
     }
@@ -1266,7 +1266,7 @@ Void function hknight_begin();
 
 void() thinking_balls = {
 	if (self.cnt > 10) {
-		sound(self, CHAN_ENDER, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
+		sound(self,CHAN_ENDER, "nehahra/ghoro/spawnb.wav",1,ATTN_NORM);
 		self.solid = SOLID_BBOX;
 		self.touch = Brd_MissileTouch;
 		self.think = fire_a_ball;
@@ -1281,7 +1281,7 @@ void() thinking_balls = {
 		return;
 	}
 	self.pain_finished = time + 1.1;
-	sound(self, CHAN_AUTO, "nehahra/ghoro/balls.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"nehahra/ghoro/balls.wav",1,ATTN_NORM);
 	self.think = thinking_balls;
 	self.nextthink = time + 0.1;
 };
@@ -1314,7 +1314,7 @@ var
     
     return;
     }
-  sound(self, CHAN_BAL, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
+  sound(self,CHAN_BAL, "nehahra/ghoro/spawnb.wav",1,ATTN_NORM);
   remove(self);
 }
 
@@ -1322,11 +1322,11 @@ Void function fire_a_ball();
 {
   self.blink = self.blink + 1;
   if (self.blink > 12) {
-    sound(self, CHAN_BAL, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
+    sound(self,CHAN_BAL, "nehahra/ghoro/spawnb.wav",1,ATTN_NORM);
     remove(self);
     exit;
     }
-  sound(self, CHAN_AUTO, "nehahra/ghoro/balls.wav", 1, ATTN_NORM);
+  sound(self,CHAN_AUTO,"nehahra/ghoro/balls.wav",1,ATTN_NORM);
   self.solid = SOLID_BBOX;
   makevectors(self.owner.angles);
   self.velocity = normalize(self.enemy.origin - self.origin);
@@ -1387,7 +1387,7 @@ void() ai_orbit_nehahra(float radius, vector offset) = {
 void(float num, vector dave) beard_balls = {
 	local entity ball;
 
-	sound(self, CHAN_VOICE, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "nehahra/ghoro/spawnb.wav",1,ATTN_NORM);
 	ball = spawn();
 	ball.movetype = MOVETYPE_FLYMISSILE;
 	ball.solid = SOLID_NOT;
@@ -1533,14 +1533,14 @@ var
 {
   num = random() + random();
   if (num < 0.6) {
-    sound(self, CHAN_VOICE, "nehahra/ghoro/talk1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "nehahra/ghoro/talk1.wav",1,ATTN_NORM);
     exit;
     }
   if (num < 1.2) {
-    sound(self, CHAN_VOICE, "nehahra/ghoro/talk2.wav", 1, ATTN_NORM);
+    sound(self,CHAN_VOICE, "nehahra/ghoro/talk2.wav",1,ATTN_NORM);
     exit;
     }
-  sound(self, CHAN_VOICE, "nehahra/ghoro/talk3.wav", 1, ATTN_NORM);
+  sound(self,CHAN_VOICE, "nehahra/ghoro/talk3.wav",1,ATTN_NORM);
 }
 
 Void function beard_look();

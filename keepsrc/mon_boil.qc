@@ -10,7 +10,7 @@ $frame explode7 explode8 explode9
 $frame hobA1 hobA2 hobA3 hobA4 hobA5 hobA6 hobA7 hobA8 hobA9 hobA10
 $frame hobB1 hobB2 hobB3 hobB4 hobB5 hobB6 hobB7 hobB8 hobB9 hobB10
 
-void() boil_stand1 = [$stand1, boil_stand2 ] { monster_idle_sound(); ai_stand();}
+void() boil_stand1 = [$stand1, boil_stand2 ] { monster_idle_sound(); ai_stand(); }
 void() boil_stand2 = [$stand2, boil_stand3 ] { ai_stand(); };
 void() boil_stand3 = [$stand3, boil_stand4 ] { ai_stand(); };
 void() boil_stand4 = [$stand4, boil_stand5 ] { ai_stand(); };
@@ -56,7 +56,7 @@ void() boil_run8 = [$run8, boil_run1 ] { ai_run(4); };
 
 // Running Boil Explosive Attack
 void() boil_expl1 = [$explode1, boil_expl2 ] { ai_face();
-	sound(self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_VOICE, "ad171/zombie/boil_windup.wav",1,ATTN_NORM); };
 void() boil_expl2 = [$explode2, boil_expl3 ] { ai_face(); };
 void() boil_expl3 = [$explode3, boil_expl4 ] { ai_face(); };
 void() boil_expl4 = [$explode4, boil_expl5 ] { ai_face(); };
@@ -83,8 +83,7 @@ void() boil_checktarget = {
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return;
-	if (intermission_running > 0) return;
-	if (cinematic_running > 0 || cutscene > 0) return;
+	if (frame_pause()) return;
 
 	client = checkclient(); // Find a client in current PVS
 	if (!client) return FALSE; // Go through all the exception(s)
@@ -102,7 +101,7 @@ void() boil_checktarget = {
 void() boil_squirtblood = {
 	if (self.waitmin < time) {
 		self.waitmin = time + self.wait + random() * self.wait;
-		sound(self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_IDLE);
+		sound(self,CHAN_WEAPON,"ad171/wraith/bounce.wav",1,ATTN_IDLE);
 		
 		SpawnProjectileMeat(self,self.origin,self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
 		// Randomly spawn an extra gib of flesh
@@ -118,7 +117,7 @@ void() boil_hoba2 = [$hobA2, boil_hoba3 ] { boil_checktarget(); };
 void() boil_hoba3 = [$hobA3, boil_hoba4 ] { self.nextthink = self.nextthink + random()*0.2; boil_checktarget(); };
 void() boil_hoba4 = [$hobA2, boil_hoba1 ] { boil_checktarget(); };
 
-void() boil_HexpA1 = [$hobA2, boil_HexpA2 ] { sound(self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
+void() boil_HexpA1 = [$hobA2, boil_HexpA2 ] { sound(self,CHAN_VOICE, "ad171/zombie/boil_windup.wav",1,ATTN_NORM); };
 void() boil_HexpA2 = [$hobA3, boil_HexpA3 ] {};
 void() boil_HexpA3 = [$hobA4, boil_HexpA4 ] {};
 void() boil_HexpA4 = [$hobA5, boil_HexpA5 ] {};
@@ -133,7 +132,7 @@ void() boil_hobb2 = [$hobB2, boil_hobb3 ] { boil_checktarget(); };
 void() boil_hobb3 = [$hobB3, boil_hobb4 ] { self.nextthink = self.nextthink + random()*0.2; boil_checktarget(); };
 void() boil_hobb4 = [$hobB2, boil_hobb1 ] { boil_checktarget(); };
 
-void() boil_HexpB1 = [$hobB2, boil_HexpB2 ] { sound(self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM); };
+void() boil_HexpB1 = [$hobB2, boil_HexpB2 ] { sound(self,CHAN_VOICE, "ad171/zombie/boil_windup.wav",1,ATTN_NORM); };
 void() boil_HexpB2 = [$hobB3, boil_HexpB3 ] {};
 void() boil_HexpB3 = [$hobB4, boil_HexpB4 ] {};
 void() boil_HexpB4 = [$hobB5, boil_HexpB5 ] {};
@@ -221,7 +220,7 @@ void() boil_die = {
 	self.max_health = MON_GIBFOUNTAIN;
 	monster_death_precheck();
 	// New gib + loud explosion sound
-	sound(self, CHAN_AUTO, "ad171/zombie/boil_explode.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"ad171/zombie/boil_explode.wav",1,ATTN_NORM);
 	// Delay the t_radius explosion for one frame
 	// Just in case several are standing next to each other
 	// otherwise there will be a runaway crash loop

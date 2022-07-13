@@ -45,36 +45,36 @@ void() SpidMissile;
 
 void() spid_stand = [0, spid_stand] { ai_stand(); };
 
-void() spid_walk1 = [0, spid_walk2] { if (random() < 0.2) sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
-void() spid_walk2 = [1, spid_walk3] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
+void() spid_walk1 = [0, spid_walk2] { if (random() < 0.2) sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
+void() spid_walk2 = [1, spid_walk3] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
 void() spid_walk3 = [2, spid_walk4] { ai_walk(MOVETYPE_STEP); };
-void() spid_walk4 = [3, spid_walk5] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
+void() spid_walk4 = [3, spid_walk5] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
 void() spid_walk5 = [4, spid_walk6] { ai_walk(MOVETYPE_STEP); };
-void() spid_walk6 = [5, spid_walk7] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
+void() spid_walk6 = [5, spid_walk7] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
 void() spid_walk7 = [6, spid_walk8] { ai_walk(MOVETYPE_STEP); };
-void() spid_walk8 = [7, spid_walk9] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
+void() spid_walk8 = [7, spid_walk9] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
 void() spid_walk9 = [8, spid_walk10] { ai_walk(MOVETYPE_STEP); };
-void() spid_walk10 = [9, spid_walk1] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
+void() spid_walk10 = [9, spid_walk1] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_walk(MOVETYPE_STEP); };
 
-void() spid_run1 = [0, spid_run2] { if (random() < 0.2) sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
-void() spid_run2 = [2, spid_run3] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
+void() spid_run1 = [0, spid_run2] { if (random() < 0.2) sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_run(12); };
+void() spid_run2 = [2, spid_run3] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_run(12); };
 void() spid_run3 = [4, spid_run4] { ai_run(12); };
-void() spid_run4 = [6, spid_run5] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
+void() spid_run4 = [6, spid_run5] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_run(12); };
 void() spid_run5 = [8, spid_run6] { ai_run(12); };
-void() spid_run6 = [0, spid_run7] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
+void() spid_run6 = [0, spid_run7] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_run(12); };
 void() spid_run7 = [2, spid_run8] { ai_run(12); };
-void() spid_run8 = [4, spid_run9] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
+void() spid_run8 = [4, spid_run9] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_run(12); };
 void() spid_run9 = [6, spid_run10] { ai_run(12); };
-void() spid_run10 = [8, spid_run1] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); ai_run(12); };
+void() spid_run10 = [8, spid_run1] { sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); ai_run(12); };
 
-void() spid_attack1 = [0, spid_attack2] { sound(self, CHAN_VOICE, "rogue/wrath/watt.wav", 1, ATTN_NORM); ai_charge(12); };
+void() spid_attack1 = [0, spid_attack2] { sound(self,CHAN_VOICE, "rogue/wrath/watt.wav",1,ATTN_NORM); ai_charge(12); };
 void() spid_attack2 = [2, spid_attack3] { ai_charge(12); };
 void() spid_attack3 = [4, spid_attack4] { ai_charge(12); };
 void() spid_attack4 = [6, spid_attack5] { ai_charge(12); };
 void() spid_attack5 = [8, spid_attack6] { ai_charge(12); };
 void() spid_attack6 = [0, spid_attack7] { ai_charge(12); };
 void() spid_attack7 = [2, spid_attack8] { ai_charge(12); if (skill > 1) SpidMissile(); };
-void() spid_attack8 = [4, spid_attack9] { ai_charge(12); sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE); };
+void() spid_attack8 = [4, spid_attack9] { ai_charge(12); sound(self,CHAN_VOICE, "spider/tap.wav",1,ATTN_IDLE); };
 void() spid_attack9 = [6, spid_attack10] { ai_charge(12); };
 void() spid_attack10 = [8, spid_run1] { SpidMissile(); };
 
@@ -93,7 +93,7 @@ void() spid_pain11 = [30, spid_run1] {};
 void(entity inflictor, entity attacker, float damage) spid_pain = {
 	if (self.pain_finished > time) return;
 
-	sound(self, CHAN_VOICE, "spider/pain.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "spider/pain.wav",1,ATTN_NORM);
 	self.velocity_x = -50 - 50 * random();
 	self.velocity_y = 0;
 	self.velocity_z = MIN_CHARMER_DISTANCE + MIN_CHARMER_DISTANCE * random();
@@ -119,7 +119,7 @@ void() spid_die = {
 	monster_death_precheck();
 
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "shalrath/death.wav",1,ATTN_NORM);
 		self.movetype = MOVETYPE_BOUNCE;
 		self.velocity_x = -50 + 100 * random();
 		self.velocity_y = -50 + 100 * random();

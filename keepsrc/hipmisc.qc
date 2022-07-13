@@ -113,7 +113,7 @@ void() effect_finale_use = { // [FUNCTION]
       pl = find (pl,classname,"player");
    }
 
-   if ( self.spawnfunction ) {
+   if (self.spawnfunction ) {
       self.nextthink = (time + self.wait);
       self.think = self.spawnfunction;
    }

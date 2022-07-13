@@ -240,7 +240,7 @@ void() rnd_cachesounds = {
 void(entity targ, string soundtype) rnd_playsurprise = {
 	if (randomcache <= 0) return;
 	
-	sound(targ, CHAN_AUTO, soundtype, 1, ATTN_NORM);
+	sound(targ,CHAN_AUTO,soundtype,1,ATTN_NORM);
 };
 
 float(float rseed) rnd_checkseedrange = {

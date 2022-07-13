@@ -59,10 +59,10 @@ void() sheep_sound =  {
 	else vol = 1;
 
 	if (r < 0.333) {
-		sound(self, CHAN_VOICE, "sheep/sheep1.wav", vol, ATTN_NORM);
+		sound(self,CHAN_VOICE, "sheep/sheep1.wav", vol,ATTN_NORM);
 	} else {
-		if (r < 0.666) sound(self, CHAN_VOICE, "sheep/sheep2.wav", vol, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "sheep/sheep3.wav", vol, ATTN_NORM);
+		if (r < 0.666) sound(self,CHAN_VOICE, "sheep/sheep2.wav", vol,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "sheep/sheep3.wav", vol,ATTN_NORM);
 	}
 	self.idletimer = time + 5 + (random() * 3);
 };
@@ -370,10 +370,10 @@ void(entity inflictor, entity attacker, float damage) sheep_pain =  {
 	else vol = 1;
 
 	if (r < 0.333) {
-		sound(self, CHAN_VOICE, "sheep/sheep1.wav", vol, ATTN_NORM);
+		sound(self,CHAN_VOICE, "sheep/sheep1.wav", vol,ATTN_NORM);
 	} else {
-		if (r < 0.666) sound(self, CHAN_VOICE, "sheep/sheep2.wav", vol, ATTN_NORM);
-		else sound(self, CHAN_VOICE, "sheep/sheep3.wav", vol, ATTN_NORM);
+		if (r < 0.666) sound(self,CHAN_VOICE, "sheep/sheep2.wav", vol,ATTN_NORM);
+		else sound(self,CHAN_VOICE, "sheep/sheep3.wav", vol,ATTN_NORM);
 	}
 	self.pain_finished = time + 2;
 	sheep_pain1();
@@ -497,10 +497,10 @@ void()	sheep_look60 	= [193,	sheep_wait1] {
 };
 
 void() sheep_bite =  {
-	makevectors( self.angles);
+	makevectors(self.angles);
 	traceline ( (self.origin + self.view_ofs), ((self.origin + self.view_ofs) + (v_forward * 36.00000)), FALSE, self);
 	if (trace_ent.takedamage) {
-		sound( self, CHAN_VOICE, "sheep/bite.wav", 1.00000, ATTN_NORM);
+		sound(self,CHAN_VOICE, "sheep/bite.wav", 1.00000,ATTN_NORM);
 		SpawnMeatSpray(self,trace_ent,(crandom() * 100) + 100);
 		T_Damage(trace_ent, self, self, 5, DAMARMOR);
 		self.attack_finished = (time + 0.2 + (random() * 0.8));
@@ -595,7 +595,7 @@ void() sheep_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "sheep/sheepfly.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "sheep/sheepfly.wav",1,ATTN_NORM);
 		self.mdl = "progs/hexen2/mon_sheep_extra.mdl";
 		self.oldorigin = self.origin;
 		setmodel(self,self.mdl); // Extra because we used more than 256 frames.

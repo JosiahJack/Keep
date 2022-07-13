@@ -52,7 +52,7 @@ void() trap_sawblade_touch = { // [FUNCTION]
 	// Different touch damage based on blade state
 	if (self.state == STATE_ON) {
 		if (self.waitmin > 0) self.attack_finished = time + self.waitmin;
-		if (self.noise2 !="") sound(self, CHAN_AUTO, self.noise2, 1, 1); // Hit sounded added by Lunaran, added sound string check
+		if (self.noise2 !="") sound(self,CHAN_AUTO,self.noise2, 1, 1); // Hit sounded added by Lunaran, added sound string check
 	} else {
 		if (self.height > 0) self.attack_finished = time + self.height;
 	}
@@ -88,7 +88,7 @@ void() trap_sawblade_stopthink = { // [FUNCTION]
 void() trap_sawblade_stop = { // [FUNCTION]
 	float d, timeToPathCorner;
 
-	sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play wind down stop sound
+	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM); // Play wind down stop sound
 	self.pain_finished = time + self.lip; // save the time we become completely still in pain_finished
 	timeToPathCorner = vlen(self.origin-self.finaldest) / self.speed; // So when we hit next pathcorner (if ever), we can stop there.
 	

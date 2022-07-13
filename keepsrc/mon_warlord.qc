@@ -110,53 +110,53 @@ void(float offset) hknight2_shot = {
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1;
 	self.attack_speed = 300;
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN2,self.attack_speed);
-	sound(self, CHAN_WEAPON, "q15/warlord/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"q15/warlord/attack1.wav",1,ATTN_NORM);
 };
 
-void()	hknight2_stand1	= [	$stand1,	hknight2_stand2	] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand2	= [	$stand2,	hknight2_stand3	] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand3	= [	$stand3,	hknight2_stand4	] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand4	= [	$stand4,	hknight2_stand5	] { ai_stand(); self.nextthink = time + 0.06;}; // Mitte
-void()	hknight2_stand5	= [	$stand5,	hknight2_stand6	] { ai_stand(); self.nextthink = time + 0.06; if (random() < 0.2) sound(self, CHAN_VOICE, "q15/warlord/growl.wav", 1, ATTN_NORM); };
-void()	hknight2_stand6	= [	$stand6,	hknight2_stand7	] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand7	= [	$stand7,	hknight2_stand8	] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand8	= [	$stand8,	hknight2_stand9	] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand9	= [	$stand9,	hknight2_stand10] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand10= [	$stand10,	hknight2_stand11] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand11= [	$stand11,	hknight2_stand12] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand12= [	$stand12,	hknight2_stand13] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand13= [	$stand13,	hknight2_stand14] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand14= [	$stand14,	hknight2_stand15] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand15= [	$stand15,	hknight2_stand16] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand16= [	$stand16,	hknight2_stand17] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand17= [	$stand17,	hknight2_stand18] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand18= [	$stand18,	hknight2_stand19] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand19= [	$stand19,	hknight2_stand20] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand20= [	$stand20,	hknight2_stand21] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand21= [	$stand21,	hknight2_stand22] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand22= [	$stand22,	hknight2_stand23] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand23= [	$stand23,	hknight2_stand24] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand24= [	$stand24,	hknight2_stand25] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand25= [	$stand25,	hknight2_stand26] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand26= [	$stand26,	hknight2_stand27] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand27= [	$stand27,	hknight2_stand28] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand28= [	$stand28,	hknight2_stand29] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand29= [	$stand29,	hknight2_stand30] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand30= [	$stand30,	hknight2_stand31] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand31= [	$stand31,	hknight2_stand32] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand32= [	$stand32,	hknight2_stand33] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand33= [	$stand33,	hknight2_stand34] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand34= [	$stand34,	hknight2_stand35] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand35= [	$stand35,	hknight2_stand36] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand36= [	$stand36,	hknight2_stand37] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand37= [	$stand37,	hknight2_stand38] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand38= [	$stand38,	hknight2_stand39] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand39= [	$stand39,	hknight2_stand40] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand40= [	$stand40,	hknight2_stand41] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand41= [	$stand41,	hknight2_stand42] { ai_stand(); self.nextthink = time + 0.06;};
-void()	hknight2_stand42= [	$stand42,	hknight2_stand1]  { ai_stand(); self.nextthink = time + 0.06;};
+void()	hknight2_stand1	= [	$stand1,	hknight2_stand2	] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand2	= [	$stand2,	hknight2_stand3	] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand3	= [	$stand3,	hknight2_stand4	] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand4	= [	$stand4,	hknight2_stand5	] { ai_stand(); self.nextthink = time + 0.06; }; // Mitte
+void()	hknight2_stand5	= [	$stand5,	hknight2_stand6	] { ai_stand(); self.nextthink = time + 0.06; if (random() < 0.2) sound(self,CHAN_VOICE, "q15/warlord/growl.wav",1,ATTN_NORM); };
+void()	hknight2_stand6	= [	$stand6,	hknight2_stand7	] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand7	= [	$stand7,	hknight2_stand8	] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand8	= [	$stand8,	hknight2_stand9	] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand9	= [	$stand9,	hknight2_stand10] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand10= [	$stand10,	hknight2_stand11] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand11= [	$stand11,	hknight2_stand12] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand12= [	$stand12,	hknight2_stand13] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand13= [	$stand13,	hknight2_stand14] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand14= [	$stand14,	hknight2_stand15] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand15= [	$stand15,	hknight2_stand16] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand16= [	$stand16,	hknight2_stand17] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand17= [	$stand17,	hknight2_stand18] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand18= [	$stand18,	hknight2_stand19] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand19= [	$stand19,	hknight2_stand20] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand20= [	$stand20,	hknight2_stand21] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand21= [	$stand21,	hknight2_stand22] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand22= [	$stand22,	hknight2_stand23] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand23= [	$stand23,	hknight2_stand24] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand24= [	$stand24,	hknight2_stand25] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand25= [	$stand25,	hknight2_stand26] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand26= [	$stand26,	hknight2_stand27] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand27= [	$stand27,	hknight2_stand28] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand28= [	$stand28,	hknight2_stand29] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand29= [	$stand29,	hknight2_stand30] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand30= [	$stand30,	hknight2_stand31] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand31= [	$stand31,	hknight2_stand32] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand32= [	$stand32,	hknight2_stand33] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand33= [	$stand33,	hknight2_stand34] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand34= [	$stand34,	hknight2_stand35] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand35= [	$stand35,	hknight2_stand36] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand36= [	$stand36,	hknight2_stand37] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand37= [	$stand37,	hknight2_stand38] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand38= [	$stand38,	hknight2_stand39] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand39= [	$stand39,	hknight2_stand40] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand40= [	$stand40,	hknight2_stand41] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand41= [	$stand41,	hknight2_stand42] { ai_stand(); self.nextthink = time + 0.06; };
+void()	hknight2_stand42= [	$stand42,	hknight2_stand1]  { ai_stand(); self.nextthink = time + 0.06; };
 
-void()	hknight2_walk1	= [	$walk1,		hknight2_walk2	] { if (random() < 0.11) sound(self, CHAN_VOICE, "q15/warlord/growl.wav", 1, ATTN_NORM); ai_walk(2); };
+void()	hknight2_walk1	= [	$walk1,		hknight2_walk2	] { if (random() < 0.11) sound(self,CHAN_VOICE, "q15/warlord/growl.wav",1,ATTN_NORM); ai_walk(2); };
 void()	hknight2_walk2	= [	$walk2,		hknight2_walk3	] { ai_walk(4); };
 void()	hknight2_walk3	= [	$walk3,		hknight2_walk4	] { ai_walk(5); };
 void()	hknight2_walk4	= [	$walk4,		hknight2_walk5	] { ai_walk(4); monster_footstep(FALSE); };
@@ -169,7 +169,7 @@ void()	hknight2_walk10	= [	$walk10,	hknight2_walk11	] { ai_walk(4); monster_foot
 void()	hknight2_walk11	= [	$walk11,	hknight2_walk12	] { ai_walk(5); };
 void()	hknight2_walk12	= [	$walk12,	hknight2_walk1	] { ai_walk(4); };
 
-void()	hknight2_run1	= [	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge_boss(30,80,hknight2_char_a1); };
+void()	hknight2_run1	= [	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self,CHAN_VOICE, "drake/archer/growl2.wav",1,ATTN_NORM); ai_run (20); CheckForCharge_boss(30,80,hknight2_char_a1); };
 void()	hknight2_run2	= [	$run2,		hknight2_run3	] { ai_run(25); monster_footstep(FALSE); };
 void()	hknight2_run3	= [	$run3,		hknight2_run4	] { ai_run(18); };
 void()	hknight2_run4	= [	$run4,		hknight2_run5	] { ai_run(16); };
@@ -178,36 +178,36 @@ void()	hknight2_run6	= [	$run6,		hknight2_run7	] { ai_run(25); monster_footstep(
 void()	hknight2_run7	= [	$run7,		hknight2_run8	] { ai_run(18); };
 void()	hknight2_run8	= [	$run8,		hknight2_run1	] { ai_run(13); };
 
-void()	hknight2_pain1	= [	$pain1,		hknight2_pain2	] { sound(self, CHAN_VOICE, "q15/warlord/pain2.wav", 1, ATTN_NORM); };
+void()	hknight2_pain1	= [	$pain1,		hknight2_pain2	] { sound(self,CHAN_VOICE, "q15/warlord/pain2.wav",1,ATTN_NORM); };
 void()	hknight2_pain2	= [	$pain2,		hknight2_pain3	] {};
 void()	hknight2_pain3	= [	$pain3,		hknight2_pain4	] {};
 void()	hknight2_pain4	= [	$pain4,		hknight2_pain5	] {};
 void()	hknight2_pain5	= [	$pain5,		hknight2_run1	] {};
 
-void()	hknight2_painb1	= [	$painb1,	hknight2_painb2	] { sound(self, CHAN_VOICE, "q15/warlord/pain1.wav", 1, ATTN_NORM); };
+void()	hknight2_painb1	= [	$painb1,	hknight2_painb2	] { sound(self,CHAN_VOICE, "q15/warlord/pain1.wav",1,ATTN_NORM); };
 void()	hknight2_painb2	= [	$painb2,	hknight2_painb3	] {};
 void()	hknight2_painb3	= [	$painb3,	hknight2_painb4	] {};
 void()	hknight2_painb4	= [	$painb4,	hknight2_run1	] {};
 
-void()	hknight2_die1	= [	$death1,	hknight2_die2	] { self.nextthink = time + 0.12;};
-void()	hknight2_die2	= [	$death2,	hknight2_die3	] { monster_check_gib(); self.nextthink = time + 0.13;};
+void()	hknight2_die1	= [	$death1,	hknight2_die2	] { self.nextthink = time + 0.12; };
+void()	hknight2_die2	= [	$death2,	hknight2_die3	] { monster_check_gib(); self.nextthink = time + 0.13; };
 void()	hknight2_die3	= [	$death3,	hknight2_die4	] { monster_check_gib(); self.solid = SOLID_NOT; ai_back(3); };
 void()	hknight2_die4	= [	$death4,	hknight2_die5	] { ai_back(4); };
 void()	hknight2_die5	= [	$death5,	hknight2_die6	] { ai_back(5); };
-void()	hknight2_die6	= [	$death6,	hknight2_die7	] { ai_back(1);sound(self, CHAN_AUTO, "q15/warlord/fall.wav", 1, ATTN_IDLE); };
+void()	hknight2_die6	= [	$death6,	hknight2_die7	] { ai_back(1);sound(self,CHAN_AUTO,"q15/warlord/fall.wav",1,ATTN_IDLE); };
 void()	hknight2_die7	= [	$death7,	hknight2_die8	] {};
 void()	hknight2_die8	= [	$death8,	hknight2_die9	] {};
 void()	hknight2_die9	= [	$death9,	hknight2_die10	] {};
 void()	hknight2_die10	= [	$death10,	hknight2_die11	] {};
 void()	hknight2_die11	= [	$death11,	hknight2_die12	] {};
-void()	hknight2_die12	= [	$death12,	hknight2_die13	] { self.nextthink = time + 0.03; monster_death_postcheck();};
+void()	hknight2_die12	= [	$death12,	hknight2_die13	] { self.nextthink = time + 0.03; monster_death_postcheck(); };
 void()	hknight2_die13	= [	$death13,	hknight2_die13	] { monster_deadbody_check(); };
 
 void()	hknight2_dieb1	= [	$deathb1,	hknight2_dieb2	] { ai_back(5); };
 void()	hknight2_dieb2	= [	$deathb2,	hknight2_dieb3	] { monster_check_gib(); ai_back(5); };
-void()	hknight2_dieb3	= [	$deathb3,	hknight2_dieb4	] { monster_check_gib(); ai_back(5); self.solid = SOLID_NOT;};
+void()	hknight2_dieb3	= [	$deathb3,	hknight2_dieb4	] { monster_check_gib(); ai_back(5); self.solid = SOLID_NOT; };
 void()	hknight2_dieb4	= [	$deathb4,	hknight2_dieb5	] { ai_back(3); };
-void()	hknight2_dieb5	= [	$deathb5,	hknight2_dieb6	] { sound(self, CHAN_AUTO, "q15/warlord/fall.wav", 1, ATTN_IDLE); };
+void()	hknight2_dieb5	= [	$deathb5,	hknight2_dieb6	] { sound(self,CHAN_AUTO,"q15/warlord/fall.wav",1,ATTN_IDLE); };
 void()	hknight2_dieb6	= [	$deathb6,	hknight2_dieb7	] {};
 void()	hknight2_dieb7	= [	$deathb7,	hknight2_dieb8	] {};
 void()	hknight2_dieb8	= [	$deathb8,	hknight2_dieb9	] { monster_death_postcheck(); };
@@ -220,7 +220,7 @@ void() hknight2_die = {
 	
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "q15/warlord/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/warlord/death1.wav",1,ATTN_NORM);
 		if (random() > 0.5)
 			hknight2_die1();
 		else
@@ -292,7 +292,7 @@ void() hknight2_multigrenade_touch = {
 		return;
 	}
 	// bounce sound
-	sound(self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"weapons/bounce.wav",1,ATTN_NORM);	
 	if (self.velocity == '0 0 0') self.avelocity = '0 0 0';
 };
 
@@ -319,7 +319,7 @@ void() hknight2_grenade_touch = {
 		return;
 	}
 
-	sound(self, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM);	// bounce sound
+	sound(self,CHAN_VOICE, "weapons/bounce.wav",1,ATTN_NORM);	// bounce sound
 	if (self.velocity == '0 0 0') self.avelocity = '0 0 0';
 };
 
@@ -327,7 +327,7 @@ void() hknight2_throw = {
 	local vector distancedelta, nozdistancedelta, org, follow; 
 	local	entity missile;
 	
-	sound(self, CHAN_WEAPON, "q15/warlord/throw.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"q15/warlord/throw.wav",1,ATTN_NORM);
 
 	missile = spawn();
 	missile.owner = self;
@@ -370,38 +370,38 @@ void() hknight2_throw = {
 	missile.scale = 1.2;	
 };
 
-void()	hknight2_throwgrenade1	= [	$throw1,	hknight2_throwgrenade2	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade2	= [	$throw2,	hknight2_throwgrenade3	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade3	= [	$throw3,	hknight2_throwgrenade4	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade4	= [	$throw4,	hknight2_throwgrenade5	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade5	= [	$throw5,	hknight2_throwgrenade6	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade6	= [	$throw6,	hknight2_throwgrenade7	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade7	= [	$throw7,	hknight2_throwgrenade8	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade8	= [	$throw8,	hknight2_throwgrenade9	] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade9	= [	$throw9,	hknight2_throwgrenade10] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade10= [	$throw10,	hknight2_throwgrenade11] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade11= [	$throw11,	hknight2_throwgrenade12] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade12= [	$throw12,	hknight2_throwgrenade13] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade13= [	$throw13,	hknight2_throwgrenade14] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade14= [	$throw14,	hknight2_throwgrenade15] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade15= [	$throw15,	hknight2_throwgrenade16] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade16= [	$throw16,	hknight2_throwgrenade17] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade17= [	$throw17,	hknight2_throwgrenade18] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade18= [	$throw18,	hknight2_throwgrenade19] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade19= [	$throw19,	hknight2_throwgrenade20] { ai_face(); self.nextthink = time + 0.06;};
+void()	hknight2_throwgrenade1	= [	$throw1,	hknight2_throwgrenade2	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade2	= [	$throw2,	hknight2_throwgrenade3	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade3	= [	$throw3,	hknight2_throwgrenade4	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade4	= [	$throw4,	hknight2_throwgrenade5	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade5	= [	$throw5,	hknight2_throwgrenade6	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade6	= [	$throw6,	hknight2_throwgrenade7	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade7	= [	$throw7,	hknight2_throwgrenade8	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade8	= [	$throw8,	hknight2_throwgrenade9	] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade9	= [	$throw9,	hknight2_throwgrenade10] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade10= [	$throw10,	hknight2_throwgrenade11] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade11= [	$throw11,	hknight2_throwgrenade12] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade12= [	$throw12,	hknight2_throwgrenade13] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade13= [	$throw13,	hknight2_throwgrenade14] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade14= [	$throw14,	hknight2_throwgrenade15] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade15= [	$throw15,	hknight2_throwgrenade16] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade16= [	$throw16,	hknight2_throwgrenade17] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade17= [	$throw17,	hknight2_throwgrenade18] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade18= [	$throw18,	hknight2_throwgrenade19] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade19= [	$throw19,	hknight2_throwgrenade20] { ai_face(); self.nextthink = time + 0.06; };
 void()	hknight2_throwgrenade20= [	$throw20,	hknight2_throwgrenade21] { ai_face(); self.nextthink = time + 0.06; hknight2_throw(); monster_footstep(FALSE); };
-void()	hknight2_throwgrenade21= [	$throw21,	hknight2_throwgrenade22] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade22= [	$throw22,	hknight2_throwgrenade23] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade23= [	$throw23,	hknight2_throwgrenade24] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade24= [	$throw24,	hknight2_throwgrenade25] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade25= [	$throw25,	hknight2_throwgrenade26] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade26= [	$throw26,	hknight2_throwgrenade27] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade27= [	$throw27,	hknight2_throwgrenade28] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade28= [	$throw28,	hknight2_throwgrenade29] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade29= [	$throw29,	hknight2_throwgrenade30] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade30= [	$throw30,	hknight2_throwgrenade31] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade31= [	$throw31,	hknight2_throwgrenade32] { ai_face(); self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade32= [	$throw32,	hknight2_throwgrenade33] { ai_face(); self.nextthink = time + 0.06;};
+void()	hknight2_throwgrenade21= [	$throw21,	hknight2_throwgrenade22] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade22= [	$throw22,	hknight2_throwgrenade23] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade23= [	$throw23,	hknight2_throwgrenade24] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade24= [	$throw24,	hknight2_throwgrenade25] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade25= [	$throw25,	hknight2_throwgrenade26] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade26= [	$throw26,	hknight2_throwgrenade27] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade27= [	$throw27,	hknight2_throwgrenade28] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade28= [	$throw28,	hknight2_throwgrenade29] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade29= [	$throw29,	hknight2_throwgrenade30] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade30= [	$throw30,	hknight2_throwgrenade31] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade31= [	$throw31,	hknight2_throwgrenade32] { ai_face(); self.nextthink = time + 0.06; };
+void()	hknight2_throwgrenade32= [	$throw32,	hknight2_throwgrenade33] { ai_face(); self.nextthink = time + 0.06; };
 void()	hknight2_throwgrenade33= [	$throw33,	hknight2_run1] { ai_face(); };
 
 float() hknight2_throwdistance = {
@@ -443,7 +443,7 @@ void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = {
 	if (self.pain_finished > time) return;
 
 	self.pain_finished = time + 0.5;
-	sound(self, CHAN_VOICE, "q15/warlord/homing_pain.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "q15/warlord/homing_pain.wav",1,ATTN_NORM);
 	hknight2_homing_teleport();
 };
 
@@ -459,12 +459,12 @@ void() hknight2_homing_touch = {
 			return;
 		}
 		T_Damage (other, self, self.owner, 15, DAMARMOR);	 // default 15	
-		sound(self, CHAN_WEAPON, "q15/warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/warlord/homing_touch.wav",1,ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
 		remove(self);
 	}
 
 	if (!IsProjectile(other)) {
-		sound(self, CHAN_WEAPON, "q15/warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/warlord/homing_touch.wav",1,ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
 		remove(self);
 	}
 };
@@ -482,7 +482,7 @@ void() hknight2_homing_think = {
 
 	// when it got stuck
 	if (self.origin == self.oldorigin) {
-		sound(self, CHAN_WEAPON, "q15/warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the face fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/warlord/homing_touch.wav",1,ATTN_NORM);	 // To abort the face fly-sound. Use same channel !!!!
 		//T_RadiusDamage (self, self.owner, 33, self.owner);	
 		remove (self);
 	}
@@ -529,7 +529,7 @@ void(vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
 	setorigin(newmis, face_spawn_pos);
 	newmis.th_pain = hknight2_homing_pain;
 	newmis.th_die = hknight2_homing_death;
-	sound(newmis, CHAN_WEAPON, "q15/warlord/homing.wav", 1, ATTN_NORM);
+	sound(newmis,CHAN_WEAPON,"q15/warlord/homing.wav",1,ATTN_NORM);
 };
 
 void() hknight2_homing_shot = {
@@ -569,7 +569,7 @@ void()	hknight2_magicb3 = [	$magicb3,	hknight2_magicb4	] { ai_face(); };
 void()	hknight2_magicb4 = [	$magicb4,	hknight2_magicb5	] { ai_face(); };
 void()	hknight2_magicb5 = [	$magicb5,	hknight2_magicb6	] { ai_face(); };
 void()	hknight2_magicb6 = [	$magicb6,	hknight2_magicb7	] { ai_face(); monster_footstep(FALSE); };
-void()	hknight2_magicb7 = [	$magicb7,	hknight2_magicb8	] { ai_face();sound(self, CHAN_WEAPON, "q15/warlord/homing_shot.wav", 1, ATTN_NORM); };
+void()	hknight2_magicb7 = [	$magicb7,	hknight2_magicb8	] { ai_face();sound(self,CHAN_WEAPON,"q15/warlord/homing_shot.wav",1,ATTN_NORM); };
 void()	hknight2_magicb8 = [	$magicb8,	hknight2_magicb9	] { ai_face(); };
 void()	hknight2_magicb9 = [	$magicb9,	hknight2_magicb10] { hknight2_homing_shot(); };
 void()	hknight2_magicb10 = [	$magicb10,	hknight2_magicb11] {};
@@ -585,7 +585,7 @@ void() ram_scan = {
 	spot2 = self.enemy.origin + self.enemy.view_ofs;
 	r = vlen (spot1 - spot2);
 	if (r < 60) {
-		sound(self, CHAN_AUTO, "q15/warlord/fall.wav", 1, ATTN_IDLE);
+		sound(self,CHAN_AUTO,"q15/warlord/fall.wav",1,ATTN_IDLE);
 
 		// damage can vary between 5 and 10 hitpoints
 		T_Damage (self.enemy, self, self, rint(5 + (5 * random())), DAMARMOR); 
@@ -601,7 +601,7 @@ void()	hknight2_char_a2	= [	$char_a2,	hknight2_char_a3	] { ai_charge(1); };
 void()	hknight2_char_a3	= [	$char_a3,	hknight2_char_a4	] { ai_charge(3); };
 void()	hknight2_char_a4	= [	$char_a4,	hknight2_char_a5	] { ai_charge(15); monster_footstep(FALSE); };
 void()	hknight2_char_a5	= [	$char_a5,	hknight2_char_a6	] { ai_charge(17); };
-void()	hknight2_char_a6	= [	$char_a6,	hknight2_char_a7	] { ai_charge(20);sound(self, CHAN_AUTO, "q15/warlord/ram.wav", 1, ATTN_NORM); };
+void()	hknight2_char_a6	= [	$char_a6,	hknight2_char_a7	] { ai_charge(20);sound(self,CHAN_AUTO,"q15/warlord/ram.wav",1,ATTN_NORM); };
 void()	hknight2_char_a7	= [	$char_a7,	hknight2_char_a8	] { ai_charge(20); ai_melee(); monster_footstep(FALSE); };
 void()	hknight2_char_a8	= [	$char_a8,	hknight2_char_a9	] { ai_charge(20); ai_melee(); };
 void()	hknight2_char_a9	= [	$char_a9,	hknight2_char_a10	] { ai_charge(20); ai_melee(); };
@@ -626,7 +626,7 @@ void()	hknight2_slice2	= [	$slice2,	hknight2_slice3	] { ai_charge(2); };
 void()	hknight2_slice3	= [	$slice3,	hknight2_slice4	] { ai_charge(2); };
 void()	hknight2_slice4	= [	$slice4,	hknight2_slice5	] { ai_charge(3);
 if (random()<0.5)
-	sound(self, CHAN_AUTO, "q15/warlord/attack2.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_AUTO,"q15/warlord/attack2.wav",1,ATTN_NORM); };
 void()	hknight2_slice5	= [	$slice5,	hknight2_slice6	] { ai_charge(7); ai_melee(); };
 void()	hknight2_slice6	= [	$slice6,	hknight2_slice7	] { ai_charge(15); ai_melee(); };
 void()	hknight2_slice7	= [	$slice7,	hknight2_slice8	] { ai_charge(20); ai_melee(); monster_footstep(FALSE); };
@@ -639,7 +639,7 @@ void()	hknight2_smash2	= [	$smash2,	hknight2_smash3	] { ai_charge(1); };
 void()	hknight2_smash3	= [	$smash3,	hknight2_smash4	] { ai_charge(1); };
 void()	hknight2_smash4	= [	$smash4,	hknight2_smash5	] { ai_charge(2);
 if (random()<0.5)
-	sound(self, CHAN_AUTO, "q15/warlord/attack2.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_AUTO,"q15/warlord/attack2.wav",1,ATTN_NORM); };
 void()	hknight2_smash5	= [	$smash5,	hknight2_smash6	] { ai_charge(10); ai_melee(); };
 void()	hknight2_smash6	= [	$smash6,	hknight2_smash7	] { ai_charge(15); ai_melee(); };
 void()	hknight2_smash7	= [	$smash7,	hknight2_smash8	] { ai_charge(15); ai_melee(); monster_footstep(FALSE); };
@@ -653,7 +653,7 @@ void()	hknight2_smash11= [	$smash11,	hknight2_run1	] { ai_charge(0); };
 void()	hknight2_watk1	= [	$w_attack1,	hknight2_watk2	] { ai_charge(1); };
 void()	hknight2_watk2	= [	$w_attack2,	hknight2_watk3	] { ai_charge(1);
 if (random()<0.5)
-	sound(self, CHAN_AUTO, "q15/warlord/attack3.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_AUTO,"q15/warlord/attack3.wav",1,ATTN_NORM); };
 void()	hknight2_watk3	= [	$w_attack3,	hknight2_watk4	] { ai_charge(10); monster_footstep(FALSE); };
 void()	hknight2_watk4	= [	$w_attack4,	hknight2_watk5	] { ai_charge(5); ai_melee(); };
 void()	hknight2_watk5	= [	$w_attack5,	hknight2_watk6	] { ai_melee(); };
@@ -678,26 +678,26 @@ void()	hknight2_watk22	= [	$w_attack22,	hknight2_run1	] { ai_charge(2); };
 
 
 
-void()	hknight2_duck1 = [	$duck1,		hknight2_duck2] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_duck2 = [	$duck2,		hknight2_duck3] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_duck3 = [	$duck3,		hknight2_duck4] { ai_face(); self.nextthink = time + 0.6;};	// am weitesten zusammengekauert !!!!!
-void()	hknight2_duck4 = [	$duck4,		hknight2_duck5] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_duck5 = [	$duck5,		hknight2_duck6] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_duck6 = [	$duck6,		hknight2_run1 ] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM;};
+void()	hknight2_duck1 = [	$duck1,		hknight2_duck2] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_duck2 = [	$duck2,		hknight2_duck3] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_duck3 = [	$duck3,		hknight2_duck4] { ai_face(); self.nextthink = time + 0.6; };	// am weitesten zusammengekauert !!!!!
+void()	hknight2_duck4 = [	$duck4,		hknight2_duck5] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_duck5 = [	$duck5,		hknight2_duck6] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_duck6 = [	$duck6,		hknight2_run1 ] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM; };
 
 
-void()	hknight2_dodge1 = [	$dodge1,	hknight2_dodge2	] { ai_face(); self.nextthink = time + 0.1;};
-void()	hknight2_dodge2 = [	$dodge2,	hknight2_dodge3	] { ai_face(); self.nextthink = time + 0.5;};	// am weitesten zur Seite gelehnt !!!!!
-void()	hknight2_dodge3 = [	$dodge3,	hknight2_dodge4	] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_dodge4 = [	$dodge4,	hknight2_dodge5	] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_dodge5 = [	$dodge5,	hknight2_run1	] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM;};
+void()	hknight2_dodge1 = [	$dodge1,	hknight2_dodge2	] { ai_face(); self.nextthink = time + 0.1; };
+void()	hknight2_dodge2 = [	$dodge2,	hknight2_dodge3	] { ai_face(); self.nextthink = time + 0.5; };	// am weitesten zur Seite gelehnt !!!!!
+void()	hknight2_dodge3 = [	$dodge3,	hknight2_dodge4	] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_dodge4 = [	$dodge4,	hknight2_dodge5	] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_dodge5 = [	$dodge5,	hknight2_run1	] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM; };
 
-void()	hknight2_block1 = [	$block1,	hknight2_block2	] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_block2 = [	$block2,	hknight2_block3	] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_block3 = [	$block3,	hknight2_block4	] { ai_face(); self.nextthink = time + 0.6;};	// am weitesten nach hinten gelehnt !!!!!
-void()	hknight2_block4 = [	$block4,	hknight2_block5	] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_block5 = [	$block5,	hknight2_block6	] { ai_face(); self.nextthink = time + 0.11;};
-void()	hknight2_block6 = [	$block6,	hknight2_run1	] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM;};
+void()	hknight2_block1 = [	$block1,	hknight2_block2	] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_block2 = [	$block2,	hknight2_block3	] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_block3 = [	$block3,	hknight2_block4	] { ai_face(); self.nextthink = time + 0.6; };	// am weitesten nach hinten gelehnt !!!!!
+void()	hknight2_block4 = [	$block4,	hknight2_block5	] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_block5 = [	$block5,	hknight2_block6	] { ai_face(); self.nextthink = time + 0.11; };
+void()	hknight2_block6 = [	$block6,	hknight2_run1	] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM; };
 
 
 void() hknight2_dodge = {
@@ -744,7 +744,7 @@ void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
 
 void() hknight2_melee = {
 	self.lefty = self.lefty + 1;
-	sound(self, CHAN_WEAPON, "q15/warlord/slash1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"q15/warlord/slash1.wav",1,ATTN_NORM);
 	if (self.lefty == 1) {
 		hknight2_slice1();
 	} else if (self.lefty == 2) {

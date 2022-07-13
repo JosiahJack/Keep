@@ -107,7 +107,7 @@ void(float sideang) elf_shot = {
 		
 	// Flash effect to show where projectile is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (sideang < 0) sound(self, CHAN_WEAPON, "xmas/elf/attack1.wav", 1, ATTN_NORM);
+	if (sideang < 0) sound(self,CHAN_WEAPON,"xmas/elf/attack1.wav",1,ATTN_NORM);
 	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
@@ -121,7 +121,7 @@ void(float sideang) elf_shot = {
 	launch_projectile(org, dir, avel, CT_PROJ_ELF,1);
 };
 
-void() elf_magic1 = [$magic12, elf_magic2 ] { sound(self, CHAN_WEAPON, "xmas/elf/magic.wav", 1, ATTN_NORM); };
+void() elf_magic1 = [$magic12, elf_magic2 ] { sound(self,CHAN_WEAPON,"xmas/elf/magic.wav",1,ATTN_NORM); };
 void() elf_magic2 = [$magic11, elf_magic3 ] { ai_face(); };
 void() elf_magic3 = [$magic10, elf_magic4 ] { ai_face(); };
 void() elf_magic4 = [$magic9, elf_magic5 ] { ai_face(); };
@@ -151,8 +151,8 @@ void() elf_melee = {
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (random() < 0.5) sound(self, CHAN_VOICE, "xmas/elf/cane_hit1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "xmas/elf/cane_hit2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_VOICE, "xmas/elf/cane_hit1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_VOICE, "xmas/elf/cane_hit2.wav",1,ATTN_NORM);
 
 	// Cane Impact (damage 1-9) is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -164,8 +164,8 @@ void() elf_melee = {
 }
 
 void() elf_cane1 = [$attack1, elf_cane2 ] { ai_charge(5);
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "xmas/elf/cane_swipe1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "xmas/elf/cane_swipe2.wav", 1, ATTN_NORM);	
+	if (random() < 0.5) sound(self,CHAN_WEAPON,"xmas/elf/cane_swipe1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"xmas/elf/cane_swipe2.wav",1,ATTN_NORM);	
 };
 void() elf_cane2 = [$attack2, elf_cane3 ] { ai_charge(5); };
 void() elf_cane3 = [$attack3, elf_cane4 ] { elf_melee(); };
@@ -214,8 +214,8 @@ void()	Elf_JumpTouch = {
 
 void() elf_leap1 = [$jump1, elf_leap2 ] { ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "xmas/elf/jump1.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "xmas/elf/jump2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound(self,CHAN_WEAPON,"xmas/elf/jump1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"xmas/elf/jump2.wav",1,ATTN_NORM);
 };
 void() elf_leap2 = [$jump2, elf_leap3 ] { ai_face(); };
 void() elf_leap3 = [$jump3, elf_leap4 ] {
@@ -259,7 +259,7 @@ void(entity inflictor, entity attacker, float damage) elf_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) elf_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -276,12 +276,12 @@ void(entity inflictor, entity attacker, float damage) elf_pain = {
 void() elf_die1 = [$death1, elf_die2] {};
 void() elf_die2 = [$death2, elf_die3] { monster_check_gib(); };
 void() elf_die3 = [$death3, elf_die4] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() elf_die4 = [$death4, elf_die5] {};
 void() elf_die5 = [$death5, elf_die6] {};
 void() elf_die6 = [$death6, elf_die7] {
 	// Drop metal cane sound
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALA,1,ATTN_NORM);
 };
 void() elf_die7 = [$death7, elf_die8] {};
 void() elf_die8 = [$death8, elf_die9] { monster_death_postcheck(); };
@@ -291,7 +291,7 @@ void() elf_die9 = [$death9, elf_die9] { monster_deadbody_check(); };
 void() elf_dieb1 = [$bdeath1, elf_dieb2] {};
 void() elf_dieb2 = [$bdeath2, elf_dieb3] { monster_check_gib(); };
 void() elf_dieb3 = [$bdeath3, elf_dieb4] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void() elf_dieb4 = [$bdeath4, elf_dieb5] {};
 void() elf_dieb5 = [$bdeath5, elf_dieb6] {};
 void() elf_dieb6 = [$bdeath6, elf_dieb7] {};
@@ -311,9 +311,9 @@ void() elf_die = {
 	if (!self.gibbed) {
 		// Pick a random death sound
 		if (random() > 0.5)
-			sound(self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
 		else 
-			sound(self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, self.death_sound2,1,ATTN_NORM);
 
 		// Pick a random fall direction
 		if (random() > 0.5) elf_die1();

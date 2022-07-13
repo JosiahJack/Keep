@@ -92,7 +92,7 @@ void() ghost_followers_death = {
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin - '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin - '0 0 4', '0 0 0', 1);	// Fixme  Placeholder
-	sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 			// To abort the fly-sound. Use same channel !!!!
+	sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 			// To abort the fly-sound. Use same channel !!!!
 	remove (self);
 };
 
@@ -100,13 +100,13 @@ void() ghost_follower_touch = {
 	if (other.takedamage) {
 		if (!(self.enemy.flags & FL_CLIENT)) {
 			T_Damage (other, self, self.owner, 7, NOARMOR);
-			sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
+			sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
 			remove(self);
 			return;
 		}
 		if (!(other.flags & FL_CLIENT))	return; // flies through other monsters when chasing player
 		T_Damage (other, self, self.owner, 7, NOARMOR); // ghost doesn't touch armor	
-		sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
@@ -121,12 +121,12 @@ void() ghost_follower_think = {
 	local float zuffi;
 
 	if (self.enemy.health < 1) {
-		sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	// To abort the fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	// To abort the fly-sound. Use same channel !!!!
 		remove (self);
 	}
 
 	if (self.attack_finished < time) {
-		sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 4', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
@@ -137,7 +137,7 @@ void() ghost_follower_think = {
 
 	if (self.origin == self.oldorigin)				// when it got stuck somewhere. You never know...
 	{
-		sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
+		sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
@@ -158,7 +158,7 @@ void() ghost_follower_think = {
 			self.movetype = MOVETYPE_FLYMISSILE;
 		} else {
 			// player is hiding directly behind a wall. CHEATER :)  Ghost can fly through walls anyway and does the damage !
-			sound(self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);			// To abort the fly-sound. Use same channel !!!!
+			sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);			// To abort the fly-sound. Use same channel !!!!
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
@@ -235,7 +235,7 @@ void(vector spawn_pos, vector spawn_vel) launch_ghost_follower = {
 	newmis.th_pain = ghost_followers_pain;
 	newmis.th_die = ghost_followers_death;
 	setorigin(newmis, spawn_pos);
-	sound(newmis, CHAN_WEAPON, "q15/warlord/homing.wav", 0.5, ATTN_NORM);
+	sound(newmis,CHAN_WEAPON,"q15/warlord/homing.wav", 0.5,ATTN_NORM);
 };
 
 void()	ghost_followers = {
@@ -268,8 +268,8 @@ void() reiver_fireball_touch = {
 		// checks if fireball inflame the player
 		if (random() <= 0.3) {
 			ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
-			sound(other, CHAN_AUTO, "player/inflame.wav", 1, ATTN_NORM); 		// play ignition sound
-			sound(other, 120, "zombie/corpse_fire.wav", 1, ATTN_NORM); 	       	// play fire loop sound
+			sound(other,CHAN_AUTO,"player/inflame.wav",1,ATTN_NORM); 		// play ignition sound
+			sound(other, 120, "zombie/corpse_fire.wav",1,ATTN_NORM); 	       	// play fire loop sound
 		}
 	} else {
 		// wall
@@ -342,7 +342,7 @@ void() reiver_fireball = {
 	local vector dir, org;
 
 	dir = normalize((self.enemy.origin + '0 0 10') - self.origin);
-	sound(self, CHAN_WEAPON, "q15/reiver/reiver_fireball_shoot.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"q15/reiver/reiver_fireball_shoot.wav",1,ATTN_NORM);
 	missile = spawn();
 	missile.owner = self;
 	missile.enemy = self.enemy;
@@ -370,21 +370,21 @@ void() reiver_idle1;
 // IDLE
 void()	reiver_look1	= [	$look1,	reiver_look2	] { ai_stand(); self.nextthink = time + 0.11;
 	//if (ext_dppart) pointparticles(particleeffectnum("Reiver_idle"), self.origin, self.velocity*10, 1);
-	sound(self, CHAN_VOICE, "q15/reiver/raith3.wav", 1, ATTN_IDLE);
+	sound(self,CHAN_VOICE, "q15/reiver/raith3.wav",1,ATTN_IDLE);
 };
-void()	reiver_look2	= [	$look2,	reiver_look3	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look3	= [	$look3,	reiver_look4	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look4	= [	$look4,	reiver_look5	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look5	= [	$look5,	reiver_look6	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look6	= [	$look6,	reiver_look7	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look7	= [	$look7,	reiver_look8	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look8	= [	$look8,	reiver_look9	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look9	= [	$look9,	reiver_look10	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look10	= [	$look10, reiver_look11	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look11	= [	$look11, reiver_look12	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look12	= [	$look12, reiver_look13	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look13	= [	$look13, reiver_look14	] { ai_stand(); self.nextthink = time + 0.11;};
-void()	reiver_look14	= [	$look14, reiver_idle1	] { ai_stand(); self.nextthink = time + 0.11;};
+void()	reiver_look2	= [	$look2,	reiver_look3	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look3	= [	$look3,	reiver_look4	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look4	= [	$look4,	reiver_look5	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look5	= [	$look5,	reiver_look6	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look6	= [	$look6,	reiver_look7	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look7	= [	$look7,	reiver_look8	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look8	= [	$look8,	reiver_look9	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look9	= [	$look9,	reiver_look10	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look10	= [	$look10, reiver_look11	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look11	= [	$look11, reiver_look12	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look12	= [	$look12, reiver_look13	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look13	= [	$look13, reiver_look14	] { ai_stand(); self.nextthink = time + 0.11; };
+void()	reiver_look14	= [	$look14, reiver_idle1	] { ai_stand(); self.nextthink = time + 0.11; };
 
 void()	reiver_idle1	= [	$idle1,	reiver_idle2	] { ai_stand(); self.nextthink = time + 0.07; self.th_stand = reiver_idle1; };
 void()	reiver_idle2	= [	$idle2,	reiver_idle3	] { ai_stand(); self.nextthink = time + 0.07; };
@@ -404,9 +404,9 @@ void()	reiver_run1;
 
 void()	reiver_underground1	= [	$raise1,	reiver_underground2	] { ai_stand(); self.nextthink = time + 0.08; 
 	StopSound(self,CHAN_VOICE); // make him sight sound a little later in this animation !
-	sound(self, CHAN_WEAPON, "player/inflame.wav", 1, ATTN_NORM); 	// play flame ignition sound
-	self.alpha = 1;};
-void() reiver_underground2	= [	$raise2,	reiver_underground3	] { ai_stand(); self.nextthink = time + 0.08;};
+	sound(self,CHAN_WEAPON,"player/inflame.wav",1,ATTN_NORM); 	// play flame ignition sound
+	self.alpha = 1; };
+void() reiver_underground2	= [	$raise2,	reiver_underground3	] { ai_stand(); self.nextthink = time + 0.08; };
 void() reiver_underground3	= [	$raise3,	reiver_underground4	] { ai_stand(); self.nextthink = time + 0.08;
 	traceline (self.origin, self.origin - '0 0 66', TRUE, self);
 	//if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak_decal"), trace_endpos, '0 0 0', 1);
@@ -414,7 +414,7 @@ void() reiver_underground3	= [	$raise3,	reiver_underground4	] { ai_stand(); self
 void()	reiver_underground4	= [	$raise4,	reiver_underground5	] { ai_stand(); self.nextthink = time + 0.08;
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1); };
 void()	reiver_underground5	= [	$raise5,	reiver_underground6	] { ai_stand(); self.nextthink = time + 0.09;
-	sound(self, CHAN_VOICE, "q15/reiver/sight.wav", 1, ATTN_NORM);
+	sound(self,CHAN_VOICE, "q15/reiver/sight.wav",1,ATTN_NORM);
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1); };
 void()	reiver_underground6	= [	$raise6,	reiver_underground7	] { ai_stand(); self.nextthink = time + 0.09;
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1); };
@@ -437,10 +437,10 @@ void()	reiver_underground14	= [	$raise14,	reiver_underground15	] { ai_stand(); s
 void()	reiver_underground15	= [	$raise15,	reiver_underground16	] { ai_stand(); self.nextthink = time + 0.08;
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1);
 };
-void()	reiver_underground16	= [	$raise16,	reiver_underground17	] { ai_stand(); self.nextthink = time + 0.08;};
-void()	reiver_underground17	= [	$raise17,	reiver_underground18	] { ai_stand(); self.nextthink = time + 0.07; self.origin = self.origin + '0 0 2';};
-void()	reiver_underground18	= [	$raise18,	reiver_underground19	] { ai_stand(); self.nextthink = time + 0.07; self.origin = self.origin + '0 0 2';};
-void()	reiver_underground19	= [	$raise19,	reiver_underground20	] { ai_stand(); self.nextthink = time + 0.07; self.origin = self.origin + '0 0 2';};
+void()	reiver_underground16	= [	$raise16,	reiver_underground17	] { ai_stand(); self.nextthink = time + 0.08; };
+void()	reiver_underground17	= [	$raise17,	reiver_underground18	] { ai_stand(); self.nextthink = time + 0.07; self.origin = self.origin + '0 0 2'; };
+void()	reiver_underground18	= [	$raise18,	reiver_underground19	] { ai_stand(); self.nextthink = time + 0.07; self.origin = self.origin + '0 0 2'; };
+void()	reiver_underground19	= [	$raise19,	reiver_underground20	] { ai_stand(); self.nextthink = time + 0.07; self.origin = self.origin + '0 0 2'; };
 void()	reiver_underground20	= [	$raise20,	reiver_underground21	] { ai_stand(); self.nextthink = time + 0.07;
 	self.takedamage = DAMAGE_AIM;
 	self.solid = SOLID_SLIDEBOX;
@@ -448,7 +448,7 @@ void()	reiver_underground20	= [	$raise20,	reiver_underground21	] { ai_stand(); s
 };
 void()	reiver_underground21	= [	$raise21,	reiver_underground22	] { ai_stand(); self.nextthink = time + 0.05; self.origin = self.origin + '0 0 2'; };
 void()	reiver_underground22	= [	$raise22,	reiver_underground23	] { ai_stand(); self.nextthink = time + 0.05; self.origin = self.origin + '0 0 2'; };
-void()	reiver_underground23	= [	$raise23,	reiver_underground24	] { ai_stand(); self.nextthink = time + 0.05;};
+void()	reiver_underground23	= [	$raise23,	reiver_underground24	] { ai_stand(); self.nextthink = time + 0.05; };
 void()	reiver_underground24	= [	$raise24,	reiver_run1	] { ai_stand(); self.nextthink = time + 0.05;
 	self.lefty = 0;				// reset
 	self.th_run = reiver_run1;		// reset
@@ -514,7 +514,7 @@ void()	reiver_fly12	= [	$idle12,reiver_fly13	] { ai_walk(6); self.nextthink = ti
 };
 void()	reiver_fly13	= [	$idle13,reiver_fly1	] { ai_walk(6); self.nextthink = time + 0.07;
 	//if (ext_dppart) pointparticles(particleeffectnum("Reiver_fly"), self.origin, '0 0 0', 1);
-	if (random() < 0.2) sound(self, CHAN_VOICE, "q15/reiver/raith3.wav", 1, ATTN_IDLE);
+	if (random() < 0.2) sound(self,CHAN_VOICE, "q15/reiver/raith3.wav",1,ATTN_IDLE);
 };
 
 // RUN
@@ -556,7 +556,7 @@ void()	reiver_run12	= [	$idle12,reiver_run13	] { ai_run(12); self.nextthink = ti
 };
 void()	reiver_run13	= [	$idle13,reiver_run1	] { ai_run(12); self.nextthink = time + 0.07;
 	//if (ext_dppart) pointparticles(particleeffectnum("Reiver_fly"), self.origin, '0 0 0', 1);
-	if (random() < 0.25) sound(self, CHAN_VOICE, "q15/reiver/run.wav", 1, ATTN_IDLE);
+	if (random() < 0.25) sound(self,CHAN_VOICE, "q15/reiver/run.wav",1,ATTN_IDLE);
 };
 
 // MELEE
@@ -574,45 +574,45 @@ void(float scratch_noise) reiver_melee_scratch = {
 	makevectors(self.angles);
 	particle (self.origin + v_forward*45 + v_up*-10, '0 0 0', 73, 17);		// spawn a little blood
 	if (scratch_noise) {
-		sound(self, CHAN_AUTO, "demon/dhit2.wav", 0.6, ATTN_NORM);
+		sound(self,CHAN_AUTO,"demon/dhit2.wav", 0.6,ATTN_NORM);
 		SpawnMeatSpray(self,self.enemy,crandom() * 100); // spawn a little gore
 	}
 };
 
 /////////   LEFT
-void()	reiver_melee_left1 = [	$meele_l1,	reiver_melee_left2	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left2 = [	$meele_l2,	reiver_melee_left3	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left3 = [	$meele_l3,	reiver_melee_left4	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left4 = [	$meele_l4,	reiver_melee_left5	] { ai_charge(10); self.nextthink = time + 0.07;};
+void()	reiver_melee_left1 = [	$meele_l1,	reiver_melee_left2	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left2 = [	$meele_l2,	reiver_melee_left3	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left3 = [	$meele_l3,	reiver_melee_left4	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left4 = [	$meele_l4,	reiver_melee_left5	] { ai_charge(10); self.nextthink = time + 0.07; };
 void()	reiver_melee_left5 = [	$meele_l5,	reiver_melee_left6	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (1); };
 void()	reiver_melee_left6 = [	$meele_l6,	reiver_melee_left7	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (0); };
 void()	reiver_melee_left7 = [	$meele_l7,	reiver_melee_left8	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (0); };
 void()	reiver_melee_left8 = [	$meele_l8,	reiver_melee_left9	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (0); };
-void()	reiver_melee_left9 = [	$meele_l9,	reiver_melee_left10	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left10 = [	$meele_l10,	reiver_melee_left11	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left11 = [	$meele_l11,	reiver_melee_left12	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left12 = [	$meele_l12,	reiver_melee_left13	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left13 = [	$meele_l13,	reiver_melee_left14	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left14 = [	$meele_l14,	reiver_melee_left15	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left15 = [	$meele_l15,	reiver_melee_left16	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_left16 = [	$meele_l16,	reiver_run1	] { ai_charge(10); self.nextthink = time + 0.07;};
+void()	reiver_melee_left9 = [	$meele_l9,	reiver_melee_left10	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left10 = [	$meele_l10,	reiver_melee_left11	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left11 = [	$meele_l11,	reiver_melee_left12	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left12 = [	$meele_l12,	reiver_melee_left13	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left13 = [	$meele_l13,	reiver_melee_left14	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left14 = [	$meele_l14,	reiver_melee_left15	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left15 = [	$meele_l15,	reiver_melee_left16	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_left16 = [	$meele_l16,	reiver_run1	] { ai_charge(10); self.nextthink = time + 0.07; };
 
 // RIGHT
-void()	reiver_melee_right1 = [	$meele_r1,	reiver_melee_right2	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right2 = [	$meele_r2,	reiver_melee_right3	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right3 = [	$meele_r3,	reiver_melee_right4	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right4 = [	$meele_r4,	reiver_melee_right5	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right5 = [	$meele_r5,	reiver_melee_right6	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right6 = [	$meele_r6,	reiver_melee_right7	] { ai_charge(10); self.nextthink = time + 0.07;};
+void()	reiver_melee_right1 = [	$meele_r1,	reiver_melee_right2	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right2 = [	$meele_r2,	reiver_melee_right3	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right3 = [	$meele_r3,	reiver_melee_right4	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right4 = [	$meele_r4,	reiver_melee_right5	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right5 = [	$meele_r5,	reiver_melee_right6	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right6 = [	$meele_r6,	reiver_melee_right7	] { ai_charge(10); self.nextthink = time + 0.07; };
 void()	reiver_melee_right7 = [	$meele_r7,	reiver_melee_right8	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (1); };
 void()	reiver_melee_right8 = [	$meele_r8,	reiver_melee_right9	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (0); };
 void()	reiver_melee_right9 = [	$meele_r9,	reiver_melee_right10	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (0); };
 void()	reiver_melee_right10 = [	$meele_r10,	reiver_melee_right11	] { ai_charge(10); self.nextthink = time + 0.07; reiver_melee_scratch (0); };
-void()	reiver_melee_right11 = [	$meele_r11,	reiver_melee_right12	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right12 = [	$meele_r12,	reiver_melee_right13	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right13 = [	$meele_r13,	reiver_melee_right14	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right14 = [	$meele_r14,	reiver_melee_right15	] { ai_charge(10); self.nextthink = time + 0.07;};
-void()	reiver_melee_right15 = [	$meele_r15,	reiver_run1	] { ai_charge(10); self.nextthink = time + 0.07;};
+void()	reiver_melee_right11 = [	$meele_r11,	reiver_melee_right12	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right12 = [	$meele_r12,	reiver_melee_right13	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right13 = [	$meele_r13,	reiver_melee_right14	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right14 = [	$meele_r14,	reiver_melee_right15	] { ai_charge(10); self.nextthink = time + 0.07; };
+void()	reiver_melee_right15 = [	$meele_r15,	reiver_run1	] { ai_charge(10); self.nextthink = time + 0.07; };
 
 void()	reiver_melee = {
 	if (self.dodge_finished > time) self.dodge_finished = time;	// remove multi_shield, when in melee fight
@@ -667,7 +667,7 @@ void()	life_drain_effect = {
 void()	reiver_vampire1	= [	$scream1,	reiver_vampire2	] { ai_face(); self.nextthink = time + 0.08;
 	reiver_hand1 ('32 23 1', 0.35);
 	reiver_hand2 ('37 -20 2', 0.35);
-	sound(self, CHAN_AUTO, "q15/reiver/vampire.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_AUTO,"q15/reiver/vampire.wav",1,ATTN_NORM); };
 void()	reiver_vampire2	= [	$scream2,	reiver_vampire3	] { ai_face(); self.nextthink = time + 0.1;
 	reiver_hand1 ('34 23 5', 0.5);
 	reiver_hand2 ('37 -23 5', 0.5);
@@ -681,7 +681,7 @@ void()	reiver_vampire4	= [	$scream4,	reiver_vampire5	] { ai_face(); self.nextthi
 	reiver_hand1 ('47 31 12', 1);
 	reiver_hand2 ('47 -30 11', 1);
 	life_drain_effect();
-	sound(self, CHAN_AUTO, "q15/reiver/vampire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_AUTO,"q15/reiver/vampire.wav",1,ATTN_NORM);
 };
 void()	reiver_vampire5	= [	$scream5,	reiver_vampire6	] { ai_face(); self.nextthink = time + 0.12; 
 	if (skill >= 2) life_drain();
@@ -772,12 +772,12 @@ void()	reiver_shoot11	= [	$shoot11, 	reiver_shoot12	] { ai_face(); self.nextthin
 	else
 		self.attack_finished = time + 2 + random();
 };
-void()	reiver_shoot12	= [	$shoot12, 	reiver_shoot13	] { ai_face(); self.nextthink = time + 0.07;};
-void()	reiver_shoot13	= [	$shoot13, 	reiver_shoot14	] { ai_face(); self.nextthink = time + 0.07;};
-void()	reiver_shoot14	= [	$shoot14, 	reiver_shoot15	] { ai_face(); self.nextthink = time + 0.07;};
-void()	reiver_shoot15	= [	$shoot15, 	reiver_shoot16	] { ai_face(); self.nextthink = time + 0.07;};
-void()	reiver_shoot16	= [	$shoot16,	 reiver_shoot17	] { ai_face(); self.nextthink = time + 0.07;};
-void()	reiver_shoot17	= [	$shoot17,	 reiver_run1	] { ai_face(); self.nextthink = time + 0.07;};
+void()	reiver_shoot12	= [	$shoot12, 	reiver_shoot13	] { ai_face(); self.nextthink = time + 0.07; };
+void()	reiver_shoot13	= [	$shoot13, 	reiver_shoot14	] { ai_face(); self.nextthink = time + 0.07; };
+void()	reiver_shoot14	= [	$shoot14, 	reiver_shoot15	] { ai_face(); self.nextthink = time + 0.07; };
+void()	reiver_shoot15	= [	$shoot15, 	reiver_shoot16	] { ai_face(); self.nextthink = time + 0.07; };
+void()	reiver_shoot16	= [	$shoot16,	 reiver_shoot17	] { ai_face(); self.nextthink = time + 0.07; };
+void()	reiver_shoot17	= [	$shoot17,	 reiver_run1	] { ai_face(); self.nextthink = time + 0.07; };
 
 // is started when enemy is RANGE_NEAR or RANGE_MID
 // RANGE_NEAR --> between 120 ... 500
@@ -841,45 +841,45 @@ void() reiver_missile =	{
 			setmodel(p, "progs/q15/reiverhands.spr");
 			porg = self.origin + v_forward *36 + v_right *-20 + v_up *1; 
 			setorigin(p, org);
-			sound(self, CHAN_AUTO, "q15/reiver/ranged_attack.wav", 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,"q15/reiver/ranged_attack.wav",1,ATTN_NORM);
 		} else {
 			self.projectile_type = 1;	// ghost_followers
-			sound(self, CHAN_AUTO, "q15/reiver/ranged_attack2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,"q15/reiver/ranged_attack2.wav",1,ATTN_NORM);
 		}
 		reiver_shoot1();
 	}
 };
 
 // PAIN
-void()	reiver_paina1	= [	$defend1,	reiver_paina2	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina2	= [	$defend2,	reiver_paina3	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina3	= [	$defend3,	reiver_paina4	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina4	= [	$defend4,	reiver_paina5	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina5	= [	$defend5,	reiver_paina6	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina6	= [	$defend6,	reiver_paina7	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina7	= [	$defend7,	reiver_paina8	] { ai_face(); self.nextthink = time + 0.08;};
-void()	reiver_paina8	= [	$defend8,	reiver_paina9	] { ai_face(); self.nextthink = time + 0.07;};
-void()	reiver_paina9	= [	$defend9,	reiver_paina10	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina10	= [	$defend10, 	reiver_paina11	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina11	= [	$defend11, 	reiver_paina12	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina12	= [	$defend12, 	reiver_paina13	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina13	= [	$defend13,	reiver_paina14	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina14	= [	$defend14, 	reiver_paina15	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina15	= [	$defend15, 	reiver_paina16	] { ai_face(); self.nextthink = time + 0.06;};
-void()	reiver_paina16	= [	$defend16,	 reiver_run1	] { ai_face(); self.nextthink = time + 0.06;};
+void()	reiver_paina1	= [	$defend1,	reiver_paina2	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina2	= [	$defend2,	reiver_paina3	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina3	= [	$defend3,	reiver_paina4	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina4	= [	$defend4,	reiver_paina5	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina5	= [	$defend5,	reiver_paina6	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina6	= [	$defend6,	reiver_paina7	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina7	= [	$defend7,	reiver_paina8	] { ai_face(); self.nextthink = time + 0.08; };
+void()	reiver_paina8	= [	$defend8,	reiver_paina9	] { ai_face(); self.nextthink = time + 0.07; };
+void()	reiver_paina9	= [	$defend9,	reiver_paina10	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina10	= [	$defend10, 	reiver_paina11	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina11	= [	$defend11, 	reiver_paina12	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina12	= [	$defend12, 	reiver_paina13	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina13	= [	$defend13,	reiver_paina14	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina14	= [	$defend14, 	reiver_paina15	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina15	= [	$defend15, 	reiver_paina16	] { ai_face(); self.nextthink = time + 0.06; };
+void()	reiver_paina16	= [	$defend16,	 reiver_run1	] { ai_face(); self.nextthink = time + 0.06; };
 
-void()	reiver_painb1	= [	$pain1,		reiver_painb2	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb2	= [	$pain2,		reiver_painb3	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb3	= [	$pain3,		reiver_painb4	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb4	= [	$pain4,		reiver_painb5	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb5	= [	$pain5,		reiver_painb6	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb6	= [	$pain6,		reiver_painb7	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb7	= [	$pain7,		reiver_painb8	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb8	= [	$pain8,		reiver_painb9	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb9	= [	$pain9,		reiver_painb10	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb10	= [	$pain10, 	reiver_painb11	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb11	= [	$pain11, 	reiver_painb12	] { ai_face(); self.nextthink = time + 0.075;};
-void()	reiver_painb12	= [	$pain12, 	reiver_run1	] { ai_face(); self.nextthink = time + 0.075;};
+void()	reiver_painb1	= [	$pain1,		reiver_painb2	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb2	= [	$pain2,		reiver_painb3	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb3	= [	$pain3,		reiver_painb4	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb4	= [	$pain4,		reiver_painb5	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb5	= [	$pain5,		reiver_painb6	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb6	= [	$pain6,		reiver_painb7	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb7	= [	$pain7,		reiver_painb8	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb8	= [	$pain8,		reiver_painb9	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb9	= [	$pain9,		reiver_painb10	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb10	= [	$pain10, 	reiver_painb11	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb11	= [	$pain11, 	reiver_painb12	] { ai_face(); self.nextthink = time + 0.075; };
+void()	reiver_painb12	= [	$pain12, 	reiver_run1	] { ai_face(); self.nextthink = time + 0.075; };
 
 void(entity inflictor, entity attacker, float damage) reiver_pain = {
 	// self.in_cocoon_shape = 0;	// remove invulnerability from cocoon shape
@@ -890,11 +890,11 @@ void(entity inflictor, entity attacker, float damage) reiver_pain = {
 
 	if (random() > 0.5) {
 		self.pain_finished = time + 1.7;
-		sound(self, CHAN_VOICE, "q15/reiver/pain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/reiver/pain2.wav",1,ATTN_NORM);
 		reiver_paina1();
 	} else {
 		self.pain_finished = time + 1.5;
-		sound(self, CHAN_VOICE, "q15/reiver/pain1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/reiver/pain1.wav",1,ATTN_NORM);
 		reiver_painb1();
 	}
 };
@@ -949,19 +949,19 @@ void()	reiver_death3	= [$deatha3, reiver_death4] {
 	self.velocity_z = 100 + 100*random();
 	SUB_RemoveFlags(self,FL_ONGROUND);
 };
-void()	reiver_death4	= [$deatha4, reiver_death5] { self.nextthink = time + 0.07;};
-void()	reiver_death5	= [$deatha5, reiver_death6] { self.nextthink = time + 0.07;};
-void()	reiver_death6	= [$deatha6, reiver_death7] { self.nextthink = time + 0.07;};
-void()	reiver_death7	= [$deatha7, reiver_death8] { self.nextthink = time + 0.07;};
-void()	reiver_death8	= [$deatha8, reiver_death9] { self.nextthink = time + 0.07;};
+void()	reiver_death4	= [$deatha4, reiver_death5] { self.nextthink = time + 0.07; };
+void()	reiver_death5	= [$deatha5, reiver_death6] { self.nextthink = time + 0.07; };
+void()	reiver_death6	= [$deatha6, reiver_death7] { self.nextthink = time + 0.07; };
+void()	reiver_death7	= [$deatha7, reiver_death8] { self.nextthink = time + 0.07; };
+void()	reiver_death8	= [$deatha8, reiver_death9] { self.nextthink = time + 0.07; };
 void()	reiver_death9	= [$deatha9, reiver_death10] { self.nextthink = time + 0.07;
 	reiver_death_touch();
 	return;
 };
-void()	reiver_death10	= [$deatha10, reiver_death11] { self.nextthink = time + 0.07;};
-void()	reiver_death11	= [$deatha11, reiver_death12] { self.nextthink = time + 0.07;};
-void()	reiver_death12	= [$deatha12, reiver_death13] { self.nextthink = time + 0.07;};
-void()	reiver_death13	= [$deatha13, reiver_death14] { self.nextthink = time + 0.07;};
+void()	reiver_death10	= [$deatha10, reiver_death11] { self.nextthink = time + 0.07; };
+void()	reiver_death11	= [$deatha11, reiver_death12] { self.nextthink = time + 0.07; };
+void()	reiver_death12	= [$deatha12, reiver_death13] { self.nextthink = time + 0.07; };
+void()	reiver_death13	= [$deatha13, reiver_death14] { self.nextthink = time + 0.07; };
 void()	reiver_death14	= [$deatha14, reiver_death15] { self.nextthink = time + 0.07; monster_death_postcheck(); };
 void()	reiver_death15	= [$deatha15, reiver_death15] { self.nextthink = time + 0.07; monster_deadbody_check(); };
 
@@ -969,7 +969,7 @@ void() reiver_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	self.dodge_finished = time - 1;		// just to be sure that the shield is gone
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "q15/reiver/death.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/reiver/death.wav",1,ATTN_NORM);
 		reiver_death1();
 	}
 };

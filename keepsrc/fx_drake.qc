@@ -117,7 +117,7 @@ void(float lite, float add, float rate) LightZero_Set = { // [FUNCTION]
 // collide with the ceiling sooner and disappear.
 void() glitter_think = { // [FUNCTION]
     if (self.frame >= self.waitmax) {
-        if (self.cnt > 5) { remove (self);  return;} // 5 rewinds give 3 sec. life -- long enough.
+        if (self.cnt > 5) { remove (self);  return; } // 5 rewinds give 3 sec. life -- long enough.
 		
         self.cnt = self.cnt + 1;
         self.frame = self.waitmin;
@@ -262,7 +262,7 @@ void() divine_use = { // [FUNCTION]
         self.think      = SUB_Remove;
     } else {
 		// No lightning strikes, so just flash and thunder ominously.
-        sound(world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+        sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
         LightZero_Set (LIGHTZERO_MAX, 0, -4);
         remove(self);
     }

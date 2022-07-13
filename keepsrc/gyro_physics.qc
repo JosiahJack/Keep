@@ -43,6 +43,8 @@ void(entity targ, float fl) SUB_RemoveFlags;
 void(entity e, float mass) Gyro_Object_Activate = {
 	local float	reactive;
 
+	if (!e) return;
+
 	if (mass == 0) mass = 1; // give it SOMETHING
 
 	//----- Prepare Object for Physics Operations --------------------
@@ -80,6 +82,8 @@ void(entity e, float mass) Gyro_Object_Activate = {
 
 //----- Deactivate a Physics Object --------------------
 void(entity e) Gyro_Object_Deactivate = {
+	if (!e) return;
+
 	//----- Remove Entity from Physics List --------------------
 	Gyro_ObjectList_Remove(e);
 	
@@ -91,6 +95,8 @@ void(entity e) Gyro_Object_Deactivate = {
 
 //----- Remove All Physics Propeties from an Object --------------------
 void(entity e) Gyro_Object_ClearPhysics = {
+	if (!e) return;
+
 	//----- Strip Physics Settings and Remove from Physics List --------------------
 	e.gyro_object_mass = 0.0;
 	e.gyro_object_bouyancy_air = 0.0;
@@ -137,7 +143,11 @@ void(entity e) Gyro_Object_ClearPhysics = {
 
 //===== Object Force-Channels and Feedback ===================
 //----- Set an Object's Force Channels --------------------
-void(entity e, float channels) Gyro_Object_SetChannels = { e.gyro_object_channels = channels; };
+void(entity e, float channels) Gyro_Object_SetChannels = {
+	if (!e) return;
+
+	e.gyro_object_channels = channels;
+};
 
 //----- Add Channels to an Object --------------------
 void(entity e, float channels) Gyro_Object_AddChannels = { e.gyro_object_channels = e.gyro_object_channels | channels; };
@@ -148,6 +158,8 @@ void(entity e, float channels) Gyro_Object_RemoveChannels = { e.gyro_object_chan
 //----- Call an Object's Feedback Function --------------------
 void(entity e) Gyro_Object_CallFeedback = {
 	local entity oldself;
+
+	if (!e) return;
 
 	if (e.gyro_feedback) {
 		oldself = self;

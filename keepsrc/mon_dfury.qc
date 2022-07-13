@@ -102,9 +102,9 @@ void()	dfury_standB4	= [	$standB4,	dfury_standB5	] { ai_stand(); };
 void()	dfury_standB5	= [	$standB5,	dfury_standB6	] { ai_stand(); };
 void()	dfury_standB6	= [	$standB6,	dfury_standB7	] { ai_stand(); };
 void()	dfury_standB7	= [	$standB7,	dfury_standB8	] { ai_stand(); };
-void()	dfury_standB8	= [	$standB8,	dfury_standB9	] { ai_stand(); self.nextthink = self.nextthink + random()*0.2;};
-void()	dfury_standB9	= [	$standB9,	dfury_standB10	] { ai_stand(); self.nextthink = self.nextthink + random()*0.2;};
-void()	dfury_standB10	= [	$standB10,	dfury_standB11	] { ai_stand(); self.nextthink = self.nextthink + random()*0.2;};
+void()	dfury_standB8	= [	$standB8,	dfury_standB9	] { ai_stand(); self.nextthink = self.nextthink + random()*0.2; };
+void()	dfury_standB9	= [	$standB9,	dfury_standB10	] { ai_stand(); self.nextthink = self.nextthink + random()*0.2; };
+void()	dfury_standB10	= [	$standB10,	dfury_standB11	] { ai_stand(); self.nextthink = self.nextthink + random()*0.2; };
 void()	dfury_standB11	= [	$standB11,	dfury_standB12	] { ai_stand(); };
 void()	dfury_standB12	= [	$standB12,	dfury_standL1	] { ai_stand(); };
 
@@ -176,7 +176,7 @@ void()	dfury_standL1	= [	$standL1,	dfury_standL2	] { monster_idle_sound();
 
 		// Make sure the idle animations don't repeat in a row
 		self.lefty = self.lip;
-		while (self.lefty == self.lip) { self.lefty = rint(random()*4);}
+		while (self.lefty == self.lip) { self.lefty = rint(random()*4); }
 		self.lip = self.lefty;
 
 		if (self.lip < 2) self.think = dfury_standC1;		// Look at weapon
@@ -247,7 +247,7 @@ void()	dfury_smash5	= [	$smash6,	dfury_smash6	] { dfury_grunt_sound(DFURY_SOUND_
 void()	dfury_smash6	= [	$smash7,	dfury_smash7	] { ai_charge(7); SwordSwipeSound(); };
 void()	dfury_smash7	= [	$smash8,	dfury_smash8	] { ai_charge(12); monster_footstep(FALSE); };
 void()	dfury_smash8	= [	$smash9,	dfury_smash9	] { ai_charge(2); self.meleecontact = TRUE; ai_meleesmash(40); };
-void()	dfury_smash9	= [	$smash10,	dfury_smash10	] { ai_charge(3); ai_melee(); self.meleecontact = FALSE;};
+void()	dfury_smash9	= [	$smash10,	dfury_smash10	] { ai_charge(3); ai_melee(); self.meleecontact = FALSE; };
 void()	dfury_smash10	= [	$smash12,	dfury_smash11	] { ai_charge(0); };
 void()	dfury_smash11	= [	$smash13,	dfury_run1	] { ai_charge(0); };
 
@@ -405,7 +405,7 @@ void(float offset) dfury_magica_shot = {
 	if (self.health < 1) return;
 
 	// Single sound per volley of bullets
-	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 
 	// Randomize quantity each time called
 	if (random() < 0.5) shotcount = 2;
@@ -443,7 +443,7 @@ void() dfury_magicb_shot = {
 	if (self.health < 1) return;
 
 	// Single sound for all rockets fired
-	sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 
 	// create an arc of rockets fanning outwards from source
 	offset = -4; shotcount = 3;
@@ -499,7 +499,7 @@ void() dfury_attachment_update = {
 
 // Magic Attack A - Spray of spikes from raised up swords
 // Block pain function from interrupting magic attack
-void()	dfury_magica1 = [	$magica2,	dfury_magica2	] { ai_face(); self.pain_finished = time + 2;};
+void()	dfury_magica1 = [	$magica2,	dfury_magica2	] { ai_face(); self.pain_finished = time + 2; };
 void()	dfury_magica2 = [	$magica3,	dfury_magica3	] { ai_face(); };
 void()	dfury_magica3 = [	$magica4,	dfury_magica4	] { ai_face(); };
 void()	dfury_magica4 = [	$magica5,	dfury_magica5	] { ai_face(); };
@@ -518,7 +518,7 @@ void()	dfury_magica15 = [	$magica16,	dfury_run1] {};
 //----------------------------------------------------------------------
 // Magic Attack B - 3 x rockets launched in an arc
 // Block pain function from interrupting magic attack
-void()	dfury_magicb1 = [	$magicb1,	dfury_magicb2	] { self.pain_finished = time + 2;};
+void()	dfury_magicb1 = [	$magicb1,	dfury_magicb2	] { self.pain_finished = time + 2; };
 void()	dfury_magicb2 = [	$magicb2,	dfury_magicb3	] { ai_face();dfury_attachment_setup(1); };
 void()	dfury_magicb3 = [	$magicb3,	dfury_magicb4	] { ai_face();dfury_attachment_update(); };
 void()	dfury_magicb4 = [	$magicb4,	dfury_magicb5	] { ai_face();dfury_attachment_update(); };
@@ -573,7 +573,7 @@ void(entity inflictor, entity attacker, float damage)	dfury_pain = {
 	
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (random() < 0.9) dfury_painA1();		// classic, body recoil
@@ -599,7 +599,7 @@ void()	dfury_die3	= [	$death4,	dfury_die4	] { monster_check_gib();
 void()	dfury_die4	= [	$death5,	dfury_die5	] {};
 void()	dfury_die5	= [	$death6,	dfury_die6	] {};
 void()	dfury_die6	= [	$death7,	dfury_die7	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALA,1,ATTN_NORM); };
 void()	dfury_die7	= [	$death8,	dfury_die8	] {};
 void()	dfury_die8	= [	$death9,	dfury_die9	] { ai_forward(10); };
 void()	dfury_die9	= [	$death10,	dfury_die10	] { ai_forward(11); };
@@ -608,7 +608,7 @@ void()	dfury_die11	= [	$death12,	dfury_die12	] {};
 void()	dfury_die12	= [	$death13,	dfury_die13	] {};
 void()	dfury_die13	= [	$death14,	dfury_die14	] {};
 void()	dfury_die14	= [	$death15,	dfury_die15	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALA, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALA,1,ATTN_NORM); };
 void()	dfury_die15	= [	$death16,	dfury_die16	] { monster_death_postcheck(); };
 void()	dfury_die16	= [	$death17,	dfury_die16	] { monster_deadbody_check(); };
 
@@ -616,11 +616,11 @@ void()	dfury_die16	= [	$death17,	dfury_die16	] { monster_deadbody_check(); };
 void()	dfury_dieb1	= [	$deathb1,	dfury_dieb2	] {};
 void()	dfury_dieb2	= [	$deathb2,	dfury_dieb3	] { monster_check_gib(); };
 void()	dfury_dieb3	= [	$deathb3,	dfury_dieb4	] { monster_check_gib();
-	self.solid = SOLID_NOT;};
+	self.solid = SOLID_NOT; };
 void()	dfury_dieb4	= [	$deathb4,	dfury_dieb5	] {};
 void()	dfury_dieb5	= [	$deathb5,	dfury_dieb6	] {};
 void()	dfury_dieb6	= [	$deathb6,	dfury_dieb7	] {
-	sound(self, CHAN_WEAPON, GIB_SOUND_METALB, 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,GIB_SOUND_METALB,1,ATTN_NORM); };
 void()	dfury_dieb7	= [	$deathb7,	dfury_dieb8	] {};
 void()	dfury_dieb8	= [	$deathb8,	dfury_dieb9	] {};
 void()	dfury_dieb9	= [	$deathb9,	dfury_dieb10] {};
@@ -636,7 +636,7 @@ void() dfury_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "hknight/death1.wav",1,ATTN_NORM);
 		if (random() > 0.5) dfury_die1();
 		else dfury_dieb1();
 	}
@@ -644,19 +644,19 @@ void() dfury_die = {
 
 void(float soundtype) dfury_grunt_sound = {
 	if (soundtype == DFURY_SOUND_PULLAPART)
-		sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt3.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt3.wav",1,ATTN_NORM);
 	else if (soundtype == DFURY_SOUND_OVERSMASH)
-		sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt4.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt4.wav",1,ATTN_NORM);
 	else if (soundtype == DFURY_SOUND_JUMP)
-		sound(self, CHAN_WEAPON, "ad171/dknight/dfury_leap.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ad171/dknight/dfury_leap.wav",1,ATTN_NORM);
 	else {
 		if (soundtype == DFURY_SOUND_OPTIONAL && random() < 0.8) return;
 		self.weaponstate = random();
 		self.weaponswitch = 0.6 + random()*0.4;
-		if (self.weaponstate < 0.25) sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt1.wav", self.weaponswitch, ATTN_NORM);
-		else if (self.weaponstate < 0.5) sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt2.wav", self.weaponswitch, ATTN_NORM);
-		else if (self.weaponstate < 0.75) sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt3.wav", self.weaponswitch, ATTN_NORM);
-		else sound(self, CHAN_WEAPON, "ad171/dknight/dfury_grunt4.wav", self.weaponswitch, ATTN_NORM);
+		if (self.weaponstate < 0.25) sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt1.wav", self.weaponswitch,ATTN_NORM);
+		else if (self.weaponstate < 0.5) sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt2.wav", self.weaponswitch,ATTN_NORM);
+		else if (self.weaponstate < 0.75) sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt3.wav", self.weaponswitch,ATTN_NORM);
+		else sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt4.wav", self.weaponswitch,ATTN_NORM);
 	}
 };
 

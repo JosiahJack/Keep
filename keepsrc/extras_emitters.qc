@@ -113,7 +113,7 @@ void() effector_destroy = { // [FUNCTION]
 		if (other.trigger_field == self) return;// Already affected by this trigger
 		if (random() < self.count) {
 			self = other;
-			if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return;}
+			if (InSky(self.origin)) { entity_remove(self, 0.1); return; }
 			if (self.touchedvoid) return;				// Marked for removal
 			if (other == self.owner) return;			// no touching self
 
@@ -379,7 +379,7 @@ void() particle_death_anim = { // [FUNCTION]
 // Particle is done
 void() particle_die = { // [FUNCTION]
 	self.classname = "p_dying";// So effectors ignore dying particles
-	if (self.owner.noise2) sound(self, CHAN_VOICE, self.owner.noise2, 1, ATTN_NORM);	
+	if (self.owner.noise2) sound(self,CHAN_VOICE, self.owner.noise2,1,ATTN_NORM);	
 	if (!self.owner.mdl2) { remove(self); return; }
 	
 	self.solid = SOLID_NOT;// Change this and DIE!
@@ -413,7 +413,7 @@ void() particle_touch = { // [FUNCTION]
 	if (AffectedByPhysics(other)) return; // Don't die on other particles
 	if (self.cnt == 3) return; // Don't go nuts (especially if caught up)
 	
-	if (!self.cnt && self.owner.noise1) sound(self, CHAN_VOICE, self.owner.noise1, 1, ATTN_NORM);	
+	if (!self.cnt && self.owner.noise1) sound(self,CHAN_VOICE, self.owner.noise1,1,ATTN_NORM);	
 	self.cnt = self.cnt + 1;	
 	if (self.owner.dmg != 0) {
 		if (other.takedamage) {
@@ -475,7 +475,7 @@ void() emitter_emit = { // [FUNCTION]
 	local entity p;
 	local vector dir;
 	
-	if (self.noise != "" && self.count == 1) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
+	if (self.noise != "" && self.count == 1) sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM); // Play emitter noise
 		
 	// Emit a particle
 	p = spawn();

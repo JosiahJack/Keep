@@ -79,13 +79,13 @@ void() button_ext_done = { // [FUNCTION]
 void() button_ext_return = { // [FUNCTION]
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, button_ext_done);
-	if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	if (self.noise1) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 };
 
 void() button_ext_firedisabled = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
-	if (self.noise2)sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	if (self.noise2)sound(self,CHAN_VOICE, self.noise2,1,ATTN_NORM);
 	if (self.event != "" && activator.classname == "player") centerprint (activator, self.event);
 	self.state = STATE_UP; // Time out for a bit
 	self.think = button_ext_done;
@@ -96,7 +96,7 @@ void() button_ext_fire = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
 	self.frame = 1;// use alternate textures
-	if (self.noise) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);	
+	if (self.noise) sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);	
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, button_ext_wait);
 };
@@ -207,7 +207,7 @@ void() switch_toggle = { // [FUNCTION]
 	if (self.cnt) return;
 
 	if (self.state == STATE_UP) {
-		if (self.noise) sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		if (self.noise) sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 		self.state = STATE_DOWN;
 		self.frame = 1; // alt texture
 		if (self.mdl) setmodel(self, self.mdl);// alt model	
@@ -221,7 +221,7 @@ void() switch_toggle = { // [FUNCTION]
 			self.nextthink = time + self.wait;
 		}
 	} else {		
-		if (self.noise1) sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+		if (self.noise1) sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 		self.state = STATE_UP;
 		self.frame = 0;
 		if (self.mdl) setmodel(self, self.weaponmodel);	

@@ -23,8 +23,8 @@ Please see cvar descriptions in included smc_config.cfg sample.
 
 void() carniv_idle_sound = {
 	if (random() < 0.2) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, "q15/carnivean/idle1.wav", 1, ATTN_IDLE);
-		else sound(self, CHAN_VOICE, "q15/carnivean/idle2.wav", 1, ATTN_IDLE);
+		if (random() < 0.5) sound(self,CHAN_VOICE, "q15/carnivean/idle1.wav",1,ATTN_IDLE);
+		else sound(self,CHAN_VOICE, "q15/carnivean/idle2.wav",1,ATTN_IDLE);
 	}
 };
 
@@ -32,9 +32,9 @@ void(float loudness) carniv_footsteps = {
 	local float select;
 	select = random();
 	if (select <= 0.5)
-		sound(self, CHAN_AUTO, "q15/carnivean/step1.wav", loudness, ATTN_IDLE);
+		sound(self,CHAN_AUTO,"q15/carnivean/step1.wav", loudness,ATTN_IDLE);
 	else 
-		sound(self, CHAN_AUTO, "q15/carnivean/step2.wav", loudness, ATTN_IDLE);
+		sound(self,CHAN_AUTO,"q15/carnivean/step2.wav", loudness,ATTN_IDLE);
 };
 
 void() carniv_projectile_rock_touch = {
@@ -49,7 +49,7 @@ void() carniv_projectile_rock_touch = {
 	if (other.takedamage) {
 		spawn_touchblood (self, other, 25);
 
-		sound(self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.6, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ambience/coaled_monster_explode.wav", 0.6,ATTN_NORM);
  
 		vel = dir * 200;
 		if (self.enemy.flags & FL_ONGROUND) {
@@ -64,7 +64,7 @@ void() carniv_projectile_rock_touch = {
 	} else {
 		// wall
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), detonate, '0 0 0', 1);	
-		sound(self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.8, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ambience/coaled_monster_explode.wav", 0.8,ATTN_NORM);
 	}
 
 	remove(self);
@@ -77,7 +77,7 @@ void() carniv_projectile_rock_homing = {
 
 	if (self.origin == self.oldorigin)					// when it got stuck
 	{
-		sound(self, CHAN_WEAPON, "ambience/coaled_monster_explode.wav", 0.7, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"ambience/coaled_monster_explode.wav", 0.7,ATTN_NORM);
 		T_RadiusDamage (self, self.owner, 20 + 5, self.owner, DAMAGEALL);
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), self.origin, '0 0 0', 1);	
 		remove (self);
@@ -120,8 +120,8 @@ void() carniv_projectile_flame_touch = {
 			// checks if carniveans projectile impact inflame the player
 			if (random() <= 0.3) {
 				ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
-				sound(other, CHAN_AUTO, "player/inflame.wav", 1, ATTN_NORM); 		// play ignition sound
-				sound(other, 120, "zombie/corpse_fire.wav", 1, ATTN_NORM); 	       	// play fire loop sound
+				sound(other,CHAN_AUTO,"player/inflame.wav",1,ATTN_NORM); 		// play ignition sound
+				sound(other, 120, "zombie/corpse_fire.wav",1,ATTN_NORM); 	       	// play fire loop sound
 			}
 		}
 	} else { // wall
@@ -148,7 +148,7 @@ void() carniv_projectile = {
 		setmodel(missile, "progs/k_spike.mdl");		// flame / explosive model
 		if (ext_dppart) missile.traileffectnum = particleeffectnum("TR_AFRITSPIKE_RED");
 		missile.cnt = 1;
-		sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 		missile.velocity = normalize ((self.enemy.origin + '0 0 7') - missile.origin);
 		missile.velocity = missile.velocity * 666;					// rocket: 1000
 		missile.angles = vectoangles(missile.velocity);
@@ -159,7 +159,7 @@ void() carniv_projectile = {
 		setmodel(missile, "progs/q15/carniv_rocks.mdl");		// rock / rubble model
 		missile.scale = 0.4;
 		missile.cnt = 2;
-		sound(self, CHAN_WEAPON, "q15/carnivean/rock_throw.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"q15/carnivean/rock_throw.wav",1,ATTN_NORM);
 		missile.velocity = normalize ((self.enemy.origin + '0 0 10') - missile.origin);
 		missile.velocity = missile.velocity * 350;
 		missile.angles = vectoangles(missile.velocity);
@@ -241,7 +241,7 @@ void() carniv_run12 = [ 65, carniv_run1 ] { self.nextthink = (time + 0.08); ai_r
 void() carniv_swing1 = [ 74, carniv_swing2 ] { ai_charge(10); };
 void() carniv_swing2 = [ 75, carniv_swing3 ] { ai_charge(5); };
 void() carniv_swing3 = [ 76, carniv_swing4 ] { ai_charge(4); };
-void() carniv_swing4 = [ 77, carniv_swing5 ] { ai_charge(9); sound(self, CHAN_WEAPON, "q15/carnivean/swing.wav", 1, ATTN_NORM); ai_melee_carnivean(0); };
+void() carniv_swing4 = [ 77, carniv_swing5 ] { ai_charge(9); sound(self,CHAN_WEAPON,"q15/carnivean/swing.wav",1,ATTN_NORM); ai_melee_carnivean(0); };
 void() carniv_swing5 = [ 78, carniv_swing6 ] { ai_charge(12); carniv_footsteps(1.0); ai_melee_carnivean(1); };
 void() carniv_swing6 = [ 79, carniv_swing7 ] { ai_charge(7); ai_melee_carnivean(0); };
 void() carniv_swing7 = [ 80, carniv_swing8 ] { ai_charge(6); ai_melee_carnivean(0); };	
@@ -266,7 +266,7 @@ void() carniv_fire8 = [ 73, carniv_run1 ] { self.nextthink = (time + 0.1); ai_fa
 
 void() carniv_missile = {
 	if (random() <= 0.77) {
-		sound(self, CHAN_AUTO, "q15/carnivean/scream.wav", 1, ATTN_NORM);
+		sound(self,CHAN_AUTO,"q15/carnivean/scream.wav",1,ATTN_NORM);
 		carniv_fire1();
 	}
 };
@@ -306,15 +306,15 @@ void(entity inflictor, entity attacker, float damage) carniv_pain = {
 
 	r = random();
 	if (r < 0.33) {
-		sound(self, CHAN_VOICE, "q15/carnivean/pain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/carnivean/pain2.wav",1,ATTN_NORM);
 		carniv_pain1();
 		self.pain_finished = time + 1.2;
 	} else if (r < 0.66) {
-		sound(self, CHAN_VOICE, "q15/carnivean/pain2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/carnivean/pain2.wav",1,ATTN_NORM);
 		carniv_painb1();
 		self.pain_finished = time + 1.2;
 	} else  {
-		sound(self, CHAN_VOICE, "q15/carnivean/pain1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "q15/carnivean/pain1.wav",1,ATTN_NORM);
 		carniv_painc1();
 		self.pain_finished = time + 1.7;
 	}
@@ -322,13 +322,13 @@ void(entity inflictor, entity attacker, float damage) carniv_pain = {
 
 void() carniv_die1 = [ 107, carniv_die2 ] { ai_back(10); };
 void() carniv_die2 = [ 108, carniv_die3 ] { ai_back(6); };
-void() carniv_die3 = [ 109, carniv_die4 ] { ai_back(5); self.solid = SOLID_NOT;};
+void() carniv_die3 = [ 109, carniv_die4 ] { ai_back(5); self.solid = SOLID_NOT; };
 void() carniv_die4 = [ 110, carniv_die5 ] { ai_back(4); };
-void() carniv_die5 = [ 111, carniv_die6 ] { sound(self, CHAN_AUTO, "demon/fall_backwards.wav", 1, ATTN_NORM); }; 
+void() carniv_die5 = [ 111, carniv_die6 ] { sound(self,CHAN_AUTO,"demon/fall_backwards.wav",1,ATTN_NORM); }; 
 void() carniv_die6 = [ 112, carniv_die7 ] {};
 void() carniv_die7 = [ 113, carniv_die8 ] {};
 void() carniv_die8 = [ 114, carniv_die9 ] {};
-void() carniv_die9 = [ 115, carniv_die10 ] { sound(self, CHAN_AUTO, "demon/fall_backwards.wav", 0.7, ATTN_NORM); }; 
+void() carniv_die9 = [ 115, carniv_die10 ] { sound(self,CHAN_AUTO,"demon/fall_backwards.wav", 0.7,ATTN_NORM); }; 
 void() carniv_die10 = [ 116, carniv_die11 ] {};
 void() carniv_die11 = [ 117, carniv_die12 ] {};
 void() carniv_die12 = [ 118, carniv_die13 ] {};
@@ -354,7 +354,7 @@ void() carniv_die31 = [ 137, carniv_die31 ] { monster_deadbody_check(); };
 
 void() carniv_bdie1 = [ 138, carniv_bdie2 ] { ai_back(3); };
 void() carniv_bdie2 = [ 139, carniv_bdie3 ] { ai_back(3); };
-void() carniv_bdie3 = [ 140, carniv_bdie4 ] { ai_back(3); self.solid = SOLID_NOT;};
+void() carniv_bdie3 = [ 140, carniv_bdie4 ] { ai_back(3); self.solid = SOLID_NOT; };
 void() carniv_bdie4 = [ 141, carniv_bdie5 ] { ai_back(2);carniv_footsteps(0.8); };
 void() carniv_bdie5 = [ 142, carniv_bdie6 ] { ai_back(2); };
 void() carniv_bdie6 = [ 143, carniv_bdie7 ] { ai_back(2); };
@@ -367,7 +367,7 @@ void() carniv_bdie12 = [ 149, carniv_bdie13 ] { ai_back(1); };
 void() carniv_bdie13 = [ 150, carniv_bdie14 ] { ai_back(3); };
 void() carniv_bdie14 = [ 151, carniv_bdie15 ] { ai_back(3); };
 void() carniv_bdie15 = [ 152, carniv_bdie16 ] { ai_back(3); };
-void() carniv_bdie16 = [ 153, carniv_bdie17 ] { sound(self, CHAN_AUTO, "demon/fall_backwards.wav", 1, ATTN_NORM); }; 
+void() carniv_bdie16 = [ 153, carniv_bdie17 ] { sound(self,CHAN_AUTO,"demon/fall_backwards.wav",1,ATTN_NORM); }; 
 void() carniv_bdie17 = [ 154, carniv_bdie18 ] {};
 void() carniv_bdie18 = [ 155, carniv_bdie19 ] {};
 void() carniv_bdie19 = [ 156, carniv_bdie20 ] {};
@@ -401,10 +401,10 @@ void() carniv_die = {
 	// regular death
 	if (!self.gibbed) {
 		if (random() < 0.5) {
-			sound(self, CHAN_VOICE, "q15/carnivean/death1.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "q15/carnivean/death1.wav",1,ATTN_NORM);
 			carniv_die1();
 		} else {
-			sound(self, CHAN_VOICE, "q15/carnivean/death2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "q15/carnivean/death2.wav",1,ATTN_NORM);
 			carniv_bdie1();
 		}
 	}

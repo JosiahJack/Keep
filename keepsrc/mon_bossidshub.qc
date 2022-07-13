@@ -153,7 +153,7 @@ void() finale_3 = { // start shub thrashing wildly
 
 // Called after thrash animation (last frame)
 void() finale_4 = {
-	sound(self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM); // Play exploding sound
+	sound(self,CHAN_VOICE, "boss2/pop2.wav",1,ATTN_NORM); // Play exploding sound
 	self.oldorigin = self.origin;
 
 	// Setup temp entity for directional force for gibs

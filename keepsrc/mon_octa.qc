@@ -17,26 +17,10 @@ $frame die11 die12 die13 die14 die15 die16
 $frame dieb1 dieb2 dieb3 dieb4 dieb5 dieb6 dieb7 dieb8 dieb9 dieb10 
 $frame dieb11 dieb12 dieb13 dieb14 dieb15 dieb16
 
-void()   ink_stand1 = [ 1,     ink_stand2 ] {};  
-void()   ink_stand2 = [ 2,     ink_stand3 ] {};  
-void()   ink_stand3 = [ 3,     ink_stand4 ] {};   
-void()   ink_stand4 = [ 13,    ink_stand5 ] {};  
-void()   ink_stand5 = [ 14,    ink_stand6 ] {};  
-void()   ink_stand6 = [ 15,    ink_stand1 ] {
-     self.nextthink = time + 0.1;
-     self.think = SUB_Remove;
-};  
+void()	octa_atk6;
+void()	octa_atka6;
 
-void() OctaInk = {
-	self.solid = SOLID_BBOX;                               
-	self.movetype = MOVETYPE_NONE;
-	setmodel(self, "progs/madfox/wink.spr");
-	setsize(self, '16 16 16', '16 16 16');
-	self.nextthink = time + 1.7;
-	self.think = ink_stand1;
-};
-
-void()	octa_stand1	= [	$stand1,	octa_stand2	] { ai_stand(); };
+void()	octa_stand1	= [	$stand1,	octa_stand2	] { ai_stand(); monster_idle_sound(); };
 void()	octa_stand2	= [	$stand2,	octa_stand3	] { ai_stand(); };
 void()	octa_stand3	= [	$stand3,	octa_stand4	] { ai_stand(); };
 void()	octa_stand4	= [	$stand4,	octa_stand5	] { ai_stand(); };
@@ -57,7 +41,7 @@ void()	octa_stand18	= [	$stand18,	octa_stand19	] { ai_stand(); };
 void()	octa_stand19	= [	$stand19,	octa_stand20	] { ai_stand(); };
 void()	octa_stand20	= [	$stand20,	octa_stand1	] { ai_stand(); };
 
-void()	octa_walk1	= [	$walk1 ,	octa_walk2	] { ai_walk(2); };
+void()	octa_walk1	= [	$walk1 ,	octa_walk2	] { ai_walk(2); monster_idle_sound(); };
 void()	octa_walk2	= [	$walk2 ,	octa_walk3	] { ai_walk(4); };
 void()	octa_walk3	= [	$walk3 ,	octa_walk4	] { ai_walk(4); };
 void()	octa_walk4	= [	$walk4 ,	octa_walk5	] { ai_walk(3); };
@@ -82,42 +66,64 @@ void()	octa_walk22	= [	$walk22,	octa_walk23	] { ai_walk(1); };
 void()	octa_walk23	= [	$walk23,	octa_walk24	] { ai_walk(2); };
 void()	octa_walk24	= [	$walk24,	octa_walk1	] { ai_walk(3); };
 
-void()	octa_run1	= [	$run1  ,	octa_run2	] { ai_run(18); };
+void()	octa_run1	= [	$run1  ,	octa_run2	] { ai_run(18); monster_idle_sound(); };
 void()	octa_run2	= [	$run2  ,	octa_run3	] { ai_run(14); };
 void()	octa_run3	= [	$run3  ,	octa_run4	] { ai_run(7); };
 void()	octa_run4	= [	$run4  ,	octa_run5	] { ai_run(12); };
 void()	octa_run5	= [	$run5  ,	octa_run6	] { ai_run(14); };
 void()	octa_run6	= [	$run6  ,	octa_run7	] { ai_run(14); };
 void()	octa_run7	= [	$run7  ,	octa_run8	] { ai_run(7); };
-void()	octa_run8	= [	$run8  ,	octa_run9	] { ai_run(11); };
-void()	octa_run9	= [	$run9  ,	octa_run1	] { ai_run(12); };
+void()	octa_run8	= [	$run8  ,	octa_run9	] {
+	ai_run(11);
+	if (random() < 0.2) {
+		self.enemydist = range_distance(self.enemy,TRUE);
+		if (self.enemydist > 256) {
+			octa_atk6();
+		}
+	}
+};
+void()	octa_run9	= [	$run9  ,	octa_run1	] { ai_run(12);sound(self,CHAN_VOICE,"tronyn/mon_bigfish_swim1.wav",1,ATTN_NORM); };
 
 void()	octa_atk1	= [	$atk1,  	octa_atk2	] { ai_face(); };
 void()	octa_atk2	= [	$atk2,  	octa_atk3	] { ai_face(); };
 void()	octa_atk3	= [	$atk3,  	octa_atk4	] { ai_face(); };
 void()	octa_atk4	= [	$atk4,  	octa_atk5	] { ai_face(); };
-void()	octa_atk5	= [	$atk5,  	octa_atk6	] { ai_face(); };
-void()	octa_atk6	= [	$atk6,  	octa_atk7	] { ai_face(); };
-void()	octa_atk7	= [	$atk7,	    octa_atk8	] { ai_face(); };
+void()	octa_atk5	= [	$atk5,  	octa_atk6	] {
+	ai_face();
+	if (self.enemydist <= 100) ai_melee();
+	else if (self.enemydist < 384) pyro_fire();
+};
+void()	octa_atk6	= [	$atk6,  	octa_atk7	] { ai_face(); if (self.enemydist <= 100) ai_melee(); };
+void()	octa_atk7	= [	$atk7,	    octa_atk8	] { ai_face(); if (self.enemydist <= 100) ai_melee(); };
 void()	octa_atk8	= [	$atk8,  	octa_atk9	] { ai_face(); };
 void()	octa_atk9	= [	$atk9,  	octa_atk10	] { ai_face(); };
 void()	octa_atk10	= [	$atk10,  	octa_run1	] { ai_face(); };
 
-void()	octa_atka1	= [	$rush1,  	octa_atka2	] { ai_face(); };
-void()	octa_atka2	= [	$rush2,  	octa_atka3	] { ai_face(); };
-void()	octa_atka3	= [	$rush3,  	octa_atka4	] { ai_face(); };
-void()	octa_atka4	= [	$rush4,  	octa_atka5	] { ai_face(); };
-void()	octa_atka5	= [	$rush5,  	octa_atka6	] { ai_face(); };
-void()	octa_atka6	= [	$rush6,  	octa_atka7	] { ai_face(); };
-void()	octa_atka7	= [	$rush7,	    octa_atka8	] { ai_face(); };
-void()	octa_atka8	= [	$rush8,  	octa_atka9	] { ai_face(); };
-void()	octa_atka9	= [	$rush9,  	octa_atka10	] { ai_face(); };
-void()	octa_atka10	= [	$rush10,  	octa_atka11	] { ai_face(); };
-void()	octa_atka11	= [	$rush11,  	octa_atka12	] { ai_face(); };
-void()	octa_atka12	= [	$rush12,  	octa_atka13	] { ai_face(); };
-void()	octa_atka13	= [	$rush13,  	octa_run1	] { ai_face(); };
+void()	octa_atka1	= [	$rush1,  	octa_atka2	] { ai_run(18); if (self.enemydist <= 100) ai_melee(); };
+void()	octa_atka2	= [	$rush2,  	octa_atka3	] { ai_run(16); if (self.enemydist <= 100) ai_melee(); };
+void()	octa_atka3	= [	$rush3,  	octa_atka4	] { ai_run(8); if (self.enemydist <= 100) ai_melee(); };
+void()	octa_atka4	= [	$rush4,  	octa_atka5	] { ai_run(6); };
+void()	octa_atka5	= [	$rush5,  	octa_atka6	] {
+	ai_run(2);
+	self.enemydist = range_distance(self.enemy,TRUE);
+	if (self.enemydist < 256) octa_run8();
+};
+void()	octa_atka6	= [	$rush6,  	octa_atka7	] { ai_run(2); };
+void()	octa_atka7	= [	$rush7,	    octa_atka8	] { ai_run(2); };
+void()	octa_atka8	= [	$rush8,  	octa_atka9	] { ai_run(4); };
+void()	octa_atka9	= [	$rush9,  	octa_atka10	] { ai_run(6); };
+void()	octa_atka10	= [	$rush10,  	octa_atka11	] { ai_run(8); };
+void()	octa_atka11	= [	$rush11,  	octa_atka12	] { ai_run(8); };
+void()	octa_atka12	= [	$rush12,  	octa_atka13	] { ai_run(16); if (self.enemydist <= 100) ai_melee(); };
+void()	octa_atka13	= [	$rush13,  	octa_run1	] { ai_run(22); if (self.enemydist <= 100) ai_melee(); sound(self,CHAN_VOICE,"tronyn/mon_bigfish_swim2.wav",1,ATTN_NORM); };
 
-void(entity inflictor, entity attacker, float damage) octa_pain1	= [	$pain1, 	octa_pain2	] {};
+void() octa_attack = {
+	sound(self,CHAN_WEAPON,"tronyn/mon_anglerfish_bite.wav",1,ATTN_NORM);
+	self.enemydist = range_distance(self.enemy,TRUE);
+	octa_atk1();
+};
+
+void()  octa_pain1	= [	$pain1, 	octa_pain2	] {};
 void()	octa_pain2	= [	$pain2, 	octa_pain3	] {};
 void()	octa_pain3	= [	$pain3, 	octa_pain4	] {};
 void()	octa_pain4	= [	$pain4, 	octa_pain5	] {};
@@ -143,6 +149,20 @@ void()	octa_painc6	= [	$painc6, 	octa_painc7	] {};
 void()	octa_painc7	= [	$painc7, 	octa_painc8	] {};
 void()	octa_painc8	= [	$painc8, 	octa_run1	] {};
 
+void(entity inflictor, entity attacker, float damage) octa_pain = {
+	monster_pain_check(attacker,damage); // Check all pain conditions and set up what to do next
+
+	// Any pain animation/sound required?
+	if (self.pain_check > 0) {
+		if (self.pain_sound != "") sound(self,CHAN_VOICE,self.pain_sound,1,ATTN_NORM);
+		self.pain_finished = time + 1.5;
+		self.lip = random();
+		if (self.lip < 0.333) octa_pain1();
+		else if (self.lip < 0.666) octa_paina1();
+		else  octa_painc1();
+	}
+};
+
 void()	octa_die1	= [	$die1,  	octa_die2	] {};
 void()	octa_die2	= [	$die2,  	octa_die3	] { monster_check_gib(); };
 void()	octa_die3	= [	$die3,  	octa_die4	] { monster_check_gib(); };
@@ -156,7 +176,7 @@ void()	octa_die10	= [	$die10,  	octa_die11	] { ai_forward(5); };
 void()	octa_die11	= [	$die11,  	octa_die12	] { ai_forward(5); };
 void()	octa_die12	= [	$die12,  	octa_die13	] { ai_forward(5); };
 void()	octa_die13	= [	$die13,  	octa_die14	] {};
-void()	octa_die14	= [	$die14,  	octa_die15 	] { self.solid = SOLID_NOT;};
+void()	octa_die14	= [	$die14,  	octa_die15 	] { self.solid = SOLID_NOT; };
 void()	octa_die15	= [	$die15,  	octa_die16	] { monster_death_postcheck(); };
 void()	octa_die16	= [	$die16,  	octa_die16	] { monster_deadbody_check(); };
 
@@ -173,14 +193,14 @@ void()	octa_dieb10	= [	$dieb10,  	octa_dieb11	] { ai_forward(5); };
 void()	octa_dieb11	= [	$dieb11,  	octa_dieb12	] { ai_forward(5); };
 void()	octa_dieb12	= [	$dieb12,  	octa_dieb13	] { ai_forward(5); };
 void()	octa_dieb13	= [	$dieb13,  	octa_dieb14	] {};
-void()	octa_dieb14	= [	$dieb14,  	octa_dieb15 ] { self.solid = SOLID_NOT;};
+void()	octa_dieb14	= [	$dieb14,  	octa_dieb15 ] { self.solid = SOLID_NOT; };
 void()	octa_dieb15	= [	$dieb15,  	octa_dieb16	] { monster_death_postcheck(); };
 void()	octa_dieb16	= [	$dieb16,  	octa_dieb16	] { monster_deadbody_check(); };
 
 void() octa_die = {
 	monster_death_precheck();
 	if (!self.gibbed) {
-		//sound(self, CHAN_VOICE, ???, 1, ATTN_NORM);
+		sound(self,CHAN_VOICE,"tronyn/mon_bigfish_death.wav",1,ATTN_NORM);
 		self.lip = random();
 		if (self.lip < 0.5) octa_die1();
 		else octa_dieb1();
@@ -192,6 +212,15 @@ void() monster_octa_precache = {
 	precache_model("progs/madfox/wink.spr");
     precache_model("progs/custents/beamhit.spr");
 	precache_model("progs/w_spike.mdl");
+	precache_sound("tronyn/mon_anglerfish_bite.wav");
+	precache_sound("tronyn/mon_bigfish_bite.wav");
+	precache_sound("tronyn/mon_bigfish_swim1.wav");
+	precache_sound("tronyn/mon_bigfish_swim2.wav");
+	precache_sound("tronyn/mon_seahorse_swim1.wav");
+	precache_sound("tronyn/mon_seahorse_swim2.wav");
+	precache_sound("tronyn/mon_bigfish_pain.wav");
+	precache_sound("ad171/ogre/ogrefish_out.wav");
+	precache_sound("tronyn/mon_bigfish_death.wav");
 };
 
 // QUAKED monster_octa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -200,14 +229,11 @@ void() monster_octa = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/madfox/mon_octa.mdl";
-	//self.gib1mdl = 
-	//self.gib2mdl = 
-	//self.gib3mdl = 
-	//self.gib4mdl = 
-	//self.idle_sound = 
-	//self.idle_soundcom = 
-	//self.sight_sound = 
-	//self.pain_sound = 
+	self.idle_sound = "tronyn/mon_seahorse_swim1.wav";
+	self.idle_sound = "tronyn/mon_seahorse_swim1.wav";
+	self.idle_soundcom = "ad171/ogre/ogrefish_out.wav";
+	self.sight_sound = "tronyn/mon_bigfish_bite.wav";
+	self.pain_sound = "tronyn/mon_bigfish_pain.wav";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.gibhealth = -80;
@@ -215,7 +241,7 @@ void() monster_octa = {
 	self.pain_flinch = 30;
 	self.steptype = FS_FLYING;			// It has tentacles!?!
 	self.blockudeath = TRUE;			// No humanoid death sound
-	if (self.health < 1) self.health = 80;
+	if (self.health < 1) self.health = 120;
 	if ( (random () < 0.500) ) {
 		if (self.deathstring == "") self.deathstring = " was inked by an Octopus\n";
 	} else {
@@ -228,9 +254,10 @@ void() monster_octa = {
 	self.th_stand = octa_stand1;
 	self.th_walk = octa_walk1;
 	self.th_run = octa_run1;
-	//self.th_missile = Wiz_Missile;
-	self.th_pain = octa_pain1;
-	self.th_die = octa_die1;
+	self.th_melee = octa_attack;
+	self.th_missile = octa_attack;
+	self.th_pain = octa_pain;
+	self.th_die = octa_die;
 	self.classtype = CT_MONOCTOPUS;
 	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVESWIM;

@@ -33,16 +33,7 @@
 // Implements: Weapons System for the Player
 //
 // Description:
-// W_SetCurrentAmmo   - Update HUD icons based on self.weapon value
-// W_BestWeapon       - returns best weapon LG > SNG > SSG > NG > SG > Axe
-//                      interesting that the function does not return GL/RL
-// W_CheckNoAmmo      - Ammo check for attack function
-// W_Attack           - Main function that fire weapons (player animations).
-//                      Typically wakes up nearby monsters
-// W_ChangeWeapon     - Change weapon based on availabilty and ammo
-// CycleWeaponCommand - Move forward or backward through active weapons
-// CycleWeaponReverseCommand
-// W_WeaponFrame      - Called every frame, catches impulse event
+// Functions for changing weapons and attacking.
 //=============================================================================
 
 entity multi_ent;
@@ -183,7 +174,7 @@ void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
 			AddMultiDamage (targ, damage);
             self = spawn();
             setall(self, "progs/null.spr", '0 0 0', '0 0 0', end2); //was null_256
-            sound(self, CHAN_AUTO, SOUND_LASER_HIT, 0.5, ATTN_STATIC); // Play sizzle sounds at reduced volume and attenuation.
+            sound(self,CHAN_AUTO,SOUND_LASER_HIT, 0.5,ATTN_STATIC); // Play sizzle sounds at reduced volume and attenuation.
             BecomeFancy(fr, 4);
             self = attacker; // We used attacker earlier to store self
         }
@@ -233,7 +224,7 @@ void() W_FireSparks = { // [FUNCTION]
     self.currentammo = 0; // Update 4/5/10:  Use all accumulated energy.
     self.zapper_time = time + WAND_DELAY;
 	W_Reload(WAND_DELAY);
-    sound(self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM); // Was weapons/gldhit. wav.
+    sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM); // Was weapons/gldhit. wav.
     // Since weapon is a magic wand, no recoil effects are needed.
     makevectors(self.v_angle);
     org = self.origin + v_forward*8 + '0 0 16';
@@ -464,7 +455,7 @@ void() W_FireThor = { // [FUNCTION]
     if (!HasPowerToThrow()) return; // No ammo or power!
 
     targ = W_ThorTarget(); // This calls 'makevectors(self.v_angle)'.
-    sound(self, CHAN_WEAPON,"knight/sword1.wav",1,ATTN_NORM);
+    sound(self,CHAN_WEAPON,"knight/sword1.wav",1,ATTN_NORM);
     Thor_Launch(self.origin + '0 0 12',v_forward,targ); // We can throw.
 };
 
@@ -472,7 +463,7 @@ void() W_FireProximityGrenade = { // [FUNCTION]
 	local entity missile;
 
 	if (self.attack_finished > time) return;
-	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return; }
 	NumProximityGrenades = (NumProximityGrenades + TRUE);
 	self.ammo_rockets = (self.ammo_rockets - TRUE);
 	self.currentammo = (self.currentammo - TRUE);
@@ -489,7 +480,7 @@ void() W_FireProximityGrenade = { // [FUNCTION]
 	missile.health = MOVETYPE_FLY;
 	missile.state = 0;
 	makevectors(self.v_angle);
-	if ( self.v_angle_x ) {
+	if (self.v_angle_x ) {
 		missile.velocity = ((((v_forward * 600.000) + (v_up * 200)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
 	} else {
 		missile.velocity = aim (self,10000.000);
@@ -516,7 +507,7 @@ void() W_FireSidewinder = { // [FUNCTION]
     if (self.ammo_rockets < 1) return;
 
     self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
-    sound(self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"zerstorer/weapons/stunfire.wav",1,ATTN_NORM);
     self.punchangle_x = -2;
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
@@ -555,24 +546,24 @@ void(float dmg, vector spraydir, float mechanical) MeleeImpactEffects = {
 					}
 				}
 			} else {
-				if (random() < 0.5) sound(self, CHAN_WEAPON, GIB_SOUND_HEAVY, 1, ATTN_NORM);
-				else sound(self, CHAN_WEAPON, GIB_SOUND_HEAVY2, 1, ATTN_NORM);
+				if (random() < 0.5) sound(self,CHAN_WEAPON,GIB_SOUND_HEAVY,1,ATTN_NORM);
+				else sound(self,CHAN_WEAPON,GIB_SOUND_HEAVY2,1,ATTN_NORM);
 			}
 		} else if (trace_ent.classtype == CT_FUNCBREAK) { // Breakable impact sounds (def=stone/brick)
-			if (trace_ent.style == BTYPE_WOOD) sound(self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_GLASS) sound(self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_METAL) sound(self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
-			else if (trace_ent.style == BTYPE_FLESH) sound(self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
-			else sound(self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+			if (trace_ent.style == BTYPE_WOOD) sound(self,CHAN_WEAPON,SOUND_AXE_WOOD,1,ATTN_NORM);
+			else if (trace_ent.style == BTYPE_GLASS) sound(self,CHAN_WEAPON,SOUND_AXE_GLASS,1,ATTN_NORM);
+			else if (trace_ent.style == BTYPE_METAL) sound(self,CHAN_WEAPON,SOUND_AXE_METAL,1,ATTN_NORM);
+			else if (trace_ent.style == BTYPE_FLESH) sound(self,CHAN_WEAPON,SOUND_AXE_FLESH,1,ATTN_NORM);
+			else sound(self,CHAN_WEAPON,SOUND_AXE_STONE,1,ATTN_NORM);
 		} else if (trace_ent.classtype == CT_FUNCPUSHABLE) { // Pushable impact sounds (def=stone/brick)
-			if (trace_ent.style == PTYPE_WOOD) sound(self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
-			else if (trace_ent.style == PTYPE_GLASS) sound(self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
-			else if (trace_ent.style == PTYPE_METAL) sound(self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
-			else sound(self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+			if (trace_ent.style == PTYPE_WOOD) sound(self,CHAN_WEAPON,SOUND_AXE_WOOD,1,ATTN_NORM);
+			else if (trace_ent.style == PTYPE_GLASS) sound(self,CHAN_WEAPON,SOUND_AXE_GLASS,1,ATTN_NORM);
+			else if (trace_ent.style == PTYPE_METAL) sound(self,CHAN_WEAPON,SOUND_AXE_METAL,1,ATTN_NORM);
+			else sound(self,CHAN_WEAPON,SOUND_AXE_STONE,1,ATTN_NORM);
 		}
 	} else {
 		// WORLD OBJECT : Target does not bleed, play stone hitting sound
-		sound(self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,SOUND_AXE_STONE,1,ATTN_NORM);
 		Tent_Point(TE_GUNSHOT,org);
 	}
 };
@@ -583,7 +574,7 @@ void() W_FireAxe = { // [FUNCTION]
 
 	makevectors(self.v_angle);				// Player forward angle
 	source = self.origin + '0 0 16';		// Move source point up body
-	if (developer && self.flags & FL_GODMODE && self.flags & FL_FLY) {
+	if (developer > 0 && self.flags & FL_GODMODE && self.flags & FL_FLY) {
 		traceline(source,source +(v_forward* RANGE_PLAYAXE),FALSE,self);
 		if (trace_fraction < 1.0) {
 			if (trace_ent.flags & FL_MONSTER && trace_ent.health > 0) {
@@ -666,11 +657,11 @@ void() W_FireShotgun = { // [FUNCTION]
 	local float shotcnt;
 
 	if (self.attack_finished > time) return;
-	if (self.ammo_shells < 1) { forceweaponswitch(0.2); return;} // Ran out of ammo, switch to next best weapon
+	if (self.ammo_shells < 1) { forceweaponswitch(0.2); return; } // Ran out of ammo, switch to next best weapon
 	
 	// Change weapon sound if using Projectile Pellets.
-	if (!query_configflag(SVR_SHOTGPROJ)) sound(self ,CHAN_WEAPON, "ad171/weapons/sg2.wav", 1, ATTN_NORM); // ever so subtle sound of a shell ejecting added to normal
-	else sound(self ,CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM); // vanilla single barrel shotgun
+	if (!query_configflag(SVR_SHOTGPROJ)) sound(self ,CHAN_WEAPON,"ad171/weapons/sg2.wav",1,ATTN_NORM); // ever so subtle sound of a shell ejecting added to normal
+	else sound(self ,CHAN_WEAPON,"weapons/guncock.wav",1,ATTN_NORM); // vanilla single barrel shotgun
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (self.perms & POW_SHOTTYMAN) W_Reload(0.3);
@@ -699,7 +690,7 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 	
 	// Ran out of ammo, switch to next best weapon
 	if (self.attack_finished > time) return;
-	if (self.ammo_shells < 2 && self.classtype != CT_MONGREMLIN) { forceweaponswitch(0.2); return;}
+	if (self.ammo_shells < 2 && self.classtype != CT_MONGREMLIN) { forceweaponswitch(0.2); return; }
 
 	makevectors(self.v_angle);		// Special view angle for the player
 
@@ -708,8 +699,8 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 	
 	// Change weapon sound if using Shotgun Upgrade or Projectile Pellets
 	// IMPORTANT - default for Projectile Pellets is ON = 0
-	if (self.moditems & IT_UPGRADE_SSG || !query_configflag(SVR_SHOTGPROJ)) sound(self ,CHAN_WEAPON, "ad171/weapons/ssg2.wav", 1, ATTN_NORM);
-	else sound(self ,CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM);
+	if (self.moditems & IT_UPGRADE_SSG || !query_configflag(SVR_SHOTGPROJ)) sound(self ,CHAN_WEAPON,"ad171/weapons/ssg2.wav",1,ATTN_NORM);
+	else sound(self ,CHAN_WEAPON,"weapons/shotgn2.wav",1,ATTN_NORM);
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (self.perms & POW_SHOTTYMAN) W_Reload(0.5);
@@ -773,11 +764,11 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 	// SNG setup, sound and ammo change
 	if ((self.ammo_nails > 1 && self.weapon == IT_SUPER_NAILGUN) || self.in_a_vehicle) {
 		if (!self.in_a_vehicle) {
-			sound(self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
 			if (self.perms & POW_DOUBLE) self.currentammo = self.ammo_nails = self.ammo_nails - 1;
 			else self.currentammo = self.ammo_nails = self.ammo_nails - 2;
 		} else {
-			sound(self, CHAN_WEAPON, "q15/weapons/rocket1i.wav", 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,"q15/weapons/rocket1i.wav",1,ATTN_NORM);
 			stemp = self;
 			self = self.vehicleattachment;
 			Launch_ShellCasing(1);
@@ -817,7 +808,7 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
 		}
 	} else { // NG setup, sound and ammo change
-		sound(self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
 			if (self.nailcosthalf) {
 				self.currentammo = self.ammo_nails = self.ammo_nails - 1;
@@ -856,7 +847,7 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 
 	// Lava SNG setup, sound and ammo change
 	if (self.ammo_lava_nails > 1 && self.weapon == IT_LAVA_SUPER_NAILGUN) {
-		sound(self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
 			self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 1;
 		} else {
@@ -878,7 +869,7 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 			StackDamage_Clear();
 		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
 	} else { // Lava NG setup, sound and ammo change
-		sound(self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
 			if (self.nailcosthalf) {
 				self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 1;
@@ -908,10 +899,10 @@ void() W_FireGrenade = { // [FUNCTION]
 	local float spd;
 
 	if (self.attack_finished > time) return;
-	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;} // Ran out of ammo, switch to next best weapon
+	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return; } // Ran out of ammo, switch to next best weapon
 
 	self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
-	sound(self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/grenade.wav",1,ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	W_Reload(0.6);
 	self.punchangle_x = -2;
@@ -949,10 +940,10 @@ void() W_FireRocket = { // [FUNCTION]
 	
 	// Ran out of ammo, switch to next best weapon
 	if (self.attack_finished > time) return;
-	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return; }
 
 	self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
-	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	W_Reload(0.8);
 	self.punchangle_x = -2;
@@ -973,10 +964,10 @@ void() W_Fire_Crossbow = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.attack_finished > time) return;
-	if (self.ammo_bolts < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_bolts < 1) { forceweaponswitch(0.2); return; }
 	self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
 	makevectors(self.v_angle);
-	sound(self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/weapons/crossbow_fire.wav",1,ATTN_NORM);
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE);
 	else dir = normalize(v_forward * SPEED_DCROSS); // Straight line forward where crosshair is pointing
 
@@ -990,10 +981,10 @@ void() W_Fire_Crossbow_Poison = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.attack_finished > time) return;
-	if (self.ammo_poison < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_poison < 1) { forceweaponswitch(0.2); return; }
 	self.currentammo = self.ammo_poison = self.ammo_poison - 1;
 	makevectors(self.v_angle);
-	sound(self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/weapons/crossbow_fire.wav",1,ATTN_NORM);
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE);
 	else dir = normalize(v_forward * SPEED_DCROSS); // Straight line forward where crosshair is pointing
 
@@ -1048,7 +1039,7 @@ void() W_FirePlasma = { // [FUNCTION]
 			T_Damage(self, world, world, self.health*0.5, NOARMOR);
 		} else {
 			W_Reload(0.2);
-			sound(self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,SOUND_MISFIRE,1,ATTN_NORM);
 		}
 		return;
 	}
@@ -1063,7 +1054,7 @@ void() W_FirePlasma = { // [FUNCTION]
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYPLASMA);
 	else dir = normalize(v_forward * SPEED_PLAYPLASMA); // Straight line forward where crosshair is pointing
 
-	sound(self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/weapons/plasma_fire.wav",1,ATTN_NORM);
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 	org = self.origin + v_forward*8 + '0 0 16';
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLAYPLASMA);
@@ -1113,7 +1104,7 @@ void() W_FireLightning = { // [FUNCTION]
 
 	// Time for a new LG hit sound?
 	if (self.t_width < time) {
-		sound(self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
+		sound(self,CHAN_WEAPON,"weapons/lhit.wav",1,ATTN_NORM);
 		self.t_width = time + 0.6;
 	}
 	
@@ -1149,13 +1140,13 @@ void(float cl) W_FireThunderbolt = { // [FUNCTION]
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
 		} else {
 			W_Reload(0.2);
-			sound(self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,SOUND_MISFIRE,1,ATTN_NORM);
 		}
 		return;
 	}
 
     if (self.t_width < time) {
-        sound(self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"weapons/lhit.wav",1,ATTN_NORM);
         self.t_width = time + 0.6;
     }
     self.punchangle_x = -2;
@@ -1186,7 +1177,7 @@ void() W_FireMultiGrenade = { // [FUNCTION]
 	local float spd;
 
 	if (self.attack_finished > time) return;
-	if (self.ammo_multi_rockets < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_multi_rockets < 1) { forceweaponswitch(0.2); return; }
 
 	self.ammo_multi_rockets = (self.ammo_multi_rockets - 1);
 	self.currentammo = (self.currentammo - TRUE);
@@ -1252,7 +1243,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
 		} else {
 			W_Reload(0.2);
-			sound(self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
+			sound(self,CHAN_WEAPON,SOUND_MISFIRE,1,ATTN_NORM);
 		}
 		return;
 	}
@@ -1289,7 +1280,7 @@ void() W_FireStinger = { // [FUNCTION]
     if (self.ammo_rockets < COST_MIRV) { W_FireRocket(); return; }
 
     self.currentammo = self.ammo_rockets = self.ammo_rockets - COST_MIRV; // Cost of admission paid.  Launch the big missile.
-    sound(self, CHAN_WEAPON, "drake/weapons/mirv1.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"drake/weapons/mirv1.wav",1,ATTN_NORM);
     self.punchangle = '6 0 -12';
     makevectors(self.v_angle);
     self.velocity = self.velocity - (v_forward * 100);  // Recoil!
@@ -1315,7 +1306,7 @@ void() W_FireHydra = { // [FUNCTION]
     cost = 3;
     if (self.ammo_rockets < cost) cost = self.ammo_rockets;
     self.currentammo = self.ammo_rockets = self.ammo_rockets - cost;
-    sound(self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
+    sound(self,CHAN_WEAPON,"zerstorer/weapons/stunfire.wav",1,ATTN_NORM);
     self.punchangle_x = -2;
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
@@ -1361,7 +1352,7 @@ void(float damage) W_FireBFG = { // [FUNCTION]
         local float donerail;
 
         makevectors(self.v_angle);
-        sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
         self.ammo_cells = self.ammo_cells - 5;
         self.currentammo = floor(self.ammo_cells / 5);
         orgo = self.origin + self.view_ofs + v_forward*8;
@@ -1599,28 +1590,38 @@ float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 
 	if (targ.selfweaponismoditems) {
 		if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
-		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE || targ.weapon == IT_AIRGUN) return TRUE;
+		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE
+			|| targ.weapon == IT_AIRGUN) return TRUE;
 	} else {
-		if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER || targ.weapon == IT_SCIMITAR) return TRUE;
+		if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR
+		    || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE
+		    || targ.weapon == IT_RAPIER || targ.weapon == IT_SCIMITAR) {
+			return TRUE;
+		}
 	}
 
 	if (targ.currentammo > 0) return TRUE;
 
-	targ.weapon = W_BestWeapon (targ);
-	W_SetCurrentAmmo (targ);
+	targ.weapon = W_BestWeapon(targ);
+	W_SetCurrentAmmo(targ);
 	return FALSE; // drop the weapon down
 };
 
 void() W_Attack = { // [FUNCTION]
 	local entity stemp;
 
-	if (intermission_running || cinematic_running || cutscene) return;
-	if ( !W_CheckNoAmmo(self) ) return;	// Out of ammo?
+	if (frame_pause()) return;
+	if (!W_CheckNoAmmo(self)) return;	// Out of ammo?
 
 	makevectors(self.v_angle);		// calculate forward angle for velocity
-	if (((self.weapon != IT_EXTRA_WEAPON && !self.selfweaponismoditems) || (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON && !self.selfweaponismoditems)) && self.weapon != IT_AXE && !self.selfweaponismoditems) self.show_hostile = time + 1;	// wake monsters up
-    self.b0_click = 0;
+	if (((self.weapon != IT_EXTRA_WEAPON && !self.selfweaponismoditems)
+		|| (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON
+		&& !self.selfweaponismoditems)) && self.weapon != IT_AXE
+		&& !self.selfweaponismoditems) {
+		self.show_hostile = time + 1;	// wake monsters up
+	}
 
+    self.b0_click = 0;
 	if (self.in_a_vehicle && self.health > 0) {
 		W_FireSpikes(0,crandom() * 2.5);
 		self.randomshells = self.randomshells - 1;
@@ -1642,12 +1643,12 @@ void() W_Attack = { // [FUNCTION]
 			if (self.perms & IT_CHAINSAW) { // Chainsaw overrides axes once acquired.
 				player_saw1(); 
 				W_Reload(0.55);
-				sound(self, CHAN_AUTO, "zerstorer/weapons/sawatck.wav", 1, ATTN_NORM);
+				sound(self,CHAN_AUTO,"zerstorer/weapons/sawatck.wav",1,ATTN_NORM);
 				self.show_hostile = time + 1; // wake monsters up, we hit stuff
 			} else {
 				// Axe and Shadowaxe
-				if (random() < 0.5) sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
-				else sound(self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+				if (random() < 0.5) sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE1,1,ATTN_NORM);
+				else sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE2,1,ATTN_NORM);
 				
 				self.lip = self.meleeattack; // Work out which axe swing to play (never play swing twice in a row)
 				while (self.meleeattack == self.lip) {
@@ -1700,7 +1701,7 @@ void() W_Attack = { // [FUNCTION]
 			if (self.moditems & IT_UPGRADE_LG) player_plasma1();
 			else {
 				player_light1(); 
-				sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM); 
+				sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM); 
 			}
 		} else if (self.weapon == IT_EXTRA_WEAPON) {
 			if (self.perms & IT_FROSTBOW) {
@@ -1743,7 +1744,7 @@ void() W_Attack = { // [FUNCTION]
 		} else if (self.weapon == IT2_CHAINLIGHTNING) {
 			player_chainlight1();
 			W_Reload(0.1);
-			sound(self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+			sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
 		} else if (self.weapon == IT2_CROSS) {
 			player_wand1();
 			W_FireSparks();
@@ -1898,7 +1899,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	local float am, fl, gotgun, inhackbank, runaway;
 	local vector checkvec;
 	
-	if (intermission_running || cinematic_running || cutscene || self.in_a_vehicle) return;
+	if (frame_pause() || self.in_a_vehicle) return;
 
 	am = TRUE;
 	checkvec = VEC_ORIGIN;
@@ -2382,7 +2383,9 @@ vector GetWepIT_FromID(float id) = { // [FUNCTION]
 	return retval;
 };
 
-void(float wepID, vector idconversion, float am) SetCycledWeapon = {
+float(float wepID, vector idconversion, float am) SetCycledWeapon = {
+	local float oktoset;
+
 	idconversion = GetWepIT_FromID(wepID); // Return to normal IT_* number.
 	self.weapon = idconversion_x;
 	self.selfweaponismoditems = idconversion_y;
@@ -2392,23 +2395,25 @@ void(float wepID, vector idconversion, float am) SetCycledWeapon = {
 		if (wepID == ID_MACE || wepID == ID_ICE
 			|| wepID == ID_VOIDSTAFF || wepID == ID_FLAK
 			|| wepID == ID_GUNGNIR) {
-			if ((self.moditems & self.weapon) && !am) W_SetCurrentAmmo(self);
+			if ((self.moditems & self.weapon) && !am) oktoset = TRUE;
 		} else if (wepID == ID_AIRGUN) {
-			if ((self.perms & self.weapon) && !am) W_SetCurrentAmmo(self);
+			if ((self.perms & self.weapon) && !am) oktoset = TRUE;
 		}
 	} else {
 		if (wepID == ID_RAPIER) {
-			if ((self.moditems & self.weapon) && !am) W_SetCurrentAmmo(self);
+			if ((self.moditems & self.weapon) && !am) oktoset = TRUE;
 		} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
-			if ((self.moditems & self.weapon) && !am) W_SetCurrentAmmo(self);
+			if ((self.moditems & self.weapon) && !am) oktoset = TRUE;
 		} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR
 			|| wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2
 			|| wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
-			if ((self.items2 & self.weapon) && !am) W_SetCurrentAmmo(self);
+			if ((self.items2 & self.weapon) && !am) oktoset = TRUE;
 		} else {
-			if ((self.items & self.weapon) && !am) W_SetCurrentAmmo(self);
+			if ((self.items & self.weapon) && !am) oktoset = TRUE;
 		}
 	}
+	if (oktoset) { W_SetCurrentAmmo(self); return TRUE; }
+	return FALSE;
 };
 
 void() CycleWeaponCommand = { // [FUNCTION]
@@ -2417,14 +2422,13 @@ void() CycleWeaponCommand = { // [FUNCTION]
 	
 	inhackbank = FALSE;
 	if (self.selfweaponismoditems) inhackbank = TRUE;
-	if (intermission_running > 0) return;		// intermission or finale
-	if (cinematic_running > 0) return;		// Remote camera active
+	if (frame_pause()) return;		// Remote camera active
+
 	self.impulse = 0;			// reset impulse
 	cyclecheck = 0; // counter to see how many times we go through the loop
 	if (self.weapon == 0 && self.items == 0 && self.items2 == 0 && self.moditems == 0 && self.perms == 0) return;
 	wepID = GetWepIDIndex(self.weapon, inhackbank);
-	// Keep cycling around weapon list until found a weapon with ammo
-	while (1) {
+	while (1) { // Keep cycling around weapon list until found a weapon with ammo
 		am = 0;
 		cyclecheck = cyclecheck + 1;
 		if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
@@ -2513,7 +2517,7 @@ void() CycleWeaponCommand = { // [FUNCTION]
 
 		if (wepID == FALSE) return; // prevent crash in "cinematic mode"
 
-		SetCycledWeapon(wepID,idconversion,am);
+		if (SetCycledWeapon(wepID,idconversion,am)) return;
 	}
 };
 
@@ -2619,7 +2623,7 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 
 		if (wepID == FALSE) return; // prevent crash in "cinematic mode"
 
-		SetCycledWeapon(wepID,idconversion,am);
+		if (SetCycledWeapon(wepID,idconversion,am)) return;
 	}
 };
 
@@ -2644,14 +2648,15 @@ void(float gibDeath) Cheat_KillRay = { // [FUNCTION]
 		vel = vel + 2*trace_plane_normal;
 		vel = vel * 200;
 		org = trace_endpos - dir*4;
-		if (!check_skycontent(org)) { // Check for sky content? skies don't impact or bleed
+		if (!InSky(org)) { // Check for sky content? skies don't impact or bleed
 			if (trace_ent.takedamage) {
 				dmg = trace_ent.health + 1;
 				if (gibDeath) dmg = dmg - trace_ent.gibhealth + 1;
-				if (trace_ent.flags & FL_MONSTER) SpawnBlood(trace_ent,org,vel*0.2,dmg*2,0); // Hitting monsters does twice the amount of blood effects
-				else SpawnBlood(trace_ent,org,vel*0.2,dmg,0);
+				if (trace_ent.flags & FL_MONSTER) SpawnBlood(trace_ent,org + (crandom() * 4 * '1 1 1'),vel*0.2,dmg*2,0); // Hitting monsters does twice the amount of blood effects
+				else SpawnBlood(trace_ent,org + (crandom() * 4 * '1 1 1'),vel*0.2,dmg,0);
 
-				T_Damage(trace_ent, self, self, dmg,DAMARMOR);
+				if (trace_ent.vulnerability > 0) trace_ent.vulnerability = 0;
+				T_Damage(trace_ent,self,self,dmg,DAMARMOR);
 				if (trace_ent.classtype == CT_TARGETDUMMY) MarkAttack(org, trace_ent.wait); // Check for target dummy (manually create marker)
 			} else Tent_Point(TE_GUNSHOT,org); // Hit something that does not bleed (often world)
 		}
@@ -2661,7 +2666,7 @@ void(float gibDeath) Cheat_KillRay = { // [FUNCTION]
 void() W_WeaponFrame = { // [FUNCTION]
 	if (self.lavaGunFired) {
 		if (self.weapon == IT_LAVA_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN) {
-			sound(self, CHAN_BODY, "rogue/weapons/snail.wav", 1, ATTN_NORM); // Hiss!
+			sound(self,CHAN_BODY,"rogue/weapons/snail.wav",1,ATTN_NORM); // Hiss!
 		}
 		self.lavaGunFired = 0;
 	}
@@ -2682,7 +2687,7 @@ void() W_WeaponFrame = { // [FUNCTION]
 		if (self.super_sound < time) {
 			self.super_sound = time + 1;
 			self.powerup_sound = time + 1;
-			sound(self, CHAN_BODY, SOUND_ARTQUAD3, 1, ATTN_NORM);
+			sound(self,CHAN_BODY,SOUND_ARTQUAD3,1,ATTN_NORM);
 		}
 	}
 	
@@ -2691,7 +2696,7 @@ void() W_WeaponFrame = { // [FUNCTION]
 			if (self.sharpshooter_sound < time) {
 				self.sharpshooter_sound = time + 0.5;
 				self.powerup_sound = time + 1; // Only play the sound every other shot
-				sound(self, CHAN_BODY, SOUND_ARTSHARP3, 1, ATTN_NORM);
+				sound(self,CHAN_BODY,SOUND_ARTSHARP3,1,ATTN_NORM);
 			}
 		}
 	}
@@ -2702,7 +2707,7 @@ void() W_WeaponFrame = { // [FUNCTION]
 			if (self.nailpiercer_sound < time) {
 				self.nailpiercer_sound = time + 0.5;
 				self.powerup_sound = time + 1;
-				sound(self, CHAN_BODY, SOUND_ARTNAILP3, 1, ATTN_NORM);
+				sound(self,CHAN_BODY,SOUND_ARTNAILP3,1,ATTN_NORM);
 			}
 		}
 	}

@@ -60,7 +60,7 @@ void() BDW_SpriteGenericPlayOnce = { // [FUNCTION]
 	self.nextthink = time + 0.05;
 };
 
-void() BDW_BodyDropSound = { sound(self, CHAN_BODY, "demon/dland2.wav", 0.7, ATTN_NORM); }; // [FUNCTION]
+void() BDW_BodyDropSound = { sound(self,CHAN_BODY,"demon/dland2.wav", 0.7,ATTN_NORM); }; // [FUNCTION]
 
 float() BDW_Check_idMapName = { // [FUNCTION]
 	//if (world.model == "maps/start.bsp") return TRUE; Och laddie, can't do that!  Every mod under the sun has a map named start!
@@ -94,7 +94,7 @@ float() BDW_Check_idMapName = { // [FUNCTION]
 	if (world.model == "maps/e4m6.bsp") return TRUE;	
 	if (world.model == "maps/e4m7.bsp") return TRUE;	
 	if (world.model == "maps/e4m8.bsp") return TRUE;
-	if (world.model == "maps/end.bsp") return TRUE; // Probably shouldn't do this one either.
+	//if (world.model == "maps/end.bsp") return TRUE; // Probably shouldn't do this one either.
 	return FALSE;
 };
 

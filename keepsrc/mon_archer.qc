@@ -96,8 +96,8 @@ void(vector st, float up) M_FireAkArrow = {
     }
 
     // In Hexen2, 0=green, 1=red, 2=gold.
-    if (type & 1) sound(self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
-    else sound(self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
+    if (type & 1) sound(self,CHAN_WEAPON,"drake/archer/arrowr.wav",1,ATTN_NORM);
+    else sound(self,CHAN_WEAPON,"drake/archer/arrowg.wav",1,ATTN_NORM);
 
     AkArrow_Launch (org, dir, type);
 };
@@ -122,16 +122,16 @@ void() archer_stand17 = [$waitA17, archer_stand18 ] { ai_stand(); };
 void() archer_stand18 = [$waitA18, archer_stand1  ] { ai_stand(); };
 
 // WALK
-void() archer_draw = { sound(self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM); };
+void() archer_draw = { sound(self,CHAN_WEAPON,"drake/archer/draw.wav",1,ATTN_NORM); };
 
 void() archer_growl = {
     if (random() < 0.1) {
         if (self.classtype == CT_MONARCHERLORD) {
             if (random() < 0.7)
-                sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM);
+                sound(self,CHAN_VOICE, "drake/archer/growl2.wav",1,ATTN_NORM);
             else
-                sound(self, CHAN_VOICE, "drake/archer/growl3.wav", 1, ATTN_NORM);
-        } else sound(self, CHAN_VOICE, "drake/archer/growl.wav", 1, ATTN_NORM);
+                sound(self,CHAN_VOICE, "drake/archer/growl3.wav",1,ATTN_NORM);
+        } else sound(self,CHAN_VOICE, "drake/archer/growl.wav",1,ATTN_NORM);
     }
 };
 
@@ -164,8 +164,8 @@ void() archer_fire1;
 
 // Emulate Hexen2 behavior.
 float() archer_face = {
-    if (visible(self.enemy)) { ai_face();  return TRUE;}
-    else { self.think = archer_run1;  return FALSE;}
+    if (visible(self.enemy)) { ai_face();  return TRUE; }
+    else { self.think = archer_run1;  return FALSE; }
 };
 
 // Animate the archer bowstring pull and hold.
@@ -177,51 +177,51 @@ void() archer_hold = {
     chance = infront (self.enemy);
     if ( chance && ((dist <= ARCHER_CLOSE) || (dist > ARCHER_FAR)) ) {
         if (dist <= ARCHER_CLOSE) { // Enemy too close -- backup.
-            if ( self.frame == $backup1 )
-                { self.frame = $backup2; ai_back(1);}
-            else if ( self.frame == $backup2 )
-                { self.frame = $backup3; ai_back(1);}
-            else if ( self.frame == $backup3 )
-                { self.frame = $backup4; ai_back(2);}
-            else if ( self.frame == $backup4 )
-                { self.frame = $backup5; ai_back(1);}
-            else if ( self.frame == $backup5 )
-                { self.frame = $backup6; ai_back(2);}
-            else if ( self.frame == $backup6 )
-                { self.frame = $backup7; ai_back(4);}
-            else if ( self.frame == $backup7 )
-                { self.frame = $backup8; ai_back(4); r = 0;}
+            if (self.frame == $backup1 )
+                { self.frame = $backup2; ai_back(1); }
+            else if (self.frame == $backup2 )
+                { self.frame = $backup3; ai_back(1); }
+            else if (self.frame == $backup3 )
+                { self.frame = $backup4; ai_back(2); }
+            else if (self.frame == $backup4 )
+                { self.frame = $backup5; ai_back(1); }
+            else if (self.frame == $backup5 )
+                { self.frame = $backup6; ai_back(2); }
+            else if (self.frame == $backup6 )
+                { self.frame = $backup7; ai_back(4); }
+            else if (self.frame == $backup7 )
+                { self.frame = $backup8; ai_back(4); r = 0; }
             else
-                { self.frame = $backup1; ai_back(2);}
+                { self.frame = $backup1; ai_back(2); }
         } else { // Enemy should be closer -- advance.
-            if ( self.frame == $backup8 )
-                { self.frame = $backup7; ai_forward(4);}
-            else if ( self.frame == $backup7 )
-                { self.frame = $backup6; ai_forward(4);}
-            else if ( self.frame == $backup6 )
-                { self.frame = $backup5; ai_forward(2);}
-            else if ( self.frame == $backup5 )
-                { self.frame = $backup4; ai_forward(1);}
-            else if ( self.frame == $backup4 )
-                { self.frame = $backup3; ai_forward(2);}
-            else if ( self.frame == $backup3 )
-                { self.frame = $backup2; ai_forward(2);}
-            else if ( self.frame == $backup2 )
-                { self.frame = $backup1; ai_forward(1); r = 0;}
+            if (self.frame == $backup8 )
+                { self.frame = $backup7; ai_forward(4); }
+            else if (self.frame == $backup7 )
+                { self.frame = $backup6; ai_forward(4); }
+            else if (self.frame == $backup6 )
+                { self.frame = $backup5; ai_forward(2); }
+            else if (self.frame == $backup5 )
+                { self.frame = $backup4; ai_forward(1); }
+            else if (self.frame == $backup4 )
+                { self.frame = $backup3; ai_forward(2); }
+            else if (self.frame == $backup3 )
+                { self.frame = $backup2; ai_forward(2); }
+            else if (self.frame == $backup2 )
+                { self.frame = $backup1; ai_forward(1); r = 0; }
             else
-                { self.frame = $backup8; ai_forward(2);}
+                { self.frame = $backup8; ai_forward(2); }
         }
     } else { // Enemy is either within ideal distance or behind archer -- stay.
-        if ( ( self.frame >= $waitB2 ) && ( self.frame <= $waitB10 ) )
+        if ( (self.frame >= $waitB2 ) && (self.frame <= $waitB10 ) )
             self.frame = self.frame + 2;
         else
-            { self.frame = $waitB2; r = 0;}
+            { self.frame = $waitB2; r = 0; }
     }
     self.nextthink = time + 0.1;
     self.think = archer_hold;
 
 	// Don't shoot blindly if enemy is confirmed to be dead.  Doing so might hit other monsters (behind target) we'd rather not anger.
-    if ((self.enemy.health <= 0) && (self.enemy.deadflag >= DEAD_DEAD)) { self.think = archer_run1;  return;}
+    if ((self.enemy.health <= 0) && (self.enemy.deadflag >= DEAD_DEAD)) { self.think = archer_run1;  return; }
     if (!archer_face ()) return; // Thinking set to th_run by call to function.
 
 	// Borrowing v_forward from the prior call to makevectors in 'infront'...
@@ -387,13 +387,13 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
 
     self.pain_finished = time + 1;
     if (self.classtype == CT_MONARCHERLORD) {
-        sound(self, CHAN_VOICE, "drake/archer/pain2.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "drake/archer/pain2.wav",1,ATTN_NORM);
     // The archer looks like a hell knight, so give him the same no-flinch,
     // but only if he is a lord class.
         if (random()*30 > damage)
             return;        // didn't flinch
     } else
-        sound(self, CHAN_VOICE, "drake/archer/pain.wav", 1, ATTN_NORM);
+        sound(self,CHAN_VOICE, "drake/archer/pain.wav",1,ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
@@ -429,7 +429,7 @@ void() archer_die9  = [$deathA18, archer_die10 ] {};
 void() archer_die10 = [$deathA20, archer_die11 ] {
     monster_death_postcheck();
     // PM:  Archer death sound split into two files.  Play part 2.
-    if ((self.flags & FL_ONGROUND) && (self.classtype != CT_MONARCHERLORD)) sound(self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
+    if ((self.flags & FL_ONGROUND) && (self.classtype != CT_MONARCHERLORD)) sound(self,CHAN_AUTO,"drake/archer/crash.wav",1,ATTN_NORM);
 };
 void() archer_die11 = [$deathA22, archer_die11  ] { monster_deadbody_check(); };
 
@@ -440,9 +440,9 @@ void() archer_die = {
 	// regular death
 	if (!self.gibbed) {
 		if (self.classtype == CT_MONARCHERLORD)
-			sound(self, CHAN_VOICE, "drake/archer/death2.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/archer/death2.wav",1,ATTN_NORM);
 		else
-			sound(self, CHAN_VOICE, "drake/archer/death.wav", 1, ATTN_NORM);
+			sound(self,CHAN_VOICE, "drake/archer/death.wav",1,ATTN_NORM);
 		archer_die1();
 	}
 };

@@ -242,8 +242,8 @@ void() W_Bomb = { // [FUNCTION]
 	T_RadiusDamage(bomb, self, 512, self,DAMAGEALL);
 	T_Damage(self, self, self, -666,DAMARMOR);
 	self.velocity_z = 700;
-	sound(self, CHAN_AUTO, "quoth/weapons/bombfar.wav", 1, ATTN_NONE);
-	sound(self, CHAN_AUTO, "quoth/weapons/bomb.wav", 1, 0.7);
+	sound(self,CHAN_AUTO,"quoth/weapons/bombfar.wav",1,ATTN_NONE);
+	sound(self,CHAN_AUTO,"quoth/weapons/bomb.wav", 1, 0.7);
 };
 
 void() info_bomb = { // [ENTITY]

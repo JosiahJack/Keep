@@ -20,7 +20,7 @@ void() hip_train_use = {
 
 void() hip_train_wait = {
 
-   if ( self.wait ) {
+   if (self.wait ) {
 
       sound(self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
       if ( (self.wait != CONTENT_EMPTY) ) {
@@ -65,7 +65,7 @@ void() hip_train_next = {
       self.think = hip_train_next;
 
    }
-   if ( self.goalentity.event ) {
+   if (self.goalentity.event ) {
 
       temp = self.target;
       self.target = self.goalentity.event;

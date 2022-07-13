@@ -145,7 +145,7 @@ void() army_fire = {
 
 	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "soldier/sattck1.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"soldier/sattck1.wav",1,ATTN_NORM);	
 	
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ))
@@ -172,7 +172,7 @@ void() army_dbs_fire = {
 
 	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "drake/weapons/ssg.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"drake/weapons/ssg.wav",1,ATTN_NORM);	
 	
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ))
@@ -201,7 +201,7 @@ void() army_fire_rocket = {
 
 	ai_trackenemy(); // Check for enemy origin (based on sight test) if cannot see enemy fire at last known location
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
+	sound(self,CHAN_WEAPON,"quoth/soldier/rocket.wav",1,ATTN_NORM);	
 	self.attack_speed = 250;
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
@@ -233,7 +233,7 @@ void() army_rocket_think = {
 void()	army_rocket_atk1 = [	$load1,	army_load2	] { ai_face();
 	self.pain_finished = time + 1.3;
 	self.attack_track = self.enemy.origin;
-	sound(self, CHAN_WEAPON, "quoth/soldier/load.wav", 1, ATTN_NORM); };
+	sound(self,CHAN_WEAPON,"quoth/soldier/load.wav",1,ATTN_NORM); };
 void()	army_load2	= [	$load2,	army_load3	] { ai_trackenemy(); };
 void()	army_load3	= [	$load3,	army_load4	] { ai_trackenemy(); };
 void()	army_load4	= [	$load4,	army_load5	] { ai_trackenemy(); };
@@ -276,14 +276,14 @@ void() army_plasma_fire = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"ad171/weapons/plasma_fire.wav",1,ATTN_NORM);
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
 	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
-void()	army_plasma_atk1 = [	$shoot1, army_plasma_atk2	] { self.pain_finished = time + 1.3; sound(self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM); };
+void()	army_plasma_atk1 = [	$shoot1, army_plasma_atk2	] { self.pain_finished = time + 1.3; sound(self,CHAN_WEAPON,"ad171/enforcer/elim_pg_load.wav",1,ATTN_NORM); };
 void()	army_plasma_atk2 = [	$shoot2, army_plasma_atk3	] { ai_face(); };
 void()	army_plasma_atk3 = [	$shoot3, army_plasma_atk4	] { ai_face(); };
 void()	army_plasma_atk4 = [	$shoot4, army_plasma_atk5	] { ai_face(); };
@@ -322,13 +322,13 @@ void() army_nailfire = {
 	}
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (self.classtype == CT_MONARMYCYBORG || self.classtype == CT_MONSUPERENFORCER) sound(self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_WEAPON, "q15/weapons/rocket1i.wav", 1, ATTN_NORM);
+	if (self.classtype == CT_MONARMYCYBORG || self.classtype == CT_MONSUPERENFORCER) sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"q15/weapons/rocket1i.wav",1,ATTN_NORM);
 
 	launch_projectile(org, dir,NO_SPIN,type, self.attack_speed);
 };
 
-void()	army_nail1 = [	$shoot1, army_nail2	] { self.pain_finished = time + 1.3; sound(self, CHAN_WEAPON, "soldier/reload.wav", 1, ATTN_NORM); };
+void()	army_nail1 = [	$shoot1, army_nail2	] { self.pain_finished = time + 1.3; sound(self,CHAN_WEAPON,"soldier/reload.wav",1,ATTN_NORM); };
 void()	army_nail2 = [	$shoot2, army_nail3	] { ai_face(); };
 void()	army_nail3 = [	$shoot3, army_nail4	] { ai_face(); };
 void()	army_nail4 = [	$shoot4, army_nail5	] { ai_face(); };
@@ -341,7 +341,7 @@ void()	army_nail9 = [	$shoot9, army_run1	] { ai_face(); };
 void() army_supernailload1 = [	$load1, army_supernailload2	] {
 	ai_face();
 	self.pain_finished = time + 1.3;
-	sound(self, CHAN_WEAPON, "soldier/reload.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"soldier/reload.wav",1,ATTN_NORM);
 };
 void() army_supernailload2 = [$load2, army_supernailload3	] { ai_face(); ai_back(2); };
 void() army_supernailload3 = [$load3, army_supernailload4	] { ai_face(); ai_back(2); };
@@ -364,7 +364,7 @@ void()	army_supernail7 = [	$shoot7, army_run1			] {
 	ai_face();
 	if (self.classtype == CT_MONARMYCYBORG) {
 		ai_run_strafe(16);
-		if (random() < 0.25) { army_supernailload1();  return;}
+		if (random() < 0.25) { army_supernailload1();  return; }
 	}
 	SUB_CheckRefire (army_supernail2);
 };
@@ -414,15 +414,15 @@ void(entity inflictor, entity attacker, float damage) army_pain = {
 			self.lip = random();
 			if (self.lip < 0.2) {
 				self.pain_finished = time + 0.6;
-				sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
 				army_pain1();
 			} else if (self.lip < 0.6) {
 				self.pain_finished = time + 1.1;
-				sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 				army_painb1();
 			} else {
 				self.pain_finished = time + 1.1;
-				sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+				sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 				army_painc1();
 			}
 		} else if (self.pain_check == 2) {
@@ -431,8 +431,8 @@ void(entity inflictor, entity attacker, float damage) army_pain = {
 			self.axhitme = 0;
 
 			// Pick a random pain sound
-			if (random() < 0.5) sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-			else sound(self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+			if (random() < 0.5) sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
+			else sound(self,CHAN_VOICE, self.pain_sound2,1,ATTN_NORM);
 
 			// Pick a random long pain animation
 			if (random() < 0.5) army_painb1();
@@ -469,7 +469,7 @@ void() army_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
+		sound(self,CHAN_VOICE, "soldier/death1.wav",1,ATTN_NORM);
 		if (random() < 0.5) army_die1(); // Forward
 		else army_cdie1();				  // Backward/side
 	}

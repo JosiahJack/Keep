@@ -110,6 +110,7 @@ subs_drake.qc				// REFINED Drake subroutines
 subs_extras.qc				// REFINED extras_r5, extras_r4 subroutines
 subs_aoa.qc					// REFINED Arms of Asgard (AoA) subroutines
 subs_nehahra.qc				// REFINED Nehahra subroutines
+subs_copper.qc				// REFINED Copper subroutines
 
 // HUD
 //-----------------------------------------------------------------------------

@@ -176,31 +176,12 @@ void(entity source, float floor_dist) ent_floorcheck = {
 	}
 };
 
-// Check for contact with sky brushes.  Use pointcontent() for Typical/Enhanced Quake engines.  Use new FTE string functions and surface check for Darkplaces engine.
-float(vector targ_origin) check_skycontent = {
-	local float surfnum;
-	local string texturename;
-
-	// projectile owner exeception (bad FPS for large maps)
-	if (self.owner.proj_noskycheck == TRUE) return FALSE;
-	else if (pointcontents(targ_origin) == CONTENT_SKY) return TRUE;
-	return FALSE;
-};
-
 float(vector bborg, float bbx, float bby, float bbz) check_skyvector = {
 	local vector skyorg;
 	skyorg_x = bborg_x + bbx;
 	skyorg_y = bborg_y + bby;
 	skyorg_z = bborg_z + bbz;
-	if (check_skycontent(skyorg) == TRUE) return TRUE;
-	else return FALSE;
-};
-
-// Check point content for SOLID or SKY problems
-float(vector pc_org) entity_pcontent = {
-	if (InSolid(pc_org)) return TRUE;
-	if (check_skycontent(pc_org)) return TRUE;
-	return FALSE;
+	return InSky(skyorg);
 };
 
 // Updates totals on the HUD (checks for client to exist)
@@ -267,82 +248,36 @@ void(entity targ, float removetime) entity_remove = {
 	SUB_Think(targ,SUB_Remove,removetime);
 };
 
+entity(vector spawn_org, string devmdl) spawn_devmarker = {
+	if (devmdl == "") devmdl = MODEL_BROKEN;
+	newmis = spawn();
+	newmis.classtype = CT_DEVMARKER;
+	newmis.movetype = MOVETYPE_NONE;
+	newmis.solid = SOLID_NOT;
+	setmodel(newmis,devmdl);
+	setorigin(newmis,spawn_org);
+	setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
+	return newmis;
+};
+
 // Show where broken monster/items are located (developer only)
 // SPNMARK_YELLOW, SPNMARK_BLUE, SPNMARK_GREEN, SPNMAKR_RED
-void(vector marker_org, float marker_type) spawn_marker = {
-	local entity marker;
-	
-	// Exceptions
+void(vector marker_org, vector marker_ang, float type, float mskin) spawn_marker = {
 	if (query_configflag(SVR_DEVHELPER)) return;
-	if (developer == 0) return;
+	if (developer <= 0) return;
 
-	// Dev Marker
-	marker = spawn();
-	marker.classtype = CT_DEVMARKER;
-	marker.movetype = MOVETYPE_NONE;
-	marker.solid = SOLID_NOT;
-	setmodel(marker, MODEL_BROKEN);
-	setorigin(marker, marker_org);
-	setsize (marker, VEC_ORIGIN, VEC_ORIGIN);
+	if (type) spawn_devmarker(marker_org,MODEL_CORNER1);
+	else spawn_devmarker(marker_org,MODEL_BROKEN);
+
+	newmis.angles = marker_ang;
 	// Setup marker type (skin colour)
 	// YELLOW = error, BLUE = delay, GREEN = nocount, RED = nightmare
-	marker.skin = marker_type;
-	marker.frame = 0;
-	// If DP engine active remove particle shadow
-	if (engine == ENG_DPEXT) marker.effects = marker.effects + EF_NOSHADOW;
-};
-
-void(vector marker_org, vector marker_ang, float marker_type) spawn_arrow = {
-	local entity marker;
-	
-	// Exceptions
-	if (query_configflag(SVR_DEVHELPER)) return;
-	if (developer == 0) return;
-
-	// Dev Marker
-	marker = spawn();
-	marker.classtype = CT_DEVMARKER;
-	marker.movetype = MOVETYPE_NONE;
-	marker.solid = SOLID_NOT;
-	setmodel(marker, MODEL_CORNER1);
-	setorigin(marker, marker_org);
-	setsize (marker, VEC_ORIGIN, VEC_ORIGIN);
-	marker.angles = marker_ang;
-	// Setup marker type (skin colour)
 	// YELLOW = 0, DARK GREEN = 1, GREEN = 2, WHITE = 3, RED = 4
-	marker.skin = marker_type;
-	marker.frame = 0;
-	marker.alpha = 0.5 + random()*0.5;
+	newmis.skin = mskin;
+	newmis.frame = 0;
+	if (type) newmis.alpha = 0.5 + random()*0.5;
 	// If DP engine active remove particle shadow
-	if (engine == ENG_DPEXT) marker.effects = marker.effects + EF_NOSHADOW;
-};
-
-entity(vector spawn_org) spawn_devmarker = {
-	local entity spawn_ent;
-	
-	spawn_ent = spawn();
-	spawn_ent.classtype = CT_DEVMARKER;
-	spawn_ent.movetype = MOVETYPE_NONE;
-	spawn_ent.solid = SOLID_NOT;
-	setmodel(spawn_ent, MODEL_BROKEN);
-	setorigin(spawn_ent, spawn_org);
-	setsize (spawn_ent, VEC_ORIGIN, VEC_ORIGIN);
-	return spawn_ent;
-};
-
-// This is designed for delay spawn monsters ONLY!  It will certainly do crazy things if not used correctly
-void(entity targ) monster_devmarker = {
-	// Exceptions
-	if (query_configflag(SVR_DEVHELPER)) return;
-	if (developer == 0) return;
-
-	targ.movetype = MOVETYPE_NONE;
-	targ.solid = SOLID_NOT;
-	setmodel(targ, MODEL_BROKEN);
-	if (targ.nomonstercount == 1) targ.skin = SPNMARK_GREEN;
-	else if (targ.delaymonstercount == 1) targ.skin = SPNMARK_GREEN;
-	else targ.skin = SPNMARK_BLUE;
-	targ.frame = 0;	
+	if (engine == ENG_DPEXT) newmis.effects = newmis.effects + EF_NOSHADOW;
 };
 
 // Check for SKILL spawning conditions (frame 0 check ONLY).  Returns FALSE = do nothing  TRUE = inhibit spawning
@@ -351,8 +286,8 @@ float() check_nightmare = {
 		if (skill_cvar != TRUE) { skill = cvar("skill"); skill_cvar = TRUE; } // Double check the coop console variable, not setup till frame 1+.  Use a nosave variable to prevent constant cvar command checking.
 		if (skill >= SKILL_NIGHTMARE) return FALSE;
 		else {
-			if (self.bsporigin) spawn_marker(bmodel_origin(self), SPNMARK_RED); // Check for BSP entities has origin is different
-			else spawn_marker(self.origin, SPNMARK_RED);	
+			if (self.bsporigin) spawn_marker(bmodel_origin(self),'0 0 0',0,SPNMARK_RED); // Check for BSP entities has origin is different
+			else spawn_marker(self.origin,'0 0 0',0,SPNMARK_RED);	
 			entity_hide(self); // Hide instead of remove because of possible active touches.
 			return TRUE;
 		}
@@ -372,8 +307,8 @@ float() check_coop = {
 		// cooponly = -1 coop >= 1 inhibit = TRUE
 		if (self.cooponly == TRUE && coop > 0) return FALSE;
 		else {
-			if (self.bsporigin) spawn_marker(bmodel_origin(self), SPNMARK_PURPLE); // Check for BSP entities has origin is different
-			else spawn_marker(self.origin, SPNMARK_PURPLE);
+			if (self.bsporigin) spawn_marker(bmodel_origin(self),'0 0 0',0,SPNMARK_PURPLE); // Check for BSP entities has origin is different
+			else spawn_marker(self.origin,'0 0 0',0,SPNMARK_PURPLE);
 			entity_hide(self); // Hide entity instead of removing it because of possible active touch functions.
 			return TRUE;
 		}
