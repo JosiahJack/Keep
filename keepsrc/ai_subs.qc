@@ -792,7 +792,7 @@ void(float dist) movetogoalplus = {
 		SUB_RemoveFlags(self,FL_SWIM);
 		self.flags = self.flags | FL_FLY;
 		self.movetype = MOVETYPE_WALK;
-		movetogoal_builtin(dist);
+		walkmove(self.ideal_yaw,dist);
 		self.flags = oflags;
 		self.movetype = mtype;
 	}
