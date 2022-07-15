@@ -206,7 +206,7 @@ void()	dprince_walk13	= [	$walk13,	dprince_walk14	] { ai_walk(6); };
 void()	dprince_walk14	= [	$walk14,	dprince_walk1	] { ai_walk(2); };
 
 void()	dprince_run1	= [	$run1,	dprince_run2	] { monster_idle_sound(); 
-	self.idlebusy = FALSE; ai_run (20); CheckForCharge(); };
+	self.idlebusy = FALSE; ai_run(20); CheckForCharge(); };
 void()	dprince_run2	= [	$run2,	dprince_run3	] { monster_footstep(FALSE); ai_run(25); };
 void()	dprince_run3	= [	$run3,	dprince_run4	] { ai_run(16); };
 void()	dprince_run4	= [	$run4,	dprince_run5	] { ai_run(14); };

@@ -1313,7 +1313,7 @@ void() func_breakable_ceramic_model = { // [FUNCTION]
 	self.classgroup = CG_BREAKABLE;
 	self.style = BTYPE_CERAMIC;
 	self.brkobjects = BMODTYPE_CUSTOM; 
-	if (CheckZeroVector(self.pos1)) self.pos1 = '168 8 1'; // Whiteish particle dust colour
+	if (VectorIsAllZeros(self.pos1)) self.pos1 = '168 8 1'; // Whiteish particle dust colour
 	if (self.exactskin <= 0) self.exactskin = 0; // Check for exactskin range errors, will be copied to rubble
 	self.skin = self.exactskin;
 	if (self.angles_y <= 0) self.angles_y = rint(random()*359); // Setting the angle key in the editor to UP/DOWN = random rotation	
@@ -1341,9 +1341,9 @@ void() misc_breakable_vase1 = { // [ENTITY]
 		self.bbmaxs = '16 16 24';
 		self.brkvol = '32 32 40';
 	} else { // Default bounding box and volume
-		if (CheckZeroVector(self.bbmins)) self.bbmins = '-8 -8 -16';
-		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '8 8 16';
-		if (CheckZeroVector(self.brkvol)) self.brkvol = '16 16 32';
+		if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-8 -8 -16';
+		if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '8 8 16';
+		if (VectorIsAllZeros(self.brkvol)) self.brkvol = '16 16 32';
 	}
 	func_breakable_ceramic_model(); // Default setup
 };
@@ -1375,21 +1375,21 @@ void() misc_breakable_pot_setup = { // [FUNCTION]
 	precache_model(self.mdl);
 
 	if (self.brkmdltype == 11 || self.brkmdltype == 21) { // Pot 1a and 2a
-		if (CheckZeroVector(self.bbmins)) self.bbmins = '-16 -16 -16';
-		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '16 16 32';
-		if (CheckZeroVector(self.brkvol)) self.brkvol = '32 32 48';
+		if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-16 -16 -16';
+		if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '16 16 32';
+		if (VectorIsAllZeros(self.brkvol)) self.brkvol = '32 32 48';
 	} else if (self.brkmdltype == 12 || self.brkmdltype == 22) { // Pot 1b and 2b
-		if (CheckZeroVector(self.bbmins)) self.bbmins = '-10 -10 -16';
-		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '10 10 16';
-		if (CheckZeroVector(self.brkvol)) self.brkvol = '20 20 32';
+		if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-10 -10 -16';
+		if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '10 10 16';
+		if (VectorIsAllZeros(self.brkvol)) self.brkvol = '20 20 32';
 	} else if (self.brkmdltype == 13 || self.brkmdltype == 23) { // Pot 1c and 2c
-		if (CheckZeroVector(self.bbmins)) self.bbmins = '-16 -16 -16';
-		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '16 16 32';
-		if (CheckZeroVector(self.brkvol)) self.brkvol = '32 32 48';
+		if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-16 -16 -16';
+		if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '16 16 32';
+		if (VectorIsAllZeros(self.brkvol)) self.brkvol = '32 32 48';
 	} else if (self.brkmdltype == 14 || self.brkmdltype == 24) { // Pot 1d and 2d
-		if (CheckZeroVector(self.bbmins)) self.bbmins = '-12 -12 -16';
-		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '12 12 32';
-		if (CheckZeroVector(self.brkvol)) self.brkvol = '24 24 48';
+		if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-12 -12 -16';
+		if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '12 12 32';
+		if (VectorIsAllZeros(self.brkvol)) self.brkvol = '24 24 48';
 	} else if (self.brkmdltype == 15 || self.brkmdltype == 25) {
 		if (self.angles_y <= 0) self.angles_y = rint(random()*359); // Find out any random rotation of the pot early for this setup
 		self.bbmins = mathlib_vectorotateZ('-20 -12 -16', self.angles_y); // Calculate the true rotation of XY bounding box
@@ -1521,11 +1521,11 @@ void() misc_breakable_pot1 = { // [ENTITY]
 	self.brkobj2 = "progs/ne_ruins/potshard2.mdl";
 	self.brkobj3 = "progs/ne_ruins/potshard3.mdl";
 	self.brkobj4 = "progs/ne_ruins/potshard4.mdl";
-	if (CheckZeroVector(self.pos1)) self.pos1 = '16 8 1';	// Brown
+	if (VectorIsAllZeros(self.pos1)) self.pos1 = '16 8 1';	// Brown
 	self.wait = -1;			// Only break once
 	self.pos2 = self.angles; // Save any custom angles, otherwise random Y rotation
 
-	if (CheckZeroVector(self.mangle) == FALSE) self.pos2 = self.mangle;
+	if (VectorIsAllZeros(self.mangle) == FALSE) self.pos2 = self.mangle;
 	else if (query_configflag(SVR_ITEMROTATE) == FALSE) self.pos2_y = rint(random()*359);
 
 	breakable_cache(); // precache all sound/model stuff

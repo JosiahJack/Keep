@@ -161,7 +161,7 @@ void(entity source, entity targ, float damage) spawn_touchblood = { // [FUNCTION
 	vel = normalize(vel + v_up*(random()- 0.5) + v_right*(random()- 0.5));
 	vel = vel + 2*trace_plane_normal;
 	vel = vel * 0.4; // Originally vel = ((vel * 200) * 0.2) * 0.01
-	if (CheckZeroVector(source.meleeoffset)) org = '0 0 0'; // Check for an origin blood offset (monsters)
+	if (VectorIsAllZeros(source.meleeoffset)) org = '0 0 0'; // Check for an origin blood offset (monsters)
 	else org = attack_vector(source.meleeoffset);
 	
 	SpawnBlood(targ,source.origin + org, vel, damage,0);
@@ -197,7 +197,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
     if (btype == BLOOD_PURPLE) text = "progs/drake/pur_gib.mdl";
     if (btype == BLOOD_FIRE) text = "progs/drake/ember.mdl";
 	makevectors(source.angles);
-	if (CheckZeroVector(source.meleeoffset)) org = v_forward * 16; // Check for a melee offset? - Special vector offset
+	if (VectorIsAllZeros(source.meleeoffset)) org = v_forward * 16; // Check for a melee offset? - Special vector offset
 	else org = attack_vector(source.meleeoffset);
 	org = org + source.origin; // Create starting point to spawn
 

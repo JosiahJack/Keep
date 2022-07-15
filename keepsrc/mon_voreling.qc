@@ -276,7 +276,7 @@ void() voreling_leap4	= [	$jump4, voreling_leap5	] {};
 void() voreling_leap5	= [	$jump5, voreling_leap6 ] {};	
 void() voreling_leap6	= [	$jump6, voreling_leap7	] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = voreling_leap3;
 	}
@@ -580,7 +580,7 @@ void() setup_voreling = { // [ENTITY]
 		self.th_jump = voreling_leap1;
 		self.th_jumpexit = voreling_leap7;
 		// Default jump forward/up distance
-		if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 200';
+		if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '500 0 200';
 		if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPVORELINGNEAR;
 		if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPVORELINGFAR;
 	}

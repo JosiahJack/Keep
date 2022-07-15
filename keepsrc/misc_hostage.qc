@@ -183,7 +183,7 @@ void() actor_run = [$rockrun1, actor_run ] { // [FUNCTION]
             self.movetarget = self.enemy;
             self.goalentity = self.enemy;
         }
-        ai_run (self.speed);
+        ai_run(self.speed);
     }
     
     if (self.count == 1) self.enemy = checkclient();

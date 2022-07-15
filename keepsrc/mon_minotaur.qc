@@ -248,7 +248,7 @@ void() ShufflerFinishedGoonSlap = {
 	self.enemy = self.oldenemy;
 	self.oldenemy = self.lastvictim;
 	self.goalentity = self.enemy;
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 };
 
 // Rage melee attack
@@ -328,7 +328,7 @@ void() mino_jump6 = [$jump11, mino_jump7 ] {};
 void() mino_jump7 = [$jump13, mino_jump8 ] { ai_face(); };
 void() mino_jump8 = [$jump15, mino_jump8 ] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; 	//random jump angle
 		self.think = mino_jump4;			// Keep jumping
 	}
@@ -606,7 +606,7 @@ void() mino_charge5 = [$charge9, mino_charge6 ] { mino_chargecheck(28);monster_f
 void() mino_charge6 = [$charge11, mino_charge1 ] { mino_chargecheck(26); };
 
 void() mino_charge = {
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	self.attack_finished = time + 2 + random();
 	mino_charge1();
 };

@@ -199,6 +199,7 @@ void()	karasu_spell1	= [	$spell1,	karasu_spell2	] {
 	Resist_Save(self);	// Save resistances for Later
 	//Immune to damage while casting
 	Resist_ChangeType(self, TRUE);
+	self.shield = 1;
 	ai_forward(10); self.skin = 3;
 };
 void()	karasu_spell2	= [	$spell2,	karasu_spell3	] { ai_forward(8); };
@@ -237,8 +238,8 @@ void()	karasu_spell21	= [	$spell21,	karasu_spell22	] {
 };
 void()	karasu_spell22	= [	$spell22,	karasu_run1	] {
 	self.takedamage = DAMAGE_AIM;	// Start taking damage
-	//Restore normal damage
-	Resist_ChangeType(self, FALSE);
+	Resist_ChangeType(self, FALSE); //Restore normal damage
+	self.shield = 0;
 };
 
 //Finsh the spell at the sixth cycle
@@ -273,7 +274,7 @@ void() check_SpellTrig =
 };
 				
 //----------------------------------------------------------------------
-void()	karasu_run1	= [	$run1,		karasu_run2	] { ai_run (16);karasu_reset_attachment(); self.skin = 0;karasu_SpellRun(); };
+void()	karasu_run1	= [	$run1,		karasu_run2	] { ai_run(16);karasu_reset_attachment(); self.skin = 0;karasu_SpellRun(); };
 void()	karasu_run2	= [	$run2,		karasu_run3	] { monster_footstep(FALSE); ai_run(19);karasu_SpellRun(); };
 void()	karasu_run3	= [	$run3,		karasu_run4	] { ai_run(14);karasu_SpellRun(); };
 void()	karasu_run4	= [	$run4,		karasu_run5	] { ai_run(13);karasu_SpellRun(); };
@@ -733,6 +734,7 @@ void() monster_karasu = {
 	self.stepc5 = "redfield/karasu/armor5.wav";
 	self.steptype = FS_TYPECUSTOM;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.shield = 0;
 	self.resist_rockets = self.resist_nails = 0.5; 
 	self.reflectnails = TRUE;		// Reflect nail projectiles	
 	self.th_checkattack = KarasuCheckAttack;

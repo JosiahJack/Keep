@@ -48,7 +48,7 @@ float() archer_check_shot = {
     makevectors(self.angles);
     spot1 = self.origin + v_forward*16 + v_right*8 + v_up*24;
     spot2 = self.enemy.origin + self.enemy.view_ofs;
-    traceline (spot1, spot2, 2, self);
+    traceline(spot1,spot2, 2, self);
     if (trace_ent != self.enemy) {
         // Didn't hit the intended target.  Either something else blocked the scan, or the scan was complete and could not hit the target.
         // Standard 1.06 progs would just return FALSE.

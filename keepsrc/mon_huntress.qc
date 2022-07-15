@@ -584,7 +584,7 @@ if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
 void()	elena_spin12	= [	$spin12,	elena_spin12	] { self.owner.frame = 7; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
 // Double check huntress is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; 	//random jump angle
 		self.think = elena_spin5;			// Keep jumping
 	}

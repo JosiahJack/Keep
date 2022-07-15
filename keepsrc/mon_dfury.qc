@@ -217,7 +217,7 @@ void()	dfury_walk14= [	$walk14,	dfury_walk1	] { ai_walk(2); };
 //===========================================================================
 // 6 frames instead of 8 frames (skipping 3rd/7th timing of original)
 void()	dfury_run1	= [	$run1,	dfury_run2	] { monster_idle_sound();
-	self.idlebusy = FALSE; ai_run (22); };
+	self.idlebusy = FALSE; ai_run(22); };
 void()	dfury_run2	= [	$run2,	dfury_run3	] { monster_footstep(FALSE); ai_run(27); };
 void()	dfury_run3	= [	$run3,	dfury_run4	] { ai_run(18); };
 void()	dfury_run4	= [	$run4,	dfury_run5	] { ai_run(16); };
@@ -328,7 +328,7 @@ void()	dfury_lunge6	= [	$lunge6,	dfury_lunge7	] {};
 void()	dfury_lunge7	= [	$lunge7,	dfury_lunge8	] {};
 void()	dfury_lunge8	= [	$lunge8,	dfury_lunge8	] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; 	//random jump angle
 		self.think = dfury_lunge4;			// Keep jumping
 	}
@@ -721,7 +721,7 @@ void() monster_dfury = {
 	self.meleeoffset = '24 0 16';		// Jump attack offset
 	self.attack_offset = '20 0 10';		// Average of both attacks
 	if (self.deathstring == "") self.deathstring = " was sliced by a Fury Knight\n";
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPFURYNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPFURYFAR;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent

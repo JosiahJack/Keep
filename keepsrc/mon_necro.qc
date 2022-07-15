@@ -480,7 +480,7 @@ void() necro1_melee = {
                     self.th_missile();
                 return;
             }
-        ai_charge (16);     // Not close enough -- continue march.
+        ai_charge(16);     // Not close enough -- continue march.
     }
 };
 
@@ -584,7 +584,7 @@ void() necro3_melee = {
 // most of the time.
     if (!InMeleeRange (80))
         if (random() < 0.6)     // 40% chance per frame to attack.
-            { ai_charge (16);  return; }
+            { ai_charge(16);  return; }
     necro3_attack1();
 };
 

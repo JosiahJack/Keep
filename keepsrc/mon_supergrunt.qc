@@ -181,33 +181,24 @@ void(float o_r, float o_z) sgrunt_plasma_launch = {
 	local float t;		
 
 	// lead the player
-	if (ai_face_last())
-	{
+	ai_face();
+	if (visible(self.enemy)) {
 		en = self.enemy;
-		t = (vlen(en.origin - self.origin)) / 750;	// rough calculation of time to reach enemy
-
-		dir = en.velocity * t * 0.5;	// 0.5 tones it down a bit
-		dir_z = 0;				// jumping produces sillyness
+		t = (vlen(en.origin - self.origin)) / 750; // Rough time to reach enemy.
+		dir = en.velocity * t * 0.5; // Tone it down a bit
+		dir_z = 0; // Jumping produces sillyness
 		dir = dir + en.origin;
 		dir = normalize(dir - self.origin);
-	}
-	else
-		dir = normalize(self.enemy.origin - self.origin);
+	} else dir = normalize(self.enemy.origin - self.origin);
 
 	makevectors(self.angles);
-	// do a hyberblaster-style offset cycle
 	ofs = v_forward*36 + v_right*o_r;	
-	ofs_z = ofs_z + o_z;
-
-	dir = dir + crandom()*0.05*v_right + crandom()*0.05*v_up;	// give it a bit of spread. FIXME: spread based on skill?
-	dir = normalize(dir);	// FIXME: is this necessary?
-
+	ofs_z = ofs_z + o_z; // Do a hyberblaster-style offset cycle
+	dir = dir + crandom()*0.05*v_right + crandom()*0.05*v_up; // Give it spread.
+	dir = normalize(dir);
 	sgrunt_spawn_plasma(self.origin + ofs, dir);
-
 	self.cnt = self.cnt - 1;
-
-	if (self.cnt <= 0)
-		self.think = sgrunt_fire12;
+	if (self.cnt <= 0) self.think = sgrunt_fire12;
 };
 
 void() sgrunt_plasma1 = [194, sgrunt_plasma2] { sgrunt_plasma_launch(9, 24); };
@@ -217,41 +208,33 @@ void() sgrunt_plasma4 = [194, sgrunt_plasma5] { sgrunt_plasma_launch(9, 17); };
 void() sgrunt_plasma5 = [194, sgrunt_plasma6] { sgrunt_plasma_launch(12, 19); };
 void() sgrunt_plasma6 = [194, sgrunt_plasma1] { sgrunt_plasma_launch(12, 22); };
 
-void() sgrunt_fire_loop = [194, sgrunt_fire_loop]
-{
-	local	vector	dir;
+void() sgrunt_fire_loop = [194, sgrunt_fire_loop] {
+	local vector dir;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound(self,CHAN_WEAPON,"sgrunt/infatck1.wav",1,ATTN_NORM);	
-
+	ai_face();
 	// fire somewhat behind the player, so a dodging player is harder to hit
-	if (ai_face_last())
-	{	
+	if (visible(self.enemy)) {	
 		dir = self.enemy.origin - self.enemy.velocity*0.2;
 		dir = normalize (dir - self.origin);
-	}
-	else
-		dir = normalize(self.enemy.origin - self.origin);
+	} else dir = normalize(self.enemy.origin - self.origin);
 	
-	FireBullets (4, SPREAD_GRUNT);	
-
+	FireBullets(4,SPREAD_GRUNT);	
 	self.cnt = self.cnt - 1;
-
-	if (self.cnt <= 0) {
-		self.think = sgrunt_fire12;
-	}	
+	if (self.cnt <= 0) self.think = sgrunt_fire12;	
 };
 
-void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face_last(); ai_forward(5); };
-void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face_last(); ai_back(1); };
-void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face_last(); ai_back(1); };
-void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face_last();sound(self,CHAN_WEAPON,"sgrunt/infatck3.wav",1,ATTN_NORM); };
-void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face_last(); ai_back(1); };
-void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face_last(); ai_forward(1); };
-void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face_last(); ai_forward(1); };
-void() sgrunt_fire8 = [191, sgrunt_fire9] { ai_face_last(); ai_forward(2); };
-void() sgrunt_fire9 = [192, sgrunt_fire10] { ai_face_last(); ai_back(2); };
-void() sgrunt_fire10 = [193, sgrunt_fire11] { ai_face_last(); ai_back(4); };
+void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face(); ai_forward(5); };
+void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face(); ai_back(1); };
+void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face(); ai_back(1); };
+void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face();sound(self,CHAN_WEAPON,"sgrunt/infatck3.wav",1,ATTN_NORM); };
+void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face(); ai_back(1); };
+void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face(); ai_forward(1); };
+void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face(); ai_forward(1); };
+void() sgrunt_fire8 = [191, sgrunt_fire9] { ai_face(); ai_forward(2); };
+void() sgrunt_fire9 = [192, sgrunt_fire10] { ai_face(); ai_back(2); };
+void() sgrunt_fire10 = [193, sgrunt_fire11] { ai_face(); ai_back(4); };
 void() sgrunt_fire11 = [194, sgrunt_fire12] {
 	ai_forward(1);
 	self.cnt = 10 + random()*10;	// number of shots to fire

@@ -338,7 +338,7 @@ var
 {
   spot1 = megadeth + [0 0 22];
   spot2 = dave + [0 0 22];
-  traceline(spot1, spot2, 1, head);
+  traceline(spot1,spot2, 1, head);
   if (trace_fraction == 1) {
     return 1;
     }
@@ -480,7 +480,7 @@ var
  spot : Vector;
  spot2 : Vector;
 {
-  if (pointcontents(self.origin) == CONTENT_LAVA) {
+  if (InLava(self.origin)) {
     Max_teleportsys();
     return;
     }
@@ -1601,7 +1601,7 @@ void() spftouch();
 var
  v : Vector;
 {
-  if (pointcontents(self.origin) == CONTENT_LAVA) {
+  if (InLava(self.origin)) {
     sound(self,CHAN_AUTO,"nehahra/weapons/sprocket.wav", 0.5,ATTN_NORM);
     self.think = Sub_remove;
     self.nextthink = time + 2;

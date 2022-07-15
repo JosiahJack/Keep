@@ -657,8 +657,8 @@ void() func_door = { // [ENTITY]
 
 	if (self.items > 0 || self.message != "") self.touch = func_door_touch; // Only need to touch doors if require keys or centerprint messages
 	self.blocked = func_door_blocked;
-	if (CheckZeroVector(self.bbmins)) self.bbmins = '-60 -60 -8'; // Check for QC created trigger bounding box override
-	if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '60 60 8';
+	if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-60 -60 -8'; // Check for QC created trigger bounding box override
+	if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '60 60 8';
 	
 	// Start open reverses pos1+2 which will screw up angletarget location
 	// Disable this feature, reverse lifts can be setup easily if needed

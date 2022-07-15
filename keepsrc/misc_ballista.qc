@@ -143,7 +143,7 @@ void() BalBoltTouch =  {
     local vector dir;
 
     if (other.takedamage) {
-        if (other != self.goalentity && !CheckZeroVector(self.velocity)) {
+        if (other != self.goalentity && !VectorIsAllZeros(self.velocity)) {
             self.goalentity = other;
             dir = normalize (self.velocity);
             traceline ( (self.origin - (dir * 25.00000)), (self.origin + (dir * 25)), FALSE, self);
@@ -241,7 +241,15 @@ void() ballista_track = {
     local float pitchmod;
     local vector my_pitch, ideal_pitch;
 
-    ai_attack_face();
+    ai_face();
+    if (FacingIdeal()) {
+        if (self.attack_state == AS_MISSILE && self.th_missile) {
+            self.th_missile();
+        } else if (self.attack_state == AS_MELEE && self.th_melee) {
+            self.th_melee();
+        }
+        self.attack_state = AS_STRAIGHT;
+    }
     makevectors(self.angles);
     my_pitch = normalize(v_forward);
     ideal_pitch = normalize(self.enemy.origin - self.origin);
@@ -290,9 +298,7 @@ void() ballista_think = {
     }
 
     if (self.enemy || self.tethered) ballista_track();
-    if (self.tethered && self.frame > 15) {
-        SUB_AdvanceFrame(1,30);
-    }
+    if (self.tethered && self.frame > 15) SUB_AdvanceFrame(1,30);
     self.nextthink = self.ltime + 0.1;
     self.think = ballista_think;
 };

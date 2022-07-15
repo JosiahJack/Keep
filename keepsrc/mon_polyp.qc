@@ -190,14 +190,14 @@ void() polyp_walk24 = [34, polyp_walk25] { ai_chargenoturn(2); };
 void() polyp_walk25 = [35, polyp_walk1] { ai_chargenoturn(2); };
 
 void() polyp_walkfly1 = [153, polyp_walkfly2] {
-	ai_walkfly(6);
+	ai_runwalkfly(6,ai_walk);
 	setmodel(self, "progs/quoth/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.velocity = VEC_ORIGIN;
 };
-void() polyp_walkfly2 = [154, polyp_walkfly3] { ai_walkfly(6); };
-void() polyp_walkfly3 = [155, polyp_walkfly4] { ai_walkfly(6); };
-void() polyp_walkfly4 = [156, polyp_walkfly1] { ai_walkfly(6); };
+void() polyp_walkfly2 = [154, polyp_walkfly3] { ai_runwalkfly(6,ai_walk); };
+void() polyp_walkfly3 = [155, polyp_walkfly4] { ai_runwalkfly(6,ai_walk); };
+void() polyp_walkfly4 = [156, polyp_walkfly1] { ai_runwalkfly(6,ai_walk); };
 
 void() polyp_invisible_sound = {
 	if (self.ltime < time) {

@@ -364,7 +364,7 @@ void() ogle_mine = {
 	makevectors(self.angles);
 	spot1 = self.origin;
 	spot2 = spot1 + (v_forward * 48); // Trace directly infront of entity using angles
-	traceline(spot1, spot2, TRUE, self);
+	traceline(spot1,spot2, TRUE, self);
 	if (trace_fraction != 1) {
 		if (r < 0.25) {
 			ogle_hammera1();

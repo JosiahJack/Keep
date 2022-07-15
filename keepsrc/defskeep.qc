@@ -623,3 +623,8 @@ vector NO_SPIN = '0 0 0'; // To make it obvious as launch_projectile argument.
 float cheatflags; // Developer cheats
 float CHEAT_KILLGUN = 1;
 float CHEAT_GIBGUN = 2;
+
+entity fliquid_head; // Borrowed schema from Gyro physics to handle checking all water funcs.
+.entity fliquid_next;
+.entity fliquid_prev;
+.float fliquid_inlist;

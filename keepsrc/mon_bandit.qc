@@ -242,7 +242,6 @@ void() monster_bandit = {
     self.th_spawn   = monster_bandit;
     self.height     = 2;
     self.ryuflags   = RYU_INSANE;
-    monster_purse (2, 0.2, 0); // Bandits may drop some coins.
 
 	// SoE:  Modified stats for nsoe2 rebel fighters.
     if (!self.skin && self.alignment > EVIL && !self.spawned) { // HACK!

@@ -279,7 +279,7 @@ void  ()fangel_wing_fire =  {
 
 void() fangel_blockthink = {
    ai_face();
-   if (!CheckZeroVector(self.velocity)) self.velocity = self.velocity * 0.7; // Woah nelly, slow er on down there
+   if (!VectorIsAllZeros(self.velocity)) self.velocity = self.velocity * 0.7; // Woah nelly, slow er on down there
    check_z_move(3);
    if (self.camera_time) self.camera_time -= 1; // hang on until 
    else {

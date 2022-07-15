@@ -130,8 +130,8 @@ void() baron_walk = {
 
 //  Victory
 void() baron_look6  = [$crstand1,  baron_look6  ] {
-    WalkFrame_Add ( $crstand1, 1, 18 );
-    if (self.walkframe == 18) {
+    SUB_AdvanceFrame(22,40);
+    if (self.frame == 40) {
 		if (self.movetarget || self.charmer) self.think = self.th_walk;
 		else self.think = self.th_stand;
 	}
@@ -139,8 +139,8 @@ void() baron_look6  = [$crstand1,  baron_look6  ] {
 };
 
 void() baron_owned1  = [$point1,  baron_owned1  ] {
-    WalkFrame_Add ( $point1, 1, 10 );
-    if (self.walkframe == 10) {
+    SUB_AdvanceFrame(11,21);
+    if (self.frame == 21) {
 		if (self.movetarget || self.charmer) self.think = self.th_walk;
 		else self.think = self.th_stand;
 	}

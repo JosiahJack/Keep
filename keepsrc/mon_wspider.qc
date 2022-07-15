@@ -223,7 +223,7 @@ void() monster_wspider = {
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 600';
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '150 0 600';
 	if (self.jumprange_x <= 0) self.jumprange_x = 100;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = 200;
 	if (self.deathstring == "") self.deathstring = " was entangled by Willie the Spider\n";

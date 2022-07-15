@@ -236,7 +236,7 @@ float() CheckBaneJump = {
 void() bane_strafe = {
 	if (self.classtype != CT_MONBANE) return;
 
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	ChangeYaw();
 	bane_shadow();     // Shadow trails, like shadow kick.
 	ai_run_strafe (20);     // Player walk speed.
@@ -679,7 +679,7 @@ void(float d) hk_charge = {
         dist = d * 2;
         if (!QC_CloseEnough (dist)) d = dist;   // Move double speed.
     }
-    ai_charge (d);
+    ai_charge(d);
 };
 
 void() bane_slice1  = [$slice1,  bane_slice2  ] { hk_charge(9); };

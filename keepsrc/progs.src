@@ -145,6 +145,7 @@ ai_ammoresist.qc			// REFINED Ammo Resistance System effects and damage function
 ai_sight.qc					// REFINED Monster Sight System for getting angry on sight or following
 ai_subs.qc					// REFINED AI Core Movement Subroutines
 ai_states.qc				// REFINED AI Core System of stand, walk, and run
+victory.qc					// REFINED Victory Trigger for when all monsters are killed.
 ai_combat.qc				// REFINED Damage System for all damage application
 ai_minions.qc				// REFINED Minion System for monsters spawning monsters and minion eggs
 ai_checkattack.qc			// REFINED Check routines form monsters to decide when and which attacks
@@ -454,3 +455,12 @@ mon_ogrelibrary.qc				// Nehahra library ogre and his cart
 // Spawn System
 //-----------------------------------------------------------------------------
 spawn.qc					// Hipnotic spawn - must be LAST since it needs to know about EVERY monster for randomized spawning or explicit mapper spawning.
+
+// General notes:
+// Compiled with fteqccgui.exe (even on my Linux build via wine as it's nice)
+//
+// To use cpd (CopyPasteDetector) I have it installed and run the following:
+// clear; sleep 1; ~/Downloads/pmd/pmd-bin-6.47.0/bin/run.sh cpd --files /home/qmaster/QUAKE/keep/keepsrc/*.qc --minimum-tokens 50 --language c
+//
+// Sometimes I vary the 50 above for the minimum tokens to find larger chunks
+// of duplicate code.  Quite handy!

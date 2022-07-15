@@ -1057,7 +1057,7 @@ void() display_secrets = {
 		sprint(self, ftos(secloc_cam.enemy.cnt));  // display secret no + XYZ origin location
 		sprint(self, ") = ");
 		sprint(self, vtos(secloc_cam.enemy.oldorigin)); 
-		if (CheckZeroVector(secloc_cam.enemy.oldorigin)) sprint(self, " [Err]");
+		if (VectorIsAllZeros(secloc_cam.enemy.oldorigin)) sprint(self, " [Err]");
 		if (secloc_cam.enemy.estate & ESTATE_OFF) sprint(self, " [Off]");
 		else if (secloc_cam.enemy.estate & ESTATE_DISABLE) sprint(self, "[Disabled]");
 		sprint(self, "\n");

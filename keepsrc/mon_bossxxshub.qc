@@ -324,11 +324,11 @@ void() monster_shub = {
 	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.takedamage = DAMAGE_NO;				// Immune to damage
-	if (CheckZeroVector(self.pos1)) self.pos1 = '200 20 0'; // Attack 1 - Setup projectile speed (200 + 20*skill)
-	if (CheckZeroVector(self.pos2)) self.pos2 = '0 0 40'; // Attack 1 - Setup projectile damage (Base + Random, Splash)
-	if (CheckZeroVector(self.dest1)) self.dest1 = '0 0 128'; // Attack 1 - Spawn location (offset from origin)
-	if (CheckZeroVector(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
-	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 128'; // Attack 2 - Spawn location (offset from origin)
+	if (VectorIsAllZeros(self.pos1)) self.pos1 = '200 20 0'; // Attack 1 - Setup projectile speed (200 + 20*skill)
+	if (VectorIsAllZeros(self.pos2)) self.pos2 = '0 0 40'; // Attack 1 - Setup projectile damage (Base + Random, Splash)
+	if (VectorIsAllZeros(self.dest1)) self.dest1 = '0 0 128'; // Attack 1 - Spawn location (offset from origin)
+	if (VectorIsAllZeros(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
+	if (VectorIsAllZeros(self.dest2)) self.dest2 = '0 0 128'; // Attack 2 - Spawn location (offset from origin)
 
 	if (self.spawnflags & MON_SHUB_UPSIDE) {
 		self.bbmins = '-96 -96 -192';	// up side down version
@@ -356,7 +356,7 @@ void() monster_shub = {
 
 // QUAKED monster_shubupsd (1 0 0) (-128 -128 -24) (128 128 512)
 void() monster_shubupsd = {
-	if (CheckZeroVector(self.pos3)) self.pos3 = '600 0 40'; // Attack 2 - Setup projectile speed, splash damage
+	if (VectorIsAllZeros(self.pos3)) self.pos3 = '600 0 40'; // Attack 2 - Setup projectile speed, splash damage
 	self.angles_x = 180; // Can I hear you say HACK?
 	self.angles_y = anglemod(self.angles_y + 180); // HACK!!!!
 	self.spawnflags = self.spawnflags | MON_SHUB_UPSIDE;

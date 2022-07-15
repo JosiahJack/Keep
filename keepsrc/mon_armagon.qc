@@ -122,8 +122,7 @@ void() armagon_think = {
    self.trigger_field.angles = self.angles;
    self.trigger_field.frame = self.frame;
    self.trigger_field.angles_y = (self.trigger_field.angles_y + self.fixangle);
-   enemy_yaw = vectoyaw ((self.enemy.origin - self.origin));
-   self.ideal_yaw = enemy_yaw;
+   ai_setidealyaw();
    self.cnt = FALSE;
    delta = armagon_yaw_delta(self.ideal_yaw - self.angles_y);
    if (fabs(delta) > 90) {
@@ -239,35 +238,35 @@ void() armagon_stand18 = [ 81.000, armagon_stand19 ] { armagon_think(); self.nex
 void() armagon_stand19 = [ 82.000, armagon_stand20 ] { armagon_think(); self.nextthink = (time + 0.200); };
 void() armagon_stand20 = [ 83.000, armagon_stand1 ] { ai_stand(); armagon_think(); self.nextthink = (time + 0.200); };
 
-void() armagon_walk1 = [ 0.000, armagon_walk2 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk2 = [ 1.000, armagon_walk3 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk3 = [ 2.000, armagon_walk4 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk4 = [ 3.000, armagon_walk5 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk5 = [ 4.000, armagon_walk6 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk6 = [ 5.000, armagon_walk7 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk7 = [ 6.000, armagon_walk8 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk8 = [ 7.000, armagon_walk9 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk9 = [ 8.000, armagon_walk10 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk10 = [ 9.000, armagon_walk11 ] { movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk11 = [ 10.000, armagon_walk12 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); movetogoal (14.000); armagon_walkthink(); };
-void() armagon_walk12 = [ 11.000, armagon_walk1 ] { movetogoal (14.000); armagon_walkthink(); };
+void() armagon_walk1 = [ 0.000, armagon_walk2 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk2 = [ 1.000, armagon_walk3 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk3 = [ 2.000, armagon_walk4 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk4 = [ 3.000, armagon_walk5 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk5 = [ 4.000, armagon_walk6 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk6 = [ 5.000, armagon_walk7 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk7 = [ 6.000, armagon_walk8 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk8 = [ 7.000, armagon_walk9 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk9 = [ 8.000, armagon_walk10 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk10 = [ 9.000, armagon_walk11 ] { movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk11 = [ 10.000, armagon_walk12 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); movetogoal(14.000); armagon_walkthink(); };
+void() armagon_walk12 = [ 11.000, armagon_walk1 ] { movetogoal(14.000); armagon_walkthink(); };
 
-void() armagon_run1 = [ 0.000, armagon_run2 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run2 = [ 1.000, armagon_run3 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run3 = [ 2.000, armagon_run4 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run4 = [ 3.000, armagon_run5 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run5 = [ 4.000, armagon_run6 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run6 = [ 5.000, armagon_run7 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run7 = [ 6.000, armagon_run8 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run8 = [ 7.000, armagon_run9 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run9 = [ 8.000, armagon_run10 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run10 = [ 9.000, armagon_run11 ] { ChangeYaw(); ai_run (14.000); armagon_think(); };
-void() armagon_run11 = [ 10.000, armagon_run12 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); ChangeYaw(); ai_run (14.000); armagon_think(); };
+void() armagon_run1 = [ 0.000, armagon_run2 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run2 = [ 1.000, armagon_run3 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run3 = [ 2.000, armagon_run4 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run4 = [ 3.000, armagon_run5 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run5 = [ 4.000, armagon_run6 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run6 = [ 5.000, armagon_run7 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run7 = [ 6.000, armagon_run8 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run8 = [ 7.000, armagon_run9 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run9 = [ 8.000, armagon_run10 ] { sound(self,MOVETYPE_PUSH,"hipnotic/armagon/servo.wav",SERVO_VOLUME,ATTN_ARMAGON); ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run10 = [ 9.000, armagon_run11 ] { ChangeYaw(); ai_run(14.000); armagon_think(); };
+void() armagon_run11 = [ 10.000, armagon_run12 ] { sound(self,MOVETYPE_TOSS,"hipnotic/armagon/footfall.wav",TRUE,ATTN_ARMAGON); ChangeYaw(); ai_run(14.000); armagon_think(); };
 void() armagon_run12 = [ 11.000, armagon_run1 ] {
    local float delta;
 
    ChangeYaw();
-   ai_run (14.000);
+   ai_run(14.000);
    armagon_think();
    if ( ((self.cnt == TRUE) && (time > self.attack_finished)) ) {
       delta = armagon_yaw_delta(self.ideal_yaw - self.angles_y);
@@ -503,7 +502,7 @@ void() armagon_stand_attack = {
 
    spot1 = (self.origin + self.view_ofs);
    spot2 = (self.enemy.origin + self.enemy.view_ofs);
-   traceline (spot1,spot2,FALSE,self);
+   traceline(spot1,spot2,FALSE,self);
    if ( (trace_ent != self.enemy) ) { armagon_run1(); return; }
    if ( (trace_inopen && trace_inwater) ) { armagon_run1(); return; }
    if ( (time < self.attack_finished) ) return ;

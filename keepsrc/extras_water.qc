@@ -79,18 +79,14 @@ void() CheckFuncWaterDeath = { // [FUNCTION]
 	local vector spot;
 	
 	spot = self.origin + self.view_ofs;
-	ent = find(world, classname, "fliquid");
-	while(ent) {	
-		if ( (spot_x<ent.absmax_x) && (spot_y<ent.absmax_y) && (spot_z<ent.absmax_z) && (spot_x>ent.absmin_x) &&  (spot_y>ent.absmin_y) &&  (spot_z>ent.absmin_z)) {
-			// Do the color shift
-			Safe_stuffcmd(self, "v_cshift ");
-			Safe_stuffcmd(self, ent.cshift);
-			Safe_stuffcmd(self, "\n");
-			self.fwatershifttime = time+frametime;
-			self.fwatershift = TRUE;			
-			return;
-		}
-		ent = find(ent, classname, "fliquid");
+	ent = GetFuncLiquidAtPoint(spot);
+	if (ent) {
+		// Do the color shift
+		Safe_stuffcmd(self, "v_cshift ");
+		Safe_stuffcmd(self, ent.cshift);
+		Safe_stuffcmd(self, "\n");
+		self.fwatershifttime = time+frametime;
+		self.fwatershift = TRUE;			
 	}
 };
 
@@ -362,6 +358,7 @@ void() func_water = { // [ENTITY]
 	setsize (self, self.mins , self.maxs);
 	setorigin(self, self.origin);
 	self.classname = "fliquid";
+	FliquidList_Add(self);
 	self.touch = liquid_touch;
 	if (self.watertype<-5 || self.watertype>-3) self.watertype = CONTENT_WATER;
 	liquid_default_cshifts();
@@ -432,6 +429,7 @@ void() func_watertrain = { // [ENTITY]
 	if (self.drag < 0) self.drag = 0;
 	if (self.mangle != '0 0 0') self.mangle = self.mangle*50;	
 	self.classname = "fliquid";
+	FliquidList_Add(self);
 	self.touch = liquid_touch;
 	train_ext_precachenoise();
 	self.solid = SOLID_TRIGGER;

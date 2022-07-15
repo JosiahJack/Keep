@@ -214,7 +214,7 @@ void()	spirit_run9	= [	$run9,		spirit_run1	] { ai_run(18); spirit_glow(); };
 void() spirit_ifin1 = {
 	self.velocity = '0 0 0';
 	// Always phase in facing the enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	self.angles_y = self.ideal_yaw;
 	sound(self,CHAN_AUTO,"redfield/spirit/spin_laugh.wav",1,ATTN_NORM);
 	self.bodyphased = MONAI_SPIRITSOLID;

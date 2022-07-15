@@ -32,7 +32,7 @@ void() monster_use = {
 	if (!(IsInsane(self)) && Align_Match(self,activator)) return;
 
 	self.enemy = activator; // Monster angry! Hunt enemy!?!
-	if (self.wakeuptrigger && self.th_wakeup) {
+	if (self.wakeuptrigger && self.th_wakeup && self.classtype != CT_MONVERMIS) {
 		self.wakeuptrigger = FALSE;	// Trigger no longer needed, reset
 		FoundHuntTarget(TRUE);		// Setup goals and warn other monsters
 		self.th_wakeup(); // If wakeup trigger setup, do not wait to do special sequence. This is really designed to go with a breakable trigger.
@@ -61,7 +61,7 @@ void() monster_liquid_check = {
 	monster_feet = self.origin; // Check for liquid at monsters feet (bottom of bounding box)
 	monster_feet_z = monster_feet_z + self.mins_z;
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) monster_feet_z = monster_feet_z + 1; // Drake added 1 more for Water_Set().
-	self.liquidbase = pointcontents(monster_feet);
+	self.liquidbase = LiquidBase(self);
 	if (self.liquidbase >= CONTENT_SOLID) {
 		if (self.inBSPwater) self.inBSPwater = FALSE;
 		self.waterlevel = 0;
@@ -755,10 +755,10 @@ void() monster_spawn = {
          || self.classtype == CT_MONVORELING)
 		&& self.spawnflags & MON_VORELING_CEILING) {
 		// Work out where the ceiling is (traceline upwards)
-		traceline (self.origin, self.origin+'0 0 4096', TRUE, self);
+		traceline(self.origin, self.origin+'0 0 4096', TRUE, self);
 		
 		// Check for empty content before moving
-		if (pointcontents(trace_endpos) == CONTENT_EMPTY) {
+		if (InOpenOrLiquid(trace_endpos)) {
 			self.flags = self.flags | FL_FLY;	// Stop any ground checks
 			self.classmove = MON_MOVEFLY;		// Avoid ground check function
 			self.origin = trace_endpos;			// Move critter to ceiling
@@ -776,7 +776,7 @@ void() monster_spawn = {
 		}
 	}
 	
-	pconts = pointcontents(self.origin);
+	pconts = GetContents(self.origin);
 
 	// Some monsters start in lava/slime (ID1 maps). If placed in laval/slime give immunity (old ID1 behaviour)
 	if (!(self.spawnflags & CAN_DROWN)) {
@@ -801,7 +801,7 @@ void() monster_spawn = {
 			// Some monster placement in the original ID maps NEED original Bounding Boxes
 			// this is something that cannot be easily fixed, so go back to original BB
 			// and test the monster placement again
-			if (CheckZeroVector(self.idmins) == FALSE) {
+			if (VectorIsAllZeros(self.idmins) == FALSE) {
 				self.bbmins = self.idmins; self.bbmaxs = self.idmaxs;
 				setsize (self, self.bbmins, self.bbmaxs);	// Restore ID BB size
 				self.origin_z = self.origin_z + 1;
@@ -917,8 +917,8 @@ void() monster_spawndelay = {
 
 // Setup bounding box for monster (based on types)
 void() monster_bbox =  {
-	if (self.bboxtype == BBOX_CUSTOM && CheckZeroVector(self.bbmins)
-        && CheckZeroVector(self.bbmaxs)) return; // We already set self.bbmins
+	if (self.bboxtype == BBOX_CUSTOM && VectorIsAllZeros(self.bbmins)
+        && VectorIsAllZeros(self.bbmaxs)) return; // We already set self.bbmins
 												 // and self.bbmaxs, unless we
 												 // didn't lol.
 

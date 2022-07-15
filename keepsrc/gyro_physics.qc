@@ -38,6 +38,7 @@
 //=============================================================================
 
 void(entity targ, float fl) SUB_RemoveFlags;
+float(vector spot) GetContents;
 
 //----- Activate a Physics Object --------------------
 void(entity e, float mass) Gyro_Object_Activate = {
@@ -785,7 +786,7 @@ void() Gyro_RunPhysics = {
 	gyrohead = gyro_objectlist_head;
 	while (gyrohead) {
 		//----- Pre-find Object Pointcontents --------------------
-		gyrohead.gyro_object_pointcontent = pointcontents(gyrohead.origin);
+		gyrohead.gyro_object_pointcontent = GetContents(gyrohead.origin);
 		
 		//----- Run Individual Physics Subsystems --------------------
 		Gyro_RunPhysics_Bouyancy(gyrohead);

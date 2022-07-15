@@ -122,7 +122,7 @@ void() ubscheckdist = {
 	dist_z = 0;
 	d = vlen (dist);
 	if (d < 450) {
-		if (visible (self.enemy)) ai_run ((((1 / d) * 5000) * -1));
+		if (visible (self.enemy)) ai_run((((1 / d) * 5000) * -1));
 	}
 	cond = FALSE;
 	if (d < 450 && d > 0) {
@@ -130,12 +130,12 @@ void() ubscheckdist = {
 	}
 
 	if (cond) {
-		ai_run (SECRET_YES_SHOOT);
+		ai_run(SECRET_YES_SHOOT);
 	} else {
 		if (((d > 450) && (d <= 600))) {
-			ai_run (SECRET_1ST_DOWN);
+			ai_run(SECRET_1ST_DOWN);
 		} else {
-			if ((d >= 600)) ai_run ((20 * (d / 500)));
+			if ((d >= 600)) ai_run((20 * (d / 500)));
 		}
 	}
 	head = findradius (self.origin, 500);
@@ -434,7 +434,7 @@ void() ubs_unfurl9 = [$unfurl9, ubs_unfurl10 ] {};
 void() ubs_unfurl10 = [$unfurl10, ubs_unfurl11 ] {};
 void() ubs_unfurl11 = [$unfurl11, ubs_runa1 ]
 {
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	self.ubs_point = SelectUBSPoint();
 	self.pausetime = 99999999;
 	self.th_run();
@@ -478,32 +478,32 @@ void() ubs_stand = {
 
 
 
-void() ubs_walka1 = [$flya1, ubs_walka2 ] { ai_walk (SECRET_NO_SHOOT); ubs_idlesound(); };
-void() ubs_walka2 = [$flya2, ubs_walka3 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walka3 = [$flya3, ubs_walka4 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walka4 = [$flya4, ubs_walka5 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walka5 = [$flya5, ubs_walka6 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walka6 = [$flya6, ubs_walka7 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walka7 = [$flya7, ubs_walka8 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walka8 = [$flya8, ubs_walk ] { ai_walk (SECRET_NO_SHOOT); };
+void() ubs_walka1 = [$flya1, ubs_walka2 ] { ai_walk(SECRET_NO_SHOOT); ubs_idlesound(); };
+void() ubs_walka2 = [$flya2, ubs_walka3 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walka3 = [$flya3, ubs_walka4 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walka4 = [$flya4, ubs_walka5 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walka5 = [$flya5, ubs_walka6 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walka6 = [$flya6, ubs_walka7 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walka7 = [$flya7, ubs_walka8 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walka8 = [$flya8, ubs_walk ] { ai_walk(SECRET_NO_SHOOT); };
 
-void() ubs_walkb1 = [$flyb1, ubs_walkb2 ] { ai_walk (SECRET_NO_SHOOT); ubs_idlesound(); };
-void() ubs_walkb2 = [$flyb2, ubs_walkb3 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkb3 = [$flyb3, ubs_walkb4 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkb4 = [$flyb4, ubs_walkb5 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkb5 = [$flyb5, ubs_walkb6 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkb6 = [$flyb6, ubs_walkb7 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkb7 = [$flyb7, ubs_walkb8 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkb8 = [$flyb8, ubs_walk ] { ai_walk (SECRET_NO_SHOOT); };
+void() ubs_walkb1 = [$flyb1, ubs_walkb2 ] { ai_walk(SECRET_NO_SHOOT); ubs_idlesound(); };
+void() ubs_walkb2 = [$flyb2, ubs_walkb3 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkb3 = [$flyb3, ubs_walkb4 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkb4 = [$flyb4, ubs_walkb5 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkb5 = [$flyb5, ubs_walkb6 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkb6 = [$flyb6, ubs_walkb7 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkb7 = [$flyb7, ubs_walkb8 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkb8 = [$flyb8, ubs_walk ] { ai_walk(SECRET_NO_SHOOT); };
 
-void() ubs_walkc1 = [$flyc1, ubs_walkc2 ] { ai_walk (SECRET_NO_SHOOT); ubs_idlesound(); };
-void() ubs_walkc2 = [$flyc2, ubs_walkc3 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkc3 = [$flyc3, ubs_walkc4 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkc4 = [$flyc4, ubs_walkc5 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkc5 = [$flyc5, ubs_walkc6 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkc6 = [$flyc6, ubs_walkc7 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkc7 = [$flyc7, ubs_walkc8 ] { ai_walk (SECRET_NO_SHOOT); };
-void() ubs_walkc8 = [$flyc8, ubs_walk ] { ai_walk (SECRET_NO_SHOOT); };
+void() ubs_walkc1 = [$flyc1, ubs_walkc2 ] { ai_walk(SECRET_NO_SHOOT); ubs_idlesound(); };
+void() ubs_walkc2 = [$flyc2, ubs_walkc3 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkc3 = [$flyc3, ubs_walkc4 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkc4 = [$flyc4, ubs_walkc5 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkc5 = [$flyc5, ubs_walkc6 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkc6 = [$flyc6, ubs_walkc7 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkc7 = [$flyc7, ubs_walkc8 ] { ai_walk(SECRET_NO_SHOOT); };
+void() ubs_walkc8 = [$flyc8, ubs_walk ] { ai_walk(SECRET_NO_SHOOT); };
 
 void() ubs_walk = {
 	if (self.health <= 500)
@@ -516,32 +516,32 @@ void() ubs_walk = {
 
 
 
-void() ubs_sidea1 = [$flya1, ubs_sidea2 ] { ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill)); };
-void() ubs_sidea2 = [$flya2, ubs_sidea3 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidea3 = [$flya3, ubs_sidea4 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidea4 = [$flya4, ubs_sidea5 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidea5 = [$flya5, ubs_sidea6 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidea6 = [$flya6, ubs_sidea7 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidea7 = [$flya7, ubs_sidea8 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidea8 = [$flya8, ubs_run ] { ai_run (24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea1 = [$flya1, ubs_sidea2 ] { ai_run(20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill)); };
+void() ubs_sidea2 = [$flya2, ubs_sidea3 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea3 = [$flya3, ubs_sidea4 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea4 = [$flya4, ubs_sidea5 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea5 = [$flya5, ubs_sidea6 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea6 = [$flya6, ubs_sidea7 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea7 = [$flya7, ubs_sidea8 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidea8 = [$flya8, ubs_run ] { ai_run(24); ubs_zap (500, (1 + skill)); };
 
-void() ubs_sideb1 = [$flyb1, ubs_sideb2 ] { ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill)); };
-void() ubs_sideb2 = [$flyb2, ubs_sideb3 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sideb3 = [$flyb3, ubs_sideb4 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sideb4 = [$flyb4, ubs_sideb5 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sideb5 = [$flyb5, ubs_sideb6 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sideb6 = [$flyb6, ubs_sideb7 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sideb7 = [$flyb7, ubs_sideb8 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sideb8 = [$flyb8, ubs_run ] { ai_run (24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb1 = [$flyb1, ubs_sideb2 ] { ai_run(20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill)); };
+void() ubs_sideb2 = [$flyb2, ubs_sideb3 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb3 = [$flyb3, ubs_sideb4 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb4 = [$flyb4, ubs_sideb5 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb5 = [$flyb5, ubs_sideb6 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb6 = [$flyb6, ubs_sideb7 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb7 = [$flyb7, ubs_sideb8 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sideb8 = [$flyb8, ubs_run ] { ai_run(24); ubs_zap (500, (1 + skill)); };
 
-void() ubs_sidec1 = [$flyc1, ubs_sidec2 ] { ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill)); };
-void() ubs_sidec2 = [$flyc2, ubs_sidec3 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidec3 = [$flyc3, ubs_sidec4 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidec4 = [$flyc4, ubs_sidec5 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidec5 = [$flyc5, ubs_sidec6 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidec6 = [$flyc6, ubs_sidec7 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidec7 = [$flyc7, ubs_sidec8 ] { ai_run (24); ubs_zap (500, (1 + skill)); };
-void() ubs_sidec8 = [$flyc8, ubs_run ] { ai_run (24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec1 = [$flyc1, ubs_sidec2 ] { ai_run(20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill)); };
+void() ubs_sidec2 = [$flyc2, ubs_sidec3 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec3 = [$flyc3, ubs_sidec4 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec4 = [$flyc4, ubs_sidec5 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec5 = [$flyc5, ubs_sidec6 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec6 = [$flyc6, ubs_sidec7 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec7 = [$flyc7, ubs_sidec8 ] { ai_run(24); ubs_zap (500, (1 + skill)); };
+void() ubs_sidec8 = [$flyc8, ubs_run ] { ai_run(24); ubs_zap (500, (1 + skill)); };
 
 void() ubs_side = {
 	sound(self,CHAN_VOICE, "travail/ubs/elec.wav",1,ATTN_NORM);
@@ -557,32 +557,32 @@ void() ubs_side = {
 
 
 
-void() ubs_dodgea1 = [$flya1, ubs_dodgea2 ] { ai_run (30); self.attack_state = AS_SLIDING; };
-void() ubs_dodgea2 = [$flya2, ubs_dodgea3 ] { ai_run (30); };
-void() ubs_dodgea3 = [$flya3, ubs_dodgea4 ] { ai_run (30); };
-void() ubs_dodgea4 = [$flya4, ubs_dodgea5 ] { ai_run (30); };
-void() ubs_dodgea5 = [$flya5, ubs_dodgea6 ] { ai_run (30); };
-void() ubs_dodgea6 = [$flya6, ubs_dodgea7 ] { ai_run (30); };
-void() ubs_dodgea7 = [$flya7, ubs_dodgea8 ] { ai_run (30); };
-void() ubs_dodgea8 = [$flya8, ubs_run ] { ai_run (30); self.attack_state = AS_STRAIGHT; };
+void() ubs_dodgea1 = [$flya1, ubs_dodgea2 ] { ai_run(30); self.attack_state = AS_SLIDING; };
+void() ubs_dodgea2 = [$flya2, ubs_dodgea3 ] { ai_run(30); };
+void() ubs_dodgea3 = [$flya3, ubs_dodgea4 ] { ai_run(30); };
+void() ubs_dodgea4 = [$flya4, ubs_dodgea5 ] { ai_run(30); };
+void() ubs_dodgea5 = [$flya5, ubs_dodgea6 ] { ai_run(30); };
+void() ubs_dodgea6 = [$flya6, ubs_dodgea7 ] { ai_run(30); };
+void() ubs_dodgea7 = [$flya7, ubs_dodgea8 ] { ai_run(30); };
+void() ubs_dodgea8 = [$flya8, ubs_run ] { ai_run(30); self.attack_state = AS_STRAIGHT; };
 
-void() ubs_dodgeb1 = [$flyb1, ubs_dodgeb2 ] { ai_run (30); self.attack_state = AS_SLIDING; };
-void() ubs_dodgeb2 = [$flyb2, ubs_dodgeb3 ] { ai_run (30); };
-void() ubs_dodgeb3 = [$flyb3, ubs_dodgeb4 ] { ai_run (30); };
-void() ubs_dodgeb4 = [$flyb4, ubs_dodgeb5 ] { ai_run (30); };
-void() ubs_dodgeb5 = [$flyb5, ubs_dodgeb6 ] { ai_run (30); };
-void() ubs_dodgeb6 = [$flyb6, ubs_dodgeb7 ] { ai_run (30); };
-void() ubs_dodgeb7 = [$flyb7, ubs_dodgeb8 ] { ai_run (30); };
-void() ubs_dodgeb8 = [$flyb8, ubs_run ] { ai_run (30); self.attack_state = AS_STRAIGHT; };
+void() ubs_dodgeb1 = [$flyb1, ubs_dodgeb2 ] { ai_run(30); self.attack_state = AS_SLIDING; };
+void() ubs_dodgeb2 = [$flyb2, ubs_dodgeb3 ] { ai_run(30); };
+void() ubs_dodgeb3 = [$flyb3, ubs_dodgeb4 ] { ai_run(30); };
+void() ubs_dodgeb4 = [$flyb4, ubs_dodgeb5 ] { ai_run(30); };
+void() ubs_dodgeb5 = [$flyb5, ubs_dodgeb6 ] { ai_run(30); };
+void() ubs_dodgeb6 = [$flyb6, ubs_dodgeb7 ] { ai_run(30); };
+void() ubs_dodgeb7 = [$flyb7, ubs_dodgeb8 ] { ai_run(30); };
+void() ubs_dodgeb8 = [$flyb8, ubs_run ] { ai_run(30); self.attack_state = AS_STRAIGHT; };
 
-void() ubs_dodgec1 = [$flyc1, ubs_dodgec2 ] { ai_run (30); self.attack_state = AS_SLIDING; };
-void() ubs_dodgec2 = [$flyc2, ubs_dodgec3 ] { ai_run (30); };
-void() ubs_dodgec3 = [$flyc3, ubs_dodgec4 ] { ai_run (30); };
-void() ubs_dodgec4 = [$flyc4, ubs_dodgec5 ] { ai_run (30); };
-void() ubs_dodgec5 = [$flyc5, ubs_dodgec6 ] { ai_run (30); };
-void() ubs_dodgec6 = [$flyc6, ubs_dodgec7 ] { ai_run (30); };
-void() ubs_dodgec7 = [$flyc7, ubs_dodgec8 ] { ai_run (30); };
-void() ubs_dodgec8 = [$flyc8, ubs_run ] { ai_run (30); self.attack_state = AS_STRAIGHT; };
+void() ubs_dodgec1 = [$flyc1, ubs_dodgec2 ] { ai_run(30); self.attack_state = AS_SLIDING; };
+void() ubs_dodgec2 = [$flyc2, ubs_dodgec3 ] { ai_run(30); };
+void() ubs_dodgec3 = [$flyc3, ubs_dodgec4 ] { ai_run(30); };
+void() ubs_dodgec4 = [$flyc4, ubs_dodgec5 ] { ai_run(30); };
+void() ubs_dodgec5 = [$flyc5, ubs_dodgec6 ] { ai_run(30); };
+void() ubs_dodgec6 = [$flyc6, ubs_dodgec7 ] { ai_run(30); };
+void() ubs_dodgec7 = [$flyc7, ubs_dodgec8 ] { ai_run(30); };
+void() ubs_dodgec8 = [$flyc8, ubs_run ] { ai_run(30); self.attack_state = AS_STRAIGHT; };
 
 void() ubs_dodge = {
 	if (self.health <= 500)

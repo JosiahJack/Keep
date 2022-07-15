@@ -616,7 +616,7 @@ void() DecodeLevelParms = {
 	mapvar[3] = parm14;
 	mapvar[4] = parm15;
 	mapvar[5] = parm16;
-	if (CheckZeroVector(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
+	if (VectorIsAllZeros(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
 	dprint("Beyond 16 Parms: gamecfg was "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
 	self.items3 = cvar("savedgamecfg");
 	cvar_set("gamecfg","0"); // Reset these to keep player config.cfg clean
@@ -1341,15 +1341,15 @@ void() PlayerPostThink = {
 			// Camera tracking system?
 			if (cam_movement) {
 				if (cam_track.attack_finished < time) { // Finished moving the tracking entity?
-					if (!CheckZeroVector(cam_track.enemy.origin)) setorigin(self, cam_track.enemy.origin); // Don't reset origin if at 0,0,0 (usually error)
+					if (!VectorIsAllZeros(cam_track.enemy.origin)) setorigin(self, cam_track.enemy.origin); // Don't reset origin if at 0,0,0 (usually error)
 					cam_movement = FALSE;
 				} else { // Update camera (player) origin
 					if (cam_bezier) { // Bezier Curve movement
 						cam_track.delay = cam_track.wait - (cam_track.attack_finished - time);
 						cam_track.origin = bezier_curve(cam_track.pos4, cam_track.pos5, cam_track.pos6, cam_track.wait, cam_track.delay);
-						if (!CheckZeroVector(cam_track.origin)) setorigin(self, cam_track.origin); // Don't reset origin if at 0,0,0 (usually error)
+						if (!VectorIsAllZeros(cam_track.origin)) setorigin(self, cam_track.origin); // Don't reset origin if at 0,0,0 (usually error)
 					} else { // Linear movement
-						if (!CheckZeroVector(cam_track.origin)) setorigin(self, cam_track.origin); // Don't reset origin if at 0,0,0 (usually error)
+						if (!VectorIsAllZeros(cam_track.origin)) setorigin(self, cam_track.origin); // Don't reset origin if at 0,0,0 (usually error)
 					}
 				}
 			}

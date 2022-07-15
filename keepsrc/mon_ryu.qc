@@ -799,7 +799,7 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
             if (attacker)
                 if (self.enemy == attacker)
                     if (self.attack_finished <= time)   // Don't spin if it can't attack.
-                        if (visible (attacker)) self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+                        if (visible (attacker)) self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
     }
 
 	if (random() < 0.5)

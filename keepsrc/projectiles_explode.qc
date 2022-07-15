@@ -726,7 +726,7 @@ void() mine1 = [ 1, mine2    ] {}; // [FUNCTION]
 void() mine2 = [ 2, mine3    ] { // [FUNCTION]
     local float pc;
 
-    pc = pointcontents(self.origin);
+    pc = GetContents(self.origin);
     if (pc == CONTENT_LAVA) { IceMine_Explode(); return; }
 
     if (self.delay > time) self.think = mine2;
@@ -1151,10 +1151,10 @@ void(entity fire) Fireball_Steam = { // [FUNCTION]
     local float sped;
     local vector vel;
 
-    sped = vlen (fire.velocity) * 0.01;
-    vel = normalize (fire.velocity) * sped;
+    sped = vlen(fire.velocity) * 0.01;
+    vel = normalize(fire.velocity) * sped;
     sound(fire,CHAN_AUTO,"player/slimbrn2.wav",1,ATTN_NORM);
-    particle (fire.origin, vel, 1, 50);
+    particle(fire.origin,vel,1,50);
 };
 
 //  This fizzles then removes the meteor.
@@ -1448,3 +1448,20 @@ void() ink_stand7 = [14,ink_stand8] { ink_think(); };
 void() ink_stand8 = [15,ink_stand9] { ink_think(); }; 
 void() ink_stand9 = [14,ink_stand10] { ink_think(); };  
 void() ink_stand10 = [16,ink_stand1] { ink_think(); };
+
+void() vermis_spore_explode = {
+	T_RadiusDamage(self, self.owner, 55, other,DAMAGEALL);
+	if (other)
+	{
+		T_Damage(other, self, self.owner, 24 + 2 * random(),DAMARMOR);
+	}
+	sound(self,CHAN_VOICE, "quoth/vermis/pop.wav", 0.6, 1.5);
+	WriteByte(0, SVC_TEMPENTITY);
+	WriteByte(0, TE_TAREXPLOSION);
+	WriteCoord(0, self.origin_x);
+	WriteCoord(0, self.origin_y);
+	WriteCoord(0, self.origin_z);
+	self.velocity = VEC_ORIGIN;
+	self.touch = SUB_Null;
+	SUB_Remove();
+};

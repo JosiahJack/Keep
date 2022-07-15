@@ -144,7 +144,7 @@ float() JumpAttackValid = {
 		if (self.classtype != CT_MONSCORPION
 			&& self.classtype != CT_MINIONSCORPION
 			&& self.classtype != CT_MONSTEELCLAW
-			&& self.enemy.origin_z > self.origin_z) return FALSE;
+			&& self.enemy.origin_z > self.origin_z) return FALSE; // This is different than if IsShortHopper failed.
 		if (self.enemydist <= self.jumprange_x) return FALSE;
 		if (self.enemydist >= self.jumprange_y) return FALSE;
 	} else { // Longer lunge checks
@@ -1495,7 +1495,7 @@ void() Shade_CheckAttack = {
 
     // Check if attack is blocked by creature.
     // If so, flag it so dragon may try to move around it vertically.
-    traceline (spot1, spot2, FALSE, self);
+    traceline(spot1,spot2, FALSE, self);
     if ((trace_ent != targ) && (trace_fraction < 1)) {
         targ = trace_ent;
         if (targ)
@@ -1564,7 +1564,7 @@ float() ArmagonCheckAttack = {
    targ = self.enemy;
    spot1 = (self.origin + self.view_ofs);
    spot2 = (targ.origin + targ.view_ofs);
-   traceline (spot1,spot2,FALSE,self);
+   traceline(spot1,spot2,FALSE,self);
    if (trace_ent != targ && !self.charmed) return (FALSE);
    if (trace_inopen && trace_inwater) return (FALSE);
    if (time < self.attack_finished) return (FALSE);
@@ -1746,7 +1746,7 @@ void() DGuardCheckAttack = {
 
 	spot1 = self.origin + self.view_ofs;
 	spot2 = self.enemy.origin + self.enemy.view_ofs;
-	traceline(spot1, spot2, 0, self);
+	traceline(spot1,spot2, 0, self);
 	if (trace_ent != self.enemy) return;
 	if (trace_inopen && trace_inwater) return;
 
@@ -1778,7 +1778,7 @@ void() FragCheckAttack = {
 void() InquisitorCheckAttack = {
 	local float rnd, dist;
 
-	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+	self.enemydist = range_distance(self.enemy,FALSE);
 	if (self.enemydist <= 350) { inquisitor_magica1(); return; } // Staff plant storm cloud, especially if within Mjolnir range
 
 	rnd = random() * 100;
@@ -1973,7 +1973,7 @@ float() CheckTurretAttack = { // [FUNCTION]
 	targ = self.enemy;
 	spot1 = self.origin + self.view_ofs;// see if any entities are in the way of the shot
 	spot2 = targ.origin + targ.view_ofs;
-	traceline (spot1, spot2, FALSE, self);
+	traceline(spot1,spot2, FALSE, self);
 	if (trace_ent != targ) return FALSE;		// don't have a clear shot	
 	if (trace_inopen && trace_inwater) return FALSE;			// sight line crossed contents
 	if (time < self.attack_finished) return FALSE;
@@ -1998,7 +1998,7 @@ float() CheckTurretAttack = { // [FUNCTION]
 float(vector p) M_MeteorCheck = { // [FUNCTION]
     local vector org, vec;
 
-	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+	self.enemydist = range_distance(self.enemy,FALSE);
     if (self.enemydist < 200) return FALSE; // Enemy too close to attacker.
 
 	vec = self.enemy.origin - self.origin;
@@ -2020,7 +2020,7 @@ float() M_FirewallCheck = { // [FUNCTION]
     if (self.enemy) {
         if (self.enemy.waterlevel) return FALSE;       // Underwater.
 
-		self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+		self.enemydist = range_distance(self.enemy,FALSE);
         if (self.enemydist > 1000) return FALSE;       // Too far away.
 
         if (!(self.enemy.flags & FL_ONGROUND)) {
@@ -2037,7 +2037,7 @@ void(float zdiff, float dist, void() chargefunc) CheckForCharge_boss = {
 	if (time < self.attack_finished) return;	
 	if ( fabs(self.origin_z - self.enemy.origin_z) > zdiff) return;		// too much height change
 
-	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+	self.enemydist = range_distance(self.enemy,FALSE);
 	if (self.enemydist < dist) return;		// use regular attack
 
 	SUB_AttackFinished (2);
@@ -2081,4 +2081,28 @@ void() CheckGugAttack = {
 		self.th_missile();
 		SUB_AttackFinished(2.3 + 0.3 * random());
 	}
+};
+
+float() CheckVermisAttack =  {
+	local vector spot1, spot2;
+
+	self.enemydist = range_distance(self.enemy,FALSE);
+	spot1 = self.origin + self.view_ofs;
+	spot2 = SUB_orgEnemyTarget() + self.enemy.view_ofs;
+	traceline(spot1,spot2,0,self);
+	if (trace_inopen && trace_inwater) return FALSE;
+
+	if (self.enemydist < 340 && self.enemy.movetype != MOVETYPE_FLY) {
+		if (self.th_melee) { self.th_melee(); return TRUE; }
+	}
+	if (!(self.th_missile)) return FALSE;
+	if (time < self.attack_finished) return FALSE;
+	if (trace_ent != self.enemy && random() < 0.3) return FALSE;
+
+	if (random() < 0.9) {
+		self.th_missile();
+		SUB_AttackFinished(2 + 1 * random());
+		return TRUE;
+	}
+	return FALSE;
 };

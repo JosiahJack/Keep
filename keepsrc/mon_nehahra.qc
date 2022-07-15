@@ -221,7 +221,7 @@ void(float dist) nehahra_motion = {
 
 	enemy_infront = infront(self.enemy);
 	enemy_range = range(self.enemy);
-	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
+	enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	movetogoal(dist);
 };
 
@@ -448,7 +448,7 @@ float(entity targ) visible_bsp = {
 	local vector spot2;
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.absmin + (targ.absmax - targ.absmin) * 0.5;
-	traceline(spot1, spot2, 1, self);
+	traceline(spot1,spot2, 1, self);
 	if (trace_inopen && trace_inwater) return FALSE;
 	if (trace_fraction == 1 || trace_ent == targ) return TRUE;
 	return FALSE;

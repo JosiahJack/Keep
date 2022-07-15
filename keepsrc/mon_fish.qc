@@ -208,16 +208,11 @@ void() monster_fish = {
 	if (self.spawnflags & MON_FISH_SMALL) {
 		if (self.bboxtype < 1) self.bboxtype = BBOX_FISHS;
 		if (self.health < 1) self.health = 15;
-		// The small fish moving really fast looks odd
-		// reverted speed and movement back to original
-		//self.move_state = '0 12 16';
-		self.move_state = '0 8 12';
 	} else {
 		if (self.bboxtype < 1) self.bboxtype = BBOX_FISH;
 		if (self.health < 1) self.health = 25;
-		self.move_state = '0 8 12';
 	}
-	
+	self.move_state = '0 8 12';
 	self.th_checkattack = FishCheckAttack;
 	self.th_stand = f_stand;
 	self.th_walk = f_walk;

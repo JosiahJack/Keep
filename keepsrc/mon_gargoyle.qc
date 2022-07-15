@@ -146,7 +146,7 @@ void() garg_fire8	= [$attack16, garg_fire9 ] { SUB_FinishAttachment(); garg_fbth
 void() garg_fire9	= [$attack18, garg_fire10 ] { ai_face();monster_idle_sound(); };
 void() garg_fire10	= [$attack20, garg_run1 ] { ai_face();
 	// If enemy really close, goto into a frenzy of fireball attacks
-	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+	self.enemydist = range_distance(self.enemy,FALSE);
 	if (SUB_healthEnemyTarget() > 0 && self.enemydist < MON_RANGE_CLOSE) self.think = garg_fire1;
 	else self.attack_state = AS_STRAIGHT;
 };

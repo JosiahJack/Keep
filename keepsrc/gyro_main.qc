@@ -114,6 +114,9 @@ float	gyro_displayintro;
 //----- General Function Protoypes --------------------
 void() Gyro_RunPhysics;
 void() Gyro_RunForces;
+void(entity targ) AddToTotals;
+void(entity thekilled, entity attacker) AddToKills;
+void(entity e) FliquidList_Remove;
 
 //===== Physics Object Variables ====================
 //----- Mass and Bouyancy --------------------
@@ -355,9 +358,19 @@ float(float x, float y) Gyro_PowerEstimation = {
 //----- Safe 'Remove' Function Replacement --------------------
 void(entity e) Gyro_RemoveEntity	= #15;
 void(entity e) remove = {
+	if (!e) return;
+	if (e == world) return;
+	if (e.flags & FL_CLIENT) return;
+
+	// Check for activate mosnters? Tidy up kill counter
+	if (e.flags & FL_MONSTER && e.health > 0) { 
+		if (e.nomonstercount) AddToTotals(e); // If a monster marked with no monster count dies update HUD totals to reflect death properly
+		AddToKills(e,activator);
+	}
 	Gyro_ObjectList_Remove(e);
 	Gyro_ForceList_Remove(e);
-	Gyro_RemoveEntity(e);
+	FliquidList_Remove(e);
+	Gyro_RemoveEntity(e); // The actual remove = #15; remove()
 };
 
 //===== Primary Control Routines ====================

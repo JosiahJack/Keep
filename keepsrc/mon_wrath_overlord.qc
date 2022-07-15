@@ -63,101 +63,98 @@ void() overlord_teleport = {
 };
 
 void() overlord_stand1 = [ 1.000, overlord_stand1 ] { ai_stand(); };
-void() overlord_walk01 = [ 1.000, overlord_walk02 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk02 = [ 2.000, overlord_walk03 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk03 = [ 3.000, overlord_walk04 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk04 = [ 4.000, overlord_walk05 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk05 = [ 5.000, overlord_walk06 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk06 = [ 6.000, overlord_walk07 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk07 = [ 7.000, overlord_walk08 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk08 = [ 8.000, overlord_walk09 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk09 = [ 9.000, overlord_walk10 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk10 = [ 10.000, overlord_walk11 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk11 = [ 11.000, overlord_walk12 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk12 = [ 12.000, overlord_walk13 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk13 = [ 13.000, overlord_walk14 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk14 = [ 14.000, overlord_walk15 ] { ai_walk (FL_CLIENT); };
-void() overlord_walk15 = [ 15.000, overlord_walk01 ] {  ai_walk (FL_CLIENT); };
+void() overlord_walk01 = [ 1.000, overlord_walk02 ] { ai_walk(8); };
+void() overlord_walk02 = [ 2.000, overlord_walk03 ] { ai_walk(8); };
+void() overlord_walk03 = [ 3.000, overlord_walk04 ] { ai_walk(8); };
+void() overlord_walk04 = [ 4.000, overlord_walk05 ] { ai_walk(8); };
+void() overlord_walk05 = [ 5.000, overlord_walk06 ] { ai_walk(8); };
+void() overlord_walk06 = [ 6.000, overlord_walk07 ] { ai_walk(8); };
+void() overlord_walk07 = [ 7.000, overlord_walk08 ] { ai_walk(8); };
+void() overlord_walk08 = [ 8.000, overlord_walk09 ] { ai_walk(8); };
+void() overlord_walk09 = [ 9.000, overlord_walk10 ] { ai_walk(8); };
+void() overlord_walk10 = [ 10.000, overlord_walk11 ] { ai_walk(8); };
+void() overlord_walk11 = [ 11.000, overlord_walk12 ] { ai_walk(8); };
+void() overlord_walk12 = [ 12.000, overlord_walk13 ] { ai_walk(8); };
+void() overlord_walk13 = [ 13.000, overlord_walk14 ] { ai_walk(8); };
+void() overlord_walk14 = [ 14.000, overlord_walk15 ] { ai_walk(8); };
+void() overlord_walk15 = [ 15.000, overlord_walk01 ] {  ai_walk(8); };
 
-void() overlord_run01 = [ 1.000, overlord_run02 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run02 = [ 2.000, overlord_run03 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run03 = [ 3.000, overlord_run04 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run04 = [ 4.000, overlord_run05 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run05 = [ 5.000, overlord_run06 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run06 = [ 6.000, overlord_run07 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run07 = [ 7.000, overlord_run08 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run08 = [ 8.000, overlord_run09 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run09 = [ 9.000, overlord_run10 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run10 = [ 10.000, overlord_run11 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run11 = [ 11.000, overlord_run12 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run12 = [ 12.000, overlord_run13 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run13 = [ 13.000, overlord_run14 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run14 = [ 14.000, overlord_run15 ] { ai_run (STAT_TOTALMONSTERS); };
-void() overlord_run15 = [ 15.000, overlord_run01 ] { ai_run (STAT_TOTALMONSTERS); };
+void() overlord_run01 = [ 1.000, overlord_run02 ] { ai_run(12); };
+void() overlord_run02 = [ 2.000, overlord_run03 ] { ai_run(12); };
+void() overlord_run03 = [ 3.000, overlord_run04 ] { ai_run(12); };
+void() overlord_run04 = [ 4.000, overlord_run05 ] { ai_run(12); };
+void() overlord_run05 = [ 5.000, overlord_run06 ] { ai_run(12); };
+void() overlord_run06 = [ 6.000, overlord_run07 ] { ai_run(12); };
+void() overlord_run07 = [ 7.000, overlord_run08 ] { ai_run(12); };
+void() overlord_run08 = [ 8.000, overlord_run09 ] { ai_run(12); };
+void() overlord_run09 = [ 9.000, overlord_run10 ] { ai_run(12); };
+void() overlord_run10 = [ 10.000, overlord_run11 ] { ai_run(12); };
+void() overlord_run11 = [ 11.000, overlord_run12 ] { ai_run(12); };
+void() overlord_run12 = [ 12.000, overlord_run13 ] { ai_run(12); };
+void() overlord_run13 = [ 13.000, overlord_run14 ] { ai_run(12); };
+void() overlord_run14 = [ 14.000, overlord_run15 ] { ai_run(12); };
+void() overlord_run15 = [ 15.000, overlord_run01 ] { ai_run(12); };
 
 void() overlord_smash;
 
-void() overlord_at_a01 = [ 16.000, overlord_at_a02 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a02 = [ 17.000, overlord_at_a03 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a03 = [ 18.000, overlord_at_a04 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a04 = [ 19.000, overlord_at_a05 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a05 = [ 20.000, overlord_at_a06 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a06 = [ 21.000, overlord_at_a07 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a01 = [ 16.000, overlord_at_a02 ] { ai_charge(12); };
+void() overlord_at_a02 = [ 17.000, overlord_at_a03 ] { ai_charge(12); };
+void() overlord_at_a03 = [ 18.000, overlord_at_a04 ] { ai_charge(12); };
+void() overlord_at_a04 = [ 19.000, overlord_at_a05 ] { ai_charge(12); };
+void() overlord_at_a05 = [ 20.000, overlord_at_a06 ] { ai_charge(12); };
+void() overlord_at_a06 = [ 21.000, overlord_at_a07 ] { ai_charge(12); };
 void() overlord_at_a07 = [ 22.000, overlord_at_a08 ] { overlord_smash(); };
-void() overlord_at_a08 = [ 23.000, overlord_at_a09 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a09 = [ 24.000, overlord_at_a10 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_a10 = [ 25.000, overlord_run01 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_a08 = [ 23.000, overlord_at_a09 ] { ai_charge(12); };
+void() overlord_at_a09 = [ 24.000, overlord_at_a10 ] { ai_charge(12); };
+void() overlord_at_a10 = [ 25.000, overlord_run01 ] { ai_charge(12); };
 
-void() overlord_at_b01 = [ 26.000, overlord_at_b02 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b02 = [ 27.000, overlord_at_b03 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b03 = [ 28.000, overlord_at_b04 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b04 = [ 29.000, overlord_at_b05 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b05 = [ 30.000, overlord_at_b06 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b06 = [ 31.000, overlord_at_b07 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b07 = [ 32.000, overlord_at_b08 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_b01 = [ 26.000, overlord_at_b02 ] { ai_charge(12); };
+void() overlord_at_b02 = [ 27.000, overlord_at_b03 ] { ai_charge(12); };
+void() overlord_at_b03 = [ 28.000, overlord_at_b04 ] { ai_charge(12); };
+void() overlord_at_b04 = [ 29.000, overlord_at_b05 ] { ai_charge(12); };
+void() overlord_at_b05 = [ 30.000, overlord_at_b06 ] { ai_charge(12); };
+void() overlord_at_b06 = [ 31.000, overlord_at_b07 ] { ai_charge(12); };
+void() overlord_at_b07 = [ 32.000, overlord_at_b08 ] { ai_charge(12); };
 void() overlord_at_b08 = [ 33.000, overlord_at_b09 ] { overlord_smash(); };
-void() overlord_at_b09 = [ 34.000, overlord_at_b10 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b10 = [ 35.000, overlord_at_b11 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b11 = [ 36.000, overlord_at_b12 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b12 = [ 37.000, overlord_at_b13 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b13 = [ 38.000, overlord_at_b14 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b14 = [ 39.000, overlord_run01 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_b09 = [ 34.000, overlord_at_b10 ] { ai_charge(12); };
+void() overlord_at_b10 = [ 35.000, overlord_at_b11 ] { ai_charge(12); };
+void() overlord_at_b11 = [ 36.000, overlord_at_b12 ] { ai_charge(12); };
+void() overlord_at_b12 = [ 37.000, overlord_at_b13 ] { ai_charge(12); };
+void() overlord_at_b13 = [ 38.000, overlord_at_b14 ] { ai_charge(12); };
+void() overlord_at_b14 = [ 39.000, overlord_run01 ] { ai_charge(12); };
 
-void() overlord_at_c01 = [ 40.000, overlord_at_c02 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c02 = [ 41.000, overlord_at_c03 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c03 = [ 42.000, overlord_at_c04 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c04 = [ 43.000, overlord_at_c05 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c05 = [ 44.000, overlord_at_c06 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_c01 = [ 40.000, overlord_at_c02 ] { ai_charge(12); };
+void() overlord_at_c02 = [ 41.000, overlord_at_c03 ] { ai_charge(12); };
+void() overlord_at_c03 = [ 42.000, overlord_at_c04 ] { ai_charge(12); };
+void() overlord_at_c04 = [ 43.000, overlord_at_c05 ] { ai_charge(12); };
+void() overlord_at_c05 = [ 44.000, overlord_at_c06 ] { ai_charge(12); };
 void() overlord_at_c06 = [ 45.000, overlord_at_c07 ] { overlord_smash(); };
-void() overlord_at_c07 = [ 46.000, overlord_at_c08 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c08 = [ 47.000, overlord_at_c09 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c09 = [ 48.000, overlord_at_c10 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c10 = [ 49.000, overlord_at_c11 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_c07 = [ 46.000, overlord_at_c08 ] { ai_charge(12); };
+void() overlord_at_c08 = [ 47.000, overlord_at_c09 ] { ai_charge(12); };
+void() overlord_at_c09 = [ 48.000, overlord_at_c10 ] { ai_charge(12); };
+void() overlord_at_c10 = [ 49.000, overlord_at_c11 ] { ai_charge(12); };
 void() overlord_at_c11 = [ 50.000, overlord_at_c12 ] { overlord_smash(); };
-void() overlord_at_c12 = [ 51.000, overlord_at_c13 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c13 = [ 52.000, overlord_at_c14 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c14 = [ 53.000, overlord_run01 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_at_c12 = [ 51.000, overlord_at_c13 ] { ai_charge(12); };
+void() overlord_at_c13 = [ 52.000, overlord_at_c14 ] { ai_charge(12); };
+void() overlord_at_c14 = [ 53.000, overlord_run01 ] { ai_charge(12); };
 
 void() overlord_smash = {
    local vector delta;
    local float smashDmg;
 
-   if ( !self.enemy )
-      return ;
+   if (self.health < 1) return;
+   if (!self.enemy) return;
+   if (!CanDamage(self.enemy,self)) return; // Don't even charge.
 
-   if ( !CanDamage (self.enemy,self) )
-      return ;
+   ai_charge(10);
+	self.enemydist = range_distance(self.enemy,FALSE);
+	if (self.enemydist > 100) return; // Enemy too far away.
 
-   ai_charge (MOVETYPE_BOUNCE);
-   delta = (self.enemy.origin - self.origin);
-   if ( (vlen (delta) > 100.000) )
-      return ;
-
-   smashDmg = (20.000 + (random () * MOVETYPE_BOUNCE));
+   smashDmg = (20.000 + (random () * 10));
    sound(self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
    T_Damage (self.enemy,self,self,smashDmg,DAMARMOR);
-   delta = normalize (((self.enemy.origin - self.origin) + self.enemy.view_ofs));
-   SpawnBlood (self.enemy, (self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
+   delta = normalize(((SUB_orgEnemyTarget() - self.origin) + self.enemy.view_ofs));
+   SpawnBlood(self.enemy,(self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
 };
 
 void() overlord_melee = {
@@ -175,17 +172,17 @@ void() overlord_melee = {
    }
 };
 
-void() overlord_msl_a01 = [ 54.000, overlord_msl_a02 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a02 = [ 55.000, overlord_msl_a03 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a03 = [ 56.000, overlord_msl_a04 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a04 = [ 57.000, overlord_msl_a05 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a05 = [ 58.000, overlord_msl_a06 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_msl_a01 = [ 54.000, overlord_msl_a02 ] { ai_charge(12); };
+void() overlord_msl_a02 = [ 55.000, overlord_msl_a03 ] { ai_charge(12); };
+void() overlord_msl_a03 = [ 56.000, overlord_msl_a04 ] { ai_charge(12); };
+void() overlord_msl_a04 = [ 57.000, overlord_msl_a05 ] { ai_charge(12); };
+void() overlord_msl_a05 = [ 58.000, overlord_msl_a06 ] { ai_charge(12); };
 void() overlord_msl_a06 = [ 59.000, overlord_msl_a07 ] { WrathMissile (MOVETYPE_STEP); };
-void() overlord_msl_a07 = [ 60.000, overlord_msl_a08 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a08 = [ 61.000, overlord_msl_a09 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a09 = [ 62.000, overlord_msl_a10 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a10 = [ 63.000, overlord_msl_a11 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a11 = [ 64.000, overlord_msl_a12 ] { ai_charge (STAT_TOTALMONSTERS); };
+void() overlord_msl_a07 = [ 60.000, overlord_msl_a08 ] { ai_charge(12); };
+void() overlord_msl_a08 = [ 61.000, overlord_msl_a09 ] { ai_charge(12); };
+void() overlord_msl_a09 = [ 62.000, overlord_msl_a10 ] { ai_charge(12); };
+void() overlord_msl_a10 = [ 63.000, overlord_msl_a11 ] { ai_charge(12); };
+void() overlord_msl_a11 = [ 64.000, overlord_msl_a12 ] { ai_charge(12); };
 void() overlord_msl_a12 = [ 65.000, overlord_run01 ] { overlord_teleport(); };
 
 void() overlord_missile = { overlord_msl_a01(); };

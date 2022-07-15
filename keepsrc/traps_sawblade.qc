@@ -79,7 +79,7 @@ void() trap_sawblade_stopthink = { // [FUNCTION]
 		self.rad_time = 0;
 	}
 
-	if (CheckZeroVector(self.velocity) == FALSE) self.velocity = normalize(self.velocity) * self.speed * remaining; // Ramp down from original speed and spinrate over self.lip seconds
+	if (VectorIsAllZeros(self.velocity) == FALSE) self.velocity = normalize(self.velocity) * self.speed * remaining; // Ramp down from original speed and spinrate over self.lip seconds
 	self.avelocity = normalize(self.avelocity) * self.yaw_speed * remaining;
 	self.nextthink = time + 0.05; // Double tick time to smooth out slowdown
 }

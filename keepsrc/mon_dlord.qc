@@ -29,7 +29,7 @@ void(void() thinkst) SUB_DLordCheckRefire = {
 	targ = self.enemy;
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
-	traceline(spot1, spot2, 0, self);
+	traceline(spot1,spot2, 0, self);
 	if (trace_ent == targ)
 		self.dlord_playervis = time + 0.8;
 

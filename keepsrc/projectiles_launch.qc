@@ -3332,3 +3332,21 @@ void(float AttackNumber) lavaman_missile = {
    sound(self,CHAN_WEAPON,"boss1/throw.wav",TRUE,ATTN_NORM);
    if ( (self.enemy.health <= FALSE) ) lavaman_idle1();
 };
+
+void(vector vel, vector org) Launch_VermisSpore = {
+		newmis = spawn();
+		newmis.classgroup = CG_PROJALL;
+		newmis.owner = self;
+		newmis.movetype = MOVETYPE_FLYMISSILE;
+		newmis.solid = SOLID_BBOX;
+		newmis.velocity = vel;
+		newmis.avelocity = '297 324 333';
+		newmis.angles = vectoangles(newmis.velocity);
+		newmis.touch = vermis_spore_touch;
+		newmis.nextthink = time + 0.1;
+		newmis.think = vermis_spore_think;
+		newmis.ltime = time + 2;
+		setmodel(newmis,"progs/quoth/spore.mdl");
+		setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
+		setorigin(newmis,org);
+};

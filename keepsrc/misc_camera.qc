@@ -759,7 +759,7 @@ void(float filehandle, string entkey, float entval) misc_camera_float = { // [FU
 void(float filehandle, string entkey, vector entval) misc_camera_vec = { // [FUNCTION]
 	local string expstr;
 
-	if (CheckZeroVector(entval) == TRUE) return;
+	if (VectorIsAllZeros(entval) == TRUE) return;
 
 	expstr = strcat(ftos(entval_x), " ", ftos(entval_y), " ", ftos(entval_z));
 	misc_camera_str(filehandle, entkey, expstr);

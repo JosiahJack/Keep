@@ -43,6 +43,10 @@
 
 void() MonsterDeBuff;
 float() Ryu_BlockCrossfire;
+void() ai_setidealyaw;
+void() vermis_wake1;
+void() vermis_trans1;
+void() vermis_idle1;
 
 // Checks pointcontents of source+target because traceline parms are not 100% reliable for flagging water/air content
 // One function check for all the different visibility functions.  Designed to work with the new liquidblock entity flag
@@ -51,8 +55,8 @@ float(entity targ, vector org_source, vector org_targ) check_liquidblock_generic
 	
 	// Is r_wateralpha set or monsters forced to check liquid surfaces?
 	if (liquid_alpha == 1 || targ.liquidblock) {
-		pc_source = pointcontents(org_source); // Check point contents first
-		pc_targ = pointcontents(org_targ);
+		pc_source = GetContents(org_source); // Check point contents first
+		pc_targ = GetContents(org_targ);
 		if (pc_source != pc_targ) return TRUE; // Are point content different? (like water/air)
 		if (trace_inopen && trace_inwater) {
 			if (targ.classtype == CT_MONRYU || targ.classtype == CT_MONWYRM) {
@@ -83,7 +87,7 @@ float(entity source, entity targ, vector s_offset, vector t_offset, float nomons
 
 	spot1 = SUB_EntityOrigin(source) + s_offset; // Bmodels don't have proper origins
 	spot2 = SUB_EntityOrigin(targ) + t_offset;
-	traceline(spot1, spot2, nomonsters, source); 
+	traceline(spot1,spot2, nomonsters, source); 
 
 	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will
 	// draw a diamond model where the AI is looking.
@@ -141,7 +145,7 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 			+ (s_ofset_y * v_right)
 			+ (s_ofset_z * v_up);
 	spot2 = SUB_EntityOrigin(targ) + t_ofset;
-	traceline (spot1, spot2, FALSE, self);
+	traceline(spot1,spot2, FALSE, self);
 	visible_distance = vlen ((trace_endpos - spot1)); // just set once to middle
 	// Is trace entity the same as the target entity?
 	if (trace_ent == targ) tr_line_x = 1;
@@ -248,11 +252,14 @@ float(entity targ) range = {
  	returns the vector distance between two points
 ======================================================================*/
 float(entity targ, float flat2d) range_distance = {
-	local vector spot1, spot2;
+	local vector spot1, spot2, enemyorg;
 	local float r;
-		
+
+	if (targ == self.enemy) enemyorg = SUB_orgEnemyTarget();
+	else enemyorg = targ.origin;
+
 	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
+	spot2 = enemyorg + targ.view_ofs;
 	if (flat2d) { spot1_z = spot2_z = 0; }
 	r = vlen (spot1 - spot2);
 	
@@ -279,7 +286,7 @@ float (entity source, entity targ) rangeattack_check = {
 	// Monsters without melee should always range anything really close
 	if (!source.th_melee && r < MON_RANGE_MELEE) return TRUE;
 
-	traceline (spot1, spot2, FALSE, source);	// trace hits monsters (infighting)
+	traceline(spot1,spot2, FALSE, source);	// trace hits monsters (infighting)
 	if (trace_ent != targ) return FALSE;			// don't have a clear shot
 
 	// Does the world define any water transparency
@@ -349,7 +356,7 @@ void() HuntTarget = {
 
 	self.oldorigin = self.origin; // Save origin
 	self.goalentity = self.enemy; // Focus on enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	ai_setidealyaw();
 	self.nextthink = time + 0.1; // Some monsters have special wakeup animations before attacking
 	if (self.classtype == CT_MONPOLYP && self.startonground == 1) {
 		self.think = polyp_wake1_prethink;
@@ -415,6 +422,20 @@ void() FoundTarget = {
 	}
 	
 	self.show_hostile = time + 1;		// Wake up other monsters
+	if (self.classtype == CT_MONVERMIS) {
+		if (self.coiled != 0) {
+			self.think = vermis_wake1;
+			sound(self,CHAN_VOICE, "quoth/vermis/sight.wav", 1, 0.4);
+		} else {
+			self.think = vermis_trans1;
+			sound(self,CHAN_VOICE, "quoth/vermis/sight2.wav", 1, 0.4);
+		}
+		self.th_stand = vermis_idle1;
+		ai_setidealyaw();
+		self.nextthink = time + 0.1;
+		self.shield = 1;
+		return;
+	}
 	monster_sightsound();				// Make sight sound regardless of who hit us
 	HuntTarget();						// Keep running after enemy
 };
@@ -449,7 +470,7 @@ void(float wakeupothers) FoundHuntTarget = {
 	self.show_hostile = time + 1;		// wake up other monsters
 	self.oldorigin = self.origin;		// Save origin
 	self.goalentity = self.enemy;		// Focus on enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	ai_setidealyaw();
 
 	// Default 1s wait (NM adjusted) before attacking
 	if (self.ryuflags & RYU_ALERT)

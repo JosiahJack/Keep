@@ -232,7 +232,7 @@ void() elf_leap4 = [$jump4, elf_leap5 ] {};
 void() elf_leap5 = [$jump5, elf_leap6 ] {};
 void() elf_leap6 = [$jump6, elf_leap7 ] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = elf_leap3;
 	}
@@ -391,7 +391,7 @@ void() monster_xmas_elf = {
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '400 0 200';
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '400 0 200';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPELFNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELFFAR;	
 	self.th_checkattack = VorelingCheckAttack;

@@ -360,7 +360,7 @@ void()	zombiek_jump6	= [	$atta6,		zombiek_jump6	] { ai_face(); };
 void()	zombiek_jump7	= [	$atta7,		zombiek_jump7	] { ai_face(); };
 void()	zombiek_jump8	= [	$atta8,		zombiek_jump9	] { ai_face();
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		if (!checkbottom(self)) {
 			self.ideal_yaw = random() * 360; 	//random jump angle
 			self.think = zombiek_jump3;
@@ -761,7 +761,7 @@ void() monster_zombiek = { // [ENTITY]
 	if (self.deathstring == "") self.deathstring = " was cornered by a Zombie Knight\n";
 
 	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 200';
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '150 0 200';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPZKNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPZKFAR;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent

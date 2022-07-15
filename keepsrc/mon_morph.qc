@@ -407,7 +407,7 @@ void() morph_minionspawn = {
 	if (self.childrenSpawned > self.minion_maxcount) return;
 
 	theDest = SUB_FindTeleportDestinationEntity();
-	if (theDest == world) return;
+	if (!theDest) return;
 
 	theChild = spawn();
 	theChild.model = self.model;

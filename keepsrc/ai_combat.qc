@@ -45,11 +45,17 @@ void(entity ent, float color1, float color2) Particle_Cube;
 void() FrozenThink;
 void() Frozen_Touch;
 void() BecomeIcyExp;
+void(entity fire) Fireball_Steam;
 
+// Returns true if the inflictor can directly damage the target.  Used for
+// explosions and melee attacks.
 float(entity targ, entity inflictor) CanDamage = {
-	if (targ.takedamage == DAMAGE_NO) return FALSE; // Any entity marked with no damage is automatically excluded
+	if (targ.takedamage == DAMAGE_NO) return FALSE;
 	
-	if (targ.movetype == MOVETYPE_PUSH) { // bmodels need special checking because their origin is 0,0,0
+	// bmodels need special checking because their origin is 0,0,0
+	// Not all bmodels use push movetype, use bsporigin instead
+	//	if (targ.movetype == MOVETYPE_PUSH) {
+	if (targ.bsporigin == TRUE) {
 		traceline(inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE, inflictor);
 		if (trace_fraction == 1) return TRUE;
 		if (trace_ent == targ) return TRUE;
@@ -71,71 +77,6 @@ float(entity targ, entity inflictor) CanDamage = {
 	return FALSE; // Couldn't hit
 };
 
-float VICTORY_ALL_MONSTERS = 0;
-float VICTORY_THRESHOLD_MONSTERS = 1;
-float VICTORY_ANY_SOME_MONSTERS = 2;
-float VICTORY_NONE_MONSTERS = 3;
-float VICTORY_NONE_DENIZENS = 4;
-float VICTORY_THRESHOLD_DENIZENS = 5;
-float VICTORY_ANY_SOME_DENIZENS = 6;
-float VICTORY_ALL_DENIZENS = 7;
-float VICTORY_MANUAL_ONLY = 1; // Only trigger if targetted, not automatic on kill.
-
-void() trigger_victory_fire = {
-	if (self.enemy) activator = self.enemy;
-	SUB_UseTargets();
-	if (self.wait < 0) self.wait = TRUE;
-};
-
-void() trigger_victory_check = {
-	local float goal, goalperc;
-
-	if (self.wait > 0) return;
-	if (self.filterstyle == VICTORY_ALL_MONSTERS) {
-		if (killed_monsters < total_monsters) return;
-	} else if (self.filterstyle == VICTORY_ALL_DENIZENS) {
-		if (killed_denizens < total_denizens) return;
-	} else if (self.filterstyle == VICTORY_NONE_MONSTERS) {
-		if (killed_monsters > 0) return;
-	} else if (self.filterstyle == VICTORY_NONE_DENIZENS) {
-		if (killed_denizens > 0) return;
-	} else if (self.filterstyle == VICTORY_ANY_SOME_MONSTERS) {
-		if (killed_monsters <= 0) return;
-	} else if (self.filterstyle == VICTORY_ANY_SOME_DENIZENS) {
-		if (killed_denizens <= 0) return;
-	}
-
-	if (self.filterstyle == VICTORY_THRESHOLD_MONSTERS
-		|| self.filterstyle == VICTORY_THRESHOLD_DENIZENS) {
-		goalperc = SUB_ClampFloat(self.count,0,1);
-	}
-
-	if (self.filterstyle == VICTORY_THRESHOLD_MONSTERS) {
-		goal = SUB_ClampFloat(ceil(total_monsters * goalperc),0,total_monsters);
-		if (self.count >= 1) goal = ceil(self.count);
-		goal = SUB_ClampFloat(goal,1,total_monsters);
-		if (killed_monsters < goal) return;
-	}
-
-	if (self.filterstyle == VICTORY_THRESHOLD_DENIZENS) {
-		goal = SUB_ClampFloat(ceil(total_denizens * goalperc),0,total_denizens);
-		if (self.count >= 1) goal = ceil(self.count);
-		goal = SUB_ClampFloat(goal,1,total_denizens);
-		if (killed_denizens < goal) return;
-	}
-
-	trigger_victory_fire();
-};
-
-// --> QUAKED trigger_victory (.5 .5 .5) (-8 -8 -8) (8 8 8)
-// Drake entity.
-// Only be fired by killing the last monster on a level (i.e., 100% kills).
-// It can contain killtargets, targets, delays, and messages.
-void() trigger_victory = {
-	 // Allow forcing the effect manually.
-	if (self.targetname != "") self.use = trigger_victory_check;
-};
-
 void(entity targ) AddToTotals = {
 	if (targ.classtype == CT_MONANACONDACOIL) return; // The coils are part of monster_anaconda
 
@@ -149,7 +90,37 @@ void(entity targ) AddToTotals = {
 	update_hud_totals(HUD_MONSTERS);
 };
 
-float(entity e, float heal, float ignore) T_Repair;
+// Add armor to entity e, within limits.  Similar to T_Heal, but for armor.
+float(entity e, float heal, float ignore) T_Repair = {
+    local float full;
+
+    if (e.health <= 0) return 0;   // Dead.
+
+    if (ignore)
+        full = 250;     // armorvalue on hud is restricted to max of 255.
+    else if (e.armortype == ARMOR_RED_TYPE)
+        full = ARMOR_RED_VALUE;
+    else if (e.armortype == ARMOR_YEL_TYPE)
+        full = ARMOR_YEL_VALUE;
+    else
+        full = ARMOR_GRN_VALUE;
+
+    if (e.armorvalue >= full) return 0;   // Armor already fully restored.
+    if (heal < 1) return 0;   // Don't damage the armor.
+
+    if (e.armorvalue + heal >= full) e.armorvalue = full;
+	else e.armorvalue = e.armorvalue + heal;
+
+	if (e.curse_type == CURSE_ARMOR) {
+		e.armorvalue = e.armorvalue - heal; // flip it!
+		if (e.armorvalue < 0) {
+			e.armorvalue = 0;
+			e.armortype = 0;
+		}
+	}
+
+    return heal;        // Return amount healed instead of TRUE.
+};
 
 void(entity thekilled, entity attacker) AddToKills = {
     local entity victory;
@@ -833,38 +804,6 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 	}
 };
 
-// Add armor to entity e, within limits.  Similar to T_Heal, but for armor.
-float(entity e, float heal, float ignore) T_Repair = {
-    local float full;
-
-    if (e.health <= 0) return 0;   // Dead.
-
-    if (ignore)
-        full = 250;     // armorvalue on hud is restricted to max of 255.
-    else if (e.armortype == ARMOR_RED_TYPE)
-        full = ARMOR_RED_VALUE;
-    else if (e.armortype == ARMOR_YEL_TYPE)
-        full = ARMOR_YEL_VALUE;
-    else
-        full = ARMOR_GRN_VALUE;
-
-    if (e.armorvalue >= full) return 0;   // Armor already fully restored.
-    if (heal < 1) return 0;   // Don't damage the armor.
-
-    if (e.armorvalue + heal >= full) e.armorvalue = full;
-	else e.armorvalue = e.armorvalue + heal;
-
-	if (e.curse_type == CURSE_ARMOR) {
-		e.armorvalue = e.armorvalue - heal; // flip it!
-		if (e.armorvalue < 0) {
-			e.armorvalue = 0;
-			e.armortype = 0;
-		}
-	}
-
-    return heal;        // Return amount healed instead of TRUE.
-};
-
 // Generic slow timer.  Inflicted by Buriza.
 void(entity targ, entity attacker, float dur) T_Slow = { // [FUNCTION]
     if (!targ) return;
@@ -901,7 +840,10 @@ void() FreezeFinish = {
 	Gyro_Object_SetBouyancy(self,BOUY_GIB);
 	Gyro_Object_SetLiquidResistance(self,RESIST_GIB);
 	if (self.targetname) self.use = BecomeIcyExp;
-	if (pointcontents(self.origin) == CONTENT_LAVA) BecomeIcyExp(); // Can't freeze that which under lava lies; so burst away!
+	if (InLava(self.origin)) {
+		Fireball_Steam(self);
+		BecomeIcyExp(); // Can't freeze that which under lava lies; so burst away!
+	}
 };
 
 void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
@@ -915,6 +857,3 @@ void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
     targ.enemy = world;
 	SUB_Think(targ,FreezeFinish,0.05);
 };
-
-// From Quoth
-void() ai_shotcheck = { if (visible(self.enemy)) self.oldenemyorigin = self.enemy.origin; };

@@ -34,66 +34,76 @@
 //
 // Description:
 // The various subroutines for monster movement and rotation.
-//
-// AI animation movement (used mostly in monsters QC file)
-// - void(float dist) ai_forward
-// - void(float dist) ai_back
-// - void(float dist) ai_pain
-// - void(float dist) ai_painforward
-// - void() ai_turn
-// - float() FacingIdeal
-// - void() ai_face
-// - void() ai_resetangles
-// - void(float dist) ai_charge
-// - void(float dist) ai_chargenoturn
-// - void() ai_charge_side
-// - void() ai_charge_front
-//
-// AI ATTACK states
-// - void() ai_run_melee
-// - void() ai_run_missile
-// - void() ai_run_jump 
-// - void(float dist) ai_run_slide
-// - void(float dist) ai_run_sidestep
-// - void(float dist) ai_run_backward
-//
-// AI interactions with Breakable System
-// - float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable
-// - void(float brkdmg) ai_damagebreakable
-// - void(float brkdmg) ai_jumpbreakable
-//
-// AI melee checks and damage
-// - float(float attackdist) ai_checkmelee
-// - void() ai_melee
-// - void(float dmg_multiplier) ai_meleesmash
-// - void() ai_melee_side
 //=============================================================================
 
 void() MonsterDeBuff;
+void(entity targ) SetMove_BoxParams;
 
-void() ai_face = {
-	//Commenting this out for the ballista.  Dangerous? if (self.health < 1) return;// Unusual check, caught elsewhere
-	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
-	ChangeYaw(); // Done in engine.
+void() ai_setidealyaw = {// [FUNCTION] 
+   enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
+   self.ideal_yaw = enemy_yaw;
+};
+
+void() ai_face = {// [FUNCTION] 
+	if (self.flags & FLx_CREATURE && self.health < 1) return;
+
+	ai_setidealyaw();
+	ChangeYaw();
+};
+
+void() ai_shotcheck = { // [FUNCTION] From Quoth, modified to include ai_face.
+	if (visible(self.enemy)) {
+		self.oldenemyorigin = self.enemy.origin;
+		ai_face();
+	} else self.ideal_yaw = vectoyaw(self.oldenemyorigin - self.origin);
+	ChangeYaw();
+};
+
+// Very costly function, re-using FindTarget again!
+void() ai_turn = { // [FUNCTION] 
+	if (!FindTarget()) ChangeYaw();
+};
+
+float() FacingIdeal = { // [FUNCTION] 
+	local float delta;
+	
+	delta = anglemod(self.angles_y - self.ideal_yaw);
+	if (delta > 45 && delta < 315) return FALSE;
+	else return TRUE;
+};
+
+void(void() thinkst) ai_facingideal_action = { // [FUNCTION] 
+	ai_face();
+	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
+		if (thinkst) thinkst();
+		self.attack_state = AS_STRAIGHT;
+	}
+};
+
+void() ai_turn_in_place = {
+	local float delta, oldyaw;
+
+	MonsterDeBuff();
+	self.nextthink = time + 0.1;
+	oldyaw = self.ideal_yaw;
+	ai_setidealyaw();
+	delta = fabs((self.angles_y - self.ideal_yaw));
+	if (delta > 10) ChangeYaw();
+	else {
+		self.ideal_yaw = oldyaw;
+		if (self.th_run) self.think = self.th_run;
+	}
 };
 
 void(float dist) ai_forward = {
 	MonsterDeBuff();
-	walkmove(self.angles_y, dist);
-};
-
-// ai_forward + ai_face
-void(float dist) ai_faceforward = {
-	ai_face();
-	ai_forward(dist);
+	walkmove(self.angles_y,dist);
 };
 
 void(float dist) ai_back = {
 	MonsterDeBuff();
-	walkmove((self.angles_y+180), dist);
+	walkmove((self.angles_y+180),dist);
 };
-
-void(float dist) ai_backface = { ai_face(); ai_back(dist); }; // faces then moves back.  Should be ai_faceback??
 
 // ai_pain (just uses ai_back, at some point a randomized backwards stagger vector was planned, but I'm not going to change expected behavior -Qmaster)
 void(float dist) ai_pain = { ai_back (dist); };
@@ -102,20 +112,6 @@ void(float dist) ai_painforward = {
 	MonsterDeBuff();
 	walkmove (self.angles_y, dist); // Not sure why Id used ideal_yaw when other functions use angles_y, commonized
 		  // meanwhile in Rubicon...// johnfitz changed so movement is based on current yaw, not ideal_yaw, to match animation   Lookie there, we're on the same page. -Qmaster
-};
-
-// ai_turn (Very costly function, re-using FindTarget again)
-void() ai_turn = {
-	if (FindTarget()) return;
-	ChangeYaw();			// Code function
-};
-
-float() FacingIdeal = {
-	local float delta;
-	
-	delta = anglemod(self.angles_y - self.ideal_yaw);
-	if (delta > 45 && delta < 315) return FALSE;
-	else return TRUE;
 };
 
 void() ai_trackenemy = {
@@ -129,16 +125,16 @@ void() ai_resetangles = {
 	self.angles_x = self.angles_z = 0; // There is a chance when finished a monster jump that some of the angles (X/Z) values are wrong and need resetting.  Should only be used after jump functions
 };
 
-// ai_charge (generic), The monster is in a melee attack, so get as close as possible to .enemy
+// ai_charge(generic), The monster is in a melee attack, so get as close as possible to .enemy
 void(float dist) ai_charge = {
 	MonsterDeBuff();
 	ai_face();
-	movetogoal (dist);
+	movetogoal(dist);
 };
 
 void(float dist) ai_chargenoturn = {
 	MonsterDeBuff();
-	movetogoal (dist);
+	movetogoal(dist);
 };
 
 void() ai_charge_side = {
@@ -148,47 +144,9 @@ void() ai_charge_side = {
 	MonsterDeBuff();
 	ai_face();
 	makevectors(self.angles); // aim to the left of the enemy for a flyby
-	dtemp = self.enemy.origin - (30 * v_right);
+	dtemp = SUB_orgEnemyTarget() - (30 * v_right);
 	heading = vectoyaw(dtemp - self.origin);
 	walkmove(heading, 20);
-};
-
-void() ai_charge_front = {
-	local	float	heading;
-	
-	MonsterDeBuff();
-	ai_face();			// Turn towards enemy first	
-	makevectors(self.angles);
-	heading = vectoyaw(self.enemy.origin - self.origin);
-	walkmove(heading, 10);
-};
-
-
-// Turn and close until within an angle to launch a melee attack
-void() ai_run_melee = {
-	ai_face();
-	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
-		self.th_melee();
-		self.attack_state = AS_STRAIGHT;
-	}
-};
-
-// Turn in place until within an angle to launch a missile attack
-void() ai_run_missile = {
-	ai_face();
-	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
-		self.th_missile();
-		self.attack_state = AS_STRAIGHT;
-	}
-};
-
-// Turn in place until within an angle to jump attack
-void() ai_run_jump = {
-	ai_face();
-	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
-		self.th_jump();
-		self.attack_state = AS_STRAIGHT;
-	}
 };
 
 // Strafe sideways, but stay at aproximately the same range
@@ -236,9 +194,8 @@ void(float dist) ai_run_backward = {
 	MonsterDeBuff();
 	
 	// Work out angle to face for enemy and then turn +/- 90 degrees so that the monster is moving sideways to the enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin) + 180; // `+ 180` is Different than ai_face	
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin) + 180; // `+ 180` is Different than ai_face	
 	ChangeYaw();
-	
 	if (walkmove (self.ideal_yaw, dist)) return; // Tests if monsters can move backwards
 	
 	self.attack_state = AS_SIDESTEP; // Cannot walk backwards, move sideways instead
@@ -262,11 +219,8 @@ float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable = {
 	return FALSE;
 };
 
-float BRKTRACE_DIST = 128;
-float BRKTRACE_ANG = 0.35;
-
 // Check if the monster (self) can see any breakables infront (target).  Triple trace infront (self.angles) origin, +upward and +downward
-float(float tracedist, float traceang) ai_tracebreakable = {
+float() ai_tracebreakable = {
 	local vector spot1, spot2;
 	local float mon_height;
 	
@@ -275,22 +229,22 @@ float(float tracedist, float traceang) ai_tracebreakable = {
 	spot1 = self.origin;
 
 	// Work out look up/down height for additional tracelines
-	mon_height = (self.maxs_z - self.mins_z) * traceang;
+	mon_height = (self.maxs_z - self.mins_z) * 0.35;
 	
 	// Trace directly infront of entity using angles
-	spot2 = spot1 + (v_forward * tracedist);
-	traceline (spot1, spot2, FALSE, self);
-	if (ai_foundbreakable(self, trace_ent, FALSE)) return TRUE;
+	spot2 = spot1 + (v_forward * 128);
+	traceline(spot1,spot2,FALSE,self);
+	if (ai_foundbreakable(self,trace_ent,FALSE)) return TRUE;
 
 	// Trace from origin and look UP!
-	spot2 = spot1 + (v_forward * tracedist) + (v_up * mon_height);
-	traceline (spot1, spot2, FALSE, self);
-	if (ai_foundbreakable(self, trace_ent, FALSE)) return TRUE;
+	spot2 = spot1 + (v_forward * 128) + (v_up * mon_height);
+	traceline(spot1,spot2,FALSE,self);
+	if (ai_foundbreakable(self,trace_ent,FALSE)) return TRUE;
 
 	// Trace from origin and look DOWN!
-	spot2 = spot1 + (v_forward * tracedist) - (v_up * mon_height);
-	traceline (spot1, spot2, FALSE, self);
-	if (ai_foundbreakable(self, trace_ent, FALSE)) return TRUE;
+	spot2 = spot1 + (v_forward * 128) - (v_up * mon_height);
+	traceline(spot1,spot2,FALSE,self);
+	if (ai_foundbreakable(self,trace_ent,FALSE)) return TRUE;
 	
 	return FALSE; // No breakable found
 };
@@ -312,7 +266,7 @@ void(float brkdmg) ai_damagebreakable = {
 	ldmg = (random() + random() + random()) * brkdmg; // Setup damage modifier
 
 	// Triple trace directly infront of monster using angles
-	if (ai_tracebreakable(BRKTRACE_DIST, BRKTRACE_ANG)) {
+	if (ai_tracebreakable()) {
 		if (self.flags & FL_MONSTER && trace_ent.brkmondmg > 0) ldmg = ldmg * trace_ent.brkmondmg; // Check for any monster damage modifier on breakable
 		T_Damage (trace_ent, self, self, ldmg, DAMARMOR); // Apply damage to breakable
 	}
@@ -337,7 +291,7 @@ void() CheckBlockedBreakable = {
 	if (self.th_melee && self.meleerange <= 0) self.meleerange = MONAI_MELEEKNIGHT; // Double check a DEFAULT melee range exist, use knights
 
 	// Triple trace directly infront of monster using angles
-	if (ai_tracebreakable(BRKTRACE_DIST, BRKTRACE_ANG)) {
+	if (ai_tracebreakable()) {
 		if (ai_foundbreakable(self, trace_ent, FALSE)) {
 			// Find out exactly how far away breakable bounding box is
 			brklen = fabs(vlen(self.origin - trace_endpos));
@@ -357,7 +311,6 @@ void() CheckBlockedBreakable = {
 		}
 	}
 };
-
 
 // Check if the monster (self) can attack enemy (target) and returns TRUE if the
 // monster is within XYZ range.  Height is checked independently.
@@ -611,7 +564,7 @@ float(float yaw, float dist) flat_move = {
 	MonsterDeBuff();
     swap = self.enemy;
     self.enemy = world;     // This prevents 'self' from going up/down.
-    dist = walkmove (yaw, dist);    // After this, dist = TRUE or FALSE.
+    dist = walkmove(yaw,dist);    // After this, dist = TRUE or FALSE.
     self.enemy = swap;
     return dist;
 };
@@ -623,7 +576,7 @@ void(float dist) flat_goal = {
 	MonsterDeBuff();
     swap = self.enemy;
     self.enemy = world;     // This prevents 'self' from going up/down.
-    movetogoal (dist);
+    movetogoal(dist);
     self.enemy = swap;
 };
 
@@ -803,165 +756,44 @@ void(float dist, void(float dist) th_think) ai_runwalkfly = {
 	}
 };
 
-// Only used by Quoth Polyp
-void(float dist) ai_walkfly = {
-	ai_runwalkfly(dist,ai_walk);
-};
-
-// Only used by Quoth Sentinel
-void(float dist) ai_runfly = {
-	ai_runwalkfly(dist,ai_run);
-};
-
 void(float scratch_noise) ai_melee_carnivean = {
-	local vector	delta;
-	local float 	ldmg;
-
 	if (!self.enemy) return;		// removed before stroke
 
-	delta = self.enemy.origin - self.origin;
-	if (vlen(delta) > 100) return;
-		
-	ldmg = (random() + random() + random()) * 4;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	self.enemydist = range_distance(self.enemy,FALSE);
+	if (self.enemydist > 100) return;
+
+	T_Damage(self.enemy,self,self,(random() + random() + random()) * 4,DAMARMOR);
 	makevectors(self.angles);
-	if (self.meleetimer < time) { // Only spawn blood/gore/sound every second
-		self.meleetimer = time + 1;
-		SpawnBlood (self.enemy, self.origin + v_forward*50 + v_up*2, VEC_ORIGIN, 17,0);
-		SpawnMeatSpray(self, self.enemy, crandom () * 100);	// spawn a little gore
-	}
+	if (self.meleetimer >= time) return;
 
+	self.meleetimer = time + 1; // Gore and sound only once per second.
 	if (scratch_noise) sound(self,CHAN_AUTO,"demon/dhit2.wav", 0.5,ATTN_NORM);
-};
-
-void() ai_melee_torment = {
-	local vector	delta;
-	local float 	ldmg;
-
-	if (!self.enemy) return;		// removed before stroke
-		
-	delta = self.enemy.origin - self.origin;
-	if (vlen(delta) > 77) return;
-		
-	ldmg = (random() + random() + random()) * 4;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-};
-
-void() ai_floatmove_start = {
-	if (self.flags & (FL_FLY|FL_SWIM) == 0) return;
-	
-	self.velocity = '0 0 0';
-	self.movetype = MOVETYPE_STEP;
-	self.oldorigin = self.origin;
-	SUB_RemoveFlags(self,FL_ONGROUND);
-};
-
-// Wrap movement code in this hot shtuff for making scrags do sick drifts
-float(vector mask) ai_floatmove_ceiltrace = {
-	local vector start, end;
-
-	start = self.origin + vec_multiply_elementwise(self.maxs, mask);
-	end = self.origin + vec_multiply_elementwise(VEC_HULL_MAX, mask);
-	traceline(start, end, FALSE, self);
-	if (trace_fraction < 1.0 || trace_startsolid || trace_allsolid) return FALSE;
-	return TRUE;
-};
-
-float() ai_floatmove_ceilcheck = {
-	if (!ai_floatmove_ceiltrace('0 0 1')) return FALSE;
-	if (!ai_floatmove_ceiltrace('1 1 1')) return FALSE;
-	if (!ai_floatmove_ceiltrace('-1 1 1')) return FALSE;
-	if (!ai_floatmove_ceiltrace('1 -1 1')) return FALSE;
-	if (!ai_floatmove_ceiltrace('-1 -1 1')) return FALSE;
-	return TRUE;
-};
-
-float() ai_fishmovecheck = {
-	local float opc;
-
-	opc = pointcontents(self.oldorigin);
-
-	// fish noclipping through ceilings
-	if (pointcontents(self.origin) != opc || pointcontents(self.origin + '0 0 16') != opc || !ai_floatmove_ceilcheck()) return FALSE;
-	return TRUE;
-};
-
-void(float dist) ai_floatmove_finish = {
-	local float interv, spd, frac;
-	local vector move;
-	
-	if (self.flags & (FL_FLY|FL_SWIM) == 0) return;
-		
-	self.movetype = MOVETYPE_FLY;
-	move = self.origin - self.oldorigin;
-	if (!InOpenOrLiquid(self.origin)) { // fish have short bounding boxes, which in quake physics land means they can noclip through ceilings
-		setorigin(self, self.oldorigin);
-		self.velocity = '0 0 0';
-		return;
-	}
-
-	// Good thing no one changes step height to be larger than 16 right...right?
-	if (vlen(move) > dist + 16) { self.velocity = '0 0 0'; return; } // probably touched a teleporter, so don't try to velocity interp
-	
-	interv = mathlib_max(0.01, self.nextthink - time);
-	
-	// flying/swimming monsters don't raise/lower for regular path walking normally, so fudge the z velocity manually
-	if (self.goalentity.classtype == CT_PATHCORNER) {
-		if (fabs(self.goalentity.origin_z - self.origin_z) > 16) {
-			spd = vlen(move);
-			frac = spd / vlen(self.goalentity.origin - self.origin);
-			move_z = frac * (self.goalentity.origin_z - self.origin_z);
-		}
-	}
-	// FL_SWIM just invalidates any movement out of water, so simulate velocity being clipped off at the surface instead.
-	// TODO: support water volumes that end in other directions than up
-	if ((self.flags & FL_SWIM) && !ai_fishmovecheck()) move_z = -1;
-	setorigin(self, self.oldorigin);
-	self.velocity = move / interv;
+	SpawnBlood(self.enemy,self.origin + v_forward*50 + v_up*2,VEC_ORIGIN,17,0);
+	SpawnMeatSpray(self,self.enemy,crandom () * 100);
 };
 
 void(float dist) movetogoalplus = {
-	ai_floatmove_start();
-	movetogoal(dist);
-	ai_floatmove_finish(dist);
-};
+	local float success, oconts, nconts, mtype, oflags;
+	local entity stemp;
 
-float(float yaw, float dist) walkmoveplus = {
-	local float result;
-	local vector oldorg;
-
-	ai_floatmove_start();
-	oldorg = self.origin;
-	result = walkmove(yaw, dist);
-	if (oldorg == self.origin || !result) {
-		ai_floatmove_finish(0);
-		return FALSE;
+	SetMove_BoxParams(self);
+	stemp = self;
+	self = move_box;
+	self.enemy = stemp;
+	success = walkmove(self.ideal_yaw,dist);
+	self = stemp;
+	if (success) {
+		if (self.flags & FL_SWIM) {
+			if (!InLiquid(move_box.origin)) return; // We can't fly there.
+		}
+		mtype = self.movetype;
+		SUB_RemoveFlags(self,FL_ONGROUND);
+		oflags = self.flags;
+		SUB_RemoveFlags(self,FL_SWIM);
+		self.flags = self.flags | FL_FLY;
+		self.movetype = MOVETYPE_WALK;
+		movetogoal_builtin(dist);
+		self.flags = oflags;
+		self.movetype = mtype;
 	}
-	ai_floatmove_finish(dist);
-	return TRUE;
-};
-
-// For Kinn's Sergeant super grunt
-float() ai_face_last = {
-	if ( (visible(self.enemy)) || (self.enemy.origin == '0 0 0') ) {
-		ai_face();
-		return TRUE;
-	}
-
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	ChangeYaw();
-	return FALSE;
-};
-
-// For the Ballista giant crossbow turret from Hexen 2
-void() ai_attack_face =  {
-    ai_face();
-    if (FacingIdeal()) {
-        if (self.attack_state == AS_MISSILE && self.th_missile) {
-            self.th_missile();
-        } else if (self.attack_state == AS_MELEE && self.th_melee) {
-            self.th_melee();
-        }
-        self.attack_state = AS_STRAIGHT;
-    }
 };

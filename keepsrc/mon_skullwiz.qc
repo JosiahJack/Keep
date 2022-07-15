@@ -169,7 +169,7 @@ void()	skullw_run14= [	$stand19,		skullw_run1	] { ai_run(0); };
 void() skullw_tfin1 = [$tele9, skullw_tfin2 ] {
 	self.velocity = '0 0 0';
 	// Always phase in facing the enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	self.angles_y = self.ideal_yaw;
 	sound(self,CHAN_AUTO,"ad171/skullwiz/blinkin.wav",1,ATTN_NORM);
 };

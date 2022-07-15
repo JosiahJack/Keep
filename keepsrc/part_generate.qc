@@ -86,7 +86,7 @@ void() emitdpp_particle = { // [FUNCTION]
 	if (self.pemit_target) self.dpp_vel = normalize(self.pemit_target.origin - self.pemit_source.origin);
 
 	// Check for volume particle spawning
-	if (!CheckZeroVector(self.part_vol)) {
+	if (!VectorIsAllZeros(self.part_vol)) {
 		if (self.pemit_source.bsporigin) self.pos1 = self.pemit_source.origin + bmodel_origin(self.pemit_source); // Check if owner is a Bmodel? (different origin location)
 		else self.pos1 = self.pemit_source.origin;
 
@@ -308,7 +308,7 @@ void() emit_particle = { // [FUNCTION]
 			part.origin = part.pos1;
 			
 			// Double check the bmodel volume has been setup correctly (not zero). Particle emitters can be started before bmodel has initialized.
-			if (CheckZeroVector(self.part_vol)) self.part_vol = self.pemit_source.size * 0.5;
+			if (VectorIsAllZeros(self.part_vol)) self.part_vol = self.pemit_source.size * 0.5;
 		} else part.origin = self.pemit_source.origin + self.part_ofs;
 
 		part.origin_x = part.origin_x + ( (random()*(self.part_vol_x*2)) - self.part_vol_x);

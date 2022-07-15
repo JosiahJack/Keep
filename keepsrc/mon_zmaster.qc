@@ -574,7 +574,7 @@ void(float dist) zmaster_run = {
 				self.enemy = self.oldenemy;
 	}
 	// see if the enemy is no longer of interest
-	if ((self.enemy.classname == "headib") || self.enemy.owner != world) {
+	if ((self.enemy.gibbed) || self.enemy.owner != world) {
 		self.enemy = world;
 		// FIXME: look all around for other targets
 		if (self.oldenemy.owner != self && (self.oldenemy.health > 0 || corpse_status(self.oldenemy))) {
@@ -597,8 +597,8 @@ void(float dist) zmaster_run = {
 	if (enemy_vis) self.search_time = time + 5;
 	enemy_infront = infront(self.enemy); // look for other coop players
 	enemy_range = range(self.enemy);
-	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
-	movetogoal (dist);      // head straight in... done in engine C code...
+	ai_setidealyaw();
+	movetogoal(dist);      // head straight in... done in engine C code...
 };
 
 float(entity testent) corpse_status = {

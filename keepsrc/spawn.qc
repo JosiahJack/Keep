@@ -985,7 +985,7 @@ float(vector spot) SpawnMinionInRadius = {
 
 	if (self.minion_count >= self.minion_maxcount) return FALSE;
 
-	if (CheckZeroVector(spot)) spot = self.origin;
+	if (VectorIsAllZeros(spot)) spot = self.origin;
 	vec = spot + vecrand(0,200,TRUE);
 	dir = normalize(vec - spot);
 	spot = spot + dir * (self.bbmins_x * 1.5 + random() * 128);

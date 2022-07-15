@@ -457,7 +457,7 @@ void() monster_base_enforcer = {
 	if (!self.pain_flinch) self.pain_flinch = 20;				// low pain threshold
 	self.pain_longanim = TRUE;			// Long pain animation for axe
 	if (!self.steptype) self.steptype = FS_TYPEHEAVY;		// heavy player
-	if (CheckZeroVector(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
+	if (VectorIsAllZeros(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
 	Resist_ChangeType(self,-1);// Always reset Ammo Resistance to be consistent
 	if (self.classtype == CT_MONELIMATOR) { self.resist_cells = 0.5; self.resist_plasma = 0.5; }
 	if (self.classtype == CT_MONDEFENDER) { self.resist_rockets = 0.5; self.resist_multi_rockets = 0.5; }
@@ -543,12 +543,25 @@ void() gunner_chaingun = {
     makevectors(self.angles);
     p1 = self.origin + (v_forward*12) + (v_right*8.5) + (v_up*16);
     p2 = Midpoint(self.enemy);
-    M_FireChaingun(p1, p2, self.enemy, '0 0 0');
+    M_FireChaingun(p1,p2,self.enemy,'0 0 0');
 };
 
 // Chaingun, Doom2 style
-void() gunner_gun1  = [$attack6,  gunner_gun2  ] { ai_face(); gunner_chaingun(); };
-void() gunner_gun2  = [$attack4,  gunner_gun1  ] { ai_face(); gunner_chaingun(); M_Break(enf_run1); };
+void() gunner_gun1 = [$attack6, gunner_gun2] { ai_face(); gunner_chaingun(); };
+void() gunner_gun2 = [$attack4, gunner_gun1] {
+	ai_face();
+	gunner_chaingun();
+    if (self.enemy.health > 0) {
+        if (!IsGhost(self.enemy)) {
+            if (visible(self.enemy)) {
+                if (enemy_range < RANGE_FAR) return;
+			}
+		}
+	}
+
+	// Break attack sequence.
+	if (self.health > 0 && self.deadflag == DEAD_NO) self.think = enf_run1;
+};
 
 // QUAKED monster_gunner (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_gunner = {

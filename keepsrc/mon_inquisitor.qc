@@ -534,7 +534,7 @@ void() monster_inquisitor = {
 	self.steptype = FS_FLYING; // We change from walking to flying sometimes
 	self.poisonous = TRUE; // Oh yeah, definitely!
 	self.minion_maxcount = 8 + skill; // More clouds on hard! (Spawn faster too, 3 at once per staf slame)
-	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '7 3 16';
+	if (VectorIsAllZeros(self.proj_attqty)) self.proj_attqty = '7 3 16';
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.pain_longanim = FALSE;		// can't be chopped with shadow axe
 	self.classgroup = CG_WIZARD;	// Creepy dudes

@@ -36,7 +36,6 @@
 // Definitions for hipnotic entities.
 //=============================================================================
 
-float MIN_ANGLE_DELTA    		= 10.000;
 float UNDERWATER    			= 2.000;
 float CHARMED_RADIUS    		= 1500.000;
 float MAX_CHARMER_DISTANCE   	= 200.000;

@@ -133,9 +133,9 @@ void() actor_rogue_run = { // [FUNCTION]
    local vector dist;
    local entity pointOne;
 
-   if ( (pointcontents (self.origin) == CONTENT_LAVA) ) {
-      pointOne = find (world,targetname,"point1");
-      if (pointOne != world) setorigin(self,pointOne.origin);
+   if (InLava(self.origin)) {
+      pointOne = find(world,targetname,"point1");
+      if (pointOne) setorigin(self,pointOne.origin);
    }
    if ( (self.goalentity.targetname == "endpoint1") ) {
       actorStage = STAGE_AT_POINT1;
@@ -154,7 +154,7 @@ void() actor_rogue_run = { // [FUNCTION]
    self.frame = (self.frame + TRUE);
    if (self.frame > MOVETYPE_BOUNCEMISSILE) self.frame = MOVETYPE_TOSS;
    dist = (self.goalentity.origin - self.origin);
-   movetogoal (CTF_CAPTURE_BONUS);
+   movetogoal(CTF_CAPTURE_BONUS);
    self.think = actor_rogue_run;
    self.nextthink = (time + 0.100);
 };
@@ -275,7 +275,7 @@ void(entity thePlayer) spawn_actor = { // [FUNCTION]
 	if (!theActor.yaw_speed) theActor.yaw_speed = 20.000;
 	theActor.view_ofs = '0.000 0.000 25.000';
 	theActor.flags = (theActor.flags | FL_MONSTER);
-	if ((pointcontents(theActor.origin) == CONTENT_LAVA) ) {
+	if (InLava(theActor.origin) ) {
 		pointOne = find(world,targetname,"point1");
 		if (pointOne) setorigin(theActor,pointOne.origin);
 	}

@@ -241,7 +241,7 @@ void()	dfury_boss_walk12	= [	$walk12,	dfury_boss_walk13	] { ai_walk(4); };
 void()	dfury_boss_walk13	= [	$walk13,	dfury_boss_walk14	] { ai_walk(6); };
 void()	dfury_boss_walk14	= [	$walk14,	dfury_boss_walk1	] { ai_walk(2); };
 
-void()	dfury_boss_run1	= [	$run1,		dfury_boss_run2	] { df_idle_sound(); ai_run (55); CheckForCharge_boss(20,80,dfury_boss_char_a1); self.colormod = '1 1 1';shambler_walking_quake();dfury_boss_footsteps (1); };
+void()	dfury_boss_run1	= [	$run1,		dfury_boss_run2	] { df_idle_sound(); ai_run(55); CheckForCharge_boss(20,80,dfury_boss_char_a1); self.colormod = '1 1 1';shambler_walking_quake();dfury_boss_footsteps (1); };
 void()	dfury_boss_run2	= [	$run2,		dfury_boss_run3	] { ai_run(60); };
 void()	dfury_boss_run3	= [	$run3,		dfury_boss_run4	] { shambler_walking_quake();dfury_boss_footsteps (1); ai_run(43); };
 void()	dfury_boss_run4	= [	$run4,		dfury_boss_run5	] { ai_run(61); };

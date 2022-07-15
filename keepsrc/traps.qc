@@ -101,20 +101,20 @@ void() trap_shooter_fire = { // [FUNCTION]
 
 		launch_projectile(self.origin, self.movedir,self.finalangle, self.cnt, self.speed);
 	} else if (self.classtype == CT_LIGHTSHOOTER) {
-		if (CheckZeroVector(self.dest1)) return; // Double check a destination origin exists
+		if (VectorIsAllZeros(self.dest1)) return; // Double check a destination origin exists
 		
 		self.effects = self.effects | EF_MUZZLEFLASH;
 		
 		// setup any random X/Y/Z start/end point wobble
 		lightn_start = lightn_finish = '0 0 0';
-		if (CheckZeroVector(self.pos1) == FALSE) {
+		if (VectorIsAllZeros(self.pos1) == FALSE) {
 			lightn_start_x = self.pos1_x * crandom();
 			lightn_start_y = self.pos1_y * crandom();
 			lightn_start_z = self.pos1_z * crandom();
 		}
 
 		lightn_start = lightn_start + self.origin;
-		if (CheckZeroVector(self.pos2) == FALSE) {
+		if (VectorIsAllZeros(self.pos2) == FALSE) {
 			lightn_finish_x = self.pos2_x * crandom();
 			lightn_finish_y = self.pos2_y * crandom();
 			lightn_finish_z = self.pos2_z * crandom();

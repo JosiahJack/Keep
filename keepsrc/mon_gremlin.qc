@@ -288,7 +288,7 @@ void(float dist) gremlin_walk = {
    if ( GremlinFindTarget () )
       return ;
 
-   movetogoal (dist);
+   movetogoal(dist);
 };
 
 void() gremlin_stand = {
@@ -348,7 +348,7 @@ void(float dist) gremlin_run = {
          }
          return ;
       }
-      movetogoal (dist);
+      movetogoal(dist);
    } else {
       if ( (random () > 0.970) ) {
          if ( GremlinFindTarget () )
@@ -405,13 +405,13 @@ void(float dist) gremlin_run = {
                self.goalentity = self.trigger_field;
                self.ideal_yaw = vectoyaw (normalize ((self.goalentity.origin - self.origin)));
                ChangeYaw();
-               movetogoal (dist);
+               movetogoal(dist);
                self.nextthink = (time + 0.100);
                return ;
             }
          }
       }
-      ai_run (dist);
+      ai_run(dist);
       self.nextthink = (time + 0.100);
    }
 };
@@ -818,29 +818,29 @@ void(float side) Gremlin_Melee = {
    SpawnMeatSpray (self,self.enemy,side);
 };
 
-void() gremlin_lunge1 = [ 124.000, gremlin_lunge2 ] { ai_charge (FALSE); };
-void() gremlin_lunge2 = [ 125.000, gremlin_lunge3 ] { ai_charge (FALSE); };
-void() gremlin_lunge3 = [ 126.000, gremlin_lunge4 ] { ai_charge (FALSE); };
-void() gremlin_lunge4 = [ 127.000, gremlin_lunge5 ] { ai_charge (FALSE); };
-void() gremlin_lunge5 = [ 128.000, gremlin_lunge6 ] { ai_charge (FALSE); };
-void() gremlin_lunge6 = [ 129.000, gremlin_lunge7 ] { ai_charge (FALSE); };
-void() gremlin_lunge7 = [ 130.000, gremlin_lunge8 ] { ai_charge (18.000); }; // Was 15, -Qmaster
-void() gremlin_lunge8 = [ 131.000, gremlin_lunge9 ] { ai_charge (1); Gremlin_Melee (FALSE); }; // Was 0, -Qmaster
-void() gremlin_lunge9 = [ 132.000, gremlin_lunge10 ] { ai_charge (FALSE); };
-void() gremlin_lunge10 = [ 133.000, gremlin_lunge11 ] { ai_charge (FALSE); };
-void() gremlin_lunge11 = [ 134.000, gremlin_run1 ] { ai_charge (FALSE); };
+void() gremlin_lunge1 = [ 124.000, gremlin_lunge2 ] { ai_charge(FALSE); };
+void() gremlin_lunge2 = [ 125.000, gremlin_lunge3 ] { ai_charge(FALSE); };
+void() gremlin_lunge3 = [ 126.000, gremlin_lunge4 ] { ai_charge(FALSE); };
+void() gremlin_lunge4 = [ 127.000, gremlin_lunge5 ] { ai_charge(FALSE); };
+void() gremlin_lunge5 = [ 128.000, gremlin_lunge6 ] { ai_charge(FALSE); };
+void() gremlin_lunge6 = [ 129.000, gremlin_lunge7 ] { ai_charge(FALSE); };
+void() gremlin_lunge7 = [ 130.000, gremlin_lunge8 ] { ai_charge(18.000); }; // Was 15, -Qmaster
+void() gremlin_lunge8 = [ 131.000, gremlin_lunge9 ] { ai_charge(1); Gremlin_Melee (FALSE); }; // Was 0, -Qmaster
+void() gremlin_lunge9 = [ 132.000, gremlin_lunge10 ] { ai_charge(FALSE); };
+void() gremlin_lunge10 = [ 133.000, gremlin_lunge11 ] { ai_charge(FALSE); };
+void() gremlin_lunge11 = [ 134.000, gremlin_run1 ] { ai_charge(FALSE); };
 
-void() gremlin_claw1 = [ 60.000, gremlin_claw2 ] { ai_charge (FALSE); };
-void() gremlin_claw2 = [ 61.000, gremlin_claw3 ] { ai_charge (FALSE); };
-void() gremlin_claw3 = [ 62.000, gremlin_claw4 ] { ai_charge (FALSE); };
-void() gremlin_claw4 = [ 63.000, gremlin_claw5 ] { ai_charge (FALSE); };
-void() gremlin_claw5 = [ 64.000, gremlin_claw6 ] { ai_charge (FALSE); };
-void() gremlin_claw6 = [ 65.000, gremlin_claw7 ] { ai_charge (FALSE); Gremlin_Melee (200); };
-void() gremlin_claw7 = [ 66.000, gremlin_claw8 ] { ai_charge (15.000); };
-void() gremlin_claw8 = [ 67.000, gremlin_claw9 ] { ai_charge (FALSE); };
-void() gremlin_claw9 = [ 68.000, gremlin_claw10 ] { ai_charge (FALSE); };
-void() gremlin_claw10 = [ 69.000, gremlin_claw11 ] { ai_charge (FALSE); };
-void() gremlin_claw11 = [ 70.000, gremlin_run1 ] { ai_charge (FALSE); };
+void() gremlin_claw1 = [ 60.000, gremlin_claw2 ] { ai_charge(FALSE); };
+void() gremlin_claw2 = [ 61.000, gremlin_claw3 ] { ai_charge(FALSE); };
+void() gremlin_claw3 = [ 62.000, gremlin_claw4 ] { ai_charge(FALSE); };
+void() gremlin_claw4 = [ 63.000, gremlin_claw5 ] { ai_charge(FALSE); };
+void() gremlin_claw5 = [ 64.000, gremlin_claw6 ] { ai_charge(FALSE); };
+void() gremlin_claw6 = [ 65.000, gremlin_claw7 ] { ai_charge(FALSE); Gremlin_Melee (200); };
+void() gremlin_claw7 = [ 66.000, gremlin_claw8 ] { ai_charge(15.000); };
+void() gremlin_claw8 = [ 67.000, gremlin_claw9 ] { ai_charge(FALSE); };
+void() gremlin_claw9 = [ 68.000, gremlin_claw10 ] { ai_charge(FALSE); };
+void() gremlin_claw10 = [ 69.000, gremlin_claw11 ] { ai_charge(FALSE); };
+void() gremlin_claw11 = [ 70.000, gremlin_run1 ] { ai_charge(FALSE); };
 
 void() Gremlin_Split = {
    local entity grem, temp, head;
@@ -927,19 +927,19 @@ void(float side) Gremlin_Gorge = {
    }
 };
 
-void() gremlin_gorge1 = [ 71.000, gremlin_gorge2 ] { ai_charge (TRUE); };
-void() gremlin_gorge2 = [ 72.000, gremlin_gorge3 ] { ai_charge (TRUE); };
-void() gremlin_gorge3 = [ 73.000, gremlin_gorge4 ] { ai_charge (FL_SWIM); };
-void() gremlin_gorge4 = [ 74.000, gremlin_gorge5 ] { ai_charge (FALSE); };
-void() gremlin_gorge5 = [ 75.000, gremlin_gorge6 ] { ai_charge (FALSE); };
-void() gremlin_gorge6 = [ 76.000, gremlin_gorge7 ] { ai_charge (FALSE); Gremlin_Gorge (200); };
-void() gremlin_gorge7 = [ 77.000, gremlin_gorge8 ] { ai_charge (FALSE); };
-void() gremlin_gorge8 = [ 78.000, gremlin_gorge9 ] { ai_charge (FALSE); Gremlin_Gorge (-200.000); };
-void() gremlin_gorge9 = [ 79.000, gremlin_gorge10 ] { ai_charge (FALSE); };
-void() gremlin_gorge10 = [ 80.000, gremlin_gorge11 ] { ai_charge (FALSE); };
-void() gremlin_gorge11 = [ 81.000, gremlin_gorge12 ] { ai_charge (FALSE); };
-void() gremlin_gorge12 = [ 82.000, gremlin_gorge13 ] { ai_charge (FALSE); };
-void() gremlin_gorge13 = [ 83.000, gremlin_gorge1 ] { ai_charge (FALSE); };
+void() gremlin_gorge1 = [ 71.000, gremlin_gorge2 ] { ai_charge(TRUE); };
+void() gremlin_gorge2 = [ 72.000, gremlin_gorge3 ] { ai_charge(TRUE); };
+void() gremlin_gorge3 = [ 73.000, gremlin_gorge4 ] { ai_charge(FL_SWIM); };
+void() gremlin_gorge4 = [ 74.000, gremlin_gorge5 ] { ai_charge(FALSE); };
+void() gremlin_gorge5 = [ 75.000, gremlin_gorge6 ] { ai_charge(FALSE); };
+void() gremlin_gorge6 = [ 76.000, gremlin_gorge7 ] { ai_charge(FALSE); Gremlin_Gorge (200); };
+void() gremlin_gorge7 = [ 77.000, gremlin_gorge8 ] { ai_charge(FALSE); };
+void() gremlin_gorge8 = [ 78.000, gremlin_gorge9 ] { ai_charge(FALSE); Gremlin_Gorge (-200.000); };
+void() gremlin_gorge9 = [ 79.000, gremlin_gorge10 ] { ai_charge(FALSE); };
+void() gremlin_gorge10 = [ 80.000, gremlin_gorge11 ] { ai_charge(FALSE); };
+void() gremlin_gorge11 = [ 81.000, gremlin_gorge12 ] { ai_charge(FALSE); };
+void() gremlin_gorge12 = [ 82.000, gremlin_gorge13 ] { ai_charge(FALSE); };
+void() gremlin_gorge13 = [ 83.000, gremlin_gorge1 ] { ai_charge(FALSE); };
 
 void() gremlin_look1 = [ 90.000, gremlin_look2 ] { self.nextthink = (time + 0.200); };
 void() gremlin_look2 = [ 91.000, gremlin_look3 ] { self.nextthink = (time + 0.200); };

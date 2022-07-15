@@ -63,22 +63,6 @@ void() scourge_think = {
 	self.spawnmulti = self.spawnsilent;
 };
 
-void(float dist) ai_right = { walkmove ((self.angles_y + 90.000),dist); };
-void(float dist) ai_left = { walkmove ((self.angles_y + 270.000),dist); };
-void() ai_turn_in_place = {
-   local float delta;
-
-   self.nextthink = (time + 0.100);
-   enemy_yaw = vectoyaw ((self.enemy.origin - self.origin));
-   delta = fabs ((self.angles_y - enemy_yaw));
-   if ( (delta > MIN_ANGLE_DELTA) ) {
-      self.ideal_yaw = enemy_yaw;
-      ChangeYaw();
-   } else {
-      self.think = self.th_run;
-   }
-};
-
 void() scourge_stand1 = [ 0.000, scourge_stand2 ] { ai_stand(); scourge_think(); self.spawnsilent = FALSE; };
 void() scourge_stand2 = [ 1.000, scourge_stand3 ] { ai_stand(); scourge_think(); };
 void() scourge_stand3 = [ 2.000, scourge_stand4 ] { ai_stand(); scourge_think(); };
@@ -98,39 +82,39 @@ void() scourge_walk1 = [ 12.000, scourge_walk2 ] {
 
    self.spawnsilent = TRUE;
    scourge_think();
-   ai_walk (8);
+   ai_walk(8);
 };
-void() scourge_walk2 = [ 13.000, scourge_walk3 ] { ai_walk (8); };
-void() scourge_walk3 = [ 14.000, scourge_walk4 ] { ai_walk (8); };
-void() scourge_walk4 = [ 15.000, scourge_walk5 ] { ai_walk (8); };
-void() scourge_walk5 = [ 16.000, scourge_walk6 ] { ai_walk (8); };
-void() scourge_walk6 = [ 17.000, scourge_walk1 ] { ai_walk (8); };
+void() scourge_walk2 = [ 13.000, scourge_walk3 ] { ai_walk(8); };
+void() scourge_walk3 = [ 14.000, scourge_walk4 ] { ai_walk(8); };
+void() scourge_walk4 = [ 15.000, scourge_walk5 ] { ai_walk(8); };
+void() scourge_walk5 = [ 16.000, scourge_walk6 ] { ai_walk(8); };
+void() scourge_walk6 = [ 17.000, scourge_walk1 ] { ai_walk(8); };
 
 void() scourge_run1 = [ 12.000, scourge_run2 ] {
 	if ( (random () < 0.100) )
 	sound(self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
 	self.spawnsilent = TRUE;
 	scourge_think();
-	ai_run (18.000); };
-void() scourge_run2 = [ 13.000, scourge_run3 ] { scourge_think(); ai_run (14.000); };
-void() scourge_run3 = [ 14.000, scourge_run4 ] { ai_run (14.000); };
-void() scourge_run4 = [ 15.000, scourge_run5 ] { ai_run (14.000); };
-void() scourge_run5 = [ 16.000, scourge_run6 ] { ai_run (14.000); };
-void() scourge_run6 = [ 17.000, scourge_run1 ] { ai_run (14.000); };
+	ai_run(18.000); };
+void() scourge_run2 = [ 13.000, scourge_run3 ] { scourge_think(); ai_run(14.000); };
+void() scourge_run3 = [ 14.000, scourge_run4 ] { ai_run(14.000); };
+void() scourge_run4 = [ 15.000, scourge_run5 ] { ai_run(14.000); };
+void() scourge_run5 = [ 16.000, scourge_run6 ] { ai_run(14.000); };
+void() scourge_run6 = [ 17.000, scourge_run1 ] { ai_run(14.000); };
 
-void() scourge_strafeleft1 = [ 12.000, scourge_strafeleft2 ] { self.spawnsilent = TRUE; scourge_think(); ai_left (20.000); };
-void() scourge_strafeleft2 = [ 13.000, scourge_strafeleft3 ] { ai_left (20.000); };
-void() scourge_strafeleft3 = [ 14.000, scourge_strafeleft4 ] { ai_left (20.000); };
-void() scourge_strafeleft4 = [ 15.000, scourge_strafeleft5 ] { ai_left (14.000); };
-void() scourge_strafeleft5 = [ 16.000, scourge_strafeleft6 ] { ai_left (14.000); };
-void() scourge_strafeleft6 = [ 17.000, scourge_run1 ] { ai_left (14.000); };
+void() scourge_strafeleft1 = [ 12.000, scourge_strafeleft2 ] { self.spawnsilent = TRUE; scourge_think(); walkmove((self.angles_y + 270.000),20.000); };
+void() scourge_strafeleft2 = [ 13.000, scourge_strafeleft3 ] { walkmove((self.angles_y + 270.000),20.000); };
+void() scourge_strafeleft3 = [ 14.000, scourge_strafeleft4 ] { walkmove((self.angles_y + 270.000),20.000); };
+void() scourge_strafeleft4 = [ 15.000, scourge_strafeleft5 ] { walkmove((self.angles_y + 270.000),14.000); };
+void() scourge_strafeleft5 = [ 16.000, scourge_strafeleft6 ] { walkmove((self.angles_y + 270.000),14.000); };
+void() scourge_strafeleft6 = [ 17.000, scourge_run1 ] { walkmove((self.angles_y + 270.000),14.000); };
 
-void() scourge_straferight1 = [ 12.000, scourge_straferight2 ] { self.spawnsilent = TRUE; scourge_think(); ai_right (20.000); };
-void() scourge_straferight2 = [ 13.000, scourge_straferight3 ] { ai_right (20.000); };
-void() scourge_straferight3 = [ 14.000, scourge_straferight4 ] { ai_right (20.000); };
-void() scourge_straferight4 = [ 15.000, scourge_straferight5 ] { ai_right (14.000); };
-void() scourge_straferight5 = [ 16.000, scourge_straferight6 ] { ai_right (14.000); };
-void() scourge_straferight6 = [ 17.000, scourge_run1 ] { ai_right (14.000); };
+void() scourge_straferight1 = [ 12.000, scourge_straferight2 ] { self.spawnsilent = TRUE; scourge_think(); walkmove((self.angles_y + 90.000),20.000); };
+void() scourge_straferight2 = [ 13.000, scourge_straferight3 ] { walkmove((self.angles_y + 90.000),20.000); };
+void() scourge_straferight3 = [ 14.000, scourge_straferight4 ] { walkmove((self.angles_y + 90.000),20.000); };
+void() scourge_straferight4 = [ 15.000, scourge_straferight5 ] { walkmove((self.angles_y + 90.000),14.000); };
+void() scourge_straferight5 = [ 16.000, scourge_straferight6 ] { walkmove((self.angles_y + 90.000),14.000); };
+void() scourge_straferight6 = [ 17.000, scourge_run1 ] { walkmove((self.angles_y + 90.000),14.000); };
 
 void() scourge_turn1 = [ 12.000, scourge_turn2 ] { self.spawnsilent = TRUE; scourge_think(); ai_turn_in_place(); };
 void() scourge_turn2 = [ 13.000, scourge_turn3 ] { ai_turn_in_place(); };
@@ -179,13 +163,13 @@ void() scourge_atk8 = [ 19.000, scourge_run1 ] {
 void() scourge_melee1 = [ 20.000, scourge_melee2 ] {
    self.spawnsilent = FALSE;
    scourge_think();
-   ai_charge (MOVETYPE_WALK);
+   ai_charge(MOVETYPE_WALK);
 };
-void() scourge_melee2 = [ 21.000, scourge_melee3 ] { ai_charge (MOVETYPE_WALK); };
-void() scourge_melee3 = [ 22.000, scourge_melee4 ] { ai_charge (FL_SWIM); };
-void() scourge_melee4 = [ 23.000, scourge_melee5 ] { ai_charge (FL_SWIM); };
-void() scourge_melee5 = [ 24.000, scourge_melee6 ] { sound(self,CHAN_WEAPON,"hipnotic/scourge/tailswng.wav",TRUE,ATTN_NORM); ai_charge (MOVETYPE_WALK); };
-void() scourge_melee6 = [ 25.000, scourge_melee7 ] { ai_charge (TRUE); };
+void() scourge_melee2 = [ 21.000, scourge_melee3 ] { ai_charge(MOVETYPE_WALK); };
+void() scourge_melee3 = [ 22.000, scourge_melee4 ] { ai_charge(FL_SWIM); };
+void() scourge_melee4 = [ 23.000, scourge_melee5 ] { ai_charge(FL_SWIM); };
+void() scourge_melee5 = [ 24.000, scourge_melee6 ] { sound(self,CHAN_WEAPON,"hipnotic/scourge/tailswng.wav",TRUE,ATTN_NORM); ai_charge(MOVETYPE_WALK); };
+void() scourge_melee6 = [ 25.000, scourge_melee7 ] { ai_charge(TRUE); };
 void() scourge_melee7 = [ 26.000, scourge_melee8 ] { Attack_With_Tail(); };
 void() scourge_melee8 = [ 27.000, scourge_melee9 ] { ai_face(); };
 void() scourge_melee9 = [ 28.000, scourge_melee10 ] { ai_face(); };

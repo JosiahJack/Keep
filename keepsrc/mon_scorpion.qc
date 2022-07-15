@@ -241,7 +241,7 @@ void() pinch_leap4	= [	$attackC7, pinch_leap5	] { ai_face(); };
 void() pinch_leap5	= [	$attackC8, pinch_leap6 ] { ai_face(); };	
 void() pinch_leap6	= [	$attackC9, pinch_leap8 ] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = pinch_leap3;
 	}
@@ -435,7 +435,7 @@ void() setup_scorpion = {
 	self.deathstring = " was stung by a Scorpion\n";
 	
 	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '575 0 50';
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '575 0 50';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPSCORPNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSCORPFAR;
 

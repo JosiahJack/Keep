@@ -458,7 +458,6 @@ void(vector orgofs, float nbframe) wraith_nailball = {
 	self.attachment.frame = nbframe;
 };
 
-//----------------------------------------------------------------------
 void(vector boneofs) wraith_firenails = {
 	local vector org, dir;
 	local float bone_type;

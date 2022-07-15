@@ -169,7 +169,7 @@ void()	hknight2_walk10	= [	$walk10,	hknight2_walk11	] { ai_walk(4); monster_foot
 void()	hknight2_walk11	= [	$walk11,	hknight2_walk12	] { ai_walk(5); };
 void()	hknight2_walk12	= [	$walk12,	hknight2_walk1	] { ai_walk(4); };
 
-void()	hknight2_run1	= [	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self,CHAN_VOICE, "drake/archer/growl2.wav",1,ATTN_NORM); ai_run (20); CheckForCharge_boss(30,80,hknight2_char_a1); };
+void()	hknight2_run1	= [	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self,CHAN_VOICE, "drake/archer/growl2.wav",1,ATTN_NORM); ai_run(20); CheckForCharge_boss(30,80,hknight2_char_a1); };
 void()	hknight2_run2	= [	$run2,		hknight2_run3	] { ai_run(25); monster_footstep(FALSE); };
 void()	hknight2_run3	= [	$run3,		hknight2_run4	] { ai_run(18); };
 void()	hknight2_run4	= [	$run4,		hknight2_run5	] { ai_run(16); };

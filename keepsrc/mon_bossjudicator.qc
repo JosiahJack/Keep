@@ -496,9 +496,10 @@ void() judge_chargeframe = {
 	if (self.walkframe > 11) self.th_run();
 	// Turn towards enemy and push forward (walkmove)
 	else {
+		ai_face();
 		// Check for less than half health for drole rampage speed
-		if (self.health < (self.max_health*0.5)) ai_faceforward(28);
-		else ai_faceforward(20);
+		if (self.health < (self.max_health*0.5)) ai_forward(28);
+		else ai_forward(20);
 	}
 };
 
@@ -955,7 +956,7 @@ void() judge_jump3 = [$jump3, judge_jump4 ] {};
 void() judge_jump4 = [$jump4, judge_jump5 ] {};
 void() judge_jump5 = [$jump5, judge_jump5 ] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; 	//random jump angle
 		self.think = self.th_jumpexit;
 	}
@@ -1635,8 +1636,8 @@ void() monster_judicator = {
 	if (self.proj_trqty <= 1) self.proj_trqty = 32;
 	if (self.proj_trdist <= 1) self.proj_trdist = 32;
 	if (self.proj_limit > PROJ_MAXLIMIT) self.proj_limit = PROJ_MAXLIMIT; // Default skill speed = 0=0.10, 1=0.08, 2=0.06, 3=0.04
-	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7'; // Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '450 0 225'; // Default jump forward/up distance
+	if (VectorIsAllZeros(self.proj_attqty)) self.proj_attqty = '3 2 7'; // Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '450 0 225'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPJUDGENEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPJUDGEFAR;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
@@ -1804,8 +1805,8 @@ void() monster_justice = {
 	self.part_exitpuff = self.part_exitsound = TRUE;
 	self.part_exitfade = self.part_exitbusy = FALSE;
 	if (self.proj_limit > PROJ_MAXLIMIT) self.proj_limit = PROJ_MAXLIMIT; // Default skill speed = 0=0.10, 1=0.08, 2=0.06, 3=0.04
-	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7'; // Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
+	if (VectorIsAllZeros(self.proj_attqty)) self.proj_attqty = '3 2 7'; // Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPJUSTICENEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPJUSTICEFAR;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent

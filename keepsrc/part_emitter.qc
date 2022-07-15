@@ -124,7 +124,7 @@ float(entity pe_ent) misc_particle_style = { // [FUNCTION]
 		pe_ent.part_ofs = '0 0 1';			// Slightly off floor
 		pe_ent.part_vel = '0 0 12';			// Slowly move upwards
 		pe_ent.part_velrand = '4 4 0';		// Slight wobble
-		if (CheckZeroVector(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '56 17 0'; // Circle radius/rotation degrees
+		if (VectorIsAllZeros(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '56 17 0'; // Circle radius/rotation degrees
 		pe_ent.part_veltype = PARTICLE_ORIGIN_RANDCIRCLE; 
 		pe_ent.wakeup_dist = 768;			// Mid range distance
 		pe_ent.wakeup_timer = 0.5;			// 4x timer
@@ -184,10 +184,10 @@ float(entity pe_ent) misc_particle_style = { // [FUNCTION]
 		
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;
 		if (!pe_ent.part_velrand) pe_ent.part_velrand = '4 4 4';
-		if (CheckZeroVector(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '8 8 8'; // The volume and direction really need to be set before the emitter is setup because the volume maybe switched off.
+		if (VectorIsAllZeros(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '8 8 8'; // The volume and direction really need to be set before the emitter is setup because the volume maybe switched off.
 		else pe_ent.part_vol = pe_ent.pemit_source.part_vol;
 		
-		if (CheckZeroVector(pe_ent.pemit_source.part_vel)) pe_ent.part_vel = '0 0 4';
+		if (VectorIsAllZeros(pe_ent.pemit_source.part_vel)) pe_ent.part_vel = '0 0 4';
 		else pe_ent.part_vel = pe_ent.pemit_source.part_vel;
 
 		if (!pe_ent.pemit_source.wakeup_dist) pe_ent.wakeup_dist = 768;	// Mid range distance
@@ -445,7 +445,7 @@ float(entity pe_ent) misc_particle_style = { // [FUNCTION]
 		pe_ent.part_limit = 100;			// Maximum particles
 		pe_ent.part_life = 5;				// Long life
 		pe_ent.part_ofs = '0 0 0';			// center of target object
-		if (CheckZeroVector(pe_ent.pemit_source.part_vel)) pe_ent.part_vel = '0 0 12';
+		if (VectorIsAllZeros(pe_ent.pemit_source.part_vel)) pe_ent.part_vel = '0 0 12';
 		pe_ent.part_velrand = '4 4 12';		// Slight wobble
 		pe_ent.part_vol = '64 64 0';		// Volume (X/Y/Z)
 		if (pe_ent.pemit_source.t_length > 0) pe_ent.part_vol_x = pe_ent.pemit_source.t_length;
@@ -1257,7 +1257,7 @@ void() misc_particle_burst_use = { // [FUNCTION]
 void() misc_particle_burst_setup = { // [FUNCTION]
 	if (!self.pemit_tcount) self.count = 20; // Read tcount from entity, but it cannot be used for constant emitters.  The finish particle system will decrease the tcount directly!
 	if (!self.part_life) self.part_life = 2;
-	if (CheckZeroVector(self.part_ofs)) self.part_ofs = '0 0 0';
+	if (VectorIsAllZeros(self.part_ofs)) self.part_ofs = '0 0 0';
 	if (self.part_style == 1) self.part_style = PARTICLE_BURST_YELLOW;
 	else if (self.part_style == 2) self.part_style = PARTICLE_BURST_GREEN;
 	else if (self.part_style == 3) self.part_style = PARTICLE_BURST_RED;
@@ -1340,11 +1340,11 @@ void() misc_weather = { // [ENTITY]
 	
 	// Setup default wind (X/Y) and vertical velocity
 	if (self.spawnflags & PARTICLE_WEATHER_SNOW) {
-		if (CheckZeroVector(self.pos1)) self.pos1 = '8 15 0'; // Mostly white
-		if (CheckZeroVector(self.pos2)) self.pos2 = '100 100 -100';
+		if (VectorIsAllZeros(self.pos1)) self.pos1 = '8 15 0'; // Mostly white
+		if (VectorIsAllZeros(self.pos2)) self.pos2 = '100 100 -100';
 	} else {
-		if (CheckZeroVector(self.pos1)) self.pos1 = '1 15 0'; // grey->white
-		if (CheckZeroVector(self.pos2)) self.pos2 = '100 100 -500';
+		if (VectorIsAllZeros(self.pos1)) self.pos1 = '1 15 0'; // grey->white
+		if (VectorIsAllZeros(self.pos2)) self.pos2 = '100 100 -500';
 	}
 
 	// Particle colour range - Make sure Y > X
@@ -1370,7 +1370,7 @@ void() misc_weather = { // [ENTITY]
 // All the variables for this function are defined in part_manage.qc
 void(entity targ) Default_ParticleTrail = { // [FUNCTION]
 	if (targ.part_chance <= 0) targ.part_chance = 0.2; // Setup particle emitter defaults
-	if (CheckZeroVector(targ.part_ofs)) targ.part_ofs = '0 0 2';
+	if (VectorIsAllZeros(targ.part_ofs)) targ.part_ofs = '0 0 2';
 	if (targ.part_base <= 0) targ.part_base = 1;
 	if (targ.part_rand <= 0) targ.part_rand = 1;
 	if (targ.part_life <= 0) targ.part_life = 2;

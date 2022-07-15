@@ -166,7 +166,7 @@ void() trigger_bmodel_touch = { // [FUNCTION]
 	if (!(self.spawnflags & TRIG_MONSTERS) && !(other.flags & FL_CLIENT)) return;
 
 	TargetMovedir(self, FALSE); // Check for any target entity tracking
-	if (!CheckZeroVector(self.movedir)) {
+	if (!VectorIsAllZeros(self.movedir)) {
 		makevectors(other.angles); // Did the trigger have an angle key setup?
 		if (v_forward * self.movedir < 0) return;		
 	}
@@ -306,7 +306,7 @@ float() check_bmodel_notouch = { // [FUNCTION]
 // return FALSE = error, show trigger message, < active version
 float() check_bmodel_modver = { // [FUNCTION]
 	if (self.spawnflags & TRIG_MODCHECK) { // Is the trigger suppose to block/check the mod?
-		if (CheckZeroVector(self.modver_check)) { // Is the mod ver/patch/beta check set to zero?  - no version check, then return TRUE (delete this trigger)
+		if (VectorIsAllZeros(self.modver_check)) { // Is the mod ver/patch/beta check set to zero?  - no version check, then return TRUE (delete this trigger)
 			entity_hide(self);
 			return TRUE;
 		} else {

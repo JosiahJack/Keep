@@ -78,7 +78,7 @@ float() Ryu_UseFreeMove = {
     else
         return TRUE; // Already level, so no need to use flat move code because the engine code will do that for us.
 
-    pc = pointcontents(spot);
+    pc = GetContents(spot);
 	// Don't let big dragons clip the ceiling.
     if ((pc == CONTENT_SOLID) && (self.maxs_z > 64)) return FALSE; // Stop huge dragons from clipping the ceiling.
 
@@ -372,12 +372,15 @@ float(float dist) Ryu_DetectDanger = {
 //  Dragon Combat.  This checks if the dragon cannot use its missile attacks because of some detrimental side effect that could result from it.
 float(entity ent) Ryu_NoShot = {
     local float element;
+    local vector base;
 
     if (ent.waterlevel > 1) {
         element = ent.ryuflags & RYU_ELEMENTS;
         if (element == RYU_USE_LITE) return TRUE;    // Lightning is useless underwater.
-        else if (element == RYU_USE_ICE) { 
-            if (ent.liquidbase == CONTENT_LAVA) return TRUE;    // Melts in lava!
+        else if (element == RYU_USE_ICE) {
+            base = self.origin;
+            base_z = base_z + self.mins_z;
+            if (InLava(base)) return TRUE;    // Melts in lava!
         }
     }
 
@@ -457,6 +460,26 @@ void() ryu_melee = {
     if (ryu_step(TRUE)) movetogoal(SPEED_RYU_MIN);   // Close in on the opponent.
 };
 
+void(entity targ) SetMove_BoxParams = {
+    if (!move_box) InitMoveBox();
+    setorigin(move_box,targ.origin);
+    setsize(move_box,targ.mins,targ.maxs);
+    move_box.flags      = FL_FLY;
+    move_box.angles     = targ.angles;
+    move_box.ideal_yaw  = targ.ideal_yaw;
+    move_box.enemy      = targ.enemy; // For walkmove's up/down motion.
+    move_box.goalentity = targ.goalentity;
+    move_box.owner      = targ; // So box can pass through owner.
+	// Splash sound control.  Synchronize builtin water values with the dragon's. 
+    // Otherwise, any time the dragon is underwater, Quake will think the hull
+    // box enters water when it moves, resulting in repeating splash sounds
+    // each frame.
+    move_box.waterlevel = targ.waterlevel;
+    move_box.watertype  = targ.watertype;
+    move_box.infuncwater = self.infuncwater;
+    move_box.inBSPwater = self.inBSPwater;
+};
+
 float(vector spot, vector add, float yaw, float dist) WyrmPt = {
     setorigin(self,spot + add);
     return Ryu_WalkMove(yaw,dist);
@@ -497,18 +520,7 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     local   float   flat, up, lo, hi;
 
     org = self.origin;
-    setorigin(move_box, self.origin);
-    setsize (move_box, self.mins, self.maxs);
-    move_box.flags      = FL_FLY;
-    move_box.angles     = self.angles;
-    move_box.ideal_yaw  = self.ideal_yaw;
-    move_box.enemy      = self.enemy;   // For walkmove's up/down motion.
-    move_box.goalentity = self.goalentity;
-    move_box.owner      = self;         // So box can pass through owner.
-	// Splash sound control.  Synchronize builtin water values with the dragon's.  Otherwise, any time the dragon is underwater, Quake will think the
-	// hull box enters water when it moves, resulting in repeating splash sounds each frame.
-    move_box.waterlevel = self.waterlevel;
-    move_box.watertype  = self.watertype;
+    SetMove_BoxParams(self);
     swap = self;
     self = move_box;
     if (!Ryu_WalkMove(yaw,dist)) { self = swap; return FALSE; } // Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.

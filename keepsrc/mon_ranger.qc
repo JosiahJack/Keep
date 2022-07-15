@@ -172,7 +172,7 @@ void(float dist) ranger_axe_step = {
 
     p1 = self.origin + self.view_ofs;
     p2 = self.enemy.origin + self.enemy.view_ofs;
-    if (vlen(p2 - p1) > (self.enemy.maxs_x * 1.25 + 90 + dist)) ai_charge (dist);   // Head straight in.
+    if (vlen(p2 - p1) > (self.enemy.maxs_x * 1.25 + 90 + dist)) ai_charge(dist);   // Head straight in.
     else ranger_strafe (dist);   // Strafe to the side.
 };
 

@@ -212,7 +212,7 @@ void() steelc_leap5 = [$jump8, steelc_leap6 ] {};
 void() steelc_leap6 = [$jump9, steelc_leap7 ] {};
 void() steelc_leap7 = [$jump10, steelc_leap8 ] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = steelc_leap3;
 	}
@@ -327,7 +327,7 @@ void() monster_steelclaw = { // [ENTITY]
 	self.deathstring = " was bled out by a Steelclaw\n";
 
 	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '650 0 50';
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '650 0 50';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPSTEELNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSTEELFAR;
 

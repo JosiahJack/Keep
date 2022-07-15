@@ -1221,7 +1221,7 @@ void() W_FireMultiRocket = { // [FUNCTION]
 	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",TRUE,ATTN_NORM);
 	self.punchangle_x = CONTENT_SOLID;
 	MultiRocketLaunch (-10.000,FL_SWIM);
-	MultiRocketLaunch (CONTENT_LAVA,MOVETYPE_WALK);
+	MultiRocketLaunch (-5,MOVETYPE_WALK);
 	MultiRocketLaunch (MOVETYPE_FLY,FALSE);
 	MultiRocketLaunch (MOVETYPE_BOUNCE,TRUE);
 	W_Reload(0.9);

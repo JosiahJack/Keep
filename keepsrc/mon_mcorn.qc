@@ -213,7 +213,7 @@ void() mcorn_leap6	= [  85, mcorn_leap7	] {
 };
 void() mcorn_leap7	= [  85, mcorn_leap7	] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = mcorn_leap5;
 	}

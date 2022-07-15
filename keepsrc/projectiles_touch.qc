@@ -653,7 +653,7 @@ void() Touch_Grenade = { // [FUNCTION]
 	self.activate = other;		// Always keep track of what to damage
 	if (self.classtype == CT_PROJ_MEGG && other.takedamage == DAMAGE_AIM) {
 		// Let minion eggs re-bounce in opposite direction.  Don't want them to explode like grenades.
-		if (CheckZeroVector(self.velocity) == FALSE) {
+		if (VectorIsAllZeros(self.velocity) == FALSE) {
 			self.angles = vectoangles(self.mangle);
 			self.angles_y = anglemod(self.angles_y + 180);
 			self.velocity = -self.mangle;	// Reverse direction
@@ -669,7 +669,7 @@ void() Touch_Grenade = { // [FUNCTION]
 			Explode_Grenade(); 
 		} else {
 			sound(self,CHAN_WEAPON,self.noise,1,ATTN_NORM); // Bounce sound.  MOOM!
-			if (CheckZeroVector(self.velocity)) self.avelocity = '0 0 0'; // Stop spinning.
+			if (VectorIsAllZeros(self.velocity)) self.avelocity = '0 0 0'; // Stop spinning.
 		}
 	}
 };
@@ -698,7 +698,7 @@ void() HIP_LaserTouch = { // [FUNCTION]
 	oldvel = normalize (self.old_velocity);
 	spot1 = (self.origin - (16 * oldvel));
 	spot2 = (self.origin + (16 * oldvel));
-	traceline (spot1,spot2,FALSE,self);
+	traceline(spot1,spot2,FALSE,self);
 	self.origin = trace_endpos;
 	org = self.origin;
 	if (self.master.tome_finished && self.tome_finished) {
@@ -1089,7 +1089,7 @@ void() Acidball_Touch = { // [FUNCTION]
 
 //  Meat -- Used by zombie and nightshade (wraith dragon).
 void() Meat_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
+    if (InSky(self.origin)) { remove(self); return; }
     if (Reflected()) return;
 
     if (other.takedamage) {
@@ -1109,7 +1109,7 @@ void() Ice_Touch = { // [FUNCTION]
     local float chunks, damage;
     local vector spot;
 
-    if (pointcontents(self.origin) <= CONTENT_LAVA) { remove(self);  return; } // Lava or sky.
+    if (GetContents(self.origin) <= CONTENT_LAVA) { remove(self);  return; } // Lava or sky.
     if (Reflected ()) return;
 
     self.touch = SUB_Null;      // Stack overflow prevention.
@@ -1392,7 +1392,7 @@ void() Firewall_Touch = { // [FUNCTION]
     if (trace_fraction == 1) pass = 1; // No flame on ground.
     else {
         spot = trace_endpos;
-        pc = pointcontents (spot);
+        pc = GetContents(spot);
         if ((pc != CONTENT_EMPTY) && (pc != CONTENT_LAVA))
             pass = 1; // Flame in void, water, or sky.
         else if (other.flags & FLx_CREATURE) {
@@ -1599,4 +1599,24 @@ void() lavaman_touch = {
 	WriteCoord (MSG_BROADCAST,self.origin_y);
 	WriteCoord (MSG_BROADCAST,self.origin_z);
 	BecomeExplosion();
+};
+
+void() vermis_spore_touch = {
+	local float rndsnd;
+
+	if (other == self.owner) return;
+	if (other.takedamage == DAMAGE_AIM) { vermis_spore_explode(); return; }
+
+	rndsnd = random();
+	if (rndsnd < 0.333) sound(self,CHAN_VOICE,"quoth/vermis/splash1.wav",1,1.7);
+	else if (rndsnd < 0.666) sound(self,CHAN_VOICE,"quoth/vermis/splash2.wav",1,1.7);
+	else sound(self,CHAN_VOICE,"quoth/vermis/splash3.wav",1,1.7);
+
+	if (VectorIsAllZeros(self.velocity)) self.avelocity = VEC_ORIGIN;
+
+	if (self.lip == 0) {
+		self.ltime = time + 0.3 + 0.4 * random();
+		self.movetype = MOVETYPE_BOUNCE;
+	}
+	self.lip = 1;
 };

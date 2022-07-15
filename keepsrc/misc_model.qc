@@ -139,7 +139,7 @@ void() misc_model_loop = { // [FUNCTION]
 		if (self.skinstart < self.pos2_x || self.skinstart > self.pos2_y) self.skinstart = self.pos2_x; // Double Check for out of bounds
 	}
 	
-	if (!CheckZeroVector(self.rotateangles) && self.waitmin3 != 0) { // Update rotation
+	if (!VectorIsAllZeros(self.rotateangles) && self.waitmin3 != 0) { // Update rotation
 		self.angles = self.angles + self.rotateangles;
 		self.angles = vectormod(self.angles);
 	}
@@ -227,7 +227,7 @@ void() misc_model_use = { // [FUNCTION]
 		if (self.pos2_z > 0 && self.skin != self.pos2_z) self.skin = self.pos2_z; // Check for new skin numbers and only change if needed
 	}
 
-	if (!CheckZeroVector(self.rotateangles)) { // ROTATION animation loops setup
+	if (!VectorIsAllZeros(self.rotateangles)) { // ROTATION animation loops setup
 		if (self.rotateloop == MMLOOP_TOGGLE) { // Toggle cannot switch off animation state because other types.  (frame/skin/rotate) maybe active and animating.
 			if (self.state == STATE_ON) { // TOGGLE OFF rotation loop ONLY!
 				self.waitmin3 = 0;
@@ -293,7 +293,7 @@ void() misc_model_on = { // [FUNCTION]
 	// Restore model/size and check if collision needed
 	if (self.spawnflags & MISC_COLLISION) {
 		self.solid = SOLID_BBOX;
-		if (CheckZeroVector(self.bbmins) && CheckZeroVector(self.bbmaxs)) setsize (self, self.mins , self.maxs); // Use model default size
+		if (VectorIsAllZeros(self.bbmins) && VectorIsAllZeros(self.bbmaxs)) setsize (self, self.mins , self.maxs); // Use model default size
 		else setsize (self, self.bbmins , self.bbmaxs); // Override defaults with custom sizes
 	} else setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	
@@ -437,7 +437,7 @@ void() misc_model = { // [ENTITY]
 
 	if (self.frame > 0) { self.pos1 = '0 0 0'; self.pos1_z = self.frame; } // Check for any skin/frame values (Quoth compatibility)
 	if (self.skin > 0) { self.pos2 = '0 0 0'; self.pos2_z = self.skin; }
-	if (!CheckZeroVector(self.mangle)) self.angles = self.mangle; // Check for a mangle override (Quoth compatibility)
+	if (!VectorIsAllZeros(self.mangle)) self.angles = self.mangle; // Check for a mangle override (Quoth compatibility)
 	if (self.angles_y < 0 || self.ideal_yaw > 0) self.angles_y = rint(random()*360); // Random Rotation : UP/DOWN angle or use the ideal_yaw key
 	self.mangle = self.angles; // Save angles (mangle not used)
 	if (world.model == "maps/ad_sepulcher.bsp") { // MAP/CODE HACK Terrible way to fix this map.  If wrong engine then delete the misc_model detail).
@@ -498,7 +498,7 @@ void() misc_model = { // [ENTITY]
 		if (self.pos2_z < 1) self.pos2 = '0 0 0'; // If no exact SKIN bas specified, reset SKIN to default = 0
 	}
 
-	if (!CheckZeroVector(self.rotateangles)) self.aflag = TRUE; // Any rotation angle setup?
+	if (!VectorIsAllZeros(self.rotateangles)) self.aflag = TRUE; // Any rotation angle setup?
 	
 	
 	if (self.aflag == TRUE) { // Setup DEFAULT animation direction, speed and status
@@ -543,11 +543,11 @@ void() misc_model = { // [ENTITY]
 		self.movetype = MOVETYPE_TOSS; // Turn misc model into an item so it can fall down
 		self.solid = SOLID_BBOX;
 		setmodel(self, self.mdl);
-		if (CheckZeroVector(self.bbmins)) setsize (self, VEC_ORIGIN, VEC_ORIGIN); // Check for any bounding box override (check min only).  Don't use model default, its usually broken or wrong.  Use a zero size so the model origin drops perfectly.
+		if (VectorIsAllZeros(self.bbmins)) setsize (self, VEC_ORIGIN, VEC_ORIGIN); // Check for any bounding box override (check min only).  Don't use model default, its usually broken or wrong.  Use a zero size so the model origin drops perfectly.
 		else setsize (self, self.bbmins , self.bbmaxs); // Override defaults with custom sizes
 
 		self.velocity = '0 0 0'; // Make sure no onspawn velocity
-		if (CheckZeroVector(self.facevector)) self.facevector = '-90 0 0'; // Default surface normal is flat so check for default modifier
+		if (VectorIsAllZeros(self.facevector)) self.facevector = '-90 0 0'; // Default surface normal is flat so check for default modifier
 		traceline(self.origin, self.origin-'0 0 1024', FALSE, self); // Trace a line downward to get the surface normal
 		self.origin_z = self.origin_z + 6; // Drop the model to the ground
 		droptofloor();

@@ -291,7 +291,7 @@ void() CheckFloorGib = {
 		ent_floorcheck(self, FLOOR_TRACE_GIBS);
 
 		// Should be used only by gibs spawned by a fountain.
-		if (CheckZeroVector(self.velocity) && !CheckZeroVector(self.avelocity)) self.avelocity = '0 0 0';
+		if (VectorIsAllZeros(self.velocity) && !VectorIsAllZeros(self.avelocity)) self.avelocity = '0 0 0';
 
 		// Check for final impact animation
 		if (self.gibAnimfinal > 0 && self.gibAnimTimer < time) {
@@ -445,21 +445,21 @@ void(float gib_no, float gib_qty) ThrowGib = {
 			gibitem.weapon = self.gib1sound;
 			if (self.gib1skin > 0) gibitem.skin = self.gib1skin;
 			if (self.gib1frame) gibitem.frame = rint(random()*self.gib1frame);
-			if (!(CheckZeroVector(self.gib1origin))) gibitem.oldorigin = self.gib1origin;
+			if (!(VectorIsAllZeros(self.gib1origin))) gibitem.oldorigin = self.gib1origin;
 		} else if (gib_no == 12) {
 			// Custom Gib (defined by monster): custom model, skin and frame
 			gibitem.mdl = self.gib2mdl;
 			gibitem.weapon = self.gib2sound;
 			if (self.gib2skin > 0) gibitem.skin = self.gib2skin;
 			if (self.gib2frame) gibitem.frame = rint(random()*self.gib2frame);
-			if (!(CheckZeroVector(self.gib2origin))) gibitem.oldorigin = self.gib2origin;
+			if (!(VectorIsAllZeros(self.gib2origin))) gibitem.oldorigin = self.gib2origin;
 		} else if (gib_no == 13) {
 			// Custom Gib (defined by monster): custom model, skin and frame
 			gibitem.mdl = self.gib3mdl;
 			gibitem.weapon = self.gib3sound;
 			if (self.gib3skin > 0) gibitem.skin = self.gib3skin;
 			if (self.gib3frame) gibitem.frame = rint(random()*self.gib3frame);
-			if (!(CheckZeroVector(self.gib3origin))) gibitem.oldorigin = self.gib3origin;
+			if (!(VectorIsAllZeros(self.gib3origin))) gibitem.oldorigin = self.gib3origin;
 		} else if (gib_no == 14) gibitem.mdl = self.gib4mdl; // Extra Custom Gib (just models, no paramters)
 		else if (gib_no == 15) gibitem.mdl = self.gib4mdl; // Extra Custom Gib (just models, no paramters)
 		else if (gib_no == GIBTYPE_ICE) {
@@ -499,7 +499,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		gibitem.solid = SOLID_TRIGGER;
 		setmodel(gibitem, gibitem.mdl);
 		// Allow for custom bounding box for gib models
-		if (!(CheckZeroVector(self.gibmins))) setsize (gibitem, self.gibmins, self.gibmaxs);
+		if (!(VectorIsAllZeros(self.gibmins))) setsize (gibitem, self.gibmins, self.gibmaxs);
 		else setsize (gibitem, VEC_ORIGIN, VEC_ORIGIN);
 		
 		// 10 frames of different pose/sizes for regular gibs
@@ -521,7 +521,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 			// Make sure gibs fountain items have correct origins
 			if (self.classtype == CT_MISCGIBF) gibitem.oldorigin = self.origin;
 			gibitem.healamount = 3 + (random() * 7);
-			if (CheckZeroVector(gibitem.oldorigin)) {
+			if (VectorIsAllZeros(gibitem.oldorigin)) {
 				gibitem.oldorigin_x = crandom()*(self.bbmaxs_x*0.75);
 				gibitem.oldorigin_y = crandom()*(self.bbmaxs_y*0.75);
 				// This function was originally designed for monster bbox only.  Function has been expanded to use misc model (source) as well
@@ -542,7 +542,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		}
 
 		// Check for water content, adjust for water friction
-		if (pointcontents(gibitem.oldorigin) == CONTENT_WATER) {
+		if (InLiquid(gibitem.oldorigin)) {
 			gibitem.gravity = 0.35;
 			gibitem.velocity_z = 0;
 		}
@@ -557,7 +557,6 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		if (gibitem.physicsflags) {
 			Gyro_Object_Activate(gibitem,MASS_GIB);
 			if (gibitem.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(gibitem,BOUY_GIB);
-			//if (gibitem.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetLiquidResistance(gibitem,RESIST_GIB);
 		}
 		gib_qty = gib_qty - 1;
 	}

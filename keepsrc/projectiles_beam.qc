@@ -181,7 +181,7 @@ void(vector spot, float count, float gopop, vector norm) LightningSparks = {
 	local float iter, xyadd, zadd;
 	local vector dir;
 
-	if (CheckZeroVector(norm)) {
+	if (VectorIsAllZeros(norm)) {
 		dir = safe_client_forward();
 		zadd = 200;
 	} else {

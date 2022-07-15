@@ -89,10 +89,12 @@ float(float t) SUB_sin = { local vector v;  v = CoSine(t);  return v_y; };
 float(float t) SUB_tan = { local vector v;  v = CoST(t);  return v_z; };
 //--------------------------------END WAND MATHS-------------------------------
 
-// Stops the current sound that is playing on the specified channel by playing an empty sound.
+// Stops the current sound that is playing on the specified channel by playing
+// an empty sound.
 void(entity ent, float chan) StopSound = { sound(ent,chan,SOUND_EMPTY,1,ATTN_NONE); };
 
-// Based on 'SV_StepDirection'.  Use this only for big multi-hulled monsters such as dragons.
+// Based on 'SV_StepDirection'.  Use this only for big multi-hulled monsters
+// such as dragons.
 float(float yaw, float dist, float noclip) QC_StepDir = {
 	local vector spot;
 
@@ -108,8 +110,7 @@ float(float yaw, float dist, float noclip) QC_StepDir = {
             return FALSE;
         }
     } else {
-
-        if (walkmove (yaw, dist)) { // First, move self.  If successful, see if self is facing ideal.  If not, snap self back.
+        if (walkmove(yaw,dist)) { // First, move self.  If successful, see if self is facing ideal.  If not, snap self back.
             if (!FacingIdeal()) setorigin(self, spot); // Didn't turn enough so don't move.  
             return TRUE;
         }
@@ -339,11 +340,11 @@ entity  move_box;
 
 // Used by big entities to prevent clipping of walls.
 void() InitMoveBox = {
-    move_box = spawn();
-    setsize (move_box, VEC_HULL2_MIN, VEC_HULL2_MAX);
-    move_box.solid      = SOLID_NOT;
-    move_box.movetype   = MOVETYPE_STEP;
-    move_box.classname  = "move_box";
+    if (!move_box) move_box = spawn();
+    setsize(move_box,VEC_HULL2_MIN,VEC_HULL2_MAX);
+    move_box.solid = SOLID_NOT;
+    move_box.movetype = MOVETYPE_STEP;
+    move_box.classname = "move_box";
     dprint("\b[SETUP]\b Drake movebox is now setup for large monsters\n");
 };
 
@@ -864,49 +865,17 @@ float() EntryPoint_BossCube = {
 	return TRUE; // Got one!
 };
 
-// Adds 'fadd' to frame 'fr'.  Used to animate monsters.
-void(float fr, float fadd, float fmax) WalkFrame_Add = {
-    if ((self.walkframe < 0) || (self.walkframe > fmax)) self.walkframe = 0;
-    self.frame = fr + self.walkframe;
-    self.walkframe = self.walkframe + fadd;
-};
-
-// Set contents of monster's purse.
-void(float loop, float drop_chance, float gem_chance) monster_purse = {
-    self.purse = '0 0 0';
-	self.purse_z = encode(loop,drop_chance * 100,gem_chance * 100);
-    while (loop > 0) {
-        if (random() < drop_chance) {
-            if (random() < gem_chance) self.purse_y = self.purse_y + 1; // Gem
-            else self.purse_x = self.purse_x + 1; // Coin
-        }
-        loop = loop - 1;
-    }
-};
-
-void(void() thinkst) M_Break = {
-    if (self.enemy.health > 0)
-        if (self.enemy.solid > SOLID_TRIGGER)
-            if (visible(self.enemy))
-                if (enemy_range < RANGE_FAR) return;
-
-    if (!((self.health <= 0) || self.deadflag)) self.think = thinkst; // Break attack sequence.
-};
-
 // Checks if the sky is above a given point.
 float(vector org, entity ignore) UpIsSky = { // [FUNCTION]
-    local float pc;
-
     traceline(org, org + '0 0 8192', TRUE, ignore); // Sees through monsters.
-    pc = pointcontents(trace_endpos);
 	if (trace_ent.classtype == CT_TRIGVOID) return TRUE; // True if we hit a trigger_void as well.
-    if (trace_fraction < 1) return (pc == CONTENT_SKY);
-    return ((pc == CONTENT_EMPTY) || (pc == CONTENT_SKY));
+    if (trace_fraction < 1) return InSky(trace_endpos);
+    if (InAir(trace_endpos)) return TRUE;
+    return (InSky(trace_endpos)); // Checked last for performance.
 };
 
 float(entity e) IsGhost = {
-	return (e.solid == SOLID_TRIGGER
-	        || e.movetype == MOVETYPE_NOCLIP
+	return (e.solid == SOLID_TRIGGER || e.movetype == MOVETYPE_NOCLIP
 	        || e.bodyphased == MONAI_SPIRITINVIS
 			|| e.bodyphased == MONAI_SKULLWINVIS
 			|| ((e.flags & FL_NOTARGET) && e.classtype == CT_MONPOLYP));

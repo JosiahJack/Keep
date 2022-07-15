@@ -160,7 +160,7 @@ void() setup_fog_controller = {
 		}
 		fog_control.fog_diffden = 0;			// Difference
 
-		if (CheckZeroVector(world.fog_colour)) {
+		if (VectorIsAllZeros(world.fog_colour)) {
 			fog_active = FALSE;						// out of sync
 			fog_control.fog_currcol = DEF_FOGCOL;	// Bad Default
 			fog_control.fog_targcol = DEF_FOGCOL;	// Target

@@ -941,9 +941,9 @@ void() item_custom = { // [ENTITY]
 	self.part_active = 0;	// Must clear this afterward
 	if (self.angles_y <= 0) self.angles_y = rint(random()*359); // Setup random rotation, will be ignored if spinning model	
 	self.touch2 = item_custom_touch;
-	if (CheckZeroVector(self.pos1)) self.bbmins = VEC_HULL_MIN;
+	if (VectorIsAllZeros(self.pos1)) self.bbmins = VEC_HULL_MIN;
 	else self.bbmins = self.pos1;
-	if (CheckZeroVector(self.pos2)) self.bbmaxs = VEC_HULL_MAX;
+	if (VectorIsAllZeros(self.pos2)) self.bbmaxs = VEC_HULL_MAX;
 	else self.bbmaxs = self.pos2;
 	item_start();
 };

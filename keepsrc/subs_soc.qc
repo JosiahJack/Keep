@@ -176,14 +176,6 @@ void(entity source, float floor_dist) ent_floorcheck = {
 	}
 };
 
-float(vector bborg, float bbx, float bby, float bbz) check_skyvector = {
-	local vector skyorg;
-	skyorg_x = bborg_x + bbx;
-	skyorg_y = bborg_y + bby;
-	skyorg_z = bborg_z + bbz;
-	return InSky(skyorg);
-};
-
 // Updates totals on the HUD (checks for client to exist)
 // - Specify which total to update using constant
 // - Uses MSG_ONE because it is more reliable across many clients

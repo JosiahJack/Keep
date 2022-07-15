@@ -288,6 +288,6 @@ void() info_intermission = {
 	if (self.fog_density > 0) { // Check for any trigger fog parameters
 		if (!self.speed) self.speed = 2;
 		if (self.fog_density > 1) self.fog_density = 1; // Double check its within range
-		if (CheckZeroVector(self.fog_colour)) self.fog_colour = '0.1 0.1 0.1';
+		if (VectorIsAllZeros(self.fog_colour)) self.fog_colour = '0.1 0.1 0.1';
 	} else self.fog_density = 0; // Disable fog trigger if density not setup
 };

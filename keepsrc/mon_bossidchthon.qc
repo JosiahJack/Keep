@@ -357,7 +357,7 @@ void() teleporttrain_target = {
 		if (self.enemy) {
 			// Work out distance and angle to turn towards
 			dir = normalize(self.enemy.origin - self.origin);
-			self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+			self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 			self.velocity = dir * self.speed;
 	
 			// Shift target to next target in the entity chain

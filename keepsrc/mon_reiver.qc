@@ -649,7 +649,7 @@ void()	life_drain = {
 	spot1 = self.origin + '0 0 12';
 	spot2 = self.enemy.origin + self.enemy.view_ofs;
 
-	traceline (spot1, spot2, FALSE, self);
+	traceline(spot1,spot2, FALSE, self);
 	if (trace_ent != self.enemy) return;		// don't have a clear shot
 
 	T_Damage (self.enemy, self, self, 7, DAMARMOR);	

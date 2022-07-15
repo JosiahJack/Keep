@@ -316,8 +316,8 @@ void() misc_gibfountain = { // [ENTITY]
 	if (self.count < 1) self.count = 1;
 	if (self.cnt < 1) self.cnt = 0;
 	if (self.speed <= 0) self.speed = 600; // Default velocity (like misc_fireball)
-	if (CheckZeroVector(self.gibvel)) self.gibvel = '200 100 0'; // Extra randomness to speed/velocity of gib (forward/right/up)
-	if (CheckZeroVector(self.angles)) { // Direction system priority = ANGLES > TARGET > ANGLETARGET.  Check for empty angles setup?
+	if (VectorIsAllZeros(self.gibvel)) self.gibvel = '200 100 0'; // Extra randomness to speed/velocity of gib (forward/right/up)
+	if (VectorIsAllZeros(self.angles)) { // Direction system priority = ANGLES > TARGET > ANGLETARGET.  Check for empty angles setup?
 		self.angles = '0 -1 0'; // No angles defined, create default direction.  Target/Angletarget are checked when gib is thrown/spawned
 		if (self.target == "") self.target = self.angletarget; // priority = TARGET > ANGLETARGET.  Target has to be defined for gib to be thrown properly.
 		else self.angletarget = self.target;
@@ -865,7 +865,7 @@ void() misc_smoke = { // [ENTITY]
 
 	makevectors(self.angles); // Calculate smoke particle movedir from angles
 	self.movedir = v_up;
-	if (CheckZeroVector(self.angles)) self.angles_y = rint(random()*360); // Setup some random Y axis rotation if nothing set
+	if (VectorIsAllZeros(self.angles)) self.angles_y = rint(random()*360); // Setup some random Y axis rotation if nothing set
 	if (ext_dppart) { // DP particle effects active?
 		if (self.spawnflags & MISC_SMOKENODPMDL) self.mdl = ""; // Remove the model if spawnflag set
 		if (query_configflag(SVR_PARTICLES) && !(self.spawnflags & MISC_SMOKENODPFX) ) { // Spawn particle emitter if particles active and not blocked
@@ -1015,7 +1015,7 @@ void() misc_spark = { // [ENTITY]
 	if (!self.speed) self.speed = 40;
 	if (!self.height) self.height = 20;
 	self.estate = ESTATE_OFF;
-	if (CheckZeroVector(self.angles)) self.angles = '0 360 0'; // Always convert 0 angle to 360 for setmovedir function
+	if (VectorIsAllZeros(self.angles)) self.angles = '0 360 0'; // Always convert 0 angle to 360 for setmovedir function
 	self.mangle = self.angles;
 	SetMovedir();
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality

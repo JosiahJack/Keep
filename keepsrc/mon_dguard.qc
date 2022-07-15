@@ -211,7 +211,7 @@ void()	dguard_walk14	= [	$walk14,	dguard_walk1	] { ai_walk(2); };
 // Added timing of 3rd/7th back to other frames
 
 void()	dguard_run1	= [	$run1,	dguard_run2	] {
-	self.idlebusy = FALSE; monster_idle_sound(); ai_run (20); };
+	self.idlebusy = FALSE; monster_idle_sound(); ai_run(20); };
 void()	dguard_run2	= [	$run2,	dguard_run3	] { monster_footstep(FALSE); ai_run(24); };
 void()	dguard_run3	= [	$run3,	dguard_run4	] { ai_run(12); };
 void()	dguard_run4	= [	$run4,	dguard_run5	] { ai_run(20); };

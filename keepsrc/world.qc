@@ -612,11 +612,11 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	player_fallspeed_setup();
 
 	// Check for Plasma gun damage override (Direct, Random, Splash)
-	if (!CheckZeroVector(world.plasmagun_dmg)) map_plasmagundmg = world.plasmagun_dmg;
+	if (!VectorIsAllZeros(world.plasmagun_dmg)) map_plasmagundmg = world.plasmagun_dmg;
 	else map_plasmagundmg = DAMAGE_PGPLAYER;
 
 	// Check for Bleeding damage override (Percentage, HoT, Pause)
-	if (!CheckZeroVector(world.bleeding_dmg)) map_bleedingdmg = world.bleeding_dmg;
+	if (!VectorIsAllZeros(world.bleeding_dmg)) map_bleedingdmg = world.bleeding_dmg;
 	else map_bleedingdmg = DAMAGE_BLEEDING;
 
 	// Make sure all parameters are within certain ranges

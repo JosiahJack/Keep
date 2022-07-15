@@ -944,11 +944,11 @@ void() monster_icegolem = {
 	if (self.idle_soundcom2 == "") self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
 	if (self.brkobj1 == "") self.brkobj1 = MODEL_BRK_ROCK1A;
 	if (self.brkobj2 == "") self.brkobj2 = MODEL_BRK_ROCK1B;
-	if (CheckZeroVector(self.dest1)) self.dest1 = '80 8 1'; // Additional rubble emitter parameters
-	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 16';
-	if (CheckZeroVector(self.brkvol)) self.brkvol = '160 160 8';
-	if (CheckZeroVector(self.brkvelbase)) self.brkvelbase = '0 0 50';
-	if (CheckZeroVector(self.brkveladd)) self.brkveladd = '100 100 100';
+	if (VectorIsAllZeros(self.dest1)) self.dest1 = '80 8 1'; // Additional rubble emitter parameters
+	if (VectorIsAllZeros(self.dest2)) self.dest2 = '0 0 16';
+	if (VectorIsAllZeros(self.brkvol)) self.brkvol = '160 160 8';
+	if (VectorIsAllZeros(self.brkvelbase)) self.brkvelbase = '0 0 50';
+	if (VectorIsAllZeros(self.brkveladd)) self.brkveladd = '100 100 100';
 	if (self.brkfade <= 0) self.brkfade = 4;
 	if (self.pain_sound == "") self.pain_sound = "ne_ruins/h2golem/pain1.wav";
 	if (self.pain_sound2 == "") self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";

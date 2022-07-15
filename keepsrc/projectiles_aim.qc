@@ -466,7 +466,7 @@ void() BounceShot_TraceNormal = {
     self.movedir = normalize (self.dest);
     spot1 = self.origin - (16*self.movedir);
     spot2 = self.origin + (16*self.movedir);
-    traceline (spot1, spot2, FALSE, self);  // see through other monsters
+    traceline(spot1,spot2, FALSE, self);  // see through other monsters
     setorigin(self, trace_endpos);     //self.origin = trace_endpos;
 };
 

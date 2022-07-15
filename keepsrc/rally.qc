@@ -3129,7 +3129,7 @@ void() VehiclePreThink = {
 	}
 	if (self.cam == CAM_TEST) calc_steering_controls();
 
-	if (pointcontents(self.origin) == CONTENT_LAVA) { DestroyVehicle(); return; }
+	if (InLava(self.origin)) { DestroyVehicle(); return; }
 
 	checkHealth();
 	if ((self.veh_body.effects & EF_DIMLIGHT) && (self.last_crash < time - 0.5)) self.veh_body.effects = self.veh_body.effects - EF_DIMLIGHT;

@@ -96,7 +96,7 @@ void() deathguard_shot = {
 	targ = self.enemy;
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
-	traceline(spot1, spot2, 0, self);
+	traceline(spot1,spot2, 0, self);
 	if (trace_ent != targ) { self.think = self.th_run; return; }
 
 	hknight_shot(0);

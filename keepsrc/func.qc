@@ -581,7 +581,7 @@ void() func_laser = { // [ENTITY]
 
 	self.classtype = CT_FUNCLASER;		// Classtype
 	self.mdl = self.model;				// Save for later (on function)
-	if (self.spr_frame > 0 && CheckZeroVector(self.angles)) self.angles = '0 -2 0';
+	if (self.spr_frame > 0 && VectorIsAllZeros(self.angles)) self.angles = '0 -2 0';
 	InitTrigger();						// Add to work and initialize
 	if (!self.alpha) self.alpha = 0.5;	// Lasers always transparent
 	self.height = self.alpha;			// Used for think function

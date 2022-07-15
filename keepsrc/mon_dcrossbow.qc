@@ -260,7 +260,7 @@ void()	dcrossbow_walk14	= [	$walk14,	dcrossbow_walk1	] { ai_walk(2); };
 
 // 6 frames instead of 8 frames (skipping 3rd/7th timing of original)
 void()	dcrossbow_run1	= [	$run1,	dcrossbow_run2	] { monster_idle_sound();
-	self.idlebusy = FALSE; ai_run (16); };
+	self.idlebusy = FALSE; ai_run(16); };
 void()	dcrossbow_run2	= [	$run2,	dcrossbow_run3	] { ai_run(20); };
 void()	dcrossbow_run3	= [	$run3,	dcrossbow_run4	] { ai_run(7); };
 void()	dcrossbow_run4	= [	$run4,	dcrossbow_run5	] { ai_run(16); };

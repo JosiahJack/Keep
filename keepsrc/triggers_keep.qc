@@ -170,7 +170,7 @@ void() trigger_waterfall = { // [ENTITY]
    InitTrigger();
    self.touch = trigger_waterfall_touch;
    if (!self.count) self.count = 100.000;
-   if (CheckZeroVector(self.movedir)) self.movedir = '0 -90 0';
+   if (VectorIsAllZeros(self.movedir)) self.movedir = '0 -90 0';
    if (!self.speed) self.movedir = (self.movedir * 50.000);
    else self.movedir = (self.movedir * self.speed);
 };

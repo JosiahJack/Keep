@@ -501,19 +501,19 @@ void() display_configflag = {
 	else dprint("+ Shotgun casing enabled\n");
 	if (playerprojsize == 0) dprint("+ Large Projectile Collision\n");
 	else dprint("- Small Projectile Collision\n");
-	if (!CheckZeroVector(world.plasmagun_dmg)) {
+	if (!VectorIsAllZeros(world.plasmagun_dmg)) {
 		dprint("+ Plasma gun damage ("); dprint(ftos(rint(map_plasmagundmg_x)));
 		dprint(" "); dprint(ftos(rint(map_plasmagundmg_y)));
 		dprint(" "); dprint(ftos(rint(map_plasmagundmg_z)));
 		dprint(")\n");
 	}
-	if (!CheckZeroVector(world.player_health)) {
+	if (!VectorIsAllZeros(world.player_health)) {
 		dprint("+ Player Max HP ("); dprint(ftos(rint(world.player_health_x)));
 		dprint(" "); dprint(ftos(rint(world.player_health_y)));
 		dprint(") Skill ("); dprint(ftos(rint(world.player_health_z)));
 		dprint(")\n");
 	}
-	if (!CheckZeroVector(world.bleeding_dmg)) {
+	if (!VectorIsAllZeros(world.bleeding_dmg)) {
 		dprint("+ Bleeding %/HoT/Pause ("); 
 		lftos(self, world.bleeding_dmg_x, 1, 2, BUFFER_DPRINT);
 		dprint(" "); dprint(ftos(world.bleeding_dmg_y));
@@ -558,7 +558,7 @@ void() display_configflag = {
 	else dprint("- Missile tracking uses default\n");
 
 	// Show Hazard damage if defaults been changed
-	if (!CheckZeroVector(world.hazard_dmg)) {
+	if (!VectorIsAllZeros(world.hazard_dmg)) {
 		dprint("+ Hazard dmg Wa ("); dprint(ftos(map_hazarddmg_x));
 		dprint(") Sl ("); dprint(ftos(map_hazarddmg_y));
 		dprint(") La ("); dprint(ftos(map_hazarddmg_z));

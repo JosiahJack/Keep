@@ -721,7 +721,7 @@ void() monster_deflector = {
 		if (self.proj_attqty_z <= 0) self.proj_attqty_z = MONAI_DEFLECTMAX;
 	} else {
 		// Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
-		if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7';
+		if (VectorIsAllZeros(self.proj_attqty)) self.proj_attqty = '3 2 7';
 	}
 
 	Resist_ChangeType(self,-1);

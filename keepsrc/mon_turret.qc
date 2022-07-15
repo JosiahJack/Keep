@@ -68,7 +68,7 @@ void() turret_face = { // [FUNCTION]
 	}
 
 	self.frame = turret_frame(self.rotate_type);
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	ChangeYaw();
 };
 
@@ -110,8 +110,7 @@ void() turret_unret6 =	[$retract1, turret_unret7] { self.nextthink = time + 0.05
 void() turret_unret7 =	[$tilt0, turret_unret7] { // [FUNCTION]
 	if (self.frame > (turret_frame(self.rotate_type) + 1))
 		self.frame = self.frame - 2;
-	else
-	{
+	else {
 		self.frame = turret_frame(self.rotate_type);
 		turret_active();
 	}
@@ -127,7 +126,7 @@ void() turret_active =	[$tilt0, turret_active] { // [FUNCTION]
 
 	enemy_infront = infront(self.enemy);
 	enemy_range = range(self.enemy);
-	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
+	ai_setidealyaw();
 	self.frame = turret_frame(self.rotate_type);
 
 	// see if the enemy is dead
@@ -153,7 +152,7 @@ void() turret_active =	[$tilt0, turret_active] { // [FUNCTION]
 	}
 
 	if (self.attack_state == AS_MISSILE || self.attack_state == AS_MELEE) {
-		ai_run_missile();
+		ai_facingideal_action(self.th_missile);
 		return;
 	}
 

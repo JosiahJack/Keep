@@ -138,7 +138,7 @@ void(float d) hk_run = {
             }
         }
     }
-    ai_run (d);
+    ai_run(d);
 };
 
 void()	hknight_run1	= [	$run1,		hknight_run2	] {
@@ -843,9 +843,9 @@ void() monster_hell_knight = {
 		self.health = MEGADEATH;			// Should be impossible to kill
 		if (self.t_length < 0) self.t_length = 5;	// Random target factor
 		if (self.dmg < 0) self.dmg = 5;				// Contact damage
-		if (CheckZeroVector(self.pos1)) self.pos1 = '20 0 24'; // Setup default pose start pos + random modifier
-		if (CheckZeroVector(self.pos2)) self.pos2 = '30 0 2';
-		if (CheckZeroVector(self.pos3)) self.pos3 = '98 103 1'; // Setup default animation pose (magicB6 - magicB11)
+		if (VectorIsAllZeros(self.pos1)) self.pos1 = '20 0 24'; // Setup default pose start pos + random modifier
+		if (VectorIsAllZeros(self.pos2)) self.pos2 = '30 0 2';
+		if (VectorIsAllZeros(self.pos3)) self.pos3 = '98 103 1'; // Setup default animation pose (magicB6 - magicB11)
 	} else if (self.spawnflags & MON_STATUE) {
 		// Detect statues and setup different parameters.  Tougher skin, less pain, heavy feet etc
 		self.resist_nails = 0.2;

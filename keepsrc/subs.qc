@@ -44,6 +44,8 @@ void(entity targ) AddToTotals;
 void(string text, string noise, entity act) Mass_Centerprint;
 void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
 void(float fx, vector spot) Tent_Point;
+void(entity ent, void() thinkst) SUB_ThinkImmediate;
+void() SUB_RemoveAttachments;
 
 void() SUB_Null = {}; // [FUNCTION]
 void() SUB_Remove = { remove(self); }; // [FUNCTION]
@@ -136,9 +138,8 @@ void() SetMovedir = { // [FUNCTION]
 	self.angles = '0 0 0'; // Bmodels need angles key reset otherwise twisted on spawn
 };
 
-float(vector check_vec) CheckZeroVector = { // [FUNCTION]
-	if (check_vec_x == 0 && check_vec_y == 0 && check_vec_z == 0) return TRUE;
-	else return FALSE;
+float(vector check_vec) VectorIsAllZeros = { // [FUNCTION]
+	return (check_vec_x == 0 && check_vec_y == 0 && check_vec_z == 0);
 };
 
 // Some entities have directional parameters (angles -> movedir).  This function searches for an angletarget entity (useful for tracking).
@@ -170,7 +171,7 @@ void() TargetMovedirReturn = { TargetMovedir(self, TRUE); }; // [FUNCTION]
 
 // Setup triggers.  Angles are used for one-way touches.  An angle of 0 is assumed to mean no restrictions, so use a yaw of 360 instead.
 void() InitTrigger = { // [FUNCTION]
-	if (CheckZeroVector(self.angles) == FALSE) SetMovedir();
+	if (VectorIsAllZeros(self.angles) == FALSE) SetMovedir();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 	self.mdl = self.model;		// Save model for later
@@ -295,28 +296,24 @@ void(entity t) clear_trigstrs = { // [FUNCTION]
 	t.target4 = "";
 };
 
-// sock: I really do hate this function because there is hardly any checks on
-// entities being removed; added a player check for sanity!
+// sock: I really do hate this function because there is hardly any checks on it
+// Qmaster: I overloaded remove() in where gyro overloaded it in gyro_main.qc
+// to add all sorts of checks such as handling monster kill count, not removing
+// player, not removing world, etc. so no worries here about removing
+// attachments too.
 void(string ktarg) SUB_KillTarget = { // [FUNCTION]
 	local entity t;
 
 	if (ktarg == "") return;
 
-	t = find (world, targetname, ktarg);
+	t = find (world,targetname,ktarg);
 	while(t) {
-		if (t.flags & FL_MONSTER && t.health > 0) { // Check for activate mosnters? Tidy up kill counter
-			if (t.nomonstercount) AddToTotals(t); // If a monster marked with no monster count dies update HUD totals to reflect death properly
-			AddToKills(t,activator);
-		}
-		if (!(t.flags & FL_CLIENT)) { // Added extra check to prevent player client removal!?!
-			// Try to minimize the entity chain damage, check for entity attachments and delete them as well!
-			if (t.attachment) remove(t.attachment);
-			if (t.attachment2) remove(t.attachment2);
-			if (t.attachment3) remove(t.attachment3);
-			if (t.entno_unique > 0) t.entno_unique = 0; // Make sure any unique ent number is reset
-			remove(t); // Remove entity from chain list.  BOOM! She gone.
-		}
-		t = find(t, targetname, ktarg); // Find the next killtarget
+		// Try to minimize the entity chain damage, check for entity
+		// attachments and delete them as well!
+		SUB_ThinkImmediate(t,SUB_RemoveAttachments);
+		if (t.entno_unique > 0) t.entno_unique = 0; // Reset unique ent number.
+		remove(t); // Remove entity from chain list.  BOOM! She gone.
+		t = find(t, targetname, ktarg); // Find the next victim to killtarget.
 	}
 };
 

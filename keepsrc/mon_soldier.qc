@@ -116,14 +116,14 @@ void()	army_run6	= [	$run6,		army_run7	] { monster_footstep(FALSE); ai_run(15); 
 void()	army_run7	= [	$run7,		army_run8	] { ai_run(10); };
 void()	army_run8	= [	$run8,		army_run1	] { ai_run(8); };
 
-void()	army_runback1	= [	$run8,	army_runback2	] { ai_backface(8); };
-void()	army_runback2	= [	$run7,	army_runback3	] { ai_backface(10); };
-void()	army_runback3	= [	$run6,	army_runback4	] { monster_footstep(FALSE); ai_backface(15); };
-void()	army_runback4	= [	$run5,	army_runback5	] { ai_backface(8); };
-void()	army_runback5	= [	$run4,	army_runback6	] { ai_backface(10); };
-void()	army_runback6	= [	$run3,	army_runback7	] { ai_backface(10); };
-void()	army_runback7	= [	$run2,	army_runback8	] { monster_footstep(FALSE); ai_backface(15); };
-void()	army_runback8	= [	$run1,	army_run1	] { ai_backface(11); };
+void()	army_runback1	= [	$run8,	army_runback2	] { ai_face(); ai_back(8); };
+void()	army_runback2	= [	$run7,	army_runback3	] { ai_face(); ai_back(10); };
+void()	army_runback3	= [	$run6,	army_runback4	] { monster_footstep(FALSE); ai_face(); ai_back(15); };
+void()	army_runback4	= [	$run5,	army_runback5	] { ai_face(); ai_back(8); };
+void()	army_runback5	= [	$run4,	army_runback6	] { ai_face(); ai_back(10); };
+void()	army_runback6	= [	$run3,	army_runback7	] { ai_face(); ai_back(10); };
+void()	army_runback7	= [	$run2,	army_runback8	] { monster_footstep(FALSE); ai_face(); ai_back(15); };
+void()	army_runback8	= [	$run1,	army_run1	] { ai_face(); ai_back(11); };
 
 // Move backwards to create some space to fire a rocket
 void() army_runbackcheck = {

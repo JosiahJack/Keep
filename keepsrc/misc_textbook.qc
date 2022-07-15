@@ -297,7 +297,7 @@ void() info_book_touch = { // [FUNCTION]
 	}
 	
 	// The angle at the which the book is facing the player
-	// book_yaw = vectoyaw(self.enemy.origin - self.origin);
+	// book_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	// book_angle = anglemod((self.angles_y - book_yaw) + 0);
 	// The angle the player is facing towards the book (45 = forward)
 	play_yaw = vectoyaw(self.origin - self.enemy.origin);
@@ -409,7 +409,7 @@ void() info_book_setup = { // [FUNCTION]
 	else self.style = MISCBOOK_GREEN;
 	
 	// Default viewing angle is min 30 and max 60 looking at origin
-	if (CheckZeroVector(self.v_angle)) self.v_angle = '30 60 0';
+	if (VectorIsAllZeros(self.v_angle)) self.v_angle = '30 60 0';
 	if (self.angles_y == 0) self.angles_y = 360;
 
 	// Check for story book setup first
@@ -486,8 +486,8 @@ void() misc_textbook = { // [ENTITY]
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.classtype = CT_STORYBOOK;
-	if (CheckZeroVector(self.pos1)) self.pos1 = '-48 -48 -32'; // Setup large bounding box for touch trigger
-	if (CheckZeroVector(self.pos2)) self.pos2 = '48 48 32';
+	if (VectorIsAllZeros(self.pos1)) self.pos1 = '-48 -48 -32'; // Setup large bounding box for touch trigger
+	if (VectorIsAllZeros(self.pos2)) self.pos2 = '48 48 32';
 	self.takedamage = DAMAGE_NO;	// No damage from anything
 	if (self.spawnflags & MISCBOOK_NOMODEL) {
 		self.mdl = "";

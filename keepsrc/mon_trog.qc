@@ -308,7 +308,7 @@ void() tele_attack = {
         if (!EntryPoint_Spawn (self, self, org, EntryPoint_Random)) return;
     }
     // Teleport is a success.
-    self.angles_y = vectoyaw(self.enemy.origin - self.origin);
+    self.angles_y = vectoyaw(SUB_orgEnemyTarget() - self.origin);
     if (!Invisible(self)) { // Fog only if visible.
         spawn_tfog (org);           // Before
         spawn_tfog (self.origin);   // After

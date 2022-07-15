@@ -170,7 +170,7 @@ void()	demon1_jump8	= [ 	$leap8,		demon1_jump9	] {};
 void()	demon1_jump9	= [ 	$leap9,		demon1_jump10	] {};
 void()	demon1_jump10	= [ 	$leap10,	demon1_jump1	] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = demon1_jump3;
 	}
@@ -290,7 +290,7 @@ void() monster_demon1 = {
 	self.meleeoffset = '32 0 10';		// Claw attack offset
 	self.meleerange = MONAI_MELEEDEMON;
 	self.meleerangez = 0;
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '600 0 250'; // Default jump forward/up distance
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '600 0 250'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPDEMONNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPDEMONFAR;
 	if (self.jumprange_z <= 0) self.jumprange_z = MONAI_JUMPDEMONCHECK;

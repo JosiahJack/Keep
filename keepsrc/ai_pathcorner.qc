@@ -502,12 +502,12 @@ void() path_corner = {
 	// Checks for solid content and keep nudging the temporary origin upwards 8 units at a time (max 64 units).
 	// If no empty space above, give up and use the original origin point instead.
 	self.oldorigin = self.origin;
-	if (pointcontents(self.oldorigin) == CONTENT_SOLID) {
+	if (InSolid(self.oldorigin)) {
 		self.lip = 8;
 		while (self.lip > 0) {
 			self.lip = self.lip - 1;
 			self.oldorigin = self.oldorigin + '0 0 8';
-			if (pointcontents(self.oldorigin) != CONTENT_SOLID) self.lip = -1;
+			if (!InSolid(self.oldorigin)) self.lip = -1;
 		}
 	}
 	// Origin is still in something solid, reset

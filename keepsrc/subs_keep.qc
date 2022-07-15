@@ -96,6 +96,66 @@ vector (float dm) VelocityForDamage = { // [FUNCTION]
 	return v * 10;
 };
 
+// Add and create list of all func water volumes for checking contents.
+// Copies Gyro_ObjectList_Add but has to be different since we use unique fields.
+void(entity e) FliquidList_Add = { // [FUNCTION]
+	if (!e) return;
+	if (!fliquid_head) { fliquid_head = e; return; } // Start the list.
+	if (e.fliquid_inlist) return; // Already in the list, whoops.
+
+	e.fliquid_inlist = TRUE;
+	e.fliquid_next = fliquid_head;
+	fliquid_head.fliquid_prev = e;
+	fliquid_head = e;
+};
+
+void(entity e) FliquidList_Remove = { // [FUNCTION]
+	if (!e.fliquid_inlist) return; // Not a func liquid volume
+
+	if (e.fliquid_prev) e.fliquid_prev.fliquid_next = e.fliquid_next;
+	else fliquid_head = e.fliquid_next;
+
+	if (e.fliquid_next) e.fliquid_next.fliquid_prev = e.fliquid_prev;
+	e.fliquid_inlist = FALSE;
+	e.fliquid_next = e.fliquid_prev = world;
+};
+
+entity(vector spot) GetFuncLiquidAtPoint = { // [FUNCTION]
+	local entity ent;
+
+	ent = fliquid_head;
+	while(ent) {	
+		if ((spot_x<ent.absmax_x) && (spot_y<ent.absmax_y)
+			&& (spot_z<ent.absmax_z) && (spot_x>ent.absmin_x)
+			&& (spot_y>ent.absmin_y) && (spot_z>ent.absmin_z)) {
+			return ent;
+		}
+		ent = fliquid_head.fliquid_next;
+	}
+	return world;
+}
+
+float(vector spot) InLiquid = { // [FUNCTION]
+	local float conts;
+	local entity ent;
+
+	conts = pointcontents(spot);
+	if ((conts <= CONTENT_WATER) && (conts != CONTENT_SKY)) {
+		if (conts == CONTENT_WATER) return 1;
+		else if (conts == CONTENT_SLIME) return 2;
+		else return 3; // CONTENT_LAVA
+	} else {
+		// Ok, now check for func water volumes.
+		ent = GetFuncLiquidAtPoint(spot);	
+		if (ent) {
+			if (ent.watertype == CONTENT_WATER) return 1;
+			else if (ent.watertype == CONTENT_SLIME) return 2;
+			else return 3; // CONTENT_LAVA
+		}
+		return 0;
+	}
+};
+
 // Check for contact with sky brushes.  Use pointcontent() for Typical/Enhanced
 // Quake engines.  Use new FTE string functions and surface check for FTE/DP.
 // This was check_skycontent in AD.  Renamed to align with the others and save
@@ -117,15 +177,26 @@ float(vector spot) InSky = { // [FUNCTION]
 };
 float(vector spot) InAir = { return (pointcontents(spot) == CONTENT_EMPTY); }; // [FUNCTION]
 float(vector spot) InSolid = { return (pointcontents(spot) == CONTENT_SOLID); }; // [FUNCTION]
-float(vector spot) InWater = { return (pointcontents(spot) == CONTENT_WATER); }; // [FUNCTION]
-float(vector spot) InSlime = { return (pointcontents(spot) == CONTENT_SLIME); }; // [FUNCTION]
-float(vector spot) InLava = { return (pointcontents(spot) == CONTENT_LAVA); }; // [FUNCTION]
+float(vector spot) InWater = { return (InLiquid(spot) == 1); }; // [FUNCTION]
+float(vector spot) InSlime = { return (InLiquid(spot) == 2); }; // [FUNCTION]
+float(vector spot) InLava = { return (InLiquid(spot) == 3); }; // [FUNCTION]
 
-float(vector spot) InLiquid = { // [FUNCTION]
+float(vector spot) GetContents = { // [FUNCTION]
 	local float conts;
 
-	conts = pointcontents(spot);
-	return ((conts <= CONTENT_WATER) && (conts != CONTENT_SKY));
+	conts = InLiquid(spot);
+	if (conts == 1) return CONTENT_WATER;
+	else if (conts == 2) return CONTENT_SLIME;
+	else if (conts == 3) return CONTENT_LAVA;
+	else return pointcontents(spot);
+};
+
+float(entity targ) LiquidBase = { // [FUNCTION]
+	local vector base;
+
+	base = targ.origin; // Check for liquid at monsters feet (bottom of bounding box)
+	base_z = base_z + targ.mins_z;
+	return GetContents(base);
 };
 
 float(vector spot) InOpenOrLiquid = { // [FUNCTION]
@@ -331,13 +402,19 @@ float(float val, float min, float max) SUB_ClampFloat = { // [FUNCTION]
 void SUB_AdvanceFrame(float min, float max) = { // [FUNCTION]
 	self.walkframe = SUB_ClampFloat(self.frame + 1,min,max);
 	self.frame = self.walkframe;
-	if (self.walkframe >= max) self.walkframe = min - 1;
+	if (self.walkframe >= max) self.walkframe = min;
+};
+
+void SUB_ReverseFrame(float min, float max) = { // [FUNCTION]
+	self.walkframe = SUB_ClampFloat(self.frame - 1,min,max);
+	self.frame = self.walkframe;
+	if (self.walkframe <= min) self.walkframe = max;
 };
 
 void SUB_AdvanceSkin(float min, float max) = { // [FUNCTION]
 	self.walkskin = SUB_ClampFloat(self.skin + 1,min,max);
 	self.skin = self.walkskin;
-	if (self.walkskin == max) self.walkskin = min - 1;
+	if (self.walkskin == max) self.walkskin = min;
 };
 
 float(entity targ) SUB_DropToFloor = { // [FUNCTION]

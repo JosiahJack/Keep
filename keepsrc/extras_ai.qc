@@ -92,10 +92,10 @@ void() SpawnTempGoal = { // [FUNCTION]
 // Return TRUE when unstuck procedure succeded
 // Return FALSE when unstuck procedure has been canceled or failed
 float() unsuckFromWaterSurface = { // [FUNCTION]
-	if (((self.enemy.origin_z - self.origin_z) > 32) && (pointcontents(self.enemy.origin) > CONTENT_WATER)) return FALSE;
+	if (((self.enemy.origin_z - self.origin_z) > 32) && (GetContents(self.enemy.origin) > CONTENT_WATER)) return FALSE;
 	if (self.oldenemy && range(self.oldenemy) == RANGE_MELEE && self.flags & FL_SWIM) return TRUE;
 	if (self.flags & FL_SWIM) {
-		if (pointcontents(self.origin + '0 0 10') > -3) { SpawnTempGoal(); return TRUE; }
+		if (GetContents(self.origin + '0 0 10') > CONTENT_WATER) { SpawnTempGoal(); return TRUE; }
 	} else if (self.flags & FL_FLY && self.infuncwater) {
 		if (self.onsurface) { SpawnTempGoal(); return TRUE; }
 	}

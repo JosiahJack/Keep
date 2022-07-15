@@ -134,7 +134,7 @@ void(float dist) dragon_move = {
    moveAngles = self.origin;
    walkmove (self.angles_y,dist);
    if ( (moveAngles == self.origin) )
-      movetogoal (dist);
+      movetogoal(dist);
 
    self.enemy = oldEnemy;
 };
@@ -302,7 +302,7 @@ void() dragon_tail_touch = {
    if (!CanDamage(self.enemy,self))
       return ;
 
-   ai_charge (10);
+   ai_charge(10);
    delta = (self.enemy.origin - self.origin);
    tailDamage = vlen (delta);
    if ( (vlen (delta) > 150.000) )

@@ -262,7 +262,7 @@ void() dog_leap4	= [	$leap4,		dog_leap5	] {};
 void() dog_leap5	= [	$leap5,		dog_leap6	] {};
 void() dog_leap6	= [	$leap6,		dog_leap6	] {
 	// Double check monster is still falling?
-	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+	if (VectorIsAllZeros(self.velocity) || self.oldorigin == self.origin) {
 		self.ideal_yaw = random() * 360; //random jump angle
 		self.think = dog_leap2;
 	}
@@ -434,7 +434,7 @@ void() monster_dog = {
 	if (self.deathstring == "") self.deathstring = " was mauled by a Rottweiler\n";
 
 	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '300 0 200';
+	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '300 0 200';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPDOGNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPDOGFAR;
 

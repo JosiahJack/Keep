@@ -352,10 +352,10 @@ void() monster_chthon = {
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.takedamage = DAMAGE_NO;	// Immune to damage
 	if (self.deathstring == "")  self.deathstring = " was blown apart by Chthon\n";
-	if (CheckZeroVector(self.pos1)) self.pos1 = '250 50 0'; // Setup projectile speed (250 + 50*skill)
-	if (CheckZeroVector(self.pos2)) self.pos2 = DAMAGE_RLPLAYER; // Setup projectile damage (Base + Random, Splash)
-	if (CheckZeroVector(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
-	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 96'; // Attack 2 - Spawn location (offset from origin)
+	if (VectorIsAllZeros(self.pos1)) self.pos1 = '250 50 0'; // Setup projectile speed (250 + 50*skill)
+	if (VectorIsAllZeros(self.pos2)) self.pos2 = DAMAGE_RLPLAYER; // Setup projectile damage (Base + Random, Splash)
+	if (VectorIsAllZeros(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
+	if (VectorIsAllZeros(self.dest2)) self.dest2 = '0 0 96'; // Attack 2 - Spawn location (offset from origin)
 	self.classtype = CT_MONXXCHTHON;
 	self.classgroup = CG_BOSS;
 	self.style = 0;

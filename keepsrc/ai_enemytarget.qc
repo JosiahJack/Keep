@@ -147,18 +147,16 @@ void() SUB_updateEnemyTarget = {
 		if (self.waitmin < time && self.wait > 0) {
 			self.waitmin = time + self.wait + random()*self.wait;
 			// Check if the enemy is close? Go to maximum height if inside melee range
-			self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+			self.enemydist = range_distance(self.enemy,FALSE);
 			if (self.enemydist < MONAI_ABOVEMELEE) self.view_ofs_z = self.height;
 			else self.view_ofs_z = (self.height*0.25) + ((self.height*0.75) * random());
 		}
 
-		self.lip = pointcontents(self.enemy.origin + self.view_ofs); // Check for solid/sky origin content
-		if (self.lip == CONTENT_SOLID || self.lip == CONTENT_SKY) {
+		if (!InOpenOrLiquid(self.enemy.origin + self.view_ofs)) {
 			// Traceline upwards to nearest point
 			traceline(self.enemy.origin, self.enemy.origin + self.view_ofs, TRUE, self);
 			setorigin(self,trace_endpos);
-		}
-		else setorigin(self, self.enemy.origin + self.view_ofs);
+		} else setorigin(self, self.enemy.origin + self.view_ofs);
 		
 		// Next update time tick (def=0.1s)
 		self.think = SUB_updateEnemyTarget;

@@ -56,7 +56,7 @@ void() misc_deadplayer = { // [ENTITY]
 	setmodel(self,MODEL_PLAYER);
 	setsize(self, VEC_HULL_MIN, '16 16 40');
 	if (!self.frame) self.frame = 93;
-	if (CheckZeroVector(self.pos1)) self.angles = '0 90 180';
+	if (VectorIsAllZeros(self.pos1)) self.angles = '0 90 180';
 };
 
 void() spawnmartin = { // [FUNCTION]
@@ -106,18 +106,18 @@ void() vigtrig = { // [FUNCTION]
 	timer.think = spawnmartin;
 	timer.cnt = self.cnt;
 	timer.pos2 = self.pos2;
-	if (CheckZeroVector(self.pos1)) timer.pos1 = '-1532 64 -1124';
+	if (VectorIsAllZeros(self.pos1)) timer.pos1 = '-1532 64 -1124';
 	timer.message = self.message2;
 	if (HasTargets(self)) SUB_UseTargets();
 };
 
 void() trigger_vigend = { // [ENTITY]
 	precache_model("progs/player.mdl");
-	if (CheckZeroVector(self.mangle)) self.mangle = '-1532 0 -1124';
+	if (VectorIsAllZeros(self.mangle)) self.mangle = '-1532 0 -1124';
 	if (!self.message) self.message = "Congratulations soldier. You have\nsingle-handedly kicked the asses of the\nenemies that killed your best friend.\nWright Bagwell salutes you.  Oh yeah,\nI guess I promised to bring him back to\nlife...";
 	if (!self.message2) self.message2 = "You are united once again\n and ready to gib all that stands\nin your way.";
 	self.use = vigtrig;
 	if (!self.delay) self.delay = 28;
 	if (!self.cnt) self.cnt = 14;
-	if (CheckZeroVector(self.pos2)) self.pos2 = '0 330 0';
+	if (VectorIsAllZeros(self.pos2)) self.pos2 = '0 330 0';
 };

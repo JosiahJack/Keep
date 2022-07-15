@@ -57,11 +57,11 @@ void(float mad) cyber_anim = {
 	// Update 7/24/09:  Cyber moves 16 every 3 frames in Doom, and Doom ran
 	// at 35 fps.  16 * 35 / 3 = ~186.666... per second.  Was 16, now 18.
     if (mad) {
-        ai_run (18);
+        ai_run(18);
         if (prandom() < 3)
             sound(self,CHAN_VOICE, "drake/cyber/cybidle.wav",1,ATTN_IDLE);
     } else
-        ai_walk (18);
+        ai_walk(18);
 };
 
 void() cyber_reset = {

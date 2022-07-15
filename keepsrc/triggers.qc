@@ -104,7 +104,7 @@ void(float dmgdef) trigger_dmgsetup = { // [FUNCTION]
 	if (self.dmgskill_x < 0) self.dmgskill_x = 0;	// Skill 0
 	if (self.dmgskill_y < 0) self.dmgskill_y = 0;	// Skill 1
 	if (self.dmgskill_z < 0) self.dmgskill_z = 0;	// Skill 2+3
-	if (CheckZeroVector(self.dmgskill)) self.dmgskill_x = self.dmgskill_y = self.dmgskill_z = self.dmg; // If no skill damage setup, use dmg default.
+	if (VectorIsAllZeros(self.dmgskill)) self.dmgskill_x = self.dmgskill_y = self.dmgskill_z = self.dmg; // If no skill damage setup, use dmg default.
 };
 
 // Return damage based on current skill level.  Expects the dmgskill entity key to be setup beforehand
@@ -414,7 +414,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	if (!self.goalentity) return;				// Always need target
 	if (!trigger_teleportable()) return;
 	
-	if (!CheckZeroVector(self.movedir)) { // Did the trigger have an angle key setup?
+	if (!VectorIsAllZeros(self.movedir)) { // Did the trigger have an angle key setup?
 		if (!other.health) self.pos1 = vectoangles(other.velocity); // Projectiles (no health) are based on velocity
 		else self.pos1 = other.angles; // Player/Monster can use angles field instead
 
@@ -467,7 +467,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	// collision and movement reasons.
 	if (self.spawnflags & TRIG_TELEINSTANT) {
 		// Check for any angle update (stored in mangle)
-		if (!CheckZeroVector(self.goalentity.mangle)) {
+		if (!VectorIsAllZeros(self.goalentity.mangle)) {
 			// TYPE 1 Instant teleport - Player / Monster (Y axis ONLY)
 			if (other.flags & FLx_CREATURE) {
 				// Work out XYZ difference between touch point and trigger origin.  The difference is relative coordinates around 0,0,0.
@@ -523,7 +523,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 			other.velocity = v_forward * self.speed; // Stationary monsters (closets) should NOT be moving!
 		} else if (self.spawnflags & TRIG_TELEPROJECTILE) { // Projectiles should be affected by speed override
 			self.pos2 = self.pos2 - self.goalentity.view_ofs; // Destination teleport entities are adjusted upward by view_ofs.  Move destination origin back down to correct position.  Default for most entities is '0 0 0', otherwise its '0 0 27'
-			if (!CheckZeroVector(self.goalentity.movedir)) other.velocity = self.goalentity.movedir * self.speed; // Check for target entity (angletarget) direction vector
+			if (!VectorIsAllZeros(self.goalentity.movedir)) other.velocity = self.goalentity.movedir * self.speed; // Check for target entity (angletarget) direction vector
 			else other.velocity = v_forward * self.speed; // Use default velocity vector
 
 			if (self.goalentity.mangle_x == 90 || self.goalentity.mangle_x == 270) other.angles_x = -other.angles_x; // This a stupid hack to get around the problem with up/down angles being back to front for models.  One day I will come back and fix this stupid hack!?!  ...Nah he probably won't lol.
@@ -726,7 +726,7 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 	self.touch = SUB_Null;
 	ResetPowerSystem(self.bmodel_act,0,FALSE); // Remove all powerup/debuff effects
 	ResetDebuffSystem(self.bmodel_act);
-	if (!CheckZeroVector(self.mapvar_update)) mapvar_range(self.mapvar_update); // Check for map variables on exit
+	if (!VectorIsAllZeros(self.mapvar_update)) mapvar_range(self.mapvar_update); // Check for map variables on exit
 	rnd_ResetRandomSeed(RND_NORESETCHLVL); // LEVEL CHANGE = Reset randomizer seed
 	
 	// Reset player inventory back to ID default (shotgun+25shells)
@@ -1169,8 +1169,8 @@ void() trigger_ladder = { // [ENTITY]
 		if (self.distance <= 0) self.distance = 0.35; // Amount of velocity to push towards ladder (stickyness)
 		if (self.lip <= 0) self.lip = 8; // Change the step amount at the top of the ladder
 		if (self.height <= 0) self.height = 11.2; // Default velocity upward if not doing anything on ladder
-		if (CheckZeroVector(self.pos1)) self.pos1 = '2.5 6 4'; // Speed adjustment for X=strafe, Y=up and Z=down movement
-		if (CheckZeroVector(self.pos2)) self.pos2 = '25 15 90'; // X=Strafe velocity, Y=Up/Down angle, Z=MIN velocity for up/down
+		if (VectorIsAllZeros(self.pos1)) self.pos1 = '2.5 6 4'; // Speed adjustment for X=strafe, Y=up and Z=down movement
+		if (VectorIsAllZeros(self.pos2)) self.pos2 = '25 15 90'; // X=Strafe velocity, Y=Up/Down angle, Z=MIN velocity for up/down
 		self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_LADDERFTESKIN); // Can't have both velocity + fteskin systems active once
 	} else if (self.spawnflags & TRIG_LADDERFTESKIN) { // Enable FTE Skin/Ladder system (reqs FTE engine)
 		self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_LADDERVELOCITY);
@@ -1536,7 +1536,7 @@ void() trigger_velocity_fire = { // [FUNCTION]
 	TargetMovedir(self, FALSE); // Check for any target entity tracking
 	
 	// Did the trigger have an angle key setup?
-	if (CheckZeroVector(self.movedir) == FALSE) {
+	if (VectorIsAllZeros(self.movedir) == FALSE) {
 		self.pos4 = vectoangles(self.bmodel_act.velocity); // Work out projectile angle using velocity
 		makevectors(self.pos4);
 		self.pos5 = v_forward; // Save v_forward (directional vector) for later
@@ -1901,7 +1901,7 @@ void() trigger_fog = { // [ENTITY]
 
 	// Check for fog colour 0,0,0 (black) option
 	if (self.fog_colour_x < 0 || self.fog_colour_y < 0 || self.fog_colour_z < 0) self.fog_colour = '0 0 0';
-	else if (CheckZeroVector(self.fog_colour)) self.fog_colour = DEF_FOGCOL; // Default colour (0.1 0.1 0.1)
+	else if (VectorIsAllZeros(self.fog_colour)) self.fog_colour = DEF_FOGCOL; // Default colour (0.1 0.1 0.1)
 
 	trigger_fog_waitforcontrol();
 };
@@ -2094,7 +2094,7 @@ void() trigger_monsterjump_fire = { // [FUNCTION]
 	if (self.bmodel_act.jump_flag > time) return; // Check monster is not jumping already
 	if (self.bmodel_act.bodyonflr == MON_ONFLR) return; // Cannot make dead bodies jump
 	if (self.bmodel_act.ignore_monjump > 0) return; // entity excluded from using monster jump triggers
-	if (!CheckZeroVector(self.movedir2)) { makevectors(self.bmodel_act.angles); if (v_forward * self.movedir2 < 0) return; } // Did the trigger have an angle key setup?
+	if (!VectorIsAllZeros(self.movedir2)) { makevectors(self.bmodel_act.angles); if (v_forward * self.movedir2 < 0) return; } // Did the trigger have an angle key setup?
 	if (!(self.bmodel_act.flags & FL_MONSTER)) return; // Block non-monsters and fly/swim if spawnflag not set
 	if (!(self.spawnflags & TRIG_MONJUMPFLY) && self.bmodel_act.flags & FL_FLY) return;
 	if (!(self.spawnflags & TRIG_MONJUMPSWIM) && self.bmodel_act.flags & FL_SWIM) return;
@@ -2151,7 +2151,7 @@ void() trigger_monsterjump = { // [ENTITY]
 
 	self.classtype = CT_TRIGMONJUMP;
 	self.classgroup = CG_TRIGGERS;
-	if (!CheckZeroVector(self.mangle)) { // Check for a facing angle (used later in fire function)
+	if (!VectorIsAllZeros(self.mangle)) { // Check for a facing angle (used later in fire function)
 		makevectors(self.mangle);
 		self.movedir2 = v_forward;
 	} else self.movedir2 = VEC_ORIGIN; // Default setup (not used)

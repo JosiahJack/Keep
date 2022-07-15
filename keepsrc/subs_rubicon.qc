@@ -4,7 +4,7 @@ float (entity targ) clean_shot = {
 	
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
-	traceline (spot1, spot2, FALSE, self);	// try not to shoot through other monsters
+	traceline(spot1,spot2, FALSE, self);	// try not to shoot through other monsters
 	if (trace_ent != targ)
 		return FALSE;
 	return TRUE;

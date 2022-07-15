@@ -53,6 +53,7 @@ void(float dist, entity ent) Ryu_VerticalSlide;
 float(float dist) Shade_AvoidGhost;
 void() DragonCheckAttack;
 void() Shade_CheckAttack;
+float() CheckVermisAttack;
 void() ryu_run_attack;
 void() nehwraith_souls1;
 
@@ -60,9 +61,9 @@ void() nehwraith_souls1;
 void() ai_stand = {
 	self.lastorigin = self.origin;		// Save for cinematic interpolation
 	if (self.health < 1) return;		// Health < 0, no more standing
+
 	check_tethertimer();				// Check for tethering system
 	MonsterDeBuff();					// Check and apply poison
-
 	if (self.classtype == CT_MONEIDOLON) {
 		FindTarget(); // Keep looking for a player
 		if (self.style == EIDOLON_PHASE1) { //1
@@ -75,6 +76,7 @@ void() ai_stand = {
 	}
 
 	if (FindTarget ()) return; // Found an enemy?
+	if (self.classtype == CT_MONVERMIS) return;
 
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
 	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
@@ -219,10 +221,8 @@ void(float dist) ai_run = {
 			}
 			if (winner && self.th_win) { self.th_win(); return; }   // We have a winner!
 
-			if (self.movetarget || self.charmer)
-				self.th_walk();
-			else
-				self.th_stand();
+			if (self.movetarget || self.charmer) self.th_walk();
+			else self.th_stand();
 			return; // Exit run function
 		}
 	}
@@ -269,22 +269,19 @@ void(float dist) ai_run = {
 				}
 			}
 		}
-		if (FindTarget ()) return;
+		if (FindTarget()) return;
 	}
 
 	// Calculate if goal/enemy is infront, the range and direction
 	enemy_infront = infront(SUB_entEnemyTarget());
 	enemy_range = range(SUB_entEnemyTarget());
-	enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
+	ai_setidealyaw(); // Sets enemy_yaw
 
 	// Dragonz are special :|
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM || self.classtype == CT_MONSHADE) {
-		if (self.attack_state == AS_MELEE) {
-			self.ideal_yaw = enemy_yaw; //  The dragon rotates in place until it faces its opponent.
-			ChangeYaw();
-
-			// Check if dragon is facing opponent.  If so, attack!
-			if (FacingIdeal ()) {
+		if (self.attack_state == AS_MELEE) { 
+			ChangeYaw(); // The dragon rotates in place until it faces its opponent.
+			if (FacingIdeal()) { // Check if dragon is facing opponent.  If so, attack!
 				self.attack_state = AS_STRAIGHT;
 
 				// Check for melee attack first.
@@ -322,7 +319,7 @@ void(float dist) ai_run = {
 		}
 	}
 
-	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
+	self.enemydist = range_distance(self.enemy,FALSE);
 
 	// Check for temporary turret mode via trigger_monsterturret
 	if (self.turretactive.classtype == CT_TRIGMONTURRET && enemy_vis && self.th_missile) {
@@ -330,7 +327,7 @@ void(float dist) ai_run = {
 			// Is there a chance to pause?
 			if (random() < self.turretactive.count)  self.turrettimer = time + 1 + random()*2;
 			self.attack_state = AS_TURRET;
-			ai_run_missile();
+			ai_facingideal_action(self.th_missile);
 			return;
 		}
 	}
@@ -345,13 +342,18 @@ void(float dist) ai_run = {
 	if (check_passivestate_system(self)) return; // Check for the passive state system (reset/timer etc)
 	
 	CheckBlockedBreakable(); // Check if blocked by breakables
-
 	if (self.attack_state == AS_MISSILE) {
-		ai_run_missile(); return;
+		// Turn in place until within an angle to launch a missile attack
+		ai_facingideal_action(self.th_missile);
+		return;
 	} else if (self.attack_state == AS_JUMP) {
-		ai_run_jump(); return;
+		// Turn in place until within an angle to jump attack
+		ai_facingideal_action(self.th_jump);
+		return;
 	} else if (self.attack_state == AS_MELEE) {
-		ai_run_melee(); return;
+		// Turn and close until within an angle to launch a melee attack
+		ai_facingideal_action(self.th_melee);
+		return;
 	}
 
 	// This has to go after range/melee attack state checks otherwise the AI will not do anything
@@ -377,11 +379,11 @@ void(float dist) ai_run = {
 			Ryu_VerticalSlide(dist, self.enemy);
 			return;
 		}
-		ai_run_slide (dist); return; // normal
+		ai_run_slide(dist); return; // normal
 	} else if (self.attack_state == AS_SIDESTEP) {
-		ai_run_sidestep (dist); return;
+		ai_run_sidestep(dist); return;
 	} else if (self.attack_state == AS_BACKWARD) {
-		ai_run_backward (dist); return;
+		ai_run_backward(dist); return;
 	}
 
 	// head straight in
@@ -404,4 +406,28 @@ void(float dist) ai_run = {
 		}
 	}
 	movetogoal(dist); // Head straight towards the enemy...unless of course I am a turret!
+};
+
+void() ai_vermis_run = {
+	if (self.enemy.health <= 0) {
+		self.enemy = world;
+		if (self.oldenemy.health > 0) {
+			self.enemy = self.oldenemy;
+			HuntTarget();
+		} else {
+			self.th_stand();
+			return;
+		}
+	}
+	self.show_hostile = time + 1;
+	enemy_vis = visible(self.enemy);
+	if (enemy_vis) self.search_time = time + 5;
+	if (coop && self.search_time < time) {
+		if (FindTarget()) return;
+	}
+	enemy_infront = infront(SUB_entEnemyTarget());
+	enemy_range = range(SUB_entEnemyTarget());
+	ai_setidealyaw(); // Sets enemy_yaw
+	CheckVermisAttack();
+	ai_shotcheck();
 };

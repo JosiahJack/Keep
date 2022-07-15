@@ -642,7 +642,7 @@ void() RyuPlasma_Think = { // [FUNCTION]
 
     if (self.delay <= time) { remove (self);  return; }
 
-    pc = pointcontents(self.origin);
+    pc = GetContents(self.origin);
     if ((pc <= CONTENT_WATER) && (pc >= CONTENT_LAVA)) { RyuPlasma_Explode();  return; }
 
     particle(self.origin, self.velocity * 0.005, 9, self.waitmin);   //2
@@ -661,7 +661,7 @@ void() Acid_Think = { // [FUNCTION]
 void() Ice_Think = { // [FUNCTION]
     Meteor_Trail (39, 2, FALSE);    // Function in 'fire.qc'.
     if (self.delay <= time) { remove (self); return; }
-    if (pointcontents(self.origin) == CONTENT_LAVA) { remove (self); return; }
+    if (GetContents(self.origin) == CONTENT_LAVA) { remove(self); return; }
 
     self.nextthink = time + 0.1;
 };
@@ -670,7 +670,7 @@ void() Ice_Think = { // [FUNCTION]
 void() Iceball_Think = { // [FUNCTION]
     Meteor_Trail (39, 2, TRUE); // Bigger ice chunks, so spawn a beam of frost.
 	self.think = Iceball_Think;
-    if ((self.delay > time) && (pointcontents(self.origin) != CONTENT_LAVA)) { self.nextthink = time + 0.1;  return; }
+    if ((self.delay > time) && (GetContents(self.origin) != CONTENT_LAVA)) { self.nextthink = time + 0.1;  return; }
 
     Touch_Missile(); // Time to blow up.
 };
@@ -1235,14 +1235,12 @@ void() Burn_Think = { // [FUNCTION]
 float(entity fire) Fireball_InWater = { // [FUNCTION]
     local float pc;
 
-    pc = pointcontents (fire.origin);
-    if (pc <= CONTENT_WATER)
-    if (pc != CONTENT_SKY) { // 8/24/09:  So fire can rain from the sky.
-        if ((pc == CONTENT_WATER) || (pc == CONTENT_SLIME)) Fireball_Steam(fire);
-        remove(fire);
-        return TRUE;
-    }
-    return FALSE;
+    pc = InLiquid(self.origin);
+    if (!pc) return FALSE; // 8/24/09:  So fire can rain from the sky.
+
+    if (pc == CONTENT_WATER || pc == CONTENT_SLIME) Fireball_Steam(self);
+    entity_remove(self,0.1);
+    return TRUE;
 };
 
 // This is the end of a fireball's think phase.
@@ -1376,7 +1374,6 @@ void() faspell_frames = { // [FUNCTION]
 	self.think = faspell_frames;
 	self.nextthink = time + HX_FRAME_TIME;
 	SUB_AdvanceFrame(0,8);
-	SUB_AdvanceFrame(0,8); // YES, Hexen2 did this twice... and so shall we! - Qmaster
 	old_angle = self.spell_angle;
 	old_count = self.count;
 	self.spell_angle += random(32,42);
@@ -1669,4 +1666,10 @@ void() tornado1 = [ 0, tornado1 ] { // [FUNCTION]
     newmis.cnt        = self.cnt + self.height;
     newmis.oldorigin  = self.origin;
     setall(newmis, "progs/drake/smoke.mdl", '0 0 0', '0 0 0', self.origin);
+};
+
+void() vermis_spore_think = {
+	if (self.ltime < time) vermis_spore_explode();
+	self.nextthink = time + 0.1;
+	self.think = vermis_spore_think;
 };

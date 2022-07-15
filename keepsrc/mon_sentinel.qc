@@ -82,16 +82,16 @@ void() sentinel_writhe8 = [7, sentinel_writhe9 ] { ai_stand(); };
 void() sentinel_writhe9 = [8, sentinel_writhe10 ] { ai_stand(); };
 void() sentinel_writhe10 = [9, sentinel_writhe1 ] { ai_stand(); };
 
-void() sentinel_run1 = [0, sentinel_run2 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run2 = [1, sentinel_run3 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run3 = [2, sentinel_run4 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run4 = [3, sentinel_run5 ] { SentinelFire();monster_idle_sound(); ai_runfly(8); };
-void() sentinel_run5 = [4, sentinel_run6 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run6 = [5, sentinel_run7 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run7 = [6, sentinel_run8 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run8 = [7, sentinel_run9 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run9 = [8, sentinel_run10 ] { SentinelFire(); ai_runfly(8); };
-void() sentinel_run10 = [9, sentinel_run1 ] { SentinelFire(); ai_runfly(8); };
+void() sentinel_run1 = [0, sentinel_run2 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run2 = [1, sentinel_run3 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run3 = [2, sentinel_run4 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run4 = [3, sentinel_run5 ] { SentinelFire();monster_idle_sound(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run5 = [4, sentinel_run6 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run6 = [5, sentinel_run7 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run7 = [6, sentinel_run8 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run8 = [7, sentinel_run9 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run9 = [8, sentinel_run10 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
+void() sentinel_run10 = [9, sentinel_run1 ] { SentinelFire(); ai_runwalkfly(8,ai_run); };
 
 void() sentinel_attack1 = [9, sentinel_run1 ] { SentinelFire(); };
 //void() sentinel_attack2 = [1, sentinel_attack3 ] { SentinelFire(); };

@@ -1104,9 +1104,9 @@ void() trigger_explode = { // [ENTITY]
 	precache_sound(self.noise);
 	if (self.spawnflags & TRIG_EXPLODEDUST) {
 		precache_model(MODEL_PROJ_SMOKE); // Precache smoke particles and set default movement
-		if (CheckZeroVector(self.angles)) self.angles_y = 360;
-		if (CheckZeroVector(self.pos1)) self.pos1 = '100 25 100';
-		if (CheckZeroVector(self.pos2)) self.pos2 = '100 25 100'; 
+		if (VectorIsAllZeros(self.angles)) self.angles_y = 360;
+		if (VectorIsAllZeros(self.pos1)) self.pos1 = '100 25 100';
+		if (VectorIsAllZeros(self.pos2)) self.pos2 = '100 25 100'; 
 	}		
 
 	if (self.style == 4) {

@@ -200,7 +200,7 @@ void()	dknight_stand12	= [	$stand12,	dknight_stand1	] {
 void(float dist) dk_walk = {
 	if (self.spawnflags & MON_GHOST_ONLY) {
 		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
-		movetogoal (dist);
+		movetogoal(dist);
 		dknight_ghost_particle();
 		dknight_ghost_glow();
 		
@@ -249,7 +249,7 @@ void()	dknight_walk14	= [	$walk14,	dknight_walk1	] { dk_walk(2); };
 
 //===========================================================================
 void()	dknight_run1	= [	$run1,	dknight_run2	] { monster_idle_sound(); 
-	self.idlebusy = FALSE; ai_run (20); CheckForCharge(); };
+	self.idlebusy = FALSE; ai_run(20); CheckForCharge(); };
 void()	dknight_run2	= [	$run2,	dknight_run3	] { monster_footstep(FALSE); ai_run(25); };
 void()	dknight_run3	= [	$run3,	dknight_run4	] { ai_run(16); };
 void()	dknight_run4	= [	$run4,	dknight_run5	] { ai_run(14); };
@@ -584,7 +584,7 @@ void() dknight_ghost_on = {
 	self.solid = SOLID_NOT;				// no world interaction
 	setmodel(self, self.mdl);					// Setup model
 	if (self.exactskin) self.skin = self.exactskin;
-	if (CheckZeroVector(self.bbmins)) monster_bbox();
+	if (VectorIsAllZeros(self.bbmins)) monster_bbox();
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
 	

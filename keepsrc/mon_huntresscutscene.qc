@@ -50,7 +50,7 @@ void() huntressmodel_stand = {
 
 void(float dist) huntressmodel_walk = {
 		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
-		movetogoal (dist);
+		movetogoal(dist);
 		
 		// Find out if the model is close enough to next path corner
 		// The model is not a monster, negative health and no body!
@@ -225,7 +225,7 @@ void() huntressmodel_on = {
 	self.movetype = MOVETYPE_NONE;		// Regular walking
 	self.solid = SOLID_NOT;				// no world interaction
 	setmodel(self, self.mdl);					// Setup model
-	if (CheckZeroVector(self.bbmins)) monster_bbox();
+	if (VectorIsAllZeros(self.bbmins)) monster_bbox();
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 	self.velocity = self.avelocity = '0 0 0';	// Reset velocity
 	
