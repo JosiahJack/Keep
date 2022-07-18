@@ -88,7 +88,7 @@ void() morph_stab2 = {
 	if ( dist <= 90 ) {
 		sound(self,CHAN_WEAPON,SOUND_LASER_HIT,1,ATTN_STATIC);
 	   	attackDamage = (random() * 10) + 20;
-		T_Damage (self.enemy, self, self, attackDamage,DAMARMOR);
+		T_Damage(self.enemy, self, self, attackDamage,DAMARMOR);
 		SpawnBlood (self.enemy, self.enemy.origin, v_forward * 150, 14,0);
 	} else {
 		self.effects = self.effects | EF_MUZZLEFLASH;
@@ -147,7 +147,7 @@ void() morph_smack = {
 	if (vlen(delta) > 100) return;
 
 	ldmg = (random() * 10) + 10;
-	T_Damage (self.enemy, self, self, ldmg,DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg,DAMARMOR);
 	makevectors(self.angles);
 	self.enemy.velocity = v_forward * 100 + '0 0 100';
 };

@@ -114,7 +114,7 @@ void() hydra_melee = {
 	sound(self,CHAN_VOICE, "extras_r5/hydra/hydra_tent.wav",1,ATTN_NORM);
 	//var float autocvar_hydra_tentacle = 4;				// set damage value of Hydra�s tentacle attacks
 	ldmg = (random() + random()) * 4;		// default 4
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 };
 
 
@@ -161,7 +161,7 @@ void() hydra_spit_touch = {
 			other.slowdowntime = time + 3;	//	we slowdown player instead of pausing him (khreathor)
 			//other.pausetime = time + 2;	// player cannot walk and see during this time
 			spawn_touchblood (self, other, 7);
-			T_Damage (other, self, self.owner, 7, DAMARMOR);	// default 7
+			T_Damage(other, self, self.owner, 7, DAMARMOR);	// default 7
 			sound(self,CHAN_WEAPON,"extras_r5/hydra/spit_impact_player.wav",1,ATTN_NORM);
 			///	TODO: Add paralyze effect?
 		}

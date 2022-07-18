@@ -321,7 +321,7 @@ void() TouchGib = {
 
 	// Check if the gib can damage on touch
 	if (self.gib1dmg > 0 && other.flags & FLx_CREATURE && other.takedamage) {
-		T_Damage (other, self, self, self.gib1dmg, DAMARMOR);
+		T_Damage(other, self, self, self.gib1dmg, DAMARMOR);
 		self.gib1dmg = 0;
 		SpawnExplosion(self.gib1exp,self.origin,"");
 		entity_remove(self, 0.1);

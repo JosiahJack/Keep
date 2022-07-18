@@ -196,7 +196,7 @@ void() Bane_JumpTouch = {
         if ( vlen(self.velocity) > 400 ) {
             ldmg = 40 + 10*random();
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-            T_Damage (other, self, self, ldmg, DAMARMOR);    
+            T_Damage(other, self, self, ldmg, DAMARMOR);    
             if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
             if ((self.frame == $char_a4 ) || (self.frame == $char_a5 )) {
                 self.frame = $char_a6;  // Go to a stab frame.
@@ -258,7 +258,7 @@ void() magica_sword_chop = {
     sound(self,CHAN_WEAPON,"drake/weapons/axhit.wav",1,ATTN_NORM);
     makevectors(self.angles);
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
-    T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+    T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
     SpawnMeatSpray (self, self.enemy, (crandom() * 50) + 50);
 };
 
@@ -668,7 +668,7 @@ void(float side) bane_melee = {
     sound(self,CHAN_WEAPON,"drake/bane/hit.wav",1,ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
     makevectors(self.angles);
     ldmg = 10 + 5*random();
-    T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+    T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
     SpawnMeatSpray(self, self.enemy, (crandom() * 50) + (50 * side));
 };
 

@@ -157,7 +157,7 @@ void() elf_melee = {
 	// Cane Impact (damage 1-9) is very weak
 	ldmg = (random() + random() + random()) * 3;
 	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Spawn blood at cane of elf
 	spawn_touchblood (self, self.enemy, ldmg*3);
@@ -193,7 +193,7 @@ void()	Elf_JumpTouch = {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 5 + 5*random();
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			// Spawn some touch blood (no explicit direction)
 			spawn_touchblood (self.enemy, self.enemy, ldmg*3);
 		}

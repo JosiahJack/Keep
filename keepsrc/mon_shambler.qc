@@ -272,7 +272,7 @@ void() sham_lightning = {
 	dir = normalize (dir);
 	traceline (org, self.origin + dir*MONAI_SHAMRANGE, TRUE, self); // Trace direct line of lightning infront of shambler
 	Tent_Beam(TE_LIGHTNING1, self, org, trace_endpos); // Display lightning model segments
-	if (ai_foundbreakable(self, trace_ent, FALSE)) T_Damage (trace_ent, self, self, 80, DAMARMOR); // Check for any breakables first
+	if (ai_foundbreakable(self, trace_ent, FALSE)) T_Damage(trace_ent, self, self, 80, DAMARMOR); // Check for any breakables first
 	else LightningDamage(org, trace_endpos, self, 10); // Standard player lightning damage function
 };
 

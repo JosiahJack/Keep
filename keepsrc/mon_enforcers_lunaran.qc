@@ -118,9 +118,9 @@ void() enforcer_missiletouch = {
 	damg = 50 + random()*20;
 	if (other.health) {
 		if (other.classgroup == CG_ENFORCER) damg = damg * 0.5; // not so rough on compatriots
-		T_Damage (other, self, self.owner, damg , DAMARMOR);
+		T_Damage(other, self, self.owner, damg , DAMARMOR);
 	}
-	T_RadiusDamage (self, self.owner, damg, other, IGNORECLASS);
+	T_RadiusDamage(self, self.owner, damg, other, IGNORECLASS);
 	self.origin = self.origin - 8*normalize(self.velocity);
 	Tent_Explosion(self.origin);
 	BecomeExplosion();

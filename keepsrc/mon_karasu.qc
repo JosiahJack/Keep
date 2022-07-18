@@ -416,9 +416,8 @@ void(vector beamoffset) kbeam_shoot = {
 	else self.enemydist = MONAI_KARASURANGE;
 	
 	traceline (org, self.origin + dir*self.enemydist, TRUE, self); // Trace direct line of beam in front of Karasu
-	QC_ParseBeam(0,"progs/redfield/beam.mdl", self, org, trace_endpos, 32); // Display beam model segments
-
-	if (ai_foundbreakable(self, trace_ent, FALSE)) T_Damage (trace_ent, self, self, 80, DAMARMOR); // Check for any breakables first
+	QC_ParseBeam(0,"progs/redfield/beam.mdl",0,self,org,trace_endpos,32); // Display beam model segments
+	if (ai_foundbreakable(self, trace_ent, FALSE)) T_Damage(trace_ent, self, self, 80, DAMARMOR); // Check for any breakables first
 	else LightningDamage(org, trace_endpos, self, 5 + skill); // Standard player lightning damage function
 };
 
@@ -508,7 +507,7 @@ void() klight_shoot = {
 
 	// Check for any breakables first
 	if (ai_foundbreakable(self, trace_ent, FALSE)) {
-		T_Damage (trace_ent, self, self, 80, DAMARMOR);
+		T_Damage(trace_ent, self, self, 80, DAMARMOR);
 	}
 	// Standard player lightning damage function
 	else LightningDamage(org, trace_endpos, self, 4 + skill);

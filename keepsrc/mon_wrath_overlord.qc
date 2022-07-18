@@ -152,7 +152,7 @@ void() overlord_smash = {
 
    smashDmg = (20.000 + (random () * 10));
    sound(self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
-   T_Damage (self.enemy,self,self,smashDmg,DAMARMOR);
+   T_Damage(self.enemy,self,self,smashDmg,DAMARMOR);
    delta = normalize(((SUB_orgEnemyTarget() - self.origin) + self.enemy.view_ofs));
    SpawnBlood(self.enemy,(self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
 };

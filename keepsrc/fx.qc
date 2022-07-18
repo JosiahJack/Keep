@@ -135,7 +135,7 @@ void(entity targ, vector org, vector vel, float part_qty, float overridecol) Spa
 		else part_col = MON_BCOLOR_RED;
 	}
 
-	if (self.flags & FL_CLIENT && self.weapon == IT_LIGHTNING && !self.selfweaponismoditems) part_col = 225; // Lightning uses 225 blood colour
+	if (self.flags & FL_CLIENT && self.weapon == IT_LIGHTNING && !self.weaponismoditems) part_col = 225; // Lightning uses 225 blood colour
 	
 	if (overridecol > 0 && overridecol < 255) part_col = overridecol;
 

@@ -101,7 +101,7 @@ void() raind_melee = {
 	// Antler attack is weak (1-9)
 	ldmg = (random() + random() + random()) * 3;
 	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Spawn blood at antlers
 	spawn_touchblood (self, self.enemy, ldmg*3);

@@ -188,7 +188,7 @@ void() func_plat_disable = { // [FUNCTION]
 };
 
 void() func_plat_blocked = { // [FUNCTION]	
-	T_Damage (other, self, self, 1, DAMARMOR);
+	T_Damage(other, self, self, 1, DAMARMOR);
 	if (self.state == STATE_UP) func_plat_go_down();
 	else if (self.state == STATE_DOWN) func_plat_go_up();
 };

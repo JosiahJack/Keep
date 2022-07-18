@@ -210,7 +210,7 @@ void() func_door_secret_blocked = {
 	if (self.estate == ESTATE_OFF) return;
 	if (time < self.attack_finished) return;
 	self.attack_finished = time + 0.5;
-	T_Damage (other, self, self, self.dmg, DAMARMOR);
+	T_Damage(other, self, self, self.dmg, DAMARMOR);
 };
 
 // QUAKED func_door_secret (0 .5 .8) ? OPEN_ONCE 1ST_LEFT 1ST_DOWN NO_SHOOT ALWAYS_SHOOT x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM

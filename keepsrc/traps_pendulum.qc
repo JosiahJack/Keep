@@ -215,8 +215,8 @@ void() trap_pendulum_touch = { // [FUNCTION]
 		self.pain_finished = time + 1;
 	}
 	
-	if (other.flags & FL_MONSTER && other.health < 100) T_Damage (other, self, self, other.max_health + 100, DAMARMOR); // Instant death for weak monsters, they can get knocked into wierd locations
-	else T_Damage (other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
+	if (other.flags & FL_MONSTER && other.health < 100) T_Damage(other, self, self, other.max_health + 100, DAMARMOR); // Instant death for weak monsters, they can get knocked into wierd locations
+	else T_Damage(other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
 
 	if (other.flags & FL_MONSTER) force = 100; // Less for monsters who survived.
 	else force = 250;

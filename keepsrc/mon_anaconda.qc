@@ -275,218 +275,79 @@ void() anac_rise15 = [14, anac_rise16] {};
 void() anac_rise16 = [15, anac_rise17] {};
 void() anac_rise17 = [16, anac_run] { self.th_run = anac_run; };
 
-void() anac_walk01 = [89, anac_walk01]
-{
-	ai_walk(MOVETYPE_BOUNCE);
-};
+void() anac_walk01 = [89, anac_walk01] { ai_walk(10); };
 
-void() anac_run = [17, anac_run01]
-{
-	ai_walk(20);
-};
-
-void() anac_run01 = [18, anac_run02]
-{
-	ai_walk(20);
-};
-
-void() anac_run02 = [19, anac_run03]
-{
-	ai_walk(20);
-};
-
-void() anac_run03 = [20, anac_run04]
-{
-	ai_walk(20);
-};
-
-void() anac_run04 = [21, anac_run05]
-{
-	ai_walk(20);
-};
-
-void() anac_run05 = [22, anac_run06]
-{
-	ai_walk(20);
-};
-
-void() anac_run06 = [23, anac_run07]
-{
-	ai_walk(20);
-};
-
-void() anac_run07 = [24, anac_run08]
-{
-	ai_walk(20);
-};
-
-void() anac_run08 = [25, anac_run09]
-{
-	ai_walk(20);
-};
-
-void() anac_run09 = [26, anac_run10]
-{
-	ai_walk(20);
-};
-
-void() anac_run10 = [27, anac_run11]
-{
-	ai_walk(20);
-};
-
-void() anac_run11 = [28, anac_run12]
-{
-	ai_walk(20);
-};
-
-void() anac_run12 = [29, anac_run13]
-{
-	ai_walk(20);
-};
-
-void() anac_run13 = [30, anac_run14]
-{
-	ai_walk(20);
-};
-
-void() anac_run14 = [31, anac_run15]
-{
-	ai_walk(20);
-};
-
-void() anac_run15 = [32, anac_run16]
-{
-	ai_walk(20);
-};
-
-void() anac_run16 = [33, anac_run17]
-{
-	ai_walk(MSG_BROADCAST);
-};
-
-void() anac_run17 = [34, anac_run18]
-{
-	ai_walk(MSG_BROADCAST);
-};
-
-void() anac_run18 = [35, anac_run19]
-{
-	ai_walk(MSG_BROADCAST);
-};
-
-void() anac_run19 = [36, anac_hmmm]
-{
-	ai_walk(MSG_BROADCAST);
-};
-
-void() anac_run20 = [37, anac_run21]
-{
-	ai_run(MSG_BROADCAST);
-};
-
-void() anac_run21 = [38, anac_run22]
-{
-	ai_run(MSG_BROADCAST);
-};
-
-void() anac_run22 = [39, anac_run23]
-{
-	ai_run(MSG_BROADCAST);
-};
-
-void() anac_run23 = [40, anac_run24]
-{
-	ai_run(MSG_BROADCAST);
-};
-
-void() anac_run24 = [41, anac_run25]
-{
-	ai_run(MSG_BROADCAST);
-};
-
-void() anac_run25 = [42, anac_run26]
-{
-	ai_run(MSG_BROADCAST);
-};
-
-void() anac_run26 = [43, anac_run27]
-{
-	ai_run(20);
-};
-
-void() anac_run27 = [44, anac_run28]
-{
-	ai_run(20);
-};
-
-void() anac_run28 = [45, anac_run29]
-{
-	ai_run(20);
-};
-
-void() anac_run29 = [46, anac_run30]
-{
-	ai_run(20);
-};
-
-void() anac_run30 = [47, anac_run]
-{
-	ai_run(20);
-};
+void() anac_run = [17, anac_run01] { ai_walk(20); };
+void() anac_run01 = [18, anac_run02] { ai_walk(20); };
+void() anac_run02 = [19, anac_run03] { ai_walk(20); };
+void() anac_run03 = [20, anac_run04] { ai_walk(20); };
+void() anac_run04 = [21, anac_run05] { ai_walk(20); };
+void() anac_run05 = [22, anac_run06] { ai_walk(20); };
+void() anac_run06 = [23, anac_run07] { ai_walk(20); };
+void() anac_run07 = [24, anac_run08] { ai_walk(20); };
+void() anac_run08 = [25, anac_run09] { ai_walk(20); };
+void() anac_run09 = [26, anac_run10] { ai_walk(20); };
+void() anac_run10 = [27, anac_run11] { ai_walk(20); };
+void() anac_run11 = [28, anac_run12] { ai_walk(20); };
+void() anac_run12 = [29, anac_run13] { ai_walk(20); };
+void() anac_run13 = [30, anac_run14] { ai_walk(20); };
+void() anac_run14 = [31, anac_run15] { ai_walk(20); };
+void() anac_run15 = [32, anac_run16] { ai_walk(20); };
+void() anac_run16 = [33, anac_run17] { ai_walk(0); };
+void() anac_run17 = [34, anac_run18] { ai_walk(0); };
+void() anac_run18 = [35, anac_run19] { ai_walk(0); };
+void() anac_run19 = [36, anac_hmmm] { ai_walk(0); };
+void() anac_run20 = [37, anac_run21] { ai_run(0); };
+void() anac_run21 = [38, anac_run22] { ai_run(0); };
+void() anac_run22 = [39, anac_run23] { ai_run(0); };
+void() anac_run23 = [40, anac_run24] { ai_run(0); };
+void() anac_run24 = [41, anac_run25] { ai_run(0); };
+void() anac_run25 = [42, anac_run26] { ai_run(0); };
+void() anac_run26 = [43, anac_run27] { ai_face(); };
+void() anac_run27 = [44, anac_run28] { ai_face(); };
+void() anac_run28 = [45, anac_run29] { ai_face(); };
+void() anac_run29 = [46, anac_run30] { ai_face(); };
+void() anac_run30 = [47, anac_run] { ai_face(); };
 
 void() anac_hmmm = {
-	if (self.enemy.health <= 0) {
-		anac_fall();
-	} else {
-		anac_run20();
-	}
+	if (self.enemy.health <= 0) anac_fall();
+	else anac_run20();
 };
 
-void() anac_attk = [108, anac_attk1]
-{
+void() anac_attk = [108, anac_attk1] {
 	ai_face();
 	sound(self,CHAN_VOICE, "hknight/idle.wav",ATTN_NORM,ATTN_NORM);
 };
-
-void() anac_attk1 = [109, anac_attk2]
-{
-	ai_face();
-};
-
-void() anac_attk2 = [110, anac_attk3]
-{
-	ai_face();
-};
-
+void() anac_attk1 = [109, anac_attk2] { ai_face(); };
+void() anac_attk2 = [110, anac_attk3] { ai_face(); };
 void() anac_attk3 = [111, anac_attk4]
 {
 	ai_face();
-	ai_forward(TE_LIGHTNING1);
+	ai_forward(5);
 };
 
 void() anac_attk4 = [112, anac_attk5]
 {
 	ai_face();
-	ai_forward(MOVETYPE_BOUNCE);
+	ai_forward(10);
 };
 
 void() anac_attk5 = [113, anac_attk6]
 {
 	ai_face();
-	ai_forward(MOVETYPE_BOUNCE);
+	ai_forward(10);
 };
 
 void() anac_attk6 = [114, anac_attk7]
 {
 	ai_face();
-	ai_forward(MOVETYPE_BOUNCE);
+	ai_forward(10);
 };
 
 void() anac_attk7 = [115, anac_attk8]
 {
 	ai_face();
-	ai_forward(MOVETYPE_BOUNCE);
+	ai_forward(10);
 };
 
 void() anac_attk8 = [116, anac_attk9]
@@ -550,7 +411,7 @@ void() anac_attk16 = [124, anac_attk17]
 {
 	anac_missile('100 0 200');
 	ai_face();
-	ai_forward(MOVETYPE_BOUNCE);
+	ai_forward(10);
 };
 
 void() anac_attk17 = [125, anac_attk18]
@@ -644,19 +505,19 @@ void() anac_eat5 = [95, anac_eat6]
 
 void() anac_eat6 = [96, anac_eat7]
 {
-	ai_charge(MOVETYPE_BOUNCE);
+	ai_charge(10);
 	ai_face();
 };
 
 void() anac_eat7 = [97, anac_eat8]
 {
-	ai_charge(MOVETYPE_BOUNCE);
+	ai_charge(10);
 	ai_face();
 };
 
 void() anac_eat8 = [98, anac_eat9]
 {
-	ai_charge(MOVETYPE_BOUNCE);
+	ai_charge(10);
 	ai_face();
 };
 
@@ -703,18 +564,18 @@ void() anac_eat14 = [104, anac_eat15]
 
 void() anac_eat15 = [105, anac_eat16]
 {
-	ai_charge(MOVETYPE_BOUNCE);
+	ai_charge(10);
 	ai_face();
 };
 
 void() anac_eat16 = [106, anac_eat17]
 {
-	ai_charge(MOVETYPE_BOUNCE);
+	ai_charge(10);
 	ai_face();
 };
 
 void() anac_eat17 = [107, anac_run] {
-	ai_charge(MOVETYPE_BOUNCE);
+	ai_charge(10);
 	ai_face();
 };
 

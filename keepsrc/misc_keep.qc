@@ -36,6 +36,8 @@
 // Various stuff.
 //=============================================================================
 
+float FILTER_NOPROJECTILE_BYPASS = 1; // Check against projectile, not owner.
+
 void() effect_pulse_launch = { // [FUNCTION]
 	local entity missile;
 	missile = spawn();
@@ -406,12 +408,15 @@ void() rotating_wall = { // [ENTITY]
 };
 
 void() move_rope_spawn = {
+	local float btype;
+
 	self.attachment = find(world,targetname,self.target);
 	if (!self.attachment) self.attachment = find(world,targetname,self.target);
 	if (self.attachment && self.target != "") {
 		dprint("Spawning some ropes!\n");
-		if (self.spawnflags & ENT_SPNSTATIC) QC_ParseBeamGeneric(0,self.mdl,self,self.origin,self.attachment.origin,self.delay, BEAM_STATIC, self.attachment);
-		else QC_ParseBeamGeneric(0,self.mdl,self,self.origin,self.attachment.origin,self.delay, BEAM_NORMAL, self.attachment);
+		btype = BEAM_NORMAL;
+		if (self.spawnflags & ENT_SPNSTATIC) btype = BEAM_STATIC; 
+		QC_ParseBeamGeneric(0,self.mdl,self.skin,self,self.origin,self.attachment.origin,self.delay,btype,self.attachment);
 	} else {
 		dprint("couldn't find a rope target of ");
 		dprint(self.target);
@@ -427,4 +432,138 @@ void() move_rope = {
 		self.think = move_rope_spawn;
 		self.nextthink = time + (random() * 0.5) + 1;
 	}
+};
+
+float(string actval, string filterval, float type) info_filter_filterstring = {
+	if (actval == "") {
+		if (filterval == "") {
+			if (type == 1) return FALSE; // Not Equal
+			else return TRUE; // Equal
+		} else {
+			if (type == 1) return TRUE; // Not Equal
+			else return FALSE; // Equal
+		}
+	} else {
+		if (filterval == "") {
+			if (type == 1) return TRUE; // Not Equal
+			else return FALSE; // Equal
+		}
+	}
+
+	// OK so both actval != "" and filterval != "" here
+	if (type == 1) return (actval != filterval); // Not Equal
+	else return (actval == filterval); // Equal
+};
+
+float(float actval, float filterval, float type) info_filter_filternumber = {
+	if (type == 5) return (actval > filterval); // Only Above
+ 	else if (type == 4) return (actval < filterval); // Only Below
+	else if (type == 3) return (actval >= filterval); // Above or Equal
+	else if (type == 2) return (actval <= filterval); // Below or Equal
+	else if (type == 1) return (actval != filterval); // Not Equal
+	else return (actval == filterval); // Equal
+};
+
+float(float actval, float filterval, float type) info_filter_filterbits = {
+	if (type == 1) return !(actval & filterval); // Not Equal
+	else return (actval & filterval); // Equal
+};
+
+void() info_filter_use = {
+	local float success, actval, filterval;
+	local string actstring, filterstring;
+	local entity act;
+
+	if (activator) act = activator;
+	else if (self.bmodel_act) act = self.bmodel_act;
+	else if (other) act = other;
+	if (!act) return; // Nothing to run filter on!
+
+	if (IsProjectile(act) && !(self.spawnflags & FILTER_NOPROJECTILE_BYPASS)) {
+		if (act.owner.flags & FLx_CREATURE) act = act.owner; // Pass owner info.
+	}
+
+	success = FALSE;
+	if (self.filterstyle == FILTER_CURRENTWEAPON) {
+		actval = GetWepIDIndex(act.weapon,act.weaponismoditems);
+		filterval = GetWepIDIndex(self.weapon,self.weaponismoditems);
+		success = info_filter_filternumber(actval,filterval,self.state);
+	} else if (self.filterstyle == FILTER_HASITEM)  success = info_filter_filterbits(act.items,self.items,self.state);
+	else if (self.filterstyle == FILTER_HASITEM2)   success = info_filter_filterbits(act.items2,self.items2,self.state);
+	else if (self.filterstyle == FILTER_HASMODITEM) success = info_filter_filterbits(act.moditems,self.moditems,self.state);
+	else if (self.filterstyle == FILTER_HASPERM)    success = info_filter_filterbits(act.perms,self.perms,self.state);
+	else if (self.filterstyle == FILTER_HASITEM3)   success = info_filter_filterbits(act.items3,self.items3,self.state);
+	else if (self.filterstyle == FILTER_CLASSNAME)  success = info_filter_filterstring(act.classname,self.filtername,self.state);
+	else if (self.filterstyle == FILTER_CLASSTYPE)  success = info_filter_filternumber(act.classtype,self.classtype,self.state);
+	else if (self.filterstyle == FILTER_TARGETNAME) success = info_filter_filterstring(act.targetname,self.filtername,self.state);
+	else if (self.filterstyle == FILTER_COUNT)      success = info_filter_filternumber(act.count,self.count,self.state);
+	else if (self.filterstyle == FILTER_CNT)        success = info_filter_filternumber(act.cnt,self.cnt,self.state);
+	else if (self.filterstyle == FILTER_HEALTH)     success = info_filter_filternumber(act.health,self.health,self.state);
+	else if (self.filterstyle == FILTER_ONFIRE) {
+		if (self.state) success = !act.burning;
+		else success = act.burning;
+	} else if (self.filterstyle == FILTER_POISONED) {
+		if (self.state) success = !act.poisoned;
+		else success = act.poisoned;
+	} else if (self.filterstyle == FILTER_BLEEDING){
+		if (self.state) success = !act.bleeding;
+		else success = act.bleeding;
+	} else if (self.filterstyle == FILTER_INVISIBLE) {
+		if (self.state) success = !Invisible(act);
+		else success = Invisible(act);
+	} else if (self.filterstyle == FILTER_INVINCIBLE){
+		if (self.state) success = !Indestructable(act);
+		else success = Indestructable(act);
+	} else if (self.filterstyle == FILTER_DAMAGEABLE){
+		if (self.state) success = (act.takedamage == DAMAGE_NO);
+		else success = act.takedamage;
+	} else if (self.filterstyle == FILTER_CURSED){
+		if (self.state) success = !act.curse_type;
+		else success = act.curse_type;
+	} else if (self.filterstyle == FILTER_SLOWED){
+		if (self.state) success = !act.slow_finished;
+		else success = act.slow_finished;
+	} else if (self.filterstyle == FILTER_FROZEN){
+		if (self.state) success = !act.frozen;
+		else success = act.frozen;
+	} else if (self.filterstyle == FILTER_ROTTING){
+		if (self.state) success = !act.rotting;
+		else success = act.rotting;
+	} else if (self.filterstyle == FILTER_WET){
+		if (self.state) success = !act.liquidbase && !act.waterlevel;
+		else success = act.liquidbase || act.waterlevel;
+	} else if (self.filterstyle == FILTER_PLAYER){
+		if (self.state) success = !(act.flags & FL_CLIENT);
+		else success = (act.flags & FL_CLIENT);
+	} else if (self.filterstyle == FILTER_MONSTER){
+		if (self.state) success = !(act.flags & FL_MONSTER);
+		else success = (act.flags & FL_MONSTER);
+	} else if (self.filterstyle == FILTER_CREATURE){
+		if (self.state) success = !(act.flags & FLx_CREATURE);
+		else success = (act.flags & FLx_CREATURE);
+	} else if (self.filterstyle == FILTER_DENIZEN){
+		if (self.state) success = !(act.alignment == NEUTRAL && act.classgroup == CG_HARMLESS);
+		else success = (act.alignment == NEUTRAL && act.classgroup == CG_HARMLESS);
+	} else if (self.filterstyle == FILTER_ALIGNMENT){
+		if (self.state) success = !Align_Match(self,act);
+		else success = Align_Match(self,act);
+	}
+
+	if (success) {
+		if (self.noise != "") sound(self,CHAN_VOICE,self.noise,1,ATTN_NORM);
+		if (self.message != "") centerprint(act,self.message);
+		activator = act;
+		SUB_UseTargets();
+	} else {
+		if (self.message2 != "") {
+			sound(act,CHAN_VOICE,"misc/talk.wav",1,ATTN_NORM);
+			centerprint(act,self.message2);
+		}
+	}
+};
+
+void() info_filter = {
+	if (self.noise != "") precache_sound(self.noise);
+	if (!self.filterstyle) self.filterstyle = FILTER_CLASSNAME;
+	self.use = info_filter_use;
 };

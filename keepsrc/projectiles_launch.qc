@@ -125,7 +125,7 @@ void() ClearMultiDamage = { // [FUNCTION]
 
 void() ApplyMultiDamage = { // [FUNCTION]
     if (!multi_ent) return;
-    T_Damage (multi_ent, self, self, multi_damage,DAMARMOR);
+    T_Damage(multi_ent, self, self, multi_damage,DAMARMOR);
 };
 
 void(entity hit, float damage) AddMultiDamage = { // [FUNCTION]
@@ -1172,7 +1172,7 @@ void(vector start, vector dir) Mirv_Launch = { // [FUNCTION]
     newmis.search_time= time;
     newmis.state      = 1;    // Warhead auto-targeting: 0 = off, 1 = on.
     newmis.weapon        = self.weapon;
-	newmis.selfweaponismoditems = self.selfweaponismoditems;
+	newmis.weaponismoditems = self.weaponismoditems;
     newmis.think1     = BecomeBigBang;    // Use alternate explosion code.
     newmis.th_win     = Mirv_Split;
 };

@@ -266,7 +266,7 @@ void() lost_charge_touch = {
 	// Do not damage other souls with charge attacks
 	// Prevents packs from killing themselves
 	if (self.classtype != other.classtype && other.takedamage) {
-		T_Damage (other, self, self, DAMAGE_LOSTCHARGE, DAMARMOR);
+		T_Damage(other, self, self, DAMAGE_LOSTCHARGE, DAMARMOR);
 		spawn_touchblood (self, other, DAMAGE_LOSTCHARGE*3);
 
 		// If touched a player, nudge them backwards
@@ -341,7 +341,7 @@ void() lost_bite = {
 
 	// Lost Soul bite is very weak
 	ldmg = (random() + random() + random()) * 3;
-	T_Damage (enemy_targ, self, self, ldmg, DAMARMOR);
+	T_Damage(enemy_targ, self, self, ldmg, DAMARMOR);
 
 	// Spawn blood at mouth of Lost Soul
 	spawn_touchblood (self, enemy_targ, ldmg*3);
@@ -471,7 +471,7 @@ void(entity inflictor, entity attacker, float damage) lost_pain = {
 void() lost_die1 = [$pain1, lost_die2 ] {};
 void() lost_die2 = [$pain2, lost_die2 ] {
 	// Lost souls explode when they die
-	T_RadiusDamage (self, self, DAMAGE_LOSTSOUL, world, DAMAGEALL);
+	T_RadiusDamage(self, self, DAMAGE_LOSTSOUL, world, DAMAGEALL);
 	if (random() < 0.5) self.lip = EXPLODE_SMALL;
 	else if (random() < 0.9) self.lip = EXPLODE_MED;
 	else self.lip = EXPLODE_BIG;

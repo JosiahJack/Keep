@@ -180,7 +180,7 @@ void() dn_and_wait_go_up = { // [FUNCTION]
 };
 
 void() dn_and_wait_crush = { // [FUNCTION]
-	T_Damage (other, self, self, 1,DAMARMOR);
+	T_Damage(other, self, self, 1,DAMARMOR);
 	if (self.state == STATE_UP) dn_and_wait_go_down();
 	else if (self.state == STATE_DOWN) dn_and_wait_go_up();
 };
@@ -214,7 +214,7 @@ void() toggle_go_up = { // [FUNCTION]
 };
 
 void() toggle_crush = { // [FUNCTION]
-	T_Damage (other, self, self, 1, DAMARMOR);
+	T_Damage(other, self, self, 1, DAMARMOR);
 	if (self.state == STATE_UP) toggle_go_down();
 	else if (self.state == STATE_DOWN) toggle_go_up();
 };
@@ -409,7 +409,7 @@ void() plat2_center_touch = { // [FUNCTION]
 };
 
 void() plat2_crush = { // [FUNCTION]
-	T_Damage (other, self, self, 1, DAMARMOR);
+	T_Damage(other, self, self, 1, DAMARMOR);
 	if (self.state == STATE_UP) plat2_go_down();
 	else if (self.state == STATE_DOWN) plat2_go_up();
 };

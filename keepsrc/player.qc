@@ -158,7 +158,7 @@ void() player_stand1 = [17,player_stand1] { // [FUNCTION]
 	self.weaponframe = IDLE_WEAPON_FRAME; // Get out of any weapon animation
 	if (self.velocity_x || self.velocity_y) { self.walkframe=0; player_run(); return; }
 
-	if (self.weapon == IT_AXE && !self.selfweaponismoditems) {
+	if (self.weapon == IT_AXE && !self.weaponismoditems) {
 		if (self.walkframe >= 12) self.walkframe = 0;
 		self.frame = 17 + self.walkframe;
 	} else {
@@ -192,8 +192,8 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 		return;
 	}
 
-	if ((self.weapon == IT_ICE && self.selfweaponismoditems && self.ammo_elemental > 5)
-		 || (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems && self.ammo_cells > 0)) {
+	if ((self.weapon == IT_ICE && self.weaponismoditems && self.ammo_elemental > 5)
+		 || (self.weapon == IT2_MJOLNIR && !self.weaponismoditems && self.ammo_cells > 0)) {
 		if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 			if (random() < 0.5) {
 				sound(self,CHAN_AUTO,"tronyn/lightning_component_electrified.wav", 0.4,ATTN_NORM);
@@ -205,7 +205,7 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 		}	
 	}
 
-	if (self.weapon == IT_AXE && !self.selfweaponismoditems) {
+	if (self.weapon == IT_AXE && !self.weaponismoditems) {
 		if (self.perms & IT_CHAINSAW) { // Check for chainsaw first because it needs a different player model.
 			if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 				if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
@@ -221,7 +221,7 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 			self.frame = 0 + self.walkframe;
 		}
 	} else {
-		if (self.weapon == IT2_GRAPPLE && !self.selfweaponismoditems) {
+		if (self.weapon == IT2_GRAPPLE && !self.weaponismoditems) {
             if (self.hook && self.hook.count) self.weaponframe = 1;   // Hook is still out.
 		}
 		if (self.walkframe >= 6) self.walkframe = 0; // Same as playham0 or playham so no need to check if no weapon or if mjolnir held or thrown.
@@ -244,7 +244,7 @@ void() player_run_nofeet = [ 6, player_run ] { // [FUNCTION]
 	if (!self.velocity_x && !self.velocity_y) { self.walkframe = 0; player_stand1(); return; } // Standing around has different animation sets
 
 	// make sure correct player animation active
-	if (self.weapon == IT_AXE && !self.selfweaponismoditems) {
+	if (self.weapon == IT_AXE && !self.weaponismoditems) {
 		if (self.walkframe >= 6) self.walkframe = 0;
 		self.frame = self.walkframe;
 	} else {
@@ -447,14 +447,14 @@ void() player_tbolt = { // [FUNCTION]
     if (!self.button0 || (frame_pause())) { player_run();  return; }
 
     self.weaponframe = self.weaponframe + 1;
-    if (self.weapon == IT2_CHAINLIGHTNING && !self.selfweaponismoditems) {
+    if (self.weapon == IT2_CHAINLIGHTNING && !self.weaponismoditems) {
 		if (self.weaponframe == 17) self.weaponframe = FIRE_WEAPON_FRAME;
     } else {
 		if (self.weaponframe == 5) self.weaponframe = FIRE_WEAPON_FRAME;
     }
     SuperDamageSound();
 
-	if (self.tome_finished || (self.weapon == IT2_CHAINLIGHTNING && !self.selfweaponismoditems)) W_FireThunderbolt (TRUE);
+	if (self.tome_finished || (self.weapon == IT2_CHAINLIGHTNING && !self.weaponismoditems)) W_FireThunderbolt (TRUE);
 	else					W_FireThunderbolt (FALSE);
 
 	W_Reload(0.2);
@@ -784,9 +784,9 @@ void() player_sawpain6 = [16, player_run] {}; // [FUNCTION]
 void(entity inflictor, entity attacker, float damage) player_pain = { // [FUNCTION]
 	if (self.weaponframe) return; // Already in a pain frame.
 	if (self.invisible_finished > time || self.in_a_vehicle) return;		// Cars and eyes don't have pain frames.
-	if (self.weapon == IT2_GRAPPLE && self.hook && !self.selfweaponismoditems) return; // No pain while the hook is out.
+	if (self.weapon == IT2_GRAPPLE && self.hook && !self.weaponismoditems) return; // No pain while the hook is out.
 
-	if (self.weapon == IT_AXE && !self.selfweaponismoditems) { 
+	if (self.weapon == IT_AXE && !self.weaponismoditems) { 
 		if (self.perms & IT_CHAINSAW) player_sawpain1();
 		else player_axpain1();
 	}
@@ -951,7 +951,7 @@ void() player_death = { // [FUNCTION]
 		// Setting the modelindex here because ClientPowerups doesn't when player has health < 1.
 		if (self.weaponmodel == "") { self.modelindex = modelindex_hamout; player_die_weaponless1(); return; }
 
-		if (self.weapon == IT_AXE && !self.selfweaponismoditems) {
+		if (self.weapon == IT_AXE && !self.weaponismoditems) {
 			if (self.perms & IT_CHAINSAW) {
 				self.modelindex = modelindex_saw;
 				player_die_saw1();
@@ -959,7 +959,7 @@ void() player_death = { // [FUNCTION]
 				self.modelindex = modelindex_player;
 				player_die_ax1();
 			}
-		} else if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
+		} else if (self.weapon == IT2_MJOLNIR && !self.weaponismoditems) {
 			if (self.hammer_finished >= time) { // Hammer has been thrown out.
 				self.modelindex = modelindex_hamout;
 				player_die_weaponless1();

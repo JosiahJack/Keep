@@ -487,7 +487,7 @@ void() func_laser_touch = { // [FUNCTION]
 	if (other.takedamage == DAMAGE_NO) return;
 
 	if (self.attack_finished < time) {
-		T_Damage (other, self, self, self.dmg, DAMARMOR);
+		T_Damage(other, self, self, self.dmg, DAMARMOR);
 		self.attack_finished = time + 0.1;
 	}
 };

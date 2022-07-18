@@ -212,7 +212,7 @@ void() wolf_melee = {
 	self.meleerange = oldrange;	
 	ldmg = (random() + random() + random()) * 5; // Wolf swings sword! 5-15 Damage
 	if (ldmg < 5) ldmg = 5;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	spawn_touchblood (self, self.enemy, ldmg*4); // Spawn some touch blood (no explicit direction)
 };
 

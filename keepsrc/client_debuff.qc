@@ -172,7 +172,7 @@ void() ClientDeBuff = {
 				
 				if (self.resist_fire > 0) self.burning_qty = self.burning_qty * (1-self.resist_fire);
 				// Use global damage function (has death checks)
-				T_Damage (self, world, world, self.debuff_qty, NOARMOR);
+				T_Damage(self, world, world, self.debuff_qty, NOARMOR);
 			}
 		}
 		// Check if player is in water up to waist?
@@ -204,7 +204,7 @@ void() ClientDeBuff = {
 				self.debuff_qty = DEBUFF_POISON_DMG; // Setup default poison damage
 				if (self.poisoned_qty < self.debuff_qty) self.debuff_qty = self.poisoned_qty; // Check poison does not exceed damage left
 				self.poisoned_qty = self.poisoned_qty - self.debuff_qty; // Subtract poison damage from counters
-				T_Damage (self, world, world, self.debuff_qty, NOARMOR); // Use global damage function (has death checks)
+				T_Damage(self, world, world, self.debuff_qty, NOARMOR); // Use global damage function (has death checks)
 			}
 		}
 		// Check if poison has finished?
@@ -374,7 +374,7 @@ void(entity targ) BleedDeBuff = {
 	if (!(targ.flags & FL_CLIENT)) return; // Sanity check!
 	if (targ.health <= DEBUFF_BLEED_MIN) return; // Check for bleeding and minimum amount of health for debuff
 	if (targ.bleeding == TRUE) { T_Damage(targ,self,self,DEBUFF_BLEED_MIN,DAMARMOR); return; } // Do minimum damage, checked min does not kill before
-	if (targ.items & IT_SUIT || Indestructable(targ)) { T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
+	if (targ.items & IT_SUIT || Indestructable(targ)) { T_Damage(targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
 
 	targ.bleeding = TRUE; // Starting bleeding!
 	targ.bleeding_time = time + map_bleedingdmg_z; // Pause before bleeding Healing starts (def=1s)
@@ -490,6 +490,6 @@ void(entity targ, float playdmg, float mondmg) ApplyFireDmg = {
 
 	if (targ.resist_fire > 0) firedamage = firedamage * (1-targ.resist_fire);
 
-	T_Damage (targ, self, self.owner, firedamage, NOARMOR); // Final damage (no armour save, fire burns through)
+	T_Damage(targ, self, self.owner, firedamage, NOARMOR); // Final damage (no armour save, fire burns through)
 	if (targ.resist_fire < 1) BurnDeBuff(targ);
 };

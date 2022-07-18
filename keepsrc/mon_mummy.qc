@@ -75,7 +75,7 @@ void() mummyGrenadeTouch = {
 
    if ( other.takedamage ) {
       mummyDamage = (15 + (random () * 15));
-      T_Damage (other,self,self.owner,mummyDamage,DAMARMOR);
+      T_Damage(other,self,self.owner,mummyDamage,DAMARMOR);
       sound(self,CHAN_WEAPON,"zombie/z_hit.wav",TRUE,ATTN_NORM);
       remove (self);
       return;

@@ -231,7 +231,7 @@ void() hknight2_die = {
 void() hknight2_multigrenade_touch;
 
 void() hknight2_minigrenade_explode = {
-	T_RadiusDamage (self, self.owner, 50, self.owner, DAMAGEALL); // make Warlord immune to his own multigrenades
+	T_RadiusDamage(self, self.owner, 50, self.owner, DAMAGEALL); // make Warlord immune to his own multigrenades
 
 	if (other.health) {
 		if (ext_dppart) pointparticles(particleeffectnum("multigrenade_explosion_nodebris"), self.origin, '0 0 0', 1);
@@ -297,7 +297,7 @@ void() hknight2_multigrenade_touch = {
 };
 
 void() hknight2_grenade_explode = {
-	T_RadiusDamage (self, self.owner, 40, world,DAMAGEALL);
+	T_RadiusDamage(self, self.owner, 40, world,DAMAGEALL);
 	R_Exp3(self.origin);
 
 	if (other.health) {
@@ -458,7 +458,7 @@ void() hknight2_homing_touch = {
 			hknight2_homing_teleport();
 			return;
 		}
-		T_Damage (other, self, self.owner, 15, DAMARMOR);	 // default 15	
+		T_Damage(other, self, self.owner, 15, DAMARMOR);	 // default 15	
 		sound(self,CHAN_WEAPON,"q15/warlord/homing_touch.wav",1,ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
 		remove(self);
 	}
@@ -483,7 +483,7 @@ void() hknight2_homing_think = {
 	// when it got stuck
 	if (self.origin == self.oldorigin) {
 		sound(self,CHAN_WEAPON,"q15/warlord/homing_touch.wav",1,ATTN_NORM);	 // To abort the face fly-sound. Use same channel !!!!
-		//T_RadiusDamage (self, self.owner, 33, self.owner);	
+		//T_RadiusDamage(self, self.owner, 33, self.owner);	
 		remove (self);
 	}
 	self.oldorigin = self.origin;
@@ -588,7 +588,7 @@ void() ram_scan = {
 		sound(self,CHAN_AUTO,"q15/warlord/fall.wav",1,ATTN_IDLE);
 
 		// damage can vary between 5 and 10 hitpoints
-		T_Damage (self.enemy, self, self, rint(5 + (5 * random())), DAMARMOR); 
+		T_Damage(self.enemy, self, self, rint(5 + (5 * random())), DAMARMOR); 
 
 		dir = (self.origin - '0 0 7') - self.enemy.origin;
 		dir = normalize(dir);

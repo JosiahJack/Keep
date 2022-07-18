@@ -117,7 +117,7 @@ float () GremlinAttemptWeaponSteal = {
    if ((vlen(self.enemy.origin - self.origin)) > 100.000) return FALSE; // not within 100 units
    if (random () < 0.500) return ( FALSE ); // 50% chance
 
-   wepID = GetWepIDIndex(self.enemy.weapon,self.enemy.selfweaponismoditems);
+   wepID = GetWepIDIndex(self.enemy.weapon,self.enemy.weaponismoditems);
    if (wepID == FALSE || wepID == ID_AXE_SHADAXE_CHAINSAW
        || wepID == ID_MACE || wepID == ID_GRAPPLE
        || wepID == ID_ICE || wepID == ID_SHOTGUN_BLASTER
@@ -132,7 +132,7 @@ float () GremlinAttemptWeaponSteal = {
    }
 
    self.weapon = wep = self.enemy.weapon;
-   self.selfweaponismoditems = self.enemy.selfweaponismoditems;
+   self.weaponismoditems = self.enemy.weaponismoditems;
    if (wepID == ID_PROXIMITY_GRENADE || wepID == ID_LASER_CANNON) {
       self.enemy.items2 = (self.enemy.items2 - (self.enemy.items2 & self.weapon));
       self.items2 = (self.items2 | self.weapon);
@@ -241,30 +241,35 @@ float() GremlinFindTarget = {
    local entity head, gorge;
    local float dist, result;
 
+   if (self.enemy && self.enemy.gorging) return TRUE;
+
    if ( ((self.stoleweapon == FALSE) && (time > self.wait)) ) {
       self.wait = (time + TRUE);
-      dist = 2000.000;
+      dist = 2000;
       gorge = world;
-      head = nextent (world);
-      while ( (head != world) ) {
-         if (head.health < 1 && (head.flags & FL_MONSTER)
-             && !head.gibbed
-             && head.classgroup != CG_HARMLESS) { // Don't eat denizens.
-            result = fabs ((head.origin_z - self.origin_z));
-            if (visible(head) && result < 80.000 && head.gorging == FALSE) {
-               dist = visible_distance;
-               gorge = head;
+      head = nextent(world);
+      while (head) {
+         if (head.health < 1 && (head.flags & FL_MONSTER) && !head.gibbed) {
+            if (head.classgroup != CG_HARMLESS) { // Don't eat denizens.
+               if (!head.gorging) {
+                  result = fabs(head.origin_z - self.origin_z);
+                  if (visible(head) && result < 80) {
+                     dist = visible_distance;
+                     gorge = head;
+                  }
+               }
             }
          }
-         head = nextent (head);
+         head = nextent(head);
       }
       if ( ((gorge != world) && (dist < (700.000 * random ()))) ) {
          self.oldenemy = self.enemy;
          self.gorging = TRUE;
          self.enemy = gorge;
+         self.enemy.gorging = TRUE;
          self.search_time = (time + MOVETYPE_STEP);
          FoundTarget();
-         return ( TRUE );
+         return TRUE;
       }
    } else {
       if (self.stoleweapon ) {
@@ -273,20 +278,19 @@ float() GremlinFindTarget = {
             self.enemy = head;
             FoundTarget();
             self.attack_finished = time;
-            self.search_time = (time + FL_SWIM);
-            return ( TRUE );
+            self.search_time = (time + 2);
+            return TRUE;
          }
       }
    }
    result = FindTarget();
-   self.search_time = (time + FL_SWIM);
-   return ( result );
+   self.search_time = (time + 2);
+   return result;
 };
 
 void(float dist) gremlin_walk = {
    movedist = dist;
-   if ( GremlinFindTarget () )
-      return ;
+   if (GremlinFindTarget()) return;
 
    movetogoal(dist);
 };
@@ -309,15 +313,8 @@ float () GremlinCheckNoAmmo = {
 };
 
 void(float dist) gremlin_run = {
-   local float r;
-   local vector d;
-   local vector ang;
-   local float done;
-   local vector end;
-   local float c;
-
-   if ( (self.watertype == CONTENT_LAVA) )
-      T_Damage (self,world,world,2000.000,DAMARMOR);
+   local float r, done, c;
+   local vector d, ang, end;
 
    movedist = dist;
    if (self.stoleweapon )
@@ -343,7 +340,7 @@ void(float dist) gremlin_run = {
          } else {
             if ( (walkmove (self.angles_y,dist) == FALSE) ) {
                self.gorging = FALSE;
-               return ;
+               return;
             }
          }
          return ;
@@ -351,8 +348,7 @@ void(float dist) gremlin_run = {
       movetogoal(dist);
    } else {
       if ( (random () > 0.970) ) {
-         if ( GremlinFindTarget () )
-            return ;
+         if (GremlinFindTarget()) return;
       }
       if (self.stoleweapon ) {
          if ( ((self.enemy.health < FALSE) && (self.enemy.classname == "player")) ) {
@@ -628,7 +624,7 @@ void() GremlinFireLightning = {
       cells = self.ammo_cells;
       self.ammo_cells = FALSE;
       discharged = TRUE;
-      T_RadiusDamage (self,self,(35.000 * cells),world,DAMAGEALL);
+      T_RadiusDamage(self,self,(35.000 * cells),world,DAMAGEALL);
       discharged = FALSE;
       return ;
    }
@@ -706,10 +702,10 @@ void() GremlinFireMultiRocket = {
 	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
 	self.ammo_multi_rockets = self.ammo_multi_rockets - 1;
-	MultiRocketLaunch (-10.000,FL_SWIM);
-	MultiRocketLaunch (CONTENT_LAVA,MOVETYPE_WALK);
-	MultiRocketLaunch (MOVETYPE_FLY,FALSE);
-	MultiRocketLaunch (MOVETYPE_BOUNCE,TRUE);
+	MultiRocketLaunch(-10.000,2);
+	MultiRocketLaunch(CONTENT_LAVA,MOVETYPE_WALK);
+	MultiRocketLaunch(5,FALSE);
+	MultiRocketLaunch(10,TRUE);
 };
 
 void() gremlin_multi_rocket1 = [ 135.000, gremlin_multi_rocket2 ] {};
@@ -769,7 +765,7 @@ void() GremlinFirePlasmaGun = {
 	setorigin(missile,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
 	sound(missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
 	missile.think = PlasmaGroundOut;
-	missile.nextthink = (time + MOVETYPE_FLY);
+	missile.nextthink = (time + 5);
 	self.attack_finished = time + 0.8;
 };
 
@@ -813,9 +809,9 @@ void(float side) Gremlin_Melee = {
    if (!CanDamage(self.enemy,self)) return;
 
    sound(self,CHAN_WEAPON,"hipnotic/grem/attack.wav",TRUE,ATTN_NORM);
-   ldmg = (MOVETYPE_BOUNCE + (MOVETYPE_FLY * random ()));
-   T_Damage (self.enemy,self,self,ldmg,DAMARMOR);
-   SpawnMeatSpray (self,self.enemy,side);
+   ldmg = (10 + (5 * random ()));
+   T_Damage(self.enemy,self,self,ldmg,DAMARMOR);
+   SpawnMeatSpray(self,self.enemy,side);
 };
 
 void() gremlin_lunge1 = [ 124.000, gremlin_lunge2 ] { ai_charge(FALSE); };
@@ -882,6 +878,7 @@ void() Gremlin_Split = {
    }
    grem = spawn();
    setorigin(grem,pos);
+   grem.owner = grem.master = self;
    temp = self;
    self = grem;
    gremlin_setup();
@@ -910,8 +907,8 @@ void(float side) Gremlin_Gorge = {
    Gremlin_Damage_Corpse (self.enemy,self,self,ldmg);
    SpawnMeatSpray (self, self.enemy,side);
    if ( (self.enemy.health < -200.000) ) {
-      if ( (self.enemy.gorging == FALSE) ) {
-         self.enemy.gorging = TRUE;
+      if ( (self.enemy.gorging < 2) ) {
+         self.enemy.gorging = 2;
          sound(self,CHAN_VOICE,"player/udeath.wav",TRUE,ATTN_NORM);
          temp = self;
          self = self.enemy;
@@ -1042,16 +1039,16 @@ void() gremlin_spawn5 = [ 88.000, gremlin_spawn6 ] { self.nextthink = (time + 0.
 void() gremlin_spawn6 = [ 89.000, gremlin_run1 ] { self.th_pain = gremlin_pain; };
 
 void() gremlin_die1 = [ 104.000, gremlin_die2 ] { sound(self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM); };
-void() gremlin_die2 = [ 105.000, gremlin_die3 ] { ai_forward (FL_SWIM); };
-void() gremlin_die3 = [ 106.000, gremlin_die4 ] { ai_forward (TRUE); };
-void() gremlin_die4 = [ 107.000, gremlin_die5 ] { ai_forward (FL_SWIM); };
-void() gremlin_die5 = [ 108.000, gremlin_die6 ] { ai_forward (TRUE); };
+void() gremlin_die2 = [ 105.000, gremlin_die3 ] { ai_forward(2); };
+void() gremlin_die3 = [ 106.000, gremlin_die4 ] { ai_forward(1); };
+void() gremlin_die4 = [ 107.000, gremlin_die5 ] { ai_forward(2); };
+void() gremlin_die5 = [ 108.000, gremlin_die6 ] { ai_forward(1); };
 void() gremlin_die6 = [ 109.000, gremlin_die7 ] { self.solid = SOLID_NOT; };
-void() gremlin_die7 = [ 110.000, gremlin_die8 ] { ai_forward (FL_SWIM); };
-void() gremlin_die8 = [ 111.000, gremlin_die9 ] { ai_forward (TRUE); };
-void() gremlin_die9 = [ 112.000, gremlin_die10 ] { ai_forward (FL_SWIM); };
-void() gremlin_die10 = [ 113.000, gremlin_die11 ] { ai_forward (TRUE); };
-void() gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward (FL_SWIM); };
+void() gremlin_die7 = [ 110.000, gremlin_die8 ] { ai_forward(2); };
+void() gremlin_die8 = [ 111.000, gremlin_die9 ] { ai_forward(1); };
+void() gremlin_die9 = [ 112.000, gremlin_die10 ] { ai_forward(2); };
+void() gremlin_die10 = [ 113.000, gremlin_die11 ] { ai_forward(1); };
+void() gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward(2); };
 void() gremlin_die12 = [ 115.000, gremlin_die12 ] {};
 
 void() Gremlin_FlipTouch = {

@@ -293,7 +293,7 @@ void() seek_punch = {
 	// Melee hit sound
 	sound(self,CHAN_WEAPON,"ad171/seeker/punch1.wav",1,ATTN_NORM);
 	ldmg = (random() + random() + random()) * 20;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, -150);
 	SpawnMeatSpray (self, self.enemy, -150);
 };
@@ -471,7 +471,7 @@ void(entity inflictor, entity attacker, float damage) seek_pain = {
 void() seek_explode = {
 	entity_hide(self); // Hide and Seek
 	Tent_Explosion(self.origin); // Regular ID particle explosion
-	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
+	T_RadiusDamage(self, self, self.death_dmg, world, DAMAGEALL);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav"); // Classic sprite/DP explosion
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);

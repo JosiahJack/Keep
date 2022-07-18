@@ -307,10 +307,10 @@ void() ClientPowerups = { // [FUNCTION]
 	} else {
 		if (self.in_a_vehicle) self.modelindex = modelindex_null;
 		else {
-			if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
+			if (self.weapon == IT2_MJOLNIR && !self.weaponismoditems) {
 				if (self.hammer_finished != 0) self.modelindex = modelindex_hamout; // Hammer has been thrown out.
 				else self.modelindex = modelindex_hammer; // We are holding the hammer.
-			} else if (self.weapon == IT_AXE && self.perms & IT_CHAINSAW && !self.selfweaponismoditems) self.modelindex = modelindex_saw;
+			} else if (self.weapon == IT_AXE && self.perms & IT_CHAINSAW && !self.weaponismoditems) self.modelindex = modelindex_saw;
 			else if (self.weaponmodel == "") self.modelindex = modelindex_hamout;
 			else self.modelindex = modelindex_player;
 		}
@@ -578,7 +578,7 @@ void() ClientPowerups = { // [FUNCTION]
 		self.effects = self.effects | EF_DIMLIGHT;
 	} else self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 
-	if (self.items2 & IT2_CROSS && self.weapon == IT2_CROSS && !self.selfweaponismoditems) self.currentammo = Zapper_Level(self);
+	if (self.items2 & IT2_CROSS && self.weapon == IT2_CROSS && !self.weaponismoditems) self.currentammo = Zapper_Level(self);
 };
 
 // If a thrown hammer was removed without resetting the hammer time,

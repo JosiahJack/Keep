@@ -63,10 +63,10 @@ void() mcorn_tailswipe = {
 	} else {
 		if (self.poisonous) {
 			PoisonDeBuff(self.enemy); // Check for poisonous attribute, you know, just in case a mapper is being clever
-			T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+			T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 		} else {
 			if (self.enemy.flags & FL_CLIENT) BleedDeBuff(self.enemy); // Don't apply T_Damage here or it will kill the player unfairly every time
-			else T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+			else T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 		}
 
 		sound(self,CHAN_WEAPON,"demon/dhit2.wav",1,ATTN_NORM); // Melee claw hit sound

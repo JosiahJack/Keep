@@ -108,13 +108,13 @@ float IT2_MJOLNIR 			= 262144.000;	//18 Keep specific	""					W
 float IT2_LASER_CANNON    	= 524288.000;	//19 Keep specific	""					W
 float IT2_GRAPPLE			= 1048576.000;	//20 Keep specific "" W Rogue grapple
 float IT2_TRINITY			= 2097152.000;	//20 Quoth
-float IT2_CROSS				= 4194304.000;	//21 Quoth							I && W2 (used by Wand)
+float IT2_CROSS				= 4194304.000;	//21 Drake magic wand, Quoth							I && W2 (used by Wand)
 float IT2_WAND				= 8388608.000; 	//22 Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
 
 float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
 float ALL_ITEMS2ARTIFACTS = 6291456; // All items that affect screen overlay cshift
 //=======================================SELF.MODITEMS======================================================
-float WEAPON_HACKBANK1		= 1;			//0  Used to store self.selfweaponismoditems during level transitions/saves
+float WEAPON_HACKBANK1		= 1;			//0  Used to store self.weaponismoditems during level transitions/saves
 float IT_UPGRADE_SSG		= 2;			//1  AoA		W\
 	float IT_ICE    			= 4;			//2  AoA		W3  HACKBANK!
 	float IT_MACE   			= 8;			//3  AoA		W3  HACKBANK!
@@ -140,7 +140,7 @@ float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
 float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
 float ALL_MODITEMSARTIFACTS = 16646144; // All items that affect screen overlay cshift
 .float serverflagstemp;
-.float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
+.float weaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
 float IT_CKEYALL			= 122880;	//17 All Custom keys
 //==========================================================================================================
 // More powerups -----------------------------------------------------------
@@ -603,10 +603,48 @@ float TURRET_STATE_ACTIVE = 2;
 float TURRET_STATE_DEACTIVATING = 3;
 float TURRET_MAX_PITCH = 6;
 float TURRET_MIN_PITCH = -6;
+
+// Filter system
+float FILTER_CURRENTWEAPON = 1;
+float FILTER_HASITEM = 2;
+float FILTER_HASITEM2 = 3;
+float FILTER_HASMODITEM = 4;
+float FILTER_HASPERM = 5;
+float FILTER_HASITEM3 = 6;
+float FILTER_CLASSNAME = 7;
+float FILTER_CLASSTYPE = 8;
+float FILTER_CLASSGROUP = 9;
+float FILTER_TARGETNAME = 10;
+float FILTER_COUNT = 11;
+float FILTER_CNT = 12;
+float FILTER_HEALTH = 13;
+float FILTER_ONFIRE = 14;
+float FILTER_POISONED = 15;
+float FILTER_BLEEDING = 16;
+float FILTER_INVISIBLE = 17;
+float FILTER_INVINCIBLE = 18;
+float FILTER_DAMAGEABLE = 19;
+float FILTER_CURSED = 20;
+float FILTER_SLOWED = 21;
+float FILTER_FROZEN = 22;
+float FILTER_ROTTING = 23;
+float FILTER_WET = 24;
+float FILTER_PLAYER = 25;
+float FILTER_MONSTER = 26;
+float FILTER_CREATURE = 27;
+float FILTER_DENIZEN = 28;
+float FILTER_ALIGNMENT = 29;
+
+// Filter method
+float FILTER_EQUAL = 0;
+float FILTER_UNEQUAL = 1;
+float FILTER_BELOWOREQUAL = 2;
+float FILTER_ABOVEOREQUAL = 3;
+float FILTER_ONLYBELOW = 4;
+float FILTER_ONLYABOVE = 5;
+
 .float filterstyle;
 .string filtername;
-.float filterclasstype;
-.float filterclassgroup;
 .float arcing; // Used by trigger_push to arc guide the player safely to a point.
 .float secrethunt_finished;
 

@@ -288,7 +288,7 @@ float(entity ent) Ryu_KeepAway = {
             if (self.ryuflags & RYU_ALERT) {
 				// If player, check his items.
 				if (ent.flags & FL_CLIENT) {
-					if (ent.selfweaponismoditems) {
+					if (ent.weaponismoditems) {
 						if (ent.weapon == IT_FLAK) return TRUE;
 					} else {
 						if ((ent.weapon == IT_GRENADE_LAUNCHER || ent.weapon == IT_ROCKET_LAUNCHER || ent.weapon == IT_MULTI_GRENADE || ent.weapon == IT_MULTI_ROCKET || ent.weapon == IT_PLASMA_GUN || (ent.weapon == IT_LIGHTNING && (ent.moditems & IT_UPGRADE_LG)))) return TRUE;

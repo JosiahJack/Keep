@@ -382,7 +382,7 @@ void()	zmaster_magica13 = [	$magica11,	zmaster_magica14	] {
 		} else self.endtime = 0.2;
 
 		if (self.enemy.classname != "player")
-			T_Damage (self.enemy, self, self, self.health+1, NOARMOR);  // T_KillDamage(self.enemy, self, self);
+			T_Damage(self.enemy, self, self, self.health+1, NOARMOR);  // T_KillDamage(self.enemy, self, self);
 		else
 			T_Damage(self.enemy, self, self, 100);
 	} else

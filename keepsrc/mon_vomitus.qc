@@ -161,7 +161,7 @@ void() vom_melee = {
         // War_Steal (self, targ, "Vomitus ate your ");
     // Heal a little as it feeds on its victim.
     ldmg = SUB_MeleeDamage (10);
-    T_Damage (targ, self, self, ldmg, DAMARMOR);
+    T_Damage(targ, self, self, ldmg, DAMARMOR);
 };
 
 float(entity targ) IsZombieDown = {

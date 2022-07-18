@@ -259,6 +259,7 @@ void(entity e, float bouyforce, float mod_air, float mod_water, float mod_slime,
 
 	//----- No Bouyancy: Call Deactivation Macro --------------------
 	if (bouyforce == 0) return Gyro_Object_RemoveBouyancy(e);
+
 	
 	//----- Calculate Basic Bouyancy Power --------------------
 	bouypower = bouyforce / e.gyro_object_mass;
@@ -787,7 +788,7 @@ void() Gyro_RunPhysics = {
 	while (gyrohead) {
 		//----- Pre-find Object Pointcontents --------------------
 		gyrohead.gyro_object_pointcontent = GetContents(gyrohead.origin);
-		
+
 		//----- Run Individual Physics Subsystems --------------------
 		Gyro_RunPhysics_Bouyancy(gyrohead);
 		Gyro_RunPhysics_Resistance(gyrohead);
@@ -803,7 +804,12 @@ void() Gyro_RunPhysics = {
 			gyrohead.velocity = '0 0 0';
 			gyrohead.avelocity = '0 0 0';
 		}
-		
+
+		//dprint("Gryo buoyancy:: contents: ");
+		//dprint(ftos(gyrohead.gyro_object_pointcontent));
+		//dprint(", z vel pre: "); dprint(ftos(gyrohead.velocity_z));
+
+
 		//----- Apply Standard Motion Effects --------------------
 		gyrohead.velocity_x = gyrohead.velocity_x * gyrohead.gyro_dampeningeffect_x;
 		gyrohead.velocity_y = gyrohead.velocity_y * gyrohead.gyro_dampeningeffect_y;
@@ -851,5 +857,6 @@ void() Gyro_RunPhysics = {
 		//----- Continue Looping Over Objects --------------------
 		gyroheadcount = gyroheadcount + 1;
 		gyrohead = gyrohead.gyro_objectlist_next;
+		//dprint(", z vel post: "); dprint(ftos(gyrohead.velocity_z)); dprint("\n");
 	}
 };

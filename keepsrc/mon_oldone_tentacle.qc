@@ -74,7 +74,7 @@ void() groundSmash = {
 	shake.attack_finished = time + .3;
 	shake.nextthink = time + 0.2;
 	sound(self,CHAN_AUTO,"shambler/fall.wav",1,ATTN_NORM);
-	T_RadiusDamage (self, self.owner, 50, self.owner, DAMAGEALL);
+	T_RadiusDamage(self, self.owner, 50, self.owner, DAMAGEALL);
 	remove(self);
 	//if (ext_dppart) pointparticles(particleeffectnum("rocket_explo_classic"), shake.origin, '0 0 0', 1);
 };

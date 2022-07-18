@@ -140,7 +140,7 @@ void() SantaMelee = {
 	// Sack attack is strong (1-60)
 	ldmg = (random() + random() + random()) * 20;
 	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Spawn blood at sack
 	spawn_touchblood (self, self.enemy, ldmg*3);

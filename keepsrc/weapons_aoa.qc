@@ -42,11 +42,11 @@ Scimitar of Fire by ryanscissorhands	#scimitar #ryanscissorhands #sword
 */
 void() RyanscissorhandsChecks = //called to ensure that the proper player model is being used while wielding weapons.
 {
-	if (self.weapon == IT_SCIMITAR && !self.selfweaponismoditems) //set player model for scimitar
+	if (self.weapon == IT_SCIMITAR && !self.weaponismoditems) //set player model for scimitar
 	{
 		setPlayerModel("progs/aoa/player_scimitar.mdl");
 	}
-	else if (self.weapon == IT_RAPIER && self.selfweaponismoditems) //set player model for rapier
+	else if (self.weapon == IT_RAPIER && self.weaponismoditems) //set player model for rapier
 	{
 		setPlayerModel("progs/aoa/player_rapier.mdl");
 	}
@@ -195,7 +195,7 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 								if (head.classgroup == CG_ZOMBIE && points > (head.health*0.25))
 									points = DAMAGE_ZOMBIECLASS;
 								// Any damage left? Check for poison as well
-								if (points > 0) T_Damage (head, inflictor, attacker, points, DAMARMOR); //T_Damage(
+								if (points > 0) T_Damage(head, inflictor, attacker, points, DAMARMOR); //T_Damage(
 								// bprint("Radius is doing ");
 								// bprint(ftos(points));
 								// bprint(" damage.\n");
@@ -418,7 +418,7 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 		SpawnBlood(trace_ent, dir, dir-org, 20,0);
 		if (trace_ent.classname == "monster_shambler")
 			damage = damage * 1.5;
-		T_Damage (trace_ent, self, self, damage, DAMARMOR);
+		T_Damage(trace_ent, self, self, damage, DAMARMOR);
 		local float randy;
 		if (randy > 0.7)
 			sound(self,CHAN_VOICE, "aoa/rapier_meat.wav",1,ATTN_NORM);
@@ -1050,7 +1050,7 @@ void() VoidShardTouch = {
 		self.dmg = 75;
 	if (other != self.owner && other.takedamage)
 	{
-		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 		particle(self.origin, spread('1 1 1') + '0 0 1', 76, 20); //blood
 		particle(self.origin, spread('1 1 1') + '0 0 1', 76, 20);//blood
 		self.dmg = 0;
@@ -1650,7 +1650,7 @@ void() ImpaleTouch = {
 	if (other.takedamage) {
 		if (other.armorvalue > 0) //direct hits are less effective against armor, but full potency against armorless targets. This is to ensure it does less damage to players, and more to monsters
 			armorResist = other.armorvalue/2;
-		T_Damage (other, self, self.owner, 120 - armorResist, DAMARMOR);
+		T_Damage(other, self, self.owner, 120 - armorResist, DAMARMOR);
 	}
 	if (!self.tome_finished) T_RadiusDamageAOA(self, self, 100, 350, self, DAMAGEALL); //norm damage 50-100
 	else T_RadiusDamageAOA(self, self, 150, 350, self, DAMAGEALL); //Tome dmg 75-150
@@ -1795,7 +1795,7 @@ void() SparkTouch = {
 	if (other.takedamage)
 	{
 		SpawnBlood (other, self.origin, spread('100 100 100'), 25,0);
-		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 		sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	}
 	else
@@ -1857,7 +1857,7 @@ void() GungnirPrimary = {
 			SpawnBlood (trace_ent, org, '0 0 0', 40,0);
 			if (trace_ent.classgroup == CG_ZOMBIE)
 				T_Damage(trace_ent, self, self, 400, DAMARMOR);
-			T_Damage (trace_ent, self, self, 50, DAMARMOR);
+			T_Damage(trace_ent, self, self, 50, DAMARMOR);
 			sound(self,CHAN_WEAPON,"blob/hit1.wav",1,ATTN_NORM);
 			sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 		}
@@ -1929,7 +1929,7 @@ void() GauntletOrbTouch = {
 	if (other.takedamage) {
 		if (other.classname == "monster_shambler")
 			self.dmg = self.dmg *2;
-		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 		sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
 	}
 	remove(self);

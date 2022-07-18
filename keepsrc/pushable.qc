@@ -258,7 +258,7 @@ void() func_pushable_death = { // [FUNCTION]
 	if (self.death_dmg > 0) {
 		Tent_Explosion(self.oldorigin);
 		SpawnExplosion(EXPLODE_SMALL, self.oldorigin, SOUND_REXP3);
-		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
+		T_RadiusDamage(self, self, self.death_dmg, world, DAMAGEALL);
 	}
 
 	if (HasTargets(self)) SUB_UseTargets();

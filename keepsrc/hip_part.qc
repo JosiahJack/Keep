@@ -115,7 +115,7 @@ void() particlefield_touch = { // [FUNCTION]
    if ( (time < self.attack_finished) ) return;
 
    self.attack_finished = (time + 0.500);
-   T_Damage (other,self,self,self.dmg,DAMARMOR);
+   T_Damage(other,self,self,self.dmg,DAMARMOR);
 };
 
 void() func_particlefield = { // [ENTITY]

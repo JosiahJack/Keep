@@ -86,7 +86,7 @@ float	GYRO_TURBULENCEMOD_SLIME = 1.2;
 float	GYRO_TURBULENCEMOD_LAVA = 1.4;
 
 //----- Core Non-Constant Settings --------------------
-float	GYRO_TICKRATE = 0.03; // Crank it!  Was 0.03, increased so that players with 144hz monitors have smooth buttery experience in QSS/FTE -Qmaster
+float	GYRO_TICKRATE = 0.03;
 float	GYRO_POWERCONSTANT = 800;
 
 //----- Force Channels --------------------
@@ -291,7 +291,7 @@ entity	gyro_forcelist_head;
 .float	gyro_forcelist_inlist;
 
 //----- Adding to the Physics Object List --------------------
-void(entity e) Gyro_ObjectList_Add = {
+void(entity e) Gyro_ObjectList_Add = { // [FUNCTION]
 	if (e.gyro_objectlist_inlist) return;
 
 	e.gyro_objectlist_inlist = TRUE;
@@ -302,7 +302,7 @@ void(entity e) Gyro_ObjectList_Add = {
 };
 
 //----- Removing from the Physics Object List --------------------
-void(entity e) Gyro_ObjectList_Remove = {
+void(entity e) Gyro_ObjectList_Remove = { // [FUNCTION]
 	if (!e.gyro_objectlist_inlist) return;
 
 	if (e.gyro_objectlist_prev)	e.gyro_objectlist_prev.gyro_objectlist_next = e.gyro_objectlist_next;
@@ -316,7 +316,7 @@ void(entity e) Gyro_ObjectList_Remove = {
 };
 
 //----- Adding to the Physics Object List --------------------
-void(entity e) Gyro_ForceList_Add = {
+void(entity e) Gyro_ForceList_Add = { // [FUNCTION]
 	if (e.gyro_forcelist_inlist) return;
 
 	e.gyro_forcelist_inlist = TRUE;
@@ -327,7 +327,7 @@ void(entity e) Gyro_ForceList_Add = {
 };
 
 //----- Removing from the Physics Object List --------------------
-void(entity e) Gyro_ForceList_Remove = {
+void(entity e) Gyro_ForceList_Remove = { // [FUNCTION]
 	if (!e.gyro_forcelist_inlist)
 		return;
 	if (e.gyro_forcelist_prev)	e.gyro_forcelist_prev.gyro_forcelist_next = e.gyro_forcelist_next;
@@ -342,9 +342,9 @@ void(entity e) Gyro_ForceList_Remove = {
 
 //===== Gyro Utility Functions ====================
 //----- Perform a Power Estimation --------------------
-float(string s) Gyro_CheckExtension = #99;
-float(float x, float y) Gyro_PowerAccurate = #97;
-float(float x, float y) Gyro_PowerEstimation = {
+float(string s) Gyro_CheckExtension = #99; // [FUNCTION]
+float(float x, float y) Gyro_PowerAccurate = #97; // [FUNCTION]
+float(float x, float y) Gyro_PowerEstimation = { // [FUNCTION]
 	local float	z;
 
 	if (ext_active) return Gyro_PowerAccurate(x, y);
@@ -356,8 +356,8 @@ float(float x, float y) Gyro_PowerEstimation = {
 };
 
 //----- Safe 'Remove' Function Replacement --------------------
-void(entity e) Gyro_RemoveEntity	= #15;
-void(entity e) remove = {
+void(entity e) Gyro_RemoveEntity	= #15; // [FUNCTION]
+void(entity e) remove = { // [FUNCTION]
 	if (!e) return;
 	if (e == world) return;
 	if (e.flags & FL_CLIENT) return;
@@ -375,26 +375,22 @@ void(entity e) remove = {
 
 //===== Primary Control Routines ====================
 //----- Initialise Variables: Called only on the First Frame in world.qc --------------------
-void() Gyro_InitialiseVariables = {	
+void() Gyro_InitialiseVariables = {	// [FUNCTION]
 	//----- Prepare Internal Settings --------------------
 	gyro_runtimer = 0;
 	gyro_displayintro = TRUE;
 };
 
 //----- Main Gyro Loop: Called every Frame --------------------
-void() Gyro_Run = {	
+void() Gyro_Run = { // [FUNCTION]
 	gyro_runtimer = time - (GYRO_TICKRATE * 0.5);
-	
-	//----- Iterate at a Fixed Rate --------------------
-	while (gyro_runtimer < time) {
+	while (gyro_runtimer < time) { // Iterate at a Fixed Rate
 		gyro_runtimer = gyro_runtimer + GYRO_TICKRATE; // Control Gyro Timer System
 		gyro_framegrav = cvar("sv_gravity"); // Set Per-Frame Globals
 		gyro_framemaxvel = cvar("sv_maxvelocity");
 		gyro_framemaxvelneg = 0.0 - gyro_framemaxvel;
 		Gyro_RunForces();
 		Gyro_RunPhysics();
-		
-		//----- Display Gyro Introduction Message --------------------
 		if (gyro_displayintro) {
 			if ((time > 1.6) && (time < 2.4)) {
 				dprint("Gyro 2.1a (April 2007) by Matt...updated to 2.2a (April 2021) by Qmaster is running\nTickrate (ms): ");

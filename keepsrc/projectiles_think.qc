@@ -295,8 +295,8 @@ void() Warhead_Think = { // [FUNCTION]
         self.enemy = world;
 		if (!self.dmg) self.dmg = 120;
 		if (self.dmg > 0 && other.health > 0) {
-			T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-			T_RadiusDamage (self, self.owner, self.dmg, other, DAMAGEALL);
+			T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
+			T_RadiusDamage(self, self.owner, self.dmg, other, DAMAGEALL);
 			R_Exp3(self.origin);
 			Tent_Explosion(self.origin);
 			BecomeExplosion2();
@@ -379,7 +379,7 @@ void() Warhead_Think = { // [FUNCTION]
 // Checks if the weapon's targeting system is offline.
 float() Mirv_Off = { // [FUNCTION]
     if (self.master.mirv1 != self) return TRUE; // Previously went offline.
-    if (self.weapon != self.master.weapon && self.selfweaponismoditems != self.master.selfweaponismoditems) return TRUE; // Not holding the launching weapon.
+    if (self.weapon != self.master.weapon && self.weaponismoditems != self.master.weaponismoditems) return TRUE; // Not holding the launching weapon.
     if (frame_pause()) return TRUE; // In a cutscene or intermission
     return FALSE;
 };
@@ -434,7 +434,7 @@ void() DrunkRocket_Think = { // [FUNCTION]
         self.enemy = world;
 		if (!self.dmg) self.dmg = 140; // Drake had this at 120, increased to improve overall effectiveness.
 		if (self.dmg > 0 && other.health > 0) {
-			T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+			T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 			T_RadiusDamage(self, self.owner, self.dmg, other, DAMAGEALL);
 			// Rocket resistance is shown with puffs of smoke
 			if (other.resist_rockets > 0 || (other.resist_multi_rockets && self.classgroup == CG_PROJMULTIROCKETS)) {
@@ -1157,10 +1157,10 @@ void() Burn_Burn = { // [FUNCTION]
 
         if (damage > 0) { // Negative damage prevention.
             if (targ.health > 0) { // Don't let burn damage gib the dead.
-                if (targ.classgroup == CG_ZOMBIE) T_Damage (targ, targ, self.master, damage + 2, DAMARMOR);    // Update 5/13/10:  More damage to zombies to overcome regeneration.
-                else T_Damage (targ, targ, self.master, damage, DAMARMOR);
+                if (targ.classgroup == CG_ZOMBIE) T_Damage(targ, targ, self.master, damage + 2, DAMARMOR);    // Update 5/13/10:  More damage to zombies to overcome regeneration.
+                else T_Damage(targ, targ, self.master, damage, DAMARMOR);
             }
-            T_RadiusDamage (self, self.master, damage, self.owner, DAMAGEALL);
+            T_RadiusDamage(self, self.master, damage, self.owner, DAMAGEALL);
         }
 
         // Subtract from total... after the damage is done because I want
@@ -1250,8 +1250,8 @@ void() Fireball_EndFrame = { // [FUNCTION]
     // Check if flame should burn things near it.
     if (self.wait) {
         if (self.wait <= time) { // Burn nearby enemies.
-            if (self.owner.resist_fire > 0) T_RadiusDamage (self, self.owner, 1, self.owner, DAMAGEALL); // This is so dragons (or players with powerups) don't hurt themselves with their own flames.
-            else T_RadiusDamage (self, self.owner, 1, world, DAMAGEALL); // It's a tiny flame so just do damage, nothing fancy.  Negative radius for the constant damage.
+            if (self.owner.resist_fire > 0) T_RadiusDamage(self, self.owner, 1, self.owner, DAMAGEALL); // This is so dragons (or players with powerups) don't hurt themselves with their own flames.
+            else T_RadiusDamage(self, self.owner, 1, world, DAMAGEALL); // It's a tiny flame so just do damage, nothing fancy.  Negative radius for the constant damage.
             self.wait = time + random();
         }
 	}
@@ -1535,7 +1535,7 @@ void() Fire_Trail = {
 		setorigin(self, self.origin);
 		SpawnExplosion(self.attack_expflame, self.origin, self.noise);
 		// Any explosive damage?
-		if (self.owner.proj_trdmg > 0)  T_RadiusDamage (self, self.owner, self.owner.proj_trdmg, world, DAMAGEALL);
+		if (self.owner.proj_trdmg > 0)  T_RadiusDamage(self, self.owner, self.owner.proj_trdmg, world, DAMAGEALL);
 	} else {
 		// Keep looping
 		self.think = Fire_Trail;

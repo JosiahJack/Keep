@@ -166,4 +166,5 @@ void(entity targ) SetDefaultDenizenAttributes = { // [FUNCTION]
 	if (!targ.passive_state) targ.passive_state = 1;
 	if (!targ.temperament) targ.temperament = TEMPRA_PASSIVE;
 	if (!targ.vulnerability) targ.vulnerability = VULN_RESISTANT;
+	targ.classgroup = CG_HARMLESS;
 };

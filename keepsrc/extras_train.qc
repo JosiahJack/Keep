@@ -230,7 +230,7 @@ void() train_ext_blocked = { // [FUNCTION]
 	if (time < self.attack_finished) return;
 	
 	self.attack_finished = time + 0.5;
-	T_Damage (other, self, self, self.dmg,DAMARMOR);
+	T_Damage(other, self, self, self.dmg,DAMARMOR);
 	if (self.spawnflags & BLOCKREVERSE && self.deadflag == FREEMOVE) { // Change direction
 		if (self.state == REVERSE) {
 			self.state = FORWARD;

@@ -268,7 +268,7 @@ void(float brkdmg) ai_damagebreakable = {
 	// Triple trace directly infront of monster using angles
 	if (ai_tracebreakable()) {
 		if (self.flags & FL_MONSTER && trace_ent.brkmondmg > 0) ldmg = ldmg * trace_ent.brkmondmg; // Check for any monster damage modifier on breakable
-		T_Damage (trace_ent, self, self, ldmg, DAMARMOR); // Apply damage to breakable
+		T_Damage(trace_ent, self, self, ldmg, DAMARMOR); // Apply damage to breakable
 	}
 };
 
@@ -391,7 +391,7 @@ void(float dmg_multiplier) ai_meleesmash = {
 	ldmg = (random() + random() + random()) * dmg_multiplier;
 	if (ldmg < 1) ldmg = 1;
 	if (self.enemy.health < ldmg) ldmg = ldmg*3;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Lots of blood and gore
 	SpawnMeatSpray (self, self.enemy, crandom() * 100);
@@ -426,7 +426,7 @@ void() ai_melee_side = {
 	if (!CanDamage (self.enemy, self)) return;
 
 	ldmg = (random() + random() + random()) * 3;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, random() * 50);
 
 	// Check for poisonous blades!
@@ -524,9 +524,9 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 							// to spawn breakable pieces away from impact location
 							if (vdamage > 0) {
 								if (sjump.classgroup == CG_BREAKABLE)
-									T_Damage (sjump, self, self, imp_damage*vpercent, DAMARMOR);
+									T_Damage(sjump, self, self, imp_damage*vpercent, DAMARMOR);
 								else
-									T_Damage (sjump, world, world, imp_damage*vpercent, DAMARMOR);
+									T_Damage(sjump, world, world, imp_damage*vpercent, DAMARMOR);
 							}
 							if (sjump.flags & FL_MONSTER) vpercent = vpercent * 0.75; // Monsters have less impact
 							makevectors(self.angles); // Attacker facing angle								
@@ -739,8 +739,7 @@ void(float dist) ai_run;
 void(float dist) ai_walk;
 
 void(float dist, void(float dist) th_think) ai_runwalkfly = {
-	local vector oldorg;
-	local vector reqvel;
+	local vector oldorg, reqvel;
 	local float d;
 	
 	oldorg = self.origin;
@@ -776,6 +775,7 @@ void(float dist) movetogoalplus = {
 	local float success, oconts, nconts, mtype, oflags;
 	local entity stemp;
 
+	ai_face();
 	SetMove_BoxParams(self);
 	stemp = self;
 	self = move_box;
@@ -783,8 +783,11 @@ void(float dist) movetogoalplus = {
 	success = walkmove(self.ideal_yaw,dist);
 	self = stemp;
 	if (success) {
-		if (self.flags & FL_SWIM) {
-			if (!InLiquid(move_box.origin)) return; // We can't fly there.
+		if (self.classmove == MON_MOVESWIM) {
+			if (!InLiquid(move_box.origin)) {
+				self.velocity = VEC_ORIGIN;
+				return; // We can't fly there.
+			}
 		}
 		mtype = self.movetype;
 		SUB_RemoveFlags(self,FL_ONGROUND);

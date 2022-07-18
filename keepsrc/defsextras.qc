@@ -61,7 +61,7 @@ float STARTSTOPPED 		= 256;
 .float	infuncwater;	// In func_water flag (khreathor)
 .float	inBSPwater;		// In regular water flag (khreathor)
 .float	onsurface;		// Enemy near the surface (khreathor)
-.float	drawntime;		// Delays between drawning damage (khreathor)
+.float	drowntime;		// Delays between drawning damage (khreathor)
 .float 	uwmuffle;		// underwater muffle playing flag
 .float	outwsound;		// head out of water flag
 .float	inwsound;		// head back in water flag

@@ -318,7 +318,7 @@ void()	zombiek_JumpTouch = {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 10 + 10*random();
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			spawn_touchblood (self, self.enemy, ldmg*3);
 		}
 	}

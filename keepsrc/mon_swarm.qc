@@ -186,7 +186,7 @@ void() beez_touch = {
 				self.attack_finished = time + 0.2; // fast!
 				// Spawn some blood, cause harm and play a sound!
 				spawn_touchblood (self, other, 3);
-				T_Damage (other, self, self, 1, DAMARMOR);
+				T_Damage(other, self, self, 1, DAMARMOR);
 				if (random() < 0.2) sound(self,CHAN_VOICE, "madfox/bees/bee1.wav", 3 * random(),  ATTN_IDLE);
 			}
 		}

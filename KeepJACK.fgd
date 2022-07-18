@@ -673,6 +673,54 @@
 	message(string) : "Console command"
 ]
 
+@PointClass base(Targetname) = info_filter : "Relay that filters activator against criteria" [
+	spawnflags(Flags) = [
+		1: "Don't pass owner info for projectiles" : 0
+	]
+	state(choices) : "Filter Method" = [
+		 0 : "Equal (def)"
+		 1 : "Unequal"
+		 2 : "Below or Equal"
+		 3 : "Above or Equal"
+		 4 : "Below Only"
+		 5 : "Above Only"
+	]
+	filterstyle(choices) : "Filter Criterion" = [
+		 1 : "current weapon"
+		 2 : "items"
+		 3 : "items2"
+		 4 : "moditems"
+		 5 : "perms"
+		 6 : "items3"
+		 7 : "classname (def)"
+		 8 : "classtype"
+		 9 : "classgroup"
+		 10 : "targetname"
+		 11 : "count"
+		 12 : "cnt"
+		 13 : "health"
+		 14 : "on fire"
+		 15 : "poisoned"
+		 16 : "bleeding"
+		 17 : "invisible"
+		 18 : "indestructable"
+		 19 : "damageable"
+		 20 : "cursed"
+		 21 : "slowed"
+		 22 : "frozen"
+		 23 : "rotting"
+		 24 : "wet"
+		 25 : "is a player"
+		 26 : "is a monster"
+		 27 : "is a creature"
+		 28 : "is a denizen"
+		 29 : "alignment"
+	]
+	filtername(string) : "Text to filter against"
+	message(string) : "Message on success"
+	message2(string) : "Message on failure"
+]
+
 @PointClass base(Targetname) = info_bomb : "Quoth Coop Bomb Effect" []
 
 @PointClass base(Targetname) = info_effect_pulse : "Projectile Light Effect" [
@@ -1041,6 +1089,8 @@
 		4 : "Red Armor" : 0
 	]	
 ]
+
+@PointClass base(Targetname,Items,PowerupSize) studio("progs/quoth/flashlight.mdl") = item_flashlight : "Flashlight" []
 
 @PointClass base(Items,PowerupSize) studio("progs/ad171/w_backpack.mdl") = item_backpack : "Backpack full of random/exact amounts of ammo" [
 	spawnflags(Flags) = [
@@ -3479,6 +3529,7 @@
 	spawnflags(Flags) = [
  		1 : "Random (multiplied by wait)" : 0
 		2 : "Boom (use thunderbolt sound)" : 0
+		4 : "Use light effects" : 0
 	]
 	dmg(integer) : "Damage (def=30)"
 	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"
@@ -3489,6 +3540,7 @@
 	spawnflags(Flags) = [
  		1 : "Random (multiplied by wait)" : 0
 		2 : "Boom (use thunderbolt sound)" : 0
+		4 : "Use light effects" : 0
 	]
 	dmg(integer) : "Damage (def=30)"
 	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"
@@ -3499,6 +3551,7 @@
 	spawnflags(Flags) = [
  		1 : "Random (multiplied by wait)" : 0
 		2 : "Boom (use thunderbolt sound)" : 0
+		4 : "Use light effects" : 0
 	]
 	dmg(integer) : "Damage (def=30)"
 	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"

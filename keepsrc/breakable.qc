@@ -337,7 +337,7 @@ void() breakable_touch = { // [FUNCTION]
 
 // Can't have multiple radius explosion on same frame so always delay them to prevent endless loops
 void() funcbreakable_delayexplode = { // [FUNCTION]
-	T_RadiusDamage (self.attachment, self.attachment, self.dmg, self.attachment, DAMAGEALL);
+	T_RadiusDamage(self.attachment, self.attachment, self.dmg, self.attachment, DAMAGEALL);
 };
 
 // Main function for generating rubble

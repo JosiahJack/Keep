@@ -250,7 +250,7 @@ void(float side) fred_blade = {
 	
 	sound(self,CHAN_WEAPON,"quoth/edie/mangle.wav",1,ATTN_NORM);
 	ldmg = (random() + random() + random()) * 20;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, side);
 	SpawnMeatSpray (self, self.enemy, side);
 };

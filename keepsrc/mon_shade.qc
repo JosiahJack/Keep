@@ -165,7 +165,7 @@ void() Shade_MeatTouch = {
     // hit something that bleeds
     if (other.takedamage) {
         spawn_touchblood (self, other, 10);
-        T_Damage (other, self, self.owner, 10,DAMARMOR);
+        T_Damage(other, self, self.owner, 10,DAMARMOR);
         remove (self);
     } else {
         // Make a little splat.
@@ -465,7 +465,7 @@ void() shadow_boom = {
     DropCoin(8);
 
     // Go boom.
-    T_RadiusDamage (self, self, 100, world, DAMAGEALL);    // wrath=80, tarbaby=120.
+    T_RadiusDamage(self, self, 100, world, DAMAGEALL);    // wrath=80, tarbaby=120.
     Rocket_Explosion2 (self.origin, 32, 5);
 };
 void() shadow_die1  = [$nova1,  shadow_die2  ] {};

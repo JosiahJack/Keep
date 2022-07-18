@@ -161,20 +161,21 @@ void() liquid_use = { // [FUNCTION]
 
 // Drown function for monsters (khreathor)
 void(entity entToDrown) liquid_drown = { // [FUNCTION]
-	if (entToDrown.flags & FL_SWIM) return;
+	if (entToDrown.flags & FL_SWIM || entToDrown.classmove == MON_MOVESWIM) return;
 	if (!(entToDrown.flags & FL_CLIENT || entToDrown.flags & FL_MONSTER)) return;
 	if (entToDrown.takedamage == DAMAGE_NO) return;
 	if (entToDrown.health < 0) return;
 	if (entToDrown.bodyonflr == MON_ONFLR) return;
 	
-	if (entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN) {
+	dprint("Drowning: "); dprint(entToDrown.classname); dprint("\n");
+	if (entToDrown.drowntime < time && entToDrown.spawnflags & CAN_DROWN) {
 		sound(self,CHAN_BODY,"player/drown1.wav",1,ATTN_NORM);
 		death_bubbles(5);
 		// drowning damage formula 5*(x^2/10 + 1) // (khreathor)
 		entToDrown.drown_dmg = 5 * (entToDrown.drown_cnt * entToDrown.drown_cnt * 0.1 + 1);
 		if (entToDrown.health < entToDrown.drown_dmg) entToDrown.drown_dmg = entToDrown.health;
-		T_Damage (entToDrown, world, world, entToDrown.drown_dmg,DAMARMOR);
-		entToDrown.drawntime = time + 1;
+		T_Damage(entToDrown,world,world,entToDrown.drown_dmg,DAMARMOR);
+		entToDrown.drowntime = time + 1;
 		entToDrown.drown_cnt = entToDrown.drown_cnt + 1;
 	}
 };
@@ -221,9 +222,8 @@ void() liquid_touch = { // [FUNCTION]
 				if (test_vec_x <= self.absmax_x + 4 && test_vec_x >= self.absmin_x - 4) {
 					if (test_vec_y <= self.absmax_y + 4 && test_vec_y >= self.absmin_y - 4) {
 						other.infuncwater = TRUE;
-						if (!other.inwsound)
-						{
-							other.drawntime = time + 12;
+						if (!other.inwsound && !other.waterlevel) {
+							other.drowntime = time + 12;
 							other.drown_dmg = 0;
 							other.drown_cnt = 1;
 							other.watertype = self.watertype;
@@ -246,7 +246,7 @@ void() liquid_touch = { // [FUNCTION]
 			other.onsurface = FALSE;
 			if (other.inwsound) {
 				other.watertype = self.watertype;
-				other.waterlevel = 1;
+				if (other.waterlevel < 1) other.waterlevel = 1;
 				other.inwsound = FALSE;
 			}
 			return;
@@ -267,22 +267,24 @@ void() liquid_touch = { // [FUNCTION]
 	test = other.origin_z + 1;
 	if (test <= self.absmax_z && ((test + other.view_ofs_z) >= self.absmin_z)) {
 		other.watertype = self.watertype;
-		other.waterlevel = 1;
+		if (other.waterlevel < 1) other.waterlevel = 1;
 		if (SUB_CheckPointInBounds(other.origin, self.absmax, self.absmin)) {
-			other.waterlevel = 2;
+			if (other.waterlevel < 2) other.waterlevel = 2;
 			other.zerogtime = time+0.05; // remove gravity in PreThink
 		}
 		
 		// Test Eyes
 		if (SUB_CheckPointInBounds(other.origin + other.view_ofs, self.absmax, self.absmin)) {
-			other.waterlevel = 3;
+			if (other.waterlevel < 3) other.waterlevel = 3;
 			other.infuncwater = TRUE;
-			other.cshift_upd = TRUE;
-			Safe_stuffcmd(other, "v_cshift "); // Do the color shift
-			Safe_stuffcmd(other, self.cshift);
-			Safe_stuffcmd(other, "\n");
-			other.fwatershifttime = time+frametime; // Tell PreThink to clear the cshift when the player is out
-			other.fwatershift = TRUE;
+			if (other.flags & FL_CLIENT) {
+				other.cshift_upd = TRUE;
+				Safe_stuffcmd(other, "v_cshift "); // Do the color shift
+				Safe_stuffcmd(other, self.cshift);
+				Safe_stuffcmd(other, "\n");
+				other.fwatershifttime = time+frametime; // Tell PreThink to clear the cshift when the player is out
+				other.fwatershift = TRUE;
+			}
 		} else {
 			if (!self.burning && !self.poisoned && !self.bleeding) other.cshift_upd = FALSE;
 		}

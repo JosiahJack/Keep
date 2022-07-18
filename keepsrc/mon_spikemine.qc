@@ -86,9 +86,9 @@ void() spikemine_Touch = {
 		if (other.classname == "trap_spike_mine" || other.classname == "monster_spikemine") return;
 		if (AffectedByPhysics(other)) return;
 
-		T_Damage (self,self,self,(self.health + MOVETYPE_BOUNCE),DAMARMOR);
+		T_Damage(self,self,self,(self.health + MOVETYPE_BOUNCE),DAMARMOR);
 	}
-	T_RadiusDamage (self,self,45.000,world,DAMAGEALL);
+	T_RadiusDamage(self,self,45.000,world,DAMAGEALL);
 	R_Exp3(self.origin);
 	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST,TE_EXPLOSION);

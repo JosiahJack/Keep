@@ -538,7 +538,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 					addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
 					addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
 					addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-					addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
+					addstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
 					addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
 				} else if (checkbuiltin(clientstat)) {
 					clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
@@ -553,7 +553,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 					clientstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
 					clientstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
 					clientstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-					clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
+					clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
 					clientstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
 				}
 				if (checkbuiltin(globalstat)) {

@@ -313,9 +313,9 @@ void() WrathMissileTouch = {
       return ;
    }
    if ( (other.classname == "monster_zombie") )
-      T_Damage (other,self,self,110.000,DAMARMOR);
+      T_Damage(other,self,self,110.000,DAMARMOR);
 
-   T_RadiusDamage (self,self.owner,20.000,world,DAMAGEALL);
+   T_RadiusDamage(self,self.owner,20.000,world,DAMAGEALL);
    R_Exp3(self.origin);
    WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
    WriteByte (MSG_BROADCAST,TE_EXPLOSION);

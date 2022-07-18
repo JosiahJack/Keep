@@ -390,7 +390,7 @@ void() skullw_guardian = {
 	
 	// Apply any direct damage and poison effect
 	if (other.takedamage) {
-		T_Damage (other, self, self.owner, DAMAGE_SWIZPOISON, DAMARMOR);
+		T_Damage(other, self, self.owner, DAMAGE_SWIZPOISON, DAMARMOR);
 		if (other.flags & FL_CLIENT) PoisonDeBuff(other);
 	}
 	

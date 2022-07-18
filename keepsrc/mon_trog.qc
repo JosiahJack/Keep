@@ -108,14 +108,14 @@ void() TrogWarpMagic = {
 
 	// Damage stuff from the circle magic.
     if (self.enemy) {
-        T_RadiusDamage (self, self.owner, 120, self.owner, DAMAGEALL);
+        T_RadiusDamage(self, self.owner, 120, self.owner, DAMAGEALL);
         if (vlen(self.enemy.origin - self.origin) <= 120) {
 
         // For those immune to splash damage, inflict minor damage.
         // This is not unlike a Doom2 arch-vile vs. cyberdemon matchup.
             if (self.enemy.noradiusdmg)
                 if (self.enemy != self.owner)
-                    T_Damage (self.enemy, self, self.owner, 20, DAMARMOR);
+                    T_Damage(self.enemy, self, self.owner, 20, DAMARMOR);
 
             if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER)) {
                 self.enemy.flags = self.enemy.flags - (self.enemy.flags & FL_ONGROUND);
@@ -191,7 +191,7 @@ void() ai_repel = {
     }
 
     sound(self,CHAN_WEAPON,"drake/skullwiz/push.wav",1,ATTN_NORM);
-    T_Damage (self.enemy, self, self, 20, DAMARMOR);
+    T_Damage(self.enemy, self, self, 20, DAMARMOR);
 };
 
 // Returns the point of one of its hands.

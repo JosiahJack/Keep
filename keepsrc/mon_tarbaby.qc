@@ -129,10 +129,10 @@ void()	Tar_JumpTouch = {
 			// Can only poison the player
 			if (ldmg) {
 				if (other.flags & FL_CLIENT && self.poisonous) {
-					if (other.poisoned) T_Damage (other, self, self, ldmg * 0.25, DAMARMOR); // Check if player is posioned already?
+					if (other.poisoned) T_Damage(other, self, self, ldmg * 0.25, DAMARMOR); // Check if player is posioned already?
 					else PoisonDeBuff(other); // Make sure player is posioned
 				} else {
-					T_Damage (other, self, self, ldmg, DAMARMOR); // Everything else gets the usual tarbaby thump!
+					T_Damage(other, self, self, ldmg, DAMARMOR); // Everything else gets the usual tarbaby thump!
 				}
 			}
 			sound(self,CHAN_WEAPON,"blob/hit1.wav",1,ATTN_NORM);
@@ -209,7 +209,7 @@ void() tbaby_finished = {
 void() tbaby_explode = {
 	self.deadflag = DEAD_FINISHED;
 	// Tarbabies explode when they die
-	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
+	T_RadiusDamage(self, self, self.death_dmg, world, DAMAGEALL);
 	sound(self,CHAN_BODY,"blob/death1.wav",1,ATTN_NORM);
 	self.origin = self.origin - 8*normalize(self.velocity);
 	Tent_Point(TE_TAREXPLOSION,self.origin); // Hard coded explosion

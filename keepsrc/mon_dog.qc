@@ -175,7 +175,7 @@ void() dog_bite = {
 	// Dog bite is nasty damage
 	ldmg = (random() + random() + random()) * 8;
 	if (self.classname == "monster_hell_hound") ldmg = ldmg + 5;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Check for poisonous attribute (new poison version)
 	if (self.poisonous) PoisonDeBuff(self.enemy);
@@ -219,7 +219,7 @@ void() Dog_JumpTouch = {
 			ldmg = 10 + 10*random();
 			if (self.classname == "monster_hell_hound") ldmg = ldmg + 10;
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			// Spawn some touch blood (no explicit direction)
 			spawn_touchblood (self.enemy, self.enemy, ldmg*3);
 		}

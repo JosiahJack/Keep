@@ -578,7 +578,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	setorigin(other, other.origin);
 	other.flags = other.flags - (other.flags & FL_ONGROUND); // Telporting entities need ground flag removed
 	self.dmg = trigger_dmgquery(); // Work out any teleport damage, based on skill level
-	if (self.dmg > 0) T_Damage (other, self, self, self.dmg, DAMARMOR);
+	if (self.dmg > 0) T_Damage(other, self, self, self.dmg, DAMARMOR);
 
 	// Check for a trigger_once condition
 	if (self.wait < 0) {
@@ -741,7 +741,7 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 		self.bmodel_act.weapon = IT_SHOTGUN;
 	}
 
-	if ((cvar("noexit") == 1) || ((cvar("noexit") == 2) && (mapname != "start"))) { T_Damage (self.bmodel_act, self, self, MEGADEATH, NOARMOR); return; } // Some crazy DM parameters to prevent teleport exit
+	if ((cvar("noexit") == 1) || ((cvar("noexit") == 2) && (mapname != "start"))) { T_Damage(self.bmodel_act, self, self, MEGADEATH, NOARMOR); return; } // Some crazy DM parameters to prevent teleport exit
 
 	if (coop || deathmatch) { bprint (self.bmodel_act.netname); bprint (" exited the level\n"); } // More crazy DM stuff.
 	if (self.startspawn2 < 1 && self.startspawn2 > 7) self.startspawn2 = 0; // is there a special info_player_start2 location setup?  This will also reset any values back to zero (default).

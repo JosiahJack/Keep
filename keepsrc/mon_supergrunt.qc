@@ -107,7 +107,7 @@ void() sgrunt_plasma_touch = {
 	if (other.takedamage)
 	{
 		spawn_touchblood (self, other, 6);
-		T_Damage (other, self, self.owner, 6, DAMARMOR);
+		T_Damage(other, self, self.owner, 6, DAMARMOR);
 	}	
 
 	// do sprite explosion
@@ -289,7 +289,7 @@ void() sgrunt_wallop = {
 		return;
 		
 	ldmg = (random() + random() + random()) * 20;
-	T_Damage (self.enemy, self, self, ldmg,DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg,DAMARMOR);
 	sound(self,CHAN_WEAPON,"sgrunt/melee2.wav",1,ATTN_NORM);
 };
 

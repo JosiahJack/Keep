@@ -58,8 +58,8 @@ void() trap_sawblade_touch = { // [FUNCTION]
 	}
 		
 	
-	if (other.flags & FL_MONSTER && other.health < 100) T_Damage (other, self, self, other.max_health + 100, DAMARMOR); // Instant death for weak monsters
-	else T_Damage (other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
+	if (other.flags & FL_MONSTER && other.health < 100) T_Damage(other, self, self, other.max_health + 100, DAMARMOR); // Instant death for weak monsters
+	else T_Damage(other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
 
 	SpawnMeatSpray ( other, other, crandom() * 200); // Blood and gore at object location not sawblade
 };

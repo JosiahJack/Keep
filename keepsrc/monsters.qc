@@ -95,7 +95,7 @@ void() monster_liquid_check = {
 
 	if (self.health < monster_dmg + 5) monster_dmg = self.health + 5;
 	self.pain_finished = 0; // Always pain for liquids, looks better.
-	T_Damage (self, world, world, monster_dmg, DAMARMOR); // Liquid damage
+	T_Damage(self,world,world,monster_dmg,DAMARMOR); // Liquid damage
 };
 
 // - use one routine so more stuff can be added easily
@@ -433,7 +433,7 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = {
 		if (deathfunc && targ.th_die) {
 			if (gibdeath) targ.gibondeath = TRUE; // Quick way to make something gib, switch on the flag for it!
 			targ.takedamage = DAMAGE_AIM; // Make sure monster can take damage
-			T_Damage (targ, world, world, targ.health+1, NOARMOR); // Always do enough damage to kill the monster.  Can be a problem for ammo resistant
+			T_Damage(targ, world, world, targ.health+1, NOARMOR); // Always do enough damage to kill the monster.  Can be a problem for ammo resistant
 		} else {
 			targ.deadflag = DEAD_DEAD;
 			targ.enemy = world;

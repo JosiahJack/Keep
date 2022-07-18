@@ -118,7 +118,7 @@ void(float side) pinch_melee = {
 	// Scorpion claw = 1-12 Damage
 	ldmg = (random() + random() + random()) * 4;
 	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, side);
 };
 

@@ -429,7 +429,7 @@ float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 	local vector vec, eorg;
 	local float dist, sperc, oldtheta;
 	
-	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) theta = 18; // ID1 default according to Copper
+	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) theta = 18;
 
 	// Place projectile destination at player head level
 	if (self.classtype == CT_MONSPIDER) mdest = mdest + ELEV_SPID_OFS;
@@ -462,10 +462,8 @@ float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 	b = -y;
 	c = a + z;
 	if (b*b < 4*a*c) {
-		if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES)
-			return 18; // ID1 default according to Copper
-		else
-			return ELEV_DEFAULT; //check if the destination is too far to reach
+		if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) return theta;
+		else return ELEV_DEFAULT; //check if the destination is too far to reach
 	}
 	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) {
 		y = 0; // Reset loop counter

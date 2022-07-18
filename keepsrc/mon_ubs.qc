@@ -209,13 +209,13 @@ void(float dist, float damage) ubs_zap = {
 	Tent_Beam(TE_LIGHTNING1,self,org,trace_endpos);
 	if ((trace_ent.classgroup == CG_ZOMBIE)) damage = 70;
 	if ((trace_ent.health <= damage)) damage = 60;
-	if (trace_ent.takedamage) T_Damage (trace_ent, self, self, damage);
+	if (trace_ent.takedamage) T_Damage(trace_ent, self, self, damage);
 };
 
 void() ubs_shot1_touch = {
 	self.think = SUB_Null;
 	if ((other == self.owner)) ubshome();
-	T_Damage (other, self, self.owner, 15);
+	T_Damage(other, self, self.owner, 15);
 	Tent_Explosion(self.origin);
 	BecomeExplosion();
 };

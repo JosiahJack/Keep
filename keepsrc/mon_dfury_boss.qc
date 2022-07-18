@@ -77,7 +77,7 @@ void() ai_melee_dfury_boss = {
 	if (vlen(delta) > 80) return;
 
 	ldmg = (random() + random() + random()) * 6;			// default 3
-	T_Damage (self.enemy, self, self, ldmg,DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg,DAMARMOR);
 };
 
 void(float AttackNumber) dfury_boss_shot2 = {
@@ -184,8 +184,8 @@ void() FuryBossSpawnTouch = {
 void() FuryBossMissileTouch = {
 	if (other == self.owner || other.classgroup == self.classgroup || other.classtype == CT_MONDFURY) { remove(self); return; } // don't explode on any fury knight friends
 
-	if (other.classgroup == CG_ZOMBIE) T_Damage (other, self, self, 110, DAMARMOR);	
-	T_RadiusDamage (self, self.owner, 20, world, DAMAGEALL);
+	if (other.classgroup == CG_ZOMBIE) T_Damage(other, self, self, 110, DAMARMOR);	
+	T_RadiusDamage(self, self.owner, 20, world, DAMAGEALL);
 	Tent_Explosion(self.origin);
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
@@ -605,7 +605,7 @@ void()	dfury_boss_JumpTouch = {
 		if ( vlen(self.velocity) > 100 ) {
 			ldmg = 50 + 10*random();	// default 40
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			if (other.classname == "player") T_Damage (other, self, self, ldmg, DAMARMOR);	
+			if (other.classname == "player") T_Damage(other, self, self, ldmg, DAMARMOR);	
 		}
 	}
 

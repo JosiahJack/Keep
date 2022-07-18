@@ -72,7 +72,7 @@ void(vector dir ) axeg_chop = {
 	if (!CanDamage (self.enemy, self))
 		return;
 	ldmg = (random() + random() + random()) * 2;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	toss = v_forward * dir_x + v_right * dir_y + v_up * dir_z;
 	self.enemy.velocity = self.enemy.velocity + toss;

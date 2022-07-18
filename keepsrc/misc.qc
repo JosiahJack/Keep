@@ -80,11 +80,11 @@ void() misc_lavaball_touch = { // [FUNCTION]
 		if (self.spawnflags & MISC_FBALLSLIME) {
 			if (other.resist_acid > 0) touchdmg = self.dmg * (1-other.resist_acid);
 			if (other.flags & FL_CLIENT && other.items & IT_SUIT) sound(other,CHAN_ITEM,SOUND_ARTSUIT3, 0.5,ATTN_NORM); // Play envirosuit protection sound
-			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
+			else T_Damage(other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		} else {
 			if (other.resist_fire > 0) touchdmg = self.dmg * (1-other.resist_fire); // Default = pain!
 			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) sound(other,CHAN_ITEM,SOUND_ARTLSHIELD3, 0.5,ATTN_NORM); // Play lava shield protection sound
-			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
+			else T_Damage(other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		}
 	}
 	misc_lavaball_reset();
@@ -483,7 +483,7 @@ void() misc_drip_touch_common = { // [FUNCTION]
 
 	if (other != self.owner && self.owner.dmg && other.takedamage) { // Damage if our owner has dmg set
 		spawn_touchblood (self,other,self.owner.dmg);
-		T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.owner.dmg, DAMARMOR);
 	}
 	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5); // small particle effect when hitting something
 	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH; // Switch to splash sprite and animate for 5 frames

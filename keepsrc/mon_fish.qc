@@ -86,7 +86,7 @@ void() fish_melee = {
 	// Fish bites man!
 	ldmg = (random() + random()) * 3;
 	sound(self,CHAN_VOICE, "fish/bite.wav",1,ATTN_NORM);
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	
 	// Spawn some touch blood (no explicit direction)
 	spawn_touchblood (self, self.enemy, ldmg*3);

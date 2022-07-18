@@ -1425,8 +1425,8 @@ void() MaxRedLightning() = {
 		}
 	}
 	traceline(org, self.origin + dir * 600, 1, self);
-	QC_ParseBeam(0,"progs/nehahra/beam.mdl", self, org, trace_endpos, 32);
-	LightningDamage(org, trace_endpos, self, MOVETYPE_TOSS);
+	QC_ParseBeam(0,"progs/nehahra/beam.mdl",0,self,org,trace_endpos,32);
+	LightningDamage(org,trace_endpos,self,MOVETYPE_TOSS);
 }
 
 void() max_s_light1 = [60, max_s_light2] {

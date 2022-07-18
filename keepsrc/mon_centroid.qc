@@ -27,7 +27,7 @@ void() Attack_With_Tail = {
 	if (!CanDamage (self.enemy,self)) return;
 
 	ldmg = (((random () + random ()) + random ()) * 15.000);
-	T_Damage (self.enemy,self,self,ldmg,DAMARMOR);
+	T_Damage(self.enemy,self,self,ldmg,DAMARMOR);
 	sound(self,CHAN_WEAPON,"shambler/smack.wav",TRUE,ATTN_NORM);
 	SpawnMeatSpray (self.enemy,self,50);
 };

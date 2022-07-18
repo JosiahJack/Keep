@@ -108,8 +108,8 @@ void() rope_think = { // [FUNCTION]
 // Kurok beam is 32 long
 // Check your precaches in old non-QSS/FTE/DP engines!
 //
-// Example usage: QC_ParseBeam(0,"progs/redfield/beam.mdl", self, org, trace_endpos, 32);
-void(float fx, string m, entity src, vector start, vector end, float length, float persistent, entity dest) QC_ParseBeamGeneric = { // [FUNCTION]
+// Example usage: QC_ParseBeam(0,"progs/redfield/beam.mdl",0,self, org, trace_endpos, 32);
+void(float fx, string m, float mskin, entity src, vector start, vector end, float length, float persistent, entity dest) QC_ParseBeamGeneric = { // [FUNCTION]
 	local float loop, numneeded, dist;
 	local entity beam, lastbeam;
 	local vector turnangle, midpoint;
@@ -136,17 +136,21 @@ void(float fx, string m, entity src, vector start, vector end, float length, flo
 			num_beams = num_beams + 1;
 			beam.mass = src.mass;
 			setmodel(beam,m);
+			if (mskin >= 0) beam.skin = mskin;
+			if (src.owner) {
+				if (src.owner.effects) beam.effects = src.owner.effects;
+			}
 			if (persistent <= 0) {
 				beam.nextthink = time + 0.2;
 				beam.think = SUB_BeamRemove;
 			} else if (persistent == 1) {
 				beam.nextthink = time + 0.2;
 				beam.think = rope_think; // Sag and sway.
-				midpoint_z = midpoint_z - self.mass;
+				midpoint_z = midpoint_z - src.mass;
 				beam.facevector = midpoint; // Store midpoint
 				beam.faceangle_inc_x = loop;
 				beam.faceangle_inc_y = numneeded;
-				beam.faceangle_inc_z = floor(self.faceangle_inc_y / 2); // Index of middle beam entity.
+				beam.faceangle_inc_z = floor(src.faceangle_inc_y / 2); // Index of middle beam entity.
 				beam.owner = src;
 				if (lastbeam) beam.oldenemy = lastbeam;
 				beam.enemy = dest;
@@ -175,7 +179,7 @@ void(float fx, string m, entity src, vector start, vector end, float length, flo
 	}
 };
 
-void(float fx, string m, entity src, vector start, vector end, float length) QC_ParseBeam = { QC_ParseBeamGeneric(fx,m,src,start,end,length,BEAM_TEMPORARY,world); }; // [FUNCTION]
+void(float fx, string m, float mskin, entity src, vector start, vector end, float length) QC_ParseBeam = { QC_ParseBeamGeneric(fx,m,mskin,src,start,end,length,BEAM_TEMPORARY,world); }; // [FUNCTION]
 
 void(vector spot, float count, float gopop, vector norm) LightningSparks = {
 	local float iter, xyadd, zadd;
@@ -459,7 +463,7 @@ void(vector p1, vector p2, entity from, float damage) PlasmaDamage = { // [FUNCT
    traceline (p1,p2,FALSE,self);
    if ( trace_ent.takedamage ) {
       particle (trace_endpos,'0.000 0.000 100.000',225.000,(damage * 4));
-      T_Damage (trace_ent,from,from.owner,damage,DAMARMOR);
+      T_Damage(trace_ent,from,from.owner,damage,DAMARMOR);
       if ( (self.classname == "player") ) {
          if ( (other.classname == "player") )
             trace_ent.velocity_z = (trace_ent.velocity_z + 400);
@@ -469,13 +473,13 @@ void(vector p1, vector p2, entity from, float damage) PlasmaDamage = { // [FUNCT
    traceline ((p1 + f),(p2 + f),FALSE,self);
    if ( ((trace_ent != e1) && trace_ent.takedamage) ) {
       particle (trace_endpos,'0.000 0.000 100.000',225.000,(damage * 4));
-      T_Damage (trace_ent,from,from.owner,damage,DAMARMOR);
+      T_Damage(trace_ent,from,from.owner,damage,DAMARMOR);
    }
    e2 = trace_ent;
    traceline ((p1 - f),(p2 - f),FALSE,self);
    if ( (((trace_ent != e1) && (trace_ent != e2)) && trace_ent.takedamage) ) {
       particle (trace_endpos,'0.000 0.000 100.000',225.000,(damage * 4));
-      T_Damage (trace_ent,from,from.owner,damage,DAMARMOR);
+      T_Damage(trace_ent,from,from.owner,damage,DAMARMOR);
    }
 };
 
@@ -819,7 +823,7 @@ void(entity attacker, vector spot, float damage, entity ignore) Zapper_Spawn = {
     zap.owner     = world;
     setall(zap, "", '0 0 0', '0 0 0', spot);   // invisible
     Rocket_Explosion2 (zap.origin, 244, 3);
-    T_RadiusDamage (zap, attacker, damage, ignore, DAMAGEALL);
+    T_RadiusDamage(zap, attacker, damage, ignore, DAMAGEALL);
     remove (zap);
 };
 
@@ -871,7 +875,7 @@ void(entity attacker, vector spot, float damage) Thunderstrike_Ex = { // [FUNCTI
     // Create lightning and thunder effects.
     setorigin(zap,end);
     sound(zap,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",1,0.5);  // It's loud.
-	QC_ParseBeam(TE_LIGHTNING1,"", zap, start, end, 32);
+	QC_ParseBeam(TE_LIGHTNING1,"",0,zap,start,end,32);
     remove(zap);   // Dummy served its purpose, now begone.
     if (pointcontents(end) == CONTENT_SKY) return;     // Don't explode if it hits sky below.
 
@@ -1093,7 +1097,7 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor, floa
             }
         } while (ignore); // end do{}while
 
-		QC_ParseBeam(fx,"", inflictor, start, p1, 32); // Draw the lightning bolt between the two points.
+		QC_ParseBeam(fx,"",0,inflictor,start,p1,32); // Draw the lightning bolt between the two points.
     }
 };
 

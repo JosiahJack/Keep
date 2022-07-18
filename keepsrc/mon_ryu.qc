@@ -262,7 +262,7 @@ void() Ryu_Bite = {
     damage = 15 + random()*5;
     if (self.spawnflags & SPAWN_WYRM) damage = damage * 4; // Moot since wyrms can't bite.
     sound(self,CHAN_WEAPON,"demon/dhit2.wav",1,ATTN_NORM);
-    T_Damage (self.enemy, self, self, damage,DAMARMOR);
+    T_Damage(self.enemy, self, self, damage,DAMARMOR);
     SpawnMeatSpray(self, self.enemy,(crandom() * 200) - 100); // Throw a piece of meat from the dragon's head (mouth).
 };
 
@@ -873,7 +873,7 @@ void() wyrm_explode = {
     local vector org, vx, vy, vz;
 
     // Lavasplash particles form a box with a size of 270x270x64. 135 * 1.4142 = 190.9188.  So use 160 damage for explosion radius of 200.
-    T_RadiusDamage (self, self, 160, self, DAMAGEALL); // Damage first, then effects.
+    T_RadiusDamage(self, self, 160, self, DAMAGEALL); // Damage first, then effects.
     Tent_LavaSplash(self.origin,-32,"boss/out1.wav");
 	self.gib1mdl = "progs/drake/dr2_lw.mdl";
 	self.gib1mdl = "progs/drake/dr2_rw.mdl";

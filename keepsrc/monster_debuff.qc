@@ -65,7 +65,7 @@ void() MonsterDeBuff = { // [FUNCTION]
 				self.debuff_qty = DEBUFF_BURN_DMG; // Setup default burning damage
 				if (self.burning_qty < self.debuff_qty) self.debuff_qty = self.burning_qty; // Check burning does not exceed stored damage
 				self.burning_qty = self.burning_qty - self.debuff_qty; // Subtract burning damage from counters
-				T_Damage (self, world, world, self.debuff_qty*(1-self.resist_fire), NOARMOR); // Use global damage function (has death checks)
+				T_Damage(self, world, world, self.debuff_qty*(1-self.resist_fire), NOARMOR); // Use global damage function (has death checks)
 			}
 		}
 		if (self.waterlevel >= 2 || self.burning_qty < 1) ResetDebuffBurning(self); // 0 = not in, 1 = feet, 2 = waist, 3 = eyes
@@ -80,7 +80,7 @@ void() MonsterDeBuff = { // [FUNCTION]
 				self.debuff_qty = DEBUFF_POISON_DMG; // Setup default poison damage
 				if (self.poisoned_qty < self.debuff_qty) self.debuff_qty = self.poisoned_qty; // Check poison does not exceed damage left
 				self.poisoned_qty = self.poisoned_qty - self.debuff_qty; // Subtract poison damage from counters
-				T_Damage (self, world, world, self.debuff_qty, DAMARMOR); // Use global damage function (has death checks)
+				T_Damage(self, world, world, self.debuff_qty, DAMARMOR); // Use global damage function (has death checks)
 			}
 		}
 		if (self.poisoned_qty < 1) ResetDebuffPoisoned(self); // Check if poison has finished?

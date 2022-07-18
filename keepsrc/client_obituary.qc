@@ -67,9 +67,9 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 				
-				if (targ.weapon == 64 && targ.waterlevel > 1) { bprint (" discharges into the water.\n"); return; }
+				if (targ.weapon == IT_LIGHTNING && !self.weaponismoditems && targ.waterlevel > 1) { bprint (" discharges into the water.\n"); return; }
 
-				if (targ.weapon == IT_GRENADE_LAUNCHER) bprint (" tries to put the pin back in\n");
+				if (targ.weapon == IT_GRENADE_LAUNCHER && !self.weaponismoditems) bprint (" tries to put the pin back in\n");
 				else bprint (" becomes bored with life\n");
 
 				return;
@@ -332,7 +332,7 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 			return;
 		} else { // Killed by not a player, something else then...
 			targ.frags = targ.frags - 1;
-			bprint (targ.netname);
+			bprint(targ.netname);
 			// All the monster death messages are now defined in the monster QC.  It is much easier to add for each new monster than find/edit them here!
 			if (attacker.flags & FL_MONSTER) {
 				if (attacker.deathstring != "") bprint (attacker.deathstring);
@@ -381,7 +381,8 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 			} else if (targ.touchedvoid) {
 				targ.deathtype = "";
 				bprint (" touched the void\n");
-			} else bprint (" is dead Jim!\n"); // heck if I know; he's just dead!!!
+			} else if (attacker.deathstring != "") bprint(attacker.deathstring);
+			else bprint (" is dead Jim!\n"); // heck if I know; he's just dead!!!
 		}
 	}
 };

@@ -40,7 +40,7 @@ void() hipRubbleTouch = { // [FUNCTION]
 	if (self.ltime < self.pausetime) return;
 
 	if (other.takedamage) {
-		T_Damage (other,self,self.owner,MOVETYPE_BOUNCE,DAMARMOR);
+		T_Damage(other,self,self.owner,MOVETYPE_BOUNCE,DAMARMOR);
 		sound(self,CHAN_WEAPON,"zombie/z_hit.wav",TRUE,ATTN_NORM);
 		self.pausetime = (self.ltime + 0.100);
 	}

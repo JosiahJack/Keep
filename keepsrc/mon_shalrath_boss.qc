@@ -292,12 +292,12 @@ void() ShalBossHome = {
 void() ShalBossMissileTouch = {
 	if (other == self.owner) return;		// don't explode on owner
 
-	if (other.classname == "monster_zombie") T_Damage (other, self, self, 110, DAMARMOR);
+	if (other.classname == "monster_zombie") T_Damage(other, self, self, 110, DAMARMOR);
 	if (other.classname == "monster_voreling") {
 		sound(self,CHAN_WEAPON,"ad171/wraith/bounce.wav",1,ATTN_NORM);
 	} else {
-		//T_RadiusDamage (self, self.owner, 40, world);
-		T_Damage (other, self, self, 25,DAMARMOR);
+		//T_RadiusDamage(self, self.owner, 40, world);
+		T_Damage(other, self, self, 25,DAMARMOR);
 		sound(self,CHAN_WEAPON,"q15/shalrath/voreball.wav",1,ATTN_NORM);
 		if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
 	}
@@ -312,7 +312,7 @@ void() ShalBossGrenadeTouch = {
 	if (other == self.owner) return;		// don't explode on owner
 	
 	self.velocity = self.velocity * 1.4;
-	if (other.classname == "monster_zombie") T_Damage (other, self, self, 110,DAMARMOR);
+	if (other.classname == "monster_zombie") T_Damage(other, self, self, 110,DAMARMOR);
 	if (other.classname == "monster_voreling") {
 		sound(self,CHAN_WEAPON,"ad171/wraith/bounce.wav",1,ATTN_NORM);
 	} else if (other.takedamage == DAMAGE_AIM) {
@@ -324,7 +324,7 @@ void() ShalBossGrenadeTouch = {
 void() ShalBossGrenadeExplode = {
 	sound(self,CHAN_WEAPON,"q15/shalrath/voreexp.wav",1,ATTN_NORM);
 	if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
-	T_RadiusDamage (self, self.owner, 90, world, DAMAGEALL);
+	T_RadiusDamage(self, self.owner, 90, world, DAMAGEALL);
 	self.touch = SUB_Null;
 	setmodel(self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
@@ -341,14 +341,14 @@ void() ShalBossNovaTouch = {
 				//if (shockwavefind.classname != "monster_voreling")
 				//{
 					//if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
-					//T_RadiusDamage (self, self.owner, 190, self.owner);
-					//T_Damage (shockwavefind, self, self.owner, 20);
+					//T_RadiusDamage(self, self.owner, 190, self.owner);
+					//T_Damage(shockwavefind, self, self.owner, 20);
 				//}
 				if (shockwavefind.classname == "monster_voreling") {
-					//T_RadiusDamage (self, self.owner, 190, self.owner);
-					T_Damage (shockwavefind, self, self.owner, 40, DAMARMOR);
+					//T_RadiusDamage(self, self.owner, 190, self.owner);
+					T_Damage(shockwavefind, self, self.owner, 40, DAMARMOR);
 				} else {
-					T_Damage (shockwavefind, self, self.owner, 20, DAMARMOR);
+					T_Damage(shockwavefind, self, self.owner, 20, DAMARMOR);
 				}
 			}
 		}

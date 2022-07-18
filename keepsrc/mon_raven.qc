@@ -211,7 +211,7 @@ void() raven_melee = {
 	if (ldmg < 2) ldmg = 2;	
 	// Check for any breakables first
 	if (ai_foundbreakable(self, trace_ent, FALSE)) {
-		T_Damage (trace_ent, self, self, ldmg, DAMARMOR);
+		T_Damage(trace_ent, self, self, ldmg, DAMARMOR);
 	} else LightningDamage(org, trace_endpos, self, ldmg); // Random hitscan damage
 
 	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn some touch blood (no explicit direction)

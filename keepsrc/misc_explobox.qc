@@ -49,7 +49,7 @@ void()	misc_ebox_0 = [0, misc_ebox_0] { // [FUNCTION]
 };
 
 void() misc_explod_delay = { // [FUNCTION]
-	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
+	T_RadiusDamage(self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
 	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_UPWARD); // Particle explosion drifting upward
 	particle (self.origin, '0 0 0', 0, 255); // Special type (hard-coded) of particle explosion that only works if particle count=255 :)
 	if (HasTargets(self)) SUB_UseTargets(); // Check for any explosion triggers

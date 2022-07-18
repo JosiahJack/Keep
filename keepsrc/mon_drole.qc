@@ -223,7 +223,7 @@ void(float side) drole_claw = {
 		if (random() < 0.5) sound(self,CHAN_WEAPON,"quoth/drole/strike1.wav",1,ATTN_NORM);
 		else sound(self,CHAN_WEAPON,"quoth/drole/strike2.wav",1,ATTN_NORM);
 		ldmg = 12 + 6*random();
-		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
+		T_Damage(self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
 	}
 };

@@ -420,7 +420,7 @@ void() particle_touch = { // [FUNCTION]
 			if (self.attack_finished < time) {			
 				if (self.owner.dmg > 0) {
 					if (self.owner.weapon >= TE_SPIKE) spawn_touchblood(self,other,self.owner.dmg); 
-					T_Damage (other, self, self, self.owner.dmg,DAMARMOR);
+					T_Damage(other, self, self, self.owner.dmg,DAMARMOR);
 				} else {
 					flip = self.owner.dmg * -1;
 					T_Heal(other,flip,FALSE); // Negative damage heals 

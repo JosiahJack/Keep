@@ -82,7 +82,7 @@ void() SnowmMelee = {
 	sound(self,CHAN_WEAPON,"xmas/snowman/claw.wav", TRUE, TRUE);
 	ldmg = (random() + random() + random()) * 5; // Claw attack is good (1-15)
 	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn blood at claw
 };
 

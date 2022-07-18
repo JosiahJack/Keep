@@ -201,7 +201,7 @@ void() baron_sword = {
     else damage = 4;
     damage = SUB_MeleeDamage(damage); // Update:  Emulate Nehahra damage.
     if (deep) damage = damage + SUB_MeleeDamage(3);
-    T_Damage (self.enemy, self, self, damage,DAMARMOR);
+    T_Damage(self.enemy, self, self, damage,DAMARMOR);
 };
 
 void() baron_skip1  = [$blam4,  baron_blam5  ] { ai_charge(6); };
@@ -256,7 +256,7 @@ void() baron_fist = {
     }
 
     sound(self,CHAN_WEAPON,"nehahra/baron/smash.wav",1,ATTN_NORM);
-    T_Damage (self.enemy, self, self, damage,DAMARMOR);
+    T_Damage(self.enemy, self, self, damage,DAMARMOR);
 	SpawnMeatSpray(self, self.enemy,crandom() * 150);
 	SpawnMeatSpray(self, self.enemy,crandom() * 150);
 };
@@ -405,7 +405,7 @@ void() Geyser_Erupt = {
     org = trace_endpos + '0 0 1';
     setorigin(self, org);
 
-    T_RadiusDamage (self, self.owner, 60, world, DAMAGEALL);
+    T_RadiusDamage(self, self.owner, 60, world, DAMAGEALL);
     sound(self,CHAN_WEAPON,"drake/misc/wallbrk.wav",1,ATTN_NORM);
 	ShockWave (self.origin, RING_QUAKE, 5, "progs/drake/s_wave.spr",FALSE);
 
@@ -852,7 +852,7 @@ void() baron_jumptouch = {
                 ldmg = 20 + 10*random();
 
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-            T_Damage (other, self, self, ldmg,DAMARMOR);
+            T_Damage(other, self, self, ldmg,DAMARMOR);
             if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
 
             if ((self.frame == $jump2 ) || (self.frame == $jump3 )) {   // Got an early hit.

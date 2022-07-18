@@ -282,7 +282,7 @@ void() wraith_debuff_trail = {
 		self.owner = self;	// Fix for T_damage inside ApplyFireDmg
 		ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
 	} else if (ai_foundbreakable(self, trace_ent, FALSE))
-		T_Damage (trace_ent, self, self, 100, DAMARMOR);
+		T_Damage(trace_ent, self, self, 100, DAMARMOR);
 	
 
 	// Generate particle beam in segments

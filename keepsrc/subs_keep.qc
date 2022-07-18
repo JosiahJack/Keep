@@ -96,11 +96,15 @@ vector (float dm) VelocityForDamage = { // [FUNCTION]
 	return v * 10;
 };
 
-// Add and create list of all func water volumes for checking contents.
+// Add and create list once of all func water volumes for checking contents.
 // Copies Gyro_ObjectList_Add but has to be different since we use unique fields.
 void(entity e) FliquidList_Add = { // [FUNCTION]
 	if (!e) return;
-	if (!fliquid_head) { fliquid_head = e; return; } // Start the list.
+	if (!fliquid_head) {
+		fliquid_head = e; // Start the list.
+		fliquid_head.fliquid_inlist = TRUE;
+		return;
+	}
 	if (e.fliquid_inlist) return; // Already in the list, whoops.
 
 	e.fliquid_inlist = TRUE;
@@ -108,6 +112,7 @@ void(entity e) FliquidList_Add = { // [FUNCTION]
 	fliquid_head.fliquid_prev = e;
 	fliquid_head = e;
 };
+
 
 void(entity e) FliquidList_Remove = { // [FUNCTION]
 	if (!e.fliquid_inlist) return; // Not a func liquid volume
@@ -121,16 +126,17 @@ void(entity e) FliquidList_Remove = { // [FUNCTION]
 };
 
 entity(vector spot) GetFuncLiquidAtPoint = { // [FUNCTION]
-	local entity ent;
+	local entity ent, start;
 
-	ent = fliquid_head;
-	while(ent) {	
+	start = ent = fliquid_head;
+	while(ent) {
 		if ((spot_x<ent.absmax_x) && (spot_y<ent.absmax_y)
 			&& (spot_z<ent.absmax_z) && (spot_x>ent.absmin_x)
 			&& (spot_y>ent.absmin_y) && (spot_z>ent.absmin_z)) {
 			return ent;
 		}
-		ent = fliquid_head.fliquid_next;
+		ent = ent.fliquid_next;
+		if (ent == start) return world;
 	}
 	return world;
 }
@@ -196,7 +202,8 @@ float(entity targ) LiquidBase = { // [FUNCTION]
 
 	base = targ.origin; // Check for liquid at monsters feet (bottom of bounding box)
 	base_z = base_z + targ.mins_z;
-	return GetContents(base);
+	targ.liquidbase = GetContents(base);
+	return targ.liquidbase;
 };
 
 float(vector spot) InOpenOrLiquid = { // [FUNCTION]

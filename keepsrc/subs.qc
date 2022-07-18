@@ -451,7 +451,7 @@ void() tdeath_touch = { // [FUNCTION]
 	// A boss cannot be telefragged (except shub).  Telefrag entity trying to telefrag boss instead!?!
 	if (other.bossflag == TRUE) {
 		if (other.classtype != CT_MONIDSHUB) {
-			T_Damage (self.owner, other, other, MEGADEATH, NOARMOR); // Chaos cannot protect you from bosses!
+			T_Damage(self.owner, other, other, MEGADEATH, NOARMOR); // Chaos cannot protect you from bosses!
 			return;
 		}
 	}
@@ -459,7 +459,7 @@ void() tdeath_touch = { // [FUNCTION]
 	if (other.flags & FL_CLIENT) { // Frag anyone who teleports in on top of an invincible player
 		if (other.invincible_finished > time || other.perms & POW_ARMORCHAOS) self.classname = "teledeath2";
 		if ( !(self.owner.flags & FL_CLIENT) ) { // other monsters explode themselves
-			T_Damage (self.owner, self, self, MEGADEATH, NOARMOR);
+			T_Damage(self.owner, self, self, MEGADEATH, NOARMOR);
 			return;
 		}
 	}
@@ -470,10 +470,10 @@ void() tdeath_touch = { // [FUNCTION]
 			other.perms = other.perms - (other.perms & POW_ARMORCHAOS); // use it up
 			other.health = 1;
 			Client_CheckMaxHP(other,TRUE,FALSE); // Set to half health, the 2nd parameter does this normally for level transitions but we reuse it here
-			T_Damage (self.owner, self, self, MEGADEATH, NOARMOR);
+			T_Damage(self.owner, self, self, MEGADEATH, NOARMOR);
 			return;
 		}
-		T_Damage (other, self, self, MEGADEATH, NOARMOR);
+		T_Damage(other, self, self, MEGADEATH, NOARMOR);
 	}
 };
 

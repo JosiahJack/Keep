@@ -218,7 +218,7 @@ float() overlord_smash = {
     smashDmg = 20 + random() * 10;
     
     sound(self,CHAN_WEAPON,"s_wrath/smash.wav",1,ATTN_NORM);
-    T_Damage (self.enemy, self, self, smashDmg);
+    T_Damage(self.enemy, self, self, smashDmg);
     delta = normalize (self.enemy.origin - self.origin + self.enemy.view_ofs);
     SpawnBlood(self.enemy,self.enemy.origin - delta * 30, delta * -100, smashDmg, 0);
     return TRUE;
@@ -438,7 +438,7 @@ void() overlord_die9  = [$death16, overlord_die10 ] { self.model = "";
     monster_dead (TRUE);
     // PM:  Old code didn't have splash damage, which is silly if the lesser
     // wraths have it but their lords don't.  So go boom once.
-    T_RadiusDamage (self, self, 80, world);
+    T_RadiusDamage(self, self, 80, world);
     Rocket_Explosion2 (self.origin, 0, 4);
     ol_toss("progs/s_wrtgb2.mdl", FALSE);
     ol_toss("progs/s_wrtgb3.mdl", FALSE);

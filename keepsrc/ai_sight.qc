@@ -373,7 +373,7 @@ void() HuntTarget = {
 
 // An enemy target has been found, wakeup and hunt target
 // Used by FindTarget once an enemy target has been found
-// used by T_Damage (combat.qc) for infighting
+// used by T_Damage(combat.qc) for infighting
 void() FoundTarget = {
 	if (self.health < 1) return FALSE;	// Dead monsters don't hunt!
 

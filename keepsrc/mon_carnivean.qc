@@ -59,7 +59,7 @@ void() carniv_projectile_rock_touch = {
 		self.enemy.velocity = self.enemy.velocity + vel;			// apply velocity (pushback)
 		self.enemy.punchangle = self.enemy.punchangle + (mathlib_randomvec() * 17);	// apply punchangle (tilt view)		ssg: self.punchangle_x = -4;
 
-		T_Damage (self.enemy, self, self.owner, 20, DAMARMOR);
+		T_Damage(self.enemy, self, self.owner, 20, DAMARMOR);
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), detonate, '0 0 0', 1);	
 	} else {
 		// wall
@@ -78,7 +78,7 @@ void() carniv_projectile_rock_homing = {
 	if (self.origin == self.oldorigin)					// when it got stuck
 	{
 		sound(self,CHAN_WEAPON,"ambience/coaled_monster_explode.wav", 0.7,ATTN_NORM);
-		T_RadiusDamage (self, self.owner, 20 + 5, self.owner, DAMAGEALL);
+		T_RadiusDamage(self, self.owner, 20 + 5, self.owner, DAMAGEALL);
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), self.origin, '0 0 0', 1);	
 		remove (self);
 		return;
@@ -113,7 +113,7 @@ void() carniv_projectile_flame_touch = {
 
 	if (other.takedamage == DAMAGE_AIM) {
 		spawn_touchblood (self,other,20);
-		T_Damage (other, self, self.owner, 20, DAMARMOR);
+		T_Damage(other, self, self.owner, 20, DAMARMOR);
 		if (ext_dppart) pointparticles(particleeffectnum("torment_hellrod_explosion"), self.origin, '0 0 0', 1);
 		R_Exp3(self.origin);
 		if (self.cnt == 1) {
@@ -125,7 +125,7 @@ void() carniv_projectile_flame_touch = {
 			}
 		}
 	} else { // wall
-		T_RadiusDamage (self, self.owner, 50, other, DAMAGEALL);	// don't do radius damage to the other, because all the damage was done in the impact
+		T_RadiusDamage(self, self.owner, 50, other, DAMAGEALL);	// don't do radius damage to the other, because all the damage was done in the impact
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion"), self.origin, '0 0 0', 1);
 	 	R_Exp3(self.origin);
 	}

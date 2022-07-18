@@ -243,8 +243,8 @@ void() func_train_touch = { // [FUNCTION]
 
 	self.attack_finished = time + 0.5;
 	
-	if (other.flags & FL_MONSTER && other.alignment != GOOD) T_Damage (other, self, self, other.max_health + 100, DAMARMOR); // Instant death for monsters, unless good
-	else T_Damage (other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
+	if (other.flags & FL_MONSTER && other.alignment != GOOD) T_Damage(other, self, self, other.max_health + 100, DAMARMOR); // Instant death for monsters, unless good
+	else T_Damage(other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
 
 	SpawnMeatSpray ( other, other, 250); // Blood and gore at object location not train
 };
@@ -322,7 +322,7 @@ void() func_train_blocked = { // [FUNCTION]
 	if (time < self.attack_finished) return; // This is constant crushing or instant death collision
 
 	self.attack_finished = time + 0.5;
-	T_Damage (other, self, self, self.dmg, DAMARMOR);
+	T_Damage(other, self, self, self.dmg, DAMARMOR);
 };
 
 void() func_train_setup = { // [FUNCTION]

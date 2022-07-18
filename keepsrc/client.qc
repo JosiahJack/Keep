@@ -47,7 +47,7 @@ float IT2_ITEMRESET = IT2_SHIELD + IT2_SUPERHEALTH + IT2_EARTHQUAKE + IT2_V_SPHE
                       + HIP_IT2_WETSUIT + HIP_IT2_EMPATHY_SHIELDS
                       + HIP_IT2_HORN_OF_CONJURING + IT2_TRINITY + IT2_KEY_SKELETON
                       + IT2_GRAPPLE;
-float IT3_ITEMRESET = IT3_FLASHLIGHT;
+float IT3_ITEMRESET = IT3_FLASHLIGHT + IT3_SECRETHUNTER;
 float ALL_WEAPONS = IT_SHOTGUN + IT_SUPER_SHOTGUN + IT_NAILGUN + IT_SUPER_NAILGUN
                     + IT_GRENADE_LAUNCHER + IT_ROCKET_LAUNCHER + IT_LIGHTNING
                     + IT_AXE + IT_LAVA_NAILGUN + IT_LAVA_SUPER_NAILGUN
@@ -59,7 +59,9 @@ float ALL_WEAPONSMODITEMS = IT_UPGRADE_SSG + IT_UPGRADE_LG + IT_SANGUINATORS
                             + IT_SCIMITAR + IT_RAPIER + IT_UPGRADE_AXE;
 float ALL_WEAPONSMODITEMS_HACKBANK = IT_ICE + IT_MACE + IT_VOID_STAFF + IT_FLAK
                                      + IT_GUNGNIR;
-float ALL_WEAPONSPERMS = IT_BLASTER + IT_CHAINSAW;
+float ALL_WEAPONSPERMS = IT_BLASTER + IT_CHAINSAW + IT_FROSTBOW;
+
+float ALL_WEAPONSPERMS_HACKBANK = IT_AIRGUN;
 
 void() SetupIntermissionCamera;
 void() CycleIntermissionCamera;
@@ -142,7 +144,7 @@ void() SetChangeParms = {
 	self.items = self.items - (self.items & IT_ITEMRESET); // remove temporary items (keys and powerups)
 	parm1 = self.items;
 	self.moditems = self.moditems - (self.moditems & IT_MODRESET); // Special mod items handling and bitstuffing
-	if (self.selfweaponismoditems) self.moditems = self.moditems | WEAPON_HACKBANK1; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
+	if (self.weaponismoditems) self.moditems = self.moditems | WEAPON_HACKBANK1; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
 	else if (self.moditems & WEAPON_HACKBANK1) self.moditems = self.moditems -  WEAPON_HACKBANK1;
 
 	parm10 = self.moditems;
@@ -184,16 +186,18 @@ void() DecodeWorldParms = {
 
 	// Take first, then give.  That way mappers can give clean slate + gives.
 	if (world.take_weapons > 0 || world.no_axestart) {
-		if (world.take_weapons >= 9999999) {
+		if (world.take_weapons >= 9999999 || world.no_axestart) {
 			parm_items = parm_items - (parm_items & ALL_WEAPONS); // Take all, clean slate.
 			parm13 = parm13 - (parm13 & ALL_WEAPONSPERMS);
+			parm13 = parm13 - (parm13 & ALL_WEAPONSPERMS_HACKBANK);
 			parm10 = parm10 - (parm10 & ALL_WEAPONSMODITEMS) - (parm10 & ALL_WEAPONSMODITEMS_HACKBANK);
 			parm8 = 0;
 			parm11 = parm11 - (parm11 & ALL_WEAPONS2);
+			parm11 = parm11 - (parm11 & IT2_WAND);
 			dprint("ALL WEAPONS REMOVED");
 			if (Client_QueryEvilmode()) {
 				dprint(", Evil Mode detected: Shadowaxe given");
-				parm1 = parm1 | IT_AXE;
+				parm_items = parm_items | IT_AXE;
 				parm10 = parm10 | IT_UPGRADE_AXE;
 				parm8 = IT_AXE;
 			}
@@ -998,7 +1002,14 @@ void() PlayerJump;
 void() WaterMove;
 void() ClientDeath;
 
-void() CheckWaterJump = {
+void() WaterJump = { // [FUNCTION]
+	self.flags = self.flags | FL_WATERJUMP;
+	self.velocity_z = 225;
+	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+	self.teleport_time = time + 2;	// safety net
+};
+
+void() CheckWaterJump = { // [FUNCTION]
 	local vector start, end;
 
 	// check for a jump-out-of-water
@@ -1008,24 +1019,35 @@ void() CheckWaterJump = {
 	v_forward_z = 0;
 	normalize(v_forward);
 	end = start + v_forward*24;
-	traceline (start, end, TRUE, self);
-	
+	traceline(start, end, TRUE, self);
 	if (trace_fraction < 1) {	// solid at waist
 		start_z = start_z + self.maxs_z - 8;
 		end = start + v_forward*24;
 		self.movedir = trace_plane_normal * -50;
-		traceline (start, end, TRUE, self);
+		traceline(start,end,TRUE,self);
 		if (trace_fraction == 1) {	// open at eye level
-			self.flags = self.flags | FL_WATERJUMP;
-			self.velocity_z = 225;
-			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-			self.teleport_time = time + 2;	// safety net
+			WaterJump();
 			return;
+		}
+	} else {
+		// I added this to make it consistently water level with shore. -Qmaster
+		start_z = start_z - 8; 
+		end = start + v_forward*24;
+		traceline(start, end, TRUE, self);
+		if (trace_fraction < 1) {	// solid at knees
+			start_z = start_z + self.maxs_z - 8;
+			end = start + v_forward*24;
+			self.movedir = trace_plane_normal * -50;
+			traceline(start,end,TRUE,self);
+			if (trace_fraction == 1) {	// open at eye level
+				WaterJump();
+				return;
+			}
 		}
 	}
 };
 
-void(entity targ) Client_LadderSounds = {
+void(entity targ) Client_LadderSounds = { // [FUNCTION]
 	local float rndsound;
 	if (query_configflag(SVR_FOOTSTEP) == TRUE) return;
 	if (targ.entladder.sounds == 4) return;
@@ -1168,7 +1190,7 @@ void() PlayerPreThink = {
 		// The jump button works a bit differently while in flymode.
 		if (self.button2) {
 			if (self.waterlevel) { // Rise if in water.  Otherwise, slam on the brakes.
-				self.velocity_z = GetWaterRiseVelocity(self.liquidbase);
+				self.velocity_z = GetWaterRiseVelocity(LiquidBase(self));
 
 				if (self.swim_flag < time) {
 					self.swim_flag = time + 1;
@@ -1452,7 +1474,7 @@ void() PlayerPostThink = {
 
 			// Check if damage can be applied after hitting water surface.  Cannot check jump flag velocity because player hit water
 			if (map_falldmgwater > 0 && !((self.perms & POW_ARMORNINJA) || self.water_blessed)) {
-				T_Damage (self, world, world, map_falldmgwater, DAMARMOR);
+				T_Damage(self, world, world, map_falldmgwater, DAMARMOR);
 				sound(self,CHAN_VOICE, "player/land.wav",1,ATTN_NORM); // Play on different channel so it does not conflict, land.wav  = light huh sound(floor impact and no damage)
 				self.deathtype = "falling";
 			}
@@ -1460,7 +1482,7 @@ void() PlayerPostThink = {
 		else if (self.jump_flag < map_fallspeedhigh) {
 			if (!((self.perms & POW_ARMORNINJA) || self.water_blessed)) { // Prevent fall damage with Ninja Armor or Water Shrine desecration
 				if (map_falldmg > 0) {
-					T_Damage (self, world, world, map_falldmg, DAMARMOR);
+					T_Damage(self, world, world, map_falldmg, DAMARMOR);
 					sound(self,CHAN_VOICE, "player/land2.wav",1,ATTN_NORM); // land2.wav = heavy huh sound and nasty bone crunching sound
 					self.deathtype = "falling";
 				}
@@ -1604,7 +1626,7 @@ void() WaterMove = {
 		if (self.pain_finished < time) {
 			self.dmg = self.dmg + map_hazarddmg_x; // Keep increasing drowning damage
 			if (self.dmg > 15) self.dmg = 10;
-			T_Damage (self, world, world, self.dmg, DAMARMOR);
+			T_Damage(self, world, world, self.dmg, DAMARMOR);
 			self.pain_finished = time + 1;
 		}
 	}
@@ -1626,13 +1648,13 @@ void() WaterMove = {
 				else self.dmgtime = time + 0.2;
 
 				// Lava damage is crazy high the deeper you go
-				if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_z*self.waterlevel*(1-self.resist_fire), DAMARMOR);
+				if (self.funcwaterdmg_finished < time) T_Damage(self, world, world, map_hazarddmg_z*self.waterlevel*(1-self.resist_fire), DAMARMOR);
 			}
 		}
 	} else if (self.watertype == CONTENT_SLIME && self.resist_acid < 1) {	// do damage
 		if (self.dmgtime < time && self.radsuit_finished < time && self.therm_finished < time) {
 			self.dmgtime = time + 1;
-			if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_y*self.waterlevel * (1-self.resist_acid), DAMARMOR);
+			if (self.funcwaterdmg_finished < time) T_Damage(self, world, world, map_hazarddmg_y*self.waterlevel * (1-self.resist_acid), DAMARMOR);
 		}
 	}
 	

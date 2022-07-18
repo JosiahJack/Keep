@@ -99,13 +99,13 @@ void() ghost_followers_death = {
 void() ghost_follower_touch = {
 	if (other.takedamage) {
 		if (!(self.enemy.flags & FL_CLIENT)) {
-			T_Damage (other, self, self.owner, 7, NOARMOR);
+			T_Damage(other, self, self.owner, 7, NOARMOR);
 			sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
 			remove(self);
 			return;
 		}
 		if (!(other.flags & FL_CLIENT))	return; // flies through other monsters when chasing player
-		T_Damage (other, self, self.owner, 7, NOARMOR); // ghost doesn't touch armor	
+		T_Damage(other, self, self.owner, 7, NOARMOR); // ghost doesn't touch armor	
 		sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
@@ -141,7 +141,7 @@ void() ghost_follower_think = {
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
-		T_RadiusDamage (self, self.owner, 7 + 15, self.owner, DAMAGEALL);	
+		T_RadiusDamage(self, self.owner, 7 + 15, self.owner, DAMAGEALL);	
 		remove (self);
 	}
 	self.oldorigin = self.origin;
@@ -162,7 +162,7 @@ void() ghost_follower_think = {
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
-			T_Damage (self.enemy, self, self.owner, 7, NOARMOR);	
+			T_Damage(self.enemy, self, self.owner, 7, NOARMOR);	
 			remove (self);
 		}
 	} else {
@@ -262,7 +262,7 @@ void() reiver_fireball_touch = {
 
 	if (other.takedamage == DAMAGE_AIM) {
 		spawn_touchblood (self, other,20);
-		T_Damage (other, self, self.owner, 20, DAMARMOR);	// default 20
+		T_Damage(other, self, self.owner, 20, DAMARMOR);	// default 20
 		if (ext_dppart) pointparticles(particleeffectnum("torment_hellrod_explosion"), self.origin, '0 0 0', 1);
 	 	R_Exp3 (self.origin);
 		// checks if fireball inflame the player
@@ -273,7 +273,7 @@ void() reiver_fireball_touch = {
 		}
 	} else {
 		// wall
-		T_RadiusDamage (self, self.owner, 20 + 10, other, DAMAGEALL); // don't do radius damage to the other, because all the damage was done in the impact
+		T_RadiusDamage(self, self.owner, 20 + 10, other, DAMAGEALL); // don't do radius damage to the other, because all the damage was done in the impact
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 	 	R_Exp3 (self.origin);
 	}
@@ -293,7 +293,7 @@ void() reiver_fireball_homing = {
 
 	// when it got stuck, remove it
 	if (self.origin == self.oldorigin) {
-		T_RadiusDamage (self, self.owner, 20 + 10, self.owner, DAMAGEALL);
+		T_RadiusDamage(self, self.owner, 20 + 10, self.owner, DAMAGEALL);
 		R_Exp3(self.origin);
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 		remove (self);
@@ -317,7 +317,7 @@ void() reiver_fireball_no_homing = {
 	if (self.enemy.health < 1) { remove(self); return; }
 
 	if (self.attack_finished < time) {
-		T_RadiusDamage (self, self.owner, 20 + 10, self.owner, DAMAGEALL);
+		T_RadiusDamage(self, self.owner, 20 + 10, self.owner, DAMAGEALL);
 		R_Exp3(self.origin);
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 		remove (self);
@@ -326,7 +326,7 @@ void() reiver_fireball_no_homing = {
 
 	if (self.origin == self.oldorigin) {
 		 // when it got stuck
-		T_RadiusDamage (self, self.owner, 20 + 10, self.owner, DAMAGEALL);
+		T_RadiusDamage(self, self.owner, 20 + 10, self.owner, DAMAGEALL);
 		R_Exp3(self.origin);
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 		remove (self);
@@ -570,7 +570,7 @@ void(float scratch_noise) reiver_melee_scratch = {
 	if (vlen(delta) > 77) return;
 		
 	ldmg = (random() + random() + random()) * 4;	// default 4
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 	makevectors(self.angles);
 	particle (self.origin + v_forward*45 + v_up*-10, '0 0 0', 73, 17);		// spawn a little blood
 	if (scratch_noise) {
@@ -652,7 +652,7 @@ void()	life_drain = {
 	traceline(spot1,spot2, FALSE, self);
 	if (trace_ent != self.enemy) return;		// don't have a clear shot
 
-	T_Damage (self.enemy, self, self, 7, DAMARMOR);	
+	T_Damage(self.enemy, self, self, 7, DAMARMOR);	
 	self.health = self.health + 7;			// give it to the reiver
 	if (self.health > self.max_health) self.health = self.max_health; // max cap
 };
@@ -904,7 +904,7 @@ void() reiver_death_touch = {
 	monster_death_postcheck(); 
 	if (self.flags & FL_ONGROUND) {
 		self.solid = SOLID_NOT;
-		T_RadiusDamage (self, self, 66, world, DAMAGEALL);	// default 66	
+		T_RadiusDamage(self, self, 66, world, DAMAGEALL);	// default 66	
 		if (ext_dppart) pointparticles(particleeffectnum("rocket_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("blood_corpse_gib"), self.origin, '0 0 0', 1);
 		R_Exp3(self.origin);
@@ -912,7 +912,7 @@ void() reiver_death_touch = {
 		return;
 	} else if (self.velocity == '0 0 0') {
 		self.solid = SOLID_NOT;
-		T_RadiusDamage (self, self, 66, world, DAMAGEALL);	// default 66		
+		T_RadiusDamage(self, self, 66, world, DAMAGEALL);	// default 66		
 		if (ext_dppart) pointparticles(particleeffectnum("rocket_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("blood_corpse_gib"), self.origin, '0 0 0', 1);
 		R_Exp3(self.origin);
@@ -923,7 +923,7 @@ void() reiver_death_touch = {
 	if (self.origin == self.oldorigin)	{
 		// when it got stuck somewhere. You never know...
 		self.solid = SOLID_NOT;
-		T_RadiusDamage (self, self, 66, world, DAMAGEALL);	// default 66		
+		T_RadiusDamage(self, self, 66, world, DAMAGEALL);	// default 66		
 		if (ext_dppart) pointparticles(particleeffectnum("rocket_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("blood_corpse_gib"), self.origin, '0 0 0', 1);
 		R_Exp3(self.origin);

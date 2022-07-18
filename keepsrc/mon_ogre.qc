@@ -139,7 +139,7 @@ void(float side, float dmgmultipler) chainsaw = {
 	if (!CanDamage (self.enemy, self)) return;
 	
 	ldmg = (random() + random() + random()) * (4*dmgmultipler);
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	SpawnMeatSpray (self, self.enemy, side);
 };

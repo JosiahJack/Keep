@@ -46,14 +46,14 @@ void(vector src, vector dir, float lsrdamage) FireLaser = {
 		vel = normalize(dir + v_up*crandom() + v_right*crandom());
 		vel = vel + 2*trace_plane_normal;
 		vel = vel * 200;
-		T_Damage (trace_ent, self, self, lsrdamage);
+		T_Damage(trace_ent, self, self, lsrdamage);
 		SpawnBlood (org, vel*0.2, lsrdamage, trace_ent,0);
 	} else if (trace_fraction != 1) {
 		Tent_Point(TE_KNIGHTSPIKE,org);
 	}
 
 	// Draw in the laser
-	QC_ParseBeam(0,"progs/redfield/beam.mdl",self,src,trace_endpos,32);
+	QC_ParseBeam(0,"progs/redfield/beam.mdl",0,self,src,trace_endpos,32);
 };
 
 

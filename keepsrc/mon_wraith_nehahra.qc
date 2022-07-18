@@ -172,7 +172,7 @@ void() ai_drain = { // [FUNCTION]
     makevectors(self.angles);
     vec = self.origin + (v_forward*47) + (v_right*6) + (v_up*10);
     particle(vec, '0 0 1', rgb, den);
-    T_Damage (self.enemy, self, self, damage, NOARMOR); // No armor, because armor cannot block incorporal attacks.  Leech, because the wraith will suck and drain your life force.
+    T_Damage(self.enemy, self, self, damage, NOARMOR); // No armor, because armor cannot block incorporal attacks.  Leech, because the wraith will suck and drain your life force.
 };
 
 void() nehwraith_fail1   = [ 101,  nehwraith_fail2  ] { ai_charge(self.speed); }; // [FUNCTION]
@@ -406,7 +406,7 @@ void() nehwraith_die7 = [ 114, nehwraith_die8  ] {}; // [FUNCTION]
 void() nehwraith_die8 = [ 116, nehwraith_die9  ] {}; // [FUNCTION]
 void() nehwraith_die9 = [ 118, SUB_Null    ] { // [FUNCTION]
     monster_ThrowGib();
-    T_RadiusDamage (self, self, 80, world,DAMAGEALL);
+    T_RadiusDamage(self, self, 80, world,DAMAGEALL);
     Rocket_Explosion2 (self.origin + '0 0 24', 0, 4);
 	entity_hide(self);
 };

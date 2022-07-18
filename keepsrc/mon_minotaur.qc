@@ -164,7 +164,7 @@ void(float side) mino_claw = {
 		ldmg = 12 + 6*random();
 		// Rage attack is once per animation frame, more deadly
 		if (self.attack_rage) ldmg = ldmg*2;
-		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
+		T_Damage(self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
 	}
 };
@@ -286,7 +286,7 @@ void() mino_JumpTouch = {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 20 + 10*random();
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			spawn_touchblood (self, self.enemy, ldmg*3);
 		}
 	}

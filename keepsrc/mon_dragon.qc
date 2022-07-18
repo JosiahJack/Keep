@@ -208,7 +208,7 @@ void() FireballTouch = {
 
    org = self.origin;
    org_z = (org_z+8);
-   T_Damage (other,self,self.owner,3,DAMARMOR);
+   T_Damage(other,self,self.owner,3,DAMARMOR);
    sound(self,CHAN_WEAPON,"hipnotic/misc/quakeend.wav",TRUE,ATTN_NORM);
    partcnt = 40;
    partcolor = 232;
@@ -309,7 +309,7 @@ void() dragon_tail_touch = {
       return ;
 
    tailDamage = ((random () * 30) + 15);
-   T_Damage (self.enemy,self,self,tailDamage,DAMARMOR);
+   T_Damage(self.enemy,self,self,tailDamage,DAMARMOR);
 };
 
 void() dragon_tail = {
@@ -326,7 +326,7 @@ void() dragon_tail = {
    dir = (self.enemy.origin - self.origin);
    dist = vlen (dir);
    if (dist <= 150.000) {
-      T_Damage (self.enemy,self,self,18,DAMARMOR);
+      T_Damage(self.enemy,self,self,18,DAMARMOR);
       dir = normalize (dir);
       self.enemy.velocity = (dir * 500.000);
       self.enemy.velocity_z = 350.000;
@@ -447,7 +447,7 @@ void() dragon_squish = {
    if ( (other.classname == "player") ) {
       self.classname = "monster_dragon_dead";
 		self.deathstring = " was squashed by the Dragon\n";
-      T_Damage (other,self,self,200.000,DAMARMOR);
+      T_Damage(other,self,self,200.000,DAMARMOR);
    }
    if ( (other == world) ) {
       self.velocity = VEC_ORIGIN;

@@ -497,7 +497,7 @@ void() func_door_reset = { // [FUNCTION]
 
 void() func_door_blocked = { // [FUNCTION]
 	if (self.midstart) self.midstart = FALSE; // Always reset midstart flag (its no longer needed)
-	T_Damage (other, self, self, self.dmg, DAMARMOR); // Do the block damage
+	T_Damage(other, self, self, self.dmg, DAMARMOR); // Do the block damage
 	if (self.wait != -1) { // if a door has a negative wait, it would never come back if blocked, so let it just squash the object to death real fast.
 		if (self.state == STATE_DOWN) func_door_go_up();
 		else func_door_go_down();

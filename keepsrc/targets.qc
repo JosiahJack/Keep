@@ -932,7 +932,7 @@ void() trigger_monsterkill_use = { // [FUNCTION]
 					self.enemy.takedamage = DAMAGE_YES; // Make sure monster can take damage
 					self.enemy.resist_fire = self.enemy.resist_acid = self.enemy.resist_cold = 0; // Reset all environment resistances to 0.
 					Resist_ChangeType(world,-1); // Reset all ammo resistances to 0.
-					T_Damage (self.enemy, self, self, self.enemy.health+1, NOARMOR); // Always do enough damage to kill the monster normally, not gibbed (unless that's how the monster dies normally).
+					T_Damage(self.enemy, self, self, self.enemy.health+1, NOARMOR); // Always do enough damage to kill the monster normally, not gibbed (unless that's how the monster dies normally).
 				} else {
 					self.enemy.deadflag = DEAD_DEAD;
 					self.enemy.enemy = world;
@@ -987,7 +987,7 @@ void() trigger_monsterattack_use = { // [FUNCTION]
 		if (self.enemy.flags & FL_MONSTER && self.enemy.health > 0) { // Only work with monsters, can't be dead, dying or negative health!
 			self.oldenemy = find(world, targetname, self.target2);
 			if (self.oldenemy.health > 0 && self.oldenemy.takedamage != DAMAGE_NO) {
-				T_Damage (self.enemy, self.oldenemy, self.oldenemy, 1, NOARMOR); // Check if attacking target is alive and can be damaged?  Setup monster to attack new target (use damage function)
+				T_Damage(self.enemy, self.oldenemy, self.oldenemy, 1, NOARMOR); // Check if attacking target is alive and can be damaged?  Setup monster to attack new target (use damage function)
 				success = TRUE;
 			}
 		}
@@ -1042,7 +1042,7 @@ void() trig_explode_fire = { // [FUNCTION]
 		return; // No damage or sprites needed
 	}
 
-	if (self.dmg > 0) T_RadiusDamage (self, self, self.dmg, self, DAMAGEALL); // create any explosive radius damage	
+	if (self.dmg > 0) T_RadiusDamage(self, self, self.dmg, self, DAMAGEALL); // create any explosive radius damage	
 	if ( !(self.spawnflags & TRIG_EXPLODENOEFF) ) { // Check for old particle effect
 		if (self.style == 0) Tent_Explosion(self.origin); // classic ID explosion
 		else if (self.style == 1) Tent_Explosion2(self.origin,39,8); // New Rogue extension - Blue

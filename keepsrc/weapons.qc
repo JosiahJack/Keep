@@ -217,7 +217,7 @@ void() W_FireSparks = { // [FUNCTION]
     local vector dir, org, err;
     local float charge;
 
-    if (self.weapon == IT2_CROSS && !self.selfweaponismoditems) charge = self.currentammo;
+    if (self.weapon == IT2_CROSS && !self.weaponismoditems) charge = self.currentammo;
     else charge = 0; // This shouldn't happen, but if so...
 	
     if (charge > WAND_FULL + 1) charge = WAND_FULL + 1;
@@ -252,13 +252,13 @@ void(float stat) HIP_FireLaser = { // [FUNCTION]
 
 	if (!self.button0) { player_run(); return; }
 
-	if ((self.weapon == IT2_LASER_CANNON && !self.selfweaponismoditems) && (self.ammo_cells < TRUE) ) {
+	if ((self.weapon == IT2_LASER_CANNON && !self.weaponismoditems) && (self.ammo_cells < TRUE) ) {
 		self.weapon = W_BestWeapon(self);
 		W_SetCurrentAmmo(self);
 		return ;
 	}
 
-	if ((self.weapon == IT_SHOTGUN && !self.selfweaponismoditems) && (self.ammo_shells < TRUE) ) { // Blaster uses this
+	if ((self.weapon == IT_SHOTGUN && !self.weaponismoditems) && (self.ammo_shells < TRUE) ) { // Blaster uses this
 		self.weapon = W_BestWeapon(self);
 		W_SetCurrentAmmo(self);
 		return ;
@@ -321,7 +321,7 @@ float(vector source, float axedmg) GibFloorBody = {
 			dotprod = vec * v_forward;
 			if (dotprod > 0.6) {				// Is the body infront of the player
 				onflr.origin = org;				// Move gib closer to floor
-				if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
+				if (self.weapon == IT2_MJOLNIR && !self.weaponismoditems) {
 					if (ai_medic(64)) {
 						dprint("Slam revive!\n");
 					} else monster_flrbody_gib(onflr, axedmg*4);
@@ -421,7 +421,7 @@ void() HIP_FireMjolnir2 = { // [FUNCTION]
 
 		trace_ent.axhitme = TRUE;
 		SpawnBlood(trace_ent, org,v_forward,damage,0);
-		T_Damage (trace_ent,self,self,damage, DAMARMOR);
+		T_Damage(trace_ent,self,self,damage, DAMARMOR);
 		if (self.ammo_cells >= 15) {
 		SpawnLightningOrb();
 		self.ammo_cells = (self.ammo_cells - 15.000);
@@ -607,7 +607,7 @@ void() W_FireAxe = { // [FUNCTION]
 			axedmg = axedmg * 2;
 			if (trace_ent.classgroup == CG_ZOMBIE) axedmg = 120;
 		}
-		T_Damage (trace_ent,self,self, axedmg, DAMARMOR);
+		T_Damage(trace_ent,self,self, axedmg, DAMARMOR);
 	}
 	MeleeImpactEffects(axedmg,'0 0 1',FALSE);
 };
@@ -1034,7 +1034,7 @@ void() W_FirePlasma = { // [FUNCTION]
 			// Impact avoidance sound
 			PlayBlastBeltSound(self);
 			// Death to everything around, except players!
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
+			T_RadiusDamage(self, self, 35*cells, self, IGNORECLASS);
 			// Reduce player HP down to 50%, no armour saves!
 			T_Damage(self, world, world, self.health*0.5, NOARMOR);
 		} else {
@@ -1070,7 +1070,7 @@ void() W_FireLightning = { // [FUNCTION]
 	if (self.waterlevel > 1) {
 		cells = self.ammo_cells; 
 		self.currentammo = self.ammo_cells = 0; // Use all cells
-		W_SetCurrentAmmo (self); // Update inventory
+		W_SetCurrentAmmo(self); // Update inventory
 
 		if (self.tome_finished) {
 			// Make some extra tome of power spark effects off the player
@@ -1093,11 +1093,11 @@ void() W_FireLightning = { // [FUNCTION]
 		if (self.moditems & IT_ARTWETSUIT) {
 			// Air tank vania item saves player from death
 			PlayBlastBeltSound(self); // Impact avoidance sound
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS); // Death to everything around.
+			T_RadiusDamage(self, self, 35*cells, self, IGNORECLASS); // Death to everything around.
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
 		} else {
 			// Default behaviour, death to everything!
-			T_RadiusDamage (self, self, 35*cells, world, DAMAGEALL); 
+			T_RadiusDamage(self, self, 35*cells, world, DAMAGEALL); 
 		}
 		return;
 	}
@@ -1136,7 +1136,7 @@ void(float cl) W_FireThunderbolt = { // [FUNCTION]
 			self.ammo_cells = 0;
 			W_SetCurrentAmmo (self);
 			PlayBlastBeltSound(self); // Impact avoidance sound
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
+			T_RadiusDamage(self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
 		} else {
 			W_Reload(0.2);
@@ -1239,7 +1239,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 			self.ammo_cells = 0; // Update inventory
 			W_SetCurrentAmmo (self);
 			PlayBlastBeltSound(self); // Impact avoidance sound
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
+			T_RadiusDamage(self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
 		} else {
 			W_Reload(0.2);
@@ -1408,7 +1408,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 		return;
 	}
 
-	if (!targ.selfweaponismoditems) {
+	if (!targ.weaponismoditems) {
 		if (targ.weapon == IT_AXE) {
 			targ.currentammo = 0;
 			if (targ.moditems & IT_UPGRADE_AXE) {
@@ -1517,7 +1517,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 		} else {
 			if (targ.weaponmodel != "") {
 				targ.weaponmodel = "";
-				targ.selfweaponismoditems = TRUE;
+				targ.weaponismoditems = TRUE;
 				W_SetCurrentAmmo(targ); // Do it again for the hack bank.
 				return;
 			}
@@ -1547,7 +1547,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 		} else {
 			if (targ.weaponmodel != "") {
 				targ.weaponmodel = "";
-				targ.selfweaponismoditems = FALSE;
+				targ.weaponismoditems = FALSE;
 				W_SetCurrentAmmo(targ); // Do it again for the other bank.
 				return;
 			}
@@ -1588,7 +1588,7 @@ float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 		return FALSE;
 	}
 
-	if (targ.selfweaponismoditems) {
+	if (targ.weaponismoditems) {
 		if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
 		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE
 			|| targ.weapon == IT_AIRGUN) return TRUE;
@@ -1614,10 +1614,10 @@ void() W_Attack = { // [FUNCTION]
 	if (!W_CheckNoAmmo(self)) return;	// Out of ammo?
 
 	makevectors(self.v_angle);		// calculate forward angle for velocity
-	if (((self.weapon != IT_EXTRA_WEAPON && !self.selfweaponismoditems)
+	if (((self.weapon != IT_EXTRA_WEAPON && !self.weaponismoditems)
 		|| (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON
-		&& !self.selfweaponismoditems)) && self.weapon != IT_AXE
-		&& !self.selfweaponismoditems) {
+		&& !self.weaponismoditems)) && self.weapon != IT_AXE
+		&& !self.weaponismoditems) {
 		self.show_hostile = time + 1;	// wake monsters up
 	}
 
@@ -1638,7 +1638,7 @@ void() W_Attack = { // [FUNCTION]
 		return;
 	}
 
-	if (!self.selfweaponismoditems) {
+	if (!self.weaponismoditems) {
 		if (self.weapon == IT_AXE) {
 			if (self.perms & IT_CHAINSAW) { // Chainsaw overrides axes once acquired.
 				player_saw1(); 
@@ -2210,7 +2210,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	if (am) { sprint(targ,"not enough ammo.\n"); return; } //Do we have ammo?
 
 	if (inhackbank) {
-		targ.selfweaponismoditems = TRUE;
+		targ.weaponismoditems = TRUE;
 		if (fl == IT_ICE) {
 			sprint(targ,"Blizzard Sphere!\n");
 		} else {
@@ -2233,7 +2233,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			}
 		}
 	} else {
-		targ.selfweaponismoditems = FALSE;
+		targ.weaponismoditems = FALSE;
 		if ( (targ.weapon != fl) ) {
 		  if ( ((targ.weapon == IT_LAVA_NAILGUN) || (targ.weapon == IT_LAVA_SUPER_NAILGUN)) ) {
 			 if ( ((fl == IT_NAILGUN) || (fl == IT_SUPER_NAILGUN)) ) {
@@ -2388,10 +2388,10 @@ float(float wepID, vector idconversion, float am) SetCycledWeapon = {
 
 	idconversion = GetWepIT_FromID(wepID); // Return to normal IT_* number.
 	self.weapon = idconversion_x;
-	self.selfweaponismoditems = idconversion_y;
+	self.weaponismoditems = idconversion_y;
 
 	// Has the player got the weapons and ammo to switch?
-	if (self.selfweaponismoditems) {
+	if (self.weaponismoditems) {
 		if (wepID == ID_MACE || wepID == ID_ICE
 			|| wepID == ID_VOIDSTAFF || wepID == ID_FLAK
 			|| wepID == ID_GUNGNIR) {
@@ -2421,7 +2421,7 @@ void() CycleWeaponCommand = { // [FUNCTION]
 	local vector idconversion;
 	
 	inhackbank = FALSE;
-	if (self.selfweaponismoditems) inhackbank = TRUE;
+	if (self.weaponismoditems) inhackbank = TRUE;
 	if (frame_pause()) return;		// Remote camera active
 
 	self.impulse = 0;			// reset impulse
@@ -2526,7 +2526,7 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 	local vector idconversion;
 	
 	inhackbank = FALSE;
-	if (self.selfweaponismoditems) inhackbank = TRUE;
+	if (self.weaponismoditems) inhackbank = TRUE;
 	if (intermission_running > 0) return;		// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	self.impulse = 0;			// reset impulse

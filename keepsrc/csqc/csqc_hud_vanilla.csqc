@@ -196,7 +196,7 @@ static float sperms; //haha	//copy of .perms
 static float sweapon;		//copy of .weapon
 static float shealth;		//copy of .health
 static float sammo_poison;  //copy of .ammo_posion
-static float shackbank;     //copy of .selfweaponismoditems
+static float shackbank;     //copy of .weaponismoditems
 static float stotal_denizens;//copyof total_denizens
 static float skilled_denizens;//copyofkilled_denizens
 

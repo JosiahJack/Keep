@@ -346,7 +346,7 @@ void(float fbfactor) fireblast = {
 	if (vlen(delta) > fbfactor) return;
 		
 	ldmg = 2 + (3 * skill);
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 };
 
 //Floating blast attack - transition to boss phase 3
@@ -468,7 +468,7 @@ void() elena_melee = {
 	// 3-10 damage depending on boss phase
 	ldmg = ((random() + random() + random()) * 2) + (2 * phase_Counter);
 	if (ldmg < 3) ldmg = 3;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Only spawn blood/gore/sound every second
 	if (self.meleetimer < time) {
@@ -500,7 +500,7 @@ void() elena_SpinTouch = {
 	if ( CanDamage(other, self) ) {
 		if ( vlen(self.velocity) > 300 ) {
 		  ldmg = 20 + 10*random();
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			spawn_touchblood (self, self.enemy, ldmg*3);
 		}
 	}

@@ -468,13 +468,13 @@ void() Explode_Grenade = { // [FUNCTION]
 		self.noise = "ad171/nour/explode2.wav";
 	} else if (!self.dmg) self.dmg = DAMAGE_PLAYGRENADE;
  
-	if (self.dmg > 0) T_RadiusDamage (self, self.owner, self.dmg, world, DAMAGEALL);
+	if (self.dmg > 0) T_RadiusDamage(self, self.owner, self.dmg, world, DAMAGEALL);
 
 	// BLAST BELT:  Resistance = 100% for splashdamage, 50% for direct.
 	if (self.activate.flags & FL_CLIENT && self.activate.takedamage == DAMAGE_AIM
 		&& self.activate.moditems & IT_ARTBLASTBELT ) {
 		PlayBlastBeltSound(other); // Play impact sound
-		if (self.dmg > 0 && self.activate.health > 0)  T_Damage (self.activate, self, self.owner, self.dmg*ART_BLASTBELT_DD, DAMARMOR); // Any direct damage is reduced
+		if (self.dmg > 0 && self.activate.health > 0)  T_Damage(self.activate, self, self.owner, self.dmg*ART_BLASTBELT_DD, DAMARMOR); // Any direct damage is reduced
 	}
 
 	if (self.activate.resist_rockets > 0) {
@@ -598,8 +598,8 @@ void() lightning_orb_death = { // [FUNCTION]
 };
 
 void() MiniGrenadeExplode = { // [FUNCTION]
-	if ( (self.owner.classname == "player") ) T_RadiusDamage (self,self.owner,90.000,world,DAMAGEALL);
-	else T_RadiusDamage (self,self.owner,60.000,world,DAMAGEALL);
+	if ( (self.owner.classname == "player") ) T_RadiusDamage(self,self.owner,90.000,world,DAMAGEALL);
+	else T_RadiusDamage(self,self.owner,60.000,world,DAMAGEALL);
 
 	WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
 	WriteByte(MSG_BROADCAST,TE_EXPLOSION);
@@ -667,12 +667,12 @@ void(float burstcharge) beam_water_burst = { // [FUNCTION]
 				totaldmg = burstcharge * burstcharge / totaldmg;
 				// check to see if the thing gets killed
 				if (current.health <= totaldmg) {
-					T_Damage (current, self, self, 99999,DAMARMOR);
+					T_Damage(current, self, self, 99999,DAMARMOR);
 					if (other.health <= 0) {
 						MakeBeamRing(other.origin);
                         Tent_Point(TE_TAREXPLOSION,other.origin);
 					}
-				} else T_Damage (current, self, self, totaldmg,DAMARMOR);
+				} else T_Damage(current, self, self, totaldmg,DAMARMOR);
 			}
 		}
 	} while(current);
@@ -746,7 +746,7 @@ void() mine3 = [ 3, SUB_Null ] { IceMine_Explode(); }; // [FUNCTION]
 void() IceMine_Explode = { // [FUNCTION]
     if (self.trigger_field) { remove (self.trigger_field);  self.trigger_field = world; }
     self.touch = SUB_Null;      // Stack overflow prevention.
-	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
+	T_RadiusDamage(self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
 	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_CENTER); // Particle explosion drifting upward
 	particle (self.origin, '0 0 0', 0, 255); // Special type (hard-coded) of particle explosion that only works if particle count=255 :)
 	self.origin = self.origin + '0 0 32';
@@ -882,7 +882,7 @@ void() Thor_Remove = { // [FUNCTION]
 
 				// if (thor.war & WARx_USES_CELLS) SUB_ThinkImmediate (thor, War_UpdateCurrentAmmo);
 				W_SetCurrentAmmo (thor);
-				if (!thor.selfweaponismoditems && thor.weapon == IT2_MJOLNIR) { // Hammer selected, so restore weapon model and ammo.
+				if (!thor.weaponismoditems && thor.weapon == IT2_MJOLNIR) { // Hammer selected, so restore weapon model and ammo.
 					if (thor.attack_finished < time + 0.2) thor.attack_finished = time + 0.2; // Delay next attack a bit so player doesn't throw immediately.
 					if (cutscene) thor = find (world, classname, "dummy"); // If TRUE, update dummy, not camera.
 					if (thor.tome_finished) thor.weaponmodel = "progs/violentrumble/v_hammerpw.mdl";

@@ -5,8 +5,8 @@ void() T_ArmaMissileTouch = {
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
 	damg = (50.000 + (random () * 20.000));
-	if (other.health) T_Damage (other,self,self.owner,damg,DAMARMOR);
-	T_RadiusDamage (self,self.owner,40.000,other,DAMAGEALL);
+	if (other.health) T_Damage(other,self,self.owner,damg,DAMARMOR);
+	T_RadiusDamage(self,self.owner,40.000,other,DAMAGEALL);
 	self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
 	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST,TE_EXPLOSION);

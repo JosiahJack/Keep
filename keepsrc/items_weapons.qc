@@ -44,11 +44,11 @@ void(entity targ, float new, float oldhackbank, float oldweapon) DM_Weapon = {
 
 	// change targ.weapon if desired
 	oldrank = GetWepIDIndex(oldweapon, oldhackbank); // passed along old value so it corresponded, targ.weapon not changed yet
-	newrank = GetWepIDIndex (new, targ.selfweaponismoditems); // But we already changed selfweaponismoditems before getting here
+	newrank = GetWepIDIndex (new, targ.weaponismoditems); // But we already changed weaponismoditems before getting here
 	if ( newrank > oldrank ) {
 		retid = GetWepIT_FromID(new);
 		targ.weapon = retid_x;
-		targ.selfweaponismoditems = retid_y;
+		targ.weaponismoditems = retid_y;
 	}
 };
 
@@ -90,8 +90,8 @@ void() weapon_touch = {
 	// Deathmatch/coop switch
 	if (deathmatch == 2 || coop) leave = TRUE;
 	else leave = FALSE;
-	oldhackbank = self.selfweaponismoditems;
-	other.selfweaponismoditems = FALSE;
+	oldhackbank = self.weaponismoditems;
+	other.weaponismoditems = FALSE;
 	oldweapon = other.weapon;
 	new = -1;
 
@@ -230,28 +230,28 @@ void() weapon_touch = {
 		other.weapon = IT_SUPER_SHOTGUN;
 			} else if (self.classtype == CT_ICE) {				// HACKBANK!
 				if (leave && (other.moditems & IT_ICE) ) return;
-				other.selfweaponismoditems = TRUE;
+				other.weaponismoditems = TRUE;
 				new = IT_ICE;
 				other.ammo_elemental = other.ammo_elemental + self.aflag;
 				other.moditems = other.moditems | IT_ICE;
 				other.weapon = IT_ICE;
 			} else if (self.classtype == CT_MACE) {				// HACKBANK!
 				if (leave && (other.moditems & IT_MACE) ) return;
-				other.selfweaponismoditems = TRUE;
+				other.weaponismoditems = TRUE;
 				new = IT_MACE;
 				other.ammo_bloodcrystals = other.ammo_bloodcrystals + self.aflag;
 				other.moditems = other.moditems | IT_MACE;
 				other.weapon = IT_MACE;
 			} else if (self.classtype == CT_VOID_STAFF) {		// HACKBANK!
 				if (leave && (other.moditems & IT_VOID_STAFF) ) return;
-				other.selfweaponismoditems = TRUE;
+				other.weaponismoditems = TRUE;
 				new = IT_VOID_STAFF;
 				other.ammo_voidshards = other.ammo_voidshards + self.aflag;
 				other.moditems = other.moditems | IT_VOID_STAFF;
 				other.weapon = IT_VOID_STAFF;
 			} else if (self.classtype == CT_FLAK) {				// HACKBANK!
 				if (leave && (other.moditems & IT_FLAK) ) return;
-				other.selfweaponismoditems = TRUE;
+				other.weaponismoditems = TRUE;
 				new = IT_FLAK;
 				other.ammo_nails = other.ammo_nails + self.aflag;
 				other.ammo_rockets = other.ammo_rockets + (ceil(self.aflag/3));
@@ -267,7 +267,7 @@ void() weapon_touch = {
 		other.weapon = IT_LIGHTNING;
 			} else if (self.classtype == CT_GUNGNIR) {			// HACKBANK!
 				if (leave && (other.moditems & IT_GUNGNIR) ) return;
-				other.selfweaponismoditems = TRUE;
+				other.weaponismoditems = TRUE;
 				new = IT_GUNGNIR;
 				other.ammo_voidshards = other.ammo_voidshards + self.aflag;
 				other.moditems = other.moditems | IT_GUNGNIR;
@@ -309,7 +309,7 @@ void() weapon_touch = {
 			else if (self.classtype == CT_AIRGUN) {				// HACKBANK!
 				if (leave && (other.perms & IT_AIRGUN) ) return;
 				new = IT_AIRGUN;
-				other.selfweaponismoditems = TRUE;
+				other.weaponismoditems = TRUE;
 				other.perms = other.perms | IT_AIRGUN;
 				other.weapon = IT_AIRGUN;
 	} else if (self.classtype == CT_FROSTBOW) {					// OVERRIDE

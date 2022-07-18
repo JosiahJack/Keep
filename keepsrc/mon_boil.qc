@@ -194,7 +194,7 @@ void() boil_explode = {
 					if (self.dmg > 0 && self.enemytarget.health > 0) {
 						if (cand) {
 							// Pass on self.enemy so death triggers fire correctly
-							T_Damage (self.enemytarget, self, self.enemy, self.dmg, DAMARMOR);
+							T_Damage(self.enemytarget, self, self.enemy, self.dmg, DAMARMOR);
 							// make sure to check for poisonous and apply debuff
 							if (self.dmg > 0 && self.poisonous == TRUE) PoisonDeBuff(self.enemytarget);
 						}

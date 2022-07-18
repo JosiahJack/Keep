@@ -100,7 +100,7 @@ void() GrappleTrack = { // [FUNCTION]
 			if (save > 0) T_Heal(self.master, save * d, FALSE);
 		}
         sound(self,CHAN_WEAPON,"zerstorer/weapons/sawguts.wav",1,ATTN_NORM); // Use Zerstorer's chainsaw grinding noise.
-        T_Damage (self.enemy, self, self.master, d, DAMARMOR);
+        T_Damage(self.enemy, self, self.master, d, DAMARMOR);
         spray_x = 100 * crandom();
         spray_y = 100 * crandom();
         spray_z = 100 * crandom() + 50;
@@ -135,7 +135,7 @@ void() GrappleAnchor = { // [FUNCTION]
     sound(self,CHAN_AUTO,sfx,1,ATTN_NORM);
     if (other.takedamage) {
         spawn_touchblood (self,other,self.dmg);
-        T_Damage (other, self, self.master, self.dmg, DAMARMOR);
+        T_Damage(other, self, self.master, self.dmg, DAMARMOR);
     }
 
 	// Remove the hook if one of...
@@ -143,7 +143,7 @@ void() GrappleAnchor = { // [FUNCTION]
 	// 2) Hook hits its master, possible with reflection.
 	// 3) Cable was severed.
 	// 4) Hook isn't connected with its master.
-    if ( (!self.master.button0 && self.weapon == IT2_GRAPPLE && !self.selfweaponismoditems) || (other == self.master) || (self.count) || (self.master.hook != self) ) {
+    if ( (!self.master.button0 && self.weapon == IT2_GRAPPLE && !self.weaponismoditems) || (other == self.master) || (self.count) || (self.master.hook != self) ) {
         if (!other.takedamage) {
             org = self.origin - 8*normalize(self.velocity);
             Tent_Point(TE_GUNSHOT,org);
@@ -245,13 +245,13 @@ void() GrappleService = { // [FUNCTION]
 		}
 
         // just draw a line to the hook
-        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(TE_BEAM,"",self.hook,(self.origin + '0 0 16'),self.hook.origin,31);
-        if (!self.button0 && self.weapon == IT2_GRAPPLE && !self.selfweaponismoditems) GrappleSever(self.hook);
+        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(TE_BEAM,"",0,self.hook,(self.origin + '0 0 16'),self.hook.origin,31);
+        if (!self.button0 && self.weapon == IT2_GRAPPLE && !self.weaponismoditems) GrappleSever(self.hook);
         return;
     } // From here on, we know the hook is attached to something.
 
     // PM:  We cannot check cutscene/intermission status here because this function isn't called during such as intermission.  Drop the hook if player lets go of button
-    if ((!self.button0 && self.weapon == IT2_GRAPPLE && !self.selfweaponismoditems) || (!(InItems2(self, IT2_GRAPPLE))) || (self.teleport_time > time)) { // PM:  6/10/11:  Sever if weapon is stolen. Can't use grapple while morphed.
+    if ((!self.button0 && self.weapon == IT2_GRAPPLE && !self.weaponismoditems) || (!(InItems2(self, IT2_GRAPPLE))) || (self.teleport_time > time)) { // PM:  6/10/11:  Sever if weapon is stolen. Can't use grapple while morphed.
         if (self.hook) SUB_ThinkImmediate (self.hook, GrappleReset); // release when we get 'ported
         return;
     }
@@ -293,5 +293,5 @@ void() GrappleService = { // [FUNCTION]
         targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
     }
 
-    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(TE_BEAM,"", self.hook,(self.origin + '0 0 16'),self.hook.origin, 31);
+    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(TE_BEAM,"",0,self.hook,(self.origin + '0 0 16'),self.hook.origin, 31);
 };

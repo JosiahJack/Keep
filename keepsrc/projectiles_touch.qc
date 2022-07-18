@@ -69,7 +69,7 @@ void() Touch_Bullet = { // [FUNCTION]
 			else spawn_touchblood (self, other, self.dmg);
 		}
 		
-		if (self.dmg > 0) T_Damage (other, self, self.owner, self.dmg, DAMARMOR); // Don't bother with damage if there is none!
+		if (self.dmg > 0) T_Damage(other, self, self.owner, self.dmg, DAMARMOR); // Don't bother with damage if there is none!
 	} else {
 		// Hit world/static object, impact particles.
 		if (self.classtype == CT_PROJ_TRACE || self.classtype == CT_PROJ_MCOR2) { // NG tink sound or SG ricochet sound.
@@ -490,7 +490,7 @@ void() Touch_HomingMissile = { // [FUNCTION]
 			trigger_ent(other, self.oldenemy); // Found a breakable which is prone to explosive damage
 		} else {
 			
-			if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) T_Damage (other, world, world, DAMAGE_ZOMBIECLASS, NOARMOR); // Homing Missiles always kill any zombie class (except for tuff mummies!).
+			if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) T_Damage(other, world, world, DAMAGE_ZOMBIECLASS, NOARMOR); // Homing Missiles always kill any zombie class (except for tuff mummies!).
 			else {
 				self.pos1 = '0 0 0'; // Missile explosion x/y/z = base/rnd/splash
 				if (self.classtype == CT_PROJ_SHUB1) self.pos1 = self.oldenemy.pos2;
@@ -504,14 +504,14 @@ void() Touch_HomingMissile = { // [FUNCTION]
 				if (other.flags & FL_CLIENT && other.moditems & IT_ARTBLASTBELT) {
 					PlayBlastBeltSound(other);	// Play impact sound
 					if (other.health > 0) {
-						if (self.dmg <= 0 && self.pos1_z > 0) T_Damage (other, self, self.oldenemy, self.pos1_z * ART_BLASTBELT_DD, DAMARMOR); // Need some damage otherwise projectile does nothing!
-						else if (self.dmg > 0) T_Damage (other, self, self.oldenemy, self.dmg * ART_BLASTBELT_DD, DAMARMOR); // Any Direct damage is reduced
+						if (self.dmg <= 0 && self.pos1_z > 0) T_Damage(other, self, self.oldenemy, self.pos1_z * ART_BLASTBELT_DD, DAMARMOR); // Need some damage otherwise projectile does nothing!
+						else if (self.dmg > 0) T_Damage(other, self, self.oldenemy, self.dmg * ART_BLASTBELT_DD, DAMARMOR); // Any Direct damage is reduced
 					}
 
-					if (self.pos1_z > 0) T_RadiusDamage (self, self.oldenemy, self.pos1_z, self.oldenemy, IGNORECLASS);
+					if (self.pos1_z > 0) T_RadiusDamage(self, self.oldenemy, self.pos1_z, self.oldenemy, IGNORECLASS);
 				} else { // DEFAULT
-					if (self.dmg > 0 && other.health > 0) T_Damage (other, self, self.oldenemy, self.dmg, DAMARMOR); // Only call T_ functions if there is damage to do!
-					if (self.pos1_z > 0) T_RadiusDamage (self, self.oldenemy, self.pos1_z, self.oldenemy, IGNORECLASS); // Stop multiple enemies of the same type killing themselves!
+					if (self.dmg > 0 && other.health > 0) T_Damage(other, self, self.oldenemy, self.dmg, DAMARMOR); // Only call T_ functions if there is damage to do!
+					if (self.pos1_z > 0) T_RadiusDamage(self, self.oldenemy, self.pos1_z, self.oldenemy, IGNORECLASS); // Stop multiple enemies of the same type killing themselves!
 					else {
 						if (self.poisonous) PoisonDeBuff(other); // Check for poison debuff (using poisonous flag)
 					}
@@ -619,13 +619,13 @@ void() Touch_Missile = { // [FUNCTION]
 			if (other.flags & FL_CLIENT && other.moditems & IT_ARTBLASTBELT) {
 				PlayBlastBeltSound(other);	// Play impact sound
 				if (other.health > 0) {
-					if (self.dmg <= 0 && self.pos1_z > 0) T_Damage (other, self, self.owner, self.pos1_z*ART_BLASTBELT_DD, DAMARMOR); // Need some damage otherwise projectile does nothing!
-					else if (self.dmg > 0) T_Damage (other, self, self.owner, self.dmg*ART_BLASTBELT_DD, DAMARMOR); // Any direct damage is reduced
+					if (self.dmg <= 0 && self.pos1_z > 0) T_Damage(other, self, self.owner, self.pos1_z*ART_BLASTBELT_DD, DAMARMOR); // Need some damage otherwise projectile does nothing!
+					else if (self.dmg > 0) T_Damage(other, self, self.owner, self.dmg*ART_BLASTBELT_DD, DAMARMOR); // Any direct damage is reduced
 				}
-				if (self.pos1_z > 0) T_RadiusDamage (self, self.owner, self.pos1_z, other, DAMAGEALL);
+				if (self.pos1_z > 0) T_RadiusDamage(self, self.owner, self.pos1_z, other, DAMAGEALL);
 			} else {
-				if (self.dmg > 0 && other.health > 0) T_Damage (other, self, self.owner, self.dmg, DAMARMOR); // DEFAULT Only call T_ functions if there is damage to do!
-				if (self.pos1_z > 0) T_RadiusDamage (self, self.owner, self.pos1_z, other, DAMAGEALL);
+				if (self.dmg > 0 && other.health > 0) T_Damage(other, self, self.owner, self.dmg, DAMARMOR); // DEFAULT Only call T_ functions if there is damage to do!
+				if (self.pos1_z > 0) T_RadiusDamage(self, self.owner, self.pos1_z, other, DAMAGEALL);
 			}
 		}
 		
@@ -718,7 +718,7 @@ void() HIP_LaserTouch = { // [FUNCTION]
 	if (other.health > 0 && other.takedamage) {
 		if (self.lastvictim == other) self.dmg = (self.dmg / 2);
 		spawn_touchblood (self, other, self.dmg);
-		T_Damage (other,self,self.lastvictim,self.dmg,DAMARMOR);
+		T_Damage(other,self,self.lastvictim,self.dmg,DAMARMOR);
 	} else {
 		if (self.cnt == 3 || random() < 0.15) Tent_Point(TE_GUNSHOT,org);
 		else {
@@ -764,7 +764,7 @@ void() AreaBlaster_Touch = { // [FUNCTION]
     if (pointcontents(self.origin) == CONTENT_SKY) { remove (self); return; }
     if (Reflected()) return;
 
-    if (other.takedamage) T_Damage (other, self, self.master, self.cnt, IGNORECLASS);
+    if (other.takedamage) T_Damage(other, self, self.master, self.cnt, IGNORECLASS);
     else Tent_Point (TE_KNIGHTSPIKE, self.origin);
 
     if (other.solid != SOLID_BSP) self.owner = other;
@@ -782,8 +782,8 @@ void() Mirv_Touch = { // [FUNCTION]
 	if (!self.dmg) self.dmg = 120;
     if (self.tome_finished) self.dmg = self.dmg * 2;
 	if (self.dmg > 0 && other.health > 0) {
-		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-		T_RadiusDamage (self, self.owner, self.dmg, other, DAMAGEALL);
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
+		T_RadiusDamage(self, self.owner, self.dmg, other, DAMAGEALL);
 		if (other.resist_rockets > 0 || (other.resist_multi_rockets && self.classgroup == CG_PROJMULTIROCKETS)) Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET); // Rocket resistance is shown with puffs of smoke
 	} else {
 		// Check for poison debuff (using poisonous flag)
@@ -792,7 +792,7 @@ void() Mirv_Touch = { // [FUNCTION]
 			PoisonDeBuff(other); // Poisonous projectiles
 		}
 
-		T_RadiusDamage (self, self.owner, self.pos1_z, other, DAMAGEALL);
+		T_RadiusDamage(self, self.owner, self.pos1_z, other, DAMAGEALL);
 	}
 	
 	self.origin = self.origin - 8*normalize(self.velocity); // Move the explosion effect higher up from point of contact
@@ -819,11 +819,11 @@ void() lavaspike_touch = { // [FUNCTION]
 			old_armormask = (other.items2 & ((IT2_ARMOR1 | IT2_ARMOR2) | IT2_ARMOR3));
 			other.armortype = FALSE;
 			other.armorvalue = FALSE;
-			T_Damage (other,self,self.owner,9,DAMARMOR);
+			T_Damage(other,self,self.owner,9,DAMARMOR);
 			other.armortype = old_armortype;
 			other.armorvalue = old_armorvalue;
 			other.items2 = (other.items2 | old_armormask);
-		} else T_Damage (other,self,self.owner,15,DAMARMOR);
+		} else T_Damage(other,self,self.owner,15,DAMARMOR);
 	} else {
 		WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
 		if (self.classname == "wizspike") WriteByte(MSG_BROADCAST,TE_WIZSPIKE);
@@ -849,9 +849,9 @@ void() superlavaspike_touch = { // [FUNCTION]
 		if (other.flags & FL_CLIENT) {
 			old_armortype = other.armortype;
 			other.armortype = (other.armortype * 0.500);
-			T_Damage (other,self,self.owner,18.000,DAMARMOR);
+			T_Damage(other,self,self.owner,18.000,DAMARMOR);
 			if (other.armortype != 0) other.armortype = old_armortype;
-		} else T_Damage (other,self,self.owner,30,DAMARMOR);
+		} else T_Damage(other,self,self.owner,30,DAMARMOR);
 	} else {
 		WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST,TE_SUPERSPIKE);
@@ -902,10 +902,10 @@ void() PlasmaTouch = { // [FUNCTION]
    if (self.owner.classtype == CT_MONGREMLIN) { damg = damg * 0.5; raddmg = 35; }
    sound(self,CHAN_WEAPON,"rogue/plasma/explode.wav",TRUE,ATTN_NORM);
    if ( other.health ) {
-      T_Damage (other,self,self.owner,damg,DAMARMOR);
+      T_Damage(other,self,self.owner,damg,DAMARMOR);
    }
 
-   T_RadiusDamage (self,self.owner,raddmg,other,DAMAGEALL);
+   T_RadiusDamage(self,self.owner,raddmg,other,DAMAGEALL);
    WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
    WriteByte (MSG_BROADCAST,TE_EXPLOSION2);
    WriteCoord (MSG_BROADCAST,self.origin_x);
@@ -929,14 +929,14 @@ void() beam_touch = { // [FUNCTION]
 		totaldmg = ceil(totaldmg);
 		// totally decimate the dude if doesn't have enough health
 		if (other.health <= totaldmg) {
-			T_Damage (other, self, self.owner, 99999,DAMARMOR);
+			T_Damage(other, self, self.owner, 99999,DAMARMOR);
 			if (other.health <= 0) {
 				MakeBeamRing(other.origin);
 				Tent_Point(TE_TAREXPLOSION,other.origin);
 				remove(self);
 				return;
 			}
-		} else T_Damage (other, self, self.owner, totaldmg,DAMARMOR);
+		} else T_Damage(other, self, self.owner, totaldmg,DAMARMOR);
 	}
 	sound(self,CHAN_ITEM,"custents/turret/beamhit.wav",1,ATTN_NORM);
 	BecomeBeamHit();
@@ -952,7 +952,7 @@ void() Laser2_Touch = { // [FUNCTION]
 	org = self.origin - 8*normalize(self.velocity);
 	if (other.health) {
 		SpawnBlood (self.enemy, org,v_forward, 9,0);
-		T_Damage (other, self, self.owner, 9, DAMARMOR);
+		T_Damage(other, self, self.owner, 9, DAMARMOR);
 	}
 	remove(self);
 };
@@ -1080,7 +1080,7 @@ void() Acidball_Touch = { // [FUNCTION]
     self.touch = SUB_Null;
     self.enemy = other;
     if (!self.dmg) self.dmg = 120;
-    if (self.enemy) T_Damage (self.enemy,self,self.owner,self.dmg / 6 * (5 + random()),DAMARMOR); // Don't check health, just if there is a target.  Someone took a direct hit.
+    if (self.enemy) T_Damage(self.enemy,self,self.owner,self.dmg / 6 * (5 + random()),DAMARMOR); // Don't check health, just if there is a target.  Someone took a direct hit.
     T_RadiusDamage(self,self.owner,self.dmg,self.enemy,DAMAGEALL); // Don't do radius damage to the enemy, because all the damage was done in the impact.
 	setorigin(self, self.origin - (8 * normalize(self.velocity))); // PM:  Do it right.
     Tent_Explosion2(self.origin,48,16);
@@ -1119,7 +1119,7 @@ void() Ice_Touch = { // [FUNCTION]
 		// Check cold resistance here instead of in the damage functions because it affects how much blood is spawned.
         if (damage > 0) {
             spawn_touchblood (self, other, damage);
-            T_Damage (other, self, self.owner, damage, DAMARMOR);
+            T_Damage(other, self, self.owner, damage, DAMARMOR);
             chunks = FALSE;
         }
     }
@@ -1194,9 +1194,9 @@ void() NecroBolt_Touch = { // [FUNCTION]
     self.touch = SUB_Null; // Stack overflow prevention.
     if (other.classname != self.master.classname) { // Warlocks are immune, and shamblers take full damage.
         damage = (self.dmg - 20) + (random() * 20); // PM:  Half strength would be 50+d10, but since older progs used 50+d20 and gives the shot more oomph, I'll leave damage alone.
-        if (damage > 0) T_Damage (other, self, self.master, damage, DAMARMOR);
+        if (damage > 0) T_Damage(other, self, self.master, damage, DAMARMOR);
     }
-    T_RadiusDamage (self, self.master, self.dmg, other, DAMAGEALL); // PM:  Don't use 120 radius damage because that is too much.  Also, even though effects look like lightning, it isn't -- it's magic!
+    T_RadiusDamage(self, self.master, self.dmg, other, DAMAGEALL); // PM:  Don't use 120 radius damage because that is too much.  Also, even though effects look like lightning, it isn't -- it's magic!
     self.origin = self.origin - 8*normalize(self.velocity);
     sound(self,CHAN_AUTO,"rogue/plasma/explode.wav",1,ATTN_NORM);
     Rocket_Explosion2(self.origin, 247, 5); // Create wicked red electric explosion.
@@ -1313,7 +1313,7 @@ void() Buriza_Touch = { // [FUNCTION]
         if (other == self.fallen) return; // Do not hit this target.
         if (other == self.oldenemy) return; // Do not retouch the same target twice in a row.
 
-		T_Damage (other, self, self.master, 100, DAMARMOR); // Hit for 100 damage like in Heretic (ToP firemace vs. bosses).
+		T_Damage(other, self, self.master, 100, DAMARMOR); // Hit for 100 damage like in Heretic (ToP firemace vs. bosses).
 		T_Slow (other, self.master, 5); // Knock off some hp, and slow for 5 seconds.
 		particle (self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
 		particle (self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
@@ -1324,7 +1324,7 @@ void() Buriza_Touch = { // [FUNCTION]
 
 	// Explode on impact on a solid surface.
     self.touch = SUB_Null; // Stack overflow prevention.
-    T_RadiusDamage (self, self.master, 60, world, DAMAGEALL);
+    T_RadiusDamage(self, self.master, 60, world, DAMAGEALL);
     self.origin = self.origin - 8*normalize(self.velocity);
     sound(self,CHAN_AUTO,"drake/weapons/icewall.wav",1,ATTN_NORM); // Don't spawn shockwaves like the dragons' iceballs.
     Particle_Explosion (self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2(self.origin, 32, 16);'.
@@ -1340,11 +1340,11 @@ void() Fireball_Touch = { // [FUNCTION]
     if (Reflected ()) return; // NEW:  Rebound if impacting a reflective surface.
 
     self.touch = SUB_Null; // Stack overflow prevention.
-    T_RadiusDamage (self, self.master, self.dmg, other, DAMAGEALL); // Hit something that bleeds.  Update 8/30/09:  Attenuation = Damage / Radius.
+    T_RadiusDamage(self, self.master, self.dmg, other, DAMAGEALL); // Hit something that bleeds.  Update 8/30/09:  Attenuation = Damage / Radius.
     self.origin = self.origin - 8*normalize(self.velocity);
     if (other.takedamage) {
         MakeFlame (other);
-        T_Damage (other, self, self.master, self.dmg, DAMARMOR);
+        T_Damage(other, self, self.master, self.dmg, DAMARMOR);
     } else FloorFire_SpawnCheck (self, 0.1);
 
     self.effects = self.effects | EF_MUZZLEFLASH;
@@ -1374,7 +1374,7 @@ void() Firelink_Touch = { // [FUNCTION]
     if (self.dmg < 1) damage = 1;
     else damage = (random() + 1) * self.dmg;
 
-    T_Damage (other, self, self.master, damage, DAMARMOR);
+    T_Damage(other, self, self.master, damage, DAMARMOR);
     self.wait = time + 0.1;    // Wait until then to damage again.
     if (self.t_width < time) {
         sound(self,CHAN_BODY,"drake/weapons/fwallhit.wav",1,ATTN_NORM); // Play burning sounds.
@@ -1429,7 +1429,7 @@ void() faBladeTouch =  { // [FUNCTION]
    if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
    damg = random(8.00000,16.00000);
-   if ( other.health ) T_Damage ( other, self, self.owner, damg, DAMARMOR);
+   if ( other.health ) T_Damage( other, self, self.owner, damg, DAMARMOR);
    sound(self,CHAN_WEAPON,"hexen2/weapons/expsmall.wav", 1.00000,ATTN_NORM);
    self.origin = (self.origin - (8.00000 * normalize (self.velocity)));
    //CreateGreenSmoke (self.origin, '0.00000 0.00000 8.00000', (HX_FRAME_TIME * 4.00000));
@@ -1443,8 +1443,8 @@ void() faSpellTouch = { // [FUNCTION]
 	if ((pointcontents(self.origin) == CONTENT_SKY)) { remove(self); return; }
 
 	damg = random(12,22);
-	if ( other.health ) T_Damage ( other, self, self.owner, damg, DAMARMOR);
-	T_RadiusDamage (self, self.owner, damg, other, DAMAGEALL);
+	if ( other.health ) T_Damage( other, self, self.owner, damg, DAMARMOR);
+	T_RadiusDamage(self, self.owner, damg, other, DAMAGEALL);
 	sound(self,CHAN_WEAPON,"hexen2/weapons/explode.wav", 1.00000,ATTN_NORM);
 	self.origin = self.origin - (8 * normalize(self.velocity));
 	FlareGlitter();
@@ -1456,7 +1456,7 @@ void() WandSpark_Touch = { // [FUNCTION]
     if (Reflected()) return;
 
     self.touch = SUB_Null; // Stack overflow prevention.
-    if (other.takedamage) T_Damage (other, self, self.master, self.dmg, DAMARMOR); // Hit something that bleeds
+    if (other.takedamage) T_Damage(other, self, self.master, self.dmg, DAMARMOR); // Hit something that bleeds
     self.origin = self.origin - 8*normalize(self.velocity);
     BecomeFancy (X32_CUT_ORANGE, 4);
 };
@@ -1515,7 +1515,7 @@ void() Touch_HazardProjectile = {
 		if (self.dmg > 0) {
 			// Spawn some blood, cause harm and play a sound!
 			spawn_touchblood (self, other, self.dmg);
-			T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+			T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 			// Play touch sound if defined? (limit replay)
 			if (self.part_soundtouch != "" && self.part_soundtimer < time) {
 				self.part_soundtimer = time + 0.3;
@@ -1557,12 +1557,12 @@ void() pyroflame_touch = {
 		// Can only poison the player
 		if (other.flags & FL_CLIENT) {
 			// Check if player is posioned already?
-			if (other.poisoned) T_Damage (other, self, self, DAMAGE_FUMPOISON, DAMARMOR);
+			if (other.poisoned) T_Damage(other, self, self, DAMAGE_FUMPOISON, DAMARMOR);
 			// Make sure player is posioned
 			else PoisonDeBuff(other);
 		}
 		// Poison anything else (very quick death, high damage)
-		else T_Damage (other, self, self, DAMAGE_MONFLAME, DAMARMOR);
+		else T_Damage(other, self, self, DAMAGE_MONFLAME, DAMARMOR);
 	}
 };
 
@@ -1589,9 +1589,9 @@ void() lavaman_touch = {
 		if  (other.classname == "monster_boss" || other.classname == "monster_chthon") damg = 0;
 
 		if (other.resist_fire > 0) damg = damg * (1-other.resist_fire);
-		T_Damage (other,self,self.owner,damg, DAMARMOR);
+		T_Damage(other,self,self.owner,damg, DAMARMOR);
 	}
-	T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
+	T_RadiusDamage(self,self.owner,40,world,DAMAGEALL);
 	self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
 	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST,TE_EXPLOSION);

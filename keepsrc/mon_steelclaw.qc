@@ -163,7 +163,7 @@ void() steelc_melee = {
 	// Spider bite (damage 1-9) is very weak
 	ldmg = (random() + random() + random()) * 3;
 	if (ldmg < 1) ldmg = 1;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Spawn blood at mouth
 	spawn_touchblood (self, self.enemy, ldmg*3);

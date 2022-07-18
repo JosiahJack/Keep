@@ -916,7 +916,7 @@ void() judge_JumpTouch = {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 20 + 10*random();
 			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			SpawnMeatSpray(self, other, FALSE);
 			SpawnMeatSpray(self, other, FALSE);
 			SpawnMeatSpray(self, other, FALSE);

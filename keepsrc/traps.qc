@@ -455,9 +455,9 @@ void() trap_gasshooter_touch = { // [FUNCTION]
 		// Check for debuff particle type first
 		if (self.owner.spawnflags & TRAP_GASFIRE) ApplyFireDmg(other, self.owner.dmg, self.owner.dmg);
 		else if (self.owner.spawnflags & TRAP_GASPOISON) PoisonDeBuff(other);
-		else T_Damage (other, self, self, self.owner.dmg, NOARMOR);
-	} else if (other.flags & FL_MONSTER) T_Damage (other, self, self, DAMAGE_MONFLAME, NOARMOR); // Monsters have special damage to kill them quicker
-	else T_Damage (other, self, self, self.owner.dmg, NOARMOR);
+		else T_Damage(other, self, self, self.owner.dmg, NOARMOR);
+	} else if (other.flags & FL_MONSTER) T_Damage(other, self, self, DAMAGE_MONFLAME, NOARMOR); // Monsters have special damage to kill them quicker
+	else T_Damage(other, self, self, self.owner.dmg, NOARMOR);
 	self.velocity = '0 0 0';
 };
 

@@ -56,7 +56,7 @@ float(entity targ, entity inflictor) CanDamage = {
 	// Not all bmodels use push movetype, use bsporigin instead
 	//	if (targ.movetype == MOVETYPE_PUSH) {
 	if (targ.bsporigin == TRUE) {
-		traceline(inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE, inflictor);
+		traceline(inflictor.origin,0.5 * (targ.absmin + targ.absmax),TRUE,inflictor);
 		if (trace_fraction == 1) return TRUE;
 		if (trace_ent == targ) return TRUE;
 		return FALSE;
@@ -250,7 +250,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		return;
 	}
 
-	if (targ.items2 & IT2_MJOLNIR && targ.weapon == IT2_MJOLNIR && !targ.selfweaponismoditems
+	if (targ.items2 & IT2_MJOLNIR && targ.weapon == IT2_MJOLNIR && !targ.weaponismoditems
         && (inflictor.classgroup == CG_PROJCELLS || inflictor.classgroup == CG_PROJPLASMAROGUE
             || attacker.classtype == CT_MONSHAM || attacker.classtype == CT_MONGAUNT)) {
 		damage = damage * 0.5; // 50% lightning protection while holding mjolnir
@@ -258,9 +258,9 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	// resist_fire is the odd one out here. There were too many edge cases not handled by classgroups so they exist in individual locations
 	// except if we have the ice arbalest out or Blizzard Sphere
-	if (( (targ.moditems & IT_ICE && targ.weapon == IT_ICE && targ.selfweaponismoditems) // Have ice out
+	if (( (targ.moditems & IT_ICE && targ.weapon == IT_ICE && targ.weaponismoditems) // Have ice out
            || (targ.items & IT_EXTRA_WEAPON && targ.perms & IT_FROSTBOW // Have frostbow out
-               && targ.weapon == IT_EXTRA_WEAPON && !targ.selfweaponismoditems) )
+               && targ.weapon == IT_EXTRA_WEAPON && !targ.weaponismoditems) )
         && (inflictor.classgroup == CG_PROJLAVANAILS || attacker.resist_fire == 1)) {
 		damage = damage * 0.5; // 50% fire protection while holding ice weapon
 	}
@@ -351,7 +351,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	// Berserker Helm melee damage boost, Drake permanent powerup
 	if ((attacker.perms & POW_VAMPIRE) || (attacker.shroom_finished > time)) {
-		if (attacker.selfweaponismoditems) {
+		if (attacker.weaponismoditems) {
 			if (attacker.weapon == IT_MACE) damage = damage * 2;
 		} else {
 			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) damage = damage * 2;
@@ -495,9 +495,9 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		targ.velocity = targ.velocity + dir;
 
 		// Wand knockback
-		if ((attacker.weapon == IT2_CROSS && !attacker.selfweaponismoditems)
-			|| (attacker.weapon == IT_MACE && attacker.selfweaponismoditems)
-			|| (attacker.weapon == IT2_MJOLNIR && !attacker.selfweaponismoditems)
+		if ((attacker.weapon == IT2_CROSS && !attacker.weaponismoditems)
+			|| (attacker.weapon == IT_MACE && attacker.weaponismoditems)
+			|| (attacker.weapon == IT2_MJOLNIR && !attacker.weaponismoditems)
 			|| attacker.tome_finished) {
 			float z_add = 150;
 			if (attacker.tome_finished) z_add = z_add * 2;
@@ -509,10 +509,8 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 
 	// Check for Blast Belt 100% splashdamage resistance
-	if (checkarmor == DAMSPLASH && targ.flags & FL_CLIENT 
-		&& targ.moditems & IT_ARTBLASTBELT) {
-		PlayBlastBeltSound(targ);
-		return;
+	if (checkarmor == DAMSPLASH && (targ.moditems & IT_ARTBLASTBELT)) {
+		if ((targ.flags & FL_CLIENT)) PlayBlastBeltSound(targ); return;
 	}
 
 	// check for godmode or invincibility
@@ -531,19 +529,19 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}	
 	}	
 	
-	//------------------------------------------------------//
-	//------------//
-	//---//
-	//
+	//------------------------------------------------------\\__
+	//------------//                                              \\
+	//---//                                                            _
+	//                                                                   \
 	targ.health = targ.health - take; // DO THE DAMAGE  --------- DO IT!!!
-	//
-	//---//
-	//------------//
+	//                                                                 _ /
+	//---\\                                                       //
+	//------------\\                                          __
 	//----------------------- OUCH! ------------------------//
 
 	// Apply berserker helm life leech to heal the attacker if the target still has health
 	if (attacker.perms & POW_VAMPIRE && targ.health > 0) {
-		if (attacker.selfweaponismoditems) {
+		if (attacker.weaponismoditems) {
 			if (attacker.weapon == IT_MACE) {
 				misc = ceil(take * 0.1); //10% of the damage done gets leeched.  Damage was already done so doesn't affect damage amount
 				if (misc < 1) misc = 1; // minimum of 1 leech
@@ -748,7 +746,7 @@ float(entity targ, entity attacker, entity ignore, float checkclass) T_RadiusCan
 // inflictor -(self) = projectile
 // attacker - (self.owner) = monster/player OR (self) = direct attack
 // ignore   - (other) = Original target OR (world) = no exceptions
-void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage = {
+void(entity inflictor, entity attacker, float dmg, entity ignore, float checkclass) T_RadiusDamage = {
 	local float points, range;
 	local entity head;
 	local vector org, imporg, dir;
@@ -759,8 +757,8 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 	if (attacker.classtype == CT_ENEMYTARGET) return;
 
 	imporg = SUB_EntityOrigin(inflictor);
-	head = findradius(imporg,damage+40);
-	points = damage;
+	head = findradius(imporg,dmg+40);
+	points = dmg;
 	while (head) {
 		if (T_RadiusCanDamage(head,attacker,ignore,checkclass)) {
 			// This formula is using bounding box size which means the damage amount is lower if the monster is larger
@@ -768,7 +766,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 			org = head.origin + (head.mins + head.maxs)*0.5;
 			points = 0.5 * vlen(imporg - org);
 			points = SUB_ClampFloat(points,0,points); // Only saturate negative.
-			points = damage - points;
+			points = dmg - points;
 			if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
 			if (points > 0 && head.health > 0) {
 				// Need CanDamage to check for anything blocking LoS.  It will do several traces (source->target) to check for any blocking entities (lifts, doors, walls etc)
@@ -776,7 +774,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 					if (points > 0) {
 						if ((inflictor.classgroup == CG_PROJFIRE
 							 || attacker.classgroup == CG_PROJFIRE)
-							&& (random() < (damage+1)*0.01)) {
+							&& (random() < (dmg+1)*0.01)) {
 							// Chance to burn equals (damage + 1)%. 
 							// e.g. 9 damage = 10% chance.
 							Burn_Add(head,attacker,MAX_BURN_DAMAGE);
@@ -794,9 +792,9 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 			dir = head.origin - ((inflictor.absmin + inflictor.absmax) * 0.5);
 			dir = normalize(dir);
 			if (head.frozen) {
-				head.velocity = head.velocity + dir*damage*2; // Half as much for frozen enemies
+				head.velocity = head.velocity + dir*dmg*2; // Half as much for frozen enemies
 				head.health = head.health - points;
-			} else head.velocity = head.velocity + dir*damage*4;
+			} else head.velocity = head.velocity + dir*dmg*4;
 			if (head.velocity_z < 10) head.velocity_z = 10;
 			head.velocity_z = vlen(head.velocity) * 0.5;
 		}
@@ -836,8 +834,8 @@ void() FreezeFinish = {
 	self.health = 0;
 	if (self.gibhealth >= 0) self.gibhealth = -60;
 	self.touch = Frozen_Touch;
-	Gyro_Object_Activate(self,MASS_GIB); // Light weight and floats, ice floats
-	Gyro_Object_SetBouyancy(self,BOUY_GIB);
+	Gyro_Object_Activate(self,8 + self.mass); // Light weight and floats, ice floats
+	Gyro_Object_SetBouyancy(self,1.15);
 	Gyro_Object_SetLiquidResistance(self,RESIST_GIB);
 	if (self.targetname) self.use = BecomeIcyExp;
 	if (InLava(self.origin)) {

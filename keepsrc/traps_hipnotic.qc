@@ -38,106 +38,68 @@
 //=============================================================================
 
 float UNDERWATER = 2.000;
-float LIGHTNING_RANDOM = 1.000;
-float LIGHTNING_BOOM = 2.000;
+float LIGHTNING_RANDOM = 1;
+float LIGHTNING_BOOM = 2;
+float LIGHTNING_LIGHTBEAM = 4;
 
 void() SpawnLightningThink = { // [FUNCTION]
-   if (time > self.delay) { remove (self); return ; }
-
    self.think = SpawnLightningThink;
-   if (checkclient()) {
-      WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-      WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-      WriteEntity (MSG_BROADCAST,self);
-      WriteCoord (MSG_BROADCAST,self.origin_x);
-      WriteCoord (MSG_BROADCAST,self.origin_y);
-      WriteCoord (MSG_BROADCAST,self.origin_z);
-      WriteCoord (MSG_BROADCAST,self.oldorigin_x);
-      WriteCoord (MSG_BROADCAST,self.oldorigin_y);
-      WriteCoord (MSG_BROADCAST,self.oldorigin_z);
-
-   }
-   LightningDamage(self.origin,self.oldorigin,self.lastvictim,self.dmg);
+   QC_ParseBeamGeneric(self.style,self.mdl,self.skin,self,self.origin,self.oldorigin,self.distance,FALSE,trace_ent);
+   if (self.dmg > 0) LightningDamage(self.origin,self.oldorigin,self.owner,self.dmg);
    self.nextthink = (time + 0.100);
+   if (time > self.duration) self.think = SUB_Remove;
 };
 
 void() trap_lightning_use = { // [FUNCTION]
    local vector p1, p2, dir;
    local float dst, remainder;
-   local entity temp;
+   local entity targ;
 
    if ( (time >= self.pausetime) ) {
-      if (self.spawnflags & LIGHTNING_BOOM) sound(self,CHAN_AUTO,"weapons/lstart.wav",TRUE,ATTN_NORM);
-      else sound(self,CHAN_AUTO,"weapons/lhit.wav",TRUE,ATTN_NORM);
-
+      sound(self,CHAN_AUTO,self.noise,TRUE,ATTN_NORM);
       if (self.classname == "trap_lightning_triggered") self.pausetime = (time + 0.100);
    }
 
-   if (self.target ) {
-      p1 = self.origin;
-      p2 = self.enemy.origin;
+   p1 = self.origin;
+   trap_tracking();
+   if (self.movetarget) {
+      p2 = self.dest1;
    } else {
       makevectors(self.angles);
-      self.movedir = v_forward;
-      traceline (self.origin,(self.origin + (self.movedir * 600.000)),TRUE,self);
-      p1 = self.origin;
-      p2 = trace_endpos;
+      p2 = (self.origin + (v_forward * 8192));
    }
-
-   dir = normalize ((p2 - p1));
-   dst = vlen((p2 - p1));
-   dst = (dst / SVC_INTERMISSION);
-   remainder = (dst - floor(dst));
-   if (remainder > FALSE) {
-      remainder = (remainder - TRUE);
-      remainder = (remainder * 15.000);
-      p1 = (p1 + (remainder * dir));
-      p2 = (p2 - (remainder * dir));
-   }
-
-   if (self.duration > 0.100) {
-      temp = self;
-      self = spawn();
-      self.origin = p1;
-      self.oldorigin = p2;
-      self.lastvictim = temp;
-      self.dmg = temp.dmg;
-      self.delay = (time + temp.duration);
-      SpawnLightningThink();
-      self = temp;
-   } else {
-      if (checkclient()) {
-         WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
-         WriteByte(MSG_BROADCAST,TE_LIGHTNING2);
-         WriteEntity(MSG_BROADCAST,self);
-         WriteCoord(MSG_BROADCAST,p1_x);
-         WriteCoord(MSG_BROADCAST,p1_y);
-         WriteCoord(MSG_BROADCAST,p1_z);
-         WriteCoord(MSG_BROADCAST,p2_x);
-         WriteCoord(MSG_BROADCAST,p2_y);
-         WriteCoord(MSG_BROADCAST,p2_z);
-         LightningDamage(p1,p2,self,self.dmg);
-      } else LightningDamage(p1,p2,self,self.dmg);
-   }
+   traceline(p1,p2,TRUE,self);
+   newmis = spawn();
+   setorigin(newmis,self.origin);
+   newmis.oldorigin = trace_endpos;
+   newmis.owner = self;
+   newmis.dmg = self.dmg;
+   newmis.style = self.style;
+   newmis.mdl = self.mdl;
+   newmis.distance = self.distance;
+   newmis.skin = self.skin;
+   newmis.deathstring = self.deathstring;
+   newmis.duration = SUB_ClampFloat(time + self.duration,0.01,self.duration);
+   SUB_ThinkImmediate(newmis,SpawnLightningThink);
 };
 
 void() lightning_think = { // [FUNCTION]
    local float timedelay;
 
    if (self.state) trap_lightning_use();
-   if (self.cnt == FALSE) {
+   if (self.cnt == 0) {
       if (self.spawnflags & LIGHTNING_RANDOM) timedelay = (self.wait * random ());
       else timedelay = self.wait;
 
-      self.cnt = TRUE;
-      self.t_length = ((time + self.duration) - 0.100);
-      self.pausetime = ((time + self.duration) - 0.100);
+      self.cnt = 1;
+      self.t_length = time + self.duration - 0.1;
+      self.pausetime = time + self.duration - 0.1;
       if (self.pausetime < (time + 0.300)) self.pausetime = (time + 0.300);
       if (timedelay < self.duration) timedelay = self.duration;
       self.t_width = (time + timedelay);
    }
    if (time >= self.t_length) {
-      self.cnt = FALSE;
+      self.cnt = 0;
       self.nextthink = self.t_width;
    } else self.nextthink = (time + 0.200);
 };
@@ -145,12 +107,7 @@ void() lightning_think = { // [FUNCTION]
 void() lightning_firstthink = { // [FUNCTION]
    local entity targ;
 
-   if (self.target) {
-      targ = find (world,targetname,self.target);
-      self.dest = targ.origin;
-      self.enemy = targ;
-   }
-
+   trap_tracking();
    self.think = SUB_Null;
    self.nextthink = FALSE;
    if (self.classname != "trap_lightning_triggered") {
@@ -160,18 +117,26 @@ void() lightning_firstthink = { // [FUNCTION]
 };
 
 void() trap_lightning_triggered = { // [ENTITY]
-   if (self.wait == FALSE) self.wait = TRUE;
-   if (self.dmg == FALSE) self.dmg = 30;
-   if (self.duration == FALSE) self.duration = 0.100;
-
+   if (self.wait == 0) self.wait = TRUE;
+   if (self.dmg == 0) self.dmg = 30;
+   if (self.duration <= 0) self.duration = 0.100;
    self.cnt = FALSE;
    self.use = trap_lightning_use;
-   precache_sound("weapons/lhit.wav");
-   precache_sound("weapons/lstart.wav");
+   if (self.spawnflags & LIGHTNING_BOOM) self.noise = "weapons/lstart.wav";
+   item_setupnoise("weapons/lhit.wav");
+   if (self.mdl != "") precache_model(self.mdl);
    self.huntingcharmer = self.nextthink;
    self.think = lightning_firstthink;
-   self.nextthink = (time + 0.250);
+   self.nextthink = (time + 0.250 + random());
    if (self.deathstring == "") self.deathstring = " was electrocuted";
+   if (self.distance <= 0) self.distance = 30;
+   if (self.spawnflags & LIGHTNING_LIGHTBEAM) {
+      if (!self.effects) {
+         self.effects = self.effects | EF_DIMLIGHT;
+         if (self.mdl == "") self.mdl = "progs/bolt2.mdl"; // Standard id1 but with light
+      }
+   }
+   if (self.mdl == "" && self.style <= 0) self.style = TE_LIGHTNING2;
 };
 
 void() trap_lightning = { // [ENTITY]
@@ -335,7 +300,7 @@ void() trap_gods_wrath = { // [ENTITY]
 void() trap_gravity_touch = { // [FUNCTION]
    if ( (self.attack_finished > time) ) return;
 
-   if ( other.takedamage ) { T_Damage (other,self,self,self.dmg,DAMARMOR); self.attack_finished = (time + 0.200); }
+   if ( other.takedamage ) { T_Damage(other,self,self,self.dmg,DAMARMOR); self.attack_finished = (time + 0.200); }
 };
 
 void() trap_gravity_think = { // [FUNCTION]

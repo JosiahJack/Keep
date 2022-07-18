@@ -579,10 +579,10 @@ void() movewall_touch = {
 	if (time < self.owner.attack_finished) return;
 
 	if (self.dmg ) {
-		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	} else if (self.owner.dmg ) {
-		T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.owner.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	}
 };
@@ -602,11 +602,11 @@ void() movewall_blocked = {
 	}
 
 	if (self.dmg ) {
-		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	}
 	else if (self.owner.dmg ) {
-		T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+		T_Damage(other, self, self.owner, self.owner.dmg, DAMARMOR);
 		self.owner.attack_finished = time + 0.5;
 	}
 };

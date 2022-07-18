@@ -81,7 +81,7 @@ void(float side) Demon_Claw = {
 		if (self.poisonous) PoisonDeBuff(self.enemy); // Check for poisonous attribute (new poison version)
 		sound(self,CHAN_WEAPON,"demon/dhit2.wav",1,ATTN_NORM); // Melee claw hit sound
 		ldmg = 10 + 5*random();
-		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
+		T_Damage(self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
 	}
 };
@@ -122,7 +122,7 @@ void() Demon_JumpTouch = {
 	if (self.classtype != other.classtype && other.takedamage) {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 40 + 10*random();
-			T_Damage (other, self, self, ldmg, DAMARMOR);	
+			T_Damage(other, self, self, ldmg, DAMARMOR);	
 			SpawnMeatSpray(self, other, FALSE);
 			SpawnMeatSpray(self, other, FALSE);
 			SpawnMeatSpray(self, other, FALSE);
