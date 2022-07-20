@@ -630,7 +630,7 @@ void() func_door = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	keyuser_setup();
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.classtype = CT_FUNCDOOR; // Setup classtype and flag as BSP origin
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;

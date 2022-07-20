@@ -439,11 +439,10 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	// POS3 = Spawn effect for destination (v_forward*32)
 
 	self.dest0 = vectormod(other.angles); // Save for later (debuglvl)
-	// I was under the impression that makevector/vectoangles was a loop.
-	// This is not the case and the QC commands are not obvious about it
-	// 
-	// makevectors + v_angle + bsp + spr all pitch (X) one way
-	// vectoangles + mdl pitch (X) the other way - thanks spike for info
+	// I was under the impression that makevector/vectoangles was a loop.  This
+	// is not the case and the QC commands are not obvious about it.
+	// makevectors + v_angle + bsp + spr all pitch (X) one way.  vectoangles + 
+	// mdl pitch (X) the other way - thanks spike for info
 	//
 	// makevectors(self.angles);
 	// self.velocity = v_forward * self.speed;
@@ -459,12 +458,11 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	// the direction vector will have the reverse X axis problem.
 	//
 	// Instant teleporter behave differently depending on what is being
-	// teleported through them.
-	// Entities with player or monster flags, will only be affected
-	// by Y axis to prevent model distortion (you know, the upsidedown monster hack?).
-	// Anything else (projectiles mostly) will be allowed to rotate
-	// on any XYZ axis because they do not need to be upright for
-	// collision and movement reasons.
+	// teleported through them.  Entities with player or monster flags, will
+	// only be affected by Y axis to prevent model distortion (you know, the
+	// upsidedown monster hack?).  Anything else (projectiles mostly) will be
+	// allowed to rotate on any XYZ axis because they do not need to be upright
+	// for collision and movement reasons.
 	if (self.spawnflags & TRIG_TELEINSTANT) {
 		// Check for any angle update (stored in mangle)
 		if (!VectorIsAllZeros(self.goalentity.mangle)) {
@@ -658,7 +656,7 @@ void() trigger_teleport = { // [ENTITY]
 	self.oldorigin = bmodel_origin(self); // True origin used for errors and debug info
 	if (self.noise == "") self.noise = "ambience/hum1.wav"; // Always pre-cache telporter teleporter sound
 	precache_sound(self.noise);
-	SUB_BoundVolume(0.5);
+	SUB_BoundSoundVolume(0.5);
 	if (SUB_HideIfNoTarget()) return; // This is a critical error - teleporter going nowhere!?!
 
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // No trigger damage functionality and always touchable! Spawnflag 1 is used for something else (notouch duplicate)
@@ -1005,7 +1003,7 @@ void() trigger_push = { // [ENTITY]
 		if (self.tetherdist <= 0) self.tetherdist = 32;
 		if (self.tetherdist > self.tetherrange) self.tetherrange = self.tetherdist + 1;
 	}
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	if (self.spawnflags & TRIG_PUSHONCE) self.wait = -1;
 	self.estate_fire = trigger_push_fire; // Setup Entity State functionality
 	self.touch = trigger_bmodel_anytouch;
@@ -1160,7 +1158,7 @@ void() trigger_ladder = { // [ENTITY]
 	precache_sound(self.noise2);
 	precache_sound(self.noise3);
 	precache_sound(self.noise4);
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	if (self.speed <= 0) self.speed = 160; // Velocity reset for upward movement (AD jump ladder system)
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // No trigger damage functionality and always touchable!
 	self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_MONSTERS); // Cannot have ladder triggers touched by monsters
@@ -1669,7 +1667,7 @@ void() trigger_takeartifact_fire = { // [FUNCTION]
 			(self.bmodel_act.moditems & IT_ARTJUMPBOOTS)) {
 			inv_artifact = TRUE;
 			ResetPowerLavaShield(self.bmodel_act, self.waitmin);
-			ResetPowerAirTank(self.bmodel_act, self.waitmin);
+			ResetPowerWetsuit(self.bmodel_act, self.waitmin);
 			ResetPowerBlastbelt(self.bmodel_act, self.waitmin);
 			ResetPowerJumpBoots(self.bmodel_act, self.waitmin);
 		}
@@ -2382,7 +2380,7 @@ void() trigger_heal = { // [ENTITY]
 	else self.noise = SOUND_HEAL15;
 
 	precache_sound(self.noise);
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	if (self.spawnflags & TRIG_SPAWNBUBBLES) trigger_setup_bubbles(); // Setup bubble model/counter/volume
 	if (!self.wait) self.wait = 1;					// Default trigger time
 	if (self.healamount < 1) self.healamount = 10;	// Quantity to heal each touch trigger
@@ -2507,7 +2505,7 @@ void() trigger_touchsound = { // [ENTITY]
 	}
 	precache_sound(self.noise); // Precache all sounds
 	precache_sound(self.noise1);	
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	if (self.spawnflags & TRIG_TSOUNDDRAIN) {
 		if (self.noise2 == "") self.noise2 = "ad171/ambience/liquid_drain.wav";
 		precache_sound(self.noise2);

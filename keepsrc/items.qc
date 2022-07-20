@@ -27,7 +27,7 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 20
+// Entity count: 18
 // Function count: 35
 //
 // Implements: Item System
@@ -1696,13 +1696,9 @@ void() item_circuitboard = { // [ENTITY]
 	item_start();
 };
 
-void() item_flag_team1 = {}; // [ENTITY]
+void() item_flagblue = { self.classname = "item_flag_team2"; item_flag_team2(); }; // [ENTITY]
 
-void() item_flag_team2 = {}; // [ENTITY]
-
-void() item_flagblue = {}; // [ENTITY]
-
-void() item_flagred = {}; // [ENTITY]
+void() item_flagred = { self.classname = "item_flag_team1"; item_flag_team1(); }; // [ENTITY]
 
 void() mariomushroom_touch = { // [FUNCTION]
 	if (other.health < 1) return;
@@ -1710,15 +1706,8 @@ void() mariomushroom_touch = { // [FUNCTION]
 	if (other.in_a_vehicle) return;
 	if (other.shroom_finished >= time) return;
 	
-	other.shroom_finished = time + self.cnt;
 	sound(other,CHAN_VOICE,"qmaster/items/smb_powerup.wav",1,ATTN_NORM);
-	other.velocity_z = other.velocity_z + 360; // pop up
-	SUB_RemoveFlags(other,FL_ONGROUND);
-	other.view_ofs = '0 0 72';
-	other.legsattachment.scale = 2;
-	other.scale = 2;
-	setsize(other,VEC_HULL2_MIN,VEC_HULL2_MAX); // grow up
-	other.effects = other.effects | EF_BRIGHTLIGHT;
+	GivePowerShroom(other,self.cnt);
 	entity_hide(self);
 };
 
@@ -1730,7 +1719,8 @@ void() item_mariomushroom = { // [ENTITY]
 	precache_sound("qmaster/items/smb_stomp.wav");
 	precache_sound("qmaster/player/jumpmario.wav");
 	self.netname = "A Strange Shroom";
-	if (self.cnt <=0) self.cnt = 60;
+	if (self.cnt ==0) self.cnt = 60;
+	if (self.cnt < POWERUP_VANIA) self.cnt = POWERUP_VANIA;
 	self.frame = rint(random()*4);
 	self.touch2 = mariomushroom_touch;
 	self.scale = 2;

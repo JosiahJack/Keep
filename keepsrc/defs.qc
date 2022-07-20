@@ -541,7 +541,7 @@ void() SUB_UseTargets;
 void() SUB_Remove;
 float(float regbitflag) query_configflag;
 float(float regbitflag) query_temp1flag;
-void(float defvol) SUB_BoundVolume;
+void(float defvol) SUB_BoundSoundVolume;
 void() trigger_bmodel_sounds;
 void() trigger_bmodel_setup;
 float() check_bmodel_keys;

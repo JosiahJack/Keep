@@ -231,7 +231,7 @@ void() func_plat = { // [ENTITY]
 	}
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
-	SUB_BoundVolume(1);	
+	SUB_BoundSoundVolume(1);	
 	self.classtype = CT_FUNCPLAT;
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;

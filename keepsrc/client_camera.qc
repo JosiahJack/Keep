@@ -139,7 +139,35 @@ void() FinishIntermissionCamera = {
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "Despite the awful might of the Elder\nWorld, you have achieved the Rune of\nElder Magic, capstone of all types of\narcane wisdom. Beyond good and evil,\nbeyond life and death, the Rune\npulsates, heavy with import. Patient and\npotent, the Elder Being Shub-Niggurath\nweaves her dire plans to clear off all\nlife from the Earth, and bring her own\nfoul offspring to our world! For all the\ndwellers in these nightmare dimensions\nare her descendants! Once all Runes of\nmagic power are united, the energy\nbehind them will blast open the Gateway\nto Shub-Niggurath, and you can travel\nthere to foil the Hell-Mother's plots\nin person.");
 			return;
-		}
+		} else if (world.model == "maps/r1m7.bsp") {
+			WriteByte(MSG_ALL, SVC_CDTRACK);
+			WriteByte(MSG_ALL, 2);
+			WriteByte(MSG_ALL, 3);
+			WriteByte(MSG_ALL, SVC_FINALE);
+			WriteString(MSG_ALL, "Victory! The Overlord's mangled\nremains are the evidence.  His evil\nWrath army?  Cast out to wander\naimlessly throughout time.\n\nAs the Slipgate fog surrounds you,\nthoughts rage into your consciousness:\nHas Quake's oppressive reign ended?\nIs it Salvation, or Damnation, which\nwaits beyond the Vortex?\n\nAnother thought, not quite your own,\nrazors through the haze.  \"Forgiveness\ncan yet be granted; Our Master remains\nto absolve your sins against his Chosen.\nFall down upon your knees-pray for\nQuake's mercy.\"");
+			return;
+		} else if (world.model == "maps/hip1m4.bsp") {
+			WriteByte(MSG_ALL,SVC_CDTRACK);
+			WriteByte(MSG_ALL,6);
+			WriteByte(MSG_ALL,3);
+			WriteByte(MSG_ALL,SVC_FINALE);
+			WriteString(MSG_ALL,"Deep within the bowels of the\nResearch Facility, you discover the\npassage that the followers of Quake\nhave used to enter our world.\nThe bastards used some type of\ngigantic teleporter to overload\none of our own slipgates!  As long as\nthis portal ...");
+			return;
+		} else if (world.model == "maps/hip2m5.bsp") {
+            WriteByte(MSG_ALL,SVC_CDTRACK);
+            WriteByte(MSG_ALL,6);
+            WriteByte(MSG_ALL,3);
+            WriteByte(MSG_ALL,SVC_FINALE);
+            WriteString(MSG_ALL,"After destroying the power generator,\nyou pass beyond the gate of Mortum's\nKeep.  A wave of nausea suddenly flows\nover you and you find yourself cast\nout into a liquid void.  You float\nlifelessly, yet aware, in a lavender\nsea of energy.");
+            return;
+        } else if (world.model == "maps/hipend.bsp") {
+			WriteByte(MSG_ALL,SVC_CDTRACK);
+			WriteByte(MSG_ALL,2);
+			WriteByte(MSG_ALL,3);
+			WriteByte(MSG_ALL,SVC_FINALE);
+			WriteString(MSG_ALL,"After the last echoes of Armagon's\ndeath yell fade away, you breathe a\nheavy sigh of relief.  With the loss\nof his magic, Armagon's fortress\nbegins to collapse.  The rift he\ncreated to send his grisly troops\nthrough time slowly closes and seals\n...");
+			return;
+        }
 		GotoNextMap(); // No special end text? go straight to next map
 	} else if (intermission_running == INTERMISSION_ENDGAME) {
 		// If the player has all four runes, print more text!?!

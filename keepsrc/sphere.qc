@@ -118,22 +118,22 @@ void() sphere_think = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void() sphere_spawn = { // [FUNCTION]
-   local entity missile;
+void(entity own, entity starter) sphere_spawn = { // [FUNCTION]
+   if (own.items2 & IT2_V_SPHERE) return; // Can only carry one, carries it indefinitely.
 
-   missile = spawn();
-   missile.movetype = MOVETYPE_FLYMISSILE;
-   missile.solid = SOLID_NOT;
-   missile.classname = "Vengeance";
-   missile.owner = other;
-   missile.weapon = FALSE;
-   missile.delay = (time + SVC_INTERMISSION);
-   setmodel(missile,"progs/rogue/sphere.mdl");
-   setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin(missile,self.origin);
-   missile.avelocity = '40.000 40.000 40.000';
-   missile.think = sphere_think;
-   missile.nextthink = (time + 0.100);
+   newmis = spawn();
+   newmis.movetype = MOVETYPE_FLYMISSILE;
+   newmis.solid = SOLID_NOT;
+   newmis.classname = "Vengeance";
+   newmis.owner = own;
+   newmis.weapon = FALSE;
+   newmis.delay = (time + SVC_INTERMISSION);
+   setmodel(newmis,"progs/rogue/sphere.mdl");
+   setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
+   setorigin(newmis,starter.origin);
+   newmis.avelocity = '40.000 40.000 40.000';
+   newmis.think = sphere_think;
+   newmis.nextthink = (time + 0.100);
 };
 
 void() item_sphere = { // [ENTITY]

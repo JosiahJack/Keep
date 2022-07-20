@@ -389,7 +389,7 @@ void() func_train = { // [ENTITY]
 	}
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.classtype = CT_FUNCTRAIN;
 	self.classgroup = CG_FUNCMOVER;
 	self.state = STATE_OFF;

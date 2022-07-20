@@ -222,7 +222,7 @@ void() func_button = { // [ENTITY]
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
 	precache_sound(self.noise);
 	if (self.noise1 != "") precache_sound(self.noise1);
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.classtype = CT_FUNCBUTTON;
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;

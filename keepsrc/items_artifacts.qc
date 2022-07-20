@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 5
-// Function count: 34
+// Entity count: 34
+// Function count: 6
 //
 // Implements: Artifacts and Powerups Item Pickups
 //
@@ -39,238 +39,58 @@
 // any benefit to the player and serve as story or progression elements.
 //=============================================================================
 
-void() sphere_spawn;
+void(entity own, entity starter) sphere_spawn;
+
+void(entity targ) artifact_powergive = { // [FUNCTION]
+	if (targ.flags & FL_CLIENT) {
+		sprint(targ,"You got the ");
+		sprint(targ,self.netname);
+	}
+
+	if (self.classtype == CT_ARTSUIT) GivePowerEnvSuit(targ,self.cnt);
+	else if (self.classtype == CT_ARTPENT) GivePowerPent(targ,self.cnt);
+	else if (self.classtype == CT_ARTINVS) GivePowerInvRing(targ,self.cnt);
+	else if (self.classtype == CT_ARTQUAD) GivePowerQuad(targ,self.cnt);
+	else if (self.classtype == CT_ARTSHARP) GivePowerSharp(targ,self.cnt);
+	else if (self.classtype == CT_ARTPIERCE) GivePowerPiercer(targ,self.cnt);
+	else if (self.classtype == CT_ARTPSHIELD) GivePowerPowerShield(targ,self.cnt);
+	else if (self.classtype == CT_ARTGRAVBELT) GivePowerAntigrav(targ,self.cnt);
+	else if (self.classtype == CT_ARTLAVASHIELD) GivePowerLavaShield(targ,self.cnt,self.volume);
+	else if (self.classtype == CT_ARTWETSUIT) GivePowerWetsuit(targ,self.cnt);
+	else if (self.classtype == CT_ARTBLASTBELT) GivePowerBlastbelt(targ,self.cnt);
+	else if (self.classtype == CT_ARTJUMPBOOTS) GivePowerJumpBoots(targ,self.cnt,self.count,self.height,self.distance);
+	else if (self.classtype == CT_ARTEMPATHY) GivePowerEmpathy(targ,self.cnt);
+	else if (self.classtype == CT_ARTSPHERE) sphere_spawn(targ,self);
+	else if (self.classtype == CT_ARTTHERMSUIT) GivePowerThermSuit(targ,self.cnt);
+	else if (self.classtype == CT_ARTTRINITY) GivePowerTrinity(targ,self.cnt);
+	else if (self.classtype == CT_ARTCROSS) GivePowerCross(targ,self.cnt);
+	else if (self.classtype == CT_ARTHASTE) targ.perms = targ.perms | POW_HASTE;
+	else if (self.classtype == CT_ARTBERSERK) GivePowerBerserk(targ);
+	else if (self.classtype == CT_ARTEQUALIZER) GivePowerEqualizer(targ);
+	else if (self.classtype == CT_ARTLEVITATION) GivePowerLevitation(targ,self.cnt);
+	else if (self.classtype == CT_ARTOPTIMIZER) GivePowerOptimizer(targ,self);
+	else if (self.classtype == CT_SIGILBANE) GivePowerSigilBane();
+	else if (self.classtype == CT_ARTREGEN) GivePowerRegeneration(targ,self);
+	else if (self.classtype == CT_ARTVITALITY) GivePowerVitality(targ,self);
+	else return; // It's a taunt!
+
+	if (targ.flags & FL_CLIENT) sprint(targ,"...\n");
+};
+
+void() info_givepower_use = { // [FUNCTION]
+	artifact_powergive(activator);
+	self.use = SUB_Null;
+	entity_remove(self,0.1);
+};
+
+void() info_givepower = { // [ENTITY]
+	self.use = info_givepower_use;
+	if (self.cnt < 0) self.cnt = POWERUP_VANIA; // Infinite time support.
+	else if (self.cnt == 0) self.cnt = POWERUP_TIMER; //  Allow for custom artifact timer. Setup minimum/default timer
+};
 
 void() artifact_touch = { // [FUNCTION]
-	entity pl;
-	float overrideSprint;
-
-	overrideSprint = FALSE;
-	if (self.classtype == CT_ARTSUIT) {
-		other.rad_time = TRUE;
-		if (self.cnt < 0) other.radsuit_finished = POWERUP_VANIA;
-		else other.radsuit_finished = time + self.cnt;
-		ResetDebuffBurning(other);
-		ResetDebuffPoisoned(other);
-	} else if (self.classtype == CT_ARTPENT) {
-		other.invincible_time = TRUE;
-		if (self.cnt < 0) other.invincible_finished = POWERUP_VANIA;
-		else other.invincible_finished = time + self.cnt;
-		ResetDebuffSystem(other);
-	} else if (self.classtype == CT_ARTINVS) {
-		other.invisible_time = TRUE;
-		other.notrace = 1;
-		if (self.cnt < 0) other.invisible_finished = POWERUP_VANIA;
-		else other.invisible_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTQUAD) {
-		other.super_time = TRUE;
-		if (self.cnt < 0) other.super_damage_finished = POWERUP_VANIA;
-		else other.super_damage_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTSHARP) {
-		other.sharpshoot_time = TRUE;
-		if (self.cnt < 0) other.sharpshoot_finished = POWERUP_VANIA;
-		else other.sharpshoot_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTPIERCE) {
-		other.nailpiercer_time = TRUE;
-		if (self.cnt < 0) other.nailpiercer_finished = POWERUP_VANIA;
-		else other.nailpiercer_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTPSHIELD) {
-		other.shield_time = TRUE;
-		if (self.cnt < 0) other.shield_finished = POWERUP_VANIA;
-		else other.shield_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTGRAVBELT) {
-		other.antigrav_time = TRUE;
-		if (self.cnt < 0) other.antigrav_finished = POWERUP_VANIA;
-		else other.antigrav_finished = time + self.cnt;
-		other.gravity = 0.25; // This is where the magic happens! See client_power.qc for how it goes back to 1.
-	} else if (self.classtype == CT_ARTLAVASHIELD) {
-		other.lavashield_time = TRUE;
-		// Volume range modifier (0-1)
-		other.lavashield_volume = self.volume;
-		if (self.cnt < 0) other.lavashield_finished = POWERUP_VANIA;
-		else other.lavashield_finished = time + self.cnt;
-		ResetDebuffBurning(other);
-	} else if (self.classtype == CT_ARTWETSUIT) {
-		other.wetsuit_time = TRUE;
-		if (self.cnt < 0) other.wetsuit_finished = POWERUP_VANIA;
-		else other.wetsuit_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTBLASTBELT) {
-		other.blastbelt_time = TRUE;
-		if (self.cnt < 0) other.blastbelt_finished = POWERUP_VANIA;
-		else other.blastbelt_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTJUMPBOOTS) {
-		other.jumpboots_time = 1;
-		if (self.cnt < 0) other.jumpboots_finished = POWERUP_VANIA;
-		else other.jumpboots_finished = time + self.cnt;
-		other.jumpboots_airlvl = 0;
-		// Check if jump max is endless, additive or exact
-		if (self.count < 0) other.jumpboots_airmax = -1;
-		else if (self.count > 0) other.jumpboots_airmax = self.count;
-		else other.jumpboots_airmax = other.jumpboots_airmax + 1;
-		// Make sure the max never goes too high
-		if (other.jumpboots_airmax > ART_JUMPBOOTS_AIRMAX) other.jumpboots_airmax = ART_JUMPBOOTS_AIRMAX;
-		if (self.height > 0) other.jumpboots_height = self.height;
-		else other.jumpboots_height = ART_JUMPHEIGHT;
-		if (self.distance > 0) other.jumpboots_forward = self.distance;
-		else other.jumpboots_forward = 0;
-	} else if (self.classtype == CT_ARTEMPATHY) {
-		other.empathy_time = TRUE;
-		if (self.cnt < 0) other.empathy_finished = POWERUP_VANIA;
-		else other.empathy_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTSPHERE) {
-		if (other.items2 & IT2_V_SPHERE) return; // Can only carry one, carries it indefinitely.
-
-        sphere_spawn();
-	} else if (self.classtype == CT_ARTTHERMSUIT) {
-		other.therm_time = TRUE;
-		if (self.cnt < 0) other.therm_finished = POWERUP_VANIA;
-		else other.therm_finished = time + self.cnt;
-		ResetDebuffBurning(other);
-	} else if (self.classtype == CT_ARTTRINITY) {
-		other.trinity_time = 1;
-		other.trinity_start = 1;
-		if (self.cnt < 0) other.trinity_finished = POWERUP_VANIA;
-		else other.trinity_finished = time + self.cnt;
-	} else if (self.classtype == CT_ARTCROSS) {
-		other.cross_time = 1;
-		other.cross_start = 1;
-		if (self.cnt < 0) other.cross_finished = POWERUP_VANIA;
-		else other.cross_finished = time + self.cnt;
-		ResetDebuffSystem(other);
-	} else if (self.classtype == CT_ARTHASTE) {
-		other.perms = other.perms | POW_HASTE;
-	} else if (self.classtype == CT_ARTBERSERK) {
-		other.perms = other.perms | POW_VAMPIRE;
-		if (other.health < 100) other.health = 100; // full heal
-	} else if (self.classtype == CT_ARTEQUALIZER) {
-		other.perms = other.perms | POW_DOUBLE;
-		other.ammo_nails = AMMO_MAXNAILS; // max out nails ammo
-		if (other.ammo_lava_nails < (AMMO_MAXLAVANAILS * 0.5)) other.ammo_lava_nails = AMMO_MAXLAVANAILS * 0.5; // fill lava nails up to half
-		W_SetCurrentAmmo(other); // if changed current ammo, update it
-	} else if (self.classtype == CT_ARTLEVITATION) {
-		other.wing_time = 1;
-		if (self.cnt < 0) other.wing_finished = POWERUP_VANIA;
-		else other.wing_finished = time + 45;
-	} else if (self.classtype == CT_ARTOPTIMIZER) {
-		sprint(other, "You got the ");
-		sprint(other, self.netname);
-		sprint(other, "...\n");
-		if (self.ammo_shells) {
-			other.maxshells = other.maxshells + self.ammo_shells;
-			other.ammo_shells = other.maxshells; // max out ammo
-			sprint(other, "Max shells increased by ");
-			sprint(other, ftos(self.ammo_shells));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_nails)  {
-			other.maxnails = other.maxnails + self.ammo_nails;
-			other.ammo_nails = other.maxnails; // max out ammo
-			sprint(other, "Max nails increased by ");
-			sprint(other, ftos(self.ammo_nails));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_rockets) {
-			other.maxrockets = other.maxrockets + self.ammo_rockets;
-			other.ammo_rockets = other.maxrockets; // max out ammo
-			sprint(other, "Max rockets increased by ");
-			sprint(other, ftos(self.ammo_rockets));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_cells) {
-			other.maxcells = other.maxcells + self.ammo_cells;
-			other.ammo_cells = other.maxcells; // max out ammo
-			sprint(other, "Max cells increased by ");
-			sprint(other, ftos(self.ammo_cells));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_lava_nails) {
-			other.maxlavanails = other.maxlavanails + self.ammo_lava_nails;
-			other.ammo_lava_nails = other.maxlavanails; // max out ammo
-			sprint(other, "Max lava nails increased by ");
-			sprint(other, ftos(self.ammo_lava_nails));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_multi_rockets) {
-			other.maxmultirockets = other.maxmultirockets + self.ammo_multi_rockets;
-			other.ammo_multi_rockets = other.maxmultirockets; // max out ammo
-			sprint(other, "Max multi-rockets ammo increased by ");
-			sprint(other, ftos(self.ammo_multi_rockets));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_plasma) {
-			other.maxplasma = other.maxplasma + self.ammo_plasma;
-			other.ammo_plasma = other.maxplasma; // max out ammo
-			sprint(other, "Max poison ammo increased by ");
-			sprint(other, ftos(self.ammo_plasma));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_poison) {
-		other.maxpoison = other.maxpoison + self.ammo_poison;
-		other.ammo_poison = other.maxpoison; // max out ammo
-			sprint(other, "Max poison ammo increased by ");
-			sprint(other, ftos(self.ammo_poison));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_bolts) {
-		other.maxbolts = other.maxbolts + self.ammo_bolts;
-		other.ammo_bolts = other.maxbolts; // max out ammo
-			sprint(other, "Max bolts increased by ");
-			sprint(other, ftos(self.ammo_bolts));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_bloodcrystals) {
-			other.maxblood = other.maxblood + self.ammo_bloodcrystals;
-			other.ammo_bloodcrystals = other.maxblood; // max out ammo
-			sprint(other, "Max blood crystals increased by ");
-			sprint(other, ftos(self.ammo_bloodcrystals));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_voidshards) {
-			other.maxvoid = other.maxvoid + self.ammo_voidshards;
-			other.ammo_voidshards = other.maxvoid; // max out ammo
-			sprint(other, "Max void shards increased by ");
-			sprint(other, ftos(self.ammo_voidshards));
-			sprint(other, "!\n");
-		}
-
-		if (self.ammo_elemental) {
-			other.maxmana = other.maxmana + self.ammo_elemental;
-			other.ammo_elemental = other.maxmana; // max out ammo
-			sprint(other, "Max elemental mana increased by ");
-			sprint(other, ftos(self.ammo_elemental));
-			sprint(other, "!\n");
-		}
-
-		overrideSprint = TRUE;
-	} else if (self.classtype == CT_SIGILBANE) {
-		// Give all players 250 health
-		pl = find (world, classname, "player");
-		while (pl) {
-			pl.health = pl.max_health;
-			pl = find (pl, classname, "player");
-		}
-	} else if (self.classtype == CT_ARTREGEN) {
-		other.health = other.max_health;
-	} else if (self.classtype == CT_ARTVITALITY) {
-		other.max_health = other.max_health + self.max_health;
-		other.health = other.max_health; 
-	} else return;
-
-	if (!overrideSprint) {
-		sprint(other, "You got the ");
-		sprint(other, self.netname);
-	}
-	sprint(other,"\n");
+	artifact_powergive(other);
 	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM); // Pickup sound
 	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	other.items = other.items | self.items; // Update player items
@@ -737,7 +557,7 @@ void() item_artifact_lavashield = { // [ENTITY]
 	self.part_active = PARTICLE_STYLE_LAVASHIELD;
 	self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_CENTER;
 	self.respawn_ofs = '0 0 16';
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	artifact_setup();
 };
 
@@ -846,7 +666,7 @@ void() item_powerup_shield = { // [ENTITY]
 	item_setupmodel("progs/rogue/shield.mdl",0);
 	item_setupnoise("rogue/shield/pickup.wav");
 	self.noise1 = "rogue/shield/hit.wav";
-	self.noise2 = SOUND_ARTPSHIELD3;
+	self.noise2 = "rogue/shield/fadeout.wav";
 	precache_sound(self.noise1);
 	precache_sound(self.noise2);
 	if (self.netname == "") self.netname = "Power Shield";

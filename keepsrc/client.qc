@@ -85,28 +85,36 @@ void() misc_camera_filewrite;
 void() earthquake_postthink;
 void(entity ownerEntity) sphere_remove;
 void() PlayerBallistaThink;
+void() tag_token_drop;
 
 // USED : Load (map command) NEW MAP or NEW GAME
 // This is a function called via the engine for new games and resets all parm data back to default values, followed by Decode.
 // Cannot use any self keys in this functions, its called by engine BEFORE any client setup or insertion into the map!
 void() SetNewParms = {
 	local float sethealth;
+
 	dprint("\b[CLIENT]\b SetNewParms\n");
 	update_configflag(SVR_SPAWN_BIT1, FALSE); // Brand new game/map, reset start position settings
 	update_configflag(SVR_SPAWN_BIT2, FALSE);
 	update_configflag(SVR_SPAWN_BIT3, FALSE);
 	fog_active = FALSE;
 	skyfog_active = FALSE;
-	parm1 = IT_SHOTGUN | IT_AXE;	// Default self.items, give shotgun and axe to start
 	sethealth = 100;
 	if (Client_QueryEvilmode()) sethealth = HEAL_EVILMAX; // Check for Evil NM+ skill level (Lower HP max)
-	parm2 = encode(sethealth, 0, 0);		// Default Health, Armortype, Armorvalue in that order
+	parm1 = IT_SHOTGUN | IT_AXE; // Default self.items, give shotgun and axe to start
+	if (deathmatch && teamplay >= TEAM_CTF) {
+		parm11 = IT2_GRAPPLE; // self.items2
+		parm2 = encode(sethealth,ARMOR_GRN_TYPE,50); // Health, Armortype, Armorvalue in that order
+	} else {
+		parm11 = 0; // self.items2						
+		parm2 = encode(sethealth,0,0);		// Default Health, Armortype, Armorvalue in that order
+	}	
 	parm3 = encode(25,0,0);			// Default shells, nails, rockets in that order
 	parm4 = 0;						// Ammo qty cells, bolts, poison in that order
 	parm5 = 0;						// Ammo qty lava_nails, multi_rockets, plasma in that order
 	parm8 = 1;						// Current selected weapon
 	parm10 = 0;						// New MOD items
-	parm11 = 0;						// self.items2
+	// parm11 handled above
 	parm12 = 0;						//
 	parm13 = 0;						// permanent powerups (perms) from Drake, can be reset this level using world.take_perms > 0
 	if (query_configflag(SVR_UPDAXE)) parm10 = parm10 | IT_UPGRADE_AXE; // Update new player inventory based on config flag
@@ -127,6 +135,10 @@ void() SetNewParms = {
 		parm6 = parm7 = parm9 = parm14 = parm15 = parm16 = 0; // Reset map variables ready for use
 		mapvar_reset();
 	}
+	cvar_set("gamecfg",ftos(0));
+	cvar_set("savedgamecfg",ftos(0));
+	teamplay = cvar("teamplay");
+	if (teamplay) cvar_set("savedgamecfg",ftos(-1)); // CTF: reset current team selection
 };
 
 // Used by trigger_changelevel.  Stores a copy of the parm data ready for death/level reset.
@@ -139,7 +151,12 @@ void() SetChangeParms = {
 
     if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3)) self.armorvalue = 100; // Reset Drake exotic spirit armor.
 	dprint("\n\b[CLIENT]\b SetChangeParms\n");
-	if (self.health < 1) { SetNewParms(); return; }
+	teamplay = cvar("teamplay");
+	if (self.health < 1 || teamplay >= TEAM_CTF) {
+		SetNewParms();
+		if (self.health < 1) cvar_set("savedgamecfg",ftos(self.items3));
+		return;
+	}
 
 	self.items = self.items - (self.items & IT_ITEMRESET); // remove temporary items (keys and powerups)
 	parm1 = self.items;
@@ -169,12 +186,13 @@ void() SetChangeParms = {
 	parm15 = mapvar[4];
 	parm16 = mapvar[5];
 	cvar_set("gamecfg",ftos(encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental)));
-	//parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
 	cvar_set("savedgamecfg",ftos(self.items3));
+	if (teamplay) cvar_set("savedgamecfg",ftos(self.steam));
 
 	dprint("Beyond 16 Parms Set:\n");
 	dprint("gamecfg: "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
 	dprint("savedgamecfg: "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
+
 };
 
 // Used during load new map such as trigger_changelevel.  Not used when loading a saved file or quickload
@@ -562,7 +580,7 @@ void() SyncModInventory = {
 
 // USED : Load NEW MAP or trigger CHANGE LEVEL.  Not used when loading a saved file or quickload
 void() DecodeLevelParms = {
-	local float had_regen;
+	local float had_regen, teamcol;
 
 	dprint("\b[CLIENT]\b Decode (Level) Parms\n");
 	mapvar_cvar = TRUE; // Map Variables are active (do not reset)
@@ -602,10 +620,10 @@ void() DecodeLevelParms = {
 	self.perms = parm13;
 
 	// ----------Drake Special exotic armor stuff----------------------------------------------
-    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN))	had_regen = TRUE;
-    else																had_regen = FALSE;
+    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN)) had_regen = TRUE;
+    else															   had_regen = FALSE;
 
-	Client_CheckMaxHP(self, FALSE, had_regen); // Always make sure the HP read from parm is within range!  Parm is re-used when map restart command is issued
+	Client_CheckMaxHP(self,FALSE,had_regen); // Always make sure the HP read from parm is within range!  Parm is re-used when map restart command is issued
 	Client_CheckEvilInv(self); // The AD inventory is reset with parm10 (could lose Shadow axe).  Check for evil skill and add shadow axe + make current weapon!
 	dprint("\b[CLIENT]\b self.weapon == ");
 	dprint(ftos(self.weapon));
@@ -625,6 +643,14 @@ void() DecodeLevelParms = {
 	self.items3 = cvar("savedgamecfg");
 	cvar_set("gamecfg","0"); // Reset these to keep player config.cfg clean
 	cvar_set("savedgamecfg","0");
+	teamplay = cvar("teamplay");
+	if (teamplay) {
+		teamcol = cvar("savedgamecfg");
+		if (TeamColorIsLegal(teamcol)) {
+			self.steam = teamcol;
+			TeamSetSkin();
+		}
+	}
 };
 
 void() GotoNextMap = {
@@ -676,13 +702,21 @@ void() NextLevel = {
 void() CheckRules = {
 	local float timelimit, fraglimit;
 
-	if (deathmatch == 0) return;	// Playing SP?
+	teamplay = cvar("teamplay");
+	if (deathmatch == 0 && teamplay == 0) return;	// Playing SP?
 	if (gameover) return;			// someone else quit the game already
 		
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
-	if (timelimit && time >= timelimit) NextLevel();
-	else if (fraglimit && self.frags >= fraglimit) NextLevel();
+	if (timelimit && time >= timelimit) {
+		NextLevel();
+		return;
+	} else if (fraglimit && self.frags >= fraglimit) {
+		NextLevel();
+		return;
+	}
+
+	TeamCheckUpdate(); // update team scores? 
 };
 
 void() SetupSpawnCoopLocations = {
@@ -866,6 +900,8 @@ void() PutClientInServer = {
 	self.effects = 0;
 	self.steplast = 1;
 	self.jump_flag = 0;
+	self.revive_origin = self.origin;
+	self.jumpboots_onground = FALSE;
 	self.oldgravity = 0;				// Reset gravity effects
 
 	// Drake variables
@@ -1163,7 +1199,7 @@ void() PlayerPreThink = {
 
 	if (self.tethered && self.tetherfocus) PlayerBallistaThink();
 	// TeamCheckLock(); // TODO: Implement Rogue's teamplay.qc stuff.
-	// CheckMOTD(); // TODO: Implement Rogue's teamplay.qc stuff.
+	CheckMOTD();
 	CheckRules();
 	Divine_Check(); // Lightning strike.
 	WaterMove();
@@ -1212,7 +1248,11 @@ void() PlayerPreThink = {
 	// Unfortunately Quake does not let the player jump if falling, but the jump boots should override this behaviour.
 	// The engine will reset the fl_onground flag when the player falls off a ledge and this flag is used to determine the starting sequence
 	// for the jump boots. This check is outside of the jump function so that the jump boots can always be reset regardless if jump starts the sequence.
-	if (self.moditems & IT_ARTJUMPBOOTS && self.flags & FL_ONGROUND) self.jumpboots_onground = TRUE;
+	if (self.flags & FL_ONGROUND) {
+		self.jumpboots_onground = TRUE;
+		// Check and set a safe revive point.  Always save last time on ground.
+		if (checkbottom(self)) self.revive_origin = self.origin;
+	}
 
 	// Rubicon Ladder Code - johnfitz
 	// Modified by me to support diff climb sounds and on/off/toggle states. -sock
@@ -1505,6 +1545,11 @@ void() PlayerPostThink = {
     if (self.hook) GrappleService(); // Update PM 7/24/09:  Added grappler weapon from DoE.
 };
 
+void(entity targ, float upforce) EntityJump = {
+	SUB_RemoveFlags(targ,FL_ONGROUND);
+	targ.velocity_z = targ.velocity_z + upforce;
+};
+
 void() PlayerJump = {
 	if (self.in_a_vehicle == TRUE) { // Jump out of the vehicle
 		TakeTargetOutOfVehicle(self,TRUE,FALSE); // Jump, keep vehicle
@@ -1520,7 +1565,7 @@ void() PlayerJump = {
 			if (random() < 0.5) sound(self,CHAN_BODY,"misc/water1.wav",1,ATTN_NORM);
 			else sound(self,CHAN_BODY,"misc/water2.wav",1,ATTN_NORM);
 		}
-		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+		if (self.shroom_finished > time) EntityJump(self,SHROOM_JUMP_BOOST); // Big Jump for Big Dude!
 		return;
 	}
 
@@ -1542,15 +1587,15 @@ void() PlayerJump = {
 			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
 			self.button2 = 0; // Clear button as jump is happening
 			self.jumpboots_sound = FALSE; // Reset 'out of jump power' sound
-			self.flags = self.flags - (self.flags & FL_ONGROUND); // Reset onground and jump boots ground flags, not needed anymore.
 			self.jumpboots_onground = FALSE; // Jumps boots don't really work until in the air.
 			self.jumpboots_airlvl = self.jumpboots_airmax; // Reset maximum amount of air jumps (for level 1-4 item)
 			if (self.shroom_finished > time) sound(self,CHAN_BODY,"qmaster/player/jumpmario.wav",1,ATTN_NORM); // Combination sound of original jump + jump boots
 			else sound(self,CHAN_BODY,SOUND_ARTJUMPBOOTS3A,1,ATTN_NORM);
-			self.velocity_z = self.velocity_z + map_jumpheight; // Start with original jump height
-			if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+			EntityJump(self,map_jumpheight); // Start with original jump height
+			if (self.shroom_finished > time) EntityJump(self,SHROOM_JUMP_BOOST); // Big Jump for Big Dude!
 		} else {	
-			// Still in the air (no ground contact).   Allow for infinite jumps (airmax = -1).  Check for more jumps (1-4) and reset velocity.  Allow for players falling of ledges (jumpboots_onground)
+			// Still in the air (no ground contact).   Allow for infinite jumps (airmax = -1).
+			// Check for more jumps (1-4) and reset velocity.  Allow for players falling off ledges.
 			if (self.jumpboots_airmax == -1 || self.jumpboots_airlvl >= 1 || self.jumpboots_onground) {
 				if (!(self.flags & FL_JUMPRELEASED)) return; // Stop constant re-jump, got to press key again
 				self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
@@ -1562,7 +1607,7 @@ void() PlayerJump = {
 				if (self.shroom_finished > time) sound(self,CHAN_BODY,"qmaster/player/jumpmario.wav",1,ATTN_NORM); // Whoosh, more power
 				else sound(self,CHAN_BODY,SOUND_ARTJUMPBOOTS3B,1,ATTN_NORM);
 				self.velocity_z = self.jumpboots_height; // Add jump boot height, different from basic jump
-				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+				if (self.shroom_finished > time) EntityJump(self,SHROOM_JUMP_BOOST); // Big Jump for Big Dude!
 			} else {
 				// No more power!	
 				if (self.jumpboots_sound < time) { // played sound already?
@@ -1581,7 +1626,7 @@ void() PlayerJump = {
 				makevectors(self.v_angle); // Use the forward/right/up vector system
 				self.finalangle = normalize(v_forward); // Normalize the result because its a multiplier
 				self.velocity = self.velocity + (self.finalangle * (self.jumpboots_forward - self.t_length)); // Never increase the forward velocity beyond limit.  Otherwise the velocity could grow too fast
-				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+				if (self.shroom_finished > time) EntityJump(self,SHROOM_JUMP_BOOST); // Big Jump for Big Dude!
 			}
 		}
 	} else if (self.onladder == LADDER_VEL) { // Velocity ladder jump logic
@@ -1596,15 +1641,15 @@ void() PlayerJump = {
 	} else {
 		// Original ID1 jump logic
 		if (!(self.flags & FL_ONGROUND)) return;
-		if (!(self.flags & FL_JUMPRELEASED)) return;	// don't pogo stick
+		if (!(self.flags & FL_JUMPRELEASED)) return; // Don't pogo stick.  Aww, but mom!  Purty pleeeease?
 
-		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
-		SUB_RemoveFlags(self,FL_ONGROUND); // don't stairwalk
+		SUB_RemoveFlags(self,FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
+		SUB_RemoveFlags(self,FL_ONGROUND); // Don't stairwalk.
 		self.button2 = 0;
 		if (self.shroom_finished > time) sound(self,CHAN_BODY,"qmaster/player/jumpmario.wav",1,ATTN_NORM);
 		else sound(self,CHAN_BODY,SOUND_PLAYER_JUMP,1,ATTN_NORM); // player jumping sound
-		self.velocity_z = self.velocity_z + map_jumpheight;
-		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+		EntityJump(self,map_jumpheight);
+		if (self.shroom_finished > time) EntityJump(self,SHROOM_JUMP_BOOST); // Big Jump for Big Dude!
 	}
 };
 
@@ -1689,6 +1734,7 @@ void() ClientRespawn = {
 		CopyToBodyQue (self);	// make a copy of the dead body for appearances sake
 		SetNewParms();			// set default spawn parms
 		PutClientInServer();	// respawn
+		TeamSetSkin();          // set the skin correctly.
 	} else localcmd ("restart\n"); // restart the entire server
 };
 
@@ -1724,6 +1770,26 @@ void() set_suicide_frame; // In player.qc, this function cannot be moved, ref an
 
 // Player entered the suicide command
 void() ClientKill = {
+	local entity vSphere;
+
+	if (self.suicide_count > 3) {
+		sprint(self,"You have suicided too much already.\n");
+		return;
+	}
+    TeamDropFlagOfPlayer(self);
+	self.suicide_count = self.suicide_count + 1;
+	if (tag_token_owner == self) {
+		self.health = 0;
+		self.solid = SOLID_NOT;
+		tag_token_drop();
+	}
+	if (self.items2 & IT2_V_SPHERE) {
+		vSphere = find (world,classname,"Vengeance");
+		while (vSphere) {
+			if (vSphere.owner == self) remove (vSphere);
+			vSphere = find(vSphere, classname, "Vengeance");
+		}
+	}
 	bprint (self.netname);
 	bprint (" suicides\n");
 	set_suicide_frame();
@@ -1736,6 +1802,17 @@ void() ClientKill = {
 void() ClientConnect = {
 	bprint (self.netname);
 	bprint (" entered the game\n");
+	self.suicide_count = 0;
+	self.ctf_killed = FALSE;
+	SetMOTD();
+	//if (((parm14 < FALSE) && (teamplay > FALSE))) { // parm14 is used in Rogue to store self.steam
+	//	if ((cvar("gamecfg") & GAMECFG_USE_COLOR)) {
+	//		self.steam = self.team;
+	//	} else {
+	//		self.steam = -50.000;
+	//	}
+	//	TeamCheckLock();
+	//}
 	if (intermission_running > 0) GotoNextMap(); // a client connecting during an intermission can cause problems
 };
 

@@ -264,7 +264,7 @@ void() func_door_secret = { // [ENTITY]
 		self.noise3 = "doors/airdoor2.wav";
 	}
 	keyuser_sounds_precache();
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.classtype = CT_FUNCSECDOOR;
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;

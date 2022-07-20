@@ -46,6 +46,7 @@ void() FrozenThink;
 void() Frozen_Touch;
 void() BecomeIcyExp;
 void(entity fire) Fireball_Steam;
+void(entity targ) UseThorsBlessing;
 
 // Returns true if the inflictor can directly damage the target.  Used for
 // explosions and melee attacks.
@@ -183,7 +184,17 @@ void(entity targ, entity attacker) Killed = {
 	local entity oself;
 
 	oself = self; self = targ; // Switch self for death functions
-	self.activate = attacker; // Always keep track of what did damage
+	self.activate = attacker; // Always keep track of what did damage.
+
+	if (self.in_a_vehicle == TRUE) { // Jump out of the vehicle
+		TakeTargetOutOfVehicle(self,TRUE,FALSE); // Jump, keep vehicle
+		return;
+	}
+
+	// Teleport to last spot we were on ground, telefragging what's there, jump
+	// up with large force, play lightning blast and beltup sounds, give
+	// invincibility and flight boot power for 15 seconds.
+	if (self.items3 & IT3_THORSBLESSING) { UseThorsBlessing(self); return; } // Lifesaver!
 
 	// doors, triggers, etc
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE || self.classtype == CT_FUNCPUSHABLE) {	
@@ -199,7 +210,12 @@ void(entity targ, entity attacker) Killed = {
 			ClientObituary(self, attacker);
 			self.touch = SUB_Null;
 			if (self.flags & FL_MONSTER) monster_death_use();
-			if (self.frozen && !(self.flags & FL_CLIENT)) T_Freeze(self,attacker);
+			if (self.frozen) {
+				if (self.flags & FL_CLIENT) {
+					self.frozen = FALSE;
+					self.th_die();
+				} else T_Freeze(self,attacker);
+			}
 			else self.th_die();
 		} else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
 			// Completely messed up setup for the oldone boss with a weird target field and mess of triggers around it! This elseif is just an exception so it works, anyway no one fights the oldone!

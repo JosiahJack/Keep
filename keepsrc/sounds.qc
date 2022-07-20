@@ -44,13 +44,13 @@ float SOUND_ALTVERSION = 4;
 float SOUND_EXTENSION1 = 16;
 
 // Volume has to be within range of 0-1, otherwise engine errors
-void(float defvol) SUB_BoundVolume = { // [FUNCTION]
+void(float defvol) SUB_BoundSoundVolume = { // [FUNCTION]
 	if (self.volume == 0) self.volume = defvol;	// Default
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;	// Set to vanilla default
 }; // Engine already bounds this to [0,1]. Silent ambientsounds make no sense.
 
 void() ambient_sound_setup = { // [FUNCTION]
-	SUB_BoundVolume(self.volume);
+	SUB_BoundSoundVolume(self.volume);
 	if (self.speed < 0) self.speed = ATTN_NONE;
 	else if (self.speed == 0) self.speed = ATTN_STATIC;
 	ambientsound(self.origin, self.noise, self.volume, self.speed);

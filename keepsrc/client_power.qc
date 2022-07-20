@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 22
+// Function count: 51
 //
 // Implements: Powerup Reset System for the Player
 //
@@ -38,6 +38,12 @@
 
 float PWR_FADING = 3;
 void() SecretHunt;
+void(entity targ, float upforce) EntityJump;
+
+float(float powtimer, float currenttimer) PowerupTime = {
+	if (powtimer < 0 || currenttimer == POWERUP_VANIA) return POWERUP_VANIA;
+	return mathlib_max(currenttimer + powtimer,time + powtimer);
+};
 
 void(entity targ, float powtimer) ResetPowerInvRing = { // [FUNCTION]
 	if (powtimer == 0) {
@@ -46,11 +52,18 @@ void(entity targ, float powtimer) ResetPowerInvRing = { // [FUNCTION]
 		targ.modelindex = modelindex_player; // Reset player model
 		targ.frame = 0;
 	} else if (targ.items & IT_INVISIBILITY) {
-		if (targ.invisible_finished > (time + powtimer) ) { // Stop powerup constantly being reset once below timer
+		// Stop powerup constantly being reset once below timer.
+		if (targ.invisible_finished > (time + powtimer) ) { 
 			targ.invisible_finished = time + powtimer;
-			targ.invisible_time = 1; // Enable fading message
+			targ.invisible_time = 1; // Enable fading message.
 		}
 	}
+};
+
+void(entity targ, float powtimer) GivePowerInvRing = { // [FUNCTION]
+	targ.invisible_time = TRUE;
+	targ.notrace = 1;
+	targ.invisible_finished = PowerupTime(powtimer,targ.invisible_finished);
 };
 
 void(entity targ, float powtimer) ResetPowerEnvSuit = { // [FUNCTION]
@@ -58,35 +71,67 @@ void(entity targ, float powtimer) ResetPowerEnvSuit = { // [FUNCTION]
 		targ.items = targ.items - (targ.items & IT_SUIT);
 		targ.radsuit_finished = targ.rad_time = 0;
 	} else if (targ.items & IT_SUIT) {
-		if (targ.radsuit_finished > (time + powtimer) ) { // Stop powerup constantly being reset once below timer
+		// Stop powerup constantly being reset once below timer.
+		if (targ.radsuit_finished > (time + powtimer) ) {
 			targ.radsuit_finished = time + powtimer;
 			targ.rad_time = 1; // Enable fading message
 		}
 	}
 };
 
-void(entity targ) ResetPowerThermSuit = { targ.therm_finished = targ.therm_time = 0; }; // [FUNCTION]
+void(entity targ, float powtimer) GivePowerEnvSuit = { // [FUNCTION]
+	targ.rad_time = TRUE;
+	targ.radsuit_finished = PowerupTime(powtimer,targ.radsuit_finished);
+	ResetDebuffBurning(targ);
+	ResetDebuffPoisoned(targ);
+};
+
+void(entity targ) ResetPowerThermSuit = { // [FUNCTION]
+	targ.therm_finished = targ.therm_time = 0;
+};
+
+void(entity targ, float powtimer) GivePowerThermSuit = { // [FUNCTION]
+	targ.therm_time = TRUE;
+	targ.therm_finished = PowerupTime(powtimer,targ.therm_finished);
+	ResetDebuffBurning(targ);
+};
 
 void(entity targ, float powtimer) ResetPowerPent = { // [FUNCTION]
 	if (powtimer == 0) {
 		targ.items = targ.items - (targ.items & IT_INVULNERABILITY);
 		targ.invincible_finished = targ.invincible_time = 0;
 	} else if (targ.items & IT_INVULNERABILITY) {
-		if (targ.invincible_finished > (time + powtimer) ) { // Stop powerup constantly being reset once below timer
+		// Stop powerup constantly being reset once below timer.
+		if (targ.invincible_finished > (time + powtimer) ) {
 			targ.invincible_finished = time + powtimer;
 			targ.invincible_time = 1; // Enable fading message
 		}
 	}
 };
 
+void(entity targ, float powtimer) GivePowerPent = { // [FUNCTION]
+	targ.invincible_time = TRUE;
+	targ.invincible_finished = PowerupTime(powtimer,targ.invincible_finished);
+	ResetDebuffSystem(targ);
+};
+
+// Quad screen effect is shared by several items
+void(entity targ) ResetPowerQuadItem = { targ.items = targ.items - (targ.items & IT_QUAD); }; // [FUNCTION]
+
 void(entity targ, float powtimer) ResetPowerQuad = { // [FUNCTION]
 	if (powtimer == 0) targ.super_damage_finished = targ.super_time = 0;
 	else if (targ.items & IT_QUAD) {
-		if (targ.super_damage_finished > (time + powtimer) ) { // Stop powerup constantly being reset once below timer
+		// Stop powerup constantly being reset once below timer.
+		if (targ.super_damage_finished > (time + powtimer) ) {
 			targ.super_damage_finished = time + powtimer;
 			targ.super_time = 1; // Enable fading message
 		}
 	}
+};
+
+void(entity targ, float powtimer) GivePowerQuad = { // [FUNCTION]
+	targ.super_time = TRUE;
+	targ.super_damage_finished = PowerupTime(powtimer,targ.super_damage_finished);
 };
 
 void(entity targ) ResetPowerShroom = { // [FUNCTION]
@@ -94,7 +139,7 @@ void(entity targ) ResetPowerShroom = { // [FUNCTION]
 	targ.shroom_finished = 0;
 	setsize(targ,VEC_HULL_MIN,VEC_HULL_MAX);
 	sound(targ,CHAN_VOICE,"qmaster/items/smb_bowserfalls.wav",1,ATTN_NORM);
-	targ.velocity = '0 0 1'; // FULL STOP! (almost) Hope you weren't in the air
+	targ.velocity = '0 0 5'; // FULL STOP! (almost) Hope you weren't in the air.
 	SUB_RemoveFlags(targ,FL_ONGROUND);
 	targ.effects = targ.effects - EF_BRIGHTLIGHT;
 	targ.legsattachment.scale = 1;
@@ -102,8 +147,15 @@ void(entity targ) ResetPowerShroom = { // [FUNCTION]
 	targ.view_ofs = '0 0 22';
 };
 
-// Quad screen effect is shared by several items
-void(entity targ) ResetPowerQuadItem = { targ.items = targ.items - (targ.items & IT_QUAD); }; // [FUNCTION]
+void(entity targ, float powtimer) GivePowerShroom = { // [FUNCTION]
+	targ.shroom_finished = time + powtimer;
+	EntityJump(targ,360);
+	targ.view_ofs = '0 0 72';
+	targ.legsattachment.scale = 2;
+	targ.scale = 2;
+	setsize(targ,VEC_HULL2_MIN,VEC_HULL2_MAX); // grow up
+	targ.effects = targ.effects | EF_BRIGHTLIGHT;
+};
 
 void(entity targ, float powtimer) ResetPowerSharp = { // [FUNCTION]
 	if (powtimer == 0) {
@@ -115,6 +167,11 @@ void(entity targ, float powtimer) ResetPowerSharp = { // [FUNCTION]
 			targ.sharpshoot_time = 1; // Enable fading message
 		}
 	}
+};
+
+void(entity targ, float powtimer) GivePowerSharp = { // [FUNCTION]
+	targ.sharpshoot_time = TRUE;
+	targ.sharpshoot_finished = PowerupTime(powtimer,targ.sharpshoot_finished);
 };
 
 void(entity targ, float powtimer) ResetPowerPiercer = { // [FUNCTION]
@@ -129,10 +186,20 @@ void(entity targ, float powtimer) ResetPowerPiercer = { // [FUNCTION]
 	}
 };
 
+void(entity targ, float powtimer) GivePowerPiercer = { // [FUNCTION]
+	targ.nailpiercer_time = TRUE;
+	targ.nailpiercer_finished = PowerupTime(powtimer,targ.nailpiercer_finished);
+};
+
 void(entity targ) ResetPowerLevitation = { // [FUNCTION]
 	targ.wing_finished = 0;
 	targ.wing_time = 0;
 	targ.gravity = fabs(targ.gravity);
+};
+
+void(entity targ, float powtimer) GivePowerLevitation = { // [FUNCTION]
+	targ.wing_time = 1;
+	targ.wing_finished = PowerupTime(powtimer,targ.wing_finished);
 };
 
 void(entity targ, float powtimer) ResetPowerLavaShield = { // [FUNCTION]
@@ -147,7 +214,60 @@ void(entity targ, float powtimer) ResetPowerLavaShield = { // [FUNCTION]
 	}
 };
 
-void(entity targ, float powtimer) ResetPowerAirTank = { // [FUNCTION]
+void(entity targ, float powtimer, float vol) GivePowerLavaShield = { // [FUNCTION]
+	targ.lavashield_time = 1;
+	targ.lavashield_finished = PowerupTime(powtimer,targ.lavashield_finished);	
+	targ.lavashield_volume = vol; // Volume range modifier (0-1)
+	ResetDebuffBurning(targ);
+};
+
+void(entity targ, float powtimer) ResetPowerPowerShield = { // [FUNCTION]
+	if (powtimer == 0) {
+		targ.items2 = targ.items2 - (targ.items2 & IT2_SHIELD);
+		targ.shield_finished = targ.lavashield_time = 0;
+	} else if (targ.items2 & IT2_SHIELD) {
+		if (targ.shield_finished > (time + powtimer) ) { // Stop powerup constantly being reset once below timer
+			targ.shield_finished = time + powtimer;
+			targ.shield_time = 1; // Enable fading message
+		}
+	}
+};
+
+void(entity targ, float powtimer) GivePowerPowerShield = { // [FUNCTION]
+	targ.shield_time = TRUE;
+	targ.shield_finished = PowerupTime(powtimer,targ.shield_finished);
+	ResetDebuffBurning(targ);
+	ResetDebuffPoisoned(targ);
+};
+
+void(entity targ, float powtimer) ResetPowerAntigrav = { // [FUNCTION]
+	if (targ.flags & FL_CLIENT) sprint(targ,"Antigrav Lost.\n");
+	targ.antigrav_finished = 0;
+	if (targ.zerogtime < time  // Reset if not swimming in a func liquid.
+		&& targ.timeladder < time) {  // Reset if not on a ladder.
+		if (targ.oldgravity > 0) targ.gravity = targ.oldgravity;
+		else targ.gravity = 1;
+	}
+};
+
+void(entity targ, float powtimer) GivePowerAntigrav = { // [FUNCTION]
+	targ.antigrav_time = 1;
+	targ.antigrav_finished = PowerupTime(powtimer,targ.antigrav_finished);
+	targ.gravity = 0.25; // This is where the magic happens! See client_power.qc for how it goes back to 1.
+};
+
+void(entity targ, float powtimer) ResetPowerEmpathy = { // [FUNCTION]
+	targ.empathy_time = 0;
+	targ.empathy_finished = 0;
+	targ.effects = (targ.effects - (targ.effects & EF_DIMLIGHT));
+};
+
+void(entity targ, float powtimer) GivePowerEmpathy = { // [FUNCTION]
+	targ.empathy_time = TRUE;
+	targ.empathy_finished = PowerupTime(powtimer,targ.empathy_finished);
+};
+
+void(entity targ, float powtimer) ResetPowerWetsuit = { // [FUNCTION]
 	if (powtimer == 0) {
 		targ.moditems = targ.moditems - (targ.moditems & IT_ARTWETSUIT);
 		targ.wetsuit_finished = targ.wetsuit_time = 0;
@@ -157,6 +277,12 @@ void(entity targ, float powtimer) ResetPowerAirTank = { // [FUNCTION]
 			targ.wetsuit_time = 1; // Enable fading message
 		}
 	}
+};
+
+void(entity targ, float powtimer) GivePowerWetsuit = { // [FUNCTION]
+	targ.wetsuit_time = TRUE;
+	targ.wetsuit_finished = PowerupTime(powtimer,targ.wetsuit_finished);
+	ResetDebuffBurning(targ);
 };
 
 void(entity targ, float powtimer) ResetPowerBlastbelt = { // [FUNCTION]
@@ -171,6 +297,11 @@ void(entity targ, float powtimer) ResetPowerBlastbelt = { // [FUNCTION]
 	}
 };
 
+void(entity targ, float powtimer) GivePowerBlastbelt = { // [FUNCTION]
+	targ.blastbelt_time = TRUE;
+	targ.blastbelt_finished = PowerupTime(powtimer,targ.blastbelt_finished);
+};
+
 void(entity targ, float powtimer) ResetPowerJumpBoots = { // [FUNCTION]
 	if (powtimer == 0) {
 		targ.moditems = targ.moditems - (targ.moditems & IT_ARTJUMPBOOTS);
@@ -183,9 +314,180 @@ void(entity targ, float powtimer) ResetPowerJumpBoots = { // [FUNCTION]
 	}
 };
 
-void(entity targ) ResetPowerWetSuit = { // [FUNCTION]
-	targ.moditems = targ.moditems - (targ.moditems & IT_ARTWETSUIT);
-	targ.wetsuit_finished = targ.wetsuit_time = 0;
+void(entity targ, float powtimer, float count, float height, float dist) GivePowerJumpBoots = { // [FUNCTION]
+	targ.jumpboots_time = TRUE;
+	targ.jumpboots_finished = PowerupTime(powtimer,targ.jumpboots_finished);
+	targ.jumpboots_airlvl = 0;
+	if (count < 0) targ.jumpboots_airmax = -1; // Check if jump max is endless, additive or exact
+	else if (count > 0) targ.jumpboots_airmax = count;
+	else targ.jumpboots_airmax = targ.jumpboots_airmax + 1;
+	if (targ.jumpboots_airmax > ART_JUMPBOOTS_AIRMAX) targ.jumpboots_airmax = ART_JUMPBOOTS_AIRMAX;
+	if (height > 0) targ.jumpboots_height = height; // Make sure the max never goes too high
+	else targ.jumpboots_height = ART_JUMPHEIGHT;
+	if (dist > 0) targ.jumpboots_forward = dist;
+	else targ.jumpboots_forward = 0;
+};
+
+void(entity targ, float powtimer) GivePowerTrinity = { // [FUNCTION]
+	targ.trinity_time = targ.trinity_start = 1;
+	targ.trinity_finished = PowerupTime(powtimer,targ.trinity_finished);
+};
+
+void(entity targ, float powtimer) GivePowerCross = { // [FUNCTION]
+	targ.cross_time = targ.cross_start = 1;
+	targ.cross_finished = PowerupTime(powtimer,targ.cross_finished);
+	ResetDebuffSystem(targ);
+};
+
+void(entity targ) GivePowerBerserk = { // [FUNCTION]
+	targ.perms = targ.perms | POW_VAMPIRE;
+	targ.health = targ.max_health; // Full Heal
+	ResetDebuffSystem(targ);
+};
+
+void(entity targ) GivePowerEqualizer = { // [FUNCTION]
+	targ.perms = targ.perms | POW_DOUBLE;
+	targ.ammo_nails = AMMO_MAXNAILS; // max out nails ammo
+	if (targ.ammo_lava_nails < (AMMO_MAXLAVANAILS * 0.5)) targ.ammo_lava_nails = AMMO_MAXLAVANAILS * 0.5; // fill lava nails up to half
+	W_SetCurrentAmmo(targ); // if changed current ammo, update it
+};
+
+void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
+	local float amgiven;
+
+	if (!(targ.flags & FL_CLIENT)) return;
+
+	sprint(targ, ": ");
+	if (giver.ammo_nails)  {
+		targ.maxnails = SUB_ClampFloat(targ.maxnails + giver.ammo_nails,targ.maxnails,AMMO_MEGAMAXNAILS);
+		targ.ammo_nails = targ.maxnails; // max out ammo
+		sprint(targ, "Max nails increased by ");
+		sprint(targ, ftos(giver.ammo_nails));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_rockets) {
+		targ.maxrockets = SUB_ClampFloat(targ.maxrockets + giver.ammo_rockets,targ.maxrockets,AMMO_MEGAMAXROCKETS);
+		targ.ammo_rockets = targ.maxrockets; // max out ammo
+		sprint(targ, "Max rockets increased by ");
+		sprint(targ, ftos(giver.ammo_rockets));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_cells) {
+		targ.maxcells = SUB_ClampFloat(targ.maxcells + giver.ammo_cells,targ.maxcells,AMMO_MEGAMAXCELLS);
+		targ.ammo_cells = targ.maxcells; // max out ammo
+		sprint(targ, "Max cells increased by ");
+		sprint(targ, ftos(giver.ammo_cells));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_lava_nails) {
+		targ.maxlavanails = SUB_ClampFloat(targ.maxlavanails + giver.ammo_lava_nails,targ.maxlavanails,AMMO_MEGAMAXLAVANAILS);
+		sprint(targ, "Max lava nails increased by ");
+		sprint(targ, ftos(giver.ammo_lava_nails));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_multi_rockets) {
+		targ.maxmultirockets = SUB_ClampFloat(targ.maxmultirockets + giver.ammo_multi_rockets,targ.maxmultirockets,AMMO_MEGAMAXMULTIROCKETS);
+		targ.ammo_multi_rockets = targ.maxmultirockets; // max out ammo
+		sprint(targ, "Max multi-rockets ammo increased by ");
+		sprint(targ, ftos(giver.ammo_multi_rockets));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_plasma) {
+		targ.maxplasma = SUB_ClampFloat(targ.maxplasma + giver.ammo_plasma,targ.maxplasma,AMMO_MEGAMAXNAILS);
+		targ.ammo_plasma = targ.maxplasma; // max out ammo
+		sprint(targ, "Max poison ammo increased by ");
+		sprint(targ, ftos(giver.ammo_plasma));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_poison) {
+		targ.maxpoison = SUB_ClampFloat(targ.maxpoison + giver.ammo_poison,targ.maxpoison,AMMO_MEGAMAXPOISON);
+		targ.ammo_poison = targ.maxpoison; // max out ammo
+		sprint(targ, "Max poison ammo increased by ");
+		sprint(targ, ftos(giver.ammo_poison));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_bolts) {
+		targ.maxbolts = SUB_ClampFloat(targ.maxbolts + giver.ammo_bolts,targ.maxbolts,AMMO_MEGAMAXBOLTS);
+		targ.ammo_bolts = targ.maxbolts; // max out ammo
+		sprint(targ, "Max bolts increased by ");
+		sprint(targ, ftos(giver.ammo_bolts));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_bloodcrystals) {
+		targ.maxblood = SUB_ClampFloat(targ.maxblood + giver.ammo_bloodcrystals,targ.maxblood,AMMO_MEGAMAXBLOOD);
+		targ.ammo_bloodcrystals = targ.maxblood; // max out ammo
+		sprint(targ, "Max blood crystals increased by ");
+		sprint(targ, ftos(giver.ammo_bloodcrystals));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_voidshards) {
+		targ.maxvoid = SUB_ClampFloat(targ.maxvoid + giver.ammo_voidshards,targ.maxvoid,AMMO_MEGAMAXVOID);
+		targ.ammo_voidshards = targ.maxvoid; // max out ammo
+		sprint(targ, "Max void shards increased by ");
+		sprint(targ, ftos(giver.ammo_voidshards));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_elemental) {
+		targ.maxmana = SUB_ClampFloat(targ.maxmana + giver.ammo_elemental,targ.maxmana,AMMO_MEGAMAXMANA);
+		targ.ammo_elemental = targ.maxmana; // max out ammo
+		sprint(targ, "Max elemental mana increased by ");
+		sprint(targ, ftos(giver.ammo_elemental));
+		sprint(targ, "!\n");
+		amgiven = TRUE;
+	}
+
+	if (giver.ammo_shells || !amgiven) { // At least give something!
+		if (giver.ammo_shells <= 0) giver.ammo_shells = 100; // Drake default.
+		targ.maxshells = SUB_ClampFloat(targ.maxshells + giver.ammo_shells,targ.maxshells,AMMO_MEGAMAXSHELLS);
+		targ.ammo_shells = targ.maxshells; // max out ammo
+		sprint(targ, "Max shells increased by ");
+		sprint(targ, ftos(giver.ammo_shells));
+		sprint(targ, "!\n");
+	}
+};
+
+void(entity targ, entity giver) GivePowerRegeneration = { // [FUNCTION]
+	targ.health = targ.max_health;
+	targ.perms = targ.perms | giver.perms;
+};
+
+void() GivePowerSigilBane = { // [FUNCTION]
+	local entity pl;
+
+	pl = find(world,classname, "player");
+	while (pl) {
+		pl.health = pl.max_health; // Give all players full health
+		pl = find (pl, classname, "player");
+	}
+};
+
+void(entity targ, entity giver) GivePowerVitality = { // [FUNCTION]
+	targ.max_health = targ.max_health + giver.max_health;
+	targ.health = targ.max_health; 
+};
+
+void(entity targ) ResetPowerThorsBlessing = { // [FUNCTION]
+	targ.items3 = targ.items3 - (targ.items3 & IT3_THORSBLESSING);
 };
 
 void(entity targ, float powtimer, float novania) ResetPowerSystem = { // [FUNCTION]
@@ -201,15 +503,38 @@ void(entity targ, float powtimer, float novania) ResetPowerSystem = { // [FUNCTI
 	ResetPowerSharp(targ, powtimer);
 	ResetPowerPiercer(targ, powtimer);
 	ResetPowerLevitation(targ);
-	ResetPowerWetSuit(targ);
-	// Don't reset Vania items
-	if (novania) {
+	if (novania) { // Reset Vania items
 		ResetPowerLavaShield(targ, powtimer);
-		ResetPowerAirTank(targ, powtimer);
+		ResetPowerWetsuit(targ, powtimer);
 		ResetPowerBlastbelt(targ, powtimer);
 		ResetPowerJumpBoots(targ, powtimer);
 	}
 };
+
+void(entity targ) UseThorsBlessing = { // [FUNCTION]
+	targ.health = SUB_ClampFloat(targ.max_health,25,HEAL_MEGAMAX);
+	targ.deadflag = DEAD_NO;
+	targ.touch = SUB_Null;
+	targ.frozen = FALSE;
+	GivePowerPent(targ,15); // Indestructable for a bit to escape potentially bad revive spot.
+	GivePowerLevitation(targ,15); // Allow for flying with space bar to escape.
+	sound(targ,CHAN_WEAPON,"tronyn/lightning_blast.wav",1,ATTN_NORM);
+	sound(targ,CHAN_ITEM,"rogue/belt/pickup.wav",1,ATTN_NORM);
+	spawn_tdeath(targ.revive_origin,targ); // Kill anything at destination.
+	setorigin(targ,targ.revive_origin); // Teleport to last spot on ground.
+	EntityJump(targ,SHROOM_JUMP_BOOST); // Launch up a bit.
+	if (targ.flags & FL_CLIENT) centerprint(targ,"Thor's Blessing\n has saved thee!");
+	ShockWave(targ.origin + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
+	ResetPowerThorsBlessing(targ);
+	ResetDebuffSystem(targ);
+	ResetPowerSystem(targ,0,FALSE);
+};
+
+void(entity targ) GivePowerThorsBlessing = { // [FUNCTION]
+	targ.items3 = targ.items3 | IT3_THORSBLESSING; // Thor's Blessing lifesaver!
+};
+
+
 
 void(entity targ) PlayLavaShieldSound = { // [FUNCTION]
 	if (!(targ.flags & FL_CLIENT)) return; // Only works for the player because of sounds.
@@ -356,7 +681,7 @@ void() ClientPowerups = { // [FUNCTION]
 	
 	// Lava Shield (Aegis of Chthon).  Flash screen 3s before running out.
 	if (self.lavashield_finished > 0) {
-	// sound and screen flash when items starts to run out
+		// sound and screen flash when items starts to run out
 		if (self.lavashield_finished < time + 3) {
 			if (self.lavashield_time == 1) {
 				sprint(self, "Aegis is falling apart!\n");
@@ -371,6 +696,58 @@ void() ClientPowerups = { // [FUNCTION]
 			}
 		}	
 		if (self.lavashield_finished < time) ResetPowerLavaShield(self,0); // Update inventory and timers
+	}
+
+	if(self.antigrav_finished) {
+		if (self.antigrav_finished < time + 3) {
+			if (self.antigrav_time == 1) {
+				sprint (self, "Antigrav failing...\n");
+				self.antigrav_time = 0;
+				sound (self, CHAN_AUTO, "rogue/belt/fadeout.wav", 1, ATTN_NORM);
+			}
+			if (self.antigrav_time < time) {
+				self.antigrav_time = time + 1;
+				Safe_stuffcmd (self, "bf\n");
+			}
+		}
+		
+		if ( self.antigrav_finished < time) ResetPowerAntigrav(self,0);
+	}
+
+	// Power Shield (rogue).  Flash screen 3s before running out.
+	if (self.shield_finished > 0) {
+		// sound and screen flash when items starts to run out
+		if (self.shield_finished < time + 3) {
+			if (self.shield_time == 1) {
+				sprint(self, "Power Shield is fading!\n");
+				Safe_stuffcmd (self, "bf\n");
+				sound(self,CHAN_AUTO,"rogue/shield/fadeout.wav",1,ATTN_NORM);
+				self.shield_time = time + 1;
+			}
+
+			if (self.shield_time < time) {
+				self.shield_time = time + 1;
+				Safe_stuffcmd (self, "bf\n");
+			}
+		}	
+		if (self.shield_finished < time) ResetPowerPowerShield(self,0); // Update inventory and timers
+	}
+
+	if (self.empathy_finished) {
+		if (self.empathy_finished < (time + 3)) {
+			if ( (self.empathy_time == TRUE) ) {
+				sprint(self,"Empathy Shields are running out\n");
+				stuffcmd(self,"bf\n");
+				sound(self,CHAN_AUTO,"items/suit2.wav",TRUE,ATTN_NORM);
+				self.empathy_time = (time + TRUE);
+			}
+			if ( (self.empathy_time < time) ) {
+				self.empathy_time = (time + TRUE);
+				stuffcmd (self,"bf\n");
+			}
+		}
+		if ( (self.empathy_finished < time) ) ResetPowerEmpathy(self,0);
+		else self.effects = (self.effects | EF_DIMLIGHT);
 	}
 
 	// Wet Suit.  Flash screen 3s before running out.  Give player 12s of air after suit finishes.
@@ -420,7 +797,7 @@ void() ClientPowerups = { // [FUNCTION]
 				Safe_stuffcmd (self, "bf\n");
 			}
 		}
-		if (self.wetsuit_finished < time) ResetPowerWetSuit(self); // Update inventory and timers.
+		if (self.wetsuit_finished < time) ResetPowerWetsuit(self,0); // Update inventory and timers.
 	}
 
 	// Invincibility (Pentagram).  Flash screen 3s before running out

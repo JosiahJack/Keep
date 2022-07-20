@@ -57,7 +57,7 @@ void() trigger_bmodel_sounds = { // [FUNCTION]
 	else if (self.sounds == 7) self.noise = "drake/misc/secret2.wav";
 
 	if (self.noise != "") precache_sound(self.noise); // precache any sounds that have been defined
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 };
 
 // Special sight trigger, Is the player *looking* at this trigger.  This sight trigger cannot be disabled or turned off atm.
@@ -275,7 +275,7 @@ void() trigger_bmodel_default = { // [FUNCTION]
 	self.estate_disable = trigger_bmodel_disable;
 	self.estate_reset = trigger_bmodel_reset;
 	self.estate = ESTATE_ON;
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 };
 
 void() trigger_bmodel_setup = { // [FUNCTION]

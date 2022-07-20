@@ -127,3 +127,5 @@ float STAGE_FIRING    = 5.000;
 entity tag_token_owner;
 .float ltrailLastUsed;
 .float orbitPosition;
+.float tag_frags;
+.float tag_message_time;

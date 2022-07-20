@@ -354,7 +354,7 @@ void() func_togglewall = { // [ENTITY]
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
 	precache_sound(self.noise2);
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.classtype = CT_FUNCTOGWALL;
 	self.bsporigin = TRUE;
 	self.angles = '0 0 0';
@@ -589,7 +589,7 @@ void() func_laser = { // [ENTITY]
 	if (self.wait < 0) self.wait = TRUE;// Display message once?
 	else self.wait = FALSE;
 	self.waitmin = FALSE;				// Spawning no message check
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	if (self.sounds > 0 && self.sounds < 3) { // Pre-cache sounds and setup sound emitter
 		if (self.sounds == 1) {
 			self.noise1 = "rrp/misc/laser_on.wav";
@@ -817,7 +817,7 @@ void() func_skill = { // [ENTITY]
 	precache_sound(self.noise1);	// stop sound(big clunk sound)
 	precache_sound(self.noise2);	// moving sound(door moving)
 	precache_sound(self.noise3);	// Touch sound
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.bsporigin = TRUE;			// Bmodel (0,0,0 origin)
 	self.mdl = self.model;
 	SetMovedir();

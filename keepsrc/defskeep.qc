@@ -177,7 +177,7 @@ float	IT_CHAINSAW 		= 2097152;		//21 Drake chainsaw						W stored in self.pems. 
 .float items3;
 float IT3_FLASHLIGHT		= 1;			//0  Flashlight from Quoth
 float IT3_SECRETHUNTER		= 2;			//1  Secret Hunter (Loki's Cat) 
-//float UNUSED    			= 4;			//2  
+float IT3_THORSBLESSING 	= 4;			//2  Free life granted upon would-be death.
 //float UNUSED   			= 8;			//3  
 //float UNUSED				= 16;			//4  
 //float UNUSED   			= 32;			//5  
@@ -296,6 +296,19 @@ float AMMO_MAXBLOOD = 100;
 float AMMO_MAXVOID = 100;
 float AMMO_MAXMANA = 100;
 
+float AMMO_MEGAMAXSHELLS = 250;
+float AMMO_MEGAMAXNAILS = 250;
+float AMMO_MEGAMAXROCKETS = 250;
+float AMMO_MEGAMAXCELLS = 250;
+float AMMO_MEGAMAXLAVANAILS = 250;
+float AMMO_MEGAMAXMULTIROCKETS = 250;
+float AMMO_MEGAMAXPLASMA = 250;
+float AMMO_MEGAMAXPOISON = 250;
+float AMMO_MEGAMAXBOLTS = 250;
+float AMMO_MEGAMAXBLOOD = 250;
+float AMMO_MEGAMAXVOID = 250;
+float AMMO_MEGAMAXMANA = 250;
+
 .float maxshells;		// Maximum ammo the player can carry
 .float maxnails;
 .float maxrockets;
@@ -334,9 +347,6 @@ string MODEL_VWEAP_PLASM = "progs/v_plasma2.mdl";		// Plasma Gun
 string MODEL_VWEAP_PROX = "progs/hipnotic/v_prox.mdl";			// Proximity Gun
 string MODEL_VWEAP_LCAN = "progs/hipnotic/v_laserg.mdl";			// Laser Cannon
 string MODEL_PROJ_GRENADEMULTI = "progs/rogue/mervup.mdl";			// Multi-Grenade for Monsters
-string SOUND_ARTPSHIELD1 = "rogue/shield/pickup.wav";			// Pickup
-string SOUND_ARTPSHIELD2 = "rogue/shield/hit.wav";			// Active
-string SOUND_ARTPSHIELD3 = "rogue/shield/fadeout.wav";		// Fading
 string SOUND_ARTCROSS2 = "quoth/items2/crosuse.wav";			// Active
 string SOUND_ARTEMPATH2 = "hipnotic/items/empathy2.wav";		// Active
 
@@ -666,3 +676,5 @@ entity fliquid_head; // Borrowed schema from Gyro physics to handle checking all
 .entity fliquid_next;
 .entity fliquid_prev;
 .float fliquid_inlist;
+
+.vector revive_origin;

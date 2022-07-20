@@ -170,7 +170,7 @@ void() func_pressureswitch = { // [ENTITY]
 	precache_sound(self.noise);
 	if (self.noise1 == "") self.noise1 = self.noise;
 	precache_sound(self.noise1);
-	SUB_BoundVolume(1);
+	SUB_BoundSoundVolume(1);
 	self.classtype = CT_FUNCPSWITCH;
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;

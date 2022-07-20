@@ -169,6 +169,12 @@ projectiles_aim.qc			//  Projectile Aims
 precache_keep.qc			// REFINED Global precaches called by worldspawn.
 world.qc					// REFINED Worldspawn, starting frame, and map start world checks
 
+// Multiplayer Stuff
+//-----------------------------------------------------------------------------
+teamplay.qc
+runes.qc
+motd.qc
+
 // Player and Powerup Systems
 //-----------------------------------------------------------------------------
 shrine.qc					// REFINED Shrine System for various beneficaial auras and rewards.
@@ -451,6 +457,8 @@ mon_queen.qc				// Queen, Redfield, DENIZEN, non-combatant queen of the tower wh
 //mon_esquid.qc				// TaoV's Blue squid barnacle stationary plantlike monster (derived from shub)
 //mon_ranger.qc				// Ranger, Drake, implemenation of the player as a singleplayer monster.  Capable of being a buddy.
 mon_ogrelibrary.qc				// Nehahra library ogre and his cart
+
+dmatch.qc					// Rogue deathmatch stuff
 
 // Spawn System
 //-----------------------------------------------------------------------------

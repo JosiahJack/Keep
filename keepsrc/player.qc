@@ -930,7 +930,7 @@ void() player_gib = { // [FUNCTION]
 };
 
 void() player_death = { // [FUNCTION]
-	if (self.health < -99) self.health = -99; // don't let sbar look bad if a player	
+	if (self.health < -99) self.health = -99; // Don't let HUD value look bad.
 	if (deathmatch || coop) DropBackpack();
 	
 	ResetPowerSystem(self,0,TRUE); // Remove all powerup/debuff effects
