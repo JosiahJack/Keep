@@ -37,6 +37,8 @@
 // 'purse' on death.  Gems give slight health, and coins give slight armor.s
 //=============================================================================
 
+void() item_coin_touch_versus;
+
 // Updates gem color and glimmer.
 void(float gt) gem_colors = { // [FUNCTION]
     local float bit3, bit4, newskin;
@@ -94,19 +96,21 @@ void() treasure_touch = { // [FUNCTION]
 	if (!self.respawn_trig) start_item_respawn();
 };
 
+void() item_coin_setskin = {
+   if (self.count < 1) self.count = 1;  //number of coins
+   if (self.count == 1) self.skin = 0;
+   if (self.count == 2) self.skin = 1;
+   if (self.count == 3) self.skin = 2;
+   if (self.count == 4) self.skin = 3;
+   if (self.count == 5) self.skin = 4;
+};
+
 // Large gems or gold coins.  Gems raise health by 3, ignoring max health.
 // Coins raise armor by a like amount, up to an absolute limit of 250.
 // Note:  In Drake, maximum health gets raised by 1 permanently.
 void() item_treasure = { // [ENTITY]
-    self.healtype = 0;
-
-	// Size.
-	if (self.spawnflags & 2)
-		self.spawnflags = self.spawnflags - 2;
-	else
-		self.spawnflags = self.spawnflags | 1;
-
     self.classname = "item_treasure";
+    self.touch2 = treasure_touch;
     if (self.spawnflags & 1) { self.frame = 0;  self.healamount = 5; }
     else if (self.spawnflags & 2) { self.frame = 2;  self.healamount = 20; }
     else { self.frame = 1;  self.healamount = 10; }
@@ -120,7 +124,9 @@ void() item_treasure = { // [ENTITY]
         }
     } else {
         self.netname = "gold";
+        item_coin_setskin();
         item_setupmodel("progs/drake/t_coin.mdl",self.frame); // SOE coin
+        if (coop > 2) self.touch2 = item_coin_touch_versus;
     }
 	self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
 	self.classtype = CT_HEALROT;
@@ -128,7 +134,6 @@ void() item_treasure = { // [ENTITY]
 	self.respawn_ofs = '0 0 16';
 	self.bbmins = VEC_ITEM_MIN;
 	self.bbmaxs = '16 16 56';
-    self.touch2 = treasure_touch;
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_HEALTH;
 	item_setupnoise("drake/items/treasure.wav");
 

@@ -720,6 +720,45 @@
 	message2(string) : "Message on failure"
 ]
 
+@PointClass base(Targetname) = info_givepower : "Grant a Powerup Power Instantly" [
+	style(choices) : "Power to Grant" = [
+		 1 : "Environmental Protection Suit"
+		 2 : "Pentagram"
+		 3 : "Ring of Shadows"
+		 4 : "Quad Damage (def)"
+		 5 : "Sharp Shooter"
+		 6 : "Nail Piercer"
+		 7 : "Power Shield"
+		 8 : "Anti-grav Belt"
+		 9 : "Lava Shield"
+		 10 : "Wetsuit"
+		 11 : "Blast Belt"
+		 12 : "Jump Boots"
+		 13 : "Empathy Shields"
+		 14 : "Vengeance Sphere"
+		 15 : "Thermal Protection Suit"
+		 16 : "Trinity"
+		 17 : "Cross of Protection"
+		 18 : "Haste"
+		 19 : "Berserk"
+		 20 : "Equalizer"
+		 21 : "Levitation"
+		 22 : "Optimizer"
+		 23 : "Sigil Bane"
+		 24 : "Lesser Rejuvenator"
+		 25 : "Rejuvenator"
+		 26 : "Heart of Darkness"
+		 27 : "Thor's Blessing"
+	]
+	message(string) : "Sprint message on give"
+	message2(string) : "Centerprint message on give"
+	count(integer) : "Jump Boots jump amount(def=1)"
+	distance(integer) : "Jump Boots forward distance(def=0)"
+	height(integer) : "Jump Boots jump height(def=0)"
+	volume(integer) : "Blast Belt or Lava Shield noise loudness(def=1)"
+]
+
+
 @PointClass base(Targetname) = info_bomb : "Quoth Coop Bomb Effect" []
 
 @PointClass base(Targetname) = info_effect_pulse : "Projectile Light Effect" [
@@ -4774,7 +4813,11 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 
 @PointClass base(MonTall) studio("progs/rogue/wrath.mdl") = monster_wrath : "Wrath" []
 @PointClass base(MonTall) studio("progs/nehahra/wraith.mdl") = monster_voidwraith : "Void Wraith" []
-@PointClass base(MonTall) studio("progs/rogue/s_wrath.mdl") = monster_super_wrath : "Wrath" []
+@PointClass base(MonTall) studio("progs/rogue/s_wrath.mdl") = monster_super_wrath : "Wrath" [
+	spawnflags(flags) = [ 
+		2 : "No Random Teleporting" : 0 
+	]
+]
 @PointClass base(MonTall) studio("progs/ad171/mon_wraith.mdl") = monster_wraith : "Wraith"
 [ spawnflags(flags) = [ 
 		2 : "Scorpions" : 0

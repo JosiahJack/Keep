@@ -791,6 +791,9 @@ void() trigger_setskill_fire = { // [FUNCTION]
 	if (self.attack_finished > time) return;
 
 	cvar_set("skill", self.message); // There is no client check for the skill level change so that the use functionality can work from trigger chains.
+	if (self.bmodel_act) activator = self.bmodel_act;
+	else if (self.enemy) activator = self.enemy;
+	SUB_UseTargets();
 	if (self.wait > 0) { // Is the trigger repeatable?
 		self.attack_finished = time + self.wait;
 		self.nextthink = self.attack_finished;
@@ -823,7 +826,7 @@ void() trigger_setskill = { // [ENTITY]
 	if (!self.wait) self.wait = 1;
 	if (self.message == "") self.message = "0";
 	self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_MONSTERS); // Cannot have skill triggers touched by monsters
-	self.estate_fire = trigger_setskill_fire; // Setup Entity State functionality
+	self.use = self.estate_fire = trigger_setskill_fire; // Setup Entity State functionality
 	trigger_bmodel_setup();
 };
 

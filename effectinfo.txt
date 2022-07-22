@@ -18,25 +18,26 @@
 //alpha 32 96 0
 //originjitter 6 6 6
 
-effect TE_GUNSHOT
-count 16
-type alphastatic
-color 0x050505 0x202020			// dark/light grey						// O rings
-size 1.5 1.5
-rotate 0 0 0 0
-time 0.15 0.45
-alpha 256 256 0
-originjitter 8 8 8
+// TEMPORARY COMMENTING OUT SO QSS DOESN'T GLITCH ON DOUBLEBARRELSHOTGUN SHOT...MAYBE
+//    effect TE_GUNSHOT
+//    count 16
+//    type alphastatic
+//    color 0x050505 0x202020			// dark/light grey						// O rings
+//    size 1.5 1.5
+//    rotate 0 0 0 0
+//    time 0.15 0.45
+//    alpha 256 256 0
+//    originjitter 8 8 8
 
-effect TE_GUNSHOT
-count 12
-type alphastatic
-color 0x404040 0x646464			// dark/light grey
-size 1.5 1.5
-rotate 0 0 0 0
-time 0.15 0.45
-originjitter 8 8 8
-alpha 256 256 0
+//    effect TE_GUNSHOT
+//    count 12
+//    type alphastatic
+//    color 0x404040 0x646464			// dark/light grey
+//    size 1.5 1.5
+//    rotate 0 0 0 0
+//    time 0.15 0.45
+//    originjitter 8 8 8
+//    alpha 256 256 0
 
 //----------------------------------------------------------------------
 //effect TE_GUNSHOT

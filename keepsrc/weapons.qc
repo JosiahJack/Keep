@@ -2679,7 +2679,7 @@ void() W_WeaponFrame = { // [FUNCTION]
 	}
 
 	ImpulseCommands();
-	if (self.ammo_poison > 0) W_SetCurrentAmmo (self); // Change crossbow skin if bolts are poisoned
+	if (self.ammo_poison > 0) W_SetCurrentAmmo(self); // Change crossbow skin if bolts are poisoned
 	if (!self.button0) return; // check for attack
 
 	if (self.b0_click) self.b0_click = 2; // Just double-clicked.

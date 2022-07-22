@@ -432,6 +432,7 @@ void() misc_librarycart = {
   precache_model("progs/nehahra/frubble3.mdl");
   precache_model("progs/ad171/w_skullbook.mdl");
   precache_sound("nehahra/wall/woodbrk.wav");
+  precache_sound("nehahra/wall/barslide.wav");
   self.classtype = CT_FUNCBREAKOBJ;
   self.classgroup = CG_BREAKABLE;
   self.solid = SOLID_BBOX;

@@ -202,7 +202,7 @@ void() trigger_bmodel_restore = { // [FUNCTION]
 	} else if ( !(self.spawnflags & TRIG_NOTOUCH) || self.spawnflags & TRIG_ALWAYTOUCH) self.solid = SOLID_TRIGGER; // ALWAYSTOUCH was added because some triggers have re-used spawnflag 1 for other purposes and they still need touch.
 	else self.solid = SOLID_NOT; // Turn off touch functionality
 
-	setsize (self, self.bbmins, self.bbmaxs); // Restore bounding box (dev testing visual thing)
+	setsize(self,self.bbmins,self.bbmaxs); // Restore bounding box (dev testing visual thing)
 
 	if (check_nightmare() == TRUE) return; // Check for spawning conditions (nightmare, coop).  Needs to exist after entity has been added to work for BSPorigin.
 	if (check_coop() == TRUE) return;

@@ -184,7 +184,7 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 
 				}
 				if (rnum == IT_AXE) {
-					clientstring = " was ax-murdered by "; //TODO check for sword perm
+					clientstring = " was ax-murdered by ";
 					clientstring2 = "\n";
 					if (targ.health < -40) {
 						clientstring = " was chopped to pieces by ";

@@ -396,8 +396,33 @@ void() SUB_CalcAngleMoveThink = { // [FUNCTION]
 	SUB_CalcAngleMove(self.mangle,10);
 };
 
+// Prevent value from being within range.
+// VALID...min...INVALID...max...VALID
+float(float val, float min, float max) SUB_ReverseClampFloat = { // [FUNCTION]
+	local float retval;
+
+	if (min > max) { retval = max; max = min; min = retval; } // Flip if needed.
+	if (min == max && val != min) return val; // Easy out!
+
+	retval = val;
+	if (retval < max && retval > min) {
+		if (max - retval < retval - min) retval = max; // Closer to max, put at.
+		else retval = min; // Closer to min, put at.
+	}
+	return retval;
+}
+
+// Prevent value from being outside range.
+// INVALID...min...VALID...max...INVALID
 float(float val, float min, float max) SUB_ClampFloat = { // [FUNCTION]
 	local float retval;
+
+	if (min > max) { retval = max; max = min; min = retval; } // Flip if needed.
+	if (min == max) {
+		if (val == min) return val; // Matchy matchy!
+		return min; // Return the unique value that satisfies the range.
+	}
+	if (val < max && val > min) return val; // Easy out!
 
 	retval = val;
 	if (retval < min) retval = min;
@@ -477,13 +502,15 @@ float(entity thePoint) IsSpaceClearAtEntity = { // [FUNCTION]
    while (neighbors) {
       if (neighbors != thePoint) {
          if ((neighbors.flags & FLx_CREATURE)) return FALSE;
-         else if (neighbors.think) return FALSE;
+         else if (neighbors.solid) return FALSE;
       }
       neighbors = neighbors.chain;
       if (neighbors == start) return TRUE;
    }
    return TRUE;
 };
+
+
 
 entity(string cname, entity targ) SUB_FindByClassnameAwayFrom = { // [FUNCTION]
 	local entity furthestDest, bestDest, curDest;
@@ -505,7 +532,6 @@ entity(string cname, entity targ) SUB_FindByClassnameAwayFrom = { // [FUNCTION]
 
 		if (curDest == world) {
 			if (bestDest != world) return bestDest;
-
 			return furthestDest;
 		}
 		if (IsSpaceClearAtEntity(curDest)) {
@@ -529,6 +555,7 @@ entity(string cname, entity targ) SUB_FindByClassnameAwayFrom = { // [FUNCTION]
 entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
 	local entity enem, result;
 	local string targtype;
+	local float loop;
 
 	if (self.enemy) enem = self.enemy;
 	else enem = find(world,classname,"player");
@@ -545,11 +572,15 @@ entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
 
 	result = SUB_FindByClassnameAwayFrom(targtype,enem);
 	if (result) return result;
-	if (targtype != "info_target") targtype = "info_target";
-	else return world;
 
+	if (targtype != "info_target") targtype = "info_target";
 	result = SUB_FindByClassnameAwayFrom(targtype,enem);
 	if (result) return result;
+
+	newmis = spawn(); // Generate random point to spawn at.
+	setorigin(newmis,vecrand(SUB_ReverseClampFloat(crandom() * 192,-128,128),128,TRUE));
+	traceline(newmis.origin,self.enemy.origin,FALSE,self);
+	if (trace_ent == self.enemy) return newmis;
 	return world;
 };
 

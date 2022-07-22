@@ -47,28 +47,27 @@ void() hipRubbleTouch = { // [FUNCTION]
 };
 
 void(string rubblename) hipThrowRubble = { // [FUNCTION]
-	local entity new;
-
-	new = spawn();
-	new.classtype = CT_TEMPPHYS;
-	new.origin = self.origin;
-	setmodel(new,rubblename);
-	setsize (new,VEC_ORIGIN,VEC_ORIGIN);
-	new.velocity_x = ((self.mangle_x) + 70.000 * crandom ());
-	new.velocity_y = ((self.mangle_y) + 70.000 * crandom ());
-	new.velocity_z = ((self.mangle_z) + 140.000 + (70.000 * random ()));
-	new.movetype = MOVETYPE_BOUNCE;
-	new.solid = SOLID_BBOX;
-	new.avelocity_x = (random () * 600.000);
-	new.avelocity_y = (random () * 600.000);
-	new.avelocity_z = (random () * 600.000);
-	new.think = SUB_Remove;
-	new.touch = hipRubbleTouch;
-	new.ltime = time;
-	new.nextthink = ((time + 13.000) + (random () * MOVETYPE_BOUNCE));
+	newmis = spawn();
+	newmis.classtype = CT_TEMPPHYS;
+	newmis.origin = self.origin;
+	setmodel(newmis,rubblename);
+	setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin(newmis,newmis.origin);
+	newmis.velocity_x = ((self.mangle_x) + 70.000 * crandom ());
+	newmis.velocity_y = ((self.mangle_y) + 70.000 * crandom ());
+	newmis.velocity_z = ((self.mangle_z) + 140.000 + (70.000 * random ()));
+	newmis.movetype = MOVETYPE_BOUNCE;
+	newmis.solid = SOLID_BBOX;
+	newmis.avelocity_x = (random () * 600.000);
+	newmis.avelocity_y = (random () * 600.000);
+	newmis.avelocity_z = (random () * 600.000);
+	newmis.think = SUB_Remove;
+	newmis.touch = hipRubbleTouch;
+	newmis.ltime = time;
+	newmis.nextthink = ((time + 13.000) + (random () * MOVETYPE_BOUNCE));
 	self.pausetime = time;
-	new.frame = FALSE;
-	new.flags = FALSE;
+	newmis.frame = FALSE;
+	newmis.flags = FALSE;
 };
 
 void() hip_rubble_use = { // [FUNCTION]

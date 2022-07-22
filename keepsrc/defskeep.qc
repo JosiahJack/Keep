@@ -490,14 +490,14 @@ float PHYS_GYRO_ANGTURBULENCE= 64;
 
 // Copper has a lot of nice changes.  Some people don't like them.  Sometimes you don't want all of them.  Well, take your pick.  Enable however many of them you want just like you would spawnflags.
 .float copperoptions;
-float COPPER_SHOTGUN_PIERCE 		= 1;		// Shotgun projectiles pierce through multiple targets in a row.  Uses same implementation as the Doom option, idea from Doom.
-float COPPER_IMPRECISE_VOREBALLS 	= 2;		// Voreballs homing tracking is imprecise and lags more, allowing quick players to strafe and run past them.
+float COPPER_SHOTGUN_PIERCE 		= 1;		// TODO: Shotgun projectiles pierce through multiple targets in a row.  Uses same implementation as the Doom option, idea from Doom.
+float COPPER_IMPRECISE_VOREBALLS 	= 2;		// TODO: Voreballs homing tracking is imprecise and lags more, allowing quick players to strafe and run past them.
 float COPPER_SEMI_Z_AWARE_OGRES 	= 4;		// Ogres lob grenades using the angle half-way between standard ID1 fixed angle (18�) and fully Z-aware high precision aiming.
-float COPPER_ONE_HIT_AXE_ZOMBIES 	= 8;		// Melee weapons are guaranteed to knock a zombie to the floor rather than randomly picking one of the other shorter pain animations.
-float COPPER_DOWNED_ZOMBIE_GIB 		= 16;		// Zombies who are laying down on the floor will be gibbed by nearby explosions.
-float COPPER_TURRET_ENFORCERS		= 32;		// Enforcers will continue to fire non-stop at their enemy for as long as the enemy is in sight.  Enforcers will only move if their enemy is out of sight.
-float COPPER_TARBABY_JUMP_CALMING	= 64;		// Spawns stop jumping if their enemy is out of sight for more than 15 seconds.  They will still chase their enemy, but by using their slower walk until in view again.
-float COPPER_CHTHON_SPD_PROGRESSION = 128;		// As chthon is hurt with each lightning shock, his projectiles get flung faster and faster.
+float COPPER_ONE_HIT_AXE_ZOMBIES 	= 8;		// TODO: Melee weapons are guaranteed to knock a zombie to the floor rather than randomly picking one of the other shorter pain animations.
+float COPPER_DOWNED_ZOMBIE_GIB 		= 16;		// TODO: Zombies who are laying down on the floor will be gibbed by nearby explosions.
+float COPPER_TURRET_ENFORCERS		= 32;		// TODO: Enforcers will continue to fire non-stop at their enemy for as long as the enemy is in sight.  Enforcers will only move if their enemy is out of sight.
+float COPPER_TARBABY_JUMP_CALMING	= 64;		// TODO: Spawns stop jumping if their enemy is out of sight for more than 15 seconds.  They will still chase their enemy, but by using their slower walk until in view again.
+float COPPER_CHTHON_SPD_PROGRESSION = 128;		// TODO: As chthon is hurt with each lightning shock, his projectiles get flung faster and faster.
 float COPPER_FORGETFUL_INFIGHTERS	= 256;		// Infighting monsters will forget their enemy when out of sight for more than 5 seconds.  If they were previously angry with another enemy, they will switch to it, but if an enemy is in sight, switch to it first.
 float COPPER_COOP_PARTY_ITEMSHARE	= 512;		// All keys and weapons are given to all other coop players of same alignment whenever one is picked up.  Only changes the weapon for the player who picked it up.
 float COPPER_COOP_BACKPACK_PROTECT	= 1024;		// Coop players can only pick up their own backpack and not other players'.
@@ -506,9 +506,9 @@ float COPPER_FAST_NAILGUN_NAILS		= 4096;		// Nailgun's projectiles are faster.  
 float COPPER_TWOSHOT_PERFORATOR		= 8192;		// When firing the perforator, instead of using 1 higher damage spike (18 vs 9), two spikes are shot instead.
 
 .float doomoptions;
-float DOOM_SHOTGUN_KNOCKBACK		= 1;		// All shotguns apply knockback to enemies all the time.
-float DOOM_SHOTGUN_PIERCE			= 2;		// Shotgun projectiles pierce through multiple targets in a row.  Uses same implementation as the Copper option, idea from Doom.
-float DOOM_MONSTERS_NM_RESPAWN		= 4;		// When skill is Nightmare (>=3), this enables monster respawning.  When respawning, corpse dissappears with teleglitter, monsters respawn with teleglitter, and the monster's previous enemy is remembered if a player and still alive.  Respawn is 8 to 300 seconds.
+float DOOM_SHOTGUN_KNOCKBACK		= 1;		// TODO: All shotguns apply knockback to enemies all the time.
+float DOOM_SHOTGUN_PIERCE			= 2;		// TODO: Shotgun projectiles pierce through multiple targets in a row.  Uses same implementation as the Copper option, idea from Doom.
+float DOOM_MONSTERS_NM_RESPAWN		= 4;		// TODO: When skill is Nightmare (>=3), this enables monster respawning.  When respawning, corpse dissappears with teleglitter, monsters respawn with teleglitter, and the monster's previous enemy is remembered if a player and still alive.  Respawn is 8 to 300 seconds.
 
 .float hipnoticoptions;
 float HIPNOTIC_OLDMJOLNIR			= 1;		// Default is off = Drake throwable Mjolnir if held down + aDaya mod jam version for Tome.  On is just lightning ground smack and whack damage similar to Quoth simple hammer whack.

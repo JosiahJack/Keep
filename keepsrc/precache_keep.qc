@@ -154,6 +154,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_sound("zerstorer/trog/bigboom.wav");
 	precache_sound("zerstorer/weapons/sawguts.wav");
 	precache_sound("drake/items/money.wav");
+	precache_model("progs/qmaster/coinitem.mdl");
 	precache_sound("ambience/thunder1.wav");
 	precache_sound("zerstorer/ambience/thunder2.wav");
 	precache_sound("drake/weapons/axhit.wav");

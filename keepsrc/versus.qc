@@ -104,7 +104,7 @@ void() print_bones = {
 	if ((coop > 2 && self.versustype == VT_GAMEMASTER) || developer > 0) centerprint2(self,"Gib total: ",ftos(bones));
 };
 
-void() item_coin_touch = {
+void() item_coin_touch_versus = {
    if (coop > 2 && other.versustype != VT_SURVIVOR)  return;
    if ( !(other.flags & FL_CLIENT) ) return;
 
@@ -121,32 +121,11 @@ void() item_coin_touch = {
    if (!self.respawn_trig) start_item_respawn();
 };
 
-void() item_coin_setup = {
-   if (self.noise == "") self.noise = "drake/items/money.wav";
-
-   precache_sound(self.noise);
-   self.touch = item_touch;
-   self.touch2 = item_coin_touch;
-   self.bbmins = VEC_HULL_MIN;
-   self.bbmaxs = VEC_HULL_MAX;
-   item_start();
-};
-
-void() item_coin_setskin = {
-   if (self.count < 1) self.count = 1;  //number of coins
-   if (self.count == 1) self.skin = 0;
-   if (self.count == 2) self.skin = 1;
-   if (self.count == 3) self.skin = 2;
-   if (self.count == 4) self.skin = 3;
-   if (self.count == 5) self.skin = 4;
-};
 
 void() item_coin = {
-	if (self.mdl == "") self.mdl = "progs/qmaster/coinitem.mdl"; // Made the drake coin.mdl spin
-	precache_model (self.mdl);
-	item_coin_setskin();
-	item_coin_setup();
-};
+	item_setupnoise("drake/items/money.wav");
+	item_treasure_coin();
+}
 
 float() can_eat_bones = {
 	if (coop < 2) return FALSE;
@@ -185,31 +164,29 @@ void() item_bone = {
 };
 
 void(float c) DropCoin = {
-	local entity item;
-
 	if (c < 1 || c > 99) return;
 	if (coop != 3) return; // not in versus mode
 
-	item = spawn();
-	item.classname = "item_coin";
-	item.origin = self.origin - '0 0 20';
-	item.count = c;
+	newmis = spawn();
+	newmis.classname = "item_treasure";
+	newmis.origin = self.origin - '0 0 20';
+	newmis.count = c;
 	item_coin_setskin();
-	item.velocity_z = 300;
-	item.velocity_x = -100 + (random() * 200);
-	item.velocity_y = -100 + (random() * 200);
-	item.flags = FL_ITEM;
-	item.solid = SOLID_TRIGGER;
-	item.movetype = MOVETYPE_TOSS;
+	newmis.velocity_z = 300;
+	newmis.velocity_x = -100 + (random() * 200);
+	newmis.velocity_y = -100 + (random() * 200);
+	newmis.flags = FL_ITEM;
+	newmis.solid = SOLID_TRIGGER;
+	newmis.movetype = MOVETYPE_TOSS;
 	self.noise = "drake/items/money.wav";
-	setmodel(item, "progs/qmaster/coinitem.mdl");
-	setsize (item, VEC_HULL_MIN, VEC_HULL_MAX);
-	item.touch = item_touch;
-	item.touch2 = item_coin_touch;
-	item.item_expired = 0; //coins never expire
-	item.item_flrcheck = fabs(item.mins_z) + 16;
-	item.think = item_thinkloop;		// Check floor
-	item.nextthink = time + 0.3;		// Let coin drop first
+	setmodel(newmis, "progs/qmaster/coinitem.mdl");
+	setsize (newmis, VEC_HULL_MIN, VEC_HULL_MAX);
+	newmis.touch = item_touch;
+	newmis.touch2 = item_coin_touch_versus;
+	newmis.item_expired = 0; //coins never expire
+	newmis.item_flrcheck = fabs(newmis.mins_z) + 16;
+	newmis.think = item_thinkloop;		// Check floor
+	newmis.nextthink = time + 0.3;		// Let coin drop first
 };
 
 void() trigger_coinpurchase_touch = {

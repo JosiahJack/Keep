@@ -45,7 +45,7 @@ void() overlord_teleport = {
    local entity theDest;
    local vector org;
 
-   if (!(self.spawnflags & FL_SWIM)) return;
+   if (self.spawnflags & FL_SWIM) return;
 
    chance = random();
    if (chance > 0.750) return;

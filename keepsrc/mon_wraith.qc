@@ -382,6 +382,8 @@ void(vector orgofs, float dbframe) wraith_debuff = {
 	self.attachment3.angles = self.angles;
 	self.attachment3.frame = self.frame;
 	self.attachment3.velocity = self.velocity;
+	self.attachment3.scale = self.scale;
+	setorigin(self.attachment3, self.origin);
 	// Randomly change alpha to make glow flicker
 	self.attachment3.alpha = 0.1 + random()*0.5;
 

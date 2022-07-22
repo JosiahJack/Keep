@@ -268,7 +268,7 @@ void(float AttackNumber) WrathMissile = {
    missile.solid = SOLID_BBOX;
    missile.movetype = MOVETYPE_FLYMISSILE;
    setmodel(missile,"progs/drake/w_ball.mdl");
-   setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
+   setsize(missile,VEC_ORIGIN,VEC_ORIGIN);
    if ( (AttackNumber == 1) ) {
       org = ((self.origin + (v_forward * 20.000)) + (v_up * 12));
    } else {
@@ -290,38 +290,30 @@ void(float AttackNumber) WrathMissile = {
    missile.touch = WrathMissileTouch;
    missile.nextthink = (time + 0.100);
    missile.think = WrathHome;
+   missile.delay = time + 15;
    self.attack_finished = (time + 2);
 };
 
 void() WrathHome = {
-   if ( (self.enemy.health < TRUE) ) {
-      remove (self);
-      return ;
-   }
-   if ( (skill == 3) ) {
-      ai_track (self.enemy,550.000);
-   } else {
-      ai_track (self.enemy,400);
-   }
+   if (self.enemy.health < 1 || self.delay < time) { other = world; self.touch(); return; }
+
+   self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
+   ai_track(self.enemy,self.attack_speed);
    self.nextthink = (time + 0.100);
    self.think = WrathHome;
 };
 
 void() WrathMissileTouch = {
-   if ( (((other == self.owner) || (other.classname == "monster_wrath")) || (other.classname == "monster_super_wrath")) ) {
-      remove (self);
-      return ;
-   }
-   if ( (other.classname == "monster_zombie") )
-      T_Damage(other,self,self,110.000,DAMARMOR);
+   if ( (((other == self.owner) || (other.classname == "monster_wrath")) || (other.classname == "monster_super_wrath")) ) return;
 
-   T_RadiusDamage(self,self.owner,20.000,world,DAMAGEALL);
+   if (other.classname == "monster_zombie") T_Damage(other,self,self,110,DAMARMOR);
+   T_RadiusDamage(self,self.owner,20,world,DAMAGEALL);
    R_Exp3(self.origin);
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
+   WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
+   WriteByte(MSG_BROADCAST,TE_EXPLOSION);
+   WriteCoord(MSG_BROADCAST,self.origin_x);
+   WriteCoord(MSG_BROADCAST,self.origin_y);
+   WriteCoord(MSG_BROADCAST,self.origin_z);
    self.velocity = VEC_ORIGIN;
    self.touch = SUB_Null;
    setmodel(self,"progs/drake/s_explod.spr");

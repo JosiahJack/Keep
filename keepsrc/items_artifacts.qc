@@ -41,10 +41,19 @@
 
 void(entity own, entity starter) sphere_spawn;
 
+void() info_givepower_releasecenterprint = {
+	if (self.enemy) self.enemy.suppressCenterPrint = FALSE;
+	self.enemy = world;
+	entity_remove(self,0.1);
+};
+
 void(entity targ) artifact_powergive = { // [FUNCTION]
-	if (targ.flags & FL_CLIENT) {
+	if (!targ) return;
+
+	if (targ.flags & FL_CLIENT && self.classname != "info_givepower") {
 		sprint(targ,"You got the ");
 		sprint(targ,self.netname);
+		sprint(targ,"...\n");
 	}
 
 	if (self.classtype == CT_ARTSUIT) GivePowerEnvSuit(targ,self.cnt);
@@ -57,7 +66,7 @@ void(entity targ) artifact_powergive = { // [FUNCTION]
 	else if (self.classtype == CT_ARTGRAVBELT) GivePowerAntigrav(targ,self.cnt);
 	else if (self.classtype == CT_ARTLAVASHIELD) GivePowerLavaShield(targ,self.cnt,self.volume);
 	else if (self.classtype == CT_ARTWETSUIT) GivePowerWetsuit(targ,self.cnt);
-	else if (self.classtype == CT_ARTBLASTBELT) GivePowerBlastbelt(targ,self.cnt);
+	else if (self.classtype == CT_ARTBLASTBELT) GivePowerBlastbelt(targ,self.cnt,self.volume);
 	else if (self.classtype == CT_ARTJUMPBOOTS) GivePowerJumpBoots(targ,self.cnt,self.count,self.height,self.distance);
 	else if (self.classtype == CT_ARTEMPATHY) GivePowerEmpathy(targ,self.cnt);
 	else if (self.classtype == CT_ARTSPHERE) sphere_spawn(targ,self);
@@ -72,19 +81,74 @@ void(entity targ) artifact_powergive = { // [FUNCTION]
 	else if (self.classtype == CT_SIGILBANE) GivePowerSigilBane();
 	else if (self.classtype == CT_ARTREGEN) GivePowerRegeneration(targ,self);
 	else if (self.classtype == CT_ARTVITALITY) GivePowerVitality(targ,self);
+	else if (self.classtype == CT_ARTTHORSBLESSING) GivePowerThorsBlessing(targ);
 	else return; // It's a taunt!
 
-	if (targ.flags & FL_CLIENT) sprint(targ,"...\n");
+	if (self.classname == "info_givepower") {
+		if (targ.flags & FL_CLIENT && self.message != "") sprint(targ,self.message);
+		if (targ.flags & FL_CLIENT && self.message2 != "") {
+			centerprint(targ,self.message2);
+			targ.suppressCenterPrint = TRUE;
+			self.enemy = targ;
+			sound(targ,CHAN_VOICE,"misc/talk.wav",1,ATTN_NORM);
+		}
+	}
 };
 
 void() info_givepower_use = { // [FUNCTION]
+	if (!activator) {
+		activator = find(world,classname,"player");
+	}
 	artifact_powergive(activator);
 	self.use = SUB_Null;
-	entity_remove(self,0.1);
+	self.message = "";
+	self.message2 = "";
+	self.message = self.message3;
+	SUB_UseTargets();
+	self.think = info_givepower_releasecenterprint;
+	self.nextthink = time + 1.5;
 };
 
 void() info_givepower = { // [ENTITY]
+	if (self.style == 1) self.classtype = CT_ARTSUIT;
+	else if (self.style == 2) self.classtype = CT_ARTPENT;
+	else if (self.style == 3) self.classtype = CT_ARTINVS;
+	else if (self.style == 4) self.classtype = CT_ARTQUAD;
+	else if (self.style == 5) self.classtype = CT_ARTSHARP;
+	else if (self.style == 6) self.classtype = CT_ARTPIERCE;
+	else if (self.style == 7) self.classtype = CT_ARTPSHIELD;
+	else if (self.style == 8) self.classtype = CT_ARTGRAVBELT;
+	else if (self.style == 9) self.classtype = CT_ARTLAVASHIELD;
+	else if (self.style == 10) self.classtype = CT_ARTWETSUIT;
+	else if (self.style == 11) self.classtype = CT_ARTBLASTBELT;
+	else if (self.style == 12) {
+		self.classtype = CT_ARTJUMPBOOTS;
+		if (self.count < -1 || self.count > ART_JUMPBOOTS_AIRMAX) self.count = 0;
+	} else if (self.style == 13) self.classtype = CT_ARTEMPATHY;
+	else if (self.style == 14) self.classtype = CT_ARTSPHERE;
+	else if (self.style == 15) self.classtype = CT_ARTTHERMSUIT;
+	else if (self.style == 16) self.classtype = CT_ARTTRINITY;
+	else if (self.style == 17) self.classtype = CT_ARTCROSS;
+	else if (self.style == 18) self.classtype = CT_ARTHASTE;
+	else if (self.style == 19) self.classtype = CT_ARTBERSERK;
+	else if (self.style == 20) self.classtype = CT_ARTEQUALIZER;
+	else if (self.style == 21) self.classtype = CT_ARTLEVITATION;
+	else if (self.style == 22) self.classtype = CT_ARTOPTIMIZER;
+	else if (self.style == 23) self.classtype = CT_SIGILBANE;
+	else if (self.style == 24) {
+		self.classtype = CT_ARTREGEN;
+		self.perms = self.perms | POW_REGENLESSER;
+	} else if (self.style == 25) {
+		self.classtype = CT_ARTREGEN;
+		self.perms = self.perms | POW_REGEN;
+	} else if (self.style == 26) {
+		self.classtype = CT_ARTVITALITY;
+		if (self.max_health <=0) self.max_health = 25;
+	} else if (self.style == 27) self.classtype = CT_ARTTHORSBLESSING;
+	else self.classtype = CT_ARTQUAD;
+
 	self.use = info_givepower_use;
+	SUB_BoundSoundVolume(1);
 	if (self.cnt < 0) self.cnt = POWERUP_VANIA; // Infinite time support.
 	else if (self.cnt == 0) self.cnt = POWERUP_TIMER; //  Allow for custom artifact timer. Setup minimum/default timer
 };
@@ -598,6 +662,7 @@ void() item_artifact_blastbelt = { // [ENTITY]
 	self.part_active = PARTICLE_STYLE_BLASTBELT;
 	self.respawn_style = PARTICLE_BURST_BLUE + PARTICLE_BURST_CENTER;
 	self.respawn_ofs = '0 0 8';
+	SUB_BoundSoundVolume(1);
 	artifact_setup();
 };
 
@@ -654,7 +719,8 @@ void() item_artifact_jumpboots = { // [ENTITY]
 	else if (self.count == 4) self.netname = "Jump Boots Level 4";
 	else self.netname = "Jump Boots + 1";
 	} else self.netname = "Jump Boots";
-	
+
+	self.moditems = IT_ARTJUMPBOOTS;
 	artifact_setup();
 };
 
@@ -939,7 +1005,7 @@ void() item_artifact_optimizer = { // [ENTITY]
 	self.part_active = PARTICLE_STYLE_ARMOR;
 	self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_CENTER;
 	self.respawn_ofs = '0 0 16';
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_shells = world.deventity.ammo_shells + AMMO_MAXSHELLS;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_shells = world.deventity.ammo_shells + self.ammo_shells;
 	artifact_setup();
 };
 

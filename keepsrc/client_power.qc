@@ -61,6 +61,7 @@ void(entity targ, float powtimer) ResetPowerInvRing = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerInvRing = { // [FUNCTION]
+	targ.items = targ.items | IT_INVISIBILITY;
 	targ.invisible_time = TRUE;
 	targ.notrace = 1;
 	targ.invisible_finished = PowerupTime(powtimer,targ.invisible_finished);
@@ -80,6 +81,7 @@ void(entity targ, float powtimer) ResetPowerEnvSuit = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerEnvSuit = { // [FUNCTION]
+	targ.items = targ.items | IT_SUIT;
 	targ.rad_time = TRUE;
 	targ.radsuit_finished = PowerupTime(powtimer,targ.radsuit_finished);
 	ResetDebuffBurning(targ);
@@ -110,6 +112,7 @@ void(entity targ, float powtimer) ResetPowerPent = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerPent = { // [FUNCTION]
+	targ.items = targ.items | IT_INVULNERABILITY;
 	targ.invincible_time = TRUE;
 	targ.invincible_finished = PowerupTime(powtimer,targ.invincible_finished);
 	ResetDebuffSystem(targ);
@@ -130,6 +133,7 @@ void(entity targ, float powtimer) ResetPowerQuad = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerQuad = { // [FUNCTION]
+	targ.items = targ.items | IT_QUAD;
 	targ.super_time = TRUE;
 	targ.super_damage_finished = PowerupTime(powtimer,targ.super_damage_finished);
 };
@@ -170,6 +174,7 @@ void(entity targ, float powtimer) ResetPowerSharp = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerSharp = { // [FUNCTION]
+	targ.moditems = targ.moditems | IT_ARTSHARP;
 	targ.sharpshoot_time = TRUE;
 	targ.sharpshoot_finished = PowerupTime(powtimer,targ.sharpshoot_finished);
 };
@@ -187,6 +192,7 @@ void(entity targ, float powtimer) ResetPowerPiercer = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerPiercer = { // [FUNCTION]
+	targ.moditems = targ.moditems | IT_ARTPIERCE;
 	targ.nailpiercer_time = TRUE;
 	targ.nailpiercer_finished = PowerupTime(powtimer,targ.nailpiercer_finished);
 };
@@ -215,6 +221,7 @@ void(entity targ, float powtimer) ResetPowerLavaShield = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer, float vol) GivePowerLavaShield = { // [FUNCTION]
+	targ.moditems = targ.moditems | IT_ARTLAVASHIELD;
 	targ.lavashield_time = 1;
 	targ.lavashield_finished = PowerupTime(powtimer,targ.lavashield_finished);	
 	targ.lavashield_volume = vol; // Volume range modifier (0-1)
@@ -234,6 +241,7 @@ void(entity targ, float powtimer) ResetPowerPowerShield = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerPowerShield = { // [FUNCTION]
+	targ.items2 = targ.items2 | IT2_SHIELD;
 	targ.shield_time = TRUE;
 	targ.shield_finished = PowerupTime(powtimer,targ.shield_finished);
 	ResetDebuffBurning(targ);
@@ -280,6 +288,7 @@ void(entity targ, float powtimer) ResetPowerWetsuit = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer) GivePowerWetsuit = { // [FUNCTION]
+	targ.moditems = targ.moditems | IT_ARTWETSUIT;
 	targ.wetsuit_time = TRUE;
 	targ.wetsuit_finished = PowerupTime(powtimer,targ.wetsuit_finished);
 	ResetDebuffBurning(targ);
@@ -297,9 +306,11 @@ void(entity targ, float powtimer) ResetPowerBlastbelt = { // [FUNCTION]
 	}
 };
 
-void(entity targ, float powtimer) GivePowerBlastbelt = { // [FUNCTION]
+void(entity targ, float powtimer, float vol) GivePowerBlastbelt = { // [FUNCTION]
+	targ.moditems = targ.moditems | IT_ARTBLASTBELT;
 	targ.blastbelt_time = TRUE;
 	targ.blastbelt_finished = PowerupTime(powtimer,targ.blastbelt_finished);
+	targ.blastbelt_volume = vol; // Volume range modifier (0-1)
 };
 
 void(entity targ, float powtimer) ResetPowerJumpBoots = { // [FUNCTION]
@@ -315,16 +326,17 @@ void(entity targ, float powtimer) ResetPowerJumpBoots = { // [FUNCTION]
 };
 
 void(entity targ, float powtimer, float count, float height, float dist) GivePowerJumpBoots = { // [FUNCTION]
+	targ.moditems = targ.moditems | IT_ARTJUMPBOOTS;
 	targ.jumpboots_time = TRUE;
 	targ.jumpboots_finished = PowerupTime(powtimer,targ.jumpboots_finished);
 	targ.jumpboots_airlvl = 0;
 	if (count < 0) targ.jumpboots_airmax = -1; // Check if jump max is endless, additive or exact
-	else if (count > 0) targ.jumpboots_airmax = count;
-	else targ.jumpboots_airmax = targ.jumpboots_airmax + 1;
+	else if (count > 0) targ.jumpboots_airmax = SUB_ClampFloat(count,1,ART_JUMPBOOTS_AIRMAX);
+	else targ.jumpboots_airmax = SUB_ClampFloat(targ.jumpboots_airmax + 1,1,ART_JUMPBOOTS_AIRMAX);
 	if (targ.jumpboots_airmax > ART_JUMPBOOTS_AIRMAX) targ.jumpboots_airmax = ART_JUMPBOOTS_AIRMAX;
-	if (height > 0) targ.jumpboots_height = height; // Make sure the max never goes too high
+	if (height > 0) targ.jumpboots_height = SUB_ClampFloat(height,16,2048); // Make sure the max never goes too high
 	else targ.jumpboots_height = ART_JUMPHEIGHT;
-	if (dist > 0) targ.jumpboots_forward = dist;
+	if (dist > 0) targ.jumpboots_forward = SUB_ClampFloat(dist,4,2048);
 	else targ.jumpboots_forward = 0;
 };
 
@@ -464,6 +476,8 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 		sprint(targ, ftos(giver.ammo_shells));
 		sprint(targ, "!\n");
 	}
+
+	targ.perms = targ.perms | POW_SHOTTYMAN;
 };
 
 void(entity targ, entity giver) GivePowerRegeneration = { // [FUNCTION]
@@ -516,8 +530,6 @@ void(entity targ) UseThorsBlessing = { // [FUNCTION]
 	targ.deadflag = DEAD_NO;
 	targ.touch = SUB_Null;
 	targ.frozen = FALSE;
-	GivePowerPent(targ,15); // Indestructable for a bit to escape potentially bad revive spot.
-	GivePowerLevitation(targ,15); // Allow for flying with space bar to escape.
 	sound(targ,CHAN_WEAPON,"tronyn/lightning_blast.wav",1,ATTN_NORM);
 	sound(targ,CHAN_ITEM,"rogue/belt/pickup.wav",1,ATTN_NORM);
 	spawn_tdeath(targ.revive_origin,targ); // Kill anything at destination.
@@ -528,13 +540,13 @@ void(entity targ) UseThorsBlessing = { // [FUNCTION]
 	ResetPowerThorsBlessing(targ);
 	ResetDebuffSystem(targ);
 	ResetPowerSystem(targ,0,FALSE);
+	GivePowerPent(targ,15); // Indestructable for a bit to escape potentially bad revive spot.
+	GivePowerLevitation(targ,15); // Allow for flying with space bar to escape.
 };
 
 void(entity targ) GivePowerThorsBlessing = { // [FUNCTION]
 	targ.items3 = targ.items3 | IT3_THORSBLESSING; // Thor's Blessing lifesaver!
 };
-
-
 
 void(entity targ) PlayLavaShieldSound = { // [FUNCTION]
 	if (!(targ.flags & FL_CLIENT)) return; // Only works for the player because of sounds.

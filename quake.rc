@@ -210,9 +210,6 @@ chase_active 0
 // Particles look tiny on large resolutions
 r_part_density 2
 
-// Ambient sounds are broken when this is set to "qw" (default)
-cl_loopbackprotocol qss
-
 // run a user script file if present (user settings)
 exec autoexec.cfg
 
