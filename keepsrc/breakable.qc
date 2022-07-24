@@ -986,8 +986,14 @@ void() breakable_on = { // [FUNCTION]
 	
 	// Setup collision based on bmodel type
 	if (self.bsporigin) {
-		self.solid = SOLID_BSP;
-		self.movetype = MOVETYPE_PUSH;
+		if (self.solid >= 0) {
+			self.solid = SOLID_BSP;
+			self.movetype = MOVETYPE_PUSH;
+		} else {
+			self.solid = SOLID_NOT;
+			self.movetype = SOLID_TRIGGER;
+			self.spawnflags = self.spawnflags | BREAK_NOSHOOT;
+		}
 		setmodel(self, self.model);
 		setorigin(self, self.origin);	
 		setsize (self, self.mins , self.maxs);
@@ -995,8 +1001,14 @@ void() breakable_on = { // [FUNCTION]
 		self.attachment.origin = bmodel_origin(self);
 		setorigin(self.attachment, self.attachment.origin);
 	} else {
-		self.solid = SOLID_BBOX;
-		self.movetype = MOVETYPE_NONE;
+		if (self.solid >= 0) {
+			self.solid = SOLID_BBOX;
+			self.movetype = MOVETYPE_NONE;
+		} else {
+			self.solid = SOLID_NOT;
+			self.movetype = SOLID_TRIGGER;
+			self.spawnflags = self.spawnflags | BREAK_NOSHOOT;
+		}
 		setmodel(self, self.mdl);
 		setorigin(self, self.origin);	
 		setsize (self, self.bbmins , self.bbmaxs);

@@ -262,6 +262,7 @@ void() info_bomb = { // [ENTITY]
 void() splash_think = { // [FUNCTION]
 	local vector vec;
 	local float variance;
+
 	variance = vlen(self.movedir) / 2;
 	vec_x = self.movedir_x - variance + random() * variance * 2;
 	vec_y = self.movedir_y - variance + random() * variance * 2;
@@ -269,6 +270,17 @@ void() splash_think = { // [FUNCTION]
 	particle (self.origin, vec, self.col, self.volume);
 	self.nextthink = time + self.wait;
 }
+
+void() misc_splash_toggle = {
+	if (self.state) {
+		self.state = FALSE;
+		self.think = SUB_Null;
+	} else {
+		self.state = TRUE;
+		self.nextthink = time + self.wait;
+		self.think = splash_think;
+	}
+};
 
 // QUAKED misc_splash (0 .5 .8) (-8 -8 -8) (8 8 8)
 // Produces a continuous particle splash for waterfalls
@@ -282,6 +294,8 @@ void() misc_splash = { // [ENTITY]
 	if (!self.movedir) self.movedir = '0 0 4';
 	if (!self.volume) self.volume = 10;
 	self.col = self.col * 16;
+	self.use = misc_splash_toggle;
+	if (self.state == 0) self.state = TRUE; // Default on.
 	self.nextthink = time + self.wait;
 	self.think = splash_think;
 };

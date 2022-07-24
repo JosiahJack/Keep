@@ -185,7 +185,13 @@ void() overlord_msl_a10 = [ 63.000, overlord_msl_a11 ] { ai_charge(12); };
 void() overlord_msl_a11 = [ 64.000, overlord_msl_a12 ] { ai_charge(12); };
 void() overlord_msl_a12 = [ 65.000, overlord_run01 ] { overlord_teleport(); };
 
-void() overlord_missile = { overlord_msl_a01(); };
+void() overlord_missile = {
+	if (self.spawnflags & 4) {
+		wraith_create_attachment();
+		if (random() < 0.7 && !self.enemy.burning) {
+			wraith_debuff1();
+		} else overlord_msl_a01();
+	} else overlord_msl_a01(); };
 
 void() overlord_pn_a01 = [ 66.000, overlord_pn_a02 ] {};
 void() overlord_pn_a02 = [ 67.000, overlord_pn_a03 ] {};
@@ -206,13 +212,12 @@ void() overlord_pn_b07 = [ 86.000, overlord_run01 ] {};
 void(entity inflictor, entity attacker, float damage) overlord_pain = {
    local float r;
 
-   if ( (self.pain_finished > time) )
-      return ;
+   if (self.pain_finished > time) return;
 
    r = random();
-   if ( (r > 0.200) )
-      return ;
+   if ( (r > 0.200) ) return ;
 
+	SUB_FinishAttachments(); // Hide any attachments
    if ( (r < 0.150) ) {
       overlord_pn_a01();
    } else {
@@ -292,6 +297,8 @@ void() overlord_die19 = [ 107.000, overlord_die19 ] {
 
 void() monster_super_wrath_precache = {
 	precache_model("progs/rogue/s_wrath.mdl");
+	precache_model("progs/ad171/mon_wraith_glow.mdl");
+	precache_model(MODEL_PROJ_WBALL);
 	precache_model("progs/drake/s_wrtgb2.mdl");
 	precache_model("progs/drake/s_wrtgb3.mdl");
 	precache_model("progs/rogue/wrthgib1.mdl");
@@ -317,6 +324,7 @@ void() monster_super_wrath = { // [ENTITY]
 	self.gib2mdl = "progs/rogue/wrthgib2.mdl";
 	self.gib3mdl = "progs/rogue/wrthgib3.mdl";
 	self.pain_sound = "rogue/wrath/wpain.wav";
+	self.weaponglow = "progs/ad171/mon_wraith_glow.mdl";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;

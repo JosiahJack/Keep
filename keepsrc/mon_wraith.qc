@@ -40,6 +40,8 @@
 // - Fire Wraith that sets the player on fire and throws bone darts.
 //=============================================================================
 
+void() overlord_run01;
+
 $skin wrthskin
 $frame basepose // Base animation pose
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 // Walk/Idle pose (strange lerp at the end of frame set)
@@ -374,8 +376,10 @@ void(vector orgofs, float dbframe) wraith_debuff = {
 	}
 	
 	// Should be visible during attack cycle
-	self.skin = self.exactskin + 1;
-	self.alpha = WRAITH_ALPHAFIRE;
+	if (self.classtype != CT_MONWRATHOVERLORD) {
+		self.skin = self.exactskin + 1;
+		self.alpha = WRAITH_ALPHAFIRE;
+	}
 	// Particles drifting up slowly from body
 	particle_explode(self.origin, 20, 2, self.part_style, PARTICLE_BURST_UPWARD);
 	// Update halo/glow model
@@ -416,12 +420,16 @@ void() wraith_magicA10 = [$magicA10, wraith_magicA11 ] { wraith_debuff('48 26 10
 void() wraith_magicA11 = [$magicA11, wraith_magicA12 ] { wraith_debuff('52 14 6',5); };
 void() wraith_magicA12 = [$magicA12, wraith_magicA13 ] {
 	wraith_debuff('52 4 6',6);
-	wraith_debuff_trail(); 
-	self.skin = self.exactskin; 
-	self.alpha = WRAITH_ALPHA;
+	wraith_debuff_trail();
+	if (self.classtype != CT_MONWRATHOVERLORD) {
+		self.skin = self.exactskin;
+		self.alpha = WRAITH_ALPHA;
+	}
 };
 void() wraith_magicA13 = [$magicA13, wraith_magicA14 ] { SUB_FinishAttachments(); };
-void() wraith_magicA14 = [$magicA14, wraith_run1 ] {};
+void() wraith_magicA14 = [$magicA14, wraith_run1 ] {
+	if (self.classtype == CT_MONWRATHOVERLORD) overlord_run01();
+};
 
 
 // RANGE ATTACK 2 - Small bone/nail attack (low damage)
