@@ -20,3 +20,4 @@ config.cfg
 fte.cfg
 ftenq.cfg
 ironwail.cfg
+*.db
