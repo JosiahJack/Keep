@@ -50,6 +50,7 @@ float MON_PASSIVESTATE_OFF = 0;		// Passive state back to normal
 float MON_PASSIVESTATE_ON = 1;		// Passive mode active
 float MON_PASSIVESTATE_TOGGLE = 2;	// Toggle states (0>1 1>0)
 float MON_PASSIVESTATE_RESET = 5;	// Going back to Passive mode
+void() ai_setidealyaw;
 
 // TRUE = gets angry, don't get passive.  FALSE = we can be passive.
 float(entity targ) check_passivestate_exception = {
@@ -246,12 +247,13 @@ void() UpdateCharmerGoal = {
 };
 
 void() HuntCharmer = {
-   self.huntingcharmer = TRUE;
-   UpdateCharmerGoal();
-   if (self.th_walk) self.think = self.th_walk;
+	self.huntingcharmer = TRUE;
+	UpdateCharmerGoal();
+	if (self.th_walk) self.think = self.th_walk;
 	else self.think = SUB_Null;
-   self.ideal_yaw = vectoyaw ((self.goalentity.origin - self.origin));
-   self.nextthink = (time + 0.100);
+
+	ai_setidealyaw();
+	self.nextthink = (time + 0.100);
 };
 
 void() FleeCharmer = {

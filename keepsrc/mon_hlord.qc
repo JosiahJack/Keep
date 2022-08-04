@@ -1152,20 +1152,21 @@ void() darklord_die = {
 };
 
 void() monster_dark_lord_precache = {
-    precache_model ("progs/qmaster/mon_hknight.mdl");
-    precache_model ("progs/drake/k_ball.mdl");    // Bane fireball.
-    precache_model ("progs/h_hellkn.mdl");
-	precache_model ("progs/drake/s_wave.spr");
-	precache_model ("progs/drake/r_bolt.mdl");  // The dark lord's head explodes when killed, so no head gib needed.
-	precache_model (MODEL_PROJ_HKN);
-	precache_model ("progs/ad171/w_hknightsword.mdl");
-	precache_model ("progs/ad171/gib_knfoot_l.mdl");
-	precache_model ("progs/ad171/gib_knfoot_r.mdl");
-    precache_model ("progs/drake/dragon.mdl");
-    precache_model ("progs/drake/drggib01.mdl");
-    precache_model ("progs/drake/drggib02.mdl");
-    precache_model ("progs/drake/drggib03.mdl");
-    precache_model ("progs/drake/plasma.mdl");
+    precache_model("progs/qmaster/mon_hknight.mdl");
+    precache_model("progs/drake/k_ball.mdl");    // Bane fireball.
+    precache_model("progs/h_hellkn.mdl");
+	precache_model("progs/drake/s_wave.spr");
+	precache_model("progs/drake/r_bolt.mdl");  // The dark lord's head explodes when killed, so no head gib needed.
+	precache_model(MODEL_PROJ_HKN);
+    precache_model(MODEL_PROJ_LAVA);
+	precache_model("progs/ad171/w_hknightsword.mdl");
+	precache_model("progs/ad171/gib_knfoot_l.mdl");
+	precache_model("progs/ad171/gib_knfoot_r.mdl");
+    precache_model("progs/drake/dragon.mdl");
+    precache_model("progs/drake/drggib01.mdl");
+    precache_model("progs/drake/drggib02.mdl");
+    precache_model("progs/drake/drggib03.mdl");
+    precache_model("progs/drake/plasma.mdl");
     precache_sound("ambience/thunder1.wav");
     precache_sound("zerstorer/ambience/thunder2.wav");
     precache_sound("drake/bane/death.wav");

@@ -228,15 +228,11 @@ void(float dist) ai_run = {
 	}
 	
 	self.show_hostile = time + 1; // Wake up any monsters in visual range
-
-	// check visibility of enemy
-	enemy_vis = visible(SUB_entEnemyTarget());
+	enemy_vis = visible(SUB_entEnemyTarget()); // check visibility of enemy
 	if (enemy_vis) {
-		// Used to wake up other enemies
 		self.search_time = time + 5;
 		self.calm_memory_finished = time + 2;
-		// The last time the enemy was in sight
-		self.enemylastseen = time;
+		self.enemylastseen = time; // The last time the enemy was in sight
 	} else {
 		if (IsLoyal(self)) {
 			if (!self.charmer) { // already have a leader to follow
@@ -275,7 +271,8 @@ void(float dist) ai_run = {
 	// Calculate if goal/enemy is infront, the range and direction
 	enemy_infront = infront(SUB_entEnemyTarget());
 	enemy_range = range(SUB_entEnemyTarget());
-	ai_setidealyaw(); // Sets enemy_yaw
+	enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin); // DO NOT USE ai_setidealyaw HERE!
+															  // It will break bumping around.
 
 	// Dragonz are special :|
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM || self.classtype == CT_MONSHADE) {

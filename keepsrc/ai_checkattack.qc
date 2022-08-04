@@ -770,7 +770,7 @@ void() LostCheckAttack = { // Found it!
 	// Cannot see enemy? go into guard mode
 	if (!enemy_vis && self.lostsearch == FALSE) {
 		SUB_switchEnemyTarget();
-		self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+		ai_setidealyaw();
 		self.lostsearch = TRUE;
 		self.lostenemy = self.enemy;
 		self.losttimer = time + MONAI_LOSTTIMER + random()*5;

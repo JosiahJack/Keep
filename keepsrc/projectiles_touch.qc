@@ -745,13 +745,17 @@ void() HIP_LaserTouch = { // [FUNCTION]
 void() ProximityGrenadeTouch = { // [FUNCTION]
 	if (other == self) return;
 	if (other.classname == self.classname) return;
-    if (Invisible(other)) return;
+    if (Invisible(other)) return; 
 
 	self.lastvictim = other;
 	if (self.state) return;
 
 	self.state = TRUE; // First touch
-	if (other.takedamage == DAMAGE_AIM) { ProximityGrenadeExplode(); self.think(); return; }
+	if (other.takedamage == DAMAGE_AIM) {
+		ProximityGrenadeExplode();
+		ProximityExplode();
+		return;
+	}
 
 	sound(self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
 	self.movetype = MOVETYPE_NONE;

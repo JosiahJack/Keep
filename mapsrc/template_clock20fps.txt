@@ -1,0 +1,7 @@
+This is a test map to demonstrate the map hack in the following blog post
+
+https://tomeofpreach.wordpress.com/2016/02/10/high-fps-texture-animations/
+
+The hack relies on specially configured textures, so you need to use the wad enclosed.
+
+Preach

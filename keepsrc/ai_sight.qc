@@ -106,12 +106,11 @@ float(entity source, entity targ, vector s_offset, vector t_offset, float nomons
 	if (nomonsters) { // monster blocking changes which test to use
 		// Has the traceline gone from source>target without anything blocking?
 		if (trace_fraction == 1) return TRUE;
-		return FALSE;
 	} else {
 		// Is the entity hit by the traceline the targ destination?
 		if (trace_ent == targ) return TRUE;
-		return FALSE;
 	}
+	return FALSE;
 };
 
  // Sees through monsters, defaults to self and view_ofs for self and targ.

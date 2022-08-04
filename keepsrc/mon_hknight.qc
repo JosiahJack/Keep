@@ -704,8 +704,6 @@ void() monster_hell_knight_precache = {
 	precache_stonegibs(); // Always precache these stone gib models
 	precache_model ("progs/ad171/mon_hknight_glow.mdl");
 	precache_model("progs/newhouse/vk_spike.mdl");
-	precache_model ("progs/lieutenant/hknight.mdl");
-	precache_model ("progs/h_mega.mdl");
 	precache_sound("hknight/hit.wav");		
 	precache_sound("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
 	precache_sound("knight/sword2.wav");
@@ -728,6 +726,12 @@ void() monster_hell_knight_precache = {
 	precache_sound("hknight/grunt.wav");
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
+};
+
+void() monster_hell_knight_enforcer_precache = {
+	monster_hell_knight_precache();
+	precache_model ("progs/lieutenant/hknight.mdl");
+	precache_model ("progs/h_mega.mdl");
 	precache_sound("enforcer/death1.wav");
 	precache_sound("enforcer/idle1.wav");
 	precache_sound("enforcer/pain1.wav");
@@ -891,7 +895,7 @@ void() monster_hell_knight = {
 		}
 	} else {
 		self.pain_longanim = TRUE;		// can be chopped with shadow axe
-		self.classgroup = CG_DKNIGHT;	// Classic tincan!
+		if (self.classgroup <= 0) self.classgroup = CG_DKNIGHT;	// Classic tincan!
 		hknight_aistates();				// setup AI state functions
 	}
 	if (self.deathstring == "") self.deathstring = " was slain by a Death Knight\n";
@@ -953,7 +957,6 @@ void() monster_hell_pointknight = {
 void() monster_hell_knight_enforcer = {
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_STATUE); // Force non-statue for this guy, we have a light saber after all
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_POINT_KNIGHT); // Force normality
-	self.classname = "monster_enforcer";
 	self.classtype = CT_MONSABERENFORCER;
 	self.mdl = ("progs/lieutenant/hknight.mdl");
 	self.headmdl = "progs/h_mega.mdl";
@@ -969,6 +972,7 @@ void() monster_hell_knight_enforcer = {
 	self.exactskin = 0;
 	if (self.health <= 0) self.health = 105;
 	if (self.deathstring == "") self.deathstring = " was cauterized by a Saber Enforcer\n";
+	self.classgroup = CG_ENFORCER;
 	monster_hell_knight();
 };
 

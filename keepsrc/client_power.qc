@@ -478,6 +478,7 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 	}
 
 	targ.perms = targ.perms | POW_SHOTTYMAN;
+	W_SetCurrentAmmo(targ); // If changed current ammo, update it.
 };
 
 void(entity targ, entity giver) GivePowerRegeneration = { // [FUNCTION]

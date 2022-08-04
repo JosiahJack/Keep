@@ -42,6 +42,7 @@ void(entity targ) SetMove_BoxParams;
 void() ai_setidealyaw = {// [FUNCTION] 
    enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
    self.ideal_yaw = enemy_yaw;
+	dprint("Ideal yaw set to: "); dprint(ftos(enemy_yaw)); dprint("\n");
 };
 
 void() ai_face = {// [FUNCTION] 

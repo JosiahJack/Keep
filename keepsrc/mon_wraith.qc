@@ -716,17 +716,17 @@ void() wraith_die = {
 };
 
 void() monster_wraith_precache = {
-	precache_model ("progs/ad171/mon_wraith.mdl");
-	precache_model ("progs/ad171/mon_wraith_glow.mdl");		// Glowing halo effect
-	precache_model (MODEL_PROJ_WTRAIL);		// Hitscan blood bolt
-	precache_model (MODEL_PROJ_WBALL);		// ball growing 8 frames
-	precache_model (MODEL_PROJ_WEGG);		// ball turned into egg
-	precache_model (MODEL_PROJ_WSHELL);		// Gibs from Egg
-	precache_model (MODEL_PROJ_WBONE);		// Bone nails (fire/scorpion)
-	precache_model (MODEL_PROJ_WPOISON);	// Poison nails (spider)
-	precache_model ("progs/rogue/wrthgib1.mdl");
-	precache_model ("progs/rogue/wrthgib2.mdl");
-	precache_model ("progs/rogue/wrthgib3.mdl");
+	precache_model("progs/ad171/mon_wraith.mdl");
+	precache_model("progs/ad171/mon_wraith_glow.mdl");		// Glowing halo effect
+	precache_model(MODEL_PROJ_WTRAIL);		// Hitscan blood bolt
+	precache_model(MODEL_PROJ_WBALL);		// ball growing 8 frames
+	precache_model(MODEL_PROJ_WEGG);		// ball turned into egg
+	precache_model(MODEL_PROJ_WSHELL);		// Gibs from Egg
+	precache_model(MODEL_PROJ_WBONE);		// Bone nails (fire/scorpion)
+	precache_model(MODEL_PROJ_WPOISON);	// Poison nails (spider)
+	precache_model("progs/rogue/wrthgib1.mdl");
+	precache_model("progs/rogue/wrthgib2.mdl");
+	precache_model("progs/rogue/wrthgib3.mdl");
 	precache_sound("ad171/wraith/idle1.wav");
 	precache_sound("ad171/wraith/idle2.wav");
 	precache_sound("ad171/wraith/idle3.wav");
@@ -734,7 +734,7 @@ void() monster_wraith_precache = {
 	precache_sound("ad171/wraith/pain1.wav");
 	precache_sound("ad171/wraith/attack1.wav"); // HITSCAN bolt
 	precache_sound("quoth/drole/explode3.wav");
-	precache_model (SBURST_FLAME); // Flames
+	precache_model(SBURST_FLAME); // Flames
 	precache_sound("ad171/wraith/attack2.wav"); // Nail/Bones
 	precache_sound("ad171/wraith/attack3.wav"); // Minions
 	precache_sound("ad171/wraith/bounce.wav"); // Egg bounce

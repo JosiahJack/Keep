@@ -1093,6 +1093,7 @@ void() func_spawn_small = { func_spawn(); };
 void(string mname) precache_monster = {
 	if (framecount > 1) return;
 
+	//dprint("precache_monster: "); dprint(mname); dprint("\n");
 	if (mname == "monster_acolyte")				necro_cache();
 	else if (mname == "monster_afrit")			monster_gargoyle_precache();
 	else if (mname == "monster_anac")			monster_anac_precache();
@@ -1177,7 +1178,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_hell_knight")	monster_hell_knight_precache();
 	else if (mname == "monster_hell_knight2")	monster_hell_knight2_precache(); // Warlord
 	else if (mname=="monster_hell_knight_champion")monster_hell_knight_precache();
-	else if (mname=="monster_hell_knight_enforcer")monster_hell_knight_precache();
+	else if (mname=="monster_hell_knight_enforcer")monster_hell_knight_enforcer_precache();
 	else if (mname == "monster_hell_lord")		monster_hell_lord_precache();
 	else if (mname == "monster_hell_pointknight")monster_hell_knight_precache();
 	else if (mname == "monster_hkboss")			monster_hkboss_precache();

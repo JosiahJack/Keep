@@ -298,7 +298,9 @@ void() overlord_die19 = [ 107.000, overlord_die19 ] {
 void() monster_super_wrath_precache = {
 	precache_model("progs/rogue/s_wrath.mdl");
 	precache_model("progs/ad171/mon_wraith_glow.mdl");
+	precache_model(MODEL_PROJ_WTRAIL);		// Hitscan blood bolt
 	precache_model(MODEL_PROJ_WBALL);
+	precache_model(SBURST_FLAME); // Flames
 	precache_model("progs/drake/s_wrtgb2.mdl");
 	precache_model("progs/drake/s_wrtgb3.mdl");
 	precache_model("progs/rogue/wrthgib1.mdl");
