@@ -1,0 +1,24 @@
+****************************************************
+02/08/98
+Adapted to qED by AzrKnight
+Moved origin of the group to 0,0,0
+Otherwise untouched.
+AzrKnight jgirard@ct.nai.net
+The qED Prefab Park http://www.conecntric.net/~njljmg
+Originated from: The Quake Prefab Park
+		 http://www.planetquake.com/qpp
+****************************************************
+Original author:
+
+A bridge made of rope and boards (like over a chasm).
+Can be stretcthed to desired length.
+Boards can be moved at angles to give it a broken bridge kinda feel
+
+42 brushes, 252 faces
+ropebrdg.qGP
+ropebrdg.txt
+
+
+				Thanks for a great site
+
+						Aegis

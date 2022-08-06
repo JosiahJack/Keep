@@ -1,0 +1,19 @@
+Half-life Red Door Prefab
+------------------------------
+10/2/1999
+
+ 18 Solids
+108 Faces
+  0 Point Entities
+  3 Solid Entities
+
+This is the red door with a window used in the office
+complex here and there. The window swings with the door
+when it opens. These doors are quite useful to create 
+an atmosphere and reduce viewable texture count. Included
+in the prefab is a door pane. Try the attached example 
+map where you can frag Barney.
+
+Carsten Schwartz
+mailto:hcschwartz@vip.cybercity.dk
+http://www.geocities.com/TimesSquare/Arcade/9022/

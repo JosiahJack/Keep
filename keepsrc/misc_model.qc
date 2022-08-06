@@ -329,7 +329,7 @@ void() misc_model_on = { // [FUNCTION]
 	} else if (self.aflag == TRUE) checkanim = TRUE; // DEFAULT Check animations if they exist (aflag)
 	
 	if (self.yaw_speed > 0) checkanim = TRUE; // If movement setup (target) start model loop
-	if (checkanim == TRUE) misc_model_use(); // Are there any animation loops TO setup?
+	if (checkanim == TRUE) misc_model_use(); // Are there any animation loops to setup?
 	else {
 		if (self.pos1_z < 0) self.frame = self.pos1_x; // Exact frame/skin numbers (check for negatives)
 		else self.frame = self.pos1_z;
@@ -348,6 +348,14 @@ void() misc_model_off = { // [FUNCTION]
 	self.solid = SOLID_NOT;
 	self.nextthink = 0;
 	self.spawnflags = self.spawnflags - (self.spawnflags & MISC_MDLSETUP); // Remove the setup spawnflags, used only once
+};
+
+void() misc_model_reset = { // [FUNCTION]
+	misc_model_loopreset();
+	self.skin = self.pos2_x;
+	self.frame = self.pos1_x;
+	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
+	else entity_state_on();
 };
 
 float(float minrange, float maxrange, float checker) misc_model_CheckRange = { // [FUNCTION]
@@ -583,6 +591,7 @@ void() misc_model = { // [ENTITY]
 	if (self.aflag == TRUE) self.estate_use = misc_model_use;
 	self.estate_on = misc_model_on;
 	self.estate_off = misc_model_off;
+	self.estate_reset = misc_model_reset;
 	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
 	else entity_state_on();
 };

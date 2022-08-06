@@ -1,0 +1,31 @@
+Created 12/8/97 by AzrKnight
+****************************
+
+DESCRIPTION: "Entrance Arch" prefab for use in Quake level.
+
+BRUSHES:     25
+
+ENTITIES:    2 (light_flame_small_yellow)
+
+BUILD TIME:  About 2½ hours from scratch
+
+TOOLS USED:  qED 1.2 by Matt Tagliaferri
+
+TEXTURES:    city5_7,citya1_1,city2_1
+
+CONTACT:     J. Girard aka AzrKnight
+	     azrknight@planetquake.com
+	     The qED Prefab Park  http://www.planetquake.com/prefab             
+
+CREDITS:     ID Software
+             Matt Tagliaferri (qED)
+
+DISCLAIMER:
+	     Copyright 1997/1998 J. Girard aka AzrKnight
+	     This can be distributed freely on the internet. Cannot be used as part
+	     of a commercial release or other profit without my express written permission.
+	     The qED Prefab Park is in no way affiliated with 3dMatrix or qED.
+	     Quake and Quake2 are Copyrights of Id Software.
+
+             
+***************************** 	

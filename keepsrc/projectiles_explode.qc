@@ -881,7 +881,7 @@ void() Thor_Remove = { // [FUNCTION]
                 if (self.ammo_cells) thor.ammo_cells = thor.ammo_cells + self.ammo_cells; // Recover all unused cells.
 
 				// if (thor.war & WARx_USES_CELLS) SUB_ThinkImmediate (thor, War_UpdateCurrentAmmo);
-				W_SetCurrentAmmo (thor);
+				W_SetCurrentAmmo(thor,TRUE);
 				if (!thor.weaponismoditems && thor.weapon == IT2_MJOLNIR) { // Hammer selected, so restore weapon model and ammo.
 					if (thor.attack_finished < time + 0.2) thor.attack_finished = time + 0.2; // Delay next attack a bit so player doesn't throw immediately.
 					if (cutscene) thor = find (world, classname, "dummy"); // If TRUE, update dummy, not camera.

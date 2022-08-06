@@ -1,0 +1,8 @@
+Start lamp is same number of brushes and faces
+as before but a flame entity was added. Also,
+texture alignment was improved through re-shaping
+of some brushes.
+
+All vertices snap to grid of course.
+
+EutecTic

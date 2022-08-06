@@ -266,7 +266,7 @@ void() SetCarDetails = {
 			}
 		}
 	}
-	if (rally_type_index > 1) W_SetCurrentAmmo();
+	if (rally_type_index > 1) W_SetCurrentAmmo(self,TRUE);
 };
 
 void(entity plyr) CallClientPrefs = {

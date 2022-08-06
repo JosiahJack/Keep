@@ -1,0 +1,55 @@
+Half-Life Prefab			By: Yak_Fighter
+Wednesday, March 31, 1999		HL#30
+---------------------------------------------------------------------------------------------------------------
+A Set of Twenty Crates
+---------------------------------------------------------------------------------------------------------------
+Title..................cratesY4AA
+Created by........Yak_Fighter
+Email................YakFighter@aol.com
+---------------------------------------------------------------------------------------------------------------
+Solids................1    per crate
+Faces................6    per crate
+Point Entities.....none
+Solid Entities......1    per crate
+maps.................rmf , map
+---------------------------------------------------------------------------------------------------------------
+Description
+-This is a set of twenty crates.  They are breakable and pushable.  These
+crates are not in WorldCraft and are entirely new.
+
+Notes
+-There will be more crate prefabs in the future.
+-The non-breakable version is 'cratesY4'
+
+Copyright and Permissions
+-This prefab may be used free of charge to anyone in any non commercial
+product as long as I get credit for the prefabs in the TXT.file.
+-If this prefab is going to be used in a commercial product, please notify me
+before it is released.
+-If the prefab is totally edited, I would like the prefab mentioned as a base
+-I would also appreciate being told what map it is used in, so I can get that
+map!
+
+Thank you for choosing and/or using my prefab
+Yak_Fighter
+---------------------------------------------------------------------------------------------------------------
+Prefab Lab Code  --  4/17/99
+---------------------------------------------------------------------------------------------------------------
+<TABLE BORDER=0><TR>
+<TD><IMG SRC="/prefablab/screenshots/cratesY4AA.gif" WIDTH=200 HEIGHT=150 ALIGN=Left></TD>
+<TD>
+<FONT FACE="Verdana, Arial, Helvetica" SIZE="2">
+<FONT COLOR="Teal"><U>File:</U></FONT> <A TARGET="prefablabdl" HREF="http://www.planethalflife.com/dl/dl.asp?planethalflife/prefablab/cratesY4AA.zip">cratesY4AA.zip (27K)</A><BR>
+<FONT COLOR="Teal"><U>Submitted By:</U></FONT> <A HREF="YakFighter@aol.com">Yak_Fighter</A><BR>
+4/17/99<BR>
+<BR>
+<FONT COLOR="Teal"><U>Solids:</U></FONT> 1 per crate<BR>
+FONT COLOR="Teal"><U>Faces:</U></FONT> 6 per crate<BR>
+<FONT COLOR="Teal"><U>Entities:</U></FONT> 1 per crate<BR>
+<FONT COLOR="Teal"><U>Formats:</U></FONT> .map, .rmf<BR>
+<FONT COLOR="Teal"><U>Custom Textures:</U></FONT> None<BR>
+<BR></TD>
+</TR></TABLE>
+This is a set of twenty crates.  They are breakable and pushable.  These crates are not in WorldCraft and are entirely new.
+</FONT>
+<HR WIDTH=100%>

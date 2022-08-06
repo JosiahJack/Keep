@@ -1,0 +1,62 @@
+Chton door -  a component originated from Matthew "Bushboy" Trow
+              at The Quake Prefab Park and adapted for qED by
+              JF Groleau.
+
+The Quake Prefab Park - http://www.planetquake.com/qpp
+The qED Toolshed - http://www.cam.org/~jfgrol/
+3D-Matrix University - http://www.3dmatrix.com/serv03.htm
+
+        TEXTURES USED:
+
+        dr07_1 for the door faces
+        metal1_3 for the door edges and frame trim
+        metal4_4 for the door frame
+
+        ENTITIES USED:
+
+        func_door
+
+        WHAT TO DO:
+
+        Extract the .qgp file from the archive and place it in the
+        c:\Program Files\qED\Group folder. Once in qED, insert this prefab
+        using the menu item "Group" + "load from library". The origin of this
+        prefab is at the bottom center of the door assembly. The position
+        or offset of the inserted group will be referenced to the offset of
+        the currently selected item in the level outline window. The group
+        can then be moved and rotated to suit the map design. Some texture
+        alignment might be required after these operations. The 3D-Matrix
+        university provide exhaustive tutorials on this topic.
+
+        FUNCTIONALITY:
+
+        2 func_door entities were added to make the door entirely functional
+        and their targetname attributes have been left blank so it will operate
+        like a normal door. The door is similar to the one in the Quake
+        level E1M6 "Door to Chton". A cutting subgroup with a negative brush 
+        the same size as the door frame is also provided for wall cutting.
+        Just move the wall brush you want to in the cutting group and do a
+        "subtract brushes". Optimize the resulting brushes if necessary and
+        move them back to their original group.
+
+        OPTIONS:
+
+        Set the func_door attributes to your liking for sound, speed, lip, etc.
+        and the targetname if you want it to be operated by a trigger entity.
+        Also, if you wish to reduce the brush count of the door or change its
+        look to a more basic type of metal door, just delete the trims around
+        the frame by removing the entire trim subgroup in the frame group.
+
+        CREDITS:
+
+        Id Software (http://www.idsoftware.com/):
+
+           For Quake, the best first-person game of the known universe.
+
+        David "Kevlar" Kelvin
+
+           The author of the original version of this Quake classic prefab.
+
+        Matthew "Bushboy" Trow (matthew@planetquake.com): 
+
+           For letting me use the prefabs on his site for qED conversions.

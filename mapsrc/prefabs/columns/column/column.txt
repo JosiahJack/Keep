@@ -1,0 +1,22 @@
+Column.map - matthew 'bushboy' trow - http://www.planetquake.com/qpp/
+----------
+
+A not so basic roman column
+
+
+5 brushes/solids
+50 faces
+
+The fifty faces relate to the five eight sided polygons.
+eight faces + top & bottom each.
+
+You can easily use eight of these columns with an addition
+of 640 faces or 80 4 sided brushes/solids giving an average
+R_SPEED middle value of 380, depending on your economical
+design structure.
+They differ from your average quake columns because of the
+'big to smaller (can't think of the word) bottom to
+top sloping effect'.
+
+Created for a development level which hopefully will be
+available one month after 25 sept 97.

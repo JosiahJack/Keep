@@ -188,3 +188,162 @@
 "avelocity" "300 300 300"
 "targetname" "shooter1"
 }
+// entity 16
+{
+"classname" "misc_model"
+"origin" "-192 -80 240"
+"mdl" "progs/tronyn/volcanoblast2.mdl"
+"__show_skin" "11"
+"angle" "180"
+"skinloop" "-1"
+"skinstart" "0"
+"pos2" "0 14 -1"
+"targetname" "lavaburst1"
+"speed" "0.08"
+"spawnflags" "64"
+"alphastart" "0.2"
+}
+// entity 17
+{
+"classname" "trigger_once"
+"target" "lavaburst1_randomizer"
+"wait" "2"
+// brush 0
+{
+( -1840 -688 16 ) ( -1840 -687 16 ) ( -1840 -688 17 ) trigger [ 0 -1 0 -16 ] [ 0 0 -1 16 ] 0 1 1
+( -1840 -688 16 ) ( -1840 -688 17 ) ( -1839 -688 16 ) trigger [ 1 0 0 0 ] [ 0 0 -1 16 ] 0 1 1
+( -1840 -688 16 ) ( -1839 -688 16 ) ( -1840 -687 16 ) trigger [ -1 0 0 0 ] [ 0 -1 0 -16 ] 0 1 1
+( -1648 -464 32 ) ( -1648 -463 32 ) ( -1647 -464 32 ) trigger [ 1 0 0 0 ] [ 0 -1 0 -16 ] 0 1 1
+( -1648 -464 32 ) ( -1647 -464 32 ) ( -1648 -464 33 ) trigger [ -1 0 0 0 ] [ 0 0 -1 16 ] 0 1 1
+( -1648 -464 32 ) ( -1648 -464 33 ) ( -1648 -463 32 ) trigger [ 0 1 0 16 ] [ 0 0 -1 16 ] 0 1 1
+}
+}
+// entity 18
+{
+"classname" "trigger_relay"
+"origin" "-1560 -144 104"
+"targetname" "lavaburst1_starter2"
+"target" "lavaburst1"
+}
+// entity 19
+{
+"classname" "trigger_relay"
+"origin" "-1560 -160 104"
+"targetname" "lavaburst1_starter3"
+"target" "lavaburst1"
+"delay" "1.05"
+}
+// entity 20
+{
+"classname" "trigger_relay"
+"origin" "-1656 -152 104"
+"targetname" "lavaburst1_randomizer"
+"target" "lavaburst1_rand1"
+"target2" "lavaburst1_rand2"
+"delay" "0.1"
+"spawnflags" "2"
+}
+// entity 21
+{
+"classname" "trigger_relay"
+"origin" "-1624 -120 104"
+"targetname" "lavaburst1_rand1"
+"target" "lavaburst1_rand1_1"
+"delay" "3"
+"target2" "lavaburst1_rand1_2"
+"spawnflags" "2"
+}
+// entity 22
+{
+"classname" "trigger_relay"
+"origin" "-1624 -184 104"
+"targetname" "lavaburst1_rand2"
+"target" "lavaburst1_rand2_1"
+"delay" "2"
+"spawnflags" "2"
+"target2" "lavaburst1_rand2_2"
+}
+// entity 23
+{
+"classname" "trigger_relay"
+"origin" "-1592 -104 104"
+"targetname" "lavaburst1_rand1_1"
+"target" "lavaburst1_starter"
+"delay" "2"
+}
+// entity 24
+{
+"classname" "trigger_relay"
+"origin" "-1592 -136 104"
+"targetname" "lavaburst1_rand1_2"
+"target" "lavaburst1_starter"
+"delay" "1"
+}
+// entity 25
+{
+"classname" "trigger_relay"
+"origin" "-1592 -168 104"
+"targetname" "lavaburst1_rand2_2"
+"target" "lavaburst1_starter"
+"delay" "2"
+}
+// entity 26
+{
+"classname" "trigger_relay"
+"origin" "-1592 -200 104"
+"targetname" "lavaburst1_rand2_1"
+"target" "lavaburst1_starter"
+"delay" "1"
+}
+// entity 27
+{
+"classname" "trigger_relay"
+"origin" "-1608 -152 120"
+"targetname" "lavaburst1_starter"
+"target" "lavaburst1_randomizer"
+"delay" "5"
+}
+// entity 28
+{
+"classname" "trigger_entitystate_reset"
+"origin" "-1624 -152 152"
+"targetname" "lavaburst1_randomizer"
+"target" "lavaburst1"
+}
+// entity 29
+{
+"classname" "trigger_multiple"
+"target" "lavaburst1_starter2"
+"wait" "3"
+// brush 0
+{
+( -1840 -304 40 ) ( -1840 -303 40 ) ( -1840 -304 41 ) trigger [ 0 -1 0 -16 ] [ 0 0 -1 40 ] 0 1 1
+( -1840 -304 40 ) ( -1840 -304 41 ) ( -1839 -304 40 ) trigger [ 1 0 0 0 ] [ 0 0 -1 40 ] 0 1 1
+( -1840 -304 40 ) ( -1839 -304 40 ) ( -1840 -303 40 ) trigger [ -1 0 0 0 ] [ 0 -1 0 -16 ] 0 1 1
+( -1648 -80 56 ) ( -1648 -79 56 ) ( -1647 -80 56 ) trigger [ 1 0 0 0 ] [ 0 -1 0 -16 ] 0 1 1
+( -1648 -80 56 ) ( -1647 -80 56 ) ( -1648 -80 57 ) trigger [ -1 0 0 0 ] [ 0 0 -1 40 ] 0 1 1
+( -1648 -80 56 ) ( -1648 -80 57 ) ( -1648 -79 56 ) trigger [ 0 1 0 16 ] [ 0 0 -1 40 ] 0 1 1
+}
+}
+// entity 30
+{
+"classname" "trigger_multiple"
+"target" "lavaburst1_starter2"
+"wait" "0.5"
+// brush 0
+{
+( -1840 144 40 ) ( -1840 145 40 ) ( -1840 144 41 ) trigger [ 0 -1 0 48 ] [ 0 0 -1 40 ] 0 1 1
+( -1840 144 40 ) ( -1840 144 41 ) ( -1839 144 40 ) trigger [ 1 0 0 0 ] [ 0 0 -1 40 ] 0 1 1
+( -1840 144 40 ) ( -1839 144 40 ) ( -1840 145 40 ) trigger [ -1 0 0 0 ] [ 0 -1 0 48 ] 0 1 1
+( -1648 368 56 ) ( -1648 369 56 ) ( -1647 368 56 ) trigger [ 1 0 0 0 ] [ 0 -1 0 48 ] 0 1 1
+( -1648 368 56 ) ( -1647 368 56 ) ( -1648 368 57 ) trigger [ -1 0 0 0 ] [ 0 0 -1 40 ] 0 1 1
+( -1648 368 56 ) ( -1648 368 57 ) ( -1648 369 56 ) trigger [ 0 1 0 -48 ] [ 0 0 -1 40 ] 0 1 1
+}
+}
+// entity 31
+{
+"classname" "trigger_entitystate_reset"
+"origin" "-1624 48 152"
+"targetname" "lavaburst1_reset"
+"target" "lavaburst1"
+}

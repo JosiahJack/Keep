@@ -84,7 +84,6 @@ float FLAG_DROPPED = 2;
 
 // Prototypes
 float(entity targ) W_BestWeapon;
-void(entity targ) W_SetCurrentAmmo;
 void(entity targ) bound_other_ammo;
 void(float o, float n) Deathmatch_Weapon;
 void() BackpackTouch;
@@ -683,7 +682,7 @@ void() TossBackpack = {
 	item.touch = BackpackTouch;
 	item.nextthink = time + 120;	// remove after 2 minutes
 	item.think = SUB_Remove;
-	W_SetCurrentAmmo(self);
+	W_SetCurrentAmmo(self,TRUE);
 };
 
 void(entity flg) RegenFlag = {

@@ -1,0 +1,24 @@
+Created 11/18/97 by AzrKnight
+****************************
+
+DESCRIPTION: Large 2 level staircase prefab for use in Quake level.
+
+BRUSHES:     40
+
+ENTITIES:    none
+
+BUILD TIME:  About 1 hour from scratch
+
+TOOLS USED:  qED by Matt Tagliaferri
+
+TEXTURES:    mmetal1_1, wwall1_1, metal7_7
+
+CONTACT:     J. Girard aka AzrKnight
+             azrknight@planetquake.com
+	     The qED Prefab Park http://www.planetquake.com/prefab
+
+CREDITS:     ID Software
+             Matt Tagliaferri (qED)
+             Matthew "BushBoy" Trow of the Quake Prefab Park
+		http://www.planetquake.com/qpp
+*****************************

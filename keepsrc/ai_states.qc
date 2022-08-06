@@ -273,7 +273,8 @@ void(float dist) ai_run = {
 	enemy_range = range(SUB_entEnemyTarget());
 	enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin); // DO NOT USE ai_setidealyaw HERE!
 															  // It will break bumping around.
-
+															  // Need to not set self.ideal_yaw
+															  // until later in appropriate ai_ call
 	// Dragonz are special :|
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM || self.classtype == CT_MONSHADE) {
 		if (self.attack_state == AS_MELEE) { 

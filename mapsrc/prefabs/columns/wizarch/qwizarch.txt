@@ -1,0 +1,48 @@
+Wiz arch - a component originated from Dustin Geeraert (aka
+           aBivr) at The Quake Prefab Park and adapted for
+           qED by JF Groleau.
+
+The Quake Prefab Park - http://www.planetquake.com/qpp
+The qED Toolshed - http://www.cam.org/~jfgrol/
+
+
+        TEXTURES USED:
+
+        wizmet1_3 for the frame arch and sides
+        wizmet2_2 for the frame blocks
+        window01_4 for the stained glass pane
+
+
+        WHAT TO DO:
+
+        Extract the .qgp file from the archive and place it in the
+        c:\Program Files\qED\Group folder. Once in qED, insert this prefab
+        using the menu item "Group" + "load from library". The origin of this
+        prefab is at the bottom and middle of the arch. The position
+        or offset of the inserted group will be referenced to the offset of
+        the currently selected item in the level outline window. The group
+        can then be moved and rotated to suit the map design. Some texture
+        re-alignment might be required after these operations. Please remember
+        that texture alignment is everything in this particular prefab.
+
+
+        OPTIONS:
+
+        The window can be re-textured to a different stained glass texture and
+        still look good provided that the texture has the same dimensions as
+        the original.
+
+
+        CREDITS:
+
+        Id Software (http://www.idsoftware.com/):
+
+           For Quake, the best first-person game of the known universe.
+
+        Dustin Geeraert (aka aBivr):
+
+           The author of this *really* cool looking piece of work.
+
+        Matthew "Bushboy" Trow (matthew@planetquake.com): 
+
+           Thanks for letting me use this cool prefab for a qED conversion.

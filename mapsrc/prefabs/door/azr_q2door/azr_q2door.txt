@@ -1,0 +1,25 @@
+02/08/98 azr_q2door
+Notes: A quick hack at a Quake2 styled door I am using in one of my 
+       levels. Used vertex editing instead of brush subtraction.
+       There are 2 func_door entities included. The speeds are set pretty
+       good so I wouldn't play with them too much. They are different
+       speeds becuase one door is larger than the other. With the current
+       speeds set they close together perfectly.
+
+Editors used: qED v2.0
+	      WinQoole - for vertex editing
+
+Entites: Yes. 2 func_door entities
+
+Textures: mindr1_1_1 for the doors
+	  metal24_4_1 for the frame
+	  Textures are from Quake2 (.wad file included)
+
+Build time: about 1½ hours from scratch
+
+Files: You should have: azr_q2dor.txt
+			azr_q2door.qGP or azr_q2door.map
+			azr_q2door.wad
+
+Contact: J. Girard aka AzrKnight jgirard@ct1.nai.net
+	 The qED Prefab Park http://www.concentric.net/~njljmg

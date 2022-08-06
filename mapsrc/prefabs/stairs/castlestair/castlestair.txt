@@ -1,0 +1,20 @@
+**Converted to .qGP for qED on 02/01/98 by AzrKnight***
+
+castlestair.jpg - matthew bushboy trow
+---------------------------------------
+
+25 solids
+154 faces
+5 entities
+textures - standard quake
+
+
+This is something I've been wanting to get right for some time -
+a spiral staircase within a castle turret which can be made as
+high as you wish yet still have decent doors into the staircase
+and also fits within a 64x64 grid.
+
+The stairs go up from door to door 256 units, quite a good
+figure to use when map building.
+
+Enjoy !!

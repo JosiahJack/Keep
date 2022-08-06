@@ -85,7 +85,7 @@ void(entity targ) Client_CheckEvilInv = {
 			targ.items = targ.items | IT_AXE;
 			targ.moditems = targ.moditems | IT_UPGRADE_AXE; // Add shadow axe to extra inventory
 			targ.weapon = IT_AXE; // Switch weapons and focus on Shadow Axe
-			W_SetCurrentAmmo(targ);
+			W_SetCurrentAmmo(targ,TRUE);
 		}
 	}
 };
@@ -133,7 +133,7 @@ void(float prevskill) Client_ResetEvilmode = {
 			self.moditems = self.moditems - (self.moditems & IT_UPGRADE_AXE);
 			self.items = self.items | IT_AXE;
 			self.weapon = IT_AXE;
-			W_SetCurrentAmmo(self);
+			W_SetCurrentAmmo(self,TRUE);
 		}
 	}
 };

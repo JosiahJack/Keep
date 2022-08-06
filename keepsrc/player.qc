@@ -319,7 +319,7 @@ void()	player_supersg6 =	[118, player_supersg1	] { // [FUNCTION]
 		if (self.ammo_shells == 1) {
 			if ((self.items & IT_SHOTGUN) || (self.perms & IT_BLASTER)) {
 				self.weapon = IT_SHOTGUN;
-				W_SetCurrentAmmo(self);
+				W_SetCurrentAmmo(self,TRUE);
 				return;
 			}
 		}
@@ -574,7 +574,7 @@ void() player_crossbow8  = [0, player_crossbow1] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	self.weaponframe = 0;
-	if (self.ammo_poison < 1) W_SetCurrentAmmo(self);
+	if (self.ammo_poison < 1) W_SetCurrentAmmo(self,TRUE);
 };
 
 // Asgard ARbalest

@@ -1,63 +1,38 @@
 ---- light / ericw-tools v0.18.1-32-g6660c5f ----
 Raytracing backend: Embree
 running with 12 threads
-LoadBSPFile: 'test_ai.bsp'
+LoadBSPFile: 'test_fireworks.bsp'
 BSP is version BSP2
-SetQdirFromPath: no "maps" in '/home/qmaster/test_ai.bsp'--- ConvertTextures ---
+SetQdirFromPath: no "maps" in '/home/qmaster/test_fireworks.bsp'--- ConvertTextures ---
 --- LoadEntities ---
-WARNING: brush entity with mins (-327.00 -291.00 17.00) maxs (-317.00 -281.00 23.00) (trigger_multiple) has unmatched "target" (flytrap1)
-124 entities read, 22 are lights.
+WARNING: entity at (-1560 -160 104) (trigger_relay) has targetname "lavaburst1_starter3", which is not targeted by anything.
+WARNING: entity at (-1624 48 152) (trigger_entitystate_reset) has targetname "lavaburst1_reset", which is not targeted by anything.
+32 entities read, 0 are lights.
 --- OptionsSummary ---
-    "sunlight" was set to "220" from map
-    "sunlight_color" was set to "255 225 166" from map
-    "sunlight2" was set to "150" from map
-    "sunlight2_color" was set to "106 124 184" from map
-    "sunlight_mangle" was set to "-0.353553 -0.353553 -0.866025" from map
 Embree_TraceInit: Embree version: 2.15.0
 Embree_TraceInit:
-	194 sky faces
-	1165 solid faces
+	51 sky faces
+	360 solid faces
 	0 filtered faces
 	0 shadow-casting skip faces
-SetupLights: 22 initial lights
-SetupLights: 22 after surface lights
-SetupLights: 22 after jittering
-using 65 suns for _sunlight2. total light: 150.000000 color: 106.000000 124.000000 184.000000
+SetupLights: 0 initial lights
+SetupLights: 0 after surface lights
+SetupLights: 0 after jittering
 --- EstimateLightVisibility ---
-0....1....2....3....4....5....6....7....8....9..
-Final count: 22 lights, 66 suns in use.
-Colored light entities/settings detected: .lit output enabled.
+
+Final count: 0 lights, 0 suns in use.
 --- LightWorld ---
 --- LightThread ---
-0....1....2....3....4....5....6..\
-WARNING: Too many light styles on a face
-         lightmap point near (16 -256 17)
-0....1....2....3....4....5....6..\
-WARNING: Too many light styles on a face
-         lightmap point near (48 -256 17)
-0....1....2....3....4....5....6..\
-WARNING: Too many light styles on a face
-         lightmap point near (16 -32 17)
-0....1....2....3....4....5....6..\
-WARNING: Too many light styles on a face
-         lightmap point near (48 -32 17)
-0....1....2....3....4....5....6..\
-WARNING: Too many light styles on a face
-         lightmap point near (-208 -256 17)
-0....1....2....3....4....5....6...\
-WARNING: Too many light styles on a face
-         lightmap point near (-208 -32 17)
 0....1....2....3....4....5....6....7....8....9....
 Lighting Completed.
 
-lightdatasize: 66114
-Writing test_ai.lit
-6 switchable light styles (32 max)
-Writing test_ai.bsp as BSP version BSP2
-0.157 seconds elapsed
+lightdatasize: 0
+0 switchable light styles (32 max)
+Writing test_fireworks.bsp as BSP version BSP2
+0.237 seconds elapsed
 
 stats:
-0.557218 lights tested, 0.305496 hits per sample point
+0.000000 lights tested, 0.000000 hits per sample point
 0.000000 surface lights tested, 0.000000 hits per sample point
 0.000000 bounce lights tested, 0.000000 hits per sample point
 0 empty lightmaps

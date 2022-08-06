@@ -107,14 +107,14 @@ void(entity targ,float type) DesecrateEffects = { // [FUNCTION]
 		targ.maxshells = targ.maxshells + 100;	// Increase maximum shells
 		targ.ammo_shells = targ.maxshells;		// Give full shell ammo
 		bound_other_ammo(targ);					// Make sure we don't go past limit
-		W_SetCurrentAmmo(targ);					// Update HUD count
+		W_SetCurrentAmmo(targ,FALSE);			// Update HUD count
 
 	} else if (type == 2) {
 		// Air
 		targ.maxnails = targ.maxnails + 100;	// Increase maximum nails
 		targ.ammo_nails = targ.maxnails;		// Gives full nail ammo
 		bound_other_ammo(targ);					// Make sure we don't go past limit
-		W_SetCurrentAmmo(targ);					// Update HUD count
+		W_SetCurrentAmmo(targ,FALSE);			// Update HUD count
 		targ.jumpboots_finished = POWERUP_VANIA; // Unlimited timeframe for using double jump
 		targ.jumpboots_airmax = targ.jumpboots_airmax + 1; // Add double jump, or increase number of jumps by 1 to triple or quadruple
 		if (targ.jumpboots_airmax > ART_JUMPBOOTS_AIRMAX) targ.jumpboots_airmax = ART_JUMPBOOTS_AIRMAX; // Still only 4 at most
@@ -128,7 +128,7 @@ void(entity targ,float type) DesecrateEffects = { // [FUNCTION]
 		targ.maxmultirockets = targ.maxmultirockets + 50;	// Increase maximum multi-rocket
 		targ.ammo_multi_rockets = targ.maxmultirockets;		// Give full multi-rocket ammo
 		bound_other_ammo(targ);					// Make sure we don't go past limit
-		W_SetCurrentAmmo(targ);					// Update HUD count
+		W_SetCurrentAmmo(targ,FALSE);			// Update HUD count
 
 	} else if (type == 4) {
 		// Blood
@@ -138,7 +138,7 @@ void(entity targ,float type) DesecrateEffects = { // [FUNCTION]
 		targ.max_health = targ.max_health + 25;	// Increase max normal health by 25
 		targ.health = targ.max_health;			// Woop!
 		bound_other_ammo(targ);					// Make sure we don't go past limit
-		W_SetCurrentAmmo(targ);					// Update HUD count
+		W_SetCurrentAmmo(targ,FALSE);			// Update HUD count
 
 	} else if (type == 5) {
 		// Spirit
@@ -264,7 +264,7 @@ void() shrine_aura_think = { // [FUNCTION]
 						ResetDebuffBurning(e);
 						e.ammo_shells = e.ammo_shells + self.cnt;
 						bound_other_ammo(e);
-						W_SetCurrentAmmo(e);
+						W_SetCurrentAmmo(e,FALSE);
 						if (e.save_lava_nails) e.save_lava_nails = e.resist_lava_nails; // remember what we were
 						if (e.resist_lava_nails < 0.75) e.resist_lava_nails = 0.75;
 						if (e.save_fire) e.save_fire = e.resist_fire; // remember what we were
@@ -274,7 +274,7 @@ void() shrine_aura_think = { // [FUNCTION]
 						// Air
 						e.ammo_nails = e.ammo_nails + self.cnt;
 						bound_other_ammo(e);
-						W_SetCurrentAmmo(e);
+						W_SetCurrentAmmo(e,FALSE);
 						e.air_finished = time + WATER_AIR;				// Breath under water
 						e.air_blessed = 1;
 
@@ -284,7 +284,7 @@ void() shrine_aura_think = { // [FUNCTION]
 						e.ammo_multi_rockets = e.ammo_multi_rockets + self.cnt;
 						e.ammo_rockets = e.ammo_rockets + self.cnt;
 						bound_other_ammo(e);
-						W_SetCurrentAmmo(e);
+						W_SetCurrentAmmo(e,FALSE);
 						if (e.resist_cold) e.save_cold = e.resist_cold;
 						e.resist_cold = 0.75;
 
@@ -294,7 +294,7 @@ void() shrine_aura_think = { // [FUNCTION]
 						if (random() < 0.4) { // Hacky way to simulate slower rate compared to healing
 							e.ammo_bloodcrystals = e.ammo_bloodcrystals + self.cnt;
 							bound_other_ammo(e);
-							W_SetCurrentAmmo(e);
+							W_SetCurrentAmmo(e,FALSE);
 						}
 						e.health = e.health + self.cnt;
 						if (e.health > HEAL_MEGAMAX) e.health = HEAL_MEGAMAX;
@@ -303,7 +303,7 @@ void() shrine_aura_think = { // [FUNCTION]
 						// Spirit
 						e.ammo_elemental = e.ammo_elemental + self.cnt;
 						bound_other_ammo(e);
-						W_SetCurrentAmmo(e);
+						W_SetCurrentAmmo(e,FALSE);
 						e.zapper_time = time - 7; // guarantee full charge if wand is out
 					}
 				}

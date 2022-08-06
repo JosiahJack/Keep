@@ -942,7 +942,7 @@ void() PutClientInServer = {
 	// Evil Mode should always start with the Axe!
 	if (Client_QueryEvilmode()) self.weapon = IT_AXE;
 	else self.weapon = W_BestWeapon (self);	// Pick best weapon from inventory
-	W_SetCurrentAmmo (self);			// Update hud icons and v_model
+	W_SetCurrentAmmo (self,TRUE);			// Update hud icons and v_model
 	self.attack_finished = time;
 	self.th_pain = player_pain;
 	self.th_die = player_death;

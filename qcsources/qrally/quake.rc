@@ -1,0 +1,26 @@
+
+// load the base configuration
+exec default.cfg
+
+// set the default name
+name "QR Player"
+
+// load the last saved configuration
+exec config.cfg
+
+// default config for rally
+exec rally.cfg
+
+// run a user script file if present
+exec autoexec.cfg
+
+// launcher settings over-write all other settings
+exec launcher.cfg
+
+//
+// stuff command line statements
+//
+stuffcmds
+
+// start demos if not allready running a server
+startdemos qrdem1 qrdem2 qrdem3

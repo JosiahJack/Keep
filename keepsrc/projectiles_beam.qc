@@ -386,7 +386,7 @@ void() HIP_FireMjolnirLightning = { // [FUNCTION]
       discharged = TRUE;
       T_RadiusDamage(self,self,(35.000 * cells),world, DAMAGEALL);
       discharged = FALSE;
-      W_SetCurrentAmmo(self);
+      W_SetCurrentAmmo(self,FALSE);
       return;
    }
 	self.struck_by_mjolnir = TRUE;

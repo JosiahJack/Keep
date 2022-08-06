@@ -1,0 +1,22 @@
+***************************************************************
+02/17/98- Adapted to qED by AzrKnight
+Moved the center of the prefabs to origin 0,0,0
+
+azrknight@planetquake.com
+
+The qED Prefab Park: http://www.planetquake.com/prefab
+The Quake Prefab Park: http://www.planetquake.com/qpp
+***************************************************************
+
+supports.zip - submitted by Tarl.
+---------------------------------
+
+Here's a whole bunch of supports/arches which can be used basically anywhere !.
+support1.qGP - 3 brushes, 18 faces
+support2.qGP - 11 brushes, 58 faces
+support3.qGP - 7 brushes, 38 faces
+support4.qGP - 5 brushes, 30 faces
+support5.qGP - 5 brushes, 28 faces
+support6.qGP - 7 brushes, 42 faces
+support7.qGP - 3 brushes, 18 faces
+support8.qGP - 5 brushes, 28 faces 

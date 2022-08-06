@@ -1208,7 +1208,7 @@ void() toggleupgradeaxe = {
 		update_configflag(SVR_UPDAXE, TRUE);
 		self.weapon = IT_AXE; // Switch to new weapon
 	}
-	W_SetCurrentAmmo(self);
+	W_SetCurrentAmmo(self,TRUE);
 };
 
 void() toggleupgradessg = {
@@ -1229,7 +1229,7 @@ void() toggleupgradessg = {
 	}
 		
 	// make sure player VIEW model is up to date
-	W_SetCurrentAmmo(self);
+	W_SetCurrentAmmo(self,TRUE);
 };
 
 void() toggleupgradelg = {
@@ -1249,7 +1249,7 @@ void() toggleupgradelg = {
 	}
 		
 	// make sure player VIEW model is up to date
-	W_SetCurrentAmmo(self);
+	W_SetCurrentAmmo(self,TRUE);
 };
 
 void() toggledevhelpers = {
@@ -1315,7 +1315,7 @@ void() CheatCommand = {
 	self.weapon = IT2_LASER_CANNON;
 	self.armorvalue = 150;
 	sound(self,CHAN_AUTO,"rogue/misc/flagcap.wav",1,ATTN_NORM);
-	W_SetCurrentAmmo (self);
+	W_SetCurrentAmmo(self,TRUE);
 };
 
 void() TogglePowerShield = {
@@ -1517,7 +1517,7 @@ void() TomeOfPowerCheat = {
 	dprint("\b[Impulse 248]\b Tome of Power Cheat!\n");
 	self.tome_finished = time + POWERUP_TIMER;
 	self.moditems = self.moditems | IT_ARTTOME;
-	W_SetCurrentAmmo(self);
+	W_SetCurrentAmmo(self,FALSE);
 };
 
 void() ToggleFlashlight = {

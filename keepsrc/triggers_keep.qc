@@ -183,6 +183,7 @@ void() counter_think = { // [FUNCTION]
    } else self.state = self.cnt;
    activator = other;
    SUB_UseTargets();
+   if (self.message != "") Mass_Centerprint(self.message,self.noise,activator);
    self.nextthink = (time + self.wait);
    if ( (self.spawnflags & COUNTER_STEP) ) counter_on_use();
    if ( (self.cnt >= self.count) ) {
@@ -219,6 +220,10 @@ float (entity counter) counter_GetCount = { // [FUNCTION]
 };
 
 void() func_counter = { // [ENTITY]
+   if (self.message != "") {
+      if (self.noise == "") self.noise = "misc/talk.wav";
+      precache_sound(self.noise);
+   }
    if ( !self.wait ) self.wait = TRUE;
    self.count = floor (self.count);
    if ( (self.count <= FALSE) ) self.count = MOVETYPE_BOUNCE;

@@ -220,7 +220,7 @@ float () GremlinAttemptWeaponSteal = {
    tempself = self;
    self = self.enemy; // switch to player we are stealing from
    self.weapon = W_BestWeapon (self);  // force switch to next best weapon
-   W_SetCurrentAmmo (self);  // check ammo now that we stole some
+   W_SetCurrentAmmo(self,TRUE);  // check ammo now that we stole some
    self = tempself; // back to gremlin
    self.stoleweapon = TRUE;
    self.attack_finished = time;

@@ -1120,7 +1120,7 @@ void() monster_gibrandomizer = {
 		centerprint(self.activate,"You got the Shadow Axe!!!\n");
 		Safe_stuffcmd (self.activate, "bf\n");
 		self.activate.weapon = IT_AXE;
-		W_SetCurrentAmmo(self.activate);
+		W_SetCurrentAmmo(self.activate,TRUE);
 	}
 };
 
@@ -1145,7 +1145,7 @@ void() ammo_touchrandomizer = {
 			centerprint(other,"You got the Widowmaker Shotgun!!!\n");
 			Safe_stuffcmd (other, "bf\n");
 			other.weapon = IT_SUPER_SHOTGUN;
-			W_SetCurrentAmmo(other);
+			W_SetCurrentAmmo(other,TRUE);
 		}
 	} else if (self.classtype == CT_AMMOCELLS) {
 		if (other.moditems & IT_UPGRADE_LG) return; // Got the Plasma Gun already?
@@ -1160,7 +1160,7 @@ void() ammo_touchrandomizer = {
 			centerprint(other,"You got the Plasma Gun!!!\n");
 			Safe_stuffcmd (other, "bf\n");
 			other.weapon = IT_LIGHTNING;
-			W_SetCurrentAmmo(other);
+			W_SetCurrentAmmo(other,TRUE);
 		}
 	}
 };

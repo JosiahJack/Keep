@@ -1,0 +1,24 @@
+Columns - Matthew 'Bushboy' Trow
+--------------------------------
+
+Here's three columns - vertex manipulation has been used.
+
+column1.map - Column which bulges in the middle, used
+              three eight sided cylinders and two squares.
+              5 brushes
+              42 faces
+
+column2.map - Pointy egyptian style column, used
+              two squares & one spike.
+              3 brushes
+              17 faces
+
+column3.map - Byzantine style column, used
+              three 16 sided cylinders and one square.
+              4 brushes
+              48 faces
+
+Be careful with the amount of columns used in one area, especially column3.
+
+***NOTE: column3 had bad brushes... I will redo it and add it here later...
+         02/01/98 AzrKnight

@@ -1,0 +1,24 @@
+Created 02/01/98 by Sagnor
+****************************
+
+DESCRIPTION: Ladder prefab for use in Quake level.
+
+BRUSHES:     11
+
+ENTITIES:    none
+
+BUILD TIME:  About 10 minutes from scratch
+
+TOOLS USED:  qED by Matt Tagliaferri
+
+TEXTURES:    wizwood1_4 & wizwood1_5
+
+CONTACT:     Sagnor
+             zifnab@snet.net
+	     sagnor@geocities.com
+
+CREDITS:     ID Software
+             Matt Tagliaferri (qED)
+             
+***************************** 	
+The qED Prefab Park   http://www.planetquake.com/prefab

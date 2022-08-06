@@ -59,7 +59,7 @@ void() ResetControlTether = {
     self.tethered = FALSE;
     self.tetherdist = 0;
     self.attack_finished = time + 0.2;
-    W_SetCurrentAmmo(self);
+    W_SetCurrentAmmo(self,TRUE);
 };
 
 void() PlayerBallistaThink {
@@ -94,7 +94,7 @@ void() trigger_control_touch = {
     other.tethered = TRUE;
     other.tetherdist = 112;
     other.tetherfocus = self.goalentity;
-    W_SetCurrentAmmo(other);
+    W_SetCurrentAmmo(other,TRUE);
     self.enemy = other;
     traceline(other.origin, (org + (dir * 10000)), FALSE, self.enemy);
     newmis = spawn();

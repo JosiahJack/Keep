@@ -366,7 +366,7 @@ void() weapon_touch = {
 	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	bound_other_ammo (other); // Make sure no ammo is over limits
 	if (new > 0 && deathmatch) DM_Weapon(other,new,oldhackbank,oldweapon); // Skip any weapon switch if no new weapon.  Check for best weapon (DM only) and switch to it!
-	W_SetCurrentAmmo(other);
+	W_SetCurrentAmmo(other,TRUE);
 	if (leave) self.state = TRUE; // Make sure any targets on the weapon are fired for co-op.  This is basically a run once check using state as a flag.  Ideally no weapon should use important target triggers!  Code idea from Bengt Jardrup.
 	activator = other;
 	SUB_UseTargets();

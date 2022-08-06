@@ -1,0 +1,398 @@
+Basic platform         - an original qED prefab and tutorial
+                         by JF Groleau at the qED Toolshed
+
+The qED Toolshed - http://www.cam.org/~jfgrol/
+3D-Matrix University - http://www.3dmatrix.com/serv03.htm
+
+TEXTURES USED:
+
+        plat_top1 for platform deck top and bottom
+        plat_stem for stem
+        tech04_1 for deck sides and stem base
+
+ENTITIES USED:
+
+        func_plat
+
+WHAT TO DO:
+
+        Extract the .qgp file from the archive and place it in the
+        c:\Program Files\qED\Group folder. Once in qED, insert this prefab
+        using the menu item "Group" + "load from library". The origin of this
+        prefab is at the center of the platform and bottom of stem. 
+        The position or offset of the inserted group will be referenced
+        to the offset of the currently selected item in the level outline
+        window. The group can then be moved and rotated to suit the map
+        design. Texture re-alignment might be required on the side brackets
+        after these operations. The 3D-Matrix university provide exhaustive
+        tutorials on this topic.
+
+FUNCTIONALITY:
+
+        A. FEATURES COMMON TO ALL PLATFORMS
+
+
+        1. The func_plat entity is the engine of the platform assembly.
+           Its physical location on the map is irrelevant although it
+           makes sense to place it at the origin of the platform assembly
+           (as in this prefab) for the sake of clarity and neatness.
+
+        2. All the brushes that make the platform assembly must be "child"
+           brushes to the func_plat entity just like a regular qED group.
+           In that respect, several physical "platform assemblies" could
+           be operated by the same func_plat entity. You are only limited
+           by your imagination.
+
+        3. Platforms must be drawn in their highest position, IOW, the
+           height that the platform will raise to when the player walks on it.
+           Once in the game, the platform will appear in its lowest position
+           unless you build a combination of the trigger_once entity targeting
+           the func_plat entity with the latter's spawnflags attribute set to 1.
+           This attribute is called the plat_low_trigger flag (who knows why?).
+           This peculiar combination will make the platform appear in its
+           highest position at first in the game. More on this later.
+
+        4. Platforms which use the func_plat entity can only be used for
+           platforms that go up when activated (rising platforms). You can,
+           however make a platform that will start in the up position as
+           described in item 3. After this type of platform has been triggered
+           once, it will thereafter revert to its normal mode of operation
+           and become a rising only platform again just as if it had been
+           built as such in the first place. It is therefore not really a
+           lowering platform or at least not in a practical sense. These types
+           of platform can be used to implement a very specific element of
+           gameflow in a single player map and their use requires careful
+           planning. They are virtually useless for deathmatch maps where the
+           gameplay is based more on a cyclic rather than linear flow. If you
+           want to build a real lowering platform, you have to use the func_door
+           entity.
+
+        B. FEATURES SPECIFIC TO STEMMED OR BLOCK TYPE PLATFORMS*
+
+          * stemmed or block platforms are defined as platforms made from a
+            brush or group of brushes having a total height greater or equal
+            to the desired travel length of the platform. Explanation below.
+
+        1. Behavior of platform when the height attribute of the func_plat
+           entity is not used (left at its default value of 0)
+
+          a. The cumulative height of all the brushes that form the platform
+             assembly (i.e. all the child brushes of the func_plat entity) is
+             what will determine the platform travel. The tricky thing to note
+             is that the platform does not necessarily lower by its full height 
+             but rather by a basic formula which is:
+
+             Travel length of platform = (total platform height - 8 units)
+
+             So, if for example, the platform deck is 16 units thick and the
+             stem underneath is 64 units tall and that the assembly rests at
+             floor level, only half the thickness of the platform deck will
+             stick out of the floor once in the down position. Here's a little
+             diagram to illustrate this:
+
+                 ________  ___          __  ___ platform top is 80
+                |        |     16 units   |     units above the floor
+                |________| ___ deck       |
+                   |  |                   |
+                   |  |                   | 80 units
+                   |  |                   | total height
+                   |  |        64 units   |
+                   |  |        stem     __|
+                   |  |
+                   |  |
+             ______|__|________________ base of stem flush with floor level
+
+             FIG 1a. PLATFORM IN THE UP POSITION AS DRAWN IN THE MAP
+
+
+                 ________  ___ platform top is 8 units above
+             ___|________|_____________ floor level
+                |________|
+                   |  |
+                   |  |
+                   |  |
+                   |  |
+                   |  |       distance of travel: (64 + 16) - 8 = 72
+                   |  |
+                   |  |
+                   |__|
+
+             FIG 2a. PLATFORM IN THE DOWN POSITION AS SEEN IN GAME
+
+
+          b. When using this method, care must be taken as to where the
+             platform brushes are located. Here's an example in which
+             the stem brush has been elongated by 8 units.
+
+
+                 ________  ___          __  ___ platform top is 80
+                |        |     16 units   |     units above the floor
+                |________| ___ deck       |     (same as previous example)
+                   |  |                   |
+                   |  |                   | 88 units
+                   |  |                   | total height
+                   |  |        72 units   |
+                   |  |        stem     __|
+                   |  |
+                   |  |
+             ______|__|________________ floor level
+                   |__| __ base of stem 8 units below floor level
+
+             FIG 1b. PLATFORM IN THE UP POSITION AS DRAWN IN THE MAP
+
+
+                 
+             ________________ platform top is level with floor
+                |        |
+                |________|
+                   |  |
+                   |  |
+                   |  |
+                   |  |       distance of travel: (72 + 16) - 8 = 80
+                   |  |
+                   |  |
+                   |  |
+                   |  |
+                   |__|
+
+             FIG 2b. PLATFORM IN THE DOWN POSITION AS SEEN IN GAME
+
+
+          c. If you want to have multiple platforms that belong to the same
+             func_plat entity, things get more complicated (as if it weren't
+             enough already) and much harder to predict. In this respect, I
+             recommend that you use the next method of controlling the
+             platform which is far simpler and entirely predictable.
+
+
+        2. Behavior of platform when the height attribute of the func_plat
+           entity is used to adjust platform travel length (recommended for
+           all types of platform).
+
+          a. In this case, it's really simple; the height attribute
+             of the func_plat entity is equal to the distance of travel,
+             regardless of platform size or height. That's all there is to it.
+             I don't know about you but I sure know which method of
+             control I'm going to use for my plats. Let's look at the previous
+             examples and see what happens now if we set the height attribute
+             to a value of 72:
+
+
+                 ________  ___          __  ___ platform top is 80
+                |        |     16 units   |     units above the floor
+                |________| ___ deck       |
+                   |  |                   |
+                   |  |                   | 80 units
+                   |  |                   | total height
+                   |  |        64 units   |
+                   |  |        stem     __|
+                   |  |
+                   |  |
+             ______|__|________________ base of stem flush with floor level
+
+             FIG 1c. PLATFORM IN THE UP POSITION AS DRAWN IN THE MAP
+
+
+                 ________  ___ platform top is 8 units above
+             ___|________|_____________ floor level
+                |________|
+                   |  |
+                   |  |
+                   |  |
+                   |  |
+                   |  |   distance of travel = value of height attribute = 72
+                   |  |
+                   |  |
+                   |__|
+
+             FIG 2c. PLATFORM IN THE DOWN POSITION AS SEEN IN GAME
+
+
+          b. Now, let's see what happens if we elongate the stem by 8 units
+             and leave the height attribute at 72:
+
+
+                 ________  ___          __  ___ platform top is 80
+                |        |     16 units   |     units above the floor
+                |________| ___ deck       |     (same as previous example)
+                   |  |                   |
+                   |  |                   | 88 units
+                   |  |                   | total height
+                   |  |        72 units   |
+                   |  |        stem     __|
+                   |  |
+                   |  |
+             ______|__|________________ floor level
+                   |__| __ base of stem 8 units below floor level
+
+             FIG 1b. PLATFORM IN THE UP POSITION AS DRAWN IN THE MAP
+
+
+                 ________  ___ platform top is 8 units above
+             ___|________|_____________ floor level
+                |________|
+                   |  |
+                   |  |
+                   |  |
+                   |  |
+                   |  |   distance of travel = value of height attribute = 72
+                   |  |
+                   |  |
+                   |  |
+                   |__|
+
+             FIG 2b. PLATFORM IN THE DOWN POSITION AS SEEN IN GAME
+
+
+             As you can see, what happens is exactly nothing. The platform still
+             travels 72 units from bottom position to top. For you, the map
+             designer, this means that all you have to worry about is:
+
+               i. where you want the top of the platform to be in the up
+                  position (where it's drawn in the map). 
+
+               ii. where you want the top of the platform to be in the down
+                   position.
+
+               iii. measure the distance in between and apply that value to
+                    the height attribute of the func_plat entity. The rest
+                    is just cosmetics.
+
+          c. If you want to build multiple platforms that stand at different
+             heights and are operated by the same func_plat entity, this is
+             the way to go (they will all raise by the same value though).
+
+        C. FEATURES SPECIFIC TO STEMLESS OR PLATE TYPE PLATFORMS*
+
+          * stemless or plate platforms are defined as platforms made from a
+            brush or group of brushes having a total height less than the
+            desired travel length of the platform. Explanation below.
+
+        1. These platforms are usually a simple thin plate or deck with no
+           stem or base that reaches to the bottom of that plate. For these
+           platforms, unless you want them to raise by a height which is
+           shorter that the thickness of the plate (which would serve no
+           purpose at all), you absolutely have to use the height attribute
+           of the func_plat entity which makes things even simpler for this
+           type of platform.
+
+        2. Please remember that when I refer to "platforms made from a brush
+           or a group of brushes", I mean brushes that belong to the func_plat
+           entity. You can have, for example, a post-shaped brush that sits
+           right in the middle of the platform deck on the map but isn't a
+           child brush of the func_plat entity. That brush is not part of the
+           platform as such although it visually looks like it does during
+           gameplay. I consider this platform as a stemless type.
+
+        D. HOW TO MAKE A PLATFORM APPEAR IN THE UP POSITION IN THE GAME*
+
+          * by using this combination of entities, the platform, when the game
+            is first started, will appear in the up position instead of the down
+            position. Please note that is only a temporary state and that the
+            platform will resume its normal operation after having been
+            triggered once.
+
+        1. Make a standard platform using the same method as described
+           earlier and build a staircase so the player can step onto it from
+           there. Set the targetname attribute of the func_plat entity to a
+           value of your choice, "startup" for example. Add a spawnflags
+           attribute to the func_plat entity and set its value to 1.
+
+        2. Add a trigger_once entity and place it over the top of the platform.
+           Set the target attribute of the trigger entity to the same value as
+           the targetname attribute of the func_plat entity, in this case:
+           "startup".
+
+        3. Drag a new cube brush from the menu onto the trigger_once
+           entity in the level outline. This is important: the brush has to be
+           made a child brush of the trigger entity in order for this to work.
+           Move and resize the brush to occupy the physical space directly
+           above the top of the platform so the player walks through it when
+           stepping on the platform.
+
+
+                                                ______
+                                               |      |
+                                               |  +   | <-- trigger_once entity
+                                               |______|     with child brush
+                                            __ ________
+                                         __|__|        | <-- platform top
+                                      __|__|  |________|
+                    staircase -->  __|__|        |  |
+                  to reach plat __|__|           |  |
+                             __|__|              |  |
+                          __|__|                 |  |
+                       __|__|                    |  |
+                    __|__|                       |  |
+                 __|__|                          |  |
+                |__|_____________________________|__|_______floor level
+
+
+             FIG 1a. PLATFORM STARTS IN THE UP POSITION AS DRAWN IN THE MAP
+
+
+        4. Now, as seen in the figure above, the platform starts in the up
+           position. When the player steps on the platform and at the same
+           time enter the physical space of the trigger_once entity's child
+           brush, this will activate the platform and make it lower.
+
+        5. As long as the player remains on the platform during the initial
+           trigger event. The platform will keep going back up and remain
+           there for a while before repeating the cycle over and over again.
+
+        6. As soon as the player steps off the platform, the platform will
+           stay down or come down from wherever it was when the player stepped
+           off and then stay dowm also. The platform is, from now on, just a
+           regular platform and will behave a such for the rest of the game.
+
+        7. Important things to note:
+
+           * What makes the platform initially appear in the up position in
+             the game is a combination of two things: the presence of the
+             trigger_once entity with its target attribute set to match the
+             targetname of the func_plat entity *plus* the spawnflags attribute
+             of the func_plat set to 1. If you omit either one, the platform
+             will function just as regular platform and will initially appear
+             in the down position at the start of the game.
+
+           * The initial lowering of the platform is triggered by the player
+             entering the physical space of the trigger_once entity's child
+             brush wherever it is located. If you place it at the other end of
+             the room, the platform will go down when the player walks there.
+             If the brush is out of reach, the platform will simply never
+             work.
+
+           * The use a trigger_multiple entity instead of a trigger_once
+             entity will make no difference. You still cannot make a real
+             consistent lowering platform without using a func_door entity.
+
+           * The use of this special combination produces one strange side
+             effect: next time you walk up the stairs and walk over the top
+             stair to jump on the platform. The platform will start coming
+             up before the player reaches the floor contrarily to an entirely
+             normal platform (no trigger_once entity) that only starts moving
+             up once the player actually lands on it.
+
+OPTIONS:
+
+        Adjust the size of the platform deck and stem to suit your taste
+        and map layout. It is recommended to keep the origin of the prefab
+        at the base and center of the platform stem. This way, when you
+        move the prefab around or make copies, all you have to do is place
+        the origin of the group at the floor level of the room it will be in.
+        This will make things cleaner and easier for you in the long run.
+
+        You can also set the speed and sound attributes of the func_plat as
+        well as the targetname attribute if wish to operate the platform
+        from a func_button entity with a matching target attribute value.
+
+CREDITS:
+
+        Id Software (http://www.idsoftware.com/):
+
+           For Quake, the best first-person game of the known universe.
+
+        Steve Fukuda (stevefu@unixg.ubc.ca):
+
+           For providing the nuts and bolts of this mini-tutorial and
+           giving me a clue on what the heck is the plat_low_trigger flag.

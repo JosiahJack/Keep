@@ -1,0 +1,24 @@
++++++++++++++++++++++++++++++++++++++++++++++
+02/02/98
+***Adapted for qED by AzrKnight***
+added light_flame_large_yellow to the prefab
+moved origin of the light to bottom center for easier handling
+otherwise untouched...
+AzrKnight jgirard@ct1.nai.net
++++++++++++++++++++++++++++++++++++++++++++++
+
+Light1.map - Jonah Bishop - jonahb@mail.3dportal.com
+
+
+
+This prefab is my version of a light fixture that comes from the Malice
+add-on to Classic Quake.  Hope 'ya like it...I'm not *real* skilled with
+Quake editing, but I think this is a nice light fixture.  Makes for some
+*great* shadows.
+
+This prefab can be rotated to be placed on walls, ceilings, and floors.  It
+must be grouped (there are only 2 sections) to stretch correctly, but
+that's not hard at all.
+
+9 solids
+58 faces

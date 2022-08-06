@@ -109,7 +109,7 @@ void(float wait_time) forceweaponswitch = { // [FUNCTION]
 	nextweap = W_BestWeapon(self); // has the player run out of ammo? work out next best weapon
 	if (self.weapon != nextweap) { // Does the player need to switch weapons?
 		self.weapon = nextweap;
-		W_SetCurrentAmmo(self);
+		W_SetCurrentAmmo(self,TRUE);
 	}
 };
 
@@ -254,13 +254,13 @@ void(float stat) HIP_FireLaser = { // [FUNCTION]
 
 	if ((self.weapon == IT2_LASER_CANNON && !self.weaponismoditems) && (self.ammo_cells < TRUE) ) {
 		self.weapon = W_BestWeapon(self);
-		W_SetCurrentAmmo(self);
+		W_SetCurrentAmmo(self,TRUE);
 		return ;
 	}
 
 	if ((self.weapon == IT_SHOTGUN && !self.weaponismoditems) && (self.ammo_shells < TRUE) ) { // Blaster uses this
 		self.weapon = W_BestWeapon(self);
-		W_SetCurrentAmmo(self);
+		W_SetCurrentAmmo(self,TRUE);
 		return ;
 	}
 
@@ -1030,7 +1030,7 @@ void() W_FirePlasma = { // [FUNCTION]
 			cells = self.ammo_cells;
 			// Update inventory
 			self.ammo_cells = 0;
-			W_SetCurrentAmmo (self);
+			W_SetCurrentAmmo (self,TRUE);
 			// Impact avoidance sound
 			PlayBlastBeltSound(self);
 			// Death to everything around, except players!
@@ -1070,7 +1070,7 @@ void() W_FireLightning = { // [FUNCTION]
 	if (self.waterlevel > 1) {
 		cells = self.ammo_cells; 
 		self.currentammo = self.ammo_cells = 0; // Use all cells
-		W_SetCurrentAmmo(self); // Update inventory
+		W_SetCurrentAmmo(self,TRUE); // Update inventory
 
 		if (self.tome_finished) {
 			// Make some extra tome of power spark effects off the player
@@ -1134,7 +1134,7 @@ void(float cl) W_FireThunderbolt = { // [FUNCTION]
 			cells = self.ammo_cells;
 			// Update inventory
 			self.ammo_cells = 0;
-			W_SetCurrentAmmo (self);
+			W_SetCurrentAmmo (self,TRUE);
 			PlayBlastBeltSound(self); // Impact avoidance sound
 			T_RadiusDamage(self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
@@ -1237,7 +1237,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 		if (self.moditems & IT_ARTWETSUIT) { // Air tank vania item wil explode weapon instead
 			cells = self.ammo_cells; // Use all cells
 			self.ammo_cells = 0; // Update inventory
-			W_SetCurrentAmmo (self);
+			W_SetCurrentAmmo (self,TRUE);
 			PlayBlastBeltSound(self); // Impact avoidance sound
 			T_RadiusDamage(self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
 			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
@@ -1396,10 +1396,10 @@ void(float damage) W_FireBFG = { // [FUNCTION]
         newmis.owner = self;
 };
 
-void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
+void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 	if (frame_pause()) return; // intermission, cinematic, or finale
 
-	remoteplayer_run(targ);	// Get out of any weapon firing states.
+	if (resetweaponframe) remoteplayer_run(targ);	// Get out of any weapon firing states.
 
 	if (targ.tethered && targ.tetherfocus && targ.health > 0) {
 		targ.currentammo = 0;
@@ -1518,7 +1518,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			if (targ.weaponmodel != "") {
 				targ.weaponmodel = "";
 				targ.weaponismoditems = TRUE;
-				W_SetCurrentAmmo(targ); // Do it again for the hack bank.
+				W_SetCurrentAmmo(targ,FALSE); // Do it again for the hack bank.
 				return;
 			}
 			// This is also called no axe startup option.  Cinematic mode, no viewmodel.
@@ -1548,7 +1548,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			if (targ.weaponmodel != "") {
 				targ.weaponmodel = "";
 				targ.weaponismoditems = FALSE;
-				W_SetCurrentAmmo(targ); // Do it again for the other bank.
+				W_SetCurrentAmmo(targ,FALSE); // Do it again for the other bank.
 				return;
 			}
 			// This is also called no axe startup option.  Cinematic mode, no viewmodel.
@@ -1603,7 +1603,7 @@ float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 	if (targ.currentammo > 0) return TRUE;
 
 	targ.weapon = W_BestWeapon(targ);
-	W_SetCurrentAmmo(targ);
+	W_SetCurrentAmmo(targ,TRUE);
 	return FALSE; // drop the weapon down
 };
 
@@ -2305,7 +2305,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	   }
 	}
 	targ.weapon = fl;
-	W_SetCurrentAmmo (targ);
+	W_SetCurrentAmmo(targ,TRUE);
 };
 
 // Returns unique ID in list of weapon cycling order.  Refer to defskeep.qc for the list and ID's
@@ -2412,7 +2412,7 @@ float(float wepID, vector idconversion, float am) SetCycledWeapon = {
 			if ((self.items & self.weapon) && !am) oktoset = TRUE;
 		}
 	}
-	if (oktoset) { W_SetCurrentAmmo(self); return TRUE; }
+	if (oktoset) { W_SetCurrentAmmo(self,TRUE); return TRUE; }
 	return FALSE;
 };
 
@@ -2679,7 +2679,7 @@ void() W_WeaponFrame = { // [FUNCTION]
 	}
 
 	ImpulseCommands();
-	if (self.ammo_poison > 0) W_SetCurrentAmmo(self); // Change crossbow skin if bolts are poisoned
+	if (self.ammo_poison > 0) W_SetCurrentAmmo(self,FALSE); // Change crossbow skin if bolts are poisoned
 	if (!self.button0) return; // check for attack
 
 	if (self.b0_click) self.b0_click = 2; // Just double-clicked.

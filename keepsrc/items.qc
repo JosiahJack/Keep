@@ -961,7 +961,7 @@ float(entity backent, string backtext1, string backtext2, float backcomma) Backp
 
 void() BackpackTouch = { // [FUNCTION]
 	local string s;
-	local float pickupweapon, acount;
+	local float pickupweapon, acount, gaveweapon;
 	
 	acount = 0;
 	sprint(other, "You get ");
@@ -973,13 +973,13 @@ void() BackpackTouch = { // [FUNCTION]
 			other.items = other.items | pickupweapon;
 			acount = BackpackText(other, "ShadowAxe", "", acount);
 			other.moditems = other.moditems | pickupweapon;
-			update_configflag(SVR_UPDAXE, TRUE);
+			update_configflag(SVR_UPDAXE, TRUE); gaveweapon = TRUE;
 		}
 		
 		if (self.items & IT_SHOTGUN && !(other.items & IT_SHOTGUN)) {
 			pickupweapon = IT_SHOTGUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "SG", "", acount);
+			acount = BackpackText(other, "SG", "", acount); gaveweapon = TRUE;
 		}
 		
 		if (self.moditems & IT_UPGRADE_SSG && !(other.moditems & IT_UPGRADE_SSG)) {
@@ -987,80 +987,80 @@ void() BackpackTouch = { // [FUNCTION]
 			other.items = other.items | pickupweapon;
 			acount = BackpackText(other, "WidowMaker", "", acount);
 			other.moditems = other.moditems | pickupweapon;
-			update_configflag(SVR_UPDSSG, TRUE);
+			update_configflag(SVR_UPDSSG, TRUE); gaveweapon = TRUE;
 		}
 		else if (self.items & IT_SUPER_SHOTGUN && !(other.items & IT_SUPER_SHOTGUN)) {
 			pickupweapon = IT_SUPER_SHOTGUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "SSG", "", acount);
+			acount = BackpackText(other, "SSG", "", acount); gaveweapon = TRUE;
 		}
 		
 		if (self.items & IT_NAILGUN && !(other.items & IT_NAILGUN)) {
 			pickupweapon = IT_NAILGUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "NG", "", acount);
+			acount = BackpackText(other, "NG", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_LAVA_NAILGUN && !(other.items & IT_LAVA_NAILGUN)) {
 			pickupweapon = IT_LAVA_NAILGUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "LAVANG", "", acount);
+			acount = BackpackText(other, "LAVANG", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_SUPER_NAILGUN && !(other.items & IT_SUPER_NAILGUN)) {
 			pickupweapon = IT_SUPER_NAILGUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "SNG", "", acount);
+			acount = BackpackText(other, "SNG", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_LAVA_SUPER_NAILGUN && !(other.items & IT_LAVA_SUPER_NAILGUN)) {
 			pickupweapon = IT_LAVA_SUPER_NAILGUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "LAVASNG", "", acount);
+			acount = BackpackText(other, "LAVASNG", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_GRENADE_LAUNCHER && !(other.items & IT_GRENADE_LAUNCHER)) {
 			pickupweapon = IT_GRENADE_LAUNCHER;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "GL", "", acount);
+			acount = BackpackText(other, "GL", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_MULTI_GRENADE && !(other.items & IT_MULTI_GRENADE)) {
 			pickupweapon = IT_MULTI_GRENADE;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "MULTIGL", "", acount);
+			acount = BackpackText(other, "MULTIGL", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_ROCKET_LAUNCHER && !(other.items & IT_ROCKET_LAUNCHER)) {
 			pickupweapon = IT_ROCKET_LAUNCHER;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "RL", "", acount);
+			acount = BackpackText(other, "RL", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_MULTI_ROCKET && !(other.items & IT_MULTI_ROCKET)) {
 			pickupweapon = IT_MULTI_ROCKET;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "MULTIRL", "", acount);
+			acount = BackpackText(other, "MULTIRL", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items & IT_PLASMA_GUN && !(other.items & IT_PLASMA_GUN)) {
 			pickupweapon = IT_PLASMA_GUN;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "PLASMALG", "", acount);
+			acount = BackpackText(other, "PLASMALG", "", acount); gaveweapon = TRUE;
 		}
 
 		if (self.items2 & IT2_PROXIMITY_GUN && !(other.items2 & IT2_PROXIMITY_GUN)) {
 			pickupweapon = IT2_PROXIMITY_GUN;
 			other.items2 = other.items2 | pickupweapon;
-			acount = BackpackText(other, "PROX", "", acount);
+			acount = BackpackText(other, "PROX", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items2 & IT2_LASER_CANNON && !(other.items2 & IT2_LASER_CANNON)) {
 			pickupweapon = IT2_LASER_CANNON;
 			other.items2 = other.items2 | pickupweapon;
-			acount = BackpackText(other, "LASERC", "", acount);
+			acount = BackpackText(other, "LASERC", "", acount); gaveweapon = TRUE;
 		}
 		if (self.items2 & IT2_MJOLNIR && !(other.items2 & IT2_MJOLNIR)) {
 			pickupweapon = IT2_MJOLNIR;
 			other.items2 = other.items2 | pickupweapon;
-			acount = BackpackText(other, "MJOL", "", acount);
+			acount = BackpackText(other, "MJOL", "", acount); gaveweapon = TRUE;
 		}
 
 		if (self.items & IT_EXTRA_WEAPON && !(other.items & IT_EXTRA_WEAPON)) {
 			pickupweapon = IT_EXTRA_WEAPON;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "XBOW", "", acount);
+			acount = BackpackText(other, "XBOW", "", acount); gaveweapon = TRUE;
 		}
 		
 		if (self.moditems & IT_UPGRADE_LG && !(other.moditems & IT_UPGRADE_LG)) {
@@ -1068,12 +1068,12 @@ void() BackpackTouch = { // [FUNCTION]
 			other.items = other.items | pickupweapon;
 			acount = BackpackText(other, "PLASMAGUN", "", acount);
 			other.moditems = other.moditems | pickupweapon;
-			update_configflag(SVR_UPDLG, TRUE);
+			update_configflag(SVR_UPDLG, TRUE); gaveweapon = TRUE;
 		}
 		else if (self.items & IT_LIGHTNING && !(other.items & IT_LIGHTNING)) {
 			pickupweapon = IT_LIGHTNING;
 			other.items = other.items | pickupweapon;
-			acount = BackpackText(other, "LG", "", acount);
+			acount = BackpackText(other, "LG", "", acount); gaveweapon = TRUE;
 		}
 	} else { // DM backpacks have only one weapon
 		// Setup name of weapon first
@@ -1102,6 +1102,7 @@ void() BackpackTouch = { // [FUNCTION]
 			other.items = other.items | self.items;
 			other.items2 = other.items2 | self.items2;
 			other.moditems = other.moditems | self.moditems;
+			gaveweapon = TRUE;
 			acount = BackpackText(other, "the ", self.netname, acount);
 		}
 	}
@@ -1300,7 +1301,7 @@ void() BackpackTouch = { // [FUNCTION]
 	// Check ammo limts, change to best weapon and set ammo type
 	bound_other_ammo (other);
 	if (deathmatch) other.weapon = W_BestWeapon(other);
-	W_SetCurrentAmmo (other);
+	W_SetCurrentAmmo(other,gaveweapon);
 	
 	// Random ammo backpacks are actual items
 	if (self.classtype == CT_AMMORANDOM) {

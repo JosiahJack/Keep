@@ -1,0 +1,16 @@
+***********************************************************
+02/17/98
+Adapted to qED by AzrKnight <azrknight@planetquake.com>
+For The qED Prefab Park <http://www.planetquake.com/prefab>
+************************************************************
+The Quake Prefab Park: http://www.planetquake.com/qpp
+
+stairs.map by Jonah Bishop
+--------------------------
+
+This prefab is a square set of spiral
+stairs...i.e. - it's not round.  The prefab is made so that it can be
+stacked on top of itself several times to any desired height.  There are 2
+light entities in the entire prefab, both being wall torches.
+
+21 solids, 66 faces, 2 torch entities

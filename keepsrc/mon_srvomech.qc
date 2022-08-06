@@ -492,7 +492,7 @@ void(entity targent) cservo_control_on = {
 };
 
 void(entity targent) cservo_control_off= {
-	local entity targcam, tmpent;
+	local entity targcam;
 
 	if (!targent) { dprint("ERROR: missing targent for cservo_control_off\n"); return; }
 	if (!(targent.flags & FL_CLIENT)) { dprint("ERROR: targent for cservo_control_off not a player\n"); return; }
@@ -508,12 +508,7 @@ void(entity targent) cservo_control_off= {
 		WriteByte (MSG_ONE, SVC_SETVIEW);
 		WriteEntity (MSG_ONE, targent.cament);
 		Safe_stuffcmd(targent, "cl_bob 0; wait\n");
-	} else {
-		tmpent = self;
-		self = targent;
-		W_SetCurrentAmmo();
-		self = tmpent;
-	}
+	} else W_SetCurrentAmmo(targent,TRUE);
 
 	Safe_stuffcmd(targent, "exec config.cfg\n");
 	Safe_stuffcmd(targent, "wait\n");

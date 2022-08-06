@@ -1,0 +1,77 @@
+The Rune Slipgate - a component originated by Jeremiah Johnson as
+                    the E1M5 Exit SlipGate at the QuakeLab and
+                    adapted for qED by JF Groleau.
+
+The QuakeLab - http://www.planetquake.com/QuakeLab
+The qED Toolshed - http://www.cam.org/~jfgrol/
+
+        TEXTURES USED:
+
+        *TELEPORT for the slipgate core.
+        COP1_1 for the pedestal and some slipgate frame faces.
+        METAL6_3 and METAL6_4 for the slipgate frame.
+        TRIGGER for the trigger_changelevel's child brush
+
+        ENTITIES USED:
+
+        trigger_changelevel, info_intermission
+
+        WHAT TO DO:
+
+        Extract the .qgp file from the archive and place it in the
+        c:\Program Files\qED\Group folder. Once in qED, insert this prefab
+        using the menu item "Group" + "load from library". The origin of this
+        prefab is at the middle center of the slipgate. The position
+        or offset of the inserted group will be referenced to the coordinates
+        of the currently selected item in the level outline window. The group
+        can then be moved and rotated to suit the map design. It is strongly
+        suggested to move the prefab on a 32 unit (or more) grid to avoid having
+        to re-align the rune textures on the slipgate which can easily turn into
+        a nightmare. It is also a good idea to rotate it in angle increments
+        of 90 degrees only. The back of the slipgate is normally butted right
+        against the surface of a wall. It will work from the back also but it
+        doesn't look that great from the rear end. Don't forget to fill out
+        the 'map' attribute of the trigger_changelevel. The present value is
+        set to start, just replace it with the name of the map you want the
+        player to go to next. Move the info_intermission entity to the
+        location of your choice and adjust its mangle attribute for it to
+        point in the proper direction.
+
+        FUNCTIONALITY:
+
+        Here, 3 *teleport textured brushes are required: a central core brush
+        that fits inside the slipgate frame and is visible and three more
+        cosmetic brushes to hide the inner sides of the slipgate frame columns.
+        The trigger_changelevel entity has a child brush with the trigger
+        texture applied. Walking into the physical space of this brush triggers
+        the action of the entity. The brush itself is not visible during
+        gameplay.
+
+        OPTIONS/COMMENTS:
+
+        This slipgate comes from an original design by Jeremiah Johnson with
+        minor modifications. It is what I believe to be an exact replica of
+        the slipgate at the end of Quake level E1M5. Some textures were
+        changed on the slipgate frame brushes and the position of those was
+        also slightly changed to make the whole stucture more symmetrical
+        and follow a 16 unit grid more closely to facilitate the re-alignment
+        of the textures. The slipgate visible core bushes were thickened
+        slightly (by two units) to make them fit on a 8 unit grid. The
+        info_intermission entity is, of course, not absolutely necessary and
+        is included here to make the prefab as complete as possible.
+
+        CREDITS:
+
+        Id Software (http://www.idsoftware.com/):
+
+           For Quake, the best first-person game of the known universe. The
+           rune slipgate is an Id original design straight level E1M5.
+
+        Jeremiah Johnson (address unknown, mail me if you know!): 
+
+           Boy, this guy is patient! Took me a whole day just to convert this
+           prefab. Just imagine how much work it must have been to build it
+           from scratch! Jeremiah, I raise my hat to you. Your prefab is
+           nothing short of superb. Best one I've seen and worked on yet.
+           A most interesting challenge. This one's a real timesaver for
+           map designers.

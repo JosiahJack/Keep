@@ -1,0 +1,3 @@
+.entity parent;
+.entity child;
+

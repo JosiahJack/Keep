@@ -1,0 +1,328 @@
+Title    : qccx v1.0 optimizing QuakeC compiler
+Filename : qccx100.zip
+Version  : 1.0
+Date     : March 3, 2000
+Author   : J.P. Grossman (a.k.a. Mephistopheles)
+Email    : jpg@ai.mit.edu
+URL      : http://elohim.ai.mit.edu/qccx
+
+
+    /------------------------------------\
+1.0 Optimizations and Command Line Options
+    \------------------------------------/
+
+Used with no command line options, qccx will produce the same progs.dat
+produced by fastqcc, only much faster.  The easiest way to turn on
+optimizations is to include /O2 in the command line which will enable all
+optimizations.  Alternately, you can enable optimizations individually
+using the /Ot, /Oi, /Op, /Oc, /Od and /Os options (described in the following
+sections).  Compiling with /O2 is equivalent to compiling with all six command
+line options.  Note that in each case O is the letter O, not zero.
+
+1.1 /Ot - eliminate temporary variables
+
+Peephole optimization: changes
+
+OP    A, B, temp
+STORE temp, C
+
+to
+
+OP    A, B, C
+
+1.2 /Oi - shorten ifs
+
+Peephole optimization: changes
+
+NOT   A, temp
+IFNOT temp
+
+to
+
+IF    A
+
+1.3 /Op - non-vector parms
+
+Save a few cycles by copying non-vector function parameters with a STORE
+rather than a STOREV.
+
+1.4 /Oc - eliminate constant defs/names
+
+The names and associated defs of initialized (constant) variables are not
+stored in the progs.dat.  This is a space optimization and does not affect 
+speed.
+
+1.5 /Od - eliminate duplicate defs
+
+If two initialized variables have the same value, only one def is used.
+Another space optimization.
+
+1.6 /Os - hash lookup in CopyString
+
+Using this option avoids duplicate strings in the string table; another space
+optimization.
+
+     /------\
+2.0  Integers
+     \------/
+
+Standard QuakeC stores ALL numbers in floating point format, so for example
+the "integer" 1 is stored internally as 3f800000.  qccx lets you create
+bona-fide integers by prefixing them with %, e.g. %5 or %-3.  There is 
+no new type for integers; they are stored in floats.  On their own they are
+not useful; they are used for arrays and pointer arithmetic.  The following
+example illustrates the creation of integer constants:
+
+local float a, b, c, d;
+
+a = 5;    // stored as 40a00000
+b = %5;   // stored as 00000005
+c = -3;   // stored as c0400000
+d = %-3;  // stored as fffffffd
+
+Integer literals may also be entered in hexadecimal C-style, e.g.
+
+a = 0x00000001;  // same as a = %1
+a = 0xfffffffd;  // same as a = %-3
+a = 0x1df001ed;
+
+Be careful when adding or subtrating integers; the following rule applies:
+If both operands *and* the result are POSITIVE INTEGERS LESS THAN 2^24, then
+you can use the standard + and - operators as you would with floating point
+numbers.  However, if either operand or the result is NEGATIVE OR GREATER
+THAN 2^24-1, you *must* use the AddInt / SubInt functions supplied in 
+internal.qc, which are less efficient but guaranteed to work.  If you're 
+ever unsure, just use AddInt/SubInt.  The following example illustrates this:
+
+local float a, b, c;
+
+a = %24;
+b = %192;
+c = a + b;         // correct; a, b, c are positive and less than 2^24
+c = b - a;         // correct; a, b, c are positive and less than 2^24
+c = a - b;         // *** WRONG!!! ***  The result is negative
+c = SubInt(a, b);  // correct
+a = b + c;         // *** WRONG!!! ***  c is negative
+a = AddInt(b, c);  // correct
+
+To convert between POSITIVE floating point and integer representations, simply 
+multiply or divide by %1.  This *only* works for positive numbers; you must
+use NegInt to deal with negative numbers.  Example:
+
+local float a;
+
+a = 5;      // stored as 40a00000 (floating point 5)
+a = a * %1; // changes a to 00000005 (integer 5)
+a = a / %1; // changes a back to 40a0000 (floating point 5)
+a = %-3;
+b = a / %1; // *** WRONG!!! ***  This won't work because a is negative
+b = -(NegInt(a) / %1); // correct
+
+Finally, when comparing two integers, always prefix them with * (which
+casts them to entities.. see section 3).  Example:
+
+if (a == b)   // This is wrong if a and b contain integer values
+if (*a == *b) // correct
+
+     /-----------------\
+3.0  Pointers and Arrays
+     \-----------------/
+
+There are several different types of pointers; all of them are (as with
+integers) stored in float variables.  When you are programming it is 
+important to remember which pointers are of which type and perform the
+appropriate conversions where necessary.
+
+3.1 Arrays
+
+The best way to explain arrays is to explain how QuakeC works with entities
+and fields.  Consider the expression self.health.  "self" is an entity, which
+actually holds a byte offset from the internal array of entities.  "health"
+is really just an integer that gives the dword (not byte) offset of the field 
+in the entity (specifically, health = 48).  Loosely speaking, the quake engine
+sees self.health and translates it to "the value stored at 
+entities + self + 4*health".
+
+qccx allows the use of integers rather than fields to specify an offset
+within an entity; standard [] notation is used.  So, for example, self[%48]
+is an exact synonym for self.health.  Warning: a common mistake (for me, 
+at least) is to type self[48] instead of self[%48].  This is wrong!  Recall
+that 48 isn't really an integer.. it is a floating point number.  The quake
+engine doesn't perform any sort of bounds checking, so the expression 
+self[48] in a quakeC program will cause quake to crash.
+
+So now you know how to treat an entity as an array.  This isn't very useful
+though; if we make the mistake of simply spawning a new entity and using it as
+an array, we will most likely quickly overwrite the .movetype field (at 
+offset 8) which will cause quake to puke.  We could solve this problem by
+"allocating" the array at a large enough offset in the entity to avoid
+overwriting anything that the quake engine cares about (150 is large enough)
+and then always index array elements as e[i + %150].  What we would really
+like to be able to do, though, is to somehow offset e itself so that it 
+points to the middle of the entity, or maybe even to a completely different
+part of memory.  For this we use..
+
+3.1 Entity (QuakeC) pointers
+
+qccx provides the & operator to get the address of an entity (referred to as
+a quakeC pointer) and the * operator for dereferencing an entity pointer 
+(under the hood, & is really just a cast from entity to float and * is a cast
+from float to entity.. but it's probably best to think of it as address of and
+dereference as in C).  Integer arithmetic can be used to modify entity 
+pointers.  For example, the following code spawns a new enitity and then sets 
+up an array at an offset of 150 into the entity (that's an offset of 150 
+dwords, which is the same as 600 bytes):
+
+local entity e, array;
+
+e = spawn();
+array = *(&e + %600);
+
+It is a fact that all pointers to spawned entities are positive integers less
+than 2^24, which is why we don't have to use AddInt in the above example.  
+Another useful fact is that &world = 0, so we could create an array at dword
+offset 150 within world without spawning a new entity simply by setting
+array = *%600.
+
+3.2 String pointers
+
+qccx provides the & operator to get the address of a string and the @ operator
+for dereferencing a string pointer.  As with entities, these are really just
+casts between the float and string types, but it is best to think of them
+as address of and dereference operators.  The following example illustrates
+the use of string pointers:
+
+local string s = "This is a string pointer";
+dprint(@(&s + %5), "\n");
+
+Output:  "is a string pointer"
+
+Another useful fact is that for any string s defined in QuakeC, &s is a 
+positive integer less than 2^24, which is why we again didn't have to use
+AddInt.  However, for any other string this is in general *not* true;
+examples include world.mapname, self.netname, and the return values of
+ftos and vtos.  Therefore you *must* use AddInt to manipulate pointers
+to these strings.
+
+Unlike C, different types of pointers to the same piece of data are NOT the
+same.  So, for example, you can't use the * operator on a string pointer and 
+get reasonable results.  To convert a string pointer to a quakeC pointer that
+will allow you to inspect and modify the contents of the string, the integer 
+constant PSTRING_TO_PQUAKEC (defined in internal.qc)  must be added to the 
+pointer.  Simlarly, to convert from a quakeC pointer to a string pointer the
+integer PQUAKEC_TO_PSTRING must be added.  The following code illustrates
+these concepts:
+
+local entity e;
+local string s = "Hi tXXXXhere";
+local float psource, pdest;
+
+e = *%600;
+psource = AddInt(&s, PSTRING_TO_PQUAKEC);
+e[0] = (*psource)[0];
+e[%1] = (*psource)[%2];
+pdest = AddInt(&e, PQUAKEC_TO_PSTRING);
+dprint(@pdest, "\n");
+
+Output:  "Hi there"
+
+3.3 C pointers
+
+If you start hacking around with quake internals, you will come across
+pointers stored in the data structures.  You can read them, but what do you
+do with them?  The answer is that you convert them from C pointers to 
+quakeC pointers by adding the constant PC_TO_PQUAKEC (defined in internal.qc).
+See DumpCL in client.qc for an example of how this is used.  internal.qc
+also defines the constants PC_TO_PSTRING, PQUAKEC_TO_PC and PSTRING_TO_PC, 
+all of which do the obvious thing.
+
+3.4 Raw pointers
+
+When the & operator is applied to an integer, it creates a raw pointer.
+This is a byte index directly into the internal entities array.  It can
+only be used to store data; it cannot be used to read data.  Don't use it.
+I only mention it for completeness and because it is used for efficiency 
+in the integer routines in internal.qc.  In fact, forget you even read this.
+
+3.5 Fun with &
+
+You can also use the & operator on fields and functions.  In each case it is
+really just a cast to a float.  Using it on a field gives you the index of
+the field, so for example self.health and self[&health] are exactly 
+synonymous.  Using it on a function gives you the offset of the function
+from the start of the functions in progs.dat (see the fnstring function in 
+internal.qc).
+
+     /-----\
+4.0  Strings
+     \-----/
+
+4.1 [] operator
+
+The [] operator is provided as a convenience to index into strings.  s[i] is
+exactly the same thing as @(&s + i).  Thus, the usual rules apply: you can
+only use the [] operator if &s is positive (i.e. a string defined in quakeC).
+Note that here i is a byte index, not a dword index.
+
+4.2 Concatenated literals
+
+String literals can be concatenated by placing them consecutively in the code,
+for example "hi " "there" is the same as "hi there".  To include the null 
+terminations, separate the strings by :, e.g. "hi ":"there".  See the hex
+string and its use in internal.qc for an example.
+
+4.3 Escape sequences
+
+The following escape sequences have been added:
+
+\\   - backslash
+\"   - double quote
+\b   - toggle bronze characters
+\[   - gold [ character
+\]   - gold ] character
+\.   - centerdot
+\<   - character 29
+\-   - character 30
+\>   - character 31
+\(   - character 128
+\=   - character 129
+\)   - character 130
+\{n} - character n (0 <= n <= 255)
+
+See ClientKill in client.qc for an example of how to use these.
+
+     /-----------\
+5.0  Other Changes
+     \-----------/
+
+5.1 String Constants
+
+qccx allows you to create string constants by initializing string variables
+in the same way that other variables can be initialized.
+
+5.2 for loops
+
+C style for loops are supported.  The syntax is exactly the same as in C.
+
+5.3 Properly typed vararg functions
+
+When a vararg function is defined, qccx will type check the typed parameters
+each time the function is used.  For example, the declaration for sprint is
+
+void (entity client, string s, ...) sprint = #24;
+
+so when qccx parses the following function call:
+
+sprint(self, s1, s2, s3, s4);
+
+it will type check self and s1, but not s2, s3 or s4.
+
+5.4 Parameter omission optimization
+
+QuakeC uses 8 global variables for parameter passing.  When a function is
+called, the parameters are copied to these global variables.  If two 
+functions in a row are called where (1) one of the parameters is the
+same, and (2) the first function doesn't overwrite these global variables,
+then it is not actually necessary to copy the parameter a second time.
+The # symbol may be used to denote an unchanged parameter that does
+not need to be copied.  See the function "twice" in world.qc for an example.

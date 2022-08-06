@@ -1,0 +1,71 @@
+The Standard Teleporter - a component originated from Steve Fukuda at
+                          The QuakeLab and adapted for qED by
+                          JF Groleau.
+
+The QuakeLab - http://www.palnetquake.com/QuakeLab
+The qED Toolshed - http://www.cam.org/~jfgrol/
+
+TEXTURES USED:
+
+        *teleport for center fill
+        ecop1_1 for surrounding frame
+
+ENTITIES USED:
+
+        info_teleport_destination & trigger_teleport
+
+WHAT TO DO:
+
+        Extract the .qgp file from the archive and place it in the
+        c:\Program Files\qED\Group folder. Once in qED, insert this prefab
+        using the menu item "Group" + "load from library". The origin of this
+        prefab is at the middle center of the teleporter. The position
+        or offset of the inserted group will be referenced to the offset of
+        the currently selected item in the level outline window. The group
+        can then be moved and rotated to suit the map design. Texture
+        alignment will not required after these operations if the original
+        teleporter textures are kept. Relocate the supplied info_teleport_
+        _destination entity and set its angle attribute as required.
+
+FUNCTIONALITY:
+
+        The basic principle is the presence of two entities:
+        trigger_teleport and info_teleport_destination with their respective
+        target and targetname attributes set to the same value. All the rest
+        is really just cosmetics. One detail to note is that the teleporter
+        core brush should not be a child of the trigger_teleport entity
+        because that will render it invisible in the game. In this prefab,
+        it exists as a child of the "construction brushes" group for
+        convenience but it could as well have been a stand-alone brush.
+        This works perfectly and actually saves a brush in the model.
+        Another point to mention is that as the player reappears at the
+        teleporter destination coordinates, he keeps moving forward in the
+        direction of entity angle even he enters the teleporter very slowly.
+        If you want to make the player reappear on a small platform or some
+        otherwise unreachable area, place some kind of obstacle to prevent
+        the player from falling off the very instant he materializes.
+
+OPTIONS:
+
+        Rename, if desired, the target attribute of the trigger_teleport and
+        the matching targetname attribute of the info_teleport_destination.
+        The angle attribute of the info_teleport_destination sets the
+        direction player will face upon exiting the teleporter. Its position
+        sets where in the map the player will reappear (can be anywhere).
+        Set the spawnflags attribute of the trigger_teleport to 1 to make
+        the teleporter work only with players (monsters can still walk through
+        it, though). Setting the spawnflags attributes to 2 is supposed to
+        make the teleporter silent but I nave not been able to make this work.
+        I have no idea why. In any case, try it.
+
+CREDITS:
+
+        Id Software (http://www.idsoftware.com/):
+
+           For Quake, the best first-person game of the known universe. The
+           standard teleporter is an Id original design.
+
+        Steve Fukuda (stevefu@unixg.ubc.ca): 
+
+           The Grand Phooba of the QuakeLab site and original builder of
+           this prefab. Thanks for making my work a whole lot easier, Steve!

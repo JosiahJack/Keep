@@ -361,7 +361,7 @@ void(entity targ) GivePowerEqualizer = { // [FUNCTION]
 	targ.perms = targ.perms | POW_DOUBLE;
 	targ.ammo_nails = AMMO_MAXNAILS; // max out nails ammo
 	if (targ.ammo_lava_nails < (AMMO_MAXLAVANAILS * 0.5)) targ.ammo_lava_nails = AMMO_MAXLAVANAILS * 0.5; // fill lava nails up to half
-	W_SetCurrentAmmo(targ); // if changed current ammo, update it
+	W_SetCurrentAmmo(targ,FALSE); // if changed current ammo, update it
 };
 
 void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
@@ -478,7 +478,7 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 	}
 
 	targ.perms = targ.perms | POW_SHOTTYMAN;
-	W_SetCurrentAmmo(targ); // If changed current ammo, update it.
+	W_SetCurrentAmmo(targ,FALSE); // If changed current ammo, update it.
 };
 
 void(entity targ, entity giver) GivePowerRegeneration = { // [FUNCTION]
@@ -978,7 +978,7 @@ void() ClientPowerups = { // [FUNCTION]
 void() CheckMjolnir = { // [FUNCTION]
     if (self.hammer_finished != 0 && self.hammer_finished < time) {
 		self.hammer_finished = 0;
-		W_SetCurrentAmmo(self);
+		W_SetCurrentAmmo(self,TRUE);
     }
 };
 

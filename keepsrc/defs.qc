@@ -549,7 +549,7 @@ void() pendulum_setuparray;
 entity multi_ent;
 float multi_damage;
 void(entity targ) W_ChangeWeapon;
-void(entity targ) W_SetCurrentAmmo;
+void(entity targ, float resetweaponframe) W_SetCurrentAmmo;
 float(entity targ) W_BestWeapon;
 void() W_WeaponFrame;
 void(float sprite_type, vector org, string expl_sound) SpawnExplosion;
