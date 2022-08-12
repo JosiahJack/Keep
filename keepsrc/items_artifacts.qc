@@ -366,7 +366,7 @@ void() item_artifact_wetsuit = { // [ENTITY], cshifts 0,255,0,20
 	item_setupnoise(SOUND_ARTWETS1);
 	self.noise1 = SOUND_ARTWETS2;
 	self.noise2 = SOUND_ARTWETS3;
-	self.noise3 = SOUND_ARTWETS3B;
+	self.noise3 = "ad171/items/wetsuit3out.wav";
 	precache_sound(self.noise1);
 	precache_sound(self.noise2);
 	precache_sound(self.noise3);

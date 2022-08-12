@@ -208,7 +208,7 @@ void() octa_die = {
 };
 
 void() monster_octa_precache = {
-	precache_model("progs/madfox/mon_octa.mdl");
+	precache_model("progs/madfox/mon_octa_extra.mdl");
 	precache_model("progs/madfox/wink.spr");
     precache_model("progs/custents/beamhit.spr");
 	precache_model("progs/w_spike.mdl");
@@ -228,7 +228,7 @@ void() monster_octa = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/madfox/mon_octa.mdl";
+	self.mdl = "progs/madfox/mon_octa_extra.mdl";
 	self.idle_sound = "tronyn/mon_seahorse_swim1.wav";
 	self.idle_sound = "tronyn/mon_seahorse_swim1.wav";
 	self.idle_soundcom = "ad171/ogre/ogrefish_out.wav";

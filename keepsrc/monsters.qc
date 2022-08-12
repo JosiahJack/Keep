@@ -1000,7 +1000,6 @@ void() monster_bbox =  {
 
 float(string mname) monster_checkminion = {
 	if (mname == "" || mname == "") return FALSE;
-	dprint("Precached minion: "); dprint(mname);
 	precache_monster(mname);
 	if (!self.minion_spawn_time || !(self.minion_spawn_time & MONANIM_SPECIFIC)) self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIFIC;
 	if (!self.minion_spawn_chance) self.minion_spawn_chance = 1; // Default to 100% spawn chance for custom minions
@@ -1122,7 +1121,7 @@ void() monster_start = {
 
 		self.movetype = MOVETYPE_NONE;
 		self.solid = SOLID_NOT;
-		setmodel(self,MODEL_BROKEN); // Display debug diamonds
+		setmodel(self,"progs/q15/misc_broken.mdl"); // Display debug diamonds
 		if (self.nomonstercount == 1) self.skin = SPNMARK_GREEN;
 		else if (self.delaymonstercount == 1) self.skin = SPNMARK_GREEN;
 		else self.skin = SPNMARK_BLUE;

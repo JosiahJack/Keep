@@ -393,7 +393,7 @@ void() Gyro_Run = { // [FUNCTION]
 		Gyro_RunPhysics();
 		if (gyro_displayintro) {
 			if ((time > 1.6) && (time < 2.4)) {
-				dprint("Gyro 2.1a (April 2007) by Matt...updated to 2.2a (April 2021) by Qmaster is running\nTickrate (ms): ");
+				dprint("Gyro 2.1a (April 2007) by Matt is running...updated to 2.2a (April 2021) by Qmaster\nTickrate (ms): ");
 				dprint(ftos(GYRO_TICKRATE * 1000));
 				dprint("\n");
 				gyro_displayintro = FALSE;

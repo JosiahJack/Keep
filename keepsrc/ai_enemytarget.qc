@@ -179,7 +179,7 @@ float(entity targ, float zoffset, float rndtimer) SUB_setupEnemyTarget = {
 		self.enemytarget.owner = self;
 		self.enemytarget.classtype = CT_ENEMYTARGET;
 		if (developer > 0 && !query_configflag(SVR_DEVHELPER)) { // Show enemytarget system in devmode ONLY (dev helper)
-			self.enemytarget.mdl = MODEL_BROKEN;
+			self.enemytarget.mdl = "progs/q15/misc_broken.mdl";
 			self.enemytarget.skin = SPNMARK_PURPLE;
 			setmodel(self.enemytarget, self.enemytarget.mdl);
 		}

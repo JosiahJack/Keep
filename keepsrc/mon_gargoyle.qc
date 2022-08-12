@@ -339,7 +339,6 @@ void() garg_die = {
 void() setup_gargoyle;
 
 void() monster_gargoyle_precache = {
-	dprint("monster_gargoyle_precache called\n");
 	precache_model("progs/ad171/mon_gargoyle.mdl");
 	precache_model("progs/mon_impling.mdl");
 	precache_model("progs/ad171/h_gargoyle.mdl");

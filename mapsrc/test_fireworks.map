@@ -6,7 +6,7 @@
 "classname" "worldspawn"
 "_tb_mod" "keep"
 "_tb_def" "external:/home/qmaster/QUAKE/keep/Keep.fgd"
-"wad" "/home/qmaster/QUAKE/Other/Compiling/Realm0_Medieval.wad"
+"wad" "../../Other/Compiling/quake.wad"
 // brush 0
 {
 ( -2080 16 -32 ) ( -2080 17 -32 ) ( -2080 16 -31 ) ground1_1 [ 0 -1 0 16 ] [ 0 0 -1 -16 ] 0 1 1
@@ -346,4 +346,30 @@
 "origin" "-1624 48 152"
 "targetname" "lavaburst1_reset"
 "target" "lavaburst1"
+}
+// entity 32
+{
+"classname" "misc_model"
+"origin" "-1504 -368 16"
+"mdl" "progs/bgfire.mdl"
+"__show_skin" "0"
+"angle" "180"
+"skinloop" "-1"
+"skinstart" "0"
+"pos2" "0 99 -1"
+"speed" "0.05"
+"alphastart" "0.2"
+}
+// entity 33
+{
+"classname" "misc_model"
+"origin" "-1504 -418 16"
+"mdl" "progs/bgfire.mdl"
+"__show_skin" "0"
+"angle" "180"
+"skinloop" "-1"
+"skinstart" "0"
+"pos2" "0 99 -1"
+"speed" "0.01"
+"alphastart" "0.2"
 }

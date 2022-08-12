@@ -409,7 +409,7 @@ void() func_train = { // [ENTITY]
 		setmodel(self, "");						// no longer need bmodel
 		setorigin(self, self.finaldest);		// Move entity to world origin
 		if (self.mdl) precache_model(self.mdl);	// Any custom model defined?
-		else self.mdl = MODEL_BROKEN;			// Use default empty model
+		else self.mdl = "progs/q15/misc_broken.mdl"; // Use default empty model
 		self.bsporigin = FALSE;					// Not bmodel anymore
 		if (self.faceangle < 0) self.faceangle = TRUE;	// fix errors
 	} else {

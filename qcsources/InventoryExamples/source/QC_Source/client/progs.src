@@ -1,0 +1,15 @@
+../../csprogs.dat
+
+defs.c
+
+csqc_constants.h
+csqc_builtins.h
+vars.h
+view.c
+
+../shared/inv_defs.qc
+../shared/functions.qc
+
+cl_inventory/cl_inventory.qc
+
+main.c

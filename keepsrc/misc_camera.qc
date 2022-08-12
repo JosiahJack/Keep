@@ -390,7 +390,7 @@ void() camera_controller_think = { // [FUNCTION]
 				// Found a control AND next camera entity?  Must find both of these because of the math formula.
 				if (self.enemy && self.oldenemy) {
 					if (developer > 0) { // Show movement tracking entity
-						setmodel(cam_track, MODEL_BROKEN); // Use the yellow diamond model
+						setmodel(cam_track, "progs/q15/misc_broken.mdl"); // Use the yellow diamond model
 						setsize(cam_track, VEC_ORIGIN, VEC_ORIGIN);
 					}
 
@@ -421,7 +421,7 @@ void() camera_controller_think = { // [FUNCTION]
 				self.enemy = find(world, targetname, cam_focus.sighttarget); // search for target entity (info_target)
 				if (self.enemy) { // Found a target?
 					if (developer > 0) { // Show movement tracking entity
-						setmodel(cam_track, MODEL_BROKEN); // Use the yellow diamond model
+						setmodel(cam_track, "progs/q15/misc_broken.mdl"); // Use the yellow diamond model
 						setsize(cam_track, VEC_ORIGIN, VEC_ORIGIN);
 					}
 

@@ -1,0 +1,20 @@
+// CSQC_UpdateView - Called every rendered frame on the client.  Useful for HUD drawing operations.
+void CSQC_UpdateView(void)
+{
+	// ALWAYS Clear Current Scene First
+	R_ClearScene();
+
+	// Assign Standard Viewflags
+		// Draw the World (and sky)
+		R_SetView(VF_DRAWWORLD, 1);
+		// Draw the Crosshair
+		R_SetView(VF_DRAWCROSSHAIR, 1);
+		// Draw the Engine Status Bar (the default Quake HUD)
+		R_SetView(VF_DRAWENGINESBAR, 0);
+
+	// Setup Entities to be Rendered (include all base types; normal, engine and viewmodels)
+	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
+	
+	// Render the Scene
+	R_RenderScene();
+}

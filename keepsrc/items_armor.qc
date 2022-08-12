@@ -231,6 +231,8 @@ void() item_armor_exotic = { // [ENTITY]
 		if (!self.part_active) self.part_active = PARTICLE_STYLE_BACKPACK;
 	} else if (self.count == 3) { // Power
 		item_setupmodel("progs/drake/armor.mdl",5);
+		precache_sound("zerstorer/me/me_soff.wav");
+		precache_sound("zerstorer/me/me_son.wav");
 		self.classtype = CT_ARMORONYXPOWER;
 		self.perms = POW_ARMORONYXPOWER;
 		if (self.netname == "") self.netname = "Power Armor";

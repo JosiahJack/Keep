@@ -464,21 +464,17 @@ float(entity targ) SUB_DropToFloor = { // [FUNCTION]
 // Checks all effects and states that would render targ invisible.  Not to be
 // confused with visible() which does traceline checks.
 float(entity targ) Invisible = { // [FUNCTION]
-	if (targ == world) return FALSE; // We shouldn't want to see the world.
+	if (!targ) return FALSE;
 	if (targ.flags & FL_NOTARGET) return TRUE;
-	if (targ.invisible_finished >= time) return TRUE;
 	if (targ.items & IT_INVISIBILITY) return TRUE;
-	if (targ.alpha != 0 && targ.alpha < 0.1) return TRUE;
-	if (targ.modelindex == 0) return TRUE;
-	if (targ.estate == ESTATE_OFF) return TRUE;
-	if (targ.model == "") return TRUE;
+	if (targ.invisible_finished > time) return TRUE;
 	return FALSE;
 };
 
 float(entity targ) Indestructable = { // [FUNCTION]
 	if (targ.flags & FL_GODMODE) return TRUE;
-	if (targ.invincible_finished >= time) return TRUE;
 	if (targ.takedamage <= DAMAGE_NO) return TRUE;
+	if (targ.invincible_finished >= time) return TRUE;
 	return FALSE;
 };
 

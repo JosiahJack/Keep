@@ -323,14 +323,14 @@ void() monster_turret = {
 	self.mdl = "progs/custents/turret.mdl";
 	self.headmdl = "progs/custents/h_turret.mdl";
 	self.gib1mdl = "progs/custents/turetgib.mdl";
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	setmodel(self, self.mdl);
+	self.solid = SOLID_NOT;			// No interaction with world
+	self.movetype = MOVETYPE_NONE;	// Static item, no movement
+	self.bbmins = '-12 -12 -6';	// Special Size
+	self.bbmaxs = '12 12 12';
+	self.bboxtype = BBOX_CUSTOM;	// Custom size
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
-	setsize (self, '-12 -12 -6', '12 12 12');
 	if (self.health < 1) self.health = 100;
 	self.max_health = self.health;
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
 	self.currentammo = TRUE;
 	if (self.spawnflags & TUR_RETRACT) {

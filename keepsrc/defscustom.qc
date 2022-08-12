@@ -1371,7 +1371,6 @@ float MISCBOOK_RED = 3;			// Red Cover
 
 string SOUND_EMPTY = "misc/null.wav";			// No sound
 string MODEL_EMPTY = "progs/ad171/misc_empty.mdl";	// Empty Model (1 point)
-string MODEL_BROKEN = "progs/q15/misc_broken.mdl";	// Model error. Quake 1.5 added lots more skins
 string MODEL_IMPACT = "progs/ad171/misc_impact.mdl";	// Impact Model Marker
 string MODEL_CORNER1 = "progs/ad171/misc_corner1.mdl";// Path corner helper (Forward)
 string MODEL_CORNER2 = "progs/ad171/misc_corner2.mdl";// Path corner helper (Backward)
@@ -1576,7 +1575,6 @@ string SOUND_ARTSUIT3 = "items/suit3.wav";			// Active - Added and created by Qm
 string SOUND_ARTWETS1 = "hipnotic/items/weton.wav";		// Pick up
 string SOUND_ARTWETS2 = "hipnotic/items/wetoff.wav";		// Fading
 string SOUND_ARTWETS3 = "hipnotic/items/wetsuit.wav"; // In Water
-string SOUND_ARTWETS3B = "ad171/items/wetsuit3out.wav";	// Out Water
 string SOUND_ARTPENT1 = "items/protect.wav";		// Pick up
 string SOUND_ARTPENT2 = "items/protect2.wav";		// Fading
 string SOUND_ARTPENT3 = "items/protect3.wav";		// Active

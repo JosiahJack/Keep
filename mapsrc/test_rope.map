@@ -4,9 +4,9 @@
 {
 "mapversion" "220"
 "classname" "worldspawn"
-"_tb_def" "external:C:/Users/Josiah/Dropbox/QUAKE/Other/Compiling/Keep.fgd"
+"_tb_def" "external:../Keep.fgd"
 "_tb_mod" "keep"
-"wad" "C:/Users/Josiah/Dropbox/QUAKE/Other/Compiling/mjolnirbgs.wad;Other/Compiling/quake.wad"
+"wad" "../../Other/Compiling/quake.wad"
 "useold_axe" "1"
 "copperoptions" "8192"
 "take_weapons" "9999999"

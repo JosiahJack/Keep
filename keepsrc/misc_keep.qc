@@ -427,7 +427,6 @@ void() move_rope_spawn = {
 	self.attachment = find(world,targetname,self.target);
 	if (!self.attachment) self.attachment = find(world,targetname,self.target);
 	if (self.attachment && self.target != "") {
-		dprint("Spawning some ropes!\n");
 		btype = BEAM_NORMAL;
 		if (self.spawnflags & ENT_SPNSTATIC) btype = BEAM_STATIC; 
 		QC_ParseBeamGeneric(0,self.mdl,self.skin,self,self.origin,self.attachment.origin,self.delay,btype,self.attachment);

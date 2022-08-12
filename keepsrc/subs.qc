@@ -111,7 +111,7 @@ float() check_bmodel_keys = { // [FUNCTION]
 		self.solid = SOLID_NOT;				// no world interaction
 		
 		// If developer active show yellow diamond
-		if (developer > 0) setmodel(self, MODEL_BROKEN);
+		if (developer > 0) setmodel(self, "progs/q15/misc_broken.mdl");
 		else setmodel(self,"");
 		
 		// Make sure no world interaction

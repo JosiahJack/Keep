@@ -427,7 +427,7 @@ void() display_configflag = {
 	dprint("\n\b[CONFIG]\b MOD Settings ("); 
 	if (configflag & SVR_LIVE) dprint(ftos(configflag-SVR_LIVE));
 	else dprint(ftos(configflag));
-	if (configflag & SVR_LIVE) dprint(") L\n");
+	if (configflag & SVR_LIVE) dprint(") LIVE\n");
 	else dprint(")\n");
 	dprint("--------------------------------------\n");
 	// Particle system
@@ -1314,7 +1314,8 @@ void() CheatCommand = {
 	self.perms = self.perms | IT_AIRGUN; // | IT_CHAINSAW | IT_BLASTER; // Left these commented out since they aren't always applicable to every map -Qmaster
 	self.weapon = IT2_LASER_CANNON;
 	self.armorvalue = 150;
-	sound(self,CHAN_AUTO,"rogue/misc/flagcap.wav",1,ATTN_NORM);
+	sound(self,CHAN_AUTO,"misc/talk.wav",1,ATTN_NORM);
+	centerprint(self,"Cheat Command!");
 	W_SetCurrentAmmo(self,TRUE);
 };
 

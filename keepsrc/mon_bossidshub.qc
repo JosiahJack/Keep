@@ -160,7 +160,7 @@ void() finale_4 = {
 	self.movelast = spawn();
 	self.movelast.oldorigin = self.origin - '0 0 -300';
 	setorigin(self.movelast, self.movelast.oldorigin);
-	setmodel(self.movelast, MODEL_BROKEN);
+	setmodel(self.movelast, "progs/q15/misc_broken.mdl");
 	self.enemy = self.movelast;
 
 	// loop through old one x/y/z space and throw tons of meat chunks	

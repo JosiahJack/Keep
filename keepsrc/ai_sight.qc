@@ -92,7 +92,7 @@ float(entity source, entity targ, vector s_offset, vector t_offset, float nomons
 	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will
 	// draw a diamond model where the AI is looking.
 	if ((targ.debuglvl || source.debuglvl) && developer > 1) {
-		if (!debugent1) debugent1 = spawn_devmarker(targ.origin,MODEL_BROKEN);
+		if (!debugent1) debugent1 = spawn_devmarker(targ.origin,"progs/q15/misc_broken.mdl");
 		debugspot1 = vectoangles(source.origin - trace_endpos);
 		makevectors(debugspot1);
 		debugspot2 = trace_endpos + (v_up * -16) + (v_forward * 50);
@@ -161,7 +161,7 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 	else if (trace_ent != world) tr_leftmon = 1;
 
 	if (self.debuglvl && developer > 1) {
-		if (!debugent2) debugent2 = spawn_devmarker(spot3,MODEL_BROKEN);
+		if (!debugent2) debugent2 = spawn_devmarker(spot3,"progs/q15/misc_broken.mdl");
 		setorigin(debugent2, trace_endpos);
 	}
 		
@@ -173,7 +173,7 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 	else if (trace_ent != world) tr_rightmon = 1;
 
 	if (self.debuglvl && developer > 1) {
-		if (!debugent3) debugent3 = spawn_devmarker(spot3,MODEL_BROKEN);
+		if (!debugent3) debugent3 = spawn_devmarker(spot3,"progs/q15/misc_broken.mdl");
 		setorigin(debugent3, trace_endpos);
 	}
 
@@ -500,19 +500,17 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 
 		if ((head.flags & FLx_CREATURE)) {
 			if (head.health > 0) {
-				if (!Invisible(head)) {
-					if (findopposing) {
-						if (!Align_Match(self,head)) {
-							if (head.alignment != NEUTRAL) {
+				if (head.alignment != NEUTRAL) {
+					if (!Invisible(head)) {
+						if (findopposing) {
+							if (!Align_Match(self,head)) {
 								// Nested visible() to improve performance by
 								// not checking visibility of dead potential
 								// enemies.
 								if (visible(head)) return head; 
 							}
-						}
-					} else {
-						if (Align_Match(self,head)) {
-							if (head.alignment != NEUTRAL) {
+						} else {
+							if (Align_Match(self,head)) {
 								if (visible(head)) return head;
 							}
 						}

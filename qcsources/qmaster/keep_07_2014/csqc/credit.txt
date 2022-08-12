@@ -1,0 +1,1 @@
+Credits go to Dresk for putting this CSQC scratch source together.

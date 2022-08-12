@@ -1007,8 +1007,7 @@ void() func_bob = { // [ENTITY]
 };
 
 void() misc_bob = { // [ENTITY], Point version.
-	if (self.mdl == "") self.mdl = MODEL_BROKEN;
+	if (self.mdl == "") self.mdl = "progs/q15/misc_broken.mdl";
 	precache_model(self.mdl);
-	precache_model(MODEL_BROKEN);
 	func_bob();
 };

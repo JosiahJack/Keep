@@ -91,7 +91,6 @@ float VULN_UNDEAD = 3;
 
 float(entity decider, entity targ) Align_Match = { // [FUNCTION]
 	if (!decider || !targ) return FALSE; // Can't match world.
-    if (decider == targ) return TRUE; // we are ourself
 	return (decider.alignment == targ.alignment);
 };
 

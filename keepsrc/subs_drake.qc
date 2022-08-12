@@ -319,7 +319,7 @@ entity temp_goal;
 void() InitTempGoal = {
     temp_goal = spawn();
     temp_goal.classname = "goal";
-    dprint("\b[SETUP]\b Drake temporary dragon goal is now setup\n");
+    dprint("\b[SETUP]\b Drake temporary movement goal is now setup\n");
 };
 
 // From Drake

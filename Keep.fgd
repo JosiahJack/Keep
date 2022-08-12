@@ -14,7 +14,7 @@
 ]
 @baseclass = Targetname [ targetname(target_source) : "TargetName" : : "Name of entity, used for triggering/targetting other entities" ]
 @baseclass = Target [ target(target_destination) : "Target" : : "Targets to affect" ]
-@baseclass = Target2 [ target(target_destination) : "Target 2" : : "More targets to affect" ]
+@baseclass = Target2 [ target2(target_destination) : "Target 2" : : "More targets to affect" ]
 
 // WORLDSPAWN
 @SolidClass = worldspawn : "World entity" [
@@ -1193,7 +1193,7 @@
 		5 : "Spirit"
 	]
 	targetname(target_source) : "Name (required)"
-	target(target_source) : "Angry target, only if respects were payed before desecration"
+	target(target_destination) : "Angry target, only if respects were payed before desecration"
 	message(string) : "god Name(def=Cthulhu)"
 	ckeyname1(string) : "Optional text to add after respect message"
 	ckeyname2(string) : "Optional text to add after desecration message"
@@ -1250,8 +1250,8 @@
 @PointClass base(Weapon) studio("progs/ad171/g_nail2.mdl") = weapon_supernailgun : "Perforator" []
 @PointClass base(Weapon) studio("progs/g_rock.mdl") = weapon_grenadelauncher : "Grenade launcher" []
 @PointClass base(Weapon) studio("progs/g_rock2.mdl") = weapon_rocketlauncher : "Rocket launcher" []
-@PointClass base(Weapon) studio("progs/g_rock.mdl") skin(2) = weapon_multi_grenade : "Multi-Grenade launcher" []
-@PointClass base(Weapon) studio("progs/g_rock2.mdl") skin(1) = weapon_multi_rocket : "Multi-Rocket launcher" []
+@PointClass base(Weapon) model({"path": "progs/g_rock.mdl","skin": 2,"frame": 0}) = weapon_multi_grenade : "Multi-Grenade launcher" []
+@PointClass base(Weapon) model({"path": "progs/g_rock2.mdl","skin": 1,"frame": 0}) = weapon_multi_rocket : "Multi-Rocket launcher" []
 @PointClass base(Weapon) studio("progs/ad171/g_light.mdl") = weapon_lightning : "Thunderbolt" []
 @PointClass base(Weapon) studio("progs/g_crossbow.mdl") = weapon_crossbow : "Crossbow" []
 @PointClass base(Weapon) studio("progs/ad171/g_shot1.mdl") = weapon_shotgun : "Sawn-off Shotgun" []
@@ -1260,7 +1260,7 @@
 @PointClass base(Weapon) studio("progs/ad171/g_plasma.mdl") = weapon_upgrade_lg : "Plasma Gun" []
 @PointClass base(Weapon) studio("progs/g_light.mdl") = weapon_plasmalightning : "Plasma Gun" []
 @PointClass base(Weapon) studio("progs/hipnotic/g_laserg.mdl") = weapon_laser_gun : "Laser Cannon" []
-@PointClass base(Weapon) studio("progs/g_rock.mdl") skin(1) = weapon_proximity_gun : "Proximity Grenade launcher" []
+@PointClass base(Weapon) model({"path": "progs/g_rock.mdl","skin": 1,"frame": 0}) = weapon_proximity_gun : "Proximity Grenade launcher" []
 @PointClass base(Weapon) studio("progs/hipnotic/g_hammer.mdl") = weapon_mjolnir : "Mjolnir's Hammer" []
 @PointClass base(Weapon) studio("progs/q15/g_saw.mdl") = weapon_chainsaw : "Chainsaw" [
 	spawnflags(Flags) = [
@@ -2029,7 +2029,6 @@ color(128 0 128) = TrigBasic [
 		 0 : "Always reset"
 	]
 	speed(integer) : "Speed after teleport (def=300)"
-	target(string) : "Points to info_teleport_destination entity"
 	target2(string) : "Can be used to fire additional targets"
 	volume(integer) : "Teleport hum sound (def=0.5)"
 	noise(sound) : "Custom sound to play when active (must be looped, def=hum1.wav)"
@@ -3790,22 +3789,18 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @baseclass = LightOff [ spawnflags(flags) = [ 1 : "Start Off" : 0 ] ]
 
 //----------------------------------------------------------------------
-@PointClass base(LightPoint,LightOff) iconsprite("sprites/light.spr") = 
-	light : "Invisible lightsource" []
-@PointClass base(LightPoint,LightOff) iconsprite("sprites/light.spr") = 
-	light_fluoro : "Fluorescent light" [
+@PointClass base(LightPoint,LightOff) = light : "Invisible lightsource" []
+@PointClass base(LightPoint,LightOff) = light_fluoro : "Fluorescent light" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
 	]
 ]
-@PointClass base(LightPoint) iconsprite("sprites/light.spr") = 
-	light_fluorospark : "Sparking fluorescent light" [
+@PointClass base(LightPoint) = light_fluorospark : "Sparking fluorescent light" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
 	]
 ]
-@PointClass base(LightPoint,LightOff) sprite("progs/s_light.spr") = 
-	light_globe : "Globe light" [
+@PointClass base(LightPoint,LightOff) = light_globe : "Globe light" [
 	spawnflags(flags) = [
 		4 : "No Static" : 0
 	]
@@ -4134,10 +4129,10 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	gib2soundx(string) : "Override random monster classname 7 of 13 (e.g. monster_dog)"
 	gib3soundx(string) : "Override random monster classname 8 of 13 (e.g. monster_dog)"
 	break_template1(string) : "Override random monster classname 9 of 13 (e.g. monster_dog)"
-	break_template1(string) : "Override random monster classname 10 of 13 (e.g. monster_dog)"
-	break_template1(string) : "Override random monster classname 11 of 13 (e.g. monster_dog)"
-	break_template1(string) : "Override random monster classname 12 of 13 (e.g. monster_dog)"
-	break_template1(string) : "Override random monster classname 13 of 13 (e.g. monster_dog)"
+	break_template2(string) : "Override random monster classname 10 of 13 (e.g. monster_dog)"
+	break_template3(string) : "Override random monster classname 11 of 13 (e.g. monster_dog)"
+	break_template4(string) : "Override random monster classname 12 of 13 (e.g. monster_dog)"
+	break_template5(string) : "Override random monster classname 13 of 13 (e.g. monster_dog)"
 ]
 
 @PointClass base(MonShort,MonsterFamilies,RandomSpawnsStrings) = func_spawn_small : "Monster Spawner" [
@@ -4483,14 +4478,14 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ]
 
 @PointClass base(MonArmagon) studio("progs/hipnotic/armabody.mdl") = monster_armagon : "Armagon" []
-@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(0) = monster_army : "Grunt" []
+@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") = monster_army : "Grunt" []
 @PointClass base(MonTall) studio("progs/mon_axeman.mdl") = monster_axeman : "Axe Knight" []
 @PointClass base(MonShort) studio("progs/lunaran/axegrunt.mdl") = monster_axegrunt : "Axe Solider" []
 @PointClass base(MonShort) studio("progs/kinn/sgrunt.mdl") = monster_super_grunt : "Super Solider" []
-@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(4) = monster_army_rocket : "Rocket Soldier" []
-@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(6) = monster_army_grenade : "Grenade Soldier" []
-@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(8) = monster_army_plasma : "Plasma Soldier" []
-@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(10) = monster_army_spike : "Nail Soldier" [
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_soldier.mdl","skin": 4,"frame": 0}) = monster_army_rocket : "Rocket Soldier" []
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_soldier.mdl","skin": 6,"frame": 0}) = monster_army_grenade : "Grenade Soldier" []
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_soldier.mdl","skin": 8,"frame": 0}) = monster_army_plasma : "Plasma Soldier" []
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_soldier.mdl","skin":10,"frame": 0}) = monster_army_spike : "Nail Soldier" [
 	spawnflags(Flags) = [
 		8192 : "Lava Nails" : 0
 	]
@@ -4503,8 +4498,8 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		8192 : "Lava Nails" : 0
 	]
 ]
-@PointClass base(MonShort) studio("progs/drake/soldier.mdl") skin(4) = monster_army_cyborg : "Soldier" []
-@PointClass base(MonTiny) studio("progs/hipnotic/mon_spikmine.mdl") skin(8) = monster_spikemine : "Spike Mine" []
+@PointClass base(MonShort) model({"path": "progs/drake/soldier.mdl","skin": 4,"frame": 0}) = monster_army_cyborg : "Soldier" []
+@PointClass base(MonTiny) studio("progs/hipnotic/mon_spikmine.mdl") = monster_spikemine : "Spike Mine" []
 @PointClass base(MonFlat) studio("progs/hipnotic/mon_scor.mdl") = monster_scourge : "Centroid" [
 	spawnflags(Flags) = [
 		8192 : "Lava Nails" : 0
@@ -4525,7 +4520,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	poisonous(integer) : "Poison attack+skin" : : "Change skin + poison dmg"
 ]
 @PointClass base(MonManticore) studio("progs/madfox/mon_manticore.mdl") = monster_manticore : "Manticore" []
-@PointClass base(MonManticore) studio("progs/madfox/mon_manticore.mdl") skin(1) = monster_lichfiend : "Lich Fiend" []
+@PointClass base(MonManticore) model({"path": "progs/madfox/mon_manticore.mdl","skin": 1,"frame": 0}) = monster_lichfiend : "Lich Fiend" []
 @PointClass base(MonDog,JumpingMon) studio("progs/mon_dog.mdl") = monster_dog : "Nasty Doggie" []
 @PointClass base(MonFlat,JumpingMon) studio("progs/hipnotic/grem.mdl") = monster_gremlin : "Gremlin" []
 @PointClass base(MonTiny) studio("progs/ad171/mon_eel.mdl") = monster_eel : "Eel" [
@@ -4565,22 +4560,22 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
 ]
 
-@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(0) = monster_enforcer : "Enforcer" [
+@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") = monster_enforcer : "Enforcer" [
 	spawnflags(flags) = [ 
 		2 : "Mega" : 0
 		4 : "Ultra" : 0
 	]
 ]
-@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(4) = monster_defender : "Defender" []
-@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(6) = monster_eliminator : "Eliminator" [
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_enforcer.mdl","skin": 4,"frame": 0}) = monster_defender : "Defender" []
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_enforcer.mdl","skin": 6,"frame": 0}) = monster_eliminator : "Eliminator" [
 	attack_sniper(integer) : "Unlimited ATTACK Range"
 ]
 
-@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(15) = monster_commando : "Commando" [
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_enforcer.mdl","skin": 15,"frame": 0}) = monster_commando : "Commando" [
 	attack_sniper(integer) : "Unlimited ATTACK Range"
 ]
 
-@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(13) = monster_gunner: "Chaingunner" []
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_enforcer.mdl","skin": 13,"frame": 0}) = monster_gunner: "Chaingunner" []
 
 @PointClass base(MonTall) studio("progs/ad171/mon_fumigator.mdl") = monster_fumigator : "Fumigator" []
 @PointClass base(MonTall) studio("progs/ad171/mon_pyro.mdl") = monster_pyro : "Pyro" []
@@ -4630,7 +4625,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	pos2(string) : "XYZ lightning random" : : "uses v_forward/v_right/v_up"
 	pos3(string) : "Animation frame set" : : "Start/Finish/Direction"
 ]
-@PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") skin(3) = monster_hell_knight_champion : "Champion knight" [
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_hknight.mdl","skin": 3,"frame": 0}) = monster_hell_knight_champion : "Champion knight" [
 	skin(integer) : "Skin (def=3)"
 ]
 @PointClass base(MonTall) studio("progs/lieutenant/hknight.mdl") = monster_hell_knight_enforcer : "Saber Enforcer" []
@@ -4648,7 +4643,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ]
 
 @PointClass base(MonTall) studio("progs/ad171/mon_dknight.mdl") = monster_dknight : "Death Knight" []
-@PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") skin(7) = monster_death_lord : "Death Lord" []
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_hknight.mdl","skin": 7,"frame": 0}) = monster_death_lord : "Death Lord" []
 @PointClass base(MonTall,JumpingMon) studio("progs/ad171/mon_dfury.mdl") = monster_dfury : "Fury Knight" []
 @PointClass base(MonTall) studio("progs/ad171/mon_dsergeant.mdl") = monster_dsergeant : "Sergeant Knight" []
 
@@ -4684,8 +4679,8 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	] 		
 ]     
 
-@PointClass base(MonWide) studio("progs/ogre.mdl") skin(1) = monster_ogre_multi : "Ogre Multi-Grenade" []
-@PointClass base(MonWide) studio("progs/ogre.mdl") skin(1) = monster_ogre_flak : "Flak Ogre" [
+@PointClass base(MonWide) model({"path": "progs/ad171/mon_ogre.mdl","skin": 3,"frame": 0}) = monster_ogre_multi : "Ogre Multi-Grenade" []
+@PointClass base(MonWide) model({"path": "progs/ad171/mon_ogre.mdl","skin": 1,"frame": 0}) = monster_ogre_flak : "Flak Ogre" [
 	spawnflags(flags) = [
 		4 : "Lava Flak" : 0
 	] 
@@ -4750,7 +4745,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	]
 ]
 
-@PointClass base(MonMassive) studio("progs/drake/shambler.mdl") skin(1) = monster_shamvile : "Sha'Vile" [
+@PointClass base(MonMassive) model({"path": "progs/drake/shambler.mdl","skin": 1,"frame": 0}) = monster_shamvile : "Sha'Vile" [
 	attack_sniper(integer) : "Unlimited ATTACK Range"
 	lip(choices) : "Allow Reviving" = [
 		0 : "Revives Dead Friends"
@@ -4797,11 +4792,11 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass base(MonTall) studio("progs/qmaster/mon_tarbaby.mdl") = monster_tarbaby : "Tarbaby"
 [ spawnflags(flags) = [ 4 : "Jump Less" : 0 ] ]
 
-@PointClass base(MonTall) studio("progs/qmaster/mon_tarbaby.mdl") skin(1) = monster_tarbaby_mitosis : "Self-Replicating Tarbaby"
+@PointClass base(MonTall) model({"path": "progs/qmaster/mon_tarbaby.mdl","skin": 1,"frame": 0}) = monster_tarbaby_mitosis : "Self-Replicating Tarbaby"
 [ spawnflags(flags) = [ 4 : "Jump Less" : 0 ] ]
 
 @PointClass base(MonWideFlat) studio("progs/drake/vomitus.mdl") = monster_vomitus : "Vomitus" []
-@PointClass base(MonWideFlat) studio("progs/drake/vomitus.mdl") skin(1) = monster_meatwad : "Vomitus Meatwad" []
+@PointClass base(MonWideFlat) model({"path": "progs/drake/vomitus.mdl","skin": 1,"frame": 0}) = monster_meatwad : "Vomitus Meatwad" []
 
 //----------------------------------------------------------------------
 @PointClass base(MonTall) studio("progs/wizard.mdl") = monster_wizard : "Wizard"
@@ -4826,7 +4821,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		8192 : "No Fire Debuff" : 0
 	]
 ]
-@PointClass base(MonWide) studio("progs/q15/reiver.mdl") skin(0) = monster_reiver : "Gorram Reiver" []
+@PointClass base(MonWide) studio("progs/q15/reiver.mdl") = monster_reiver : "Gorram Reiver" []
 
 @PointClass base(MonTall) studio("progs/ad171/mon_skullwiz.mdl") = monster_skullwiz : "Skull Wizard"
 [ spawnflags(flags) = [ 
@@ -4856,9 +4851,9 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	]
 ]
 
-@PointClass base(MonShort) studio("progs/madfox/mon_zerstorer.mdl") skin(6) = monster_zerstorer : "Zerstorer" []
+@PointClass base(MonShort) studio("progs/madfox/mon_zerstorer.mdl") = monster_zerstorer : "Zerstorer" []
 
-@PointClass base(MonShort) studio("progs/ad171/mon_zombie.mdl") skin(6) = monster_zombiep : "Poison Zombie"
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_zombie.mdl","skin": 6,"frame": 0}) = monster_zombiep : "Poison Zombie"
 [ spawnflags(flags) = [ 4 : "On Floor" : 0 ] ]
 @PointClass base(MonShort,JumpingMon) studio("progs/ad171/mon_zombiek.mdl") = monster_zombiek : "Zombie Knight"
 [ spawnflags(flags) = [ 4 : "On Floor" : 0 ] 
@@ -5014,7 +5009,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	tethertimer(integer):"Tether Timer"
 ]
 
-@PointClass size(-32 -32 -24, 32 32 128) studio("progs/ad171/mon_bosseidolon.mdl") skin(1) = monster_eidolon : "Sculptor" [
+@PointClass size(-32 -32 -24, 32 32 128) model({"path": "progs/ad171/mon_bosseidolon.mdl","skin": 1,"frame": 0}) = monster_eidolon : "Sculptor" [
 	targetname(string) : "monster / trigger name"
 	target(string) : "Wave Final trigger"
 	noise1(string) : "Wave 1 trigger ent"
@@ -5114,12 +5109,12 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/bandit.mdl") = monster_bandit : "Bandit" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/rebel.mdl") = monster_rebel : "Rebel" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/archer.mdl") = monster_archer : "Archer" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/archer.mdl") skin(1) = monster_archer_lord : "Archer Lord" []
-@PointClass base(MonDog) studio("progs/mon_dog.mdl") skin(3) = monster_hell_hound : "Hell hound" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(2) = monster_hell_lord : "Hell Lord" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(3) = monster_hkboss : "Boss Knight" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(4) = monster_bane : "Bane" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(6) = monster_dark_lord : "The Dark Lord" [
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/drake/archer.mdl","skin": 1,"frame": 0}) = monster_archer_lord : "Archer Lord" []
+@PointClass base(MonDog) model({"path": "progs/mon_dog.mdl","skin": 3,"frame": 0}) = monster_hell_hound : "Hell hound" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/qmaster/mon_hknight.mdl","skin": 2,"frame": 0}) = monster_hell_lord : "Hell Lord" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/qmaster/mon_hknight.mdl","skin": 3,"frame": 0}) = monster_hkboss : "Boss Knight" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/qmaster/mon_hknight.mdl","skin": 4,"frame": 0}) = monster_bane : "Bane" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/qmaster/mon_hknight.mdl","skin": 6,"frame": 0}) = monster_dark_lord : "The Dark Lord" [
 	spawnflags(Flags) = [
 		4 : "Beast (Turns into Dragon)" : 0
 	]
@@ -5146,14 +5141,14 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ]
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/nemesant.mdl") = monster_nemesant : "Nemesant" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/nemesant.mdl") = monster_troglodyte : "Troglodyte" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/nemesant.mdl") skin(1) = monster_trogboss : "Troglodyte Boss" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/drake/nemesant.mdl","skin": 1,"frame": 0}) = monster_trogboss : "Troglodyte Boss" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_sorceror : "Sorceror" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_acolyte : "Acolyte" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_warlock : "Warlock" []
 
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_necromancer : "Necromancer" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hexen2/fangel.mdl") = monster_fallen_angel : "Fallen Angel" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hexen2/fangel.mdl") skin(1) = monster_fallen_angel_lord : "Fallen Angel" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) model({"path": "progs/hexen2/fangel.mdl","skin": 1,"frame": 0}) = monster_fallen_angel_lord : "Fallen Angel" []
 @PointClass base(Monster) size(-32 -32 -24, 32 32 64) studio("progs/drake/cyber.mdl") = monster_cyberdemon : "Cyberdemon" []
 
 
@@ -5239,7 +5234,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) studio("progs/teleport.mdl") =
 	misc_teleporttrain : "Moving teleport destination" [
 	speed(integer) : "Speed (units per second)" : 64
-	target(target_source) : "First stop target"
+	target(target_destination) : "First stop target"
 ]
 
 @PointClass base(Appearflags, Targetname) color(0 255 0) size(-8 -8 -8, 8 8 8) = info_earthquake : "Earthquake" [
@@ -5591,7 +5586,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ]
 
 @SolidClass base(Targetname) = t_effector_gravity : "Extras_R4 particle gravtrig" [
-	gravity(integer) : "Gravity (0.0-1.0)" : 1.0
+	gravity(integer) : "Gravity (0.0-1.0)" : 1
 	count(integer) : "% of Particles to Affect(1-100)" : 100
 	spawnflags(Flags) = [
 		1 : "Start On" : 0
@@ -5796,7 +5791,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 
 //CTF
 @PointClass size(-8 -8 -8, 8 8 40) studio("progs/q15/flag.mdl")  = item_flagblue : "Blue Flag" []
-@PointClass size(-8 -8 -8, 8 8 40) studio("progs/q15/flag.mdl") skin(0) = item_flagred : "Red Flag" []
+@PointClass size(-8 -8 -8, 8 8 40) model({"path": "progs/q15/flag.mdl","skin": 1,"frame": 0}) = item_flagred : "Red Flag" []
 @PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) = item_flag_team1 : "CTF: Red Team Flag" [] // Alternate name for historical purposes
 @PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) = item_flag_team2 : "CTF: Blue Team Flag" [] // Alternate name
 @PointClass base(PlayerClass) = info_player_team1 : "CTF - Red Player Start" []

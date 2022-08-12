@@ -791,7 +791,7 @@ void() ClientPowerups = { // [FUNCTION]
 			} else {
 				// Different sound when not in the water (faster)
 				self.volume = 0.4 + random() * 0.4;
-				sound(self,CHAN_ITEM,SOUND_ARTWETS3B, self.volume,ATTN_IDLE);
+				sound(self,CHAN_ITEM,"ad171/items/wetsuit3out.wav", self.volume,ATTN_IDLE);
 				self.wetsuit_sound = time + 3 + random();
 			}
 		}

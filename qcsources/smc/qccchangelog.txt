@@ -1,0 +1,48 @@
+FTEQCC Changes:
+
+Changes from 2666 to 2770:
+- fix progs alignment which caused problems with non-QCLIB engines
+- message fixes
+- remove octal escape code parsing
+
+Changes from 2600 to 2666:
+- added the ternary and comma operator
+- other bug fixes
+
+Changes from 2501 to 2600:
+- fast arrays enabled by default
+      Note to DarkPlaces engine users:
+
+      As of January 28, 2006, DarkPlaces builds will reject any progs with
+      unknown opcodes even though the opcodes are never reached in code
+      execution. This behavior is not present in any other Quake engine or
+      progs executor. If you need backwards compatibility, use the command
+      line parameter -Fno-fastarrays to disable usage of fast arrays.
+- fixes to fast arrays
+- fix to "effectless statement" warnings being off by a line number
+- added entnum intrinsic, use entnum(x) to directly access entity numbered x
+- fix to -srcfile parameter in FTEQCC GUI compile
+- faster compilation when not using overlaptemps or locals marshalling
+- warnings and errors now show which function they occured in
+- total warning count added
+- other bug fixes
+
+Changes from 2352 to 2501:
+- flag hashonly, only use #define constants explicitly defining #
+      Fixes this case with preqcc specific mods:
+         #define something somethingelse
+         .float #something;
+         float something;
+      - accessible by using -Fhashonly on command line
+- flag fastarrays, generates extra instructions inside array handling functions
+      to detect engine and use extension opcodes in supporting engines.
+      Adds a global which is set by the engine if the engine supports the 
+      extra opcodes. Will probably have issues in DarkPlaces.
+      - accessible by using -Ffastarrays on command line
+- -Wno-mundane, disables warnings such as unreferenced variables and constants, 
+      same name as global, dead code, assignment to conditional, identical
+      precompiler constants, #undef not defined, constant comparison, assignment
+      to constant functions, and bad pragmas
+- variable function assignments no longer result in warnings
+- constant name maximum increased to 64
+- other bug fixes

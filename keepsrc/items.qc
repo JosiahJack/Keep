@@ -928,7 +928,7 @@ void() item_custom_touch = { // [FUNCTION]
 };
 
 void() item_custom = { // [ENTITY]
-	if (self.mdl == "") self.mdl = MODEL_BROKEN;
+	if (self.mdl == "") self.mdl = "progs/q15/misc_broken.mdl";
 	if (self.noise == "") self.noise = AMMO_PICKUP;
 	if (self.skin <= 0) self.skin = 0;
 	item_setupmodel(self.mdl,self.skin);

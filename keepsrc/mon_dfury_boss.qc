@@ -638,10 +638,11 @@ void() dfury_boss_pause = {
 	self.th_die = dfury_boss_die;
 	self.use = SUB_Null;
 	self.think = dfury_boss_run1;
-	self.enemy = activator;
+	if (activator) self.enemy = activator;
 	self.nextthink = time + 0.1;
-	FoundHuntTarget(FALSE);	
 	self.delay = 0;	
+	if (self.enemy) FoundHuntTarget(FALSE);
+	else self.th_stand();
 };
 
 void() dfury_boss_pause1 = {
@@ -733,20 +734,17 @@ void() monster_dfury_boss = {
 	if (self.spawnflags & 2) {
 		self.skin = 0;
 		if (self.frame == 0) self.frame = 10;
-		if (!self.targetname) {
-			dprint ("statue not targeted\n");
-			dprint (self.classname);
-			dprint (" at ");
-			dprint (vtos(self.origin));
-			dprint ("\n");
-			return;
-		}
+
 		self.classgroup = CG_STONE;	// Join the statues!
 		self.use = dfury_boss_pause;
 		self.th_stand = dfury_boss_pause1;
 		self.th_walk = dfury_boss_pause1;
 		self.th_run = dfury_boss_pause1;
 		if (self.deathstring == "")  self.deathstring = " was smashed by a Stone Brigade Commander's fury\n";
+		if (!self.targetname) {
+			activator = world;
+			dfury_boss_pause();
+		}
 	} else {
 		self.skin = 1; // Normal skin is on 1, yeah it's weird
 		self.th_stand = dfury_boss_stand1;

@@ -416,7 +416,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_model(MODEL_PROJ_GRENADE);
 	precache_model(MODEL_PROJ_ROCKET);
 	precache_model(MODEL_BACKPACK);		// DropBackpack - items.qc
-	precache_model(MODEL_BROKEN);			// Broken model error
+	precache_model("progs/q15/misc_broken.mdl");			// Broken model error
 	precache_model(MODEL_EMPTY);			// Used for info_intermission cameras
 	precache_model(MODEL_CORNER1);			// Dev spawn angle marker
 	precache_model("progs/airfist/s_ablast.spr");
@@ -564,7 +564,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		}
 	}
 	dprint("\b[ENGINE]\b ");
-	if (engine == ENG_FITZ) dprint("Fitz Compatible (old, weak). NOT RECOMMENDED!\n");
+	if (engine == ENG_FITZ) dprint("Fitz-based / QS\n");
 	else if (engine == ENG_DPEXT) dprint("Advanced Engine\n"); // FTE, no longer lame old broken Darkplaces aka DP, aka flatwater.
 	else dprint("Unknown\n");
 

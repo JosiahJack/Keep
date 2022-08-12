@@ -1,0 +1,34 @@
+// load the base configuration
+exec default.cfg
+
+// load the last saved configuration
+exec config.cfg
+
+// run a user script file if present
+exec autoexec.cfg
+
+//
+// stuff command line statements
+//
+
+stuffcmds
+
+sv_aim 2
+
+alias bobstyle1 "cl_bobcycle 0.6;cl_bobup 0.5;cl_bob 0.02"	// old bob
+alias bobstyle2 "cl_bobcycle 0.7;cl_bobup 0.0;cl_bob 0.015" // less pronounced bob (default)
+bobstyle2
+
+scr_conspeed 900
+
+// FrikBot
+alias addbot "impulse 100"
+alias addenemy "impulse 101"
+alias removebot "impulse 102"
+alias botcam "impulse 103"
+alias wayed "impulse 104"		// waypoint editor, only accessible in developer mode
+bind "9" "impulse 9"				// needed for menu selection
+bind "0" "impulse 10"				// needed for menu selection
+saved1 1								// Keep bots on changelevels
+
+// startdemos

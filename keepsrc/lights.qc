@@ -194,9 +194,6 @@ void() light_on = { // [FUNCTION]
 
 	if (self.style > 0) { // Light style defined?
 		if (self.style < LIGHT_MAXLIGHTSTYLE) lightstyle(self.style, light_style_str[self.style]); // Update light style (use array to get the latest)
-		dprint("Light style set to : ");
-		dprint(ftos(self.style));
-		dprint("\n");
 	}
 
 	light_part_emitter_on(); // Switch on particle emitters, if any.

@@ -1,0 +1,66 @@
+---- qbsp / ericw-tools v0.18.1-32-g6660c5f ----
+Input file: test_monster.map
+Output file: test_monster.bsp
+
+---- LoadMapFile ----
+*** WARNING 05: No info_player_start entity in level
+*** WARNING 06: No info_player_deathmatch entities in level
+          533 faces
+           89 brushes
+           17 entities
+           17 unique texnames
+          128 texinfo
+
+Opened WAD: ../../Other/Compiling/quake.wad
+Processing hull 0...
+---- Brush_LoadEntity ----
+           51 brushes
+           25 detail wall
+           50 planes
+---- CSGFaces ----
+          455 brushfaces
+          249 csgfaces
+          260 mergedfaces
+---- SolidBSP ----
+          107 split nodes
+           22 solid leafs
+           61 empty leafs
+            0 water leafs
+           25 detail leafs
+            0 detail illusionary leafs
+            0 detail fence leafs
+            0 illusionary visblocker leafs
+          439 leaffaces
+          351 nodefaces
+---- Portalize ----
+           86 vis leafs
+           86 vis clusters
+          194 vis portals
+---- FillOutside ----
+*** WARNING 10: Reached occupant at (288 0 72), no filling performed.
+Leak file written to test_monster.pts
+---- MakeFaceEdges ----
+---- GrowRegions ----
+Processing hull 1...
+*** WARNING 10: Reached occupant at (288 0 72), no filling performed.
+Processing hull 2...
+*** WARNING 10: Reached occupant at (288 0 72), no filling performed.
+---- WriteBSPFile ----
+Wrote test_monster.bsp
+          108 planes             2160
+          460 vertexes           5520
+          149 nodes              6556
+           84 texinfo            3360
+          320 faces              8960
+          320 clipnodes          3840
+          104 leafs              4576
+          330 marksurfaces       1320
+         1285 surfedges          5140
+          865 edges              6920
+           17 textures         101392
+              lightdata             0
+              visdata               0
+              entdata            1435
+
+0.042 seconds elapsed
+Peak memory usage: 2926888 (2.8M)

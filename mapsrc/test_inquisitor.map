@@ -5,9 +5,9 @@
 "classname" "worldspawn"
 "worldtype" "0"
 "mapversion" "220"
-"wad" "C:/Users/Josiah/Dropbox/QUAKE/Other/Compiling/quake.wad;C:/Users/Josiah/Dropbox/QUAKE/Other/Compiling/ad_start.wad;C:/Users/Josiah/Desktop/sogsrc/MjolnirMaps/Textures/Realm4.wad;C:/Users/Josiah/Desktop/sogsrc/TwilightoftheIdols/IdolsJuly11/IdolsJuly11.wad;C:/Users/Josiah/Desktop/sogsrc/MjolnirMaps/Textures/Realm0_Base.wad;C:/Users/Josiah/Desktop/sogsrc/MjolnirMaps/Textures/Realm2.wad;C:/Users/Josiah/Desktop/sogsrc/MjolnirMaps/Textures/Realm3.wad"
+"wad" "../../Other/Compiling/quake.wad"
 "_generator" "J.A.C.K. 1.1.1064 (vpQuake)"
-"_tb_def" "external:C:/Users/Josiah/Dropbox/QUAKE/Other/Compiling/Keep.fgd"
+"_tb_def" "external:../Keep.fgd"
 "_tb_mod" "keep"
 "_bounce" "1"
 "_bouncescale" "2"
@@ -16147,7 +16147,7 @@
 ( -1144 3480 -356 ) ( -1144 3480 80 ) ( -1160 3464 -356 ) window01 [ 0 1 0 43 ] [ 0 0 -1 52 ] 0 2 3
 ( -672 3008 -356 ) ( -1144 3480 -356 ) ( -672 2976 -356 ) window01 [ 1 0 0 43 ] [ 0 -1 0 52 ] 0 2 3
 ( -672 2976 80 ) ( -1160 3464 80 ) ( -672 3008 80 ) window01 [ 1 0 0 43 ] [ 0 -1 0 52 ] 0 2 3
-( -672 3008 -356 ) ( -672 3008 80 ) ( -1144 3480 -356 ) window01 [ 0 1 0 43 ] [ 0 0 -1 52 ] 0 2 3
+( -672 3008 -356 ) ( -672 3008 80 ) ( -1144 3480 -356 ) window01p [ 0 1 0 43 ] [ 0 0 -1 52 ] 0 2 3
 ( -672 2976 -356 ) ( -672 2976 80 ) ( -672 3008 -356 ) window01 [ 0 1 0 43 ] [ 0 0 -1 52 ] 0 2 3
 }
 // brush 1772
@@ -16171,7 +16171,7 @@
 // brush 1774
 {
 ( -352 3008 80 ) ( -352 2976 80 ) ( -352 3008 -356 ) window01 [ -0 1 0 43 ] [ -0 0 -1 52 ] 0 2 3
-( 120 3480 80 ) ( -352 3008 80 ) ( 120 3480 -356 ) window01 [ -0 1 0 43 ] [ -0 0 -1 52 ] 0 2 3
+( 120 3480 80 ) ( -352 3008 80 ) ( 120 3480 -356 ) window01p [ -0 1 0 43 ] [ -0 0 -1 52 ] 0 2 3
 ( 136 3464 -356 ) ( 120 3480 -356 ) ( -352 2976 -356 ) window01 [ -1 0 0 43 ] [ -0 -1 0 52 ] 0 2 3
 ( 120 3480 80 ) ( 136 3464 80 ) ( -352 3008 80 ) window01 [ -1 0 0 43 ] [ -0 -1 0 52 ] 0 2 3
 ( -352 2976 80 ) ( 136 3464 80 ) ( -352 2976 -356 ) window01 [ -0 1 0 43 ] [ -0 0 -1 52 ] 0 2 3

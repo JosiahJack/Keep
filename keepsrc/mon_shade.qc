@@ -517,6 +517,7 @@ void() monster_nightshade_precache = {
     precache_sound("drake/shade/taunt.wav");
     precache_sound("wizard/hit.wav");   // used by C code, so don't sound2
     precache_sound("nehahra/wraith/soul.wav");
+    precache_sound("nehahra/wraith/return.wav");
 };
 
 // --> QUAKED monster_nightshade (1 0 0) (-32 -32 -24) (32 32 32) Ambush x Souls

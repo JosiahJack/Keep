@@ -145,7 +145,7 @@ void(vector org, float marker_time) MarkAttack = { // [FUNCTION]
 	newmis.classtype = CT_DEVMARKER;
 	newmis.movetype = MOVETYPE_NONE;
 	newmis.solid = SOLID_NOT;
-	setmodel(newmis, MODEL_BROKEN);
+	setmodel(newmis, "progs/q15/misc_broken.mdl");
 	newmis.skin = rint(random()*7);
 	setorigin(newmis, org);
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);

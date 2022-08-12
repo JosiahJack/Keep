@@ -78,120 +78,10 @@ void() PreCache_GreenFlame = {
 };
 
 void() PrecacheAll = { // [FUNCTION]
-	precache_sound("hipnotic/items/empathy2.wav");	// Empathy shield sound
-	precache_sound("hipnotic/items/wetsuit.wav");		// Wetsuit noise
-	precache_sound("rogue/shield/hit.wav");		// Power Shield hit
-	precache_sound("rogue/shield/fadeout.wav");		// Power Shield fadeout
-	precache_sound("rogue/belt/use.wav");		// Antigrav ping
-	precache_sound("rogue/belt/fadeout.wav");		// Antigrav fadeout
-	precache_sound("quoth/pyro/fstop.wav");		// For dragon fire
-	precache_sound("quoth/pyro/flame.wav");		// For dragon fire
-	precache_sound("ad171/weapons/crossbow_fire.wav");
-	precache_sound("qmaster/player/jump.wav");
-	precache_sound("qmaster/player/jumpland.wav");
-	precache_sound("hipnotic/weapons/laserric.wav");
-	precache_sound("hipnotic/weapons/laserg.wav");
-	precache_sound("hipnotic/weapons/mjolslap.wav");
-	precache_sound("hipnotic/weapons/mjolhit.wav");
-	precache_sound("hipnotic/weapons/mjoltink.wav");
-	precache_sound("hipnotic/weapons/proxwarn.wav");
-	precache_sound("hipnotic/weapons/proxbomb.wav");
-	precache_sound("hipnotic/misc/quake.wav");
-	precache_sound("hipnotic/misc/quakeend.wav");
-	precache_sound("ad171/weapons/crossbow_rdy.wav");
-	precache_sound(SOUND_LASER_HIT);
-	precache_sound("ad171/spider/hiss2.wav");
-	precache_sound("rogue/weapons/snail.wav");
-	precache_sound("boss1/sight1.wav");
-	precache_sound("rogue/plasma/explode.wav");
-	precache_sound("rogue/plasma/fire.wav");
-	precache_sound("rogue/plasma/flight.wav");
-	precache_sound("quoth/items2/trinend.wav");
-	precache_sound("quoth/items2/crosend.wav");
-	precache_sound("quoth/items2/crosuse.wav");
-	precache_sound("items/inv3.wav");
-	precache_sound("items/inv2.wav");
-	precache_sound("items/suit2.wav");
-	precache_sound("nehahra/wraith/soul.wav");
-	precache_sound("drake/shade/taunt.wav");
-	precache_sound("drake/weapons/nova.wav");
-	precache_sound("nehahra/wraith/rych1.wav");
-	precache_sound("nehahra/wraith/select.wav");
-	precache_sound("nehahra/wraith/return.wav");
-	precache_sound("drake/weapons/zap1.wav");
-    precache_sound("drake/weapons/zap2.wav");
-    precache_sound("drake/weapons/mirv2.wav");
-    precache_sound("drake/items/tomepow.wav");
-    precache_sound("drake/items/tomepow2.wav");
-    precache_sound("hknight/attack1.wav");
-	precache_sound(SOUND_ARTINV1);
-	precache_sound(SOUND_ARTQUAD1);
-	precache_sound(SOUND_ARTPENT1);
-	precache_sound(SOUND_ARTSUIT1);
-	precache_sound(SOUND_ARTSHARP1);
-	precache_sound(SOUND_ARTNAILP1);
-	precache_sound(SOUND_ARTLSHIELD1);
-	precache_sound(SOUND_ARTBLASTBELT1);
-	precache_sound(SOUND_ARTJUMPBOOTS1);
-	precache_sound("rogue/misc/flagcap.wav"); // For cheat command
-	precache_sound("zerstorer/me/me_soff.wav");
-	precache_sound("zerstorer/me/me_son.wav");
-	precache_sound("hipnotic/items/wetsuit.wav");
-	precache_sound("ad171/items/wetsuit3out.wav");
-	precache_sound("hipnotic/items/wetoff.wav");
-	precache_sound("items/damage2.wav");
-	precache_sound("ad171/items/sharp2.wav");
-	precache_sound("items/protect2.wav");
-	precache_sound("ad171/items/nailp2.wav");
-	precache_sound("ad171/items/sharp3.wav");
-	precache_sound("ad171/nour/idle1.wav");
-	precache_sound("drake/weapons/shatter.wav");
-	precache_sound("zerstorer/cube/bc_gulp.wav");
-	precache_sound("zerstorer/cube/bc_attck.wav");
-	precache_sound("zerstorer/gibfnt/gf_plop.wav");
-	precache_sound("player/udeath.wav");
-	precache_sound("boss1/out1.wav");
-	precache_sound("zerstorer/trog/bigboom.wav");
-	precache_sound("zerstorer/weapons/sawguts.wav");
-	precache_sound("drake/items/money.wav");
+	precache_aoa();
+	precache_poisongibs();
+	precache_model("progs/backpack.mdl");
 	precache_model("progs/qmaster/coinitem.mdl");
-	precache_sound("ambience/thunder1.wav");
-	precache_sound("zerstorer/ambience/thunder2.wav");
-	precache_sound("drake/weapons/axhit.wav");
-	precache_sound("nehahra/player/flight.wav");
-	precache_sound("zerstorer/ambience/wingend.wav");
-    precache_sound("shambler/smack.wav");
-    precache_sound("drake/weapons/chain1.wav");
-    precache_sound("drake/items/reflect3.wav");
-    precache_sound("zombie/z_hit.wav");
-	precache_sound("zerstorer/weapons/stunfire.wav");
-	precache_sound("zerstorer/weapons/sawidle.wav");
-    precache_sound("zerstorer/weapons/sawatck.wav");
-    precache_sound("zerstorer/weapons/sawridle.wav");
-    precache_sound("drake/weapons/clang.wav");
-	precache_sound("drake/weapons/axhitwal.wav");
-	precache_sound("ad171/weapons/bolt_hit1.wav");
-	precache_sound("ad171/weapons/bolt_hit4.wav");
-	precache_sound("enforcer/enfire.wav");
-	precache_sound("xmas/raindeer/hit.wav");
-	precache_sound("doom/bfg.wav");
-	precache_sound("zerstorer/ambience/thunder2.wav");
-	precache_sound("custents/weapons/lncharow.wav");
-	precache_sound("drake/weapons/mirv1.wav");
-    precache_sound("knight/sword1.wav");
-	precache_sound("kinn/shuffler/expsmall.wav");
-	precache_sound("ad171/weapons/sword1a.wav");
-	precache_sound("ad171/weapons/sword1b.wav");
-	precache_sound("ad171/weapons/sword2a.wav");
-	precache_sound("ad171/weapons/sword2b.wav");
-	precache_sound("weapons/axe_flesh.wav");
-	precache_sound("ad181/items/blastbelt2.wav");
-	precache_sound("ad181/items/lavashield2.wav");
-	precache_sound("ad171/items/sharp2.wav");
-	precache_sound("ad181/items/jumpboots3a.wav");
-	precache_sound("ad181/items/jumpboots3b.wav");
-	precache_sound("ad181/items/jumpboots3c.wav");
-	precache_sound("drake/misc/dsslop.wav");
 	precache_model("progs/nehahra/soul.mdl");
 	precache_model("progs/null.mdl");
 	precache_model("progs/spark.spr");
@@ -221,11 +111,9 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/madfox/g_hamer.mdl");
 	precache_model("progs/madfox/v_hamer.mdl");
 	precache_model("progs/madfox/thr0wham.mdl");
-	precache_model("progs/hipnotic/v_hammer.mdl"); //mjolnir
 	precache_model("progs/violentrumble/v_hammer.mdl"); //mjolnir
 	precache_model("progs/violentrumble/v_hammerpw.mdl"); //mjolnir
 	precache_model("progs/hipnotic/playham.mdl"); // player with the hammer
-	precache_model("progs/quoth/v_ham.mdl"); //warhammer from quoth
 	precache_model("progs/drake/v_wand.mdl");
 	precache_model("progs/drake/throwham.mdl");
 	precache_model("progs/drake/s_wave.spr");
@@ -281,18 +169,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/aoa/v_voidstaff.mdl");
 	precache_model("progs/ad171/misc_spark.mdl");
 	precache_model("progs/rrp/spark.mdl");
-	precache_sound("rrp/misc/spark.wav");
-	precache_sound("misc/spark1.wav");
-	precache_sound("misc/spark2.wav");
-	precache_sound("misc/spark3.wav");
-	precache_sound("misc/spark4.wav");
-	precache_sound("drake/weapons/icewall.wav");
-	precache_sound("drake/necro/att_a.wav");
-	precache_sound("drake/necro/att_a2.wav");
-	precache_sound("drake/weapons/xbowdraw.wav");
-	precache_sound("drake/weapons/freeze.wav");
-	precache_sound("drake/weapons/icehit.wav");
-	precache_sound("drake/weapons/shatter.wav");
 	precache_model("progs/drake/blood.mdl"); 		// BLOOD_RED
 	precache_model("progs/drake/blood_gr.mdl"); 	// BLOOD_GREEN
 	precache_model("progs/drake/gr_gib.mdl"); 		// BLOOD_GREEN
@@ -301,10 +177,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/qrally/sumabase.mdl");
 	precache_model("progs/qrally/sumanail.mdl");
 	precache_model("progs/qrally/sumarock.mdl");
-	precache_sound("qrally/start.wav");
-	precache_sound("qrally/ray/engstart.wav");
-	precache_sound("qrally/start2.wav");
-	precache_sound("quoth/items/click.wav");
 	precache_model(MODEL_HEAL5);
 	precache_model(MODEL_HEAL15);
 	precache_model(MODEL_HEAL25);
@@ -313,23 +185,131 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model(MODEL_HEAL15B);
 	precache_model(MODEL_HEAL100B);
 	precache_model("progs/rogue/sphere.mdl");
-	precache_sound("rogue/sphere/sphere.wav");
 	precache_model("progs/hipnotic/s_bullet.spr");
 	precache_model(MODEL_PROJ_HKN);
 	precache_model("progs/q15/zom_gib.mdl");
+	precache_model("progs/drake/dragon.mdl");
+	precache_sound("hipnotic/items/empathy2.wav");	// Empathy shield sound
+	precache_sound("hipnotic/items/wetsuit.wav");		// Wetsuit noise
+	precache_sound("rogue/shield/hit.wav");		// Power Shield hit
+	precache_sound("rogue/shield/fadeout.wav");		// Power Shield fadeout
+	precache_sound("rogue/belt/use.wav");		// Antigrav ping
+	precache_sound("rogue/belt/fadeout.wav");		// Antigrav fadeout
+	precache_sound("ad171/weapons/crossbow_fire.wav");
+	precache_sound("qmaster/player/jump.wav");
+	precache_sound("hipnotic/weapons/laserric.wav");
+	precache_sound("hipnotic/weapons/laserg.wav");
+	precache_sound("hipnotic/weapons/mjolslap.wav");
+	precache_sound("hipnotic/weapons/mjolhit.wav");
+	precache_sound("hipnotic/weapons/mjoltink.wav");
+	precache_sound("hipnotic/weapons/proxwarn.wav");
+	precache_sound("hipnotic/weapons/proxbomb.wav");
+	precache_sound("hipnotic/misc/quake.wav");
+	precache_sound("hipnotic/misc/quakeend.wav");
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("rogue/weapons/snail.wav");
+	precache_sound("rogue/plasma/explode.wav");
+	precache_sound("rogue/plasma/fire.wav");
+	precache_sound("rogue/plasma/flight.wav");
+	precache_sound("quoth/items2/trinend.wav");
+	precache_sound("quoth/items2/crosend.wav");
+	precache_sound("quoth/items2/crosuse.wav");
+	precache_sound("items/inv3.wav");
+	precache_sound("items/inv2.wav");
+	precache_sound("items/suit2.wav");
+	precache_sound("drake/weapons/nova.wav");
+	precache_sound("drake/weapons/zap1.wav");
+    precache_sound("drake/weapons/zap2.wav");
+    precache_sound("drake/weapons/mirv2.wav");
+    precache_sound("drake/items/tomepow.wav");
+    precache_sound("drake/items/tomepow2.wav");
+    precache_sound("hknight/attack1.wav");
+	precache_sound(SOUND_ARTINV1);
+	precache_sound(SOUND_ARTQUAD1);
+	precache_sound(SOUND_ARTPENT1);
+	precache_sound(SOUND_ARTSUIT1);
+	precache_sound(SOUND_ARTSHARP1);
+	precache_sound(SOUND_ARTNAILP1);
+	precache_sound(SOUND_ARTLSHIELD1);
+	precache_sound(SOUND_ARTBLASTBELT1);
+	precache_sound(SOUND_ARTJUMPBOOTS1);
+	precache_sound("hipnotic/items/wetsuit.wav");
+	precache_sound("ad171/items/wetsuit3out.wav");
+	precache_sound("hipnotic/items/wetoff.wav");
+	precache_sound("items/damage2.wav");
+	precache_sound("ad171/items/sharp2.wav");
+	precache_sound("items/protect2.wav");
+	precache_sound("ad171/items/nailp2.wav");
+	precache_sound("ad171/items/sharp3.wav");
+	precache_sound("ad171/nour/idle1.wav");
+	precache_sound("drake/weapons/shatter.wav");
+	precache_sound("zerstorer/cube/bc_gulp.wav");
+	precache_sound("zerstorer/cube/bc_attck.wav");
+	precache_sound("zerstorer/gibfnt/gf_plop.wav");
+	precache_sound("player/udeath.wav");
+	precache_sound("boss1/out1.wav");
+	precache_sound("zerstorer/trog/bigboom.wav");
+	precache_sound("zerstorer/weapons/sawguts.wav");
+	precache_sound("drake/items/money.wav");
+	precache_sound("ambience/thunder1.wav");
+	precache_sound("zerstorer/ambience/thunder2.wav");
+	precache_sound("drake/weapons/axhit.wav");
+	precache_sound("nehahra/player/flight.wav");
+	precache_sound("zerstorer/ambience/wingend.wav");
+    precache_sound("shambler/smack.wav");
+    precache_sound("drake/weapons/chain1.wav");
+    precache_sound("drake/items/reflect3.wav");
+    precache_sound("zombie/z_hit.wav");
+	precache_sound("zerstorer/weapons/stunfire.wav");
+	precache_sound("zerstorer/weapons/sawidle.wav");
+    precache_sound("zerstorer/weapons/sawatck.wav");
+    precache_sound("zerstorer/weapons/sawridle.wav");
+    precache_sound("drake/weapons/clang.wav");
+	precache_sound("drake/weapons/axhitwal.wav");
+	precache_sound("ad171/weapons/bolt_hit1.wav");
+	precache_sound("ad171/weapons/bolt_hit4.wav");
+	precache_sound("enforcer/enfire.wav");
+	precache_sound("xmas/raindeer/hit.wav");
+	precache_sound("doom/bfg.wav");
+	precache_sound("zerstorer/ambience/thunder2.wav");
+	precache_sound("custents/weapons/lncharow.wav");
+	precache_sound("drake/weapons/mirv1.wav");
+    precache_sound("knight/sword1.wav");
+	precache_sound("kinn/shuffler/expsmall.wav");
+	precache_sound("ad171/weapons/sword1a.wav");
+	precache_sound("ad171/weapons/sword1b.wav");
+	precache_sound("ad171/weapons/sword2a.wav");
+	precache_sound("ad171/weapons/sword2b.wav");
+	precache_sound("weapons/axe_flesh.wav");
+	precache_sound("ad181/items/blastbelt2.wav");
+	precache_sound("ad181/items/lavashield2.wav");
+	precache_sound("ad171/items/sharp2.wav");
+	precache_sound("ad181/items/jumpboots3a.wav");
+	precache_sound("ad181/items/jumpboots3b.wav");
+	precache_sound("ad181/items/jumpboots3c.wav");
+	precache_sound("drake/misc/dsslop.wav");
+	precache_sound("rrp/misc/spark.wav");
+	precache_sound("drake/weapons/icewall.wav");
+	precache_sound("drake/necro/att_a.wav");
+	precache_sound("drake/necro/att_a2.wav");
+	precache_sound("drake/weapons/xbowdraw.wav");
+	precache_sound("drake/weapons/freeze.wav");
+	precache_sound("drake/weapons/icehit.wav");
+	precache_sound("drake/weapons/shatter.wav");
+	precache_sound("qrally/start.wav");
+	precache_sound("qrally/ray/engstart.wav");
+	precache_sound("qrally/start2.wav");
+	precache_sound("quoth/items/click.wav");
+	precache_sound("rogue/sphere/sphere.wav");
 	precache_sound("redfield/misc/catsmeow.wav");
 	precache_sound("ad171/weapons/bolt_hit2.wav");
 	precache_sound("ad171/weapons/bolt_hit3.wav");
 	precache_sound("drake/bane/thunder.wav");
 	precache_sound("tronyn/lightning_component_electrified.wav");
 	precache_sound("tronyn/lightning_rod_electrified.wav");
-	precache_model("progs/drake/dragon.mdl");
 	precache_sound("tronyn/lightning_strike.wav"); // For kill ray cheat.
 	precache_sound("tronyn/lightning_blast.wav"); // For gib ray cheat.
 	precache_sound("rogue/belt/pickup.wav"); // For Thor's Blessing activation.
-	precache_model("progs/backpack.mdl");
-	precache_aoa();
-	precache_poisongibs();
 	if (ext_dppart) {
 		particleeffectnum("TE_POISONBIG");
 		particleeffectnum("voreball_explosion");

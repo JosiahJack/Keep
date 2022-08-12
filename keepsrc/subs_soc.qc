@@ -241,7 +241,7 @@ void(entity targ, float removetime) entity_remove = {
 };
 
 entity(vector spawn_org, string devmdl) spawn_devmarker = {
-	if (devmdl == "") devmdl = MODEL_BROKEN;
+	if (devmdl == "") devmdl = "progs/q15/misc_broken.mdl";
 	newmis = spawn();
 	newmis.classtype = CT_DEVMARKER;
 	newmis.movetype = MOVETYPE_NONE;
@@ -259,7 +259,7 @@ void(vector marker_org, vector marker_ang, float type, float mskin) spawn_marker
 	if (developer <= 0) return;
 
 	if (type) spawn_devmarker(marker_org,MODEL_CORNER1);
-	else spawn_devmarker(marker_org,MODEL_BROKEN);
+	else spawn_devmarker(marker_org,"progs/q15/misc_broken.mdl");
 
 	newmis.angles = marker_ang;
 	// Setup marker type (skin colour)

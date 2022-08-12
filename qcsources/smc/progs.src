@@ -1,0 +1,66 @@
+../progs.dat
+
+defs.qc
+gyro/gyro_main.qc	// added  Gyro 2.1a
+gyro/gyro_physics.qc	// added  Gyro 2.1a
+gyro/gyro_forces.qc	// added  Gyro 2.1a
+gyro/gyro_user.qc	// added  Gyro 2.1a
+gyro_smc_settings.qc	// added  Gyro settings for small mod compilation
+dpextensions.qc		// added
+check.qc		// added  bbox check algorythm
+custom_effects.qc	// added  custom effects
+flashlight.qc		// added
+flashlight_cubemap.qc	// added
+clone_monsters.qc	// added  function to multiply monsters in maps
+face.qc			// added  for evil texture effect
+subs.qc
+fight.qc
+ai.qc
+dodge.qc		// added  for run+fire feature
+combat.qc
+items.qc
+flesh_splat.qc		// added flesh-splat effect when shooting monsters (by MaNiAc + Nahuel)
+weapons.qc
+world.qc
+splash.qc		// added splash effect for liquids
+client.qc
+eatgibs.qc		// added gib effects
+KickGibs.qc		// added gib effects
+player.qc
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc
+skull.qc         	// added skull animation (random end of "Vengeance of the deceased" death animation)
+grimrock_trinity.qc	// added "Legend of Grimrock + Blade-Trinity"  death animation
+spider.qc		// added new walking monster type
+afrit.qc		// added new flying monster type
+hydra.qc		// added new swimming monster type
+warlord.qc		// added new walking monster type
+torment.qc		// added new walking monster type
+carnivean.qc		// added new walking monster type
+yakman.qc		// added new walking monster type
+reiver.qc		// added new flying monster type
+necromancer.qc		// added new flying monster type
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc			// registered
+shalrath.qc		// registered
+enforcer.qc		// registered
+oldone.qc		// registered
+
+ghost.qc         	// added "Ancient ghosts of the fallen" death animation
+soul.qc			// added "Relieved souls of the enslaved" death animation
+lightbeam.qc		// light beam spawn addon (by Nahuel)

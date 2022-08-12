@@ -1,0 +1,15 @@
+./progs.dat
+
+defs.qc                 
+dpextensions.qc
+
+inv_defs.qc
+functions.qc
+sgitem.qc
+armor_base.qc
+armor_yellow.qc
+sv_InvContainer.qc
+SV_ParseClientCommand.qc
+
+
+

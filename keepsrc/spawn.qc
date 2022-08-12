@@ -907,7 +907,7 @@ void(string mname) BeMonsterFromString = {
 	else if (mname == "monster_trogboss") { monster_trogboss(); }
 	else if (mname == "monster_troglodyte") { monster_troglodyte(); }
 	else if (mname == "monster_tur") { monster_tur(); }
-	// else if (mname == "monster_turret") { monster_turret(); }
+	else if (mname == "monster_turret") { monster_turret(); }
 	// else if (mname == "monster_ubs") { monster_ubs(); }
 	else if (mname == "monster_ultra") { monster_ultra(); }
 	else if (mname == "monster_vermis") { monster_vermis(); }
@@ -1280,7 +1280,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_trogboss")		monster_nemesant_precache();
 	else if (mname == "monster_troglodyte")		monster_nemesant_precache();
 	else if (mname == "monster_tur")			monster_tur_precache();
-	// else if (mname == "monster_turret")		monster_turret_precache();
+	else if (mname == "monster_turret")			monster_turret_precache();
 	// else if (mname == "monster_ubs")			monster_ubs_precache();
 	else if (mname == "monster_ultra")			monster_enforcer_precache();
 	else if (mname == "monster_vermis")			monster_vermis_precache();
