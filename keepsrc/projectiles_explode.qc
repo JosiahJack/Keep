@@ -510,6 +510,7 @@ float() MonsterGrenadeSpeed = { return SPEED_MONGRENADE + (skill * SPEED_MONGLSK
 void(vector p1, vector p2, entity from, float damage) HIP_HammerDamage = { // [FUNCTION]
    local entity e1, e2;
    local vector f;
+    local float pcount;
 
    f = (p2 - p1);
    normalize (f);
@@ -517,24 +518,25 @@ void(vector p1, vector p2, entity from, float damage) HIP_HammerDamage = { // [F
    f_y = f_x;
    f_z = FALSE;
    f = (f * FL_INWATER);
+    pcount = SUB_ClampFloat(damage * 4,8,254);
    e2 = world;
    e1 = world;
    traceline(p1,p2,FALSE,self);
    if (trace_ent.takedamage && !trace_ent.wetsuit_finished) {
-      particle (trace_endpos,'0 0 100',225,(damage * MOVETYPE_STEP));
+      particle (trace_endpos,'0 0 100',225,pcount);
       T_Damage(trace_ent,from,from,damage,DAMARMOR);
       if (self.flags & FL_CLIENT && other.flags & FL_CLIENT) trace_ent.velocity_z = (trace_ent.velocity_z + 400.000);
    }
    e1 = trace_ent;
    traceline((p1 + f),(p2 + f),FALSE,self);
    if (((trace_ent != e1 && trace_ent.takedamage) && !trace_ent.wetsuit_finished)) {
-      particle(trace_endpos,'0 0 100',225,(damage * MOVETYPE_STEP));
+      particle(trace_endpos,'0 0 100',225,pcount);
       T_Damage(trace_ent,from,from,damage, DAMARMOR);
    }
    e2 = trace_ent;
    traceline ((p1 - f),(p2 - f),FALSE,self);
    if ((trace_ent != e1 && (trace_ent != e2)) && trace_ent.takedamage && !trace_ent.wetsuit_finished) {
-      particle(trace_endpos,'0 0 100',225,(damage * MOVETYPE_STEP));
+      particle(trace_endpos,'0 0 100',225,pcount);
       T_Damage(trace_ent,from,from,damage, DAMARMOR);
    }
 };

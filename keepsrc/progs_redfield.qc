@@ -214,7 +214,7 @@ void() misc_saluteknight_setup = { // [FUNCTION]
 
 // QUAKED misc_saluteknight (1 .5 .25) (-16 -16 -16) (16 16 32)
 void() misc_saluteknight = { // [ENTITY]
-	self.mdl = "progs/ad171/mon_knight.mdl";
+	self.mdl = "progs/ad181/mon_knight.mdl";
 	precache_model (self.mdl);
 	precache_sound("redfield/misc/armor_clink.wav");
 	self.movetype = MOVETYPE_NONE;

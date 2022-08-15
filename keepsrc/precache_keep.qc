@@ -82,7 +82,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_poisongibs();
 	precache_model("progs/backpack.mdl");
 	precache_model("progs/qmaster/coinitem.mdl");
-	precache_model("progs/nehahra/soul.mdl");
 	precache_model("progs/null.mdl");
 	precache_model("progs/spark.spr");
 	precache_model("progs/drake/flame2.mdl");
@@ -95,7 +94,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/quoth/medexp.spr");	// For dragon fire
 	precache_model("progs/hipnotic/lasrspik.mdl");
 	precache_model("progs/ne_ruins/proxbomb.mdl");
-	precache_model("progs/g_crossbow.mdl");
 	precache_model("progs/its/v_crossbow1.mdl");
 	precache_model("progs/its/v_crossbow2.mdl");
 	precache_model("progs/drake/v_xbow.mdl");
@@ -108,8 +106,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/v_multi2.mdl");
 	precache_model("progs/drake/v_mirv.mdl");
 	precache_model("progs/hipnotic/v_laserg.mdl");
-	precache_model("progs/madfox/g_hamer.mdl");
-	precache_model("progs/madfox/v_hamer.mdl");
 	precache_model("progs/madfox/thr0wham.mdl");
 	precache_model("progs/violentrumble/v_hammer.mdl"); //mjolnir
 	precache_model("progs/violentrumble/v_hammerpw.mdl"); //mjolnir

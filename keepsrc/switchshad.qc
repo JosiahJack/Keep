@@ -125,6 +125,7 @@ void() func_shadow_controller = {
 };
 
 void() func_shadow_setup_controller = {
+	dprint("func_shadow_setup_controller");
 	self.switchfader = spawn();
 	self.switchfader.classtype = CT_CONTROL;
 	self.switchfader.owner = self; // Make sure link back to source entity

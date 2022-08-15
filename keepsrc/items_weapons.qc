@@ -399,6 +399,7 @@ void() weapon_upgrade_ssg = {
 
 void() weapon_upgrade_lg = {
 	item_setupmodel(MODEL_GWEAP_UPLG,0);
+	precache_model (MODEL_PROJ_PLASMA);
 	self.weapon = IT_UPGRADE_LG;
 	self.classtype = CT_UPGRADE_LG;
 	if (self.netname == "") self.netname = "Plasma Gun"; // AD Plasma Gun, direct & splashdamage

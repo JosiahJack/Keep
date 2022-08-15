@@ -152,7 +152,7 @@ void(entity inflictor, entity attacker, float damage) misc_targetdummy_pain = { 
 // Target practice dummy
 void() misc_targetdummy = { // [ENTITY]
 	if (self.spawnflags & MISC_TARGKNIGHT) {
-		self.mdl = "progs/ad171/mon_knight.mdl";
+		self.mdl = "progs/ad181/mon_knight.mdl";
 		self.headmdl = "progs/ad171/targd_short.mdl";
 		self.pain_sound = "knight/khurt.wav";
 		self.t_width = FALSE;

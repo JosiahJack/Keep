@@ -944,11 +944,14 @@ float(entity f, entity e) Gyro_Force_CheckBounds = {
 //----- Run Force Code every Frame --------------------
 void() Gyro_RunForces = {
 	local entity	forcehead, gyrohead, oldforce;
-	local float		forceheadcount;
+	local float		forceheadcount, loopiter;
 
 	//----- Loop Over Every Force --------------------
 	forcehead = gyro_forcelist_head;
 	while (forcehead) {
+		if (loopiter > 256) return;
+
+		loopiter = loopiter + 1;
 		//----- Run Update Function on Changed Forces --------------------
 		if (forcehead.gyro_force_update) {
 			Gyro_Force_Update(forcehead);

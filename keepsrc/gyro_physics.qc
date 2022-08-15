@@ -45,6 +45,7 @@ void(entity e, float mass) Gyro_Object_Activate = {
 	local float	reactive;
 
 	if (!e) return;
+	if (gyro_objectlist_size >= MAX_GYRO_OBJECTS) return;
 
 	if (mass == 0) mass = 1; // give it SOMETHING
 
@@ -137,9 +138,9 @@ void(entity e) Gyro_Object_ClearPhysics = {
 	Gyro_ObjectList_Remove(e);
 	
 	//----- Print Debugging Information --------------------
-	dprint("Gyro Debug: Entity physics cleared for '");
-	dprint(e.classname);
-	dprint("'\nAll physics settings removed\n");
+	//dprint("Gyro Debug: Entity physics cleared for '");
+	//dprint(e.classname);
+	//dprint("'\nAll physics settings removed\n");
 };
 
 //===== Object Force-Channels and Feedback ===================
@@ -256,6 +257,8 @@ void(entity e) Gyro_Object_RemoveBouyancy = {
 //----- Give an Entity Bouyancy in Air, Water, Slime and Lava --------------------
 void(entity e, float bouyforce, float mod_air, float mod_water, float mod_slime, float mod_lava) Gyro_Object_SetBouyancyMod = {
 	local float	bouypower;
+
+	if (gyro_objectlist_size >= MAX_GYRO_OBJECTS) return;
 
 	//----- No Bouyancy: Call Deactivation Macro --------------------
 	if (bouyforce == 0) return Gyro_Object_RemoveBouyancy(e);
@@ -776,7 +779,7 @@ void(entity e, float turbforce) Gyro_Object_SetAngleTurb = {
 //----- Run Physics Code every Frame --------------------
 void() Gyro_RunPhysics = {
 	local entity gyrohead;
-	local float gyroheadcount, movespeed;
+	local float gyroheadcount, movespeed, loopiter;
 
 	//----- Update Global-Turbulence Vector --------------------
 	gyro_globalturbulence_x = random() - 0.5;
@@ -786,6 +789,9 @@ void() Gyro_RunPhysics = {
 	//----- Loop Over all Physics Objects --------------------
 	gyrohead = gyro_objectlist_head;
 	while (gyrohead) {
+		if (loopiter > 256) return;
+
+		loopiter = loopiter + 1;
 		//----- Pre-find Object Pointcontents --------------------
 		gyrohead.gyro_object_pointcontent = GetContents(gyrohead.origin);
 

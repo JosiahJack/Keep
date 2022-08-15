@@ -157,8 +157,8 @@ void() misc_demon = { // [ENTITY]
 // -------- NOTES --------
 // Dead Death Knight for poses
 void() misc_dknight = { // [ENTITY]
-	self.mdl = "progs/ad171/mon_dknight.mdl";			// New Hell Knight
-	self.headmdl = "progs/ad171/h_dknight.mdl";
+	self.mdl = "progs/ad181/mon_dknight.mdl";			// New Hell Knight
+	self.headmdl = "progs/ad181/h_dknight.mdl";
 	self.gib1mdl = "progs/ad171/w_dknightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot

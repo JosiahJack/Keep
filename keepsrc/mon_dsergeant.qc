@@ -488,8 +488,8 @@ void(float soundtype) dsergeant_grunt_sound = {
 };
 
 void() monster_dsergeant_precache = {
-	precache_model("progs/ad171/mon_dsergeant.mdl");
-	precache_model("progs/ad171/h_dknight.mdl");
+	precache_model("progs/ad181/mon_dsergeant.mdl");
+	precache_model("progs/ad181/h_dknight.mdl");
 	precache_model(MODEL_PROJ_SERG);
 	precache_model("progs/ad171/w_blueflail.mdl");
 	precache_model("progs/ad171/gib_knfoot_l.mdl");
@@ -514,8 +514,8 @@ void() monster_dsergeant = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/ad171/mon_dsergeant.mdl";			// Blue badass!
-	self.headmdl = "progs/ad171/h_dknight.mdl";
+	self.mdl = "progs/ad181/mon_dsergeant.mdl";			// Blue badass!
+	self.headmdl = "progs/ad181/h_dknight.mdl";
 	self.gib1mdl = "progs/ad171/w_blueflail.mdl";			// Unique weapon
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";		// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot

@@ -430,7 +430,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	// Special artifact combo setups for extra abilities:
 	// Blast Belt + Quad reduces incoming damage by 50%
-	if (targ.flags & FL_CLIENT && targ.moditems & IT_ARTBLASTBELT && targ.items & IT_QUAD) damage = ceil(damage * 0.5);
+	if ((targ.flags & FL_CLIENT) && (targ.moditems & IT_ARTBLASTBELT) && (targ.items & IT_QUAD)) damage = ceil(damage * 0.5);
 
 	// Lava Shield + Pentagram prevents armour from being damaged
 	if (targ.flags & FL_CLIENT && targ.moditems & IT_ARTLAVASHIELD && targ.items & IT_INVULNERABILITY) noarmordmg = TRUE;	
@@ -526,7 +526,8 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	// Check for Blast Belt 100% splashdamage resistance
 	if (checkarmor == DAMSPLASH && (targ.moditems & IT_ARTBLASTBELT)) {
-		if ((targ.flags & FL_CLIENT)) PlayBlastBeltSound(targ); return;
+		if ((targ.flags & FL_CLIENT)) PlayBlastBeltSound(targ);
+		return;
 	}
 
 	// check for godmode or invincibility
@@ -763,7 +764,7 @@ float(entity targ, entity attacker, entity ignore, float checkclass) T_RadiusCan
 // attacker - (self.owner) = monster/player OR (self) = direct attack
 // ignore   - (other) = Original target OR (world) = no exceptions
 void(entity inflictor, entity attacker, float dmg, entity ignore, float checkclass) T_RadiusDamage = {
-	local float points, range;
+	local float points, range, loopiter;
 	local entity head;
 	local vector org, imporg, dir;
 
@@ -772,10 +773,14 @@ void(entity inflictor, entity attacker, float dmg, entity ignore, float checkcla
 	if (attacker.classtype == CT_WORLD) return;
 	if (attacker.classtype == CT_ENEMYTARGET) return;
 
+	loopiter = 0;
 	imporg = SUB_EntityOrigin(inflictor);
 	head = findradius(imporg,dmg+40);
 	points = dmg;
 	while (head) {
+		if (loopiter > 256) break;
+
+		loopiter = loopiter + 1;
 		if (T_RadiusCanDamage(head,attacker,ignore,checkclass)) {
 			// This formula is using bounding box size which means the damage amount is lower if the monster is larger
 			// It should really be based on bounding box edge not monster origin
@@ -795,7 +800,7 @@ void(entity inflictor, entity attacker, float dmg, entity ignore, float checkcla
 							// e.g. 9 damage = 10% chance.
 							Burn_Add(head,attacker,MAX_BURN_DAMAGE);
 						}
-						T_Damage(head,inflictor,attacker,points,DAMARMOR); // Any damage left? Check for poison as well
+						T_Damage(head,inflictor,attacker,points,DAMSPLASH); // Any damage left? Check for poison as well
 					}
 					if (attacker.poisonous) PoisonDeBuff(head);
 				}

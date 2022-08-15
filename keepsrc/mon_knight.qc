@@ -327,8 +327,8 @@ void() knight_statue = {
 };
 
 void() monster_knight_precache = {
-	precache_model ("progs/ad171/mon_knight.mdl");
-	precache_model ("progs/h_knight.mdl");
+	precache_model ("progs/ad181/mon_knight.mdl");
+	precache_model ("progs/ad181/h_knight.mdl");
 	precache_model ("progs/ad171/w_knightsword.mdl");
 	precache_model ("progs/ad171/gib_knfoot_l.mdl");
 	precache_model ("progs/ad171/gib_knfoot_r.mdl");
@@ -352,8 +352,8 @@ void() monster_knight_precache = {
 void() monster_knight = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	self.mdl = "progs/ad171/mon_knight.mdl";
-	self.headmdl = "progs/h_knight.mdl"; // Large head
+	self.mdl = "progs/ad181/mon_knight.mdl";
+	self.headmdl = "progs/ad181/h_knight.mdl"; // Large head
 	self.gib1mdl = "progs/ad171/w_knightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl"; // left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl"; // right foot
@@ -361,7 +361,7 @@ void() monster_knight = {
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = "";
 	if (random() < 0.5) self.gib3mdl = "";
-	if (self.deathstring == "")  self.deathstring = " was slashed by a Knight\n";
+	if (self.deathstring == "") self.deathstring = " was slashed by a Knight\n";
 
 	if (self.spawnflags & MON_STATUE) {
 		self.hittype = HIT_STONE;
@@ -373,7 +373,7 @@ void() monster_knight = {
 
 		self.pain_sound = "rogue/statue/pain.wav";
 		self.death_sound = "rogue/statue/death.wav";
-		self.gib1skin = 1;					// Stoney sword
+		self.gib1skin = 4;					// Stoney sword
 		self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
 		self.gib2mdl = self.gib3mdl = "";
 	} else {

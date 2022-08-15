@@ -274,6 +274,10 @@ float	GYRO_AFFECTOR_DIRECTIONAL	= 3;
 float	GYRO_AFFECTOR_ANTIGRAVITY	= 4;
 float	GYRO_AFFECTOR_RESISTANCE	= 5;
 
+float MAX_GYRO_OBJECTS = 256; // Added by Qmaster to mitigate large maps and to
+							  // prevent runaway loop errors as gibs and such
+							  // accumulate.
+
 //===== Object Linked-List Control ====================
 //----- List Variable Declarations --------------------
 float	gyro_objectlist_size;
@@ -371,6 +375,8 @@ void(entity e) remove = { // [FUNCTION]
 	Gyro_ForceList_Remove(e);
 	FliquidList_Remove(e);
 	Gyro_RemoveEntity(e); // The actual remove = #15; remove()
+	totaledicts = totaledicts - 1;
+	if (totaledicts < 2) totaledicts = 2; // Always world and player.
 };
 
 //===== Primary Control Routines ====================

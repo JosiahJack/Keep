@@ -58,20 +58,6 @@ float		coop_health;		// Toggle health packs respawning in coop
 float		coop_powerups;		// Toggle powerups respawning in coop
 float		trig_cdtrack;		// Trigger changed CD track
 string		trig_skybox;		// Trigger changed Skybox
-float		engine;				// Type of engine active 0=Fitz, 1=DP, 2=FTE
-float		ext_active;			// PR extenstions active (DP/FTE)
-float       ext_rerelease;      // Using the Quake Rerelease engine
-float		ext_dpfog;			// Extra DP fog parameters
-float		ext_dppart;			// Extra DP particle system
-float		ext_ftepart;		// Extra FTE particle system
-float		ext_dpsurf;			// Extra DP query surface information
-float		ext_dprain;			// Extra DP particle rain system
-float		ext_dpsnow;			// Extra DP particle snow system
-float		ext_dprot;			// Extra DP rotating bmodel system
-float		ext_fteskin;		// Extra FTE skin/ladder system
-float		ext_frikfile;		// Extra FRIK File extension system
-float		ext_ftestrings;		// Extra FTE/QSS file extensions
-float		ext_sprintf;		// Sprintf C code function (exposed to QC)
 float		pixelmode;			// Change texture pixel mode (linear/nearest)
 float		weathersys;			// Change weather particles (enable/disable)
 float		playerprojsize;		// Player projectiles 0=Large or 1=Small

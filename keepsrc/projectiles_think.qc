@@ -1417,6 +1417,7 @@ void() Flare_Think = { // [FUNCTION]
     if (self.lefty) FlareGlitter();
     else { // Spawn some particles at the source.
         den = ceil(self.delay - time) * 4;
+        if (den > 254) den = 254;
         particle(self.origin,VEC_ORIGIN,232,den);
     }
     self.lefty = !self.lefty;

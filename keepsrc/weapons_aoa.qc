@@ -139,7 +139,7 @@ void() sword3Attack8 = [2, player_run] { self.weaponframe = 20; };
 
 void(entity inflictor, entity attacker, float damage, float radius, entity ignore, float checkclass) T_RadiusDamageAOA = // radius and damage are now independent arguments with falloff damage being mostly linear, and doesn't hurt attacker. I might extend it further to pass "damage_attacker" boolean "float"
 {
-	local	float 	points, distance;
+	local	float 	points, distance, loopiter;
 	local	entity	head;
 	local	vector	org, imporg;
 
@@ -152,9 +152,12 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 	if (inflictor.bsporigin) imporg = bmodel_origin(inflictor);
 	else imporg = inflictor.origin;
 		
+	loopiter = 0;
 	head = findradius(imporg, radius);
-	
 	while (head) {
+		if (loopiter > 256) break;
+
+		loopiter = loopiter + 1;
 		if (head != ignore) {
 			// This is used mostly for wraiths so when they die they don't
 			// kill each other, can't get the code logic to work so its
@@ -179,28 +182,20 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 						org = head.origin + (head.mins + head.maxs)*0.5;
 						distance = vlen(imporg - org);
 						points = ((radius - distance)/radius + damage)/2; //damage is an average of the [float damage] argument, and a spatially-linear falloff damage. AKA damage falls off from 100% to 50% at the edge of the radius
-						
 						if (points > 0 && head.health > 0) {
 							// Need CanDamage to check for anything blocking LoS
 							// It will do several traces (source->target) to check
 							// for any blocking entities (lifts, doors, walls etc)
 							if (CanDamage (head, inflictor)) {
-								// #ryanscissorhands: This splash damage is NOT part of rocket resistance, hence commenting out the subsequent two lines
-								//if (head.resist_rockets > 0)
-								//	points = Resist_Damage(head, AM_ROCKETS, points); // We do this inside T_Damage now for consistency and reduced duplicate code. -Qmaster
-								
 								// Zombies should really be blown from explosives
 								// especially from ogre grenades right under their feet
 								// Check for glancing damage or if too far away
-								if (head.classgroup == CG_ZOMBIE && points > (head.health*0.25))
-									points = DAMAGE_ZOMBIECLASS;
-								// Any damage left? Check for poison as well
-								if (points > 0) T_Damage(head, inflictor, attacker, points, DAMARMOR); //T_Damage(
-								// bprint("Radius is doing ");
-								// bprint(ftos(points));
-								// bprint(" damage.\n");
-								
-								if (attacker.poisonous) PoisonDeBuff(head);
+								if (head.classgroup == CG_ZOMBIE && points > (head.health*0.25)) points = DAMAGE_ZOMBIECLASS;
+								if (points > 0) {
+									// Any damage left? Check for poison as well
+									T_Damage(head, inflictor, attacker, points, DAMSPLASH);
+									if (attacker.poisonous) PoisonDeBuff(head);
+								}
 							}
 						}
 					}

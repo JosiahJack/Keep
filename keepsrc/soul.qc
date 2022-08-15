@@ -134,7 +134,8 @@ void(entity ent) Soul_Spawn = { // [FUNCTION]
     newmis.owner      = self;  // Cannot use 'master' because summon code thinks soul is a pet.
     newmis.classname  = "soul";
 	newmis.classtype  = CT_SOUL;
-    newmis.solid      = SOLID_TRIGGER; // Don't make bodies glow.
+    newmis.solid      = SOLID_TRIGGER; // Don't make bodies glow.  Must NOT be SOLID_NOT or else
+                                       // findradius can't see it!
     newmis.movetype   = MOVETYPE_NOCLIP;
     newmis.cnt        = 1; // Begins hidden in corpse.
     newmis.mangle     = '0 0 20';

@@ -432,8 +432,8 @@ void() dguard_die = {
 };
 
 void() monster_dguard_precache = {
-	precache_model("progs/ad171/mon_dguard.mdl");
-	precache_model("progs/ad171/h_dguard.mdl");
+	precache_model("progs/ad181/mon_dguard.mdl");
+	precache_model("progs/ad181/h_dguard.mdl");
 	precache_model("progs/ad171/w_dguardsword.mdl");
 	precache_model("progs/ad171/gib_knfoot_l.mdl");
 	precache_model("progs/ad171/gib_knfoot_r.mdl");
@@ -449,8 +449,8 @@ void() monster_dguard = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/ad171/mon_dguard.mdl";
-	self.headmdl = "progs/ad171/h_dguard.mdl";				// Large head
+	self.mdl = "progs/ad181/mon_dguard.mdl";
+	self.headmdl = "progs/ad181/h_dguard.mdl";				// Large head
 	self.gib1mdl = "progs/ad171/w_dguardsword.mdl";		// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";		// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot

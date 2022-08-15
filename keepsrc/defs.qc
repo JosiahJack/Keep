@@ -386,6 +386,21 @@ float 	developer;
 .float		distance;
 .float		volume;
 
+float		engine;				// Type of engine active 0=Fitz, 1=DP, 2=FTE
+float		ext_active;			// PR extenstions active (DP/FTE)
+float       ext_rerelease;      // Using the Quake Rerelease engine
+float		ext_dpfog;			// Extra DP fog parameters
+float		ext_dppart;			// Extra DP particle system
+float		ext_ftepart;		// Extra FTE particle system
+float		ext_dpsurf;			// Extra DP query surface information
+float		ext_dprain;			// Extra DP particle rain system
+float		ext_dpsnow;			// Extra DP particle snow system
+float		ext_dprot;			// Extra DP rotating bmodel system
+float		ext_fteskin;		// Extra FTE skin/ladder system
+float		ext_frikfile;		// Extra FRIK File extension system
+float		ext_ftestrings;		// Extra FTE/QSS file extensions
+float		ext_sprintf;		// Sprintf C code function (exposed to QC)
+
 float(float yaw, float dist) noclip_move;
 
 // builtin functions
@@ -400,7 +415,11 @@ void(string e) error				= #10;
 void(string e) objerror				= #11;
 float(vector v) vlen				= #12;
 float(vector v) vectoyaw			= #13;
-entity() spawn						= #14;
+
+float totaledicts, startframe_edicts;
+
+entity() spawn_builtin				= #14;
+// spawn() down below after dprint so it can warn when max edicts is reached.
 void(vector v1, vector v2, float nomonsters, entity forent) traceline = #16; // sets trace_* globals.  nomonsters can be true to ignore blocking monsters.  An entity will also be ignored for testing if forent == test, a forent of world is ignored
 entity() checkclient				= #17;	// returns a client to look for
 entity(entity start, .string fld, string match) find = #18;
@@ -411,6 +430,44 @@ entity(vector org, float rad) findradius = #22;
 void(string s) dprint				= #25;
 string(float f) ftos				= #26;
 string(vector v) vtos				= #27;
+
+void(entity targ) entity_stop;
+entity testlastspawn;
+entity() spawn = {
+
+	if (totaledicts >= 8191 && !ext_ftepart) {
+		if (developer > 1) {
+			dprint("WARNING: Out of edicts!  Reached ");
+			dprint(ftos(totaledicts));
+			dprint(" edicts!\n");
+		}
+		if (!newmis) return world;
+
+		newmis.flags = 0;
+		entity_stop(newmis);
+		return newmis;
+	}
+	if ((totaledicts - startframe_edicts) > 100 && framecount > 15 && !ext_ftepart) {
+		if (developer > 1) dprint("WARNING: Spawned 100 new entities this frame! Stopped until next frame!\n");
+		if (!newmis) return world;
+
+		newmis.flags = 0;
+		entity_stop(newmis);
+		return newmis; // Prevent runaway loop errors on spawners and gibs.
+	}
+
+	totaledicts = totaledicts + 1;
+	//if (self) {
+	//	dprint("self: ");
+	//	dprint(self.classname);
+	//	dprint(" -- ");
+	//}
+	//dprint("spawned new entity ");
+	//dprint(ftos(totaledicts));
+	//dprint("\n");
+	testlastspawn = spawn_builtin();
+	return testlastspawn;
+};
 void() coredump						= #28;	// prints all edicts
 void() traceon						= #29;	// turns statment trace on
 void() traceoff						= #30;

@@ -514,6 +514,8 @@ float CT_PROJ_WIZBOSS = 583;    // Lava ball of the Lava Scrag
 float CT_PROJ_INK = 584;        // Octopus Ink
 float CT_ARTTHORSBLESSING = 585;// Thor's Blessing free life at would-be death.
 
+
+
 float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power
 float CT_ARTPSHIELD = 591;		// Power Shield

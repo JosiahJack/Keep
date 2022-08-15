@@ -616,8 +616,8 @@ void() dknight_ghost_on = {
 };
 
 void() monster_dknight_precache = {
-	precache_model("progs/ad171/mon_dknight.mdl");
-	precache_model("progs/ad171/h_dknight.mdl");
+	precache_model("progs/ad181/mon_dknight.mdl");
+	precache_model("progs/ad181/h_dknight.mdl");
 	precache_model(MODEL_PROJ_HKN);
 	precache_model("progs/ad171/gib_knfoot_l.mdl");
 	precache_model("progs/ad171/gib_knfoot_r.mdl");
@@ -641,8 +641,8 @@ void() monster_dknight = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/ad171/mon_dknight.mdl";			// New Hell Knight
-	self.headmdl = "progs/ad171/h_dknight.mdl";
+	self.mdl = "progs/ad181/mon_dknight.mdl";			// New Hell Knight
+	self.headmdl = "progs/ad181/h_dknight.mdl";
 	self.gib1mdl = "progs/ad171/w_dknightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot

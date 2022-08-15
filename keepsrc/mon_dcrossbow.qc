@@ -532,8 +532,8 @@ void() dcrossbow_die = {
 void() dcrossbow_crossbow_sound = { sound(self,CHAN_WEAPON,"ad171/weapons/crossbow_swipe.wav",1,ATTN_NORM); };
 
 void() monster_dcrossbow_precache = {
-	precache_model ("progs/ad171/mon_dcrossbow.mdl");
-	precache_model ("progs/ad171/h_dcrossbow.mdl");
+	precache_model ("progs/ad181/mon_dcrossbow.mdl");
+	precache_model ("progs/ad181/h_dcrossbow.mdl");
 	precache_model (MODEL_PROJ_BOLT1);
 	precache_model ("progs/ad171/w_dcrossbow.mdl");
 	precache_model ("progs/ad171/gib_knfoot_l.mdl");
@@ -557,8 +557,8 @@ void() monster_dcrossbow = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/ad171/mon_dcrossbow.mdl";			// crossbow guy
-	self.headmdl = "progs/ad171/h_dcrossbow.mdl";
+	self.mdl = "progs/ad181/mon_dcrossbow.mdl";			// crossbow guy
+	self.headmdl = "progs/ad181/h_dcrossbow.mdl";
 	self.gib1mdl = "progs/ad171/w_dcrossbow.mdl";			// Unique weapon
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";		// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot

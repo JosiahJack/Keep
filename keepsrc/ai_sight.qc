@@ -87,7 +87,7 @@ float(entity source, entity targ, vector s_offset, vector t_offset, float nomons
 
 	spot1 = SUB_EntityOrigin(source) + s_offset; // Bmodels don't have proper origins
 	spot2 = SUB_EntityOrigin(targ) + t_offset;
-	traceline(spot1,spot2, nomonsters, source); 
+	traceline(spot1,spot2, nomonsters, source);
 
 	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will
 	// draw a diamond model where the AI is looking.
@@ -478,21 +478,31 @@ void(float wakeupothers) FoundHuntTarget = {
 		if (!self.attack_instant) SUB_AttackFinished(1); // Wait a while before first attack.
 };
 
-entity(float findopposing) SeeTarget = { // [FUNCTION]
+entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 	local float dist;
 	local entity head;
 
-	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I careth not.
-	if (!findopposing && self.horn_active && self.charmer) return world; // Already have a leader to follow
+	if ((total_monsters - killed_monsters) > 1000) {
+		if (random() < 0.99) return world;
+	}
 
-	// Shorter sight charmers to keep closer to player who summoned us, maybe.
-	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; 
-	else dist = MON_MAX_RANGE; // NORMAL SIGHT
+	if ((total_monsters - killed_monsters) > 500) {
+		if (random() < 0.5) return world;
+	}
+
+	if (self.alignment == NEUTRAL) {
+		if(!IsInsane(self)) return FALSE; // I careth not.
+	}
 
 	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
 	if (random() < 0.333) dist = 256;
 	head = world;
-	head = findradius(self.origin,dist);
+	// Shorter sight charmers to keep closer to player who summoned us, maybe.
+	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; 
+	else dist = MON_MAX_RANGE; // NORMAL SIGHT
+
+	if (playersonly) head = QC_FindRadiusPlayers(self.origin,dist);
+	else head = findradius(self.origin,dist);
 	while (head) {
 		if (self.classtype == CT_MONWRAITHNEHAHRA && !self.enemy) {
 			if (head.classtype == CT_SOUL && self.alpha < 1) return head;
@@ -523,14 +533,30 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 	return head;
 };
 
-entity() SeeOpposing = {
+entity() SeeOpposing = { // [FUNCTION]
 	if (random() < 0.666) return world;
-	return SeeTarget(TRUE);
-}; // [FUNCTION]
-entity() SeeFriendly = { 
+
+	// Check and only look for players if no opposing monsters.  Faster.
+	if (self.alignment == GOOD) {
+		if ((total_monsters - total_goodmonsters) < 1) return SeeTarget(TRUE,TRUE);
+	} else if (self.alignment == EVIL) {
+		if (total_goodmonsters < 1) return SeeTarget(TRUE,TRUE);
+	}
+	return SeeTarget(TRUE,FALSE); // Look for monsters or players to fight.
+};
+entity() SeeFriendly = { // [FUNCTION]
+	if (self.horn_active && self.charmer) return world; // Already have a leader
 	if (random() < 0.666) return world;
-	return SeeTarget(FALSE);
-}; // [FUNCTION]
+
+	// Check and only look for players if no friendly monsters.  Faster.
+	if (self.alignment == GOOD) {
+		if (total_goodmonsters <= 1) return SeeTarget(FALSE,TRUE);
+	} else if (self.alignment == EVIL) {
+		if ((total_monsters - total_goodmonsters) <= 1) return SeeTarget(FALSE,TRUE);
+	}
+
+	return SeeTarget(FALSE,FALSE); // Look for monsters or players to join.
+};
 
 void(entity leader) FollowTheLeader = {
 	dprint("I'll follow you I guess.  Let's get a beer when this is over.\n");
@@ -557,10 +583,11 @@ float() FindTarget = { // [FUNCTION]
 
 	self.enemyexit = FALSE; // Reset any combat exit conditions
 
-	// All following monsters (could be evil) such as Horn of Conjouring monsters (always friendly to the player who summoned them)
+	// All following monsters such as those summoned by the Horn of Conjouring or
+	// Cowardly or Calm following a leader (good or evil).
 	if (self.charmed) {
 		if (self.horn_active) self.effects = (self.effects | EF_DIMLIGHT); // Horn summon player followers are always lit regardless of other effects and shields
-		if ( (self.huntingcharmer > FALSE) ) {
+		if (self.huntingcharmer > 0) {
 			UpdateCharmerGoal(); // Move our goal point to be 300units towards our charmer's position, goes past when close
 			r = vlen ((self.origin - self.goalentity.origin));
 			if ( (r < MIN_CHARMER_DISTANCE) ) {
@@ -578,11 +605,11 @@ float() FindTarget = { // [FUNCTION]
 			} else {
 				charmdist = TOOCLOSE_CHARMER_DISTANCE;
 				if (self.temperament == TEMPRA_COWARDLY && charmrand < 0.1) charmdist = 384;
- 				if ( (vlen ((self.origin - self.charmer.origin)) < charmdist) ) { // 120units or closer to our charmer
+				if ( (vlen ((self.origin - self.charmer.origin)) < charmdist) ) { // 120units or closer to our charmer
 					FleeCharmer(); // Get out of our charmer's way
 					return FALSE;
 				}
- 			}
+			}
 		}
 	}
 

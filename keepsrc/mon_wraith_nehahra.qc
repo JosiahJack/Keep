@@ -171,6 +171,7 @@ void() ai_drain = { // [FUNCTION]
     self.t_width = self.t_width + 1;
     makevectors(self.angles);
     vec = self.origin + (v_forward*47) + (v_right*6) + (v_up*10);
+	if (den > 254) den = 254;
     particle(vec, '0 0 1', rgb, den);
     T_Damage(self.enemy, self, self, damage, NOARMOR); // No armor, because armor cannot block incorporal attacks.  Leech, because the wraith will suck and drain your life force.
 };

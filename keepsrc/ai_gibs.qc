@@ -268,7 +268,13 @@ void() RemoveGib_Final = {
 };
 
 void() RemoveGib = {
-	if (self.owner.classtype == CT_MISCGIBF || self.owner.classgroup == CG_TEMPENT) {
+	if (self.owner.classtype == CT_MISCGIBF
+		|| self.owner.classgroup == CG_TEMPENT
+		|| (total_monsters - killed_monsters) > 300) {
+		self.touch = SUB_Null;
+		self.classtype = 0;
+		self.classgroup = 0;
+		Gyro_Object_ClearPhysics(self);
 		self.think = model_fade; // Fade away model, if active (default)
 		self.nextthink = time + 10;
 	} else {
@@ -398,6 +404,8 @@ void() TouchGib = {
 void(float gib_no, float gib_qty) ThrowGib = {
 	while (gib_qty > 0) {
 		gibitem = spawn();
+		if (!gibitem) return;
+
 		gibitem.owner = self;
 		gibitem.classname = "item_gib";
 		gibitem.classtype = CT_TEMPGIB;
@@ -739,6 +747,11 @@ void() monster_ThrowGib = {
 
 // Check health for gib condition, and gib if so
 void() monster_check_gib = {
+	if (!ext_ftepart && gibbed_this_frame > 10) {
+		if (developer > 1) dprint("Gibbed more than 10 enemies this frame! Skipped gibbing more!\n");
+		return;
+	}
+
 	// There are always exceptions to the every rule! Spawns=Explode, Wraith/Wrath=Explode, Jim=Explode, SkullWiz=Fade away, Lost Souls=Explode etc. etc.
 	if (self.gibhealth == MON_NEVERGIB) return;
 	if (self.touchedvoid) { entity_hide(self); return; }
@@ -746,6 +759,7 @@ void() monster_check_gib = {
 	if (self.gibondeath) self.health = self.gibhealth; // Make sure gibondeath has gib velocity (health value)
 	if (self.health < (self.gibhealth + 1) || self.gibondeath) { // Is it time to throw a gib party?
 		monster_ThrowGib();
+		gibbed_this_frame = gibbed_this_frame + 1;
 		monster_gibrandomizer();
 	}
 };

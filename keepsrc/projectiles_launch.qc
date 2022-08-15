@@ -313,11 +313,20 @@ void() SetNewmisCommonRocketParameters = {
 
 void() SetNewmisCommonPlasmaParameters = {
 	newmis.classgroup = CG_PROJCELLS;
+	newmis.classtype = CT_PROJ_PLASMA;	// Class type number, quick identity
 	newmis.count = 1 + rint(random()*2);	// Default particles
 	newmis.speed = 0.02;					// Next function interval (very high tick)
 	newmis.think = Particle_Plasma;			// Manually generate blue/white particle trail
+	newmis.attack_finished = time + LIFE_PROJECTILE;
 	if (newmis.poisonous) newmis.mdl = MODEL_PROJ_PLASMAGRN;
-	else newmis.mdl = MODEL_PROJ_PLASMA;
+	else newmis.mdl = MODEL_PROJ_PGPLASMA;
+
+	// Is DP engine active for new particle trail?
+	if (ext_dppart) {
+		if (newmis.poisonous) newmis.traileffectnum = particleeffectnum(DPP_TRPOISON);
+		else newmis.traileffectnum = particleeffectnum(DPP_TRPLASMA);
+		newmis.effects = 0;
+	}
 };
 
 void(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile = { // [FUNCTION]
@@ -333,7 +342,8 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 	newmis.classtype = proj_type;		// Class type number, quick identity
 	newmis.classgroup = CG_PROJALL;	// Ammo type (default)
 	newmis.bbmins = newmis.bbmaxs = VEC_ORIGIN;
-	newmis.speed = newmis.attack_speed = newmis.attack_maxspeed = proj_speed;	// Save for later
+	newmis.speed = newmis.attack_speed = proj_speed; // Save for later
+	newmis.attack_maxspeed = proj_speed;
 	if (newmis.classtype == CT_PROJ_NG || newmis.classtype == CT_PROJ_SNG
 	    || newmis.classtype == CT_PROJ_REFNG) {
 		newmis.classgroup = CG_PROJNAILS; // Force it for piercer
@@ -449,37 +459,43 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 		else newmis.mdl = MODEL_PROJ_GROCK2;
 		newmis.frame = rint(random()*9);
 		newmis.avelocity = vecrand(0,200,TRUE);
-	} else if (proj_type == CT_MONARMYPLASMA) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONARMYPLASMA) {
 		SetNewmisCommonPlasmaParameters();
-	} else if (proj_type == CT_MONELIMATOR) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONELIMATOR) {
 		SetNewmisCommonPlasmaParameters();
-	} else if (proj_type == CT_MONCENTURION) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONCENTURION) {
 		SetNewmisCommonPlasmaParameters();
-	} else if (proj_type == CT_MONGAUNT) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONGAUNT) {
 		SetNewmisCommonPlasmaParameters();
 		if (newmis.poisonous) newmis.mdl = MODEL_PROJ_GAPLASMAGRN;
 		else newmis.mdl = MODEL_PROJ_GAPLASMA;
-	} else if (proj_type == CT_MONDEFLECTOR) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONDEFLECTOR) {
 		SetNewmisCommonPlasmaParameters();
-	} else if (proj_type == CT_MONEEL) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONEEL) {
 		SetNewmisCommonPlasmaParameters();
-	} else if (proj_type == CT_MONSEEKER) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONSEEKER) {
 		SetNewmisCommonPlasmaParameters();
-	} else if (proj_type == CT_MONTURRETB) {
-		SetNewmisCommonPlasmaParameters();
-		newmis.mdl = MODEL_PROJ_LASERBLUE;
-	} else if (proj_type == CT_MONFLOYD) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONTURRETB) {
 		SetNewmisCommonPlasmaParameters();
 		newmis.mdl = MODEL_PROJ_LASERBLUE;
-	} else if (proj_type == CT_MONMINOTAUR) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONFLOYD) {
+		SetNewmisCommonPlasmaParameters();
+		newmis.mdl = MODEL_PROJ_LASERBLUE;
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONMINOTAUR) {
 		SetNewmisCommonPlasmaParameters();
 		newmis.mdl = MODEL_PROJ_MPLASMA;
 	} else if (proj_type == CT_SUMMONLIGHT) {
 		SetNewmisCommonPlasmaParameters();
 		newmis.mdl = MODEL_PROJ_LIGHTNING2;
-	} else if (proj_type == CT_MONNOUR) {
+	} else if (proj_type == CT_PROJ_PLASMA && self.owner.classtype == CT_MONNOUR) {
 		SetNewmisCommonPlasmaParameters();
 		newmis.mdl = MODEL_PROJ_LIGHTNING2;
+	} else if (proj_type == CT_PROJ_PLASMA) {
+		SetNewmisCommonPlasmaParameters();
+		newmis.pain_finished = time + 0.1;		// Update model frame every 0.1s
+		newmis.avelocity = vecrand(0,300,TRUE);	// randomize avel
+		newmis.angles_y = rint(random()*360);	// Random angle
+		newmis.frame = 0;						// Start really small
 	} else if (proj_type == CT_REFLECTLIGHT) {
 		SetNewmisCommonPlasmaParameters();
 		newmis.mdl = MODEL_PROJ_LIGHTNING2;
@@ -874,8 +890,11 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 	}
 
 	newmis.finalangle = dir;
-	newmis.velocity = newmis.mangle = newmis.finalangle * newmis.speed;
+	newmis.velocity = newmis.mangle = newmis.finalangle * newmis.attack_speed;
 	newmis.avelocity = avel;
+	//dprint("Projectile launched with velocity ");
+	//dprint(vtos(newmis.velocity));
+	//dprint("\n");
 	if (!(self.flags & FL_CLIENT)) {
 		newmis.angles = vectoangles(newmis.finalangle);
 		if (proj_type == CT_PROJ_SHAL
@@ -889,6 +908,7 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 		newmis.angles = vectoangles(dir); // Normalized angles.
 	}
 
+	if (newmis.mdl == "") newmis.mdl = MODEL_PROJ_NG;
 	setmodel(newmis,newmis.mdl);
 	setsize(newmis,newmis.bbmins,newmis.bbmaxs);
 	newmis.oldorigin = newmis.origin = org;	// Save starting origin		
@@ -3034,7 +3054,8 @@ float (entity e) hornInfront = {
 void() launch_horn = {
 	local entity e;
 	local vector delta, dir;
-	local float eSpeed, dist, percent, ldmg, nearAWall, inDamage, inRange, recoil;
+	local float eSpeed, dist, percent, ldmg, nearAWall, inDamage, inRange;
+	local float recoil, loopiter;
 
 	// Constants used in the control of how the Airfist works
 	inDamage = 20; // Maximum damage that can be incurred by the Airfist.  The actual entity's damage is based on the distance from the center of the shot.
@@ -3075,9 +3096,13 @@ void() launch_horn = {
 	// Get all the entity's in the shot range
 	makevectors(self.v_angle);
 	e = findradius(self.origin, inRange);
+	loopiter = 0;
 	while (e) {
+		if (loopiter > 256) break;
+
 		if (e == self || e.solid == SOLID_BSP || e.movetype == MOVETYPE_NONE || (e.AIRG_Flags & AIRG_EXCLUDEENTITY)) { e = e.chain; continue; } // This is the exclusion code.  It excludes everything that is "Illegal" to move. eg. doors.
 
+		loopiter = loopiter + 1;
 		if (visible(e) && (self.waterlevel > 2 || hornInfront(e)) && (AffectedByPhysics(e) || e.flags & FLx_CREATURE)) { // Affect monsters and projectiles
 			// if flying creature and movetype is step then change to fly
 			// NOTE: For some reason the normal quakeC, flying monsters has set a

@@ -678,3 +678,6 @@ entity fliquid_head; // Borrowed schema from Gyro physics to handle checking all
 .float fliquid_inlist;
 
 .vector revive_origin;
+
+float gibbed_this_frame;
+float total_goodmonsters;

@@ -375,12 +375,48 @@ float(float yaw, float dist) noclip_move = {
 entity(vector org, float radius) QC_FindRadius = {
     local entity  e, head;
     local vector  spot;
-    local float rad, d, lensq;
+    local float rad, d, lensq, loopiter;
 
     rad = radius * radius;
     head = world;
     e = nextent(world);
+    loopiter = 0;
     while (e) {
+        if (loopiter > 256) return head;
+
+        loopiter = loopiter + 1;
+        d = org_x - (e.origin_x + (e.mins_x + e.maxs_x)*0.5);
+        d = d * d;
+        if (d > rad) continue;
+
+        d = org_y - (e.origin_y + (e.mins_y + e.maxs_y)*0.5);
+        d = d * d;
+        if (d > rad) continue;
+
+        d = org_z - (e.origin_z + (e.mins_z + e.maxs_z)*0.5);
+        d = d * d;
+        if (d > rad) continue;
+
+        e.chain = head;
+        head = e;
+        e = nextent(e);
+    }
+    return head;
+};
+
+entity(vector org, float radius) QC_FindRadiusPlayers = {
+    local entity  e, head;
+    local vector  spot;
+    local float rad, d, lensq, loopiter;
+
+    rad = radius * radius;
+    head = world;
+    e = nextent(world);
+    loopiter = 0;
+    while (e) {
+        if (loopiter > 6) return head;
+
+        loopiter = loopiter + 1;
         d = org_x - (e.origin_x + (e.mins_x + e.maxs_x)*0.5);
         d = d * d;
         if (d > rad) continue;

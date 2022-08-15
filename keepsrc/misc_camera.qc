@@ -585,6 +585,7 @@ void() camera_player_animate = { // [FUNCTION]
 void() camera_controller_setup = { // [FUNCTION]
 	if (!cam_control) { // Does controller exist?
 		cam_active = CINECAM_OFF; // Default state is off
+		dprint("camera_controller_setup: cam_control");
 		cam_control = spawn();					// Create an entity
 		cam_control.owner = self;				// Link back to client
 		cam_control.classtype = CT_CONTROL;
@@ -605,6 +606,7 @@ void() camera_controller_setup = { // [FUNCTION]
 		cam_player.view_ofs = '0 0 0';
 		cam_player.th_altstand = camera_player_animate;
 
+		dprint("camera_controller_setup: cam_track");
 		cam_track = spawn(); // Setup Camera Tracking entity.  To prevent the player moving the camera while the cinematic is active, a simple entity does the camera movement and the player entity mirrors this origin instead
 		cam_track.owner = cam_control;
 		cam_track.classtype = CT_CONTROL;

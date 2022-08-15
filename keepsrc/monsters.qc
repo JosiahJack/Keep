@@ -698,8 +698,11 @@ void() monster_spawn = {
 		self.vulnerability = VULN_SERAPHIC;
 	}
 
+
 	if (self.alignment == NEUTRAL) self.passive_state = 1;
 	setup_passivestate(self); // Check for passive mode and add (defaults) extra variables
+
+	if (self.alignment == GOOD) total_goodmonsters = total_goodmonsters + 1;
 	if (!self.enemy) self.enemy = self.movetarget = self.goalentity = world; // Reset all enemy tracking entities
 	self.pausetime = LARGE_TIMER;
 	if (!self.pain_timeout) self.pain_timeout = 1;	// Default
@@ -822,23 +825,26 @@ void() monster_spawn = {
 				dprint ("\b[STUCK]\b "); dprint (self.classname);
 				dprint (" at "); dprint (vtos(self.origin));
 				dprint ("\n");
-				spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
-				monster_remove_kill(self, FALSE, TRUE);
-				return;
+				//spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
+				//monster_remove_kill(self, FALSE, TRUE);
+				//return;
+				// Carry on just like vanilla progs does so that some maps don't break.
 			}
 		}
 	}
 
 	// Telefrag (kill) anything at monster position. Phased monsters cannot telefrag or produce spawn effects
 	if (!self.bodyphased) {
-		// New spawn condition via entity key nospawndamage
-		// This is to prevent excessive damage to breakables
-		// Monsters can spawn in very wierd situations (inside things)
-		// if spawning damage is disabled (spawn_tdeath)
-		if (self.nospawndamage == 0) spawn_tdeath(self.origin, self);	// 50K damage!
-		
-		// Don't show spawning effect if delay spawn + nogfx
-		if (self.spawnflags & MON_SPAWN_DELAY && !(self.spawnflags & MON_SPAWN_NOGFX)) spawn_tfog(self.origin);
+		if (self.spawnflags & MON_SPAWN_DELAY) {
+			// New spawn condition via entity key nospawndamage
+			// This is to prevent excessive damage to breakables
+			// Monsters can spawn in very wierd situations (inside things)
+			// if spawning damage is disabled (spawn_tdeath)
+			if (self.nospawndamage == 0) spawn_tdeath(self.origin, self);	// 50K damage!
+			
+			// Don't show spawning effect if delay spawn + nogfx
+			if (!(self.spawnflags & MON_SPAWN_NOGFX)) spawn_tfog(self.origin);
+		}
 	}
 
 	// Hell Knights can be setup to point at a target and fire lightning.  This uses the magicB attack by ID software that was never used
@@ -1103,11 +1109,10 @@ void() monster_start = {
 	else if (self.sight_sound3) self.sight_count = 3;
 	else if (self.sight_sound2) self.sight_count = 2;
 	else self.sight_count = 1;
-	
-	// Allow monster armor maphack.  Qmaster is evil again :)
-	
-    self.mindex2 = self.modelindex;      // Remember original modelindex.
 
+	// Allow monster armor maphack.  Qmaster is evil again :)
+
+    self.mindex2 = self.modelindex;      // Remember original modelindex.
 	if (self.spawnflags & MON_SPAWN_DELAY || self.brain & 32) {
 		setmodel(self, "");
 		self.solid = SOLID_NOT;				// No world interaction

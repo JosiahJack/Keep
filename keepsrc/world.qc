@@ -268,6 +268,7 @@ void() main = { // [FUNCTION]
 // gh_movemonster  : Monster movement when impacted by chain
 void() worldspawn = { // [ENTITY]...well it IS.
 	dprint ("\b[WORLDSPAWN]\b function started ...\n");
+	totaledicts = 1;
 	lastspawn = world;
 	InitBodyQue();
 	if (world.hipnoticoptions & HIPNOTIC_BULLETHOLES) InitBulletHoles();
@@ -705,8 +706,10 @@ void() StartFrame = { // [FUNCTION]
 	framecount = framecount + 1;
 	LightZero_Go(); // Flashes lightstyle of whole level to simulate lightning for Drake effects.
 	Gyro_Run(); // Process the physics.
+	startframe_edicts = totaledicts;
+	gibbed_this_frame = 0;
 };
- 
+
 void() bodyque= {}; // [ENTITY] Just here so spawn functions don't complain after the world creates bodyques
 
 void() InitBodyQue = { // [FUNCTION], New Code from Inside3d forums (old system was terrible).  Oh hey, now called InsideQc.  Interesting.

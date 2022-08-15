@@ -237,6 +237,7 @@ void() trap_pendulum_fire = { // [FUNCTION]
 	else self.think = pend_swing13;
 
 	self.nextthink = time + 0.01 + self.wait;
+	if (self.lefty) self.nextthink = self.nextthink + self.delay;
 };
 
 void() trap_pendulum_use = { // [FUNCTION]
@@ -264,6 +265,7 @@ void() trap_pendulum_on = { // [FUNCTION]
 	setmodel(self, self.mdl);
 	setsize (self, self.mins , self.maxs);
 	trap_pendsize(self.frame);
+	if (self.lefty) trap_pendulum_fire();
 };
 
 void() trap_pendulum_off = { // [FUNCTION]
@@ -313,6 +315,11 @@ void() trap_pendlong = { // [ENTITY]
 	if (self.targetname == "" && (self.spawnflags & ENT_STARTOFF)) {
 		dprint(self.classname);
 		dprint(" missing targetname on startoff pendulum, cannot be triggered that way! Turned it on.\n");
+		if (self.spawnflags & ENT_STARTOFF) self.spawnflags = self.spawnflags - ENT_STARTOFF;
+		self.state = STATE_ON;
+	}
+
+	if (self.lefty) {
 		if (self.spawnflags & ENT_STARTOFF) self.spawnflags = self.spawnflags - ENT_STARTOFF;
 		self.state = STATE_ON;
 	}
@@ -383,5 +390,23 @@ void() trap_pendshort = { // [ENTITY]
 void() trap_pendshortx = { // [ENTITY]
 	self.spawnflags = self.spawnflags | PEND_SHORT;
 	self.spawnflags = self.spawnflags | PEND_XSWING;
+	trap_pendlong();
+};
+
+void() pendulum = { // [ENTITY]
+	setorigin(self,self.origin + '0 0 104');
+	self.dmg = self.currentammo;
+	self.lefty = TRUE;
+	if (self.spawnflags & 4) {
+		self.spawnflags = self.spawnflags | ENT_STARTOFF;
+		self.spawnflags = self.spawnflags - 4;
+	}
+	if (self.spawnflags & 1) {
+		self.classname = "trap_pendlongx";
+		trap_pendlongx();
+		return;
+	}
+
+	self.classname = "trap_pendlong";
 	trap_pendlong();
 };

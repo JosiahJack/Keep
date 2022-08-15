@@ -674,15 +674,18 @@ float(entity targ, entity inflictor, entity attacker, float damage, vector spot,
 // Shoots multiple lightning bolts at nearby targets from a common point.  Used by burst lightning gun.  Also used by plasma discharge.
 void(entity inflictor, entity attacker, float damage, entity ignore, vector spot, vector pak, float bang) BurstLit_Chain = { // [FUNCTION]
     local entity head, saved;
-    local float hits, nofriendlyfire, radius, maxhits;
+    local float hits, nofriendlyfire, radius, maxhits, loopiter;
 
     nofriendlyfire = pak_x;
     radius = pak_y;
     maxhits = pak_z;
-    hits = 0;
+    hits = loopiter = 0;
     saved = world;
     head = findradius(spot,radius);
     while (head) { // Notarget/stealth won't save you from discharge.  Don't waste hits on immune targets, though.
+		if (loopiter > 256) break;
+
+		loopiter = loopiter + 1;
         if ((head.takedamage == DAMAGE_AIM
 			&& (head != attacker&& head != ignore && head.resist_cells < 1
             && !(nofriendlyfire && Ally_Check(head,attacker))

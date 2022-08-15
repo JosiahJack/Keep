@@ -120,6 +120,7 @@ void(entity targ, vector org, vector vel, float part_qty, float overridecol) Spa
 
 	if (!targ) return;
 
+	if (part_qty > 254) part_qty = 254;
 	if (targ.bleedcolour <= 0 && targ.bloodtype <= 0) targ.bleedcolour = MON_BCOLOR_RED;
 	else if (targ.bleedcolour != targ.bloodtype && targ.bleedcolour <= 0 && targ.bloodtype > 0) targ.bleedcolour = targ.bloodtype; // fix it just in case
 	else if (targ.bleedcolour != targ.bloodtype && !targ.bloodtype && targ.bleedcolour) targ.bloodtype = targ.bleedcolour;
