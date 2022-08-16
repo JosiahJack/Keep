@@ -56,12 +56,11 @@ void() trap_sawblade_touch = { // [FUNCTION]
 	} else {
 		if (self.height > 0) self.attack_finished = time + self.height;
 	}
-		
-	
+
 	if (other.flags & FL_MONSTER && other.health < 100) T_Damage(other, self, self, other.max_health + 100, DAMARMOR); // Instant death for weak monsters
 	else T_Damage(other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
 
-	SpawnMeatSpray ( other, other, crandom() * 200); // Blood and gore at object location not sawblade
+	SpawnMeatSpray(self, other, crandom() * 200);
 };
 
 // New slowdown/stop function by lunaran
@@ -123,7 +122,7 @@ void() trap_sawblade_setup = { // [FUNCTION]
 	self.estate_fire = func_train_next;	// Move to next path corner
 	self.state = STATE_OFF;				// sawblade is OFF, waiting
 	self.touch = trap_sawblade_touch; // Sharp pointy edges!
-	if (self.owner && self.spawnflags & SAW_STARTON) { // Did the first corner (owner) exist?
+	if (self.movestart && self.spawnflags & SAW_STARTON) { // Did the first corner (owner) exist?
 		self.nextthink = time + 0.1;
 		self.think = self.estate_use;
 	}
@@ -235,4 +234,14 @@ void() trap_sawbladey = { // [ENTITY]
 void() trap_sawbladex = { // [ENTITY]
 	self.spawnflags = self.spawnflags | SAW_XAXIS;
 	trap_sawbladey();
+};
+
+void() buzzsaw = { // [ENTITY]
+	if (self.speed <= 0) self.speed = 100;
+	self.dmg = self.currentammo;
+	self.currentammo = 0;
+	if (self.dmg <= 0) self.dmg = 10;
+	self.spawnflags = self.spawnflags | SAW_STARTON;
+	if(self.angles_y == 0 || self.angles_y == 180) trap_sawbladex();
+	else trap_sawbladey();
 };

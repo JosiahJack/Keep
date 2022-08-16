@@ -238,6 +238,7 @@ void() trap_pendulum_fire = { // [FUNCTION]
 
 	self.nextthink = time + 0.01 + self.wait;
 	if (self.lefty) self.nextthink = self.nextthink + self.delay;
+	self.lefty = FALSE;
 };
 
 void() trap_pendulum_use = { // [FUNCTION]
@@ -394,8 +395,9 @@ void() trap_pendshortx = { // [ENTITY]
 };
 
 void() pendulum = { // [ENTITY]
-	setorigin(self,self.origin + '0 0 104');
+	setorigin(self,self.origin + '0 0 108');
 	self.dmg = self.currentammo;
+	self.currentammo = 0;
 	self.lefty = TRUE;
 	if (self.spawnflags & 4) {
 		self.spawnflags = self.spawnflags | ENT_STARTOFF;

@@ -1901,6 +1901,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	
 	if (frame_pause() || self.in_a_vehicle) return;
 
+	if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	am = TRUE;
 	checkvec = VEC_ORIGIN;
 	inhackbank = FALSE; // Set later if switching to hack bank 2nd set of 24 weapons.
@@ -2420,6 +2421,7 @@ void() CycleWeaponCommand = { // [FUNCTION]
 	local float	am, inhackbank, wepID, cyclecheck;
 	local vector idconversion;
 	
+	if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	inhackbank = FALSE;
 	if (self.weaponismoditems) inhackbank = TRUE;
 	if (frame_pause()) return;		// Remote camera active
@@ -2525,6 +2527,7 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 	local float	am, inhackbank, wepID, cyclecheck;
 	local vector idconversion;
 	
+	if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	inhackbank = FALSE;
 	if (self.weaponismoditems) inhackbank = TRUE;
 	if (intermission_running > 0) return;		// intermission or finale

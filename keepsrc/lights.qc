@@ -943,7 +943,6 @@ void() light_candle = { // [ENTITY]
 void() light_lantern = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/rogue/lantern.mdl"; // Allow for custom models
 	precache_model (self.mdl);
-	self.angles_y = self.fixangle;
 	setmodel(self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function

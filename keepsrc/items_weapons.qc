@@ -73,6 +73,46 @@ void(float amount) item_ammo_set = {
 	// else leave self.aflag at user specified value to allow for custom ammo amount.
 };
 
+void (entity comboOwner) EnableComboWeapons = {
+	if (!(comboOwner.flags & FL_CLIENT)) return;
+
+	if (!(comboOwner.items & IT_LAVA_NAILGUN)) {
+		if (comboOwner.ammo_lava_nails > 0 && (comboOwner.items & IT_NAILGUN)) {
+			sprint(comboOwner,"Lava Enabled\n");
+			comboOwner.items = (comboOwner.items | IT_LAVA_NAILGUN);
+		}
+	}
+
+	if (!(comboOwner.items & IT_LAVA_SUPER_NAILGUN)) {
+		if (comboOwner.ammo_lava_nails > 0 && (comboOwner.items & IT_SUPER_NAILGUN)) {
+			sprint (comboOwner,"Super Lava Enabled!\n");
+			comboOwner.items = (comboOwner.items | IT_LAVA_SUPER_NAILGUN);
+		}
+	}
+
+	if (!(comboOwner.items & IT_MULTI_GRENADE)) {
+		if (comboOwner.ammo_multi_rockets > 0
+			&& ((comboOwner.items & IT_GRENADE_LAUNCHER)
+				|| (comboOwner.items2 & IT2_PROXIMITY_GUN))) {
+			sprint (comboOwner,"Multi Grenades Enabled\n");
+			comboOwner.items = (comboOwner.items | IT_MULTI_GRENADE);
+		}
+	}
+
+	if (!(comboOwner.items & IT_MULTI_ROCKET)) {
+		if (comboOwner.ammo_multi_rockets > 0 && (comboOwner.items & IT_ROCKET_LAUNCHER)) {
+			sprint(comboOwner,"Multi Rockets Enabled\n");
+			comboOwner.items = (comboOwner.items | IT_MULTI_ROCKET);
+		}
+	}
+	if (!(comboOwner.items & IT_PLASMA_GUN)) {
+		if (comboOwner.ammo_plasma > 0 && (comboOwner.items & IT_LIGHTNING)) {
+			sprint(comboOwner,"Plasma Lightning Gun Enabled\n");
+			comboOwner.items = (comboOwner.items | IT_PLASMA_GUN);
+		}
+	}
+};
+
 void() weapon_start = {
 	self.classgroup = CG_WEAPON;
 	self.touch2 = weapon_touch;
@@ -365,6 +405,7 @@ void() weapon_touch = {
 	sprint(other, "\n");
 	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	bound_other_ammo (other); // Make sure no ammo is over limits
+	if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	if (new > 0 && deathmatch) DM_Weapon(other,new,oldhackbank,oldweapon); // Skip any weapon switch if no new weapon.  Check for best weapon (DM only) and switch to it!
 	W_SetCurrentAmmo(other,TRUE);
 	if (leave) self.state = TRUE; // Make sure any targets on the weapon are fired for co-op.  This is basically a run once check using state as a flag.  Ideally no weapon should use important target triggers!  Code idea from Bengt Jardrup.

@@ -1619,6 +1619,8 @@ void() func_ctf_wall =
 		self.angles = '0 0 0';
 		self.movetype = MOVETYPE_PUSH;	// so it doesn't get pushed by anything
 		self.solid = SOLID_BSP;
+		self.classgroup = CG_FUNCMOVER;
+		self.bsporigin = TRUE;
 		setmodel (self, self.model);
 	} else
 		remove(self);

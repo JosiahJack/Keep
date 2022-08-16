@@ -635,6 +635,8 @@ void() func_movewall = {
 	
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
+	self.classgroup = CG_FUNCMOVER;
+	self.bsporigin = TRUE;
 	if (self.spawnflags & MOVEWALL_NONBLOCKING ) self.solid = SOLID_NOT;
 	else {
 		self.solid = SOLID_BSP;

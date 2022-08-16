@@ -935,7 +935,10 @@ void() item_artifact_horn = { // [ENTITY]
 	item_start();
 };
 
-void() item_hornofconjuring = { self.classname = "item_artifact_horn"; item_artifact_horn(); }; // [ENTITY]
+void() item_hornofconjouring = { self.classname = "item_artifact_horn"; item_artifact_horn(); }; // [ENTITY]
+
+void() item_hornofconjuring = { item_hornofconjouring(); }; // [ENTITY]
+
 void() item_artifact_shambler = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/drake/doll03.mdl";
     if (self.netname == "") self.netname = "Shambler Doll";
@@ -1077,6 +1080,20 @@ void() item_artifact_random = { // [ENTITY]
 		item_artifact_trinity();
 	else if (rnd < 50)
 		item_artifact_wetsuit();
-	else
+	else if (rnd < 55)
+		item_artifact_blastbelt();
+	else if (rnd < 60)
+		item_artifact_lavashield();
+	else if (rnd < 65)
+		item_artifact_levitation();
+	else if (rnd < 65)
+		item_powerup_belt();
+	else {
 		item_backpack();
+	}
+};
+
+void() item_random_powerup = { // [ENTITY]
+	self.classname = "item_artifact_random";
+	item_artifact_random();
 };

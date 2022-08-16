@@ -80,6 +80,7 @@ void(entity inflictor, entity attacker, float damage) explobsp_hurt = { // [FUNC
 void() func_explobsp = { // [ENTITY]
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
+	self.bsporigin = TRUE;
 	setmodel(self, self.model);
    	setsize(self, self.mins, self.maxs );
 	precache_sound("weapons/r_exp3.wav");
@@ -128,6 +129,7 @@ void(entity inflictor, entity attacker, float damage) breakaway_hurt = { // [FUN
 void() func_breakaway = { // [ENTITY]
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
+	self.bsporigin = TRUE;
 	setmodel(self, self.model);
    	setsize(self, self.mins, self.maxs );
 	if (self.noise)	precache_sound(self.noise);
@@ -148,6 +150,7 @@ void() func_breakaway = { // [ENTITY]
 void() func_nodraw = { // [ENTITY]
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
+	self.bsporigin = TRUE;
 	self.solid = SOLID_BSP;
 	setmodel(self, self.model);
 	if (!(self.spawnflags & 1)) self.model = "";

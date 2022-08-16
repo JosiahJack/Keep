@@ -214,8 +214,6 @@ void() monster_oldone = {
 	self.bbmaxs = '96 96 192';
 	self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	setmodel(self, self.mdl);					// Setup model
-	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.gibbed = FALSE;			// Still in one piece
 	Resist_ChangeType(self,1); // Always reset Ammo Resistance to be consistent

@@ -424,7 +424,7 @@ void() display_configflag = {
 	// No warning message, called from client.qc
 	if (developer <= 0) return;
 
-	dprint("\n\b[CONFIG]\b MOD Settings ("); 
+	dprint("\b[CONFIG]\b MOD Settings ("); 
 	if (configflag & SVR_LIVE) dprint(ftos(configflag-SVR_LIVE));
 	else dprint(ftos(configflag));
 	if (configflag & SVR_LIVE) dprint(") LIVE\n");

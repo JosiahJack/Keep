@@ -192,34 +192,50 @@ void() dn_and_wait_use = { // [FUNCTION]
 };
 
 void() toggle_hit_top = { // [FUNCTION]
+	dprint("new plat(toggle) hit top at ");
+	dprint(vtos(self.origin));
+	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 	self.state = STATE_TOP;
 };
 
 void() toggle_hit_bottom = { // [FUNCTION]
+	dprint("new plat(toggle) hit bottom at ");
+	dprint(vtos(self.origin));
+	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 	self.state = STATE_BOTTOM;
 };
 
 void() toggle_go_down = { // [FUNCTION]
+	dprint("new plat(toggle) go down to");
+	dprint(vtos(self.pos2));
+	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos2, self.speed, toggle_hit_bottom);
 };
 
 void() toggle_go_up = { // [FUNCTION]
+	dprint("new plat(toggle) go up to ");
+	dprint(vtos(self.pos1));
+	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.state = STATE_UP;
-	SUB_CalcMove (self.pos1, self.speed, toggle_hit_top);
+	SUB_CalcMove(self.pos1,self.speed,toggle_hit_top);
 };
 
 void() toggle_crush = { // [FUNCTION]
+	dprint("new plat(toggle) crush\n");
 	T_Damage(other, self, self, 1, DAMARMOR);
 	if (self.state == STATE_UP) toggle_go_down();
 	else if (self.state == STATE_DOWN) toggle_go_up();
 };
 
 void() toggle_use = { // [FUNCTION]
+	dprint("new plat(toggle) used and at ");
+	dprint(vtos(self.origin));
+	dprint("\n");
 	if (self.state == STATE_TOP) toggle_go_down();
 	else if (self.state == STATE_BOTTOM) toggle_go_up();
 };
@@ -453,10 +469,13 @@ void() func_new_plat = { // [ENTITY]
    self.classname = "plat";
    self.solid = SOLID_BSP;
    self.movetype = MOVETYPE_PUSH;
+   self.bsporigin = TRUE;
+   self.classtype = CT_FUNCPLAT;
+   self.classgroup = CG_FUNCMOVER;
    setorigin(self,self.origin);
    setmodel(self,self.model);
    setsize (self,self.mins,self.maxs);
-   if ( !self.speed ) self.speed = 150;
+   if (self.speed <= 0) self.speed = 150;
    self.pos1 = self.origin;  // pos1 is the top position,
    self.pos2 = self.origin;  // pos2 is the bottom
    if ( (self.height < 0) ) {

@@ -503,8 +503,11 @@ void() trigger_usekey = { // [ENTITY]
 
 // Thought this could be fun.  Good for ice or slick muddy surfaces. -Qmaster
 void() func_slidebox = { // [ENTITY]
+   self.classtype = CT_SLIDEBOX;
 	self.angles = VEC_ORIGIN;
 	self.movetype = MOVETYPE_PUSH;
+	self.classgroup = CG_FUNCMOVER;
+	self.bsporigin = TRUE;
 	self.solid = SOLID_SLIDEBOX;
 	self.use = func_wall_use;
 	setmodel(self,self.model);

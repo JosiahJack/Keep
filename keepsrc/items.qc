@@ -876,6 +876,16 @@ void() item_keyx = { // [ENTITY]
 	key_setup();
 };
 
+// The red key card.
+void() item_key3 = {
+	self.spawnflags = self.spawnflags | IT_CKEY1;
+	if (self.items2 & 4096) self.items2 = self.items2 - 4096; // Clear old IT2_KEY3 from ancient days of Keep.
+	self.netname = "red keycard";
+	self.mdl = "progs/b_r_key.mdl";
+	self.noise = "misc/basekey.wav";
+	self.message2 = "KEYRED";
+};
+
 // QUAKED item_custom (0 .5 .8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 // { model(":progs/key_base.mdl"); }
 // -------- KEYS --------

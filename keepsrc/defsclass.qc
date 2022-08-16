@@ -543,6 +543,7 @@ float CT_ARTLEVITATION = 623;	// Boots of Levitation, Drake
 float CT_ARTOPTIMIZER = 624;	// Shotgun Optimizer, Drake
 float CT_SIGILBANE = 625;		// Seal of Bane, Drake
 
+float CT_SLIDEBOX = 649;        // Ice brush for sliding around.
 float CT_SPIKESHOOTER = 650;	// Trap SPIKE shooter
 float CT_GRENADESHOOTER = 652;	// Trap GRENADE shooter
 float CT_ROCKETSHOOTER = 654;	// Trap ROCKET shooter

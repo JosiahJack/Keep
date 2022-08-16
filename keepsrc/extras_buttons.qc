@@ -163,6 +163,7 @@ void() func_button_ext = { // [ENTITY]
 	if (self.noise2) precache_sound(self.noise2);
 	SetMovedir();
 	self.movetype = MOVETYPE_PUSH;
+	self.bsporigin = TRUE;
 	self.solid = SOLID_BSP;
 	setmodel(self, self.model);
 	self.blocked = SUB_Null;

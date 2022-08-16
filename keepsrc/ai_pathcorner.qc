@@ -263,8 +263,6 @@ void() path_corner_setuptargets = {
 	// Bad situation : Found a path corner with no back-link
 	// label as deadend (direction reverse) and circular link
 	if ( !(self.spawnflags & PATHC_BACKLINK) ) {
-		dprint("\b[PATH_CORNER]\b ("); dprint(self.targetname);
-		dprint(") - Deadend found\n");
 		if (self.movetarget) self.movetarget3 = self.movetarget;
 		else self.movetarget3 = self;
 		self.spawnflags = self.spawnflags | PATHC_DEADEND;

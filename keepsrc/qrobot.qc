@@ -531,6 +531,7 @@ void() func_robot = {
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	self.use = robot_use_turnon;
+	self.bsporigin = TRUE;
 	setmodel(self, self.model);
 	setsize (self, self.mins , self.maxs);
 	if (!self.poindex || self.poindex > 50) self.poindex = TRUE;

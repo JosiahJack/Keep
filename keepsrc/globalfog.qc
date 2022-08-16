@@ -141,7 +141,6 @@ void() setup_fog_controller = {
 		// if the worldspawn setup correctly then enable
 		// the controller and allow fog changes
 		fog_active = FALSE;
-		dprint("setup_fog_controller");
 		fog_control = spawn();
 		if (!fog_control) return;
 
@@ -245,7 +244,6 @@ void(float gf_den, float gf_time) fade_skyfog = {
 void() setup_skyfog_controller = {
 	if (!skyfog_control) { // Start off with the sky fog controller disabled; if the worldspawn setup correctly then enable the controller and allow fog changes.
 		skyfog_active = FALSE;
-		dprint("setup_skyfog_controller");
 		skyfog_control = spawn();
 		if (!skyfog_control) return;
 

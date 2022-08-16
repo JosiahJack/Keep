@@ -651,7 +651,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	if ( (self.flags & FL_MONSTER) && attacker != world && inflictor.classtype != CT_PROJ_BOLT1 && inflictor.classtype != CT_PROJ_BOLT2) {
 		// Is the current attacker not self and not current enemy target?
 		if (self != attacker && attacker != SUB_entEnemyTarget()) {
-			if (!Align_Match(self,attacker) || IsInsane(self)) { // Don't get angry at friends, unless insane
+			if ((!Align_Match(self,attacker) || self.alignment == EVIL && attacker.alignment == EVIL) || IsInsane(self)) { // Don't get angry at friends, unless insane
 				if ((self.noinfighting && attacker.flags & FL_MONSTER || attacker.noinfighting) && !(IsInsane(self))) {
 					// Prevent monsters from infighting
 					// but let them react to the player

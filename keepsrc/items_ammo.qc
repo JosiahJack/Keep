@@ -91,12 +91,15 @@ void() ammo_touch = {
 	} else if (self.classtype == CT_AMMOPLASMA) {
 		if (other.ammo_plasma >= AMMO_MAXPLASMA) return;
 		other.ammo_plasma = other.ammo_plasma + self.aflag;
+		if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	} else if (self.classtype == CT_AMMOMULTIROCKETS) {
 		if (other.ammo_multi_rockets >= AMMO_MAXMULTIROCKETS) return;
 		other.ammo_multi_rockets = other.ammo_multi_rockets + self.aflag;
+		if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	} else if (self.classtype == CT_AMMOLAVANAILS) {
 		if (other.ammo_lava_nails >= AMMO_MAXLAVANAILS) return;
 		other.ammo_lava_nails = other.ammo_lava_nails + self.aflag;
+		if (detected_mod == MOD_ROGUE) EnableComboWeapons(other);
 	} else if (self.classtype == CT_AMMOPOISON) {
 		if (other.ammo_poison >= AMMO_MAXPOISON) return;
 		other.ammo_poison = other.ammo_poison + self.aflag;

@@ -141,6 +141,7 @@ void() func_turret = { // [ENTITY]
 	precache_sound(SOUND_LASER_HIT);
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
+	self.bsporigin = TRUE;
 	setorigin(self, self.origin);	
 	setmodel(self, self.model);
 	self.use = turret_func_use;

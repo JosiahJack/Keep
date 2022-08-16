@@ -167,6 +167,7 @@ projectiles_aim.qc			//  Projectile Aims
 // World and Main System Setup
 //-----------------------------------------------------------------------------
 precache_keep.qc			// REFINED Global precaches called by worldspawn.
+world_modmaps.qc			// Detect and handle discrepancies so original mod maps play as intended.
 world.qc					// REFINED Worldspawn, starting frame, and map start world checks
 
 // Multiplayer Stuff

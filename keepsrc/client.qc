@@ -189,9 +189,9 @@ void() SetChangeParms = {
 	cvar_set("savedgamecfg",ftos(self.items3));
 	if (teamplay) cvar_set("savedgamecfg",ftos(self.steam));
 
-	dprint("Beyond 16 Parms Set:\n");
+	dprint("\b[Beyond 16 Parms]\b ");
 	dprint("gamecfg: "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
-	dprint("savedgamecfg: "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
+	dprint("                  savedgamecfg: "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
 
 };
 
@@ -516,6 +516,8 @@ void() DecodeWorldParms = {
 	}
 
 	if (world.take_perms > 0) { dprint("All permanent powerups removed by world!\n"); parm13 = 0; } // take away all permanent powerups
+
+	detected_mod = DetectedMod();
 };
 
 // USED : Load NEW MAP or trigger CHANGE LEVEL
@@ -606,13 +608,13 @@ void() DecodeLevelParms = {
 	self.ammo_multi_rockets = decode(parm5,MID8);
 	self.ammo_plasma = decode(parm5,HI8);
 
-	dprint("Beyond 16 Parms: gamecfg was "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
+	dprint("\b[Beyond 16 Parms]\b gamecfg was "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
 	self.ammo_bloodcrystals = decode(cvar("gamecfg"),LOW8);// cvar("parm17_hack"); //decode(parm17,LOW8);
-	dprint("Beyond 16 Parms: set player ammo_bloodcrystals to: "); dprint(ftos(self.ammo_bloodcrystals)); dprint("\n");
+	dprint("                  set player ammo_bloodcrystals to: "); dprint(ftos(self.ammo_bloodcrystals)); dprint("\n");
 	self.ammo_voidshards = decode(cvar("gamecfg"),MID8);// cvar("parm18_hack");//decode(parm17,MID8);
-	dprint("Beyond 16 Parms: set player ammo_voidshards to: "); dprint(ftos(self.ammo_voidshards)); dprint("\n");
+	dprint("                  set player ammo_voidshards to: "); dprint(ftos(self.ammo_voidshards)); dprint("\n");
 	self.ammo_elemental = decode(cvar("gamecfg"),HI8);// cvar("parm19_hack");//decode(parm17,HI8);
-	dprint("Beyond 16 Parms: set player ammo_elemental to: "); dprint(ftos(self.ammo_elemental)); dprint("\n");
+	dprint("                  set player ammo_elemental to: "); dprint(ftos(self.ammo_elemental)); dprint("\n");
 	self.weapon = parm8;
 	self.moditems = parm10;
 	self.items2 = parm11;
@@ -639,7 +641,7 @@ void() DecodeLevelParms = {
 	mapvar[4] = parm15;
 	mapvar[5] = parm16;
 	if (VectorIsAllZeros(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
-	dprint("Beyond 16 Parms: gamecfg was "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
+	dprint("\b[Beyond 16 Parms]\b savedgamecfg was "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
 	self.items3 = cvar("savedgamecfg");
 	cvar_set("gamecfg","0"); // Reset these to keep player config.cfg clean
 	cvar_set("savedgamecfg","0");
@@ -1106,6 +1108,8 @@ float GetWaterRiseVelocity(float type) {
 
 // Called every frame before physics are run
 void() PlayerPreThink = {
+	local float prevgrav;
+
 	// This is just a messy situation ...
 	// The savegame data is not live until after frame 0 has finished.  The only variable read from a savegame early is skill level!
 	// So instead of detecting Chaos mode changes at frame 0 and fixing them, have to wait for savegame data to be live and client/server stable
@@ -1193,10 +1197,21 @@ void() PlayerPreThink = {
 		self.fwatershift = FALSE;
 	}
 
-	// Both func_water and func_ladder require zero G to work properly.  Lucky for us, the Mission Pack build of Quake has a gravity modifier we can exploit.
-	if (self.zerogtime < time) self.gravity = self.oldgravity;// reset normal gravity
-	else self.gravity = 0.0001;// zero G (0 OR 1 is normal), pOx - END  - func_water & func_ladder support
-
+	prevgrav = self.gravity;
+	if (self.antigrav_finished < time) {
+		// Both func_water and func_ladder require zero G to work properly.  Lucky for us, the Mission Pack 1 gave us a gravity modifier we can exploit.
+		if (self.zerogtime < time) self.gravity = self.oldgravity;// reset normal gravity
+		else self.gravity = 0.0001;// zero G (0 OR 1 is normal), pOx - END  - func_water & func_ladder support
+		if (self.gravity != prevgrav) {
+			dprint("1. Gravity change for ");
+			dprint(self.classname);
+			dprint(", from: ");
+			dprint(ftos(prevgrav));
+			dprint(", to: ");
+			dprint(ftos(self.gravity));
+			dprint("\n");
+		}
+	}
 	if (self.tethered && self.tetherfocus) PlayerBallistaThink();
 	// TeamCheckLock(); // TODO: Implement Rogue's teamplay.qc stuff.
 	CheckMOTD();
@@ -1267,6 +1282,15 @@ void() PlayerPreThink = {
 			self.velocity = '0 0 0'; // Reset velocity upwards and all sideways movement so that the player stays on the ladder and climbs straight up with very little sidways movement.
 			self.velocity_z = self.entladder.speed;
 			self.gravity = 0.0000001;
+			if (self.gravity != prevgrav) {
+				dprint("2. Gravity change for ");
+				dprint(self.classname);
+				dprint(", from: ");
+				dprint(ftos(prevgrav));
+				dprint(", to: ");
+				dprint(ftos(self.gravity));
+				dprint("\n");
+			}
 			if (self.timeladder < time) {
 				self.timeladder = time + self.entladder.waitmin; // Reset timer for next sound to play
 				Client_LadderSounds(self); // Check for any sounds and query if footsteps are active
@@ -1285,9 +1309,17 @@ void() PlayerPreThink = {
 		
 		self.onladder = LADDER_NONE; // Reset ladder touch function
 	} else {
-		if (self.oldgravity > 0) self.gravity = self.oldgravity; // Reset any ladder gravity settings
-		else self.gravity = 1;
-
+		if (self.oldgravity > 0 && self.antigrav_finished < time) self.gravity = self.oldgravity; // Reset any ladder gravity settings
+		else if (self.antigrav_finished < time) self.gravity = 0;
+		if (self.gravity != prevgrav) {
+			dprint("3. Gravity change for ");
+			dprint(self.classname);
+			dprint(", from: ");
+			dprint(ftos(prevgrav));
+			dprint(", to: ");
+			dprint(ftos(self.gravity));
+			dprint("\n");
+		}
 		if (self.button2) PlayerJump(); // Original jump conditions.  Huh!
 		else self.flags = self.flags | FL_JUMPRELEASED;
 	}
@@ -1342,6 +1374,8 @@ enumflags {
 	
 // Called every frame after physics are run
 void() PlayerPostThink = {
+	local entity goodjumptouch;
+
 	if (prethink == TRUE && postthink == FALSE) {
 		if (self.flags & FL_CLIENT) { // Check for the player?  First couple of frames the player is not setup correctly.
 			postthink = TRUE;			// postthink flag complete
@@ -1500,8 +1534,11 @@ void() PlayerPostThink = {
 						break;
 					}
 				}
+
+				if (self.jumptouch.classtype == CT_SLIDEBOX) goodjumptouch = self.jumptouch;
 				self.jumptouch = self.jumptouch.chain; // Keep cycling through radius list
 			}
+			if (goodjumptouch) self.jumptouch = goodjumptouch;
 		}
 	}
 	
@@ -1575,7 +1612,14 @@ void() PlayerJump = {
             self.wing_sound = time + 1;
         }
 		// Gravity reversal was the simplest method to implement.  Using fancy math to get reverse standard gravity can cause problems if the player gets hit with other effects that change gravity field.
+		dprint("4. Gravity change for ");
+		dprint(self.classname);
+		dprint(", from: ");
+		dprint(ftos(self.gravity));
         self.gravity = 0 - fabs(self.gravity);
+		dprint(", to: ");
+		dprint(ftos(self.gravity));
+		dprint("\n");
         return;
     }
 
@@ -1640,7 +1684,7 @@ void() PlayerJump = {
 		self.velocity = v_forward * (map_jumpheight*1);
 	} else {
 		// Original ID1 jump logic
-		if (!(self.flags & FL_ONGROUND)) return;
+		if (!(self.flags & FL_ONGROUND) && self.jumptouch.classtype != CT_SLIDEBOX) return;
 		if (!(self.flags & FL_JUMPRELEASED)) return; // Don't pogo stick.  Aww, but mom!  Purty pleeeease?
 
 		SUB_RemoveFlags(self,FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground

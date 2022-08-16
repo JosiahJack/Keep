@@ -46,6 +46,7 @@ void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
 void(float fx, vector spot) Tent_Point;
 void(entity ent, void() thinkst) SUB_ThinkImmediate;
 void() SUB_RemoveAttachments;
+vector(entity targ) SUB_EntityOrigin;
 
 void() SUB_Null = {}; // [FUNCTION]
 void() SUB_Remove = { remove(self); }; // [FUNCTION]
@@ -232,7 +233,12 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = { // [FUNCTION]
 	local vector vdestdelta;
 	local float len, traveltime;
 
-	if (!tspeed) tspeed = 40;			// Create default speed if none specified
+	if (!tspeed) {
+		tspeed = 40;			// Create default speed if none specified
+		dprint("\bWarning\b No tspeed passed to SUB_CalcMove for ");
+		dprint(self.classname);
+		dprint("!\n");
+	}
 	self.think1 = func;					// Finished moving function
 	self.finaldest = tdest;				// Final origin (Overwrite existing values)
 	self.think = SUB_CalcMoveDone;		// Tidy up function
@@ -262,6 +268,7 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = { // [FUNCTION]
 
 // After moving, set origin to exact final destination rather than last value that is very very close but not quite.
 void()  SUB_CalcMoveDone = { // [FUNCTION]
+	dprint("Calc move done!\n");
 	if (self.classname == "fliquid") self.fmover = ""; // Update for moving liquids - from extras_r4/r5
 	self.velocity = '0 0 0';
 	setorigin(self, self.finaldest);

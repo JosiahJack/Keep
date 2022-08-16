@@ -82,6 +82,7 @@ void() func_breakawaywall = { // [ENTITY]
    self.classname = "breakaway";
    self.solid = SOLID_BSP;
    self.movetype = MOVETYPE_PUSH;
+	self.bsporigin = TRUE;
    setorigin(self,self.origin);
    setmodel(self,self.model);
    setsize (self,self.mins,self.maxs);

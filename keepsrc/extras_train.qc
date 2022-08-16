@@ -585,6 +585,8 @@ void() func_train_ext = { // [ENTITY]
 	train_ext_precachenoise();
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
+	self.classgroup = CG_FUNCMOVER;
+	self.bsporigin = TRUE;
 	self.blocked = train_ext_blocked;
 	self.classname = "train_ext";
 	setmodel(self, self.model);
