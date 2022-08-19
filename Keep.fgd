@@ -1,8 +1,8 @@
 //======================================================================
 // ENTITIES FGD file
 // MOD    : Keep
-// VERSION: v0.90
-// Editor : Worldcraft, Jackhammer 
+// VERSION: v0.96
+// Editor : Trenchbroom 
 //======================================================================
 @baseclass = Appearflags [
 	spawnflags(Flags) = [
