@@ -204,6 +204,34 @@ void() trap_shooter_reset = { // [FUNCTION]
 // -------- NOTES --------
 // When triggered, fires a SPIKE in the direction determined by angle.  Use TOGGLE spawnflag and trigger to enable continuous mode.
 void() trap_spikeshooter = { // [ENTITY]
+	if (detected_mod == MOD_ROGUE) {
+		// Fix up the spawnflags
+		if (self.spawnflags & 4) { // SPAWNFLAG_LAVASPIKE
+			self.spawnflags = self.spawnflags - 4;
+			item_setupmodel("progs/lspike.mdl",0);
+			item_setupnoise(SOUND_LASER_FIRE);
+			self.cnt = CT_PROJ_LAVANG;
+		}
+		if (self.spawnflags & 8) { // SPAWNFLAG_SUPERLAVA
+			self.spawnflags = self.spawnflags - 8;
+			item_setupmodel("progs/lspike.mdl",0);
+			item_setupnoise("weapons/rocket1i.wav");
+			self.cnt = CT_PROJ_LAVASNG;
+		}
+		if (self.spawnflags & 16) { // SPAWNFLAG_LAVASKILL
+			self.spawnflags = self.spawnflags - 16;
+			item_setupmodel("progs/lspike.mdl",0);
+			item_setupnoise("weapons/spike2.wav");
+			if (skill > 1) self.cnt = CT_PROJ_LAVASNG;
+			else self.cnt = CT_PROJ_LAVANG;
+		}
+		if (self.spawnflags & 32) { // SPAWNFLAG_FIREBALL
+			self.spawnflags = self.spawnflags - 32;
+			item_setupmodel("progs/rogue/fireball.mdl",0);
+			dprint("Rogue trap_spikeshooter set fireball spawnflag TODO!! ------------ !!TODO\n");
+			//self.cnt = CT_PROJ_DRAGON; // TODO!
+		}
+	}
 	if (self.spawnflags & TRAP_SNGSPIKE) {
 		item_setupmodel(MODEL_PROJ_SNG,0);
 		item_setupnoise("weapons/spike2.wav");
@@ -277,7 +305,7 @@ void() trap_spikeshooter = { // [ENTITY]
 		self.think = TargetMovedirReturn;
 	}
 
-	dprint("Shooter setup with cnt "); dprint(ftos(self.cnt)); dprint("\n");
+	//dprint("Shooter setup with cnt "); dprint(ftos(self.cnt)); dprint("\n");
 };
 
 // QUAKED trap_grenadeshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LARGE x x x x TOGGLE x TRACK Not_Easy Not_Normal Not_Hard Not_DM

@@ -875,7 +875,11 @@ void() MultiGrenadeTouch = { // [FUNCTION]
       } else {
          if (self.owner.classname == "player") {
 			self.lefty = TRUE;
-            MultiGrenadeExplode(); // Split and near insta-explode.
+			if (detected_mod == MOD_ROGUE) {
+				if (!self.height) self.height = EXPLODE_SMALL;
+				self.dmg = DAMAGE_PLAYGRENADE;
+				Explode_Grenade();
+			} else MultiGrenadeExplode(); // Split and near insta-explode.
          } else MiniGrenadeExplode(); // Monster grenade, forgiving.
       }
       return;

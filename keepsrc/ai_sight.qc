@@ -517,7 +517,7 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 								// Nested visible() to improve performance by
 								// not checking visibility of dead potential
 								// enemies.
-								if (visible(head)) return head; 
+								if (visible(head)) return head;
 							}
 						} else {
 							if (Align_Match(self,head)) {
@@ -534,7 +534,7 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 };
 
 entity() SeeOpposing = { // [FUNCTION]
-	if (random() < 0.666) return world;
+	if (random() < 0.5) return world;
 
 	// Check and only look for players if no opposing monsters.  Faster.
 	if (self.alignment == GOOD) {
@@ -546,7 +546,7 @@ entity() SeeOpposing = { // [FUNCTION]
 };
 entity() SeeFriendly = { // [FUNCTION]
 	if (self.horn_active && self.charmer) return world; // Already have a leader
-	if (random() < 0.666) return world;
+	if (random() < 0.9) return world;
 
 	// Check and only look for players if no friendly monsters.  Faster.
 	if (self.alignment == GOOD) {
@@ -682,9 +682,7 @@ float() FindTarget = { // [FUNCTION]
 		if (enemy_range == RANGE_NEAR) {
 			if (client.show_hostile < time && !infront(client)) return FALSE;
 		} else {
-			if ( (enemy_range == RANGE_MID) ) {
-				if (!infront(client)) return FALSE;
-			}
+			if (!infront(client)) return FALSE;
 		}
 	}
 	// The only two things that alert monsters when invisible besides damage: firing a weapon or bumping into a dog

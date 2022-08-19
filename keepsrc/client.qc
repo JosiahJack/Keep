@@ -516,8 +516,6 @@ void() DecodeWorldParms = {
 	}
 
 	if (world.take_perms > 0) { dprint("All permanent powerups removed by world!\n"); parm13 = 0; } // take away all permanent powerups
-
-	detected_mod = DetectedMod();
 };
 
 // USED : Load NEW MAP or trigger CHANGE LEVEL
@@ -652,6 +650,9 @@ void() DecodeLevelParms = {
 			self.steam = teamcol;
 			TeamSetSkin();
 		}
+		dprint("self.team = "); dprint(ftos(self.team));
+		dprint(" and self.steam = "); dprint(ftos(self.steam));
+		dprint(" --------------- \n");
 	}
 };
 
@@ -1213,7 +1214,7 @@ void() PlayerPreThink = {
 		}
 	}
 	if (self.tethered && self.tetherfocus) PlayerBallistaThink();
-	// TeamCheckLock(); // TODO: Implement Rogue's teamplay.qc stuff.
+	TeamCheckLock();
 	CheckMOTD();
 	CheckRules();
 	Divine_Check(); // Lightning strike.
@@ -1844,19 +1845,18 @@ void() ClientKill = {
 
 // Called when a player connects to a server
 void() ClientConnect = {
+	local float stm;
+
 	bprint (self.netname);
 	bprint (" entered the game\n");
 	self.suicide_count = 0;
 	self.ctf_killed = FALSE;
 	SetMOTD();
-	//if (((parm14 < FALSE) && (teamplay > FALSE))) { // parm14 is used in Rogue to store self.steam
-	//	if ((cvar("gamecfg") & GAMECFG_USE_COLOR)) {
-	//		self.steam = self.team;
-	//	} else {
-	//		self.steam = -50.000;
-	//	}
-	//	TeamCheckLock();
-	//}
+	stm = cvar("savedgamecfg");
+	if (stm < 0 && teamplay > 0) { // parm14 is used in Rogue to store self.steam
+		self.steam = -50;
+		TeamCheckLock();
+	}
 	if (intermission_running > 0) GotoNextMap(); // a client connecting during an intermission can cause problems
 };
 
@@ -1871,8 +1871,8 @@ void() ClientDisconnect = {
 	bprint (" frags\n");
 	sound(self,CHAN_BODY,"player/tornoff2.wav",1,ATTN_NONE);
 	sphere_remove(self);
-	// if (tag_token_owner == self) tag_token_drop(); // TODO: Add rogue's teamplay.qc stuff
-	// TeamDropFlagOfPlayer(self); // TODO: Add rogue's teamplay.qc stuff
+	if (tag_token_owner == self) tag_token_drop();
+	TeamDropFlagOfPlayer(self);
 	self.steam = -50.000;
 	self.team = FALSE;
 	set_suicide_frame();

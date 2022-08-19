@@ -1219,7 +1219,7 @@ void() monster_dark_lord = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     if (self.spawnflags & 4) {
-        hp = 4000 + (500 * cvar("skill"));
+        hp = 4000 + (500 * skill);
 		if (self.deathstring == "")  self.deathstring = " fell before a Beastly Dark Lord\n";
     } else {
 		if (self.deathstring == "")  self.deathstring = " fell before a Dark Lord\n";

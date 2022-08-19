@@ -38,6 +38,8 @@
 // dying on purpose from it.
 //=============================================================================
 
+void(entity targ, entity attacker) dmatch_score;
+
 // Called when a player dies, deals with all death messages
 void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 	local float rnum;
@@ -70,8 +72,12 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 				if (targ.weapon == IT_LIGHTNING && !self.weaponismoditems && targ.waterlevel > 1) { bprint (" discharges into the water.\n"); return; }
 
 				if (targ.weapon == IT_GRENADE_LAUNCHER && !self.weaponismoditems) bprint (" tries to put the pin back in\n");
-				else bprint (" becomes bored with life\n");
-
+				else if (teamplay && (targ.team != targ.steam)) {
+					if (cvar("gamecfg") & GAMECFG_ALLOW_CHG)
+						bprint(" changed teams\n");
+					else
+						bprint(" tried to change teams\n");
+				} else bprint (" becomes bored with life\n");
 				return;
 			} else if ( (teamplay == 2) && (targ.team > 0)&&(targ.team == attacker.team) ) {
 				if (rnum < 0.25) clientstring = " mows down a teammate\n";
@@ -84,7 +90,11 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 				attacker.frags = attacker.frags - 1;
 				return;
 			} else {
-				attacker.frags = attacker.frags + 1;
+				if (teamplay == TEAM_DMATCH_TAG) dmatch_score(targ,attacker);
+				else {
+					attacker.frags = attacker.frags + 1;
+					TeamAssists(targ, attacker); // --ZOID
+				}
 				rnum = attacker.weapon;
 				if (rnum == IT_SHOTGUN) {
 					if ( (random () < 0.500) ) {

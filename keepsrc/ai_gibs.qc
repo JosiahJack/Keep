@@ -573,8 +573,6 @@ void(float gib_no, float gib_qty) ThrowGib = {
 
 // Explode monster into a shower of gibs (throw head as well)
 void() monster_ThrowGib = {
-	self.gibbed = TRUE; // Monster has offically gone to pieces ;)
-
 	// New gib sounds.  Zombies have special gib sound because they always go that way!  Stone enemies are just a pile of rubble and dust!
 	if (self.classgroup == CG_ZOMBIE)
 		sound(self,CHAN_VOICE, "zombie/z_gib.wav",1,ATTN_NORM);
@@ -595,6 +593,7 @@ void() monster_ThrowGib = {
 	}	
 	// Some monsters have special death setups
 	if (self.classtype == CT_MONFREDDIE) {
+		self.gibbed = TRUE; // Monster has offically gone to pieces ;)
 		ExplosiveGibDeath(self.death_sound,1,2,2);
 		return;
 	}
@@ -742,12 +741,13 @@ void() monster_ThrowGib = {
 	newmis.bbmins = self.bbmins;
 	newmis.bbmaxs = self.bbmaxs;
 	newmis.pos1 = self.origin; // Respawn point
+	self.gibbed = TRUE; // Monster has offically gone to pieces ;)
 	entity_hide(self); // Finally hide monster
 };
 
 // Check health for gib condition, and gib if so
 void() monster_check_gib = {
-	if (!ext_ftepart && gibbed_this_frame > 10) {
+	if (!ext_ftepart && gibbed_this_frame > 10 && !self.gibondeath) {
 		if (developer > 1) dprint("Gibbed more than 10 enemies this frame! Skipped gibbing more!\n");
 		return;
 	}
@@ -759,8 +759,8 @@ void() monster_check_gib = {
 	if (self.gibondeath) self.health = self.gibhealth; // Make sure gibondeath has gib velocity (health value)
 	if (self.health < (self.gibhealth + 1) || self.gibondeath) { // Is it time to throw a gib party?
 		monster_ThrowGib();
-		gibbed_this_frame = gibbed_this_frame + 1;
 		monster_gibrandomizer();
+		gibbed_this_frame = gibbed_this_frame + 1;
 	}
 };
 

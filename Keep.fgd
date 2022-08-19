@@ -1485,7 +1485,29 @@
 	noise1(string) : "Custom sound - Stopped"
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]	
-
+@SolidClass base(Appearflags, Targetname) = func_elvtr_button : "Elevator button"
+[
+	spawnflags(Flags) = 
+	[
+		1 : "Down" : 0
+	]
+	target(target_source) : "Targetted object"
+	speed(integer) : "Speed" : 5
+	health(integer) : "Health (shootable if > 0)"
+	sounds(choices) : "Sounds" : 1 = 
+	[
+		1: "Steam metal"
+		2: "Wooden clunk"
+		3: "Metallic clink"
+		4: "In-out"
+	]
+	wait(choices) : "Delay before reset" : 3 =
+	[
+		-1: "Stays pressed"
+	]
+	delay(integer) : "Delay before trigger"
+	lip(integer) : "Lip at end of move" : 4
+]
 @SolidClass base(FuncItems, FuncLighting) = func_new_plat : "Rogue Plat" [
 	spawnflags(Flags) = [
 		1 : "Down n'wait" : 0
@@ -4877,8 +4899,9 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 
 @PointClass base(MonShort) studio("progs/rogue/mon_mummy.mdl") = monster_mummy : "Mummmy" [
 	spawnflags(flags) = [ 
-		2 : "Ambush" : 0
-		4 : "OnFloor" : 0
+		1 : "Ambush" : 0
+		2 : "On Floor" : 0
+		4 : "Strong" : 0
 	]
 	sequence(choices) : "Pose (editor)" = [
 		0 : "Normal"
@@ -5796,3 +5819,5 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) = item_flag_team2 : "CTF: Blue Team Flag" [] // Alternate name
 @PointClass base(PlayerClass) = info_player_team1 : "CTF - Red Player Start" []
 @PointClass base(PlayerClass) = info_player_team2 : "CTF - Blue Player Start" []
+
+@PointClass base(Appearflags) color(255 255 0) size(-16 -16 -16, 16 16 16) studio("progs/rogue/sphere.mdl") = dmatch_tag_token : "Deathmatch tag token" []

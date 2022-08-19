@@ -1,3 +1,5 @@
+float MUMMY_STRONG = 4;
+
 void() mummy_stand1 = [ 0.000, mummy_stand2 ] { ai_stand(); };
 void() mummy_stand2 = [ 1.000, mummy_stand3 ] { ai_stand(); };
 void() mummy_stand3 = [ 2.000, mummy_stand4 ] { ai_stand(); };
@@ -338,8 +340,6 @@ void() mummy_wake = {
 
 void(entity inflictor, entity attacker, float damage) mummy_wake_pain = { mummy_wake(); };
 
-float MUMMY_STRONG = 4.000;
-
 void() monster_mummy_precache = {
 	precache_model ("progs/rogue/mon_mummy.mdl");
 	precache_model ("progs/ad181/h_zombie.mdl");
@@ -391,16 +391,16 @@ void() monster_mummy = {
 	self.classtype = CT_MONMUMMY;
 	self.classgroup = CG_ZOMBIE;
 	self.classmove = MON_MOVEWALK;
-	if ( (self.spawnflags & 4) ) {
+	if ((self.spawnflags & 2)) {
 		setsize (self,VEC_HULL_MIN,'16.000 16.000 -16.000');
 		self.solid = SOLID_NOT;
 		self.th_stand = mummy_sleep;
 		self.th_run = mummy_wake;
 		self.th_walk = mummy_wake;
 		self.th_pain = mummy_wake_pain;
+      self.th_wakeup = mummy_wake;
 		self.th_missile = mummy_wake;
 	}
-
 	if (self.deathstring == "")  self.deathstring = " was mummified by a Mummy\n";
 	monster_start();
 };

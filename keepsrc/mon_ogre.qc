@@ -591,9 +591,22 @@ void() monster_ogre = {
 		if (self.deathstring == "")  self.deathstring = " was destroyed by an Ogre\n";
 	}
 
+	if (detected_mod == MOD_ROGUE) {
+		if (self.spawnflags <= 1) {
+			if (cvar("skill") > 0) {
+				if (random() <= 0.25) {
+					self.spawnflags = self.spawnflags | OGRE_MULTI;
+				}
+			}
+		}
+	}
+
 	if (self.spawnflags & OGRE_MULTI) {
 		if (!self.ammo_multi_rockets) self.ammo_multi_rockets = 2;
-		self.skin = 2;  // multi overrides green skin, though health benefit still exists
+		self.skin = 2;  // Multi overrides green skin, though health benefit still exists
+						// I've kept this the same as rogue skin here, though Keep's unique
+						// monster_ogre_multi down below uses skin 3 as it's clearer that
+						// it is different than a normal ogre and thus a severe threat.
 		self.th_missile = ogre_multi_shoot1;
 	} else {
 		// Always not zware

@@ -723,10 +723,12 @@ void() monster_spawn = {
 	// Angles key used for specific facing direction, 0 = random setup
 	// This function check is before any droptofloor or content checks
 	// It will allow onfloor monsters to exist in tight spaces, shallow graves
-	if (self.spawnflags & MON_ONFLOOR && self.classgroup == CG_ZOMBIE) {
-		if (self.classtype == CT_MONZOMBIEK) zombiek_onground(MONAI_ZOMBIEFLR);
-		else zombie_onground(MONAI_ZOMBIEFLR);
-		return;
+	if (self.classgroup == CG_ZOMBIE) {
+		if (self.spawnflags & MON_ONFLOOR && self.classtype != CT_MONMUMMY) { // 4
+			if (self.classtype == CT_MONZOMBIEK) zombiek_onground(MONAI_ZOMBIEFLR);
+			else zombie_onground(MONAI_ZOMBIEFLR);
+			return;
+		}
 	}
 
 	// Special minions (start small and grow fast)

@@ -1399,7 +1399,7 @@ float() rnd_CheckSaveGameReboot = {
 	cleansavegame = clean_randflags(savegamechaos);
 	if (cleanflags == 0 && cleansavegame == 0) { // DEFAULT = system off or legacy savegame files
 		// Nothing to do, pass through functionality
-		dprint("\b[RND_SYNC]\b Chaos Mode Disabled!\n");
+		dprint("\b[RND_SYNC]\b Chaos Mode Disabled\n");
 		return FALSE;
 	} else if (cleanflags == 0 && cleansavegame > 0) { // SAVEGAME requires Chaos system and CURRENT is wrong!
 		dprint("\b[RND_SYNC]\b Chaos Mode ("); // Highlight where Chaos mode enabled

@@ -1,0 +1,5041 @@
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         health_touch()
+item_skinanim    1.0
+item_skinanim_no  2.0
+respawn_time    20.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  28.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    105.0
+
+EDICT 30:
+modelindex     201.0
+absmin         ' 33.0 -895.0   0.0'
+absmax         ' 95.0 -833.0  56.0'
+movetype         6.0
+solid            1.0
+origin         ' 64.0 -864.0   0.0'
+oldorigin      ' 64.0 -864.0   0.0'
+angles         '  0.0 310.0   0.0'
+classname      item_health
+model          progs/ad171/health_15b.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+flags          768.0
+spawnflags       1.0
+noise          items/r_item1.wav
+mdl            progs/ad171/health_15b.mdl
+healamount      15.0
+classtype      750.0
+classgroup     100.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         health_touch()
+respawn_time    20.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 31:
+modelindex     201.0
+absmin         '-15.0 -895.0   0.0'
+absmax         ' 47.0 -833.0  56.0'
+movetype         6.0
+solid            1.0
+origin         ' 16.0 -864.0   0.0'
+oldorigin      ' 16.0 -864.0   0.0'
+angles         '  0.0 229.0   0.0'
+classname      item_health
+model          progs/ad171/health_15b.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+flags          768.0
+spawnflags       1.0
+noise          items/r_item1.wav
+mdl            progs/ad171/health_15b.mdl
+healamount      15.0
+classtype      750.0
+classgroup     100.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         health_touch()
+respawn_time    20.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 32:
+absmin         '1487.0 -385.0  47.0'
+absmax         '1489.0 -383.0  49.0'
+origin         '1488.0 -384.0  48.0'
+angles         '  0.0  90.0   0.0'
+classname      info_player_start
+owner          entity 32
+classtype       10.0
+estate           1.0
+hitcontentsmaskibad type 8
+
+EDICT 33:
+modelindex     209.0
+absmin         '587.0 -1011.0  68.9'
+absmax         '629.0 -1005.0 110.9'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '608.0 -1008.0  89.9'
+velocity       '  0.0   0.0  10.0'
+angles         '-214.7   0.0   0.0'
+avelocity      '-180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink        8.7
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 35
+spawnflags      17.0
+target         saw1wp1
+movedir        '  0.0   0.0   1.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '536.0 -1008.0  80.0'
+dmg              1.0
+movetarget     entity 35
+think1         func_train_pause()
+finaldest      '608.0 -1008.0 153.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 34
+movestart      entity 34
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 34:
+absmin         '599.0 -1017.0  61.0'
+absmax         '617.0 -999.0  95.0'
+solid            1.0
+origin         '608.0 -1008.0  78.0'
+oldorigin      '608.0 -1008.0  78.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw1wp2
+targetname     saw1wp1
+movetarget     entity 35
+state            1.0
+classtype       26.0
+targetback     saw1wp1
+movetarget3    entity 37
+hitcontentsmaskibad type 8
+
+EDICT 35:
+absmin         '599.0 -1017.0 136.0'
+absmax         '617.0 -999.0 170.0'
+solid            1.0
+origin         '608.0 -1008.0 153.0'
+oldorigin      '608.0 -1008.0 153.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw1wp3
+targetname     saw1wp2
+movetarget     entity 36
+state            1.0
+classtype       26.0
+targetback     saw1wp2
+movetarget3    entity 34
+hitcontentsmaskibad type 8
+
+EDICT 36:
+absmin         '247.0 -1017.0 118.0'
+absmax         '265.0 -999.0 152.0'
+solid            1.0
+origin         '256.0 -1008.0 135.0'
+oldorigin      '256.0 -1008.0 135.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw1wp4
+targetname     saw1wp3
+movetarget     entity 37
+state            1.0
+classtype       26.0
+targetback     saw1wp3
+movetarget3    entity 35
+hitcontentsmaskibad type 8
+
+EDICT 37:
+absmin         '247.0 -1017.0  43.0'
+absmax         '265.0 -999.0  77.0'
+solid            1.0
+origin         '256.0 -1008.0  60.0'
+oldorigin      '256.0 -1008.0  60.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw1wp1
+targetname     saw1wp4
+movetarget     entity 34
+state            1.0
+classtype       26.0
+targetback     saw1wp4
+movetarget3    entity 36
+hitcontentsmaskibad type 8
+
+EDICT 38:
+absmin         '-17.0 -1065.0 -25.0'
+absmax         '  1.0 -1047.0   9.0'
+solid            1.0
+origin         ' -8.0 -1056.0  -8.0'
+oldorigin      ' -8.0 -1056.0  -8.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         t3
+targetname     t2
+movetarget     entity 40
+state            1.0
+classtype       26.0
+targetback     t2
+movetarget3    entity 40
+hitcontentsmaskibad type 8
+
+EDICT 39:
+modelindex     209.0
+absmin         '-40.9 -1059.0 -29.0'
+absmax         '  1.1 -1053.0  13.0'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '-19.9 -1056.0  -8.0'
+velocity       '-10.0   0.0   0.0'
+angles         '214.7   0.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       29.2
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 40
+spawnflags      17.0
+target         t2
+movedir        ' -1.0   0.0   0.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '-350.0 -1056.0  -8.0'
+dmg              1.0
+movetarget     entity 40
+think1         func_train_pause()
+finaldest      '-288.0 -1056.0  -8.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 38
+movestart      entity 38
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 40:
+absmin         '-297.0 -1065.0 -25.0'
+absmax         '-279.0 -1047.0   9.0'
+solid            1.0
+origin         '-288.0 -1056.0  -8.0'
+oldorigin      '-288.0 -1056.0  -8.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         t2
+targetname     t3
+movetarget     entity 38
+state            1.0
+classtype       26.0
+targetback     t3
+movetarget3    entity 38
+hitcontentsmaskibad type 8
+
+EDICT 41:
+absmin         '-297.0 -1101.0 -25.0'
+absmax         '-279.0 -1083.0   9.0'
+solid            1.0
+origin         '-288.0 -1092.0  -8.0'
+oldorigin      '-288.0 -1092.0  -8.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         t4
+targetname     t5
+movetarget     entity 43
+state            1.0
+classtype       26.0
+targetback     t5
+movetarget3    entity 43
+hitcontentsmaskibad type 8
+
+EDICT 42:
+absmin         '-297.0 -1137.0 -25.0'
+absmax         '-279.0 -1119.0   9.0'
+solid            1.0
+origin         '-288.0 -1128.0  -8.0'
+oldorigin      '-288.0 -1128.0  -8.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         t6
+targetname     t7
+movetarget     entity 44
+state            1.0
+classtype       26.0
+targetback     t7
+movetarget3    entity 44
+hitcontentsmaskibad type 8
+
+EDICT 43:
+absmin         '-17.0 -1101.0 -25.0'
+absmax         '  1.0 -1083.0   9.0'
+solid            1.0
+origin         ' -8.0 -1092.0  -8.0'
+oldorigin      ' -8.0 -1092.0  -8.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         t5
+targetname     t4
+movetarget     entity 41
+state            1.0
+classtype       26.0
+targetback     t4
+movetarget3    entity 41
+hitcontentsmaskibad type 8
+
+EDICT 44:
+absmin         '-17.0 -1137.0 -25.0'
+absmax         '  1.0 -1119.0   9.0'
+solid            1.0
+origin         ' -8.0 -1128.0  -8.0'
+oldorigin      ' -8.0 -1128.0  -8.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         t7
+targetname     t6
+movetarget     entity 42
+state            1.0
+classtype       26.0
+targetback     t6
+movetarget3    entity 42
+hitcontentsmaskibad type 8
+
+EDICT 45:
+modelindex     209.0
+absmin         '-40.9 -1095.0 -29.0'
+absmax         '  1.1 -1089.0  13.0'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '-19.9 -1092.0  -8.0'
+velocity       '-10.0   0.0   0.0'
+angles         '214.7   0.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       29.2
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 41
+spawnflags      17.0
+target         t4
+movedir        ' -1.0   0.0   0.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          ' 52.0 -1092.0  -8.0'
+dmg              1.0
+movetarget     entity 41
+think1         func_train_pause()
+finaldest      '-288.0 -1092.0  -8.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 43
+movestart      entity 43
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 46:
+modelindex     209.0
+absmin         '-40.9 -1131.0 -29.0'
+absmax         '  1.1 -1125.0  13.0'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '-19.9 -1128.0  -8.0'
+velocity       '-10.0   0.0   0.0'
+angles         '214.7   0.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       29.2
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 42
+spawnflags      17.0
+target         t6
+movedir        ' -1.0   0.0   0.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          ' 52.0 -1128.0  -8.0'
+dmg              1.0
+movetarget     entity 42
+think1         func_train_pause()
+finaldest      '-288.0 -1128.0  -8.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 44
+movestart      entity 44
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 47:
+modelindex     209.0
+absmin         '101.0 -953.0  95.1'
+absmax         '107.0 -911.0 137.1'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '104.0 -932.0 116.1'
+velocity       '  0.0   0.0 -10.0'
+angles         '214.7  90.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           ' -2.0 -20.0 -20.0'
+maxs           '  2.0  20.0  20.0'
+size           '  4.0  40.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       14.4
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 55
+spawnflags       1.0
+target         saw3wp1
+movedir        '  0.0   0.0  -1.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '104.0 -1012.0 152.0'
+dmg              1.0
+movetarget     entity 55
+think1         func_train_pause()
+finaldest      '104.0 -932.0  -4.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         ' -2.0 -20.0 -20.0'
+bbmaxs         '  2.0  20.0  20.0'
+movelast       entity 56
+movestart      entity 56
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 48:
+absmin         '521.0 -1145.0 -42.0'
+absmax         '539.0 -1127.0  -8.0'
+solid            1.0
+origin         '530.0 -1136.0 -25.0'
+oldorigin      '530.0 -1136.0 -25.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw2wp2
+targetname     saw2wp1
+movetarget     entity 49
+state            1.0
+classtype       26.0
+targetback     saw2wp1
+movetarget3    entity 54
+hitcontentsmaskibad type 8
+
+EDICT 49:
+absmin         '230.0 -1145.0 -17.0'
+absmax         '248.0 -1127.0  17.0'
+solid            1.0
+origin         '239.0 -1136.0   0.0'
+oldorigin      '239.0 -1136.0   0.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw2wp3
+targetname     saw2wp2
+movetarget     entity 53
+state            1.0
+classtype       26.0
+targetback     saw2wp2
+movetarget3    entity 48
+hitcontentsmaskibad type 8
+
+EDICT 50:
+modelindex     209.0
+absmin         '497.1 -1139.0 -45.0'
+absmax         '539.1 -1133.0  -3.0'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '518.1 -1136.0 -24.0'
+velocity       '-10.0   0.0   0.9'
+angles         '214.7   0.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       30.4
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 49
+spawnflags      17.0
+target         saw2wp1
+movedir        ' -1.0   0.0   0.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '584.0 -1136.0  -8.0'
+dmg              1.0
+movetarget     entity 49
+think1         func_train_pause()
+finaldest      '239.0 -1136.0   0.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 48
+movestart      entity 48
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 51:
+modelindex     209.0
+absmin         '497.1 -1139.0 -45.0'
+absmax         '539.1 -1133.0  -3.0'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '518.1 -1136.0 -24.0'
+velocity       '-10.0   0.0   0.9'
+angles         '214.7   0.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       30.4
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 49
+spawnflags      17.0
+target         saw2wp1
+movedir        ' -1.0   0.0   0.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '620.0 -1136.0  28.0'
+dmg              1.0
+movetarget     entity 49
+think1         func_train_pause()
+finaldest      '239.0 -1136.0   0.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 48
+movestart      entity 48
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 52:
+modelindex     209.0
+absmin         '497.1 -1139.0 -45.0'
+absmax         '539.1 -1133.0  -3.0'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '518.1 -1136.0 -24.0'
+velocity       '-10.0   0.0   0.9'
+angles         '214.7   0.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           '-20.0  -2.0 -20.0'
+maxs           ' 20.0   2.0  20.0'
+size           ' 40.0   4.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       30.4
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 49
+spawnflags      17.0
+target         saw2wp1
+movedir        ' -1.0   0.0   0.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '656.0 -1136.0 -44.0'
+dmg              1.0
+movetarget     entity 49
+think1         func_train_pause()
+finaldest      '239.0 -1136.0   0.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         '-20.0  -2.0 -20.0'
+bbmaxs         ' 20.0   2.0  20.0'
+movelast       entity 48
+movestart      entity 48
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 53:
+absmin         '241.0 -1145.0  56.0'
+absmax         '259.0 -1127.0  90.0'
+solid            1.0
+origin         '250.0 -1136.0  73.0'
+oldorigin      '250.0 -1136.0  73.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw2wp4
+targetname     saw2wp3
+movetarget     entity 54
+state            1.0
+classtype       26.0
+targetback     saw2wp3
+movetarget3    entity 49
+hitcontentsmaskibad type 8
+
+EDICT 54:
+absmin         '532.0 -1145.0  31.0'
+absmax         '550.0 -1127.0  65.0'
+solid            1.0
+origin         '541.0 -1136.0  48.0'
+oldorigin      '541.0 -1136.0  48.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw2wp1
+targetname     saw2wp4
+movetarget     entity 48
+state            1.0
+classtype       26.0
+targetback     saw2wp4
+movetarget3    entity 53
+hitcontentsmaskibad type 8
+
+EDICT 55:
+absmin         ' 95.0 -941.0 -21.0'
+absmax         '113.0 -923.0  13.0'
+solid            1.0
+origin         '104.0 -932.0  -4.0'
+oldorigin      '104.0 -932.0   4.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw3wp1
+targetname     saw3wp2
+movetarget     entity 56
+lip             -1.0
+state            1.0
+classtype       26.0
+targetback     saw3wp2
+movetarget3    entity 56
+hitcontentsmaskibad type 8
+
+EDICT 56:
+absmin         ' 95.0 -941.0 111.0'
+absmax         '113.0 -923.0 145.0'
+solid            1.0
+origin         '104.0 -932.0 128.0'
+oldorigin      '104.0 -932.0 128.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw3wp2
+targetname     saw3wp1
+movetarget     entity 55
+state            1.0
+classtype       26.0
+targetback     saw3wp1
+movetarget3    entity 55
+hitcontentsmaskibad type 8
+
+EDICT 57:
+modelindex     209.0
+absmin         '137.0 -953.0 155.1'
+absmax         '143.0 -911.0 197.1'
+ltime            1.2
+movetype         8.0
+solid            1.0
+origin         '140.0 -932.0 176.1'
+velocity       '  0.0   0.0 -10.0'
+angles         '214.7  90.0   0.0'
+avelocity      '180.0   0.0   0.0'
+classname      buzzsaw
+model          progs/ad171/trap_sawblade.mdl
+mins           ' -2.0 -20.0 -20.0'
+maxs           '  2.0  20.0  20.0'
+size           '  4.0  40.0  40.0'
+touch          trap_sawblade_touch()
+think          SUB_CalcMoveDone()
+nextthink       12.8
+currentammo      1.0
+v_angle        '180.0   0.0   0.0'
+yaw_speed      180.0
+goalentity     entity 59
+spawnflags       1.0
+target         saw4wp1
+movedir        '  0.0   0.0  -1.0'
+speed           10.0
+mdl            progs/ad171/trap_sawblade.mdl
+dest0          '140.0 -1012.0 260.0'
+dmg              1.0
+movetarget     entity 59
+think1         func_train_pause()
+finaldest      '140.0 -932.0  72.0'
+lip              2.0
+state            1.0
+height           1.0
+waitmin          0.1
+distance        10.0
+volume           0.5
+classtype      666.0
+bbmins         ' -2.0 -20.0 -20.0'
+bbmaxs         '  2.0  20.0  20.0'
+movelast       entity 58
+movestart      entity 58
+estate           1.0
+estate_on      trap_sawblade_on()
+estate_off     func_train_off()
+estate_disable func_train_disable()
+estate_use     trap_sawblade_use()
+estate_fire    func_train_next()
+estate_reset   func_train_reset()
+hitcontentsmaskibad type 8
+
+EDICT 58:
+absmin         '131.0 -941.0 171.0'
+absmax         '149.0 -923.0 205.0'
+solid            1.0
+origin         '140.0 -932.0 188.0'
+oldorigin      '140.0 -932.0 188.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw4wp2
+targetname     saw4wp1
+movetarget     entity 59
+state            1.0
+classtype       26.0
+targetback     saw4wp1
+movetarget3    entity 59
+hitcontentsmaskibad type 8
+
+EDICT 59:
+absmin         '131.0 -941.0  55.0'
+absmax         '149.0 -923.0  89.0'
+solid            1.0
+origin         '140.0 -932.0  72.0'
+oldorigin      '140.0 -932.0  72.0'
+classname      path_corner
+mins           ' -8.0  -8.0 -16.0'
+maxs           '  8.0   8.0  16.0'
+size           ' 16.0  16.0  32.0'
+touch          path_corner_touch()
+use            path_corner_use()
+think          path_corner_setuptargets()
+spawnflags      80.0
+target         saw4wp1
+targetname     saw4wp2
+movetarget     entity 58
+state            1.0
+classtype       26.0
+targetback     saw4wp2
+movetarget3    entity 58
+hitcontentsmaskibad type 8
+
+EDICT 60:
+modelindex     211.0
+absmin         '1391.0  31.0 -321.0'
+absmax         '1425.0  65.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '1408.0  48.0 -304.0'
+oldorigin      '1408.0  48.0 -304.0'
+angles         '  7.5   0.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            5.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand1()
+nextthink        2.5
+health          60.0
+weapon           6.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '1408.0  48.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.9
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        7.0
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 61:
+modelindex     211.0
+absmin         '1727.0 -161.0 -273.0'
+absmax         '1761.0 -127.0 -239.0'
+movetype         4.0
+solid            3.0
+origin         '1744.0 -144.0 -256.0'
+oldorigin      '1744.0 -144.0 -256.0'
+angles         '  9.0 148.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand2()
+nextthink        2.5
+health          60.0
+weapon           7.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+ideal_yaw      148.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '1744.0 -144.0 -256.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.8
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        8.2
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 62:
+modelindex     211.0
+absmin         '895.0 -209.0 -321.0'
+absmax         '929.0 -175.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '912.0 -192.0 -304.0'
+oldorigin      '912.0 -192.0 -304.0'
+angles         ' 12.0 289.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            2.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand4()
+nextthink        2.4
+health          60.0
+weapon           9.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+ideal_yaw      289.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '912.0 -192.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.5
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        7.0
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 63:
+modelindex     211.0
+absmin         '1119.0 159.0 -257.0'
+absmax         '1153.0 193.0 -223.0'
+movetype         4.0
+solid            3.0
+origin         '1136.0 176.0 -240.0'
+oldorigin      '1136.0 176.0 -240.0'
+angles         '  9.0 131.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand2()
+nextthink        2.5
+health          60.0
+weapon           7.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+ideal_yaw      131.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '1136.0 176.0 -240.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.8
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        8.5
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 64:
+modelindex     211.0
+absmin         '1583.0 143.0 -321.0'
+absmax         '1617.0 177.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '1600.0 160.0 -304.0'
+oldorigin      '1600.0 160.0 -304.0'
+angles         ' 10.5   0.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            1.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand3()
+nextthink        2.5
+health          60.0
+weapon           8.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '1600.0 160.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.7
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        6.4
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 65:
+modelindex     211.0
+absmin         '1183.0 -177.0 -321.0'
+absmax         '1217.0 -143.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '1200.0 -160.0 -304.0'
+oldorigin      '1200.0 -160.0 -304.0'
+angles         ' 13.5   0.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            3.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand5()
+nextthink        2.5
+health          60.0
+weapon          10.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '1200.0 -160.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.5
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        6.4
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 66:
+modelindex     211.0
+absmin         '911.0 143.0 -321.0'
+absmax         '945.0 177.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '928.0 160.0 -304.0'
+oldorigin      '928.0 160.0 -304.0'
+angles         ' 12.0   0.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            2.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand4()
+nextthink        2.4
+health          60.0
+weapon           9.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '928.0 160.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.5
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        8.1
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 67:
+modelindex     211.0
+absmin         '815.0 -209.0 -321.0'
+absmax         '849.0 -175.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '832.0 -192.0 -304.0'
+oldorigin      '832.0 -192.0 -304.0'
+angles         ' 10.5   0.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            1.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand3()
+nextthink        2.4
+health          60.0
+weapon           8.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '832.0 -192.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.6
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        8.9
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 68:
+modelindex     211.0
+absmin         '1711.0 -289.0 -321.0'
+absmax         '1745.0 -255.0 -287.0'
+movetype         4.0
+solid            3.0
+origin         '1728.0 -272.0 -304.0'
+oldorigin      '1728.0 -272.0 -304.0'
+angles         '  6.0   0.0   0.0'
+classname      monster_eel
+model          progs/ad171/mon_eel.mdl
+frame            4.0
+mins           '-16.0 -16.0 -16.0'
+maxs           ' 16.0  16.0  16.0'
+size           ' 32.0  32.0  32.0'
+use            monster_use()
+think          eel_stand6()
+nextthink        2.4
+health          60.0
+weapon           5.0
+takedamage       2.0
+view_ofs       '  0.0   0.0   8.0'
+flags           34.0
+max_health      60.0
+waterlevel       1.0
+watertype       -3.0
+yaw_speed       10.0
+th_stand       eel_stand1()
+th_walk        eel_walk1()
+th_run         eel_run1()
+th_missile     eel_attack2_1()
+th_melee       eel_attack1()
+th_pain        eel_pain1()
+th_die         eel_death()
+mdl            progs/ad171/mon_eel.mdl
+lastorigin     '1728.0 -272.0 -304.0'
+pausetime      999999.0
+aura_type       -1.0
+classtype      365.0
+classgroup     625.0
+classmove        4.0
+inBSPwater       1.0
+mega_health     60.0
+bboxtype        16.0
+bbmins         '-16.0 -16.0 -16.0'
+bbmaxs         ' 16.0  16.0  16.0'
+gibhealth      -25.0
+headmdl        progs/ad171/h_eel.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack CheckAttack()
+liquidbase      -3.0
+liquidcheck      2.9
+meleerange      80.0
+pain_flinch     10.0
+pain_timeout     1.0
+pain_sound     rogue/eel/epain3.wav
+deathstring     was electrified by an Eel
+
+idletimer        8.8
+sight_sound    rogue/eel/eelc5.wav
+sight_sound2   rogue/eel/eelc5.wav
+sight_sound3   rogue/eel/eelc5.wav
+sight_sound4   rogue/eel/eelc5.wav
+sight_count      4.0
+switchoverride   1.0
+steptype        10.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        211.0
+hitcontentsmaskibad type 8
+blockudeath      1.0
+
+EDICT 69:
+modelindex     217.0
+absmin         '1297.0 -31.0 -368.0'
+absmax         '1359.0  31.0 -312.0'
+movetype         6.0
+solid            1.0
+origin         '1328.0   0.0 -344.0'
+oldorigin      '1328.0   0.0 -344.0'
+classname      item_artifact_envirosuit
+model          progs/ad171/artifact_envsuit.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          2097152.0
+netname        Environment Suit
+flags          768.0
+noise          items/suit.wav
+noise1         items/suit2.wav
+mdl            progs/ad171/artifact_envsuit.mdl
+cnt             30.0
+classtype      550.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  514.0
+respawn_ofs    '  0.0   0.0  28.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    200.0
+
+EDICT 70:
+modelindex     218.0
+absmin         '1249.0 -415.0   0.0'
+absmax         '1311.0 -353.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1280.0 -384.0   0.0'
+oldorigin      '1280.0 -384.0   0.0'
+classname      weapon_proximity_gun
+model          progs/hipnotic/g_prox.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon         131072.0
+netname        Proximity Grenade Launcher
+flags          768.0
+mdl            progs/hipnotic/g_prox.mdl
+aflag           10.0
+classtype      531.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 71:
+modelindex     219.0
+absmin         '1249.0 -479.0   0.0'
+absmax         '1311.0 -417.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1280.0 -448.0   0.0'
+oldorigin      '1280.0 -448.0   0.0'
+classname      weapon_mjolnir
+model          progs/hipnotic/g_hammer.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_thinkloop()
+nextthink        2.4
+weapon         262144.0
+netname        Mjolnir's Hammer
+flags          768.0
+mdl            progs/hipnotic/g_hammer.mdl
+aflag           60.0
+classtype      547.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 72:
+modelindex     220.0
+absmin         '1249.0 -543.0   0.0'
+absmax         '1311.0 -481.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1280.0 -512.0   0.0'
+oldorigin      '1280.0 -512.0   0.0'
+classname      weapon_laser_gun
+model          progs/hipnotic/g_laserg.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon         524288.0
+netname        Laser Cannon
+flags          768.0
+mdl            progs/hipnotic/g_laserg.mdl
+aflag           30.0
+classtype      549.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 73:
+modelindex     221.0
+absmin         '1313.0 -543.0   0.0'
+absmax         '1375.0 -481.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1344.0 -512.0   0.0'
+oldorigin      '1344.0 -512.0   0.0'
+classname      weapon_nailgun
+model          progs/ad171/g_nail.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon           4.0
+netname        Nailgun
+flags          768.0
+mdl            progs/ad171/g_nail.mdl
+aflag           30.0
+classtype      520.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 74:
+modelindex     222.0
+absmin         '1313.0 -479.0   0.0'
+absmax         '1375.0 -417.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1344.0 -448.0   0.0'
+oldorigin      '1344.0 -448.0   0.0'
+classname      weapon_supernailgun
+model          progs/ad171/g_nail2.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon           8.0
+netname        Super Nailgun
+flags          768.0
+mdl            progs/ad171/g_nail2.mdl
+aflag           30.0
+classtype      525.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 75:
+modelindex     223.0
+absmin         '1313.0 -415.0   0.0'
+absmax         '1375.0 -353.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1344.0 -384.0   0.0'
+oldorigin      '1344.0 -384.0   0.0'
+classname      weapon_supershotgun
+model          progs/ad171/g_shot2.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon           2.0
+netname        Double-barrelled Shotgun
+flags          768.0
+mdl            progs/ad171/g_shot2.mdl
+aflag           25.0
+classtype      510.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 76:
+modelindex     224.0
+absmin         '1249.0 -607.0   0.0'
+absmax         '1311.0 -545.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1280.0 -576.0   0.0'
+oldorigin      '1280.0 -576.0   0.0'
+classname      weapon_grenadelauncher
+model          progs/g_rock.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon          16.0
+netname        Grenade Launcher
+flags          768.0
+mdl            progs/g_rock.mdl
+aflag           10.0
+classtype      530.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 77:
+modelindex     225.0
+absmin         '1313.0 -607.0   0.0'
+absmax         '1375.0 -545.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1344.0 -576.0   0.0'
+oldorigin      '1344.0 -576.0   0.0'
+classname      weapon_rocketlauncher
+model          progs/g_rock2.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon          32.0
+netname        Rocket Launcher
+flags          768.0
+mdl            progs/g_rock2.mdl
+aflag           10.0
+classtype      535.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 78:
+modelindex     226.0
+absmin         '1249.0 -671.0   0.0'
+absmax         '1311.0 -609.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1280.0 -640.0   0.0'
+oldorigin      '1280.0 -640.0   0.0'
+classname      weapon_lightning
+model          progs/g_light.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+weapon          64.0
+netname        Thunderbolt
+flags          768.0
+mdl            progs/g_light.mdl
+aflag           15.0
+classtype      540.0
+classgroup     250.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         weapon_touch()
+respawn_time    30.0
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 79:
+modelindex     227.0
+absmin         '1777.0 -1167.0   0.0'
+absmax         '1839.0 -1105.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1808.0 -1136.0   0.0'
+oldorigin      '1808.0 -1136.0   0.0'
+angles         '  0.0  61.0   0.0'
+classname      item_shells
+model          progs/ad171/ammo_shells1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of shells
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_shells1.mdl
+aflag           40.0
+classtype      710.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  257.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 80:
+modelindex     227.0
+absmin         '1777.0 -1119.0   0.0'
+absmax         '1839.0 -1057.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1808.0 -1088.0   0.0'
+oldorigin      '1808.0 -1088.0   0.0'
+angles         '  0.0  35.0   0.0'
+classname      item_shells
+model          progs/ad171/ammo_shells1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of shells
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_shells1.mdl
+aflag           40.0
+classtype      710.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  257.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 81:
+modelindex     227.0
+absmin         '1825.0 -1119.0   0.0'
+absmax         '1887.0 -1057.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -1088.0   0.0'
+oldorigin      '1856.0 -1088.0   0.0'
+angles         '  0.0  68.0   0.0'
+classname      item_shells
+model          progs/ad171/ammo_shells1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of shells
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_shells1.mdl
+aflag           40.0
+classtype      710.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  257.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 82:
+modelindex     227.0
+absmin         '1825.0 -1167.0   0.0'
+absmax         '1887.0 -1105.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -1136.0   0.0'
+oldorigin      '1856.0 -1136.0   0.0'
+angles         '  0.0  15.0   0.0'
+classname      item_shells
+model          progs/ad171/ammo_shells1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of shells
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_shells1.mdl
+aflag           40.0
+classtype      710.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  257.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 83:
+modelindex     229.0
+absmin         '1777.0 -1055.0   0.0'
+absmax         '1839.0 -993.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1808.0 -1024.0   0.0'
+oldorigin      '1808.0 -1024.0   0.0'
+angles         '  0.0 178.0   0.0'
+classname      item_spikes
+model          progs/ad171/ammo_nails1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_nails1.mdl
+aflag           50.0
+classtype      720.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 84:
+modelindex     229.0
+absmin         '1825.0 -1055.0   0.0'
+absmax         '1887.0 -993.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -1024.0   0.0'
+oldorigin      '1856.0 -1024.0   0.0'
+angles         '  0.0 139.0   0.0'
+classname      item_spikes
+model          progs/ad171/ammo_nails1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_nails1.mdl
+aflag           50.0
+classtype      720.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 85:
+modelindex     229.0
+absmin         '1825.0 -1007.0   0.0'
+absmax         '1887.0 -945.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -976.0   0.0'
+oldorigin      '1856.0 -976.0   0.0'
+angles         '  0.0  99.0   0.0'
+classname      item_spikes
+model          progs/ad171/ammo_nails1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_nails1.mdl
+aflag           50.0
+classtype      720.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 86:
+modelindex     229.0
+absmin         '1777.0 -1007.0   0.0'
+absmax         '1839.0 -945.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1808.0 -976.0   0.0'
+oldorigin      '1808.0 -976.0   0.0'
+angles         '  0.0 210.0   0.0'
+classname      item_spikes
+model          progs/ad171/ammo_nails1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_nails1.mdl
+aflag           50.0
+classtype      720.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+headmdl        progs/ad171/ammo_lidlarge.mdl
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 87:
+modelindex     230.0
+absmin         '1761.0 -943.0   0.0'
+absmax         '1823.0 -881.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1792.0 -912.0   0.0'
+oldorigin      '1792.0 -912.0   0.0'
+angles         '  0.0 229.0   0.0'
+classname      item_rockets
+model          progs/ad171/ammo_rockets1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of rockets
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_rockets1.mdl
+aflag           10.0
+classtype      730.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 88:
+modelindex     230.0
+absmin         '1809.0 -943.0   0.0'
+absmax         '1871.0 -881.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1840.0 -912.0   0.0'
+oldorigin      '1840.0 -912.0   0.0'
+angles         '  0.0 138.0   0.0'
+classname      item_rockets
+model          progs/ad171/ammo_rockets1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of rockets
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_rockets1.mdl
+aflag           10.0
+classtype      730.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 89:
+modelindex     230.0
+absmin         '1809.0 -895.0   0.0'
+absmax         '1871.0 -833.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1840.0 -864.0   0.0'
+oldorigin      '1840.0 -864.0   0.0'
+angles         '  0.0 251.0   0.0'
+classname      item_rockets
+model          progs/ad171/ammo_rockets1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of rockets
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_rockets1.mdl
+aflag           10.0
+classtype      730.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 90:
+modelindex     230.0
+absmin         '1761.0 -895.0   0.0'
+absmax         '1823.0 -833.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1792.0 -864.0   0.0'
+oldorigin      '1792.0 -864.0   0.0'
+angles         '  0.0 306.0   0.0'
+classname      item_rockets
+model          progs/ad171/ammo_rockets1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of rockets
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_rockets1.mdl
+aflag           10.0
+classtype      730.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 91:
+modelindex     231.0
+absmin         '1761.0 -831.0   0.0'
+absmax         '1823.0 -769.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1792.0 -800.0   0.0'
+oldorigin      '1792.0 -800.0   0.0'
+angles         '  0.0  91.0   0.0'
+classname      item_cells
+model          progs/ad171/ammo_battery1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        battery
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_battery1.mdl
+aflag           12.0
+classtype      740.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 92:
+modelindex     231.0
+absmin         '1809.0 -831.0   0.0'
+absmax         '1871.0 -769.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1840.0 -800.0   0.0'
+oldorigin      '1840.0 -800.0   0.0'
+angles         '  0.0  72.0   0.0'
+classname      item_cells
+model          progs/ad171/ammo_battery1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        battery
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_battery1.mdl
+aflag           12.0
+classtype      740.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 93:
+modelindex     231.0
+absmin         '1809.0 -783.0   0.0'
+absmax         '1871.0 -721.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1840.0 -752.0   0.0'
+oldorigin      '1840.0 -752.0   0.0'
+angles         '  0.0  48.0   0.0'
+classname      item_cells
+model          progs/ad171/ammo_battery1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        battery
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_battery1.mdl
+aflag           12.0
+classtype      740.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 94:
+modelindex     231.0
+absmin         '1761.0 -783.0   0.0'
+absmax         '1823.0 -721.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1792.0 -752.0   0.0'
+oldorigin      '1792.0 -752.0   0.0'
+angles         '  0.0  20.0   0.0'
+classname      item_cells
+model          progs/ad171/ammo_battery1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        battery
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_battery1.mdl
+aflag           12.0
+classtype      740.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 95:
+modelindex     232.0
+absmin         '1777.0 -719.0   0.0'
+absmax         '1839.0 -657.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1808.0 -688.0   0.0'
+oldorigin      '1808.0 -688.0   0.0'
+angles         '  0.0  72.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail1.bsp
+aflag           50.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 96:
+modelindex     232.0
+absmin         '1825.0 -719.0   0.0'
+absmax         '1887.0 -657.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -688.0   0.0'
+oldorigin      '1856.0 -688.0   0.0'
+angles         '  0.0  34.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail1.bsp
+aflag           50.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 97:
+modelindex     233.0
+absmin         '1777.0 -655.0   0.0'
+absmax         '1839.0 -593.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1808.0 -624.0   0.0'
+oldorigin      '1808.0 -624.0   0.0'
+angles         '  0.0 281.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail0.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail0.bsp
+aflag           25.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 98:
+modelindex     233.0
+absmin         '1825.0 -655.0   0.0'
+absmax         '1887.0 -593.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -624.0   0.0'
+oldorigin      '1856.0 -624.0   0.0'
+angles         '  0.0  50.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail0.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail0.bsp
+aflag           25.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 99:
+modelindex     234.0
+absmin         '1809.0 -591.0   0.0'
+absmax         '1871.0 -529.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1840.0 -560.0   0.0'
+oldorigin      '1840.0 -560.0   0.0'
+angles         '  0.0 226.0   0.0'
+classname      item_multi_rockets
+model          maps/b_mrock1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of multi rockets
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_mrock1.bsp
+aflag           10.0
+classtype      744.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 100:
+modelindex     234.0
+absmin         '1745.0 -591.0   0.0'
+absmax         '1807.0 -529.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1776.0 -560.0   0.0'
+oldorigin      '1776.0 -560.0   0.0'
+angles         '  0.0 264.0   0.0'
+classname      item_multi_rockets
+model          maps/b_mrock1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of multi rockets
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_mrock1.bsp
+aflag           10.0
+classtype      744.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 101:
+modelindex     235.0
+absmin         '1745.0 -511.0   0.0'
+absmax         '1807.0 -449.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1776.0 -480.0   0.0'
+oldorigin      '1776.0 -480.0   0.0'
+angles         '  0.0 210.0   0.0'
+classname      item_multi_rockets
+model          maps/b_mrock0.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of multi rockets
+flags          768.0
+noise          weapons/lock4.wav
+mdl            maps/b_mrock0.bsp
+aflag            5.0
+classtype      744.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 102:
+modelindex     235.0
+absmin         '1809.0 -511.0   0.0'
+absmax         '1871.0 -449.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1840.0 -480.0   0.0'
+oldorigin      '1840.0 -480.0   0.0'
+angles         '  0.0  50.0   0.0'
+classname      item_multi_rockets
+model          maps/b_mrock0.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of multi rockets
+flags          768.0
+noise          weapons/lock4.wav
+mdl            maps/b_mrock0.bsp
+aflag            5.0
+classtype      744.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 103:
+modelindex     236.0
+absmin         '1761.0 -463.0   0.0'
+absmax         '1823.0 -401.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1792.0 -432.0   0.0'
+oldorigin      '1792.0 -432.0   0.0'
+angles         '  0.0 122.0   0.0'
+classname      item_plasma
+model          maps/b_plas1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of plasma
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_plas1.bsp
+aflag           12.0
+classtype      745.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  264.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 104:
+modelindex     236.0
+absmin         '1825.0 -463.0   0.0'
+absmax         '1887.0 -401.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -432.0   0.0'
+oldorigin      '1856.0 -432.0   0.0'
+angles         '  0.0  86.0   0.0'
+classname      item_plasma
+model          maps/b_plas1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of plasma
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_plas1.bsp
+aflag           12.0
+classtype      745.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  264.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 105:
+modelindex     236.0
+absmin         '1825.0 -399.0   0.0'
+absmax         '1887.0 -337.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -368.0   0.0'
+oldorigin      '1856.0 -368.0   0.0'
+angles         '  0.0 325.0   0.0'
+classname      item_plasma
+model          maps/b_plas1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of plasma
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_plas1.bsp
+aflag           12.0
+classtype      745.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  264.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 106:
+modelindex     236.0
+absmin         '1761.0 -399.0   0.0'
+absmax         '1823.0 -337.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1792.0 -368.0   0.0'
+oldorigin      '1792.0 -368.0   0.0'
+angles         '  0.0  10.0   0.0'
+classname      item_plasma
+model          maps/b_plas1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of plasma
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_plas1.bsp
+aflag           12.0
+classtype      745.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  264.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 107:
+modelindex     237.0
+absmin         '1633.0 -1055.0   0.0'
+absmax         '1695.0 -993.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -1024.0   0.0'
+oldorigin      '1664.0 -1024.0   0.0'
+classname      item_armor1
+model          progs/ad171/armour.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        Green Armor
+flags          768.0
+armortype        0.3
+armorvalue     100.0
+noise          items/armor1.wav
+mdl            progs/ad171/armour.mdl
+classtype      770.0
+classgroup     275.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         armor_touch()
+respawn_time    20.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2           1.0
+hitcontentsmaskibad type 8
+part_active    110.0
+
+EDICT 108:
+modelindex     237.0
+absmin         '1633.0 -1119.0   0.0'
+absmax         '1695.0 -1057.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -1088.0   0.0'
+oldorigin      '1664.0 -1088.0   0.0'
+classname      item_armor2
+model          progs/ad171/armour.mdl
+skin             1.0
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        Yellow Armor
+flags          768.0
+armortype        0.6
+armorvalue     150.0
+noise          items/armor1.wav
+mdl            progs/ad171/armour.mdl
+classtype      775.0
+classgroup     275.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         armor_touch()
+ckeyhudskin      1.0
+respawn_time    20.0
+respawn_effect   1.0
+respawn_style  257.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2           2.0
+hitcontentsmaskibad type 8
+part_active    110.0
+
+EDICT 109:
+modelindex     237.0
+absmin         '1633.0 -1183.0   0.0'
+absmax         '1695.0 -1121.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -1152.0   0.0'
+oldorigin      '1664.0 -1152.0   0.0'
+classname      item_armorInv
+model          progs/ad171/armour.mdl
+skin             2.0
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        Red Armor
+flags          768.0
+armortype        0.8
+armorvalue     200.0
+noise          items/armor1.wav
+mdl            progs/ad171/armour.mdl
+classtype      790.0
+classgroup     275.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         armor_touch()
+ckeyhudskin      2.0
+respawn_time    20.0
+respawn_effect   1.0
+respawn_style  260.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2           4.0
+hitcontentsmaskibad type 8
+part_active    110.0
+
+EDICT 110:
+modelindex     231.0
+absmin         '1713.0 -831.0   0.0'
+absmax         '1775.0 -769.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1744.0 -800.0   0.0'
+oldorigin      '1744.0 -800.0   0.0'
+angles         '  0.0 162.0   0.0'
+classname      item_cells
+model          progs/ad171/ammo_battery1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        battery
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_battery1.mdl
+aflag           12.0
+classtype      740.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 111:
+modelindex     231.0
+absmin         '1713.0 -783.0   0.0'
+absmax         '1775.0 -721.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1744.0 -752.0   0.0'
+oldorigin      '1744.0 -752.0   0.0'
+angles         '  0.0 140.0   0.0'
+classname      item_cells
+model          progs/ad171/ammo_battery1.mdl
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        battery
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            progs/ad171/ammo_battery1.mdl
+aflag           12.0
+classtype      740.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  258.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 112:
+modelindex     236.0
+absmin         '1689.0 -399.0   0.0'
+absmax         '1751.0 -337.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1720.0 -368.0   0.0'
+oldorigin      '1720.0 -368.0   0.0'
+angles         '  0.0 353.0   0.0'
+classname      item_plasma
+model          maps/b_plas1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of plasma
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_plas1.bsp
+aflag           12.0
+classtype      745.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  264.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 113:
+modelindex     236.0
+absmin         '1689.0 -463.0   0.0'
+absmax         '1751.0 -401.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1720.0 -432.0   0.0'
+oldorigin      '1720.0 -432.0   0.0'
+angles         '  0.0 304.0   0.0'
+classname      item_plasma
+model          maps/b_plas1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of plasma
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_plas1.bsp
+aflag           12.0
+classtype      745.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+frame_override   1.0
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  264.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 114:
+modelindex     233.0
+absmin         '1673.0 -655.0   0.0'
+absmax         '1735.0 -593.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1704.0 -624.0   0.0'
+oldorigin      '1704.0 -624.0   0.0'
+angles         '  0.0 116.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail0.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail0.bsp
+aflag           25.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 115:
+modelindex     232.0
+absmin         '1673.0 -719.0   0.0'
+absmax         '1735.0 -657.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1704.0 -688.0   0.0'
+oldorigin      '1704.0 -688.0   0.0'
+angles         '  0.0 184.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail1.bsp
+aflag           50.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 116:
+modelindex     233.0
+absmin         '1721.0 -655.0   0.0'
+absmax         '1783.0 -593.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1752.0 -624.0   0.0'
+oldorigin      '1752.0 -624.0   0.0'
+angles         '  0.0 220.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail0.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail0.bsp
+aflag           25.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 117:
+modelindex     232.0
+absmin         '1721.0 -719.0   0.0'
+absmax         '1783.0 -657.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1752.0 -688.0   0.0'
+oldorigin      '1752.0 -688.0   0.0'
+angles         '  0.0 122.0   0.0'
+classname      item_lava_spikes
+model          maps/b_lnail1.bsp
+mins           '-16.0 -16.0   0.0'
+maxs           ' 16.0  16.0  56.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        box of lava nails
+flags          768.0
+spawnflags       1.0
+noise          weapons/lock4.wav
+mdl            maps/b_lnail1.bsp
+aflag           50.0
+classtype      743.0
+classgroup     200.0
+bbmins         '-16.0 -16.0   0.0'
+bbmaxs         ' 16.0  16.0  56.0'
+touch2         ammo_touch()
+respawn_time    30.0
+respawn_effect   1.0
+respawn_style  320.0
+respawn_ofs    '  0.0   0.0  24.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+
+EDICT 118:
+modelindex     217.0
+absmin         '1825.0 -1247.0   0.0'
+absmax         '1887.0 -1185.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -1216.0  24.0'
+oldorigin      '1856.0 -1216.0  24.0'
+classname      item_artifact_envirosuit
+model          progs/ad171/artifact_envsuit.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          2097152.0
+netname        Environment Suit
+flags          768.0
+noise          items/suit.wav
+noise1         items/suit2.wav
+mdl            progs/ad171/artifact_envsuit.mdl
+cnt             30.0
+classtype      550.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  514.0
+respawn_ofs    '  0.0   0.0  28.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    200.0
+
+EDICT 119:
+modelindex     238.0
+absmin         '1825.0 -1311.0   0.0'
+absmax         '1887.0 -1249.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -1280.0  24.0'
+oldorigin      '1856.0 -1280.0  24.0'
+classname      item_artifact_super_damage
+model          progs/ad171/artifact_quad.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          4194304.0
+netname        Quad Damage
+flags          768.0
+noise          items/damage.wav
+noise1         items/damage2.wav
+noise2         items/damage3.wav
+mdl            progs/ad171/artifact_quad.mdl
+cnt             30.0
+classtype      565.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    230.0
+
+EDICT 120:
+modelindex     239.0
+absmin         '1825.0 -1375.0   0.0'
+absmax         '1887.0 -1313.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1856.0 -1344.0  24.0'
+oldorigin      '1856.0 -1344.0  24.0'
+classname      item_artifact_invulnerability
+model          progs/ad171/artifact_pent.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          1048576.0
+netname        Pentagram of Protection
+flags          768.0
+noise          items/protect.wav
+noise1         items/protect2.wav
+noise2         items/protect3.wav
+mdl            progs/ad171/artifact_pent.mdl
+cnt             30.0
+classtype      555.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time   300.0
+respawn_style  516.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    210.0
+
+EDICT 121:
+modelindex     240.0
+absmin         '1905.0 -415.0   0.0'
+absmax         '1967.0 -353.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1936.0 -384.0  24.0'
+oldorigin      '1936.0 -384.0  24.0'
+classname      item_artifact_invisibility
+model          progs/ad171/artifact_invis.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          524288.0
+netname        Ring of Shadows
+flags          768.0
+noise          items/inv1.wav
+noise1         items/inv2.wav
+noise2         items/inv3.wav
+mdl            progs/ad171/artifact_invis.mdl
+cnt             30.0
+classtype      560.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time   300.0
+respawn_style  513.0
+respawn_ofs    '  0.0   0.0   6.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    220.0
+
+EDICT 122:
+modelindex     241.0
+absmin         '1633.0 -863.0   0.0'
+absmax         '1695.0 -801.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -832.0  24.0'
+oldorigin      '1664.0 -832.0  24.0'
+classname      item_key1
+model          progs/ad171/key_medieval.mdl
+skin             2.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          131072.0
+netname        silver key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      600.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      2.0
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    120.0
+
+EDICT 123:
+modelindex     241.0
+absmin         '1633.0 -1007.0   0.0'
+absmax         '1695.0 -945.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -976.0  24.0'
+oldorigin      '1664.0 -976.0  24.0'
+classname      item_key2
+model          progs/ad171/key_medieval.mdl
+skin             6.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          262144.0
+netname        gold key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      605.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      6.0
+respawn_time    60.0
+respawn_style  513.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    122.0
+
+EDICT 124:
+modelindex     242.0
+absmin         '1073.0 -1263.0   0.0'
+absmax         '1135.0 -1201.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1104.0 -1232.0  24.0'
+oldorigin      '1104.0 -1232.0  24.0'
+classname      item_key_skeleton
+model          progs/qmaster/w_sk_key.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        a skeleton key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/qmaster/w_sk_key.mdl
+classtype      606.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+respawn_time    60.0
+respawn_style  576.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2         65536.0
+hitcontentsmaskibad type 8
+part_active    130.0
+
+EDICT 125:
+modelindex     243.0
+absmin         '1681.0 -1519.0   0.0'
+absmax         '1743.0 -1457.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1712.0 -1488.0  24.0'
+oldorigin      '1712.0 -1488.0  24.0'
+classname      item_sigil
+model          progs/ad171/key_rune1.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        The Rune
+flags          768.0
+spawnflags       1.0
+noise          misc/runekey.wav
+mdl            progs/ad171/key_rune1.mdl
+classtype      620.0
+classgroup     310.0
+customkey        1.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         sigil_touch()
+respawn_time    60.0
+respawn_style  528.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    140.0
+
+EDICT 126:
+modelindex     244.0
+absmin         '1617.0 -1519.0   0.0'
+absmax         '1679.0 -1457.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1648.0 -1488.0  24.0'
+oldorigin      '1648.0 -1488.0  24.0'
+classname      item_sigil
+model          progs/ad171/key_rune2.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        The Rune
+flags          768.0
+spawnflags       2.0
+noise          misc/runekey.wav
+mdl            progs/ad171/key_rune2.mdl
+classtype      620.0
+classgroup     310.0
+customkey        2.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         sigil_touch()
+respawn_time    60.0
+respawn_style  528.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    140.0
+
+EDICT 127:
+modelindex     245.0
+absmin         '1553.0 -1519.0   0.0'
+absmax         '1615.0 -1457.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1584.0 -1488.0  24.0'
+oldorigin      '1584.0 -1488.0  24.0'
+classname      item_sigil
+model          progs/ad171/key_rune3.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        The Rune
+flags          768.0
+spawnflags       4.0
+noise          misc/runekey.wav
+mdl            progs/ad171/key_rune3.mdl
+classtype      620.0
+classgroup     310.0
+customkey        4.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         sigil_touch()
+respawn_time    60.0
+respawn_style  528.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    140.0
+
+EDICT 128:
+modelindex     246.0
+absmin         '1489.0 -1519.0   0.0'
+absmax         '1551.0 -1457.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1520.0 -1488.0  24.0'
+oldorigin      '1520.0 -1488.0  24.0'
+classname      item_sigil
+model          progs/ad171/key_rune4.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        The Rune
+flags          768.0
+spawnflags       8.0
+noise          misc/runekey.wav
+mdl            progs/ad171/key_rune4.mdl
+classtype      620.0
+classgroup     310.0
+customkey        8.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         sigil_touch()
+respawn_time    60.0
+respawn_style  528.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    140.0
+
+EDICT 129:
+modelindex     247.0
+absmin         '1889.0 -1375.0   0.0'
+absmax         '1951.0 -1313.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1920.0 -1344.0  24.0'
+oldorigin      '1920.0 -1344.0  24.0'
+classname      item_artifact_wetsuit
+model          progs/ad171/artifact_wetsuit.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        Wet Suit
+flags          768.0
+noise          hipnotic/items/weton.wav
+noise1         hipnotic/items/wetoff.wav
+noise2         hipnotic/items/wetsuit.wav
+noise3         ad171/items/wetsuit3out.wav
+mdl            progs/ad171/artifact_wetsuit.mdl
+cnt            300.0
+classtype      593.0
+classgroup     350.0
+moditems       262144.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  28.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+exactskin        4.0
+hitcontentsmaskibad type 8
+part_active    270.0
+
+EDICT 130:
+modelindex     248.0
+absmin         '1889.0 -1247.0   0.0'
+absmax         '1951.0 -1185.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1920.0 -1216.0  24.0'
+oldorigin      '1920.0 -1216.0  24.0'
+classname      item_artifact_empathy_shields
+model          progs/hipnotic/empathy.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        Empathy Shield
+flags          768.0
+noise          hipnotic/items/empathy.wav
+noise1         hipnotic/items/empathy2.wav
+noise2         items/suit2.wav
+mdl            progs/hipnotic/empathy.mdl
+cnt             30.0
+classtype      594.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  513.0
+respawn_ofs    '  0.0   0.0   6.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2         16384.0
+hitcontentsmaskibad type 8
+part_active    220.0
+
+EDICT 131:
+modelindex     249.0
+absmin         '1937.0 -1135.0   0.0'
+absmax         '1999.0 -1073.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1968.0 -1104.0  24.0'
+oldorigin      '1968.0 -1104.0  24.0'
+classname      item_powerup_shield
+model          progs/rogue/shield.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          4194304.0
+netname        Power Shield
+flags          768.0
+noise          rogue/shield/pickup.wav
+noise1         rogue/shield/hit.wav
+noise2         rogue/shield/fadeout.wav
+mdl            progs/rogue/shield.mdl
+cnt             30.0
+classtype      591.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  516.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2          64.0
+hitcontentsmaskibad type 8
+part_active    210.0
+
+EDICT 132:
+modelindex     250.0
+absmin         '1937.0 -1055.0   0.0'
+absmax         '1999.0 -993.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1968.0 -1024.0  24.0'
+oldorigin      '1968.0 -1024.0  24.0'
+classname      item_powerup_belt
+model          progs/ad172/artifact_blastbelt.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          4194304.0
+netname        Anti-Grav Belt
+flags          768.0
+noise          rogue/belt/pickup.wav
+noise1         rogue/belt/use.wav
+noise2         rogue/belt/fadeout.wav
+mdl            progs/ad172/artifact_blastbelt.mdl
+cnt             45.0
+classtype      592.0
+classgroup     350.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         artifact_touch()
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  16.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    230.0
+
+EDICT 133:
+modelindex       2.0
+absmin         '991.0 -1025.0  -1.0'
+absmax         '1009.0 -927.0  97.0'
+ltime            0.2
+movetype         7.0
+solid            4.0
+oldorigin      '1000.0 -976.0  48.0'
+classname      func_door
+model          *1
+mins           '992.0 -1024.0   0.0'
+maxs           '1008.0 -928.0  96.0'
+size           ' 16.0  96.0  96.0'
+touch          func_door_touch()
+use            entity_state_use()
+think          func_door_final_setup()
+blocked        func_door_blocked()
+items          131072.0
+enemy          entity 133
+yaw_speed      100.0
+spawnflags      16.0
+owner          entity 133
+movedir        ' -0.0  -0.0  -1.0'
+sounds           3.0
+noise          misc/talk.wav
+noise1         doors/stndr2.wav
+noise2         doors/stndr1.wav
+noise3         doors/medtry.wav
+speed          100.0
+mdl            *1
+wait            -1.0
+noise4         doors/meduse.wav
+dmg              2.0
+lip              8.0
+state            1.0
+pos2           ' -0.0   0.0 -88.0'
+volume           1.0
+classtype      800.0
+classgroup     450.0
+bsporigin        1.0
+bbmins         '-60.0 -60.0  -8.0'
+bbmaxs         ' 60.0  60.0   8.0'
+estate           1.0
+estate_on      func_door_on()
+estate_off     func_door_off()
+estate_disable func_door_disable()
+estate_use     func_door_use()
+estate_reset   func_door_reset()
+hitcontentsmaskibad type 8
+
+EDICT 134:
+modelindex       3.0
+absmin         '703.0 -921.0  -1.0'
+absmax         '801.0 -903.0  97.0'
+ltime            0.2
+movetype         7.0
+solid            4.0
+oldorigin      '752.0 -912.0  48.0'
+classname      func_door
+model          *2
+mins           '704.0 -920.0   0.0'
+maxs           '800.0 -904.0  96.0'
+size           ' 96.0  16.0  96.0'
+touch          func_door_touch()
+use            entity_state_use()
+think          func_door_final_setup()
+blocked        func_door_blocked()
+items          262144.0
+enemy          entity 134
+yaw_speed      100.0
+spawnflags       8.0
+owner          entity 134
+movedir        ' -0.0  -0.0  -1.0'
+sounds           3.0
+noise          misc/talk.wav
+noise1         doors/stndr2.wav
+noise2         doors/stndr1.wav
+noise3         doors/medtry.wav
+speed          100.0
+mdl            *2
+wait            -1.0
+noise4         doors/meduse.wav
+dmg              2.0
+lip              8.0
+state            1.0
+pos2           ' -0.0   0.0 -88.0'
+volume           1.0
+classtype      800.0
+classgroup     450.0
+bsporigin        1.0
+bbmins         '-60.0 -60.0  -8.0'
+bbmaxs         ' 60.0  60.0   8.0'
+estate           1.0
+estate_on      func_door_on()
+estate_off     func_door_off()
+estate_disable func_door_disable()
+estate_use     func_door_use()
+estate_reset   func_door_reset()
+hitcontentsmaskibad type 8
+
+EDICT 135:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+ltime            0.2
+oldorigin      '912.0 -1040.0  48.0'
+classname      func_door
+model
+use            entity_state_use()
+think          SUB_Null()
+blocked        func_door_blocked()
+enemy          entity 135
+yaw_speed      100.0
+spawnflags      66.0
+owner          entity 135
+movedir        ' -0.0  -0.0  -1.0'
+sounds           2.0
+noise          misc/talk.wav
+noise1         doors/hydro2.wav
+noise2         doors/hydro1.wav
+noise3         doors/medtry.wav
+speed          100.0
+mdl            *3
+wait            -1.0
+trigger_field  entity 152
+noise4         doors/meduse.wav
+dmg              2.0
+lip              8.0
+state            1.0
+pos2           ' -0.0   0.0 -88.0'
+volume           1.0
+classtype      800.0
+classgroup     450.0
+bsporigin        1.0
+bbmins         '-60.0 -60.0  -8.0'
+bbmaxs         ' 60.0  60.0   8.0'
+estate           2.0
+estate_on      func_door_on()
+estate_off     func_door_off()
+estate_disable func_door_disable()
+estate_use     func_door_use()
+estate_reset   func_door_reset()
+hitcontentsmaskibad type 8
+
+EDICT 136:
+modelindex       5.0
+absmin         '1087.0 -641.0  -1.0'
+absmax         '1105.0 -543.0  97.0'
+ltime            0.2
+movetype         7.0
+solid            4.0
+oldorigin      '1096.0 -592.0  48.0'
+classname      func_door
+model          *4
+mins           '1088.0 -640.0   0.0'
+maxs           '1104.0 -544.0  96.0'
+size           ' 16.0  96.0  96.0'
+touch          func_door_touch()
+use            entity_state_use()
+think          func_door_final_setup()
+blocked        func_door_blocked()
+items          131072.0
+enemy          entity 136
+yaw_speed      100.0
+spawnflags      24.0
+owner          entity 136
+movedir        ' -0.0  -0.0  -1.0'
+sounds           3.0
+noise          misc/talk.wav
+noise1         doors/stndr2.wav
+noise2         doors/stndr1.wav
+noise3         doors/medtry.wav
+speed          100.0
+mdl            *4
+wait            -1.0
+noise4         doors/meduse.wav
+dmg              2.0
+lip              8.0
+state            1.0
+pos2           ' -0.0   0.0 -88.0'
+volume           1.0
+classtype      800.0
+classgroup     450.0
+bsporigin        1.0
+bbmins         '-60.0 -60.0  -8.0'
+bbmaxs         ' 60.0  60.0   8.0'
+estate           1.0
+estate_on      func_door_on()
+estate_off     func_door_off()
+estate_disable func_door_disable()
+estate_use     func_door_use()
+estate_reset   func_door_reset()
+hitcontentsmaskibad type 8
+
+EDICT 137:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+ltime            0.2
+oldorigin      '1096.0 -480.0  48.0'
+classname      func_door
+model
+touch          func_door_touch()
+use            entity_state_use()
+think          SUB_Null()
+blocked        func_door_blocked()
+items          262144.0
+enemy          entity 137
+yaw_speed      100.0
+spawnflags      72.0
+owner          entity 137
+movedir        ' -0.0  -0.0  -1.0'
+sounds           3.0
+noise          misc/talk.wav
+noise1         doors/stndr2.wav
+noise2         doors/stndr1.wav
+noise3         doors/medtry.wav
+speed          100.0
+mdl            *5
+wait            -1.0
+noise4         doors/meduse.wav
+dmg              2.0
+lip              8.0
+state            1.0
+pos2           ' -0.0   0.0 -88.0'
+volume           1.0
+classtype      800.0
+classgroup     450.0
+bsporigin        1.0
+bbmins         '-60.0 -60.0  -8.0'
+bbmaxs         ' 60.0  60.0   8.0'
+estate           2.0
+estate_on      func_door_on()
+estate_off     func_door_off()
+estate_disable func_door_disable()
+estate_use     func_door_use()
+estate_reset   func_door_reset()
+hitcontentsmaskibad type 8
+
+EDICT 138:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+ltime            0.2
+oldorigin      '1096.0 -368.0  48.0'
+classname      func_door
+model
+touch          func_door_touch()
+use            entity_state_use()
+think          SUB_Null()
+blocked        func_door_blocked()
+items          131072.0
+enemy          entity 138
+yaw_speed      100.0
+spawnflags      80.0
+owner          entity 138
+movedir        ' -0.0  -0.0  -1.0'
+sounds           3.0
+noise          misc/talk.wav
+noise1         doors/stndr2.wav
+noise2         doors/stndr1.wav
+noise3         doors/medtry.wav
+speed          100.0
+mdl            *6
+wait            -1.0
+noise4         doors/meduse.wav
+dmg              2.0
+lip              8.0
+state            1.0
+pos2           ' -0.0   0.0 -88.0'
+volume           1.0
+classtype      800.0
+classgroup     450.0
+bsporigin        1.0
+bbmins         '-60.0 -60.0  -8.0'
+bbmaxs         ' 60.0  60.0   8.0'
+estate           2.0
+estate_on      func_door_on()
+estate_off     func_door_off()
+estate_disable func_door_disable()
+estate_use     func_door_use()
+estate_reset   func_door_reset()
+hitcontentsmaskibad type 8
+
+EDICT 139:
+modelindex     241.0
+absmin         '1633.0 -799.0   0.0'
+absmax         '1695.0 -737.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -768.0  24.0'
+oldorigin      '1664.0 -768.0  24.0'
+classname      item_key1
+model          progs/ad171/key_medieval.mdl
+skin             2.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          131072.0
+netname        silver key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      600.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      2.0
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    120.0
+
+EDICT 140:
+modelindex     241.0
+absmin         '1633.0 -943.0   0.0'
+absmax         '1695.0 -881.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1664.0 -912.0  24.0'
+oldorigin      '1664.0 -912.0  24.0'
+classname      item_key2
+model          progs/ad171/key_medieval.mdl
+skin             6.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          262144.0
+netname        gold key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      605.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      6.0
+respawn_time    60.0
+respawn_style  513.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    122.0
+
+EDICT 141:
+modelindex     241.0
+absmin         '1569.0 -863.0   0.0'
+absmax         '1631.0 -801.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1600.0 -832.0  24.0'
+oldorigin      '1600.0 -832.0  24.0'
+classname      item_key1
+model          progs/ad171/key_medieval.mdl
+skin             2.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          131072.0
+netname        silver key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      600.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      2.0
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    120.0
+
+EDICT 142:
+modelindex     241.0
+absmin         '1569.0 -799.0   0.0'
+absmax         '1631.0 -737.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1600.0 -768.0  24.0'
+oldorigin      '1600.0 -768.0  24.0'
+classname      item_key1
+model          progs/ad171/key_medieval.mdl
+skin             2.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          131072.0
+netname        silver key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      600.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      2.0
+respawn_time    60.0
+respawn_style  520.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    120.0
+
+EDICT 143:
+modelindex     241.0
+absmin         '1569.0 -943.0   0.0'
+absmax         '1631.0 -881.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1600.0 -912.0  24.0'
+oldorigin      '1600.0 -912.0  24.0'
+classname      item_key2
+model          progs/ad171/key_medieval.mdl
+skin             6.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          262144.0
+netname        gold key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      605.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      6.0
+respawn_time    60.0
+respawn_style  513.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    122.0
+
+EDICT 144:
+modelindex     241.0
+absmin         '1569.0 -1007.0   0.0'
+absmax         '1631.0 -945.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1600.0 -976.0  24.0'
+oldorigin      '1600.0 -976.0  24.0'
+classname      item_key2
+model          progs/ad171/key_medieval.mdl
+skin             6.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+items          262144.0
+netname        gold key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/ad171/key_medieval.mdl
+classtype      605.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+ckeyhudskin      6.0
+respawn_time    60.0
+respawn_style  513.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+hitcontentsmaskibad type 8
+part_active    122.0
+
+EDICT 145:
+modelindex     242.0
+absmin         '1009.0 -1263.0   0.0'
+absmax         '1071.0 -1201.0  56.0'
+movetype         6.0
+solid            1.0
+origin         '1040.0 -1232.0  24.0'
+oldorigin      '1040.0 -1232.0  24.0'
+classname      item_key_skeleton
+model          progs/qmaster/w_sk_key.mdl
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  32.0'
+size           ' 32.0  32.0  56.0'
+touch          item_touch()
+think          item_delay()
+netname        a skeleton key
+flags          768.0
+noise          misc/medkey.wav
+mdl            progs/qmaster/w_sk_key.mdl
+classtype      606.0
+classgroup     300.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  32.0'
+touch2         key_touch()
+respawn_time    60.0
+respawn_style  576.0
+respawn_ofs    '  0.0   0.0  20.0'
+estate           1.0
+estate_on      item_on()
+estate_off     item_off()
+estate_use     item_use()
+estate_reset   item_reset()
+items2         65536.0
+hitcontentsmaskibad type 8
+part_active    130.0
+
+EDICT 146:
+modelindex     251.0
+absmin         '1407.0 -1265.0 167.0'
+absmax         '1441.0 -1231.0 233.0'
+movetype         4.0
+solid            3.0
+origin         '1424.0 -1248.0 192.0'
+oldorigin      '1424.0 -1248.0 192.0'
+angles         '  0.0 270.0   0.0'
+classname      monster_imp
+model          progs/ad171/mon_gargoyle.mdl
+frame           50.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  40.0'
+size           ' 32.0  32.0  64.0'
+use            monster_use()
+think          garg_idle9()
+nextthink        2.4
+health         120.0
+takedamage       2.0
+view_ofs       '  0.0   0.0  24.0'
+flags           33.0
+max_health     120.0
+waterlevel      -1.0
+watertype       -1.0
+ideal_yaw      270.0
+yaw_speed       15.0
+th_stand       garg_idle1()
+th_walk        garg_walk1()
+th_run         garg_run1()
+th_missile     garg_fire1()
+th_pain        garg_pain()
+th_die         garg_die()
+mdl            progs/ad171/mon_gargoyle.mdl
+lastorigin     '1424.0 -1248.0 192.0'
+pausetime      999999.0
+height         128.0
+aura_type       -1.0
+fov              0.3
+classtype      325.0
+classgroup     680.0
+classmove        2.0
+mega_health    120.0
+bboxtype         5.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  40.0'
+gibhealth      -70.0
+headmdl        progs/ad171/h_gargoyle.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack StrafeFlyerCheckAttack()
+liquidbase      -1.0
+liquidcheck      2.6
+attack_offset  ' 16.0  28.0  22.0'
+pain_flinch     70.0
+pain_timeout     1.0
+pain_sound     ad171/gargoyle/pain75.wav
+pain_sound2    ad171/gargoyle/pain100.wav
+deathstring     was incinerated by an Imp
+
+idletimer        5.8
+idle_sound     ad171/gargoyle/idle1.wav
+idle_soundcom  ad171/gargoyle/perch1.wav
+idle_soundcom2 ad171/gargoyle/perch2.wav
+sight_sound    ad171/gargoyle/sight1.wav
+sight_sound2   ad171/gargoyle/sight1.wav
+sight_sound3   ad171/gargoyle/sight1.wav
+sight_sound4   ad171/gargoyle/sight1.wav
+sight_count      4.0
+switchoverride   1.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        251.0
+hitcontentsmaskibad type 8
+gib1mdl
+gib2mdl        progs/ad171/gib_gargwing2.mdl
+blockudeath      1.0
+
+EDICT 147:
+modelindex     251.0
+absmin         '1279.0 -1265.0 167.0'
+absmax         '1313.0 -1231.0 233.0'
+movetype         4.0
+solid            3.0
+origin         '1296.0 -1248.0 192.0'
+oldorigin      '1296.0 -1248.0 192.0'
+angles         '  0.0 270.0   0.0'
+classname      monster_imp
+model          progs/ad171/mon_gargoyle.mdl
+frame           50.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  40.0'
+size           ' 32.0  32.0  64.0'
+use            monster_use()
+think          garg_idle9()
+nextthink        2.5
+health         120.0
+takedamage       2.0
+view_ofs       '  0.0   0.0  24.0'
+flags           33.0
+max_health     120.0
+waterlevel      -1.0
+watertype       -1.0
+ideal_yaw      270.0
+yaw_speed       15.0
+th_stand       garg_idle1()
+th_walk        garg_walk1()
+th_run         garg_run1()
+th_missile     garg_fire1()
+th_pain        garg_pain()
+th_die         garg_die()
+mdl            progs/ad171/mon_gargoyle.mdl
+lastorigin     '1296.0 -1248.0 192.0'
+pausetime      999999.0
+height         128.0
+aura_type       -1.0
+fov              0.3
+classtype      325.0
+classgroup     680.0
+classmove        2.0
+mega_health    120.0
+bboxtype         5.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  40.0'
+gibhealth      -70.0
+headmdl        progs/ad171/h_gargoyle.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack StrafeFlyerCheckAttack()
+liquidbase      -1.0
+liquidcheck      2.7
+attack_offset  ' 16.0  28.0  22.0'
+pain_flinch     70.0
+pain_timeout     1.0
+pain_sound     ad171/gargoyle/pain75.wav
+pain_sound2    ad171/gargoyle/pain100.wav
+deathstring     was incinerated by an Imp
+
+idletimer        7.0
+idle_sound     ad171/gargoyle/idle1.wav
+idle_soundcom  ad171/gargoyle/perch1.wav
+idle_soundcom2 ad171/gargoyle/perch2.wav
+sight_sound    ad171/gargoyle/sight1.wav
+sight_sound2   ad171/gargoyle/sight1.wav
+sight_sound3   ad171/gargoyle/sight1.wav
+sight_sound4   ad171/gargoyle/sight1.wav
+sight_count      4.0
+switchoverride   1.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        251.0
+hitcontentsmaskibad type 8
+gib1mdl        progs/ad171/gib_gargwing1.mdl
+gib2mdl        progs/ad171/gib_gargwing2.mdl
+blockudeath      1.0
+
+EDICT 148:
+modelindex     251.0
+absmin         '1535.0 -1265.0 167.0'
+absmax         '1569.0 -1231.0 233.0'
+movetype         4.0
+solid            3.0
+origin         '1552.0 -1248.0 192.0'
+oldorigin      '1552.0 -1248.0 192.0'
+angles         '  0.0 270.0   0.0'
+classname      monster_imp
+model          progs/ad171/mon_gargoyle.mdl
+frame           48.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  40.0'
+size           ' 32.0  32.0  64.0'
+use            monster_use()
+think          garg_idle8()
+nextthink        2.4
+health         120.0
+takedamage       2.0
+view_ofs       '  0.0   0.0  24.0'
+flags           33.0
+max_health     120.0
+waterlevel      -1.0
+watertype       -1.0
+ideal_yaw      270.0
+yaw_speed       15.0
+th_stand       garg_idle1()
+th_walk        garg_walk1()
+th_run         garg_run1()
+th_missile     garg_fire1()
+th_pain        garg_pain()
+th_die         garg_die()
+mdl            progs/ad171/mon_gargoyle.mdl
+lastorigin     '1552.0 -1248.0 192.0'
+pausetime      999999.0
+height         128.0
+aura_type       -1.0
+fov              0.3
+classtype      325.0
+classgroup     680.0
+classmove        2.0
+mega_health    120.0
+bboxtype         5.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  40.0'
+gibhealth      -70.0
+headmdl        progs/ad171/h_gargoyle.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack StrafeFlyerCheckAttack()
+liquidbase      -1.0
+liquidcheck      2.7
+attack_offset  ' 16.0  28.0  22.0'
+pain_flinch     70.0
+pain_timeout     1.0
+pain_sound     ad171/gargoyle/pain75.wav
+pain_sound2    ad171/gargoyle/pain100.wav
+deathstring     was incinerated by an Imp
+
+idletimer        9.3
+idle_sound     ad171/gargoyle/idle1.wav
+idle_soundcom  ad171/gargoyle/perch1.wav
+idle_soundcom2 ad171/gargoyle/perch2.wav
+sight_sound    ad171/gargoyle/sight1.wav
+sight_sound2   ad171/gargoyle/sight1.wav
+sight_sound3   ad171/gargoyle/sight1.wav
+sight_sound4   ad171/gargoyle/sight1.wav
+sight_count      4.0
+switchoverride   1.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        251.0
+hitcontentsmaskibad type 8
+gib1mdl
+gib2mdl        progs/ad171/gib_gargwing2.mdl
+blockudeath      1.0
+
+EDICT 149:
+modelindex     251.0
+absmin         '1327.0 -1345.0 167.0'
+absmax         '1361.0 -1311.0 233.0'
+movetype         4.0
+solid            3.0
+origin         '1344.0 -1328.0 192.0'
+oldorigin      '1344.0 -1328.0 192.0'
+angles         '  0.0 270.0   0.0'
+classname      monster_imp
+model          progs/ad171/mon_gargoyle.mdl
+frame           48.0
+mins           '-16.0 -16.0 -24.0'
+maxs           ' 16.0  16.0  40.0'
+size           ' 32.0  32.0  64.0'
+use            monster_use()
+think          garg_idle8()
+nextthink        2.4
+health         120.0
+takedamage       2.0
+view_ofs       '  0.0   0.0  24.0'
+flags           33.0
+max_health     120.0
+waterlevel      -1.0
+watertype       -1.0
+ideal_yaw      270.0
+yaw_speed       15.0
+th_stand       garg_idle1()
+th_walk        garg_walk1()
+th_run         garg_run1()
+th_missile     garg_fire1()
+th_pain        garg_pain()
+th_die         garg_die()
+mdl            progs/ad171/mon_gargoyle.mdl
+lastorigin     '1344.0 -1328.0 192.0'
+pausetime      999999.0
+height         128.0
+aura_type       -1.0
+fov              0.3
+classtype      325.0
+classgroup     680.0
+classmove        2.0
+mega_health    120.0
+bboxtype         5.0
+bbmins         '-16.0 -16.0 -24.0'
+bbmaxs         ' 16.0  16.0  40.0'
+gibhealth      -70.0
+headmdl        progs/ad171/h_gargoyle.mdl
+bleedcolour     73.0
+ticktimer        0.1
+th_checkattack StrafeFlyerCheckAttack()
+liquidbase      -1.0
+liquidcheck      2.7
+attack_offset  ' 16.0  28.0  22.0'
+pain_flinch     70.0
+pain_timeout     1.0
+pain_sound     ad171/gargoyle/pain75.wav
+pain_sound2    ad171/gargoyle/pain100.wav
+deathstring     was incinerated by an Imp
+
+idletimer        6.8
+idle_sound     ad171/gargoyle/idle1.wav
+idle_soundcom  ad171/gargoyle/perch1.wav
+idle_soundcom2 ad171/gargoyle/perch2.wav
+sight_sound    ad171/gargoyle/sight1.wav
+sight_sound2   ad171/gargoyle/sight1.wav
+sight_sound3   ad171/gargoyle/sight1.wav
+sight_sound4   ad171/gargoyle/sight1.wav
+sight_count      4.0
+switchoverride   1.0
+bloodtype       73.0
+th_revive      revive_frames()
+xfl            65536.0
+mindex2        251.0
+hitcontentsmaskibad type 8
+gib1mdl        progs/ad171/gib_gargwing1.mdl
+gib2mdl        progs/ad171/gib_gargwing2.mdl
+blockudeath      1.0
+
+EDICT 150:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+model
+frame           14.0
+think          player_legs_animation()
+nextthink        2.4
+owner          entity 1
+alpha            1.0
+hitcontentsmaskibad type 8
+
+EDICT 151:
+absmin         '1487.0 -385.0  23.0'
+absmax         '1489.0 -383.0  25.0'
+origin         '1488.0 -384.0  24.0'
+oldorigin      '1488.0 -384.0  24.0'
+model
+think          player_vehicle_animation()
+nextthink        2.4
+owner          entity 1
+pain_finished    2.0
+hitcontentsmaskibad type 8
+
+EDICT 152:
+absmin         '803.0 -1109.0  -9.0'
+absmax         '1021.0 -971.0 105.0'
+solid            1.0
+mins           '804.0 -1108.0  -8.0'
+maxs           '1020.0 -972.0 104.0'
+size           '216.0 136.0 112.0'
+touch          func_door_trigger_touch()
+owner          entity 135
+classtype      801.0
+bsporigin        1.0
+hitcontentsmaskibad type 8
+
+EDICT 153:
+modelindex      55.0
+absmin         '1487.0 -385.0  47.0'
+absmax         '1489.0 -383.0  49.0'
+origin         '1488.0 -384.0  48.0'
+model          progs/ad171/misc_empty.mdl
+mins           '  0.0   0.0   0.0'
+maxs           '  0.0   0.0   0.0'
+size           '  0.0   0.0   0.0'
+owner          entity 153
+mangle         '  0.0  90.0   0.0'
+count            1.0
+classtype       16.0
+hitcontentsmaskibad type 8
+FREE
+
+EDICT 155:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+model
+frame           14.0
+think          player_legs_animation()
+nextthink        2.4
+colormap         1.0
+owner          entity 1
+alpha            1.0
+hitcontentsmaskibad type 8
+
+EDICT 156:
+absmin         '1487.0 -385.0  23.0'
+absmax         '1489.0 -383.0  25.0'
+origin         '1488.0 -384.0  24.0'
+oldorigin      '1488.0 -384.0  24.0'
+model
+think          player_vehicle_animation()
+nextthink        2.4
+colormap         1.0
+owner          entity 1
+pain_finished    2.2
+hitcontentsmaskibad type 8
+
+EDICT 157:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+think          fog_controller_think()
+nextthink        2.4
+owner          entity 1
+state            2.0
+classtype       15.0
+fog_dpextra    1 0 8192 1024 32
+fog_currden      0.1
+fog_targden      0.1
+fog_currcol    '  0.1   0.1   0.1'
+fog_targcol    '  0.1   0.1   0.1'
+hitcontentsmaskibad type 8
+
+EDICT 158:
+absmin         ' -1.0  -1.0  -1.0'
+absmax         '  1.0   1.0   1.0'
+think          skyfog_controller_think()
+nextthink        2.4
+owner          entity 1
+state            2.0
+classtype       15.0
+skyfog_currden   0.5
+skyfog_targden   0.5
+hitcontentsmaskibad type 8
+]condump

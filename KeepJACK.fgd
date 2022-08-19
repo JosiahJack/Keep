@@ -1488,7 +1488,29 @@
 	noise1(string) : "Custom sound - Stopped"
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]	
-
+@SolidClass base(Appearflags, Targetname) = func_elvtr_button : "Elevator button"
+[
+	spawnflags(Flags) = 
+	[
+		1 : "Down" : 0
+	]
+	target(target_source) : "Targetted object"
+	speed(integer) : "Speed" : 5
+	health(integer) : "Health (shootable if > 0)"
+	sounds(choices) : "Sounds" : 1 = 
+	[
+		1: "Steam metal"
+		2: "Wooden clunk"
+		3: "Metallic clink"
+		4: "In-out"
+	]
+	wait(choices) : "Delay before reset" : 3 =
+	[
+		-1: "Stays pressed"
+	]
+	delay(integer) : "Delay before trigger"
+	lip(integer) : "Lip at end of move" : 4
+]
 @SolidClass base(FuncItems, FuncLighting) = func_new_plat : "Rogue Plat" [
 	spawnflags(Flags) = [
 		1 : "Down n'wait" : 0
@@ -4890,8 +4912,9 @@ GN/A" : 0
 
 @PointClass base(MonShort) studio("progs/rogue/mon_mummy.mdl") = monster_mummy : "Mummmy" [
 	spawnflags(flags) = [ 
-		2 : "Ambush" : 0
-		4 : "OnFloor" : 0
+		1 : "Ambush" : 0
+		2 : "On Floor" : 0
+		4 : "Strong" : 0
 	]
 	sequence(choices) : "Pose (editor)" = [
 		0 : "Normal"
@@ -5811,9 +5834,11 @@ GN/A" : 0
 @PointClass base(FuncItems,ExternalMapSettings,FuncLighting) size(-24 -24 -16, 24 24 16) color(255 25 25) = misc_external_map : "Import an external '.map's brushwork into your world geometry. Only brushwork, or func_group, in the worldspawn of the imported map is used, everything else is ignored. This is a *compiler* entity only. NOTE: Texture .wad's used in the external map MUST be used in the map you are importing into." []
 
 //CTF
-@PointClass size(-8 -8 -8, 8 8 40) studio("progs/q15/flag.mdl")  = item_flagblue : "Blue Flag" []
+@PointClass size(-8 -8 -8, 8 8 40) studio("progs/q15/flag.mdl") = item_flagblue : "Blue Flag" []
 @PointClass size(-8 -8 -8, 8 8 40) studio("progs/q15/flag.mdl") skin(0) = item_flagred : "Red Flag" []
 @PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) = item_flag_team1 : "CTF: Red Team Flag" [] // Alternate name for historical purposes
 @PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) = item_flag_team2 : "CTF: Blue Team Flag" [] // Alternate name
 @PointClass base(PlayerClass) = info_player_team1 : "CTF - Red Player Start" []
 @PointClass base(PlayerClass) = info_player_team2 : "CTF - Blue Player Start" []
+
+@PointClass base(Appearflags) color(255 255 0) size(-16 -16 -16, 16 16 16) studio("progs/rogue/sphere.mdl") = dmatch_tag_token : "Deathmatch tag token" []

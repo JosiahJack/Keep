@@ -3649,7 +3649,7 @@ void() rally_startfinish = {
 		place_flag.nextthink = time + 0.5;
 		place_flag.think = spawn_finish_model;
 	}
-	if (cvar("skill") <= 1 && !cvar("deathmatch"))
+	if (skill <= 1 && !cvar("deathmatch"))
 	{
 		self.ammo_nails = floor(self.ammo_nails * 0.75);
 	}
@@ -3657,7 +3657,7 @@ void() rally_startfinish = {
 	{
 		if (cvar("deathmatch"))
 		{
-			self.ammo_nails = cvar("skill") * 2;
+			self.ammo_nails = skill * 2;
 		}
 	}
 	self.touch = startfinish_touch;
@@ -3672,7 +3672,7 @@ void() rally_startfinish_brush = {
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";
-	if (cvar("skill") <= 1 && !cvar("deathmatch"))
+	if (skill <= 1 && !cvar("deathmatch"))
 	{
 		self.ammo_nails = floor(self.ammo_nails * 0.75);
 	}
@@ -3680,7 +3680,7 @@ void() rally_startfinish_brush = {
 	{
 		if (cvar("deathmatch"))
 		{
-			self.ammo_nails = cvar("skill") * 2;
+			self.ammo_nails = skill * 2;
 		}
 	}
 	self.classname = "rally_startfinish";

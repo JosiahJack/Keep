@@ -137,6 +137,8 @@ void(entity own, entity starter) sphere_spawn = { // [FUNCTION]
 };
 
 void() item_sphere = { // [ENTITY]
+   if (detected_mod == MOD_ROGUE && !deathmatch) return;
+
 	item_setupmodel("progs/rogue/sphere.mdl",0);
 	item_setupnoise("rogue/sphere/sphere.wav");
 	self.noise1 = self.noise2 = "rogue/sphere/sphere.wav";

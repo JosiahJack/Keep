@@ -282,7 +282,7 @@ void() monster_eel = {
 	self.th_die = eel_death;
 	self.th_pain = eel_pain1;
 	self.th_melee = eel_attack1;
-	self.th_missile = eel_attack2_1;
+	if (detected_mod != MOD_ROGUE) self.th_missile = eel_attack2_1;
 	self.classtype = CT_MONEEL;
 	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVESWIM;

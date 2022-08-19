@@ -40,14 +40,22 @@ void() print_coins;
 void() print_bones;
 void() usecommand;
 void() HonkHorn;
+void() TossBackpack;
+void() TossWeapon;
+void() TeamFlagStatusReport;
 
 void() ImpulseCommands = {
 	if (   (self.impulse >= 1 && self.impulse <= 8)
         || (self.impulse >= 60 && self.impulse <= 64)
         || (self.impulse >= 75 && self.impulse <= 90)
-        || self.impulse == 47) W_ChangeWeapon (self);
+        || self.impulse == 47 || self.impulse == 22) W_ChangeWeapon(self);
+	else if (self.impulse == 9) CheatCommand();
 	else if (self.impulse == 10) CycleWeaponCommand();
 	else if (self.impulse == 12) CycleWeaponReverseCommand();
+	else if (self.impulse == 13) CheatCommand();
+	else if (self.impulse == 20) TossBackpack();
+	else if (self.impulse == 21) TossWeapon();
+	else if (self.impulse == 23) TeamFlagStatusReport();
 	else if (self.impulse == 55) HonkHorn();
 	else if (self.impulse == 56) ToggleDragonArmor();
 	else if (self.impulse == 57) ToggleSpiritShroud();
@@ -111,7 +119,7 @@ void() ImpulseCommands = {
 	// else if (self.impulse == 247) AirTankCheat();
 	else if (self.impulse == 247) BlastBeltCheat();
 	else if (self.impulse == 248) TomeOfPowerCheat();
-	else if (self.impulse == 249 || self.impulse == 9 || self.impulse == 13) CheatCommand();
+	else if (self.impulse == 249) CheatCommand();
 	else if (self.impulse == 250) SharpshooterCheat();
 	else if (self.impulse == 251) NailPiercerCheat();
 	else if (self.impulse == 252) EnvSuitCheat();

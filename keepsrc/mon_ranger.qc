@@ -841,7 +841,7 @@ void() ranger_stats = {
     local float sklevel, axe, am, s, n, r, c, arm;
 
     am = 0;
-    sklevel = cvar("skill");
+    sklevel = skill;
     sklevel = floor(sklevel);
     if (cranked) sklevel = sklevel + 1;
     if (sklevel >= 2) self.speed  = 32;   // Running speed.

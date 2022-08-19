@@ -57,7 +57,7 @@ void() mapvar_setuparray;
 void() player_fallspeed_reset;
 void() player_fallspeed_setup;
 void() Client_SyncEvilmode;
-void() InitMusic;
+float() InitMusic;
 
 void() main = { // [FUNCTION]
 	precache_file("progs.dat"); // these are just commands to the prog compiler to copy these files
@@ -640,6 +640,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	if (self.passive_state == 1) map_passivestate = TRUE;
 	else map_passivestate = FALSE;
 
+	detected_mod = DetectedMod();
 	configflag = cvar("temp1"); // The values of configflag is never saved, its always generated!  Merge any changes from worldspawn into console variable
 	sycn_worldspawn();
 	temp1flag = configflag;
@@ -693,8 +694,9 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	if (coop > 2) versus_setup();
 	else dprint("\b[VERSUS]\b Versus is currently deactivated.\n         Intended to be played on specific maps with coop 3\n");
 	Gyro_InitialiseVariables(); // Setup the physics system.
-	if (query_configflag(SVR_DRAKEMUSIC) == SVR_DRAKEMUSIC) InitMusic(); // Setup Drake secondary music system that plays music from two speaker entities in the map corners.
-	else dprint("\b[WORLD]\b Drake music system inactive\n");
+	if (query_configflag(SVR_DRAKEMUSIC) == SVR_DRAKEMUSIC) {
+		if (!InitMusic()) dprint("\b[WORLD]\b Drake music system active but no music specified\n        in worldspawn's noise, noise1, noise2, or noise3\n"); // Setup Drake secondary music system that plays music from two speaker entities in the map corners.
+	} else dprint("\b[WORLD]\b Drake music system inactive\n");
 	// Kitchen sink?
 };
 

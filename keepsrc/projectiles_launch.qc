@@ -297,6 +297,7 @@ void() SetNewmisCommonGrenadeParameters = {
 	newmis.noise = "weapons/bounce.wav";
 	newmis.height = EXPLODE_SMALL;
 	newmis.mass = MASS_GRENADE;
+	newmis.gravity = newmis.owner.gravity;
 	newmis.physicsflags = newmis.physicsflags | PHYS_GYRO_BOUYANT;
 };
 
@@ -874,6 +875,8 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 		newmis.delay = time + 20; // Total duration
 		newmis.alpha = 0.8;
 		SUB_Think(newmis,ink_stand1,0.1);
+	} else if (proj_type == CT_PROJ_DRAGON) {
+		newmis.mdl = "progs/rogue/fireball.mdl";
 	}
 
 	if (newmis.attack_rage == TRUE) { // Limited missile steering.  Faster is harder to steer, but faster because rage! Argh!
@@ -892,9 +895,6 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 	newmis.finalangle = dir;
 	newmis.velocity = newmis.mangle = newmis.finalangle * newmis.attack_speed;
 	newmis.avelocity = avel;
-	//dprint("Projectile launched with velocity ");
-	//dprint(vtos(newmis.velocity));
-	//dprint("\n");
 	if (!(self.flags & FL_CLIENT)) {
 		newmis.angles = vectoangles(newmis.finalangle);
 		if (proj_type == CT_PROJ_SHAL

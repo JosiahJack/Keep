@@ -129,7 +129,7 @@ void() path_corner_updatearrow = {
 };
 
 void() path_corner_setuparrow = {
-	if (query_configflag(SVR_DEVHELPER)) return; // Visual AI pathing only active in dev mode
+	if (query_configflag(SVR_DEVHELPER) || developer < 2) return; // Visual AI pathing only active in dev mode
 
 	if (!self.alpha) self.alpha = 0.35; // Setup default alpha for arrows
 	if (self.spawnflags & PATHC_BACKLINK) { // Draw back link arrow

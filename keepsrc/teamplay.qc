@@ -685,6 +685,145 @@ void() TossBackpack = {
 	W_SetCurrentAmmo(self,TRUE);
 };
 
+void() Team_weapon_touch =
+{
+	local	float	hadammo, best, new, old;
+	local entity stemp;
+
+	if (!(other.flags & FL_CLIENT)) return;
+	// Don't let the owner pick up his own weapon for a second.
+	if ((other == self.owner) && ((self.nextthink - time) > 119)) return;
+
+	// if the player was using his best weapon, change up to the new one if better		
+	best = W_BestWeapon(other);
+	if (self.classname == "weapon_nailgun")
+		new = IT_NAILGUN;
+	else if (self.classname == "weapon_supernailgun")
+		new = IT_SUPER_NAILGUN;
+	else if (self.classname == "weapon_supershotgun")
+		new = IT_SUPER_SHOTGUN;
+	else if (self.classname == "weapon_rocketlauncher")
+		new = IT_ROCKET_LAUNCHER;
+	else if (self.classname == "weapon_grenadelauncher")
+		new = IT_GRENADE_LAUNCHER;
+	else if (self.classname == "weapon_lightning")
+		new = IT_LIGHTNING;
+	else
+		objerror ("Team_weapon_touch: unknown classname");
+
+	sprint (other, "You got the ");
+	sprint (other, self.netname);
+	sprint (other, "\n");
+	// weapon touch sound
+	sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
+	stuffcmd (other, "bf\n");
+	bound_other_ammo(other);
+
+	// change to the weapon
+	old = other.items;
+	other.items = other.items | new;
+	
+	remove(self);
+	self = other;
+
+	if (!deathmatch)
+		self.weapon = new;
+	else
+		Deathmatch_Weapon(old, new);
+
+	EnableComboWeapons(self);
+	W_SetCurrentAmmo(self,TRUE);
+	// dropped weapon doesn't target, so no need to call UseTargets
+};
+
+void() TossWeapon =
+{
+	local entity item;
+	
+	if (deathmatch != 1)
+		return;  // only in deathmatch 1
+
+	// only valid in teamplay modes
+	if (teamplay < 1)
+		return;
+
+	if((self.weapon == IT_AXE) || (self.weapon == IT_SHOTGUN) ||
+		(self.weapon == IT2_GRAPPLE))
+		return;
+		
+	item = spawn();
+	item.owner = self;
+	makevectors(self.v_angle);
+	item.weapon = 0;
+
+	setorigin(item, self.origin + '0 0 16');
+	item.velocity = aim(self, 1000);
+	item.velocity = item.velocity * 500;
+	item.flags = FL_ITEM;
+	item.solid = SOLID_TRIGGER;
+	item.movetype = MOVETYPE_BOUNCE;
+	
+	if(self.weapon == IT_SUPER_SHOTGUN)
+	{
+		setmodel (item, "progs/g_shot.mdl");
+		item.weapon = IT_SUPER_SHOTGUN;
+		item.netname = "Double-barrelled Shotgun";
+		item.classname = "weapon_supershotgun";
+		self.items = self.items - IT_SUPER_SHOTGUN;
+	}
+
+	if( self.weapon == IT_NAILGUN || self.weapon == IT_LAVA_NAILGUN )
+	{
+		setmodel (item, "progs/g_nail.mdl");
+		item.weapon = IT_NAILGUN;
+		item.netname = "nailgun";
+		item.classname = "weapon_nailgun";
+		self.items = self.items - (self.items & (IT_NAILGUN | IT_LAVA_NAILGUN));
+	}
+		
+	if( self.weapon == IT_SUPER_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN)
+	{
+		setmodel (item, "progs/g_nail2.mdl");
+		item.weapon = IT_SUPER_NAILGUN;
+		item.netname = "Super Nailgun";
+		item.classname = "weapon_supernailgun";
+		self.items = self.items - (self.items & (IT_SUPER_NAILGUN | IT_LAVA_SUPER_NAILGUN));
+	}
+	
+	if( self.weapon == IT_GRENADE_LAUNCHER || self.weapon == IT_MULTI_GRENADE)
+	{
+		setmodel (item, "progs/g_rock.mdl");
+		item.weapon = IT_GRENADE_LAUNCHER;
+		item.netname = "Grenade Launcher";
+		item.classname = "weapon_grenadelauncher";
+		self.items = self.items - (self.items & (IT_GRENADE_LAUNCHER | IT_MULTI_GRENADE));
+	}
+	
+	if( self.weapon == IT_ROCKET_LAUNCHER || self.weapon == IT_MULTI_ROCKET)
+	{
+		setmodel (item, "progs/g_rock2.mdl");
+		item.weapon = IT_ROCKET_LAUNCHER;
+		item.netname = "Rocket Launcher";
+		item.classname = "weapon_rocketlauncher";
+		self.items = self.items - (self.items & (IT_ROCKET_LAUNCHER | IT_MULTI_ROCKET));
+	}
+	
+	if( self.weapon == IT_LIGHTNING || self.weapon == IT_PLASMA_GUN)
+	{
+		setmodel (item, "progs/g_light.mdl");
+		item.weapon = IT_LIGHTNING;
+		item.netname = "Thunderbolt";
+		item.classname = "weapon_lightning";
+		self.items = self.items - (self.items & (IT_LIGHTNING | IT_PLASMA_GUN));
+	}
+	setsize(item, '-16 -16 0', '16 16 56');
+	item.touch = Team_weapon_touch;
+	item.think = SUB_Remove;
+	item.nextthink = time + 120;
+	self.weapon = W_BestWeapon(self);
+	W_SetCurrentAmmo(self, TRUE);
+};
+
 void(entity flg) RegenFlag = {
 	flg.movetype = MOVETYPE_TOSS;
 	flg.solid = SOLID_TRIGGER;
@@ -785,7 +924,7 @@ void() TeamFlagTouch = {
 
 	if (other.classname != "player") return;
 	if (other.health <= 0) return;
-	if (other.team != other.steam) return; // something is fishy, somebody is playing with colors
+	if (other.team != other.steam) { dprint("TeamFlagTouch other.team wasn't other.steam\n");return; } // something is fishy, somebody is playing with colors
 	if (self.cnt == FLAG_CARRIED) return; // huh?
 
 	// Ok, first up, let's do it for one flag mode

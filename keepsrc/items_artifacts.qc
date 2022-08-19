@@ -747,7 +747,7 @@ void() item_powerup_shield = { // [ENTITY]
 
 void() item_powerup_belt = { // [ENTITY]
 	if (artifact_checkrandomizer()) return; // Check for any random setups
-	
+
 	item_setupmodel("progs/ad172/artifact_blastbelt.mdl",0); // sock originally did an orange skin version of rogue/beltup.mdl.  Changed to new model.  Adding here to have 2nd skin as an option.
 	item_setupnoise("rogue/belt/pickup.wav");
 	self.noise1 = "rogue/belt/use.wav";
@@ -1058,6 +1058,9 @@ void() item_artifact_vitality = { // [ENTITY]
 
 void() item_artifact_random = { // [ENTITY]
 	local float rnd;
+
+	if (detected_mod == MOD_ROGUE && !deathmatch) return;
+	dprint("spawning random artifact\n");
 
 	rnd = random() * 100;
 	if (rnd < 5)

@@ -1580,6 +1580,44 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 	return FALSE;
 };
 
+float(float w) RankForWeapon = {
+	if (w == IT_PLASMA_GUN)
+		return 1;
+	if (w == IT_LIGHTNING)
+		return 2;
+	if (w == IT_MULTI_ROCKET)
+		return 3;
+	if (w == IT_ROCKET_LAUNCHER)
+		return 4;
+	if (w == IT_LAVA_SUPER_NAILGUN)
+		return 5;
+	if (w == IT_SUPER_NAILGUN)
+		return 6;
+	if (w == IT_MULTI_GRENADE)
+		return 7;
+	if (w == IT_GRENADE_LAUNCHER)
+		return 8;
+	if (w == IT_LAVA_NAILGUN)
+		return 9;
+	if (w == IT_SUPER_SHOTGUN)
+		return 10;
+	if (w == IT_NAILGUN)
+		return 11;
+	return 12;
+};
+
+void(float old, float new) Deathmatch_Weapon = {
+	local float or, nr;
+
+	// PGM - fix for changing to weapons when grappling.
+	if (self.weapon == IT2_GRAPPLE && self.button0) return;
+
+	// change self.weapon if desired
+	or = RankForWeapon (self.weapon);
+	nr = RankForWeapon (new);
+	if ( nr < or ) self.weapon = new;
+};
+
 float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 	if (targ.in_a_vehicle && targ.randomshells > 0) return TRUE;
 	if (targ.tethered && targ.tetherfocus && targ.health > 0) {
@@ -2166,7 +2204,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	} else if (targ.impulse == 79) {
 		fl = IT2_CROSS;
 		gotgun = InItems2(targ, fl);
-	} else if (targ.impulse == 80) {
+	} else if (targ.impulse == 80 || targ.impulse == 22) { // Rogue used 22.
 		fl = IT2_GRAPPLE;
 		gotgun = InItems2(targ, fl);
 	} else if (targ.impulse == 81) {

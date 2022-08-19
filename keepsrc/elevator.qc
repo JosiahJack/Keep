@@ -66,10 +66,15 @@ void() elvtr_button_wait;
 void() elvtr_button_return;
 
 void() elvtr_button_wait = { // [FUNCTION]
-	self.lefty = 0;
-	if (self.spawnflags & ELVTR_DOWN) self.lefty = -1;
-	else self.lefty = 1;
-		
+	dprint("elvtr butn affecting target named ");
+	dprint(self.bmodel_act.targetname);
+	dprint(", state prior: ");
+	dprint(ftos(self.bmodel_act.lefty));
+	self.bmodel_act.lefty = 1;
+	if (self.spawnflags & ELVTR_DOWN) self.bmodel_act.lefty = -1;
+	dprint(", state after: ");
+	dprint(ftos(self.bmodel_act.lefty));
+	dprint("\n");
 	self.state = STATE_TOP;
 	self.nextthink = self.ltime + self.wait;
 	self.think = elvtr_button_return;
@@ -94,13 +99,13 @@ void() elvtr_button_fire = { // [FUNCTION]
 
 	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.state = STATE_UP;
-	SUB_CalcMove (self.pos2, self.speed, elvtr_button_wait);
+	SUB_CalcMove(self.pos2,self.speed,elvtr_button_wait);
 };
 
 void() elvtr_button_use = { self.enemy = activator; elvtr_button_fire(); }; // [FUNCTION]
 
 void() elvtr_button_touch = { // [FUNCTION]
-	if (other.classname != "player") return;
+	if (!(other.flags & FL_CLIENT)) return;
 
 	self.enemy = other;
 	elvtr_button_fire();
@@ -134,7 +139,12 @@ void() func_elvtr_button = { // [ENTITY]
 		else if (self.sounds == 2) self.noise = "buttons/switch02.wav";
 		else if (self.sounds == 3) self.noise = "buttons/switch04.wav";
 	}
+	self.bmodel_act = find(world,targetname,self.target);
+	if (!self.bmodel_act) dprint("\bWarning:\b missing target for func_elvtr_button\n");
 	precache_sound(self.noise);
+	self.classtype = CT_FUNCBUTTON;
+	self.classgroup = CG_FUNCMOVER;
+	self.bsporigin = TRUE;
 	SetMovedir();
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
@@ -150,6 +160,7 @@ void() func_elvtr_button = { // [ENTITY]
 	if (!self.speed) self.speed = 40;
 	if (!self.wait) self.wait = 1;
 	if (!self.lip) self.lip = 4;
+	if (world.model == "maps/r1m7.bsp" && detected_mod == MOD_ROGUE) self.lip = 1;
 	self.state = STATE_BOTTOM;
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
@@ -192,50 +203,34 @@ void() dn_and_wait_use = { // [FUNCTION]
 };
 
 void() toggle_hit_top = { // [FUNCTION]
-	dprint("new plat(toggle) hit top at ");
-	dprint(vtos(self.origin));
-	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 	self.state = STATE_TOP;
 };
 
 void() toggle_hit_bottom = { // [FUNCTION]
-	dprint("new plat(toggle) hit bottom at ");
-	dprint(vtos(self.origin));
-	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise1,1,ATTN_NORM);
 	self.state = STATE_BOTTOM;
 };
 
 void() toggle_go_down = { // [FUNCTION]
-	dprint("new plat(toggle) go down to");
-	dprint(vtos(self.pos2));
-	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos2, self.speed, toggle_hit_bottom);
 };
 
 void() toggle_go_up = { // [FUNCTION]
-	dprint("new plat(toggle) go up to ");
-	dprint(vtos(self.pos1));
-	dprint("\n");
 	sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
 	self.state = STATE_UP;
 	SUB_CalcMove(self.pos1,self.speed,toggle_hit_top);
 };
 
 void() toggle_crush = { // [FUNCTION]
-	dprint("new plat(toggle) crush\n");
 	T_Damage(other, self, self, 1, DAMARMOR);
 	if (self.state == STATE_UP) toggle_go_down();
 	else if (self.state == STATE_DOWN) toggle_go_up();
 };
 
 void() toggle_use = { // [FUNCTION]
-	dprint("new plat(toggle) used and at ");
-	dprint(vtos(self.origin));
-	dprint("\n");
 	if (self.state == STATE_TOP) toggle_go_down();
 	else if (self.state == STATE_BOTTOM) toggle_go_up();
 };
@@ -266,19 +261,19 @@ void() elvtr_crush = { // [FUNCTION]
 // self = plat, other = elevator button, other.enemy = player
 void() elvtr_use = { // [FUNCTION]
 	local float	tempDist, elvPos, btnPos;
-	
+
 	if ((self.elevatorLastUse + 2) > time) return;
 	
+	if (self.lefty == 0) self.lefty = 1;
 	self.elevatorLastUse = time;
-	if (self.lefty == 0) return;
-
 	elvPos = (self.absmin_z + self.absmax_z) * 0.5;
 	btnPos = (other.absmin_z + other.absmax_z) * 0.5;
 	if (elvPos > btnPos) {
 		tempDist = (elvPos - btnPos) / self.height;
 		tempDist = ceil ( tempDist);
 		self.elevatorToFloor = self.elevatorOnFloor - tempDist;
-		elvtr_go();
+		dprint("elvtr_use elvtr_go 1.\n");
+		elvtr_go(); 
 		return;
 	} else {
 		tempDist = btnPos - elvPos;
@@ -286,20 +281,25 @@ void() elvtr_use = { // [FUNCTION]
 			tempDist = tempDist / self.height;
 			tempDist = floor ( tempDist );
 			self.elevatorToFloor = self.elevatorOnFloor + tempDist;
+			dprint("elvtr_use elvtr_go 2.\n");
 			elvtr_go();
 			return;
 		}
 	}
 		
-	if (self.lefty == -1) {	
-		if (self.elevatorOnFloor > 0) {
-			self.elevatorToFloor = self.elevatorOnFloor - 1;
-			elvtr_go();
-		}
-	} else if (self.lefty == 1) {
+	if (self.lefty == 1) {
+		//self.lefty = -1;
 		if (self.elevatorOnFloor < (self.cnt - 1)) {
 			self.elevatorToFloor = self.elevatorOnFloor + 1;
+			dprint("elvtr_use elvtr_go up.\n");
 			elvtr_go();
+		}
+	} else {
+		//self.lefty = 1;
+		if (self.elevatorOnFloor > 0) {
+			self.elevatorToFloor = self.elevatorOnFloor - 1;
+			dprint("elvtr_use elvtr_go dn.\n");
+			elvtr_go(); 
 		}
 	}
 };

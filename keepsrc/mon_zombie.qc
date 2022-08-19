@@ -73,6 +73,9 @@ $frame paine29 paine30
 $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 
 void(float type) zombie_sound;
+void(entity inflictor, entity attacker, float damage) mummy_wake_pain;
+void() mummy_sleep;
+void() zombie_die;
 
 void() zombie_stand1	= [	$stand1,		zombie_stand2	] {
 	zombie_sound(2); self.solid = SOLID_SLIDEBOX; ai_stand();
@@ -187,7 +190,6 @@ void() zombie_atta12	= [	$atta12,	zombie_atta13	] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
 void() zombie_atta13	= [	$atta13,	zombie_run1	] { ai_face();ZombieThrowFlesh('-10 -22 30'); };
 
-//----------------------------------------------------------------------
 void() zombie_attb1		= [	$attb1,		zombie_attb2	] { ai_face(); };
 void() zombie_attb2		= [	$attb2,		zombie_attb3	] { ai_face(); };
 void() zombie_attb3		= [	$attb3,		zombie_attb4	] { ai_face(); };
@@ -206,7 +208,6 @@ void() zombie_attb13	= [	$attb13,	zombie_attb14	] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() zombie_attb14	= [	$attb13,	zombie_run1	] { ai_face();ZombieThrowFlesh('-10 -24 29'); };
 
-//----------------------------------------------------------------------
 void() zombie_attc1		= [	$attc1,		zombie_attc2	] { ai_face(); };
 void() zombie_attc2		= [	$attc2,		zombie_attc3	] { ai_face(); };
 void() zombie_attc3		= [	$attc3,		zombie_attc4	] { ai_face(); };
@@ -223,7 +224,6 @@ void() zombie_attc11	= [	$attc11,	zombie_attc12	] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() zombie_attc12	= [	$attc12,	zombie_run1		] { ai_face();ZombieThrowFlesh('-12 -19 29'); };
 
-//----------------------------------------------------------------------
 void() zombie_missile = {
 	self.lip = self.meleeattack;
 	// Don't pick the same attack twice in a row
@@ -253,7 +253,6 @@ void() zombie_paina10	= [	$paina10,	zombie_paina11	] {};
 void() zombie_paina11	= [	$paina11,	zombie_paina12	] {};
 void() zombie_paina12	= [	$paina12,	zombie_run1		] { self.inpain = 0; };
 
-//----------------------------------------------------------------------
 void() zombie_painc1	= [	$painc1,	zombie_painc2	] {};
 void() zombie_painc2	= [	$painc2,	zombie_painc3	] {};
 void() zombie_painc3	= [	$painc3,	zombie_painc4	] { ai_pain(3); };
@@ -273,7 +272,6 @@ void() zombie_painc16	= [	$painc16,	zombie_painc17	] {};
 void() zombie_painc17	= [	$painc17,	zombie_painc18	] {};
 void() zombie_painc18	= [	$painc18,	zombie_run1	] {};
 
-//----------------------------------------------------------------------
 void() zombie_paind1	= [	$paind1,	zombie_paind2	] {};
 void() zombie_paind2	= [	$paind2,	zombie_paind3	] {};
 void() zombie_paind3	= [	$paind3,	zombie_paind4	] {};
@@ -288,9 +286,7 @@ void() zombie_paind11	= [	$paind11,	zombie_paind12	] {};
 void() zombie_paind12	= [	$paind12,	zombie_paind13	] {};
 void() zombie_paind13	= [	$paind13,	zombie_run1	] {};
 
-//----------------------------------------------------------------------
 // Fall down - B : random pain, E : large amount of damage
-//----------------------------------------------------------------------
 void() zombie_painb1	= [	$painb1,	zombie_painb2	] { self.inpain = 2; };
 void() zombie_painb2	= [	$painb2,	zombie_painb3	] { ai_pain(2); };
 void() zombie_painb3	= [	$painb3,	zombie_painb4	] { ai_pain(8); };
@@ -329,7 +325,6 @@ void() zombie_painb28	= [	$painb28,	zombie_run1		] {
 	}
 };
 
-//----------------------------------------------------------------------
 void() zombie_paine1	= [	$paine1,	zombie_paine2	] { self.inpain = 2; };
 void() zombie_paine2	= [	$paine2,	zombie_paine3	] { ai_pain(8); };
 void() zombie_paine3	= [	$paine3,	zombie_paine4	] { ai_pain(5); };
@@ -405,12 +400,16 @@ void(entity inflictor, entity attacker, float take) zombie_pain = {
 =============================================================================*/
 void() zombie_wakeup	= {
 	if (self.gibbed) return;			// Do nothing dead
-	
+
+	self.th_stand = zombie_stand1;
+	self.th_walk = zombie_walk1;
+	self.th_run = zombie_run1;
+	self.th_pain = zombie_pain;
+	self.th_die = zombie_die;
+	self.th_missile = zombie_missile;
 	self.use = SUB_Null;				// No more using at this point
 	if (!self.enemy) FindTarget();		// If no enemy, look around?
-
-	// Turn monster collision on and test if can walk forward
-	self.solid = SOLID_SLIDEBOX;
+	self.solid = SOLID_SLIDEBOX; // Turn monster collision on and test if can walk forward
 	if (!walkmove (0, 0))
 	{
 		self.inpain = 2;				// On ground
@@ -426,8 +425,7 @@ void() zombie_wakeup	= {
 			Killed(self, self);				// Register death
 			return;
 		}
-	}
-	else {
+	} else {
 		self.bodyonflr = "";			// Body is chop proof!
 		self.inpain = 1;				// Animation not finished
 		zombie_sound(6);				// Wake up sound
@@ -437,6 +435,10 @@ void() zombie_wakeup	= {
 		else self.think = zombie_paine13;
 	}
 };
+
+void(entity inflictor, entity attacker, float damage) zombie_wakeup_pain = { zombie_wakeup(); };
+
+void() zombie_sleep = [self.frame,zombie_sleep] { ai_stand(); };
 
 //----------------------------------------------------------------------
 // Puts the zombie on the floor with a random Yaw rotation
@@ -449,10 +451,8 @@ void(float frameno) zombie_onground = {
 	self.count = 0;					// Reset get up tries
 	self.solid = SOLID_NOT;			// No world interaction
 	self.bodyonflr = MON_ONFLR;		// mark body for the chop
-
-	// Does the zombie start on the ground?
-	if (frameno == MONAI_ZOMBIEFLR) {
-		// Do nothing else while on the floor
+	if (frameno == MONAI_ZOMBIEFLR) { // Does the zombie start on the ground?
+		// Do nothing else while on the flo or
 		self.nextthink = self.pausetime;
 		self.think = SUB_Null;
 
@@ -469,8 +469,17 @@ void(float frameno) zombie_onground = {
 		if (self.angles_y < 1) self.angles_y = rint(random()*359);
 		self.use = self.th_wakeup;
 		self.fixangle = TRUE;
-	}
-	else {
+		if (self.targetname == "" || detected_mod == MOD_ROGUE)  {
+			self.th_run = self.th_wakeup;
+			self.th_walk = self.th_wakeup;
+			if (self.classtype == CT_MONMUMMY) self.th_pain = mummy_wake_pain;
+			else self.th_pain = zombie_wakeup_pain;
+			self.th_missile = self.th_wakeup;
+			if (self.classtype == CT_MONMUMMY) self.th_stand = mummy_sleep;
+			else self.th_stand = zombie_sleep;
+			self.th_stand();
+		}
+	} else {
 		self.zombieflr = frameno;	// Wakeup pose for later
 		// Keep zombies on the ground and check again later
 		self.nextthink = self.nextthink + MONAI_ZOMBGRDTIMER;
@@ -622,6 +631,10 @@ void() monster_zombie = { // [ENTITY]
 	if (self.poisonous) self.classname = "monster_zombiep"; // Ensure precaches.
 	self.mdl = "progs/ad171/mon_zombie.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";
+	if (detected_mod == MOD_ROGUE && self.spawnflags & 2) {
+		self.spawnflags = self.spawnflags - 2; // Rogue on floor flag.
+		self.spawnflags = self.spawnflags | MON_ONFLOOR;
+	}
 
 	// Stupid ID getting the crucified and ambush back to front on zombies
 	// Lets fix the problem and reverse the flags to match everything else

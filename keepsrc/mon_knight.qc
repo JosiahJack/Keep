@@ -362,27 +362,6 @@ void() monster_knight = {
 	if (random() < 0.5) self.gib2mdl = "";
 	if (random() < 0.5) self.gib3mdl = "";
 	if (self.deathstring == "") self.deathstring = " was slashed by a Knight\n";
-
-	if (self.spawnflags & MON_STATUE) {
-		self.hittype = HIT_STONE;
-		self.idle_sound = "ad171/statue/idle1.wav";
-		self.idle_sound2 = "ad171/statue/idle2.wav";
-		self.idle_soundcom = "rogue/statue/idle.wav";
-		if (random() < 0.5) self.sight_sound = "ad171/statue/sight.wav";
-		else self.sight_sound = "rogue/statue/see.wav";
-
-		self.pain_sound = "rogue/statue/pain.wav";
-		self.death_sound = "rogue/statue/death.wav";
-		self.gib1skin = 4;					// Stoney sword
-		self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
-		self.gib2mdl = self.gib3mdl = "";
-	} else {
-		self.idle_sound = "knight/idle.wav";
-		self.sight_sound = "knight/ksight.wav";
-		self.pain_sound = "knight/khurt.wav";
-		self.death_sound = "knight/kdeath.wav";
-	}
-	
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -398,9 +377,21 @@ void() monster_knight = {
     self.hittype    = HIT_METAL;
 	self.meleerange = 80;
 	self.meleerangez = 48;
-	// Detect statues and setup different parameters
-	// Tougher skin, less pain, heavy feet etc	
+
+	// Detect statues and setup tougher skin, less pain, heavy feet etc
 	if (self.spawnflags & MON_STATUE) {
+		self.hittype = HIT_STONE;
+		self.idle_sound = "ad171/statue/idle1.wav";
+		self.idle_sound2 = "ad171/statue/idle2.wav";
+		self.idle_soundcom = "rogue/statue/idle.wav";
+		if (random() < 0.5) self.sight_sound = "ad171/statue/sight.wav";
+		else self.sight_sound = "rogue/statue/see.wav";
+
+		self.pain_sound = "rogue/statue/pain.wav";
+		self.death_sound = "rogue/statue/death.wav";
+		self.gib1skin = 1;					// Stoney sword
+		self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
+		self.gib2mdl = self.gib3mdl = "";
 		self.classgroup = CG_STONE;		// Stone hates metal!
 		self.resist_nails = 0.5;		// Tough skin for nails
 		if (!self.exactskin) self.exactskin = 4;	// Stone skin
@@ -411,7 +402,7 @@ void() monster_knight = {
 		self.no_liquiddmg = TRUE;		// Immune to slime/lava
 		if (self.deathstring == "")  self.deathstring = " was smashed by a Stone Knight\n";
 		self.hittype = HIT_STONE;
-		
+
 		// Allow knights to start with a stone skin, but not be frozen!
 		if (self.spawnflags & MON_NOTFROZEN) {
 			self.spawnflags = self.spawnflags - MON_STATUE;
@@ -436,6 +427,11 @@ void() monster_knight = {
 			self.frame = self.pos1_x;		// Setup frame / pose		
 		}
 	} else {
+		self.idle_sound = "knight/idle.wav";
+		self.sight_sound = "knight/ksight.wav";
+		self.pain_sound = "knight/khurt.wav";
+		self.death_sound = "knight/kdeath.wav";
+
 		// The new knight model by Lunaran has 4 available skins to
 		// choose from. The local option will always override the
 		// worldspawn option.
@@ -443,8 +439,8 @@ void() monster_knight = {
 		if (self.exactskin < 0) self.randomskin = 4;
 		if (!self.exactskin && world.knight_defskin > 0) self.exactskin = world.knight_defskin;
 		self.pain_longanim = TRUE;		// can be chopped with shadow axe
-		self.classgroup = CG_KNIGHT;	// Classic tincan!
 		knight_aistates();				// setup AI state functions
+		self.classgroup = CG_KNIGHT;	// Classic tincan!
 	}
 
 	self.classtype = CT_MONKNIGHT;

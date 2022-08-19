@@ -1308,5 +1308,4 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_zombiek")		monster_zombiek_precache();
 	// else if (mname == "monster_zombie_master")	monster_zombie_master_precache();
 	else if (mname == "monster_zombiep")		monster_zombiep_precache();
-	dprint("\n");
 };

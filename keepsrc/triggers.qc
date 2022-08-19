@@ -648,6 +648,11 @@ void() trigger_teleport_setup = { // [FUNCTION]
 // This entity cannot be damaged and is always touchable once activated
 // Can be switched on/off using entity state system (including tele hum sound)
 void() trigger_teleport = { // [ENTITY]
+	if (detected_mod == MOD_ROGUE) {
+		if (self.spawnflags & TRIG_TELEALWAYSON) { // value of 4 == CTF_ONLY
+			if (teamplay < TEAM_CTF || teamplay > TEAM_CTF_ALT) { remove (self); return; }
+		}
+	}
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_TRIGTELEPORT;
@@ -677,7 +682,8 @@ void() trigger_teleport = { // [ENTITY]
 	// Annoying that the targetname is being used like this because there could have been a better way to do this type of functionality.
 	// == "" teleporter works fine (starts on)
 	// != "" teleporter requires trigger activation
-	if (self.spawnflags & TRIG_TELEALWAYSON) self.estate_on();
+	if (self.spawnflags & TRIG_TELEALWAYSON && detected_mod != MOD_ROGUE) self.estate_on();
+
 	else if (self.spawnflags & ENT_STARTOFF) self.estate_off();
 	else if (self.targetname != "") self.estate_off();
 	else self.estate_on();

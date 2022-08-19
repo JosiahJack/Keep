@@ -268,7 +268,6 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = { // [FUNCTION]
 
 // After moving, set origin to exact final destination rather than last value that is very very close but not quite.
 void()  SUB_CalcMoveDone = { // [FUNCTION]
-	dprint("Calc move done!\n");
 	if (self.classname == "fliquid") self.fmover = ""; // Update for moving liquids - from extras_r4/r5
 	self.velocity = '0 0 0';
 	setorigin(self, self.finaldest);
@@ -329,6 +328,7 @@ void(string targname) SUB_Target = { // [FUNCTION]
 
 	if (targname == "") return;
 
+	//if (targname == "t12") dprint("Running SUB_UseTargets for t12\n");
 	act = activator; // ID Code - Never switch around, not sure why it is here?
 	t = find (world,targetname,targname);
 	stemp = self;

@@ -165,7 +165,7 @@ void() MusicStart_Think = { // [FUNCTION]
 };
 
 // This should only be called by worldspawn.
-void() InitMusic = { // [FUNCTION]
+float() InitMusic = { // [FUNCTION]
     local string music1, music2, music3;
     local float abort;
 
@@ -180,7 +180,7 @@ void() InitMusic = { // [FUNCTION]
     if (music1 != "") { abort = FALSE;  precache_sound(music1); }
     if (music2 != "") { abort = FALSE;  precache_sound(music2); }
     if (music3 != "") { abort = FALSE;  precache_sound(music3); }
-    if (abort) return; // No music to play.
+    if (abort) return FALSE; // No music to play.
 
     SpawnStereo();
 	// Hack:  SoE music doesn't loop.
@@ -201,6 +201,7 @@ void() InitMusic = { // [FUNCTION]
     dprint("\b[WORLD]\b Drake music system initialized");
     if (music1 != "") { dprint(" with tracks "); dprint(music1); dprint(", "); dprint(music2);  dprint(", "); dprint(music3); }
     dprint("\n");
+    return TRUE;
 };
 
 // Toggles music on and off.  It is not really a cheat, but since music

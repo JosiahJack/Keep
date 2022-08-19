@@ -47,6 +47,8 @@ void() Frozen_Touch;
 void() BecomeIcyExp;
 void(entity fire) Fireball_Steam;
 void(entity targ) UseThorsBlessing;
+float(entity targ, entity inflictor, entity attacker, float damage) TeamHealthDam;
+float(float damage, entity who) RuneApplyEarth;
 
 // Returns true if the inflictor can directly damage the target.  Used for
 // explosions and melee attacks.
@@ -544,7 +546,11 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 				}
 			}
 		}	
-	}	
+	}
+
+	if (!TeamHealthDam(targ, inflictor, attacker, damage)) return; // same team --ZOID
+
+	if (deathmatch) take = RuneApplyEarth(take, targ); // rune power up (Earth Magic)
 	
 	//------------------------------------------------------\\__
 	//------------//                                              \\
@@ -637,7 +643,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			 && targ.resist_cold < 1 && targ.classgroup != CG_HARMLESS) {
 			targ.frozen = TRUE;
 		}
-		Killed (targ, attacker);
+		Killed(targ,attacker);
 		return;
 	} // Has the target died?
 	
@@ -651,7 +657,9 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	if ( (self.flags & FL_MONSTER) && attacker != world && inflictor.classtype != CT_PROJ_BOLT1 && inflictor.classtype != CT_PROJ_BOLT2) {
 		// Is the current attacker not self and not current enemy target?
 		if (self != attacker && attacker != SUB_entEnemyTarget()) {
-			if ((!Align_Match(self,attacker) || self.alignment == EVIL && attacker.alignment == EVIL) || IsInsane(self)) { // Don't get angry at friends, unless insane
+			if (!Align_Match(self,attacker)
+				|| (self.alignment == EVIL && attacker.alignment == EVIL)
+				|| IsInsane(self)) { // Don't get angry at friends, unless insane
 				if ((self.noinfighting && attacker.flags & FL_MONSTER || attacker.noinfighting) && !(IsInsane(self))) {
 					// Prevent monsters from infighting
 					// but let them react to the player

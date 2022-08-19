@@ -1081,7 +1081,7 @@ void() monster_ryu = {
 
     // Fast = more alert -- better dodging and aiming.
     // Slow = slower speed, poor tracking.
-    if (self.spawnflags & SPAWNx_SKILL == SPAWNx_SKILL) powlevel = cvar("skill"); // Conflict -- let skill decide.
+    if (self.spawnflags & SPAWNx_SKILL == SPAWNx_SKILL) powlevel = skill; // Conflict -- let skill decide.
     else if (self.spawnflags & SPAWN_FAST) powlevel = 2;
     else if (self.spawnflags & SPAWN_SLOW) powlevel = 0;
     else powlevel = 1;

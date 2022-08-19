@@ -409,6 +409,7 @@ void() pendulum = { // [ENTITY]
 		return;
 	}
 
+	if (self.spawnflags & 2 && detected_mod == MOD_ROGUE) self.spawnflags = self.spawnflags - 2;
 	self.classname = "trap_pendlong";
 	trap_pendlong();
 };
