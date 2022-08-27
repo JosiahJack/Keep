@@ -1,3 +1,14 @@
+version 0.96:
+	Fixed hipnotic earthquakes never resetting
+	Fixed hipnotic vs rogue earthquake bugs
+	Added mod map detection for rogue and hipnotic to fix up spawnflags where AD/Keep deviated
+	Added ability to cycle intermissions with weapon cycle commands (e.g. mouse wheel) forward and reverse.
+	Fixed lots of rogue entity regressions with mitosis spawns, zombie spawnflags, func_new_plat
+	Fixed performance regressions and made performance scaling on large maps not affect small maps.
+	Fixed fiend precache softcrash
+	Fixed drip gravity bug.
+	Improved performance on insane maps with large numbers of enemies.
+	Improved performance on maps with only one kind of enemy alignment (e.g. start maps with only denizens).
 version 0.95:
 	Commit messages have it.
 version 0.94:
