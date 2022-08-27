@@ -47,6 +47,20 @@ float INTERMISSION_RUNE = 3;	// Check for end of episode
 float INTERMISSION_ENDGAME = 4;	// End of game!?! (set in oldone.qc)
 float INTERMISSION_CAMERA = 10;	// Special Camera only mode
 
+// Find 1
+//   camera_ent is 1
+//   prevcam is 1
+// Find 2
+//   prevcam(1).owner is 2
+//   prevcam is 2
+// Find 3
+//   prevcam(2).owner is 3
+//   prevcam is 3
+// Loop done
+// prevcam(3).owner = camera_ent(1)
+// camera_ent(1).owner(2).owner(3).owner(1)
+// camera_ent(1).master(3).master(2)
+
 void() SetupIntermissionCamera = {
 	local entity intercam, prevcam;
 
@@ -62,16 +76,18 @@ void() SetupIntermissionCamera = {
 			if (!prevcam) { camera_ent = intercam; camera_ent.count = 0; }
 			else prevcam.owner = intercam;
 
-			// Save current camera to previous ready for loop
-			prevcam = intercam;
+			intercam.master = prevcam;
+			prevcam = intercam; // Save current camera to previous ready for loop
 			camera_ent.count = camera_ent.count + 1;
-			//dprint("[CAM] ("); dprint(ftos(camera_ent.count));
-			//dprint(") Org ("); dprint(vtos(intercam.origin)); dprint(")\n");
-				
+			if (developer > 1) {
+				dprint("[CAM] ("); dprint(ftos(camera_ent.count));
+				dprint(") Org ("); dprint(vtos(intercam.origin)); dprint(")\n");
+			}	
 			intercam = find(intercam, classname, "info_intermission");
 		}
 		// Close the camera chain
 		prevcam.owner = camera_ent;
+		camera_ent.master = prevcam;
 		dprint("\b[CAMERA]\b Intermissions found (");
 		dprint(ftos(camera_ent.count)); dprint(")\n");
 	} else {
@@ -185,14 +201,14 @@ void() FinishIntermissionCamera = {
 	} else GotoNextMap(); // Finished episode text and shub waking up text, then finally next map!
 };
 
-void() NextIntermissionCamera = {
+void(float reverse) NextIntermissionCamera = {
 	if (camera_ent.count > 1 && intermission_running > 0 && intermission_running < INTERMISSION_CAMERA) { // Exclude the special intermission cameras (special impulse)
 		// Cycle through list trying to find a camera.  Designed for the intermission at the end of a map.
 		while(self.goalentity.spawnflags & CAMERA_NOINTERMIS) { // Can have special cameras designed for impulse 145!
 			self.goalentity = self.goalentity.owner;
 		}
 	}
-	
+
 	// Switch player view to intermission camera
 	self.view_ofs = '0 0 0';
 	setorigin(self, self.goalentity.origin);
@@ -260,15 +276,21 @@ void() CycleIntermissionCamera = {
 				}
 			}
 		}
-	}
-	// check for attack button to switch cameras
-	else if (self.button0) {
+	} else if (self.button0 || self.impulse == 10) {
+		// Check for attack button or weapon cycling to switch cameras
+		self.impulse = 0;
 		self.button0 = self.button1 = self.button2 = 0;
 		self.waitmin = time + 0.5;
-
-		// Shift forward to next camera
 		self.goalentity = self.goalentity.owner;
-		NextIntermissionCamera();
+		dprint("Intermission cycle forward\n");
+		NextIntermissionCamera(FALSE); // Shift forward to next camera
+	} else if (self.impulse == 12) {
+		self.impulse = 0;
+		self.button0 = self.button1 = self.button2 = 0;
+		self.waitmin = time + 0.5;
+		self.goalentity = self.goalentity.master; // Shift reverse to previous camera
+		dprint("Intermission cycle reverse\n");
+		NextIntermissionCamera(TRUE);
 	}
 };
 
@@ -306,7 +328,7 @@ void() StartIntermissionCamera = {
 				self.lip = self.lip - 1;				// Keep looping
 			}
 		}
-		NextIntermissionCamera(); // Switch player to the currently selected camera
+		NextIntermissionCamera(TRUE); // Switch player to the currently selected camera
 		
 		// Check if end of map intermission is really running?  Can enter this function via camera test mode (impulse xxx)
 		if (intermission_running == 0) intermission_running = INTERMISSION_CAMERA;

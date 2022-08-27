@@ -37,6 +37,8 @@
 // spawn and explodes on death.
 //=============================================================================
 
+void() monster_tarbaby;
+
 void(entity inflictor, entity attacker, float damage) tbaby_mitosis = { // [FUNCTION]
 	if ( random() < 0.35 ) {
 		newmis = spawn();
@@ -47,14 +49,24 @@ void(entity inflictor, entity attacker, float damage) tbaby_mitosis = { // [FUNC
 	}
 };
 
-void() monster_tarbaby_mitosis = { // [ENTITY]
-	if (self.health < 1) self.health = 100;
-	if (self.skin <= 0) self.skin = 1;
+void(float strong) monster_tarbaby_mitosis_setup = { // [FUNCTION]
+	if (strong) {
+		if (self.health < 1) self.health = 100;
+		if (self.skin <= 0) self.skin = self.exactskin = 2;
+	} else {
+		if (self.health < 1) self.health = 60;
+		if (self.skin <= 0) self.skin = self.exactskin = 1;
+	}
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
 	if (self.minion_name == "") {
 		self.minion_name = "monster_tarbaby";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }
 	self.th_pain = tbaby_mitosis;
+};
+
+void() monster_tarbaby_mitosis = { // [ENTITY]
+	if (random() < 0.5) monster_tarbaby_mitosis_setup(TRUE);
+	else monster_tarbaby_mitosis_setup(FALSE);
 	monster_tarbaby();
 };

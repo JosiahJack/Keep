@@ -2800,7 +2800,7 @@
 	[
 		1 : "Use Particles" : 0
 	]
-	dmg(integer) : "Damage for each Explosion"
+	dmg(integer) : "Damage for each Explosion (def=120)"
 	netname(string) : "Classname to protect from explosion, or targetname if classname not found (Zerstorer hack)"
 	speed(choices) : "Explosion Attonation" : 1 = 
 	[
@@ -2811,13 +2811,13 @@
 	]
 	volume(string) : "Explosion Volume" : "1.0"
 ]
-@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_explode : "Explosion"
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_explode : "Explosion, Zerstorer version"
 [
 	spawnflags(flags) =
 	[
 		1 : "Use Particles" : 0
 	]
-	dmg(integer) : "Damage for each Explosion"
+	dmg(integer) : "Damage for each Explosion (def=0)"
 	netname(string) : "Classname to protect from explosion, or targetname if classname not found (Zerstorer hack)"
 	speed(choices) : "Explosion Attonation" : 1 = 
 	[
@@ -3260,12 +3260,17 @@
 		 1 : "No Model + Effects" : 0
 		 2 : "Plinth1" : 0
 		 4 : "Plinth2" : 0
+		 8 : "Story, Stay Open" : 0
 		16 : "Plinth Collision" : 0
 		32 : "Facing Angle Only" : 0
 		64 : "Start Off" : 0
 		128: "No Effects" : 0
 	]
 	v_angle(string) : "Viewing angle (def='30 60 0')"
+	randomskin(choices) : "Use Random Skin" = [
+		0 : "No random skin"
+		1 : "Randomize skin"
+	]
 	exactskin(choices) : "Book Cover" = [
 		0 : "Brown 1"
 		1 : "Brown 2"
@@ -3280,6 +3285,10 @@
 	pos2(string) : "Touch trigger maximum size"
 	message(string) : "Header message"
 	message2(string) : "Body text"
+	cnt(choices) : "Shuffle text on each read" = [
+		0: "Normal, no shuffling"
+		-1: "Shuffle text on each read"
+	]
 ]
 
 //----------------------------------------------------------------------
@@ -4869,14 +4878,21 @@ GN/A" : 0
 		2 : "Statue" : 0
 		4 : "Perch" : 0 
 	]
-	skin(integer) : "Skin"
+	skin(integer) : "Skin (0 - 5)"
 ]
 @PointClass base(MonTall) studio("progs/mon_impling.mdl") = monster_impling : "Impling" [
 	spawnflags(flags) = [ 
 		2 : "Statue" : 0
 		4 : "Perch" : 0 
 	]
-	skin(integer) : "Skin"
+	skin(integer) : "Skin (0 - 5)"
+]
+@PointClass base(MonTall) studio("progs/drake/imp_lord.mdl") = monster_imp_lord : "Imp Lord" [
+	spawnflags(flags) = [ 
+		2 : "Statue" : 0
+		4 : "Perch" : 0 
+	]
+	skin(integer) : "Skin (0 - 4)"
 ]
 
 @PointClass base(MonTall) studio("progs/quoth/gaunt.mdl") = monster_gaunt : "Gaunt" [
@@ -4890,18 +4906,19 @@ GN/A" : 0
 
 @PointClass base(MonShort) studio("progs/ad171/mon_zombie.mdl") skin(6) = monster_zombiep : "Poison Zombie"
 [ spawnflags(flags) = [ 4 : "On Floor" : 0 ] ]
-@PointClass base(MonShort,JumpingMon) studio("progs/ad171/mon_zombiek.mdl") = monster_zombiek : "Zombie Knight"
-[ spawnflags(flags) = [ 4 : "On Floor" : 0 ] 
+@PointClass base(MonShort,JumpingMon) studio("progs/ad171/mon_zombiek.mdl") = monster_zombiek : "Zombie Knight" [
+	spawnflags(flags) = [ 4 : "On Floor" : 0 ] 
 	poisonous(choices) : "Is Monster Poisonous" = [
 		0 : "Normal"
 		1 : "Poisonous"
 	]
 ]
-@PointClass base(MonShort) studio("progs/ad171/mon_zombie.mdl") = monster_zombie : "Zombie"
-[ spawnflags(flags) = [ 
+@PointClass base(MonShort) studio("progs/ad171/mon_zombie.mdl") = monster_zombie : "Zombie" [
+	spawnflags(flags) = [ 
 		1 : "Crucified" : 0
 		2 : "Ambush" : 0
 		4 : "OnFloor" : 0
+		65536 : "Drop From Crucified" : 0
 	]
 	sequence(choices) : "Pose (editor)" = [
 		0 : "Normal"

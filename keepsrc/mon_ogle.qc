@@ -283,14 +283,14 @@ void() ogle_wipebrowlow10= [172, ogle_hammerlowa1	] { ai_stand();if (random() < 
 
 void() ogle_walk1;
 
-void() ogle_pushcart1 = [173, ogle_pushcart2	] { ai_walk(4); monster_footstep(FALSE); self.state = OGLE_PUSHING;if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart2 = [174, ogle_pushcart3	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart3 = [175, ogle_pushcart4	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart4 = [176, ogle_pushcart5	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart5 = [177, ogle_pushcart6	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart6 = [178, ogle_pushcart7	] { ai_walk(4);monster_footstep(FALSE); if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart7 = [179, ogle_pushcart8	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
-void() ogle_pushcart8 = [180, ogle_pushcart1	] { ai_walk(4);if (!self.attachment) ogle_walk1(); };
+void() ogle_pushcart1 = [173, ogle_pushcart2	] { ai_walk(4); monster_footstep(FALSE); self.state = OGLE_PUSHING;if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart2 = [174, ogle_pushcart3	] { ai_walk(4);if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart3 = [175, ogle_pushcart4	] { ai_walk(4);if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart4 = [176, ogle_pushcart5	] { ai_walk(4);if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart5 = [177, ogle_pushcart6	] { ai_walk(4);if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart6 = [178, ogle_pushcart7	] { ai_walk(4);monster_footstep(FALSE); if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart7 = [179, ogle_pushcart8	] { ai_walk(4);if (!self.entattachment) ogle_walk1(); };
+void() ogle_pushcart8 = [180, ogle_pushcart1	] { ai_walk(4);if (!self.entattachment) ogle_walk1(); };
 
 void() ogle_leaning1 = [181, ogle_leaning2] { ai_stand(); self.state = OGLE_LEANING; };
 void() ogle_leaning2 = [182, ogle_leaning3] { ai_stand(); };
@@ -356,7 +356,7 @@ void() ogle_mine = {
 	local vector spot1, spot2;
 
 	r = random();
-	if (self.attachment) {
+	if (self.entattachment) {
 		ogle_pushcart1();
 		return;
 	}
@@ -413,14 +413,14 @@ void(entity inflictor, entity attacker, float damage) ogle_pain = {
 	}
 };
 
-void() ogle_walk1 = [217, ogle_walk2	] { ai_walk(4); monster_footstep(FALSE); self.state = FALSE; if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk2 = [218, ogle_walk3	] { ai_walk(2); if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk3 = [219, ogle_walk4	] { ai_walk(2); if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk4 = [220, ogle_walk5	] { ai_walk(2); if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk5 = [221, ogle_walk6	] { ai_walk(2); monster_footstep(FALSE); if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk6 = [222, ogle_walk7	] { ai_walk(4); if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk7 = [223, ogle_walk8	] { ai_walk(2); if (self.attachment) ogle_pushcart1(); };
-void() ogle_walk8 = [224, ogle_walk1	] { ai_walk(2); if (self.attachment) ogle_pushcart1(); };
+void() ogle_walk1 = [217, ogle_walk2	] { ai_walk(4); monster_footstep(FALSE); self.state = FALSE; if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk2 = [218, ogle_walk3	] { ai_walk(2); if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk3 = [219, ogle_walk4	] { ai_walk(2); if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk4 = [220, ogle_walk5	] { ai_walk(2); if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk5 = [221, ogle_walk6	] { ai_walk(2); monster_footstep(FALSE); if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk6 = [222, ogle_walk7	] { ai_walk(4); if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk7 = [223, ogle_walk8	] { ai_walk(2); if (self.entattachment) ogle_pushcart1(); };
+void() ogle_walk8 = [224, ogle_walk1	] { ai_walk(2); if (self.entattachment) ogle_pushcart1(); };
 
 void() ogle_chargea1 = [224, ogle_chargea2	] { ai_charge(12); };
 void() ogle_chargea2 = [225, ogle_chargea3	] { ai_charge(10); };

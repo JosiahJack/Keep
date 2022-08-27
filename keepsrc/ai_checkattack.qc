@@ -813,7 +813,8 @@ void() StrafeFlyerCheckAttack = {
 				return;
 			}
 		} else {
-			SetSelfAttackChances(0.9,0.6,0.2);
+			if (self.classtype == CT_MONGARGOYLE_MEGA) self.attack_chance = 1;
+			else SetSelfAttackChances(0.9,0.6,0.2);
 			if (random () < self.attack_chance) {
 				if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset, '0 0 0')) {
 					if (enemy_range != RANGE_MELEE)	SUB_AttackFinished(2 + random());

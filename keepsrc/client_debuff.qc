@@ -123,7 +123,7 @@ void() ClientDeBuff = {
 		return;
 	}
 
-	if (self.flashlight) {
+	if (self.items3 & IT3_FLASHLIGHT_ON) {
 		if (!self.attachment3) {
 			flashlightSpot = spawn();
 			flashlightSpot.effects = EF_BRIGHTLIGHT;

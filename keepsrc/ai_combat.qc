@@ -196,7 +196,7 @@ void(entity targ, entity attacker) Killed = {
 	// Teleport to last spot we were on ground, telefragging what's there, jump
 	// up with large force, play lightning blast and beltup sounds, give
 	// invincibility and flight boot power for 15 seconds.
-	if (self.items3 & IT3_THORSBLESSING) { UseThorsBlessing(self); return; } // Lifesaver!
+	if (self.items3 & IT3_THORSBLESSING && !teamplay) { UseThorsBlessing(self); return; } // Lifesaver!
 
 	// doors, triggers, etc
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE || self.classtype == CT_FUNCPUSHABLE) {	
@@ -467,11 +467,11 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 		// Power Armor
 		if (targ.perms & POW_ARMORONYXPOWER) {
-			if (targ.powershield_active) {
+			if (targ.items3 & IT3_POWERSHIELD_ON) {
 				if (targ.ammo_cells > 1) {
 					saveperms = PowerArmor_Absorb(targ,take,TRUE); // only does something if damage is greater than 2
 				} else {
-					targ.powershield_active = FALSE;
+					if (targ.items3 & IT3_POWERSHIELD_ON) targ.items3 = targ.items3 - IT3_POWERSHIELD_ON;
 					sound(targ,CHAN_AUTO,"zerstorer/me/me_soff.wav",1,ATTN_NORM);
 				}
 			}
@@ -639,8 +639,8 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 	
 	if (targ.health < 1) {
-		if ((inflictor.classgroup == CG_PROJICE || inflictor.classtype == CT_FROSTSHARD)
-			 && targ.resist_cold < 1 && targ.classgroup != CG_HARMLESS) {
+		if (inflictor.classtype == CT_FROSTSHARD
+			&& targ.resist_cold < 1 && targ.classgroup != CG_HARMLESS) {
 			targ.frozen = TRUE;
 		}
 		Killed(targ,attacker);

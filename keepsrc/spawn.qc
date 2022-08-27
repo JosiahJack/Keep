@@ -227,8 +227,8 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.87) retval = "monster_baron_water";
 			else if (rand < 0.88) retval = "monster_oglib";
 			else if (rand < 0.89) retval = "monster_lavagolem";
+			else if (rand < 0.90) retval = "monster_imp_lord";
 			// More slots!?!!?
-			//
 			//
 			//
 			//
@@ -336,8 +336,9 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.88) retval = "monster_pyro";
 		else retval = "monster_seeker";
 	} else if (self.style == 14) { // Elite Mystic
-		if (rand < 0.33) retval = "monster_fallen_angel_lord";
-		else if (rand < 0.66) retval = "monster_mummy";
+		if (rand < 0.25) retval = "monster_fallen_angel_lord";
+		else if (rand < 0.5) retval = "monster_imp_lord";
+		else if (rand < 0.75) retval = "monster_mummy";
 		else retval = "monster_wraith";
 	} else if (self.style == 15) { // Elite Horrors
 		if (rand < 0.2) retval = "monster_drole";
@@ -508,9 +509,10 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.875) retval = "monster_sentinel";
 		else retval = "monster_ryu";
 	} else if (self.style == 38) { // Elite Flyers
-		if (rand < 0.25) retval = "monster_centurion";
-		else if (rand < 0.5) retval = "monster_fallen_angel_lord";
-		else if (rand < 0.75) retval = "monster_wraith";
+		if (rand < 0.2) retval = "monster_centurion";
+		else if (rand < 0.4) retval = "monster_imp_lord";
+		else if (rand < 0.6) retval = "monster_fallen_angel_lord";
+		else if (rand < 0.8) retval = "monster_wraith";
 		else retval = "monster_nightshade";
 	} else if (self.style == 28) { // Boss Flyers
 		if (rand < 0.2) retval = "monster_super_wrath";
@@ -559,6 +561,7 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.12) retval = "monster_spider";
 		else if (rand < 0.16) retval = "monster_gargoyle";
 		else if (rand < 0.20) retval = "monster_impling";
+		else if (rand < 0.22) retval = "monster_imp_lord";
 		else if (rand < 0.3) retval = "monster_skullwiz";
 		else if (rand < 0.34) retval = "monster_acolyte";
 		else if (rand < 0.4) retval = "monster_sorceror";
@@ -819,6 +822,7 @@ void(string mname) BeMonsterFromString = {
 	else if (mname == "monster_icegolem") { monster_icegolem(); }
 	else if (mname == "monster_imp") { monster_imp(); }
 	else if (mname == "monster_impling") { monster_impling(); }
+	else if (mname == "monster_imp_lord") { monster_imp_lord(); }
 	else if (mname == "monster_inquisitor") { monster_inquisitor(); }
 	else if (mname == "monster_jim") { monster_jim(); }
 	else if (mname == "monster_judgeminion") { monster_judgeminion(); }
@@ -1131,6 +1135,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_death_guard")	monster_deathguard_precache();
 	else if (mname == "monster_deathguard")		monster_deathguard_precache();
 	else if (mname == "monster_death_lord")		monster_death_lord_precache();
+	else if (mname == "monster_decoy")			monster_decoy_precache();
 	else if (mname == "monster_defender")		monster_enforcer_precache();
 	else if (mname == "monster_deflector")		monster_deflector_precache();
 	else if (mname == "monster_demon1")			monster_demon1_precache();
@@ -1190,6 +1195,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_icegolem")		monster_icegolem_precache();
 	else if (mname == "monster_imp")			monster_gargoyle_precache();
 	else if (mname == "monster_impling")		monster_gargoyle_precache();
+	else if (mname == "monster_imp_lord")		monster_gargoyle_precache();
 	else if (mname == "monster_inquisitor")		monster_inquisitor_precache();
 	else if (mname == "monster_jim")			monster_jim_precache();
 	else if (mname == "monster_judgeminion")	monster_gaunt_precache();

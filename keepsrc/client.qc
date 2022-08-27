@@ -83,6 +83,7 @@ float(float baxis_start, float baxis_control, float baxis_end, float baxis_time)
 vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve;
 void() misc_camera_filewrite;
 void() earthquake_postthink;
+void() earthquake_prethink;
 void(entity ownerEntity) sphere_remove;
 void() PlayerBallistaThink;
 void() tag_token_drop;
@@ -135,10 +136,13 @@ void() SetNewParms = {
 		parm6 = parm7 = parm9 = parm14 = parm15 = parm16 = 0; // Reset map variables ready for use
 		mapvar_reset();
 	}
-	cvar_set("gamecfg",ftos(0));
-	cvar_set("savedgamecfg",ftos(0));
+
 	teamplay = cvar("teamplay");
 	if (teamplay) cvar_set("savedgamecfg",ftos(-1)); // CTF: reset current team selection
+	else {
+		cvar_set("savedgamecfg",ftos(0));
+		cvar_set("gamecfg",ftos(0));
+	}
 };
 
 // Used by trigger_changelevel.  Stores a copy of the parm data ready for death/level reset.
@@ -152,9 +156,9 @@ void() SetChangeParms = {
     if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3)) self.armorvalue = 100; // Reset Drake exotic spirit armor.
 	dprint("\n\b[CLIENT]\b SetChangeParms\n");
 	teamplay = cvar("teamplay");
-	if (self.health < 1 || teamplay >= TEAM_CTF) {
+	if (self.health < 1 && teamplay >= TEAM_CTF) {
 		SetNewParms();
-		if (self.health < 1) cvar_set("savedgamecfg",ftos(self.items3));
+		cvar_set("savedgamecfg",ftos(self.steam));
 		return;
 	}
 
@@ -185,14 +189,18 @@ void() SetChangeParms = {
 	parm14 = mapvar[3];
 	parm15 = mapvar[4];
 	parm16 = mapvar[5];
-	cvar_set("gamecfg",ftos(encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental)));
-	cvar_set("savedgamecfg",ftos(self.items3));
-	if (teamplay) cvar_set("savedgamecfg",ftos(self.steam));
-
+	if (teamplay) cvar_set("savedgamecfg",ftos(self.steam)); // Don't save items3 in teamplay.
+	else {
+		cvar_set("savedgamecfg",ftos(self.items3));
+		cvar_set("gamecfg",ftos(encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental)));
+	}
 	dprint("\b[Beyond 16 Parms]\b ");
-	dprint("gamecfg: "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
-	dprint("                  savedgamecfg: "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
-
+	dprint("gamecfg: ");
+	dprint(ftos(cvar("gamecfg")));
+	dprint("\n");
+	dprint("                  savedgamecfg: ");
+	dprint(ftos(cvar("savedgamecfg")));
+	dprint("\n");
 };
 
 // Used during load new map such as trigger_changelevel.  Not used when loading a saved file or quickload
@@ -422,49 +430,51 @@ void() DecodeWorldParms = {
 		parm5 = encode(tlow8,tmid8,thi8); //store plasma back in parm5
 	}
 
-	tlow8 = decode(cvar("gamecfg"),LOW8);//cvar("parm17_hack"); //decode(parm17,LOW8);
-	tmid8 = decode(cvar("gamecfg"),MID8);//cvar("parm18_hack");//decode(parm17,MID8);
-	thi8 =  decode(cvar("gamecfg"),HI8);//cvar("parm19_hack"); //decode(parm17,HI8);
-	if (world.ammo_bloodcrystals || (world.currentammo && tlow8 > 0)) {
-		dprint("\b[CLIENT]\b Ammo Blood Crystals ("); dprint(ftos(tlow8)); dprint(") To (");
-		if (world.currentammo) tlow8 = world.ammo_bloodcrystals;
-		else if (tlow8 < world.ammo_bloodcrystals) tlow8 = world.ammo_bloodcrystals;
-		if (world.maxblood > 0) {
-			if (tlow8 > world.maxblood) tlow8 = world.maxblood;
-		} else {
-			if (tlow8 > AMMO_MAXBLOOD) tlow8 = AMMO_MAXBLOOD;
+	if (!teamplay) {
+		tlow8 = decode(cvar("gamecfg"),LOW8);//cvar("parm17_hack"); //decode(parm17,LOW8);
+		tmid8 = decode(cvar("gamecfg"),MID8);//cvar("parm18_hack");//decode(parm17,MID8);
+		thi8 =  decode(cvar("gamecfg"),HI8);//cvar("parm19_hack"); //decode(parm17,HI8);
+		if (world.ammo_bloodcrystals || (world.currentammo && tlow8 > 0)) {
+			dprint("\b[CLIENT]\b Ammo Blood Crystals ("); dprint(ftos(tlow8)); dprint(") To (");
+			if (world.currentammo) tlow8 = world.ammo_bloodcrystals;
+			else if (tlow8 < world.ammo_bloodcrystals) tlow8 = world.ammo_bloodcrystals;
+			if (world.maxblood > 0) {
+				if (tlow8 > world.maxblood) tlow8 = world.maxblood;
+			} else {
+				if (tlow8 > AMMO_MAXBLOOD) tlow8 = AMMO_MAXBLOOD;
+			}
+			tlow8 = SUB_ClampFloat(tlow8,0,255);
+			dprint(ftos(tlow8)); dprint(")\n");	
+			cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
+			//parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
 		}
-		tlow8 = SUB_ClampFloat(tlow8,0,255);
-		dprint(ftos(tlow8)); dprint(")\n");	
-		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
-		//parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
-	}
-	if (world.ammo_voidshards || (world.currentammo && tmid8 > 0)) {
-		dprint("\b[CLIENT]\b Ammo Void Shards ("); dprint(ftos(tmid8)); dprint(") To (");
-		if (world.currentammo) tmid8 = world.ammo_voidshards;
-		else if (tmid8 < world.ammo_voidshards) tmid8 = world.ammo_voidshards;
-		if (world.maxvoid > 0) {
-			if (tmid8 > world.maxvoid) tmid8 = world.maxvoid;
-		} else {
-			if (tmid8 > AMMO_MAXVOID) tmid8 = AMMO_MAXVOID;
+		if (world.ammo_voidshards || (world.currentammo && tmid8 > 0)) {
+			dprint("\b[CLIENT]\b Ammo Void Shards ("); dprint(ftos(tmid8)); dprint(") To (");
+			if (world.currentammo) tmid8 = world.ammo_voidshards;
+			else if (tmid8 < world.ammo_voidshards) tmid8 = world.ammo_voidshards;
+			if (world.maxvoid > 0) {
+				if (tmid8 > world.maxvoid) tmid8 = world.maxvoid;
+			} else {
+				if (tmid8 > AMMO_MAXVOID) tmid8 = AMMO_MAXVOID;
+			}
+			tmid8 = SUB_ClampFloat(tmid8,0,255);
+			dprint(ftos(tmid8)); dprint(")\n");
+			cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
+			//parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
 		}
-		tmid8 = SUB_ClampFloat(tmid8,0,255);
-		dprint(ftos(tmid8)); dprint(")\n");
-		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
-		//parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
-	}
-	if (world.ammo_elemental || (world.currentammo && thi8 > 0)) {
-		dprint("\b[CLIENT]\b Ammo Plasma ("); dprint(ftos(thi8)); dprint(") To (");
-		if (world.currentammo) thi8 = world.ammo_elemental;
-		else if (thi8 < world.ammo_elemental) thi8 = world.ammo_elemental;
-		if (world.maxmana > 0) {
-			if (thi8 > world.maxmana) thi8 = world.maxmana;
-		} else {
-			if (thi8 > AMMO_MAXMANA) thi8 = AMMO_MAXMANA;
+		if (world.ammo_elemental || (world.currentammo && thi8 > 0)) {
+			dprint("\b[CLIENT]\b Ammo Plasma ("); dprint(ftos(thi8)); dprint(") To (");
+			if (world.currentammo) thi8 = world.ammo_elemental;
+			else if (thi8 < world.ammo_elemental) thi8 = world.ammo_elemental;
+			if (world.maxmana > 0) {
+				if (thi8 > world.maxmana) thi8 = world.maxmana;
+			} else {
+				if (thi8 > AMMO_MAXMANA) thi8 = AMMO_MAXMANA;
+			}
+			thi8 = SUB_ClampFloat(thi8,0,255);
+			dprint(ftos(thi8)); dprint(")\n");
+			cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
 		}
-		thi8 = SUB_ClampFloat(thi8,0,255);
-		dprint(ftos(thi8)); dprint(")\n");
-		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
 	}
 
 	// Update player armour type and quantity
@@ -607,12 +617,16 @@ void() DecodeLevelParms = {
 	self.ammo_plasma = decode(parm5,HI8);
 
 	dprint("\b[Beyond 16 Parms]\b gamecfg was "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
-	self.ammo_bloodcrystals = decode(cvar("gamecfg"),LOW8);// cvar("parm17_hack"); //decode(parm17,LOW8);
-	dprint("                  set player ammo_bloodcrystals to: "); dprint(ftos(self.ammo_bloodcrystals)); dprint("\n");
-	self.ammo_voidshards = decode(cvar("gamecfg"),MID8);// cvar("parm18_hack");//decode(parm17,MID8);
-	dprint("                  set player ammo_voidshards to: "); dprint(ftos(self.ammo_voidshards)); dprint("\n");
-	self.ammo_elemental = decode(cvar("gamecfg"),HI8);// cvar("parm19_hack");//decode(parm17,HI8);
-	dprint("                  set player ammo_elemental to: "); dprint(ftos(self.ammo_elemental)); dprint("\n");
+	if (teamplay) {
+		self.ammo_bloodcrystals = self.ammo_voidshards = self.ammo_elemental = 0;
+	} else {
+		self.ammo_bloodcrystals = decode(cvar("gamecfg"),LOW8);// cvar("parm17_hack"); //decode(parm17,LOW8);
+		dprint("                  set player ammo_bloodcrystals to: "); dprint(ftos(self.ammo_bloodcrystals)); dprint("\n");
+		self.ammo_voidshards = decode(cvar("gamecfg"),MID8);// cvar("parm18_hack");//decode(parm17,MID8);
+		dprint("                  set player ammo_voidshards to: "); dprint(ftos(self.ammo_voidshards)); dprint("\n");
+		self.ammo_elemental = decode(cvar("gamecfg"),HI8);// cvar("parm19_hack");//decode(parm17,HI8);
+		dprint("                  set player ammo_elemental to: "); dprint(ftos(self.ammo_elemental)); dprint("\n");
+	}
 	self.weapon = parm8;
 	self.moditems = parm10;
 	self.items2 = parm11;
@@ -640,9 +654,6 @@ void() DecodeLevelParms = {
 	mapvar[5] = parm16;
 	if (VectorIsAllZeros(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
 	dprint("\b[Beyond 16 Parms]\b savedgamecfg was "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
-	self.items3 = cvar("savedgamecfg");
-	cvar_set("gamecfg","0"); // Reset these to keep player config.cfg clean
-	cvar_set("savedgamecfg","0");
 	teamplay = cvar("teamplay");
 	if (teamplay) {
 		teamcol = cvar("savedgamecfg");
@@ -653,6 +664,10 @@ void() DecodeLevelParms = {
 		dprint("self.team = "); dprint(ftos(self.team));
 		dprint(" and self.steam = "); dprint(ftos(self.steam));
 		dprint(" --------------- \n");
+	} else {
+		self.items3 = cvar("savedgamecfg");
+		cvar_set("savedgamecfg","0");
+		cvar_set("gamecfg","0");
 	}
 };
 
@@ -1165,8 +1180,8 @@ void() PlayerPreThink = {
 		if (trig_skybox != "") trigger_skybox_change(self);
 	}
 
-	if (intermission_running > 0) { impulse_notvalid(); CycleIntermissionCamera(); return; } // If Intermission system active check for button0-2 keys
-	if (secloc_running > 0) { impulse_notvalid(); CheckSecretCamera(); return; } // If secret location camera active check for button0-2 keys
+	if (intermission_running > 0) { CycleIntermissionCamera(); return; } // If Intermission system active check for button0-2 keys
+	if (secloc_running > 0) { CheckSecretCamera(); return; } // If secret location camera active check for button0-2 keys
 	if (self.entactive && self.entattachment) setorigin(self.entattachment, self.origin); // Update particle emitter origin attached to the player.  Cinematic camera uses player and this should be before it
     if (cutscene > 0) { Cutscene_Think(); return; } // Check for Drake cutscene stuff.
 	if (cinematic_running > 0) return; // If cinematic camera system active
@@ -1182,14 +1197,7 @@ void() PlayerPreThink = {
 		oskill = skill; // Sync old and new skill variables
 	}
 
-	if (earthquake_active) {
-		if (self.flags & FL_ONGROUND ) {
-			self.velocity_x = self.velocity_x + (random() * earthquake_intensity * 2) - earthquake_intensity;
-			self.velocity_y = self.velocity_y + (random() * earthquake_intensity * 2) - earthquake_intensity;
-			self.velocity_z = self.velocity_z + (random() * earthquake_intensity * 2) - earthquake_intensity;
-		}
-	}
-
+	earthquake_prethink(); // Rogue Earthquake force application.
 	makevectors(self.v_angle);
 
 	// func_water screen tinting
@@ -1424,10 +1432,10 @@ void() PlayerPostThink = {
 
 	SUB_PushFrameMovers(); // pOx - Advance frame based entities (noclip)
 	self.SendFlags = self.SendFlags | PLAYER_ORIGIN; // CSQC ping
+	earthquake_postthink(); // Hipnotic Earthquake force application.
+	if (intermission_running > 0) return; // Level intermission or finale, added hook for rogue earthquake sequence.
+	if (secloc_running > 0) return; // Special systems that pause the QC/Game
 
-	// Special systems that pause the QC/Game
-	if (intermission_running > 0) { earthquake_postthink(); return; } // Level intermission or finale, added hook for rogue earthquake sequence.
-	if (secloc_running > 0) return;
 	if (cinematic_running > 0) { // separate from `cutscene` and its implementation
 		// The focalpoint system is about tracking an entity while the camera is stationary or moving and updating the player viewing angle.
 		// The current (2019) community client engines default protocol's are 15 or 666, which unfortunately do not support smooth angle updates.
@@ -1491,13 +1499,11 @@ void() PlayerPostThink = {
 		}
 		return;
 	}
-
 	if (self.deadflag) return; // Dead
+
 	if (self.target2 != "") trigger_strs(self.target2, self); self.target2 = ""; // Any spawn targets to update?
-
 	if (self.movetype == MOVETYPE_FLY && self.waterlevel && self.waterlevel < 2) self.velocity = self.velocity * 0.7; // flight adjustment we have boots of levitation
-	W_WeaponFrame(); // Impulse commands and Quad updates
-
+	W_WeaponFrame(); // Shooting, impulse commands, and Quad updates.
 	if (map_fallspeeddebug == TRUE && developer > 1 && self.jump_flag != 0) { dprint(ftos(self.jump_flag)); dprint(" "); }// Show the player fall speed/velocity to the console.  Useful for showing what map unit heights affect damage values
 	
 	// Is the player sliding on top of an entity? (not on ground).  Need postthink check because player starts at 0,0,0 floating :P
@@ -1853,8 +1859,12 @@ void() ClientConnect = {
 	self.ctf_killed = FALSE;
 	SetMOTD();
 	stm = cvar("savedgamecfg");
+	teamplay = cvar("teamplay");
 	if (stm < 0 && teamplay > 0) { // parm14 is used in Rogue to store self.steam
-		self.steam = -50;
+		if (cvar("gamecfg") & GAMECFG_USE_COLOR)
+			self.steam = self.team; // accept joining players color if legal
+		else
+			self.steam = -50; // always reassign
 		TeamCheckLock();
 	}
 	if (intermission_running > 0) GotoNextMap(); // a client connecting during an intermission can cause problems

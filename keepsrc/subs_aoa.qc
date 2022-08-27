@@ -36,103 +36,6 @@
 // Simple utility functions for AoA weapons and their effects.
 //=============================================================================
 
-//precache all models and sounds for aoa weapons
-void() precache_aoa = {
-	//#aoa precache sounds
-	precache_sound("aoa/melee_meat.wav");
-	precache_sound("aoa/axhit3.wav");
-	precache_sound("aoa/acidhit.wav");
-	precache_sound("aoa/radius.wav");
-	precache_sound("aoa/rapier_meat.wav");
-	precache_sound("aoa/rapier_meat2.wav");
-	precache_sound("aoa/rapier_meat3.wav");
-	precache_sound("aoa/staffhit.wav");
-	precache_sound("ad171/seeker/explode_major.wav");
-	precache_sound("aoa/staffshot.wav");
-	precache_sound("aoa/melee_meat.wav");
-	precache_sound("aoa/swing2.wav");
-	precache_sound("aoa/gauntlet_att.wav");
-	precache_sound("aoa/gauntlet_att2.wav");
-	precache_sound("aoa/gauntlet_att3.wav");
-	precache_sound("aoa/gauntlet_att4.wav");
-	precache_sound("aoa/heartbeat.wav");
-	precache_sound("ad171/gibs/gibacid.wav");
-	precache_sound("aoa/heal.wav");
-	precache_sound("aoa/drainhealth.wav");
-	precache_sound("aoa/corruption.wav");
-	precache_sound("aoa/crossshot.wav");
-	precache_sound("aoa/thndr.wav");
-	precache_sound("aoa/iceattack.wav");
-	precache_sound("aoa/vortex.wav");
-	precache_sound("aoa/whisper1.wav");
-	precache_sound("aoa/whisper2.wav");
-	precache_sound("aoa/whisper3.wav");
-	precache_sound("aoa/whisper4.wav");
-	precache_sound("aoa/sanguinator_atk1.wav");
-	precache_sound("aoa/sanguinator_atk2.wav");
-	precache_sound("aoa/sanguinator_atk3.wav");
-	precache_sound("blob/hit1.wav");
-	precache_sound("player/axhit2.wav");
-	precache_sound("kurok/weapons/ax1.wav");
-	precache_sound("hknight/hit.wav");
-	precache_sound("shambler/sboom.wav");
-	precache_sound("weapons/ax1.wav");
-	precache_sound("aoa/rockattack.wav");
-	precache_sound("aoa/fastboulder.wav");
-	precache_sound("aoa/slowboulder.wav");
-	precache_sound("aoa/flakshot.wav");
-	precache_sound("aoa/hhs.wav"); //mace third attack (Tome of Power)
-	precache_sound("aoa/mildarmor.wav");
-	
-	//#aoa precache models
-	precache_model ("progs/aoa/ghostrapier.mdl");
-	precache_model ("progs/aoa/radius.mdl");
-	precache_model ("progs/aoa/bolt4.mdl");
-	precache_model ("progs/aoa/test.mdl");
-	precache_model ("progs/aoa/icespike.mdl");
-	precache_model ("progs/aoa/greenembers.mdl");
-	precache_model ("progs/aoa/void_shard.mdl");
-	precache_model ("progs/aoa/drainhit.mdl");
-	precache_model ("progs/aoa/drainmiss.mdl");
-	precache_model ("progs/aoa/spark.mdl");
-	precache_model ("progs/aoa/ad_gungnir_impact.mdl");
-	precache_model ("progs/aoa/spark.mdl");
-	precache_model ("progs/aoa/bloodorb_small.mdl");
-	precache_model ("progs/aoa/bloodorb1.mdl");
-	precache_model ("progs/aoa/boneshard.mdl"); // Added gray particle trail to ad171/proj_wraithbone.mdl
-	precache_model ("progs/aoa/bloodembers.mdl");
-	precache_model ("progs/aoa/player_rapier.mdl");
-	precache_model ("progs/aoa/player_scimitar.mdl");
-	precache_model ("progs/aoa/ammo_voidshards.mdl");
-	precache_model ("progs/aoa/ammo_voidshards_big.mdl");
-	precache_model ("progs/aoa/ammo_elemental.mdl");
-	precache_model ("progs/aoa/ammo_elemental_big.mdl");
-	precache_model ("progs/aoa/ammo_bloodcrystals.mdl");
-	precache_model ("progs/aoa/ammo_bloodcrystals_big.mdl");
-	precache_model ("progs/aoa/player_rapier.mdl");
-	precache_model ("progs/aoa/vortex.mdl");
-	precache_model ("progs/aoa/boulder.mdl");
-	precache_model ("progs/aoa/greyorb.mdl");
-	precache_model ("progs/aoa/greyorbprojectile.mdl");
-	precache_model ("progs/aoa/divetarget.mdl");
-	precache_model ("progs/aoa/proj_flak_shell.mdl"); //flak cannon projectile
-	precache_model ("progs/aoa/proj_flak_shrapnel.mdl"); //flak shrapnel
-	precache_model ("progs/aoa/ghostrapier.mdl");
-	precache_model ("progs/aoa/sphere.mdl");
-	precache_model ("progs/aoa/g_scimitar.mdl");
-	precache_model ("progs/aoa/g_rapier.mdl");
-	precache_model ("progs/redfield/g_lightstaff.mdl");		
-	precache_model ("progs/aoa/g_mace.mdl");		
-	precache_model ("progs/aoa/g_voidstaff.mdl");
-	precache_model ("progs/aoa/g_flak.mdl");
-	precache_model ("progs/aoa/g_gungnir.mdl");
-	precache_model ("progs/aoa/g_sanguinators.mdl");
-	precache_model ("progs/aoa/glow.mdl");
-	precache_model ("progs/aoa/tessla.mdl");
-	precache_model ("progs/aoa/bloodsphere.mdl");
-	//precache_model ("progs/aoa/tessla.mdl");
-};
-
 void(string a, string b, string c, string d) aoaprint = {
 	bprint(a);
 	bprint(b);
@@ -141,9 +44,7 @@ void(string a, string b, string c, string d) aoaprint = {
 	bprint("\n");
 };
 
-
-void(string playerModel) setPlayerModel = //sets the player model to the string value, and sets appropriate mins/maxs
-{
+void(string playerModel) setPlayerModel = { //sets the player model to the string value, and sets appropriate mins/maxs
 	setmodel(self, playerModel);
 	setsize (self, '-16 -16 -24', '16 16 32');
 	setorigin(self, self.origin);

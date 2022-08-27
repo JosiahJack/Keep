@@ -117,10 +117,15 @@ void() func_exploder = { // [ENTITY]
 	self.use = exploder_use;
 	if (!self.owner) self.owner = find(world, classname, self.netname); // If netname is set, this explosion won't harm the netname, useful for protecting bosses
 	if (!self.owner) self.owner = find(world, targetname, self.netname);
-	if (self.dmg == 0) self.dmg = 120;
+	if (self.dmg == 0 && self.classname != "func_explode") self.dmg = 120; // \/...Other than this damage caveat that is.
 	if (self.dmg < 0) self.dmg = 0;
 	if ( (self.speed <= 0) ) self.speed = 1;
 	if (self.volume <= 0) self.volume = 1;
+};
+
+// Zerst�rer entity, redirects to Hipnotic version since it's the same..../\
+void() func_explode = { // [ENTITY]
+   func_exploder();
 };
 
 void() multi_exploder_fire = { // [FUNCTION]

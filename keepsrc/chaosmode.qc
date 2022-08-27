@@ -404,6 +404,7 @@ float() health_checkrandomizer = {
 	} else if (self.spawnflags & H_MEGA) {
 		precache_sound((self.noise1 = SOUND_ARTSUIT1)); // Precache extra files for later
 		precache_sound((self.noise2 = SOUND_ARTSUIT2));
+		precache_sound(SOUND_ARTSUIT3);
 	}
 	
 	if (self.randomized > 0 && self.th_randfunc) { // Randomizer function setup?

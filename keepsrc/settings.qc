@@ -227,16 +227,6 @@ float() impulse_playeronly = {
 	else return FALSE;
 };
 
-void() impulse_notvalid = {
-	if (!(self.flags & FL_CLIENT)) return;
-	if (self.impulse > 0) {
-		sprint(self, "[Impulse ");
-		sprint(self, ftos(self.impulse));
-		sprint(self, "] does not work at the moment!\n");
-		self.impulse = 0;
-	}
-};
-
 float() impulse_activecameras = {
 	if (intermission_running > 0 && developer < 1) {
 		sprint(self, "[Impulse ");
@@ -1322,12 +1312,12 @@ void() CheatCommand = {
 void() TogglePowerShield = {
 	if (!(self.perms & POW_ARMORONYXPOWER)) { sprint(self, "Player has no Power Shield to activate.\n"); return; } // no power shield on player
 	if (self.ammo_cells < 1) { sprint(self, "Not enough cells to activate Power Shield.\n"); return; } // no power shield on player
-	if (self.powershield_active) {
-		self.powershield_active = FALSE;
+	if (self.items3 & IT3_POWERSHIELD_ON) {
+		self.items3 = self.items3 - IT3_POWERSHIELD_ON;
 		sound(self,CHAN_AUTO,"zerstorer/me/me_soff.wav",1,ATTN_NORM);
 		sprint(self, "Power Shield deactivated.\n");
 	} else {
-		self.powershield_active = TRUE;
+		self.items3 = self.items3 | IT3_POWERSHIELD_ON;
 		sound(self,CHAN_AUTO,"zerstorer/me/me_son.wav",1,ATTN_NORM);
 		sprint(self, "Power Shield activated.\n");
 	}
@@ -1524,7 +1514,8 @@ void() TomeOfPowerCheat = {
 void() ToggleFlashlight = {
 	if (!(other.items3 | IT3_FLASHLIGHT)) { sprint(other,"No flashlight\n"); return; }
 
-	self.flashlight = !self.flashlight;
+	if (other.items3 & IT3_FLASHLIGHT_ON) self.items3 = self.items3 - IT3_FLASHLIGHT_ON;
+	else self.items3 = self.items3 | IT3_FLASHLIGHT_ON;
 	sound(self,CHAN_VOICE,"quoth/items/click.wav",TRUE,ATTN_NONE);
 };
 

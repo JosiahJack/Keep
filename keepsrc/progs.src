@@ -313,6 +313,7 @@ mon_enforcers_lunaran.qc 	// Lunaran stuff, located here to inherit $frame refer
 mon_shalrath.qc				// Vore, vanilla, three-legged spider-like she-witch that hurls a magical homing purple star that explodes
 mon_shambler.qc				// Shambler, vanilla, large lightning shooting white bulky muscled creature with bloodied white seal fur and claws
 mon_soldier.qc				// Grunt, vanilla, psychotic shotgun toting soldier who has had his mind rotted by Quake.
+mon_tarbabymitosis.qc		// Rogue mitosis spawn
 mon_tarbaby.qc				// Spawn, vanilla, bouncing bob of goo that explodes on death and is painful to the touch.
 mon_wizard.qc				// Scrag, vanilla, flying and spits slime (no poison effects though)
 mon_zombie.qc				// Zombie, vanilla, must be gibbed to kill
@@ -378,7 +379,6 @@ mon_wrath.qc				// Wrath, Rogue, a floating ghoul in a hood that hurls magic sta
 mon_wrath_overlord.qc		// Overlord, Rogue, a 4-armed super Wrath that can teleport to random (mapper specified) locations.
 mon_morph.qc				// Guardian, Rogue, 4 versions of different types of egyptian/greek guardians that morph out of the ground and spawn weaker copies.
 mon_dragon.qc				// Dragon, Rogue, a large dragon that flies about a set path and shoots fire balls at you, with Qmaster's overhaul to make him more epic.
-mon_tarbabymitosis.qc		// Mitosis Spawn, Rogue, a green spawn that can split into two.
 mon_ogreflak.qc				// Flak Ogre, Kinn's ogre that shoots nails, with Qmaster's addition of Rogue lava nail option.
 mon_supergrunt.qc			// Super Grunt, Kinn's more powerful grunt.
 mon_deathguard.qc			// Death Guard, Quoth's slightly more powerful knight in between a knight and a death knight.

@@ -37,7 +37,6 @@
 //=============================================================================
 
 float earthquake_active;
-float earthquake_intensity;
 .float ammo_lava_nails;
 .float ammo_multi_rockets;
 .float ammo_plasma;

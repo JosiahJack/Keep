@@ -187,7 +187,6 @@ void() ProximityBomb = { // [FUNCTION]
         }
     }
 
-    self.owner = world;
     self.takedamage = DAMAGE_YES;
     if (random() < 0.33) { self.nextthink = (time + 0.250); return; }
 
@@ -197,7 +196,7 @@ void() ProximityBomb = { // [FUNCTION]
             if (head.flags & FLx_CREATURE) {
                 if (head.health > 0) {
                     if (!Invisible(head)) {
-                        if (Align_Opposing(self,head)) {
+                        if (head != self.owner) {
                             self.lastvictim = head;
                             ProximityGrenadeExplode();
                             return;
@@ -1091,7 +1090,11 @@ void() TraceExploShell_Think = { // [FUNCTION]
 void() FrozenThink = { // [FUNCTION]
 	if (self.health < self.cnt) {
 		self.count = self.count + (self.cnt - self.health);
-		if (self.health < self.gibhealth || self.health < 600) { sound(self,CHAN_ITEM,"drake/weapons/shatter.wav",1,ATTN_NORM); Shattered(); return; }
+		if (self.health < self.gibhealth || self.health < 600) {
+            Shattered();
+            return;
+        }
+
 		sound(self,CHAN_ITEM,"drake/weapons/icehit.wav",1,ATTN_NORM);
 	}
 	self.cnt = self.health;

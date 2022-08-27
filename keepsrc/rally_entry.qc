@@ -75,6 +75,20 @@ void() item_rallycar = { // [ENTITY]
 	else if (self.mdl == "progs/qrally/mgnanail.mdl") self.vehicle_index = 4;
 	else if (self.mdl == "progs/qrally/tritnail.mdl") self.vehicle_index = 5;
 	else self.vehicle_index = 1;
+
+	precache_model(self.mdl);
+	precache_model("progs/qrally/sumabase.mdl");
+	precache_model("progs/qrally/sumanail.mdl");
+	precache_model("progs/qrally/sumarock.mdl");
+	if (self.vehicle_index == 3) precache_sound("qrally/ray/engstart.wav");
+	else if (self.vehicle_index == 4) precache_sound("qrally/start2.wav");
+	else precache_sound("qrally/start.wav");
+
+	precache_sound("qrally/meepmeep.wav");
+	precache_sound("q15/weapons/rocket1i.wav");
+    precache_sound("zerstorer/weapons/sawridle.wav"); // Engine idling.
+	precache_model("progs/redfield/proj_nailcase.mdl");
+
 	if (self.skin > 1) self.skin = 1; // cap it, models only have 2 skins
 	self.vehicle_skindex = self.skin;
 	self.solid = SOLID_TRIGGER;
@@ -83,10 +97,6 @@ void() item_rallycar = { // [ENTITY]
 	if (self.armorvalue == 0) self.armorvalue = 100; // Vehicle gas
 	if (self.health <= 0) self.health = 250; // Vehicle health
 	if (self.ammo_nails <= 0) self.ammo_nails = 200; // Vehicle ammo
-	precache_sound("qrally/meepmeep.wav");
-	precache_sound("q15/weapons/rocket1i.wav");
-	precache_model(self.mdl);
-	precache_model("progs/redfield/proj_nailcase.mdl");
 	setmodel(self,self.mdl);
 	setsize(self,VEC_HULL2_MIN,VEC_HULL2_MAX);
 	self.pain_finished = time + 1 + (random() * 5); // prevent touch for a bit

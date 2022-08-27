@@ -270,7 +270,8 @@ void() RemoveGib_Final = {
 void() RemoveGib = {
 	if (self.owner.classtype == CT_MISCGIBF
 		|| self.owner.classgroup == CG_TEMPENT
-		|| (total_monsters - killed_monsters) > 300) {
+		|| (total_monsters - killed_monsters) > 300
+		|| (totaledicts < 8000 && !ext_ftepart)) {
 		self.touch = SUB_Null;
 		self.classtype = 0;
 		self.classgroup = 0;

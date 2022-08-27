@@ -897,16 +897,24 @@ void() light_candle_setup = { // [FUNCTION]
 // -------- NOTES --------
 // Wide variety of Candles (from Rogue Software)
 void() light_candle = { // [ENTITY]
-	precache_model ("progs/ad171/misc_candle1.mdl"); // Cannot have randomly selected models for prechache.  Quickload will re-run all spawn functions and try to select a different candle model which is not precached.
-	precache_model ("progs/ad171/misc_candle2.mdl");
-	precache_model ("progs/ad171/misc_candle3.mdl");
+	if (detected_mod == MOD_ROGUE) {
+		precache_model("progs/rogue/candle.mdl");
+		setmodel(self,"progs/rogue/candle.mdl");
+		makestatic(self);
+		return;
+	} else {
+		precache_model ("progs/ad171/misc_candle1.mdl"); // Cannot have randomly selected models for prechache.  Quickload will re-run all spawn functions and try to select a different candle model which is not precached.
+		precache_model ("progs/ad171/misc_candle2.mdl");
+		precache_model ("progs/ad171/misc_candle3.mdl");
 
-	// Check for size 1=small, 2=medium, 3=regular (def), -1=random
-	if (self.height < 0) self.height = 1 + rint(random()*2);
-	if (self.height == 1) self.mdl = "progs/ad171/misc_candle1.mdl";
-	else if (self.height == 2) self.mdl = "progs/ad171/misc_candle2.mdl";
-	else self.mdl = "progs/ad171/misc_candle3.mdl";
-	
+		// Check for size 1=small, 2=medium, 3=regular (def), -1=random
+		if (self.height < 0) self.height = 1 + rint(random()*2);
+		if (self.height == 1) self.mdl = "progs/ad171/misc_candle1.mdl";
+		else if (self.height == 2) self.mdl = "progs/ad171/misc_candle2.mdl";
+		else self.mdl = "progs/ad171/misc_candle3.mdl";
+	}
+	precache_model(self.mdl);
+
 	// Check for width 1=regular (def), 2=fat, 3=thin, -1=random.  The models are split up into three groups of off/on.
 	if (self.t_width < 0) self.t_width = 1 + rint(random()*2);
 	else if (self.t_width == 0 || self.t_width > 3) self.t_width = 1;
@@ -919,7 +927,7 @@ void() light_candle = { // [ENTITY]
 	self.nextthink = 0;
 
 	// The model should not be setup flush to floor because it is a light source and will look really odd, setup entity 16 units above floor and the "lip" key will move it back down again.
-	if (!self.lip) self.lip = 16;
+	if (!self.lip && detected_mod != MOD_ROGUE) self.lip = 16;
 	self.origin_z = self.origin_z - self.lip;
 
 	// Check for static entity option first

@@ -47,6 +47,7 @@ void() ai_setidealyaw;
 void() vermis_wake1;
 void() vermis_trans1;
 void() vermis_idle1;
+void() W_ShowHostile;
 
 // Checks pointcontents of source+target because traceline parms are not 100% reliable for flagging water/air content
 // One function check for all the different visibility functions.  Designed to work with the new liquidblock entity flag
@@ -221,7 +222,7 @@ float(entity targ) infront = {
 	vec = normalize (imporg - selforg);
 	dot = vec * v_forward;
 	if (self.fov <= 0) self.fov = 0.3;
-	f = SUB_ClampFloat(self.fov,0.011,1);
+	f = SUB_ClampFloat(self.fov,0.011,0.989); // 4 degree minimum
 	if (dot > f) return TRUE; // Custom field of view...because monster_wyrm needed it
 	return FALSE;
 };
@@ -420,7 +421,7 @@ void() FoundTarget = {
 		}
 	}
 	
-	self.show_hostile = time + 1;		// Wake up other monsters
+	W_ShowHostile(); // Wake up other monsters
 	if (self.classtype == CT_MONVERMIS) {
 		if (self.coiled != 0) {
 			self.think = vermis_wake1;
@@ -466,7 +467,7 @@ void(float wakeupothers) FoundHuntTarget = {
 		sight_entity_time = time;		// reset wakeup timer
 	}
 	
-	self.show_hostile = time + 1;		// wake up other monsters
+	W_ShowHostile(); // Wake up other monsters.
 	self.oldorigin = self.origin;		// Save origin
 	self.goalentity = self.enemy;		// Focus on enemy
 	ai_setidealyaw();
@@ -495,7 +496,7 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 	}
 
 	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
-	if (random() < 0.333) dist = 256;
+	if (random() < 0.333 && ((total_monsters - killed_monsters) > 100)) dist = 256;
 	head = world;
 	// Shorter sight charmers to keep closer to player who summoned us, maybe.
 	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; 
@@ -534,7 +535,7 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 };
 
 entity() SeeOpposing = { // [FUNCTION]
-	if (random() < 0.5) return world;
+	if (random() < 0.5 && ((total_monsters - killed_monsters) > 200)) return world;
 
 	// Check and only look for players if no opposing monsters.  Faster.
 	if (self.alignment == GOOD) {
@@ -546,7 +547,7 @@ entity() SeeOpposing = { // [FUNCTION]
 };
 entity() SeeFriendly = { // [FUNCTION]
 	if (self.horn_active && self.charmer) return world; // Already have a leader
-	if (random() < 0.9) return world;
+	if (random() < 0.9 && ((total_monsters - killed_monsters) > 100)) return world;
 
 	// Check and only look for players if no friendly monsters.  Faster.
 	if (self.alignment == GOOD) {

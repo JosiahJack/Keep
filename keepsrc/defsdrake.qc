@@ -192,7 +192,6 @@ float cutscene;       		// Set to TRUE during a cutscene.
 float doomed;				// TRUE = Monsters respawn after death.
 float respawning; 			// Toggle used when respawning monsters.
 float super_active;
-.float powershield_active;
 .float      hittype;
 vector      damage_velocity;// Set by 'T_Damage' for gib velocity.
 .float      bloodtype;      // For blood other than red, like in Alien Quake.
@@ -323,3 +322,5 @@ float THOR_SPEED = 600;
 // 32*3 = 96, which is double of an equalized shotgun's 6*8 (or 12*4) = 48.  Super shotgun's damage rate is doubled similarly by the Tome.
 // Damage based on unmodified shotguns (or those in nsoe).  Recent decision was made to buff shotguns for Drake.
 float EXSHELL_DAMAGE = 35;
+
+.float attack_time; // So imps know when to dodge.

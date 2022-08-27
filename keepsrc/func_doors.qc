@@ -558,7 +558,7 @@ void() keyuser_setup = { // [FUNCTION]
 		if (self.worldtype == 1) self.noise4 = "doors/runeuse.wav";
 		else if (self.worldtype == 2) self.noise4 = "doors/baseuse.wav";
 		else self.noise4 = "doors/meduse.wav";
-	}		
+	}
 
 	keyuser_sounds_precache();
 	self.items = self.moditems = 0; // Is the door locked via special keys (silver/gold).  Make sure any rogue entity keys are removed.

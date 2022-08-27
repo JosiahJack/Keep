@@ -568,6 +568,8 @@ void(entity targ) UseThorsBlessing = { // [FUNCTION]
 };
 
 void(entity targ) GivePowerThorsBlessing = { // [FUNCTION]
+	if (teamplay) { dprint("Not giving Thor's Blessing in teamplay games\n"); return; }
+
 	targ.items3 = targ.items3 | IT3_THORSBLESSING; // Thor's Blessing lifesaver!
 };
 
@@ -637,7 +639,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (frame_pause()) return; // Exceptions: Dead, intermission or cinematic cameras
 	if (self.health < 1) return;
 
-	if ((self.items3 & IT3_SECRETHUNTER)) SecretHunt();
+	if ((self.items3 & IT3_SECRETHUNTER) && !teamplay) SecretHunt();
 
 	// Invisibility (Gold Ring) - Flash screen 3s before running out
 	if (self.invisible_finished > 0) {

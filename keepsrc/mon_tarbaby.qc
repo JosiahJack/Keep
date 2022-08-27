@@ -257,13 +257,32 @@ void() monster_tarbaby_precache = {
 	precache_sound("blob/death1.wav");
 	precache_sound("blob/hit1.wav");
 	precache_sound("blob/land1.wav");
-	precache_sound("rogue/blob/mytosis.wav");
+	if (self.th_pain == tbaby_mitosis) precache_sound("rogue/blob/mytosis.wav");
 };
 
 //QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush x Lessjump
 void() monster_tarbaby = {
+	local float myRand;
+
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (detected_mod == MOD_ROGUE) {
+		if (self.spawnflags & 8) { // Strong mitosis
+			monster_tarbaby_mitosis_setup(TRUE);
+			self.spawnflags = self.spawnflags - 8;
+		} else if (self.spawnflags & 4) { // Mitosis
+			monster_tarbaby_mitosis_setup(FALSE);
+			self.spawnflags = self.spawnflags - 4;
+		} else if (self.spawnflags & 2) { // Force normal
+			self.skin = self.exactskin = 0;
+			self.spawnflags = self.spawnflags - 2;
+		} else {
+			myRand = (skill * 0.2) + random();
+			if (myRand > 0.8 && skill > 1) monster_tarbaby_mitosis_setup(TRUE);
+			else if (myRand > 0.5) monster_tarbaby_mitosis_setup(FALSE);
+		}
+	}
 
 	self.mdl = "progs/qmaster/mon_tarbaby.mdl";
 	self.headmdl = "";

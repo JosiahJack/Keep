@@ -140,7 +140,7 @@ void() turret_active =	[$tilt0, turret_active] { // [FUNCTION]
 			return;
 		}
 	}
-    self.show_hostile = time + 1;       // wake up other monsters
+    W_ShowHostile(); // wake up other monsters
 
 	// check knowledge of enemy
 	enemy_vis = visible(self.enemy);

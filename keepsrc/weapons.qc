@@ -100,6 +100,11 @@ void(float reload) W_Reload = { // [FUNCTION]
     self.attack_finished = time + reload;
 };
 
+void() W_ShowHostile = {
+    self.show_hostile = time + 1;   // wake monsters up
+    self.attack_time = time;    // So imps know when to dodge.
+};
+
 // Weapon ammo run out and switching to next best weapon
 void(float wait_time) forceweaponswitch = { // [FUNCTION]
 	local float nextweap;
@@ -326,7 +331,7 @@ float(vector source, float axedmg) GibFloorBody = {
 						dprint("Slam revive!\n");
 					} else monster_flrbody_gib(onflr, axedmg*4);
 				} else monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
-				self.show_hostile = time + 1;	// wake monsters up, we hit stuff
+				W_ShowHostile(); // Wake monsters up, we hit stuff.
 				return TRUE;														// Finished
 			}
 		}
@@ -592,7 +597,7 @@ void() W_FireAxe = { // [FUNCTION]
 	traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self); // Trace forward and see if the axe has hit anything?
 	if (trace_fraction == 1) return;	// No contact, no hit
 
-	self.show_hostile = time + 1;	// wake monsters up, we hit stuff
+	W_ShowHostile();
 	if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
 		// Mark the monster with type of axe used and change damage
 		if (self.moditems & IT_UPGRADE_AXE) {
@@ -1648,7 +1653,7 @@ float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 void() W_Attack = { // [FUNCTION]
 	local entity stemp;
 
-	if (frame_pause()) return;
+	if (cinematic_running > 0 || cutscene > 0) return;
 	if (!W_CheckNoAmmo(self)) return;	// Out of ammo?
 
 	makevectors(self.v_angle);		// calculate forward angle for velocity
@@ -1656,7 +1661,7 @@ void() W_Attack = { // [FUNCTION]
 		|| (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON
 		&& !self.weaponismoditems)) && self.weapon != IT_AXE
 		&& !self.weaponismoditems) {
-		self.show_hostile = time + 1;	// wake monsters up
+		W_ShowHostile();
 	}
 
     self.b0_click = 0;
@@ -1682,7 +1687,7 @@ void() W_Attack = { // [FUNCTION]
 				player_saw1(); 
 				W_Reload(0.55);
 				sound(self,CHAN_AUTO,"zerstorer/weapons/sawatck.wav",1,ATTN_NORM);
-				self.show_hostile = time + 1; // wake monsters up, we hit stuff
+				W_ShowHostile(); // Always alerting monsters nearby when chainsaw running.
 			} else {
 				// Axe and Shadowaxe
 				if (random() < 0.5) sound(self,CHAN_WEAPON,SOUND_AXE_SWIPE1,1,ATTN_NORM);

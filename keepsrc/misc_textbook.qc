@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 3
-// Function count: 99
+// Function count: 101
 //
 // Implements: Readable Message System
 //
@@ -66,6 +66,42 @@ $frame open1 open2 open3 open4 open5 open6 open7 open8 open9 open10
 
 void() book_closed1;
 void(float fadedir) info_book_fadesetup;
+
+void() info_book_random_text = { // [FUNCTION]
+	local float rnd;
+
+	rnd = random();
+	if (rnd < 0.2) self.message = "\b- - -\b\n\nThe pages appear to be blank";
+	else if (rnd < 0.4) self.message = "\bLor . m ip$3-`  del04- |,\b\n\nAn ancient text that is illegible";
+	else if (rnd < 0.6) self.message = "\b& # %\b\n\nThe characters are unfamiliar";
+	else if (rnd < 0.8) self.message = "\b@@# ### %$$*&&\b\n\nDecipherment is beyond the living";
+	else self.message = "\bx x x\b\n\nAn unholy text, not for mortal tongues";
+};
+
+void() info_book_shuffle_text = { // [FUNCTION]
+	local float rnd, loop;
+	local string starttxt;
+
+	starttxt = self.randomclass;
+	while (self.randomclass == starttxt) {
+		loop = loop + 1;
+		rnd = random();
+		if (self.message != "" && self.message2 != "" && self.message3 != "" && self.message4 != "") {
+			if (rnd < 0.25) self.randomclass = self.message;
+			else if (rnd < 0.5) self.randomclass = self.message2;
+			else if (rnd < 0.75) self.randomclass = self.message3;
+			else self.randomclass = self.message4;
+		} else if (self.message != "" && self.message2 != "" && self.message3 != "") {
+			if (rnd < 0.333) self.randomclass = self.message;
+			else if (rnd < 0.666) self.randomclass = self.message2;
+			else self.randomclass = self.message3;	
+		} else if (self.message != "" && self.message2 != "") {
+			if (rnd < 0.5) self.randomclass = self.message;
+			else self.randomclass = self.message2;	
+		}
+		if (loop > 10) return;
+	}
+};
 
 float MISCBOOK_NOMODEL = 1;		// Will not use any model and particles
 float MISCBOOK_PLINTH1 = 2;		// setup and spawn on plinth1
@@ -149,6 +185,8 @@ void()	book_closed10 =	[$closed10, book_closed1 ] {}; // [FUNCTION]
 // Book closing (open -> close)
 void()	book_closing1 =	[$opening10, book_closing2	] { // [FUNCTION]
 	self.state = MISCBOOK_CLOSING;
+	if (self.cnt == -1) info_book_random_text();
+	else if (self.cnt == -2) info_book_shuffle_text();
 	self.search_time = time + 2 + (random()*5); // make sure book idles don't start straight away
 };
 void()	book_closing2 =	[$opening9, book_closing3	] {}; // [FUNCTION]
@@ -180,7 +218,7 @@ void() book_finish = { // [FUNCTION]
 		self.enemy.suppressCenterPrint = FALSE; // Clear client centerprint suppression
 		centerprint(self.enemy, "");
 	}
-	if (self.pain_finished > 0) book_stayopen1();
+	if (self.pain_finished > 0 && self.cnt >= 0) book_stayopen1();
 	else book_closing1();
 };
 
@@ -253,10 +291,14 @@ void() info_book_displaystory = { // [FUNCTION]
 			self.message4 = self.attachment.oldenemy.message4;
 		}
 
-		// Work out which centerprint to use
-		if (self.message3 != "" && self.message4 != "") self.cnt = 2;
-		else if (self.message3 != "") self.cnt = 1;
-		else self.cnt = 0;
+		if (self.cnt == -1) info_book_random_text();
+		else if (self.cnt == -2) info_book_shuffle_text();
+		else {
+			// Work out which centerprint to use
+			if (self.message3 != "" && self.message4 != "") self.cnt = 2;
+			else if (self.message3 != "") self.cnt = 1;
+			else self.cnt = 0;
+		}
 
 		// Move controller on to next story chapter
 		if (self.attachment.height < self.attachment.count) {
@@ -270,6 +312,7 @@ void() info_book_displaystory = { // [FUNCTION]
 	// Check for any additional strings and use correct centerprint.  The engine function will merge several strings together.
 	if (self.cnt == 1) centerprint_msg3(self.enemy, self.message, self.message2, self.message3);
 	else if (self.cnt == 2) centerprint_msg4(self.enemy, self.message, self.message2, self.message3, self.message4);
+	else if (self.cnt == -2) centerprint_builtin(self.enemy, self.randomclass);
 	else centerprint_msg(self.enemy, self.message, self.message2);
 
 	// Check for any additional trigger events
@@ -314,7 +357,7 @@ void() info_book_touch = { // [FUNCTION]
 			self.attack_finished = time + 0.2;
 			book_open1();
 		} else if (self.state == MISCBOOK_OPEN && self.pain_finished == FALSE) { // Has the book just opened and never been read before?
-			self.pain_finished = TRUE;
+			if (self.spawnflags & MISCBOOK_NOMODEL || self.spawnflags & MISCBOOK_STORY) self.pain_finished = TRUE;
 			info_book_fadesetup(1);
 			self.wait = time + 0.3;
 			self.attack_finished = time + 0.2;
@@ -378,6 +421,8 @@ void() info_book_off =  { // [FUNCTION]
 };
 
 void() info_book_setup = { // [FUNCTION]
+	local float msgcount;
+
 	self.attachment = spawn(); // Setup book fade controller
 	self.attachment.owner = self;
 	self.attachment.classtype = CT_CONTROL;
@@ -422,21 +467,33 @@ void() info_book_setup = { // [FUNCTION]
 		self.cnt = 0;
 		self.attachment = find(world, targetname, self.target2);
 		// Is this entity a storybook controller?
-		if (!self.attachment || self.attachment.classtype != CT_STORYCONTROL)
-		{
+		if (!self.attachment || self.attachment.classtype != CT_STORYCONTROL) {
 			dprint("\b[STORYBOOK]\b Missing controller!\n");
 			spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
 			entity_hide(self);
 			return;
 		}
 	} else { // Setup default message for testing.
-		if (self.message == "") self.message = "\b--[ Dark Elder Magic ]--\b\n\n";
-		if (self.message2 == "") self.message2 = "Despite the awful might of the Elder\nWorld, you have achieved the Rune of\nElder Magic, capstone of all types of\narcane wisdom. Beyond good and evil,\nbeyond life and death, the Rune\npulsates, heavy with import.\n";
-
-		// Check for additional strings to display.  This is to fix quark editor limit of 128 characters per string.
-		if (self.message3 != "" && self.message4 != "") self.cnt = 2;
-		else if (self.message3 != "") self.cnt = 1;
-		else self.cnt = 0;
+		if (self.cnt < 0) {
+			self.cnt = -2;
+			if (self.message != "") msgcount = self.count | 1;
+			if (self.message2 != "") msgcount = self.count | 2;
+			if (self.message3 != "") msgcount = self.count | 4;
+			if (self.message4 != "") msgcount = self.count | 8;
+			if (msgcount) info_book_shuffle_text(); // Shuffle the existing messages on each read.
+			else {
+				self.cnt = -1;
+				info_book_random_text(); // Create some odd text to use.
+			}
+		} else if (self.message == "" && self.message2 == "" && self.message3 == "" && self.message4 == "") {
+			self.cnt = -1;
+			info_book_random_text(); // Create some odd text to use.
+		} else {
+			// Check for additional strings to display.  This is to fix quark editor limit of 128 characters per string.
+			if (self.message3 != "" && self.message4 != "") self.cnt = 2;
+			else if (self.message3 != "") self.cnt = 1;
+			else self.cnt = 0;
+		}
 	}
 
 	if ( !(self.spawnflags & MISCBOOK_NOMODEL) ) {

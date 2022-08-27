@@ -418,7 +418,6 @@ void() ol_toss_loop = {
 
 // PM:  Modified scene for engines with interpolation.
 void() overlord_die1  = [$death2,  overlord_die2  ] {
-    if (Shattered()) return;
     self.flags = self.flags | FL_FLY;   // Don't fall!
     sound(self,CHAN_VOICE, "wrath/wdthc.wav",1,ATTN_NORM);
     // PM:  If ethereal, make them solid when killed.

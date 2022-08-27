@@ -20,6 +20,10 @@ void() PlaySoundThink = { // [FUNCTION]
 };
 
 void() play_sound_triggered = { // [ENTITY]
+   if (detected_mod == MOD_HIPNOTIC) {
+      if (self.noise == "misc/rockthud.wav") self.noise = "hipnotic/misc/rockthud.wav";
+      if (self.noise == "misc/deepthud.wav") self.noise = "hipnotic/misc/deepthud.wav";
+   }
    precache_sound(self.noise);
    precache_sound("misc/null.wav");
    if ( (self.volume <= 0) ) self.volume = 1;

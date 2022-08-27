@@ -185,11 +185,13 @@ void() counter_think = { // [FUNCTION]
    SUB_UseTargets();
    if (self.message != "") Mass_Centerprint(self.message,self.noise,activator);
    self.nextthink = (time + self.wait);
-   if ( (self.spawnflags & COUNTER_STEP) ) counter_on_use();
-   if ( (self.cnt >= self.count) ) {
+   if ((self.spawnflags & COUNTER_STEP)) counter_on_use();
+   if (self.cnt >= self.count) {
 		self.cnt = 0;
-		if ( (self.aflag || !(self.spawnflags & COUNTER_LOOP)) && self.spawnflags & COUNTER_TOGGLE ) counter_on_use();
-		else remove (self);
+		if (self.aflag || !(self.spawnflags & COUNTER_LOOP)) {
+         if (self.spawnflags & COUNTER_TOGGLE) counter_on_use();
+		   else {dprint("counter removed\n"); remove (self);}
+      }
    }
 };
 
@@ -214,6 +216,7 @@ void() counter_off_use = { // [FUNCTION]
    if (self.delay) self.nextthink = (time + self.delay);
    else counter_think();
 };
+
 float (entity counter) counter_GetCount = { // [FUNCTION]
    if (counter.classname == "counter") return counter.state;
    return 0;
@@ -224,9 +227,9 @@ void() func_counter = { // [ENTITY]
       if (self.noise == "") self.noise = "misc/talk.wav";
       precache_sound(self.noise);
    }
-   if ( !self.wait ) self.wait = TRUE;
-   self.count = floor (self.count);
-   if ( (self.count <= FALSE) ) self.count = MOVETYPE_BOUNCE;
+   if ( !self.wait ) self.wait = 1;
+   self.count = floor(self.count);
+   if (self.count <= 0) self.count = 10;
    self.cnt = FALSE;
    self.state = FALSE;
    self.classname = "counter";
@@ -239,7 +242,7 @@ void() func_counter = { // [ENTITY]
 };
 
 void() oncount_use = { // [FUNCTION]
-   if ( (counter_GetCount (other) == self.count) ) {
+   if (counter_GetCount(other) == self.count) {
       activator = other;
       SUB_UseTargets();
    }
@@ -466,21 +469,22 @@ void() trigger_prerequisit = { // [ENTITY]
 	InitTrigger();
 };
 
+void() hipkeytrigger_success = { // [FUNCTION]
+   self.touch = SUB_Null;
+   self.use = SUB_Null;
+   self.nextthink = (time + 0.100);
+   self.think = SUB_Remove;
+   self.message = "";
+   sound(self,CHAN_VOICE,self.noise4,TRUE,ATTN_NORM);
+   SUB_UseTargets();
+};
+
 void() hipkeytrigger_use = { // [FUNCTION]
 	if (!(activator.flags & FL_CLIENT)) return;
 	if (self.attack_finished > time) return;
 
 	self.attack_finished = (time + 2);
-	keyuser_attempt(SUB_Null,activator);
-
-	activator.items = (activator.items - self.items);
-	self.touch = SUB_Null;
-	self.use = SUB_Null;
-	self.nextthink = (time + 0.100);
-	self.think = SUB_Remove;
-	self.message = "";
-	sound(self,CHAN_VOICE,self.noise4,TRUE,ATTN_NORM);
-	SUB_UseTargets();
+	keyuser_attempt(hipkeytrigger_success,activator);
 };
 
 void() hipkeytrigger_touch = { // [FUNCTION]
@@ -492,10 +496,14 @@ void() hipkeytrigger_touch = { // [FUNCTION]
 };
 
 void() trigger_usekey = { // [ENTITY]
-	keyuser_setup();
-	if (self.spawnflags & 1) self.items = IT_KEY2; // Use gold key.  Was formerly USE_GOLD_KEY, but that's not needed.
-	else if (!(self.spawnflags & 8) && !(self.spawnflags & 16) && self.customkey <= 0) self.items = IT_KEY1; // If normal door settings aren't set, default to hipnotic default.
+	if (self.spawnflags & 1) { // USE_GOLD_KEY
+      self.spawnflags = self.spawnflags - 1;
+      self.spawnflags = self.spawnflags | 8;
+   }
 
+	if (!(self.spawnflags & 8) && !(self.spawnflags & 16) && self.customkey <= 0) self.spawnflags = self.spawnflags | 16; // If normal door settings aren't set, default to hipnotic default.
+
+	keyuser_setup();
 	self.use = hipkeytrigger_use;
 	self.touch = hipkeytrigger_touch;
 	InitTrigger();

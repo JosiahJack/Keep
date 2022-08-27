@@ -255,7 +255,7 @@ void(vector start, float zoffset, string snd) Tent_LavaSplash = {
 // Explode self into ice chunks.
 void() Shattered = { // [FUNCTION]
     sound(self,CHAN_VOICE,"drake/weapons/shatter.wav",1,ATTN_NORM);
-    MakeIcyExp (self.origin); 
+    MakeIcyExp(self.origin); 
 	self.gibbed = TRUE;
 	self.think = SUB_Null;
 	self.gibpartstyle = PARTICLE_BURST_BLUE;

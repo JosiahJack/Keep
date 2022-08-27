@@ -778,7 +778,7 @@ void() item_key1 = { // [ENTITY]
 		item_setupmodel("progs/ad171/key_runic.mdl",2);
 		if (self.netname == "") self.netname = "silver runekey";
 	} else if (self.worldtype == 2) {
-		item_setupmodel("progs/ad171/key_base.mdl",2);
+		item_setupmodel("progs/qmaster/key_base.mdl",2);
 		if (self.netname == "") self.netname = "silver keycard";
 	} else {
 		item_setupmodel("progs/ad171/key_medieval.mdl",2);

@@ -516,7 +516,6 @@ void() misc_drip_spawn = { // [FUNCTION]
 	else self.movetype = MOVETYPE_FLY;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.velocity_z = -map_gravity * self.gravity;
-	if (self.velocity_z < 1) self.velocity_z = -40;
 	self.think = misc_drip_reset;
 	self.nextthink = time + self.proj_trlife; // Drip only lasts 3s, don't want to travel forever
 	self.touch = misc_drip_touch;

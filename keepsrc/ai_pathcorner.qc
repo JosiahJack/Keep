@@ -374,7 +374,10 @@ void(entity mon, entity obj) give_monster_object = {
 	mon.entattachment = obj;
 	setorigin(obj,org); // ok we got it.
 	mon.hasobject = "true"; // signal that we are holding something
-	if (self.classtype == CT_MONOGLE) ogle_pushcart1();
+	if (self.classtype == CT_MONOGLE) {
+		dprint("ogle push cart given\n");
+		ogle_pushcart1();
+	}
 	self = tself; // restore previous self
 };
 

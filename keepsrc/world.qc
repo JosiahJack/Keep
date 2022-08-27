@@ -269,13 +269,16 @@ void() main = { // [FUNCTION]
 void() worldspawn = { // [ENTITY]...well it IS.
 	dprint ("\b[WORLDSPAWN]\b function started ...\n");
 	totaledicts = 1;
+	teamplay = cvar("teamplay");
+	developer = cvar("developer");
+	skill = cvar("skill");
+	coop = cvar("coop");
 	lastspawn = world;
 	InitBodyQue();
 	if (world.hipnoticoptions & HIPNOTIC_BULLETHOLES) InitBulletHoles();
 	InitTempGoal();
 	InitMoveBox(); // Create dummy entity used for checking movement for extra large monsters
     InitLightning();
-	developer = cvar("developer");
 	self.classtype = CT_WORLD;
 	if (self.angles_y != 0) self.angles = '0 0 0'; // ID map E3M3 has worldspawn angles set, WUT!?!
 	Client_SyncEvilmode(); // Engine resets skill 0-3, change it back
@@ -335,7 +338,6 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_sound(SOUND_ARTPENT3);			// God mode on, taking damage
 	precache_sound(SOUND_ARTBLASTBELT3);		// Blast belt active
 	precache_sound(SOUND_ARTLSHIELD3);			// Lava shield active
-	precache_sound(SOUND_ARTSUIT3);		// Blast belt active
 	precache_sound("misc/power.wav");			//lightning for boss, vanilla id1 sound
 	precache_sound("player/gib.wav");			// Used for players only
 	precache_sound(GIB_SOUND_UDEATH);			// Used for monsters and players (sounds player)
@@ -378,7 +380,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_model("progs/q15/player_legs1_suit.mdl");
 	precache_model("progs/q15/player_legs2.mdl");
 	precache_model(SBUBBLE_DROWN);			// player drowning bubbles
-	precache_model(SEXP_SMALL);			// Fire explosion (ID)
+	precache_model(SEXP_SMALL);				// Fire explosion (ID)
 	precache_model(SEXP_MED);				// Fire explosion (Quoth)
 	precache_model(SEXP_BIG);				// Fire explosion (Quoth)
 	precache_model(SEXP_PLASMA_SMALL);		// Plasma explosion (Marcher)
@@ -478,10 +480,6 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_sound(SOUND_FS_GIANT3);
 	precache_sound(SOUND_FS_GIANT4);
 	precache_sound(SOUND_FS_GIANT5);
-	precache_sound("weapons/agfire.wav"); // Airfist fire
-	precache_sound("weapons/agfail.wav"); // Airfist fail fire
-	precache_sound("weapons/agwater.wav"); // Airfist underwater shot
-	precache_sound("weapons/agwfail.wav"); // Airfist fail underwater shot
 	PrecacheAll(); // :D Qmaster is so evil sometimes.  OK OK, it's not really ALL per se.  Just a whole lot.
 	engine = ENG_FITZ;						// Default engine type (no extensions)
 	ext_active = cvar("pr_checkextension");	// Check for engine type and extensions (different features)

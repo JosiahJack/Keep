@@ -110,32 +110,64 @@ void() info_givepower_use = { // [FUNCTION]
 };
 
 void() info_givepower = { // [ENTITY]
-	if (self.style == 1) self.classtype = CT_ARTSUIT;
-	else if (self.style == 2) self.classtype = CT_ARTPENT;
-	else if (self.style == 3) self.classtype = CT_ARTINVS;
-	else if (self.style == 4) self.classtype = CT_ARTQUAD;
-	else if (self.style == 5) self.classtype = CT_ARTSHARP;
-	else if (self.style == 6) self.classtype = CT_ARTPIERCE;
-	else if (self.style == 7) self.classtype = CT_ARTPSHIELD;
-	else if (self.style == 8) self.classtype = CT_ARTGRAVBELT;
-	else if (self.style == 9) self.classtype = CT_ARTLAVASHIELD;
-	else if (self.style == 10) self.classtype = CT_ARTWETSUIT;
-	else if (self.style == 11) self.classtype = CT_ARTBLASTBELT;
-	else if (self.style == 12) {
+	if (self.style == 1) {
+		self.classtype = CT_ARTSUIT;
+		precache_sound(SOUND_ARTSUIT1);
+		precache_sound(SOUND_ARTSUIT2);
+		precache_sound(SOUND_ARTSUIT3);
+	} else if (self.style == 2) {
+		self.classtype = CT_ARTPENT;
+		precache_sound(SOUND_ARTPENT1);
+		precache_sound(SOUND_ARTPENT2);
+		precache_sound(SOUND_ARTPENT3);
+	} else if (self.style == 3) {
+		self.classtype = CT_ARTINVS;
+	} else if (self.style == 4) {
+		self.classtype = CT_ARTQUAD;
+	} else if (self.style == 5) {
+		self.classtype = CT_ARTSHARP;
+	} else if (self.style == 6) {
+		self.classtype = CT_ARTPIERCE;
+	} else if (self.style == 7) {
+		self.classtype = CT_ARTPSHIELD;
+	} else if (self.style == 8) {
+		self.classtype = CT_ARTGRAVBELT;
+	} else if (self.style == 9) {
+		self.classtype = CT_ARTLAVASHIELD;
+	} else if (self.style == 10) {
+		self.classtype = CT_ARTWETSUIT;
+		precache_sound(SOUND_ARTWETS1);
+		precache_sound(SOUND_ARTWETS2);
+		precache_sound(SOUND_ARTWETS3);
+		precache_sound("ad171/items/wetsuit3out.wav");
+	} else if (self.style == 11) {
+		self.classtype = CT_ARTBLASTBELT;
+	} else if (self.style == 12) {
 		self.classtype = CT_ARTJUMPBOOTS;
 		if (self.count < -1 || self.count > ART_JUMPBOOTS_AIRMAX) self.count = 0;
-	} else if (self.style == 13) self.classtype = CT_ARTEMPATHY;
-	else if (self.style == 14) self.classtype = CT_ARTSPHERE;
-	else if (self.style == 15) self.classtype = CT_ARTTHERMSUIT;
-	else if (self.style == 16) self.classtype = CT_ARTTRINITY;
-	else if (self.style == 17) self.classtype = CT_ARTCROSS;
-	else if (self.style == 18) self.classtype = CT_ARTHASTE;
-	else if (self.style == 19) self.classtype = CT_ARTBERSERK;
-	else if (self.style == 20) self.classtype = CT_ARTEQUALIZER;
-	else if (self.style == 21) self.classtype = CT_ARTLEVITATION;
-	else if (self.style == 22) self.classtype = CT_ARTOPTIMIZER;
-	else if (self.style == 23) self.classtype = CT_SIGILBANE;
-	else if (self.style == 24) {
+	} else if (self.style == 13) {
+		self.classtype = CT_ARTEMPATHY;
+	} else if (self.style == 14) {
+		self.classtype = CT_ARTSPHERE;
+	} else if (self.style == 15) {
+		self.classtype = CT_ARTTHERMSUIT;
+	} else if (self.style == 16) {
+		self.classtype = CT_ARTTRINITY;
+	} else if (self.style == 17) {
+		self.classtype = CT_ARTCROSS;
+	} else if (self.style == 18) {
+		self.classtype = CT_ARTHASTE;
+	} else if (self.style == 19) {
+		self.classtype = CT_ARTBERSERK;
+	} else if (self.style == 20) {
+		self.classtype = CT_ARTEQUALIZER;
+	} else if (self.style == 21) {
+		self.classtype = CT_ARTLEVITATION;
+	} else if (self.style == 22) {
+		self.classtype = CT_ARTOPTIMIZER;
+	} else if (self.style == 23) {
+		self.classtype = CT_SIGILBANE;
+	} else if (self.style == 24) {
 		self.classtype = CT_ARTREGEN;
 		self.perms = self.perms | POW_REGENLESSER;
 	} else if (self.style == 25) {
@@ -144,8 +176,11 @@ void() info_givepower = { // [ENTITY]
 	} else if (self.style == 26) {
 		self.classtype = CT_ARTVITALITY;
 		if (self.max_health <=0) self.max_health = 25;
-	} else if (self.style == 27) self.classtype = CT_ARTTHORSBLESSING;
-	else self.classtype = CT_ARTQUAD;
+	} else if (self.style == 27) {
+		self.classtype = CT_ARTTHORSBLESSING;
+	} else {
+		self.classtype = CT_ARTQUAD;
+	}
 
 	self.use = info_givepower_use;
 	SUB_BoundSoundVolume(1);
@@ -328,6 +363,8 @@ void() item_artifact_envirosuit = { // [ENTITY]
 	item_setupnoise(SOUND_ARTSUIT1);
 	self.noise1 = SOUND_ARTSUIT2;
 	precache_sound(self.noise1);
+	precache_sound(SOUND_ARTSUIT3); // Added by Qmaster for when hit by things
+									// suit protects against, e.g. lava balls.
 	if (self.netname == "") self.netname = "Environment Suit";
 	self.items = IT_SUIT;
 	self.classtype = CT_ARTSUIT;
@@ -863,10 +900,11 @@ void() item_flashlight_touch = {
 };
 
 void() item_flashlight = {
-	if (deathmatch) { remove(self); return; }
+	if (deathmatch || teamplay) { remove(self); return; }
 
 	item_setupmodel("progs/quoth/flashlight.mdl",0);
-	item_setupnoise("quoth/items/click.wav");
+	self.noise = "quoth/items/click.wav";
+	precache_sound("quoth/items/click.wav");
 	self.touch2 = item_flashlight_touch;
 	if (self.netname == "") self.netname = "Flashlight";
 	self.classtype = CT_ARTFLASHLIGHT;
@@ -890,10 +928,11 @@ void() item_secrethunter_touch = {
 };
 
 void() item_secrethunter = {
-	if (deathmatch) { remove(self); return; }
+	if (deathmatch || teamplay) { remove(self); return; }
 
 	item_setupmodel("progs/redfield/cat.mdl",0);
 	item_setupnoise("redfield/misc/catsmeow.wav");
+	precache_sound("redfield/misc/catsmeow.wav"); // Explicit precache for hunt sound.
 	self.touch2 = item_secrethunter_touch;
 	if (self.netname == "") self.netname = "Secret Hunter, Loki's Cat";
 	self.classtype = CT_ARTSECRETHUNTER;

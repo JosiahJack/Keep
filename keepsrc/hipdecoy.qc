@@ -144,7 +144,6 @@ void() monster_decoy_precache = {
 void() monster_decoy = {
 	if ( deathmatch ) { remove(self); return; }
 
-   monster_decoy_precache(); // Not really a monster, precache here and now.
 	setup_decoy(self);
 	monster_decoy_go();
 };

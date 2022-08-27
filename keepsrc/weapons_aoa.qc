@@ -341,13 +341,8 @@ void() GhostRapierAnimation4 = [4, GhostRapierAnimation5] { GhostRapierAttack(25
 void() GhostRapierAnimation5 = [5, GhostRapierAnimation6] { FindEnemy(self.origin, 75); };
 void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] { SwordSwipeSound();FindEnemy(self.origin, 75); };
 void() GhostRapierAnimation7 = [7, GhostRapierAnimation8] { GhostRapierAttack(30); };
-void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
-{
-	if (!self.owner.tome_finished) //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
-	{	
-		bprint("I think tome is off...\n");
-		remove(self);
-	}
+void() GhostRapierAnimation8 = [8, GhostRapierAnimation9] {
+	if (!self.owner.tome_finished) remove(self); //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
 };
 void() GhostRapierAnimation9 = [9, GhostRapierAnimation10] {};
 void() GhostRapierAnimation10 = [10, GhostRapierAnimation11] {};
@@ -940,12 +935,9 @@ void() StaffDetonate3 = [111, StaffDetonate4] { self.weaponframe =11; };
 void() StaffDetonate4 = [112, player_run] { self.weaponframe =12; };
 
 void() VoidExplosion = {
-
 	sound(self,CHAN_VOICE, "ad171/seeker/explode_major.wav",1,ATTN_NORM);
 	local entity GreenEmbers, GreenEmbers2, GreenEmbers3;
-	
 	makevectors(self.velocity);
-	
 	GreenEmbers = spawn();
 	GreenEmbers.classgroup = CG_PROJALL;
 	GreenEmbers.angles = vectoangles(v_right* 10);
@@ -954,7 +946,6 @@ void() VoidExplosion = {
 	setorigin(GreenEmbers, self.origin + spread('5 5 5'));
 	GreenEmbers.nextthink = time + 0.05;
 	GreenEmbers.think = embers1;
-	
 	GreenEmbers2 = spawn();
 	GreenEmbers2.classgroup = CG_PROJALL;
 	GreenEmbers2.angles = vectoangles(v_right*-10);
@@ -963,7 +954,6 @@ void() VoidExplosion = {
 	setorigin(GreenEmbers2, self.origin + spread('5 5 5'));
 	GreenEmbers2.nextthink = time + 0.05;
 	GreenEmbers2.think = embers1;
-	
 	GreenEmbers3 = spawn();
 	GreenEmbers3.classgroup = CG_PROJALL;
 	GreenEmbers3.angles = vectoangles(v_forward*10);
@@ -972,23 +962,16 @@ void() VoidExplosion = {
 	setorigin(GreenEmbers3, self.origin + spread('5 5 5'));
 	GreenEmbers3.nextthink = time + 0.05;
 	GreenEmbers3.think = embers1;
-
-	if (self.tome_finished) //extra damage with TOme of Power
-	{
-		T_RadiusDamageAOA(self, self.owner, 150, 150, world, DAMAGEALL);
-	}
-	else
-	{
-		T_RadiusDamageAOA(self, self.owner, 80, 200, world, DAMAGEALL);
-	}
+	if (self.tome_finished) T_RadiusDamageAOA(self, self.owner, 150, 150, world, DAMAGEALL); // Extra damage with Tome of Power
+	else T_RadiusDamageAOA(self, self.owner, 80, 200, world, DAMAGEALL);
 	remove(self);
 };
 
 void() BlueExplosion = {
 	local float loops;
+
 	loops = 25;
-	while (loops> 0)
-	{
+	while (loops> 0) {
 		particle(self.origin + spread('0.5 0.5 0.5')*5, spread('0.1 0.1 10')*4, 145+random()*2, 5); //was color 47+random()*2
 		loops = loops - 1;
 	}
@@ -996,9 +979,9 @@ void() BlueExplosion = {
 
 void() GreenExplosion = {
 	local float loops;
+
 	loops = 40;
-	while (loops> 0)
-	{
+	while (loops> 0) {
 		particle(self.origin + spread('3 3 3'), spread('0.8 0.8 0.4')*15, 184+random()*5, 2);
 		particle(self.origin + spread('3 3 3'), spread('0.8 0.8 0.6')*8, 5, 1);
 		loops = loops - 1;
@@ -1006,39 +989,34 @@ void() GreenExplosion = {
 };
 
 void() DetonateVoidShards = {
-	if (self.ammo_voidshards < 4)
-	{
+	local entity list;
+	local float FoundATarget;
+
+	if (self.ammo_voidshards < 4) {
 		centerprint(self, "Not enough ammo to detonate.");
 		return;
 	}
-	local entity list;
-	local float FoundATarget;
+
 	FoundATarget = FALSE;
-	
 	makevectors(self.v_angle);
 	traceline(self.origin + '0 0 16', self.origin + '0 0 16' + v_forward * 1000, TRUE, self);
 	list = findradius(trace_endpos, 2000);
-	
-	while (list)
-	{
-		if (list.classname == "VoidShard")
-		{
+	while (list) {
+		if (list.classname == "VoidShard") {
 			list.nextthink = time;
 			list.think = VoidExplosion;
 			FoundATarget = TRUE;
 		}
 		list = list.chain;
 	}
-	if (FoundATarget == TRUE)
-	{
+
+	if (FoundATarget == TRUE) {
 		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 4;
 		sound(self,CHAN_WEAPON,"ad171/seeker/explode_major.wav",1,ATTN_NORM);
 	}
 };
 
 void() VoidShardTouch = {
-	// trigger sound
-	// sound(self,CHAN_AUTO,"aoa/staffhit.wav",1,ATTN_NORM); #techdebt
 	GreenExplosion();
 	BlueExplosion();
 	if (self.owner.tome_finished)
@@ -1322,7 +1300,7 @@ void() MaceSwing;
 
 void() CastDrainHealth;
 
-void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound(self,CHAN_WEAPON,"weapons/ax1.wav",1,ATTN_NORM);W_Reload(0.6); }; //th
+void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound(self,CHAN_WEAPON,"kurok/weapons/ax1.wav",1,ATTN_NORM);W_Reload(0.6); }; //th
 void() MaceSwing2 =	[	120,	MaceSwing3	] { self.weaponframe=2; };
 void() MaceSwing3 =	[	121,	MaceSwing4	] { self.weaponframe=3; MaceSwing(); };
 void() MaceSwing4 =	[	122,	MaceSwing5	] { self.weaponframe=4; };
@@ -1336,7 +1314,7 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 	}
 };
 
-void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound(self,CHAN_WEAPON,"weapons/ax1.wav",1,ATTN_NORM);W_Reload(0.7); };
+void() MaceBackhand1 =	[	125,	MaceBackhand2	] { self.weaponframe=6;sound(self,CHAN_WEAPON,"kurok/weapons/ax1.wav",1,ATTN_NORM);W_Reload(0.7); };
 void() MaceBackhand2 =	[	126,	MaceBackhand3	] { self.weaponframe=7;MaceSwing(); };
 void() MaceBackhand3 =	[	127,	MaceBackhand4	] { self.weaponframe=8; };
 void() MaceBackhand4 =	[	128,	MaceBackhand5	] { self.weaponframe=9; };
@@ -1452,7 +1430,6 @@ void() W_FireMace = {
 	MaceSwing1(); 	//trigger animation
 	if ((self.flags & FL_ONGROUND)) return;
 
-	sound(self,CHAN_VOICE, "qmaster/player/jump.wav",1,ATTN_NORM);
 	makevectors(self.v_angle);
 	lunge = '0 0 300';
 	//centerprint(self, ftos(v_forward_z));

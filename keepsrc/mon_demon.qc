@@ -241,6 +241,7 @@ void() monster_demon1_precache = {
 	precache_sound("demon/dhit2.wav");
 	precache_sound("demon/djump.wav");
 	precache_sound("demon/sight2.wav");
+	if (self.poisonous) precache_poisongibs();
 };
 
 /*======================================================================
@@ -250,7 +251,6 @@ void() monster_demon1 = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	monster_demon1_precache();
 	self.mdl = "progs/mon_demon.mdl";
 	self.headmdl = "progs/h_demon.mdl";
 	self.gib1mdl = "progs/ad171/gib_dmleg1.mdl";		// Left leg
@@ -263,9 +263,7 @@ void() monster_demon1 = {
 	self.idle_sound = "demon/idle1.wav";
 	self.pain_sound = "demon/dpain1.wav";
 	self.sight_sound = "demon/sight2.wav";
-
 	if (self.poisonous) { // Precache extra green small gibs
-		precache_poisongibs();
 		self.gibtype = GIBTYPE_POISON;
 		self.exactskin = 3;
 		self.gib1skin = self.gib2skin = self.gib3skin = 1;

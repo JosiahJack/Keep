@@ -567,7 +567,7 @@ void() wyrm_go = {
         ryu_run1();
 };
 
-void() dragon_bite1  = [$attack1,  dragon_bite2  ] { self.show_hostile = time + 1; ryu_melee(); };
+void() dragon_bite1  = [$attack1,  dragon_bite2  ] { W_ShowHostile(); ryu_melee(); };
 void() dragon_bite2  = [$attack2,  dragon_bite3  ] { ryu_melee(); };
 void() dragon_bite3  = [$attack3,  dragon_bite4  ] { ryu_melee(); };
 void() dragon_bite4  = [$attack4,  dragon_bite5  ] { ryu_melee(); };
@@ -741,7 +741,7 @@ void() dragon_ranged = {
 	}
 };
 void() dragon_missile1  = [$attack1,  dragon_missile2  ] {
-    self.show_hostile = time + 1;   // wake monsters up
+    W_ShowHostile();
     if (self.classtype != CT_MONWYRM) Ryu_StrafeOption();
     dragon_ranged();
 };

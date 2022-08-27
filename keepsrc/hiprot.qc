@@ -570,7 +570,7 @@ void() func_rotate_train = {
 	self.flags = self.flags | FL_ONGROUND;
 };
 
-void() rotate_train = {	self.classname = "func_rotate_train"; func_rotate_train(); };
+void() rotate_train = {	dprint("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers\n"); self.classname = "func_rotate_train"; func_rotate_train(); };
 
 void() rotate_door_reversedirection;
 void() rotate_door_group_reversedirection;

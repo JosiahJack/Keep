@@ -584,15 +584,14 @@ void(float dist) zmaster_run = {
 			sound(self,CHAN_VOICE, "custents/zmaster/comnback.wav",1,ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
-			if (self.movetarget)
-				self.th_walk();
-			else
-				self.th_stand();
+			if (self.movetarget) self.th_walk();
+			else self.th_stand();
+
 			return;
 		}
 	}
-	self.show_hostile = time + 1;		// wake up other monsters
-	// check knowledge of enemy
+
+	W_ShowHostile();
 	enemy_vis = visible(self.enemy);
 	if (enemy_vis) self.search_time = time + 5;
 	enemy_infront = infront(self.enemy); // look for other coop players

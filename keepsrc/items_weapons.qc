@@ -532,6 +532,9 @@ void() weapon_grapple = {
 
 void() weapon_chainsaw = {
 	item_setupmodel(g_chainsawmodel,0);
+	precache_sound("zerstorer/weapons/sawidle.wav");
+    precache_sound("zerstorer/weapons/sawatck.wav");
+    precache_sound("zerstorer/weapons/sawridle.wav");
 	self.classtype = CT_CHAINSAW;
 	if (self.netname == "") self.netname = "Chainsaw";
 	weapon_start();
@@ -576,6 +579,10 @@ void() weapon_crossbow = {
 
 void() weapon_buriza = {
 	item_setupmodel("progs/drake/g_xbow.mdl",0);
+	precache_sound("drake/weapons/xbowdraw.wav");
+	precache_sound("drake/weapons/icehit.wav");
+	precache_sound("drake/weapons/shatter.wav");
+	precache_sound("drake/weapons/freeze.wav");
 	self.weapon = IT_FROSTBOW;
 	self.classtype = CT_FROSTBOW;
 	if (self.netname == "") self.netname = "Asgard Arbalest";
@@ -662,6 +669,10 @@ void() weapon_plasmalightning = {
 	item_ammo_set(AMMO_PLASMA_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_plasma = world.deventity.ammo_plasma + self.aflag;
 	weapon_start();
+};
+
+void() weapon_plasma = {
+	weapon_plasmalightning(); // TODO: Add Doom-like plasmagun per Tronyn.
 };
 
 void() weapon_chain_lightning = {
@@ -766,6 +777,7 @@ void() weapon_flak = {
 // --> QUAKED weapon_mirv (0 .5 .8) (-16 -16 0) (16 16 32)
 void() weapon_stinger = {
 	item_setupmodel("progs/drake/g_mirv.mdl",0);
+	precache_sound("drake/weapons/mirv1.wav");
 	self.weapon = IT_MIRV;
 	self.classtype = CT_MIRV;
 	if (self.netname == "") self.netname = "MIRV Launcher";

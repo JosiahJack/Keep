@@ -227,7 +227,7 @@ void(float dist) ai_run = {
 		}
 	}
 	
-	self.show_hostile = time + 1; // Wake up any monsters in visual range
+	W_ShowHostile(); // Wake up other monsters.
 	enemy_vis = visible(SUB_entEnemyTarget()); // check visibility of enemy
 	if (enemy_vis) {
 		self.search_time = time + 5;
@@ -417,7 +417,7 @@ void() ai_vermis_run = {
 			return;
 		}
 	}
-	self.show_hostile = time + 1;
+	W_ShowHostile(); // Wake up other monsters.
 	enemy_vis = visible(self.enemy);
 	if (enemy_vis) self.search_time = time + 5;
 	if (coop && self.search_time < time) {

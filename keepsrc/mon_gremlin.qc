@@ -1104,7 +1104,7 @@ void() gremlin_die = {
 float () GremlinWeaponAttack = {
 	if (!GremlinCheckNoAmmo()) return FALSE;
 
-	self.show_hostile = (time + TRUE);
+	W_ShowHostile(); // Wake up other monsters.
 	if (self.weapon == IT_SHOTGUN) {
 		gremlin_shot1();
 		W_FireShotgun();

@@ -34,18 +34,55 @@ $frame swoop1 swoop2 swoop3 swoop4 swoop5 swoop6 swoop7 swoop8
 $frame swoop9 swoop10 swoop11 swoop12 swoop13 swoop14 swoop15 swoop16
 $frame swoop17 swoop18 swoop19 swoop20
 
-// Swooshing through the air!
-$frame swooploop1 swooploop2 swooploop3 swooploop4
+$frame swpcyc1 swpcyc2 swpcyc3 swpcyc4
 
-// Nose up, back to fly idling
-$frame swoopend1 swoopend2 swoopend3 swoopend4 swoopend5 swoopend6 swoopend7 swoopend8
-$frame swoopend9 swoopend10 swoopend11 swoopend12 swoopend13 swoopend14 swoopend15
+$frame swpend1 swpend2 swpend3 swpend4 swpend5 swpend6 swpend7 swpend8
+$frame swpend9 swpend10 swpend11 swpend12 swpend13 swpend14 swpend15
 
-// Alternative to stop swooping
-$frame swoopout1 swoopout2 swoopout3 swoopout4 swoopout5 swoopout6 swoopout7 swoopout8
-$frame swoopout9 swoopout10 swoopout11 swoopout12 swoopout13 swoopout14 swoopout15
+$frame swpout1 swpout2 swpout3 swpout4 swpout5 swpout6 swpout7 swpout8
+$frame swpout9 swpout10 swpout11 swpout12 swpout13 swpout14 swpout15
 
-void() gargoylewings = { sound(self,CHAN_ITEM,"ad171/gargoyle/wings1.wav",1,ATTN_IDLE); };
+void() imp_touch;
+void() imp_down1;
+void() imp_up1;
+
+void() gargoylewings = {
+	if (self.classtype == CT_MONGARGOYLE_MEGA) sound(self,CHAN_ITEM,"drake/imp/swoopbig.wav",1,ATTN_IDLE);
+	else sound(self,CHAN_ITEM,"ad171/gargoyle/wings1.wav",1,ATTN_IDLE);
+};
+
+// Sets movetype to real flight and other stats needed for swooping.
+void() imp_movefly = {
+    self.count      = 140;      // Flight speed.
+    self.yaw_speed  = 30;
+    self.velocity   = '0 0 0';
+    self.movetype   = MOVETYPE_FLY;
+    self.touch      = imp_touch;
+    gargoylewings();
+};
+
+// Sets imp movement to movetype_step and other stats.
+void() imp_movestep = {
+    self.count      = 0;
+    self.yaw_speed  = 15;
+    self.velocity   = '0 0 0';
+    self.movetype   = MOVETYPE_STEP;
+    self.touch      = SUB_Null;
+    self.flags      = self.flags - (self.flags & FL_ONGROUND);
+};
+
+// Make the imp ready for dodging.
+void(float left, float motion) imp_set_dodge = {
+    self.lefty = left;
+    self.attack_state = motion;
+    if (motion == AS_VERTICAL) {
+        if (self.movetype == MOVETYPE_FLY) imp_movestep (); // Break out of swoop physics.
+
+        self.waitmin = time + 1.5;
+        if (left) imp_down1 ();
+        else imp_up1 ();
+    } else self.waitmin = time + 1;
+};
 
 void()	garg_idle1	= [	$fly2,	garg_idle2	] { monster_idle_sound(); ai_stand(); };
 void()	garg_idle2	= [	$fly4,	garg_idle3	] { ai_stand(); };
@@ -89,6 +126,40 @@ void()	garg_run7	= [	$fly13,	garg_run8	] { ai_run(5); };
 void()	garg_run8	= [	$fly15,	garg_run9	] { ai_run(6); };
 void()	garg_run9	= [	$fly17,	garg_run10	] { ai_run(7); };
 void()	garg_run10	= [	$fly19,	garg_run1	] { ai_run(8); };
+
+// 25 27 29 31 33 35 25 15 5 -5
+// Note:  Imp will be locked in a mini-swoop, so don't call ai_run until
+// it is done.  Use 'ai_up(-dist)' to move.
+void() imp_down1  =[ $swoop1,   imp_down2  ] {};    //ai_down(0);};
+void() imp_down2  =[ $swoop3,   imp_down3  ] {ai_down(4);};
+void() imp_down3  =[ $swoop5,   imp_down4  ] {ai_down(8);};
+void() imp_down4  =[ $swoop7,   imp_down5  ] {ai_down(16);};
+void() imp_down5  =[ $swoop9,   imp_down6  ] {ai_down(24);};
+void() imp_down6  =[ $swoop11,  imp_down7  ] {ai_down(32);};
+void() imp_down7  =[ $swoop13,  imp_down8  ] {ai_down(32);};
+void() imp_down8  =[ $swoop15,  imp_down9  ] {ai_down(24);};
+void() imp_down9  =[ $swoop17,  imp_down10 ] {ai_down(16);};
+void() imp_down10 =[ $swoop19,  imp_down11 ] {ai_down(8);};
+void() imp_down11 =[ $swpout3,  imp_down12 ] {};    //ai_run(0);};
+void() imp_down12 =[ $swpout5,  imp_down13 ] {};    //ai_run(0);};
+void() imp_down13 =[ $swpout7,  imp_down14 ] {};    //ai_run(0);};
+void() imp_down14 =[ $swpout9,  imp_down15 ] {};    //ai_run(0);};
+void() imp_down15 =[ $swpout11, garg_run1    ] {};    //ai_run(0);};
+
+// 30 30 31 31 32 32 33 20 10 0
+void() imp_up1  =[ $fly1,  imp_up2  ] {ai_run(8);};
+void() imp_up2  =[ $fly3,  imp_up3  ] {ai_run(16);};
+void() imp_up3  =[ $fly5,  imp_up4  ] {ai_run(24);};
+void() imp_up4  =[ $fly7,  imp_up5  ] {ai_run(32);};
+void() imp_up5  =[ $fly9,  imp_up6  ] {ai_run(32);};
+void() imp_up6  =[ $fly11, imp_up7  ] {ai_run(24);};
+void() imp_up7  =[ $fly13, imp_up8  ] {ai_run(16);};
+// Note:  Hexen2 froze $fly14 a few frames for longer ascent.
+void() imp_up8  =[ $fly14, imp_up9  ] {ai_run(12);};
+void() imp_up9  =[ $fly14, imp_up10 ] {ai_run(12);};
+void() imp_up10 =[ $fly15, imp_up11 ] {ai_run(8);};
+void() imp_up11 =[ $fly17, imp_up12 ] {ai_run(4);};
+void() imp_up12 =[ $fly19, garg_run1  ] {ai_run(0);};
 
 // Range attack
 void() garg_fbthrow = {
@@ -257,6 +328,299 @@ void() gargoyle_grow = {
 	gargoyle_grow1();
 };
 
+// ATTACK (Swoop) - - - - - - - - - - -
+// Called and used only by imp_tocuh.
+void() imp_swpend =
+{
+    self.flags = self.flags - (self.flags & FL_ONGROUND);
+    self.velocity_x = self.velocity_x / 1.2;
+    self.velocity_y = self.velocity_y / 1.2;
+    self.velocity_z = self.velocity_z + 30;     //Hexen2 used 15.
+};
+
+void() imp_swpend1  =[ $swpend1,  imp_swpend2  ] {imp_swpend();};
+void() imp_swpend2  =[ $swpend3,  imp_swpend3  ] {imp_swpend();};
+void() imp_swpend3  =[ $swpend5,  imp_swpend4  ] {imp_swpend();};
+void() imp_swpend4  =[ $swpend7,  imp_swpend5  ] {imp_swpend();};
+void() imp_swpend5  =[ $swpend9,  imp_swpend6  ] {imp_swpend();};
+void() imp_swpend6  =[ $swpend11, imp_swpend7  ] {imp_swpend();};
+void() imp_swpend7  =[ $swpend13, imp_swpend8  ] {imp_swpend();};
+void() imp_swpend8  =[ $swpend15, garg_run1      ] {imp_swpend(); SUB_AttackFinished(1); imp_movestep();};
+
+void() imp_bounce1  =[ $swoop9,  imp_bounce2  ] {imp_swpend();};
+void() imp_bounce2  =[ $swoop7,  imp_bounce3  ] {imp_swpend();};
+void() imp_bounce3  =[ $swoop5,  imp_bounce4  ] {imp_swpend();};
+void() imp_bounce4  =[ $swoop3,  imp_bounce5  ] {imp_swpend();};
+void() imp_bounce5  =[ $swoop1,  garg_run1      ] {imp_swpend(); SUB_AttackFinished(1); imp_movestep();};
+
+void() garg_pain1;
+
+void() imp_touch = {
+    local float damage, dx;
+
+    self.touch = SUB_Null;
+    if ( (( self.frame >= $swpcyc1 ) && ( self.frame <= $swpcyc4 ))
+		|| (( self.frame >= $swoop10 ) && ( self.frame <= $swoop20 )) ) { // PM:  Included more frames that imp can damage other with.
+        self.flags = self.flags - (self.flags & FL_ONGROUND);
+        sound (self, CHAN_WEAPON,"drake/weapons/axhit.wav", 1, ATTN_NORM);
+        if ( self.frame <= $swoop15 ) self.think = imp_bounce1;
+        else self.think = imp_swpend2;   //swpend1;
+
+        if (other.takedamage) {
+            if (( self.frame >= $swpcyc1 ) && ( self.frame <= $swpcyc4 )) dx = self.count;
+            else if (( self.frame >= $swoop16 ) && ( self.frame <= $swoop20 )) dx = ( self.frame - $swoop16 ) * 5;
+            else dx = 0;
+
+            damage = 10 + dx / 2; // Damage was x4/3, a bit much now.
+            damage = damage * 1.2; // Hexen2 pcs began with sub-100 hp.
+            if (self.classtype == CT_MONGARGOYLE_MEGA) damage = 30 + dx * 2; // Hexen2 damage was 33+dx*5 -- way too much!
+            T_Damage(other,self,self,damage,DAMARMOR);
+        } else if ( self.frame > $swoop15 ) {
+            imp_movestep();
+            garg_pain1();
+        }
+    } else {
+        if ( self.frame <= $swoop9 ) { // Extra recovery logic.
+            if ( self.frame <= $swoop3 ) self.think = imp_bounce5;
+            else if ( self.frame <= $swoop5 ) self.think = imp_bounce4;
+            else if ( self.frame <= $swoop7 ) self.think = imp_bounce3;
+            else self.think = imp_bounce2;
+        } else if ( self.frame >= $swpout9 ) self.think = garg_run1;
+        else if ( self.frame >= $swpout5 ) self.think = imp_swpend3;
+        else self.think = imp_swpend2;
+
+        if (vlen(self.velocity) > 300) sound(self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
+    }
+};
+
+void() imp_slow = {
+    if (self.velocity_x > 10) self.velocity_x = self.velocity_x / 2;
+    else self.velocity_x = 0;
+
+    if (self.velocity_y > 10) self.velocity_y = self.velocity_y / 2;
+    else self.velocity_y = 0;
+};
+
+void() imp_abort1  =[ $swpout1,  imp_abort2  ] {imp_slow();};
+void() imp_abort2  =[ $swpout3,  imp_abort3  ] {imp_slow();};
+void() imp_abort3  =[ $swpout5,  imp_abort4  ] {imp_slow();};
+void() imp_abort4  =[ $swpout7,  imp_abort5  ] {imp_slow();};
+void() imp_abort5  =[ $swpout9,  imp_abort6  ] {imp_slow();};
+void() imp_abort6  =[ $swpout11, imp_abort7  ] {imp_slow();};
+void() imp_abort7  =[ $swpout13, imp_abort8  ] {imp_slow();};
+void() imp_abort8  =[ $swpout15, garg_run1     ] {imp_slow(); SUB_AttackFinished(1);};
+
+// Charging.
+void() imp_charge = {
+	local float tempfov;
+
+    if (self.enemy.attack_time + 0.5 > time) {
+		tempfov = self.fov;
+		self.fov = 0.5; // 45 degrees
+        if (infront(self.enemy)) {
+			self.fov = tempfov; 
+            if (vlen(self.enemy.origin - self.origin) > 250) { // PM:  Also added more checks.
+                self.velocity_z = self.velocity_z + 150;
+                imp_abort1 ();
+                return;
+            } // ELSE... keep going for the hit!
+        }
+		self.fov = tempfov;
+    }
+    if (visible(self.enemy))
+    if (infront(self.enemy))
+    if (range(self.enemy) < RANGE_FAR)
+    {
+        local   vector  spot1, spot2, dir;
+
+        spot1 = self.origin;    //Midpoint (self);
+        spot2 = Aimpoint (self.enemy);
+        dir = normalize (spot2 - spot1);
+        self.velocity = dir * (self.count * 10 + 500);   //(self.count * 7 + 377);
+
+        ai_face();
+        // Should increment counter by 2 due to game framerate differences,
+        // but the swoop wouldn't last long enough for long range attacking.
+        // Thus, up counter by 1, not 2, to give roughly three second swoop.
+        self.count = self.count + 1;
+        if (self.flags & FL_ONGROUND || self.count > 30)
+        {
+            self.flags = self.flags - (self.flags & FL_ONGROUND);
+            imp_abort1 ();
+        }
+        return;
+    }
+    imp_abort1 ();
+};
+void() imp_charge1 =[ $swpcyc1,  imp_charge2 ] {imp_charge();};
+void() imp_charge2 =[ $swpcyc2,  imp_charge3 ] {imp_charge();};
+void() imp_charge3 =[ $swpcyc3,  imp_charge4 ] {imp_charge();};
+void() imp_charge4 =[ $swpcyc4,  imp_charge1 ] {imp_charge();};
+
+// Dive-and-swoop.
+void() imp_dive;
+void() imp_swoop1  =[ $swoop1,  imp_swoop2  ] {imp_movefly(); imp_dive();};
+void() imp_swoop2  =[ $swoop3,  imp_swoop3  ] {imp_dive();};
+void() imp_swoop3  =[ $swoop5,  imp_swoop4  ] {imp_dive();};
+void() imp_swoop4  =[ $swoop7,  imp_swoop5  ] {imp_dive();};
+void() imp_swoop5  =[ $swoop9,  imp_swoop6  ] {imp_dive();};
+void() imp_swoop6  =[ $swoop11, imp_swoop7  ] {imp_dive();};
+void() imp_swoop7  =[ $swoop13, imp_swoop7  ] {imp_dive();};  // Loop
+void() imp_swoop8  =[ $swoop15, imp_swoop9  ] {imp_dive();};
+void() imp_swoop9  =[ $swoop17, imp_swoop10 ] {imp_dive();};
+void() imp_swoop10 =[ $swoop19, imp_charge1 ] {imp_dive(); self.count = 0;};
+void() imp_dive =
+{
+    ai_face();
+    self.count = self.count * 1.3225;   // 1.15 * 1.15 = 1.3225.
+    if ( self.frame >= $swoop12 )
+    {
+        local   vector  spot1, spot2, dir;
+
+        spot1 = self.origin;
+        spot1_z = self.absmin_z;
+        spot2 = Aimpoint(self.enemy);
+        dir = normalize(spot2 - spot1);
+        self.velocity = dir * self.count;
+        if ( self.frame <= $swoop13 )
+            self.velocity_x = self.velocity_y = 0;
+        if ( self.frame == $swoop13 )
+            if (self.absmin_z - self.enemy.absmax_z > 50)
+                self.frame = $swoop12;
+    }
+    if (( self.frame == $swoop12 ) || ( self.frame == $swoop13 ))
+    {
+        if ((self.flags & FL_ONGROUND) || (self.origin_z - self.enemy.origin_z < 60))
+        {
+            self.flags = self.flags - (self.flags & FL_ONGROUND);
+            self.count = 280;
+            self.think = imp_swoop8;
+        }
+        // PM:  Always send the imp down so it doesn't get stuck in loop.
+        else if (self.velocity_z > -80)
+            self.velocity_z = -80;      // Equivalent to 8 pixel shift.
+    }
+    // If last frame, set speed to 0.  (Done elsewhere.)
+};
+
+float() imp_guard = {
+	local float dist, dot, tempfov;
+    local vector p1, p2, pd;
+
+    if (self.enemy.attack_time + 0.5 < time) return FALSE; // Hexen2 used one second.  Too long for me, so use half that.
+
+	tempfov = self.fov;
+	self.fov = 0.5;
+    if (infront(self.enemy)) {
+		self.fov = tempfov;
+        p1 = self.enemy.origin + '0 0 16';   // player firing point - close enough.
+        p2 = Midpoint (self);       // Imp's center.
+    	// PM:  The rest differs from Hexen2 to something I can understand more easily.
+        pd = normalize (p2 - p1);
+        if (self.enemy.flags & FL_CLIENT) {
+            makevectors (self.enemy.v_angle);
+            pd = v_forward;
+        }
+        else if (self.pain_finished <= time) return FALSE;   // Don't dodge monsters unless hurt recently.
+
+        makevectors (self.angles);
+        dot = pd * v_right;
+        if (dot > 0.1) { // Go left.
+            imp_set_dodge (1, AS_SLIDING);
+            return TRUE;
+        }
+        if (dot < -0.1) { // Go right.
+            imp_set_dodge (0, AS_SLIDING);
+            return TRUE;
+        }
+        if (self.classtype == CT_MONGARGOYLE_MEGA)
+            dist = 0.5; // Don't let imp lords swoop so easily.
+        else
+            dist = 0.2;
+        dot = pd * v_up;
+        if (dot > dist)
+        {   // Go down.
+            imp_set_dodge (1, AS_VERTICAL);
+            return TRUE;
+        }
+        // PM:  Changed to <= so imps can go up sometimes from centered aim.
+        if (dot <= 0)   //(dot < 0)
+        {   // Go up.
+            imp_set_dodge (0, AS_VERTICAL);
+            return TRUE;
+        }
+    }
+	self.fov = tempfov;
+    return FALSE;
+};
+
+// Straight swoop.
+void() imp_out =
+{
+    ai_face();
+//    if ( !((self.enemy.flags & FL_CLIENT) && (self.enemy.war & WARx_AXE_FRAMES)) )
+    if (imp_guard ())   // Abort if TRUE.
+    {
+        if (self.attack_state != AS_VERTICAL)
+            garg_run1 ();
+//        return;
+    }
+};
+void() imp_swpout1  =[ $swpout15, imp_swpout2  ] {imp_movefly(); imp_out();};
+void() imp_swpout2  =[ $swpout13, imp_swpout3  ] {imp_out();};
+void() imp_swpout3  =[ $swpout11, imp_swpout4  ] {imp_out();};
+void() imp_swpout4  =[ $swpout9,  imp_swpout5  ] {imp_out();};
+void() imp_swpout5  =[ $swpout7,  imp_swpout6  ] {imp_out();};
+void() imp_swpout6  =[ $swpout5,  imp_swpout7  ] {imp_out();};
+void() imp_swpout7  =[ $swpout3,  imp_swpout8  ] {imp_out();};
+void() imp_swpout8  =[ $swpout1,  imp_charge1  ] {self.count = 0; imp_out();};
+
+// Select an attack for the imp to use.
+void() ImpAttack = {
+    local float  lo, nodrop, dx, dy;
+    local vector spot1, spot2, spot3, down;
+
+    if (self.classtype == CT_MONGARGOYLE_MEGA && random() < 0.5) { garg_fire1();  return; } // Lords shoot more and dive less.
+
+    nodrop = FALSE;
+    spot1 = Midpoint(self);     //self.origin + self.view_ofs;
+    spot2 = self.enemy.origin + '0 0 16';   //self.enemy.view_ofs;
+    spot3 = spot2;
+    spot3_z = spot1_z;
+    dx = vlen(spot3 - spot1);
+    if (self.classtype == CT_MONGARGOYLE_MEGA) dy = self.absmin_z - spot2_z;
+    else dy = spot1_z - spot2_z;
+
+    if (dy <= 36) if (random() < 0.3) nodrop = TRUE;
+    if (self.classtype == CT_MONGARGOYLE_MEGA) lo = 140;
+    else lo = 100;
+
+    if (dx > lo)
+        if ((dy > 36) || nodrop) {
+            down = '0 0 -1' * dy;
+            fat_trace (spot1, spot1 + down);
+            if ((trace_fraction == 1) || nodrop) {
+                if (nodrop) traceline (spot1, spot2, 2, self);
+                else traceline (spot1 + down, spot2, 2, self);
+
+                if (trace_ent == self.enemy) {
+                    if (nodrop) imp_swpout1(); // Head straight.
+                    else imp_swoop1(); // Dive, then go.
+
+                    return;
+                }
+            }
+        }
+
+    // Fire imps attack less -- try to get close.
+    // Update:  Does not apply to lords.
+    if (self.classtype != CT_MONGARGOYLE_MEGA) {
+        if ((self.ryuflags & RYU_ELEMENTS) == RYU_USE_FIRE)
+            if (random() < 0.5) return;
+    }
+
+    garg_fire1();
+};
 
 // The gargoyle does not have a specific pain animation
 // - Kinn created one from the death animation (Marcher progs)
@@ -334,14 +698,13 @@ void() garg_die = {
 	}
 };
 
-
-
 void() setup_gargoyle;
 
 void() monster_gargoyle_precache = {
 	precache_model("progs/ad171/mon_gargoyle.mdl");
 	precache_model("progs/mon_impling.mdl");
-	precache_model("progs/ad171/h_gargoyle.mdl");
+	if (self.classtype == CT_MONGARGOYLE_MEGA) precache_model("progs/drake/h_imp2.mdl");
+	else precache_model("progs/ad171/h_gargoyle.mdl");
 	precache_model(MODEL_PROJ_GARGBALL);		// FB growing 8 frames
 	precache_model(MODEL_PROJ_GARGOYLE);		// red/smoke wiz projectile
 	precache_model(MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
@@ -361,6 +724,14 @@ void() monster_gargoyle_precache = {
 	precache_sound("ad171/gargoyle/sight1.wav");
 	precache_sound("ad171/statue/idle1.wav");
 	precache_sound("ad171/statue/idle2.wav");
+	precache_sound("drake/weapons/axhit.wav");
+	if (self.classtype == CT_MONGARGOYLE_MEGA) {
+		precache_model("progs/drake/imp_lord.mdl");
+		precache_model("progs/drake/h_imp2.mdl");
+		precache_model("progs/drake/impwing2.mdl");
+		precache_sound("drake/imp/swoopbig.wav");
+		precache_sound("drake/imp/upbig.wav");
+	}
 };
 
 // QUAKED monster_gargoyle (0.8 0 0.2) (-16 -16 -24) (16 16 40) AMBUSH STATUE PERCH NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
@@ -376,10 +747,16 @@ void() monster_gargoyle = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_gargoyle.mdl";
-	if (self.classtype == CT_MONGARGOYLE_MINI) self.mdl = "progs/mon_impling.mdl";
-	self.headmdl = "progs/ad171/h_gargoyle.mdl";
 	self.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
 	self.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
+	self.headmdl = "progs/ad171/h_gargoyle.mdl";
+	if (self.classtype == CT_MONGARGOYLE_MINI) self.mdl = "progs/mon_impling.mdl";
+	else if (self.classtype == CT_MONGARGOYLE_MEGA) {
+		self.mdl = "progs/drake/imp_lord.mdl";
+		self.headmdl = "progs/drake/h_imp2.mdl";
+		self.gib1mdl = "progs/drake/impwing2.mdl";
+	}
+
 	self.idle_sound = "ad171/gargoyle/idle1.wav";
 	self.idle_soundcom = "ad171/gargoyle/perch1.wav";
 	self.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
@@ -407,6 +784,22 @@ void() monster_impling = {
 	monster_gargoyle();
 };
 
+// From Kinn
+void() monster_imp_lord = {
+	local float rnd;
+
+	if (self.deathstring == "") {
+		rnd = random();
+		if (rnd < 0.5) self.deathstring = " was jacked up by an Imp Lord\n";
+		else if (rnd < 0.5) self.deathstring = " was raked by an Imp Lord\n";
+		else if (rnd < 0.5) self.deathstring = " was crashed by an Imp Lord\n";
+		else if (rnd < 0.5) self.deathstring = " was chilled out by an Imp Lord\n";
+		else self.deathstring = " was roasted by an Imp\n";
+	}
+	self.classtype = CT_MONGARGOYLE_MEGA;
+	monster_gargoyle();
+};
+
 // From Quake 1.5
 void() monster_afrit = {
 	if (self.deathstring == "")  self.deathstring = " was burned down by the Afrits\n";
@@ -421,14 +814,34 @@ void() setup_gargoyle = {
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.skin > 5) self.skin = 5;
+	if (self.exactskin > 5) self.exactskin = 5;
 	if (self.classtype == CT_MONGARGOYLE_MINI) {
 		if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT; // Tiny imp
 		if (self.health < 1) self.health = 80;
+		self.gibhealth = -35;
+	} else if (self.classtype == CT_MONGARGOYLE_MEGA) {
+		if (self.skin > 4) self.skin = 4;
+		if (self.exactskin > 4) self.exactskin = 4;
+		self.bbmins = '-32 -32 -24';	// Special Size
+		self.bbmaxs = '32 32 16';
+		if (self.bboxtype < 1) self.bboxtype = BBOX_CUSTOM;
+		if (self.health < 1) self.health = 300; // Hexen2 had 600, Drake used 300 for better Quake balance.
+		self.gibhealth = -80;				// Need a powerful weapon to GIB
+		self.mass = MASS_HEAVY;
 	} else {
 		if (self.bboxtype < 1) self.bboxtype = BBOX_TALL; // Normal gargoyle
 		if (self.health < 1) self.health = 120;
+		self.gibhealth = -60;				// Need a powerful weapon to GIB
 	}
-	self.gibhealth = -70;				// Need a powerful weapon to GIB
+
+	if ((self.classtype == CT_MONGARGOYLE_MEGA && (self.skin == 4 || self.exactskin == 4))
+		|| (self.skin == 1 || self.skin == 5 || self.exactskin == 1 || self.exactskin == 5)) { // Stony
+		self.gibhealth = -100;
+		self.hittype = HIT_STONE;
+		self.resist_nails = 0.5;
+		self.mass = MASS_HEAVY;
+	}
 	self.gibbed = FALSE;				// no falling apart
 	self.pain_flinch = 70;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
@@ -447,7 +860,7 @@ void() setup_gargoyle = {
 	if (self.spawnflags & MON_STATUE && self.spawnflags & MON_GARGOYLE_PERCH) {
 		dprint("\b[GARGOYLE]\b Cannot be perch and statue!\n");
 		self.spawnflags = self.spawnflags - MON_GARGOYLE_PERCH;
-	}	
+	}
 
 	if (self.spawnflags & MON_GARGOYLE_PERCH) {
 		// Perched Gargoyles have special idle animation + idle sounds
@@ -464,7 +877,7 @@ void() setup_gargoyle = {
 		self.think1 = gargoyle_wakeup;		// Wakeup statue angry at player
 		self.skin = 1;						// Stone like skin
 		self.gib1skin = self.gib2skin = 1;
-		//self.resist_nails = 0.5;			// Stone resistance
+		self.resist_nails = 0.5;			// Stone resistance
 		// Work out random starting pose
 		self.pos1_x = $perch1;
 		self.pos1_y = $perch24;
@@ -479,7 +892,8 @@ void() setup_gargoyle = {
 		self.th_stand = garg_idle1;
 		self.th_walk = garg_walk1;
 		self.th_run = garg_run1;
-		self.th_missile = garg_fire1;
+		self.th_missile = ImpAttack;
+		self.th_melee = imp_swoop1;
 	}
 	monster_start();
 };

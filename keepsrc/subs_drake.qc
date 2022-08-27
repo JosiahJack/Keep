@@ -916,3 +916,26 @@ float(entity e) IsGhost = {
 			|| e.bodyphased == MONAI_SKULLWINVIS
 			|| ((e.flags & FL_NOTARGET) && e.classtype == CT_MONPOLYP));
 };
+
+void(vector p1, vector p2) fat_trace = { // [FUNCTION]
+    local vector add;
+
+    traceline (p1, p2, FALSE, self);
+    if (trace_fraction == 1.0) {
+        add = self.mins;
+        add_z = 0;
+        traceline (p1 + add, p2 + add, FALSE, self);
+        if (trace_fraction == 1.0) {
+            add_x = self.maxs_x;
+            traceline (p1 + add, p2 + add, FALSE, self);
+            if (trace_fraction == 1.0) {
+            add_y = self.maxs_y;
+                traceline (p1 + add, p2 + add, FALSE, self);
+                if (trace_fraction == 1.0) {
+                    add_x = self.mins_x;
+                    traceline (p1 + add, p2 + add, FALSE, self);
+                }
+            }
+        }
+    }
+};

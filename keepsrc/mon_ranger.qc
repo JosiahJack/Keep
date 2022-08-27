@@ -765,9 +765,7 @@ void() ranger_die = {
     local string sfx;
 
     monster_death_precheck();
-
-    if (Shattered ()) return;
-    if (Decapitated ()) {
+    if (Decapitated()) {
         if (self.war == WAR_AXE)
             monster_decap ('-11 0 20', ranger_axdecap1);
         else

@@ -588,7 +588,7 @@ void() cservo_attack= {
 
 	self.attack_finished = time + 0.15;
 	self.movetarget.owner.attack_finished = time + 1;
-	self.show_hostile = time + 1;
+	W_ShowHostile();
 };
 
 //=======================================================================

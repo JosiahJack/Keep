@@ -6,10 +6,12 @@ float MONAI_ZOMBGRDTIMER = 2;	// Zombie onground timer (between checking)
 float MONAI_ZOMBGRDBLOCK = 300;	// 0.1 * 300 = 30s
 float MONAI_ZOMBIELOW_DAM = 9;	// Pain threshold for animations	
 float MONAI_ZOMBIEHGH_DAM = 24;
+float SPAWN_SNEAKY = 65536;
 
 void(entity e) sendmonsterdevdata;
 void(float frameno) zombie_onground;
 void(float frameno) zombiek_onground;
+void() zombie_sneaky;
 void(float c) DropCoin;
 void() eidolon_start;
 void() revive_frames;
@@ -360,6 +362,7 @@ void() monster_death_precheck = {
 			}
 		}
 		monster_check_gib();		// Check for gib state
+		SUB_RemoveAttachments();
 		if (!self.gibbed && (self.classmove == MON_MOVEFLY || (self.flags & FL_FLY))
             && self.classmove != MON_MOVESTATIC && self.movetype != MOVETYPE_NONE) {
 			self.movetype = MOVETYPE_TOSS; // Affected by gravity
@@ -723,8 +726,8 @@ void() monster_spawn = {
 	// Angles key used for specific facing direction, 0 = random setup
 	// This function check is before any droptofloor or content checks
 	// It will allow onfloor monsters to exist in tight spaces, shallow graves
-	if (self.classgroup == CG_ZOMBIE) {
-		if (self.spawnflags & MON_ONFLOOR && self.classtype != CT_MONMUMMY) { // 4
+	if (self.classgroup == CG_ZOMBIE && self.classtype != CT_MONMUMMY) {
+		if (self.spawnflags & MON_ONFLOOR) { // 4
 			if (self.classtype == CT_MONZOMBIEK) zombiek_onground(MONAI_ZOMBIEFLR);
 			else zombie_onground(MONAI_ZOMBIEFLR);
 			return;
@@ -782,14 +785,15 @@ void() monster_spawn = {
 	}
 	
 	pconts = GetContents(self.origin);
+	self.liquidbase = LiquidBase(self);
 
 	// Some monsters start in lava/slime (ID1 maps). If placed in laval/slime give immunity (old ID1 behaviour)
 	if (!(self.spawnflags & CAN_DROWN)) {
-		if (pconts == CONTENT_SLIME) { 
+		if (pconts == CONTENT_SLIME || self.liquidbase == CONTENT_SLIME) {
 			if (self.resist_acid <= 0) self.resist_acid = 1;
 			self.no_liquiddmg = TRUE;
 		}
-		if (pconts == CONTENT_LAVA) {
+		if (pconts == CONTENT_LAVA || self.liquidbase == CONTENT_LAVA) {
 			if (self.resist_fire <= 0) self.resist_fire = 1;
 			self.no_liquiddmg = TRUE;
 		}
@@ -911,6 +915,11 @@ void() monster_spawn = {
 		self.takedamage = DAMAGE_NO;
 		self.solid = SOLID_NOT;
 		setmodel(self,"");
+	}
+
+	if (self.spawnflags & SPAWN_SNEAKY && self.classtype == CT_MONZOMBIE) { // 65536
+		zombie_sneaky();
+		return;
 	}
 
 	// No more spawn exception check for targets.  If monster has died, don't reset any timers

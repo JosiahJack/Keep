@@ -736,33 +736,25 @@ void() Team_weapon_touch =
 	// dropped weapon doesn't target, so no need to call UseTargets
 };
 
-void() TossWeapon =
-{
+void() TossWeapon = {
 	local entity item;
 	
-	if (deathmatch != 1)
-		return;  // only in deathmatch 1
+	if (deathmatch != 1) return;  // only in deathmatch 1
+	if (teamplay < 1) return; // only valid in teamplay modes
+	if(self.weapon == IT_AXE || self.weapon == IT_SHOTGUN || self.weapon == IT2_GRAPPLE) return;
 
-	// only valid in teamplay modes
-	if (teamplay < 1)
-		return;
-
-	if((self.weapon == IT_AXE) || (self.weapon == IT_SHOTGUN) ||
-		(self.weapon == IT2_GRAPPLE))
-		return;
-		
+	dprint("TODO: teamplay weapon toss not yet implemented.\n");
+	/*
 	item = spawn();
 	item.owner = self;
 	makevectors(self.v_angle);
 	item.weapon = 0;
-
 	setorigin(item, self.origin + '0 0 16');
 	item.velocity = aim(self, 1000);
 	item.velocity = item.velocity * 500;
 	item.flags = FL_ITEM;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_BOUNCE;
-	
 	if(self.weapon == IT_SUPER_SHOTGUN)
 	{
 		setmodel (item, "progs/g_shot.mdl");
@@ -821,7 +813,7 @@ void() TossWeapon =
 	item.think = SUB_Remove;
 	item.nextthink = time + 120;
 	self.weapon = W_BestWeapon(self);
-	W_SetCurrentAmmo(self, TRUE);
+	W_SetCurrentAmmo(self, TRUE);*/
 };
 
 void(entity flg) RegenFlag = {

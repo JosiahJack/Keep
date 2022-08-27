@@ -882,6 +882,7 @@ void() monster_bane_precache = {
 	precache_sound("drake/bane/pain.wav");
 	precache_sound("drake/bane/death.wav");
 	precache_sound("drake/bane/sight.wav");
+	precache_sound("drake/weapons/mirv1.wav");
 };
 
 // The Bane  (SoE Big Bad Evil Guy, Hell Knight boss variant)
@@ -1133,11 +1134,6 @@ void() darklord_dieb8 = [$deathb8, darklord_dieb9 ] {};
 void() darklord_dieb9 = [$deathb9, darklord_dieb9   ] {};
 
 void() darklord_die = {
-// check for gib
-//    if (Shattered ())
-//        return;
-
-// regular death
     local   vector  st;
 
     sound(self,CHAN_VOICE, "drake/darklord/death.wav",1,ATTN_NORM);

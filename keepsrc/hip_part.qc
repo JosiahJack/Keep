@@ -99,7 +99,7 @@ void() particlefield_XY = { // [FUNCTION]
    end = (self.dest2 + self.origin);
    pos_x = start_x;
    pos_z = start_z;
-   while ( (pos_x < end_x) ) {
+   while (pos_x < end_x) {
       pos_y = start_y;
       while ( (pos_y < end_y) ) {
          particle (pos,VEC_ORIGIN,self.col,self.count);
@@ -124,6 +124,7 @@ void() func_particlefield = { // [ENTITY]
    self.classname = "particlefield";
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_NONE;
+   self.bsporigin = TRUE;
    setmodel(self,self.model);
    self.model = "";
    self.origin = ((self.mins + self.maxs) * 0.500);

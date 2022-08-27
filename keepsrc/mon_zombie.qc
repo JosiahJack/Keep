@@ -70,12 +70,16 @@ $frame paine11 paine12 paine13 paine14 paine15 paine16 paine17 paine18 paine19
 $frame paine20 paine21 paine22 paine23 paine24 paine25 paine26 paine27 paine28
 $frame paine29 paine30
 
-$frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
+$frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6 cruc_7
+$frame cruc_8 cruc_9 cruc_10 cruc_11 cruc_12 cruc_13
+$frame cruc_14 cruc_15 cruc_16
 
 void(float type) zombie_sound;
 void(entity inflictor, entity attacker, float damage) mummy_wake_pain;
 void() mummy_sleep;
 void() zombie_die;
+void() zombie_cruc1;
+void() zombie_escape;
 
 void() zombie_stand1	= [	$stand1,		zombie_stand2	] {
 	zombie_sound(2); self.solid = SOLID_SLIDEBOX; ai_stand();
@@ -487,6 +491,73 @@ void(float frameno) zombie_onground = {
 	}
 };
 
+void() zombie_escape1=[ $cruc_1, zombie_escape2 ] {self.nextthink=time+0.20;};
+void() zombie_escape2=[ $cruc_2, zombie_escape3 ] {self.nextthink=time+0.20;};
+void() zombie_escape3=[ $cruc_3, zombie_escape4 ] {self.nextthink=time+0.20;};
+void() zombie_escape4=[ $cruc_4, zombie_escape5 ] {self.nextthink=time+0.20;};
+void() zombie_escape5=[ $cruc_5, zombie_escape6 ] {self.nextthink=time+0.15;};
+void() zombie_escape6=[ $cruc_6, zombie_escape7 ] {self.nextthink=time+0.15;};
+void() zombie_escape7=[ $cruc_7, zombie_escape8 ] {self.nextthink=time+0.15;};
+void() zombie_escape8=[ $cruc_8, zombie_escape9 ] {self.nextthink=time+0.15;};
+void() zombie_escape9=[ $cruc_9, zombie_escape10 ] {self.nextthink=time+0.15;};
+void() zombie_escape10=[$cruc_10, zombie_escape11] {self.nextthink=time+0.15;};
+void() zombie_escape11=[$cruc_11, zombie_escape12] {self.nextthink=time+0.10;};
+void() zombie_escape12=[$cruc_12, zombie_escape13] {self.nextthink=time+0.10;};
+void() zombie_escape13=[$cruc_13, zombie_escape14] {self.nextthink=time+0.10;};
+void() zombie_escape14=[$cruc_14, zombie_escape15] {
+	makevectors (self.angles);
+	setorigin ( self, self.origin + v_forward * 8);
+	self.nextthink=time+0.15;
+};
+void() zombie_escape15=[ $cruc_15, zombie_escape16] {
+	makevectors (self.angles);
+	setorigin ( self, self.origin + v_forward * 8);
+	self.nextthink=time+0.15;
+};
+void() zombie_escape16 = [ $cruc_16, zombie_run1 ] {
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_STEP;
+	self.takedamage = DAMAGE_AIM;
+	self.th_stand = zombie_stand1;
+	self.th_walk = zombie_walk1;
+	self.th_pain = zombie_pain;
+	self.th_run = zombie_run1;
+	self.th_missile = zombie_missile;
+	self.health = 60;
+	sound(self,CHAN_VOICE,"zombie/z_idle.wav",1,ATTN_IDLE);
+	self.velocity_z = self.velocity_z + 25;
+};
+
+void() zombie_escape =  {
+	if (!self.pain_finished) self.pain_finished = time + self.delay;
+	self.think = zombie_cruc1;
+	self.nextthink = time + 0.1;
+};
+
+void(entity inflictor, entity attacker, float damage) zombie_escape_pain = { zombie_escape(); };
+
+void() zombie_sneaky = {
+	self.takedamage = DAMAGE_NO;
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_NOT;
+	self.th_stand = zombie_cruc1;
+	self.th_run = zombie_escape;
+	self.th_walk = zombie_escape;
+	self.th_pain = zombie_escape_pain;
+	self.th_missile = zombie_escape;
+	if (!self.delay) self.delay = 3;
+	self.ideal_yaw = self.angles * '0 1 0';
+	if (!self.yaw_speed) self.yaw_speed = 20;
+	self.view_ofs = '0 0 25';
+	self.nextthink = self.nextthink + random()*0.5;
+	self.think = self.th_stand;
+	self.takedamage = DAMAGE_AIM;		// Can receive damage
+	self.velocity = '0 0 0';			// Make sure stationary
+	self.deadflag = DEAD_NO;			// used to stop death re-triggering
+	self.view_ofs = '0 0 -24';			// Standard setup
+	self.pain_timeout = 1;				// Default
+};
+
 // All sounds used
 // 1 = sticking around, crucified
 // 2 = strutting the stuff (walking)
@@ -528,19 +599,29 @@ void() zombie_die = {
 	monster_death_precheck();
 };
 
-void() zombie_cruc1	= [$cruc_1,zombie_cruc2] { zombie_sound(1); };
-void() zombie_cruc2	= [$cruc_2,zombie_cruc3] { self.nextthink = time + 0.1 + random()*0.1; };
-void() zombie_cruc3	= [$cruc_3,zombie_cruc4] { self.nextthink = time + 0.1 + random()*0.1; };
-void() zombie_cruc4	= [$cruc_4,zombie_cruc5] { self.nextthink = time + 0.1 + random()*0.1; };
-void() zombie_cruc5	= [$cruc_5,zombie_cruc6] { self.nextthink = time + 0.1 + random()*0.1; };
-void() zombie_cruc6	= [$cruc_6,zombie_cruc1] { self.nextthink = time + 0.1 + random()*0.1; };
-
-void(entity inflictor, entity attacker, float damage) zombie_cruc_pain = {
-	self.health = self.max_health;				// reset health	
-	// Any pain to moan about?
-	if (self.pain_finished < time) zombie_sound(4);
-	self.pain_finished = time + 1 + random();
+// zombie_lurk is an improved version of what zombie did in zombie_crucXX
+// with an added check for enemies if they're sneaky types... 
+void() zombie_lurk = {
+	if (self.spawnflags & SPAWN_SNEAKY) {
+		if (!self.pain_finished) { // Not pausing before attack, but looking for player.
+			if(FindTarget()) return;
+		} else {
+			if ( self.pain_finished < time ) { // If we've waited long enough, pounce!
+				self.think = zombie_escape1;
+				self.nextthink = time + 0.1;
+				return;
+			}
+		}
+	}
+	self.nextthink = time + 0.1 + random()*0.1;
 };
+
+void() zombie_cruc1	= [$cruc_1,zombie_cruc2] { zombie_lurk(); zombie_sound(1); };
+void() zombie_cruc2	= [$cruc_2,zombie_cruc3] { zombie_lurk(); };
+void() zombie_cruc3	= [$cruc_3,zombie_cruc4] { zombie_lurk(); };
+void() zombie_cruc4	= [$cruc_4,zombie_cruc5] { zombie_lurk(); };
+void() zombie_cruc5	= [$cruc_5,zombie_cruc6] { zombie_lurk(); };
+void() zombie_cruc6	= [$cruc_6,zombie_cruc1] { zombie_lurk(); };
 
 void() zombie_cruc_spawn = {
 	self.use = SUB_Null;				// No more triggers
@@ -555,7 +636,7 @@ void() zombie_cruc_spawn = {
 	if (self.exactskin > 0) self.skin = rint(self.exactskin);
 	else self.skin = rint(random()*(self.randomskin-1));
 	if (self.skin < 0) self.skin = 0;	// Double check no negatives	
-	self.takedamage = DAMAGE_AIM;		// Can receive damage
+	self.takedamage = DAMAGE_NO;
 	self.velocity = '0 0 0';			// Make sure stationary
 	self.deadflag = DEAD_NO;			// used to stop death re-triggering
 	self.view_ofs = '0 0 -24';			// Standard setup
@@ -566,7 +647,8 @@ void() zombie_cruc_spawn = {
 void() zombie_cruc_setup = {
 	// Setup AI functions
 	self.th_stand = self.th_walk = self.th_run = zombie_cruc1;
-	self.th_pain = zombie_cruc_pain; self.th_die = zombie_die;
+	self.th_pain = SUB_Null_pain;
+	self.th_die = SUB_Null;
 	self.gibbed = FALSE;				// Still in one piece
 	self.health = self.max_health = 60;	// Save for later
 	self.gibhealth = 0 - self.health;	// Work out damage trigger
@@ -576,12 +658,9 @@ void() zombie_cruc_setup = {
 	// Zombies cannot be crucified and on the floor at once!
 	// EDIT: Yeah they can.  Just ask Fredrik 'PeyloW' Olsson and his temple2 map
 	if (self.spawnflags & MON_ONFLOOR) {
-		if (!(self.mangle))
-			self.angles_x = 90;
-		else
-			self.angles = self.mangle;
+		if (!(self.mangle)) self.angles_x = 90;
+		else self.angles = self.mangle;
 
-		
 		// pff, see. easy -Qmaster
 	}
 	
@@ -618,6 +697,7 @@ void() monster_zombie_precache = {
 	precache_sound("zombie/z_hit.wav");	// Impact - hit
 	precache_sound("zombie/z_gib.wav");	// Death sound
 	precache_sound("zombie/z_idle.wav");
+	if (self.spawnflags & SPAWN_SNEAKY) precache_model("progs/rogue/zombie.mdl");
 };
 
 void() monster_zombiep;
@@ -631,10 +711,18 @@ void() monster_zombie = { // [ENTITY]
 	if (self.poisonous) self.classname = "monster_zombiep"; // Ensure precaches.
 	self.mdl = "progs/ad171/mon_zombie.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";
-	if (detected_mod == MOD_ROGUE && self.spawnflags & 2) {
-		self.spawnflags = self.spawnflags - 2; // Rogue on floor flag.
-		self.spawnflags = self.spawnflags | MON_ONFLOOR;
+	if (detected_mod == MOD_ROGUE) {
+		if (self.spawnflags & 2) { // Rogue on floor flag.
+			self.spawnflags = self.spawnflags - 2;
+			self.spawnflags = self.spawnflags | MON_ONFLOOR;
+		}
+		if (self.spawnflags & 8) { // Rogue sneaky flag.  Drop from crucified.
+			self.spawnflags = self.spawnflags - 8;
+			self.spawnflags = self.spawnflags | SPAWN_SNEAKY;
+			if (self.spawnflags & MON_ONFLOOR) self.spawnflags = self.spawnflags - MON_ONFLOOR;
+		}
 	}
+	if (self.spawnflags & SPAWN_SNEAKY) self.mdl = "progs/rogue/zombie.mdl";
 
 	// Stupid ID getting the crucified and ambush back to front on zombies
 	// Lets fix the problem and reverse the flags to match everything else
@@ -657,9 +745,13 @@ void() monster_zombie = { // [ENTITY]
 	if (!self.classtype) self.classtype = CT_MONZOMBIE;
 	self.classgroup = CG_ZOMBIE;			// One big happy zombie family!
 	self.classmove = MON_MOVEWALK;
-	if (!self.exactskin) self.randomskin = 2;
+	if (!self.exactskin && !(self.spawnflags & SPAWN_SNEAKY)) self.randomskin = 2;
 	if (self.deathstring == "") self.deathstring = " joins the Zombies\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	if (self.spawnflags & SPAWN_SNEAKY) {
+		if (self.spawnflags & MON_CRUCIFIED) self.spawnflags = self.spawnflags - MON_CRUCIFIED;
+		self.exactskin = self.skin = 0;
+	}
 	if (self.spawnflags & MON_CRUCIFIED) zombie_cruc_setup(); // Setup crucified zombies
 	else {
 		// Setup zombie ready for placement
@@ -673,13 +765,18 @@ void() monster_zombie = { // [ENTITY]
 		if (!self.movespeed) self.movespeed = 1;// Adjustable speed via skill level
 		self.inpain = 0;						// Zombie starts with no pain lock
 		self.count = 0;							// Reset get up timer
-		self.th_stand = zombie_stand1;
-		self.th_walk = zombie_walk1;
-		self.th_run = zombie_run1;
-		self.th_pain = zombie_pain;
 		self.th_die = zombie_die;
-		self.th_missile = zombie_missile;
 		self.th_wakeup = zombie_wakeup;			// Get off floor
+		if (self.spawnflags & SPAWN_SNEAKY) {
+			zombie_sneaky();
+		} else {
+			self.th_stand = zombie_stand1;
+			self.th_walk = zombie_walk1;
+			self.th_run = zombie_run1;
+			self.th_pain = zombie_pain;
+			self.th_missile = zombie_missile;
+
+		}
 		monster_start();
 	}
 };

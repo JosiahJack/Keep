@@ -242,26 +242,27 @@ void() func_train_touch = { // [FUNCTION]
 	if (time < self.attack_finished) return;
 
 	self.attack_finished = time + 0.5;
-	
-	if (other.flags & FL_MONSTER && other.alignment != GOOD) T_Damage(other, self, self, other.max_health + 100, DAMARMOR); // Instant death for monsters, unless good
+	if (other.flags & FL_MONSTER && other.alignment != GOOD) T_Damage(other,self,self,other.max_health + 100,DAMARMOR); // Instant death for monsters, unless good
 	else T_Damage(other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
 
-	SpawnMeatSpray ( other, other, 250); // Blood and gore at object location not train
+	SpawnMeatSpray(other, other, 250); // Blood and gore at object location not train
 };
 
 void() func_train_startcorner = { // [FUNCTION]
-	if (!self.movestart) self.movestart = find(world, targetname, self.target); // Find first corner (after spawning)
+	if (!self.movestart) self.movestart = find(world,targetname,self.target); // Find first corner (after spawning)
 	if (self.movestart) { // Has the first path corner been found?
 		self.finaldest = func_train_origin(self.movestart); // Move to first path corner (instantly)
-		setorigin(self, self.finaldest);
+		if (detected_mod == MOD_ROGUE && self.classtype == CT_SAWBLADE) setorigin(self,self.origin);
+		else setorigin(self,self.finaldest);
+
 		self.movetarget = self.movestart;
 		if (self.direction) self.movelast = self.movestart.movetarget; // Setup last path corner location based on direction
 		else self.movelast = self.movestart.movetarget3;
 		
 		if (!self.movelast) self.movelast = self.movestart; // Double check movelast is valid, if not reset
-		if (self.movetarget.corner_event) trigger_strs(self.movetarget.corner_event, self); // Fire any event targets on path_corner
+		if (self.movetarget.corner_event) trigger_strs(self.movetarget.corner_event,self); // Fire any event targets on path_corner
 	} else {
-		setorigin(self, self.dest0); // Cannot find first corner (bad situation).  Go back to spawn location!
+		setorigin(self,self.dest0); // Cannot find first corner (bad situation).  Go back to spawn location!
 		self.movetarget = self.movelast = self;
 	}
 };
