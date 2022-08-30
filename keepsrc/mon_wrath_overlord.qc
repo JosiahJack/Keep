@@ -40,6 +40,8 @@
 // Also includes the info_overlord_destination definition.
 //=============================================================================
 
+float() overlord_smash;
+
 void() overlord_teleport = {
    local float chance;
    local entity theDest;
@@ -95,8 +97,6 @@ void() overlord_run13 = [ 13.000, overlord_run14 ] { ai_run(12); };
 void() overlord_run14 = [ 14.000, overlord_run15 ] { ai_run(12); };
 void() overlord_run15 = [ 15.000, overlord_run01 ] { ai_run(12); };
 
-void() overlord_smash;
-
 void() overlord_at_a01 = [ 16.000, overlord_at_a02 ] { ai_charge(12); };
 void() overlord_at_a02 = [ 17.000, overlord_at_a03 ] { ai_charge(12); };
 void() overlord_at_a03 = [ 18.000, overlord_at_a04 ] { ai_charge(12); };
@@ -138,23 +138,28 @@ void() overlord_at_c12 = [ 51.000, overlord_at_c13 ] { ai_charge(12); };
 void() overlord_at_c13 = [ 52.000, overlord_at_c14 ] { ai_charge(12); };
 void() overlord_at_c14 = [ 53.000, overlord_run01 ] { ai_charge(12); };
 
-void() overlord_smash = {
-   local vector delta;
-   local float smashDmg;
+float() overlord_smash = { // PM:  Changed from void to float type so overlord can shoot on a miss.
+	local vector delta;
+	local float smashDmg;
 
-   if (self.health < 1) return;
-   if (!self.enemy) return;
-   if (!CanDamage(self.enemy,self)) return; // Don't even charge.
+	if (detected_mod == MOD_DRAKE) ai_charge(self.speed);
 
-   ai_charge(10);
-	self.enemydist = range_distance(self.enemy,FALSE);
-	if (self.enemydist > 100) return; // Enemy too far away.
+	if (self.health < 1) return FALSE;
+	if (!self.enemy) return FALSE;
+	if (!CanDamage(self.enemy,self)) return FALSE; // Don't even charge.
 
-   smashDmg = (20.000 + (random () * 10));
-   sound(self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
-   T_Damage(self.enemy,self,self,smashDmg,DAMARMOR);
-   delta = normalize(((SUB_orgEnemyTarget() - self.origin) + self.enemy.view_ofs));
-   SpawnBlood(self.enemy,(self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
+	if (detected_mod != MOD_DRAKE) {
+		ai_charge(10);
+		self.enemydist = range_distance(self.enemy,FALSE);
+		if (self.enemydist > 100) return FALSE; // Enemy too far away.
+	}
+
+	smashDmg = 20 + (random() * 10);
+	sound(self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
+	T_Damage(self.enemy,self,self,smashDmg,DAMARMOR);
+	delta = normalize(((SUB_orgEnemyTarget() - self.origin) + self.enemy.view_ofs));
+	SpawnBlood(self.enemy,(self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
+	return TRUE;
 };
 
 void() overlord_melee = {
@@ -210,19 +215,13 @@ void() overlord_pn_b06 = [ 85.000, overlord_pn_b07 ] {};
 void() overlord_pn_b07 = [ 86.000, overlord_run01 ] {};
 
 void(entity inflictor, entity attacker, float damage) overlord_pain = {
-   local float r;
-
    if (self.pain_finished > time) return;
-
-   r = random();
-   if ( (r > 0.200) ) return ;
+   if (random() > 0.2) return;
 
 	SUB_FinishAttachments(); // Hide any attachments
-   if ( (r < 0.150) ) {
-      overlord_pn_a01();
-   } else {
-      overlord_pn_b01();
-   }
+   if (random() < 0.5)  overlord_pn_a01();
+   else overlord_pn_b01();
+
    self.pain_finished = (time + FL_SWIM);
    sound(self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
@@ -231,10 +230,18 @@ void(string gibName) ol_toss = {
 	local vector flingVelocity;
 	local entity myGib;
 
-	makevectors(self.angles);
-	flingVelocity = ((v_forward * 250.000) + (v_up * 300.000));
-	flingVelocity = (flingVelocity + (v_up * ((random () * 100.000) - 50.000)));
-	flingVelocity = (flingVelocity + (v_right * ((random () * 200.000) - 100.000)));
+	if (detected_mod == MOD_DRAKE) {
+		// PM:  More random velocity code.
+		flingVelocity = self.angles;
+		flingVelocity_y = random() * 360;
+		makevectors(flingVelocity);
+    	flingVelocity = (v_forward * 250) + (v_up * (300 + (random() * 100 - 50)));
+	} else {
+		makevectors(self.angles);
+		flingVelocity = ((v_forward * 250.000) + (v_up * 300.000));
+		flingVelocity = (flingVelocity + (v_up * ((random () * 100.000) - 50.000)));
+		flingVelocity = (flingVelocity + (v_right * ((random () * 200.000) - 100.000)));
+	}
 
 	myGib = spawn();
 	setmodel(myGib,gibName);
@@ -269,14 +276,15 @@ void() overlord_die14 = [ 103.000, overlord_die15 ] { self.nextthink = (time + 0
 void() overlord_die15 = [ 104.000, overlord_die16 ] { self.nextthink = (time + 0.050); };
 void() overlord_die16 = [ 105.000, overlord_die17 ] { self.nextthink = (time + 0.050); };
 void() overlord_die17 = [ 106.000, overlord_die18 ] {
-   self.model = "";
-   Tent_Explosion2(self.origin,0,4);
-   ol_toss ("progs/drake/s_wrtgb2.mdl");
-   ol_toss ("progs/drake/s_wrtgb3.mdl");
-   ol_toss ("progs/rogue/wrthgib1.mdl");
-   ol_toss ("progs/rogue/wrthgib2.mdl");
-   ol_toss ("progs/rogue/wrthgib3.mdl");
-   self.nextthink = (time + 0.100);
+	self.model = "";
+	T_RadiusDamage(self,self,80,world,DAMAGEALL); // PM:  Old code didn't have splash damage, which is silly if the lesser wraths have it but their lords don't.  So go boom once.
+	Tent_Explosion2(self.origin,0,4);
+	ol_toss ("progs/drake/s_wrtgb2.mdl");
+	ol_toss ("progs/drake/s_wrtgb3.mdl");
+	ol_toss ("progs/rogue/wrthgib1.mdl");
+	ol_toss ("progs/rogue/wrthgib2.mdl");
+	ol_toss ("progs/rogue/wrthgib3.mdl");
+	self.nextthink = (time + 0.100);
 };
 
 void() overlord_die18 = [ 107.000, overlord_die19 ] {

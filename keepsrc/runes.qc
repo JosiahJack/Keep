@@ -147,7 +147,7 @@ float(float damage, entity who) RuneApplyEarth =
 {
 	if (who.rune & ITEM_RUNE1) {
 		if (who.rune1_last_noise_time < time) {
-			sound (who, CHAN_ITEM, "runes/end1.wav", 1, ATTN_NORM);
+			sound (who, CHAN_ITEM, "rogue/runes/end1.wav", 1, ATTN_NORM);
 			// tune as needed
 			who.rune1_last_noise_time = time + 1.0;
 		}
@@ -160,7 +160,7 @@ void(entity who) RuneApplyBlackNoise =
 {
 	if (who.rune & ITEM_RUNE2)
 		if (who.rune2_last_noise_time < time) {
-			sound (who, CHAN_ITEM, "runes/end2.wav", 1, ATTN_NORM);
+			sound (who, CHAN_ITEM, "rogue/runes/end2.wav", 1, ATTN_NORM);
 			// tune as needed
 			who.rune2_last_noise_time = time + 1.0;
 		}
@@ -177,7 +177,7 @@ float(float tvalue, entity who) RuneApplyHell =
 {
 	if (who.rune & ITEM_RUNE3) {
 		if (who.rune3_last_noise_time < time) {
-			sound (who, CHAN_ITEM, "runes/end3.wav", 1, ATTN_NORM);
+			sound (who, CHAN_ITEM, "rogue/runes/end3.wav", 1, ATTN_NORM);
 			// tune as needed
 			who.rune3_last_noise_time = time + 1.0;
 		}
@@ -190,7 +190,7 @@ void(entity who) RuneApplyElder =
 {
 	if (who.rune & ITEM_RUNE4) {
 		if (who.rune4_last_regen_time < time && who.health < 100) {
-			sound (who, CHAN_ITEM, "runes/end4.wav", 1, ATTN_NORM);
+			sound (who, CHAN_ITEM, "rogue/runes/end4.wav", 1, ATTN_NORM);
 			who.health = who.health + 5;
 			if (who.health > 100)
 				who.health = 100;
@@ -215,9 +215,9 @@ void() RunePrecache =
 			precache_model("progs/end3.mdl");
 			precache_model("progs/end4.mdl");
 
-			precache_sound("runes/end1.wav");
-			precache_sound("runes/end2.wav");
-			precache_sound("runes/end3.wav");
-			precache_sound("runes/end4.wav");
+			precache_sound("rogue/runes/end1.wav");
+			precache_sound("rogue/runes/end2.wav");
+			precache_sound("rogue/runes/end3.wav");
+			precache_sound("rogue/runes/end4.wav");
 		}
 };

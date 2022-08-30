@@ -334,7 +334,7 @@ void() camera_controller_think = { // [FUNCTION]
 			cam_player.frame = 0;
 
 			// Restore player core parameters
-			setmodel(cam_client, MODEL_PLAYER);
+			setmodel(cam_client, "progs/player.mdl");
 			modelindex_player = cam_client.modelindex;
 			setsize (cam_client, cam_client.bbmins, cam_client.bbmaxs);
 			cam_client.solid = SOLID_SLIDEBOX;
@@ -494,7 +494,7 @@ void() camera_controller_think = { // [FUNCTION]
 					cam_player.solid = SOLID_NOT;
 					cam_player.movetype = MOVETYPE_NONE;
 					setorigin(cam_player, self.dest2);
-					setmodel(cam_player, MODEL_PLAYER);
+					setmodel(cam_player, "progs/player.mdl");
 					setsize(cam_player, VEC_ORIGIN, VEC_ORIGIN);
 					cam_player.angles = self.dest3;
 					cam_player.fixangle = TRUE;

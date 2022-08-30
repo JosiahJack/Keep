@@ -874,7 +874,7 @@ void() wyrm_explode = {
 
     // Lavasplash particles form a box with a size of 270x270x64. 135 * 1.4142 = 190.9188.  So use 160 damage for explosion radius of 200.
     T_RadiusDamage(self, self, 160, self, DAMAGEALL); // Damage first, then effects.
-    Tent_LavaSplash(self.origin,-32,"boss/out1.wav");
+    Tent_LavaSplash(self.origin,-32,"boss1/out1.wav");
 	self.gib1mdl = "progs/drake/dr2_lw.mdl";
 	self.gib1mdl = "progs/drake/dr2_rw.mdl";
 	self.gib1mdl = "progs/drake/dr2_tail.mdl";

@@ -70,6 +70,45 @@ $frame aether15 aether16 aether17 aether18
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9 deathb10
 
+void(float ofs) nehwraith_shot;
+void() ai_drain;
+
+// Used by phase-capable wraiths.
+void(void() func1, void() func2) wraith_start = {
+    if (self.spawnflags & SPAWN_SOUL) { // Resolve any conflict between phase by ambush or aether.
+        if (self.health < self.max_health)
+            if (self.health < WRAITH_HP_CRITICAL) {
+                func1(); 
+                return;
+            }
+    }
+
+    if (self.takedamage) func1(); // Wraith is visible and vulnerable.
+    else func2 ();                // Wraith was phased out.
+};
+
+void() wraith_flash = {
+    if (!self.modelindex)
+        if (random() < 0.2) SUB_Flash();
+};
+
+void() wraith_idle_sfx = {
+    // Note:  skin 0 is the normal wrath skin.  skin 1 is a grayscale version
+    // with red eyes.  The latter is used for the ghostly wraith.  From here on,
+    // any conditional with 'self.skin' will assume wraith and not wrath.
+    if (self.skin) {
+        if (random() < 0.2) {
+            if (random() < 0.8) sound(self,CHAN_VOICE,"nehahra/wraith/idle.wav",1,ATTN_IDLE);
+            else sound(self,CHAN_VOICE,"nehahra/wraith/weird.wav", 1,ATTN_IDLE);
+        }
+    }
+};
+
+void() wraith_stand_fx = {
+    if (random() < 0.3) SUB_Flash();
+    if (random() < 0.05) sound(self,CHAN_VOICE,"nehahra/wraith/idle.wav",1,ATTN_IDLE);
+};
+
 void() ai_shield_on = {
     if (self.spawnflags & 2)
         ReflectorShield (self);
@@ -80,7 +119,6 @@ void() ai_shield_off = {
             self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
 };
 
-// AETHER - - - - - - - - - - - - - - -
 void() overlord_attack;
 
 void() dreadlord_aether1  = [$aether1,  dreadlord_aether2  ] { ai_shield_off(); aether_out1(); };
@@ -100,7 +138,7 @@ void() dreadlord_aether14 = [$aether14, dreadlord_aether15 ] {};
 void() dreadlord_aether15 = [$aether15, dreadlord_aether16 ] {};
 void() dreadlord_aether16 = [$aether16, dreadlord_aether17 ] {};
 void() dreadlord_aether17 = [$aether17, dreadlord_aether18 ] {};
-void() dreadlord_aether18 = [$aether17, overlord_run1      ] { aether_out2(); };
+void() dreadlord_aether18 = [$aether17, dreadlord_runb1      ] { aether_out2(); };
 
 void() dreadlord_appear1  = [$aether17, dreadlord_appear2  ] {};
 void() dreadlord_appear2  = [$aether17, dreadlord_appear3  ] { aether_in1(); };
@@ -119,36 +157,37 @@ void() dreadlord_appear14 = [$aether5,  dreadlord_appear15 ] {};
 void() dreadlord_appear15 = [$aether4,  dreadlord_appear16 ] {};
 void() dreadlord_appear16 = [$aether3,  dreadlord_appear17 ] {};
 void() dreadlord_appear17 = [$aether2,  dreadlord_appear18 ] {};
-void() dreadlord_appear18 = [$aether1,  overlord_run1      ] { aether_in2(overlord_attack, overlord_attack); };
+void() dreadlord_appear18 = [$aether1,  dreadlord_runb1      ] { aether_in2(overlord_attack, overlord_attack); };
 
 void() dreadlord_souls1  = [$attackb1,  dreadlord_souls2  ] {
 	ai_face();
-    sound(self,CHAN_VOICE, "wraith/talk1.wav",1,ATTN_IDLE);
+    sound(self,CHAN_VOICE, "nehahra/wraith/talk1.wav",1,ATTN_IDLE);
     self.gorging = TRUE;
     if (!self.takedamage && self.modelindex) self.takedamage = DAMAGE_AIM; // If skipping phasing anim to attack, make sure wraith can take damage.
 
 };
 void() dreadlord_souls2  = [$attackc14, dreadlord_souls3  ] { ai_face(); };
 void() dreadlord_souls3  = [$attackb1,  dreadlord_souls2  ] { ai_face();
-    if (self.enemy.classtype != CT_SOUL) self.think = overlord_run1;
+    if (self.enemy.classtype != CT_SOUL) self.think = dreadlord_runb1;
     else self.nextthink = random() * 0.2 + 0.1 + time;
 };
 
 float(float d, float run) ai_wraith2 = {
-    ai_wraith("wraith/speak.wav");
+    ai_wraith("nehahra/wraith/speak.wav");
     return FALSE;
 };
 
 void() ai_wraith2_stand = {
     if (self.skin) {
-        if (ai_wraith2 (0, FALSE)) return;
+        if (ai_wraith2(0,FALSE)) return;
 
-        if (!self.modelindex)
-            if (!(self.spawnflags & 1) || (self.attack_state == AS_FLEEING)) wraith_stand_fx();
+        if (!self.modelindex) {
+            if (self.attack_state == AS_FLEEING) wraith_stand_fx();
+        }
     }
     ai_stand();
 };
-void() overlord_stand1 = [$walk1,  overlord_stand1 ] { ai_shield_off(); ai_wraith2_stand(); };
+void() dreadlord_standb1 = [$walk1,  dreadlord_standb1 ] { ai_shield_off(); ai_wraith2_stand(); };
 
 void(float d) ai_wraith2_walk = {
     if (self.skin) {
@@ -160,21 +199,21 @@ void(float d) ai_wraith2_walk = {
     }
     ai_walk(d);
 };
-void() overlord_walk1  = [$walk1,  overlord_walk2  ] { ai_shield_off(); ai_wraith2_walk(8); };
-void() overlord_walk2  = [$walk2,  overlord_walk3  ] { ai_wraith2_walk(8); };
-void() overlord_walk3  = [$walk3,  overlord_walk4  ] { ai_wraith2_walk(8); };
-void() overlord_walk4  = [$walk4,  overlord_walk5  ] { ai_wraith2_walk(8); };
-void() overlord_walk5  = [$walk5,  overlord_walk6  ] { ai_wraith2_walk(8); };
-void() overlord_walk6  = [$walk6,  overlord_walk7  ] { ai_wraith2_walk(8); };
-void() overlord_walk7  = [$walk7,  overlord_walk8  ] { ai_wraith2_walk(8); };
-void() overlord_walk8  = [$walk8,  overlord_walk9  ] { ai_wraith2_walk(8); };
-void() overlord_walk9  = [$walk9,  overlord_walk10 ] { ai_wraith2_walk(8); };
-void() overlord_walk10 = [$walk10, overlord_walk11 ] { ai_wraith2_walk(8); };
-void() overlord_walk11 = [$walk11, overlord_walk12 ] { ai_wraith2_walk(8); };
-void() overlord_walk12 = [$walk12, overlord_walk13 ] { ai_wraith2_walk(8); };
-void() overlord_walk13 = [$walk13, overlord_walk14 ] { ai_wraith2_walk(8); };
-void() overlord_walk14 = [$walk14, overlord_walk15 ] { ai_wraith2_walk(8); };
-void() overlord_walk15 = [$walk15, overlord_walk1  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb1  = [$walk1,  dreadlord_walkb2  ] { ai_shield_off(); ai_wraith2_walk(8); };
+void() dreadlord_walkb2  = [$walk2,  dreadlord_walkb3  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb3  = [$walk3,  dreadlord_walkb4  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb4  = [$walk4,  dreadlord_walkb5  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb5  = [$walk5,  dreadlord_walkb6  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb6  = [$walk6,  dreadlord_walkb7  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb7  = [$walk7,  dreadlord_walkb8  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb8  = [$walk8,  dreadlord_walkb9  ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb9  = [$walk9,  dreadlord_walkb10 ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb10 = [$walk10, dreadlord_walkb11 ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb11 = [$walk11, dreadlord_walkb12 ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb12 = [$walk12, dreadlord_walkb13 ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb13 = [$walk13, dreadlord_walkb14 ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb14 = [$walk14, dreadlord_walkb15 ] { ai_wraith2_walk(8); };
+void() dreadlord_walkb15 = [$walk15, dreadlord_walkb1  ] { ai_wraith2_walk(8); };
 
 void(float d) ai_wraith2_run = {
     if (self.skin) {
@@ -185,46 +224,22 @@ void(float d) ai_wraith2_run = {
     }
     ai_run(d);
 };
-void() overlord_run1   = [$walk1,  overlord_run2   ] { ai_shield_on(); ai_wraith2_run(self.speed); };
-void() overlord_run2   = [$walk2,  overlord_run3   ] { ai_wraith2_run(self.speed); };
-void() overlord_run3   = [$walk3,  overlord_run4   ] { ai_wraith2_run(self.speed); };
-void() overlord_run4   = [$walk4,  overlord_run5   ] { ai_wraith2_run(self.speed); };
-void() overlord_run5   = [$walk5,  overlord_run6   ] { ai_wraith2_run(self.speed); };
-void() overlord_run6   = [$walk6,  overlord_run7   ] { ai_wraith2_run(self.speed); };
-void() overlord_run7   = [$walk7,  overlord_run8   ] { ai_wraith2_run(self.speed); };
-void() overlord_run8   = [$walk8,  overlord_run9   ] { ai_wraith2_run(self.speed); };
-void() overlord_run9   = [$walk9,  overlord_run10  ] { ai_wraith2_run(self.speed); };
-void() overlord_run10  = [$walk10, overlord_run11  ] { ai_wraith2_run(self.speed); };
-void() overlord_run11  = [$walk11, overlord_run12  ] { ai_wraith2_run(self.speed); };
-void() overlord_run12  = [$walk12, overlord_run13  ] { ai_wraith2_run(self.speed); };
-void() overlord_run13  = [$walk13, overlord_run14  ] { ai_wraith2_run(self.speed); };
-void() overlord_run14  = [$walk14, overlord_run15  ] { ai_wraith2_run(self.speed); };
-void() overlord_run15  = [$walk15, overlord_run1   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb1   = [$walk1,  dreadlord_runb2   ] { ai_shield_on(); ai_wraith2_run(self.speed); };
+void() dreadlord_runb2   = [$walk2,  dreadlord_runb3   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb3   = [$walk3,  dreadlord_runb4   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb4   = [$walk4,  dreadlord_runb5   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb5   = [$walk5,  dreadlord_runb6   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb6   = [$walk6,  dreadlord_runb7   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb7   = [$walk7,  dreadlord_runb8   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb8   = [$walk8,  dreadlord_runb9   ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb9   = [$walk9,  dreadlord_runb10  ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb10  = [$walk10, dreadlord_runb11  ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb11  = [$walk11, dreadlord_runb12  ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb12  = [$walk12, dreadlord_runb13  ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb13  = [$walk13, dreadlord_runb14  ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb14  = [$walk14, dreadlord_runb15  ] { ai_wraith2_run(self.speed); };
+void() dreadlord_runb15  = [$walk15, dreadlord_runb1   ] { ai_wraith2_run(self.speed); };
 
-// PM:  Changed from void to float type so overlord can shoot on a miss.
-float() overlord_smash = {
-    local   vector  delta;
-    local   float   smashDmg;
-
-    ai_charge(self.speed);  // Was 10.
-
-    if (!self.enemy)
-        return TRUE;
-    if (!CanDamage (self.enemy, self))
-        return FALSE;
-    if (!InMeleeRange (100))
-        return FALSE;
-
-    smashDmg = 20 + random() * 10;
-    
-    sound(self,CHAN_WEAPON,"s_wrath/smash.wav",1,ATTN_NORM);
-    T_Damage(self.enemy, self, self, smashDmg);
-    delta = normalize (self.enemy.origin - self.origin + self.enemy.view_ofs);
-    SpawnBlood(self.enemy,self.enemy.origin - delta * 30, delta * -100, smashDmg, 0);
-    return TRUE;
-};
-
-// Axe - - - - - - -
 // PM:  No tele check at end of axe throw.
 void() overlord_throw = [$attack10, overlord_refire] { ai_charge(self.speed); };
 
@@ -235,15 +250,14 @@ void() overlord_axe4  = [$attack4,  overlord_axe5  ] { ai_charge(self.speed); };
 void() overlord_axe5  = [$attack5,  overlord_axe6  ] { ai_charge(self.speed); };
 void() overlord_axe6  = [$attack6,  overlord_axe7  ] { ai_charge(self.speed); };
 void() overlord_axe7  = [$attack7,  overlord_axe8  ] {
-    if (!overlord_smash())      // Smites enemy in melee range.
-    {
-        M_FireAxe ('62 16 9', "progs/throwax2.mdl");
+    if (!overlord_smash()) {     // Smites enemy in melee range.
+        M_FireAxe ('62 16 9', "progs/drake/throwax2.mdl");
         self.think = overlord_throw;
     }
 };
 void() overlord_axe8  = [$attack8,  overlord_axe9  ] { ai_charge(self.speed); };
 void() overlord_axe9  = [$attack9,  overlord_axe10 ] { ai_charge(self.speed); };
-void() overlord_axe10 = [$attack10, overlord_run1  ] { ai_charge(self.speed); };
+void() overlord_axe10 = [$attack10, dreadlord_runb1  ] { ai_charge(self.speed); };
 
 // Mace - - - - - -
 void() overlord_spray1 = [$attackc6,  overlord_spray2 ] { nehwraith_shot(2);nehwraith_shot(1); };
@@ -251,7 +265,7 @@ void() overlord_spray2 = [$attackc7,  overlord_spray3 ] { ai_charge(self.speed);
 void() overlord_spray3 = [$attackb11, overlord_spray4 ] { ai_charge(self.speed); };
 void() overlord_spray4 = [$attackb12, overlord_spray5 ] { ai_charge(self.speed); };
 void() overlord_spray5 = [$attackb13, overlord_spray6 ] { ai_charge(self.speed); };
-void() overlord_spray6 = [$attackb14, overlord_run1   ] { ai_charge(self.speed);overlord_teleport(); };
+void() overlord_spray6 = [$attackb14, dreadlord_runb1   ] { ai_charge(self.speed);overlord_teleport(); };
 
 void() overlord_mace1  = [$attackc1,  overlord_mace2  ] { ai_charge(self.speed); };
 void() overlord_mace2  = [$attackc2,  overlord_mace3  ] { ai_charge(self.speed); };
@@ -259,8 +273,7 @@ void() overlord_mace3  = [$attackc3,  overlord_mace4  ] { ai_charge(self.speed);
 void() overlord_mace4  = [$attackc4,  overlord_mace5  ] { ai_charge(self.speed); };
 void() overlord_mace5  = [$attackc5,  overlord_mace6  ] { ai_charge(self.speed); };
 void() overlord_mace6  = [$attackc6,  overlord_mace7  ] {
-    if (!overlord_smash())      // Smites enemy in melee range.
-        overlord_spray1();     // Launch missiles on a miss.
+    if (!overlord_smash()) overlord_spray1();     // Smites enemy in melee range.  Launch missiles on a miss.
 };
 void() overlord_mace7  = [$attackc7,  overlord_mace8  ] { ai_charge(self.speed); };
 void() overlord_mace8  = [$attackc8,  overlord_mace9  ] { ai_charge(self.speed); };
@@ -269,7 +282,7 @@ void() overlord_mace10 = [$attackc10, overlord_mace11 ] { ai_charge(self.speed);
 void() overlord_mace11 = [$attackc11, overlord_mace12 ] { overlord_smash(); };
 void() overlord_mace12 = [$attackc12, overlord_mace13 ] { ai_charge(self.speed); };
 void() overlord_mace13 = [$attackc13, overlord_mace14 ] { ai_charge(self.speed); };
-void() overlord_mace14 = [$attackc14, overlord_run1   ] { ai_charge(self.speed); };
+void() overlord_mace14 = [$attackc14, dreadlord_runb1   ] { ai_charge(self.speed); };
 
 // Orb - - - - - - -
 void(float AttackNumber) WrathMissile;
@@ -280,11 +293,11 @@ void() overlord_drain3 = [$attackb1,  overlord_drain4 ] { ai_charge(self.speed);
 void() overlord_drain4 = [$attackc14, overlord_drain5 ] { ai_charge(self.speed); ai_drain(); };
 void() overlord_drain5 = [$attackb1,  overlord_drain6 ] { ai_charge(self.speed); ai_drain(); };
 void() overlord_drain6 = [$attackc14, overlord_drain7 ] { ai_charge(self.speed); ai_drain(); };
-void() overlord_drain7 = [$attackb1,  overlord_run1   ] { ai_charge(self.speed); ai_drain(); };
+void() overlord_drain7 = [$attackb1,  dreadlord_runb1   ] { ai_charge(self.speed); ai_drain(); };
 
 void() overlord_magic1  = [$magic1,  overlord_magic2  ] {
     if (!self.skin)
-        sound(self,CHAN_VOICE, "wrath/watt.wav",1,ATTN_NORM);
+        sound(self,CHAN_VOICE, "rogue/wrath/watt.wav",1,ATTN_NORM);
     ai_shield_off(); ai_charge(self.speed); };
 void() overlord_magic2  = [$magic2,  overlord_magic3  ] { ai_charge(self.speed); };
 void() overlord_magic3  = [$magic3,  overlord_magic4  ] { ai_charge(self.speed); };
@@ -293,39 +306,30 @@ void() overlord_magic5  = [$magic5,  overlord_magic6  ] { ai_charge(self.speed);
 void() overlord_magic6  = [$magic6,  overlord_magic7  ] {//WrathMissile(4); };
     if (self.enemy)
     if (CanDamage (self.enemy, self))
-    if (InMeleeRange (80))
-    {   // We can touch the target.
+    if (InMeleeRange (80)) { // We can touch the target.
         overlord_drain1();
         return;
     }
-    // Couldn't touch the target, so launch orb.
-    if (self.classname == "monster_wraith_lord")
-        M_Shal30 ('20 0 16');
-    else
-        WrathMissile(4);
+
+    M_Shal_Ex ('20 0 16',30,"drake/hkboss/iceball.wav"); // Couldn't touch the target, so launch orb.
 };
 void() overlord_magic7  = [$magic7,  overlord_magic8  ] { ai_charge(self.speed); };
 void() overlord_magic8  = [$magic8,  overlord_magic9  ] { ai_charge(self.speed); };
 void() overlord_magic9  = [$magic9,  overlord_magic10 ] { ai_charge(self.speed); };
 void() overlord_magic10 = [$magic10, overlord_magic11 ] { ai_charge(self.speed); };
 void() overlord_magic11 = [$magic11, overlord_magic12 ] { ai_charge(self.speed); };
-void() overlord_magic12 = [$magic12, overlord_run1    ] { overlord_teleport(); };
+void() overlord_magic12 = [$magic12, dreadlord_runb1    ] { overlord_teleport(); };
 
 void() overlord_attack = {
     local   float   r;
 
-//- - - - - - - - -
 // If skipping phasing anim to attack, make sure wraith can take damage.
     if (!self.takedamage)
-        if ((self.frame >= $form1 ) && (self.frame <= $form19 ))
-            self.takedamage = DAMAGE_AIM;
-//- - - - - - - - -
-    ai_shield_off();
+        if ((self.frame >= $form1 ) && (self.frame <= $form19 )) self.takedamage = DAMAGE_AIM;
 
+    ai_shield_off();
     r = random();
-//- - - - - - - - -
-    if (r < 0.33)
-    {
+    if (r < 0.33) {
         if (self.frame == $attack10 )
             overlord_axe2();
         else
@@ -341,141 +345,11 @@ void() overlord_refire = {
     if (self.enemy.health > 0)
         if (visible (self.enemy))
             { overlord_attack();  return; }
-    overlord_run1();
+    dreadlord_runb1();
 };
 
-// PAIN - - - - - - - - - - - - - - - -
-void() overlord_pain1  = [$pain1,  overlord_pain2  ] {};
-void() overlord_pain2  = [$pain2,  overlord_pain3  ] {};
-void() overlord_pain3  = [$pain3,  overlord_pain4  ] { overlord_teleport(); };
-void() overlord_pain4  = [$pain4,  overlord_pain5  ] {};
-void() overlord_pain5  = [$pain5,  overlord_pain6  ] {};
-void() overlord_pain6  = [$pain9,  overlord_pain7  ] {};    //$pain6
-void() overlord_pain7  = [$pain10, overlord_run1   ] {};    //$pain7
-
-void() overlord_painb1 = [$painb1, overlord_painb2 ] {};
-void() overlord_painb2 = [$painb2, overlord_painb3 ] {};
-void() overlord_painb3 = [$painb3, overlord_painb4 ] { overlord_teleport(); };
-void() overlord_painb4 = [$painb4, overlord_painb5 ] {};
-void() overlord_painb5 = [$painb5, overlord_painb6 ] {};
-void() overlord_painb6 = [$painb8, overlord_painb7 ] {};    //painb6
-void() overlord_painb7 = [$painb9, overlord_run1   ] {};    //painb7
-
-void() overlord_pain = {
-    local   float   r;
-
-    if (SUB_IgnorePain ())
-        return;     // No pain anims in Nightmare.
-    if (self.pain_finished > time)
-        return;
-
-    r = random();
-    if (r > 0.2)
-        return;
-
-// Go to a pain frame.
-    ai_shield_off();
-    self.pain_finished = time + 2;
-    sound(self,CHAN_VOICE, "wrath/wpain.wav",1,ATTN_NORM);
-    if (r < 0.15)
-        overlord_pain1();
-    else 
-        overlord_painb1();
-};
-
-// DEATH - - - - - - - - - - - - - - - -
-void(string gibName, float eat) ol_toss = {
-    local   vector  flingVelocity;
-
-// DISABLED -- Old velocity code.
-//    makevectors(self.angles);
-//    flingVelocity = v_forward*250;
-//    flingVelocity = flingVelocity + v_up * (300 + (random() * 100 - 50));
-//    flingVelocity = flingVelocity + v_right * (random() * 200 - 100);
-
-// PM:  More random velocity code.
-    flingVelocity = self.angles;
-    flingVelocity_y = random() * 360;
-    makevectors(flingVelocity);
-    flingVelocity = (v_forward * 250) + (v_up * (300 + (random() * 100 - 50)));
-
-// Replaced StartGib with my gib code.
-    Gib_Spawn (self.origin, gibName, flingVelocity, '0 0 0', 0, 0, eat, self.spawned);
-};
-
-void() ol_toss_loop = {
-    local   float   loop;
-
-    loop = 2;
-    Rocket_Explosion2 (self.origin, 0, 4);
-    while (loop > 0) {
-        ol_toss("progs/gib1.mdl", TRUE);
-        ol_toss("progs/gib2.mdl", TRUE);
-        ol_toss("progs/gib3.mdl", TRUE);
-        loop = loop - 1;
-    }
-};
-
-// PM:  Modified scene for engines with interpolation.
-void() overlord_die1  = [$death2,  overlord_die2  ] {
-    self.flags = self.flags | FL_FLY;   // Don't fall!
-    sound(self,CHAN_VOICE, "wrath/wdthc.wav",1,ATTN_NORM);
-    // PM:  If ethereal, make them solid when killed.
-    if (self.movetype == MOVETYPE_NOCLIP) {
-        self.alpha = 0;
-        self.movetype = MOVETYPE_STEP;
-    }
-};
-void() overlord_die2  = [$death4,  overlord_die3  ] {};
-void() overlord_die3  = [$death6,  overlord_die4  ] {};
-void() overlord_die4  = [$death8,  overlord_die5  ] {};
-void() overlord_die5  = [$death9,  overlord_die6  ] {};
-void() overlord_die6  = [$death11, overlord_die7  ] {};
-void() overlord_die7  = [$death13, overlord_die8  ] {};
-void() overlord_die8  = [$death15, overlord_die9  ] {};
-void() overlord_die9  = [$death16, overlord_die10 ] { self.model = "";
-    monster_dead (TRUE);
-    // PM:  Old code didn't have splash damage, which is silly if the lesser
-    // wraths have it but their lords don't.  So go boom once.
-    T_RadiusDamage(self, self, 80, world);
-    Rocket_Explosion2 (self.origin, 0, 4);
-    ol_toss("progs/s_wrtgb2.mdl", FALSE);
-    ol_toss("progs/s_wrtgb3.mdl", FALSE);
-    ol_toss("progs/wrthgib1.mdl", TRUE);
-    ol_toss("progs/wrthgib2.mdl", TRUE);
-    ol_toss("progs/wrthgib3.mdl", TRUE);
-};
-void() overlord_die10 = [$death17, overlord_die11 ] { ol_toss_loop(); };
-void() overlord_die11 = [$death17, overlord_die11 ] {
-    ol_toss_loop();
-    remove(self);
-};
-
-// other -- Drake stuff
-
-void() monster_super_wrath_precache = {
-    precache_model ("progs/k_spike.mdl");
-    precache_model ("progs/s_wrath.mdl");
-    precache_model ("progs/s_wrtgb1.mdl");
-    precache_model ("progs/s_wrtgb2.mdl");
-    precache_model ("progs/s_wrtgb3.mdl");
-    precache_model ("progs/throwax2.mdl");
-    precache_model ("progs/wrthgib1.mdl");
-    precache_model ("progs/wrthgib2.mdl");
-    precache_model ("progs/wrthgib3.mdl");
-    precache_model ("progs/w_ball.mdl");
-    precache_sound("hknight/attack1.wav");
-    precache_sound("hknight/hit.wav");    // used by C code, so don't sound2
-    precache_sound("s_wrath/smash.wav");
-    precache_sound("wraith/drain.wav");
-    precache_sound("wrath/wsee.wav");
-    precache_sound("wrath/watt.wav");
-    precache_sound("wrath/wpain.wav");
-    precache_sound("wrath/wdthc.wav");
-};
 
 //  Dread Lord  (Wraith Boss)
-
 void() dreadlord_stand1  = [$form17, dreadlord_stand2  ] { ai_wraith2_stand(); };
 void() dreadlord_stand2  = [$form15, dreadlord_stand3  ] { ai_wraith2_stand(); };
 void() dreadlord_stand3  = [$form13, dreadlord_stand4  ] { ai_wraith2_stand(); };
@@ -512,8 +386,8 @@ void() dreadlord_form5  = [$form9,  dreadlord_form6  ] { ai_wraith2_run(self.spe
 void() dreadlord_form6  = [$form11, dreadlord_form7  ] { self.takedamage = DAMAGE_AIM; ai_shield_on(); ai_wraith2_run(self.speed); };
 void() dreadlord_form7  = [$form13, dreadlord_form8  ] { ai_wraith2_run(self.speed); };
 void() dreadlord_form8  = [$form15, dreadlord_form9  ] { ai_wraith2_run(self.speed); };
-void() dreadlord_form9  = [$form17, overlord_run1    ] { ai_wraith2_run(self.speed); };
-void() dreadlord_form = { wraith_start (overlord_run1, dreadlord_form1); };
+void() dreadlord_form9  = [$form17, dreadlord_runb1    ] { ai_wraith2_run(self.speed); };
+void() dreadlord_form = { wraith_start (dreadlord_runb1, dreadlord_form1); };
 
 void() dreadlord_pain1  = [$painc1,  dreadlord_pain2  ] {};
 void() dreadlord_pain2  = [$painc2,  dreadlord_pain3  ] {};
@@ -521,7 +395,7 @@ void() dreadlord_pain3  = [$painc3,  dreadlord_pain4  ] { overlord_teleport(); }
 void() dreadlord_pain4  = [$painc4,  dreadlord_pain5  ] {};
 void() dreadlord_pain5  = [$painc5,  dreadlord_pain6  ] {};
 void() dreadlord_pain6  = [$painc6,  dreadlord_pain7  ] {};
-void() dreadlord_pain7  = [$painc7,  overlord_run1    ] {};
+void() dreadlord_pain7  = [$painc7,  dreadlord_runb1    ] {};
 
 void() dreadlord_painb1 = [$paind1,  dreadlord_painb2 ] {};
 void() dreadlord_painb2 = [$paind2,  dreadlord_painb3 ] {};
@@ -529,9 +403,9 @@ void() dreadlord_painb3 = [$paind3,  dreadlord_painb4 ] { overlord_teleport(); }
 void() dreadlord_painb4 = [$paind4,  dreadlord_painb5 ] {};
 void() dreadlord_painb5 = [$paind5,  dreadlord_painb6 ] {};
 void() dreadlord_painb6 = [$paind6,  dreadlord_painb7 ] {};
-void() dreadlord_painb7 = [$paind7,  overlord_run1    ] {};
+void() dreadlord_painb7 = [$paind7,  dreadlord_runb1    ] {};
 
-void() dreadlord_pain = {
+void(entity inflictor, entity attacker, float damage) dreadlord_pain = {
     local float r;
 
 	// Don't run away unless it can phase out.
@@ -548,7 +422,7 @@ void() dreadlord_pain = {
 	// Now do the standard pain routine.
     ai_shield_off();
     self.pain_finished = time + 2;
-    sound(self,CHAN_VOICE, "wraith/growl2.wav",1,ATTN_NORM);
+    sound(self,CHAN_VOICE, "nehahra/wraith/growl2.wav",1,ATTN_NORM);
     self.velocity = '0 0 0';
     if (r < 0.15) dreadlord_pain1();
     else dreadlord_painb1();
@@ -566,46 +440,57 @@ void() dreadlord_die = [$deathb1,  dreadlord_die1] {
 	self.flags = self.flags | FL_FLY;
     self.movetype = MOVETYPE_NONE;  // Freeze monster in place.
     if (random() < 0.2)
-        sound(self,CHAN_VOICE, "wraith/talk3.wav",1,ATTN_NORM);
+        sound(self,CHAN_VOICE, "nehahra/wraith/talk3.wav",1,ATTN_NORM);
     else
-        sound(self,CHAN_VOICE, "wraith/call.wav",1,ATTN_NORM);
+        sound(self,CHAN_VOICE, "nehahra/wraith/call.wav",1,ATTN_NORM);
+
+    dreadlord_die1();
 };
 // Use setorigin to force relink in case model is still not visible.
 // Just don't call it in the same frame of a th_die call in case of loop.
 void() dreadlord_die1  = [$deathb1,  dreadlord_die2  ] { setorigin(self,self.origin); };
-void() dreadlord_die2  = [$deathb2,  dreadlord_die3  ] { monster_check_gib(); };
+void() dreadlord_die2  = [$deathb2,  dreadlord_die3  ] {};
 void() dreadlord_die3  = [$deathb3,  dreadlord_die4  ] {};
 void() dreadlord_die4  = [$deathb4,  dreadlord_die5  ] {};
 void() dreadlord_die5  = [$deathb5,  dreadlord_die6  ] {};
-void() dreadlord_die6  = [$deathb6,  dreadlord_die7  ] { self.solid = SOLID_NOT; };
+void() dreadlord_die6  = [$deathb6,  dreadlord_die7  ] {};
 void() dreadlord_die7  = [$deathb7,  dreadlord_die8  ] {};
 void() dreadlord_die8  = [$deathb8,  dreadlord_die9  ] {};
-void() dreadlord_die9  = [$deathb9,  dreadlord_die10 ] { monster_death_postcheck(); };
-void() dreadlord_die10 = [$deathb10, dreadlord_die10 ] { monster_deadbody_check(); };
+void() dreadlord_die9  = [$deathb9,  dreadlord_die10 ] {};
+void() dreadlord_die10 = [$deathb10, dreadlord_die10 ] {
+    T_RadiusDamage(self, self, 80, world,DAMAGEALL);
+    Rocket_Explosion2 (self.origin + '0 0 24', 0, 4);
+	entity_hide(self);
+};
 
 void() monster_wraith_lord_precache = {
-    precache_model ("progs/s_wrath.mdl");
-    precache_model ("progs/soul.mdl");
-    precache_model ("progs/throwax2.mdl");
-    precache_model ("progs/v_spike.mdl");
-    precache_model ("progs/wr_spike.mdl");
-    precache_sound("baron/throb.wav");
-    precache_sound("hkboss/iceball.wav");
+    precache_model ("progs/drake/s_wrath.mdl");
+    precache_model ("progs/nehahra/soul.mdl");
+    precache_model ("progs/drake/throwax2.mdl");
+    precache_model ("progs/drake/v_spike.mdl");
+    precache_model ("progs/nehahra/wr_spike.mdl");
+    precache_sound("nehahra/baron/throb.wav");
+    precache_sound("drake/hkboss/iceball.wav");
     precache_sound("hknight/attack1.wav");
-    precache_sound("s_wrath/smash.wav");
-    precache_sound("wraith/call.wav");
-    precache_sound("wraith/drain.wav");
-    precache_sound("wraith/growl2.wav");
-    precache_sound("wraith/idle.wav");
-    precache_sound("wraith/idle2.wav");
-    precache_sound("wraith/return.wav");
-    precache_sound("wraith/rych1.wav");    // "Got his soul!"
-    precache_sound("wraith/select.wav");
-    precache_sound("wraith/soul.wav");
-    precache_sound("wraith/speak.wav");
-    precache_sound("wraith/talk1.wav");
-    precache_sound("wraith/talk3.wav");
-    precache_sound("wraith/weird.wav");
+    precache_sound("rogue/s_wrath/smash.wav");
+    precache_sound("nehahra/wraith/call.wav");
+    precache_sound("drake/wraith/drain.wav");
+    precache_sound("nehahra/wraith/growl2.wav");
+    precache_sound("nehahra/wraith/idle.wav");
+    precache_sound("nehahra/wraith/idle2.wav");
+    precache_sound("rogue/wrath/wsee.wav");
+    precache_sound("nehahra/wraith/return.wav");
+    precache_sound("nehahra/wraith/rych1.wav"); // "Got his soul!"
+    precache_sound("nehahra/wraith/select.wav");
+    precache_sound("nehahra/wraith/soul.wav");
+    precache_sound("nehahra/wraith/speak.wav");
+    precache_sound("nehahra/wraith/talk1.wav");
+    precache_sound("nehahra/wraith/talk3.wav");
+    precache_sound("nehahra/wraith/weird.wav");
+    precache_sound("rogue/wrath/watt.wav");
+    precache_sound("player/axhit2.wav");
+    precache_sound("zombie/z_hit.wav");
+
 };
 
 // --> QUAKED monster_wraith_lord (1 0 0) (-16 -16 -24) (16 16 32) Ambush BossMode Souls
@@ -618,11 +503,10 @@ void() monster_wraith_lord = {
 	if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
 	if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
 	if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
-	self.pain_sound = "nehahra/wraith/wpain.wav";
+	self.pain_sound = "rogue/wrath/wpain.wav";
 	self.idle_sound = "nehahra/wraith/idle.wav";
 	self.idle_sound2 = "nehahra/wraith/idle2.wav";
-	self.idle_soundcom = "nehahra/wraith/idle3.wav";
-	self.sight_sound = "nehahra/wraith/wsee.wav";
+	self.sight_sound = "rogue/wrath/wsee.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -634,16 +518,9 @@ void() monster_wraith_lord = {
 	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
     self.skin = 1;
     self.alpha = 0.7;
-
-    if (self.spawnflags & 1) { // Use phasing in ambush mode.
-        self.th_stand   = dreadlord_stand;
-        self.th_walk    = dreadlord_walk;
-        self.th_run     = dreadlord_form;
-    } else { // The first three functions are shared by both wrath and wraith.
-        self.th_stand   = overlord_stand1;
-        self.th_walk    = overlord_walk1;
-        self.th_run     = overlord_run1;
-    }
+    self.th_stand   = dreadlord_stand;
+    self.th_walk    = dreadlord_walk;
+    self.th_run     = dreadlord_form;
     self.th_missile =
     self.th_melee   = overlord_attack;
     self.th_pain    = dreadlord_pain;
@@ -657,5 +534,6 @@ void() monster_wraith_lord = {
     if (self.deathstring == "")  self.deathstring = " was desecrated by a Dread Wraith\n";
     if (self.spawnflags & 2) self.bossflag = TRUE;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.classmove = MON_MOVEFLY;
     monster_start();
 };

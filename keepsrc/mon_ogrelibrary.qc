@@ -43,6 +43,7 @@ void() oglib_walk;
 
 /*void() monster_library_precache = {
   precache_model2("progs/nehahra/library.mdl");
+  precache_model("progs/nehahra/book.mdl");
   precache_model2("progs/nehahra/archg.mdl");
   precache_model2("progs/nehahra/h_archg.mdl");
   precache_model2("progs/nehahra/gntspke.mdl");
@@ -53,7 +54,7 @@ void() oglib_walk;
   precache_model2("progs/nehahra/rubble5.mdl");
   precache_model2("progs/nehahra/rubble6.mdl");
   precache_model2("progs/nehahra/gring.mdl");
-  precache_sound2("boss3/nehahra/nehdie4.wav");
+  precache_sound2("nehahra/boss3/nehdie4.wav");
   precache_sound2("nehahra/archg/mykey.wav");
   precache_sound2("nehahra/gaunt/gspike.wav");
   precache_sound2("nehahra/gaunt/spkhit.wav");
@@ -65,7 +66,7 @@ void() monster_library = {
   if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
   if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-  self.mdl = "progs/library.mdl";
+  self.mdl = "progs/nehahra/library.mdl";
   self.headmdl = "progs/nehahra/h_archg.mdl";
   self.solid = SOLID_SLIDEBOX;
   self.movetype = MOVETYPE_STEP;
@@ -94,9 +95,9 @@ void() monster_library = {
 };
 
 void() library_2archg = {
-  setmodel(self, "progs/archg.mdl");
+  setmodel(self, "progs/nehahra/archg.mdl");
   setsize(self, VEC_HULL_MIN, [12 12 48]);
-  ThrowGib("progs/book.mdl", -40);
+  ThrowGib("progs/nehahra/book.mdl", -40);
   self.objekt = world;
   self.goalentity = world;
   self.th_stand = archg_stand;
@@ -274,7 +275,7 @@ void()  library_shsh = {
     ai_face_objekt();
     }
   if (self.walkframe == 10) {
-    sound(self,CHAN_VOICE, "archg/shsh.wav",1,ATTN_NORM);
+    sound(self,CHAN_VOICE, "nehahra/archg/shsh.wav",1,ATTN_NORM);
     }
   ai_library();
 }
@@ -352,7 +353,7 @@ var
 
 void()  library_itemmad = {
 {
-  sound(self,CHAN_VOICE, "archg/mykey.wav",1,ATTN_NORM);
+  sound(self,CHAN_VOICE, "nehahra/archg/mykey.wav",1,ATTN_NORM);
 }
 
 void()  ai_library = {

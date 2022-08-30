@@ -287,7 +287,7 @@ void() actor_sf64start = { // [FUNCTION]
     self.use = Actor_use;
     self.solid = SOLID_SLIDEBOX;        
     self.movetype = MOVETYPE_STEP;    // They just stand on the ground
-    setmodel(self,MODEL_PLAYER);
+    setmodel(self,"progs/player.mdl");
     setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
     setorigin(self, self.origin);
     if (self.wait) self.pausetime = time + self.wait;
@@ -339,7 +339,7 @@ void() misc_hostage = { // [ENTITY]
     self.use = Actor_use;
     self.solid = SOLID_SLIDEBOX;        
     self.movetype = MOVETYPE_STEP;    // They just stand on the ground
-    setmodel(self,MODEL_PLAYER);
+    setmodel(self,"progs/player.mdl");
     setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
     setorigin(self, self.origin);
     self.nextthink = time + 0.1;

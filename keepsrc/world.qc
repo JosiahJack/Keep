@@ -373,9 +373,9 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_sound("misc/water1.wav");			// swimming
 	precache_sound("misc/water2.wav");			// swimming
 	precache_sound(SOUND_HEARTBEAT);			// Heartbeat (fast 1s)
-	precache_model(MODEL_PLAYER);
-	precache_model(MODEL_PLAYER_EYES);
-	precache_model(MODEL_PLAYER_HEAD);
+	precache_model("progs/player.mdl");
+	precache_model("progs/qmaster/eyes.mdl");
+	precache_model("progs/h_player.mdl");
 	precache_model("progs/q15/player_legs1.mdl");
 	precache_model("progs/q15/player_legs1_suit.mdl");
 	precache_model("progs/q15/player_legs2.mdl");

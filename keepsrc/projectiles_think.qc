@@ -626,10 +626,12 @@ void() AkArrow_Think = { // [FUNCTION]
     self.nextthink = time + 0.05;
 };
 
-// From Drake's throwing axe.  This removes the axe if its surface moves or if its been out too long.  Update:  Also called by goblin arrow code for the same purpose.
+// From Drake's throwing axe.  This removes the axe if its surface moves or if
+// its been out too long. Update:  Also called by goblin arrow code for the
+// same purpose.
 void() Axe_Watch = { // [FUNCTION]
     if (self.delay <= time) remove(self);
-    else if (vlen (self.enemy.velocity) > 0) remove(self);      // Surface moved, so remove the axe now.
+    else if (vlen (self.enemy.velocity) > 0) remove(self); // Surface moved, so remove the axe now.
     else {
 		self.nextthink = time + 0.1;
 		self.think = Axe_Watch;

@@ -1,0 +1,155 @@
+// This map has been written by QuArK - Quake Army Knife, QuArK 6.4 alpha
+// It is a map for the game Quake 1.
+// For more information see QuArK's Home Page :  http://www.planetquake.com/quark
+
+// Entity 0
+// worldspawn
+{
+ "classname" "worldspawn"
+ "wad" "gfx/QuArK.wad"
+// Brush 0
+// Border walls:g[1] -> East wall:p[1]
+ {
+  ( 432 0 96 ) ( 432 128 96 ) ( 560 0 96 ) city2_6 -432 0 0 1 1 //TX1
+  ( 432 0 -96 ) ( 432 -128 -96 ) ( 560 0 -96 ) city2_6 -432 0 0 1 -1 //TX1
+  ( 432 192 272 ) ( 432 192 400 ) ( 304 192 272 ) city2_6 432 272 0 -1 1 //TX1
+  ( 432 -192 272 ) ( 432 -192 400 ) ( 560 -192 272 ) city2_6 -432 272 0 1 1 //TX1
+  ( 272 0 272 ) ( 272 0 400 ) ( 272 128 272 ) city2_6 0 272 0 1 1 //TX1
+  ( 256 0 272 ) ( 256 0 400 ) ( 256 -128 272 ) city2_6 0 272 0 -1 1 //TX1
+ }
+// Brush 1
+// Border walls:g[1] -> West wall:p[2]
+ {
+  ( 432 0 96 ) ( 432 128 96 ) ( 560 0 96 ) city2_6 -432 0 0 1 1 //TX1
+  ( 432 0 -96 ) ( 432 -128 -96 ) ( 560 0 -96 ) city2_6 -432 0 0 1 -1 //TX1
+  ( 432 128 272 ) ( 432 128 400 ) ( 304 128 272 ) city2_6 432 272 0 -1 1 //TX1
+  ( 432 -192 272 ) ( 432 -192 400 ) ( 560 -192 272 ) city2_6 -432 272 0 1 1 //TX1
+  ( -256 0 272 ) ( -256 0 400 ) ( -256 128 272 ) city2_6 0 272 0 1 1 //TX1
+  ( -272 0 272 ) ( -272 0 400 ) ( -272 -128 272 ) city2_6 0 272 0 -1 1 //TX1
+ }
+// Brush 2
+// Border walls:g[1] -> West wall:p[3]
+ {
+  ( 304 0 96 ) ( 304 128 96 ) ( 432 0 96 ) city2_6 -304 0 0 1 1 //TX1
+  ( 304 0 -96 ) ( 304 -128 -96 ) ( 432 0 -96 ) city2_6 -304 0 0 1 -1 //TX1
+  ( 304 192 272 ) ( 304 192 400 ) ( 176 192 272 ) city2_6 304 272 0 -1 1 //TX1
+  ( 304 -192 272 ) ( 304 -192 400 ) ( 432 -192 272 ) city2_6 -304 272 0 1 1 //TX1
+  ( -384 0 272 ) ( -384 0 400 ) ( -384 128 272 ) city2_6 0 272 0 1 1 //TX1
+  ( -400 0 272 ) ( -400 0 400 ) ( -400 -128 272 ) city2_6 0 272 0 -1 1 //TX1
+ }
+// Brush 3
+// Border walls:g[1] -> North wall:p[4]
+ {
+  ( 432 0 96 ) ( 432 128 96 ) ( 560 0 96 ) city2_6 -432 0 0 1 1 //TX1
+  ( 432 0 -96 ) ( 432 -128 -96 ) ( 560 0 -96 ) city2_6 -432 0 0 1 -1 //TX1
+  ( 432 208 272 ) ( 432 208 400 ) ( 304 208 272 ) city2_6 432 272 0 -1 1 //TX1
+  ( 432 192 272 ) ( 432 192 400 ) ( 560 192 272 ) city2_6 -432 272 0 1 1 //TX1
+  ( 256 0 272 ) ( 256 0 400 ) ( 256 128 272 ) city2_6 0 272 0 1 1 //TX1
+  ( -384 0 272 ) ( -384 0 400 ) ( -384 -128 272 ) city2_6 0 272 0 -1 1 //TX1
+ }
+// Brush 4
+// Border walls:g[1] -> South wall:p[5]
+ {
+  ( 432 0 96 ) ( 432 128 96 ) ( 560 0 96 ) city2_6 -432 0 0 1 1 //TX1
+  ( 432 0 -96 ) ( 432 -128 -96 ) ( 560 0 -96 ) city2_6 -432 0 0 1 -1 //TX1
+  ( 432 -192 272 ) ( 432 -192 400 ) ( 304 -192 272 ) city2_6 432 272 0 -1 1 //TX1
+  ( 432 -208 272 ) ( 432 -208 400 ) ( 560 -208 272 ) city2_6 -432 272 0 1 1 //TX1
+  ( 256 0 272 ) ( 256 0 400 ) ( 256 128 272 ) city2_6 0 272 0 1 1 //TX1
+  ( -384 0 272 ) ( -384 0 400 ) ( -384 -128 272 ) city2_6 0 272 0 -1 1 //TX1
+ }
+// Brush 5
+// Border walls:g[1] -> Sky:p[6]
+ {
+  ( 432 0 112 ) ( 432 128 112 ) ( 560 0 112 ) sky1 -432 0 0 1 1 //TX1
+  ( 432 0 96 ) ( 432 -128 96 ) ( 560 0 96 ) sky1 -432 0 0 1 -1 //TX1
+  ( 432 192 272 ) ( 432 192 400 ) ( 304 192 272 ) sky1 432 272 0 -1 1 //TX1
+  ( 432 -192 272 ) ( 432 -192 400 ) ( 560 -192 272 ) sky1 -432 272 0 1 1 //TX1
+  ( 256 0 272 ) ( 256 0 400 ) ( 256 128 272 ) sky1 0 272 0 1 1 //TX1
+  ( -384 0 272 ) ( -384 0 400 ) ( -384 -128 272 ) sky1 0 272 0 -1 1 //TX1
+ }
+// Brush 6
+// Border walls:g[1] -> Floor:p[7]
+ {
+  ( 432 0 -96 ) ( 432 128 -96 ) ( 560 0 -96 ) woodflr1_5 -432 0 0 1 1 //TX1
+  ( 432 0 -112 ) ( 432 -128 -112 ) ( 560 0 -112 ) woodflr1_5 -432 0 0 1 -1 //TX1
+  ( 432 192 272 ) ( 432 192 400 ) ( 304 192 272 ) woodflr1_5 432 272 0 -1 1 //TX1
+  ( 432 -192 272 ) ( 432 -192 400 ) ( 560 -192 272 ) woodflr1_5 -432 272 0 1 1 //TX1
+  ( 256 0 272 ) ( 256 0 400 ) ( 256 128 272 ) woodflr1_5 0 272 0 1 1 //TX1
+  ( -384 0 272 ) ( -384 0 400 ) ( -384 -128 272 ) woodflr1_5 0 272 0 -1 1 //TX1
+ }
+}
+// Entity 1
+// info_player_start:e[2]
+{
+ "classname" "info_player_start"
+ "origin" "-336 -128 -72"
+ "angle" "90"
+}
+// Entity 2
+// light:e[3]
+{
+ "classname" "light"
+ "origin" "-336 0 0"
+ "light" "200"
+}
+// Entity 3
+// light:e[4]
+{
+ "classname" "light"
+ "origin" "128 0 0"
+ "light" "200"
+}
+// Entity 4
+// monster_alouet:e[5]
+{
+ "classname" "monster_alouet"
+ "origin" "96 0 -64"
+ "angle" "0"
+}
+// Entity 5
+// monster_alouet:e[6]
+{
+ "classname" "monster_alouet"
+ "origin" "-160 -64 -64"
+ "angle" "0"
+ "target" "d1"
+}
+// Entity 6
+// light:e[7]
+{
+ "classname" "light"
+ "origin" "0 0 0"
+ "light" "300"
+}
+// Entity 7
+// path_corner:e[8]
+{
+ "classname" "path_corner"
+ "origin" "-192 -128 -64"
+ "targetname" "d1"
+ "target" "d2"
+}
+// Entity 8
+// path_corner:e[9]
+{
+ "classname" "path_corner"
+ "origin" "192 -128 -64"
+ "targetname" "d2"
+ "target" "d3"
+}
+// Entity 9
+// path_corner:e[10]
+{
+ "classname" "path_corner"
+ "origin" "192 128 -64"
+ "targetname" "d3"
+ "target" "d4"
+}
+// Entity 10
+// path_corner:e[11]
+{
+ "classname" "path_corner"
+ "origin" "-192 128 -64"
+ "targetname" "d4"
+ "target" "d1"
+}

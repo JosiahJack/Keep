@@ -207,7 +207,7 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.67) retval = "monster_beez";
 			// else if (rand < 0.68) retval = "monster_ubs";
 			else if (rand < 0.69) retval = "monster_wolf";
-			// else if (rand < 0.70) retval = "monster_wraith_lord";
+			else if (rand < 0.70) retval = "monster_wraith_lord";
 			else if (rand < 0.71) retval = "monster_xmas_elf";
 			else if (rand < 0.72) retval = "monster_xmas_raindeer";
 			else if (rand < 0.73) retval = "monster_xmas_santa";
@@ -925,7 +925,7 @@ void(string mname) BeMonsterFromString = {
 	else if (mname == "monster_wizard") { monster_wizard(); }
 	else if (mname == "monster_wolf") { monster_wolf(); }
 	else if (mname == "monster_wraith") { monster_wraith(); }
-	// else if (mname == "monster_wraith_lord") { monster_wraith_lord(); }
+	else if (mname == "monster_wraith_lord") { monster_wraith_lord(); }
 	else if (mname == "monster_wraithminion") { monster_wraithminion(); }
 	else if (mname == "monster_wraithminion2") { monster_wraithminion2(); }
 	else if (mname == "monster_wrath") { monster_wrath(); }
@@ -1300,7 +1300,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_wizard")			monster_wizard_precache();
 	else if (mname == "monster_wolf")			monster_wolf_precache();
 	else if (mname == "monster_wraith")			monster_wraith_precache();
-	// else if (mname == "monster_wraith_lord")	monster_wraith_lord_precache();
+	else if (mname == "monster_wraith_lord")	monster_wraith_lord_precache();
 	else if (mname == "monster_wraithminion")	monster_spider_precache();
 	else if (mname == "monster_wraithminion2")	monster_scorpion_precache();
 	else if (mname == "monster_wrath")			monster_wrath_precache();

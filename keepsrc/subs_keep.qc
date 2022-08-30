@@ -299,34 +299,30 @@ void() SUB_CheckRandomizedAngles = { // [FUNCTION]
 	if (self.angles_y > 360) self.angles_y = 0;
 };
 
+void(entity att) SUB_FinishAttachmentEntity = {
+	if (!att) return;
+
+	att.movetype = MOVETYPE_NONE;	// Stationary
+	att.solid = SOLID_NOT;		// no world interaction
+	setmodel(att,"");			// Hide model
+	att.velocity = '0 0 0';
+	att.state = STATE_OFF;
+};
+
+void() SUB_AttachmentFinishSelf = {
+	SUB_FinishAttachmentEntity(self);
+};
+
 void() SUB_FinishAttachment = { // [FUNCTION]
-	if (self.attachment) {
-		self.attachment.movetype = MOVETYPE_NONE;	// Stationary
-		self.attachment.solid = SOLID_NOT;		// no world interaction
-		setmodel(self.attachment,"");			// Hide model
-		self.attachment.velocity = '0 0 0';
-		self.attachment.state = STATE_OFF;
-	}
+	if (self.attachment) SUB_FinishAttachmentEntity(self.attachment);
 };
 
 void() SUB_FinishAttachment2 = { // [FUNCTION]
-	if (self.attachment2) {
-		self.attachment2.movetype = MOVETYPE_NONE;	// Stationary
-		self.attachment2.solid = SOLID_NOT;			// no world interaction
-		setmodel(self.attachment2,"");
-		self.attachment2.velocity = '0 0 0';
-		self.attachment2.state = STATE_OFF;
-	}
+	if (self.attachment2) SUB_FinishAttachmentEntity(self.attachment2);
 };
 
 void() SUB_FinishAttachment3 = { // [FUNCTION]
-	if (self.attachment3) {
-		self.attachment3.movetype = MOVETYPE_NONE;	// Stationary
-		self.attachment3.solid = SOLID_NOT;			// no world interaction
-		setmodel(self.attachment3,"");
-		self.attachment3.velocity = '0 0 0';
-		self.attachment3.state = STATE_OFF;
-	}
+	if (self.attachment3) SUB_FinishAttachmentEntity(self.attachment3);
 };
 
 void() SUB_FinishAttachments = { // [FUNCTION]

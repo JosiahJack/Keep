@@ -50,10 +50,10 @@
 //=============================================================================
 
 void() misc_deadplayer = { // [ENTITY]
-	precache_model(MODEL_PLAYER);
+	precache_model("progs/player.mdl");
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-	setmodel(self,MODEL_PLAYER);
+	setmodel(self,"progs/player.mdl");
 	setsize(self, VEC_HULL_MIN, '16 16 40');
 	if (!self.frame) self.frame = 93;
 	if (VectorIsAllZeros(self.pos1)) self.angles = '0 90 180';

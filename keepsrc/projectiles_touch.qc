@@ -1628,3 +1628,46 @@ void() vermis_spore_touch = {
 	}
 	self.lip = 1;
 };
+
+// Called when a thrown axe hits something.
+void() Axe_Touch = {
+	local vector org;
+
+    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (Reflected ()) return;
+
+    if (other.takedamage) {
+        self.touch = SUB_Null;      // Stack overflow prevention.
+        spawn_touchblood(self,other,20);
+        T_Damage(other,self,self.master,20,DAMARMOR);
+        sound(self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
+        remove(self);
+        return;
+    }
+
+    sound(self,CHAN_WEAPON,"player/axhit2.wav",1,ATTN_NORM);
+    if (other.solid != SOLID_BSP) {  // e.g., shielded mega enforcer.
+    	// Bounce off object.
+        if (self.velocity == '0 0 0') self.avelocity = '0 0 0';
+        if (self.count > 2) { // Don't let it bounce too much.
+            org = self.origin - 8*normalize(self.velocity);
+            Tent_Point (TE_GUNSHOT, org);
+            remove (self);
+
+        }
+        else
+            self.count = self.count + 1;
+        return;
+    }
+
+	// Imbed into the surface.
+    self.movetype = MOVETYPE_NONE;
+    self.velocity = self.avelocity = '0 0 0';
+    self.touch = SUB_Remove;
+    if (other) { // Hit something that may move later.  Watch the axe.
+        self.enemy = other;
+        self.delay = self.nextthink;
+        self.nextthink = time + 0.05;
+        self.think = Axe_Watch;
+    }
+};

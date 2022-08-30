@@ -270,7 +270,7 @@ void() actor_throw = { // [FUNCTION]
 void() misc_actor = { // [ENTITY]
 	if (deathmatch && !(self.spawnflags & 4096)) { remove(self); return; }
 	
-	if (!self.mdl) self.mdl = MODEL_PLAYER;
+	if (!self.mdl) self.mdl = "progs/player.mdl";
 	precache_model (self.mdl);
 	if (self.noise) precache_sound(self.noise);
 	self.solid = SOLID_NOT;				// No world interaction

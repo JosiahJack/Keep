@@ -388,7 +388,7 @@ void() newboss_awake = {
 	self.th_stand = newboss_missile1;
 	self.th_run = newboss_missile1;
 	newboss_rise1();
-	Tent_LavaSplash(self.origin,-50,"boss/out1.wav");
+	Tent_LavaSplash(self.origin,-50,"boss1/out1.wav");
 };
 
 void() monster_virtus_precache = {

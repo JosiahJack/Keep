@@ -1,38 +1,136 @@
 ---- light / ericw-tools v0.18.1-32-g6660c5f ----
 Raytracing backend: Embree
 running with 12 threads
-LoadBSPFile: 'test_weapons.bsp'
+LoadBSPFile: 'end3.bsp'
 BSP is version BSP2
-SetQdirFromPath: no "maps" in '/home/qmaster/test_weapons.bsp'--- ConvertTextures ---
+SetQdirFromPath: no "maps" in '/home/qmaster/end3.bsp'--- ConvertTextures ---
 --- LoadEntities ---
-74 entities read, 8 are lights.
+WARNING: entity at (-824 552 1432) (info_null) has targetname "topwhite5a", which is not targeted by anything.
+WARNING: entity at (-824 1112 1432) (info_null) has targetname "topwhite6a", which is not targeted by anything.
+WARNING: entity at (824 552 1432) (info_null) has targetname "topwhite2a", which is not targeted by anything.
+WARNING: entity at (824 1112 1432) (info_null) has targetname "topwhite1a", which is not targeted by anything.
+WARNING: entity at (-1184 832 -672) (info_teleport_destination) has targetname "upperport", which is not targeted by anything.
+WARNING: brush entity with mins (-543.00 257.00 -2943.00) maxs (-289.00 511.00 -2689.00) (func_door) has targetname "deathcage", which is not targeted by anything.
+WARNING: brush entity with mins (289.00 257.00 -2943.00) maxs (543.00 511.00 -2689.00) (func_door) has targetname "warcage", which is not targeted by anything.
+2191 entities read, 1518 are lights.
 --- OptionsSummary ---
+    "light" was set to "0" from map
 Embree_TraceInit: Embree version: 2.15.0
 Embree_TraceInit:
-	0 sky faces
-	1072 solid faces
+	1330 sky faces
+	50739 solid faces
 	0 filtered faces
 	0 shadow-casting skip faces
-SetupLights: 8 initial lights
-SetupLights: 8 after surface lights
-SetupLights: 8 after jittering
+SetupLights: 1518 initial lights
+SetupLights: 1518 after surface lights
+SetupLights: 1518 after jittering
+WARNING: couldn't nudge light in solid at -2424.000000 832.000000 -1608.000000
+WARNING: couldn't nudge light in solid at 1376.000000 968.000000 -1592.000000
+WARNING: couldn't nudge light in solid at 1376.000000 696.000000 -1592.000000
+WARNING: couldn't nudge light in solid at -880.000000 1840.000000 -1568.000000
 --- EstimateLightVisibility ---
-0....1....2....3....4....5....6....7....8...
-Final count: 8 lights, 0 suns in use.
+0....1....2....3....4....5....6....7....8....9....
+Final count: 1518 lights, 0 suns in use.
 Colored light entities/settings detected: .lit output enabled.
 --- LightWorld ---
 --- LightThread ---
+0....1....2\
+WARNING: Too many light styles on a face
+         lightmap point near (1120 1376 -703)
+0....1....2..\
+WARNING: Too many light styles on a face
+         lightmap point near (511 2560 -1856)
+0....1....2..\
+WARNING: Too many light styles on a face
+         lightmap point near (511 2472 -1792)
+0....1....2..\
+WARNING: Too many light styles on a face
+         lightmap point near (152 2519 -2407)
+0....1....2...\
+WARNING: Too many light styles on a face
+         lightmap point near (-159 2519 -2411)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-512 2593 -1504)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-512 2593 -2112)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2593 -1440)
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2593 -2144)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-576 2593 -2112)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2593 -1504)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2593 -2112)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-480 2561 -2048)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-560 2561 -1856)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2561 -1792)
+WARNING: Too many light styles on a face
+         lightmap point near (-511 2560 -1856)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-511 2560 -1856)
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2561 -2016)
+WARNING: Too many light styles on a face
+         lightmap point near (-608 2561 -2048)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-511 2472 -1792)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-656 2561 -1416)
+0....1....2....3...\
+WARNING: Too many light styles on a face
+         lightmap point near (-609 2561 -1512)
+0....1....2....3....\
+WARNING: Too many light styles on a face
+         lightmap point near (-349 2321 -2254)
+0....1....2....3....\
+WARNING: Too many light styles on a face
+         lightmap point near (-175 2519 -2422)
+0....1....2....3....4....5....6....7\
+WARNING: Too many light styles on a face
+         lightmap point near (-975 -849 -1727)
+0....1....2....3....4....5....6....7.\
+WARNING: Too many light styles on a face
+         lightmap point near (-1040 -896 -1719)
+0....1....2....3....4....5....6....7.\
+WARNING: Too many light styles on a face
+         lightmap point near (-1040 -1024 -1719)
+0....1....2....3....4....5....6....7..\
+WARNING: Too many light styles on a face
+         lightmap point near (-1104 -896 -1719)
+0....1....2....3....4....5....6....7..\
+WARNING: Too many light styles on a face
+         lightmap point near (-1040 -976 -1719)
+0....1....2....3....4....5....6....7..\
+WARNING: Too many light styles on a face
+         lightmap point near (-1151 -975 -1719)
 0....1....2....3....4....5....6....7....8....9....
 Lighting Completed.
 
-lightdatasize: 18058
-Writing test_weapons.lit
-0 switchable light styles (32 max)
-Writing test_weapons.bsp as BSP version BSP2
-0.306 seconds elapsed
+lightdatasize: 2208193
+Writing end3.lit
+23 switchable light styles (32 max)
+Writing end3.bsp as BSP version BSP2
+3.548 seconds elapsed
 
 stats:
-0.239299 lights tested, 0.223165 hits per sample point
+2.442982 lights tested, 1.462362 hits per sample point
 0.000000 surface lights tested, 0.000000 hits per sample point
 0.000000 bounce lights tested, 0.000000 hits per sample point
 0 empty lightmaps

@@ -710,3 +710,26 @@ void() M_FireOctopusInk = {
 		loopvar = loopvar + 1;
 	}
 };
+
+//  Throwing Axe -- Used by axeman and overlord.
+void(vector st, string axe) M_FireAxe = {
+    local vector org, dir;
+    local entity targ;
+
+    targ = self.enemy;
+    makevectors (self.angles);
+    org = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
+    dir = Aim_Ballistic (org, self.enemy.origin, 600, 200, targ, 1, SHOT_TIME_TOSS, MOVETYPE_TOSS);
+    dir = Maim_Scatter (self.enemy.origin,'0 0 0');
+    sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+    Axe_Launch(org, dir, '0 0 200', axe);
+};
+
+// Shalmissile attack.  Used by shal-rath and others.
+void(vector st, float damage, string sfx) M_Shal_Ex = {
+    self.effects = self.effects | EF_MUZZLEFLASH;
+    sound (self, CHAN_WEAPON, sfx, 1, ATTN_NORM);
+    self.attack_speed = 400;
+	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
+    if (damage) newmis.dmg  = damage;
+};

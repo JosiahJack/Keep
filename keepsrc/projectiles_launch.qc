@@ -3375,3 +3375,23 @@ void(vector vel, vector org) Launch_VermisSpore = {
 		setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
 		setorigin(newmis,org);
 };
+
+// This launches a throwing axe.
+void(vector start, vector dir, vector add, string axe) Axe_Launch = {
+    newmis = spawn ();
+    newmis.master = newmis.owner = self;
+    newmis.movetype     = MOVETYPE_BOUNCE;
+    newmis.solid        = SOLID_BBOX;
+	newmis.classgroup = CG_PROJALL;
+    newmis.classname    = "axe";
+    newmis.speed        = 600;
+    newmis.velocity     = (dir * 600) + add;
+    newmis.angles       = vectoangles(newmis.velocity);
+    newmis.avelocity    = '-600 0 0';   // Make sure pitch = 0 - speed.
+    newmis.skin         = 0;    // Normal bloody axe.
+    newmis.count        = 0;
+    newmis.touch        = Axe_Touch;
+    newmis.nextthink    = time + 2.5;
+    newmis.think        = SUB_Remove;
+    setall(newmis,"progs/drake/throwax2.mdl",'0 0 0','0 0 0',start);
+};

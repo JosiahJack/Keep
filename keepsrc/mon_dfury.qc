@@ -474,26 +474,26 @@ void() dfury_magicb_shot = {
 };
 
 void(float skincolor) dfury_attachment_setup = {
-	if (self.attachment && !self.attachment.state) {
-		self.attachment.state = TRUE;
+	if (self.attachment && self.attachment.state != STATE_ON) {
+		self.attachment.state = STATE_ON;
 		setmodel(self.attachment, self.weaponglow);
 		self.attachment.alpha = 0.1;
 		self.attachment.skin = skincolor;
 		setorigin(self.attachment, self.origin);
 		self.attachment.angles = self.angles;
 		self.attachment.nextthink = time + 0.15;
-		self.attachment.think = SUB_FinishAttachment;
+		self.attachment.think = SUB_AttachmentFinishSelf;
 	}
 };
 
 void() dfury_attachment_update = {		
-	if (self.attachment && self.attachment.state) {
+	if (self.attachment) {
 		setorigin(self.attachment, self.origin);
 		self.attachment.angles = self.angles;
 		self.attachment.frame = self.frame;
 		self.attachment.alpha = 0.3 + random()*0.7;
 		self.attachment.nextthink = time + 0.15;
-		self.attachment.think = SUB_FinishAttachment;
+		self.attachment.think = SUB_AttachmentFinishSelf;
 	}
 };
 
@@ -515,7 +515,6 @@ void()	dfury_magica13 = [	$magica14,	dfury_magica14] { dfury_attachment_update()
 void()	dfury_magica14 = [	$magica15,	dfury_magica15] { dfury_attachment_update();dfury_magica_shot(2); };
 void()	dfury_magica15 = [	$magica16,	dfury_run1] {};
 
-//----------------------------------------------------------------------
 // Magic Attack B - 3 x rockets launched in an arc
 // Block pain function from interrupting magic attack
 void()	dfury_magicb1 = [	$magicb1,	dfury_magicb2	] { self.pain_finished = time + 2; };
@@ -532,10 +531,8 @@ void()	dfury_magicb11 = [	$magicb11,	dfury_magicb12] {};
 void()	dfury_magicb12 = [	$magicb12,	dfury_magicb13] {};
 void()	dfury_magicb13 = [	$magica13,	dfury_run1] {};
 
-//----------------------------------------------------------------------
 // MagicB is explosive so only use if there is range available
 // Otherwise randomly pick between the two types (spikes/rockets)
-//----------------------------------------------------------------------
 void() dfury_magic = {
 	SUB_AttackFinished (2 + random());
 	self.enemydist = range_distance(self.enemy, FALSE);
@@ -553,7 +550,6 @@ void()	dfury_painA3	= [	$painA3,		dfury_painA4	] {};
 void()	dfury_painA4	= [	$painA4,		dfury_painA5	] {};
 void()	dfury_painA5	= [	$painA5,		dfury_run1	] {};
 
-//----------------------------------------------------------------------
 void()	dfury_painD1	= [	$painD1,		dfury_painD2	] {};
 void()	dfury_painD2	= [	$painD2,		dfury_painD3	] {};
 void()	dfury_painD3	= [	$painD3,		dfury_painD4	] {};
@@ -566,7 +562,6 @@ void()	dfury_painD9	= [	$painD9,		dfury_painD10	] {};
 void()	dfury_painD10	= [	$painD10,		dfury_painD11	] {};
 void()	dfury_painD11	= [	$painD11,		dfury_run1	] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage)	dfury_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -746,9 +741,9 @@ void() monster_dfury = {
 	self.attachment = spawn(); // Setup magic glowing sword effect
 	self.attachment.owner = self;
 	self.attachment.classtype = CT_ATTACHMENT;
-	setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
+	setsize(self.attachment,'0 0 0','0 0 0');
 	self.attachment.movetype = MOVETYPE_NONE;
 	self.attachment.solid = SOLID_NOT;
-	setorigin(self.attachment, self.origin);
+	setorigin(self.attachment,self.origin);
 	monster_start();
 };

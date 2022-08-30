@@ -399,7 +399,7 @@ mon_cyber.qc				// Cyberdemon, Doom, Drake's implementation.
 mon_hlord_dragon.qc			// The Beast (The Dark Lord transforms into a dragon beast), Drake.
 mon_hlord.qc				// The Dark Lord, Bane, and Hell Knight Boss (HK Boss), various might Drake enemies from SOE, Rapture, and other Tronyn maps.
 mon_rebel.qc				// Crossbow Bandit, Drake, enforcer-type enemy.
-//mon_dreadwrath.qc			// Dread Lord (Drake's version of the Rogue Overlord aka super wrath)
+mon_dreadwrath.qc			// Dread Lord (Drake's version of the Rogue Overlord aka super wrath)
 mon_trog.qc					// Nemesant, Trogolodite, and Trogboss, Zerstorer, with Drake updates, floating voodoo-doll-like wizards with various spells.
 //mon_zerst.qc				// Zerstorer, from Zerstorer, heavily modified by Qmaster to make use of Madfox's added poses.
 //mon_enf2.qc				// Nehahra

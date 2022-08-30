@@ -939,3 +939,21 @@ void(vector p1, vector p2) fat_trace = { // [FUNCTION]
         }
     }
 };
+
+// Spawns a muzzleflash.  Used by phased out monsters with a modelindex
+// of zero, who cannot display effects while modelindex is zero.
+// Update 9/5/09:  Also by players for some weapons to get around
+// Qrack's custom client muzzleflashes.
+void() SUB_Flash = {
+    local   entity  e;
+
+    e = spawn();
+    e.movetype  = MOVETYPE_NONE;    //MOVETYPE_NOCLIP;
+    e.velocity  = '0 0 0';          //self.velocity;
+    e.touch     = SUB_Null;
+    e.solid     = SOLID_NOT;
+    e.effects   = EF_MUZZLEFLASH;       // The point of this function.
+    e.nextthink = time + 0.1;
+    e.think     = SUB_Remove;
+    setall (e, "progs/null.spr", '0 0 0', '0 0 0', self.origin); // Non-zero invisible model.
+};

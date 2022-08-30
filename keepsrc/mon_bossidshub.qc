@@ -186,7 +186,7 @@ void() finale_4 = {
 	// put a player model down
 	self.oldorigin = self.oldorigin - '32 264 0';
 	setorigin(self.movelast, self.oldorigin);
-	setmodel(self.movelast, MODEL_PLAYER);
+	setmodel(self.movelast, "progs/player.mdl");
 	self.movelast.angles = '0 290 0';
 	self.movelast.frame = 1;
 

@@ -134,7 +134,7 @@ void() glitter_think = { // [FUNCTION]
 void() make_glitter = { // [FUNCTION]
 	local entity targ;
     local vector spot, vel;
-    local float rgb, go;
+    local float rgb;
 
     spot_x = self.origin_x + (crandom() * self.size_x);
     spot_y = self.origin_y + (crandom() * self.size_y);
@@ -142,26 +142,11 @@ void() make_glitter = { // [FUNCTION]
     vel = self.movedir * self.speed;
     rgb = self.count;
     if (self.lefty) {
-		// Show particles only if the client can see the spawn point.
-		// We need this check because in software mode (WinQuake),
-		// a client can see particles through non-world wall entities
-		// if said client is a long distance away.
-        go = TRUE;
-		// Don't try this in netgames.
-        if (!deathmatch) {
-            targ = checkclient();
-            if (targ) {
-                traceline (targ.origin + targ.view_ofs, spot, TRUE, targ);
-                if (trace_fraction < 1) go = FALSE;
-            } else go = FALSE;
-        }
-        if (go) {
-            if (rgb > 251) rgb = 9;
-            else if (rgb > 246) rgb = 225;
-            else if (rgb > 243) rgb = 41;
-            else if (rgb > 239) rgb = 193;
-            particle (spot, vel*0.1, rgb, 10);
-        }
+        if (rgb > 251) rgb = 9;
+        else if (rgb > 246) rgb = 225;
+        else if (rgb > 243) rgb = 41;
+        else if (rgb > 239) rgb = 193;
+        particle (spot, vel*0.1, rgb, 10);
     } else { // Heretic-style teleglitter.
         if (rgb > 251) rgb = 90;
         else if (rgb > 246) rgb = 85;
@@ -181,7 +166,7 @@ void() make_glitter = { // [FUNCTION]
         newmis.classname    = "glitter";
         newmis.frame        = rgb;
         newmis.cnt          = 0;
-        setsize (newmis, '-1 -1 -1', '1 1 1');
+        setsize(newmis,'-1 -1 -1','1 1 1');
         newmis.movedir      = self.movedir;
         newmis.speed        = self.speed;
         newmis.waitmin      = newmis.frame;
@@ -214,6 +199,7 @@ void() misc_glitter = { // [ENTITY]
     if (!self.count) self.count  = 244; // Default is bright electric blue.
     if (!self.speed) self.speed  = 100;
     if (!self.height) self.height = 50; // Acceleration per frame for teleglitter.
+    else if (self.height < 0) self.height = 0;
 
 	// Sparks should fly up by default.  An angle of 0 is assumed to mean
 	// undefined, so to force east flight path, use a yaw of 360 instead.

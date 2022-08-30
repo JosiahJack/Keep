@@ -903,7 +903,7 @@ void() PutClientInServer = {
 	else self.target2 = "";
 	
 	if (spot.cameratarget) self.cameratarget = spot.cameratarget; // Copy over any cinematic camera start sequences
-	self.headmdl = MODEL_PLAYER_HEAD;
+	self.headmdl = "progs/h_player.mdl";
 	self.takedamage = DAMAGE_AIM;
 	self.alpha = 1;
 	self.solid = SOLID_SLIDEBOX;
@@ -1002,7 +1002,7 @@ void() PutClientInServer = {
 	else self.angles = spot.angles;
 	self.v_angle = self.angles;
 	self.fixangle = TRUE;				// Turn this way immediately
-	setmodel(self, MODEL_PLAYER_EYES); // Oh, this is a hack!
+	setmodel(self, "progs/qmaster/eyes.mdl"); // Oh, this is a hack!
 	modelindex_eyes = self.modelindex;
    	setmodel(self,"progs/hipnotic/playham.mdl");
   	modelindex_hammer = self.modelindex;
@@ -1012,7 +1012,7 @@ void() PutClientInServer = {
   	modelindex_saw = self.modelindex;
 	setmodel(self, "");
 	modelindex_null = self.modelindex; // For vehicles to fully hide player more so than just eyes.
-	setmodel(self, MODEL_PLAYER);
+	setmodel(self, "progs/player.mdl");
 	modelindex_player = self.modelindex;
 	if (!modelindex_eyes) modelindex_eyes = modelindex_player;
 	if (!modelindex_hammer) modelindex_hammer = modelindex_player;
