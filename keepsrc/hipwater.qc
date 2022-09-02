@@ -1,5 +1,5 @@
 
-void() bobbingwater_think = {
+void() bobbingwater_think = { // [FUNCTION]
    local vector ang;
 
    self.count = (self.count + (self.speed * (time - self.ltime)));

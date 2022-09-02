@@ -137,13 +137,14 @@ void Rocket_Explosion2 (vector org, float x, float y);
 float() can_eat_bones;
 void MakeIcyExp (vector org);
 void(string explosound, float g1cnt, float g2cnt, float g3cnt) ExplosiveGibDeath;
+void(entity targ) ResetDebuffBurning;
 
 // Only load extra gibs when there is a monster requiring them
 // There are separate gib models because of particle trail colours
 // These functions have to be called from monster spawn functions
 // The gib system tests for the global variables defined below
 // If the extra gibs are not active then default blood vers are used
-void() precache_stonegibs = {
+void() precache_stonegibs = { // [FUNCTION]
 	gibstone = TRUE;
 	precache_model (GIB1_STONE);			// New gib - arm/leg
 	precache_model (GIB2_STONE);			// New gib - body
@@ -152,7 +153,7 @@ void() precache_stonegibs = {
 	precache_model (GIB5_STONE);			// New gib - large chunk/ball
 };
 
-void() precache_poisongibs = {
+void() precache_poisongibs = { // [FUNCTION]
 	gibpoison = TRUE;
 	precache_model (GIB1_POISON);			// New gib - arm/leg
 	precache_model (GIB2_POISON);			// New gib - body
@@ -161,7 +162,7 @@ void() precache_poisongibs = {
 	precache_model (GIB5_POISON);			// New gib - large chunk/ball
 };
 
-void() precache_bloodgibs = {
+void() precache_bloodgibs = { // [FUNCTION]
 	gibblood = TRUE;
 	precache_model (GIB1_BLOOD);			// New gib - arm/leg
 	precache_model (GIB2_BLOOD);			// New gib - body
@@ -170,7 +171,7 @@ void() precache_bloodgibs = {
 	precache_model (GIB5_BLOOD);			// New gib - large chunk/ball
 };
 
-float(float gibsound) check_gibsound = {
+float(float gibsound) check_gibsound = { // [FUNCTION]
 	if (gibsound == GIB_IMPACT_HEAVY) return TRUE;
 	else if (gibsound == GIB_IMPACT_METALA) return TRUE;
 	else if (gibsound == GIB_IMPACT_METALB) return TRUE;
@@ -181,7 +182,7 @@ float(float gibsound) check_gibsound = {
 	else return FALSE;
 };
 
-void(entity gibent) DPP_blood_trail = {
+void(entity gibent) DPP_blood_trail = { // [FUNCTION]
 	// Cannot add particle trails to the player!
 	if (gibent.flags & FL_CLIENT) {
 		dprint("\b[GIB]\b Cannot add particle trail to player!\n");
@@ -209,7 +210,7 @@ void(entity gibent) DPP_blood_trail = {
 };
 
 // Takes the angle between self and enemy and projects backwards
-vector(float gibforce) DirectionForDamage = {
+vector(float gibforce) DirectionForDamage = { // [FUNCTION]
 	local vector gvel;
 	local float gftype;
 	
@@ -259,7 +260,7 @@ vector(float gibforce) DirectionForDamage = {
 	return gvel;
 };
 
-void() RemoveGib_Final = {
+void() RemoveGib_Final = { // [FUNCTION]
 	self.think = SUB_Null;
 	self.touch = SUB_Null;
 	self.classtype = 0;
@@ -267,7 +268,7 @@ void() RemoveGib_Final = {
 	Gyro_Object_ClearPhysics(self);
 };
 
-void() RemoveGib = {
+void() RemoveGib = { // [FUNCTION]
 	if (self.owner.classtype == CT_MISCGIBF
 		|| self.owner.classgroup == CG_TEMPENT
 		|| (total_monsters - killed_monsters) > 300
@@ -285,7 +286,7 @@ void() RemoveGib = {
 	self.ltime = self.nextthink;
 };
 
-void() CheckFloorGib = {
+void() CheckFloorGib = { // [FUNCTION]
 	if (coop > 2 && numgamemasters > 0) return; // Need the money
 
 	if (self.pain_finished > time) {
@@ -318,7 +319,7 @@ void() CheckFloorGib = {
 
 float() Gib_Eaten;
 
-void() TouchGib = {
+void() TouchGib = { // [FUNCTION]
 	local vector dir;
 
 	if (InSky(self.origin)) { entity_remove(self, 0.1); return; } // Always check for sky and void functions first
@@ -402,7 +403,7 @@ void() TouchGib = {
 };
 
 // Was originally in player.qc; moved here instead.  Spawns a gib model and throws it up into the air to bounce around.
-void(float gib_no, float gib_qty) ThrowGib = {
+void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 	while (gib_qty > 0) {
 		gibitem = spawn();
 		if (!gibitem) return;
@@ -573,7 +574,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 };
 
 // Explode monster into a shower of gibs (throw head as well)
-void() monster_ThrowGib = {
+void() monster_ThrowGib = { // [FUNCTION]
 	// New gib sounds.  Zombies have special gib sound because they always go that way!  Stone enemies are just a pile of rubble and dust!
 	if (self.classgroup == CG_ZOMBIE)
 		sound(self,CHAN_VOICE, "zombie/z_gib.wav",1,ATTN_NORM);
@@ -747,7 +748,7 @@ void() monster_ThrowGib = {
 };
 
 // Check health for gib condition, and gib if so
-void() monster_check_gib = {
+void() monster_check_gib = { // [FUNCTION]
 	if (!ext_ftepart && gibbed_this_frame > 10 && !self.gibondeath) {
 		if (developer > 1) dprint("Gibbed more than 10 enemies this frame! Skipped gibbing more!\n");
 		return;
@@ -765,10 +766,8 @@ void() monster_check_gib = {
 	}
 };
 
-void(entity targ) ResetDebuffBurning;
-
 // Drake - Checks if gib should be eaten.  TRUE = yes.
-float() Gib_Eaten = {
+float() Gib_Eaten = { // [FUNCTION]
     local float leave, gibs;
 
     if (other.health <= 0) return FALSE;   // Dead.

@@ -2033,7 +2033,7 @@ float() M_FirewallCheck = { // [FUNCTION]
 };
 
 // Check for mad charge.
-void(float zdiff, float dist, void() chargefunc) CheckForCharge_boss = {
+void(float zdiff, float dist, void() chargefunc) CheckForCharge_boss = { // [FUNCTION]
 	if (!enemy_vis) return; 
 	if (time < self.attack_finished) return;	
 	if ( fabs(self.origin_z - self.enemy.origin_z) > zdiff) return;		// too much height change
@@ -2045,7 +2045,7 @@ void(float zdiff, float dist, void() chargefunc) CheckForCharge_boss = {
 	chargefunc(); 	// Charge!	
 };
 
-void() dcrossbow_checkmelee = {
+void() dcrossbow_checkmelee = { // [FUNCTION]
 	// Always return if monster is dead!
 	if (self.health < 1) return;
 
@@ -2062,7 +2062,7 @@ void() dcrossbow_checkmelee = {
 	}
 };
 
-void() CheckGugAttack = {
+void() CheckGugAttack = { // [FUNCTION]
 	local vector spot1, spot2;
 
 	if (self.carry_time > 8) {

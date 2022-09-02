@@ -123,7 +123,7 @@ void() weapon_start = {
 	item_start();
 };
 
-void() weapon_touch = {
+void() weapon_touch = { // [FUNCTION]
 	local float best, new, leave, oldhackbank, oldweapon;
 	
 	best = W_BestWeapon(other); // if the player was using his best weapon change up to the new one if better	
