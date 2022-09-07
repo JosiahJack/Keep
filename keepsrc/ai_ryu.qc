@@ -97,7 +97,7 @@ float(float yaw, float dist) Ryu_WalkMove = {
 };
 
 // Angular Movement.  Reverses angle changes caused by tilting.  Should be called each frame unless the dragon needs to tilt.
-void() ryu_untilt = {
+void() ryu_untilt = { // [FUNCTION]
     if (self.angles_z != 0) {
         if (self.angles_z < -5)
             self.angles_z = self.angles_z + 5;
@@ -456,7 +456,7 @@ float(float melee) ryu_step = {
     return TRUE; // Proceed forward.
 };
 
-void() ryu_melee = {
+void() ryu_melee = { // [FUNCTION]
     if (ryu_step(TRUE)) movetogoal(SPEED_RYU_MIN);   // Close in on the opponent.
 };
 

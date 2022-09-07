@@ -99,7 +99,7 @@ void() baron_idle41 = [$idle4,  baron_idle42 ] { ai_stand(); };
 void() baron_idle42 = [$idle3,  baron_idle43 ] { ai_stand(); };
 void() baron_idle43 = [$idle2,  baron_idle6  ] { ai_stand(); };
 
-void() baron_stand = {
+void() baron_stand = { // [FUNCTION]
     if (baron_sword_drawn ()) baron_idle1(); // Put sword away.
     else baron_idle6();
 };
@@ -123,7 +123,7 @@ void() baron_walk15 = [$run5,  baron_walk16 ] { ai_walk(6); };
 void() baron_walk16 = [$run6,  baron_walk17 ] { ai_walk(6); };
 void() baron_walk17 = [$run6,  baron_walk6  ] { ai_walk(6); };
 
-void() baron_walk = {
+void() baron_walk = { // [FUNCTION]
     if (baron_sword_drawn ()) baron_walk6(); // Start jogging.
     else baron_walk1(); // Draw sword then move.
 };
@@ -147,7 +147,7 @@ void() baron_owned1  = [$point1,  baron_owned1  ] {
     ai_stand();
 };
 
-void() baron_win = {
+void() baron_win = { // [FUNCTION]
 	local float r;
 
     if (baron_sword_drawn ()) {
@@ -180,12 +180,12 @@ void() baron_run9  = [$run4,  baron_run10 ] { monster_footstep(FALSE); ai_run(BA
 void() baron_run10 = [$run5,  baron_run11 ] { ai_run(BARON_SPEED); };
 void() baron_run11 = [$run6,  baron_run6  ] { ai_run(BARON_SPEED); };
 
-void() baron_run = {
+void() baron_run = { // [FUNCTION]
     if (baron_sword_drawn ()) baron_run6(); // Start running.
     else baron_run1(); // Draw sword then move.
 };
 
-void() baron_sword = {
+void() baron_sword = { // [FUNCTION]
     local float damage;
     local float deep;
 
@@ -220,7 +220,7 @@ void() baron_blam9  = [$blam3,  baron_blam10 ] { ai_charge(3); };
 void() baron_blam10 = [$blam2,  baron_blam11 ] { ai_charge(3); baron_sword(); };
 void() baron_blam11 = [$blam1,  baron_run    ] { ai_charge(3); baron_sword(); };
 
-void() baron_fist = {
+void() baron_fist = { // [FUNCTION]
     local vector delta, dir;
 	local float damage, up;
     
@@ -292,7 +292,7 @@ void() baron_fasts1  = [$smack1,  baron_fasts2  ] { ai_charge(6); };
 void() baron_fasts2  = [$smack3,  baron_fasts3  ] { ai_charge(4); };
 void() baron_fasts3  = [$smack6,  baron_smack7  ] { ai_charge(2); };
 
-void() baron_melee = {
+void() baron_melee = { // [FUNCTION]
     if (self.state) {
 		self.state = FALSE;
         if (self.level) self.think = baron_fasts1;
@@ -311,13 +311,13 @@ void() baron_melee = {
 // Returns TRUE if baron can summon an earth elemental.  This only checks if summoning is allowed; nothing gets spawned here.
 float() BaronGolem_Check = { return (self.minion_count < ceil(skill / 2) + 1); };
 
-void(vector start, vector dir, float sped) Baron_Ice_Launch = {
+void(vector start, vector dir, float sped) Baron_Ice_Launch = { // [FUNCTION]
     Ice_Launch (start, dir, sped);
     newmis.delay = time + 5;
     newmis.dmg = 18;    //random() * 5 + 15;
 };
 
-void() Baron_Ice = {
+void() Baron_Ice = { // [FUNCTION]
     local vector org, dir, err, base;
     local float loop;
 
@@ -336,7 +336,7 @@ void() Baron_Ice = {
     }
 };
 
-void() Earth_Touch = {
+void() Earth_Touch = { // [FUNCTION]
     if (Reflected()) return;
 
     if (other.takedamage) {
@@ -349,7 +349,7 @@ void() Earth_Touch = {
     remove(self);
 };
 
-void(vector start, vector dir, float sped) Earth_Launch = {
+void(vector start, vector dir, float sped) Earth_Launch = { // [FUNCTION]
     newmis = spawn();
     newmis.master       = newmis.owner      = self;
 	newmis.classgroup = CG_PROJALL;
@@ -375,7 +375,7 @@ void(vector start, vector dir, float sped) Earth_Launch = {
 };
 
 // Shoots a spray of rock chunks at the enemy.
-void() Baron_Earth = {
+void() Baron_Earth = { // [FUNCTION]
     local vector org, dir, err, base;
     local float loop;
 
@@ -394,7 +394,7 @@ void() Baron_Earth = {
     }
 };
 
-void() Geyser_Erupt = {
+void() Geyser_Erupt = { // [FUNCTION]
     local   entity  swap;
     local   vector  org, dir, trig;
     local   float   loop, sped, ang, qcos, qsin;
@@ -433,7 +433,7 @@ void() Geyser_Erupt = {
     remove (self);
 };
 
-void() Geyser_NextThink = {
+void() Geyser_NextThink = { // [FUNCTION]
     self.nextthink = time + 0.05;
     if (self.delay <= self.nextthink) {
         self.nextthink  = self.delay;
@@ -441,7 +441,7 @@ void() Geyser_NextThink = {
     }
 };
 
-void() Geyser_Think = {
+void() Geyser_Think = { // [FUNCTION]
     local vector spot;
 
     self.distance = self.distance + 50;
@@ -452,7 +452,7 @@ void() Geyser_Think = {
     Geyser_NextThink();
 };
 
-void() Baron_Geyser = {
+void() Baron_Geyser = { // [FUNCTION]
 	// If target is within 'droptofloor' distance, spawn a geyser at his feet.
     traceline (self.enemy.origin, self.enemy.origin - '0 0 256', TRUE, self);
     if (trace_fraction == 1) return;
@@ -470,7 +470,7 @@ void() Baron_Geyser = {
 };
 
 // Lifts all enemies and their missiles in front of baron up into the air.
-void() Baron_Air = {
+void() Baron_Air = { // [FUNCTION]
     local entity head;
     local vector ang;
     local float damage;
@@ -520,7 +520,7 @@ void() Baron_Air = {
 };
 
 // Replaced lightning bolt with plasma/ball lightning.
-void(vector st) M_FireBaronPlasma = {
+void(vector st) M_FireBaronPlasma = { // [FUNCTION]
     local vector p1, p2, dir;
     local entity targ;
 
@@ -533,7 +533,7 @@ void(vector st) M_FireBaronPlasma = {
     RyuPlasma_Launch(p1,dir,1000,60);
 };
 
-void() baron_slam = {
+void() baron_slam = { // [FUNCTION]
     local   vector  org, org2, dir;
 
     makevectors(self.angles);
@@ -646,7 +646,7 @@ void() baron_point11 = [$point11, baron_run     ] { ai_face(); };
 // SoE/Rapture:  Don't use hknight_shot like in Drake because of the
 // various changes required for Tronyn's modified knights.
 // The basic shot code is otherwise the same as the hell knights'.
-void(float offset) baron_shot = {
+void(float offset) baron_shot = { // [FUNCTION]
     local vector offang, org, vec;
     
     offang = vectoangles (self.enemy.origin - self.origin);
@@ -698,7 +698,7 @@ void() baron_magica6  = [$magica6,  baron_magica7  ] { ai_face(); baron_shot(-2)
 };
 void() baron_magica7  = [$magica7,  baron_run      ] { ai_face(); };
 
-void() baron_magic = {
+void() baron_magic = { // [FUNCTION]
     if (self.level) {
         local   float   r;
         local   float   opt;
@@ -836,7 +836,7 @@ void() baron_tjump  = [$jump3,  baron_jump5  ] {
     self.nextthink = time + 0.2;
 };
 
-void() baron_jumptouch = {
+void() baron_jumptouch = { // [FUNCTION]
     if (self.health <= 0) return;
 
 	// PM:  Check for leaping slash attack.
@@ -896,7 +896,7 @@ void() baron_jumptouch = {
 };
 
 // Ripped from Nehahra's ai2_tracetoss, adapted to Drake.
-float(vector ang, float sped, vector add) baron_tracejump = {
+float(vector ang, float sped, vector add) baron_tracejump = { // [FUNCTION]
     local   vector  vel, end;
     local   float   pc;
 
@@ -917,7 +917,7 @@ float(vector ang, float sped, vector add) baron_tracejump = {
     return TRUE; // Go!
 };
 
-void() baron_missile = {
+void() baron_missile = { // [FUNCTION]
     if (!(self.spawnflags & BSF_NO_JUMP))
         if (range(self.enemy) != RANGE_MELEE)   // range check not in Nehahra.
             if (random() < 0.3)     // Me: 0.2, Nehahra/Rapture: 0.3.

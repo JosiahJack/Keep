@@ -2,7 +2,7 @@
 
 void() tag_token_touch;
 
-void() tag_token_respawn = {
+void() tag_token_respawn = { // [FUNCTION]
 	local entity spawnPoint;
 	local entity tagToken;
 	
@@ -20,14 +20,14 @@ void() tag_token_respawn = {
 	droptofloor();
 };
 
-void() tag_token_fall = {
+void() tag_token_fall = { // [FUNCTION]
 	self.tag_frags = 0;
 	self.think = tag_token_respawn;
 	self.nextthink = time + 30;
 	droptofloor();
 };
 
-void() tag_token_drop = {
+void() tag_token_drop = { // [FUNCTION]
 	local entity tagToken;
 	
 	tagToken = find (world, classname, "dmatch_tag_token");
@@ -43,7 +43,7 @@ void() tag_token_drop = {
 	tagToken.nextthink = time + 0.1;
 };
 
-void() tag_token_think = {
+void() tag_token_think = { // [FUNCTION]
 	if ( self.owner.health > 0) {
 		if ( self.tag_message_time < time ) {
 			bprint ( self.owner.netname );
@@ -57,7 +57,7 @@ void() tag_token_think = {
 	} else tag_token_drop();
 };
 
-void() tag_token_touch = {
+void() tag_token_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 		
 	tag_token_owner = other;
@@ -76,7 +76,7 @@ void() tag_token_touch = {
 /*QUAKED dmatch_tag_token (1 1 0) (-16 -16 -16) (16 16 16)
 The deathmatch tag token.
 */
-void() dmatch_tag_token = {
+void() dmatch_tag_token = { // [ENTITY]
 	if ( cvar("teamplay") != TEAM_DMATCH_TAG ) { remove (self); return; }
 
 	item_setupmodel("progs/rogue/sphere.mdl",1);
@@ -87,7 +87,7 @@ void() dmatch_tag_token = {
 	item_start();
 };
 
-void(entity targ, entity attacker) dmatch_score = {
+void(entity targ, entity attacker) dmatch_score = { // [FUNCTION]
 	local entity tagToken;
 	
 	if ( teamplay == TEAM_DMATCH_TAG ) {

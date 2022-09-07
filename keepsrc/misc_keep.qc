@@ -271,7 +271,7 @@ void() splash_think = { // [FUNCTION]
 	self.nextthink = time + self.wait;
 }
 
-void() misc_splash_toggle = {
+void() misc_splash_toggle = { // [FUNCTION]
 	if (self.state) {
 		self.state = FALSE;
 		self.think = SUB_Null;
@@ -421,7 +421,7 @@ void() rotating_wall = { // [ENTITY]
 	self.avelocity_z = self.r_wall_z_spin;
 };
 
-void() move_rope_spawn = {
+void() move_rope_spawn = { // [FUNCTION]
 	local float btype;
 
 	self.attachment = find(world,targetname,self.target);

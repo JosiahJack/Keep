@@ -69,14 +69,14 @@ void() boil_expl9 = [$explode9, boil_expl9 ] {
 };
 
 // Stationary Boil - Nailed to the floor or wall
-void() boil_suicide = {
+void() boil_suicide = { // [FUNCTION]
 	if (self.health < 1) return;
 	self.use = SUB_Null;
 	// Make sure current enemy is the cause of the damage
 	T_Damage(self,self,self.enemy,self.health+1,NOARMOR);
 };
 
-void() boil_checktarget = {
+void() boil_checktarget = { // [FUNCTION]
 	local entity client;
 
 	self.enemy = self.goalentity = world; // Should never have an active enemy
@@ -98,7 +98,7 @@ void() boil_checktarget = {
 	if (self.enemydist < self.t_width) self.th_melee();
 };
 
-void() boil_squirtblood = {
+void() boil_squirtblood = { // [FUNCTION]
 	if (self.waitmin < time) {
 		self.waitmin = time + self.wait + random() * self.wait;
 		sound(self,CHAN_WEAPON,"ad171/wraith/bounce.wav",1,ATTN_IDLE);
@@ -153,7 +153,7 @@ void(entity inflictor, entity attacker, float take) boil_pain = {
 	return; // No special animation
 };
 
-void() boil_explode = {
+void() boil_explode = { // [FUNCTION]
 	local entity head;
 	local float cand;
 
@@ -215,7 +215,7 @@ void() boil_explode = {
 	if (self.healamount > 0) DropHealthpack();
 };
 
-void() boil_die = {
+void() boil_die = { // [FUNCTION]
 	// Upward fountain of gibs
 	self.max_health = MON_GIBFOUNTAIN;
 	monster_death_precheck();
@@ -228,7 +228,7 @@ void() boil_die = {
 	self.nextthink = time + 0.1;
 };
 
-void() monster_boil_precache = {
+void() monster_boil_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_boil.mdl");
 	precache_sound("ad171/zombie/boil_idle1.wav");
 	precache_sound("ad171/zombie/boil_idle2.wav");
@@ -240,11 +240,10 @@ void() monster_boil_precache = {
 };
 
 // QUAKED monster_boil (1 0 0) (-16 -16 -24) (16 16 32)
-void() monster_boil = {
+void() monster_boil = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	monster_boil_precache();
 	self.mdl = "progs/ad171/mon_boil.mdl";
 	self.idle_sound = "ad171/zombie/boil_idle1.wav";
 	self.idle_sound2 = "ad171/zombie/boil_idle2.wav";

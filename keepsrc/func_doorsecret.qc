@@ -206,7 +206,7 @@ void() func_door_secret_reset = { // [FUNCTION]
 
 };
 
-void() func_door_secret_blocked = {
+void() func_door_secret_blocked = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 	if (time < self.attack_finished) return;
 	self.attack_finished = time + 0.5;

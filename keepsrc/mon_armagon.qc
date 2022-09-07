@@ -420,7 +420,7 @@ void() armagon_die14 = [ 97.000, armagon_die14 ] {
 	DropCoin(1);
 };
 
-void() armagon_body_explode2 = {
+void() armagon_body_explode2 = { // [FUNCTION]
    sound(self,CHAN_AUTO,"drake/misc/longexpl.wav",TRUE,ATTN_ARMAGON);
    self.think = armagon_body_explode2;
    self.movetype = MOVETYPE_NONE;
@@ -430,7 +430,7 @@ void() armagon_body_explode2 = {
    s_explode1();
 };
 
-void() armagon_body_explode1 = {
+void() armagon_body_explode1 = { // [FUNCTION]
    self.think = armagon_body_explode1;
    self.nextthink = (time + 0.100);
    if ( (self.cnt == FALSE) )
@@ -457,12 +457,12 @@ void(entity inflictor, entity attacker, float damage) armagon_pain = {
    sound(self,CHAN_VOICE,"hipnotic/armagon/pain.wav",TRUE,ATTN_NORM);
 };
 
-void() armagon_missile_attack = {
+void() armagon_missile_attack = { // [FUNCTION]
    if ( (random () < 0.500) ) armagon_watk1();
    else armagon_wlaseratk1();
 };
 
-void() armagon_repulse_attack = {
+void() armagon_repulse_attack = { // [FUNCTION]
    local entity head;
    local vector dir;
 
@@ -542,7 +542,6 @@ void() monster_armagon = {
 
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	monster_armagon_precache();
 	self.lefty = FALSE;
 	body = spawn();
 	body.origin = self.origin;

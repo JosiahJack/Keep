@@ -50,12 +50,12 @@
 //=============================================================================
 
 // For pressing a use keybind to use something.  Used by purchase triggers.
-void() usecommand = {
+void() usecommand = { // [FUNCTION]
 	self.usingfinished = time + 0.8; // show that we pressed using for a bit, to give time for touches to register
 };
 
 // Sets up the base game states for versus mode
-void() versus_setup = {
+void() versus_setup = { // [FUNCTION]
 	precache_model("progs/qmaster/coinitem.mdl"); // Spawned by all monsters on death
 	precache_model("progs/qmaster/boneitem.mdl"); // Spawned by all monsters on death, if gamemasters are present
 	coins = 0;
@@ -66,7 +66,7 @@ void() versus_setup = {
 	dprint("\b[VERSUS]\b Versus mode setup and active!\n");
 };
 
-void(entity targ) set_teamsurvivor = {
+void(entity targ) set_teamsurvivor = { // [FUNCTION]
 	if (targ.versustype < 1) {
 		targ.versustype = VT_SURVIVOR;
 		targ.alignment = GOOD;
@@ -80,7 +80,7 @@ void(entity targ) set_teamsurvivor = {
 	}   
 };
 
-void(entity targ) set_teamgamemaster = {
+void(entity targ) set_teamgamemaster = { // [FUNCTION]
 	if (targ.versustype < 1) {
 		targ.versustype = VT_GAMEMASTER;
 		targ.alignment = EVIL;
@@ -91,20 +91,20 @@ void(entity targ) set_teamgamemaster = {
 		} else {
 			sprint(targ,"Already on a team, can't change mid-game");
 		}
-	}   
+	}
 };
 
 // Let's Survivors know how many coins they have collected to use for purchasing weapons, items, doors, etc.
-void() print_coins = {
+void() print_coins = { // [FUNCTION]
 	if ((coop < 3 || (coop > 2 && self.versustype == VT_SURVIVOR)) || developer > 0) centerprint2(self,"Coin total: ",ftos(coins));
 };
 
 // Let's Gamemasters know how many gibs they have collected to use for purchasing more monsters or events.
-void() print_bones = {
+void() print_bones = { // [FUNCTION]
 	if ((coop > 2 && self.versustype == VT_GAMEMASTER) || developer > 0) centerprint2(self,"Gib total: ",ftos(bones));
 };
 
-void() item_coin_touch_versus = {
+void() item_coin_touch_versus = { // [FUNCTION]
    if (coop > 2 && other.versustype != VT_SURVIVOR)  return;
    if ( !(other.flags & FL_CLIENT) ) return;
 

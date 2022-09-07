@@ -1023,18 +1023,12 @@
 		4 : "Blue"
 	]	
 ]
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_pent.mdl") = 
-	item_artifact_invulnerability : "Pentagram of Protection" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_invis.mdl") = 
-	item_artifact_invisibility : "Ring of Shadows" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_quad.mdl") = 
-	item_artifact_super_damage : "Quad damage" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_tome.mdl") = 
-	item_artifact_tomeofpower : "Tome of Power" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_piercer.mdl") = 
-	item_artifact_nail_piercer : "Nail Piercer" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_sharp.mdl") = 
-	item_artifact_sharp_shooter : "Sharp Shooter" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_pent.mdl") = item_artifact_invulnerability : "Pentagram of Protection" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_invis.mdl") = item_artifact_invisibility : "Ring of Shadows" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_quad.mdl") = item_artifact_super_damage : "Quad damage" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_tome.mdl") = item_artifact_tomeofpower : "Tome of Power" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_piercer.mdl") = item_artifact_nail_piercer : "Nail Piercer" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_sharp.mdl") = item_artifact_sharp_shooter : "Sharp Shooter" []
 //_____JUMP BOOTS_____
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad181/artifact_jumpboots.mdl") = item_artifact_jumpboots : "Jump Boots, Permanent upgrade! Primary : Player can do (1-4) extra jumps. Secondary : Can jump while falling off ledges or midair." [
 	noise(sound) : "Custom Sound (pickup)"
@@ -1087,22 +1081,15 @@
 @PointClass base(Items) size(-32 -32 -24, 32 32 40) studio("progs/qrally/sumabase.mdl") = item_rallycar : "Drivable Vehicle" []
 @PointClass base(Items,PowerupSize) studio("progs/madfox/mushroom_item.mdl") = item_mariomushroom : "A Strange Shroom" []
 
-@PointClass base(Items,PowerupSize,PowerTimer) = 
-	item_artifact_random : "Random Powerup or Backpack" []
-@PointClass base(Items,PowerupSize) = 
-	item_taunt : "Taunt Unusable Item" [
+@PointClass base(Items,PowerupSize,PowerTimer) = item_artifact_random : "Random Powerup or Backpack" []
+@PointClass base(Items,PowerupSize) = item_taunt : "Taunt Unusable Item" [
 	model(string) : "Model"
 ]
-@PointClass base(Items,PowerupSize) studio("progs/drake/zerkhelm.mdl") = 
-	item_artifact_berserker : "Berserker Helm" []
-@PointClass base(Items,PowerupSize) studio("progs/drake/shotty.mdl") = 
-	item_artifact_optimizer : "Shotgun Optimizer" []
-@PointClass base(Items,PowerupSize) studio("progs/drake/gemini.mdl") = 
-	item_artifact_equalizer : "Twin Shot" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/levitate.mdl") = 
-	item_artifact_levitation : "Boots of Levitation" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/regen.mdl") = 
-	item_artifact_regeneration : "Rejuvenation" [
+@PointClass base(Items,PowerupSize) studio("progs/drake/zerkhelm.mdl") = item_artifact_berserker : "Berserker Helm" []
+@PointClass base(Items,PowerupSize) studio("progs/drake/shotty.mdl") = item_artifact_optimizer : "Shotgun Optimizer" []
+@PointClass base(Items,PowerupSize) studio("progs/drake/gemini.mdl") = item_artifact_equalizer : "Twin Shot" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/levitate.mdl") = item_artifact_levitation : "Boots of Levitation" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/regen.mdl") = item_artifact_regeneration : "Rejuvenation" [
 	spawnflags(Flags) = [
 		1 : "Lesser" : 0
 	]	
@@ -1241,7 +1228,6 @@
 	netname(string) : "Override name of the weapon"
 ]
 
-//----------------------------------------------------------------------
 @PointClass base(Weapon) studio("progs/ad171/g_shadaxeplain.mdl") = weapon_axe : "Axe" []
 @PointClass base(Weapon) studio("progs/g_shot.mdl") = weapon_supershotgun : "Super shotgun" []
 @PointClass base(Weapon) studio("progs/ad171/g_nail.mdl") = weapon_nailgun : "Nailgun" []
@@ -1355,7 +1341,6 @@
 	]		
 ]
 
-//----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_button : "Button" [
 	speed(integer) : "Speed (def=40)"
 	wait(integer) : "Delay before reset (def=1)"
@@ -1485,8 +1470,7 @@
 	noise1(string) : "Custom sound - Stopped"
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]	
-@SolidClass base(Appearflags, Targetname) = func_elvtr_button : "Elevator button"
-[
+@SolidClass base(Appearflags, Targetname) = func_elvtr_button : "Elevator button" [
 	spawnflags(Flags) = 
 	[
 		1 : "Down" : 0
@@ -1527,8 +1511,7 @@
 	]
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
-@SolidClass base(FuncItems, FuncLighting) = func_multi_exploder : "Multiple Explosions"
-[
+@SolidClass base(FuncItems, FuncLighting) = func_multi_exploder : "Multiple Explosions" [
 	spawnflags(flags) =
 	[
 		1 : "Use Particles" : 0
@@ -1548,7 +1531,6 @@
 	delay(integer) : "Triggered Delay"
 ]
 
-//----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_train : "Train" [
 	spawnflags(Flags) = [
 		1 : "Start ON" : 0
@@ -1609,7 +1591,6 @@
 	count(integer) : "Fire on Count(def=1)"
 ]
 
-//----------------------------------------------------------------------
 @PointClass base(Appearflags) size(-8 -8 -8, 8 8 8) = path_corner : "Path Corner" [
 	spawnflags(Flags) = [
 		1 : "Exact logic" : 0
@@ -1659,7 +1640,6 @@
 	target(target_destination) : "Targetname of Forward route"
 ]
 
-//----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_wall : "Wall" [
 	spawnflags(Flags) = [
 		2 : "A Frame" : 0
@@ -1690,6 +1670,7 @@
 	]
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
+
 @SolidClass base(FuncItems, FuncLighting) = func_episodegate : "Episode Gate" [
 	spawnflags(Flags) = [
 		1 : "Episode 1" : 0
@@ -1699,8 +1680,9 @@
 	]
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
+
 @SolidClass base(FuncItems, FuncLighting) = func_bossgate : "Boss gate" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
-//----------------------------------------------------------------------
+
 @SolidClass base(FuncItems, FuncLighting) = func_laser : "Lasers" [
 	spawnflags(Flags) = [
 		2 : "Solid" : 0
@@ -1719,7 +1701,7 @@
 	noise1(string) : "Custom sound : Switch ON"
 	noise2(string) : "Custom sound : Switch OFF"
 ]
-//----------------------------------------------------------------------
+
 @SolidClass base(FuncItems, FuncLighting) = func_skill : "Skill Select" [
 	spawnflags(Flags) = [
 		1 : "Start Open" : 0
@@ -1741,7 +1723,7 @@
 	noise3(string) : "Custom sound : Touch"
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
-//----------------------------------------------------------------------
+
 @SolidClass base(FuncItems, FuncLighting) = func_bob : "Bobbing Bmodel" [	
 	height(integer) : "Intensity (def=4)"
 	count(integer) : "Cycle timer (def=2, min=1)"
@@ -1750,7 +1732,7 @@
 	delay(integer) : "Delay start (-1=random)"
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]	
-//----------------------------------------------------------------------
+
 @SolidClass base(FuncItems, FuncLighting) = func_explobox : "Exploding Brushwork" [
 	noise(string) : "Custom Sound - Explosion"
 	health(integer) : "Health (def=15)"
@@ -2789,8 +2771,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ne_ruins/pot1.mdl") = misc_breakable_pot1 []
 @PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_vase1.mdl") = misc_breakable_vase1 []
 
-@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_exploder : "Explosion"
-[
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_exploder : "Explosion" [
 	spawnflags(flags) =
 	[
 		1 : "Use Particles" : 0
@@ -2806,8 +2787,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	]
 	volume(string) : "Explosion Volume" : "1.0"
 ]
-@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_explode : "Explosion, Zerstorer version"
-[
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_explode : "Explosion, Zerstorer version" [
 	spawnflags(flags) =
 	[
 		1 : "Use Particles" : 0
@@ -4039,10 +4019,8 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ]
 
 //----------------------------------------------------------------------
-@PointClass base(Appearflags,Targetname) size(-4 -4 -4, 4 4 4) = 
-	info_rotate : "Rotating Objects pivot point" []
-@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) =
-	func_rotate_entity : "Rotating Object" [
+@PointClass base(Appearflags,Targetname) size(-4 -4 -4, 4 4 4) = info_rotate : "Rotating Objects pivot point" []
+@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) = func_rotate_entity : "Rotating Object" [
 	spawnflags(flags) = [
 		1 : "Toggle" : 0
 		2 : "Start ON" : 0
@@ -4066,8 +4044,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	noise1(string) : "Custom start sound"
 	speed(integer) : "Set speed of train"
 ]
-@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) =
-	func_rotate_train : "Rotating Platform" [
+@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) = func_rotate_train : "Rotating Platform" [
 	path(string) : "Starting position"
 	speed(integer) : "Travel Speed (def=100)"
 	dmg(integer) : "blocking damage (def=0)"
@@ -4086,8 +4063,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 @SolidClass base(HipItems) = rotate_object : "Rotating Object" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
-@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) =
-	func_rotate_door : "Rotating Door" [
+@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) = func_rotate_door : "Rotating Door" [
 	spawnflags(flags) = [
 		1 : "Stay Open" : 0 : "Reopen after closing, stops a once only door from closing"
 	]
@@ -4277,7 +4253,6 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	brkgravity(integer) : "Rubble gravity (def=1)"
 ]
 
-//----------------------------------------------------------------------
 @SolidClass base(Break) = func_breakable : "Breakable" [
 	noise1(string) : "Break noise"
 	noise2(string) : "Explode noise"
@@ -4513,6 +4488,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass base(MonArmagon) studio("progs/hipnotic/armabody.mdl") = monster_armagon : "Armagon" []
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") = monster_army : "Grunt" []
 @PointClass base(MonTall) studio("progs/mon_axeman.mdl") = monster_axeman : "Axe Knight" []
+@PointClass base(MonTall) model({"path": "progs/mon_axeman.mdl","skin": 1,"frame": 0}) = monster_thug : "Forest Thug" []
 @PointClass base(MonShort) studio("progs/lunaran/axegrunt.mdl") = monster_axegrunt : "Axe Solider" []
 @PointClass base(MonShort) studio("progs/kinn/sgrunt.mdl") = monster_super_grunt : "Super Solider" []
 @PointClass base(MonShort) model({"path": "progs/ad171/mon_soldier.mdl","skin": 4,"frame": 0}) = monster_army_rocket : "Rocket Soldier" []
@@ -4547,8 +4523,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		2 : "Asleep" : 2
 	]
 ]
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
+
 @PointClass base(MonDemon) studio("progs/mon_demon.mdl") = monster_demon1 : "Fiend" [
 	poisonous(integer) : "Poison attack+skin" : : "Change skin + poison dmg"
 ]
@@ -4624,7 +4599,6 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	]
 ]
 
-//----------------------------------------------------------------------
 @PointClass base(MonShort) studio("progs/ad171/mon_knight.mdl") = monster_knight : "Knight. Uses upgraded AD model." + 
 " Part of the Death Brigade.  Stronger than a death guard but still" +
 " useful for early on axe combat. Capable of starting as a statue which uses a stone skin." [
@@ -4692,7 +4666,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		4 : "Nails" : 0
 	]
 ]
-//----------------------------------------------------------------------
+
 @PointClass base(MonWide) studio("progs/ogre.mdl") = monster_ogre : "Ogre" [
 	spawnflags(flags) = [
 		2 : "Multi-grenades" : 0
@@ -4725,7 +4699,6 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass base(MonWide) studio("progs/ad171/mon_hogreham.mdl") = monster_hogreham : "Hunter Ogre Hammer"
 [ spawnflags(flags) = [ 4 : "Metal Skin" : 0 ] ]
 
-//----------------------------------------------------------------------
 @PointClass base(MonGiant) studio("progs/quoth/drole.mdl") = monster_drole : "Drole" []
 @PointClass base(MonGiant) studio("progs/ad171/mon_minotaur.mdl") = monster_minotaur : "Minotaur" [
 	spawnflags(flags) = [
@@ -4733,8 +4706,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		4 : "Minions" : 0
 	]
 ]
-@PointClass base(MonTall) studio("progs/rogue/mon_morph_az.mdl") = monster_morph : "Mighty Morphin Power Smurf"
-[
+@PointClass base(MonTall) studio("progs/rogue/mon_morph_az.mdl") = monster_morph : "Mighty Morphin Power Smurf" [
 	spawnflags(Flags) = 
 	[
 		1 : "Ambush" : 0
@@ -4743,8 +4715,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		8 : "Greek" : 0
 	]
 ]
-@PointClass base(MonWide) studio("progs/ad171/mon_shalrath.mdl") = monster_shalrath : "Shalrath"
-[ spawnflags(flags) = [ 4 : "Minions" : 0 ] ]
+@PointClass base(MonWide) studio("progs/ad171/mon_shalrath.mdl") = monster_shalrath : "Shalrath" [ spawnflags(flags) = [ 4 : "Minions" : 0 ] ]
 
 @PointClass base(MonWide) studio("progs/q15/shalrath_boss.mdl") = monster_shalrath_boss : "Shalrath Queen" []
 
@@ -4947,8 +4918,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	noise1(string) : "Name, Death Lightning Start"
 	noise2(string) : "Name, Death Lightning End"
 ]
-@PointClass size(-80 -80 -24, 80 80 256) studio("progs/ad171/mon_bosschthon.mdl") = monster_chthon : "Chthon"
-[
+@PointClass size(-80 -80 -24, 80 80 256) studio("progs/ad171/mon_bosschthon.mdl") = monster_chthon : "Chthon" [
 	spawnflags(flags) = [ 
 		2 : "Evil Red" : 0
 		4 : "Green" : 0
@@ -4977,8 +4947,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ]
 @PointClass base(Monster) size(-16 -16 -24, 16 16 32) studio("progs/oldone.mdl") = monster_oldone : "Shub-Niggurath" []
 @PointClass base(Targetname,Appearflags,Target) size(-12 -12 -24, 12 12 128) studio("progs/q15/oldone_tent.mdl") = monster_oldone_tentacle : "Shub Tendril" []
-@PointClass size(-128 -128 -24, 128 128 192) studio("progs/oldone.mdl") = monster_shub : "Shub-Niggurath"
-[
+@PointClass size(-128 -128 -24, 128 128 192) studio("progs/oldone.mdl") = monster_shub : "Shub-Niggurath" [
 	spawnflags(flags) = [
 		2 : "Trig Dmg" : 0
 		8 : "Idle Until 2nd Trigger" : 0
@@ -5002,8 +4971,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	noise4(string) : "Wave 4 trigger"
 	deathtype(string) : "Death message (optional)"
 ]
-@PointClass size(-128 -128 -192, 128 128 24) studio("progs/oldone.mdl") = monster_shubupsd : "Shub Upside Down"
-[
+@PointClass size(-128 -128 -192, 128 128 24) studio("progs/oldone.mdl") = monster_shubupsd : "Shub Upside Down" [
 	spawnflags(flags) = [
 		2 : "Trig Dmg" : 0
 		8 : "Idle Until 2nd Trigger" : 0
@@ -5094,8 +5062,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 
 @PointClass base(MonVermis) studio("progs/quoth/vermis.mdl") = monster_vermis : "Vermis" []
 @PointClass base(MonMassive) studio("progs/madfox/mon_spellmas.mdl") = monster_spellmaster : "Baseboss (very similar to Virtus boss, not the same)" []
-@PointClass base(MonMassive) studio("progs/virtus/newboss.mdl") = monster_virtus: "Virtus Boss"
-[
+@PointClass base(MonMassive) studio("progs/virtus/newboss.mdl") = monster_virtus: "Virtus Boss" [
 	spawnflags(Flags) = 
 	[
 		2 : "No Exit Message" : 0
@@ -5497,8 +5464,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ///	These use "smart" waypoints and trigger relays that actually control most aspects of the train, but a simple train can still be setup by ignoring extra options. 
 ///	The last waypoint does not need a target. The train will either auto-reverse (if set) or wait for manual reverse/move triggers.
 
-@SolidClass = func_train_ext : "Train (Extra)"
-[
+@SolidClass = func_train_ext : "Train (Extra)" [
 	speed(integer) : "Speed" : 0 : "Speed of the train (can be overridden by waypoints)"
 	dmg(integer) : "Damage" : : "Amonut of damage to inflict when blocked"
 	noise(string) : "Noise" : : "Start/travel noise (can be overridden by waypoints)"
@@ -5532,8 +5498,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ///	train_ext_waypoint - func_train_ext is "dumb" on it's own these entities really control the train. 
 ///	These are used by func_watertrain as well.
 
-@PointClass = train_ext_waypoint : "Train (Extra) Waypoint"
-[
+@PointClass = train_ext_waypoint : "Train (Extra) Waypoint" [
 	speed(integer) : "Speed" : : "Forward speed from this waypoint to the next (-1 is warp to next waypoint)"
 	wait(integer) : "Wait" : 0 : "Time to pause at this waypoint when moving forward (-1 is wait for re-trigger, 0 is no pause)"
 	noise(string) : "Noise" : : "Override train's start/travel noise from this waypoint to the next when moving forward"
@@ -5560,8 +5525,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///func_button_ext - Simlilar to func_button, but can be disabled/enabled via triggers and allows for both touch and weapon hits to activate if specified.
 
-@SolidClass = func_button_ext : "Button (Extra)"
-[
+@SolidClass = func_button_ext : "Button (Extra)" [
 	angle(angle) : "Angle" : : "Move direction"
 	lip(integer) : "Lip" : 4 : "Override the default 4 pixel lip remaining at end of move"
 	speed(integer) : "Speed" : 40 : "Override the default 40 speed"
@@ -5592,8 +5556,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 ///	You can "attach" a func_switch to a func_train_ext (switch goes where the train goes) but due to this, 
 ///	these don't move like buttons and are always passthrough to avoid blocking issues (therefore, they can not be shot to activate).
 
-@SolidClass = func_switch : "Switch"
-[
+@SolidClass = func_switch : "Switch" [
 	wait(integer) : "Wait" : -1 : "Returns to original state after 'wait' seconds (default is -1, wait for re-trigger)"
 	angle(angle) : "Angle" : : "Angle player must be facing in order to activate by touch"
 	noise(string) : "Noise" : : "Path to push noise"

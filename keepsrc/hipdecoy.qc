@@ -70,7 +70,7 @@ void() decoy_walk1 = [ 6.000, decoy_walk1 ] {
 	self.walkframe = (self.walkframe + TRUE);
 };
 
-void() monster_decoy_go = {
+void() monster_decoy_go = { // [FUNCTION]
    self.origin_z = self.origin_z + 1;
    droptofloor();
    if (!walkmove(0,0)) {
@@ -111,7 +111,7 @@ void() monster_decoy_go = {
    self.nextthink = (self.nextthink + (random () * 0.500));
 };
 
-void(entity decoy) setup_decoy = {
+void(entity decoy) setup_decoy = { // [FUNCTION]
    local entity pl;
 
    decoy.classname = "monster_decoy";
@@ -131,7 +131,7 @@ void(entity decoy) setup_decoy = {
    decoy.colormap = pl.colormap; // TODO: Find random player in coop.
 };
 
-void() monster_decoy_precache = {
+void() monster_decoy_precache = { // [FUNCTION]
 	precache_sound("hipnotic/misc/foot1.wav");
 	precache_sound("hipnotic/misc/foot2.wav");
 	precache_sound("hipnotic/misc/foot3.wav");
@@ -141,14 +141,14 @@ void() monster_decoy_precache = {
 	precache_sound("hipnotic/misc/foot7.wav");
 };
 
-void() monster_decoy = {
+void() monster_decoy = { // [ENTITY]
 	if ( deathmatch ) { remove(self); return; }
 
 	setup_decoy(self);
 	monster_decoy_go();
 };
 
-void(string targ, vector orig) become_decoy = {
+void(string targ, vector orig) become_decoy = { // [FUNCTION]
 	local entity decoy, temp;
 
 	decoy = spawn();

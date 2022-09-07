@@ -1,9 +1,8 @@
-
 void() hip_train_next;
 
 void() hip_func_train_find;
 
-void() hip_train_use = {
+void() hip_train_use = { // [FUNCTION]
 
    if ( (self.think != hip_func_train_find) ) {
 
@@ -18,7 +17,7 @@ void() hip_train_use = {
 
 };
 
-void() hip_train_wait = {
+void() hip_train_wait = { // [FUNCTION]
 
    if (self.wait ) {
 
@@ -39,7 +38,7 @@ void() hip_train_wait = {
 
 };
 
-void() hip_train_next = {
+void() hip_train_next = { // [FUNCTION]
 
    local entity targ;
    local float current;
@@ -94,7 +93,7 @@ void() hip_train_next = {
 
 };
 
-void() hip_func_train_find = {
+void() hip_func_train_find = { // [FUNCTION]
 
    local entity targ;
 

@@ -309,7 +309,7 @@ void() trigger_secret = { // [ENTITY]
 	trigger_bmodel_setup(); // Setup Entity State functionality
 };
 
-void() trigger_teleport_sound = { // [ENTITY]
+void() trigger_teleport_sound = { // [FUNCTION]
 	if (!self.owner) { StopSound(self,CHAN_VOICE); return; } // Has the original bmodel trigger been deleted!?!  Clear sound channel with silence (full volume) if so.
 	if (self.owner.attack_finished > time) return; // Has the trigger been hidden/removed?
 	
@@ -928,7 +928,7 @@ float() trigger_pushable = { // [FUNCTION]
 			|| self.bmodel_act.classtype == CT_FUNCBREAKOBJ); // gibs affected.
 };
 
-void() trigger_push_controlled_arc = {
+void() trigger_push_controlled_arc = { // [FUNCTION]
 	local float zdiff, dist, spdattn;
 
 	dist = vlen((self.movetarget.origin - self.bmodel_act.origin));

@@ -68,33 +68,33 @@
 //=============================================================================
 
 // These entity states are monitored and updated by the entity
-void() entity_state_on = { 
+void() entity_state_on = { // [FUNCTION]
 	if (self.estate_on) self.estate_on(); 
 	else self.estate = ESTATE_ON;
 };
 
-void() entity_state_off = { 
+void() entity_state_off = { // [FUNCTION]
 	if (self.estate_off) self.estate_off();
 	else self.estate = ESTATE_OFF;
 };
 
-void() entity_state_disable = { 
+void() entity_state_disable = { // [FUNCTION]
 	if (self.estate_disable) self.estate_disable();
 	self.estate = ESTATE_DISABLE;
 };
 
-void() entity_state_reset = { 
+void() entity_state_reset = { // [FUNCTION]
 	if (self.estate_reset) self.estate_reset();
 };
 
-void() entity_state_aframe = {
+void() entity_state_aframe = { // [FUNCTION]
 	if (!self.estate_aframe) return; // Only switch frames if the entity has a function defintion.  This will restrict to entities designed for this change.
 
 	if (other.state == 0) self.frame = 0;
 	else self.frame = 1;
 };
 
-void() entity_state_use = {
+void() entity_state_use = { // [FUNCTION]
 	// Does the firing entity have specific state requests?
 	if (other.estate_trigger) {
 		if (other.estate_trigger & ESTATE_ON) entity_state_on();
@@ -111,18 +111,7 @@ void() entity_state_use = {
 	}
 };
 
-// QUAKED trigger_entitystate_x (.7 .5 1) (-8 -8 -16) (8 8 16) x
-// -------- KEYS --------
-// target, target2, target3, target4  : target entities to affect x
-// wait    : -1 = will only fire targets once
-// delay   : delay before firing (after being triggered)
-// cnt     : random amount of time to add to delay
-// sounds  : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
-// noise   : custom sound to play when triggered
-// volume  : Volume for all custom sounds played (def=1, range=0-1)
-// -------- NOTES --------
-// Switch the target(s) entity state X
-void(string targstr) trigger_entitystate_target = {
+void(string targstr) trigger_entitystate_target = { // [FUNCTION]
 	local entity t, stemp, otemp;
 
 	t = find(world, targetname, targstr); // Start looking for targets to update
@@ -138,7 +127,7 @@ void(string targstr) trigger_entitystate_target = {
 	}
 };
 
-void() trigger_entitystate_fire = {
+void() trigger_entitystate_fire = { // [FUNCTION]
 	if (self.noise != "") sound(self,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Play any trigger sounds
 	if (self.target != "") trigger_entitystate_target(self.target);
 	if (self.target2 != "") trigger_entitystate_target(self.target2);
@@ -147,7 +136,7 @@ void() trigger_entitystate_fire = {
 	if (self.wait < 0) self.attack_finished = time + LARGE_TIMER; // TRIGGER_ONCE functionality
 };	
 
-void() trigger_entitystate_use = {
+void() trigger_entitystate_use = { // [FUNCTION]
 	if (self.attack_finished > time) return; // Is the trigger blocked? (trigger_once)
 
 	// Check for delay fire functionality
@@ -158,34 +147,45 @@ void() trigger_entitystate_use = {
 	} else trigger_entitystate_fire(); // Fire/use straight away
 };
 
-void() trigger_entitystate_togglechecks = {
+void() trigger_entitystate_togglechecks = { // [FUNCTION]
 	self.classtype = CT_ESTATE;
 	trigger_bmodel_sounds();			// Precache any sounds
 	if (self.target == "") dprint("\b[ENTSTATE]\b Missing target!\n");
 	if (self.targetname != "") self.use = trigger_entitystate_use;
 };
 
-void() trigger_entitystate_off = {
+// QUAKED trigger_entitystate_x (.7 .5 1) (-8 -8 -16) (8 8 16) x
+// -------- KEYS --------
+// target, target2, target3, target4  : target entities to affect x
+// wait    : -1 = will only fire targets once
+// delay   : delay before firing (after being triggered)
+// cnt     : random amount of time to add to delay
+// sounds  : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
+// noise   : custom sound to play when triggered
+// volume  : Volume for all custom sounds played (def=1, range=0-1)
+// -------- NOTES --------
+// Switch the target(s) entity state X
+void() trigger_entitystate_off = { // [ENTITY]
 	trigger_entitystate_togglechecks();
 	self.estate_trigger = ESTATE_OFF;
 };
 
-void() trigger_entitystate_on = {
+void() trigger_entitystate_on = { // [ENTITY]
 	trigger_entitystate_togglechecks();
 	self.estate_trigger = ESTATE_ON;
 };
 
-void() trigger_entitystate_disable = {
+void() trigger_entitystate_disable = { // [ENTITY]
 	trigger_entitystate_togglechecks();
 	self.estate_trigger = ESTATE_DISABLE;
 };
 
-void() trigger_entitystate_reset = {
+void() trigger_entitystate_reset = { // [ENTITY]
 	trigger_entitystate_togglechecks();
 	self.estate_trigger = ESTATE_RESET;
 };
 
-void() trigger_entitystate_aframe = {
+void() trigger_entitystate_aframe = { // [ENTITY]
 	trigger_entitystate_togglechecks();
 	self.estate_trigger = ESTATE_AFRAME;
 };

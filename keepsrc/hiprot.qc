@@ -352,7 +352,7 @@ void() path_rotate = {
 	if (self.noise1) precache_sound(self.noise1);
 };
 
-void() rotate_train_think = {
+void() rotate_train_think = { // [FUNCTION]
 	local float t, timeelapsed;
 
 	t = time - self.ltime;
@@ -375,14 +375,14 @@ void() rotate_train_think = {
 	self.nextthink = time + 0.02;
 };
 
-void() rotate_train_use = {
+void() rotate_train_use = { // [FUNCTION]
 	if (self.think1 != rotate_train_find) {
 		if (self.velocity != '0 0 0' ) return;		// already activated
 		if (self.think1 ) self.think1();
 	}
 };
 
-void() rotate_train_wait = {
+void() rotate_train_wait = { // [FUNCTION]
 	self.state = RSTATE_WAIT;
 	if (self.goalentity.noise ) sound(self,CHAN_VOICE, self.goalentity.noise,1,ATTN_NORM);
 	else sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
@@ -397,7 +397,7 @@ void() rotate_train_wait = {
 	self.think1 = rotate_train_next;
 };
 
-void() rotate_train_stop = {
+void() rotate_train_stop = { // [FUNCTION]
 	self.state = RSTATE_STOP;
 	if (self.goalentity.noise ) sound(self,CHAN_VOICE, self.goalentity.noise,1,ATTN_NORM);
 	else sound(self,CHAN_VOICE, self.noise,1,ATTN_NORM);
@@ -411,7 +411,7 @@ void() rotate_train_stop = {
 	self.think1 = rotate_train_next;
 };
 
-void() rotate_train_next = {
+void() rotate_train_next = { // [FUNCTION]
 	local entity targ, current;
 	local vector vdestdelta;
 	local float len, traveltime, div;
@@ -570,12 +570,12 @@ void() func_rotate_train = {
 	self.flags = self.flags | FL_ONGROUND;
 };
 
-void() rotate_train = {	dprint("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers\n"); self.classname = "func_rotate_train"; func_rotate_train(); };
+void() rotate_train = {	dprint("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers\n"); self.classname = "func_rotate_train"; func_rotate_train(); }; // [ENTITY], Redirect.
 
 void() rotate_door_reversedirection;
 void() rotate_door_group_reversedirection;
 
-void() movewall_touch = {
+void() movewall_touch = { // [FUNCTION]
 	if (time < self.owner.attack_finished) return;
 
 	if (self.dmg ) {
@@ -587,7 +587,7 @@ void() movewall_touch = {
 	}
 };
 
-void() movewall_blocked = {
+void() movewall_blocked = { // [FUNCTION]
 	local entity temp;
 
 	if (time < self.owner.attack_finished) return;
@@ -611,7 +611,7 @@ void() movewall_blocked = {
 	}
 };
 
-void() movewall_think = {
+void() movewall_think = { // [FUNCTION]
 	self.ltime = time;
 	self.nextthink = time + 0.02;
 };
@@ -665,7 +665,7 @@ void() func_movewall = {
 // -------- NOTES --------
 // Defines a bmodel object to be rotated
 // Used as the target of func_rotate_door
-void() rotate_object_move = {
+void() rotate_object_move = { // [FUNCTION]
 	local entity ent;
 	
 	ent = find( world, targetname, self.target2);
@@ -676,7 +676,7 @@ void() rotate_object_move = {
 	}
 };
 
-void() rotate_object = {
+void() rotate_object = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	if (!self.target) { dprint("\b[ROT OBJECT]\b missing target!\n"); return; }
 	self.classname = "rotate_object";
@@ -694,7 +694,7 @@ void() rotate_object = {
 	else self.think = SUB_Null;
 };
 
-void() rotate_door_think2 = {
+void() rotate_door_think2 = { // [FUNCTION]
 	local float t;
 
 	t = time - self.ltime;
@@ -713,7 +713,7 @@ void() rotate_door_think2 = {
 	RotateTargetsFinal();
 };
 
-void() rotate_door_think = {
+void() rotate_door_think = { // [FUNCTION]
 	local float t;
 
 	t = time - self.ltime;
@@ -730,7 +730,7 @@ void() rotate_door_think = {
 	self.nextthink = time + 0.01;
 };
 
-void() rotate_door_reversedirection = {
+void() rotate_door_reversedirection = { // [FUNCTION]
 	local vector start;
 
 	self.frame = 1 - self.frame; // change to alternate textures
@@ -751,7 +751,7 @@ void() rotate_door_reversedirection = {
 	self.ltime = time;
 };
 
-void() rotate_door_group_reversedirection = {
+void() rotate_door_group_reversedirection = { // [FUNCTION]
 	local string name;
 
 	if (self.group ) {
@@ -764,7 +764,7 @@ void() rotate_door_group_reversedirection = {
 	} else rotate_door_reversedirection();
 };
 
-void() rotate_door_use = {
+void() rotate_door_use = { // [FUNCTION]
 	local vector start;
 
 	if ( (self.state != RSTATE_OPEN ) && (self.state != RSTATE_CLOSED ) ) return;
@@ -805,7 +805,7 @@ void() rotate_door_use = {
 // STAYOPEN : Reopen after closing, stops a once only door from closing if blocked
 // -------- NOTES --------
 // Rotating door moving around a point of rotation
-void() func_rotate_door = {
+void() func_rotate_door = { // [ENTITY]
 	if (!self.target) { dprint("\b[ROT DOOR]\b missing target!\n"); return; }
 
 	self.dest1 = '0 0 0';

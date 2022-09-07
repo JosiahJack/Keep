@@ -95,7 +95,7 @@ void() nour_walk9	= [	$idle9, nour_walk10] { ai_walk(8); };
 void() nour_walk10	= [	$idle10, nour_walk11] { ai_walk(8); };
 void() nour_walk11	= [	$idle11, nour_walk1] { ai_walk(8); };
 
-void() nour_slideframe = {
+void() nour_slideframe = { // [FUNCTION]
 	// Check for boss mode (phase and wave check)
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		if (self.style != NOUR_PHASE2) return;
@@ -123,13 +123,12 @@ void() nour_slideframe = {
 	else ai_run(8);
 };
 
-//----------------------------------------------------------------------
-void() nour_slide1 = { self.walkframe = 0; nour_slideframe(); };
+void() nour_slide1 = { self.walkframe = 0; nour_slideframe(); }; // [FUNCTION]
 
 
 // RUN state - chasing the player
 
-void() nour_runframe = {
+void() nour_runframe = { // [FUNCTION]
 	// Check for boss mode (phase and wave check)
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		if (self.style != NOUR_PHASE2) return;
@@ -156,7 +155,7 @@ void() nour_runframe = {
 	else ai_run(16);
 };
 
-void() nour_run1 = { self.walkframe = 0; nour_runframe(); };
+void() nour_run1 = { self.walkframe = 0; nour_runframe(); }; // [FUNCTION]
 
 // Attachment management (create, finish and delete)
 void() nour_create_attachment = {
@@ -174,7 +173,7 @@ void() nour_create_attachment = {
 // ATTACK A - Fire multiple spit/spikes
 // Block pain function from interrupting magic attack
 
-void(vector offset) nour_spike = {
+void(vector offset) nour_spike = { // [FUNCTION]
 	local vector dtarget, starget, ftarget, sorg, forg, dir;
 	
 	if (!self.enemy) return;
@@ -244,7 +243,7 @@ void(vector bombofs) Fire_NourBomb = {
 	launch_projectile(org,dir,avel,CT_PROJ_NOUR2,1);
 };
 
-void(vector bombofs, float bombframe) Setup_NourBomb = {
+void(vector bombofs, float bombframe) Setup_NourBomb = { // [FUNCTION]
 	local vector org;
 	if (self.health < 1) return;
 	
@@ -297,7 +296,7 @@ void() nour_attb16	= [$shotb16, nour_attb17] { ai_face(); };
 void() nour_attb17	= [$shotb17, nour_run1] { ai_face(); };
 
 // Fire random plasma spikes while summoning wizard minions
-void(vector minofs) Fire_NourPlasma = {
+void(vector minofs) Fire_NourPlasma = { // [FUNCTION]
 	local vector org;
 
 	makevectors(self.angles);
@@ -307,7 +306,7 @@ void(vector minofs) Fire_NourPlasma = {
 	launch_projectile(org,self.pos3,NO_SPIN,CT_SUMMONLIGHT,SPEED_REFLECTION);
 };
 
-void(vector minofs) Spawn_NourMin = {
+void(vector minofs) Spawn_NourMin = { // [FUNCTION]
 	// Finished with bomb effect
 	SUB_FinishAttachment();
 	Fire_NourPlasma(minofs);
@@ -381,7 +380,7 @@ void(vector minofs, float minframe) Setup_NourMin = {
 	Fire_NourPlasma(minofs); // Generate a random bolt of electricity
 };
 
-void() nour_powersummon = {
+void() nour_powersummon = { // [FUNCTION]
 	// Block all damage while summoning stuff
 	Resist_ChangeType(self, TRUE);
 	
@@ -412,7 +411,8 @@ void() nour_powersummon = {
 	}
 };
 
-void() nour_attc1	= [$shotc1, nour_attc2] { ai_face();
+void() nour_attc1	= [$shotc1, nour_attc2] { // [FUNCTION]
+	ai_face();
 	// Make sure boss mode active for this attack
 	if (!(self.spawnflags & MON_NOUR_BOSS)) { self.think = self.th_run; return; }
 
@@ -462,7 +462,7 @@ void() nour_painb7 = [$painb7, nour_painb8 ] {};
 void() nour_painb8 = [$painb8, nour_painb9 ] {};
 void() nour_painb9 = [$painb9, nour_run1 ] {};
 
-void(entity inflictor, entity attacker, float damage) nour_pain = {
+void(entity inflictor, entity attacker, float damage) nour_pain = { // [FUNCTION]
 	// Finish with all attachments
 	SUB_FinishAttachment();
 
@@ -489,7 +489,7 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 };
 
 // Death comes to us all, even Nour!
-void() nour_explode = {
+void() nour_explode = { // [FUNCTION]
 	if (self.message2 != "") trigger_strs(self.message2,self); // Final triggers
 	entity_hide(self);
 	Tent_Explosion2(self.origin,35,8); // Blue ID particle explosion
@@ -510,7 +510,7 @@ void() nour_explode = {
 };
 
 // Spawn implosion effect and lightning.
-void(float partcol) nour_lightningdeath = {
+void(float partcol) nour_lightningdeath = { // [FUNCTION]
 	if (random() < 0.5) particle_implode(self.origin,20+random()*20,100,100,partcol);
 	else { // Spawn particle smoke and explosive smoke
 		SpawnProjectileSmoke(self.origin,150,100,300);
@@ -545,7 +545,7 @@ void() nour_die9 = [$death9, nour_die9 ] {
 	nour_lightningdeath(PARTICLE_BURST_BLUE); // No more Nour!
 };
 
-void() nour_die = {
+void() nour_die = { // [FUNCTION]
 	self.deadflag = DEAD_DEAD;	// Nour bites the dust
 	self.effects = 0;			// Remove effects on death
 	SUB_FinishAttachment();	// Remove any attachments
@@ -561,7 +561,7 @@ void() nour_die = {
 // Create minion entity chain
 // Entities are created so that the spawning space can be tested
 // before spawning the minions for possible collisions
-float() nour_minionsetup = {
+float() nour_minionsetup = { // [FUNCTION]
 	local entity min_prev, min_first;
 	
 	self.lip = self.attack_summon;
@@ -594,7 +594,7 @@ float() nour_minionsetup = {
 	else return TRUE;
 };
 
-void() nour_spawntether = {
+void() nour_spawntether = { // [FUNCTION]
 	// temporary tether point
 	self.movelast = spawn();
 	self.movelast.owner = self;
@@ -606,7 +606,7 @@ void() nour_spawntether = {
 };
 
 // REVEAL PHASE (coming out of the ground)
-void() nour_readyframe = {
+void() nour_readyframe = { // [FUNCTION]
 	self.walkframe = 0;				// Reset just in case
 	self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
 	self.movetype = MOVETYPE_STEP;	// back to regular movement
@@ -617,7 +617,7 @@ void() nour_readyframe = {
 	else self.th_stand();			// Wait for the player
 };
 
-void() nour_revealframe = {
+void() nour_revealframe = { // [FUNCTION]
 	// Beginning of animation block
 	if (self.walkframe == 3) 
 		sound(self,CHAN_BODY,"ad171/nour/reveal.wav",1,ATTN_NORM);
@@ -656,7 +656,7 @@ void() nour_revealframe = {
 };
 
 // Setup BOSS Nour after trigger event
-void() nour_awake = {
+void() nour_awake = { // [FUNCTION]
 	// make sure boss mode selected
 	if (!(self.spawnflags & MON_NOUR_BOSS)) return;
 

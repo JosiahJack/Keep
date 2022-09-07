@@ -1,3 +1,7 @@
+version 0.97:
+	Added more [FUNCTION] tags to mark as non-entities for Nifty
+	Fixed bad references found by Nifty
+	Fixed precache for some monsters
 version 0.96:
 	Fixed hipnotic earthquakes never resetting
 	Fixed hipnotic vs rogue earthquake bugs

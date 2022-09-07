@@ -23,7 +23,7 @@ float CHTHON_PHASE3 = 3;	// Frenzy mode
 float CHTHON_PHASE4 = 4;	// Death
 
 // IDLE state - waiting for player
-void() xxchthon_idleframe = {
+void() xxchthon_idleframe = { // [FUNCTION]
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return;
 
@@ -41,10 +41,10 @@ void() xxchthon_idleframe = {
 	else if (FindTarget()) self.th_missile();
 };
 
-void() xxchthon_idle = { self.walkframe = 0; xxchthon_idleframe(); };
+void() xxchthon_idle = { self.walkframe = 0; xxchthon_idleframe(); }; // [FUNCTION]
 
 // ATTACK 1 - Constant fireballs
-void(vector orgofs) xxchthon_missile = {
+void(vector orgofs) xxchthon_missile = { // [FUNCTION]
 	local vector offang, org, vec, dir, mdest, avel;
 	local float projlen;
 
@@ -75,7 +75,7 @@ void(vector orgofs) xxchthon_missile = {
 	launch_projectile (org,dir,avel,CT_PROJ_CHTHON,self.attack_speed);
 };
 
-void() xxchthon_attackframe = {
+void() xxchthon_attackframe = { // [FUNCTION]
 	if (self.health < 1) return; // Get the obvious exception(s) done first
 
 	if (self.walkframe == 0) monster_idle_sound(); // Beginning of animation block
@@ -100,10 +100,10 @@ void() xxchthon_attackframe = {
 	}
 };
 
-void() xxchthon_attack = { self.walkframe = 0; xxchthon_attackframe(); };
+void() xxchthon_attack = { self.walkframe = 0; xxchthon_attackframe(); }; // [FUNCTION]
 
 // Re-using the original shock animations for end of wave event
-void() xxchthon_shakeattack = {
+void() xxchthon_shakeattack = { // [FUNCTION]
 	local vector org, ang, dir, avel;
 
 	self.attack_speed = self.pos3_x; // Custom grenade firing speed
@@ -118,7 +118,7 @@ void() xxchthon_shakeattack = {
 	launch_projectile(org,dir,avel,CT_PROJ_CHTHON2,1);
 };
 
-void() xxchthon_shakeframe = {
+void() xxchthon_shakeframe = { // [FUNCTION]
 	if (random() < 0.75) xxchthon_shakeattack(); // Randomnly fire grenades outward
 	self.nextthink = time + 0.1; // Keep on looping around
 	self.think = xxchthon_shakeframe;
@@ -142,8 +142,7 @@ void() xxchthon_shakeframe = {
 	else self.frame = $shockc1 + self.walkframe;
 };
 
-//----------------------------------------------------------------------
-void() xxchthon_shake = {
+void() xxchthon_shake = { // [FUNCTION]
 	// Start roaring and shaking
 	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_NORM);
 	Resist_ChangeType(self, TRUE);
@@ -151,10 +150,7 @@ void() xxchthon_shake = {
 	xxchthon_shakeframe();
 };
 
-
-// PAIN and DEATH
-
-void(entity inflictor, entity attacker, float damage) xxchthon_pain = {
+void(entity inflictor, entity attacker, float damage) xxchthon_pain = { // [FUNCTION]
 
 	// Check for boss wave trigger events
 	if (SUB_BossWaveCheck(0)) { self.th_jump(); return; }
@@ -169,7 +165,7 @@ void(entity inflictor, entity attacker, float damage) xxchthon_pain = {
 };
 
 // DEATH - Fall down and explode
-void() xxchthon_lavasplash = {
+void() xxchthon_lavasplash = { // [FUNCTION]
 	if (ext_dppart) {
 		// Two different types of liquid splash (only DP)
 		if (self.spawnflags & MON_CHTHON_GREEN) 
@@ -178,13 +174,13 @@ void() xxchthon_lavasplash = {
 	}
 };
 
-void() xxchthon_explode = {
+void() xxchthon_explode = { // [FUNCTION]
 	entity_hide(self); // No more Boss!
 	self.max_health = MON_GIBEXPLOSION; // Gib explosive fountain!?!
 	ThrowGib(11, 15 + rint(random()*10));	// lava explosions
 };
 
-void() xxchthon_explosion = {
+void() xxchthon_explosion = { // [FUNCTION]
 	// Pick random location above/center of chthin
 	self.oldorigin = self.origin + vecrand(0,100,TRUE);
 	self.oldorigin_z = self.origin_z + 50 + random()*100;
@@ -198,17 +194,17 @@ void() xxchthon_explosion = {
 	ThrowGib(11, 1);
 };
 
-void() xxchthon_death1 = [$death1, xxchthon_death2] {};
-void() xxchthon_death2 = [$death2, xxchthon_death3] { xxchthon_explosion(); };
-void() xxchthon_death3 = [$death3, xxchthon_death4] { xxchthon_explosion(); };
-void() xxchthon_death4 = [$death4, xxchthon_death5] { xxchthon_explosion(); };
-void() xxchthon_death5 = [$death5, xxchthon_death6] { xxchthon_explosion(); };
-void() xxchthon_death6 = [$death6, xxchthon_death7] { xxchthon_explosion(); };
-void() xxchthon_death7 = [$death7, xxchthon_death8] { xxchthon_explosion(); };
-void() xxchthon_death8 = [$death8, xxchthon_death9] { xxchthon_explosion(); };
-void() xxchthon_death9 = [$death9, xxchthon_explode] { xxchthon_lavasplash(); };
+void() xxchthon_death1 = [$death1, xxchthon_death2] {}; // [FUNCTION]
+void() xxchthon_death2 = [$death2, xxchthon_death3] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death3 = [$death3, xxchthon_death4] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death4 = [$death4, xxchthon_death5] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death5 = [$death5, xxchthon_death6] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death6 = [$death6, xxchthon_death7] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death7 = [$death7, xxchthon_death8] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death8 = [$death8, xxchthon_death9] { xxchthon_explosion(); }; // [FUNCTION]
+void() xxchthon_death9 = [$death9, xxchthon_explode] { xxchthon_lavasplash(); }; // [FUNCTION]
 
-void() xxchthon_die = {
+void() xxchthon_die = { // [FUNCTION]
 	self.style = CHTHON_PHASE4;		// Game Over for Chthon!
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
@@ -242,7 +238,7 @@ void() xxchthon_rise17	= [	$rise17, xxchthon_attack ] {
 };
 
 // Setup Chthon after trigger event
-void() xxchthon_awake = {
+void() xxchthon_awake = { // [FUNCTION]
 	self.use = SUB_Null;			// No more triggers
 	self.style = CHTHON_PHASE1;		// Rising from Lava
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)

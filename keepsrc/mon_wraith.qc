@@ -739,8 +739,10 @@ void() monster_wraith_precache = {
 	precache_sound("ad171/wraith/attack3.wav"); // Minions
 	precache_sound("ad171/wraith/bounce.wav"); // Egg bounce
 	precache_sound("ad171/wraith/sight1.wav");
-	monster_scorpion_precache();
-	monster_spider_precache();
+	if (self.minion_name == "monster_scorpion"
+        || (self.spawnflags & MON_WRAITH_SCORPIONS)) monster_scorpion_precache();
+	if (self.minion_name == "monster_spider"
+        || (self.spawnflags & MON_WRAITH_SPIDERS)) monster_spider_precache();
 };
 
 // QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush

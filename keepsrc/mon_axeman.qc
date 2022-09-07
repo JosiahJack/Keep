@@ -137,10 +137,9 @@ void() monster_ax_precache = {
 };
 
 // monster_axeman (1 0 0) (-16 -16 -24) (16 16 40) Ambush, Ferocious axe-wielding maniac :)
-void() monster_ax = { // [ENTITY]
+void() monster_ax = { // [ENTITY], Redirect
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	monster_ax_precache();
 	self.mdl = "progs/mon_axeman.mdl";
 	self.headmdl = "progs/h_knight.mdl";
 	self.gib1sound = GIB_IMPACT_METALA;
@@ -179,7 +178,7 @@ void() monster_ax = { // [ENTITY]
 	monster_start();
 };
 
-void() monster_axeman = { monster_ax(); }; // [ENTITY], Re-direct.
+void() monster_axeman = { monster_ax(); }; // [ENTITY]
 
 void() monster_thug = { // [ENTITY], Re-skin only.
     self.skin = self.exactskin = 1;

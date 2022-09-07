@@ -230,20 +230,20 @@ void(float rndperc) rnd_addpoison;
 void(vector rndvec, float prevind) rnd_prevnumber;
 float(float seedstart) srandom;
 
-void() rnd_cachesounds = {
+void() rnd_cachesounds = { // [FUNCTION]
 	if (randomcache) return;
 	
 	randomcache = TRUE;
 	precache_sound(RND_SURPRISEPOS); // Positive random surprise
 	precache_sound(RND_SURPRISENEG); // Negative random surprise
 };
-void(entity targ, string soundtype) rnd_playsurprise = {
+void(entity targ, string soundtype) rnd_playsurprise = { // [FUNCTION]
 	if (randomcache <= 0) return;
 	
 	sound(targ,CHAN_AUTO,soundtype,1,ATTN_NORM);
 };
 
-float(float rseed) rnd_checkseedrange = {
+float(float rseed) rnd_checkseedrange = { // [FUNCTION]
 	local float ret_val;
 	
 	if (rseed <= 0) ret_val = 1; // Cannot have zero or negative
@@ -253,14 +253,14 @@ float(float rseed) rnd_checkseedrange = {
 };
 
 // Used INTERNALLY to the randomizer function
-void() disable_randflags = {
+void() disable_randflags = { // [FUNCTION]
 	randomflags = cvar("scratch3");
 	randomflags = randomflags - (randomflags & RND_DISABLE); // Remove all gameplay mode bits (1-8)
 	cvar_set("scratch3", ftos(randomflags));
 };
 
 // Used INTERNALLY to the randomizer function
-float() check_randflags = {
+float() check_randflags = { // [FUNCTION]
 	randomflags = cvar("scratch3");
 	if (randomflags & RND_FAMILYSPAWN) return TRUE;
 	else if (randomflags & RND_BBOXSPAWN) return TRUE;
@@ -268,7 +268,7 @@ float() check_randflags = {
 };
 
 // Used INTERNALLY to clean chaos flag of internal bit values
-float(float cleanflags) clean_randflags = {
+float(float cleanflags) clean_randflags = { // [FUNCTION]
 	local float ret_val;
 	ret_val = cleanflags;
 	// Remove internal bitflags
@@ -279,7 +279,7 @@ float(float cleanflags) clean_randflags = {
 	return ret_val;
 };
 
-float() generate_randomseed = {
+float() generate_randomseed = { // [FUNCTION]
 	local float rndcount, rndloop, flip_val, ret_val;
 	
 	// Generate seed with 4 random numbers combined.  The downside is the extreme values (low/high) are very rare
@@ -298,7 +298,7 @@ float() generate_randomseed = {
 	return ret_val; // Final result
 };
 
-void() setup_randomseed = {
+void() setup_randomseed = { // [FUNCTION]
 	local float i, rndoffset;
 	
 	rnd_cachesounds(); // Cache random reward sounds
@@ -328,7 +328,7 @@ void() setup_randomseed = {
 	}
 };
 
-float(float seedno) fetch_randomnumber = {
+float(float seedno) fetch_randomnumber = { // [FUNCTION]
 	local float ret_val;
 	
 	ret_val = srandom(randomseed[seedno]); // Randomly pick another type
@@ -338,7 +338,7 @@ float(float seedno) fetch_randomnumber = {
 };
 
 // Create all random numbers
-void(float seedno) rnd_generateseeds = {
+void(float seedno) rnd_generateseeds = { // [FUNCTION]
 	self.randomclass = self.classname; // Save original classname for debug stats
 	self.randomized = fetch_randomnumber(seedno);
 	self.randomupg = fetch_randomnumber(seedno);
@@ -346,7 +346,7 @@ void(float seedno) rnd_generateseeds = {
 };
 
 // IMPORTANT - This function is called on FRAME 0!  Randomizes all monsters.  Called from all monsters' .qc files
-float() monster_checkrandomizer = {
+float() monster_checkrandomizer = { // [FUNCTION]
 	if (HasTargets(self)) return FALSE; // prevent removing monsters required by counters
 	if (check_randflags() == FALSE) return FALSE; // Is the randomizer system active?
 	if (self.randomized != 0) return FALSE; // Has the entity already been randomized?
@@ -370,7 +370,7 @@ float() monster_checkrandomizer = {
 };
 
 // IMPORTANT - This function is called on FRAME 0!  Check for monsters spawning instead of Health Packs.  Called from items.qc / item_health
-float() health_checkrandomizer = {
+float() health_checkrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return FALSE; // Is the randomizer system active?
 	if (self.randomized != 0) return FALSE; // Has the entity already been randomized?
 	if (framecount > 0) return FALSE; // This can only happen on frame 0
@@ -415,7 +415,7 @@ float() health_checkrandomizer = {
 };
 
 // IMPORTANT - This function is called on FRAME 0!  Convert small ammo packs to large for shotgun/plasma fragments.  Called from items.qc / item_shells, item_cells, item_plasma
-float() ammo_checkrandomizer = {
+float() ammo_checkrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return FALSE; // Is the randomizer system active?
 	if (self.randomized != 0) return FALSE; // Has the entity already been randomized?
 	if (framecount > 0) return FALSE; // This can only happen on frame 0
@@ -442,7 +442,7 @@ float() ammo_checkrandomizer = {
 };
 
 // IMPORTANT - This function is called on FRAME 0!  Check for different spawning options for armour.  Called from items.qc / various armour spawn routines
-float() armour_checkrandomizer = {
+float() armour_checkrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return FALSE; // Is the randomizer system active?
 	if (self.randomized != 0) return FALSE; // Has the entity already been randomized?
 	if (framecount > 0) return FALSE; // This can only happen on frame 0
@@ -487,7 +487,7 @@ float() armour_checkrandomizer = {
 };
 
 // IMPORTANT - This function is called on FRAME 0!  Check for different spawning options for artifact/powerups.  Called from items.qc / various artifact spawn routines
-float() artifact_checkrandomizer = {
+float() artifact_checkrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return FALSE; // Is the randomizer system active?
 	if (self.randomized != 0) return FALSE; // Has the entity already been randomized?
 	if (framecount > 0) return FALSE; // This can only happen on frame 0
@@ -545,7 +545,7 @@ float() artifact_checkrandomizer = {
 	else return FALSE;
 };
 
-void() rnd_dogfamily = {
+void() rnd_dogfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 0;
@@ -570,7 +570,7 @@ void() rnd_dogfamily = {
 	}
 };
 
-void() rnd_fishfamily = {
+void() rnd_fishfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 1;
@@ -595,7 +595,7 @@ void() rnd_fishfamily = {
 	}
 };
 
-void() rnd_armyfamily = {
+void() rnd_armyfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 2;
@@ -628,7 +628,7 @@ void() rnd_armyfamily = {
 	}
 };
 
-void() rnd_zombiefamily = {
+void() rnd_zombiefamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 3;
@@ -659,7 +659,7 @@ void() rnd_zombiefamily = {
 	}
 };
 
-void() rnd_knightfamily = {
+void() rnd_knightfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 4;
@@ -691,7 +691,7 @@ void() rnd_knightfamily = {
 	}
 };
 
-void() rnd_enforcerfamily = {
+void() rnd_enforcerfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 5;
@@ -726,7 +726,7 @@ void() rnd_enforcerfamily = {
 	}
 };
 
-void() rnd_wizardfamily = {
+void() rnd_wizardfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 6;
@@ -753,7 +753,7 @@ void() rnd_wizardfamily = {
 	}
 };
 
-void() rnd_tarbabyfamily = {
+void() rnd_tarbabyfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 7;
@@ -779,7 +779,7 @@ void() rnd_tarbabyfamily = {
 	}
 };
 
-void() rnd_ogrefamily = {
+void() rnd_ogrefamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 8;
@@ -812,7 +812,7 @@ void() rnd_ogrefamily = {
 	}
 };
 
-void() rnd_hknightfamily = {
+void() rnd_hknightfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 9;
@@ -839,7 +839,7 @@ void() rnd_hknightfamily = {
 	}
 };
 
-void() rnd_demonfamily = {
+void() rnd_demonfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 10;
@@ -863,7 +863,7 @@ void() rnd_demonfamily = {
 	}
 };
 
-void() rnd_shalrathfamily = {
+void() rnd_shalrathfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 11;
@@ -884,7 +884,7 @@ void() rnd_shalrathfamily = {
 	}
 };
 
-void() rnd_shamblerfamily = {
+void() rnd_shamblerfamily = { // [FUNCTION]
 	local vector randomrange; // Store family ranges in a vector
 	
 	self.randomindex = 12;
@@ -913,7 +913,7 @@ void() rnd_shamblerfamily = {
 };
 
 // BOUNDING BOX spawning system.  Resets HP and spawnflags.
-void() rnd_bboxspawns = {
+void() rnd_bboxspawns = { // [FUNCTION]
 	if (self.classname == "monster_enforcer") { // Humanoid Scale bounding box
 		self.randombbox = RND_BBOX1;
 		rnd_resethealth(HP_MONENFORCER);
@@ -1023,7 +1023,7 @@ void() rnd_bboxspawns = {
 };
 
 // FAMILY spawning system. Reset HP and spawnflags for randomly chosen monsters from within "families".
-void() rnd_familyspawns = {
+void() rnd_familyspawns = { // [FUNCTION]
 	if (self.classname == "monster_dog") {
 		rnd_resethealth(HP_MONDOG);
 		rnd_resetspawnflags();
@@ -1103,7 +1103,7 @@ void() rnd_familyspawns = {
 // IMPORTANT - This function is called only when monsters gib
 // Check for shadow axe fragments
 // Called from ai_gibs.qc / monster_check_gib
-void() monster_gibrandomizer = {
+void() monster_gibrandomizer = { // [FUNCTION]
 	local float wpnupg;
 	
 	if (check_randflags() == FALSE) return; // Check for randomizer system
@@ -1126,7 +1126,7 @@ void() monster_gibrandomizer = {
 };
 
 // IMPORTANT - This function is called only on item pickup.  Check for weapon fragments (shotgun/plasma).  Called from items.qc / ammo_touch
-void() ammo_touchrandomizer = {
+void() ammo_touchrandomizer = { // [FUNCTION]
 	local float wpnupg;
 
 	if (check_randflags() == FALSE) return; // Check for randomizer system
@@ -1167,7 +1167,7 @@ void() ammo_touchrandomizer = {
 };
 
 // IMPORTANT - This function is called only on item pickup.  Check for positive/negative buff Megahealth.  Called from items.qc / health_touch
-void() health_touchrandomizer = {
+void() health_touchrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return; // Check for randomizer system
 	if (!(other.flags & FL_CLIENT)) return; // Check for player
 	
@@ -1192,7 +1192,7 @@ void() health_touchrandomizer = {
 };
 
 // IMPORTANT - This function is called only on item pickup.  Check for positive/negative buff Red Armour.  Called from items.qc / armor_touch
-void() armour_touchrandomizer = {
+void() armour_touchrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return; // Check for randomizer system
 	if (!(other.flags & FL_CLIENT)) return; // Check for player
 	
@@ -1217,7 +1217,7 @@ void() armour_touchrandomizer = {
 };
 
 // IMPORTANT - This function is called only on item pickup.  Check for positive buff on artifacts (no negative).  Pent=+lava shield, Quad=+blast belt, EnvSuit=+jump boots.  Called from items.qc / artifact_touch
-void() artifact_touchrandomizer = {
+void() artifact_touchrandomizer = { // [FUNCTION]
 	if (check_randflags() == FALSE) return; // Check for randomizer system
 	if (!(other.flags & FL_CLIENT)) return; // Check for player
 	
@@ -1263,7 +1263,7 @@ void() artifact_touchrandomizer = {
 	}
 };
 
-float() rnd_upgwpnmax_shadowaxe = {
+float() rnd_upgwpnmax_shadowaxe = { // [FUNCTION]
 	local float ret_val;
 	
 	if (skill == SKILL_EASY) ret_val = RND_FRAGAXE; // Default Shadow Axe fragments (5=Easy, 9=Normal, 13=Hard+)
@@ -1274,7 +1274,7 @@ float() rnd_upgwpnmax_shadowaxe = {
 	return ret_val;
 };
 
-float() rnd_upgwpnmax_widowmaker = {
+float() rnd_upgwpnmax_widowmaker = { // [FUNCTION]
 	local float ret_val;
 	
 	if (skill == SKILL_EASY) ret_val = RND_FRAGSHELL; // Default WidowMaker fragments (3=Easy, 4=Normal, 5=Hard+)
@@ -1285,7 +1285,7 @@ float() rnd_upgwpnmax_widowmaker = {
 	return ret_val;
 };
 
-float() rnd_upgwpnmax_plasmagun = {
+float() rnd_upgwpnmax_plasmagun = { // [FUNCTION]
 	local float ret_val;
 	
 	if (skill == SKILL_EASY) ret_val = RND_FRAGCELL; // Default PlasmaGun fragments (1=Easy, 2=Normal, 3=Hard+)
@@ -1296,7 +1296,7 @@ float() rnd_upgwpnmax_plasmagun = {
 	return ret_val;
 };
 
-void() rnd_displaydebug = {
+void() rnd_displaydebug = { // [FUNCTION]
 	dprint("\bRnd\b "); 
 	lftos(self,self.randomized,2,0,BUFFER_DPRINT);
 	dprint(" \bU\b "); 
@@ -1321,7 +1321,7 @@ void() rnd_displaydebug = {
 	dprint("\n");
 };
 
-float(vector rndvec, float rndno) rnd_fetchrange = {
+float(vector rndvec, float rndno) rnd_fetchrange = { // [FUNCTION]
 	// Find out random number range 
 	if (rndno < rndvec_x) return 1;
 	else if (rndno < rndvec_y) return 2;
@@ -1330,7 +1330,7 @@ float(vector rndvec, float rndno) rnd_fetchrange = {
 };
 
 // Make sure random number is within 1-99 range.  Cannot have a zero value, its used to test setup or not!
-float(float rndno) rnd_validaterange = {
+float(float rndno) rnd_validaterange = { // [FUNCTION]
 	local float ret_val;
 	
 	ret_val = floor(rndno);
@@ -1341,7 +1341,7 @@ float(float rndno) rnd_validaterange = {
 	return ret_val;
 };
 
-void(vector rndvec, float prevind) rnd_prevnumber = {
+void(vector rndvec, float prevind) rnd_prevnumber = { // [FUNCTION]
 	local float rndgroup;
 	
 	rndgroup = rnd_fetchrange(rndvec, self.randomized); // Find out the new random number range 
@@ -1356,32 +1356,32 @@ void(vector rndvec, float prevind) rnd_prevnumber = {
 };
 
 // Fix HP to prevent map unbalance! haha :P
-void(float hpvalue) rnd_resethealth = {
+void(float hpvalue) rnd_resethealth = { // [FUNCTION]
 	if (randomflags & RND_NORESETHP) return;
 	else self.health = hpvalue;
 };
 
 // Remove any specific spawnflags
-void() rnd_resetspawnflags = {
+void() rnd_resetspawnflags = { // [FUNCTION]
 	self.spawnflags = self.spawnflags - (self.spawnflags & 2);
 	self.spawnflags = self.spawnflags - (self.spawnflags & 4);
 };
 
 // Remove any specific spawnflags
-void() rnd_resetzombieflags = {
+void() rnd_resetzombieflags = { // [FUNCTION]
 	self.spawnflags = self.spawnflags - (self.spawnflags & 1);
 	self.spawnflags = self.spawnflags - (self.spawnflags & 2);
 	self.spawnflags = self.spawnflags - (self.spawnflags & 4);
 };
 
-void(float rndperc) rnd_addpoison = {
+void(float rndperc) rnd_addpoison = { // [FUNCTION]
 	if (randomflags & RND_NOPOISON) return; // Check for any exceptions
 	if (rndperc == 0) rndperc = RND_MIDDLE; // Default percentage chance
 	if (self.randompoison < rndperc) self.poisonous = TRUE; // Check for poison?
 };
 
 // Blocking quickload
-float() rnd_CheckNoQuickLoad = {
+float() rnd_CheckNoQuickLoad = { // [FUNCTION]
 	if (!(savegamechaos & RND_FAMILYSPAWN) && !(savegamechaos & RND_BBOXSPAWN)) return FALSE; // Is randomizer active in savegame data!?!
 	if (skill < SKILL_EVIL) return FALSE; // Skill 4 only restricted
 	if (!(savegamechaos & RND_NOQUICKLOAD)) return FALSE; // Quickload exception on savegame data!?!
@@ -1389,7 +1389,7 @@ float() rnd_CheckNoQuickLoad = {
 };
 
 // This function is about trying to detect savegame data and correct the current setup (scratch2/3 are not saved)
-float() rnd_CheckSaveGameReboot = {
+float() rnd_CheckSaveGameReboot = { // [FUNCTION]
 	local float currentseed, cleanflags, cleansavegame;
 
 	if (deathmatch > 0) return FALSE; // No deathmatch support
@@ -1439,7 +1439,7 @@ float() rnd_CheckSaveGameReboot = {
 };
 
 // Simplifed version of mathlib_bitshift
-float (float number, float exp) simple_bitshift = {
+float (float number, float exp) simple_bitshift = { // [FUNCTION]
 	local float digit, ret_val;
 	
 	digit = fabs(exp);
@@ -1454,7 +1454,7 @@ float (float number, float exp) simple_bitshift = {
 };
 
 // Random number generator using a seed system.  Originally written by spike, I removed the foo!
-vector(vector seedvec, float bitshift) magicshift = {
+vector(vector seedvec, float bitshift) magicshift = { // [FUNCTION]
 	if (bitshift > 0) { // Shift Left (LOW) bits
 		while (bitshift --> 0) {
 			seedvec_y = (seedvec_y*2)&0xfffe;
@@ -1474,7 +1474,7 @@ vector(vector seedvec, float bitshift) magicshift = {
 	return seedvec;
 };
 
-float(float seedstart) srandom = {
+float(float seedstart) srandom = { // [FUNCTION]
 	local float ret_val;
 	local vector seedval;
 	
@@ -1501,7 +1501,7 @@ float(float seedstart) srandom = {
 };
 
 // RESET original seed (mapload, ondeath, changelevel)
-void(float entrypoint) rnd_ResetRandomSeed = {
+void(float entrypoint) rnd_ResetRandomSeed = { // [FUNCTION]
 	if (deathmatch > 0) return;	// No deathmatch support
 	if (check_randflags() == FALSE) return; // Randomizer flag (options).  Also updates randomflags variable
 	

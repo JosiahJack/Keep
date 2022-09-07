@@ -747,15 +747,15 @@ void(entity ent) CopyToBodyQue = { // [FUNCTION]
 };
 
 // Stuff removed
-void() item_weapon = { remove(self); }; // [ENTITY]
-void() misc_noisemaker = { remove(self); }; // [ENTITY]
-void() noclass = { remove(self); }; // [ENTITY]
-void() test_fodder = { if (developer < 1) remove(self); }; // [ENTITY]
-void() test_goaway = { remove(self); }; // [ENTITY]
-void() test_spawn = { if (developer < 1)  remove(self); }; // [ENTITY]
-void() test_teleport = { if (developer < 1)  remove(self); }; // [ENTITY]
-void() testplayerstart = { if (developer < 1)  remove(self); }; // [ENTITY]
-void() viewthing = { if (developer < 1) remove(self); }; // [ENTITY]
+void() item_weapon = { remove(self); }; // [ENTITY], Legacy
+void() misc_noisemaker = { remove(self); }; // [ENTITY], Legacy
+void() noclass = { remove(self); }; // [ENTITY], Legacy
+void() test_fodder = { if (developer < 1) remove(self); }; // [ENTITY], Legacy
+void() test_goaway = { remove(self); }; // [ENTITY], Legacy
+void() test_spawn = { if (developer < 1)  remove(self); }; // [ENTITY], Legacy
+void() test_teleport = { if (developer < 1)  remove(self); }; // [ENTITY], Legacy
+void() testplayerstart = { if (developer < 1)  remove(self); }; // [ENTITY], Legacy
+void() viewthing = { if (developer < 1) remove(self); }; // [ENTITY], Legacy
 
 void() trigger_onlyregistered_touch = { // [FUNCTION]
 	if ( !(other.flags & FL_CLIENT) ) return;

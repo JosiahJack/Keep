@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 
-// Function count: 
+// Entity count: 1
+// Function count: 7
 //
 // Implements: Switchable Shadow (lightmaps) Brush Entities
 //
@@ -56,7 +56,7 @@ float FUNC_SHADOW_FADING = 1;	// Does the shadow fade in/out (trigger)
 .entity	switchfader; // Controller for fading shadows on bmodels
 string shad_str[10]; // The array is setup from world.qc before anything loads
 
-void() switch_shadow_setuparray = {
+void() switch_shadow_setuparray = { // [FUNCTION]
 	shad_str[0] = "a";  shad_str[1] = "c"; // Missing B
 	shad_str[2] = "d";  shad_str[3] = "e";
 	shad_str[4] = "f";  shad_str[5] = "h"; // Missing G
@@ -64,13 +64,13 @@ void() switch_shadow_setuparray = {
 	shad_str[8] = "k";  shad_str[9] = "m"; // Missing L
 };
 
-void() switch_shadow_on = {
+void() switch_shadow_on = { // [FUNCTION]
 	if (self.switchshadstyle < 1) return; // Check there is a shadow lightstyle first?  This usually 1-31 (QC defined) and 32-64 (Map defined).
 	
 	lightstyle(self.switchshadstyle, shad_str[SWITCH_ARRAY_OFF]);
 };
 
-void() switch_shadow_off = {
+void() switch_shadow_off = { // [FUNCTION]
 	if (self.switchshadstyle < 1) return; // Check there is a shadow lightstyle first?  This usually 1-31 (QC defined) and 32-64 (Map defined).
 	
 	lightstyle(self.switchshadstyle, shad_str[SWITCH_ARRAY_ON]);
@@ -97,7 +97,7 @@ void() switch_shadow_off = {
 // these with a special unique texture so they can be filtered or hidden
 // from view in the editor. This function will not work if brushwork is
 // painted with clip or skip textures. Recommend to use trigger.
-void() func_shadow_controller = {
+void() func_shadow_controller = { // [FUNCTION]
 	local entity tself;
 	
 	// There are 3 different states of the controller
@@ -124,7 +124,7 @@ void() func_shadow_controller = {
 	}
 };
 
-void() func_shadow_setup_controller = {
+void() func_shadow_setup_controller = { // [FUNCTION]
 	dprint("func_shadow_setup_controller");
 	self.switchfader = spawn();
 	self.switchfader.classtype = CT_CONTROL;
@@ -138,18 +138,18 @@ void() func_shadow_setup_controller = {
 	self.switchfader.nextthink = time + 0.1;
 };
 
-void() func_shadow_on = {
+void() func_shadow_on = { // [FUNCTION]
 	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // No longer need this spawnflag, remove it
 	self.estate = ESTATE_ON; // Setup final shadow style
 	if (self.speed == FALSE) switch_shadow_on(); // if there is no fade timer, set absolute value
 };
 
-void() func_shadow_off = {
+void() func_shadow_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF; // Setup final shadow style
 	if (self.speed == FALSE) switch_shadow_off(); // if there is no fade timer, set absolute value
 };
 
-void() func_shadow = {
+void() func_shadow = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_FUNCSHADOW;

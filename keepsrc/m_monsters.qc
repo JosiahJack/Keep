@@ -11,7 +11,7 @@
 	return TRUE;
 };*/
 
-void() bdw_monster_start_go = {
+void() bdw_monster_start_go = { // [FUNCTION]
 	local entity t;
 
 	if (self.flags & FL_FLY)
@@ -88,9 +88,7 @@ void() bdw_monster_start_go = {
 			self.pausetime = 99999999;
 			self.th_stand();
 		}		
-	}
-	else
-	{
+	} else {
 		self.pausetime = 99999999;		
 		self.th_stand();
 	}	
@@ -100,11 +98,7 @@ void() bdw_monster_start_go = {
 	//self.nextthink = time + 0.1 + random()*0.5;	
 };
 
-
-
-
-
-void() bdw_monster_start = {
+void() bdw_monster_start = { // [FUNCTION]
 // delay drop to floor to make sure all doors have been spawned
 // spread think times so they don't all happen at same time
 	self.nextthink = time + 0.1 + random()*0.5;	// ben - bugfix

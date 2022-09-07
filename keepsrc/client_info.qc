@@ -149,7 +149,7 @@ void() info_player_team2 = {
 // -------- SPAWNFLAGS --------
 // -------- NOTES --------
 // Destination marker for a teleporter
-void() info_teleport_angle = {
+void() info_teleport_angle = { // [FUNCTION]
 	self.movetarget = find(world, targetname, self.angletarget); // Find angletarget entity in world
 	if (self.movetarget) {
 		if (self.bsporigin) self.dest1 = bmodel_origin(self); // Check for bmodel origin on self/angletarget entities
@@ -171,7 +171,7 @@ void() info_teleport_angle = {
 	}
 };
 
-void() info_teleport_convert_updown = {
+void() info_teleport_convert_updown = { // [FUNCTION]
 	// Setup special mangle/movedir: editor -1 = UP and -2 = DOWN
 	if (self.mangle == '0 -1 0') {
 		self.mangle = '270 0 0'; self.movedir = '0 0 1';

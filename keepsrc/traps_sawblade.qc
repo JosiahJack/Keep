@@ -236,7 +236,7 @@ void() trap_sawbladex = { // [ENTITY]
 	trap_sawbladey();
 };
 
-void() buzzsaw = { // [ENTITY]
+void() buzzsaw = { // [ENTITY], Redirect
 	if (self.speed <= 0) self.speed = 100;
 	self.dmg = self.currentammo;
 	self.currentammo = 0;

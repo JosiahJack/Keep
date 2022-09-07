@@ -394,7 +394,7 @@ void() trap_pendshortx = { // [ENTITY]
 	trap_pendlong();
 };
 
-void() pendulum = { // [ENTITY]
+void() pendulum = { // [ENTITY], Redirect
 	setorigin(self,self.origin + '0 0 108');
 	self.dmg = self.currentammo;
 	self.currentammo = 0;

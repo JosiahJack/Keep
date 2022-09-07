@@ -131,7 +131,7 @@ void() ftop_attack23= [	$attack23, ftop_attack1 ] {
 	if (self.enemy == world) self.think = self.th_stand; // If no enemy go back to idling in a pool of lava!
 };
 
-void() ftop_lightning = {
+void() ftop_lightning = { // [FUNCTION]
 	if (!self.movetarget2) return;
 	if (!self.movetarget3) return;
 
@@ -141,7 +141,7 @@ void() ftop_lightning = {
 	Tent_Beam(TE_LIGHTNING3, self, self.pos1, self.pos2); // Generate the lightning effect
 };
 
-void(entity inflictor, entity attacker, float damage) ftop_pain = {
+void(entity inflictor, entity attacker, float damage) ftop_pain = { // [FUNCTION]
 	self.health = self.max_health;
 };
 
@@ -206,7 +206,7 @@ void() ftop_shockc9 = [	$shockc9, ftop_shockc10 ] { ftop_lightning(); };
 void() ftop_shockc10 = [	$shockc10, ftop_death1 ] { ftop_lightning();
 	if (self.attack_finished > time) self.think = ftop_shockc1; };
 
-void() ftop_deathsequence = {
+void() ftop_deathsequence = { // [FUNCTION]
 	self.use = SUB_Null;
 	self.enemy = world;
 	self.takedamage = DAMAGE_NO;
@@ -254,7 +254,7 @@ void() ftop_rise17	= [	$rise17, ftop_attack1 ] {
 	self.th_die = ftop_deathsequence;
 };
 
-void() ftop_wakeup = {
+void() ftop_wakeup = { // [FUNCTION]
 	self.skin = 1;		// Dark lava skin
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
@@ -272,7 +272,7 @@ void() ftop_wakeup = {
 // Uses Chthon precache
 
 // QUAKED monster_firetopboss (1 0.25 0.25) (-128 -128 -24) (128 128 256)
-void() monster_firetopboss = {
+void() monster_firetopboss = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";

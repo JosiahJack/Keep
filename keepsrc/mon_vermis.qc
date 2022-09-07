@@ -90,7 +90,7 @@ void() vermis_touch = {
 
 void() vermis_coil1 = [2, vermis_coil1] { self.height = 8; };
 
-void() vermis_idle2 = {
+void() vermis_idle2 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = vermis_idle2;
 	SUB_ReverseFrame(53,71);
@@ -99,7 +99,7 @@ void() vermis_idle2 = {
 	ai_stand();
 };
 
-void() vermis_idle1 = {
+void() vermis_idle1 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = vermis_idle1;
 	SUB_AdvanceFrame(52,71);
@@ -108,20 +108,20 @@ void() vermis_idle1 = {
 	ai_stand();
 };
 
-void() vermis_run1 = {
+void() vermis_run1 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = vermis_run1;
 	SUB_AdvanceFrame(92,121);
 	ai_vermis_run();
 };
 
-void() vermis_wake_things = {
+void() vermis_wake_things = { // [FUNCTION]
 	self.spawnmaxs_z = self.spawnmaxs_z + self.height;
 	setsize(self, '-64 -64 -512', self.spawnmaxs);
 	self.touch = vermis_touch;
 };
 
-void() vermis_wake1 = {
+void() vermis_wake1 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = vermis_wake1;
 	SUB_AdvanceFrame(2,51);
@@ -142,7 +142,7 @@ void() vermis_wake1 = {
 	}
 };
 
-void() vermis_trans2 = {
+void() vermis_trans2 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = vermis_trans2;
 	SUB_AdvanceFrame(22,51);
@@ -151,7 +151,7 @@ void() vermis_trans2 = {
 	else if (self.frame > 50) vermis_run1();
 };
 
-void() vermis_trans1 = {
+void() vermis_trans1 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = vermis_trans1;
 	SUB_AdvanceFrame(212,216);
@@ -159,7 +159,7 @@ void() vermis_trans1 = {
 	if (self.frame == 216) vermis_trans2();
 };
 
-void(vector offset) vermis_shoot = {
+void(vector offset) vermis_shoot = { // [FUNCTION]
 	local entity missile;
 	local vector org, vec, enemorg;
 	local float t, dist, numspores;
@@ -262,14 +262,14 @@ void(vector offset1, vector offset2) vermis_move = {
 	self.enemy.teleport_time = time + 0.2;
 };
 
-void() dummy_think = {
+void() dummy_think = { // [FUNCTION]
 	self.owner.vermis_grabbed = 0;
 	self.owner.spawnmaster = world;
 	self.owner.velocity = self.velocity;
 	entity_remove(self,0.1);
 };
 
-void() vermis_launch = {
+void() vermis_launch = { // [FUNCTION]
 	if (self.enemy.vermis_grabbed != 1) return;
 
 	makevectors(self.angles);
@@ -328,7 +328,7 @@ void() vermis_grab18 = [159, vermis_grab19] { vermis_launch(); };
 void() vermis_grab19 = [160, vermis_grab20] {};
 void() vermis_grab20 = [161, vermis_run1] {};
 
-void() vermis_melee = {
+void() vermis_melee = { // [FUNCTION]
 	if (self.vermis_grabbed > time) return;
 
 	if (!(self.enemy.flags & FL_FLY)) vermis_grab1();
@@ -398,7 +398,7 @@ void() vermis_death52 = [209, vermis_death47] {
 	self.inv = 1;
 };
 
-void() vermis_die = {
+void() vermis_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	sound(self,CHAN_WEAPON,"quoth/vermis/death.wav", 1, 0);
 	self.solid = SOLID_NOT;

@@ -61,7 +61,7 @@ float ICEG_PHASE3 = 3;	// Busting Columns
 float ICEG_PHASE4 = 4;	// Death
 
 // Check the tether system
-float() iceg_CheckTether = {
+float() iceg_CheckTether = { // [FUNCTION]
 	self.t_length = vlen(self.origin - self.movelast.origin);
 	// Check the most obvious first, inside tether range?
 	if (self.t_length < self.tetherrange) return FALSE;
@@ -75,7 +75,7 @@ float() iceg_CheckTether = {
 };
 	
 // Quick check for stomp/melee + fast range attack
-void() iceg_CheckCombo = {
+void() iceg_CheckCombo = { // [FUNCTION]
 	if (self.health < 1) return;
 	if (self.enemy.health < 1) return;
 	if (skill < SKILL_NORMAL) return;
@@ -89,7 +89,7 @@ void() iceg_CheckCombo = {
 };
 
 // MONSTER STATES (stand, walk run, attack, pain and death!
-void() iceg_idleframe = {
+void() iceg_idleframe = { // [FUNCTION]
 	if (self.health < 1) return; // Do nothing if dead.
 	if (self.walkframe == 0) monster_idle_sound();
 	self.walkframe = SUB_ClampFloat(self.walkframe + 1,$wait1,20); // Keep animating.
@@ -101,7 +101,7 @@ void() iceg_idleframe = {
 	ai_stand(); // Keep looking for an enemy.
 };
 
-void() iceg_walkframe = {
+void() iceg_walkframe = { // [FUNCTION]
 	// Do nothing if dead
 	if (self.health < 1) return;
 	
@@ -131,9 +131,9 @@ void() iceg_walkframe = {
 	}
 };
 
-void() iceg_walk1 = { self.walkframe = 0; iceg_walkframe(); };
+void() iceg_walk1 = { self.walkframe = 0; iceg_walkframe(); }; // [FUNCTION]
 
-void() iceg_runframe = {
+void() iceg_runframe = { // [FUNCTION]
 	if (self.style != ICEG_PHASE2) return;
 	if (self.health < 1) return;
 	
@@ -171,10 +171,10 @@ void() iceg_runframe = {
 	else ai_run(self.lip);
 };
 
-void() iceg_run1 = { self.walkframe = 0; iceg_runframe(); };
+void() iceg_run1 = { self.walkframe = 0; iceg_runframe(); }; // [FUNCTION]
 
 // MELEE - knockback the player with swipe
-void(float dist) iceg_mcharge = { 
+void(float dist) iceg_mcharge = {  // [FUNCTION]
 	ai_charge(dist);
 	// Hexen 2 models were designed for 20fps
 	self.ticktimer = 0.05;
@@ -226,7 +226,7 @@ void() iceg_knock24 = [$knock24, iceg_run1 ] { iceg_mcharge(5);
 // RANGE ATTACK (ICE SHARDS == rockets)
 // Total shards to fire is based on skill level
 // easy=3, normal=3, hard=4, nm=5
-void() iceg_shardanimate = {
+void() iceg_shardanimate = { // [FUNCTION]
 	// manually animate
 	self.frame = self.frame + 1;
 	self.lip = 1 - (self.frame / 11);
@@ -238,7 +238,7 @@ void() iceg_shardanimate = {
 	else self.nextthink = time + 0.1;
 };
 
-void() iceg_shardtrail = {
+void() iceg_shardtrail = { // [FUNCTION]
 	local entity oring;
 	
 	// Spawn a temporary entity
@@ -269,8 +269,7 @@ void() iceg_shardtrail = {
 			self.traileffectnum = particleeffectnum(DPP_TRPLASMA);
 			self.effects = 0;
 		}
-	}
-	else {
+	} else {
 		// Classic (fitz/qs) engine particles only
 		if (!ext_dppart) {
 			self.oldorigin = crandom() * '1 1 1';
@@ -288,7 +287,7 @@ void() iceg_shardtrail = {
 	self.nextthink = time + 0.05 + random()*0.05;
 };
 
-void() lavag_shardtrail = {
+void() lavag_shardtrail = { // [FUNCTION]
 	local entity oring;
 	
 	// Spawn a temporary entity
@@ -337,7 +336,7 @@ void() lavag_shardtrail = {
 	self.nextthink = time + 0.05 + random()*0.05;
 };
 
-void(entity targ) iceg_icestorm = {
+void(entity targ) iceg_icestorm = { // [FUNCTION]
 	local float zpart;
 	local vector org, targ_org, dir, yrand, zrand;
 
@@ -399,7 +398,7 @@ void(entity targ) iceg_icestorm = {
 	else launch_projectile(org,dir,NO_SPIN,CT_PROJ_ICEG1,self.attack_speed);
 };
 
-void() iceg_magtime = { self.nextthink = time + 0.05; };
+void() iceg_magtime = { self.nextthink = time + 0.05; }; // [FUNCTION]
 
 void() iceg_magic1 = [$magic1, iceg_magic2 ] { iceg_magtime(); ai_face();
 	self.pain_finished = time + 1.5;
@@ -435,7 +434,7 @@ void() iceg_magic23 = [$magic23, iceg_magic24 ] { iceg_magtime(); };
 void() iceg_magic24 = [$magic24, iceg_run1 ] { iceg_magtime(); };
 
 // RANGE ATTACK (Stomp ground and drop debris from ceiling)
-void() iceg_ceilingrubble = {
+void() iceg_ceilingrubble = { // [FUNCTION]
 	// No enemy or dead?
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -493,7 +492,7 @@ void() iceg_ceilingrubble = {
 	self.attachment.nextthink = time + 0.05;
 };
 
-void() iceg_footstomp = { self.nextthink = time + 0.05; };
+void() iceg_footstomp = { self.nextthink = time + 0.05; }; // [FUNCTION]
 
 void() iceg_stomp1 = [$stomp1, iceg_stomp2 ] { iceg_footstomp();
 	self.pain_finished = time + self.pain_timeout; };
@@ -532,7 +531,7 @@ void() iceg_stomp24 = [$stomp24, iceg_run1 ] { iceg_footstomp();
 };
 
 // WAVE BOUNDARY - destroy some objects and spawn adds
-void() iceg_aiturn = {
+void() iceg_aiturn = { // [FUNCTION]
 	// turn towards a target if one exists
 	if (self.enemytarget) {
 		// Check if enemy target is bmodel or point entity
@@ -550,7 +549,7 @@ void() iceg_aiturn = {
 	}
 };
 
-void() iceg_waveface = {
+void() iceg_waveface = { // [FUNCTION]
 	// Hexen 2 quicktime!
 	self.nextthink = time + 0.05;
 	iceg_aiturn();
@@ -634,7 +633,7 @@ void() iceg_turnframe = {
 	else self.think = iceg_turnframe;
 };
 
-void() iceg_waveboundary = {
+void() iceg_waveboundary = { // [FUNCTION]
 	// Find a target to aim at (columns to blow up)
 	self.enemytarget = find(world, targetname, self.attachment2.noise1);
 	// First target seems to be dead
@@ -662,7 +661,7 @@ void() iceg_waveboundary = {
 };
 
 // PAIN (no pain animations)
-void(entity inflictor, entity attacker, float damage) iceg_pain = {
+void(entity inflictor, entity attacker, float damage) iceg_pain = { // [FUNCTION]
 	// Check for boss wave trigger events
 	if (SUB_BossWaveCheck(CT_MONICEGOLEMWAVE)) {
 		self.th_jump();
@@ -680,7 +679,7 @@ void(entity inflictor, entity attacker, float damage) iceg_pain = {
 };
 
 // DEATH : Time to melt the heavy water GOLEM!
-void() iceg_fadeout = {
+void() iceg_fadeout = { // [FUNCTION]
 	self.origin_z = self.origin_z - 0.2;	// Slowly sink into the ground (melting)
     self.alpha = 1 - ((time - self.ltime) / 1);
 	if (random() < 0.1) SpawnProjectileSmoke(self.origin, 200, 100, 100);
@@ -688,7 +687,7 @@ void() iceg_fadeout = {
     else self.nextthink = time + FADEMODEL_TIME;
 };
 
-void() iceg_startfade = {
+void() iceg_startfade = { // [FUNCTION]
 	// Check for any final trigger events
 	if (self.message2 != "") trigger_strs(self.message2,self);
 
@@ -700,7 +699,7 @@ void() iceg_startfade = {
 	iceg_fadeout();
 };
 
-void(float fdist) iceg_brk = {
+void(float fdist) iceg_brk = { // [FUNCTION]
 	if (fdist > 0) ai_forward(fdist);
 	if (random() < 0.2) SpawnProjectileSmoke(self.origin, 200, 50, 150);
 	if (random() < 0.4) SpawnProjectileSmoke(self.origin, 300, 50, 150);
@@ -735,7 +734,7 @@ void() iceg_death22 = [$death22, iceg_startfade] {
 	self.movetype = MOVETYPE_NONE;
 };
 
-void() iceg_die = {
+void() iceg_die = { // [FUNCTION]
 	self.deadflag = DEAD_DEAD;
 	self.effects = 0;			// Remove effects on death
 	self.style = ICEG_PHASE4;	// Heavy Water
@@ -746,14 +745,14 @@ void() iceg_die = {
 };
 
 // Wakeup From Statue form
-void() iceg_birth = {
+void() iceg_birth = { // [FUNCTION]
 	if (random() < 0.4) SpawnProjectileSmoke(self.origin, 200, 100, 100);
 	if (random() < 0.8) SpawnProjectileSmoke(self.origin, 200, 50, 250);
 	if (random() < 0.1) ThrowGib(11, 1);	// Small Golem rock
 	self.nextthink = time + 0.05;
 };
 
-void() iceg_wake1 = [$birth1, iceg_wake2 ] {
+void() iceg_wake1 = [$birth1, iceg_wake2 ] { // [FUNCTION]
 	self.use = SUB_Null;				// No more triggers
 	self.style = ICEG_PHASE2;			// Free to fight
 	self.yaw_speed = 20 + (skill * 4);	// Really Fast Speed
@@ -827,7 +826,7 @@ void() iceg_tranB13 = [$tranB13, iceg_tranB13 ] {
 
 // Setup Ice Golem after trigger event
 
-void() iceg_setup = {
+void() iceg_setup = { // [FUNCTION]
 	self.use = SUB_Null;		// No more triggers
 	self.style = ICEG_PHASE1;	// Bursting intro sequence
 	self.flags = FL_MONSTER;	// Reset flag
@@ -897,7 +896,7 @@ void() iceg_setup = {
 	} else self.use = iceg_wake1; // Wait for trigger event to be wakeup
 };
 
-void() monster_icegolem_precache = {
+void() monster_icegolem_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_bossicegolem.mdl");
 	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
 	precache_model(MODEL_PROJ_RINGBLAST);	// Ice ring shockwave
@@ -931,7 +930,7 @@ void() monster_icegolem_precache = {
 };
 
 // QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)
-void() monster_icegolem = {
+void() monster_icegolem = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.mdl == "") self.mdl = "progs/ad171/mon_bossicegolem.mdl";

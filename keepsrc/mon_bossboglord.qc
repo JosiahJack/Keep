@@ -56,7 +56,7 @@ void() bogl_run5 = [$run5, bogl_run6 ] { monster_footstep(FALSE); ai_run(24); };
 void() bogl_run6 = [$run6, bogl_run1 ] { ai_run(20); };
 
 // Attachment management (create, finish and delete)
-void() bogl_create_attachment = {
+void() bogl_create_attachment = { // [FUNCTION]
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -182,7 +182,7 @@ void() bogl_smash11 = [$smash11, bogl_smash12] { ai_charge(5); };
 void() bogl_smash12 = [$smash12, bogl_run1	 ] { ai_charge(4); };
 
 // RANGE ATTACK 2 - Projectile Lightning attack
-void() bogl_lightning = {
+void() bogl_lightning = { // [FUNCTION]
 	local vector org, dir, vec;
 	if (self.health < 1) return;
 	
@@ -287,7 +287,7 @@ void() bogl_magic11 = [$magic11, bogl_magic12 ] {
 	if (skill == SKILL_NIGHTMARE) bogl_lightning(); };
 void() bogl_magic12 = [$magic12, bogl_run1 ] {};
 
-void() bogl_tetherattack = {
+void() bogl_tetherattack = { // [FUNCTION]
 	// Completely randomize tether attack chance 50/50
 	// Both attacks have different advantages with different
 	// skill levels, might as well make it equal chance
@@ -396,8 +396,6 @@ void() monster_boglord_precache = {
 void() monster_boglord = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
-
-	monster_boglord_precache();
 
 	// One model, two different skins
 	self.mdl = "progs/ad171/mon_bossboglord.mdl";

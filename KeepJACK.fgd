@@ -4522,6 +4522,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonArmagon) studio("progs/hipnotic/armabody.mdl") = monster_armagon : "Armagon" []
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(0) = monster_army : "Grunt" []
 @PointClass base(MonTall) studio("progs/mon_axeman.mdl") = monster_axeman : "Axe Knight" []
+@PointClass base(MonTall) studio("progs/mon_axeman.mdl") skin(1) = monster_thug : "Forest Thug" []
 @PointClass base(MonShort) studio("progs/lunaran/axegrunt.mdl") = monster_axegrunt : "Axe Solider" []
 @PointClass base(MonShort) studio("progs/kinn/sgrunt.mdl") = monster_super_grunt : "Super Solider" []
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(4) = monster_army_rocket : "Rocket Soldier" []

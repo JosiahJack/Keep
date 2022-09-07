@@ -104,7 +104,7 @@ void() coil_move2 = [0, coil_whuh] { ai_walk(TE_LAVASPLASH); ai_face(); };
 void() coil_awake;
 
 // Say whuh now?
-void() coil_whuh = {
+void() coil_whuh = { // [FUNCTION]
 	if (random() > 0.1)	coil_move();
 	else				coil_awake();
 };
@@ -113,13 +113,13 @@ void(entity inflictor, entity attacker, float damage) coil_pain01 = [9, coil_pai
 void() coil_pain02 = [10, coil_pain03] { ai_pain(ATTN_NORM); };
 void() coil_pain03 = [11, coil_run] { ai_pain(ATTN_NORM); };
 
-void() coil_awake = {
+void() coil_awake = { // [FUNCTION]
 	Tent_Point(TE_LAVASPLASH,self.origin);
 	self.yaw_speed = 20;
 	coil_rise();
 };
 
-void() coil_explode = {
+void() coil_explode = { // [FUNCTION]
 	ThrowGib(1,floor(random() * 4));
 	ThrowGib(2,floor(random() * 4));
 	ThrowGib(3,floor(random() * 4));
@@ -135,7 +135,6 @@ void() monster_coil_precache = {
 void() monster_coil = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	monster_coil_precache();
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "progs/anaconda/coils.mdl");
@@ -651,7 +650,7 @@ void() anac_doom12 = [6, anac_doom12] {
 	self.nextthink = time + 0.1;
 };
 
-void() anacdoom_1 = {
+void() anacdoom_1 = { // [FUNCTION]
 	local entity pos, pl, timer;
 
 	if (self.spawnflags & ANAC_INTERMISSION) {
@@ -690,13 +689,13 @@ void() anacdoom_1 = {
 	timer.think = anacdoom_2;
 };
 
-void() anacdoom_2 = {
+void() anacdoom_2 = { // [FUNCTION]
 	Tent_Point(TE_TAREXPLOSION,(self.owner.origin - '0 100 0'));
 	self.nextthink = time + 1.5;
 	self.think = anacdoom_3;
 };
 
-void() anacdoom_3 = {
+void() anacdoom_3 = { // [FUNCTION]
 	self.owner.think = anac_doom;
 	self.owner.nextthink = time + 0.1;
 	self.think = anacdoom_4; 
@@ -704,7 +703,7 @@ void() anacdoom_3 = {
 	lightstyle(ATTN_NONE, "abcdefghijklmlkjihgfedcb");
 };
 
-void() anacdoom_4 = {
+void() anacdoom_4 = { // [FUNCTION]
 	local vector oldo;
 	local float x,y,z,r;
 
@@ -757,19 +756,19 @@ void() anac_explode2 = [6, anac_explode2] {
 	BecomeExplosion();
 };
 
-void() anac_awake = {
+void() anac_awake = { // [FUNCTION]
 	Tent_Point(TE_LAVASPLASH,self.origin);
 	self.yaw_speed = 20;
 	anac_rise();
 };
 
-void() anac_down = {
+void() anac_down = { // [FUNCTION]
 	Tent_Point(TE_LAVASPLASH,self.origin);
 	self.yaw_speed = 20;
 	anac_fall6();
 };
 
-void() check_anac = {
+void() check_anac = { // [FUNCTION]
 	local vector dist;
 	local float d;
 	dist = self.enemy.origin - self.origin;
@@ -781,7 +780,7 @@ void() check_anac = {
 	}
 };
 
-void() monster_anac_precache = {
+void() monster_anac_precache = { // [FUNCTION]
 	precache_sound("blob/death1.wav");
 	precache_sound("boss1/out1.wav");
 	precache_sound("boss1/sight1.wav");
@@ -799,10 +798,9 @@ void() monster_anac_precache = {
 	precache_model("progs/gib1.mdl");
 };
 
-void() monster_anac = {
+void() monster_anac = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	monster_anac_precache();
 	self.gib1mdl = "progs/gib1.mdl";
 	precache_model("progs/gib2.mdl");
 	self.gib2mdl = "progs/gib2.mdl";

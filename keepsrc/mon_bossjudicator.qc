@@ -183,7 +183,7 @@ float() judge_CheckTether = {
 };
 
 // Attachment management (create, finish and remove)
-void() justice_create_attachment = {
+void() justice_create_attachment = { // [FUNCTION]
 	if (!self.attachment) {
 		self.attachment = spawn();
 		self.attachment.owner = self;
@@ -191,7 +191,7 @@ void() justice_create_attachment = {
 	}
 };
 
-void(float att_frame) justice_update_attachment = {
+void(float att_frame) justice_update_attachment = { // [FUNCTION]
 	makevectors(self.angles);
 	self.attachment.origin = self.origin + attack_vector(self.meleeoffset);
 	setorigin(self.attachment, self.attachment.origin);
@@ -199,7 +199,7 @@ void(float att_frame) justice_update_attachment = {
 	self.attachment.frame = att_frame;
 };
 
-void() justice_setup_attachment = {
+void() justice_setup_attachment = { // [FUNCTION]
 	// Check if attachment has been setup yet
 	if (!self.attachment) justice_create_attachment();
 	self.attachment.state = STATE_ON;
@@ -209,7 +209,7 @@ void() justice_setup_attachment = {
 	justice_update_attachment(0);
 };
 
-void() judge_standframe = {
+void() judge_standframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -268,8 +268,7 @@ void() judge_standframe = {
 	else ai_stand();	
 };
 
-//----------------------------------------------------------------------
-void() judge_tauntframe = {
+void() judge_tauntframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -297,8 +296,7 @@ void() judge_tauntframe = {
 	else ai_stand();	
 };
 
-//----------------------------------------------------------------------
-void() judge_idleCframe = {
+void() judge_idleCframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -324,8 +322,7 @@ void() judge_idleCframe = {
 	else ai_stand();	
 };
 
-//----------------------------------------------------------------------
-void() judge_idleDframe = {
+void() judge_idleDframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -355,8 +352,7 @@ void() judge_idleDframe = {
 	else ai_stand();	
 };
 
-//----------------------------------------------------------------------
-void() judge_walkframe = {
+void() judge_walkframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -385,7 +381,7 @@ void() judge_walkframe = {
 	else ai_walk(JUSTICESPD_WALK);
 };
 
-void() judge_runframe = {
+void() judge_runframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -422,7 +418,7 @@ void() judge_runframe = {
 	}
 };
 
-void() judge_fistframe = {
+void() judge_fistframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -466,7 +462,7 @@ void() judge_fistframe = {
 	}
 };
 
-void() judge_chargeframe = {
+void() judge_chargeframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -503,7 +499,7 @@ void() judge_chargeframe = {
 	}
 };
 
-void() judge_swingframe = {
+void() judge_swingframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -544,7 +540,7 @@ void() judge_swingframe = {
 	if (self.walkframe > 11) self.th_run();
 };
 
-void() judge_smashframe = {
+void() judge_smashframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -586,7 +582,7 @@ void() judge_smashframe = {
 };
 
 // (JUSTICE only) MAGIC PATTERN A - Giant arrow heads in diamond
-void(float offset) judge_firemagicA = {
+void(float offset) judge_firemagicA = { // [FUNCTION]
 	local vector org, dir;
 	
 	if (!self.enemy) return;
@@ -609,7 +605,7 @@ void(float offset) judge_firemagicA = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_JUSTICER,self.attack_speed);
 };
 
-void() judge_magicAframe = {
+void() judge_magicAframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -651,7 +647,7 @@ void() judge_magicAframe = {
 
 // (JUSTICE only) FLAMES PATTERN 1 - wall arc infront (at players feet)
 
-void(float fire_explode) judge_fireflamewall = {
+void(float fire_explode) judge_fireflamewall = { // [FUNCTION]
 	local vector org, eorg, torg, dir, ang;
 	local float expl_type, targetang, fire_life;
 
@@ -692,7 +688,7 @@ void(float fire_explode) judge_fireflamewall = {
 	self.proj_attarc = self.proj_attarc + 1;
 };
 
-void() judge_flamewall = {
+void() judge_flamewall = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -769,7 +765,7 @@ void() judge_flamewall = {
 };
 
 // (JUDGE only) MAGIC PATTERN B - Giant arrow heads in sweeping arc
-void(float offset) judge_firemagicB = {
+void(float offset) judge_firemagicB = { // [FUNCTION]
 	local float projcol, fire_col;
 	local vector org, dir, fire_pat;
 	
@@ -819,7 +815,7 @@ void(float offset) judge_firemagicB = {
 	else SpawnVelocitySmoke(org, dir+v_up, 200, 50);
 };
 
-void() judge_magicBframe = {
+void() judge_magicBframe = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -855,7 +851,7 @@ void() judge_magicBframe = {
 	if (self.walkframe > 13) self.th_run();
 };
 
-void() judge_flameline = {
+void() judge_flameline = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -891,7 +887,7 @@ void() judge_flameline = {
 };
 
 // Lunge forward (leaving ground) and do heavy damage on touch
-void() judge_JumpTouch = {
+void() judge_JumpTouch = { // [FUNCTION]
 	local float ldmg;
 	
 	// Judge Dead stops here!
@@ -969,7 +965,7 @@ void()	judge_jump7 = [$jump7, judge_run ] {
 	// Make sure attack state is reset (can then decide melee or range)
 	self.attack_state = AS_STRAIGHT; ai_resetangles(); ai_face(); };
 
-void() judge_jump = {
+void() judge_jump = { // [FUNCTION]
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Hide any glowing/sprite attachments
@@ -989,7 +985,7 @@ void() judge_jump = {
 
 // Entry point for Stand, Walk and Run monster states
 // All have to cope with sword out/on back blend animations
-void() judge_stand = { 
+void() judge_stand = { // [FUNCTION]
 	// Hide any glowing/sprite attachments
 	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
@@ -1001,7 +997,7 @@ void() judge_stand = {
 	judge_checksword(JUDGE_SWSHOULDER, JUDGE_SFXDEF);
 };
 
-void() judge_walk =  {
+void() judge_walk =  { // [FUNCTION]
 	// Start walking
 	self.state = JUDGE_WALK;
 	// Hide any glowing/sprite attachments
@@ -1012,7 +1008,7 @@ void() judge_walk =  {
 	else judge_checksword(JUDGE_SWBACK, JUDGE_SFXDEF);
 };
 
-void() judge_run = {
+void() judge_run = { // [FUNCTION]
 	// Don't start combat with a jump!
 	if (!self.attack_active) self.jump_flag = time + 2;
 	// Entered combat once
@@ -1029,7 +1025,7 @@ void() judge_run = {
 	judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
 };
 
-void() judge_melee = {
+void() judge_melee = { // [FUNCTION]
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Reset jump attack decision branch
@@ -1048,7 +1044,7 @@ void() judge_melee = {
 	judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
 };
 
-void() judge_range = {
+void() judge_range = { // [FUNCTION]
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Hide any glowing/sprite attachments
@@ -1113,8 +1109,7 @@ void() judge_range = {
 
 // Sword position blending, checked by all functions
 // Blend animations ( Back / Shoulder / Hand )
-//----------------------------------------------------------------------
-void() judge_finishsword = {
+void() judge_finishsword = { // [FUNCTION]
 	self.walkframe = self.attack_chance = 0;
 	// Where to go next?
 	if (self.state == JUDGE_STAND) judge_standframe();
@@ -1148,7 +1143,7 @@ void() judge_finishsword = {
 	else judge_runframe();
 };
 
-void() judge_movesword = {
+void() judge_movesword = { // [FUNCTION]
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
 		if (SUB_BossWaveCheck(FALSE)) { self.th_summon(); return; }
@@ -1176,7 +1171,7 @@ void() judge_movesword = {
 	if (self.walkframe > 4) judge_finishsword();
 };
 
-void(float finalstate, float soundtype) judge_checksword = {
+void(float finalstate, float soundtype) judge_checksword = { // [FUNCTION]
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -1212,8 +1207,7 @@ void(float finalstate, float soundtype) judge_checksword = {
 				if (soundtype == 0) self.blendsfx = JUDGE_SFXSHEATH;
 				self.blendstart = $drawD1; self.blenddir = 1;
 			}
-		}
-		else if (self.weaponstate == JUDGE_SWSHOULDER) {
+		} else if (self.weaponstate == JUDGE_SWSHOULDER) {
 			if (finalstate == JUDGE_SWBACK) {
 				//dprint("SHOULDER --> BACK\n");
 				if (soundtype == 0) self.blendsfx = JUDGE_SFXSHEATH;
@@ -1227,8 +1221,7 @@ void(float finalstate, float soundtype) judge_checksword = {
 				if (soundtype == 0) self.blendsfx = JUDGE_SFXSHEATH;
 				self.blendstart = $drawD1; self.blenddir = 1;
 			}
-		}
-		else if (self.weaponstate == JUDGE_SWHAND) {
+		} else if (self.weaponstate == JUDGE_SWHAND) {
 			if (finalstate == JUDGE_SWBACK) {
 				//dprint("HAND --> BACK\n");
 				if (soundtype == 0) self.blendsfx = JUDGE_SFXDRAW;
@@ -1242,8 +1235,7 @@ void(float finalstate, float soundtype) judge_checksword = {
 				if (soundtype == 0) self.blendsfx = JUDGE_SFXSHEATH;
 				self.blendstart = $drawE1; self.blenddir = -1;
 			}
-		}
-		else if (self.weaponstate == JUDGE_SWFLOOR) {
+		} else if (self.weaponstate == JUDGE_SWFLOOR) {
 			if (finalstate == JUDGE_SWBACK) {
 				//dprint("FLOOR --> BACK\n");
 				// blend does not exist, use floor -> shoulder
@@ -1268,7 +1260,7 @@ void(float finalstate, float soundtype) judge_checksword = {
 
 
 // Fire random plasma spikes while summoning gaunt minions
-void() Fire_judgePlasma = {
+void() Fire_judgePlasma = { // [FUNCTION]
 	local vector org, ovec, rndvec, destvec;
 
 	makevectors(self.angles);
@@ -1279,7 +1271,7 @@ void() Fire_judgePlasma = {
 	launch_projectile(org,destvec,NO_SPIN,CT_SUMMONLIGHT,SPEED_REFLECTION);
 };
 
-void() Spawn_judgeMin = {
+void() Spawn_judgeMin = { // [FUNCTION]
 	// Fire off some random plasma/lightning
 	Fire_judgePlasma();
 	
@@ -1295,7 +1287,7 @@ void() Spawn_judgeMin = {
 	}
 };
 
-void() judge_summonframe = {
+void() judge_summonframe = { // [FUNCTION]
 	// Keep looping
 	self.nextthink = time + 0.1;
 	self.think = judge_summonframe;
@@ -1341,7 +1333,7 @@ void() judge_summonframe = {
 };
 
 // Make sure boss ONLY active for this attack
-void() judge_summon = {
+void() judge_summon = { // [FUNCTION]
 	if (self.classtype == CT_MONJUSTICE) { self.think = self.th_run; return; }
 
 	self.nextthink = time + 0.1;
@@ -1357,7 +1349,7 @@ void()	judge_painA2 = [$painA2, judge_painA3 ] {};
 void()	judge_painA3 = [$painA3, judge_painA4 ] {};
 void()	judge_painA4 = [$painA4, judge_run ] {};
 
-void(entity inflictor, entity attacker, float damage) judge_pain = {
+void(entity inflictor, entity attacker, float damage) judge_pain = { // [FUNCTION]
 	// Hide any glowing/sprite attachments
 	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
@@ -1393,7 +1385,6 @@ void() judge_dieA8 = [$deathA8, judge_dieA9 ] {};
 void() judge_dieA9 = [$deathA9, judge_dieA10 ] { monster_death_postcheck(); };
 void() judge_dieA10 = [$deathA10, judge_dieA10 ] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() judge_dieB1 = [$deathB1, judge_dieB2 ] {};
 void() judge_dieB2 = [$deathB2, judge_dieB3 ] { monster_check_gib(); };
 void() judge_dieB3 = [$deathB3, judge_dieB4 ] { monster_check_gib(); self.solid = SOLID_NOT; };
@@ -1405,8 +1396,7 @@ void() judge_dieB7 = [$deathB7, judge_dieB8 ] {
 void() judge_dieB8 = [$deathB8, judge_dieB9 ] { monster_death_postcheck(); };
 void() judge_dieB9 = [$deathB9, judge_dieB9 ] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
-void() judge_die = {
+void() judge_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	
@@ -1431,7 +1421,7 @@ void() judge_die = {
 	}
 };
 
-void() judge_spawntether = {
+void() judge_spawntether = { // [FUNCTION]
 	// temporary tether point
 	self.movelast = spawn();
 	self.movelast.owner = self;
@@ -1443,7 +1433,7 @@ void() judge_spawntether = {
 };
 
 // INTRO PHASE (??)
-void() judge_readyframe = {
+void() judge_readyframe = { // [FUNCTION]
 	self.takedamage = DAMAGE_AIM;	// Can take damage
 	self.style = JUDGE_PHASE2;		// Time to fight!
 	Resist_ChangeType(self,FALSE);	// restore resistance
@@ -1457,7 +1447,7 @@ void() judge_readyframe = {
 };
 
 // Setup BOSS Judicator after trigger event
-void() judge_awake = {
+void() judge_awake = { // [FUNCTION]
 	// make sure boss mode selected
 	if (self.classtype == CT_MONJUSTICE) return;
 
@@ -1557,7 +1547,7 @@ void() judge_awake = {
 	judge_readyframe();
 };
 
-void() monster_judicator_precache = {
+void() monster_judicator_precache = { // [FUNCTION]
 	precache_model("progs/ad181/mon_judge.mdl");
 	precache_model("progs/ad181/h_judge.mdl");
 	precache_model("progs/ad181/w_judgesword.mdl");
@@ -1583,7 +1573,7 @@ void() monster_judicator_precache = {
 };
 
 // QUAKED monster_judicator (1 0 0) (-32 -32 -24) (32 32 80) Ambush
-void() monster_judicator = {
+void() monster_judicator = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad181/mon_judge.mdl";			// Judicator Knight

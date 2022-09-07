@@ -42,7 +42,7 @@ var float autocvar_player_legs_model = 2;		// set cvar 'player_legs_model' defau
 .float visible_legs_helper;
 
 // Update the legs
-void() player_legs_animation = {
+void() player_legs_animation = { // [FUNCTION]
 	if ((cvar("chase_active")) || (self.owner.invisible_finished) || self.owner.in_a_vehicle || frame_pause()) {	// if switched into 3rd person mode while playing
 		self.alpha = 0.00001;
 	} else
@@ -79,7 +79,7 @@ void() player_legs_animation = {
 };
 
 // Create the legs.  Done only once at level start.
-entity(entity e) player_legs = {
+entity(entity e) player_legs = { // [FUNCTION]
 	local entity shaderrr;
 
 	shaderrr = spawn();

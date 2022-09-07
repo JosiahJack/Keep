@@ -45,7 +45,7 @@ void() DHM_CalcMoveDone;
 void() move_camera;
 void() player_run;
 
-void() dummy_setup = {
+void() dummy_setup = { // [FUNCTION]
 	setorigin(self,self.oldorigin);
 };
 

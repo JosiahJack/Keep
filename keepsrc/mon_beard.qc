@@ -1,23 +1,23 @@
-void function hknight_stand1();
-{
-  #0 hknight_stand2;
-  ai_stand();
-  ai_emnity("monster_qguy", 1500, 0);
-}
+//void() hknight_stand1 =
+//{
+//  #0 hknight_stand2;
+//  ai_stand();
+//  ai_emnity("monster_qguy", 1500, 0);
+//}
 
-Void function hknight_stand4();
-{
-  #3 hknight_stand5;
-  ai_stand();
-  ai_emnity("monster_qguy", 1500, 0);
-}
+//Void function hknight_stand4();
+//{
+//  #3 hknight_stand5;
+//  ai_stand();
+//  ai_emnity("monster_qguy", 1500, 0);
+//}
 
-Void function hknight_stand6();
-{
-  #5 hknight_stand7;
-  ai_stand();
-  ai_emnity("monster_qguy", 1500, 0);
-}
+//Void function hknight_stand6();
+//{
+//  #5 hknight_stand7;
+//  ai_stand();
+//  ai_emnity("monster_qguy", 1500, 0);
+//}
 
 
 Void function hknight_rush1();

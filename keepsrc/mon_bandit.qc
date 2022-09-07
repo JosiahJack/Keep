@@ -30,7 +30,7 @@ $frame standb1 standb2 standb3 standb4 standb5 standb6
 
 //  BANDIT / GOBLIN  (Soldier variant armed with a bow.)
 
-void() bandit_fire = {
+void() bandit_fire = { // [FUNCTION]
     local vector org, dir;
     local float artype;
 
@@ -50,7 +50,7 @@ void() bandit_fire = {
 };
 
 // SoE:  Check if shot is blocked.  Used by rebel to avoid friendly fire.
-void() bandit_short = {
+void() bandit_short = { // [FUNCTION]
     local vector p1, p2;
 
     if (self.ryuflags & RYU_REBEL) {
@@ -197,7 +197,6 @@ void() monster_bandit_precache = {
 void() monster_bandit = {    
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	monster_bandit_precache();
 	self.mdl = "progs/drake/bandit.mdl";
 	self.headmdl = "progs/drake/h_bandit.mdl";
 	if (self.deathstring == "")  self.deathstring = " was shot by a Bandit\n";

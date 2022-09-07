@@ -303,18 +303,18 @@ void() shal_die = {
 };
 
 void() monster_shalrath_precache = {
-	precache_model ("progs/ad171/mon_shalrath.mdl");
-	precache_model ("progs/ad171/h_shalrath.mdl");
-	precache_model (MODEL_PROJ_SHAL);		// Original - progs/v_spike.mdl
-	precache_model (MODEL_PROJ_SHOME);		// Homing missile growing 8 frames
-	precache_model (MODEL_PROJ_SBALL);		// ball growing 8 frames
-	precache_model (MODEL_PROJ_SEGG);		// ball turned into egg
-	precache_model (MODEL_PROJ_SSHELL);		// Gibs from Egg
-	precache_model ("progs/ad171/mon_vorelingp.mdl"); // Precache minion stuff anwyays from monster_shalrathminion
-	precache_model ("progs/ad171/gib_vorelegp.mdl");
-	precache_model (MODEL_PROJ_VORE);			// Spit Projectile
-	precache_model ("progs/ad171/mon_voreling.mdl");
-	precache_model ("progs/q15/gib_voreleg.mdl"); // Has added frame
+	precache_model("progs/ad171/mon_shalrath.mdl");
+	precache_model("progs/ad171/h_shalrath.mdl");
+	precache_model(MODEL_PROJ_SHAL);		// Original - progs/v_spike.mdl
+	precache_model(MODEL_PROJ_SHOME);		// Homing missile growing 8 frames
+	precache_model(MODEL_PROJ_SBALL);		// ball growing 8 frames
+	precache_model(MODEL_PROJ_SEGG);		// ball turned into egg
+	precache_model(MODEL_PROJ_SSHELL);		// Gibs from Egg
+	precache_model("progs/ad171/mon_vorelingp.mdl"); // Precache minion stuff anwyays from monster_shalrathminion
+	precache_model("progs/ad171/gib_vorelegp.mdl");
+	precache_model(MODEL_PROJ_VORE);			// Spit Projectile
+	precache_model("progs/ad171/mon_voreling.mdl");
+	precache_model("progs/q15/gib_voreleg.mdl"); // Has added frame
 	precache_sound("shalrath/idle.wav");
 	precache_sound("shalrath/death.wav");
 	precache_sound("shalrath/pain.wav");

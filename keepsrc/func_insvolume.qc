@@ -42,7 +42,7 @@ float FUNC_INSVOLMONSTER = 2;
 float FUNC_INSVOLITEM = 4;
 float FUNC_INSVOLPUSHABLE = 8;
 
-float(entity targ) func_insvolume_check = {
+float(entity targ) func_insvolume_check = { // [FUNCTION]
 	local vector targ_mins, targ_maxs;
 	
 	// Is the touching entity linked to anthing?
@@ -110,7 +110,7 @@ float(entity targ) func_insvolume_check = {
 	return FALSE;
 };
 
-void(entity targ) func_insvolume_add = {
+void(entity targ) func_insvolume_add = { // [FUNCTION]
 	if (self.tno1 == world) { self.tno1 = targ; targ.touching = self; }
 	else if (self.tno2 == world) { self.tno2 = targ; targ.touching = self; }
 	else if (self.tno3 == world) { self.tno3 = targ; targ.touching = self; }
@@ -125,7 +125,7 @@ void(entity targ) func_insvolume_add = {
 	}
 };
 
-void() func_insvolume_touch = {
+void() func_insvolume_touch = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return; // Block functionality if state wrong
 	if (other.touching == self) return; // Already checking this (other) entity?
 
@@ -151,7 +151,7 @@ void() func_insvolume_touch = {
 	if (other.touching == world) func_insvolume_add(other);
 };
 
-void() func_insvolume_on = {
+void() func_insvolume_on = { // [FUNCTION]
 	if (self.estate == ESTATE_ON) return; // Stop re-triggering ON state
 
 	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // No longer need this spawnflag, remove it
@@ -161,7 +161,7 @@ void() func_insvolume_on = {
 	setsize (self, self.bbmins, self.bbmaxs);
 };
 
-void() func_insvolume_off = {
+void() func_insvolume_off = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return; // Stop re-triggering OFF state
 
 	self.estate = ESTATE_OFF;
@@ -170,7 +170,7 @@ void() func_insvolume_off = {
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 };
 
-void() func_insvolume_controller_think = {
+void() func_insvolume_controller_think = { // [FUNCTION]
 	self.think = func_insvolume_controller_think; // Keep the controller looping
 	self.nextthink = time + 0.1;
 	self.owner.targetnumber = FALSE;
@@ -211,7 +211,7 @@ void() func_insvolume_controller_think = {
 	}
 };
 
-void() func_insvolume_controller_setup = {
+void() func_insvolume_controller_setup = { // [FUNCTION]
 	if (!self.attachment) self.attachment = spawn(); // Check if controller entity been setup
 	self.attachment.owner = self; // Setup link back to inside volume
 	self.attachment.classtype = CT_CONTROL;
@@ -243,7 +243,7 @@ void() func_insvolume_controller_setup = {
 // STARTOFF  : Starts off and waits for trigger
 // -------- NOTES --------
 // Function to test if an entity bounding box is inside of this volume
-void() func_insidevolume = {
+void() func_insidevolume = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	// No trigger/movement angles

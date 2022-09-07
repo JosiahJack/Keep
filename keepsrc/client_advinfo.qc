@@ -87,7 +87,7 @@ void() ammostats_phase3;
 void() ammostats_phase4;
 void() ammostats_phase5;
 
-void(entity targ, float ammoqty, string zero10, string zero100, string zero1000, string zero10000, string zero100000) zerofill_number = {
+void(entity targ, float ammoqty, string zero10, string zero100, string zero1000, string zero10000, string zero100000) zerofill_number = { // [FUNCTION]
 	if (ammoqty > 99999 && zero100000 == "") ammoqty = 99999; // Cap number based on strings
 	if (ammoqty > 9999 && zero10000 == "") ammoqty = 9999;
 	if (ammoqty > 999 && zero1000 == "") ammoqty = 999;
@@ -101,7 +101,7 @@ void(entity targ, float ammoqty, string zero10, string zero100, string zero1000,
 	sprint(targ, ftos(ammoqty));	
 };
 
-void() display_ammostats = {
+void() display_ammostats = { // [FUNCTION]
 	local float statloop;
 
 	if (impulse_activecameras()) return;	// Are cameras active
@@ -143,7 +143,7 @@ void() display_ammostats = {
 };
 
 // PHASE 1 : WEAPON stats
-void() ammostats_phase1 = {
+void() ammostats_phase1 = { // [FUNCTION]
 	local float as_shadaxe, as_windowmaker, as_plasmagun;
 	local entity entlist;
 
@@ -260,7 +260,7 @@ void() ammostats_phase1 = {
 };
 
 // PHASE 2 : AMMO boxes + BACKPACK stats
-void() ammostats_phase2 = {
+void() ammostats_phase2 = { // [FUNCTION]
 	local float mixedval;
 	local entity entlist;
 
@@ -441,7 +441,7 @@ void() ammostats_phase2 = {
 };
 
 // Display MONSTER Summary for the map
-void(entity targ) ammostats_monsummary = {
+void(entity targ) ammostats_monsummary = { // [FUNCTION]
 	//              1234567890123456789012345678901234567890
 	sprint(targ,   "======================================\n");
 	sprint(targ, "\bMonstrs Qty NoC Dly +NM +CO Zomb    HP\b\n");
@@ -465,7 +465,7 @@ void(entity targ) ammostats_monsummary = {
 };
 
 // Display ARTIFACT Summary for the map
-void(entity targ) ammostats_artsummary = {
+void(entity targ) ammostats_artsummary = { // [FUNCTION]
 	local float artqty;
 	//              1234567890123456789012345678901234567890
 	sprint(targ,   "--------------------------------------\n");
@@ -487,7 +487,7 @@ void(entity targ) ammostats_artsummary = {
 };
 
 // PHASE 3 : Count MONSTERS and display summary table
-void() ammostats_phase3 = {
+void() ammostats_phase3 = { // [FUNCTION]
 	display_monsqty();
 	ammostats_artsummary(self.owner);
 	ammocontrol.state = AC_PHASE4; // next stage of stats
@@ -496,7 +496,7 @@ void() ammostats_phase3 = {
 };
 
 // PHASE 4 : Count ARMOUR and HEALTH packs
-void() ammostats_phase4 = {
+void() ammostats_phase4 = { // [FUNCTION]
 	local entity entlist;
 
 	// FIND all armour/health packs
@@ -596,7 +596,7 @@ void() ammostats_phase4 = {
 };
 
 // PHASE 5 : Finally display data tables
-void() ammostats_phase5 = {
+void() ammostats_phase5 = { // [FUNCTION]
 	local float subtwbm, subtsml, subtlrg, totalrock;
 	local float hpmon_ammo_ratio, hparm_hpmon_ratio;
 	local float nozombammo, nozombmonhp, nobackammo, shotgunstart;
@@ -828,7 +828,7 @@ void() ammostats_phase5 = {
 };
 	
 // Display monsters left alive in map
-void() display_monsleft = {
+void() display_monsleft = { // [FUNCTION]
 	local float entcount, montotal, monalive, mondead;
 	local entity entlist;
 	
@@ -887,13 +887,13 @@ void() display_monsleft = {
 	sprint(self, "\n\n");
 };
 
-void(float careAboutFirst) populate_monsterlist = {
+void(float careAboutFirst) populate_monsterlist = { // [FUNCTION]
 
 };
 
 // FIND all MONSTERS in the map
 // Display quantity of different monster types
-void() display_monsqty = {
+void() display_monsqty = { // [FUNCTION]
 	local entity asmonent[MAX_MONARRAY], entlist; // Monster Array of quantity/hp differences
 	local float asmonqty[MAX_MONARRAY], asmonhp[MAX_MONARRAY], monloop, monfound, monarrayfull, subtmonhp;
 
@@ -1030,7 +1030,7 @@ void() display_monsqty = {
 };
 
 // Find and display secret locations
-void() display_secrets = {
+void() display_secrets = { // [FUNCTION]
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1070,7 +1070,7 @@ void() display_secrets = {
 	sprint(self, ")\n\n");
 };
 
-void() FinishSecretCamera = {
+void() FinishSecretCamera = { // [FUNCTION]
 	setmodel(self, "progs/player.mdl"); // Restore player core parameters (NO save)
 	modelindex_player = self.modelindex;
 	setsize (self, self.bbmins, self.bbmaxs);
@@ -1100,7 +1100,7 @@ void() FinishSecretCamera = {
 	self.impulse = self.button0 = self.button1 = self.button2 = 0; // flush keyboard buffers
 };
 
-void() SaveSecretCamera = {
+void() SaveSecretCamera = { // [FUNCTION]
 	secloc_running = TRUE; // Block pre/post player functions
 	secloc_cam.flags = self.flags; // SAVE player parameters
 	secloc_cam.effects = self.effects;
@@ -1115,7 +1115,7 @@ void() SaveSecretCamera = {
 	secloc_cam.weaponframe = self.weaponframe;	
 };
 
-void() NextSecretCamera = {
+void() NextSecretCamera = { // [FUNCTION]
 	if (!secloc_cam.enemy) { FinishSecretCamera(); return; }
 	
 	secloc_cam.count = secloc_cam.count + 1; // Find next secret location
@@ -1130,7 +1130,7 @@ void() NextSecretCamera = {
 	secloc_cam.enemy = find(secloc_cam.enemy, classname, "trigger_secret"); // Keep search for more secrets
 };
 
-void() CheckSecretCamera = {
+void() CheckSecretCamera = { // [FUNCTION]
 	if (intermission_running > 0) return;
 	if (impulse_playeronly()) return;		// Player only
 	if (!secloc_running) return;
@@ -1146,7 +1146,7 @@ void() CheckSecretCamera = {
 	}
 };
 
-void() display_secretlocs = {
+void() display_secretlocs = { // [FUNCTION]
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (secloc_running) return;

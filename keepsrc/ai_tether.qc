@@ -52,7 +52,7 @@
 float TETHER_RADIUS = 300;		// Default tether radius
 float TETHER_WAIT = 30;			// Default timer to wait before reset
 
-void(entity targ) display_tethersystem = {
+void(entity targ) display_tethersystem = { // [FUNCTION]
 	local vector org;
 	
 	// Find origin of tether target
@@ -83,7 +83,7 @@ void(entity targ) display_tethersystem = {
 };
 
 // Check for tether point (find and setup entity)
-void() setup_tethersystem = {
+void() setup_tethersystem = { // [FUNCTION]
 	// Check if the tether system be setup already
 	if (self.tethertarget != "") {
 		// Find the tether point (has to be path corner)
@@ -105,7 +105,7 @@ void() setup_tethersystem = {
 };
 
 // Check for tether range and return TRUE if at radius limit
-float() check_tethersystem = {
+float() check_tethersystem = { // [FUNCTION]
 	local vector org;
 	
 	if (self.tethered == FALSE) return FALSE; // Is the system active on the monster?
@@ -156,7 +156,7 @@ float() check_tethersystem = {
 };
 
 // Check tether timer for stand function
-void() check_tethertimer = {
+void() check_tethertimer = { // [FUNCTION]
 	if (self.tethered == FALSE) return;		// System active?
 	if (!self.tethertarg) return;			// No target active
 	if (self.enemy) return;					// In combat?

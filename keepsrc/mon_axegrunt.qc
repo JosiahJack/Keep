@@ -195,7 +195,6 @@ void() monster_axegrunt_precache = {
 void() monster_axegrunt = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	monster_axegrunt_precache();
 	self.mdl = "progs/lunaran/axegrunt.mdl";
 	self.headmdl = "progs/drake/h_guard.mdl";
 	self.gib1mdl = "progs/gib1.mdl";

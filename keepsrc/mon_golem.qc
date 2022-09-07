@@ -598,7 +598,6 @@ void() monster_golem_precache = {
 void() monster_golem = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	monster_golem_precache();
 	self.mdl = "progs/ad171/mon_golem.mdl";
 	self.gibtype = GIBTYPE_STONE;				// Stoney gibs!
 	self.gib1mdl = MODEL_PROJ_GROCK1;			// small golem rock

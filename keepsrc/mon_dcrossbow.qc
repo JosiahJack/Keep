@@ -81,8 +81,8 @@ $frame deathb9 deathb10 deathb11 deathb12 deathb13 deathb14 deathb15 deathb16
 $frame deathb17 deathb18 deathb19 deathb20
 
 void() dcrossbow_hold1;
-void() dcrossbow_checkmelee;
 void() dcrossbow_crossbow_sound;
+
 float CROSS_DOWN = 1;
 float CROSS_UP = 2;
 
