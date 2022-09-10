@@ -53,7 +53,7 @@ void() ogle_paina1;
 void() ogle_painb1;
 void() ogle_mine;
 
-void() ogle_mining_sound = {
+void() ogle_mining_sound = { // [FUNCTION]
 	local float r;
 	r = random();
 	if (self.spawnflags & OGLE_FLESHMINING) {
@@ -81,7 +81,7 @@ void() ogle_mining_sound = {
 	}
 };
 
-void() ogle_cheer_sound = {
+void() ogle_cheer_sound = { // [FUNCTION]
 	local float r;
 	r = random();
 
@@ -351,7 +351,7 @@ void() ogle_idle_to_lean4 = [214, ogle_idle_to_lean5] {};
 void() ogle_idle_to_lean5 = [215, ogle_idle_to_lean6] {};
 void() ogle_idle_to_lean6 = [216, ogle_leaning_idle1] {};
 
-void() ogle_mine = {
+void() ogle_mine = { // [FUNCTION]
 	local float r;
 	local vector spot1, spot2;
 
@@ -384,7 +384,7 @@ void() ogle_mine = {
 	}
 };
 
-void(entity inflictor, entity attacker, float damage) ogle_pain = {
+void(entity inflictor, entity attacker, float damage) ogle_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -442,7 +442,7 @@ void() ogle_chargeb7 = [239, ogle_chargeb8	] { ai_charge(12);sound(self,CHAN_VOI
 void() ogle_chargeb8 = [240, ogle_chargeb9	] { ai_charge(18); ai_melee(); };
 void() ogle_chargeb9 = [233, ogle_run1	] { ai_charge(14); ai_melee(); if (self.enemy.health < 1) ogle_cheer_sound(); };
 
-void() ogle_charge = {
+void() ogle_charge = { // [FUNCTION]
 	if (random() < 0.5) ogle_chargea1();
 	else ogle_chargeb1();
 };
@@ -462,7 +462,7 @@ void() ogle_death12 = [252, ogle_death13	] {};
 void() ogle_death13 = [253, ogle_death14	] { monster_death_postcheck(); };
 void() ogle_death14 = [254, ogle_death14	] { monster_deadbody_check(); };
 
-void() ogle_die = {
+void() ogle_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) { 
@@ -471,7 +471,7 @@ void() ogle_die = {
 	}
 };
 
-void() monster_ogle_precache =  {
+void() monster_ogle_precache =  { // [FUNCTION]
 	precache_model ("progs/heretic2/mon_ogle.mdl");
 	precache_sound("ogle/cheer1.wav");
 	precache_sound("ogle/cheer2.wav");

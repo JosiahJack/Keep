@@ -203,7 +203,7 @@ void() knight_fast5  = [$attackb7,  knight_fast6  ] { ai_charge(3); ai_melee(); 
 void() knight_fast6  = [$attackb9,  knight_fast7  ] { ai_charge(1); ai_melee(); };
 void() knight_fast7  = [$attackb10, knight_run1   ] { monster_footstep(FALSE); ai_charge(5); };
 
-void() knight_melee = {
+void() knight_melee = { // [FUNCTION]
 	if (ai_checkmelee(self.meleerange,self.meleerangez)) {
 		if (self.exactskin == 2 && self.max_health > 75) knight_fast1(); // Drake's cranked monster_warrior
 		else knight_atk1();
@@ -226,7 +226,7 @@ void()	knight_painb9	= [	$painb9,	knight_painb10	] { ai_painforward(5); };
 void()	knight_painb10	= [	$painb10,	knight_painb11	] { ai_painforward(0); };
 void()	knight_painb11	= [	$painb11,	knight_run1	] {};
 
-void(entity inflictor, entity attacker, float damage)	knight_pain = {
+void(entity inflictor, entity attacker, float damage) knight_pain = { // [FUNCTION]
 	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 
 	// Any pain animation/sound required?
@@ -271,7 +271,7 @@ void()	knight_dieb9	= [	$deathb9,	knight_dieb10] {};
 void()	knight_dieb10 = [	$deathb10,	knight_dieb11] { monster_death_postcheck(); };
 void()	knight_dieb11 = [	$deathb11,	knight_dieb11] { monster_deadbody_check(); };
 
-void() knight_die = {
+void() knight_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 
 	// regular des
@@ -282,7 +282,7 @@ void() knight_die = {
 	}
 };
 
-void() knight_aistates = {
+void() knight_aistates = { // [FUNCTION]
 	self.th_stand = knight_stand1;		// Idling on feet
 	self.th_walk = knight_walk1;		// Walking
 	self.th_run = knight_run1;			// Running
@@ -291,7 +291,7 @@ void() knight_aistates = {
 	self.th_die = knight_die;			// Face meets floor
 };
 
-void() knight_wakeup = {
+void() knight_wakeup = { // [FUNCTION]
 	// Check for sudden death!
 	if (self.health < 0) return;
 	
@@ -303,7 +303,7 @@ void() knight_wakeup = {
 	monster_targets();					// Check for targets
 };
 
-void() knight_statue = {
+void() knight_statue = { // [FUNCTION]
 	local float targ_angle, new_frame;
 
 	if (self.health < 0) return; // Check for sudden death!
@@ -323,10 +323,10 @@ void() knight_statue = {
 	}
 	
  	self.think = knight_statue;
- 	self.nextthink = time + 5 + random()*5;
+ 	self.nextthink = time + 5 + random() * 5;
 };
 
-void() monster_knight_precache = {
+void() monster_knight_precache = { // [FUNCTION]
 	precache_model ("progs/ad181/mon_knight.mdl");
 	precache_model ("progs/ad181/h_knight.mdl");
 	precache_model ("progs/ad171/w_knightsword.mdl");

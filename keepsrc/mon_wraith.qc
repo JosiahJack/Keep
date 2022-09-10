@@ -113,35 +113,9 @@ void() wraith_run8 = [$stand10, wraith_run3 ] { ai_run(4); };
 void() wraith_run9 = [$stand11, wraith_run3 ] { ai_run(8); };
 void() wraith_run10 = [$stand12, wraith_run3 ] { ai_run(8); };
 
-// Attachment management (create, finish and delete)
-void() wraith_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = MODEL_PROJ_WBALL;
-		self.attachment.alpha = 0.85;
-	}
-	if (!self.attachment2) {
-		self.attachment2 = spawn();
-		self.attachment2.owner = self;
-		self.attachment2.classtype = CT_ATTACHMENT;
-		self.attachment2.mdl = MODEL_PROJ_WBALL;
-		self.attachment2.alpha = 0.85;
-	}
-	if (!self.attachment3) {
-		self.attachment3 = spawn();
-		self.attachment3.owner = self;
-		self.attachment3.classtype = CT_ATTACHMENT;
-		self.attachment3.mdl = self.weaponglow;
-		self.attachment3.alpha = 0.5;
-	}
-};
-
 // FADE OUT TEMPORARY MODELS
 // Very quick fade (0.5s) - modified version of model_fade
-void() debuff_fade = {
+void() debuff_fade = { // [FUNCTION]
     self.alpha = 0.5 - ((time - self.ltime) / 0.5);
 
     if (self.alpha < 0.2) {
@@ -154,19 +128,15 @@ void() debuff_fade = {
     self.nextthink = time + FADEDEBUFF_TIME;
 };
 
-//----------------------------------------------------------------------
 // Start fading out (very quick, over 0.5s)
-//----------------------------------------------------------------------
-void() wraith_debuff_chunk = {
+void() wraith_debuff_chunk = { // [FUNCTION]
 	self.think = debuff_fade;
 	self.nextthink = time + FADEDEBUFF_TIME;
 	self.ltime = self.nextthink;
 };
 
-//----------------------------------------------------------------------
 // Manual animation of ball at end of the debuff particle trail
-//----------------------------------------------------------------------
-void() wraith_debuff_shrink = {
+void() wraith_debuff_shrink = { // [FUNCTION]
 	// Count downwards getting smaller
 	self.lip = self.frame - 1;
 	if (self.lip < 0) wraith_debuff_chunk();
@@ -185,8 +155,7 @@ void() wraith_debuff_shrink = {
 // Generate an animated particle trail from 32 unit segments
 // Slowly remove segments from source to target
 // Generate a ball at target location slowly shrinking
-
-void() wraith_fire_touch = {
+void() wraith_fire_touch = { // [FUNCTION]
 	if (other.solid == SOLID_TRIGGER) return;
 	if (other.classtype == CT_TEMPSTREAM) return;
 	if (other.health > 0) return;
@@ -584,7 +553,9 @@ void() wraith_magicB13 = [$magicB13, wraith_run1 ] { ai_face(); };
 void() wraith_magic = {
 	local entity truetarg;
 	
-	wraith_create_attachment(); // Make sure the attachments are setup ready
+	SUB_CreateSelfAttachment(MODEL_PROJ_WBALL,0.85); // Make sure the attachments are setup ready
+	SUB_CreateSelfAttachment2(MODEL_PROJ_WBALL,0.85);
+	SUB_CreateSelfAttachment3(self.weaponglow,0.5);
 	truetarg = SUB_entEnemyTarget();
 	if (((self.spawnflags & MON_WRAITH_SPIDERS) || (self.spawnflags & MON_WRAITH_SCORPIONS))
 	    && !self.minion_active) {

@@ -139,36 +139,7 @@ void() wolf_wake15	= [	$howl15,	wolf_wake16	] { ai_stand(); };
 void() wolf_wake16	= [	$howl16,	wolf_wake17	] { ai_stand(); };
 void() wolf_wake17	= [	$howl17,	wolf_run1	] { ai_stand(); };
 
-// Attachment management (create, finish and delete)
-void() wolf_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		//self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.state = FALSE;
-	}
-};
-
-void() wolf_reset_attachment = {
-	if (self.attachment) {
-		if (self.attachment.state) {
-			// Move attachment into place ready for use
-			self.attachment.movetype = MOVETYPE_NONE;
-			self.attachment.solid = SOLID_NOT;
-			self.attachment.frame = 0;
-			self.attachment.skin = 0;
-			setmodel(self.attachment, "");
-			setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-			setorigin(self.attachment, self.origin);
-			// Using empty model, so reset angle, frame and skin.
-			self.attachment.angles = self.angles;
-			self.attachment.state = FALSE;
-		}
-	}
-};
-
-void() wolf_setup_attachment = {
+void() wolf_setup_attachment = { // [FUNCTION]
 	if (self.attachment) {
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
@@ -179,24 +150,19 @@ void() wolf_setup_attachment = {
 };
 
 //Setup sword blur model effect
-void(float blframe, float blalpha) wolf_blur = {
+void(float blframe, float blalpha) wolf_blur = { // [FUNCTION]
 	if (self.health < 1) return;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) wolf_create_attachment();
-
-	// Frame 0 is start of the sequence (move everything into place)
-	if (blframe == 0 || blframe == 10 || blframe == 13) wolf_setup_attachment();
-	
-	// Place sword blur in correct loacation
-	setorigin(self.attachment, self.origin);
+	SUB_CreateSelfAttachment("",1.0);
+	if (blframe == 0 || blframe == 10 || blframe == 13) wolf_setup_attachment(); // Frame 0 is start of the sequence (move everything into place)
+	setorigin(self.attachment, self.origin); // Place sword blur in correct loacation
 	self.attachment.angles = self.angles;
 	self.attachment.frame = blframe;
 	self.attachment.alpha = blalpha;	
 };
 
 // Wolf Sword Melee.
-void() wolf_melee = {
+void() wolf_melee = { // [FUNCTION]
 	local float ldmg, oldrange;
 
 	if (!self.enemy) return; // Removed before stroke
@@ -216,26 +182,26 @@ void() wolf_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*4); // Spawn some touch blood (no explicit direction)
 };
 
-void() wolf_slash1	= [	$slash1,	wolf_slash2	] { ai_face(); wolf_reset_attachment(); };
+void() wolf_slash1	= [	$slash1,	wolf_slash2	] { ai_face(); SUB_FinishAttachment(); };
 void() wolf_slash2	= [	$slash2,	wolf_slash3	] { ai_face(); };
 void() wolf_slash3	= [	$slash3,	wolf_slash4	] { ai_face(); };
 void() wolf_slash4	= [	$slash4,	wolf_slash5	] { ai_chargenoturn(0); wolf_blur(10, 0.2); wolf_melee();
 sound(self,CHAN_WEAPON,"redfield/wolf/sword_slash.wav",1,ATTN_NORM); };
 void() wolf_slash5	= [	$slash5,	wolf_slash6	] { ai_chargenoturn(0); wolf_blur(11, 0.2); wolf_melee(); };
 void() wolf_slash6	= [	$slash6,	wolf_slash7	] { ai_chargenoturn(0); wolf_blur(12, 0.1); wolf_melee(); };
-void() wolf_slash7	= [	$slash7,	wolf_slash8	] { ai_chargenoturn(0); wolf_reset_attachment(); };
+void() wolf_slash7	= [	$slash7,	wolf_slash8	] { ai_chargenoturn(0); SUB_FinishAttachment(); };
 void() wolf_slash8	= [	$slash8,	wolf_slash9	] { ai_chargenoturn(0); };
 void() wolf_slash9	= [	$slash9,	wolf_slash10	] { ai_chargenoturn(0); };
 void() wolf_slash10	= [	$slash10,	wolf_slash11	] { ai_chargenoturn(0); wolf_melee(); };
 void() wolf_slash11	= [	$slash11,	wolf_slash12	] { ai_chargenoturn(0); wolf_blur(13, 0.2); wolf_melee(); };
 void() wolf_slash12	= [	$slash12,	wolf_slash13	] { ai_chargenoturn(0); wolf_blur(14, 0.2); wolf_melee(); };
 void() wolf_slash13	= [	$slash13,	wolf_slash14	] { ai_chargenoturn(0); wolf_blur(15, 0.1); wolf_melee(); };
-void() wolf_slash14	= [	$slash14,	wolf_slash15	] { ai_chargenoturn(0); wolf_reset_attachment(); };
+void() wolf_slash14	= [	$slash14,	wolf_slash15	] { ai_chargenoturn(0); SUB_FinishAttachment(); };
 void() wolf_slash15	= [	$slash15,	wolf_slash16	] { ai_chargenoturn(0); };
 void() wolf_slash16	= [	$slash16,	wolf_slash17	] { ai_chargenoturn(0); };
 void() wolf_slash17	= [	$slash17,	wolf_run1	] { ai_chargenoturn(0); };
 
-void() wolf_spin1	= [	$spin1,		wolf_spin2	] { ai_chargenoturn(0); wolf_reset_attachment(); };
+void() wolf_spin1	= [	$spin1,		wolf_spin2	] { ai_chargenoturn(0); SUB_FinishAttachment(); };
 void() wolf_spin2	= [	$spin2,		wolf_spin3	] { ai_chargenoturn(0);
 sound(self,CHAN_WEAPON,"redfield/wolf/sword_spin.wav",1,ATTN_NORM); };
 void() wolf_spin3	= [	$spin3,		wolf_spin4	] { ai_chargenoturn(0); };
@@ -251,12 +217,12 @@ void() wolf_spin12	= [	$spin12,	wolf_spin13	] { ai_charge(40); wolf_blur(5, 0.2)
 void() wolf_spin13	= [	$spin13,	wolf_spin14	] { ai_charge(40); wolf_blur(6, 0.2); };
 void() wolf_spin14	= [	$spin14,	wolf_spin15	] { ai_charge(40); wolf_blur(7, 0.2); wolf_melee(); };
 void() wolf_spin15	= [	$spin15,	wolf_spin16	] { ai_chargenoturn(0); wolf_blur(8, 0.1); wolf_melee(); };
-void() wolf_spin16	= [	$spin16,	wolf_run1	] { ai_chargenoturn(0); wolf_reset_attachment(); wolf_melee();
+void() wolf_spin16	= [	$spin16,	wolf_run1	] { ai_chargenoturn(0); SUB_FinishAttachment(); wolf_melee();
 	if (ai_checkmelee(self.meleerange,self.meleerangez)) self.think = wolf_slash1;
 };
 
 // Magic Sword Attack
-void(vector leftofsb, vector rightofsb) moonsword_charge = {	
+void(vector leftofsb, vector rightofsb) moonsword_charge = { // [FUNCTION]
 	if (self.health < 1) return;
 
 
@@ -270,7 +236,7 @@ void(vector leftofsb, vector rightofsb) moonsword_charge = {
 	particle_explode(self.pos2, 12+random()*2, 0.1+random()*0.2, PARTICLE_BURST_BLUE, PARTICLE_BURST_LOSTUP);
 };
 
-void() wolf_moonsword = {
+void() wolf_moonsword = { // [FUNCTION]
 	local vector org, dir;
 
 	ai_face();
@@ -295,7 +261,7 @@ void() wolf_shoot9	= [	$shoot9,	wolf_shoot10	] { self.skin = 0; };
 void() wolf_shoot10	= [	$shoot10,	wolf_run1	] {};
 
 // Only functions when monster spawns standing -- No walking / path corners.  Currently need solution to this problem so long as taunt animations are used
-void() wolf_wakeup = {
+void() wolf_wakeup = { // [FUNCTION]
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -328,8 +294,7 @@ void() wolf_pain10	= [	$pain10,	wolf_pain11	] {};
 void() wolf_pain11	= [	$pain11,	wolf_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) wolf_pain = {
-	//Reset blur attachment
-	wolf_reset_attachment();		
+	SUB_FinishAttachment(); //Reset blur attachment	
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);

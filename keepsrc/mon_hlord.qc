@@ -66,7 +66,7 @@ $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
 
 // Makes the Bane gray and ghostly.  Called by 'painc' and 'magice' series.
-void() bane_gray = {
+void() bane_gray = { // [FUNCTION]
     if (self.health <= self.waitmin) { // Set up clone magic.
         self.health     = self.waitmin; // Yes, reset health.
         self.waitmax    =           // If lower than min, then max too.
@@ -87,7 +87,7 @@ void() bane_pain2 = [$pain2, bane_pain3   ] { ai_forward(8); };
 void() bane_pain3 = [$pain4, bane_pain4   ] { ai_forward(4); };
 void() bane_pain4 = [$pain5, hknight_run1 ] { ai_forward(2); };
 
-void() bane_painb1= [$pain1, bane_pain3   ] {};
+void() bane_painb1= [$pain1, bane_pain3   ] {}; // [FUNCTION]
 
 // Shadows
 // Trailing shadowy copies of bane, like Johnny Cage shadow kick, or Akuma teleport...or mouse cursor trails in 1998.
@@ -187,7 +187,7 @@ void() bane_jump5   = [$char_a5,  bane_jump6 ] { self.nextthink = time + 0.5; };
 void() bane_jump6   = [$char_a6,  bane_jump1 ] { self.nextthink = time + 3; };
 void() bane_jump7   = [$char_a8,  hknight_char_a10 ] {};
 
-void() Bane_JumpTouch = {
+void() Bane_JumpTouch = { // [FUNCTION]
     local   float   ldmg;
 
     if (self.health <= 0) return;
@@ -221,7 +221,7 @@ void() Bane_JumpTouch = {
     self.nextthink = time + 0.1;
 };
 
-float() CheckBaneJump = {
+float() CheckBaneJump = { // [FUNCTION]
     local vector dist;
     local float d;
 
@@ -233,7 +233,7 @@ float() CheckBaneJump = {
     return TRUE;
 };
 
-void() bane_strafe = {
+void() bane_strafe = { // [FUNCTION]
 	if (self.classtype != CT_MONBANE) return;
 
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
@@ -242,11 +242,11 @@ void() bane_strafe = {
 	ai_run_strafe (20);     // Player walk speed.
 };
 
-void() hk_face = { ai_face();  bane_strafe(); };
+void() hk_face = { ai_face();  bane_strafe(); }; // [FUNCTION]
 
 // ATTACK #1 (Modified for Lightning Airstrike)
 // Here for incidental damage in case enemy runs up to melee range while the sword is coming down during the magica animation.
-void() magica_sword_chop = {
+void() magica_sword_chop = { // [FUNCTION]
     local   float   ldmg;
     local   vector  delta;
     
@@ -486,7 +486,7 @@ void() bane_magicd14 = [$magica2,  bane_magicd15 ] {};
 void() bane_magicd15 = [$magica1,  hknight_run1  ] {};
 
 //  Clones
-void() clone_die = {
+void() clone_die = { // [FUNCTION]
 	// Copied from 'eyes.qc'...
     self.takedamage = DAMAGE_NO;    // PM:  Needed in Drake.
     self.modelindex = 0;
@@ -499,7 +499,7 @@ void() clone_die = {
     spawn_tfog (self.origin); // Poof!
 };
 
-void() clone_spawn = {
+void() clone_spawn = { // [FUNCTION]
     local entity kage;       // Watching too much Naruto, eh?
 
 	if (!checkbuiltin(checkbuiltin) && !checkbuiltin(copyentity)) return;
@@ -582,7 +582,7 @@ void() bane_magice13 = [$magicb11, bane_magice14 ] { self.alpha = 0; hk_face();
 void() bane_magice14 = [$magicb12, bane_magice15 ] { hk_face(); };
 void() bane_magice15 = [$magicb13, hknight_run1  ] { hk_face(); };
 
-void() lord_magic = {
+void() lord_magic = { // [FUNCTION]
     local float r, add, opt;
 
     add = 1;
@@ -601,7 +601,7 @@ void() lord_magic = {
 };
 
 // TODO: If close, use slam, charge, or melee; else, shoot or summon.
-void() darklord_magic = {
+void() darklord_magic = { // [FUNCTION]
     local float dist;
 
 	// FIXME:  Check for corpses to make wraths from.
@@ -621,7 +621,7 @@ void() darklord_magic = {
     hknight_magicb1(); // Magic missile straight
 };
 
-void() hkboss_magic = {
+void() hkboss_magic = { // [FUNCTION]
 	local float r;
 
 	self.meleeattack = self.meleeattack + 1;
@@ -638,7 +638,7 @@ void() hkboss_magic = {
         hknight_magicc1();
 };
 
-void() bane_magic = {
+void() bane_magic = { // [FUNCTION]
     if (random() < 0.25) {
         if (CheckBaneJump ()) { // PM:  Jumping done at charge anim.  However, if enemy is low enough that CheckForCharge would abort, then we can check for jumping.
             if (self.origin_z - self.enemy.origin_z > 20) { bane_jump1();  return; } // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
@@ -655,7 +655,7 @@ void() bane_magic = {
         hknight_magicc1();
 };
 
-void(float side) bane_melee = {
+void(float side) bane_melee = { // [FUNCTION]
     local   float   ldmg;
 
     if ((self.classtype != CT_MONBANE) && (self.classtype != CT_MONDARKLORD)) return;
@@ -672,7 +672,7 @@ void(float side) bane_melee = {
     SpawnMeatSpray(self, self.enemy, (crandom() * 50) + (50 * side));
 };
 
-void(float d) hk_charge = {
+void(float d) hk_charge = { // [FUNCTION]
     local float dist;
 
     if ((self.classtype == CT_MONBANE) || (self.classtype == CT_MONDARKLORD)) {
@@ -714,7 +714,7 @@ void() bane_watk12 = [$w_attack19, bane_watk13 ] { hk_charge(4); ai_melee(); };
 void() bane_watk13 = [$w_attack20, bane_watk14 ] { hk_charge(6); };
 void() bane_watk14 = [$w_attack22, hknight_run1] { hk_charge(10); };
 
-void(entity inflictor, entity attacker, float damage) bane_pain = {
+void(entity inflictor, entity attacker, float damage) bane_pain = { // [FUNCTION]
 	// Shadow clone magic check.
     if (!self.waitmax) {
         if ((self.health <= self.waitmin) && ((self.enemy == attacker) || (self.oldenemy == attacker)) && (self.touch != Bane_JumpTouch) && (self.classname != self.master.classname) && (walkmove (0, 0))) { // Does Bane have the ace in the hole?  Is Bane fighting his enemy?  Is Bane not locked in motion?  Is Bane real?  Can the Bane move? "Bushin no Kage!\n"
@@ -762,7 +762,7 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
         bane_painb1();
 };
 
-void() baneknight_melee = {
+void() baneknight_melee = { // [FUNCTION]
     local float fast;
 
     self.meleeattack = self.meleeattack + 1;
@@ -788,14 +788,14 @@ void() baneknight_melee = {
     }
 };
 
-void() bane_win = {
+void() bane_win = { // [FUNCTION]
     sound(self,CHAN_VOICE, "drake/bane/laugh.wav",1,ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
     if (self.movetarget || self.charmer) self.th_walk();
     else self.th_stand();
 };
 
 // Tougher and meaner red version with fire magic.
-void() monster_hell_lord_precache = {
+void() monster_hell_lord_precache = { // [FUNCTION]
     precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
@@ -819,7 +819,7 @@ void() monster_hell_lord = { monster_hell_knight(); };
 void() monster_lord = { self.classname = "monster_hell_lord";  monster_hell_knight(); };
 
 // For Rapture's hkboss.
-void() monster_hkboss_precache = {
+void() monster_hkboss_precache = { // [FUNCTION]
     precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
@@ -842,14 +842,14 @@ void() monster_hkboss_precache = {
 void() monster_hkboss = { monster_hell_knight(); }; // For Rapture.
 
 // In case Bane gets aggravated during teleportation...
-void() bane_run = {
+void() bane_run = { // [FUNCTION]
     if (self.skin == SKIN_BANE_GRAY)
         bane_painc1();     // Restart shadow walk.
     else
         hknight_run1();
 };
 
-void() monster_bane_precache = {
+void() monster_bane_precache = { // [FUNCTION]
 	precache_model("progs/qmaster/mon_hknight.mdl");
 	precache_model("progs/h_hellkn.mdl");
 	precache_model(MODEL_PROJ_HKN);
@@ -980,7 +980,7 @@ void() darklord_fast6 = [$run6, darklord_fast7 ] { monster_footstep(FALSE); dk_f
 void() darklord_fast7 = [$run7, darklord_fast8 ] { dk_fast(21); };
 void() darklord_fast8 = [$run8, darklord_fast1 ] { dk_fast(13); };
 
-void() dk_shield = {
+void() dk_shield = { // [FUNCTION]
     if (self.minion_count < 1) {
         if (self.flags & FL_GODMODE) {
             SUB_RemoveFlags(self,FL_GODMODE);
@@ -997,21 +997,21 @@ void() dk_shield = {
     }
 };
 
-void(float d) dk_slow = {
+void(float d) dk_slow = { // [FUNCTION]
     if (!self.enemy) { darklord_fast1();  return; }
     if (!visible (self.enemy)) { darklord_fast1();  return; }
     dk_shield();
     ai_run(d);
 };
 
-void(float d) dk_fast = {
+void(float d) dk_fast = { // [FUNCTION]
 	if (self.enemy)
 		if (visible (self.enemy)) { darklord_run1();  return; }
     dk_shield();
     ai_run(d);
 };
 
-void(float d) dk_charge = { hk_charge(d*2); };
+void(float d) dk_charge = { hk_charge(d*2); }; // [FUNCTION]
 void() dk_idle_sound = { if (random() < 0.2) sound(self,CHAN_VOICE, "drake/darklord/idle1.wav",1,ATTN_NORM); };
 
 void() darklord_slice1  = [$slice1,  darklord_slice2  ] { dk_idle_sound(); dk_charge(9); };
@@ -1048,7 +1048,7 @@ void() darklord_watk12 = [$w_attack19, darklord_watk13 ] { dk_charge(4); ai_mele
 void() darklord_watk13 = [$w_attack20, darklord_watk14 ] { dk_charge(6); };
 void() darklord_watk14 = [$w_attack22, hknight_run1] { dk_charge(10); };
 
-void() darklord_melee = {
+void() darklord_melee = { // [FUNCTION]
     if (self.waitmin < time) { darklord_magica1(); return; }
 
     self.meleeattack = self.meleeattack + 1;
@@ -1079,7 +1079,7 @@ void() darklord_fall10 = [$stand1, darklord_fall11 ] {};
 void() darklord_fall11 = [$stand2, darklord_fall12 ] {};
 void() darklord_fall12 = [$stand3, darklord_thebeast ] { Quake_Spawn(self,0,0,self.origin,FALSE,5,VEC_QUAKE); self.nextthink = time + 3; }; // Shake entire level.
 
-void(entity inflictor, entity attacker, float damage) darklord_pain = {
+void(entity inflictor, entity attacker, float damage) darklord_pain = { // [FUNCTION]
     if (self.max_health - self.health >= 1000) {
 		// Took enough damage to die.  So feign death before transforming.
         local   vector  st;
@@ -1133,7 +1133,7 @@ void() darklord_dieb7 = [$deathb7, darklord_dieb8 ] {};
 void() darklord_dieb8 = [$deathb8, darklord_dieb9 ] {};
 void() darklord_dieb9 = [$deathb9, darklord_dieb9   ] {};
 
-void() darklord_die = {
+void() darklord_die = { // [FUNCTION]
     local   vector  st;
 
     sound(self,CHAN_VOICE, "drake/darklord/death.wav",1,ATTN_NORM);
@@ -1147,7 +1147,7 @@ void() darklord_die = {
     Rocket_Explosion2 (st, 32, 5);
 };
 
-void() monster_dark_lord_precache = {
+void() monster_dark_lord_precache = { // [FUNCTION]
     precache_model("progs/qmaster/mon_hknight.mdl");
     precache_model("progs/drake/k_ball.mdl");    // Bane fireball.
     precache_model("progs/h_hellkn.mdl");

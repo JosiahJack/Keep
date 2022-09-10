@@ -46,13 +46,13 @@ void() imp_touch;
 void() imp_down1;
 void() imp_up1;
 
-void() gargoylewings = {
+void() gargoylewings = { // [FUNCTION]
 	if (self.classtype == CT_MONGARGOYLE_MEGA) sound(self,CHAN_ITEM,"drake/imp/swoopbig.wav",1,ATTN_IDLE);
 	else sound(self,CHAN_ITEM,"ad171/gargoyle/wings1.wav",1,ATTN_IDLE);
 };
 
 // Sets movetype to real flight and other stats needed for swooping.
-void() imp_movefly = {
+void() imp_movefly = { // [FUNCTION]
     self.count      = 140;      // Flight speed.
     self.yaw_speed  = 30;
     self.velocity   = '0 0 0';
@@ -62,7 +62,7 @@ void() imp_movefly = {
 };
 
 // Sets imp movement to movetype_step and other stats.
-void() imp_movestep = {
+void() imp_movestep = { // [FUNCTION]
     self.count      = 0;
     self.yaw_speed  = 15;
     self.velocity   = '0 0 0';
@@ -72,7 +72,7 @@ void() imp_movestep = {
 };
 
 // Make the imp ready for dodging.
-void(float left, float motion) imp_set_dodge = {
+void(float left, float motion) imp_set_dodge = { // [FUNCTION]
     self.lefty = left;
     self.attack_state = motion;
     if (motion == AS_VERTICAL) {
@@ -108,7 +108,8 @@ void()	garg_walk9	= [	$fly17,	garg_walk10	] { ai_walk(8); };
 void()	garg_walk10	= [	$fly19,	garg_walk1	] { ai_walk(8); };
 
 
-void()	garg_run1	= [	$fly1,	garg_run2	] { monster_idle_sound();
+void()	garg_run1	= [	$fly1,	garg_run2	] { // [FUNCTION]
+	monster_idle_sound();
 	if (self.attachment && self.attachment.state == STATE_ON) SUB_FinishAttachment();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
@@ -162,7 +163,7 @@ void() imp_up11 =[ $fly17, imp_up12 ] {ai_run(4);};
 void() imp_up12 =[ $fly19, garg_run1  ] {ai_run(0);};
 
 // Range attack
-void() garg_fbthrow = {
+void() garg_fbthrow = { // [FUNCTION]
 	local vector org, dir;
 	
 	makevectors(self.angles);
@@ -172,7 +173,7 @@ void() garg_fbthrow = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_GARG,self.attack_speed);
 };
 
-void(float fbframe, vector fbofs) garg_fbupdate = {
+void(float fbframe, vector fbofs) garg_fbupdate = { // [FUNCTION]
 	if (self.health < 1) return;
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -251,7 +252,7 @@ void()	garg_wakeup6	= [	$flyup20,	garg_run1	] {
 	self.nextthink = time + 0.1;// Next frame
 };
 
-void() gargoyle_wakeup = {
+void() gargoyle_wakeup = { // [FUNCTION]
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -278,26 +279,23 @@ void() gargoyle_wakeup = {
 	garg_wakeup1();
 };
 
-void() gargoyle_statue = {
+void() gargoyle_statue = { // [FUNCTION]
 	if (random() < MON_IDLE_SOUND) sound(self,CHAN_VOICE, self.idle_sound,1,ATTN_NORM);
 	
  	self.think = gargoyle_statue;
  	self.nextthink = time + 5 + random()*5;
 };
 
-
 // MINION - Grow and spin up from nothing
-
-void() gargoyle_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() gargoyle_grow1 = [$grow1, gargoyle_grow2 ] {};
-void() gargoyle_grow2 = [$grow2, gargoyle_grow3 ] { gargoyle_growangle(); };
-void() gargoyle_grow3 = [$grow3, gargoyle_grow4 ] { gargoyle_growangle(); };
-void() gargoyle_grow4 = [$grow4, gargoyle_grow5 ] { gargoyle_growangle(); };
-void() gargoyle_grow5 = [$grow5, gargoyle_grow6 ] { gargoyle_growangle(); };
-void() gargoyle_grow6 = [$grow6, gargoyle_grow7 ] { gargoyle_growangle(); };
-void() gargoyle_grow7 = [$grow7, gargoyle_grow8 ] { gargoyle_growangle(); };
-void() gargoyle_grow8 = [$grow8, gargoyle_grow9 ] { gargoyle_growangle(); };
-void() gargoyle_grow9 = [$grow9, gargoyle_grow10] { gargoyle_growangle(); };
+void() gargoyle_grow2 = [$grow2, gargoyle_grow3 ] { SUB_GrowAngle(); };
+void() gargoyle_grow3 = [$grow3, gargoyle_grow4 ] { SUB_GrowAngle(); };
+void() gargoyle_grow4 = [$grow4, gargoyle_grow5 ] { SUB_GrowAngle(); };
+void() gargoyle_grow5 = [$grow5, gargoyle_grow6 ] { SUB_GrowAngle(); };
+void() gargoyle_grow6 = [$grow6, gargoyle_grow7 ] { SUB_GrowAngle(); };
+void() gargoyle_grow7 = [$grow7, gargoyle_grow8 ] { SUB_GrowAngle(); };
+void() gargoyle_grow8 = [$grow8, gargoyle_grow9 ] { SUB_GrowAngle(); };
+void() gargoyle_grow9 = [$grow9, gargoyle_grow10] { SUB_GrowAngle(); };
 void() gargoyle_grow10= [$grow10, garg_run1 ] {
 	// Is the gargoyle stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
@@ -319,7 +317,7 @@ void() gargoyle_grow10= [$grow10, garg_run1 ] {
 	}
 };
 
-void() gargoyle_grow = {
+void() gargoyle_grow = { // [FUNCTION]
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -328,10 +326,9 @@ void() gargoyle_grow = {
 	gargoyle_grow1();
 };
 
-// ATTACK (Swoop) - - - - - - - - - - -
+// ATTACK (Swoop)
 // Called and used only by imp_tocuh.
-void() imp_swpend =
-{
+void() imp_swpend = { // [FUNCTION]
     self.flags = self.flags - (self.flags & FL_ONGROUND);
     self.velocity_x = self.velocity_x / 1.2;
     self.velocity_y = self.velocity_y / 1.2;
@@ -355,7 +352,7 @@ void() imp_bounce5  =[ $swoop1,  garg_run1      ] {imp_swpend(); SUB_AttackFinis
 
 void() garg_pain1;
 
-void() imp_touch = {
+void() imp_touch = { // [FUNCTION]
     local float damage, dx;
 
     self.touch = SUB_Null;
@@ -393,7 +390,7 @@ void() imp_touch = {
     }
 };
 
-void() imp_slow = {
+void() imp_slow = { // [FUNCTION]
     if (self.velocity_x > 10) self.velocity_x = self.velocity_x / 2;
     else self.velocity_x = 0;
 
@@ -411,7 +408,7 @@ void() imp_abort7  =[ $swpout13, imp_abort8  ] {imp_slow();};
 void() imp_abort8  =[ $swpout15, garg_run1     ] {imp_slow(); SUB_AttackFinished(1);};
 
 // Charging.
-void() imp_charge = {
+void() imp_charge = { // [FUNCTION]
 	local float tempfov;
 
     if (self.enemy.attack_time + 0.5 > time) {
@@ -469,8 +466,7 @@ void() imp_swoop7  =[ $swoop13, imp_swoop7  ] {imp_dive();};  // Loop
 void() imp_swoop8  =[ $swoop15, imp_swoop9  ] {imp_dive();};
 void() imp_swoop9  =[ $swoop17, imp_swoop10 ] {imp_dive();};
 void() imp_swoop10 =[ $swoop19, imp_charge1 ] {imp_dive(); self.count = 0;};
-void() imp_dive =
-{
+void() imp_dive = { // [FUNCTION]
     ai_face();
     self.count = self.count * 1.3225;   // 1.15 * 1.15 = 1.3225.
     if ( self.frame >= $swoop12 )
@@ -503,7 +499,7 @@ void() imp_dive =
     // If last frame, set speed to 0.  (Done elsewhere.)
 };
 
-float() imp_guard = {
+float() imp_guard = { // [FUNCTION]
 	local float dist, dot, tempfov;
     local vector p1, p2, pd;
 
@@ -555,8 +551,7 @@ float() imp_guard = {
 };
 
 // Straight swoop.
-void() imp_out =
-{
+void() imp_out = { // [FUNCTION]
     ai_face();
 //    if ( !((self.enemy.flags & FL_CLIENT) && (self.enemy.war & WARx_AXE_FRAMES)) )
     if (imp_guard ())   // Abort if TRUE.
@@ -808,7 +803,7 @@ void() monster_afrit = {
 };
 
 
-void() setup_gargoyle = {
+void() setup_gargoyle = { // [FUNCTION]
 	if (random() < 0.5) self.gib1mdl = ""; // Randomize gib parts by removing some
 	else if (random() < 0.5) self.gib2mdl = "";
 
@@ -899,15 +894,12 @@ void() setup_gargoyle = {
 };
 
 // A code way to spawn gargoyles (requires monster_minotaurminion entity)
-void(vector minion_org, entity minion_targ) minion_gargoyle = {
+void(vector minion_org, entity minion_targ) minion_gargoyle = { // [FUNCTION]
 	local entity minion;
 
-	// Check if there is space to spawn entity
-	if (!InOpenOrLiquid(minion_org)) return;
-	
-	// Self = minotaur, there is no egg 
-	update_minioncount(self, 1);			// Update spawn counters
-	
+	if (!InOpenOrLiquid(minion_org)) return; // Check if there is space to spawn entity
+
+	update_minioncount(self, 1);			// Update spawn counters.  Self = minotaur, there is no egg 
 	minion = spawn();
 	minion.classname = "monster_gargoyle";	// For function searching
 	setorigin(minion, minion_org);			// Move to new location
@@ -932,19 +924,16 @@ void(vector minion_org, entity minion_targ) minion_gargoyle = {
 	
 	// Adopt parameters from host spawner
 	minion.infightextra = self.infightextra;
-	
 	minion.mdl = "progs/ad171/mon_gargoyle.mdl";
 	minion.headmdl = "progs/ad171/h_gargoyle.mdl";
 	minion.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
 	minion.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
-
 	minion.pain_sound = "ad171/gargoyle/pain75.wav";
 	minion.pain_sound2 = "ad171/gargoyle/pain100.wav";
 	minion.idle_sound = "ad171/gargoyle/idle1.wav";
 	minion.idle_soundcom = "ad171/gargoyle/perch1.wav";
 	minion.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
 	minion.sight_sound = "ad171/gargoyle/sight1.wav";
-	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_gargoyle;
 };

@@ -55,7 +55,7 @@ float DEFLECT_WALK = 1;
 float DEFLECT_RUN = 2;
 
 //===========================================================================
-void() deflect_shieldon = {
+void() deflect_shieldon = { // [FUNCTION]
 	self.takedamage = DAMAGE_YES;	// Grenades bounce off
 	self.bouncegrenade = TRUE;		// Warning to other monsters
 	self.reflectnails = TRUE;		// Reflect nail projectiles
@@ -69,7 +69,7 @@ void() deflect_shieldon = {
 	self.resist_multi_rockets = 0.25;
 };
 
-void() deflect_shieldoff = {
+void() deflect_shieldoff = { // [FUNCTION]
 	self.takedamage = DAMAGE_AIM;	// Grenades can make contact
 	self.bouncegrenade = FALSE;		// Reset to default
 	self.reflectnails = FALSE;		// Allow nail projectiles
@@ -80,15 +80,15 @@ void() deflect_shieldoff = {
 	self.resist_rockets = 0; self.resist_cells = 0.5;
 };
 
-void() deflect_shieldsound_on = {
+void() deflect_shieldsound_on = { // [FUNCTION]
 	sound(self,CHAN_ITEM,"ad181/deflector/shield_on.wav",1,ATTN_NORM);
 };
 
-void() deflect_shieldsound_off = {
+void() deflect_shieldsound_off = { // [FUNCTION]
 	sound(self,CHAN_ITEM,"ad181/deflector/shield_off.wav",1,ATTN_NORM);
 };
 
-void() deflect_shieldparticle = {
+void() deflect_shieldparticle = { // [FUNCTION]
 	self.pos1 = self.origin;
 	// Randomize position from middle to feet (particles float up)
 	self.pos1_z = self.pos1_z - (random()*20);
@@ -116,7 +116,6 @@ void() deflect_stands7= [$fieldon7, deflect_stands6] { ai_stand();
 void() deflect_stands6= [$fieldon6, deflect_stands5] { ai_stand(); };
 void() deflect_stands5= [$fieldon5, deflect_stand2] { ai_stand(); };
 
-//----------------------------------------------------------------------
 void() deflect_stand2= [$stand2, deflect_stand3] { ai_stand(); };
 void() deflect_stand3= [$stand3, deflect_stand4] { ai_stand(); };
 void() deflect_stand4= [$stand4, deflect_stand5] { ai_stand(); };
@@ -124,7 +123,6 @@ void() deflect_stand5= [$stand5, deflect_stand6] { ai_stand(); };
 void() deflect_stand6= [$stand6, deflect_stand7] { ai_stand(); };
 void() deflect_stand7= [$stand7, deflect_stand1] { ai_stand(); };
 
-//===========================================================================
 void() deflect_walks5;	// Forward compiler reference
 void() deflect_walk1= [$walk1, deflect_walk2] { ai_walk(2);
 	// Work out if shield was on before this state
@@ -141,7 +139,6 @@ void() deflect_walks5= [$fieldon5, deflect_walks6] { ai_walk(0);
 void() deflect_walks6= [$fieldon6, deflect_walks7] { ai_walk(0); };
 void() deflect_walks7= [$fieldon7, deflect_walk2] { ai_walk(0); };
 
-//----------------------------------------------------------------------
 void() deflect_walk2= [$walk2, deflect_walk3] {
 	deflect_shieldparticle(); monster_footstep(FALSE); ai_walk(4); };
 void() deflect_walk3= [$walk3, deflect_walk4] { ai_walk(4); };
@@ -160,14 +157,12 @@ void() deflect_walk14= [$walk14, deflect_walk15] { ai_walk(3); };
 void() deflect_walk15= [$walk15, deflect_walk16] { ai_walk(4); };
 void() deflect_walk16= [$walk16, deflect_walk1] { ai_walk(2); };
 
-//===========================================================================
 // Two speed run animation based on enemy visibility
-//===========================================================================
 void()	deflect_slow1;
 void()	deflect_fast1;
 
 // run state has two animation speeds (single function required)
-void(float movespd) deflect_run = {
+void(float movespd) deflect_run = { // [FUNCTION]
 	// Block all checks if dead
 	if (self.health < 1) return;
 	// idle functions work for both animation sets
@@ -201,7 +196,6 @@ void(float movespd) deflect_run = {
 };
 
 // Walk animation with 150% movement speed
-//----------------------------------------------------------------------
 void()	deflect_slow1= [$walk1,	deflect_slow2 ] { self.walkframe=0;deflect_run(3); };
 void()	deflect_slow2= [$walk2,	deflect_slow3 ] {
 	deflect_shieldparticle(); monster_footstep(FALSE); deflect_run(6);
@@ -224,7 +218,6 @@ void()	deflect_slow15= [$walk15, deflect_slow16] { deflect_run(6); };
 void()	deflect_slow16= [$walk16, deflect_slow1] { deflect_run(3); };
 
 // Typical run animation (used when enemy out of sight)
-//----------------------------------------------------------------------
 void()	deflect_fast1= [$run1, deflect_fast2] { self.walkframe=0;deflect_run(18); };
 void()	deflect_fast2= [$run2, deflect_fast3] { deflect_run(14); };
 void()	deflect_fast3= [$run3, deflect_fast4] {
@@ -239,7 +232,7 @@ void()	deflect_fast7= [$run7, deflect_fast8] {
 void()	deflect_fast8= [$run8, deflect_fast1] { deflect_run(11); };
 
 // MELEE Range (Flames)
-void(float fire_explode) deflect_fireflame = {
+void(float fire_explode) deflect_fireflame = { // [FUNCTION]
 	local vector org, eorg, torg, dir, ang;
 	local float expl_type, targetang;
 
@@ -293,7 +286,7 @@ void(float fire_explode) deflect_fireflame = {
 	self.proj_attarc = self.proj_attarc + 1;
 };
 
-void() deflect_flameframe = {
+void() deflect_flameframe = { // [FUNCTION]
 	// Dead Deflectors don't reflect back
 	if (self.health < 1) return;
 
@@ -316,7 +309,7 @@ void() deflect_flameframe = {
 	} else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
 		deflect_shieldoff(); deflect_shieldsound_off();
 	} else if (self.walkframe == 2) { self.frame = $attack3; ai_face(); }
-	// MAIN ATTACK LOOP ---------------------------------------------------
+	// MAIN ATTACK LOOP
 	else if (self.walkframe == 3) { self.frame = $attack14; ai_face();
 		// Sprite Count = Base (X) * (Skill * Y) Maximum = Z
 		self.attack_count = SpriteCount_Flame(self.proj_attqty);
@@ -354,7 +347,7 @@ void() deflect_flameframe = {
 };
 
 // MELEE Range (Plasma)
-void(float sideang) deflect_fireplasma = {
+void(float sideang) deflect_fireplasma = { // [FUNCTION]
 	local vector org, targ_org, dir;
 
 	if (!self.enemy) return;
@@ -372,7 +365,7 @@ void(float sideang) deflect_fireplasma = {
 	launch_projectile(org,dir,NO_SPIN,CT_MONDEFLECTOR,self.attack_speed);
 };
 
-void() deflect_plasmaframe = {
+void() deflect_plasmaframe = { // [FUNCTION]
 	if (self.health < 1) return; // Dead Deflectors don't reflect back
 
 	// Keep looping
@@ -415,7 +408,7 @@ void() deflect_plasmaframe = {
 	self.walkframe = self.walkframe + 1; // Update frame and move forward
 };
 
-void() deflect_melee = { 
+void() deflect_melee = { // [FUNCTION]
 	self.walkframe = 0;		// Frame counter
 	self.attack_count = 0;	// Plasma/Flame counter
 	self.attack_switch = 0;	// switching run modes
@@ -425,7 +418,7 @@ void() deflect_melee = {
 };
 
 // LONG Range (Rocket Launcher)
-void(float sideang) deflect_fire_rocket = {
+void(float sideang) deflect_fire_rocket = { // [FUNCTION]
 	local vector org, torg, dir;
 	
 	if (!self.enemy) return;
@@ -446,7 +439,7 @@ void(float sideang) deflect_fire_rocket = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_DEFLECT1,self.attack_speed);
 };
 
-void() deflect_rocketframe = {
+void() deflect_rocketframe = { // [FUNCTION]
 	// Dead deflectors don't fight anymore
 	if (self.health < 1) return;
 
@@ -486,29 +479,26 @@ void() deflect_rocketframe = {
 	self.walkframe = self.walkframe + 1;
 };
 
-//----------------------------------------------------------------------
-void() deflector_range = { self.walkframe = 0; deflect_rocketframe(); };
-
+void() deflector_range = { self.walkframe = 0; deflect_rocketframe(); }; // [FUNCTION]
 
 // Classic enforcer 4 pain animation sets
-
 void() deflect_paina1= [$paina1, deflect_paina2] {};
 void() deflect_paina2= [$paina2, deflect_paina3] {};
 void() deflect_paina3= [$paina3, deflect_paina4] {};
 void() deflect_paina4= [$paina4, deflect_slow1] {
 	// Last pain frame has shield coming on
-	deflect_shieldon();deflect_shieldsound_on(); };
+	deflect_shieldon();deflect_shieldsound_on();
+};
 
-//----------------------------------------------------------------------
 void() deflect_painb1= [$painb1, deflect_painb2] {};
 void() deflect_painb2= [$painb2, deflect_painb3] {};
 void() deflect_painb3= [$painb3, deflect_painb4] {};
 void() deflect_painb4= [$painb4, deflect_painb5] {};
 void() deflect_painb5= [$painb5, deflect_slow1] {
 	// Last pain frame has shield coming on
-	deflect_shieldon();deflect_shieldsound_on(); };
+	deflect_shieldon();deflect_shieldsound_on();
+};
 
-//----------------------------------------------------------------------
 void() deflect_painc1= [$painc1, deflect_painc2] {};
 void() deflect_painc2= [$painc2, deflect_painc3] { monster_footstep(FALSE); };
 void() deflect_painc3= [$painc3, deflect_painc4] {};

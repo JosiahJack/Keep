@@ -179,7 +179,7 @@ void()	jim_run1	= [	$idle1,	jim_run1 ] {
 
 // Range (LASERS or ROCKETS)
 
-void() jim_laser = {
+void() jim_laser = { // [FUNCTION]
 	local vector org, dir, vec;
 
 	if (!self.enemy) return;
@@ -201,7 +201,7 @@ void() jim_laser = {
 };
 
 // Straight aim rocket, no pre-calculation or steering (skill based speed)
-void() jim_rocket = {
+void() jim_rocket = { // [FUNCTION]
 	local vector org, dir, vec;
 	
 	if (!self.enemy) return;
@@ -229,7 +229,7 @@ void(float vspeed) jim_vel = {
 };
 
 // Calculate new attack vector for firing lasers at the player
-void() jim_attack = {
+void() jim_attack = { // [FUNCTION]
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_FLY;
 	makevectors(self.angles);
@@ -246,7 +246,6 @@ void() jim_attack = {
 	traceline(self.origin, self.origin+self.attack_track, FALSE, self);
 };
 
-//----------------------------------------------------------------------------
 void() jim_fire1 = [$idle1, jim_fire2 ] { jim_update(JS_IDLE);
 	if (self.classtype == CT_MONJIM) 
 		sound(self,CHAN_WEAPON,"quoth/bob/fire.wav",1,ATTN_NORM);
@@ -288,7 +287,7 @@ void() jim_fire11 = [$idle1, jim_run1 ] { jim_update(JS_IDLE);
 
 // ROBOT PAIN!?!
 
-void() jim_inpain = {
+void() jim_inpain = { // [FUNCTION]
 	// Keep cycling the pain animation
 	self.think = jim_inpain;
 	self.nextthink = time + 0.1;
@@ -344,7 +343,7 @@ void(entity inflictor, entity attacker, float damage) jim_pain = {
 void() jim_dying2;
 void() jim_is_dead;
 
-void() jim_dying1 = {
+void() jim_dying1 = { // [FUNCTION]
 	// Setup correct death frame
 	self.frame = JS_DYING + self.cnt;
 	self.cnt = self.cnt + 1;
@@ -372,7 +371,7 @@ void() jim_dying1 = {
 	}
 };
 
-void() jim_dying2 = {
+void() jim_dying2 = { // [FUNCTION]
 	// Setup correct death frame
 	self.frame = JS_DYING + self.cnt;
 	self.cnt = self.cnt + 1;
@@ -400,20 +399,16 @@ void() jim_dying2 = {
 };
 
 // He's dead Jim! Star Trek references.
-void() jim_is_dead = {
+void() jim_is_dead = { // [FUNCTION]
 	self.think = self.touch = SUB_Null;
-	
-	// Final fireworks!
-	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW); // Final fireworks!
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
-
-	// Goto final resting place
-	entity_hide(self);
+	entity_hide(self); // Goto final resting place
 };
 
-void() jim_die = {
+void() jim_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -452,7 +447,7 @@ void() jim_die = {
 	jim_dying1();
 };
 
-void() monster_jim_precache = {
+void() monster_jim_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_jim.mdl");
 	precache_model("progs/ad171/mon_jimrock.mdl");
 	precache_model(MODEL_PROJ_LASER);		// Projectile fire and impact (used in projectiles): Enforcer laser model
@@ -527,7 +522,7 @@ void() monster_jim = {
 };
 
 // Re-direct all Quoth Bob requests to Jim!
-void() monster_bob = {
+void() monster_bob = { // [ENTITY], Redirect
 	if (self.deathstring == "")  self.deathstring = " was zapped by a Bob-bot\n";
 	monster_jim();
 }

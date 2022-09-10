@@ -642,7 +642,7 @@ void() item_health = { // [ENTITY]
 };
 
 // Redirect for Nehahra medieval healthkit
-void() item2_health = { // [ENTITY]
+void() item2_health = { // [ENTITY], Redirect
 	self.skin_override = 2;
 	self.classname = "item_health";
 	item_health();
@@ -683,7 +683,7 @@ void() item_healthvial = { // [ENTITY]
 	item_start();
 };
 
-void() item_healthgem = { item_healthvial(); } // [ENTITY], Used to be called a gem, renamed to vial
+void() item_healthgem = { item_healthvial(); } // [ENTITY], Redirect. Used to be called a gem, renamed to vial
 
 void() item_health_potion = { item_healthvial(); } // [ENTITY] From drake, redirect
 
@@ -1562,8 +1562,6 @@ void() item_backpack = { // [ENTITY]
 	self.nextthink = time + 0.1 + random(); // Double checking all the different ammo combinations can be time consuming, delay spawn the backpack instead
 };
 
-void() item_artifact_super_pack = { self.classname = "item_backpack"; item_backpack(); }; // [ENTITY]
-
 void() DropHealthpack = { // [FUNCTION]
 	local entity item;
 	
@@ -1664,12 +1662,30 @@ void(entity e) senddevdata { // [FUNCTION]
 	world.deventity.ammo_elemental		= world.deventity.ammo_elemental + e.ammo_elemental;
 };
 
+// Note:  Item built specifically to fix a nsoe4 design flaw.
+void() item_pushup_touch = {
+    if (other.health <= 0) return;
+    if (!(other.flags & FL_CLIENT))  return; // Must be a player!
+
+    sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+    stuffcmd (other, "bf\n");
+    other.velocity = self.movedir;
+    other.flags = other.flags - (other.flags & FL_ONGROUND);
+    if (self.message)  {
+        centerprint (other, self.message);      // "Going up!"
+        sound (other, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+    } else {
+        activator = other;
+        SUB_UseTargets ();          // fire all targets / killtargets
+    }
+    remove(self);
+};
+
 // Can't touch dis!
 void() item_taunt = { // [ENTITY]
 	if (self.mdl == "" && self.model == "") { dprint("No model for item_taunt, removed.\n"); remove(self); }
 
 	if (self.model) self.mdl = self.model;
-	self.touch2 = SUB_Null;
 	precache_model(self.mdl);
 	setmodel(self,self.mdl);
 	self.solid = SOLID_NOT;
@@ -1677,10 +1693,19 @@ void() item_taunt = { // [ENTITY]
 	setsize(self,VEC_HULL_MIN,VEC_HULL_MAX);
 };
 
-// HACK alert! ...meh, including this here to be nice.  From Drake.  This is an item_taunt and it should have a push trigger and a killtarget to remove this and the trigger after jumping
+// HACK alert!
 void() item_pushup = { // [ENTITY]
-	self.mdl = "progs/drake/wings2.mdl";
-	item_taunt();
+	item_setupmodel("progs/drake/wings2.mdl",0);
+	precache_sound("ambience/windfly.wav");
+	precache_sound("misc/talk.wav");
+    setmodel(self,self.mdl);
+    if (self.movedir == '0 0 0') self.movedir = '0 0 1000';
+    if (world.model == "maps/nsoe4.bsp") { // SoE:  Indian Summer
+        self.movedir = '0 -160 1200';
+        self.message = "Going up!";
+    }
+    setsize (self, '-16 -16 -24', '16 16 32');
+	self.touch = item_pushup_touch;
 };
 
 // From Rubicon 2 by ijed, MFX, & Hrimfaxi

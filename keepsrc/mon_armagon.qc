@@ -496,7 +496,7 @@ void() armagon_repulse_attack = { // [FUNCTION]
    }
 };
 
-void() armagon_stand_attack = {
+void() armagon_stand_attack = { // [FUNCTION]
    local vector spot1;
    local vector spot2;
 
@@ -516,7 +516,7 @@ void() armagon_stand_attack = {
    if ( (self.cnt == TRUE) ) { armagon_run1(); return; }
 };
 
-void() monster_armagon_precache = {
+void() monster_armagon_precache = { // [FUNCTION]
    precache_model ("progs/hipnotic/armabody.mdl");
    precache_model ("progs/hipnotic/armalegs.mdl");
    precache_model ("progs/missile.mdl");

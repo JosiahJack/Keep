@@ -77,7 +77,7 @@ void()	voreling_walk3	= [	$walk3,	voreling_walk4	] { ai_walk(4); };
 void()	voreling_walk4	= [	$walk4,	voreling_walk5	] { ai_walk(5); };
 void()	voreling_walk5	= [	$walk5,	voreling_walk1	] { ai_walk(5); };
 
-void() voreling_runpause = {
+void() voreling_runpause = { // [FUNCTION]
 	if (!self.enemy) return; // Do nothing is not to fight or dead
 	if (self.health < 1) return;
 
@@ -100,7 +100,7 @@ void()	voreling_runp11	= [	$idle11,voreling_runp12	] { voreling_runpause(); };
 void()	voreling_runp12	= [	$idle12,voreling_runp13	] { voreling_runpause(); };
 void()	voreling_runp13	= [	$idle13,voreling_runp1	] { voreling_runpause(); };
 
-void(float dist) voreling_checkpause = {
+void(float dist) voreling_checkpause = { // [FUNCTION]
 	if (!self.enemy) return; // Do nothing is not to fight or dead
 	if (self.health < 1) return;
 
@@ -116,7 +116,8 @@ void(float dist) voreling_checkpause = {
 	}
 };
 
-void()	voreling_run1 = [$run1, voreling_run2 ] { self.movespeed = 0;
+void()	voreling_run1 = [$run1, voreling_run2 ] { // [FUNCTION]
+	self.movespeed = 0;
 	monster_idle_sound();
 	voreling_checkpause(8);
 	// Vorelings have constant problems with weird angles (X/Z)
@@ -138,7 +139,7 @@ void()	voreling_slide4	= [	$walk4,		voreling_slide5	] { ai_run_slide(4); };
 void()	voreling_slide5	= [	$walk5,		voreling_run1	] { ai_run(4); };
 
 // VORELING 2 - PURPLE/POISON SPIT FUNCTIONS (range)
-void(float sideang) voreling_spitacid = {
+void(float sideang) voreling_spitacid = { // [FUNCTION]
 	local vector org, ang, dir, avel;
 	local string snd;
 	local float projtype;
@@ -184,7 +185,7 @@ void()	voreling_spit8 = [$bite6, voreling_spit9 ] {};
 void()	voreling_spit9 = [$bite7, voreling_run1 ] {};
 
 // BITE
-void() voreling_melee = {
+void() voreling_melee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -221,7 +222,7 @@ void()	voreling_bite6 = [	$bite6, voreling_bite7 ] {
 	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = voreling_bite2; }; // Exit bite attack loop
 void()	voreling_bite7	= [	$bite7, voreling_run1	] {};
 
-void()	Voreling_JumpTouch = {
+void()	Voreling_JumpTouch = { // [FUNCTION]
 	local float ldmg;
 
 	if (self.health <= 0) return;
@@ -297,7 +298,7 @@ void()	voreling_idleup4 = [$idleup4, voreling_idleup5] { ai_stand(); };
 void()	voreling_idleup5 = [$idleup5, voreling_idleup6] { ai_stand(); };
 void()	voreling_idleup6 = [$idleup6, voreling_idleup1] { ai_stand(); };
 
-void() voreling_droptouch = {
+void() voreling_droptouch = { // [FUNCTION]
 	// Check if landed on something that is not the ground?
 	if (!checkbottom(self)) {
 		// Is the voreling standing on something?
@@ -344,7 +345,7 @@ void()	voreling_drop5	= [	$drop5,	voreling_drop5	] {
 	if (self.attack_timer < time || self.velocity_z == 0) voreling_droptouch();
 };
 
-void() voreling_wakeup = {
+void() voreling_wakeup = { // [FUNCTION]
 	if (self.health < 1) return; // Dead already?
 
 	// No longer need cling to ceiling spawnflag, remove it
@@ -369,16 +370,15 @@ void() voreling_wakeup = {
 };
 
 // MINION - Grow and spin up from nothing
-void() voreling_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() voreling_grow1 = [$grow1, voreling_grow2 ] {};
-void() voreling_grow2 = [$grow2, voreling_grow3 ] { voreling_growangle(); };
-void() voreling_grow3 = [$grow3, voreling_grow4 ] { voreling_growangle(); };
-void() voreling_grow4 = [$grow4, voreling_grow5 ] { voreling_growangle(); };
-void() voreling_grow5 = [$grow5, voreling_grow6 ] { voreling_growangle(); };
-void() voreling_grow6 = [$grow6, voreling_grow7 ] { voreling_growangle(); };
-void() voreling_grow7 = [$grow7, voreling_grow8 ] { voreling_growangle(); };
-void() voreling_grow8 = [$grow8, voreling_grow9 ] { voreling_growangle(); };
-void() voreling_grow9 = [$grow9, voreling_grow10] { voreling_growangle(); };
+void() voreling_grow2 = [$grow2, voreling_grow3 ] { SUB_GrowAngle(); };
+void() voreling_grow3 = [$grow3, voreling_grow4 ] { SUB_GrowAngle(); };
+void() voreling_grow4 = [$grow4, voreling_grow5 ] { SUB_GrowAngle(); };
+void() voreling_grow5 = [$grow5, voreling_grow6 ] { SUB_GrowAngle(); };
+void() voreling_grow6 = [$grow6, voreling_grow7 ] { SUB_GrowAngle(); };
+void() voreling_grow7 = [$grow7, voreling_grow8 ] { SUB_GrowAngle(); };
+void() voreling_grow8 = [$grow8, voreling_grow9 ] { SUB_GrowAngle(); };
+void() voreling_grow9 = [$grow9, voreling_grow10] { SUB_GrowAngle(); };
 void() voreling_grow10= [$grow10, voreling_run1 ] {
 	if (!InOpenOrLiquid(self.origin)) { // Is the voreling stuck? cannot move?
 		self.health = self.gibhealth;
@@ -399,7 +399,7 @@ void() voreling_grow10= [$grow10, voreling_run1 ] {
 		}
 	}
 };
-void() voreling_grow = {
+void() voreling_grow = { // [FUNCTION]
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -408,10 +408,10 @@ void() voreling_grow = {
 	voreling_grow1();
 };
 
-void() voreling_pain1	= [	$pain1,	voreling_pain2	] {};
-void() voreling_pain2	= [	$pain2,	voreling_run1	] {};
+void() voreling_pain1	= [	$pain1,	voreling_pain2	] {}; // [FUNCTION]
+void() voreling_pain2	= [	$pain2,	voreling_run1	] {}; // [FUNCTION]
 
-void(entity inflictor, entity attacker, float damage) voreling_pain = {
+void(entity inflictor, entity attacker, float damage) voreling_pain = { // [FUNCTION]
 	// Has the voreling been hit while on the ceiling?
 	if (self.spawnflags & MON_VORELING_CEILING) {
 		self.pain_finished = time + 1;
@@ -452,7 +452,7 @@ void() voreling_dieB5 = [	$deathB5, voreling_dieB6	] {};
 void() voreling_dieB6 = [	$deathB6, voreling_dieB7	] { monster_death_postcheck(); };
 void() voreling_dieB7 = [	$deathB7, voreling_dieB7	] { monster_deadbody_check(); };
 
-void() voreling_die = {
+void() voreling_die = { // [FUNCTION]
 	if (random() < 0.5) self.max_health = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far
 	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE; // Has the voreling died while on the ceiling?
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -463,7 +463,7 @@ void() voreling_die = {
 	}
 };
 
-void() monster_voreling_precache = {
+void() monster_voreling_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_vorelingp.mdl");
 	precache_model("progs/ad171/gib_vorelegp.mdl");
 	precache_model(MODEL_PROJ_VORE);			// Spit Projectile
@@ -481,7 +481,7 @@ void() monster_voreling_precache = {
 	precache_sound("quoth/voreling/sight.wav");
 };
 
-void() monster_swampling_precache = {
+void() monster_swampling_precache = { // [FUNCTION]
 	monster_voreling_precache();
 	precache_model("progs/ad171/mon_swamplingp.mdl");
 	precache_model("progs/ad171/gib_swamplegp.mdl");
@@ -544,7 +544,7 @@ void() monster_shalrathminion = {
 	monster_voreling();
 };
 
-void() setup_voreling = { // [ENTITY]
+void() setup_voreling = { // [FUNCTION]
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -613,7 +613,7 @@ void() setup_voreling = { // [ENTITY]
 };
 
 // A code way to spawn vorelings (requires monster_shalrathminion entity)
-void(vector minion_org, entity minion_targ) minion_voreling = {
+void(vector minion_org, entity minion_targ) minion_voreling = { // [FUNCTION]
 	local entity minion;
 
 	// Check if there is space to spawn entity

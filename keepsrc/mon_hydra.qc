@@ -75,8 +75,7 @@ void() hydra_walk17 = [      $swim17, hydra_walk18 ] { ai_fish_movement("ai_walk
 void() hydra_walk18 = [      $swim18, hydra_walk1 ] { ai_fish_movement("ai_walk",12); };
 
 
-void() hydra_run1  = [      $swim1, hydra_run2 ] 
-{
+void() hydra_run1  = [      $swim1, hydra_run2 ] { // [FUNCTION]
 	// Swim faster after player is paralyzed (khreathor)
 	if (self.aflag > time)
 		self.speed = 32;
@@ -96,7 +95,7 @@ void() hydra_run8  = [      $swim15, hydra_run9 ] { ai_fish_movement("ai_run",se
 void() hydra_run9  = [      $swim17, hydra_run1 ] { ai_fish_movement("ai_run",self.speed); };
 
 
-void() hydra_melee = {
+void() hydra_melee = { // [FUNCTION]
 	local vector	delta;
 	local float 	ldmg;
 
@@ -144,7 +143,7 @@ void() hydra_attack23       = [      $attack23,      hydra_attack24] { ai_fish_m
 void() hydra_attack24       = [      $attack24,      hydra_run1] { ai_fish_movement("ai_charge",16); };
 
 
-void() hydra_spit_touch = {
+void() hydra_spit_touch = { // [FUNCTION]
 	if (other == self.owner)
 		return;
 	if (other.solid == SOLID_TRIGGER)
@@ -173,7 +172,7 @@ void() hydra_spit_touch = {
 };
 
 
-void() hydra_spit_start = {
+void() hydra_spit_start = { // [FUNCTION]
 	local	vector	offang, org, vec, follow;
 	local	entity	spit;
 	
@@ -209,7 +208,6 @@ void() hydra_spit_start = {
 
 	sound(self,CHAN_WEAPON,"extras_r5/hydra/hydra_spit.wav",1,ATTN_NORM);
 };
-
 
 void()	Hydra_Spit1	= [	$hspit1,	Hydra_Spit2] { ai_face(); self.nextthink = time + 0.07; };
 void()	Hydra_Spit2	= [	$hspit2,	Hydra_Spit3] { ai_face(); self.nextthink = time + 0.07; };
@@ -267,7 +265,7 @@ void(entity inflictor, entity attacker, float damage)	hydra_pain = {
 	}
 };
 
-void() hydra_death= {
+void() hydra_death= { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death

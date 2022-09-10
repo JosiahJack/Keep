@@ -8,7 +8,7 @@ float DT_ROOM_B    = 2.000;
 float DT_ROOM_C    = 4.000;
 float DRAGON_ROGUE = 2;
 
-void() dragon_stop_attack = {
+void() dragon_stop_attack = { // [FUNCTION]
 	if (self.dragonAttacking == FALSE) return;
 
 	self.attack_finished = (time + (random () * 2) );
@@ -20,7 +20,7 @@ void() dragon_stop_attack = {
 	self.dragonAttacking = FALSE;
 };
 
-void() dragon_check_attack = {
+void() dragon_check_attack = { // [FUNCTION]
    local vector vec;
    local float dot;
 
@@ -53,7 +53,7 @@ void() dragon_check_attack = {
    }
 };
 
-void(float dist) dragon_move = {
+void(float dist) dragon_move = { // [FUNCTION]
    local vector moveDir;
    local vector moveAngles;
    local float leftTurn;
@@ -139,7 +139,7 @@ void(float dist) dragon_move = {
    self.enemy = oldEnemy;
 };
 
-void() dragon_stand1 = [ 1.000, dragon_walk1 ] {};
+void() dragon_stand1 = [ 1.000, dragon_walk1 ] {}; // [FUNCTION]
 
 void() dragon_walk1;
 void() dragon_walk3;
@@ -174,7 +174,7 @@ void() dragon_atk_f2 = [ 59.000, dragon_atk_f3 ] { dragon_move (17.000); dragon_
 void() dragon_atk_f3 = [ 60.000, dragon_atk_f4 ] { dragon_move (17.000); dragon_fireball(); };
 void() dragon_atk_f4 = [ 60.000, dragon_walk3 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
-void() dragon_walk1 = [ 1.000, dragon_walk2 ] {
+void() dragon_walk1 = [ 1.000, dragon_walk2 ] { // [FUNCTION]
    if (self.dragonAttacking )
       dragon_stop_attack();
 
@@ -197,7 +197,7 @@ void() dragon_walk11 = [ 11.000, dragon_walk12 ] { self.th_missile = dragon_atk_
 void() dragon_walk12 = [ 12.000, dragon_walk13 ] { self.th_missile = SUB_Null; dragon_move (17.000); };
 void() dragon_walk13 = [ 13.000, dragon_walk1 ] { self.th_missile = SUB_Null; dragon_move (17.000); self.dragonPainSequence = 1; };
 
-void() FireballTouch = {
+void() FireballTouch = { // [FUNCTION]
    local vector org;
    local vector rndpos;
    local float partcnt;
@@ -231,7 +231,7 @@ void() FireballTouch = {
    remove (self);
 };
 
-void(vector org, vector dir) launch_fireball = {
+void(vector org, vector dir) launch_fireball = { // [FUNCTION]
    local entity fireball;
    local float fireSpeed;
 
@@ -255,7 +255,7 @@ void(vector org, vector dir) launch_fireball = {
    fireball.think = SUB_Remove;
 };
 
-void() dragon_fireball = {
+void() dragon_fireball = { // [FUNCTION]
    local float fireCount;
    local vector org;
    local vector dir;
@@ -292,7 +292,7 @@ void() dragon_fireball = {
    }
 };
 
-void() dragon_tail_touch = {
+void() dragon_tail_touch = { // [FUNCTION]
    local vector delta;
    local float tailDamage;
 
@@ -312,7 +312,7 @@ void() dragon_tail_touch = {
    T_Damage(self.enemy,self,self,tailDamage,DAMARMOR);
 };
 
-void() dragon_tail = {
+void() dragon_tail = { // [FUNCTION]
    local float dist;
    local vector dir;
 
@@ -372,7 +372,7 @@ void() dragon_painF1 = [ 77.000, dragon_painF2 ] { dragon_move (12); };
 void() dragon_painF2 = [ 78.000, dragon_painF3 ] { dragon_move (12); };
 void() dragon_painF3 = [ 79.000, dragon_walk2 ] { dragon_move (12); };
 
-void(entity inflictor, entity attacker, float damage) dragon_pain = {
+void(entity inflictor, entity attacker, float damage) dragon_pain = { // [FUNCTION]
    local float r;
 
    if (self.pain_finished > time) return;
@@ -406,7 +406,7 @@ void(entity inflictor, entity attacker, float damage) dragon_pain = {
    }
 };
 
-void() dragon_boom2 = {
+void() dragon_boom2 = { // [FUNCTION]
 	self.velocity = self.part_vel;
 	ThrowGib(1,5);
 	ThrowGib(2,5);
@@ -416,7 +416,7 @@ void() dragon_boom2 = {
 	remove (self);
 };
 
-void() dragon_boom1 = {
+void() dragon_boom1 = { // [FUNCTION]
    if (self.dragonDeathState > DDIE_STOPPED)
       return ;
 
@@ -429,7 +429,7 @@ void() dragon_boom1 = {
    self.nextthink = (time + 0.100);
 };
 
-void() dragon_explode = {
+void() dragon_explode = { // [FUNCTION]
    if (self.dragonDeathState > DDIE_FALLING)
       return ;
 
@@ -443,7 +443,7 @@ void() dragon_explode = {
    }
 };
 
-void() dragon_squish = {
+void() dragon_squish = { // [FUNCTION]
    if ( (other.classname == "player") ) {
       self.classname = "monster_dragon_dead";
 		self.deathstring = " was squashed by the Dragon\n";
@@ -455,7 +455,7 @@ void() dragon_squish = {
    }
 };
 
-void() dragon_death1 = [ 80.000, dragon_death2 ] {
+void() dragon_death1 = [ 80.000, dragon_death2 ] { // [FUNCTION]
 	if ( (self.dragonDeathState > FALSE) ) return;
 
 	self.dragonDeathState = DDIE_FALLING;
@@ -495,7 +495,7 @@ void() dragon_death21 = [ 100.000, dragon_death21 ] {
 	remove (self);
 };
 
-void() dragon_use = {
+void() dragon_use = { // [FUNCTION]
    if ( (self.health < TRUE) ) { self.use = SUB_Null; return ; }
 
    self.th_stand = dragon_walk1;
@@ -504,7 +504,7 @@ void() dragon_use = {
    self.nextthink = (time + 0.100);
 };
 
-void() dragon_activate = {
+void() dragon_activate = { // [FUNCTION]
    self.takedamage = DAMAGE_AIM;
    self.ideal_yaw = (self.angles * '0.000 1.000 0.000');
    if ( !self.yaw_speed )
@@ -535,7 +535,7 @@ void() dragon_activate = {
       dragon_use();
 };
 
-void() monster_dragon_precache = {
+void() monster_dragon_precache = { // [FUNCTION]
 	precache_model ("progs/drake/dragon.mdl");
 	precache_model ("progs/quoth/fireball.mdl");
 	precache_model ("progs/drake/drggib01.mdl");
@@ -549,7 +549,7 @@ void() monster_dragon_precache = {
 	precache_sound("rogue/dragon/death.wav");
 };
 
-void() monster_dragon = {
+void() monster_dragon = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/drake/dragon.mdl";
@@ -580,7 +580,7 @@ void() monster_dragon = {
 	self.think = dragon_activate;
 };
 
-void() dragon_corner = {
+void() dragon_corner = { // [ENTITY]
 	self.classname = "path_corner";
 	path_corner();
 };

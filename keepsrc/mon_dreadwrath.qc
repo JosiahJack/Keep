@@ -320,7 +320,7 @@ void() overlord_magic10 = [$magic10, overlord_magic11 ] { ai_charge(self.speed);
 void() overlord_magic11 = [$magic11, overlord_magic12 ] { ai_charge(self.speed); };
 void() overlord_magic12 = [$magic12, dreadlord_runb1    ] { overlord_teleport(); };
 
-void() overlord_attack = {
+void() overlord_attack = { // [FUNCTION]
     local   float   r;
 
 // If skipping phasing anim to attack, make sure wraith can take damage.
@@ -341,7 +341,7 @@ void() overlord_attack = {
         overlord_magic1();
 };
 
-void() overlord_refire = {
+void() overlord_refire = { // [FUNCTION]
     if (self.enemy.health > 0)
         if (visible (self.enemy))
             { overlord_attack();  return; }
@@ -360,7 +360,7 @@ void() dreadlord_stand7  = [$form5,  dreadlord_stand8  ] { ai_wraith2_stand(); }
 void() dreadlord_stand8  = [$form3,  dreadlord_stand9  ] { ai_wraith2_stand(); };
 void() dreadlord_stand9  = [$form1,  dreadlord_stand10 ] { self.modelindex = 0; ai_wraith2_stand(); };
 void() dreadlord_stand10 = [$form1,  dreadlord_stand10 ] { ai_wraith2_stand(); };
-void() dreadlord_stand = { wraith_start (dreadlord_stand1, dreadlord_stand9); };
+void() dreadlord_stand = { wraith_start (dreadlord_stand1, dreadlord_stand9); }; // [FUNCTION]
 
 void() dreadlord_walk1  = [$form17, dreadlord_walk2  ] { ai_wraith2_walk(8); };
 void() dreadlord_walk2  = [$form15, dreadlord_walk3  ] { ai_wraith2_walk(8); };
@@ -375,7 +375,7 @@ void() dreadlord_walk10 = [$form1,  dreadlord_walk10 ] { ai_wraith2_walk(8);
 	if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
     if (random() < 1/12) wraith_idle_sfx();
 };
-void() dreadlord_walk = { wraith_start (dreadlord_walk1, dreadlord_walk9); };
+void() dreadlord_walk = { wraith_start (dreadlord_walk1, dreadlord_walk9); }; // [FUNCTION]
 
 // Call reload func to prevent wraith from shooting while it phases.
 void() dreadlord_form1  = [$form1,  dreadlord_form2  ] { M_Reload (1); self.modelindex = self.mindex2; ai_wraith2_run(self.speed); };
@@ -387,7 +387,7 @@ void() dreadlord_form6  = [$form11, dreadlord_form7  ] { self.takedamage = DAMAG
 void() dreadlord_form7  = [$form13, dreadlord_form8  ] { ai_wraith2_run(self.speed); };
 void() dreadlord_form8  = [$form15, dreadlord_form9  ] { ai_wraith2_run(self.speed); };
 void() dreadlord_form9  = [$form17, dreadlord_runb1    ] { ai_wraith2_run(self.speed); };
-void() dreadlord_form = { wraith_start (dreadlord_runb1, dreadlord_form1); };
+void() dreadlord_form = { wraith_start (dreadlord_runb1, dreadlord_form1); }; // [FUNCTION]
 
 void() dreadlord_pain1  = [$painc1,  dreadlord_pain2  ] {};
 void() dreadlord_pain2  = [$painc2,  dreadlord_pain3  ] {};

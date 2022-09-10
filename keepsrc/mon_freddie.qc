@@ -230,13 +230,10 @@ void() fred_runframe = {
 	ai_run(self.distance);
 };
 
-//----------------------------------------------------------------------
-void() fred_run = { self.walkframe = 0; fred_runframe(); };
+void() fred_run = { self.walkframe = 0; fred_runframe(); }; // [FUNCTION]
 
-//===========================================================================
 // MELEE ATTACK - Various back and forth blade arm attacks
-//===========================================================================
-void(float side) fred_blade = {
+void(float side) fred_blade = { // [FUNCTION]
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -256,7 +253,6 @@ void(float side) fred_blade = {
 };
 
 // Alternative ending of melee attack (chance of extra damage)
-//----------------------------------------------------------------------
 void() fred_bswing1 = [$bswing1, fred_bswing2 ] { ai_face(); ai_forward(20);
 	sound(self,CHAN_WEAPON,"quoth/edie/sawstart.wav",1,ATTN_NORM); };
 void() fred_bswing2 = [$bswing2, fred_bswing3 ] { ai_face(); ai_forward(12); };

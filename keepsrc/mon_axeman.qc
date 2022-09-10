@@ -71,7 +71,7 @@ void() axe_atkd4 = [$axattd4,axe_atkd5] { ai_charge(0); };
 void() axe_atkd5 = [$axattd5,axe_atkd6] { ai_charge(6); };
 void() axe_atkd6 = [$axattd6,axe_run1] { ai_charge(8); };
 
-void() axe_atk = {
+void() axe_atk = { // [FUNCTION]
 	axeman_type = axeman_type + 1;
 
 	if (axeman_type == 1)

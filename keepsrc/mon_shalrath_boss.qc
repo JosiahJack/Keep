@@ -366,7 +366,7 @@ void() ShalBossNovaTouch = {
 };
 
 //Enemy spawner
-void() shal_boss_spawner = {
+void() shal_boss_spawner = { // [FUNCTION]
 	local vector distancedelta, nozdistancedelta; 
 	local entity missile;
 	
@@ -399,7 +399,7 @@ void() shal_boss_spawner = {
 	setorigin(missile, self.origin);
 };
 
-void() monster_shalrath_boss_precache = {
+void() monster_shalrath_boss_precache = { // [FUNCTION]
 	precache_model("progs/q15/shalrath_boss.mdl");
 	precache_model("progs/q15/shalrath_death.mdl");
 	precache_model("progs/q15/h_shalboss.mdl");

@@ -11,44 +11,29 @@ $frame drink34 drink35 drink36 drink37
 
 void() huntressmodel_drink1;
 
-// Attachment management (create, finish and delete the Chalice)
-void() huntress_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment2) {
-		self.attachment2 = spawn();
-		self.attachment2.classtype = CT_ATTACHMENT;
-		setmodel(self.attachment2, "progs/redfield/huntress/cutscene_chalice.mdl");
-		setsize(self.attachment2,VEC_ORIGIN, VEC_ORIGIN);
-		setorigin(self.attachment2, self.origin);
-		self.attachment2.movetype = MOVETYPE_NOCLIP;
-		self.attachment2.angles = self.angles;
-	}
-};
-
 void() huntress_update_attachment = {
 	self.attachment2.frame = self.frame;
 };
 
 //Update the Rakuoy model frame and position with the Huntress
-void() create_rakuyo = {
+void() create_rakuyo = { // [FUNCTION]
 	if (self.attachment.model == "") {
 		setmodel(self.attachment, "progs/redfield/huntress/cutscene_rakuyo.mdl");
 	}
 };
 
-void() huntressmodel_rakuyo = {
-	
+void() huntressmodel_rakuyo = { // [FUNCTION]
 	if (self.attachment.movetype != MOVETYPE_STEP) self.attachment.movetype = MOVETYPE_STEP;
 	setorigin(self.attachment, self.origin);
 	self.attachment.angles = self.angles;
 	self.attachment.frame = self.frame;
 };
 
-void() huntressmodel_stand = {
+void() huntressmodel_stand = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;
 };
 
-void(float dist) huntressmodel_walk = {
+void(float dist) huntressmodel_walk = { // [FUNCTION]
 		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
 		movetogoal(dist);
 		
@@ -93,23 +78,24 @@ void()	huntressmodel_walk14	= [	$walk14,	huntressmodel_walk15	] { huntressmodel_
 void()	huntressmodel_walk15	= [	$walk15,	huntressmodel_walk16	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
 void()	huntressmodel_walk16	= [	$walk16,	huntressmodel_walk1	] { huntressmodel_walk(4); huntressmodel_rakuyo(); };
 
-
-//----------------------------------------------------------------------
-void()	huntressmodel_pain = {
-	 return;
-};
+void()	huntressmodel_pain = {}; // [FUNCTION]
 
 float idle_speech;
 
-void() idle_checktime = {
+void() idle_checktime = { // [FUNCTION]
 	if (idle_speech >= 3)
 	huntressmodel_drink1();
 };
 
-//----------------------------------------------------------------------
-void()	huntressmodel_idle1 = [$drink37,	huntressmodel_idle2 	] { huntress_create_attachment(); huntress_update_attachment(); huntressmodel_stand(); 
-self.skin = 0; huntressmodel_rakuyo(); particle_explode(self.origin + '-12 4 8', 8, 0.3+random()*0.5, PARTICLE_BURST_WHITE, PARTICLE_BURST_CENTER);
-	sound(self,CHAN_VOICE, "redfield/huntress/dialogue2.wav",1,ATTN_NORM); };
+void()	huntressmodel_idle1 = [$drink37,	huntressmodel_idle2 	] {
+	SUB_CreateSelfAttachment2("progs/redfield/huntress/cutscene_chalice.mdl",1.0);
+	huntress_update_attachment(); // 2
+	huntressmodel_stand(); 
+	self.skin = 0;
+	huntressmodel_rakuyo();
+	particle_explode(self.origin + '-12 4 8', 8, 0.3+random()*0.5, PARTICLE_BURST_WHITE, PARTICLE_BURST_CENTER);
+	sound(self,CHAN_VOICE, "redfield/huntress/dialogue2.wav",1,ATTN_NORM);
+};
 void()	huntressmodel_idle2 = [$drink36,	huntressmodel_idle3 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void()	huntressmodel_idle3 = [$drink35,	huntressmodel_idle4 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void()	huntressmodel_idle4 = [$drink34,	huntressmodel_idle5 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
@@ -127,11 +113,14 @@ void() 	huntressmodel_idle14 = [$idle7,	huntressmodel_idle15	] { huntress_update
 void() 	huntressmodel_idle15 = [$idle8,	huntressmodel_idle16	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void() 	huntressmodel_idle16 = [$idle9,	huntressmodel_idle17 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void() 	huntressmodel_idle17 = [$idle10,	huntressmodel_idle18 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
-void() 	huntressmodel_idle18 = [$idle11,	huntressmodel_idle8	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();
-idle_checktime(); };
+void() 	huntressmodel_idle18 = [$idle11,	huntressmodel_idle8	] {
+	huntress_update_attachment();
+	huntressmodel_stand();
+	huntressmodel_rakuyo();
+	idle_checktime();
+};
 
 
-//----------------------------------------------------------------------
 void() 	huntressmodel_drink1 = [	$drink1,		huntressmodel_drink2	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void() 	huntressmodel_drink2 = [	$drink2,		huntressmodel_drink3	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void() 	huntressmodel_drink3 = [	$drink3,		huntressmodel_drink4	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
@@ -174,9 +163,8 @@ void()	huntressmodel_drink35 = [	$drink35,		huntressmodel_drink36 	] { huntress_
 void()	huntressmodel_drink36 = [	$drink36,		huntressmodel_drink37 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 void()	huntressmodel_drink37 = [	$drink37,		huntressmodel_drink37 	] { huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo(); };
 
-//----------------------------------------------------------------------
 // The use function is for triggering the model to move
-void() huntressmodel_use = { 
+void() huntressmodel_use = { // [FUNCTION]
 	// Check for a delay target route (using target2)
 	if (self.estate == ESTATE_ON && self.target2 != "") {
 		self.target = self.target2;
@@ -187,8 +175,7 @@ void() huntressmodel_use = {
 	self.estate_on();
 };
 
-//----------------------------------------------------------------------
-void() huntressmodel_off = {
+void() huntressmodel_off = { // [FUNCTION]
 	// Block if already off
 	if (self.estate == ESTATE_OFF) return;	
 	
@@ -214,8 +201,7 @@ void() huntressmodel_off = {
 	}	
 }
 
-//----------------------------------------------------------------------
-void() huntressmodel_on = {
+void() huntressmodel_on = { // [FUNCTION]
 	// Block if already ON
 	if (self.estate == ESTATE_ON) return;	
 	
@@ -250,20 +236,15 @@ void() huntressmodel_on = {
 /*======================================================================
 QUAKED monster_huntressmodel (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_huntressmodel = {
+void() monster_huntressmodel = { // [ENTITY]
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/redfield/huntress/cutscene_huntress.mdl";			// Animated Huntress cutscene model
-
 	precache_model (self.mdl);
-	
 	precache_sound("redfield/huntress/dialogue2.wav");
-
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;	
-
 	precache_model ("progs/redfield/huntress/cutscene_rakuyo.mdl");
-	precache_model ("progs/redfield/huntress/cutscene_chalice.mdl");
-		
+	precache_model ("progs/redfield/huntress/cutscene_chalice.mdl");	
 	self.nomonstercount = TRUE;
 	self.gibhealth = MON_NEVERGIB;
 	self.health = LARGE_TIMER;
@@ -281,7 +262,6 @@ void() monster_huntressmodel = {
 	precache_sound(self.stepc4);
 	precache_sound(self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
-		
 	self.th_stand = huntressmodel_idle1;
 	self.th_walk = huntressmodel_walk1;
 	self.th_run = huntressmodel_walk1;

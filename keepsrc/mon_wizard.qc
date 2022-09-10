@@ -325,7 +325,7 @@ void() monster_nourminion = { // [ENTITY]
 	monster_wizard();
 };
 
-void() setup_wizard = {
+void() setup_wizard = { // [FUNCTION]
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;

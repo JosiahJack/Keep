@@ -71,7 +71,7 @@ void(float dist) gaunt_hadj = {
 	}
 };
 
-void() GauntAttackFinished = {
+void() GauntAttackFinished = { // [FUNCTION]
 	if (enemy_range >= RANGE_MID || !enemy_vis) {
 		self.attack_state = AS_STRAIGHT;
 		self.think = gaunt_run1;
@@ -81,7 +81,7 @@ void() GauntAttackFinished = {
 	}
 };
 
-void() gaunt_strafe = {
+void() gaunt_strafe = { // [FUNCTION]
 	local float ofs;
 	local float hadj;
 	local vector hadjvec;
@@ -157,7 +157,8 @@ void() gaunt_walk19 = [$hover19, gaunt_walk20 ] { ai_walk(8); };
 void() gaunt_walk20 = [$hover20, gaunt_walk1 ] { ai_walk(8); };
 
 
-void() gaunt_run1 = [$hover1, gaunt_run2 ] { monster_idle_sound();
+void() gaunt_run1 = [$hover1, gaunt_run2 ] { // [FUNCTION]
+	monster_idle_sound();
 	SUB_FinishAttachment();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
@@ -207,14 +208,14 @@ void() gaunt_side18 = [41, gaunt_side19] { gaunt_hadj(8 * self.multiplier); };
 void() gaunt_side19 = [42, gaunt_side20] { gaunt_hadj(10 * self.multiplier); };
 void() gaunt_side20 = [43, gaunt_side1] { gaunt_hadj(12 * self.multiplier); };
 
-void(float fxframe) gaunt_lightning_fx = {
+void(float fxframe) gaunt_lightning_fx = { // [FUNCTION]
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.owner.frame = fxframe;
 	setorigin(self.owner, self.origin - VEC_ORIGIN);
 	self.owner.angles = self.angles;
 };
 
-void() gaunt_fast1 = [44, gaunt_fast2] {
+void() gaunt_fast1 = [44, gaunt_fast2] { // [FUNCTION]
 	local entity o;
 	if (random() < 0.5) {
 		self.lefty = 1;
@@ -252,7 +253,7 @@ void() gaunt_fast19 = [62, gaunt_fast20] {};
 void() gaunt_fast20 = [63, gaunt_run1] { ai_face(); self.attack_state = AS_STRAIGHT; };
 
 // RANGE - Plasma from arc infront
-void() gaunt_plasma = {
+void() gaunt_plasma = { // [FUNCTION]
 	local vector org, dir;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -264,22 +265,11 @@ void() gaunt_plasma = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
 };
 
-// Attachment management (create, finish and delete)
-void() gaunt_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = self.weaponglow;
-		if (self.poisonous) self.attachment.skin = 1;
-	}
-};
-
-void(float elecframe) gaunt_elecupdate = {
+void(float elecframe) gaunt_elecupdate = { // [FUNCTION]
 	if (self.health < 1) return;
-	if (!self.attachment) gaunt_create_attachment();
-	
+
+	SUB_CreateSelfAttachment(self.weaponglow,1.0);
+	if (self.poisonous) self.attachment.skin = 1;
 	if (elecframe == 0) {
 		self.attachment.state = STATE_ON;
 		self.pain_finished = time + 1.2;		//don't go into pain whilst firing
@@ -298,7 +288,6 @@ void(float elecframe) gaunt_elecupdate = {
 	self.attachment.frame = elecframe;
 };
 
-//----------------------------------------------------------------------
 void() gaunt_fire1 = [$attack1, gaunt_fire2 ] { gaunt_elecupdate(0); };
 void() gaunt_fire2 = [$attack2, gaunt_fire3 ] { gaunt_elecupdate(1); };
 void() gaunt_fire3 = [$attack3, gaunt_fire4 ] { gaunt_elecupdate(2); };
@@ -357,7 +346,7 @@ void() gaunt_wakeup8 = [$launch8, gaunt_run1 ] {
 	self.th_missile = gaunt_fire1;
 };
 
-void() gaunt_wakeup = {
+void() gaunt_wakeup = { // [FUNCTION]
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -396,7 +385,7 @@ void() 	gaunt_painB3 = [$painB3, gaunt_painB4 ] {};
 void() 	gaunt_painB4 = [$painB4, gaunt_painB5 ] {};
 void() 	gaunt_painB5 = [$painB5, gaunt_run1 ] {};
 
-void(entity inflictor, entity attacker, float damage) gaunt_pain = {
+void(entity inflictor, entity attacker, float damage) gaunt_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 	SUB_FinishAttachment(); // make sure any electricity is hidden
@@ -431,7 +420,7 @@ void() gaunt_deathB6 = [$deathB6, gaunt_deathB7 ] {};
 void() gaunt_deathB7 = [$deathB7, gaunt_deathB8 ] { monster_death_postcheck(); };
 void() gaunt_deathB8 = [$deathB8, gaunt_deathB8 ] { monster_deadbody_check(); };
 
-void() gaunt_die = {
+void() gaunt_die = { // [FUNCTION]
 	// Check for perching gaunt, need to blow up in gibs
 	// In an awkward pose that does not go well into death animations
 	if (self.spawnflags & MON_GAUNT_PERCH) self.gibondeath = TRUE;
@@ -466,7 +455,7 @@ void() gaunt_die = {
 	}
 };
 
-float() gaunt_checkswoop = {
+float() gaunt_checkswoop = { // [FUNCTION]
 	local entity head;
 	local float m;
 	head = findradius(self.origin,1024);
@@ -485,7 +474,7 @@ float() gaunt_checkswoop = {
 	return FALSE;
 };
 
-void() gaunt_flyswoop = {
+void() gaunt_flyswoop = { // [FUNCTION]
 	self.velocity = self.goalentity.origin - self.origin + '0 0 32';
 	self.velocity = normalize(self.velocity);
 	self.velocity = self.velocity * 600;
@@ -655,7 +644,7 @@ void() monster_judgeminion = {
 	monster_gaunt();
 };
 
-void() setup_gaunt = {
+void() setup_gaunt = { // [FUNCTION]
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;

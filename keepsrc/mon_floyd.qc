@@ -36,7 +36,7 @@ $frame death9 death10 death11 death12 death13 death14 death15 death16
 void() floyd_sleep = [$idle1, floyd_sleep] {};
 
 
-void() floyd_standframe = {
+void() floyd_standframe = { // [FUNCTION]
 	// Make sure alive
 	if (self.health < 0) return;
 	
@@ -55,13 +55,12 @@ void() floyd_standframe = {
 	ai_stand();
 };
 
-//----------------------------------------------------------------------
-void()	floyd_stand1 = [$idle1, floyd_stand1 ] {
+void()	floyd_stand1 = [$idle1, floyd_stand1 ] { // [FUNCTION]
 	self.walkframe = 0; floyd_standframe();
 };
 
 
-void() floyd_walkframe = {
+void() floyd_walkframe = { // [FUNCTION]
 	// Make sure alive
 	if (self.health < 0) return;
 	
@@ -82,13 +81,12 @@ void() floyd_walkframe = {
 	ai_walk(1.875);
 };
 
-//----------------------------------------------------------------------
-void()	floyd_walk1 = [$walk1, floyd_walk1 ] {
+void()	floyd_walk1 = [$walk1, floyd_walk1 ] { // [FUNCTION]
 	self.walkframe = 0; floyd_walkframe();
 };
 
 
-void() floyd_runframe = {
+void() floyd_runframe = { // [FUNCTION]
 	// Make sure alive
 	if (self.health < 0) return;
 	
@@ -109,15 +107,10 @@ void() floyd_runframe = {
 	ai_run(3.75);
 };
 
-//----------------------------------------------------------------------
-void()	floyd_run1 = [$run1, floyd_run1 ] {
-	self.walkframe = 0; floyd_runframe();
-};
-void()	floyd_run5 = [$run5, floyd_run5 ] {
-	self.walkframe = 4; floyd_runframe();
-};
+void()	floyd_run1 = [$run1, floyd_run1 ] { self.walkframe = 0; floyd_runframe(); }; // [FUNCTION]
+void()	floyd_run5 = [$run5, floyd_run5 ] { self.walkframe = 4; floyd_runframe(); }; // [FUNCTION]
 
-void(float muzzle) floyd_fire = {
+void(float muzzle) floyd_fire = { // [FUNCTION]
 	local vector org, targ_org, dir, muzoff;
 
 	if (!self.enemy) return;
@@ -167,7 +160,6 @@ void() floyd_paina4 = [$paina4, floyd_paina5] {};
 void() floyd_paina5 = [$paina5, floyd_paina6] {};
 void() floyd_paina6 = [$paina6, floyd_run1]   {};
 
-//----------------------------------------------------------------------
 // B = Long pain animation
 void() floyd_painb1 =  [$painb1,  floyd_painb2]  {};
 void() floyd_painb2 =  [$painb2,  floyd_painb3]  {};
@@ -196,7 +188,7 @@ void() floyd_painc12 = [$painc12, floyd_painc13] { ai_painforward(1.25); };
 void() floyd_painc13 = [$painc13, floyd_painc14] { ai_painforward(1.25); };
 void() floyd_painc14 = [$painc14, floyd_run1]    { ai_painforward(1.25); };
 
-void(entity inflictor, entity attacker, float damage) floyd_pain = {
+void(entity inflictor, entity attacker, float damage) floyd_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -250,7 +242,7 @@ void() floyd_death15 = [$death15, floyd_death15 ] {
 	ExplosiveGibDeath(self.death_sound2,2,4,4);
 };
 
-void() floyd_die = {
+void() floyd_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// Check for rolling on floor first
@@ -272,7 +264,7 @@ void() floyd_die = {
 
 // Floyd ASLEEP functions
 
-void() floyd_default_state = {
+void() floyd_default_state = { // [FUNCTION]
 	// Setup default pain parameters
 	self.pain_timeout = 1.5;
 	self.pain_flinch = 150;
@@ -285,8 +277,7 @@ void() floyd_default_state = {
 	self.th_pain = floyd_pain;
 };
 
-//----------------------------------------------------------------------
-void() floyd_awake = {
+void() floyd_awake = { // [FUNCTION]
 	// Cannot be woken up if dead
 	if (self.health < 1) return;
 	
@@ -297,8 +288,7 @@ void() floyd_awake = {
 	monster_targets();		// Find target (angry/path_corner)
 };
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) floyd_painawake = {
+void(entity inflictor, entity attacker, float damage) floyd_painawake = { // [FUNCTION]
 	// Cannot be attacked by other robots or woken up if dead
 	if (attacker.classgroup == CG_ROBOT) return;
 	if (self.health < 1) return;
@@ -314,7 +304,7 @@ void(entity inflictor, entity attacker, float damage) floyd_painawake = {
 
 // Floyd ROLLING functions
 
-void() floyd_roll = {
+void() floyd_roll = { // [FUNCTION]
 	self.frame = self.frame + 1;
 	
 	if (self.frame > $death15 || self.frame < $death10) {
@@ -326,12 +316,10 @@ void() floyd_roll = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // This chunk of code is straight from rubicon2 MOD (unchanged)
 // Personally I would have created a maximum bbox radius of the floyd model
 // but this system is much better and unfortunately more complex (maths)
-//----------------------------------------------------------------------
-vector (vector testmoos, float testang, float testradius, float minmax) test_moos_angle = {
+vector (vector testmoos, float testang, float testradius, float minmax) test_moos_angle = { // [FUNCTION]
 	local vector testangs, floyd_moos;
 	floyd_moos = testmoos;
 	testangs = '0 0 0';
@@ -350,7 +338,7 @@ vector (vector testmoos, float testang, float testradius, float minmax) test_moo
 	return floyd_moos;
 };
 
-vector (entity floyd) get_floyd_mins = {
+vector (entity floyd) get_floyd_mins = { // [FUNCTION]
 	local float feetyaw;
 	local vector floyd_mins;
 	
@@ -364,7 +352,7 @@ vector (entity floyd) get_floyd_mins = {
 	return floyd_mins;
 };
 
-vector (entity floyd) get_floyd_maxs = {
+vector (entity floyd) get_floyd_maxs = { // [FUNCTION]
 	local float feetyaw;
 	local vector floyd_maxs;
 	
@@ -378,7 +366,7 @@ vector (entity floyd) get_floyd_maxs = {
 	return floyd_maxs;
 };
 
-void() monster_floyd_precache = {
+void() monster_floyd_precache = { // [FUNCTION]
 	precache_model("progs/ad181/mon_floyd.mdl");
 	precache_model("progs/ad181/h_floyd.mdl");
 	precache_model("progs/ad181/gib_floyd1.mdl"); // Large chunk of floyd metal
@@ -396,7 +384,7 @@ void() monster_floyd_precache = {
 };
 
 // QUAKED monster_floyd (1 0 0) (-24 -24 -24) (24 24 64) Ambush
-void() monster_floyd = {
+void() monster_floyd = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -413,10 +401,8 @@ void() monster_floyd = {
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_XTALL;
-
-	// Half health for rolling floyd
 	if (self.health < 1) {
-		if (self.spawnflags & MON_FLOYDROLL) self.health = 75;
+		if (self.spawnflags & MON_FLOYDROLL) self.health = 75; // Less health for rolling floyd
 		else self.health = 175;
 	}
 	self.gibhealth = MON_NEVERGIB;		// Special explosion death

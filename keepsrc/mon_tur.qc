@@ -40,7 +40,7 @@
 void() tur_aim;
 void() tur_run;
 
-void() checkground = {
+void() checkground = { // [FUNCTION]
 	if (!(self.flags & FL_ONGROUND))
 		return;
 
@@ -50,7 +50,7 @@ void() checkground = {
 	}
 };
 
-float() turfindtarget = {
+float() turfindtarget = { // [FUNCTION]
 	local entity e;
 	local float r;
 	local float mr;
@@ -78,7 +78,7 @@ float() turfindtarget = {
 	return 0;
 };
 
-void() tur_stand = {
+void() tur_stand = { // [FUNCTION]
 	checkground();
 	if (!(self.flags & FL_ONGROUND)) T_Damage(self, world, world, 1000,DAMARMOR);
 		
@@ -101,7 +101,7 @@ void() tur_walk = {
 	self.nextthink = time + 0.1;
 };
 
-void() tur_run = {
+void() tur_run = { // [FUNCTION]
 	checkground();
 	if (!(self.flags & FL_ONGROUND)) T_Damage(self, world, world, 1000,DAMARMOR);
 	if (!visible(self.enemy)) self.enemy = world;
@@ -125,13 +125,13 @@ void() tur_death = {
 	entity_remove(self,0.1);
 };
 
-void() tur_die = {
+void() tur_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	self.solid = SOLID_NOT;
 	tur_death();
 };
 
-void() tur_aim = {
+void() tur_aim = { // [FUNCTION]
 	local vector dir;
 	local vector vtemp;
 	local vector org;
@@ -180,7 +180,7 @@ void() tur_aim = {
 	}
 };
 
-void() tur_launch = {
+void() tur_launch = { // [FUNCTION]
 	local vector v1;
 	if (!(self.ammo_cells)) return;
 
@@ -208,7 +208,7 @@ void() tur_launch = {
 	}
 };
 
-void() tur_use =  {
+void() tur_use =  { // [FUNCTION]
 	if (self.state == 0) {
 		self.state = 1;
 	} else {
@@ -218,7 +218,7 @@ void() tur_use =  {
 	self.nextthink = time + 0.1;
 };
 
-void() monster_tur_precache = {
+void() monster_tur_precache = { // [FUNCTION]
 	precache_model("progs/oum/aagba.mdl");
 	precache_model("progs/oum/aagtb.mdl");
 	precache_model("progs/laser.mdl");

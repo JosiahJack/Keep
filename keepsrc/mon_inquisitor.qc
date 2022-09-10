@@ -23,7 +23,7 @@ void()	inquisitor_walk12	= [217,	inquisitor_walk1	] { ai_walk(6); ai_down(4); };
 
 void() inquisitor_flightland1;
 
-void() inquisitor_flight_attack = {
+void() inquisitor_flight_attack = { // [FUNCTION]
 	throwpolypgib("progs/quoth/bilefrag.mdl", -40);
 	throwpolypgib("progs/quoth/bilefrag.mdl", -50);
 	throwpolypgib("progs/quoth/bilefrag.mdl", -60);
@@ -32,7 +32,7 @@ void() inquisitor_flight_attack = {
 
 void() inquisitor_ascend1;
 
-void() InquisitorCheckSetDown = {
+void() InquisitorCheckSetDown = { // [FUNCTION]
 	// Should we stop flying?
 	if (self.flight_finished < time) {
 		self.think = inquisitor_flightland1;
@@ -82,7 +82,7 @@ void() inquisitor_ascend14= [102, inquisitor_ascend15] { ai_up(2); };
 void() inquisitor_ascend15= [103, inquisitor_ascend16] {};
 void() inquisitor_ascend16= [104, inquisitor_run1] {};
 
-void() inquisitor_wavetargets = {
+void() inquisitor_wavetargets = { // [FUNCTION]
 	// Check for boss wave boundary event
 	if (self.health > 0) {
 		// Check for wave boundary triggers
@@ -122,7 +122,7 @@ void()	inquisitor_standrun2= [71,		inquisitor_standrun3 ] { ai_run(0); };
 void()	inquisitor_standrun3= [72,		inquisitor_standrun1 ] { ai_run(0); };
 
 // AttackStopPalmOut 51-72
-void() inquisitor_stormcloud = {
+void() inquisitor_stormcloud = { // [FUNCTION]
 	local entity cloud;
 	local vector offs;
 	local float notfound;
@@ -173,7 +173,7 @@ void()	inquisitor_magica11= [10,inquisitor_magica12	] { ai_face();inquisitor_sto
 void()	inquisitor_magica12= [11,inquisitor_magica13	] { ai_face();inquisitor_stormcloud(); ai_down(4); };
 void()	inquisitor_magica13= [12,inquisitor_standrun1] { ai_face();inquisitor_stormcloud(); ai_down(4); };
 
-void(vector boneofs) inquisitor_firebones = {
+void(vector boneofs) inquisitor_firebones = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.health < 1) return;
@@ -214,7 +214,7 @@ void()	inquisitor_magicb13= [25,inquisitor_magicb14	] { ai_face(); ai_down(4); }
 void()	inquisitor_magicb14= [26,inquisitor_magicb15	] { ai_face(); ai_down(4); };
 void()	inquisitor_magicb15= [27,inquisitor_standrun1] { ai_face(); ai_down(4); };
 
-void() inquisitor_fireflamewall = {
+void() inquisitor_fireflamewall = { // [FUNCTION]
 	local vector org, eorg, torg, dir, ang;
 	local float targetang, fire_life;
 
@@ -303,7 +303,7 @@ void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die6] { particle (self.origin
 void() inquisitor_bbomb_die6 = [5,inquisitor_bbomb_die7] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 8); self.nextthink = time + 0.15; };
 void() inquisitor_bbomb_die7 = [6,inquisitor_bbomb_die7] { particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 6); entity_remove(self, 0.1); return; };
 
-void() inquisitor_bbomb_burstcheck = {
+void() inquisitor_bbomb_burstcheck = { // [FUNCTION]
 	if (self.attack_finished < time) {
 		self.think = inquisitor_bbomb_die1;
 		self.nextthink = 0.1;
@@ -315,7 +315,7 @@ void() inquisitor_bbomb_charge2 = [7,inquisitor_bbomb_charge3] { inquisitor_bbom
 void() inquisitor_bbomb_charge3 = [6,inquisitor_bbomb_charge4] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15; };
 void() inquisitor_bbomb_charge4 = [5,inquisitor_bbomb_die1] { inquisitor_bbomb_burstcheck(); self.nextthink = time + 0.15; };
 
-void() inquisitor_bilebomb_at_enemys_feet = {
+void() inquisitor_bilebomb_at_enemys_feet = { // [FUNCTION]
 	local entity missile;
 	local vector org;
 	local float dist;
@@ -363,17 +363,17 @@ void()	inquisitor_magicd18= [88,inquisitor_standrun1] { ai_face(); ai_down(4); }
 
 void() inquisitor_pain1;
 
-void() inquisitor_die = {
-	inquisitor_pain1(); // hunch it, prep for burst!
+void() inquisitor_die = { // [FUNCTION]
+	inquisitor_pain1(); // Hunch it, prep for burst!
 };
 
-void() inquisitor_shieldon = {
+void() inquisitor_shieldon = { // [FUNCTION]
 	self.shield = 1;
 	self.effects = EF_BRIGHTFIELD;
 	self.takedamage = DAMAGE_NO;
 };
 
-void() inquisitor_shieldoff = {
+void() inquisitor_shieldoff = { // [FUNCTION]
 	self.shield = 0;
 	self.effects = 0;
 	self.takedamage = DAMAGE_AIM;

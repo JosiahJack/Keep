@@ -430,7 +430,7 @@ vector(float index) robot_getpoint = {
 	return VEC_ORIGIN;
 };
 
-void() robot_use_turnon = {
+void() robot_use_turnon = { // [FUNCTION]
 	self.use = robot_use_turnoff;
 	if (self.wait) {
 		self.think = robot_thinkgo;
@@ -441,13 +441,13 @@ void() robot_use_turnon = {
 	robot_thinkgo();
 };
 
-void() robot_use_turnoff = {
+void() robot_use_turnoff = { // [FUNCTION]
 	self.use = robot_use_turnon;
 	self.think = SUB_Null;
 	self.nextthink = -1;
 };
 
-void() robot_sync_all_targets = {
+void() robot_sync_all_targets = { // [FUNCTION]
 	local string stemp;
 
 	stemp = self.target;
@@ -458,7 +458,7 @@ void() robot_sync_all_targets = {
 	return;
 };
 
-void() robot_wait = {
+void() robot_wait = { // [FUNCTION]
 	self.poindex = (self.poindex + 1);	
 
 	if (self.syncerbot != "") {
@@ -486,7 +486,7 @@ void() robot_wait = {
 };
 
 // This function steps through the program until we hit the correct starting point then returns it.
-vector(vector pnt) robot_relativecoord_get = {
+vector(vector pnt) robot_relativecoord_get = { // [FUNCTION]
 	local float indexer;
 	local vector vtemp;	
 
@@ -504,7 +504,7 @@ vector(vector pnt) robot_relativecoord_get = {
 };
 
 // Main Movement Function
-void() robot_thinkgo = {
+void() robot_thinkgo = { // [FUNCTION]
 	self.curpoint = robot_getpoint(self.poindex);
 	if (self.curpoint == VEC_ORIGIN) {
 		self.poindex = TRUE;
@@ -522,10 +522,10 @@ void() robot_thinkgo = {
 };
 
 // Home sweet origin position
-void() info_home = {};
+void() info_home = {}; // [ENTITY]
 
 // Our Beloved Coordinate Axis Robot
-void() func_robot = {
+void() func_robot = { // [ENTITY]
 	local entity targ;
 
 	self.solid = SOLID_BSP;
@@ -562,7 +562,7 @@ void() func_robot = {
 	}
 };
 
-void() robot_controller_use_targets = {
+void() robot_controller_use_targets = { // [FUNCTION]
 	local entity stemp;
 	local string temptarget;
 	local string targname1;
@@ -860,7 +860,7 @@ void() robot_controller_use_targets = {
 	self.count = self.oldcount;
 };
 
-void() robot_controller_use = {
+void() robot_controller_use = { // [FUNCTION]
 	self.count = (self.count - TRUE);
 	if ((self.oldcount - self.count) == 1) self.syncent1 = other;
 	if ((self.oldcount - self.count) == 2) self.syncent2 = other;
@@ -893,7 +893,7 @@ void() robot_controller_use = {
 	}	
 };
 
-void() func_robot_controller = {
+void() func_robot_controller = { // [ENTITY]
 	if (!self.targetname) return;
 
 	if (!self.count) self.count = 2;

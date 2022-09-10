@@ -259,7 +259,6 @@ void() zombiek_run11	= [	$run11,		zombiek_run1	] { ai_run(11);
 	self.steptype = FS_TYPESLOW;		// Normal zombie foot
 };
 
-//===========================================================================
 // Melee Attack 2 - Stationary over arm swing (17->12 frames)
 // Removed frames 1,3,4,5,7
 void()	zombiek_attb1	= [	$attb2,		zombiek_attb6 ] { ai_face(); };
@@ -275,7 +274,6 @@ void()	zombiek_attb15= [	$attb15,	zombiek_attb16] {};
 void()	zombiek_attb16= [	$attb16,	zombiek_attb17] {};
 void()	zombiek_attb17= [	$attb17,	zombiek_run1	] {};
 
-//----------------------------------------------------------------------
 // Melee Attack 3 - Stationary sideways swing (15->12 frames)
 // Removed frames 1,3,15
 void()	zombiek_attc1	= [	$attc2,		zombiek_attc4	] { ai_face(); };
@@ -291,8 +289,7 @@ void()	zombiek_attc12= [	$attc12,	zombiek_attc13] {};
 void()	zombiek_attc13= [	$attc13,	zombiek_attc14] {};
 void()	zombiek_attc14= [	$attc14,	zombiek_run1	] {};
 
-//----------------------------------------------------------------------
-void() zombiek_melee = {
+void() zombiek_melee = { // [FUNCTION]
 	ai_face();		// Turn towards enemy target
 	walkmove (self.ideal_yaw, 20);
 
@@ -305,7 +302,7 @@ void() zombiek_melee = {
 // Jump + melee attack
 // Melee Attack 1 - Smash, chop overhead to ground (19->10/11 frames)
 
-void()	zombiek_JumpTouch = {
+void()	zombiek_JumpTouch = { // [FUNCTION]
 	local float ldmg;
 	
 	if (self.health < 1) return;
@@ -336,7 +333,6 @@ void()	zombiek_JumpTouch = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void()	zombiek_jump1	= [	$atta1,		zombiek_jump2 ] { ai_charge(12);
 	self.jump_flag = time + MONAI_JUMPZOMBTIME;
 	zombie_sound(3);	// Moan about jumping forward
@@ -369,7 +365,6 @@ void()	zombiek_jump8	= [	$atta8,		zombiek_jump9	] { ai_face();
 	self.oldorigin = self.origin;
 };
 
-//----------------------------------------------------------------------
 void() zombiek_jump15;		// Chance of quick animation exit
 void()	zombiek_jump9	= [	$atta9,		zombiek_jump10] { ai_melee(); };
 void()	zombiek_jump10= [	$atta10,	zombiek_jump11] { ai_melee(); };
@@ -382,9 +377,6 @@ void()	zombiek_jump15= [	$atta15,	zombiek_jump16] {};
 void()	zombiek_jump16= [	$atta16,	zombiek_jump18] {};
 void()	zombiek_jump18= [	$atta18,	zombiek_run1 ] { ai_resetangles(); };
 
-/*======================================================================
-  PAIN
-========================================================================*/
 void()	zombiek_paina1	= [	$paina1,		zombiek_paina2	] { ai_painforward(8); };
 void()	zombiek_paina2	= [	$paina2,		zombiek_paina3	] { ai_painforward(3); };
 void()	zombiek_paina3	= [	$paina3,		zombiek_paina4	] { ai_painforward(3); };
@@ -398,7 +390,6 @@ void()	zombiek_paina10	= [	$paina10,		zombiek_paina11	] { ai_painforward(1); };
 void()	zombiek_paina11	= [	$paina11,		zombiek_paina12	] { ai_painforward(2); };
 void()	zombiek_paina12	= [	$paina12,		zombiek_run1	] { ai_painforward(1); self.inpain = 0; };
 
-//----------------------------------------------------------------------
 void()	zombiek_painb1	= [	$painb1,		zombiek_painb2	] { ai_painforward(8); };
 void()	zombiek_painb2	= [	$painb2,		zombiek_painb3	] { ai_pain(1); };
 void()	zombiek_painb3	= [	$painb3,		zombiek_painb4	] { ai_pain(1); };
@@ -425,7 +416,6 @@ void()	zombiek_painb23	= [	$painb23,		zombiek_painb24	] { ai_painforward(3); };
 void()	zombiek_painb24	= [	$painb24,		zombiek_painb25	] { ai_painforward(3); };
 void()	zombiek_painb25	= [	$painb25,		zombiek_run1	] { ai_painforward(3); };
 
-//----------------------------------------------------------------------
 void()	zombiek_painc1	= [	$painc1,		zombiek_painc2	] { ai_painforward(8); };
 void()	zombiek_painc2	= [	$painc2,		zombiek_painc3	] { ai_painforward(6); };
 void()	zombiek_painc3	= [	$painc3,		zombiek_painc4	] { ai_painforward(5); };
@@ -450,7 +440,6 @@ void()	zombiek_painc19	= [	$painc19,		zombiek_painc20	] { monster_footstep(FALSE
 void()	zombiek_painc20	= [	$painc20,		zombiek_painc21	] {};
 void()	zombiek_painc21	= [	$painc21,		zombiek_run1	] {};
 
-//----------------------------------------------------------------------
 void()	zombiek_paind1	= [	$paind1,		zombiek_paind2	] { self.inpain = 2; ai_painforward(8); };
 void()	zombiek_paind2	= [	$paind2,		zombiek_paind3	] { ai_painforward(4); };
 void()	zombiek_paind3	= [	$paind3,		zombiek_paind4	] { ai_painforward(4); };
@@ -497,7 +486,6 @@ void()	zombiek_painw21	= [	$painc21,		zombiek_run1	] {
 	}
 };
 
-//----------------------------------------------------------------------
 void()	zombiek_paine1	= [	$paine1,		zombiek_paine2	] { self.inpain = 2; ai_pain(8); };
 void()	zombiek_paine2	= [	$paine2,		zombiek_paine3	] { ai_pain(4); };
 void()	zombiek_paine3	= [	$paine3,		zombiek_paine4	] { ai_pain(3); };
@@ -544,13 +532,10 @@ void()	zombiek_paine31	= [	$paine31,		zombiek_run1	] { ai_painforward(3);
 	}
 };
 
-/*======================================================================
- ZOMBIE PAIN
- * All damage must come through pain function to reset health
- * Be careful blocking zombie pain function with pain_finished
- * zombies react in 2 ways, minor pain (a,c,d) and full knockdown (b,e)
-======================================================================*/
-void(entity inflictor, entity attacker, float take) zombiek_pain = {
+// * All damage must come through pain function to reset health
+// * Be careful blocking zombie pain function with pain_finished
+// * zombies react in 2 ways, minor pain (a,c,d) and full knockdown (b,e)
+void(entity inflictor, entity attacker, float take) zombiek_pain = { // [FUNCTION]
 	self.health = self.max_health;				// always reset health	
 	if (take < MONAI_ZOMBIELOW_DAM) return;		// totally ignore
 	if (self.inpain > 0) return;				// in pain animation, do nothing
@@ -559,14 +544,9 @@ void(entity inflictor, entity attacker, float take) zombiek_pain = {
 	self.inpain = 1;			// In pain, don't interrupt animation
 	self.attack_elev = targzone(self, attacker);
 	
-	//----------------------------------------------------------------------
 	// Damage 25-60, wobble or drop to ground (SSG, Quad NG)
-	//----------------------------------------------------------------------
 	if (take > MONAI_ZOMBIEHGH_DAM)	zombiek_knockdown();// ON THE GROUND
-	//----------------------------------------------------------------------
-	// Damage 9-25 random pain animation (random chance of knockdown)
-	//----------------------------------------------------------------------
-	else {
+	else { // Damage 9-25 random pain animation (random chance of knockdown)
 		self.lip = random();
 		if (self.lip < 0.25) zombiek_paina1();			// 12 frames (drag foot)
 		else if (self.lip < 0.5) zombiek_knockdown();	// ON THE GROUND
@@ -576,10 +556,8 @@ void(entity inflictor, entity attacker, float take) zombiek_pain = {
 	}
 };
 
-/*=============================================================================
- ZOMBIE WAKEUP (check if can get up)
-=============================================================================*/
-void() zombiek_wakeup	= {
+// Check if can get up.
+void() zombiek_wakeup	= { // [FUNCTION]
 	if (self.gibbed) return;			// Do nothing dead
 	
 	self.use = SUB_Null;				// No more using at this point
@@ -617,7 +595,7 @@ void() zombiek_wakeup	= {
 // Puts the zombie on the floor with a random Yaw rotation
 // IF frameno = MONAI_ZOMBIEFLR Setup on floor with use trigger
 // ELSE setup next think timer and wait for opportunity to get back up
-void(float frameno) zombiek_onground = {	
+void(float frameno) zombiek_onground = { // [FUNCTION]
 	self.health = self.max_health;	// reset health
 	self.inpain = 2;				// Lying on floor, no pain
 	self.count = 0;					// Reset get up tries
@@ -656,7 +634,7 @@ void(float frameno) zombiek_onground = {
 // Puts the zombie on the floor based on the angle of attack
 // 270-360, 360-90 : Fall forward (3 checks Left, middle, right)
 // 180-270, 90-180 : Fall backward
-void() zombiek_knockdown = {
+void() zombiek_knockdown = { // [FUNCTION]
 	local float enemy_ang, comp_ang;
 	
 	// Work out which direction the damage came from (enemy)

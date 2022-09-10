@@ -110,6 +110,10 @@ void() info_player_coop = {
 	if (self.targetname != "") self.use = entity_state_use;
 };
 
+void() info_player_coop2 = {
+	info_player_coop();
+};
+
 //QUAKED info_player_deathmatch (0 1 1) (-16 -16 -24) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 // { model(":progs/player.mdl"); }
 // Starting position for deathmatch games

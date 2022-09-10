@@ -168,26 +168,20 @@ void() StartTrogMagic = {
 
 // Used by necromancer and nemesant to shove an enemy away.
 // Note:  Skullwiz version use different velocity and damage methods.
-void() ai_repel = {
-    if (!self.enemy)
-        return;     // No one to attack.
-    if (!InMeleeRange (120))
-        return;
-    if (!CanDamage (self.enemy, self))
-        return;
-
-    // Note:  Different than Armagon's because we ignore elevation.
-    local   vector  dir;
+void() ai_repel = { // [FUNCTION] Note:  Different than Armagon's because we ignore elevation.
+    local vector dir;
+    if (!self.enemy) return;     // No one to attack.
+    if (!InMeleeRange(120)) return;
+    if (!CanDamage(self.enemy,self)) return;
 
     dir = self.enemy.origin;
     dir_z = self.origin_z;     // Only interested in xy-plane, so ignore z.
     dir = normalize(dir - self.origin);
     dir = dir * 1000;
-    dir_z = 120;    // Add a little up to overcome normal gravity.
-// Send the enemy flying.
+    dir_z = 120;    // Add a little up to overcome normal gravity.  
     if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER)) {
         self.enemy.flags = self.enemy.flags - (self.enemy.flags & FL_ONGROUND);
-        self.enemy.velocity = self.enemy.velocity + dir;
+        self.enemy.velocity = self.enemy.velocity + dir; // Send the enemy flying.
     }
 
     sound(self,CHAN_WEAPON,"drake/skullwiz/push.wav",1,ATTN_NORM);
@@ -195,14 +189,14 @@ void() ai_repel = {
 };
 
 // Returns the point of one of its hands.
-vector(float left) Nemesant_Hand = {
+vector(float left) Nemesant_Hand = { // [FUNCTION]
     makevectors(self.angles);
     if (left) return (self.origin + (v_forward*16) - (v_right*10) + (v_up*30)); // TRUE = use left hand, FALSE = use right hand.
     return (self.origin - (v_forward*16) + (v_right*12) + (v_up*45));
 };
 
 // This sends a bolt of lightning at an enemy, similar to the shamblers'.  Assume not in water and don't check for discharge.
-void() Nemesant_Bolt = {
+void() Nemesant_Bolt = { // [FUNCTION]
     local vector p1, p2;
 
     p1 = Nemesant_Hand (TRUE);      // This will call makevectors as well.
@@ -216,7 +210,7 @@ void() Nemesant_Bolt = {
 };
 
 // Magic missile sidewinding tracking code.
-void() nemes_track = {
+void() nemes_track = { // [FUNCTION]
     local vector vec;
     local float up, old, delta;
 
@@ -246,7 +240,7 @@ void() nemes_track = {
 };
 
 // Spawns each magic missile launched by the nemesant.
-void(float ofs, float up, vector vec) nemes_shot = {
+void(float ofs, float up, vector vec) nemes_shot = { // [FUNCTION]
     hknight_shot(ofs);
     setorigin(newmis, vec);
     newmis.velocity  = normalize(newmis.velocity) * 600;
@@ -263,7 +257,7 @@ void(float ofs, float up, vector vec) nemes_shot = {
 };
 
 // Shoots a salvo of magic missiles at an enemy.
-void() Nemesant_Missiles = {
+void() Nemesant_Missiles = { // [FUNCTION]
     local   vector  p1;
 
     p1 = Nemesant_Hand (TRUE);
@@ -276,13 +270,13 @@ void() Nemesant_Missiles = {
 
 // Lobs its trademark bouncing seeker fireball.
 // In Drake, more monsters copy and use this attack.
-void() Nemesant_FireBall = { M_FireSmart ('16 12 45'); };
+void() Nemesant_FireBall = { M_FireSmart ('16 12 45'); }; // [FUNCTION]
 
 
 //  Movement and Teleportation
 
 // PM:  Teleport code mostly rewritten from the original.
-void() tele_attack = {
+void() tele_attack = { // [FUNCTION]
     local   vector  org, delta;
 
     delta = self.enemy.origin - self.origin;
@@ -320,7 +314,7 @@ void() tele_attack = {
     self.attack_finished = 0;   // PM:  This lets mage attack now.
 };
 
-void() check_tele = {
+void() check_tele = { // [FUNCTION]
     local entity head;
 
     if (!self.enemy) return;
@@ -338,7 +332,7 @@ void() check_tele = {
     }
 };
 
-void() nemes_idlesound = {
+void() nemes_idlesound = { // [FUNCTION]
     local float wr;
 
     if (self.waitmin < time) {

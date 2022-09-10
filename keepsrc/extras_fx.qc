@@ -92,7 +92,7 @@ void() spark_spawn = { // [FUNCTION]
 void() spark_spawn_withsounds = { // [FUNCTION]
 	local float r;
 	
-	if (!(self.spawnflags & 2)) {
+	if (!(self.spawnflags & 2)) { // SILENT
 		r = rint(random() * 3);	// play a random spark sound	
 		if (r == 1) sound(self,CHAN_AUTO,"misc/spark1.wav",1,ATTN_NORM);
 		else if (r == 2) sound(self,CHAN_AUTO,"misc/spark2.wav",1,ATTN_NORM);
@@ -119,7 +119,7 @@ void() fx_spark = { // [ENTITY]
 	if (self.wait < 0) self.wait = 0; // default frequency to 0
 	self.think = spark_spawn_withsounds;
 	
-	if (self.targetname != "" && !(self.spawnflags & 1)) spark_pause();
+	if (self.targetname != "" && !(self.spawnflags & 1)) spark_pause(); // START_ON
 	else spark_start();
 };
 

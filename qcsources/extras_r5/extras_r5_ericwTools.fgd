@@ -1,0 +1,1467 @@
+//
+// Quake game definition file (.fgd)
+// for Worldcraft 1.6 and above
+//
+// written by autolycus / autolycus@planetquake.com
+// email me with improvements and suggestions
+//
+
+//Modified by CZG : grawert@online.no : http://www.planetquake.com/greyvoid/
+//Further modifed for Ericw's new compile tools by Daz : http://youtube.com/darrenweekes
+//Updated for TyrUtils v0.15.4 11/12/2015
+//File version 7.0
+//Tested with J.A.C.K Steam release
+//Updated for TyrUtils v0.15.9 13-03-17
+//Dev Note - some brush model keys/values are duplicated in func_detail as that brush model only supports a subset of available keys/values.
+
+//
+// worldspawn
+//
+
+@SolidClass = worldspawn : "World entity"
+[
+	message(string) : "Level name"
+	worldtype(choices) : "Ambience" : 0 =
+	[
+		0 : "Medieval"
+		1 : "Runic (metal)"
+		2 : "Present (base)"
+	]
+	sounds(integer) : "CD track to play" : 1
+	light(integer) : "Ambient light" : 0 : "Set a global minimum light level of 'n' across the whole map. This is an easy way to eliminate completely dark areas of the level, however you may lose some contrast as a result, so use with care. Default 0"
+	_sunlight(integer) : "Sunlight" : 0 : "Set the brightness of the sunlight coming from an unseen sun in the sky. Sky brushes (or more accurately bsp leafs with sky contents) will emit sunlight at an angle specified by the _sun_mangle key. Default 0"
+	_sun_mangle(string) : "Sun mangle (Yaw pitch roll)" : "0 -90 0" : "Specifies the direction of sunlight using yaw(x), pitch(y) and roll(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees and pitch specifies the angle from 90 (straight up) to -90 (straight down). Roll has no effect, so use any value (e.g. 0). Default is straight down (0 -90 0)"
+	_sunlight_penumbra(integer) : "Sunlight penumbra in degrees" : 0 : "Specifies the penumbra width, in degrees, of sunlight. Useful values are 3-4 for a gentle soft edge, or 10-20+ for more diffuse sunlight. Default is 0"
+	_sunlight_color(color255) : "Sunlight color R G B" : "255 255 255" : "Specify red(r), green(g) and blue(b) components for the colour of the sunlight. RGB component values are between 0 and 255 (between 0 and 1 is also accepted). Default is white light (255 255 255)"
+	_sunlight2(integer) : "Sunlight 2 brightness" : 0 : "Set the brightness of a large dome of lights positioned around the map (16K unit radius). Useful for simulating higly diffused light (e.g. cloudy skies) in outdoor areas. Default 0"
+	_sunlight2_color(color255) : "Sunlight 2 color R G B" : "255 255 255" : "Specifies the colour of _sunlight2, same format as _sunlight_color. Default is white light (255 255 255)"
+	_sunlight3(integer) : "Sunlight 3 brightness" : 0 : "Same as _sunlight2 but creates lights on the bottom hemisphere. Default 0"
+	_sunlight3_color(color255) : "Sunlight 3 color R G B" : "255 255 255" : "Specifies the colour of _sunlight3, same format as _sunlight_color. Default is white light (255 255 255)"
+	_dist(integer) : "Global light scale" : 1 : "Scales the fade distance of all lights by a factor of n. If n is more than 1 lights fade more quickly with distance and if n is less than 1, lights fade more slowly with distance and light reaches further"
+	_range(float) : "Global light range" : "0.5" : "Scales the brightness range of all lights without affecting their fade discance. Values of n more than 0.5 makes lights brighter and n less than 0.5 makes lights less bright. The same effect can be achieved on individual lights by adjusting both the 'light' and 'wait' attributes"
+	_anglescale(float) : "Light angle scale" : "0.5" : "Sets a scaling factor for how much influence the angle of incidence of sunlight on a surface has on the brightness of the surface. n must be between 0.0 and 1.0. Smaller values mean less attenuation, with zero meaning that angle of incidence has no effect at all on the brightness. Default 0.5"
+	_dirt(integer) : "Dirt mapping (AO)" : -1 : "1 enables dirtmapping (ambient occlusion) on all lights, borrowed from q3map2. This adds shadows to corners and crevices. You can override the global setting for specific lights with the _dirt light entity key or _sunlight_dirt, _sunlight2_dirt, and _minlight_dirt worldspawn keys. Default is no dirtmapping (-1)"
+	_sunlight_dirt(integer) : "Sunlight dirt" : -1 : "1 enables dirtmapping (ambient occlusion) on sunlight, -1 to disable (making it illuminate the dirtmapping shadows). Default is to use the value of '_dirt'"
+	_sunlight2_dirt(integer) : "Sublight 2 dirt" : -1 : "1 enables dirtmapping (ambient occlusion) on sunlight2, -1 to disable. Default is to use the value of '_dirt'"
+	_minlight_dirt(integer) : "Minlight dirt" : -1 : "1 enables dirtmapping (ambient occlusion) on minlight, -1 to disable. Default is to use the value of '_dirt'"
+	_dirtmode(integer) : "Dirt mode" : 0 : "Choose between ordered (0, default) and randomized (1) dirtmapping."
+	_dirtdepth(integer) : "Dirt depth" : 128 : "Maximum depth of occlusion checking for dirtmapping, default 128."
+	_dirtscale(integer) : "Dirt scale" : 1 : "Scale factor used in dirt calculations, default 1. Lower values (e.g. 0.5) make the dirt fainter, 2.0 would create much darker shadows"
+	_dirtgain(integer) : "Dirt gain" : 1 : "Exponent used in dirt calculation, default 1. Lower values (e.g. 0.5) make the shadows darker and stretch further away from corners"
+	_gamma(integer) : "Lightmap gamma" : 1 : "Adjust brightness of final lightmap. Default 1, >1 is brighter, <1 is darker"
+]
+
+//
+// base marker definitions
+//
+
+@baseclass = Appearflags [
+	spawnflags(Flags) =
+	[
+		256 : "Not in Easy" : 0
+		512 : "Not in Normal" : 0
+		1024 : "Not in Hard" : 0
+		2048 : "Not in Deathmatch" : 0
+	]
+]
+
+@baseclass = Targetname [ targetname(target_source) : "Name" ]
+@baseclass = Target [ target(target_destination) : "Target" ]
+@baseclass = ModelLight
+	[
+		_minlight(integer) : "Min light" :  : "Set the minimum light level for any surface of the brush model. Default 0"
+		_mincolor(color255) : "Min light color R G B" : "255 255 255" : "Specify red(r), green(g) and blue(b) components for the colour of the minlight. RGB component values are between 0 and 255 (between 0 and 1 is also accepted). Default is white light (255 255 255)"
+		_shadow(integer) : "Shadows" :  : "If n is 1, this model will cast shadows on other models and itself (i.e. '_shadow' implies '_shadowself'). Note that this doesn’t magically give Quake dynamic lighting powers, so the shadows will not move if the model moves. Func_detail ONLY - If set to -1, light will pass through this brush model. Default 0"
+		_shadowself(integer) : "Self Shadow" :  : "If n is 1, this model will cast shadows on itself if one part of the model blocks the light from another model surface. This can be a better compromise for moving models than full shadowing. Default 0"
+		_dirt(integer) : "Dirt mapping (override)" :  : "For brush models, -1 prevents dirtmapping on the brush model. Useful it the bmodel touches or sticks into the world, and you want to those ares from turning black. Default 0"
+		_phong(choices) : "Enable Phong shading" : 0 =
+		[
+			0: "No"
+			1: "Yes"
+		]
+		_phong_angle(integer) : "Phong shading angle" :  : "Enables phong shading on faces of this model with a custom angle. Adjacent faces with normals this many degrees apart (or less) will be smoothed. Consider setting '_anglescale' to '1' on lights or worldspawn to make the effect of phong shading more visible. Use the '-phongdebug' command-line flag to save the interpolated normals to the lightmap for previewing (use 'r_lightmap 1' or 'gl_lightmaps 1' in your engine to preview.)"
+	]
+
+//
+// player starts, deathmatch, coop, teleport
+//
+
+@baseclass base(Appearflags) flags(Angle) size(-16 -16 -24, 16 16 32) offset(0 0 24) 
+	color(0 255 0) = PlayerClass []
+
+@PointClass base(PlayerClass) = info_player_start : "Player 1 start" []
+@PointClass base(PlayerClass) = info_player_coop : "Player cooperative start" []
+@PointClass base(PlayerClass) = info_player_start2 : "Player episode return point" []
+@PointClass base(PlayerClass) = info_player_deathmatch : "DM start" []
+@PointClass size(-32 -32 0, 32 32 64) base(PlayerClass, Targetname) = info_teleport_destination : "Teleport destination" []
+@PointClass = info_null : "info_null (spotlight target)"
+[
+	targetname(target_source) : "Name" 
+]@PointClass = info_notnull : "info_notnull (spotlight target)"
+[
+	targetname(target_source) : "Name" 
+	use(string) : "self.use"
+	think(string) : "self.think"
+	nextthink(integer) : "nextthink"
+]
+@PointClass base(Appearflags) = info_intermission : "Intermission camera" 
+[
+	mangle(string) : "Mangle (Pitch Yaw Roll)"
+]
+
+//
+// items
+//
+@baseclass = Item
+[
+	message(string) : "Message"
+]
+@baseclass size(0 0 0, 32 32 32) color(80 0 200) base(Item, Appearflags, Target) = Ammo
+[
+	spawnflags(flags) = 
+	[
+		1 : "Large box" : 0
+	]
+]
+
+@PointClass base(Ammo) studio("maps/b_batt0.bsp") = item_cells : "Thunderbolt ammo" []
+@PointClass base(Ammo) studio("maps/b_rock0.bsp") = item_rockets : "Rockets" []
+@PointClass base(Ammo) studio("maps/b_shell0.bsp") = item_shells : "Shells" []
+@PointClass base(Ammo) studio("maps/b_nail0.bsp") = item_spikes : "Nailgun ammo" []
+
+@PointClass size(-16 -16 0, 16 16 16) base(Appearflags) studio("maps/b_bh25.bsp") = item_health : "Health pak" 
+[
+	spawnflags(flags) = 
+	[
+		1 : "Rotten" : 0
+		2 : "Megahealth" : 0
+	]
+]
+
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/suit.mdl") = 
+	item_artifact_envirosuit : "Environmental protection suit" []
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/quaddama.mdl") = 
+	item_artifact_super_damage : "Quad damage" []
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/invulner.mdl") = 
+	item_artifact_invulnerability : "Pentagram of Protection" []
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/invisibl.mdl") = 
+	item_artifact_invisibility : "Ring of Shadows" []
+
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) studio("progs/armor.mdl") skin(2) = 
+	item_armorInv : "200% armor (Red)" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) studio("progs/armor.mdl") skin(1) = 
+	item_armor2 : "150% armor (Yellow)" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) studio("progs/armor.mdl") skin(0) = 
+	item_armor1 : "100% armor (Green)" []
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/w_s_key.mdl") = 
+	item_key1 : "Silver key" []
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/w_g_key.mdl") = 
+	item_key2 : "Gold key" []
+@PointClass size(-16 -16 -24, 16 16 32) offset(0 0 24) base(Appearflags) studio("progs/end1.mdl") = 
+	item_sigil : "Sigil" 
+[
+	spawnflags(Flags) =
+	[
+		1 : "Episode 1" : 1
+		2 : "Episode 2" : 0
+		4 : "Episode 3" : 0
+		8 : "Episode 4" : 0
+	]
+]
+
+//
+// weaponses
+//
+
+@baseclass size(-16 -16 0, 16 16 32) color(0 0 200) base(Appearflags) = Weapon []
+
+@PointClass base(Weapon) studio("progs/g_shot.mdl") = weapon_supershotgun : "Super shotgun" []
+@PointClass base(Weapon) studio("progs/g_nail.mdl") = weapon_nailgun : "Nailgun" []
+@PointClass base(Weapon) studio("progs/g_nail2.mdl") = weapon_supernailgun : "Perforator" []
+@PointClass base(Weapon) studio("progs/g_rock.mdl") = weapon_grenadelauncher : "Grenade launcher" []
+@PointClass base(Weapon) studio("progs/g_rock2.mdl") = weapon_rocketlauncher : "Rocket launcher" []
+@PointClass base(Weapon) studio("progs/g_light.mdl") = weapon_lightning : "Thunderbolt" []
+
+//
+// badasses
+//
+
+@baseclass base(Appearflags, Targetname, Target) flags(Angle) color(220 0 0) offset(0 0 24) = Monster 
+[
+	spawnflags(Flags) = 
+	[
+		1 : "Ambush" : 0
+	]
+]
+
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/soldier.mdl") = monster_army : "Grunt" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 40) studio("progs/dog.mdl") = monster_dog : "Nasty Doggie" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) studio("progs/ogre.mdl") = monster_ogre : "Ogre" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) studio("progs/ogre.mdl") = monster_ogre_marksman : "Ogre marksman" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/knight.mdl") = monster_knight : "Knight" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") = monster_hell_knight : "Hell knight" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/wizard.mdl") = monster_wizard : "Scrag" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) studio("progs/demon.mdl") = monster_demon1 : "Fiend" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) studio("progs/shambler.mdl") = monster_shambler : "Shambler" []
+@PointClass base(Monster) size(-128 -128 -24, 128 128 256) studio("progs/boss.mdl") = monster_boss : "Chthon" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/enforcer.mdl") = monster_enforcer : "Enforcer" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 48) studio("progs/shalrath.mdl") = monster_shalrath : "Shalrath" []
+@PointClass base(Monster) size(32 32 48) studio("progs/tarbaby.mdl") = monster_tarbaby : "Tarbaby" []
+@PointClass base(Monster) size(32 32 48) studio("progs/fish.mdl") = monster_fish : "Rotfish" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 32) studio("progs/oldone.mdl") = monster_oldone : "Shub-Niggurath" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 32) studio("progs/zombie.mdl") = monster_zombie : "Zombie" 
+[
+	spawnflags(Flags) = 
+	[
+		1 : "Crucified" : 0
+		2 : "Ambush" : 0
+	]
+	sequence(choices) : "Pose (editor)" = 
+	[
+		0 : "Normal"
+		192: "Crucified"
+	]
+]
+
+//
+// lights
+//
+
+@baseclass = Light [
+	light(integer) : "Brightness" : 300 : "Set the light intensity. Negative values are also allowed and will cause the entity to subtract light cast by other entities. Default 300"
+	_color(color255) : "Light color" : "255 255 255" : "Specify red(r), green(g) and blue(b) components for the colour of the light. RGB component values are between 0 and 255 (between 0 and 1 is also accepted). Default is white light ('255 255 255')"
+	wait(integer) : "Fade distance multiplier" : 1 : "Scale the fade distance of the light by 'n'. Values of n more than 1 make the light fade more quickly with distance, and values less than 1 make the light fade more slowly (and thus reach further). Default 1"
+	delay(choices) : "Attenuation" : 0 : "Select an attenuation formula for the light: 0 = Linear attenuation (default). 1 = 1/x attenuation. 2 = 1/(x^2) attenuation. 3 = No attenuation (same brightness at any distance). 4 = 'local minlight' - No attenuation and like minlight, it won't raise the lighting above it's light value. Unlike minlight, it will only affect surfaces within line of sight of the entity. 5 = 1/(x^2) attenuation, but slightly more attenuated and without the extra bright effect that 'delay 2' has near the source"  =
+	[
+		0 : "Linear falloff (Default)"
+		1 : "Inverse distance falloff"
+		2 : "Inverse distance squared"
+		3 : "No falloff"
+		4 : "Local minlight"
+		5 : "Inverse distance 2"
+	]
+	mangle(string) : "Spotlight direction" :  : "Turns the light into a spotlight and specifies the direction of light using yaw(x), pitch(y) and roll(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees and pitch specifies the angle from 90 (straight up) to -90 (straight down). Roll has no effect, so use any value (e.g. 0). Often easier than the 'target' method"
+	angle(integer) : "Spotlight cone angle" :  : "Specifies the angle in degrees for a spotlight cone. Default 40"
+	style(choices) : "Appearance" =
+	[
+		0 : "Normal"
+		10: "Fluorescent flicker"
+		2 : "Slow, strong pulse"
+		11: "Slow pulse, noblack"
+		5 : "Gentle pulse"
+		1 : "Flicker A"
+		6 : "Flicker B"
+		3 : "Candle A"
+		7 : "Candle B"
+		8 : "Candle C"
+		4 : "Fast strobe"
+		9 : "Slow strobe"
+	]
+	_softangle(integer) : "Spotlight soft angle" : 0 : "Specifies the angle in degrees for an inner spotlight cone (must be less than the 'angle' cone. Creates a softer transition between the full brightness of the inner cone to the edge of the outer cone. Default 0 (disabled)"
+	_anglescale(integer) : "Light angle scale" : 0.5 : "Sets a scaling factor for how much influence the angle of incidence of light on a surface has on the brightness of the surface. n must be between 0.0 and 1.0. Smaller values mean less attenuation, with zero meaning that angle of incidence has no effect at all on the brightness. Default 0.5"
+	_dirtscale(integer) : "Dirt scale (override)" :  : "Override the global '_dirtscale' or '_dirtgain' settings to change how this light is affected by dirtmapping (ambient occlusion). See descriptions of these keys in the worldspawn section"
+	_dirt(integer) : "Dirt map (override)" :  : "Overrides the worldspawn setting of '_dirt' for this particular light. -1 to disable dirtmapping (ambient occlusion) for this light, making it illuminate the dirtmapping shadows. 1 to enable ambient occlusion for this light. Default is to defer to the worldspawn setting"
+	_deviance(integer) : "Deviance" :  : "Split up the light into a sphere of randomly positioned lights within radius 'n' (in world units). Useful to give shadows a wider penumbra. '_samples' specifies the number of lights in the sphere. The 'light' value is automatically scaled down for most lighting formulas (except linear and non-additive minlight) to attempt to keep the brightness equal. Default is 0, do not split up lights"
+	_samples(integer) : "No. of Deviance lights" :  : "Number of lights to use for '_deviance'. Default 16 (only used if '_deviance' is set)"
+	_surface(string) : "Surface light texture name" :  : "Makes surfaces with the given texture name emit light, by using this light as a template which is copied across those surfaces. Lights are spaced about 128 units (though possibly closer due to bsp splitting) apart and positioned 2 units above the surfaces"
+	_surface_offset(integer) : "Surface light offset" :  : "Controls the offset lights are placed above surfaces for '_surface'. Default 2"
+	_project_texture(string) : "Name of texture being projected" :  : "Specifies that a light should project this texture. The texture must be used in the map somewhere"
+	_project_mangle(string) : "Angle of projected texture" :  : "Specifies the yaw/pitch/roll angles for a texture projection (overriding mangle)"
+	_project_fov(integer) : "fov of projected texture" :  : "Specifies the fov angle for a texture projection. Default 90"
+	_bouncestyled(integer) : "Bounce styled light?" :  : "Set this to '1' to enable this styled light to bounce if you are using bounce lighting in your map"
+]
+
+@PointClass size(-8 -8 -8, 8 8 8) flags(Light) base(Targetname, Target, Light) iconsprite("sprites/light.spr") = 
+	light : "Invisible lightsource"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -8, 8 8 8) flags(Light) base(Targetname, Light) iconsprite("sprites/light.spr") = 
+	light_fluoro : "Fluorescent light"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -8, 8 8 8) flags(Light) base(Targetname, Light) iconsprite("sprites/light.spr") = 
+	light_fluorospark : "Sparking fluorescent light"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -8, 8 8 8) flags(Light) base(Targetname, Light) sprite("progs/s_light.spr") = 
+	light_globe : "Globe light" []
+@PointClass size(-10 -10 -12, 12 12 18) offset(0 0 12) base(Targetname, Light) studio("progs/flame2.mdl") sequence(1) = 
+	light_flame_large_yellow : "Large yellow flame" []
+@PointClass size(-10 -10 -12, 12 12 18) offset(0 0 12) base(Targetname, Light) studio("progs/flame2.mdl") sequence(0) = 
+	light_flame_small_yellow : "Small yellow flame" 
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-10 -10 -12, 12 12 18) offset(0 0 12) base(Targetname, Light) studio("progs/flame2.mdl") sequence(0) = 
+	light_flame_small_white : "Small white flame" 
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-10 -10 -20, 10 10 20) offset(0 0 20) base(Targetname, Light) studio("progs/flame.mdl") = 
+	light_torch_small_walltorch : "Small walltorch" []
+
+//
+// misc
+//
+
+@PointClass base(Appearflags) = air_bubbles : "Air bubbles" []
+@PointClass base(Appearflags, Targetname) =
+	event_lightning : "Chthon's lightning" []
+@PointClass base(Appearflags) = misc_fireball : "Small fireball"
+	[ speed(integer) : "Speed" : 40 ]
+
+//									//
+//									//
+// NEW ERICW TOOLS POINT ENTITIES	//
+//									//
+//									//
+
+@PointClass size(-8 -8 -8, 8 8 8) color(200 200 0) = misc_external_map : "External map prefab. each 'misc_external_map' imports brushes from an external .map file, applies rotations specified by the '_external_map_angles' key, then translates them to the 'origin' key of the 'misc_external_map' entity. Finally, the classname of the 'misc_external_map' is switched to the one provided by the mapper in the '_external_map_classname' key. (The 'origin' key is also cleared to '0 0 0' before saving the .bsp). The external .map file should consist of worldspawn brushes only, although you can use func_group for editing convenience. Brush entities are merged with the worldspawn brushes during import. All worldspawn keys, and any point entities are ignored. Currently, this means that the 'wad' key is not handled, so you need to add any texture wads required by the external .map file to your main map. Note that you can set other entity keys on the 'misc_external_map' to configure the final entity type. e.g. if you set '_external_map_classname' to 'func_door', you can also set a 'targetname' key on the 'misc_external_map', or any other keys for 'func_door'"
+[ 
+	_external_map(string) : "Path" :  :"ABSOLUTE path to external .map file. For example 'c:\quake\myprefab.map'"
+	_external_map_classname(string) : "Class name" :  :"What entity you want the external map to turn in to. You can use internal qbsp entity types such as 'func_detail', or a regular bmodel classname like 'func_wall' or 'func_door'"
+	_external_map_angles(string) : "Angle" :  :"Rotation for the prefab, 'pitch yaw roll' format. Negative pitch is down"
+	_external_map_angle(integer) : "Short angle" :  :"Short version of '_external_map_angles' for when you want to specify just a yaw rotation"
+]
+
+//										//
+//										//
+// END NEW ERICW TOOLS POINT ENTITIES	//
+//										//
+//										//
+
+@PointClass studio("maps/b_explob.bsp") = misc_explobox : "Large nuclear container" []
+@PointClass studio("maps/b_exbox2.bsp") = misc_explobox2 : "Small nuclear container" []
+@PointClass base(Targetname) = trap_spikeshooter : "Triggered shooter" 
+[
+	spawnflags(Flags) = 
+	[
+		1 : "Superspike" : 0
+		2 : "Laser" : 0
+	]
+]
+@PointClass base(trap_spikeshooter) = trap_shooter : "Continuous shooter" []
+
+// 
+// ambient sounds
+//
+
+@PointClass = ambient_drip : "Dripping sound" []
+@PointClass = ambient_drone : "Engine/machinery sound" []
+@PointClass = ambient_comp_hum : "Computer background sounds" []
+@PointClass = ambient_flouro_buzz : "Fluorescent buzzing sound" []
+@PointClass = ambient_light_buzz : "Buzzing sound from light" []
+@PointClass = ambient_suck_wind : "Wind sound" []
+@PointClass = ambient_swamp1 : "Frogs croaking" []
+@PointClass = ambient_swamp2 : "Frogs croaking B" []
+@PointClass = ambient_thunder : "Thunder sound" []
+
+// 
+// moving things
+//
+
+@baseclass base(Appearflags, Targetname, Target, ModelLight) = Door
+[
+	speed(integer) : "Speed" : 100
+	sounds(choices) : "Sound" : 0 = 
+	[
+		1: "Stone"
+		2: "Machine"
+		3: "Stone Chain"
+		4: "Screechy Metal"
+	]
+	wait(choices) : "Delay before close" : 4 = 
+	[
+		-1 : "Stays open"
+	]
+	lip(integer) : "Lip" : 8
+	dmg(integer) : "Damage inflicted when blocked" : 0
+	message(string) : "Message if triggered"
+	health(integer) : "Health (shoot open)" : 0
+]
+
+@SolidClass base(Door) = func_door : "Basic door" 
+[
+	spawnflags(flags) =
+	[
+		1 : "Starts Open" : 0
+		4 : "Don't link" : 0
+		8 : "Gold Key required" : 0
+        16: "Silver Key required" : 0
+        32: "Toggle" : 0
+	]
+]
+
+@SolidClass base(Appearflags, Targetname, ModelLight) = func_door_secret : "Triggered door" 
+[
+	t_width(integer) : "First move lenght"
+	t_length(integer) : "Second move lenght"
+	dmg(integer) : "Damage when blocked" : 2
+	wait(choices) : "Time before close" : 2 =
+	[
+		-1 : "Stay open"
+	]
+	sounds(choices) : "Sounds" : 3 =
+	[
+		1: "Medieval"
+		2: "Metal"
+		3: "Base"
+	]
+	spawnflags(flags) = 
+	[
+		1 : "Open once only" : 0
+		2 : "Moves left first" : 0
+		4 : "Moves down first" : 0
+		8 : "Not shootable" : 0
+           16 : "Always shootable" : 0
+	]
+]
+
+@SolidClass base(Targetname, Appearflags, ModelLight) = func_wall : "Wall" []
+
+//									//
+//									//
+// NEW ERICW TOOLS BRUSH ENTITIES	//
+//									//
+//									//
+
+
+@SolidClass color(128 128 230)base(ModelLight) = func_detail : "Detail brush. Ignored by vis so can speed up compile times consideratbly. Also allows you to set new compiler lighting options on brushes. DOES NOT SEAL MAPS FROM VOID" []
+
+@SolidClass color(128 128 230)base(ModelLight) = func_detail_illusionary : "func_detail variant with no collision (players / monsters / gunfire) and doesn't split world faces. Doesn't cast shadows unless enabled with _shadow 1. Useful for hanging vines. Still creates BSP leafs." []
+
+@SolidClass color(128 128 230)base(ModelLight) = func_detail_wall : "func_detail variant that doesn't split world faces. Useful for when you want a decoration touching a floor or wall to not split the floor - wall faces (you'll get some overdraw instead.) If it completely covers up a world face, that face will get clipped away, so it's not suitable for fence textures; see func_detail_fence instead" []
+
+@SolidClass color(128 128 230)base(ModelLight) = func_detail_fence : "Similar to func_detail_wall except it's suitable for fence textures, never clips away world faces. Useful for fences, grates, etc., that are solid and block gunfire" []
+
+@SolidClass base(ModelLight) = func_group : "Brush group. Is treated by qbsp as world brushes but allows you to add light shading settings. _dirt and _shadow currently only accept -1 as a valid setting for func_group" []
+
+//											//
+//											//
+// END OF NEW ERICW TOOLS BRUSH ENTITIES	//
+//											//
+//											//
+
+@SolidClass = func_illusionary : "Solids that can be walked through" []
+
+@SolidClass base(Targetname, ModelLight) = func_button : "Button" 
+[
+	speed(integer) : "Speed" : 40
+	lip(integer) : "Lip" : 4
+	target(target_source) : "Targetted object"
+	health(integer) : "Health (shootable if > 0)"
+	sounds(choices) : "Sounds" = 
+	[
+		0 : "Steam metal"
+		1 : "Wooden clunk"
+		2 : "Metallic clink"
+		3 : "In-out"
+	]
+	wait(integer) : "Delay before reset" : 1
+	delay(string) : "Delay before trigger"
+	message(string) : "Message" 
+]
+
+@SolidClass base(Targetname, ModelLight) = func_train : "Moving platform" 
+[
+	sounds(choices) : "Sound" : 1 =
+	[
+		0: "None"
+		1: "Ratchet Metal"
+	]
+	speed(integer) : "Speed (units per second)" : 64
+	target(target_source) : "First stop target"
+	dmg(integer) : "Damage on crush" : 0
+]
+
+@PointClass base(Targetname) size(16 16 16) = 
+	path_corner : "Moving platform stop"
+[
+	target(target_source) : "Next stop target"
+	wait(integer) : "Wait" : 0
+]
+
+@SolidClass base(Targetname, ModelLight) = func_plat : "Elevator" 
+[	
+	spawnflags(Flags) =
+	[
+		1 : "Low trigger" : 0
+	]
+	speed(integer) : "Speed" : 150
+	height(integer) : "Travel altitude (can be negative)" : 0
+	sounds(choices) : "Sound group" : 1 =
+	[
+		0: "None"
+		1: "Base fast"
+		2: "Chain Slow"
+	]
+]	
+
+@SolidClass base(ModelLight) = func_episodegate : "Episode Gate"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Episode 1" : 1
+		2 : "Episode 2" : 0
+		4 : "Episode 3" : 0
+		8 : "Episode 4" : 0
+	]
+]
+
+@SolidClass base(ModelLight) = func_bossgate : "Boss gate" []
+
+//
+// triggers
+//
+
+@baseclass base(Target, Targetname) = Trigger
+[
+	killtarget(target_source) : "Kill target"
+	sounds(choices) : "Sound style" : 0 =
+	[
+		0 : "None"
+		1 : "Secret sound"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Set message to text string"
+	]
+	delay(integer) : "Delay before trigger" : 0
+	message(string) : "Message (set sound too!)"
+]
+
+@SolidClass= trigger_changelevel : "Trigger: Change level"
+[
+	map(string) : "New map name"
+	target(target_destination) : "Target"
+	spawnflags(flags) =
+	[
+		1: "No Intermission" : 0
+	]
+]
+
+@SolidClass base(Trigger) = trigger_once : "Trigger: Activate once"
+[
+	health(integer) : "Health"
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+]
+@SolidClass base(Trigger) = trigger_multiple : "Trigger: Activate multiple" 
+[
+	wait(choices) : "Wait before reset" : 4 =
+		[
+		-1 : "Never reset"
+		]
+	health(integer) : "Health"
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+]
+@SolidClass base(Trigger) = trigger_onlyregistered : "Trigger: Registered only" 
+[
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+]
+@SolidClass base(Trigger) = trigger_secret : "Trigger: Secret" 
+[
+	sounds(choices) : "Sound style" : 1 =
+	[
+		0 : "None"
+		1 : "Secret sound"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Set message to text string"
+	]
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+]
+
+@SolidClass base(Target, Targetname) = trigger_teleport : "Trigger teleport" 
+[
+	spawnflags(Flags) =
+	[
+		1 : "Player only" : 0
+		2 : "Silent" : 0
+	]
+]
+
+// need updates:
+
+@SolidClass = trigger_setskill : "Trigger set skill" 
+[
+	message(choices) : "Skill to change to" : 1 =
+	[
+        0 : "Easy"
+        1 : "Medium"
+        2 : "Hard"
+        3 : "Nightmare!"
+	]
+]
+@PointClass base(Trigger) = trigger_relay : "Trigger relay"
+[
+]
+@SolidClass base(Targetname) = trigger_monsterjump : "Trigger monster jump" 
+[
+	speed(integer) : "Jump Speed" : 200
+	height(integer) : "Jump Height" : 200
+]
+@PointClass base(Target, Targetname) = trigger_counter : "Trigger counter" 
+[
+	spawnflags(flags) = [ 1: "No Message" : 0 ]
+	count(integer) : "Count before activation" : 2
+]
+@SolidClass base(Targetname) = trigger_push : "Trigger player push"
+[
+	spawnflags(flags) = [ 1: "Once Only" : 0 ]
+	speed(integer) : "Speed of push" : 1000
+]
+@SolidClass  base(Targetname) = trigger_hurt : "Trigger player hurt" 
+[
+	dmg(integer) : "Damage" : 5
+	wait(integer) : "Delay before reset"
+	message(string) : "Message"
+]
+
+//////////////////////////////////////////////////
+///	EXTRAS_R5
+//////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+/// func_water - Turns a brush into a liquid-mimic that can move up & down.
+
+@SolidClass = func_water : "Water"
+[
+	watertype(choices) : "Water Type" : -3 =
+	[
+		-3 : "Water"
+		-4 : "Slime"
+		-5 : "Lava"
+	]
+	height(integer) : "Height" : 0 : "Number of units to move (negatve is down)"
+	speed(integer) : "Speed" : 0 : "Speed used when it moves to 'height' position."
+	speed2(integer) : "Speed2" : : "Speed used when moving back to original position (pos1). Same as 'speed' if not defined."
+	wait(integer) : "Wait" : 0 : "Wait before returning to original position -1 = stay at pos2 until triggered again."
+	noise(string) : "Noise" : : "Path to the WAV played when the water moves from pos1 to pos2 (should be looped)."
+	noise1(string) : "Noise1" : : "Path to the WAV played when the water moves back to pos1 from pos2 (should be looped)."
+	noise2(string) : "Noise2" : : "Path to the WAV played when the water stops moving."
+	mangle(angle) : "Direction" : : "Direction & speed of current"
+	drag(integer) : "Drag" : 0 : "Drag on player when water is moving (0 is no drag, 100 if full drag)"
+	cshift(color1) : "Color shift" : : "Custom RGB+I colour shift. Automatically set by watertype if ommited."
+	targetname(target_source) : "Name" : : "Can be triggered (just keeps bobbing between pos1 & pos2 otherwise)."
+	target(target_destination) : "Target" : : "Activate this entity after moving (top and bottom)"
+
+	spawnflags(Flags) =
+	[
+		16 : "Ease Undercurrent" : 0 : "Normally, the deeper you are, the more you are affected by current. This reverses that, making current is stronger at the surface."
+	]
+]
+///	Notes:
+///	func_water is an easy way to make rising/falling water, 
+///	but func_watertrain is much more flexible (it can do anything func_water can do, and then some, but it's more work to setup)
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/// func_watertrain - Turns a brush into a liquid-mimic that travels like a func_train_ext. 
+///	It can target an existing func_train_ext to become a child of that train, or link directly with a chain of train_ext_waypoint entities.
+
+@SolidClass = func_watertrain : "Water Train"
+[
+	watertype(choices) : "Water Type" : -3 =
+	[
+		-3 : "Water"
+		-4 : "Slime"
+		-5 : "Lava"
+	]
+	height(integer) : "Height" : 0 : "Number of units to move (negatve is down)"
+	speed(integer) : "Speed" : 0 : "Speed of the watertrain (can be overridden by waypoints)"
+	wait(integer) : "Wait" : 0 : "Wait before returning to original position -1 = stay at pos2 until triggered again."
+	noise(string) : "Noise" : : "Path to the WAV played when the water moves (can be overridden by waypoints)"
+	noise1(string) : "Noise1" : : "Path to the WAV played when the water stops moving (can be overridden by waypoints)"
+	noise2(string) : "Noise4" : : "Noise to make when changing directions (DON'T USE A LOOPED WAV!!)"
+	noise5(string) : "Noise5" : : "Noise to make when trying to go wrong way at end of path (uses 'noise1' if not set)"
+	cshift(color1) : "Color shift" : : "Custom RGB+I colour shift. Automatically set by watertype if ommited."
+	mangle(angle) : "Direction" : : "Direction & speed of current (if any)"
+	drag(integer) : "Drag" : 0 : "Drag on player when water is moving (0 is no drag, 100 if full drag)"
+	target(target_destination) : "Target" : : "Activate this entity after moving (top and bottom)"
+	event(target_destination) : "Event" : : "Start at this waypoint (since you MUST use the first waypoint as the 'target' on a non-looped path)"
+	targetname(target_source) : "Name" : : "Can be triggered (just keeps bobbing between pos1 & pos2 otherwise)."
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start the train immediately, even if targeted."
+		2 : "Allow Pause" : 0 : "Re-Triggering will pause/resume the train at any point along it's path."
+		4 : "Allow Changedir" : 0 : "Lets a changedir trigger reverse the train's direction at any time"
+		8 : "Auto-Reverse" : 0 : "Train automatically reverses direction when it hits the last/first waypoint (only makes sense if last waypoint has no target)."
+		16 : "Ease Undercurrent" : 0 : "Normally, the deeper you are, the more you are affected by current. This reverses that, making current is stronger at the surface."
+		32 : "Start Reverse" : 0 :	"Start in reverse"
+	]
+]
+///	Notes:
+///	If a func_watertrain's target is a func_train_ext, the parent train controls all, movement and overrides train-specific spawnflags.
+///	func_watertrain uses a frame-based move that may lag/overshoot the engine controlled parent train when the game is running slow. 
+///	It will never go out-of-sync with the parent for more than a couple frames, 
+///	but you should be aware of this when mapping (extend hidden water edges into solid geometry, and allow for some play in all directions).
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// func_train_ext - can have certain "children" objects that tag along, can change direction, or stop/resume at any time.
+///	These use "smart" waypoints and trigger relays that actually control most aspects of the train, but a simple train can still be setup by ignoring extra options. 
+///	The last waypoint does not need a target. The train will either auto-reverse (if set) or wait for manual reverse/move triggers.
+
+@SolidClass = func_train_ext : "Train (Extra)"
+[
+	speed(integer) : "Speed" : 0 : "Speed of the train (can be overridden by waypoints)"
+	dmg(integer) : "Damage" : : "Amonut of damage to inflict when blocked"
+	noise(string) : "Noise" : : "Start/travel noise (can be overridden by waypoints)"
+	noise1(string) : "Noise1" : : "Stop noise (can be overridden by waypoints)"
+	noise2(string) : "Noise4" : : "Noise to make when changing directions (DON'T USE A LOOPED WAV!!)"
+	noise5(string) : "Noise5" : : "Noise to make when trying to go wrong way at end of path (uses 'noise1' if not set)"
+	target(target_destination) : "Target" : : "First waypoint or start position"
+	event(target_destination) : "Event" : : "Start at this waypoint (since you MUST use the first waypoint as the 'target' on a non-looped path)"
+	targetname(target_source) : "Name" : : "Can be triggered and/or targeted by child objects"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start the train immediately, even if targeted."
+		2 : "Allow Pause" : 0 : "Re-Triggering will pause/resume the train at any point along it's path."
+		4 : "Allow Changedir" : 0 : "Lets a changedir trigger reverse the train's direction at any time"
+		8 : "Auto-Reverse" : 0 : "Train automatically reverses direction when it hits the last/first waypoint (only makes sense if last waypoint has no target). It will NOT auto-reverse on spawn if facing the wrong way (which is possible and valid)."
+		16 : "Block Reverse" : 0 : "Reverses train direction when blocked (after inflicting damage) Don't use this on trains with non-looped paths without some way of getting it back to the forward direction (AUTOREVERSE or ALLOWCHANGEDIR). Else it'll get stuck when it reaches the start point again."
+		32 : "Start Reverse" : 0 :	"Start in reverse"
+	]
+]
+///	Notes:
+///	A train without a targetname will start immediately (doesn't need "START_ON" to be set) but it can not be stopped, and can not have children objects.
+///	If your waypoints are not looped (i.e. the last point doesn't target the first), the train MUST target the first waypoint. 
+///	Use the "event" target to have the train spanw at a different point along it's path ("event" is ignored if it's not on the same path.).
+///	If you have a train on a non looped waypoint path, and AUTOREVERSE is not set, the train will stop at the last waypoint. 
+///	If ALLOWCHANGEDIR is set, and the train gets a t_changerdir trigger, you will then be able to re-trigger movement in the reverse direction. 
+///	Otherwise re-triggering will just produce the wrong-way sound.
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///	train_ext_waypoint - func_train_ext is "dumb" on it's own these entities really control the train. 
+///	These are used by func_watertrain as well.
+
+@PointClass = train_ext_waypoint : "Train (Extra) Waypoint"
+[
+	speed(integer) : "Speed" : : "Forward speed from this waypoint to the next (-1 is warp to next waypoint)"
+	wait(integer) : "Wait" : 0 : "Time to pause at this waypoint when moving forward (-1 is wait for re-trigger, 0 is no pause)"
+	noise(string) : "Noise" : : "Override train's start/travel noise from this waypoint to the next when moving forward"
+	noise1(string) : "Noise1" : : "Override train's stop noise at this waypoint when moving forward (or between this waypoint and the next)"
+	event(target_destination) : "Event" : : "Targetname of entity to fire when the train hits this point when moving forward"
+	speed2(integer) : "Reverse Speed" : : "Reverse speed from this waypoint to the previous in (-1 is warp to previous)"
+	wait2(integer) : "Reverse Wait" : 0 : "Time to pause at this waypoint when moving in reverse (-1 is wait for re-trigger, 0 is no pause)"
+	noise2(string) : "Noise2" : : "Override train's start/travel noise from this waypoint to the previous when moving in reverse"
+	noise3(string) : "Noise3" : : "Override train's stop noise at this waypoint when moving in reverse (or between this waypoint to the previous)"
+	event2(target_destination) : "Reverse Event" : : "Targetname of entity to fire when the train hits this point when moving in reverse"
+	targetname(target_source) : "Name" : : "This waypoint's name"
+	target(target_destination) : "Target" : : "Name of the next waypoint"
+]
+///	Notes:
+///	Always use unique sets of train_ext_waypoint for func_train_ext and func_watertrain. 
+///	The waypoints are linked with one another and can only work with one train at a time.
+///	Speed propogates from waypoint to waypoint (if it's not set, the last speed is used). 
+///	The first waypoint can also simply use the train's "speed" if set.
+///	If the reverse speed/event are not set, the forward direction speed/event are used. 
+///	Reverse sounds default to the train's sounds if they are not set. 
+///	(This only matters for trains that can go in reverse of course).
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///func_button_ext - Simlilar to func_button, but can be disabled/enabled via triggers and allows for both touch and weapon hits to activate if specified.
+
+@SolidClass = func_button_ext : "Button (Extra)"
+[
+	angle(angle) : "Angle" : : "Move direction"
+	lip(integer) : "Lip" : 4 : "Override the default 4 pixel lip remaining at end of move"
+	speed(integer) : "Speed" : 40 : "Override the default 40 speed"
+	wait(integer) : "Wait" : 1 : "Override the default 1 second wait (-1 = never return)"
+	health(integer) : "Health" : : "If set, the button must be killed instead of touched"
+	noise(string) : "Push Noise" : : "Path to push noise"
+	noise1(string) : "Return Noise" : : "Path to return noise"
+	noise2(string) : "Disabled Noise" : : "Path to disabled noise"
+	message(string) : "Message" : : "Print this message if used when disabled"
+	target(target_destination) : "Target" : : "Activate this entity when used"
+	targetname(target_source) : "Name" : : "Disable/enable buttons"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start Off" : 0 : "Spawns in disabled state (must be triggered to be used)"
+		2 : "Always Touch" : 0 : "Touch to activate, even if health>0"
+	]
+]
+///	Notes:
+///	When a another trigger/button "uses" these, they will toggle between enabled and disabled mode - you can not press a disabled button (it just plays it's "disabled" sound). 
+///	They can be disabled or enabled at any time, even while moving, but they will complete the move and return to the "up" position before enabling/disabling themselves in that case.
+///	They can not be fired again until they're "done" - they must be fully reset and enabled to be fired. 
+///	The "active" texture frame (if it has texture frames) will only be displayed when the button is enabled, and fully in the "up" position (i.e. ready to be used).
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///	func_switch - A two-state toggle that can use an alternate set of brushes as it's toggled state. 
+///	You can "attach" a func_switch to a func_train_ext (switch goes where the train goes) but due to this, 
+///	these don't move like buttons and are always passthrough to avoid blocking issues (therefore, they can not be shot to activate).
+
+@SolidClass = func_switch : "Switch"
+[
+	wait(integer) : "Wait" : -1 : "Returns to original state after 'wait' seconds (default is -1, wait for re-trigger)"
+	angle(angle) : "Angle" : : "Angle player must be facing in order to activate by touch"
+	noise(string) : "Noise" : : "Path to push noise"
+	noise1(string) : "Noise1" : : "Path to optional reset noise ('noise' is used if ommited, use 'misc/null.wav' for silent return)"
+	target(target_destination) : "Target" : : "Activate this entity when used"
+	event(target_destination) : "Event" : : "Parent train (ya, 'event' is kind of a dumb key name for this...)"
+	targetname(target_source) : "Name" : : "Toggle switch remotely, or just for func_bspframe's sake"
+]
+///	Notes:
+///	A func_bspframe entity that targets a func_switch is used as the alternate model frame.
+///	To avoid big headaches with child movement on trains, these are always pass-through objects - make'em small or flat. 
+///	This also means you can't shoot'em, but a normal trigger with health can trigger a func_switch if you need that effect (won't work on a moving train of course)
+///	Although an alternate model can be used, the texture frame is also switched when toggled so simple animated switches can be made without the need for a func_bspframe.
+
+
+//////////////////////////////////////
+///	func_emitter | func_emitter_volume
+///	func_emitter emits particles from a fixed point while func_emitter_volume emits particles from a random spot within a brush volume.
+
+@SolidClass = func_emitter : "Emitter Volume"
+[
+	wait(float) : "Wait" : 0.1 : "Delay between particle emissions (-1 is a single burst, then pause)"
+	wait2(float) : "Wait2" : : "If set, delay is a random number between 'wait' and 'wait2' (unless 'wait' is -1)"
+	ppe(integer) : "Particles Per Emission" : 1 : "Particles per emission (default is 1)."
+	h1(integer) : "Horizontal Angle" : : "Toss particles along this horizontal (yaw) angle (1 - 360)"
+	h2(integer) : "Horizontal Angle 2" : : "If set, tossess particles along a random horizontal angle between 'h1' and 'h2'"
+	v1(integer) : "Vertical Angle" : : "Toss particles along this vertical (pitch) angle (1 - 360) 270 is up, 90 is down."
+	v2(integer) : "Vertical Angle 2" : : "If set, tossess particles along a random vertical angle between 'v1' and 'v2'"
+	avelocity(vector) : "Angle Velocity" : : "X Y Z emitter angle velocity (IMPORTANT: rotates after each emittion, this is NOT time based!)"
+	noise(string) : "Noise" : : "Noise the emitter makes when spawning a new particle (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)"
+	target(target_destination) : "Target" : : "Attach the emitter to a func_train_ext"
+	targetname(target_source) : "Name" : : "Can be triggered on/off"
+
+	style(choices) : "Movetype" : 10 =
+	[
+		10 : "MOVETYPE_BOUNCE"
+		6 : "MOVETYPE_TOSS"
+		5 : "MOVETYPE_FLY"
+		0 : "MOVETYPE_NONE"
+	]
+	speed(integer) : "Speed" : : "Speed of the particles"
+	speed2(integer) : "Speed2" : : "If set, speed is a random number between 'speed' and 'speed2'"
+	lspan(integer) : "Life Span" : 3 : "Life span of particles in seconds"
+	lspan2(integer) : "Life Span 2" : : "If set, life span is a random number between 'lspan' and 'lspan2'"
+	mdl(string) : "Model" : : "Path to the sprite or model file to use as particles"
+	frame(integer) : "Start Frame" : : "Start frame (model/sprite frame)"
+	nfrms(integer) : "Number Of Frames" : : "Number of animation frames"
+	frate(float) : "FPS" : 0.1 : "Override the default 10fps (0.1) animation rate"
+	gravity(float) : "Gravity" : 1 : "Alter gravity G = sv_gravity*self.gravity (NOTE: 0 or 1 is unaltered - use 0.001 for 'zero G' or better yet, set 'style' to MOVETYPE_FLY)"
+	dmg(integer) : "Damage" : : "Damage particles do when they hit something"
+	effects(choices) : "Effects" =
+	[
+		2 : "EF_MUZZLEFLASH"
+		8 : "EF_DIMLIGHT"
+		4 : "EF_BRIGHTLIGHT"
+		1 : "EF_BRIGHTFIELD"
+	]
+	noise1(string) : "Noise1" : : "Noise particles make when they hit something (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)"
+	noise2(string) : "Noise2" : : "Noise particles make when they die (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)"
+	message(string) : "Message" : : "Death message if player is killed by a particle"
+	weapon(choices) : "Damage Effect" =	
+	[
+		0 : "TE_SPIKE"
+		1 : "TE_SUPERSPIKE"
+		2 : "TE_GUNSHOT"
+		3 : "TE_EXPLOSION"
+		4 : "TE_TAREXPLOSION"
+		5 : "TE_LIGHTNING1"
+		6 : "TE_LIGHTNING2"
+		7 : "TE_WIZSPIKE"
+		8 : "TE_KNIGHTSPIKE"
+		9 : "TE_LIGHTNING3"
+		10 : "TE_LAVASPLASH"
+		11 : "TE_TELEPORT"
+	]
+	mdl2(string) : "Model2" : : "Path to the sprite or model to become when life span expires (optional - just remove if not set)"
+	nfrms2(integer) : "Number Of Frames 2" : : "Number of animation frames for 'death' animations"
+	frate2(integer) : "FPS2" : : "Override the default 10fps (0.1) animation rate for the 'death' model"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Emitters with targetnames will wait for a trigger event unless this is set"
+		2 : "Emit Solid" : 0 : "Particles are solid, block players, and collide with each other"
+		4 : "Remove On Touch" : 0 : "Remove particles (or do death animation) on touch"
+		8 : "Die After Animation" : 0 : "Remove particles (or do death animation) after reaching the last animation frame (loop animation otherwise)"
+		16 : "Spin Particles" : 0 : "Gives particles semi-random angle velocity (doesn't affect parallel sprites)"
+		32 : "Stagger Frames" : 0 : "Each new particle begins with the next sequential animation frame (NOTE: DIEAFTERANIM will still kill it after the absolute 'last' frame)"
+		64 : "Kill In Func_Water" : 0 : "Remove particles (or do death animation) when in contact with func_water"
+		128 : "Use Effectors" : 0 : "Partciles generated by this emitter are affected by effector triggers"
+		256 : "Start Stopped" : 0 : "Emitter won't spin until it's used by a trigger_go/reverse/forward (only affects emitters with avelocity)"
+	]
+]
+
+@PointClass = func_emitter : "Emitter"
+[
+	wait(float) : "Wait" : 0.1 : "Delay between particle emissions (-1 is a single burst, then pause)"
+	wait2(float) : "Wait2" : : "If set, delay is a random number between 'wait' and 'wait2' (unless 'wait' is -1)"
+	ppe(integer) : "Particles Per Emission" : 1 : "Particles per emission (default is 1)."
+	h1(integer) : "Horizontal Angle" : : "Toss particles along this horizontal (yaw) angle (1 - 360)"
+	h2(integer) : "Horizontal Angle 2" : : "If set, tossess particles along a random horizontal angle between 'h1' and 'h2'"
+	v1(integer) : "Vertical Angle" : : "Toss particles along this vertical (pitch) angle (1 - 360) 270 is up, 90 is down."
+	v2(integer) : "Vertical Angle 2" : : "If set, tossess particles along a random vertical angle between 'v1' and 'v2'"
+	avelocity(vector) : "Angle Velocity" : : "X Y Z emitter angle velocity (IMPORTANT: rotates after each emittion, this is NOT time based!)"
+	noise(string) : "Noise" : : "Noise the emitter makes when spawning a new particle (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)"
+	target(target_destination) : "Target" : : "Attach the emitter to a func_train_ext"
+	targetname(target_source) : "Name" : : "Can be triggered on/off"
+
+	style(choices) : "Movetype" : 10 =
+	[
+		10 : "MOVETYPE_BOUNCE"
+		6 : "MOVETYPE_TOSS"
+		5 : "MOVETYPE_FLY"
+		0 : "MOVETYPE_NONE"
+	]
+	speed(integer) : "Speed" : : "Speed of the particles"
+	speed2(integer) : "Speed2" : : "If set, speed is a random number between 'speed' and 'speed2'"
+	lspan(integer) : "Life Span" : 3 : "Life span of particles in seconds"
+	lspan2(integer) : "Life Span 2" : : "If set, life span is a random number between 'lspan' and 'lspan2'"
+	mdl(string) : "Model" : : "Path to the sprite or model file to use as particles"
+	frame(integer) : "Start Frame" : : "Start frame (model/sprite frame)"
+	nfrms(integer) : "Number Of Frames" : : "Number of animation frames"
+	frate(float) : "FPS" : 0.1 : "Override the default 10fps (0.1) animation rate"
+	gravity(float) : "Gravity" : 1 : "Alter gravity G = sv_gravity*self.gravity (NOTE: 0 or 1 is unaltered - use 0.001 for 'zero G' or better yet, set 'style' to MOVETYPE_FLY)"
+	dmg(integer) : "Damage" : : "Damage particles do when they hit something"
+	effects(choices) : "Effects" =
+	[
+		2 : "EF_MUZZLEFLASH"
+		8 : "EF_DIMLIGHT"
+		4 : "EF_BRIGHTLIGHT"
+		1 : "EF_BRIGHTFIELD"
+	]
+	noise1(string) : "Noise1" : : "Noise particles make when they hit something (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)"
+	noise2(string) : "Noise2" : : "Noise particles make when they die (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)"
+	message(string) : "Message" : : "Death message if player is killed by a particle"
+	weapon(choices) : "Damage Effect" =	
+	[
+		0 : "TE_SPIKE"
+		1 : "TE_SUPERSPIKE"
+		2 : "TE_GUNSHOT"
+		3 : "TE_EXPLOSION"
+		4 : "TE_TAREXPLOSION"
+		5 : "TE_LIGHTNING1"
+		6 : "TE_LIGHTNING2"
+		7 : "TE_WIZSPIKE"
+		8 : "TE_KNIGHTSPIKE"
+		9 : "TE_LIGHTNING3"
+		10 : "TE_LAVASPLASH"
+		11 : "TE_TELEPORT"
+	]
+	mdl2(string) : "Model2" : : "Path to the sprite or model to become when life span expires (optional - just remove if not set)"
+	nfrms2(integer) : "Number Of Frames 2" : : "Number of animation frames for 'death' animations"
+	frate2(integer) : "FPS2" : : "Override the default 10fps (0.1) animation rate for the 'death' model"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Emitters with targetnames will wait for a trigger event unless this is set"
+		2 : "Emit Solid" : 0 : "Particles are solid, block players, and collide with each other"
+		4 : "Remove On Touch" : 0 : "Remove particles (or do death animation) on touch"
+		8 : "Die After Animation" : 0 : "Remove particles (or do death animation) after reaching the last animation frame (loop animation otherwise)"
+		16 : "Spin Particles" : 0 : "Gives particles semi-random angle velocity (doesn't affect parallel sprites)"
+		32 : "Stagger Frames" : 0 : "Each new particle begins with the next sequential animation frame (NOTE: DIEAFTERANIM will still kill it after the absolute 'last' frame)"
+		64 : "Kill In Func_Water" : 0 : "Remove particles (or do death animation) when in contact with func_water"
+		128 : "Use Effectors" : 0 : "Partciles generated by this emitter are affected by effector triggers"
+		256 : "Start Stopped" : 0 : "Emitter won't spin until it's used by a trigger_go/reverse/forward (only affects emitters with avelocity)"
+	]
+]
+
+
+//////////////////////////////////////////////////////
+///	t_effector_destroy - Kills particles that touch it
+
+@SolidClass = t_effector_destroy : "Effector Destroy"
+[
+	count(integer) : "Obliteration(%)" : 100 :"Override the default 100% obliteration (valid: 1-99 i.e 50 affects roughly 50% of the particles)"
+	targetname(target_source) : "Name" : : "Can be enabled/disabled"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start in enabled state even if targeted"
+	]
+]
+
+/////////////////////////////////////////////////////////
+///	t_effector_push - Pushes particles in a new direction
+
+@SolidClass = t_effector_push : "Effector Push"
+[
+	mangle(vector) : "X Y Z speed" : : "X Y Z speed"
+	cnt(integer) : "Velocity Attenuation(%)" : 0 : "Percentage of original particle velocity to diminish"
+	count(integer) : "Particles Affected(%)" : 100 :"Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)"
+	targetname(target_source) : "Name" : : "Can be enabled/disabled"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start in enabled state even if targeted"
+		16 : "Tangental" : 0 : "Particles turn to face new direction"
+	]
+]
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	t_effector_trubulence - Pushes particles at random speeds in all directions (can exlude certain axii)
+
+@SolidClass = t_effector_trubulence : "Effector Trubulence"
+[
+	speed(integer) : "Amount" : : "Max amount of turbulence"
+	cnt(integer) : "Velocity Attenuation(%)" : 0 : "Percentage of original particle velocity to diminish"
+	count(integer) : "Particles Affected(%)" : 100 :"Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)"
+	targetname(target_source) : "Name" : : "Can be enabled/disabled"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start in enabled state even if targeted"
+		2 : "Not X" : 0 : "Don't affect X direction"
+		4 : "Not Y" : 0 : "Don't affect Y direction"
+		8 : "Not Z" : 0 : "Don't affect Z direction"
+		16 : "Tangental" : 0 : "Particles turn to face new direction"
+	]
+]
+
+
+/////////////////////////////////////////////////
+///t_effector_gravity - Modifies particle gravity
+
+@SolidClass = t_effector_gravity : "Effector Gravity"
+[
+	gravity(float) : "Gravity" : : "Add this to current gravity value, or change to this value if 'ABSOLUTE' is set"
+	count(integer) : "Particles Affected(%)" : 100 :"Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)"
+	targetname(target_source) : "Name" : : "Can be enabled/disabled"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start in enabled state even if targeted"
+		2 : "Absolute" : 0 : "Particles use new gravity outright"
+	]
+]
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+///	t_effector_attract - Particles touching this trigger are attracted to it's centre. 
+///	Can also repel particles with negative strength. This works best with particles that have a low gravity setting or are MOVETYPE_FLY.
+
+@SolidClass = t_effector_attract : "Effector Attract"
+[
+	speed(integer) : "Strength" : 280 : "Strength of the attraction"
+	cnt(integer) : "Velocity Attenuation(%)" : 0 : "Percentage of original particle velocity to diminish"
+	count(integer) : "Particles Affected(%)" : 100 :"Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)"
+	targetname(target_source) : "Name" : : "Can be enabled/disabled"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start in enabled state even if targeted"
+		16 : "Tangental" : 0 : "Particles turn to face new direction"
+	]
+]
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	t_effector_friction - Applies friction to particles, slowing them down (negative values speed particles up)
+
+@SolidClass = t_effector_friction : "Effector Friction"
+[
+	speed(integer) : "Friction" : 0 : "Amount of Friction (max 100 = dead stop, negative values can go further though -200 etc.)"
+	count(integer) : "Particles Affected(%)" : 100 :"Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)"
+	targetname(target_source) : "Name" : : "Can be enabled/disabled"
+
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start in enabled state even if targeted"
+	]
+]
+
+//////////////////
+///	Relay Triggers
+
+@baseclass = RelayTriggers
+[
+	delay(float) : "Delay" : : "Delay before triggering"
+	target(target_destination) : "Target" : : "Must be a func_train_ext, func_watertrain, func_emitter or func_emitter_volume"
+	targetname(target_source) : "Name" : : "Must be triggered by another entity"
+]
+
+@PointClass base(RelayTriggers) = trigger_changedir : "Trigger Changedir" []
+
+
+@PointClass base(RelayTriggers) = trigger_forward : "Trigger Forward" []
+
+
+@PointClass base(RelayTriggers) = trigger_reverse : "Trigger Reverse" []
+
+
+@PointClass base(RelayTriggers) = trigger_stop : "Trigger Stop" []
+
+
+@PointClass base(RelayTriggers) = trigger_go : "Trigger Go" []
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	trigger_relay2 - Works just like the original trigger_relay, but allows you to fire two unique targets 
+///	(or the same target twice, useful for starting and stopping emitters at regular intervals).
+
+@PointClass = trigger_relay2 : "Trigger Relay 2"
+[
+	delay(integer) : "Delay" : : "Delay before triggering first target"
+	target(target_destination) : "Target" : : "Targetname of the first entity to activate"
+	message(string) : "Message" : : "Message to display when activating first target"
+	killtarget(target_destination) : "Killtarget" : : "Kill this entity after 'delay' time"
+	wait(integer) : "Delay2" : : "Delay before triggering second target"
+	event(target_destination) : "Target2" : : "Targetname of the second entity to activate"
+	message2(string) : "Message2" : : "Message to display when activating second target"
+	killtarget2(target_destination) : "Killtarget2" : : "Kill this entity after 'wait' time"
+	targetname(target_source) : "Name" : : "Must be triggered by another entity"
+]
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	trigger_chat - A little hack to print a "chat" message in a single player game from a non-existant source 
+///	(good for sending messages to the player from "HQ" or whatever). 
+///	These are always one-off triggers, removed after sending their message.
+
+@SolidClass = trigger_chat : "Trigger Chat"
+[
+	angle(integer) : "Angle" : : "Angle the player must be facing to trigger"
+	netname(string) : "Sender" : : "Name of the sender"
+	message(string) : "Message" : : "The chat message"
+	delay(integer) : "Delay" : : "Delay before activating target"
+	target(target_destination) : "Target" : : "Activate this ent after delay (setup a chat relay)"
+]
+
+
+///////////////////////////////////////////////////////////////////////////
+///	trigger_chat_relay - Like trigger_chat, but must be remotely triggered. 
+///	It can trigger another ent after delay time to easily string together a bunch of timed messages. 
+///	These are always one-off triggers, removed after sending their message.
+
+@PointClass = trigger_chat_relay : "Trigger Chat Relay"
+[
+	netname(string) : "Sender" : : "Name of the sender"
+	message(string) : "Message" : : "The chat message"
+	delay(integer) : "Delay" : : "Delay before activating target"
+	target(target_destination) : "Target" : : "Activate this ent after delay (setup a chat relay)"
+	targetname(target_source) : "Name" : : "This trigger's name"
+]
+
+
+///////////////////////////////////////////////////////////////////////////////////
+///	trigger_shake - Earthquake trigger - shakes players in it's radius when active. 
+///	Strength of tremor is greatest at the centre.
+
+@PointClass = trigger_shake : "Shake Trigger"
+[
+	dmg(integer) : "Strength" : 120 : "Strength at center (default is 120)"
+	wait(integer) : "Wait" : 1 : "Duration of shake (default is 1)"
+	count(integer) : "Radius" : 200 : "Affect radius (defalt is 200)"
+	noise(string) : "Noise" : : "Noise to play when starting to shake"
+	noise1(string) : "Noise1" : : "Noise to play when stopping"
+	targetname(target_source) : "Name" : : "Must be triggered"
+
+	spawnflags(Flags) =
+	[
+		1 : "View Only" : 0 : "Shakes the view, but player movement is not affected"
+	]
+]
+
+
+/////////////////////////////////////////////////////////////////////////////
+///trigger_enemy - Hack to get a monster's attention (for "scripted" events).
+
+@PointClass = trigger_enemy : "Trigger Enemy"
+[
+	target(target_destination) : "Target" : : "The monster(s) to anger"
+	targetname(target_source) : "Name" : : "Must be triggered"
+]
+///	Notes:
+///	If you're using Quiver for mapping, you'll likely need to add a "targetname" key to each monster type for this to work.
+///	Monsters will basically just turn and shoot at this ent until they get another enemy (i.e. they're shot by something else). They will shoot in the direction of this ent regardless if they can "see" it, or if it's blocked by the world, or by another monster. (Can be carefully setup to start in-fighting).
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+///	func_ladder - Creates an invisible trigger area that the player can "climb" vertically
+
+@SolidClass = func_ladder : "Ladder"
+[
+	angle(integer) : "Angle" : : "The direction the player must be facing in order to climb"
+	targetname(target_source) : "Name" : : "use as a killtarget to delete the ladder"
+]
+///	Notes:
+///	These work best when they are at least 8 units thick.
+///	Make sure the angle is set correctly. All movement revolves around the ladder's facing angle. (Remember: It's the angle the PLAYER must be facing to climb)
+///	The top of the func_ladder brush should be flush with the top of the ledge (if the ladder leads to a ledge). Ladders behave as if there's an 8 unit "step" at the top.
+///	It's a good idea to back these up with a solid brush or a clipping brush. Especially if using real geometry for the rungs. (i.e. to fill the gaps between the rungs).
+///	If you need a "two-way" ladder (like a ladder hanging from a fire-escape) use a clip brush in the middle, and two func_ladders on either end with opposite facing angles.
+///	Avoid situations where more than one func_ladder can be touched at the same time.
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	func_bspframe - A little hack to allow alternate bsp model "frames" for func_breakaway, func_explobsp and func_switch.
+@SolidClass = func_bspframe : "BSP Frame"
+[
+	target(target_destination) : "Target" : : "The owner object"
+]
+/// Notes:
+/// When used on solid objects (like func_explobsp) insure these won't stick into nearby players/monsters
+/// when the parent object switches frames. (i.e. make this object smaller than the parent, or create
+/// a clip area that encompases both object frames)
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	func_breakaway - This is a simple BSP model that goes away (or becomes it's alternate frame) when killed. 
+///	These can be used to mimic "gibbable" objects when combined with emitters, or on their own for small breakable panels.
+
+@SolidClass = func_breakaway : "Breakaway"
+[
+	health(integer) : "Health" : 20 : "Maximum health"
+	frags(integer) : "Texture Change Health" : : "Use alt texture when 'health' equals or is less than this"
+	noise(string) : "Noise" : : "Path to noise to make when dying (breaking)"
+	noise1(string) : "Noise1" : : "Path to noise to make when taking damage"
+	target(target_destination) : "Target" : : "Activate this when dying (i.e. target an emitter to generate rubble)"
+	targetname(target_source) : "Name" : : "Can be targeted by a func_bspframe or for triggering remotely"
+
+	spawnflags(Flags) =
+	[
+		1 : "Heal" : 0 : "Only dies if one shot of damage is greater than health (heals small damage)"
+		2 : "Bleed" : 0 : "Show blood effect instead of sparks when shot"
+	]
+]
+
+//////////////////////////////////////////////////////////////////////////////////////////
+///	func_explobsp - Basically just like misc_explobox, but uses whatever geometry ya like. 
+///	The explosion occurs at the exact center of the brushes, so keep that in mind.
+
+@SolidClass = func_explobsp : "Explosive Geometry"
+[
+	health(integer) : "Health" : 20 : "Maximum health"
+	dmg(integer) : "Damage" : 160 : "Amount of damage caused by explosion"
+	target(target_destination) : "Target" : : "Activate this when exploding"
+	targetname(target_source) : "Name" : : "Can be targeted by a func_bspframe or for triggering remotely"
+
+	spawnflags(Flags) =
+	[
+		1 : "Heal" : 0 : "Only dies if one shot of damage is greater than health (heals small damage)"
+	]
+]
+
+////////////////////////////////////////////////////////////////////////////////////
+///	func_nodraw - Like func_wall, but is invisible by default, and has no think/use.
+
+@SolidClass = func_nodraw : "Nodraw Wall"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Show Geometry" : 0 : "Show brush geometry"
+	]
+]
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+///	func_model - Places a static model, or can optionally become a corpse (gibbable). 
+///	Corpses will drop to the floor, but static models just hang at the origin. 
+///	Static models don't collide (surround it with clip brushes, or func_nodraw if this is a problem).
+
+@PointClass = func_model : "Model"
+[
+	mdl(string) : "Model" : : "Path to the model"
+	frame(integer) : "Frame" : :"Animation frame"
+	mangle(angle) : "Orientation" : : "X Y Z Orientation"
+	spawnflags(Flags) =
+	[
+		1 : "Corpse" : 0 : "Turn it into a corpse"
+	]
+]
+///	Notes:
+///	Corpses have a height of 2 units, so don't expect to use a run frame and be able to shoot anything but the feet.
+///	Messing with any angle other than the Y (yaw) angle is usually asking for trouble (unless ou know what you're doing).
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	fx_ambientsound - Plays any sound as a true ambientsound. Wait's for trigger if it has a targetname.
+
+@PointClass = fx_ambientsound : "FX Ambientsound"
+[
+	noise(string) : "Noise" : : "Path to the sound (MUST be a looped WAV!)"
+	volume(integer) : "Volume" : 1 : "Sound volume"
+	distance(float) : "Distance (attenuation)" : 1 : "Sound attenuation (NOTE: built-in ambient sounds are all ATTN_STATIC)"
+	targetname(target_source) : "Name" : : "Sounds can be triggered on (but not stopped once started!)"
+]
+
+
+//////////////////////////////////////////////////////////////////////////
+///	fx_sound - Plays any sound with an optional (different) shutoff sound.
+///	Can trigger on/off, repeat, play n times, randomize, all sorts of fun stuff...
+
+@PointClass = fx_sound : "FX Sound"
+[
+	noise(string) : "Noise" : : "Path to the sound - example: 'misc/mysound.wav'"
+	noise1(string) : "Noise1" : : "Path to the shutoff sound. Use 'misc/null.wav' to abruptly mute 'noise' when toggled off. If 'noise1' is empty, 'noise' is allowed to finish when paused (or continue if it's a looped WAV)."
+	distance(float) : "Distance (attenuation)" : 1 : "Sound attenuation (defaults to ATTN_NORM)."
+	volume(integer) : "Volume" : 1 : "Sound volume."
+	count(integer) : "Count" : 1 : "Number of times to play the sound each time it's triggered (-1 is infinite loop)."
+	pausetime(integer) : "Pause Time" : 0 : "Delay in seconds before playing the next loop (omit or set to 0 if 'count' is 1)"
+	cnt(integer) : "Random Seed" : 0 : "Random seed for repeats, this number is multiplied by random() and added to pausetime (0 is no random)."
+	targetname(target_source) : "Name" : : "Can be triggered"
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start right away even if triggered"
+	]
+]
+///	Notes:
+///	Although you can use looping WAV files with fx_sound, you shouldn't rely on them looping for ever. 
+///	Quake will stop playing a sound when it can no longer hear it (well, "see it" is more accurate). 
+///	If an fx_sound is playing a looped WAV in this case, it will simply stop playing it. If you want a sound to loop, 
+///	it's best to use a non-looping WAV and set it's paustime to the length of the sound. 
+///	This won't stop Quake from muting the sound when it's nolonger in range, but at least it will start up again when it comes back into range 
+///	(although it starts at the next loop time, so long sounds may still act weird).
+///	If you need a triggered looping sound (that can't be turned off once started) use fx_ambientsound.
+///	For some reason, Quake refuses to play sounds immediately, so there is a one second delay from worldspawn to when the sound actually starts.
+
+
+////////////////////////////////////////////////////////////////////////////////
+///	fx_drip - Single, continuous drip. Can toggle on/off with multiple triggers.
+
+@PointClass = fx_drip : "FX Drip"
+[
+	wait(float) : "Frequency" : 3 : "A seed for the frequency of the drips, 0 is pretty quick"
+	targetname(target_source) : "Name" : : "Can be triggered"
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start right away even if triggered"
+		2 : "Silent" : 0 : "Don't make sound."
+	]
+]
+///	Notes:
+///	Use SILENT when using several drip enties and use an fx_sound triggered at the same time to provide the sound. If you have too many drip noises playing, 
+///	they can override more important sounds in the same area (like plat/door sounds).
+///	These are much simpler to set up, but func_emitter* entities can easily mimic drips, and should be used in place of fx_drip for busy effects (like rain).
+
+
+////////////////////////////////////////////////////////////////////////////////////
+///	fx_spark - Throws sparks randomly 360º around the origin in the horizontal axis. 
+///	Can toggle on/off with multiple triggers.
+
+@PointClass = fx_spark : "FX Spark"
+[
+	wait(float) : "Frequency" : 0 : "A seed for the frequency of the sparks, 0 is pretty quick"
+	targetname(target_source) : "Name" : : "Can be triggered"
+	spawnflags(Flags) =
+	[
+		1 : "Start On" : 0 : "Start right away even if triggered"
+		2 : "Silent" : 0 : "Don't make sound."
+	]
+]
+///	Notes:
+///	Like fx_drip, these are much simpler to set up than func_emitter* entities,
+/// but the latter can give much more control over direction, spread, and frequency.
+
+
+//////////////////////////////////////////////////////////////////////
+///	info_rotate - Used as the point of rotation for rotatable objects.
+
+@PointClass = info_rotate : "Rotation Point" []
+
+
+////////////////////////////////////////////////////////////////////
+///	func_rotate_entity - Creates an entity that continually rotates. 
+///	Can be toggled on and off if targeted.
+
+@PointClass = func_rotate_entity : "Rotate Entity"
+[
+	deathtype(string) : "Orbituary" : : "Message that will appear when a player is killed by the train."
+	rotate(integer) : "Rotate" : : "Rate to rotate."
+	speed(integer) : "Speed" : 0 : "How long the entity takes to go from standing still to full speed and vice-versa."
+	target(target_destination) : "Target" : : "Center of rotation."
+	spawnflags(Flags) =
+	[
+		1 : "Toggle" : 0 : "Allows the rotation to be toggled on/off"
+		2 : "Start On" : 0 : "Wether the entity is spinning when spawned. If TOGGLE is 0, entity can be turned on, but not off."
+	]
+]
+	
+
+
+////////////////////////////////////////
+///	path_rotate - Path for rotate_train.
+
+@PointClass = path_rotate : "Path Rotate"
+[
+	noise(string) : "Noise" : : "Name of the sound to play when train stops."
+	noise1(string) : "Noise1" : : "Name of the sound to play when train moves."
+	event(target_destination) : "Event" : : "Target to trigger when train arrives at path_rotate."
+	spawnflags(Flags) =
+	[
+		1 : "Rotation" : 0 : "Rotate at rate specified by 'rotate'. Use '0 0 0' to stop rotation."
+		2 : "Angles" : 0 : "Rotate to the angles specified by 'angles' while traveling to this path_rotate. Use values < 0 or > 360 to guarantee that it turns in a certain direction. Having this flag set automatically clears any rotation."
+		4 : "Stop" : 0 : "Stop and wait to be retriggered."
+		8 : "No Rotate" : 0 : "Stop rotating when waiting to be triggered."
+		16 : "Damage" : 0 : "Cause damage based on 'dmg'."
+		32 : "Movetime" : 0 : "Interpret 'speed' as the length of time to take moving from one corner to another."
+		64 : "Set Damage" : 0 : "Set all targets damage to 'dmg'"
+	]
+]
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	func_rotate_train - In path_rotate, set speed to be the new speed of the train after it reaches the path change. 
+///	If speed is -1, the train will warp directly to the next path change after the specified wait time. 
+///	If MOVETIME is set on the path_rotate, the train to interprets "speed" as the length of time to take moving from one corner to another.
+
+@PointClass = func_rotate_train : "Rotate Train"
+[
+	noise(string) : "Noise" : : "Name of the sound to play when train stops."
+	noise1(string) : "Noise1" : : "Name of the sound to play when train moves."
+	path(target_destination) : "First Path" : : "Specifies the first path_rotate and is the starting position. If the train is the target of a button or trigger, it will not begin moving until activated. The func_rotate_train entity is the center of rotation of all objects targeted by it."
+	deathtype(string) : "Orbituary" : : "message that will appear when a player is killed by the train."
+	speed(integer) : "Speed" : 100 : "Speed"
+	dmg(integer) : "Damage" : 0 : "Damage"
+	sounds(choices) : "Sounds" : 1 =
+	[
+		0 : "None"
+		1 : "Metal"
+	]
+]
+
+
+/////////////////////////////////////////////////////////
+///	rotate_object - This defines an object to be rotated. 
+///	Used as the target of func_rotate_door.
+
+@SolidClass = rotate_object : "Rotate Object"[]
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///	func_rotate_door - Creates a door that rotates between two positions around a point of rotation each time it's triggered.
+
+@PointClass = func_rotate_door : "Rotate Door"
+[
+	dmg(integer) : "Damage" : 2 : "Specifies the damage to cause when blocked. Defaults to 2. Negative numbers indicate no damage."
+	speed(integer) : "Speed" : 2 : "Specifies how the time it takes to rotate"
+	sounds(choices) : "Sounds" : 1 =
+	[
+		1 : "Medieval"
+		2 : "Metal"
+		3 : "Base"
+	]
+	spawnflags(Flags) =
+	[
+		1 : "Stay Open" : 0 : "Reopen after closing. This prevents a trigger-once door from closing again when it's blocked."
+	]
+]
+
+
+//////////////////////////////////////////////////////////////////
+///	func_movewall - Used to emulate collision on rotating objects.
+
+@SolidClass = func_movewall : "Movewall"
+[
+	dmg(integer) : "Damage" : : "Damage to cause when touched or blocked."
+	spawnflags(Flags) =
+	[
+		1 : "Visible" : 0 : "Causes brush to be displayed."
+		2 : "Touch" : 0 : "Specifies whether to cause damage when touched by player."
+		4 : "Nonblocking" : 0 : "Makes the brush non-solid. This is useless if VISIBLE is not set."
+	]
+]

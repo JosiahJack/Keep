@@ -308,7 +308,7 @@ void() anac_run28 = [45, anac_run29] { ai_face(); };
 void() anac_run29 = [46, anac_run30] { ai_face(); };
 void() anac_run30 = [47, anac_run] { ai_face(); };
 
-void() anac_hmmm = {
+void() anac_hmmm = { // [FUNCTION]
 	if (self.enemy.health <= 0) anac_fall();
 	else anac_run20();
 };

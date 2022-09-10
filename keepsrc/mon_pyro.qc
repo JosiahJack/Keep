@@ -54,7 +54,7 @@ $frame paina1 paina2 paina3 paina4
 $frame painb1 painb2 painb3 painb4 painb5
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 
-void() pyro_soundreset = {
+void() pyro_soundreset = { // [FUNCTION]
 	if (self.attack_finished > time) sound(self,CHAN_WEAPON,self.noise4,1,ATTN_NORM); // Turn off flame sound
 	else StopSound(self,CHAN_WEAPON); // Play sound anyway to be sure the channel is silent
 };

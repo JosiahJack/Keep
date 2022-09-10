@@ -96,7 +96,7 @@ void() treasure_touch = { // [FUNCTION]
 	if (!self.respawn_trig) start_item_respawn();
 };
 
-void() item_coin_setskin = {
+void() item_coin_setskin = { // [FUNCTION]
    if (self.count < 1) self.count = 1;  //number of coins
    if (self.count == 1) self.skin = 0;
    if (self.count == 2) self.skin = 1;

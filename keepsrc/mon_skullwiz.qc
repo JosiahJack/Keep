@@ -138,12 +138,12 @@ void()	skullw_transB1	= [	$transB3,	skullw_transB2	] {};
 void()	skullw_transB2	= [	$transB5,	skullw_transB3	] {};
 void()	skullw_transB3	= [	$transB7,	skullw_walk1	] {};
 
-void() skullw_stand = {
+void() skullw_stand = { // [FUNCTION]
 	if (self.idlebusy == SKULLW_WALK) skullw_transA1();
 	else skullw_stand1();
 };
 
-void() skullw_walk = {
+void() skullw_walk = { // [FUNCTION]
 	if (self.idlebusy == SKULLW_STAND) skullw_transB1();
 	else skullw_walk1();
 };
@@ -166,7 +166,7 @@ void()	skullw_run13= [	$stand17,		skullw_run14] { ai_run(0); };
 void()	skullw_run14= [	$stand19,		skullw_run1	] { ai_run(0); };
 
 // MELEE - Teleportation
-void() skullw_tfin1 = [$tele9, skullw_tfin2 ] {
+void() skullw_tfin1 = [$tele9, skullw_tfin2 ] { // [FUNCTION]
 	self.velocity = '0 0 0';
 	// Always phase in facing the enemy
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
@@ -182,7 +182,7 @@ void() skullw_tfin5 = [$tele1, skullw_run1 ] { ai_face();
 };
 
 // Find new teleport location
-void() skullw_blink = {
+void() skullw_blink = { // [FUNCTION]
 	local float dist, edist, blinkfinished, blinkcount;
 	local vector org, org_ofs, angle_vec;
 
@@ -259,7 +259,7 @@ void() skullw_blink = {
 };
 
 // Cycle around teleport chain lists instead
-void() skullw_waitforlink = {
+void() skullw_waitforlink = { // [FUNCTION]
 	self.nextthink = time + 0.5 + random();
 	self.think = skullw_waitforlink;
 	setorigin(self, self.movelast.origin);	// move to new location
@@ -281,7 +281,7 @@ void() skullw_waitforlink = {
 	}
 };
 
-void() skullw_checkblinklist = {
+void() skullw_checkblinklist = { // [FUNCTION]
 		// Does the blink list exist already?
 	if (self.movelast.classtype != CT_SKULLTELEPORT) {
 		self.movelast = find(world,targetname,self.target2);
@@ -301,27 +301,27 @@ void() skullw_checkblinklist = {
 };
 
 // touch book and phase out
-void() skullw_tele1	= [$spellB3,	skullw_tele2    ] {
+void() skullw_tele1	= [$spellB3,	skullw_tele2    ] { // [FUNCTION]
 	self.pain_finished = time + 1;				// no pain during teleportation
 	if (random() < 0.5) sound(self,CHAN_VOICE, "ad171/skullwiz/blinkspk1.wav",1,ATTN_NORM);
 	else sound(self,CHAN_VOICE, "ad171/skullwiz/blinkspk2.wav",1,ATTN_NORM);
 };
-void() skullw_tele2	= [$spellB5,	skullw_tele3 ] {};
-void() skullw_tele3	= [$spellB7,	skullw_tele4 ] {};
-void() skullw_tele4	= [$spellB9,	skullw_tele6 ] {};
-void() skullw_tele6	= [$spellB13,	skullw_tele8 ] {};
-void() skullw_tele8	= [$tele1,		skullw_tele9 ] {
+void() skullw_tele2	= [$spellB5,	skullw_tele3 ] {}; // [FUNCTION]
+void() skullw_tele3	= [$spellB7,	skullw_tele4 ] {}; // [FUNCTION]
+void() skullw_tele4	= [$spellB9,	skullw_tele6 ] {}; // [FUNCTION]
+void() skullw_tele6	= [$spellB13,	skullw_tele8 ] {}; // [FUNCTION]
+void() skullw_tele8	= [$tele1,		skullw_tele9 ] { // [FUNCTION]
 	self.takedamage = DAMAGE_NO;	// No damage or impact, phasing out
 	self.solid = SOLID_NOT;
 	self.bodyphased = MONAI_SKULLWINVIS;
 	particle_explode(self.origin, 100, 1, self.part_style, PARTICLE_BURST_SKULLUP);
 	sound(self,CHAN_VOICE, "ad171/skullwiz/blinkout.wav",1,ATTN_NORM);
 };
-void() skullw_tele9	= [$tele3,	skullw_tele10 ] {};
-void() skullw_tele10= [$tele5,	skullw_tele11 ] {};
-void() skullw_tele11= [$tele7,	skullw_tele12 ] {};
-void() skullw_tele12= [$tele9,	skullw_tele13 ] {};
-void() skullw_tele13 = {
+void() skullw_tele9	= [$tele3,	skullw_tele10 ] {}; // [FUNCTION]
+void() skullw_tele10= [$tele5,	skullw_tele11 ] {}; // [FUNCTION]
+void() skullw_tele11= [$tele7,	skullw_tele12 ] {}; // [FUNCTION]
+void() skullw_tele12= [$tele9,	skullw_tele13 ] {}; // [FUNCTION]
+void() skullw_tele13 = { // [FUNCTION]
 	setmodel(self,"");
 	// Check if a chain list has been defined
 	if (self.target2 != "") skullw_checkblinklist();
@@ -329,7 +329,7 @@ void() skullw_tele13 = {
 };
 
 // Rocket Skull Attack (Regular)
-void(vector orgofs) skullw_fire = {
+void(vector orgofs) skullw_fire = { // [FUNCTION]
 	local vector org, dir;
 	local float proj_type;
 
@@ -357,7 +357,7 @@ void() skullw_attack7	= [	$spellA13,	skullw_attack8	] {};
 void() skullw_attack8	= [	$spellA15,	skullw_run1		] {};
 
 // Poison Skull Attack (Guardians)
-void() skullw_poison_touch = {
+void() skullw_poison_touch = { // [FUNCTION]
 	if (other.solid == SOLID_TRIGGER) return;
 	if (other.classtype == CT_TEMPSTREAM) return;
 	if (other.health > 0) return;
@@ -369,7 +369,7 @@ void() skullw_poison_touch = {
 	self.nextthink = time + 0.1;
 };
 
-void() skullw_poison_think = {
+void() skullw_poison_think = { // [FUNCTION]
 	// Randomly drift upwards and slow down forward movement
 	self.velocity_z = self.velocity_z + 10 + (random() * 20);
 	self.velocity = self.velocity - (self.velocity * 0.125);
@@ -379,7 +379,7 @@ void() skullw_poison_think = {
 	else self.nextthink = time + 0.1;
 };
 
-void() skullw_guardian = {
+void() skullw_guardian = { // [FUNCTION]
 	local float poison_loop;
 	local vector poison_angles, org, dir;
 	
@@ -431,33 +431,8 @@ void() skullw_guardian = {
 
 
 // SUMMON MINION - Purple magic ball
-
-void() skullw_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = MODEL_PROJ_SWBALL;
-	}
-};
-
-void() skullw_finish_attachment = {
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-void() skullw_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-};
-
 // Display a purple ball in the hand of the skull wizard
-void(vector orgofs, float dbframe) skullw_sumball = {
+void(vector orgofs, float dbframe) skullw_sumball = { // [FUNCTION]
 	local vector org;
 
 	// Frame 0 is start of the sequence (move everything into place)
@@ -486,11 +461,9 @@ void(vector orgofs, float dbframe) skullw_sumball = {
 	//	else particle_debuff(self.origin, 16, rint(4+random()*4), self.part_style);
 };
 
-//----------------------------------------------------------------------
 // Raise hand up to the sky and spawn purple particles from body
 // Always check if there is space to spawn a lost soul first
 // Block monster pain function so that the summons is completed
-//----------------------------------------------------------------------
 void() skullw_summon1 = [$summon1, skullw_summon2 ] {
 	ai_face(); self.pain_finished = time + 2; };
 void() skullw_summon2 = [$summon3, skullw_summon3 ] {
@@ -536,21 +509,17 @@ void() skullw_summon9 = [$summon17, skullw_summon10 ] { skullw_sumball('26 -4 19
 void() skullw_summon10 = [$summon19, skullw_summon11 ] { skullw_sumball('26 -5 23',4); };
 void() skullw_summon11 = [$summon21, skullw_summon12 ] { skullw_sumball('26 -6 30',3); };
 void() skullw_summon12 = [$summon23, skullw_summon13 ] { skullw_sumball('19 -7 32',1); };
-void() skullw_summon13 = [$summon25, skullw_summon14 ] { skullw_finish_attachment();
+void() skullw_summon13 = [$summon25, skullw_summon14 ] { SUB_FinishAttachment();
 	if (self.aflag == TRUE) particle_explode(self.pos1, 15, 2, self.part_style, PARTICLE_BURST_MINOTAUR); };
 void() skullw_summon14 = [$summon27, skullw_summon15 ] { ai_face(); };
 void() skullw_summon15 = [$summon29, skullw_run1 ] {
 	ai_face();SUB_AttackFinished (1 + 2*random()); };
 
-//----------------------------------------------------------------------
 // Both type of skull wizards go through the same magic function
-//----------------------------------------------------------------------
-void() skullw_magic = {
+void() skullw_magic = { // [FUNCTION]
 	local entity miniondef;
 	
-	// Make sure the attachments are setup ready
-	skullw_create_attachment();
-
+	SUB_CreateSelfAttachment(MODEL_PROJ_SWBALL,1.0);
 	if (self.spawnflags & MON_SKULLWIZ_MINIONS && !self.minion_active) {
 		// Check for minion template first
 		miniondef = find(world,classname,"monster_skullwizminion");
@@ -582,7 +551,7 @@ void() skullw_magic = {
 };
 	
 
-void() skullw_phased = { 
+void() skullw_phased = { // [FUNCTION]
 	self.nextthink = time + 0.1;	// Keep looking for player
 	self.think = skullw_phased;		// Keep looping
 	if (random() < 0.02) 
@@ -591,8 +560,7 @@ void() skullw_phased = {
 	ai_stand(); 					// Keep looking
 };
 
-//----------------------------------------------------------------------
-void() skullw_wakeup = {
+void() skullw_wakeup = { // [FUNCTION]
 	// Reset all monster state functions back to default
 	self.th_stand = skullw_stand;
 	self.th_walk = skullw_walk;
@@ -639,7 +607,7 @@ void()	skullw_painB9	= [	$painA9,	skullw_painB10	] {};
 void()	skullw_painB10	= [	$painA10,	skullw_painB11	] {};
 void()	skullw_painB11	= [	$painA11,	skullw_run1	] 	{};
 
-void(entity inflictor, entity attacker, float damage) skullw_pain = {
+void(entity inflictor, entity attacker, float damage) skullw_pain = { // [FUNCTION]
 	if (random() < skill * 0.1)	//ijed: make them blink sometimes, 10% chance per skill above easy
 	{		
 		//bprint("SkullWiz Telepain\n");
@@ -651,7 +619,7 @@ void(entity inflictor, entity attacker, float damage) skullw_pain = {
 	
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
-	skullw_finish_attachment();
+	SUB_FinishAttachment();
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -665,7 +633,7 @@ void(entity inflictor, entity attacker, float damage) skullw_pain = {
 };
 
 
-void() skullw_fadeaway = {
+void() skullw_fadeaway = { // [FUNCTION]
 	//	sound(self,CHAN_BODY,"ad171/skullwiz/fadeaway.wav",1,ATTN_NORM);
 	// Particle burst upwards as robes fade away
 	//particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);	//ijed: why call attention to a post-post death sequence?
@@ -674,7 +642,7 @@ void() skullw_fadeaway = {
 	self.ltime = self.nextthink;
 };
 
-void() skullw_explode = {
+void() skullw_explode = { // [FUNCTION]
 	self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
 	//particle_explode(self.origin, 100, 3, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
 	particle_explode(self.origin, 100, 3, PARTICLE_BURST_RED, PARTICLE_BURST_SKULLUP);	//ijed: made them all die red which just seemed to fit better than white tbh																																							
@@ -701,10 +669,10 @@ void()	skullw_death14	= [	$death15,	skullw_death14] {
 	self.nextthink = time + 8 + random() * 8;
 };
 
-void() skullw_die = {
+void() skullw_die = { // [FUNCTION]
 	sound(self,CHAN_VOICE, "ad171/skullwiz/death.wav",1,ATTN_NORM); // Play fade away/death sound
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-	skullw_remove_attachment();
+	SUB_RemoveAttachments();
 
 	// Special death, Instantly vaporize cloak.  This is really a gib death without the gibs!
 	if (self.health < -40) {
@@ -722,7 +690,7 @@ void() skullw_die = {
 	}
 };
 
-void() monster_skullwiz_precache = {
+void() monster_skullwiz_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_skullwiz.mdl");
 	precache_model (MODEL_PROJ_SWSKULL);		// explosive flaming skull
 	precache_model (MODEL_PROJ_SWSKULLP);		// explosive poison skull
@@ -876,7 +844,7 @@ void() info_skullwiz_link = {
 	}
 };
 
-void() info_skullwiz_destination = {
+void() info_skullwiz_destination = { // [ENTITY]
 	// All teleportation points need to be part of a chain otherwise the skull Wizard would have to use findradius which is expensive if lots of entities are around
 	if (SUB_HideIfNoTargetname()) return;
 	if (SUB_HideIfNoTarget()) return;

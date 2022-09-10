@@ -54,7 +54,7 @@ void() HonkHorn = { // [FUNCTION]
 	}
 };
 
-void() vehicle_death = {
+void() vehicle_death = { // [FUNCTION]
 	self.think = SUB_Remove;
 	self.nextthink = time + 0.1;
 };

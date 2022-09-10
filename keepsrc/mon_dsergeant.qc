@@ -281,7 +281,7 @@ void()	dsergeant_char_a11= [	$char_a11,dsergeant_char_a12] { ai_charge(18);
 void()	dsergeant_char_a12= [	$char_a12,dsergeant_char_b1	] { ai_charge(16);
 	CheckForSergeantCharge(); };
 
-void() dsergeant_charging = {
+void() dsergeant_charging = { // [FUNCTION]
 	if (random() < 0.35) dsergeant_char_a1();	// Slow left+right swing
 	else dsergeant_char_b1();									// fast spin around head
 };
@@ -346,7 +346,7 @@ void()	dsergeant_watk20= [	$w_attack20,dsergeant_watk21] { ai_charge(6); };
 void()	dsergeant_watk21= [	$w_attack21,dsergeant_watk22] { ai_charge(7); };
 void()	dsergeant_watk22= [	$w_attack22,dsergeant_run1	] { ai_charge(3); };
 
-void() dsergeant_melee = {
+void() dsergeant_melee = { // [FUNCTION]
 	self.meleeattack = random();
 	if (self.meleeattack < 0.4) dsergeant_slice1();
 	else if (self.meleeattack < 0.9) dsergeant_smash1();
@@ -354,7 +354,7 @@ void() dsergeant_melee = {
 };
 
 // Death Sergeant Homing Missile Attack
-void() SergMissile = {
+void() SergMissile = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 

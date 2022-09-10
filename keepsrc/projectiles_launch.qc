@@ -1363,7 +1363,16 @@ void(vector org, vector dir) WeldFire = { // [FUNCTION]
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;
 	newmis.event = "mthret";
-	newmis.touch = WeldTouch;
+	if (self.enemy.classtype == CT_MONARCHG
+		|| self.enemy.classtype == CT_FUNCDOOR
+		|| self.enemy.classtype == CT_FUNCSECDOOR
+		|| self.enemy.classname == "func_mindcrime"
+		|| self.enemy.classname == "exploding_wall"
+		|| self.enemy.classname == "func_sobject"
+		|| self.enemy.classname == "func_quakedmg"
+		|| self.enemy.classname == "func_explodable") { // Nehahra's FL_BLOODLESS 8192 flagged entities.
+		newmis.touch = nehahra_wreckbsp;
+	} else newmis.touch = WeldTouch;
 	if (self.classtype == CT_MONNEHAHRA && (ai_foundbreakable(self, self.enemy, FALSE))) newmis.touch = nehahra_wreckbsp; // could be max mister
 	newmis.classname = "weld_blob";
 	newmis.think = SUB_Remove;
@@ -3031,14 +3040,14 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 };
 
 // Convert the movetype back to MOVETYPE_STEP cas we are finished with the velocity change (we should be anyway).
-void() removeFlyMode = {
+void() removeFlyMode = { // [FUNCTION]
 	self.owner.movetype = MOVETYPE_STEP;
 	self.owner.AIRG_Flags = self.owner.AIRG_Flags - AIRG_STEPCONVERTEDTOFLY;
 	remove(self); // don't need self anymore, remove self.
 };
 
 // Modification of infront() from ai.qc to be tighter
-float (entity e) hornInfront = {
+float (entity e) hornInfront = { // [FUNCTION]
 	local vector vec;
 	local float dot;
 
@@ -3051,7 +3060,7 @@ float (entity e) hornInfront = {
 };
 
 // The main code for when the Airfist is fired.
-void() launch_horn = {
+void() launch_horn = { // [FUNCTION]
 	local entity e;
 	local vector delta, dir;
 	local float eSpeed, dist, percent, ldmg, nearAWall, inDamage, inRange;

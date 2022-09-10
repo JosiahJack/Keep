@@ -66,6 +66,8 @@
 // Added slight resistance in liquids to grenade projectiles.
 //=============================================================================
 
+void(entity ent) Burn_Null;
+
 //===== User Tweakable Parameters ====================
 //----- Natural Bouyancy Settings --------------------
 float	GYRO_BOUYANCYMOD_AIR = 0.0;
@@ -371,6 +373,9 @@ void(entity e) remove = { // [FUNCTION]
 		if (e.nomonstercount) AddToTotals(e); // If a monster marked with no monster count dies update HUD totals to reflect death properly
 		AddToKills(e,activator);
 	}
+	Burn_Null(e);
+	e.targetname = "";
+	if (e.use) e.use = SUB_Null;
 	Gyro_ObjectList_Remove(e);
 	Gyro_ForceList_Remove(e);
 	FliquidList_Remove(e);

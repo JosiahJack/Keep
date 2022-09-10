@@ -140,7 +140,7 @@ void() Vomit_Spawn = {
 
 // Vomitus chews on the target.
 // Note:  This is called during running instead of an attack sequence.
-void() vom_melee = {
+void() vom_melee = { // [FUNCTION]
     local entity targ;
     local float ldmg;
 
@@ -164,7 +164,7 @@ void() vom_melee = {
     T_Damage(targ, self, self, ldmg, DAMARMOR);
 };
 
-float(entity targ) IsZombieDown = {
+float(entity targ) IsZombieDown = { // [FUNCTION]
     if (targ.classgroup == CG_ZOMBIE)
         if (targ.solid == SOLID_NOT)
             if (targ.frame == 172)  // paine11.
@@ -173,13 +173,13 @@ float(entity targ) IsZombieDown = {
 };
 
 // Crushes all nearby corpses into edible gibs, healing vomitus.
-void() Vomit_Crush = {
+void() Vomit_Crush = { // [FUNCTION]
     if (GibFloorBody(self.origin,100)) T_Heal(self,30,TRUE); // Can exceed max.
 };
 
-void() ai_vomit_stand = { Vomit_Crush(); ai_stand(); };
-void(float dist) ai_vomit_walk = { Vomit_Crush(); ai_walk(dist); };
-void(float dist) ai_vomit_run  = {
+void() ai_vomit_stand = { Vomit_Crush(); ai_stand(); }; // [FUNCTION]
+void(float dist) ai_vomit_walk = { Vomit_Crush(); ai_walk(dist); }; // [FUNCTION]
+void(float dist) ai_vomit_run  = { // [FUNCTION]
     local float close;
 
     close = QC_CloseEnough(dist);
@@ -201,21 +201,21 @@ void(float dist) ai_vomit_run  = {
     ai_run(dist);
 };
 
-void() vom_stand1 = [$walk1, vom_stand2 ] { ai_vomit_stand(); };
-void() vom_stand2 = [$walk2, vom_stand3 ] { ai_vomit_stand(); };
-void() vom_stand3 = [$walk3, vom_stand4 ] { ai_vomit_stand(); };
-void() vom_stand4 = [$walk4, vom_stand5 ] { ai_vomit_stand(); };
-void() vom_stand5 = [$walk5, vom_stand6 ] { ai_vomit_stand(); };
-void() vom_stand6 = [$walk4, vom_stand7 ] { ai_vomit_stand(); };
-void() vom_stand7 = [$walk3, vom_stand8 ] { ai_vomit_stand(); };
-void() vom_stand8 = [$walk2, vom_stand1 ] { ai_vomit_stand(); };
+void() vom_stand1 = [$walk1, vom_stand2 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand2 = [$walk2, vom_stand3 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand3 = [$walk3, vom_stand4 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand4 = [$walk4, vom_stand5 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand5 = [$walk5, vom_stand6 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand6 = [$walk4, vom_stand7 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand7 = [$walk3, vom_stand8 ] { ai_vomit_stand(); }; // [FUNCTION]
+void() vom_stand8 = [$walk2, vom_stand1 ] { ai_vomit_stand(); }; // [FUNCTION]
 
-void() vom_idle_sfx = {
+void() vom_idle_sfx = { // [FUNCTION]
 	// Yes, use attn_norm instead of attn_idle.
     sound(self,CHAN_VOICE, "zerstorer/gibfnt/gf_plop.wav",1,ATTN_NORM);
 };
 
-void() vom_walk1  = [$walk1,  vom_walk2  ] {
+void() vom_walk1  = [$walk1,  vom_walk2  ] { // [FUNCTION]
     if (random() < 0.5) vom_idle_sfx();
     ai_vomit_walk(2);
 };
@@ -244,7 +244,7 @@ void() vom_walk23 = [$walk23, vom_walk24 ] { ai_turn(); };
 void() vom_walk24 = [$walk24, vom_walk25 ] { ai_turn(); };
 void() vom_walk25 = [$walk25, vom_walk1  ] { ai_turn(); };
 
-void() vom_run1  = [$run1,  vom_run2  ] {
+void() vom_run1  = [$run1,  vom_run2  ] { // [FUNCTION]
     if (random() < 0.2)
         vom_idle_sfx();
     ai_vomit_run(4);
@@ -264,7 +264,7 @@ void() vom_end1 = [$attack11, vom_end2     ] { ai_face(); };
 void() vom_end2 = [$attack12, vom_end3     ] { ai_face(); };
 void() vom_end3 = [$attack13, vom_run1     ] { ai_face(); };
 
-void() vom_attack1  = [$attack1,  vom_attack2  ] {
+void() vom_attack1  = [$attack1,  vom_attack2  ] { // [FUNCTION]
     self.pain_finished = time + 1.2;    // Ignore pain during attack.
     sound(self,CHAN_WEAPON,"zerstorer/gibfnt/gf_sprt1.wav",1,ATTN_NORM);
     ai_face();
@@ -296,7 +296,7 @@ void() vom_pain3  = [$pain3,  vom_pain4  ] {};
 void() vom_pain4  = [$pain2,  vom_pain5  ] {};
 void() vom_pain5  = [$pain1,  vom_run1   ] {};
 
-void(entity inflictor, entity attacker, float damage) vom_pain = {
+void(entity inflictor, entity attacker, float damage) vom_pain = { // [FUNCTION]
     if (self.pain_finished > time) return; // don't make multiple pain sounds right after each other
 
     self.pain_finished = time + 2;
@@ -308,7 +308,7 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
 };
 
 // Death
-void(float dm) vom_gib = {
+void(float dm) vom_gib = { // [FUNCTION]
 	// PM:  Don't even think about calling T_RadiusDamage here!
 	// This is because gib functions may be called by T_Damage,
 	// which may be called within in T_RadiusDamage loop.
@@ -349,13 +349,13 @@ void() vom_die16 = [$death15, vom_die16 ] {
 	self.nextthink = time + 0.1;
 };
 
-void() vom_die = {
+void() vom_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
     sound(self,CHAN_VOICE, "drake/vomitus/death.wav",1,ATTN_NORM);
     vom_die1();
 };
 
-void() monster_vomit_precache = {
+void() monster_vomit_precache = { // [FUNCTION]
     precache_model ("progs/drake/h_vomit.mdl");
     precache_model ("progs/ad181/h_zombie.mdl");
     precache_model ("progs/drake/tar_gib.mdl");

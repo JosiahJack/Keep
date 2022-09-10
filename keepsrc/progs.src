@@ -199,6 +199,7 @@ items_weapons.qc			// REFINED Weapon item pickups.
 items_ammo.qc				// REFINED Ammo item pickups.
 items_armor.qc				// REFINED Armor item pickups.
 items_artifacts.qc			// REFINED Artifacts and powerups.
+bloodcb.qc					// Zerstorer Blood Cube powerup.
 items_drake.qc				// REFINED Drake items
 items_progspn.qc			// REFINED Progressive Spawn System for picking a list of items up in the same order.
 

@@ -309,7 +309,7 @@ float() check_coop = {
 };
 
 // Vector randomizer, used mostly for avelocity setups.  Used all over the place; monsters, weapons and gibs!
-vector(float base, float rndmix, float plusminus) vecrand = {
+vector(float base, float rndmix, float plusminus) vecrand = { // [FUNCTION]
 	local vector vecmix;
 	if (plusminus) {
 		vecmix_x = base + crandom() * rndmix; 
@@ -324,7 +324,7 @@ vector(float base, float rndmix, float plusminus) vecrand = {
 };
 
 // Gradually fade out a model over time.  Optionally entity removal if height = 0
-void() model_fade = {
+void() model_fade = { // [FUNCTION]
 	if (coop > 2 && (self.classtype == CT_TEMPGIB || self.owner.classtype == CT_MISCGIBF)) {
 		self.think = SUB_Null;
 		return; // Keep gibs for versus mode :)
@@ -357,7 +357,7 @@ void() model_fade = {
 // and will spike in chance when close to range boundaries
 // Also this formula has no skill modifiers leading to limited gameplay rules
 
-float() SUB_ChanceAttack = {
+float() SUB_ChanceAttack = { // [FUNCTION]
 	local float chrange, chskill, chance;
 	
 	chrange = chskill = 0; // taniwha patch

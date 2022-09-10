@@ -19,7 +19,7 @@
 //  ai_emnity("monster_qguy", 1500, 0);
 //}
 
-
+/*
 Void function hknight_rush1();
 {
   self.effects = self.effects | EF_MUZZLEFLASH;
@@ -250,20 +250,18 @@ Void function hknight_walk20();
   ai_emnity("monster_qguy", 1500, 0);
 }
 
-Void function hknight_run1();
-{
-  if (borkfactor1()) {
-    exit;
-    }
-  #29 hknight_run2;
-  hk_idle_sound();
-  ai_run(20);
-}
+//Void function hknight_run1();
+//{
+//  if (borkfactor1()) {
+//    exit;
+//    }
+//  #29 hknight_run2;
+//  hk_idle_sound();
+//  ai_run(20);
+//}
 
-void() hknight_run2 = [30, hknight_run3] { ai_run(25); };
-void() hknight_run3 = [31, hknight_run4] { ai_run(18); if (self.jump_flag < time) ai_ledgejump(self.angles, 0); };
-void() hknight_run4 = [32, hknight_run5] { ai_run(FL_INWATER); };
-void function hknight_run5(); {
+//void() hknight_run3 = [31, hknight_run4] { ai_run(18); if (self.jump_flag < time) ai_ledgejump(self.angles, 0); };
+void() hknight_run5 = {
   if (CheckForCharge()) {
     exit;
     }
@@ -1566,4 +1564,4 @@ Void function beard_nod();
   self.frame = 193 + self.walkframe;
   self.walkframe = self.walkframe + 1;
 }
-
+*/

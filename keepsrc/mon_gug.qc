@@ -105,7 +105,7 @@ void() gug_stand78 = [79, gug_stand79] { ai_stand(); };
 void() gug_stand79 = [80, gug_stand80] { ai_stand(); };
 void() gug_stand80 = [81, gug_choosestand] { ai_stand(); };
 
-void() gug_choosestand = {
+void() gug_choosestand = { // [FUNCTION]
 	local float rnd;
 	if (random() < 0.3)
 		sound(self,CHAN_FEET, self.idle_sound, 1, 0.7);
@@ -126,7 +126,7 @@ void() gug_choosestand = {
 	}
 };
 
-void() gug_step_sound = {
+void() gug_step_sound = { // [FUNCTION]
 	local float rnd;
 	local entity head;
 
@@ -175,14 +175,14 @@ void() gug_run6 = [103, gug_run7] { ai_run(20); };
 void() gug_run7 = [104, gug_run8] { ai_run(18); };
 void() gug_run8 = [105, gug_run1] { ai_run(16); };
 
-void(float dist, float yawspd) ai_gug_swing = {
+void(float dist, float yawspd) ai_gug_swing = { // [FUNCTION]
 	self.yaw_speed = yawspd;
 	ai_face();
 	movetogoal(dist);
 	self.yaw_speed = 15;
 };
 
-void() gug_dummy_think = {
+void() gug_dummy_think = { // [FUNCTION]
 	self.owner.gug_slapped = 0;
 	self.owner.spawnmaster = world;
 	self.owner.velocity = self.velocity;
@@ -190,7 +190,7 @@ void() gug_dummy_think = {
 	self.think = SUB_Remove;
 };
 
-void(float dist, float power, float clawdmg, float stime) gug_hit = {
+void(float dist, float power, float clawdmg, float stime) gug_hit = { // [FUNCTION]
 	local float edist;
 	local entity head;
 	local vector vec;
@@ -339,14 +339,14 @@ void() gug_swingr21 = [149, gug_swingr22] { ai_gug_swing(22, 21); gug_step_sound
 void() gug_swingr22 = [150, gug_swingr23] { ai_gug_swing(20, 21); };
 void() gug_swingr23 = [151, gug_run1] { ai_gug_swing(18, 20); };
 
-void() bile_expl1 = [0, bile_expl2] {};
-void() bile_expl2 = [1, bile_expl3] {};
-void() bile_expl3 = [2, bile_expl4] {};
-void() bile_expl4 = [3, bile_expl5] {};
-void() bile_expl5 = [4, bile_expl6] {};
-void() bile_expl6 = [5, SUB_Remove] {};
+void() bile_expl1 = [0, bile_expl2] {}; // [FUNCTION]
+void() bile_expl2 = [1, bile_expl3] {}; // [FUNCTION]
+void() bile_expl3 = [2, bile_expl4] {}; // [FUNCTION]
+void() bile_expl4 = [3, bile_expl5] {}; // [FUNCTION]
+void() bile_expl5 = [4, bile_expl6] {}; // [FUNCTION]
+void() bile_expl6 = [5, SUB_Remove] {}; // [FUNCTION]
 
-void() BecomeBileExplosion = {
+void() BecomeBileExplosion = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = VEC_ORIGIN;
 	self.touch = SUB_Null;
@@ -355,7 +355,7 @@ void() BecomeBileExplosion = {
 	bile_expl1();
 };
 
-void() BileFragTouch = {
+void() BileFragTouch = { // [FUNCTION]
 	local vector org;
 
 	if (other == self.owner)
@@ -386,7 +386,7 @@ void() BileFragTouch = {
 	BecomeBileExplosion();
 };
 
-void() BileBombTouch = {
+void() BileBombTouch = { // [FUNCTION]
 	local vector org;
 	local float bcnt;
 	local entity missile;
@@ -437,7 +437,7 @@ void() BileBombTouch = {
 	BecomeBileExplosion();
 };
 
-void() BileBombThink = {
+void() BileBombThink = { // [FUNCTION]
 	local entity missile;
 	local float spd;
 	local float t;
@@ -474,7 +474,7 @@ void() BileBombThink = {
 	SUB_Remove();
 };
 
-void() gug_bilebomb = {
+void() gug_bilebomb = { // [FUNCTION]
 	local entity missile;
 	local float dist;
 	local float spd;
@@ -534,7 +534,7 @@ void() gug_bile24 = [167, gug_bile25] {};
 void() gug_bile25 = [168, gug_bile26] {};
 void() gug_bile26 = [169, gug_run1] {};
 
-void() gug_quake_think = {
+void() gug_quake_think = { // [FUNCTION]
 	local float points;
 	local entity head;
 	local vector org;
@@ -566,7 +566,7 @@ void() gug_quake_think = {
 		SUB_Remove();
 };
 
-void(float stime) gug_quake = {
+void(float stime) gug_quake = { // [FUNCTION]
 	local entity qent;
 
 	self.t_width = time + 4.5;
@@ -585,7 +585,7 @@ void(float stime) gug_quake = {
 	setorigin(qent, self.origin);
 };
 
-void() gug_quake_damage = {
+void() gug_quake_damage = { // [FUNCTION]
 	local string dethmsg;
 	local float dmg;
 	local entity head;
@@ -697,7 +697,7 @@ void() gug_death39 = [238, gug_death40] {};
 void() gug_death40 = [239, gug_death41] { monster_death_postcheck(); };
 void() gug_death41 = [240, gug_death41] { monster_deadbody_check(); };
 
-void() gug_die = {
+void() gug_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -707,7 +707,7 @@ void() gug_die = {
 	}
 };
 
-void() gug_melee = {
+void() gug_melee = { // [FUNCTION]
 	sound(self,CHAN_VOICE, "quoth/gug/swipe.wav",1,ATTN_NORM);
 	if (self.state == 0)
 		self.state = ceil(2 * random());
@@ -723,7 +723,7 @@ void() gug_melee = {
 	}
 };
 
-void() gug_missile = {
+void() gug_missile = { // [FUNCTION]
 	local float dist;
 
 	dist = vlen(self.enemy.origin - self.origin);

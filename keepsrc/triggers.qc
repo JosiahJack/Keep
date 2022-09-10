@@ -191,7 +191,7 @@ void() trigger_spawn_bubbles = { // [FUNCTION]
 		bubble.origin_y = self.oldorigin_y + crandom()*self.t_length;
 		bubble.origin_z = self.oldorigin_z;
 		setorigin(bubble, bubble.origin);
-		bubble.velocity = vecrand(0,5,TRUE);
+		bubble.velocity = vecrand(0,self.old_velocity_x,TRUE);
 		bubble.velocity_z = 10 + random()*15;
 		bubble.count = rint(random()*4);
 		bubble.nextthink = time + 0.5 + random()*0.5;
@@ -2304,6 +2304,9 @@ void() trigger_hurt = { // [ENTITY]
 	self.estate_on = trigger_hurt_on;
 	self.estate_off = trigger_bmodel_off;
 	self.estate_disable = trigger_bmodel_disable;
+	if (self.old_velocity_x <= 0) self.old_velocity_x = 5; // Default float speed
+	if (self.old_velocity_y <= 0) self.old_velocity_y = 10;
+	if (self.old_velocity_z <= 0) self.old_velocity_z = 15;
 	if (self.dmg > 0) {
 		self.estate_fire = trigger_hurt_fire;
 		self.touch = trigger_bmodel_anytouch;
@@ -2341,6 +2344,9 @@ void() trigger_heal_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.solid = SOLID_TRIGGER;
 	setsize (self, self.bbmins, self.bbmaxs); // Restore bounding box (dev testing visual thing)
+	if (self.old_velocity_x <= 0) self.old_velocity_x = 5; // Default float speed
+	if (self.old_velocity_y <= 0) self.old_velocity_y = 10;
+	if (self.old_velocity_z <= 0) self.old_velocity_z = 15;
 	trigger_spawn_bubbles(); // Spawn bubbles inside volume brush
 };
 

@@ -468,12 +468,23 @@ void() s_splashremoves6 = [5, SUB_Remove] { self.nextthink = time+0.05; }; // [F
 
 // Effects common to both drips that remove themselves and drips that move back to the start point.
 void() misc_drip_touch_common = { // [FUNCTION]
+	local vector pos_add, vel, org_ofs;
+
 	self.touch = SUB_Null;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.owner.bubble_count > 0) self.owner.bubble_count = self.owner.bubble_count - 1;
 	if (self.cnt) self.origin = self.pos1; // If water below, shift origin to water surface
-	setorigin(self,self.origin + '0 0 8'); // Was 12
+	if (self.velocity_z > 0) {
+		org_ofs = '0 0 3';
+		pos_add = '0 0 -2';
+		vel = '0 0 -0.5';
+	} else {
+		org_ofs = '0 0 8';
+		pos_add = '0 0 1';
+		vel = '0 0 0.5';
+	}
+	setorigin(self,self.origin + org_ofs);
 	if (!(self.spawnflags & MISC_DRIPSILENT)) { // play a random drip sound
 		self.lip = random() * 3;
 		if (self.lip < 1 && self.noise1 != "") sound(self,CHAN_AUTO,self.noise1,1,ATTN_STATIC);
@@ -485,7 +496,8 @@ void() misc_drip_touch_common = { // [FUNCTION]
 		spawn_touchblood (self,other,self.owner.dmg);
 		T_Damage(other, self, self.owner, self.owner.dmg, DAMARMOR);
 	}
-	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5); // small particle effect when hitting something
+
+	particle(self.origin+pos_add,vel, self.aflag+random()*4, 5+random()*5); // small particle effect when hitting something
 	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH; // Switch to splash sprite and animate for 5 frames
 	setmodel(self,self.headmdl);
 };
@@ -659,7 +671,8 @@ void() trigger_spawn_drips = { // [FUNCTION]
 		drip.origin_y = self.oldorigin_y + crandom()*self.t_length;
 		drip.origin_z = self.oldorigin_z;
 		setorigin(drip, drip.origin);
-		drip.velocity_z = -map_gravity;
+		if (self.gravity != 0) drip.velocity_z = self.gravity * -1 * map_gravity;
+		else drip.velocity_z = map_gravity * -1;
 		drip.nextthink = time + 0.5 + random()*0.5;
 		drip.touch = misc_drip_removetouch;
 		if (self.aflag > 0) {
@@ -742,7 +755,10 @@ void() func_bubbles = { // [ENTITY]
 	self.estate_off = trigger_bmodel_off;
 	self.estate_disable = trigger_bmodel_disable;
 	self.estate_reset = func_bubbles_reset;
-	self.touch = SUB_Null; // do nothing, we are just here to blow bubbles
+	if (self.old_velocity_x <= 0) self.old_velocity_x = 5; // Default float speed
+	if (self.old_velocity_y <= 0) self.old_velocity_y = 10;
+	if (self.old_velocity_z <= 0) self.old_velocity_z = 15;
+	self.touch = SUB_Null; // Do nothing, we are just here to blow bubbles
 	if (self.spawnflags & ENT_STARTOFF) self.estate_off(); // Switch on OR off?
 	else self.estate_on();
 };

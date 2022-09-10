@@ -182,15 +182,6 @@ float() judge_CheckTether = {
 	}
 };
 
-// Attachment management (create, finish and remove)
-void() justice_create_attachment = { // [FUNCTION]
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-	}
-};
-
 void(float att_frame) justice_update_attachment = { // [FUNCTION]
 	makevectors(self.angles);
 	self.attachment.origin = self.origin + attack_vector(self.meleeoffset);
@@ -200,13 +191,11 @@ void(float att_frame) justice_update_attachment = { // [FUNCTION]
 };
 
 void() justice_setup_attachment = { // [FUNCTION]
-	// Check if attachment has been setup yet
-	if (!self.attachment) justice_create_attachment();
+	SUB_CreateSelfAttachment("",1.0);
 	self.attachment.state = STATE_ON;
 	setmodel(self.attachment, self.weaponglow);
 	self.attachment.skin = 0;
-	// Display/sync with main model
-	justice_update_attachment(0);
+	justice_update_attachment(0); // Display/sync with main model
 };
 
 void() judge_standframe = { // [FUNCTION]

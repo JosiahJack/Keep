@@ -78,7 +78,7 @@ $frame deathb17 deathb18 deathb19 deathb20
 void() dknight_ghost_particle;		// Ghost particles
 void() dknight_ghost_glow;			// Secondary ghost glow
 
-void() dk_stand = {
+void() dk_stand = { // [FUNCTION]
 	if (self.spawnflags & MON_GHOST_ONLY) {
 		if (self.movetype != MOVETYPE_NONE) self.movetype = MOVETYPE_NONE;
 		dknight_ghost_particle();
@@ -320,10 +320,8 @@ void()	dknight_smash9	= [	$smash10,	dknight_smash10	] { ai_charge(3); ai_melee()
 void()	dknight_smash10	= [	$smash12,	dknight_smash11	] { ai_charge(0); ai_melee(); };
 void()	dknight_smash11	= [	$smash13,	dknight_run1	] { ai_charge(0); };
 
-//----------------------------------------------------------------------
 // Melee Attack 3 - W_Attack (two handed slashing attack)
 // Identical frame set (Hell Knight / Death Knight)
-
 void()	dknight_watk1	= [	$w_attack1,	dknight_watk2	] { ai_charge(2); };
 void()	dknight_watk2	= [	$w_attack2,	dknight_watk3	] { monster_footstep(FALSE); ai_charge(0); };
 void()	dknight_watk3	= [	$w_attack3,	dknight_watk4	] { ai_charge(0); };
@@ -352,9 +350,7 @@ void()	dknight_watk22	= [	$w_attack22,	dknight_run1	] { ai_charge(3); };
 // Attack 1 - Slice (one hand slashing run attack)
 // Attack 2 - Smash (chop overhead to ground)
 // Attack 3 - W_Attack (two handed slashing attack)
-
-//----------------------------------------------------------------------
-void() dknight_melee = {
+void() dknight_melee = { // [FUNCTION]
 	self.meleeattack = self.meleeattack + 1;
 
 	if (self.meleeattack == 1) dknight_slice1();
@@ -365,10 +361,8 @@ void() dknight_melee = {
 	}
 };
 
-//===========================================================================
 // Hell Knight - 11 frames / Death Knight - 14 frames (skipped 1, 10,14)
 // Death Knight frames trimmed down to match Hell Knight (damage ratio)
-
 void()	dknight_magicc1 = [	$magicc2,	dknight_magicc2	] { ai_face(); };
 void()	dknight_magicc2 = [	$magicc3,	dknight_magicc3	] { ai_face(); };
 void()	dknight_magicc3 = [	$magicc4,	dknight_magicc4	] { ai_face(); };
@@ -388,7 +382,6 @@ void()	dknight_painA3	= [	$painA3,		dknight_painA4	] {};
 void()	dknight_painA4	= [	$painA4,		dknight_painA5	] {};
 void()	dknight_painA5	= [	$painA5,		dknight_run1	] {};
 
-//----------------------------------------------------------------------
 void()	dknight_painD1	= [	$painD1,		dknight_painD2	] {};
 void()	dknight_painD2	= [	$painD2,		dknight_painD3	] {};
 void()	dknight_painD3	= [	$painD3,		dknight_painD4	] {};
@@ -468,8 +461,7 @@ void()	dknight_dieb18	= [	$deathb18,	dknight_dieb19	] {};
 void()	dknight_dieb19	= [	$deathb19,	dknight_dieb20	] { monster_death_postcheck(); };
 void()	dknight_dieb20	= [	$deathb20,	dknight_dieb20	] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
-void() dknight_die = {
+void() dknight_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -487,7 +479,7 @@ void() dknight_die = {
 
 void() dknight_ghostnull = {};
 
-void() dknight_ghost_glow = {
+void() dknight_ghost_glow = { // [FUNCTION]
 	if (self.attachment) {
 		self.attachment.frame = self.frame;
 		setorigin(self.attachment, self.origin);
@@ -498,7 +490,7 @@ void() dknight_ghost_glow = {
 	}
 };
 
-void() dknight_ghost_particle = {
+void() dknight_ghost_particle = { // [FUNCTION]
 	self.alpha = 0.5 + (0.1*random());
 	self.pos1 = '0 0 0';
 	self.pos1_x = crandom()*16;
@@ -515,7 +507,7 @@ void() dknight_ghost_particle = {
 };
 
 // The use function is for triggering the ghost to move
-void() dknight_ghost_use = { 
+void() dknight_ghost_use = {  // [FUNCTION]
 	// Check for a delay target route (using target2).
 	if (self.estate == ESTATE_ON && self.target2 != "") {
 		self.target = self.target2;
@@ -526,7 +518,7 @@ void() dknight_ghost_use = {
 	self.estate_on(); // Always go to an on state.
 };
 
-void() dknight_ghost_fade = {
+void() dknight_ghost_fade = { // [FUNCTION]
 	if (self.estate == ESTATE_ON) return;
 	self.endstate = self.endstate - FADEMODEL_TIME;
 	if (self.classtype != CT_MONQUEEN) self.alpha = self.endstate;
@@ -541,7 +533,7 @@ void() dknight_ghost_fade = {
 	else self.nextthink = time + FADEMODEL_TIME;
 };
 
-void() dknight_ghost_off = {
+void() dknight_ghost_off = { // [FUNCTION]
 	// Block if already off
 	if (self.estate == ESTATE_OFF) return;	
 
@@ -565,7 +557,7 @@ void() dknight_ghost_off = {
 	self.nextthink = time + FADEMODEL_TIME;
 }
 
-void() dknight_ghost_on = {
+void() dknight_ghost_on = { // [FUNCTION]
 	local float pcol;
 	
 	if (self.estate == ESTATE_ON) return; // Block if already ON
@@ -615,7 +607,7 @@ void() dknight_ghost_on = {
 	self.th_stand();
 };
 
-void() monster_dknight_precache = {
+void() monster_dknight_precache = { // [FUNCTION]
 	precache_model("progs/ad181/mon_dknight.mdl");
 	precache_model("progs/ad181/h_dknight.mdl");
 	precache_model(MODEL_PROJ_HKN);
@@ -637,7 +629,7 @@ void() monster_dknight_precache = {
 };
 
 // QUAKED monster_dknight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_dknight = {
+void() monster_dknight = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -713,7 +705,7 @@ void() monster_dknight = {
 	}
 };
 
-void() monster_dknightghost = {
+void() monster_dknightghost = { // [ENTITY]
 	self.spawnflags = MON_GHOST_ONLY;
 	monster_dknight();
 };

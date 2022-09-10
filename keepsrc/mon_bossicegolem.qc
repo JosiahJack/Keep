@@ -614,7 +614,7 @@ void() iceg_waveb24 = [$magic24, iceg_run1 ] {
 	self.pain_finished = self.attack_finished = time + 2;
 };
 
-void() iceg_turnframe = {
+void() iceg_turnframe = { // [FUNCTION]
 	if (self.health < 1) return; // Do nothing if dead
 	
 	// Check for any special frame events

@@ -36,14 +36,14 @@ $frame painB9 painB10 painB11 painB12 painB13 painB14 painB15 painB16
 $frame painB17 painB18 painB19 painB20
 
 // Work out angle difference between player and boss
-float(vector targorg, float angdiff) eidolon_angcheck = {
+float(vector targorg, float angdiff) eidolon_angcheck = { // [FUNCTION]
 	self.ideal_yaw = vectoyaw(targorg - self.origin);
 	if ((self.ideal_yaw - angdiff) > self.angles_y) return TRUE;
 	else if ((self.ideal_yaw + angdiff)<self.angles_y) return TRUE;
 	else return FALSE;
 };
 
-void() eidolon_idle = {
+void() eidolon_idle = { // [FUNCTION]
 	if (self.health < 1) return; // Do nothing if dead
 
 	if (self.walkframe == 1) monster_idle_sound();
@@ -54,7 +54,7 @@ void() eidolon_idle = {
 	ai_stand();
 };
 
-void() eidolon_stand1 = [$stand1, eidolon_idle ] { self.walkframe = 0; };
+void() eidolon_stand1 = [$stand1, eidolon_idle ] { self.walkframe = 0; }; // [FUNCTION]
 
 // There is only one set of animations for walk and run and
 // the only different is the final AI state (walk/run) 
@@ -63,7 +63,7 @@ void() eidolon_stand1 = [$stand1, eidolon_idle ] { self.walkframe = 0; };
 float EIDOLON_WALK = 2;
 float EIDOLON_RUN = 4;
 
-void(float fstate) eidolon_move = {
+void(float fstate) eidolon_move = { // [FUNCTION]
 	if (self.health < 1) return; // Do nothing if dead
 
 	self.nextthink = time + 0.05;
@@ -102,24 +102,13 @@ void(float fstate) eidolon_move = {
 	else if (fstate == EIDOLON_RUN && self.enemy) ai_run(6);
 };
 
-void() eidolon_walk1 = [$walk1, eidolon_walk1 ] { eidolon_move(EIDOLON_WALK); };
-void() eidolon_run1 = [$walk1, eidolon_run1 ] { eidolon_move(EIDOLON_RUN); };
+void() eidolon_walk1 = [$walk1, eidolon_walk1 ] { eidolon_move(EIDOLON_WALK); }; // [FUNCTION]
+void() eidolon_run1 = [$walk1, eidolon_run1 ] { eidolon_move(EIDOLON_RUN); }; // [FUNCTION]
 
-// Attachment management (create, finish and delete)
-void() eidolon_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = MODEL_PROJ_EIDO1;
-	}
-};
-
-void() eidolon_setup_attachment = {
+void() eidolon_setup_attachment = { // [FUNCTION]
 	if (self.health < 1) return; // Is monster dead or dying?
 
-	if (!self.attachment) eidolon_create_attachment(); // Check if attachment has been setup yet
+	SUB_CreateSelfAttachment(MODEL_PROJ_EIDO1,1.0);
 	SUB_FinishAttachment();
 	setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin(self.attachment, self.origin); // Move attachment into place ready for use
@@ -129,7 +118,7 @@ void() eidolon_setup_attachment = {
 
 // ATTACK A  - Fire large explosive rock (grenade)
 // Animation - Spell, put right hand up and infront
-void(vector rockofs) Fire_attackA = {
+void(vector rockofs) Fire_attackA = { // [FUNCTION]
 	local float foffset, offset, shotcount;
 	local vector org, sorg, dir, offang, avel;
 
@@ -162,12 +151,10 @@ void(vector rockofs) Fire_attackA = {
 	}
 };
 
-void(vector rockofs, float rockframe) Setup_attackA = {
+void(vector rockofs, float rockframe) Setup_attackA = { // [FUNCTION]
 	local vector org;
 
-	if (!self.attachment) eidolon_create_attachment(); // Check if attachment has been setup yet
-	
-	// Frame 0 is start of the sequence (move everything into place)
+	SUB_CreateSelfAttachment(MODEL_PROJ_EIDO1,1.0); // Frame 0 is start of the sequence (move everything into place)
 	if (rockframe == 0) {
 		self.attachment.state = STATE_ON;
 		self.attachment.movetype = MOVETYPE_NONE;
@@ -186,7 +173,7 @@ void(vector rockofs, float rockframe) Setup_attackA = {
 	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_WHITE, 0); // Random explosion like particles from ball as it grows
 };
 
-void() eidolon_attackA2 = {
+void() eidolon_attackA2 = { // [FUNCTION]
 	if (self.health < 0) return; // Do nothing if dead
 
 	self.nextthink = time + 0.05;
@@ -214,11 +201,11 @@ void() eidolon_attackA1 = [$spell1, eidolon_attackA2 ] { ai_face();
 
 // ATTACK B - Drops rocks randomly from above player
 // Animation - Howl, raise arms up and then pull down
-void() eidolon_attackB1 = {};
+void() eidolon_attackB1 = {}; // [FUNCTION]
 
 // ATTACK C - Projectile vomit rocks and dust at the player
 // Animation - breathe, swings arms back and push head forward
-void(vector rockofs) Fire_attackC = {
+void(vector rockofs) Fire_attackC = { // [FUNCTION]
 	local vector org, dir;
 
 	if (!self.enemy) return;
@@ -234,43 +221,31 @@ void(vector rockofs) Fire_attackC = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_GROCK,self.attack_speed);
 };
 
-void() eidolon_attackC2 = {
-	// Do nothing if dead
-	if (self.health < 0) return;
+void() eidolon_attackC2 = { // [FUNCTION]
+	if (self.health < 0) return; // Do nothing if dead
 
 	self.nextthink = time + 0.05;
-	// Keep turning towards the player
-	ai_face();
-	
-	// Keep moveing the animation frame forward
+	ai_face(); // Keep turning towards the player
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > 43) self.think = self.th_run;
-	self.frame = $breath1 + self.walkframe;
-	
-	// Start demon roar and then rocks!?!
-	if (self.frame == $breath4)
-		sound(self,CHAN_WEAPON,"ad171/eidolon/attackc.wav",1,ATTN_NORM);
-	
-	// Rock breath!?!
-	if (self.frame > $breath17 && self.frame < $breath35)
-		Fire_attackC('56 0 44');
+	self.frame = $breath1 + self.walkframe; // Keep moveing the animation frame forward
+	if (self.frame == $breath4) sound(self,CHAN_WEAPON,"ad171/eidolon/attackc.wav",1,ATTN_NORM); // Start demon roar and then rocks!?!
+	if (self.frame > $breath17 && self.frame < $breath35) Fire_attackC('56 0 44'); // Rock breath!?!
 };
 
-void() eidolon_attackC1 = [$breath1, eidolon_attackC2 ] { ai_face();
+void() eidolon_attackC1 = [$breath1, eidolon_attackC2 ] { // [FUNCTION]
+	ai_face();
 	self.pain_finished = time + 2;
 	self.walkframe = 0;
 };
 
 // ATTACK E - Summon monsters from blocks of stone
 // Animation - power, lean head back, put hands up right infront
-void(vector rockofs, float rockframe) Setup_attackE = {
+void(vector rockofs, float rockframe) Setup_attackE = { // [FUNCTION]
 	local vector org;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) eidolon_create_attachment();
-	
-	// Frame 0 is start of the sequence (move everything into place)
-	if (rockframe == 0) {
+	SUB_CreateSelfAttachment(MODEL_PROJ_EIDO1,1.0);
+	if (rockframe == 0) { // Frame 0 is start of the sequence (move everything into place)
 		self.attachment.state = STATE_ON;
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
@@ -306,7 +281,7 @@ void(vector rockofs, float rockframe) Setup_attackE = {
 	}
 };
 
-void() eidolon_attackE_firing = {
+void() eidolon_attackE_firing = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	
 	// Keep moveing the animation frame forward
@@ -331,9 +306,9 @@ void() eidolon_attackE_firing = {
 	else if (self.frame == $power13) Setup_attackE('80 16 104',7);
 }
 
-void() eidolon_attackE2 = [$power1, eidolon_attackE_firing ] { self.walkframe = 0; };
+void() eidolon_attackE2 = [$power1, eidolon_attackE_firing ] { self.walkframe = 0; }; // [FUNCTION]
 
-void() eidolon_attackE_turning = {
+void() eidolon_attackE_turning = { // [FUNCTION]
 	self.nextthink = time + 0.05;
 	
 	// Turn towards the power crystal
@@ -357,7 +332,7 @@ void() eidolon_attackE_turning = {
 	else walkmove (self.ideal_yaw - 180, 3);
 };
 
-void() eidolon_attackE1 = [$walk1, eidolon_attackE_turning ] {
+void() eidolon_attackE1 = [$walk1, eidolon_attackE_turning ] { // [FUNCTION]
 	Resist_ChangeType(self, TRUE);
 	self.takedamage = DAMAGE_NO;
 	self.goalentity = self.attachment2;
@@ -371,7 +346,7 @@ void() eidolon_attackE1 = [$walk1, eidolon_attackE_turning ] {
 };
 
 // PAIN and DEATH
-void() eidolon_painA2 = {
+void() eidolon_painA2 = { // [FUNCTION]
 	// Do nothing if dead
 	if (self.health < 1) return;
 	self.nextthink = time + 0.1;
@@ -385,7 +360,7 @@ void() eidolon_painA2 = {
 	else self.frame = $painA1 + self.walkframe;
 };
 
-void() eidolon_painB2 = {
+void() eidolon_painB2 = { // [FUNCTION]
 	// Do nothing if dead
 	if (self.health < 1) return;
 	self.nextthink = time + 0.05;
@@ -399,10 +374,10 @@ void() eidolon_painB2 = {
 	else self.frame = $painB1 + self.walkframe;
 };
 
-void() eidolon_painA1 = [$painA1, eidolon_painA2 ] { self.walkframe = 0; };
-void() eidolon_painB1 = [$painB1, eidolon_painB2 ] { self.walkframe = 0; };
+void() eidolon_painA1 = [$painA1, eidolon_painA2 ] { self.walkframe = 0; }; // [FUNCTION]
+void() eidolon_painB1 = [$painB1, eidolon_painB2 ] { self.walkframe = 0; }; // [FUNCTION]
 
-void(entity inflictor, entity attacker, float damage) eidolon_pain = {
+void(entity inflictor, entity attacker, float damage) eidolon_pain = { // [FUNCTION]
 	SUB_FinishAttachment(); // Finish with all attachments
 
 	// Check for boss wave trigger events
@@ -426,7 +401,7 @@ void(entity inflictor, entity attacker, float damage) eidolon_pain = {
 };
 
 // Oh no rocky has died!?!
-void() eidolon_explode = {
+void() eidolon_explode = { // [FUNCTION]
 	if (self.deathtarget != "") trigger_strs(self.deathtarget,self); // Check for any final trigger events
 	entity_hide(self); // No more Boss!
 	Tent_Explosion2(self.origin,35,8); // Blue ID particle explosion
@@ -438,7 +413,7 @@ void() eidolon_explode = {
 	ThrowGib(5, 5 + rint(random()*3));
 };
 
-void(vector start, vector dir, entity source) M_FireRandomLightningEffect = {
+void(vector start, vector dir, entity source) M_FireRandomLightningEffect = { // [FUNCTION]
 	traceline(start,dir * 600,FALSE,self);
 	Tent_Beam(TE_LIGHTNING2,source,self.origin,trace_endpos);
 	if (random() < 0.5) { // Play some arching lightning sounds
@@ -448,7 +423,7 @@ void(vector start, vector dir, entity source) M_FireRandomLightningEffect = {
 	}
 };
 
-void() eidolon_die2 = {
+void() eidolon_die2 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	if (self.frame == $crouch3) self.solid = SOLID_NOT;
 	
@@ -483,9 +458,9 @@ void() eidolon_die2 = {
 	if (self.lip > 40) eidolon_explode();
 };
 
-void() eidolon_die1 = [$crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0; };
+void() eidolon_die1 = [$crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0; }; // [FUNCTION]
 
-void() eidolon_die = {
+void() eidolon_die = { // [FUNCTION]
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
 	SUB_FinishAttachment();	// Remove any attachments
@@ -497,7 +472,7 @@ void() eidolon_die = {
 };
 
 // Roar and break free from cage!
-void() eidolon_free2 = {
+void() eidolon_free2 = { // [FUNCTION]
 	// Do nothing if dead
 	if (self.health < 1) return;
 
@@ -513,14 +488,14 @@ void() eidolon_free2 = {
 	self.frame = $howl1 + self.walkframe;
 };
 
-void() eidolon_free1 = [$howl1, eidolon_free2 ] {
+void() eidolon_free1 = [$howl1, eidolon_free2 ] { // [FUNCTION]
 	self.takedamage = DAMAGE_YES;		// Enable resistance effects
 	sound(self,CHAN_VOICE, self.sight_sound,1,ATTN_NORM);
 	self.walkframe = 0;
 };
 
 // Setup Eidolon after trigger event
-void() eidolon_wakeup = {
+void() eidolon_wakeup = { // [FUNCTION]
 	self.use = monster_use; // we are normal now
 	self.th_stand = eidolon_stand1; // Restore all think functions
 	self.th_walk = eidolon_walk1;
@@ -542,7 +517,7 @@ void() eidolon_wakeup = {
 	}
 };
 
-void() eidolon_start = {
+void() eidolon_start = { // [FUNCTION]
 	self.style = EIDOLON_PHASE1;	// Trapped in cage
 	self.yaw_speed = 6;				// Really slow while in cage
 	self.velocity = '0 0 0';		// Make sure stationary
@@ -592,7 +567,7 @@ void() eidolon_start = {
 	}
 };
 
-void() monster_eidolon_precache = {
+void() monster_eidolon_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_bosseidolon.mdl");
 	precache_model(MODEL_PROJ_EIDO1);
 	precache_model(MODEL_PROJ_GROCK1);
@@ -622,7 +597,7 @@ void() monster_eidolon_precache = {
 };
 
 // QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
-void() monster_eidolon = {
+void() monster_eidolon = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups	
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
@@ -666,27 +641,23 @@ void() monster_eidolon = {
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
 	monster_start();
-
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[EIDO_BOSS]\b Missing trigger name!\n");
+	if (self.targetname == "") { // No targetname = no trigger!
+		dprint("\b[EIDO_BOSS]\b Missing trigger name! Starting now.\n");
 		eidolon_start();
 	}
 };
 
-
-/*QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
-Target for boss lightning wave event
--------- KEYS --------
-targetname : name of wave event (links to noise key on boss)
-target     : trigger name of adds to spawn
-target2    : trigger name of crystal event
-noise      : targetname of collision entity
--------- SPAWNFLAGS --------
--------- NOTES --------
-Target for boss lightning wave event
-======================================================================*/
-void() monster_eidolon_wavetrig = {
+// QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
+// Target for boss lightning wave event
+// -------- KEYS --------
+// targetname : name of wave event (links to noise key on boss)
+// target     : trigger name of adds to spawn
+// target2    : trigger name of crystal event
+// noise      : targetname of collision entity
+// -------- SPAWNFLAGS --------
+// -------- NOTES --------
+// Target for boss lightning wave event
+void() monster_eidolon_wavetrig = { // [ENTITY]
 	self.classtype = CT_MONEIDOLONWAVE;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;

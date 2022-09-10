@@ -89,7 +89,7 @@ float spirit_atk;
 void() spirit_sword_sound;
 
 // Glowing aura attachment model, setup and management
-void() spirit_glow = {	
+void() spirit_glow = { // [FUNCTION]
 	if (self.model == "") {
 		setmodel(self.attachment, "");
 	}
@@ -107,13 +107,13 @@ void() spirit_glow = {
 	if (self.attachment.alpha <= 0) self.attachment.alpha = 0.04;
 };
 
-void() spirit_glow_off = {
+void() spirit_glow_off = { // [FUNCTION]
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 	}
 };
 
-void() spirit_remove_glow = {
+void() spirit_remove_glow = { // [FUNCTION]
 	if (self.attachment) {
 		self.attachment.state = FALSE;
 		self.attachment.think = SUB_Remove;
@@ -122,7 +122,7 @@ void() spirit_remove_glow = {
 };
 
 
-void() spirit_alphacontrol = {
+void() spirit_alphacontrol = { // [FUNCTION]
 	if (self.alpha < 1) { 
 		self.alpha = self.alpha + 0.5;
 	}
@@ -153,13 +153,13 @@ void()	spirit_laugh19	= [	$laugh19,	spirit_stand1	] { ai_stand(); spirit_glow();
 
 
 void()	spirit_stand1	= [	$stand1,	spirit_stand2	] { ai_stand(); 
-spirit_alphacontrol();
-self.skin = 0;
-spirit_glow();
+	spirit_alphacontrol();
+	self.skin = 0;
+	spirit_glow();
 };
 void()	spirit_stand2	= [	$stand2,	spirit_stand3	] { ai_stand();
-spirit_alphacontrol();
-spirit_glow();
+	spirit_alphacontrol();
+	spirit_glow();
 };
 void()	spirit_stand3	= [	$stand3,	spirit_stand4	] { ai_stand(); spirit_glow(); };
 void()	spirit_stand4	= [	$stand4,	spirit_stand5	] { ai_stand(); spirit_glow(); };
@@ -178,8 +178,8 @@ self.idlebusy = FALSE;
 
 
 void()	spirit_walk1	= [	$walk1,		spirit_walk2	] { self.skin = 0; ai_walk(4);
-spirit_glow();
-monster_idle_sound();
+	spirit_glow();
+	monster_idle_sound();
 };
 void()	spirit_walk2	= [	$walk2,		spirit_walk3	] { ai_walk(4); spirit_glow(); };
 void()	spirit_walk3	= [	$walk3,		spirit_walk4	] { ai_walk(4); spirit_glow(); };
@@ -194,9 +194,9 @@ void()	spirit_walk11	= [	$walk11,	spirit_walk1	] { ai_walk(4); spirit_glow(); };
 
 
 void()	spirit_run1	= [	$run1,		spirit_run2	] { ai_run(18);
-spirit_alphacontrol();
-spirit_glow(); 
-monster_idle_sound();
+	spirit_alphacontrol();
+	spirit_glow(); 
+	monster_idle_sound();
 };
 void()	spirit_run2	= [	$run2,		spirit_run3	] { ai_run(18);
 spirit_alphacontrol();
@@ -211,7 +211,7 @@ void()	spirit_run8	= [	$run8,		spirit_run9	] { ai_run(18); spirit_glow(); };
 void()	spirit_run9	= [	$run9,		spirit_run1	] { ai_run(18); spirit_glow(); };
 
 // Range - Fade to invisible and charge
-void() spirit_ifin1 = {
+void() spirit_ifin1 = { // [FUNCTION]
 	self.velocity = '0 0 0';
 	// Always phase in facing the enemy
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
@@ -225,7 +225,7 @@ void() spirit_ifin1 = {
 };
 
 // Find new teleport location
-void() spirit_fade = {
+void() spirit_fade = { // [FUNCTION]
 	local float dist, edist, fadefinished, fadecount;
 	local vector org, org_ofs, angle_vec;
 
@@ -303,7 +303,7 @@ void() spirit_fade = {
 };
 
 // Cycle around teleport chain lists instead
-void() spirit_waitforlink = {
+void() spirit_waitforlink = { // [FUNCTION]
 	self.nextthink = time + 0.5 + random();
 	self.think = spirit_waitforlink;
 	setorigin(self, self.movelast.origin);	// move to new location
@@ -326,7 +326,7 @@ void() spirit_waitforlink = {
 	}
 };
 
-void() spirit_checkfadelist = {
+void() spirit_checkfadelist = { // [FUNCTION]
 		// Does the fade list exist already?
 	if (self.movelast.classtype != CT_SPIRITTELEPORT) {
 		self.movelast = find(world,targetname,self.target2);
@@ -346,7 +346,7 @@ void() spirit_checkfadelist = {
 };
 
 // spin and fade to invisible
-void() spirit_spin1	= [$spin1,	spirit_spin2    ] {
+void() spirit_spin1	= [$spin1,	spirit_spin2    ] { // [FUNCTION]
 	self.pain_finished = time + 1.2;			// no pain during teleportation
 	self.attack_finished = 2 + random();			// pause before next attack
 	sound(self,CHAN_VOICE, "redfield/spirit/fadeout.wav",1,ATTN_NORM);
@@ -360,14 +360,14 @@ void() spirit_spin3	= [  $spin3,	spirit_spin4 ] {
 	particle_explode(self.origin, 100, 1, PARTICLE_BURST_WHITE, PARTICLE_BURST_UPWARD);
 	spirit_glow();
 };
-void() spirit_spin4	= [  $spin4,	spirit_spin5 ] { spirit_glow(); };
-void() spirit_spin5	= [  $spin5,	spirit_spin6 ] { spirit_glow(); };
-void() spirit_spin6	= [  $spin6,	spirit_spin8 ] { spirit_glow(); };
-void() spirit_spin7	= [  $spin7,	spirit_spin8 ] { spirit_glow(); };
-void() spirit_spin8	= [  $spin8,	spirit_spin9 ] { self.alpha = 0.8; spirit_glow(); };
-void() spirit_spin9	= [  $spin9,	spirit_spin10 ] { self.alpha = 0.4; spirit_glow(); };
-void() spirit_spin10	= [  $spin10,	spirit_spin11 ] { self.alpha = 0.2; spirit_glow(); };
-void() spirit_spin11	= {
+void() spirit_spin4	= [  $spin4,	spirit_spin5 ] { spirit_glow(); }; // [FUNCTION]
+void() spirit_spin5	= [  $spin5,	spirit_spin6 ] { spirit_glow(); }; // [FUNCTION]
+void() spirit_spin6	= [  $spin6,	spirit_spin8 ] { spirit_glow(); }; // [FUNCTION]
+void() spirit_spin7	= [  $spin7,	spirit_spin8 ] { spirit_glow(); }; // [FUNCTION]
+void() spirit_spin8	= [  $spin8,	spirit_spin9 ] { self.alpha = 0.8; spirit_glow(); }; // [FUNCTION]
+void() spirit_spin9	= [  $spin9,	spirit_spin10 ] { self.alpha = 0.4; spirit_glow(); }; // [FUNCTION]
+void() spirit_spin10	= [  $spin10,	spirit_spin11 ] { self.alpha = 0.2; spirit_glow(); }; // [FUNCTION]
+void() spirit_spin11	= { // [FUNCTION]
 	setmodel(self,"");
 	spirit_glow();
 	self.attachment.movetype = MOVETYPE_NOCLIP;
@@ -376,20 +376,22 @@ void() spirit_spin11	= {
 	else spirit_fade();
 };
 
-void()	spirit_slasha1	= [	$slasha1,	spirit_slasha2	] { ai_charge(20); spirit_alphacontrol(); spirit_glow(); };
-void()	spirit_slasha2	= [	$slasha2,	spirit_slasha3	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
-void()	spirit_slasha3	= [	$slasha3,	spirit_slasha4	] { ai_charge_side(); self.skin = 0; spirit_glow(); };
-void()	spirit_slasha4	= [	$slasha4,	spirit_slasha5	] { ai_charge_side(); spirit_glow(); };
-void()	spirit_slasha5	= [	$slasha5,	spirit_slasha6	] { ai_charge_side(); spirit_sword_sound(); spirit_glow(); };
-void()	spirit_slasha6	= [	$slasha6,	spirit_slasha7	] { ai_melee_side(); spirit_glow(); };
-void()	spirit_slasha7	= [	$slasha7,	spirit_slasha8	] { ai_melee_side(); spirit_glow(); };
-void()	spirit_slasha8	= [	$slasha8,	spirit_slasha9	] { ai_charge_side(); spirit_glow(); };
-void()	spirit_slasha9	= [	$slasha9,	spirit_run1	] { ai_charge(12); spirit_glow();
+void()	spirit_slasha1	= [	$slasha1,	spirit_slasha2	] { ai_charge(20); spirit_alphacontrol(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha2	= [	$slasha2,	spirit_slasha3	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha3	= [	$slasha3,	spirit_slasha4	] { ai_charge_side(); self.skin = 0; spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha4	= [	$slasha4,	spirit_slasha5	] { ai_charge_side(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha5	= [	$slasha5,	spirit_slasha6	] { ai_charge_side(); spirit_sword_sound(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha6	= [	$slasha6,	spirit_slasha7	] { ai_melee_side(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha7	= [	$slasha7,	spirit_slasha8	] { ai_melee_side(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha8	= [	$slasha8,	spirit_slasha9	] { ai_charge_side(); spirit_glow(); }; // [FUNCTION]
+void()	spirit_slasha9	= [	$slasha9,	spirit_run1	] { // [FUNCTION]
+	ai_charge(12);
+	spirit_glow();
 	if (random() < 0.35) spirit_spin1();
 };
 
 void()	spirit_slashb1	= [	$slashb1,	spirit_slashb2	] { ai_charge(20); spirit_alphacontrol();
-spirit_glow();
+	spirit_glow();
 };
 void()	spirit_slashb2	= [	$slashb2,	spirit_slashb3	] { ai_charge(14); spirit_alphacontrol(); spirit_glow(); };
 void()	spirit_slashb3	= [	$slashb3,	spirit_slashb4	] { ai_charge_side(); self.skin = 0; spirit_glow(); };
@@ -400,7 +402,7 @@ void()	spirit_slashb7	= [	$slashb7,	spirit_slashb8	] { ai_charge_side(); spirit_
 void()	spirit_slashb8	= [	$slashb8,	spirit_slashb9	] { ai_charge(8); spirit_glow(); };
 void()	spirit_slashb9	= [	$slashb9,	spirit_slashb10	] { ai_charge(12); spirit_glow(); };
 void()	spirit_slashb10	= [	$slashb10,	spirit_run1	] { ai_charge(16); spirit_glow();
-if (random() < 0.3) spirit_spin1();
+	if (random() < 0.3) spirit_spin1();
 };
 
 void()	spirit_stab1	= [	$stab1,		spirit_stab2	] { ai_charge(16); spirit_alphacontrol(); spirit_glow(); };
@@ -409,8 +411,8 @@ void()	spirit_stab3	= [	$stab3,		spirit_stab4	] { ai_charge(10); self.skin = 0; 
 void()	spirit_stab4	= [	$stab4,		spirit_stab5	] { ai_charge(8); spirit_glow(); };
 void()	spirit_stab5	= [	$stab5,		spirit_stab6	] { ai_charge(8); spirit_glow(); };
 void()	spirit_stab6	= [	$stab6,		spirit_stab7	] { ai_charge(1); spirit_sword_sound();
-spirit_glow();
-ai_melee();
+	spirit_glow();
+	ai_melee();
 };
 void()	spirit_stab7	= [	$stab7,		spirit_stab8	] { ai_charge(0); spirit_glow(); ai_melee(); };
 void()	spirit_stab8	= [	$stab8,		spirit_stab9	] { ai_charge(0); spirit_glow(); ai_melee(); };
@@ -420,7 +422,7 @@ if (random() < 0.25) spirit_spin1();
 };
 
 // Buildup particles for scream
-void(vector leftofsb, vector rightofsb) spirit_charge = {	
+void(vector leftofsb, vector rightofsb) spirit_charge = { // [FUNCTION]
 	if (self.health < 1) return;
 
 	// Work out each hand position
@@ -492,7 +494,7 @@ void()	spirit_scream17	= [	$scream17,	spirit_scream18	] { ai_charge(8); spirit_g
 void()	spirit_scream18	= [	$scream18,	spirit_scream19	] { ai_charge(12); spirit_glow(); };
 void()	spirit_scream19	= [	$scream19,	spirit_run1	] { ai_charge(16); spirit_glow(); };
 
-void() spirit_chooseatk = {
+void() spirit_chooseatk = { // [FUNCTION]
 	if (!ai_checkmelee(self.meleerange,FALSE)) return;		// Too far away
 	if (self.health < 1) return;				// Ghost is dead again
 
@@ -509,7 +511,7 @@ void() spirit_chooseatk = {
 	}
 }; 
 
-void() spirit_phased = { 
+void() spirit_phased = { // [FUNCTION]
 	self.nextthink = time + 0.1;	// Keep looking for player
 	self.think = spirit_phased;		// Keep looping
 	if (random() < 0.02) 
@@ -518,7 +520,7 @@ void() spirit_phased = {
 	ai_stand(); 					// Keep looking
 };
 
-void() spirit_wakeup = {
+void() spirit_wakeup = { // [FUNCTION]
 	// Reset all monster state functions back to default
 	self.th_stand = spirit_stand1;
 	self.th_walk = spirit_walk1;
@@ -559,8 +561,7 @@ void()	spirit_pain10	= [	$pain10,	spirit_run1	] { spirit_glow();
 if (random() < 0.75) spirit_spin1();
 };
 
-void(entity inflictor, entity attacker, float damage) spirit_pain = {
-	
+void(entity inflictor, entity attacker, float damage) spirit_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 	self.skin = 0;
@@ -599,7 +600,7 @@ void()	spirit_death12	= [	$death12,	spirit_death12	] {
 	entity_hide(self);
 };
 
-void() spirit_die = {
+void() spirit_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -624,14 +625,14 @@ void() spirit_die = {
 	}
 };
 
-void() spirit_sword_sound = {
+void() spirit_sword_sound = { // [FUNCTION]
 	self.weaponstate = random();
 	if (self.weaponstate < 0.35) sound(self,CHAN_WEAPON,"redfield/spirit/slash1.wav",1,ATTN_NORM);
 	else if (self.weaponstate < 0.65) sound(self,CHAN_WEAPON,"redfield/spirit/slash2.wav",1,ATTN_NORM);
 	else sound(self,CHAN_WEAPON,"redfield/spirit/slash3.wav",1,ATTN_NORM);
 };
 
-void() monster_spirit_precache = {
+void() monster_spirit_precache = { // [FUNCTION]
 	precache_model ("progs/redfield/mon_spirit.mdl");
 	precache_model ("progs/redfield/mon_spirit_glow.mdl"); // Glowing aura attachment
 	precache_model ("progs/redfield/sword_spirit.mdl");

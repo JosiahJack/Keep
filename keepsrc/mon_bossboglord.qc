@@ -55,30 +55,6 @@ void() bogl_run4 = [$run4, bogl_run5 ] { ai_run(20); };
 void() bogl_run5 = [$run5, bogl_run6 ] { monster_footstep(FALSE); ai_run(24); };
 void() bogl_run6 = [$run6, bogl_run1 ] { ai_run(20); };
 
-// Attachment management (create, finish and delete)
-void() bogl_create_attachment = { // [FUNCTION]
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.alpha = 0.85;
-	}
-	if (!self.attachment2) {
-		self.attachment2 = spawn();
-		self.attachment2.owner = self;
-		self.attachment2.classtype = CT_ATTACHMENT;
-		self.attachment2.alpha = 0.85;
-	}
-
-	if (!self.attachment3) {
-		self.attachment3 = spawn();
-		self.attachment3.owner = self;
-		self.attachment3.classtype = CT_ATTACHMENT;
-		self.attachment3.alpha = 1.0;
-	}
-};
-
 // RANGE ATTACK 1 - overhead SMASH/slime
 void(vector leftofs, vector rightofs) bogl_throwslime = {
 	local vector org, btarg, dir, avel;
@@ -111,8 +87,9 @@ void(vector leftofs, vector rightofs, float sbframe, float chfeet) bogl_slimebal
 	local vector org;
 	if (self.health < 1) return;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) bogl_create_attachment();
+	SUB_CreateSelfAttachment("",0.85); // Check if attachment has been setup yet
+	SUB_CreateSelfAttachment2("",0.85);
+	SUB_CreateSelfAttachment3("",1.00);
 	
 	// Frame 0 is start of the sequence (move everything into place)
 	if (sbframe == 0) {
@@ -210,11 +187,10 @@ void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
 	local float midpoint;
 	if (self.health < 1) return;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) bogl_create_attachment();
-
-	// Frame 0 is start of the sequence (move everything into place)
-	if (sbframe == 0) {
+	SUB_CreateSelfAttachment("",0.85); // Check if attachment has been setup yet
+	SUB_CreateSelfAttachment2("",0.85);
+	SUB_CreateSelfAttachment3("",1.00);
+	if (sbframe == 0) { // Frame 0 is start of the sequence (move everything into place)
 		setorigin(self.attachment, self.origin);
 		if (self.spawnflags & MON_BOGL_STRONG) 
 			setmodel(self.attachment, MODEL_PROJ_BLORDBEAM2);

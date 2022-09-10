@@ -263,7 +263,7 @@ void() drn_runb8 = [25, drn_runb9] { ai_run_slide(13); };
 void() drn_runb9 = [26, drn_runb10] { ai_run_slide(13); };
 void() drn_runb10 = [18, drn_run]  { ai_run_slide(13); if (crandom() > 0.5) sound(self,CHAN_VOICE, "drake/drone/drnhunt.wav",1,ATTN_NORM); };
 
-void() drn_run = {
+void() drn_run = { // [FUNCTION]
 	if (random() < 0.5)
 		drn_runa1();
 	else

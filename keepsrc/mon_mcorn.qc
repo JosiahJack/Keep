@@ -45,7 +45,7 @@ void() mcorn_run7		= [	40  ,	mcorn_run8	] { ai_run(16); };
 void() mcorn_run8		= [	41  ,	mcorn_run1	] { ai_run(32); };
 
 // Melee tail swipe
-void() mcorn_tailswipe = {
+void() mcorn_tailswipe = { // [FUNCTION]
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -76,7 +76,7 @@ void() mcorn_tailswipe = {
 };
 
 // Projectile spit launch
-void() mcorn_fire = {
+void() mcorn_fire = { // [FUNCTION]
 	local vector org, vec;
 
 	if (!self.enemy) return;
@@ -88,7 +88,7 @@ void() mcorn_fire = {
 };
 
 // Barrage of ricocheting spikes in a fan spray shape
-void() mcorn_barrage = {
+void() mcorn_barrage = { // [FUNCTION]
 	local	vector	offang;
 	local	vector	org, dir;
 	
@@ -145,7 +145,7 @@ void() mcorn_barrage = {
     launch_projectile(org,dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 };
 
-void() mcorn_projectiles = {
+void() mcorn_projectiles = { // [FUNCTION]
 	if (random() < 0.1) mcorn_barrage();
 	else mcorn_fire();
 };
@@ -280,7 +280,7 @@ void() mcorn_die23	= [	109,mcorn_die24	] { monster_death_postcheck(); };
 void() mcorn_die24	= [	110,mcorn_die24	] { monster_deadbody_check();sound(self,CHAN_VOICE, "qmaster/manticore/mon_manticore_ghostcall1.wav",1,ATTN_NORM); };
 
 // Invisible ghost that makes noises after death.  Is it dead?  IS IT???
-void() mcorn_ghostthink = {
+void() mcorn_ghostthink = { // [FUNCTION]
 	local float r;
 
 	r = random();
@@ -292,7 +292,7 @@ void() mcorn_ghostthink = {
 	self.nextthink = time + (random() * 15);
 };
 
-void() mcorn_die = {
+void() mcorn_die = { // [FUNCTION]
 	local entity ghoster;
 
 	// Pre-check routine to tidy up extra entities
@@ -311,7 +311,7 @@ void() mcorn_die = {
 	}
 };
 
-void() monster_mcorn_precache = {
+void() monster_mcorn_precache = { // [FUNCTION]
 	precache_model ("progs/madfox/h_mcorn.mdl");
 	precache_model ("progs/madfox/mon_manticore.mdl");
 	precache_model ("progs/madfox/proj_mcornflame.mdl");

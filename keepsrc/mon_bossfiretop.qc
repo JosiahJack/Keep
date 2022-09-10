@@ -145,26 +145,26 @@ void(entity inflictor, entity attacker, float damage) ftop_pain = { // [FUNCTION
 	self.health = self.max_health;
 };
 
-void() ftop_death1 = [$death1, ftop_death2] {
+void() ftop_death1 = [$death1, ftop_death2] { // [FUNCTION]
 	ftop_lightning();
 	sound(self,CHAN_VOICE, "ad171/chthon/death1.wav",1,ATTN_NORM);
 	if (self.noise3 != "") trigger_strs(self.noise3, self);
 };
-void() ftop_death2 = [$death2, ftop_death3] { ftop_lightning(); };
-void() ftop_death3 = [$death3, ftop_death4] { ftop_lightning(); };
-void() ftop_death4 = [$death4, ftop_death5] {};
-void() ftop_death5 = [$death5, ftop_death6] {};
-void() ftop_death6 = [$death6, ftop_death7] {};
-void() ftop_death7 = [$death7, ftop_death8] {};
-void() ftop_death8 = [$death8, ftop_death9] {};
-void() ftop_death9 = [$death9, ftop_death10] {
+void() ftop_death2 = [$death2, ftop_death3] { ftop_lightning(); }; // [FUNCTION]
+void() ftop_death3 = [$death3, ftop_death4] { ftop_lightning(); }; // [FUNCTION]
+void() ftop_death4 = [$death4, ftop_death5] {}; // [FUNCTION]
+void() ftop_death5 = [$death5, ftop_death6] {}; // [FUNCTION]
+void() ftop_death6 = [$death6, ftop_death7] {}; // [FUNCTION]
+void() ftop_death7 = [$death7, ftop_death8] {}; // [FUNCTION]
+void() ftop_death8 = [$death8, ftop_death9] {}; // [FUNCTION]
+void() ftop_death9 = [$death9, ftop_death10] { // [FUNCTION]
 	Tent_LavaSplash(self.origin,0,"ad171/chthon/lavasplash.wav");
 };
-void() ftop_death10 = [$death9, ftop_death11] {
+void() ftop_death10 = [$death9, ftop_death11] { // [FUNCTION]
 	AddToKills(self,self.enemy);
 	entity_hide(self);
 };
-void() ftop_death11 = { remove(self); };
+void() ftop_death11 = { remove(self); }; // [FUNCTION]
 
 void() ftop_shocka1 = [	$shocka1, ftop_shocka2 ] { ftop_lightning(); };
 void() ftop_shocka2 = [	$shocka2, ftop_shocka3 ] { ftop_lightning(); };

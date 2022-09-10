@@ -41,7 +41,7 @@
 
 void(entity own, entity starter) sphere_spawn;
 
-void() info_givepower_releasecenterprint = {
+void() info_givepower_releasecenterprint = { // [FUNCTION]
 	if (self.enemy) self.enemy.suppressCenterPrint = FALSE;
 	self.enemy = world;
 	entity_remove(self,0.1);
@@ -78,6 +78,7 @@ void(entity targ) artifact_powergive = { // [FUNCTION]
 	else if (self.classtype == CT_ARTEQUALIZER) GivePowerEqualizer(targ);
 	else if (self.classtype == CT_ARTLEVITATION) GivePowerLevitation(targ,self.cnt);
 	else if (self.classtype == CT_ARTOPTIMIZER) GivePowerOptimizer(targ,self);
+	else if (self.classtype == CT_ARTSUPERPACK) GivePowerOptimizer(targ,self); // Does all of ammos!
 	else if (self.classtype == CT_SIGILBANE) GivePowerSigilBane();
 	else if (self.classtype == CT_ARTREGEN) GivePowerRegeneration(targ,self);
 	else if (self.classtype == CT_ARTVITALITY) GivePowerVitality(targ,self);
@@ -178,6 +179,8 @@ void() info_givepower = { // [ENTITY]
 		if (self.max_health <=0) self.max_health = 25;
 	} else if (self.style == 27) {
 		self.classtype = CT_ARTTHORSBLESSING;
+	} else if (self.style == 28) {
+		self.classtype = CT_ARTSUPERPACK;
 	} else {
 		self.classtype = CT_ARTQUAD;
 	}
@@ -974,9 +977,9 @@ void() item_artifact_horn = { // [ENTITY]
 	item_start();
 };
 
-void() item_hornofconjouring = { self.classname = "item_artifact_horn"; item_artifact_horn(); }; // [ENTITY]
+void() item_hornofconjouring = { self.classname = "item_artifact_horn"; item_artifact_horn(); }; // [ENTITY], Redirect
 
-void() item_hornofconjuring = { item_hornofconjouring(); }; // [ENTITY]
+void() item_hornofconjuring = { item_hornofconjouring(); }; // [ENTITY], Redirect
 
 void() item_artifact_shambler = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/drake/doll03.mdl";
@@ -986,7 +989,7 @@ void() item_artifact_shambler = { // [ENTITY]
 	item_artifact_horn();
 };
 
-void() item_artifact_monster = { // [ENTITY]
+void() item_artifact_monster = { // [ENTITY], Redirect
     if (self.mdl == "") self.mdl = "progs/drake/doll03.mdl";
     if (self.netname == "") self.netname = "Monster Doll";
     if (self.noise == "") self.noise = "drake/items/shambler.wav";
@@ -1035,7 +1038,25 @@ void() item_artifact_levitation = { // [ENTITY]
 };
 
 // Original classname in Zerstorer.  Replaced Zerstorer's Dark-Angel Wings with Boots of Levitation.
-void() item_wings = { self.classname = "item_artifact_levitation"; item_artifact_levitation(); }; // [ENTITY]
+void() item_wings = { self.classname = "item_artifact_levitation"; item_artifact_levitation(); }; // [ENTITY], Redirect
+
+// Increases ammo capacity.  Works like backpack from Doom.
+// Set the max for all ammo types.
+// Gives the large ammo box amount for all 4 standard ammo and any non-standard ammo the player already has > 0 of.
+// All max carrying capacities are maxed out to the megamax regardless of what player has.
+void() item_artifact_super_pack = { // [ENTITY]
+	item_setupmodel("progs/drake/uberpack.mdl",0);
+	item_setupnoise("weapons/pkup.wav");
+    self.netname = "Super Pack";
+	self.classtype = CT_ARTSUPERPACK;
+	self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_CENTER;
+	self.respawn_ofs = '0 0 16';
+	self.ammo_shells = self.ammo_rockets = self.ammo_nails = self.ammo_cells = 255; // Capped by megamax values later.
+	self.ammo_lava_nails = self.ammo_multi_rockets = self.ammo_plasma = 255; // Not actually 255 when used, clamped to megamax values.
+	self.ammo_poison = self.ammo_bolts = 255;
+	self.ammo_bloodcrystals = self.ammo_voidshards = self.ammo_elemental = 255;
+	artifact_setup();
+};
 
 // Shotguns fire faster -- permanently.  Also fills shells to the maximum.
 void() item_artifact_optimizer = { // [ENTITY]
@@ -1093,6 +1114,48 @@ void() item_artifact_vitality = { // [ENTITY]
 	self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_CENTER;
 	self.respawn_ofs = '0 0 16';
     artifact_setup();
+};
+
+void() PlaceItem = {
+	local float	oldz;
+
+	self.mdl = self.model;		// so it can be restored on respawn
+	if (self.classname != "item_tree") {
+	   self.flags = FL_ITEM;		// make extra wide
+	   self.solid = SOLID_TRIGGER;
+	} else self.solid = SOLID_BBOX;
+
+	self.movetype = MOVETYPE_TOSS;	
+	self.velocity = '0 0 0';
+	self.origin_z = self.origin_z + 6;
+	oldz = self.origin_z;
+	if (!droptofloor()) {
+		dprint ("Item "); dprint(self.classname); dprint(" would have fell out of level at ");
+		dprint (vtos(self.origin));
+		dprint (", left where it started\n");
+		setorigin(self,self.oldorigin);
+		self.movetype = MOVETYPE_NONE;
+	}
+};
+
+void() item_zerlogo = {
+	precache_model ("progs/zerlogo.mdl");
+	setmodel (self, "progs/zerlogo.mdl");
+	setsize (self, '-16 -16 0', '16 16 56');
+	self.oldorigin = self.origin;
+	self.nextthink = time + 0.2; // Start after other solids
+	self.think = PlaceItem;
+};
+
+void() item_tree = {
+	precache_model ("progs/tree.mdl");
+	if (self.wait) self.skin = self.wait;
+	if (self.dmg) self.frame = self.dmg;
+	setmodel (self, "progs/tree.mdl");
+	setsize (self, '-16 -16 0', '16 16 86');
+	self.oldorigin = self.origin;
+	self.nextthink = time + 0.2; // Start after other solids
+	self.think = PlaceItem;
 };
 
 void() item_artifact_random = { // [ENTITY]

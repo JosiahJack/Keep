@@ -739,9 +739,45 @@ void() CheckRules = {
 
 void() SetupSpawnCoopLocations = {
 	local entity cooploc, prevloc;
+	local float start2;
 	
 	if (coop > 2) set_teamsurvivor(self);
 		
+	// Check for any info_player_start2 special spawn locations
+	start2 = mathlib_bitvalue( query_configflag(SVR_SPAWN_BIT1), SVR_SPAWN_BIT1);
+	start2 = start2 + mathlib_bitvalue( query_configflag(SVR_SPAWN_BIT2), SVR_SPAWN_BIT2)*2;
+	start2 = start2 + mathlib_bitvalue( query_configflag(SVR_SPAWN_BIT3), SVR_SPAWN_BIT3)*4;
+	
+	// have a rune or new spawnflag option? Pick second spawn position
+	if (query_configflag(SVR_RUNE_ALL) || start2 > 0 ) {
+		// Read any spawn location number (High/low bit flag, 0-3 values)
+		// The first spawn for coop is always the SP start location
+		cooploc = find (world, classname, "info_player_coop2");
+		prevloc = world;
+		
+		// Any coop spawns exist?
+		if (cooploc) {
+			// Create a list
+			while(cooploc) {
+				// first spawn in chain? setup first and previous spawns
+				if (!prevloc) { 
+					coop_ent = cooploc; 
+					coop_ent.count = 0;
+				} else prevloc.owner = cooploc;
+
+				if (cooploc.startspawn2 == start2) { // Mathes one of 7 return points.
+					prevloc = cooploc; // Save current spawn location to previous ready for loop
+					coop_ent.count = coop_ent.count + 1;	
+					cooploc = find(cooploc, classname, "info_player_coop2");
+				} else cooploc = find (world, classname, "info_player_coop2"); // Keep looking.
+			}
+			// Close the chain
+			prevloc.owner = coop_ent;
+		}
+	}
+
+	if (coop_ent.count > 0) return; // Already setup the coop2 spots, else find normal coops as usual.
+
 	// The first spawn for coop is always the SP start location
 	cooploc = find (world, classname, "info_player_coop");
 	prevloc = world;

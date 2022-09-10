@@ -381,7 +381,7 @@ void() func_water = { // [ENTITY]
 	else self.use = liquid_use; // Wait for trigger.
 };
 
-void() func_watertrain_init = {
+void() func_watertrain_init = { // [FUNCTION]
 	local entity targ;
 	
 	targ = find (world, targetname, self.target);

@@ -160,7 +160,7 @@ void() hogremac_smash12= [	$smash12,	hogremac_smash13 ] {};
 void() hogremac_smash13= [	$smash13,	hogremac_smash14 ] { ai_face(); };
 void() hogremac_smash14= [	$smash14,	hogremac_run1	] { ai_face(); };
 
-void() hogremac_melee = {
+void() hogremac_melee = { // [FUNCTION]
 	// Mace ogres don't get interrupted with pain for melee
 	self.pain_finished = time + 2;
 	self.lip = random();

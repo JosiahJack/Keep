@@ -144,7 +144,6 @@ void() hogre_swing12= [	$swing12,	hogre_swing13 ] { ai_face(); };
 void() hogre_swing13= [	$swing13,	hogre_swing14 ] { ai_face(); };
 void() hogre_swing14= [	$swing14,	hogre_run1	] { ai_face(); };
 
-//----------------------------------------------------------------------
 void() hogre_smash1	= [	$smash1,	hogre_smash2	] { ai_charge(9);hogre_sound(2); };
 void() hogre_smash2	= [	$smash2,	hogre_smash3	] { ai_charge(9); };
 void() hogre_smash3	= [	$smash3,	hogre_smash4	] { monster_footstep(FALSE); ai_charge(9); };
@@ -161,7 +160,6 @@ void() hogre_smash12= [	$smash12,	hogre_smash13 ] { ai_face(); };
 void() hogre_smash13= [	$smash13,	hogre_smash14 ] { ai_face(); };
 void() hogre_smash14= [	$smash14,	hogre_run1	] { ai_face(); };
 
-//----------------------------------------------------------------------
 void() hogre_thrust1	= [	$thrust1,	hogre_thrust2	] { ai_charge(12);hogre_sound(2); };
 void() hogre_thrust2	= [	$thrust2,	hogre_thrust3	] { ai_charge(12); };
 void() hogre_thrust3	= [	$thrust3,	hogre_thrust4	] { ai_charge(15); };
@@ -177,17 +175,13 @@ void() hogre_thrust12	= [	$thrust12,	hogre_thrust13	] { ai_face(); };
 void() hogre_thrust13	= [	$thrust13,	hogre_thrust14	] { ai_face(); };
 void() hogre_thrust14	= [	$thrust14,	hogre_run1	] { ai_face(); };
 
-//----------------------------------------------------------------------
-void() hogre_melee = {
+void() hogre_melee = { // [FUNCTION]
 	self.lip = random();
 	if (self.lip < 0.2 && skill > SKILL_NORMAL) hogre_thrust1();
 	else if (self.lip < 0.4) hogre_smash1();
 	else hogre_swing1();
 };
 
-/*======================================================================
- OgreFireGrenade (use version in mon_ogre.qc)
-======================================================================*/
 void() hogre_shoot1	= [	$shootB1,		hogre_shoot2	] { ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
@@ -201,18 +195,14 @@ void() hogre_shoot5	= [	$shootB5,		hogre_shoot6	] { ai_face(); };
 void() hogre_shoot6	= [	$shootB6,		hogre_shoot7	] { ai_face(); };
 void() hogre_shoot7	= [	$shootB7,		hogre_run1	] { ai_face(); };
 
-
 // painA - Quick backwards flex
-//----------------------------------------------------------------------
 void()	hogre_painA1	= [	$painA1,	hogre_painA2 ] {};
 void()	hogre_painA2	= [	$painA2,	hogre_painA3 ] {};
 void()	hogre_painA3	= [	$painA3,	hogre_painA4 ] {};
 void()	hogre_painA4	= [	$painA4,	hogre_painA5 ] {};
 void()	hogre_painA5	= [	$painA5,	hogre_run1	 ] {};
 
-//----------------------------------------------------------------------
 // painB - Stagger backwards
-//----------------------------------------------------------------------
 void()	hogre_painB1	= [	$painB1,	hogre_painB2 ] { ai_pain(7); };
 void()	hogre_painB2	= [	$painB2,	hogre_painB3 ] { ai_pain(5); };
 void()	hogre_painB3	= [	$painB3,	hogre_painB4 ] {};
@@ -246,7 +236,7 @@ void()	hogre_painC15= [	$painC15,	hogre_painC16	] { ai_forward(4); };
 void()	hogre_painC16= [	$painC16,	hogre_painC17	] { ai_forward(5); };
 void()	hogre_painC17= [	$painC17,	hogre_run1	] { ai_forward(4); };
 
-void(entity inflictor, entity attacker, float damage) hogre_pain = {
+void(entity inflictor, entity attacker, float damage) hogre_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -322,7 +312,7 @@ void()	hogre_dieB12= [	$deathB12,	hogre_dieB13] {};
 void()	hogre_dieB13= [	$deathB13,	hogre_dieB14] { monster_death_postcheck(); };
 void()	hogre_dieB14= [	$deathB14,	hogre_dieB14] { monster_deadbody_check(); };
 
-void() hogre_die = {
+void() hogre_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -335,7 +325,7 @@ void() hogre_die = {
 	}
 };
 
-void(float soundtype) hogre_sound = {
+void(float soundtype) hogre_sound = { // [FUNCTION]
 	if (soundtype == 1) sound(self,CHAN_VOICE, "ogre/ogdrag.wav",1,ATTN_IDLE);
 	else if (soundtype == 2) sound(self,CHAN_WEAPON,"ogre/ogsawatk.wav",1,ATTN_NORM);
 	else if (soundtype == 3) sound(self,CHAN_WEAPON,GIB_SOUND_WOOD,1,ATTN_NORM);
@@ -365,12 +355,12 @@ void() hogre_wakeup7b	= [	$thrust12,	hogre_wakeup8b ] {};
 void() hogre_wakeup8b	= [	$thrust13,	hogre_wakeup9b ] {};
 void() hogre_wakeup9b	= [	$thrust14,	hogre_run1	] {};
 
-void() hogre_wakeup1 = {
+void() hogre_wakeup1 = { // [FUNCTION]
 	if (random() < 0.7) hogre_wakeup1a();	// More over head swing than thrust
 	else hogre_wakeup1b();
 };
 
-void() monster_hogre_precache = {
+void() monster_hogre_precache = { // [FUNCTION]
 	precache_model ("progs/ogre.mdl"); // Precache for upgrade
 	precache_model ("progs/h_ogre.mdl"); // Load/Quickload need this
 	precache_model ("progs/ad171/mon_hogre.mdl");

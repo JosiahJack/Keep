@@ -44,7 +44,7 @@ void() ballista_think;
 // self = player
 // self.tetherfocus.tetherfocus = trigger_control
 // self.tetherfocus = ballista
-void() ResetControlTether = {
+void() ResetControlTether = { // [FUNCTION]
     self.tetherfocus.tetherfocus.enemy = world;
     self.tetherfocus.tetherfocus.attack_finished = time + 2; // Prevent immediate retrigger.
     self.tetherfocus.tetherfocus = world; // Done resetting the trigger_control.
@@ -62,7 +62,7 @@ void() ResetControlTether = {
     W_SetCurrentAmmo(self,TRUE);
 };
 
-void() PlayerBallistaThink {
+void() PlayerBallistaThink { // [FUNCTION]
     local vector source;
 
     if (vlen(self.tetherfocus.dest1 - self.origin) > self.tetherdist) { ResetControlTether(); return; }
@@ -78,7 +78,7 @@ void() PlayerBallistaThink {
     }
 };
 
-void() trigger_control_touch = {
+void() trigger_control_touch = { // [FUNCTION]
     local vector org, dir;
     local float fire_range;
 
@@ -87,12 +87,12 @@ void() trigger_control_touch = {
     if (self.enemy && self.enemy.flags & FL_CLIENT && self.enemy.tethered) return; // Already under control
     if (self.enemy && other != self.enemy) return;
     if (self.goalentity.health <= 0) return;
-    if (vlen(self.goalentity.origin - other.origin) > 112) return;
+    if (vlen(self.goalentity.origin - other.origin) > self.meleerange) return;
 
     self.attack_finished = time + 2; // Give time for the player to move away.
     other.attack_finished = time + 0.1;
     other.tethered = TRUE;
-    other.tetherdist = 112;
+    other.tetherdist = self.meleerange;
     other.tetherfocus = self.goalentity;
     W_SetCurrentAmmo(other,TRUE);
     self.enemy = other;
@@ -106,26 +106,27 @@ void() trigger_control_touch = {
     self.goalentity.tethered = TRUE;
 };
 
-void() trigger_control_find_target =  {
+void() trigger_control_find_target =  { // [FUNCTION]
     self.goalentity = find(world, targetname, self.target);
     if (!self.goalentity) { dprint(self.classname); dprint( ": Could not find target: "); dprint(self.target); dprint("\n"); return; }
 
     self.goalentity.mangle = self.goalentity.angles;
 };
 
-void() trigger_control = {
+void() trigger_control = { // [ENTITY]
     if (SUB_HideIfNoTarget()) return; 
 
-   self.enemy = world;
-   self.touch = trigger_control_touch;
-   self.ltime = time;
-   InitTrigger();
-   self.think = trigger_control_find_target;
-   self.nextthink = time + 1.00;
+    if (self.meleerange <= 0) self.meleerange = 112;
+    self.enemy = world;
+    self.touch = trigger_control_touch;
+    self.ltime = time;
+    InitTrigger();
+    self.think = trigger_control_find_target;
+    self.nextthink = time + 1.00;
     self.attack_finished = 0;
 };
 
-void() chunk_death =  {
+void() chunk_death =  { // [FUNCTION]
     self.gibtype = GIBTYPE_STONE;
     if (self.classtype == CT_BALLISTA) self.max_health = 500; // Push the gibs more.
     ThrowGib(11,rint(7));
@@ -139,7 +140,7 @@ void() chunk_death =  {
     self.nextthink = time + 0.1;
 };
 
-void() BalBoltTouch =  {
+void() BalBoltTouch =  { // [FUNCTION]
     local vector dir;
 
     if (other.takedamage) {
@@ -172,8 +173,7 @@ void() BalBoltTouch =  {
     }
 };
 
-
-void() FireBalBolt =  {
+void() FireBalBolt =  { // [FUNCTION]
     local vector launchPoint, targetPoint;
 
 
@@ -216,7 +216,7 @@ void() FireBalBolt =  {
     setorigin(newmis,launchPoint);
 };
 
-void() ballista_fire = {
+void() ballista_fire = { // [FUNCTION]
     if (self.goalentity.oldenemy.flags & FL_CLIENT) {
         self.ammo_bolts = self.ammo_bolts - 1;
         if (self.ammo_bolts < 1) {
@@ -237,7 +237,7 @@ void() ballista_fire = {
     }
 };
 
-void() ballista_track = {
+void() ballista_track = { // [FUNCTION]
     local float pitchmod;
     local vector my_pitch, ideal_pitch;
 
@@ -279,7 +279,7 @@ void() ballista_track = {
     }
 };
 
-void() ballista_think = {
+void() ballista_think = { // [FUNCTION]
     if (self.spawnflags & SPAWNFLAG_BALLISTA_TRACK && !self.tethered) {
         if (self.enemy) {
             if (self.enemy.health < 1) {
@@ -303,7 +303,7 @@ void() ballista_think = {
     self.think = ballista_think;
 };
 
-void() obj_ballista =  {
+void() obj_ballista =  { // [ENTITY]
     self.mdl = "progs/hexen2/ballista.mdl";
     precache_model(self.mdl); // The giant crossbow turret.
     precache_model("progs/hexen2/balbolt.mdl"); // The bolt it shoots.

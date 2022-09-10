@@ -1431,7 +1431,7 @@ $cd id1/models/flag
 $base base
 $skin skin
 
-void() place_flag = {
+void() place_flag = { // [FUNCTION]
 	self.mdl = self.model;		// so it can be restored on respawn
 	self.flags = FL_ITEM;		// make extra wide
 	self.solid = SOLID_TRIGGER;
@@ -1454,8 +1454,7 @@ void() place_flag = {
 	self.oldorigin = self.origin; // save for flag return
 };
 
-void(entity flg, string cname) place_flagbase = 
-{
+void(entity flg, string cname) place_flagbase = { // [FUNCTION]
 	local entity oself;
 
 	teamplay = cvar("teamplay");

@@ -1,4 +1,4 @@
-void() wallsprite = {
+void() wallsprite = { // [ENTITY]
    if (!self.model) self.model = "progs/hipnotic/s_blood1.spr";
    precache_model(self.model);
    setmodel(self,self.model);
@@ -10,13 +10,13 @@ void() wallsprite = {
    makestatic (self);
 };
 
-void() InitBulletHoles = {
+void() InitBulletHoles = { // [FUNCTION]
    bulletholes = nullentity;
    lastbullet = nullentity;
    numbulletholes = FALSE;
 };
 
-void() remove_bullethole = {
+void() remove_bullethole = { // [FUNCTION]
    local entity ent;
 
    if (bulletholes == nullentity) objerror ("remove_bullethole: bulletholes == nullentity! ");
@@ -28,7 +28,7 @@ void() remove_bullethole = {
    numbulletholes = (numbulletholes - TRUE);
 };
 
-void(vector pos) placebullethole = {
+void(vector pos) placebullethole = { // [FUNCTION]
    local entity new;
    local vector norm;
 

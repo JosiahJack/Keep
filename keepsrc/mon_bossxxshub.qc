@@ -18,7 +18,7 @@ float SHUB_NEEDS_2ND_TRIG = 8;
 void() xxshub_wakeup;
 
 // IDLE state - flailing arms (only state really)
-void() xxshub_idleframe = {
+void() xxshub_idleframe = { // [FUNCTION]
 	if (self.health < 1) return; // Get the obvious exception(s) done first
 	
 	// Beginning of animation block
@@ -45,10 +45,10 @@ void() xxshub_idleframe = {
 	}	
 };
 
-void() xxshub_idle = { self.walkframe = 0; xxshub_idleframe(); };
+void() xxshub_idle = { self.walkframe = 0; xxshub_idleframe(); }; // [FUNCTION]
 
 // Attack 1 : Fire Shub Homing Missile
-void() xxshub_attack1 = {
+void() xxshub_attack1 = { // [FUNCTION]
 	//if (self.spawnflags & SHUB_NEEDS_2ND_TRIG && self.use == xxshub_wakeup) return FALSE; // don't start attacking until 2nd trigger
 
 	// Check sightline to player
@@ -67,7 +67,7 @@ void() xxshub_attack1 = {
 };
 
 // Attack 2 : shake and spam grenades (end of wave event)
-void() xxshub_shakeattack = {
+void() xxshub_shakeattack = { // [FUNCTION]
 	local vector org, dir, ang, avel;
 	
 	// Custom grenade firing speed
@@ -89,7 +89,7 @@ void() xxshub_shakeattack = {
 	launch_projectile(org,dir,avel,CT_PROJ_SHUB2,1);
 };
 
-void() xxshub_shakeframe = {
+void() xxshub_shakeframe = { // [FUNCTION]
 	// Randomnly fire grenades outward
 	if (random() < 0.5) xxshub_shakeattack();
 	
@@ -119,7 +119,7 @@ void() xxshub_shakeframe = {
 	} else self.frame = $shake1 + self.walkframe; // Update frame and keep on shaking!
 };
 
-void() xxshub_attack2 = {
+void() xxshub_attack2 = { // [FUNCTION]
 	//if (self.spawnflags & SHUB_NEEDS_2ND_TRIG && self.use == xxshub_wakeup) return FALSE; // don't start attacking until 2nd trigger
 	Resist_ChangeType(self, TRUE);
 	self.walkframe = self.count = 0; 
@@ -127,7 +127,7 @@ void() xxshub_attack2 = {
 };
 
 // PAIN (ignored, just keeps on firing)
-void(entity inflictor, entity attacker, float damage) xxshub_pain = {
+void(entity inflictor, entity attacker, float damage) xxshub_pain = { // [FUNCTION]
 	// Shub been hit, wakeup and start attacking
 	if (self.style == SHUB_PHASE1) { self.use(); return; }
 	self.pain_finished = time + 2 + random()*2;
@@ -151,7 +151,7 @@ void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 };
 
 // FINAL DEATH - shake it baby and explode
-void() xxshub_explode = {
+void() xxshub_explode = { // [FUNCTION]
 	entity_hide(self); // No more Boss!
 	Tent_Explosion2(self.origin,35,8); // Blue ID particle explosion
 	
@@ -164,7 +164,7 @@ void() xxshub_explode = {
 	ThrowGib(5, 10 + rint(random()*3));
 };
 
-void() xxshub_deathframe = {
+void() xxshub_deathframe = { // [FUNCTION]
 	// Throw debris out from top of shub
 	self.pos3 = vecrand(100,100,TRUE);
 	self.pos3_z = 128 + random()*128;
@@ -188,7 +188,7 @@ void() xxshub_deathframe = {
 	}
 };
 
-void() xxshub_die = {
+void() xxshub_die = { // [FUNCTION]
 	self.style = SHUB_PHASE4;		// Game Over for Shub!
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
@@ -200,10 +200,8 @@ void() xxshub_die = {
 	xxshub_deathframe();
 };
 
-//----------------------------------------------------------------------
 // Switch Shub into a fighting stance
-//----------------------------------------------------------------------
-void() xxshub_wakeup = {
+void() xxshub_wakeup = { // [FUNCTION]
 	// Time to fight!
 	self.use = SUB_Null;			// No more triggers
 	self.style = SHUB_PHASE2;		// Start fighting
@@ -226,7 +224,7 @@ void() xxshub_wakeup = {
 };	
 
 // Setup Shub after trigger event
-void() xxshub_start = {
+void() xxshub_start = { // [FUNCTION]
 	self.use = SUB_Null;			// Suppress trigger events
 	self.style = SHUB_PHASE1;		// Waiting for combat trigger
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
@@ -277,7 +275,7 @@ void() xxshub_start = {
 	} else self.th_stand();
 };
 
-void() monster_shub_precache = {
+void() monster_shub_precache = { // [FUNCTION]
 	precache_model ("progs/oldone.mdl");
 	precache_model (MODEL_PROJ_SHUB1);		// Large Homing Missile
 	precache_model (MODEL_PROJ_SHUB2);		// Large blob of blood
@@ -298,7 +296,7 @@ void() monster_shub_precache = {
 };
 
 // QUAKED monster_shub (1 0 0) (-128 -128 -24) (128 128 512)
-void() monster_shub = {
+void() monster_shub = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/oldone.mdl";
@@ -329,7 +327,6 @@ void() monster_shub = {
 	if (VectorIsAllZeros(self.dest1)) self.dest1 = '0 0 128'; // Attack 1 - Spawn location (offset from origin)
 	if (VectorIsAllZeros(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
 	if (VectorIsAllZeros(self.dest2)) self.dest2 = '0 0 128'; // Attack 2 - Spawn location (offset from origin)
-
 	if (self.spawnflags & MON_SHUB_UPSIDE) {
 		self.bbmins = '-96 -96 -192';	// up side down version
 		self.bbmaxs = '96 96 24';
@@ -355,7 +352,7 @@ void() monster_shub = {
 };
 
 // QUAKED monster_shubupsd (1 0 0) (-128 -128 -24) (128 128 512)
-void() monster_shubupsd = {
+void() monster_shubupsd = { // [ENTITY]
 	if (VectorIsAllZeros(self.pos3)) self.pos3 = '600 0 40'; // Attack 2 - Setup projectile speed, splash damage
 	self.angles_x = 180; // Can I hear you say HACK?
 	self.angles_y = anglemod(self.angles_y + 180); // HACK!!!!

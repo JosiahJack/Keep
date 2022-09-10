@@ -64,7 +64,7 @@ void(float mad) cyber_anim = {
         ai_walk(18);
 };
 
-void() cyber_reset = {
+void() cyber_reset = { // [FUNCTION]
     if ((self.frame < $walk1 ) || (self.frame > $walk7 )) self.walkframe = 0;
 };
 

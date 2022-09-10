@@ -243,7 +243,7 @@ void()	hknight_watk22	= [	$w_attack22,	hknight_run1	] { monster_footstep(FALSE);
 // Attack 1 - Slice (one hand slashing run attack)
 // Attack 2 - Smash (chop overhead to ground)
 // Attack 3 - W_Attack (two handed slashing attack)
-void() hknight_melee = {
+void() hknight_melee = { // [FUNCTION]
 	self.meleeattack = self.meleeattack + 1;
 
 	if (self.meleeattack == 1) hknight_slice1();
@@ -397,23 +397,7 @@ void()	hknight_magicc9 = [	$magicc9,	hknight_magicc10] { hknight_shot(1);if (sel
 void()	hknight_magicc10 = [	$magicc10,	hknight_magicc11] { hknight_shot(2);if (self.classname == "monster_bane") { bane_strafe(); }};
 void()	hknight_magicc11 = [	$magicc11,	hknight_run1] { hknight_shot(3);if (self.classname == "monster_bane") { bane_strafe(); }};
 
-
-// Special setup - Hell Knight firing electricity at target
-void() hknight_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = self.weaponglow;
-		setmodel(self.attachment, self.attachment.mdl);
-		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-		self.attachment.movetype = MOVETYPE_NONE;
-		self.attachment.solid = SOLID_NOT;
-	}
-};
-
-void() hknight_pointfire = {
+void() hknight_pointfire = { // [FUNCTION]
 	local vector hkp_start, hkp_rand, hkp_end;
 	
 	// Make sure the knight is alive
@@ -472,7 +456,7 @@ void() hknight_pointfire = {
 	
 };
 
-void() hknight_pointsetup = {
+void() hknight_pointsetup = { // [FUNCTION]
 	local entity newpoint;
 
 	if (self.target == "") {
@@ -489,8 +473,11 @@ void() hknight_pointsetup = {
 		// Stop other monsters attacking pointy knights
 		self.flags = self.flags - (self.flags & FL_MONSTER);
 		self.enemy = world;
-		// Create glowing sword and start pointing
-		hknight_create_attachment();
+		SUB_CreateSelfAttachment(self.weaponglow,1.0); // Create glowing sword and start pointing
+		setmodel(self.attachment, self.attachment.mdl);
+		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
+		self.attachment.movetype = MOVETYPE_NONE;
+		self.attachment.solid = SOLID_NOT;
 		self.th_run();
 	} else {
 		// Find Lightning bolt target
@@ -513,24 +500,25 @@ void() hknight_pointsetup = {
 			// Stop other monsters attacking pointy knights
 			self.flags = self.flags - (self.flags & FL_MONSTER);
 			self.enemy = world;
-			// Create glowing sword and start pointing
-			hknight_create_attachment();
+			SUB_CreateSelfAttachment(self.weaponglow,1.0); // Create glowing sword and start pointing
+			setmodel(self.attachment, self.attachment.mdl);
+			setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
+			self.attachment.movetype = MOVETYPE_NONE;
+			self.attachment.solid = SOLID_NOT;
 			self.th_run();
 		}
 	}
 };
 
-
-void()	hknight_pain1	= [	$pain1,		hknight_pain2	] {};
-void()	hknight_pain2	= [	$pain2,		hknight_pain3	] {};
-void()	hknight_pain3	= [	$pain3,		hknight_pain4	] {};
-void()	hknight_pain4	= [	$pain4,		hknight_pain5	] {};
-void()	hknight_pain5	= [	$pain5,		hknight_run1	] {};
+void()	hknight_pain1	= [	$pain1,		hknight_pain2	] {}; // [FUNCTION]
+void()	hknight_pain2	= [	$pain2,		hknight_pain3	] {}; // [FUNCTION]
+void()	hknight_pain3	= [	$pain3,		hknight_pain4	] {}; // [FUNCTION]
+void()	hknight_pain4	= [	$pain4,		hknight_pain5	] {}; // [FUNCTION]
+void()	hknight_pain5	= [	$pain5,		hknight_run1	] {}; // [FUNCTION]
 
 void() hkfast_pain1;
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) hknight_pain = {
+void(entity inflictor, entity attacker, float damage) hknight_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -591,7 +579,7 @@ void()	hknight_dieb7	= [	$deathb7,	hknight_dieb8	] {};
 void()	hknight_dieb8	= [	$deathb8,	hknight_dieb9	] { monster_death_postcheck(); };
 void()	hknight_dieb9	= [	$deathb9,	hknight_dieb9	] { monster_deadbody_check(); };
 
-void() hknight_die = {
+void() hknight_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	SUB_RemoveAttachment(); // Make sure attachments are removed
 
@@ -613,7 +601,7 @@ void() hknight_die = {
 };
 
 // Used by stone knights to wakup and attack the player
-void() hknight_aistates = {
+void() hknight_aistates = { // [FUNCTION]
 	self.th_stand = hknight_stand1;		// Idling on feet
 	self.th_walk = hknight_walk1;		// Walking
 	self.th_run = hknight_run1;			// Running
@@ -631,7 +619,7 @@ void() hknight_aistates = {
 	self.th_die = hknight_die;			// Face meets floor
 };
 
-void() hknight_wakeup = {
+void() hknight_wakeup = { // [FUNCTION]
 	if (self.health < 0) return;		// Check for sudden death!
 	
 	self.use = SUB_Null;				// no re-trigger
@@ -642,7 +630,7 @@ void() hknight_wakeup = {
 };
 
 // Restore pointy lightning knights to normal hell knights
-void() hknight_pointwakeup = {
+void() hknight_pointwakeup = { // [FUNCTION]
 	if (self.health < 0) return; // Check for sudden death!
 
 	self.health = self.max_health = self.reset_health; // Always reset health+max back to default
@@ -674,7 +662,7 @@ void() hknight_pointwakeup = {
 };
 
 // Special pain function for pointy lightning knights
-void(entity inflictor, entity attacker, float damage) hknight_pointpain = {
+void(entity inflictor, entity attacker, float damage) hknight_pointpain = { // [FUNCTION]
 	self.pain_finished = 0;
 	if (!(attacker.flags & FL_CLIENT)) return;
 	self.enemy = attacker;
@@ -682,7 +670,7 @@ void(entity inflictor, entity attacker, float damage) hknight_pointpain = {
 };
 
 // Special use/trigger function for pointy lightning knights
-void() hknight_pointuse = {
+void() hknight_pointuse = { // [FUNCTION]
 	// Check for enemy/health/player exceptions
 	if (self.enemy) return;
 	if (self.health < 1) return;
@@ -694,7 +682,7 @@ void() hknight_pointuse = {
 	hknight_pointwakeup();
 };
 
-void() monster_hell_knight_precache = {
+void() monster_hell_knight_precache = { // [FUNCTION]
 	precache_model("progs/qmaster/mon_hknight.mdl");
 	precache_model("progs/h_hellkn.mdl");
 	precache_model(MODEL_PROJ_HKN);
@@ -728,7 +716,7 @@ void() monster_hell_knight_precache = {
 	precache_sound("knight/sword2.wav");
 };
 
-void() monster_hell_knight_enforcer_precache = {
+void() monster_hell_knight_enforcer_precache = { // [FUNCTION]
 	monster_hell_knight_precache();
 	precache_model ("progs/lieutenant/hknight.mdl");
 	precache_model ("progs/h_mega.mdl");
@@ -743,7 +731,7 @@ void() monster_hell_knight_enforcer_precache = {
 };
 
 // QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_hell_knight = {
+void() monster_hell_knight = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -936,7 +924,7 @@ void() monster_hell_knight = {
 // STARTOFF : Trigger Spawn
 // -------- NOTES --------
 // Special Electricity Pointing Hell Knight
-void() monster_hell_pointknight = {
+void() monster_hell_pointknight = { // [ENTITY]
 	local entity newpoint;
 
 	self.spawnflags = self.spawnflags | MON_POINT_KNIGHT; // Setup with new special spawnflag (not mapper controlled)
@@ -954,7 +942,7 @@ void() monster_hell_pointknight = {
 };
 
 // Light Saber Enforcer from back2forwards by The Lieutenant
-void() monster_hell_knight_enforcer = {
+void() monster_hell_knight_enforcer = { // [ENTITY]
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_STATUE); // Force non-statue for this guy, we have a light saber after all
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_POINT_KNIGHT); // Force normality
 	self.classtype = CT_MONSABERENFORCER;
@@ -999,12 +987,12 @@ void()	hknight_stride19= [	$walk19,	hknight_stride20	] { ai_run(3); };
 void()	hknight_stride20= [	$walk20,	hknight_stride1	] { ai_run(2); };
 
 // A champion has a choice of two missile attacks - a faster version of the standard attack, and a vore-style homing missile. eventually he will be able to teleport.
-void() hknight_champion_magic = {
+void() hknight_champion_magic = { // [FUNCTION]
 	if (random() < 0.6) hknight_magicc1();
 	else hknight_magicb1();
 };
 
-void() monster_hell_knight_champion { 
+void() monster_hell_knight_champion { // [ENTITY]
 	if (self.deathstring == "")  self.deathstring = " was conquered by a Champion Death Knight\n";
 	monster_hell_knight();
 }

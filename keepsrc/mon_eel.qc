@@ -4,7 +4,7 @@ $frame edeath9 edeath10 edeath11 edeath12 edeath13 edeath14 edeath15
 
 void(entity inflictor, entity attacker, float damage) eel_pain1;
 
-void() eel_pitch_change = {
+void() eel_pitch_change = { // [FUNCTION]
    if (!InLiquid(self.origin)) {
       droptofloor();
       T_Damage(self,world,world,MOVETYPE_TOSS,DAMARMOR);
@@ -103,7 +103,7 @@ void() eel_run6 = [ 5, eel_run1 ] {
 };
 
 // RANGE - Plasma from mouth
-void() eel_plasma = {
+void() eel_plasma = { // [FUNCTION]
 	local vector org, dir;
 
 	// Check if can fire bolt of plasma
@@ -117,7 +117,7 @@ void() eel_plasma = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
 };
 
-void() eel_melee = {
+void() eel_melee = { // [FUNCTION]
    local float attackOK;
 
    attackOK = TRUE;
@@ -198,7 +198,7 @@ void() eel_attack2_10 = [$eswim4, eel_attack2_11 ] { self.skin = 2; };
 void() eel_attack2_11 = [$eswim5, eel_attack2_12 ] { self.skin = 1; ai_face(); };
 void() eel_attack2_12 = [$eswim6, eel_run1 ] { self.skin = 0; ai_face(); };
 
-void() eel_death1 = [ 6, eel_death2 ] {
+void() eel_death1 = [ 6, eel_death2 ] { // [FUNCTION]
 	self.skin = FALSE;
 	self.effects = FALSE;
 	sound(self,CHAN_VOICE,"rogue/eel/edie3r.wav",TRUE,ATTN_NORM);
@@ -220,12 +220,12 @@ void() eel_death14 = [ 13, eel_death15 ] {};
 void() eel_death15 = [ 14, eel_death16 ] { monster_death_postcheck(); };
 void() eel_death16 = [ 15, eel_death16 ] { monster_deadbody_check(); };
 
-void() eel_death = {
+void() eel_death = { // [FUNCTION]
    monster_death_precheck();
    if (!self.gibbed) { eel_death1(); }
 };
 
-void(entity inflictor, entity attacker, float damage) eel_pain1 = [ 6, eel_pain2 ] {
+void(entity inflictor, entity attacker, float damage) eel_pain1 = [ 6, eel_pain2 ] { // [FUNCTION]
    if (self.pain_finished > time) return;
 
    self.pain_finished = (time + TRUE);
@@ -239,7 +239,7 @@ void() eel_pain5 = [ 8, eel_pain6 ] {};
 void() eel_pain6 = [ 7, eel_pain7 ] {};
 void() eel_pain7 = [ 6, eel_run1 ] {};
 
-void() monster_eel_precache = {
+void() monster_eel_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_eel.mdl");
 	precache_model("progs/ad171/h_eel.mdl");
 	precache_model("progs/ad171/eelgib.mdl");
@@ -256,7 +256,7 @@ void() monster_eel_precache = {
 	precache_sound("rogue/eel/eatt1.wav");
 };
 
-void() monster_eel = {
+void() monster_eel = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

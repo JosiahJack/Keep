@@ -1,4 +1,4 @@
-void() monster_mistermax_precache = {
+void() monster_mistermax_precache = { // [FUNCTION]
 	precache_model("progs/nehahra/maxwell.mdl");
 	precache_model("progs/nehahra/gntspke.mdl");
 	precache_model("progs/drake/v_spike.mdl");
@@ -43,7 +43,7 @@ void() monster_mistermax_precache = {
 	precache_sound("nehahra/max/mpain3.wav");
 };
 
-void(vector megadeth, vector vec) spawn_maxteleport = {
+void(vector megadeth, vector vec) spawn_maxteleport = { // [FUNCTION]
 	local entity mark;
 
 	mark = spawn();
@@ -54,7 +54,7 @@ void(vector megadeth, vector vec) spawn_maxteleport = {
 	mark.nextthink = time + 0.3;
 };
 
-void(vector megadeth, vector vec, string ing) spawn_newteleport = {
+void(vector megadeth, vector vec, string ing) spawn_newteleport = { // [FUNCTION]
 	local entity mark;
 
 	mark = spawn();
@@ -66,7 +66,7 @@ void(vector megadeth, vector vec, string ing) spawn_newteleport = {
 	mark.nextthink = time + 0.3;
 };
 
-void() prepare_finale = {
+void() prepare_finale = { // [FUNCTION]
 	// spawn_moderator();
 	// spawn_platpoint();
 	// spawn_maxcontrol();
@@ -124,7 +124,7 @@ void() prepare_finale = {
 	// spawn_downpoint('90 -272 856], 4);
 };
 
-void() max_teleport = {
+void() max_teleport = { // [FUNCTION]
 	local vector megadeth;
 	local entity head;
 
@@ -138,7 +138,7 @@ void() max_teleport = {
 	self.nextthink = time + 0.3;
 };
 
-void() new_teleport = {
+void() new_teleport = { // [FUNCTION]
 	local vector megadeth;
 	local entity head, vec;
 
@@ -155,7 +155,7 @@ void() new_teleport = {
 	self.nextthink = time + 0.3;
 };
 
-void() spawn_moderator = {
+void() spawn_moderator = { // [FUNCTION]
 var
  mark : Object;
 {

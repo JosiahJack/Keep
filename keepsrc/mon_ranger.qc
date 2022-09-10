@@ -100,7 +100,7 @@ void() ranger_stand3    = [$stand3,  ranger_stand4  ] { ai_stand(); };
 void() ranger_stand4    = [$stand4,  ranger_stand5  ] { ai_stand(); };
 void() ranger_stand5    = [$stand5,  ranger_stand1  ] { ai_stand(); };
 
-void() ranger_stand = {
+void() ranger_stand = { // [FUNCTION]
     if (self.war & WARx_AXE_FRAMES)
         ranger_axstand1();
     else
@@ -134,7 +134,7 @@ void() ranger_walk10 = [$rockrun5,  ranger_walk11 ] { ai_walk(8); };
 void() ranger_walk11 = [$rockrun6,  ranger_walk12 ] { ai_walk(8); };
 void() ranger_walk12 = [$rockrun6,  ranger_walk1  ] { ai_walk(8); };
 
-void() ranger_walk = {
+void() ranger_walk = { // [FUNCTION]
     if (self.war & WARx_AXE_FRAMES) ranger_axwalk1();
     else ranger_walk1();
 };
@@ -153,21 +153,21 @@ void() ranger_run4  = [$rockrun4,  ranger_run5  ] { ai_run(self.speed); };
 void() ranger_run5  = [$rockrun5,  ranger_run6  ] { M_Step(); ai_run(self.speed); };
 void() ranger_run6  = [$rockrun6,  ranger_run1  ] { ai_run(self.speed); };
 
-void() ranger_run = {
+void() ranger_run = { // [FUNCTION]
     self.cnt = 0;   // Reset Nightmare fire counter.
     if (self.war & WARx_AXE_FRAMES) ranger_axrun1();
     else ranger_run1();
 };
 
-void(float dist) ranger_charge = {
+void(float dist) ranger_charge = { // [FUNCTION]
     ai_face();
     if (QC_CloseEnough (dist)) safe_goal (8);   // Given speed was too fast, so slow down.
     else safe_goal (dist);
 };
 
-void(float dist) ranger_strafe = { ai_face(); ai_run_strafe (dist); };
+void(float dist) ranger_strafe = { ai_face(); ai_run_strafe (dist); }; // [FUNCTION]
 
-void(float dist) ranger_axe_step = {
+void(float dist) ranger_axe_step = { // [FUNCTION]
     local vector p1, p2;
 
     p1 = self.origin + self.view_ofs;
@@ -176,7 +176,7 @@ void(float dist) ranger_axe_step = {
     else ranger_strafe (dist);   // Strafe to the side.
 };
 
-void() ranger_axe = {
+void() ranger_axe = { // [FUNCTION]
     local vector  p1, p2;
     
     ai_face();
@@ -187,12 +187,12 @@ void() ranger_axe = {
 };
 
 // This checks if the attack combo should be broken.
-void(void() thinkst) ranger_break = {
+void(void() thinkst) ranger_break = { // [FUNCTION]
     if (self.enemy.health <= 0) self.think = thinkst;   // Target dead, end it.
     else if (!visible (self.enemy)) self.think = thinkst;
 };
 
-void() sfx_axe = { sound(self,CHAN_WEAPON,"drake/axeman/axe1.wav",1,ATTN_NORM); };
+void() sfx_axe = { sound(self,CHAN_WEAPON,"drake/axeman/axe1.wav",1,ATTN_NORM); }; // [FUNCTION]
 
 // NOTE:  Modified axe attacks to be like CoE's axeman instead of player.
 // FIXME:  Change attacks to be more like the Bane's.
@@ -243,13 +243,13 @@ void() ranger_axef3 = [$axattd3, ranger_axef4 ] { ai_charge_left(self.speed); ai
 void() ranger_axef4 = [$axattd4, ranger_axeg  ] { ranger_break(ranger_axed5); ai_charge_left(self.speed); ai_melee(); };
 
 // Common combo ender.
-void() ranger_axeg  = [$axattb1, ranger_axebx ] {
+void() ranger_axeg  = [$axattb1, ranger_axebx ] { // [FUNCTION]
     M_Reload (0.5);     // Making another swing.
     if (random() < 0.5) self.think = ranger_axec1;
     ranger_charge(self.speed);
 };
 
-void() ranger_axer = {
+void() ranger_axer = { // [FUNCTION]
     local float combo, r;
 
     combo = TRUE;
@@ -271,9 +271,9 @@ void() ranger_axer = {
     M_Reload (0.5);
 };
 
-entity() Ranger_Target = { if (skill >= 2) return self.enemy; return world; };
+entity() Ranger_Target = { if (skill >= 2) return self.enemy; return world; }; // [FUNCTION]
 
-void() ranger_shotgun = {
+void() ranger_shotgun = { // [FUNCTION]
     local vector p1, p2;
     local float shotty;
     
@@ -305,7 +305,7 @@ void() ranger_auto2  = [$nailatt2,  ranger_auto3  ] { ranger_strafe(self.speed);
 void() ranger_auto3  = [$nailatt1,  ranger_auto4  ] { ranger_strafe(self.speed); ranger_shotgun();if (self.ammo_shells >= 1) SUB_CheckRefire(ranger_auto2); };
 void() ranger_auto4  = [$nailatt2,  ranger_run    ] { ranger_strafe(self.speed); };
 
-void() ranger_nailgun = {
+void() ranger_nailgun = { // [FUNCTION]
     local vector p1, p2;
     local float super;
     local entity targ;
@@ -333,7 +333,7 @@ void() ranger_nail2  = [$nailatt2,  ranger_nail3  ] { ranger_strafe(self.speed);
 void() ranger_nail3  = [$nailatt1,  ranger_nail4  ] { ranger_strafe(self.speed); ranger_nailgun();if (self.ammo_nails >= 1) SUB_CheckRefire(ranger_nail2); };
 void() ranger_nail4  = [$nailatt2,  ranger_run    ] { ranger_strafe(self.speed); };   // if (self.war & WAR_CHAINGUN) ranger_nailgun(); };
 
-void(float lite) ranger_laser = {
+void(float lite) ranger_laser = { // [FUNCTION]
     local vector p1, p2;
     local float up;
     local entity targ;
@@ -373,7 +373,7 @@ void() ranger_lc2 = [$nailatt2, ranger_lc3 ] { ranger_strafe(self.speed); ranger
 void() ranger_lc3 = [$nailatt1, ranger_lc4 ] { ranger_strafe(self.speed); ranger_laser(2); };
 void() ranger_lc4 = [$nailatt2, ranger_run ] { ranger_strafe(self.speed); ranger_laser(3); if (self.ammo_cells >= 1) SUB_CheckRefire(ranger_lc1); };
 
-void() ranger_rocket = {
+void() ranger_rocket = { // [FUNCTION]
     local vector p1, p2;
     local entity targ;
 
@@ -429,7 +429,7 @@ void() ranger_rock6  = [$rockatt6,  ranger_run    ] { ai_face();
 // Note:  Don't allow strafing with lightning or plasma guns because a single 
 // careless move into water will cause a discharge with the attacker at the
 // center.
-void(float cl) ranger_tbolt = {
+void(float cl) ranger_tbolt = { // [FUNCTION]
     local vector p1, p2;
     
     ai_face();
@@ -556,7 +556,7 @@ float(float dist) RangerUse_Nailgun = {
     return FALSE;   // No compelling reason to use instead of shotgun.
 };
 
-void() ranger_fire = {
+void() ranger_fire = { // [FUNCTION]
     local vector  p1, p2;
     local float dist, shot, MASK;
 
@@ -760,7 +760,7 @@ void() ranger_axdie7 = [$axdeth7,  ranger_axdie8 ] {};
 void() ranger_axdie8 = [$axdeth8,  ranger_axdie9 ] { monster_death_postcheck(); };
 void() ranger_axdie9 = [$axdeth9,  monster_end   ] { monster_deadbody_check(); };
 
-void() ranger_die = {
+void() ranger_die = { // [FUNCTION]
     local float r;
     local string sfx;
 
@@ -803,8 +803,7 @@ void() ranger_die = {
     }
     sound(self,CHAN_VOICE, sfx,1,ATTN_NORM);
 
-    if (self.war == WAR_AXE)
-    {
+    if (self.war == WAR_AXE) {
         ranger_axdie1();
         return;
     }
@@ -821,13 +820,13 @@ void() ranger_die = {
         ranger_diee1();
 };
 
-void(float hello) ranger_sight = {
+void(float hello) ranger_sight = { // [FUNCTION]
     if (hello) sound(self,CHAN_VOICE, "drake/ranger/idle.wav",1,ATTN_NORM);
     else if (random() < 0.5) sound(self,CHAN_VOICE, "drake/ranger/sight1.wav",1,ATTN_NORM);
     else sound(self,CHAN_VOICE, "drake/ranger/sight2.wav",1,ATTN_NORM);
 };
 
-void() monster_ranger_precache = {
+void() monster_ranger_precache = { // [FUNCTION]
     precache_model("progs/drake/ranger.mdl");
     precache_sound("drake/axeman/axe1.wav");
     precache_sound("drake/ranger/idle.wav");     // Was 'soldier/idle.wav'.
@@ -835,7 +834,7 @@ void() monster_ranger_precache = {
     precache_sound("drake/ranger/sight2.wav");
 };
 
-void() ranger_stats = {
+void() ranger_stats = { // [FUNCTION]
     local float sklevel, axe, am, s, n, r, c, arm;
 
     am = 0;

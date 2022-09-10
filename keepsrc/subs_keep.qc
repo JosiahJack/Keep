@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 41
+// Function count: 55
 //
 // Implements: Subroutines
 //
@@ -299,30 +299,56 @@ void() SUB_CheckRandomizedAngles = { // [FUNCTION]
 	if (self.angles_y > 360) self.angles_y = 0;
 };
 
-void(entity att) SUB_FinishAttachmentEntity = {
+entity(string attmodel, float attalpha) SUB_CreateAttachment = { // [FUNCTION]
+	newmis = spawn();
+	newmis.owner = self;
+	newmis.classtype = CT_ATTACHMENT;
+	newmis.mdl = attmodel;
+	newmis.alpha = attalpha;
+	return newmis;
+};
+
+void(string attmodel, float attalpha) SUB_CreateSelfAttachment = { // [FUNCTION]
+	if (!self.attachment) self.attachment = SUB_CreateAttachment(attmodel,attalpha);
+};
+
+void(string attmodel, float attalpha) SUB_CreateSelfAttachment2 = { // [FUNCTION]
+	if (!self.attachment2) self.attachment2 = SUB_CreateAttachment(attmodel,attalpha);
+};
+
+void(string attmodel, float attalpha) SUB_CreateSelfAttachment3 = { // [FUNCTION]
+	if (!self.attachment3) self.attachment3 = SUB_CreateAttachment(attmodel,attalpha);
+};
+
+void(entity att, vector spot, vector ang) SUB_FinishAttachmentEntity = {
 	if (!att) return;
 
 	att.movetype = MOVETYPE_NONE;	// Stationary
 	att.solid = SOLID_NOT;		// no world interaction
+	att.frame = 0;
+	att.skin = 0;
 	setmodel(att,"");			// Hide model
+	setsize(att,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin(att,self.origin); // Doesn't matter if this is correct, invisible.
 	att.velocity = '0 0 0';
+	att.angles = self.angles; // This will work on the ones that need it.
 	att.state = STATE_OFF;
 };
 
 void() SUB_AttachmentFinishSelf = {
-	SUB_FinishAttachmentEntity(self);
+	SUB_FinishAttachmentEntity(self,self.origin,self.angles);
 };
 
 void() SUB_FinishAttachment = { // [FUNCTION]
-	if (self.attachment) SUB_FinishAttachmentEntity(self.attachment);
+	if (self.attachment) SUB_FinishAttachmentEntity(self.attachment,self.origin,self.angles);
 };
 
 void() SUB_FinishAttachment2 = { // [FUNCTION]
-	if (self.attachment2) SUB_FinishAttachmentEntity(self.attachment2);
+	if (self.attachment2) SUB_FinishAttachmentEntity(self.attachment2,self.origin,self.angles);
 };
 
 void() SUB_FinishAttachment3 = { // [FUNCTION]
-	if (self.attachment3) SUB_FinishAttachmentEntity(self.attachment3);
+	if (self.attachment3) SUB_FinishAttachmentEntity(self.attachment3,self.origin,self.angles);
 };
 
 void() SUB_FinishAttachments = { // [FUNCTION]
@@ -577,7 +603,7 @@ entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
 };
 
 // Setup wave HP and trigger boundaries
-void() SUB_BossWaveSetupHP = {
+void() SUB_BossWaveSetupHP = { // [FUNCTION]
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
 		self.health = self.bosswaveqty; // Only one wave left (death is final trigger)
@@ -667,3 +693,5 @@ vector(entity targ) SUB_EntityOrigin = {
 vector(entity targ) AbsBoundsCenter = {
 	return ((targ.absmin + targ.absmax) * 0.5);
 };
+
+void() SUB_GrowAngle = { self.angles_y = self.angles_y + self.lefty; };

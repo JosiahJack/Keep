@@ -290,7 +290,7 @@ void()	dguard_atkB21= [	$w_attack22,		dguard_run1	] { ai_charge(5); };
 // Attack 1b - Char_A (swinging sword left to right infront)
 // Attack 2a - Smash (chop overhead to ground)
 // Attack 2b - W_Attack (two handed slashing attack)
-void() dguard_melee = {
+void() dguard_melee = { // [FUNCTION]
 	local float	len;
 
 	// Close melee attack 1a, 1b (slice and char_a)

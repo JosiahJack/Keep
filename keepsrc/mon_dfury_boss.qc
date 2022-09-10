@@ -133,7 +133,7 @@ void(float offset) dfury_boss_shot = {
 	sound(self,CHAN_WEAPON,"q15/dfury/proj.wav",1,ATTN_NORM);
 };
 
-void() dfury_boss_spawner = {
+void() dfury_boss_spawner = { // [FUNCTION]
 	local vector distancedelta; 
 	local vector nozdistancedelta; 
 	local entity missile;
@@ -547,7 +547,7 @@ void()	dfury_boss_watk14	= [	$w_attack14,	dfury_boss_watk15	] { ai_charge(0); ai
 void()	dfury_boss_watk15	= [	$w_attack15,	dfury_boss_watk16	] { ai_charge(0); ai_melee_dfury_boss(); };
 void()	dfury_boss_watk16	= [	$w_attack16,	dfury_boss_run1	] 	  { ai_charge(13); dfury_boss_footsteps (0.8); };
 
-void() dfury_boss_idle_sound = {
+void() dfury_boss_idle_sound = { // [FUNCTION]
 	if (random() < 0.2) sound(self,CHAN_VOICE, "q15/dfury/idle.wav",1,ATTN_NORM);
 };
 
@@ -567,7 +567,7 @@ void(entity inflictor, entity attacker, float damage)	dfury_boss_pain = {
 	dfury_boss_pain1();
 };
 
-void() dfury_boss_melee = {
+void() dfury_boss_melee = { // [FUNCTION]
 	self.style = self.style + 1;
 
 	sound(self,CHAN_WEAPON,"q15/dfury/slash1.wav",1,ATTN_NORM);
@@ -582,7 +582,7 @@ void() dfury_boss_melee = {
 };
 
 // adds random magic attack animation
-void() dfury_boss_random_magic = {
+void() dfury_boss_random_magic = { // [FUNCTION]
 	local float zufall;
 	zufall = random();
 	if (zufall > 0.56 && zufall < 0.62)
@@ -596,7 +596,7 @@ void() dfury_boss_random_magic = {
 };
 
 //boss jump attack
-void()	dfury_boss_JumpTouch = {
+void()	dfury_boss_JumpTouch = { // [FUNCTION]
 	local float ldmg;
 
 	if (self.health <= 0) return;
@@ -625,7 +625,7 @@ void()	dfury_boss_JumpTouch = {
 };
 
 
-void() dfury_boss_pause = {
+void() dfury_boss_pause = { // [FUNCTION]
 	sound(self,CHAN_AUTO,"drake/misc/wallbrk.wav",1,ATTN_NONE);
 	self.skin = 1;
 	self.takedamage = DAMAGE_AIM;
@@ -645,7 +645,7 @@ void() dfury_boss_pause = {
 	else self.th_stand();
 };
 
-void() dfury_boss_pause1 = {
+void() dfury_boss_pause1 = { // [FUNCTION]
 	self.takedamage = DAMAGE_NO;
 	self.use = dfury_boss_pause;
 	self.think = dfury_boss_pause1;
@@ -653,7 +653,7 @@ void() dfury_boss_pause1 = {
     self.skin = 0;
 };
 
-void() monster_dfury_boss_precache = {
+void() monster_dfury_boss_precache = { // [FUNCTION]
 	precache_model ("progs/q15/dfury_boss.mdl");
 	precache_model ("progs/k_spike.mdl");
 	precache_model ("progs/q15/proj_summon.mdl");
@@ -708,7 +708,7 @@ void() monster_dfury_boss_precache = {
 };
 
 //QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_dfury_boss = {
+void() monster_dfury_boss = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/q15/dfury_boss.mdl";

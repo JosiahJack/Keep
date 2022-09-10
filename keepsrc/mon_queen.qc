@@ -56,35 +56,6 @@ void() queen_walk1= [$spell1, queen_walk1] { huntressmodel_walk(5); }; //Unfinis
 
 void() queen_ghostnull = {}; // The Ghost Queen system (this is not a monster)
 
-// Attachment management (create, finish and delete)
-void() redqueen_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		//self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.state = FALSE;
-	}
-};
-
-void() redqueen_reset_attachment = {
-	if (self.attachment) {
-		if (self.attachment.state) {
-			// Move attachment into place ready for use
-			self.attachment.movetype = MOVETYPE_NONE;
-			self.attachment.solid = SOLID_NOT;
-			self.attachment.frame = 0;
-			self.attachment.skin = 0;
-			setmodel(self.attachment, "");
-			setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-			setorigin(self.attachment, self.origin);
-			// Using empty model, so reset angle, frame and skin.
-			self.attachment.angles = self.angles;
-			self.attachment.state = FALSE;
-		}
-	}
-};
-
 void() redqueen_setup_attachment = {
 	if (self.attachment) {
 		self.attachment.movetype = MOVETYPE_NONE;
@@ -96,11 +67,9 @@ void() redqueen_setup_attachment = {
 };
 
 void(float rqframe, float rqskin, float rqalpha) redqueen_drawq = {
-	if (!self.attachment) redqueen_create_attachment(); // Check if attachment has been setup yet
+	SUB_CreateSelfAttachment("",1.0);
 	if (rqframe == 0) redqueen_setup_attachment(); // Frame 0 is start of the sequence (move everything into place)
-	
-	// Place Q in center of Red Queen model
-	setorigin(self.attachment, self.origin);
+	setorigin(self.attachment, self.origin); // Place Q in center of Red Queen model
 	self.attachment.angles = self.angles;
 	self.attachment.frame = rqframe;	
 	self.attachment.skin = rqskin;
@@ -138,7 +107,7 @@ void() redqueen_idleb28 = [	$idleb28,	redqueen_idleb29 ] {}
 void() redqueen_idleb29 = [	$idleb29,	redqueen_idleb30 ] {}
 void() redqueen_idleb30 = [	$idleb30,	redqueen_idle1 ] { self.skin = 1; }
 
-void() 	redqueen_idle1 = [	$idle1,		redqueen_idle2	] { self.skin = 0; redqueen_reset_attachment();
+void() 	redqueen_idle1 = [	$idle1,		redqueen_idle2	] { self.skin = 0; SUB_FinishAttachment();
 self.walkframe = self.walkframe + 1; };
 void() 	redqueen_idle2 = [	$idle2,		redqueen_idle3	] {};
 void() 	redqueen_idle3 = [	$idle3,		redqueen_idle4	] {};
@@ -215,7 +184,7 @@ void() 	redqueen_spell25 = [	$spell25,	redqueen_spell26 ] { redqueen_drawq(17,0,
 void() 	redqueen_spell26 = [	$spell26,	redqueen_spell27 ] { redqueen_drawq(18,0,1); };
 void() 	redqueen_spell27 = [	$spell27,	redqueen_spell28 ] { redqueen_drawq(19,0,0.5); };
 void()	redqueen_spell28 = [	$spell28,	redqueen_spell29 ] { redqueen_drawq(20,0,0.25); self.skin = 1; };
-void()	redqueen_spell29 = [	$spell28,	redqueen_idle1 	 ] { redqueen_reset_attachment(); self.skin = 0; };
+void()	redqueen_spell29 = [	$spell28,	redqueen_idle1 	 ] { SUB_FinishAttachment(); self.skin = 0; };
 
 void() monster_queen_precache = {
 	precache_model ("progs/redfield/red_queen.mdl");

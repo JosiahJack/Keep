@@ -3,7 +3,7 @@ void() fangel_flyframes_check;
 void() fangel_hand1;
 void() fangel_fly1;
 
-float() fangel_check_incoming =  {
+float() fangel_check_incoming =  { // [FUNCTION]
 	local entity item;
 	local vector vec, realvec;
 	local float dot;
@@ -39,7 +39,7 @@ float FANGEL_STAGE_FLY   =  1.00000;
 float FANGEL_STAGE_FLOAT   =  2.00000;
 float FANGEL_STAGE_SIDESTEP   =  3.00000;
 
-void  ()fangel_check_wing =  {
+void  ()fangel_check_wing =  { // [FUNCTION]
 	local float chance, visib;
 
 	visib = visible (self.enemy);
@@ -73,7 +73,7 @@ void  ()fangel_check_wing =  {
    }
 };
 
-void() fangel_find_spot =  {
+void() fangel_find_spot =  { // [FUNCTION]
 	local float crj, radius, dist, oldz;
 	local vector vec,newpos;
 
@@ -107,7 +107,7 @@ void() fangel_find_spot =  {
 };
 
 
-void() fangel_init =  {
+void() fangel_init =  { // [FUNCTION]
 	self.ideal_yaw = vectoyaw ( (self.enemy.origin - self.origin));
 	self.think = self.th_stand;
 	self.nextthink = time + 0.1 + (random() * 0.5);
@@ -124,7 +124,7 @@ void() fangel_init =  {
 	fangel_find_spot ();
 };
 
-void  ()fangel_wait =  {
+void() fangel_wait =  { // [FUNCTION]
 	self.nextthink = time + 0.15;
 	self.th_stand = fangel_flyframes_check;
    if (FindTarget()) {
@@ -141,10 +141,9 @@ void  ()fangel_wait =  {
    }
 };
 
-void  ()fangel_sidestep =  {
-local float retval = 0.00000;
-local float dist = 0.00000;
-local float chance = 0.00000;
+void() fangel_sidestep =  { // [FUNCTION]
+	local float retval, dist, chance;
+
    self.monster_duration -= 1.00000;
    dist = 1 + (random() * 3);
    retval = walkmove((self.angles_y + 90.00000), dist);
@@ -181,7 +180,7 @@ local float chance = 0.00000;
 };
 
 
-void  (float thrust)fangel_fly =  {
+void(float thrust) fangel_fly =  { // [FUNCTION]
 	local float dist;
 
 	self.ideal_yaw = vectoyaw ( (self.enemy.origin - self.origin));
@@ -212,7 +211,7 @@ void  (float thrust)fangel_fly =  {
 	if ( (self.ring_flight_time > time) ) walkmove(self.angles_y, self.ring_regen_time);
 };
 
-void()fangel_float =  {
+void() fangel_float =  { // [FUNCTION]
    self.monster_duration = (self.monster_duration - 1.00000);
    ai_face ();
    enemy_range = range (self.enemy);
@@ -227,7 +226,7 @@ void()fangel_float =  {
    }
 };
 
-float(float maxdist) check_z_move =  {
+float(float maxdist) check_z_move =  { // [FUNCTION]
 	local float goaldist;
 	local entity targ;
 
@@ -252,7 +251,7 @@ float(float maxdist) check_z_move =  {
    return TRUE;
 };
 
-void(float thrust) fangel_move = {
+void(float thrust) fangel_move = { // [FUNCTION]
 	check_z_move((thrust/2));
 	if (self.monster_stage == FANGEL_STAGE_WAIT) { fangel_wait(); return; }
 	if (self.monster_stage == FANGEL_STAGE_FLY) { fangel_fly(thrust); return; }
@@ -260,7 +259,7 @@ void(float thrust) fangel_move = {
 	if (self.monster_stage == FANGEL_STAGE_FLOAT) { fangel_float(); return; }
 };
 
-void() fangel_hand_fire = {
+void() fangel_hand_fire = { // [FUNCTION]
    ai_face();
    sound(self,CHAN_WEAPON,"hexen2/fangel/hand.wav", 1.00000,ATTN_NORM);
    do_faSpell('10 -4 8',400);
@@ -268,7 +267,7 @@ void() fangel_hand_fire = {
 };
 
 
-void  ()fangel_wing_fire =  {
+void() fangel_wing_fire =  { // [FUNCTION]
    ai_face();
    sound(self,CHAN_WEAPON,"hexen2/fangel/wing.wav", 1.00000,ATTN_NORM);
    makevectors(self.angles);
@@ -277,7 +276,7 @@ void  ()fangel_wing_fire =  {
 
 };
 
-void() fangel_blockthink = {
+void() fangel_blockthink = { // [FUNCTION]
    ai_face();
    if (!VectorIsAllZeros(self.velocity)) self.velocity = self.velocity * 0.7; // Woah nelly, slow er on down there
    check_z_move(3);
@@ -334,7 +333,7 @@ void() fangel_block21 = [20, fangel_flyframes_check] {
 
 void() fangel_death6;
 
-void() fangel_death_effects = {
+void() fangel_death_effects = { // [FUNCTION]
 	traceline (self.origin, (self.origin - '0 0 250'), FALSE, self);
 	if (vlen(self.origin - trace_endpos) < 128) particle(trace_endpos, '0 0 25', 225, 80); 
 	//if ( ((self.frame == 27.00000) && !(self.flags & FL_ONGROUND)) ) {
@@ -395,7 +394,7 @@ void() fangel_death38 = [58, fangel_death39] { fangel_death_effects(); };
 void() fangel_death39 = [59, fangel_death40] { fangel_death_effects(); monster_death_postcheck(); };
 void() fangel_death40 = [60, fangel_death40] { monster_deadbody_check(); };
 
-void() fangel_death = {
+void() fangel_death = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.th_run = SUB_Null;
 	self.idle_sound = SOUND_EMPTY;
@@ -454,7 +453,7 @@ void() fangel_flyother28 = [88, fangel_flyother29] { fangel_move(3 * 0.1); self.
 void() fangel_flyother29 = [89, fangel_flyother30] { fangel_move(3 * 0.1);monster_idle_sound(); };
 void() fangel_flyother30 = [90, fangel_flyframes_check] { fangel_move(3 * 0.1);monster_idle_sound(); };
 
-void() fangel_flyframes_check = {
+void() fangel_flyframes_check = { // [FUNCTION]
 	fangel_check_incoming();
 	if (self.enemy) self.idle_sound = "hexen2/fangel/fly.wav";
 	else {
@@ -498,7 +497,7 @@ void() fangel_hand22 = [112, fangel_flyframes_check] {
 	self.frame = self.splash_time;
 };
 
-void() fangel_paincheck = {
+void() fangel_paincheck = { // [FUNCTION]
 	local float chance;
 
 	fangel_check_incoming();
@@ -578,7 +577,7 @@ void() fangel_fly30 = [214, fangel_flyframes_check] {
 };
 
 
-void  (entity inflictor, entity attacker, float damage)fangel_pain =  {
+void(entity inflictor, entity attacker, float damage) fangel_pain =  { // [FUNCTION]
    if ( ((random(self.health) > damage) || (self.pain_finished > time))) return;
 
    self.pain_finished = ((time + 1.00000) + self.skin);
@@ -598,7 +597,7 @@ void  (entity inflictor, entity attacker, float damage)fangel_pain =  {
    }
 };
 
-void() fangel_attack = {
+void() fangel_attack = { // [FUNCTION]
 	if (random() < 0.5)	fangel_hand1();
 	else				fangel_fly1();
 };

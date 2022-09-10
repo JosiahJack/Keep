@@ -54,7 +54,7 @@ $frame exp
 void() tbaby_finaldeath; // Return to death explosion
 
 // A small looped idle animation using walk
-void() tbaby_standframe = {
+void() tbaby_standframe = { // [FUNCTION]
 	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
 	
 	// Keep looping
@@ -70,12 +70,12 @@ void() tbaby_standframe = {
 	ai_stand();
 }
 
-void() tbaby_stand1 = { self.walkframe = 0; tbaby_standframe(); }
+void() tbaby_stand1 = { self.walkframe = 0; tbaby_standframe(); } // [FUNCTION]
 // Can't find where this is being used, probably an old idea in id code
 void() tbaby_hang1 = [$walk1, tbaby_hang1] { ai_stand(); };
 
 // The classic slow turning/walk animation
-void() tbaby_walkframe = {
+void() tbaby_walkframe = { // [FUNCTION]
 	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
 
 	self.nextthink = time + 0.1; // Keep looping
@@ -89,11 +89,10 @@ void() tbaby_walkframe = {
 	if (self.walkframe >= 25) self.walkframe = 0; // Keep looking
 };
 
-void() tbaby_walk1 = { self.walkframe = 0; tbaby_walkframe(); }
+void() tbaby_walk1 = { self.walkframe = 0; tbaby_walkframe(); } // [FUNCTION]
 
 // Running like a snail!
-void() tbaby_runframe = {
-	
+void() tbaby_runframe = { // [FUNCTION]
 	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
 
 	self.nextthink = time + 0.1; // Keep looping
@@ -106,10 +105,10 @@ void() tbaby_runframe = {
 	if (self.walkframe >= 25) self.walkframe = 0; // Keep looping
 };
 
-void() tbaby_run1 = { self.walkframe = 0; tbaby_runframe(); }
+void() tbaby_run1 = { self.walkframe = 0; tbaby_runframe(); } // [FUNCTION]
 
 // The crazy jump functionality of spawns!
-void()	Tar_JumpTouch = {
+void()	Tar_JumpTouch = { // [FUNCTION]
 	local float ldmg;
 
 	if (self.frozen) {
@@ -198,7 +197,7 @@ void(entity inflictor, entity attacker, float damage) tbaby_pain = {
 };
 
 // Death of the Tarbaby!
-void() tbaby_finished = { 
+void() tbaby_finished = { // [FUNCTION]
 	// Can drop health packs! - randomizer
 	if (self.healamount > 0) DropHealthpack();
 	// Hide monster
@@ -206,7 +205,7 @@ void() tbaby_finished = {
 };
 
 // The final insult, exploding death!
-void() tbaby_explode = {
+void() tbaby_explode = { // [FUNCTION]
 	self.deadflag = DEAD_FINISHED;
 	// Tarbabies explode when they die
 	T_RadiusDamage(self, self, self.death_dmg, world, DAMAGEALL);
@@ -224,7 +223,7 @@ void() tbaby_explode = {
 };
 
 // Waiting 1 frame to explode!
-void() tbaby_die1 = {
+void() tbaby_die1 = { // [FUNCTION]
 	self.deadflag = DEAD_EXPLODE;
 	self.takedamage = DAMAGE_NO;
 	self.frame = $exp;
@@ -235,7 +234,7 @@ void() tbaby_die1 = {
 // The tarbaby has 1 frame delay before exploding and it can cause
 // problems with all the functions. This is to make sure everything
 // returns to the part of the death journey of the spawn!
-void() tbaby_finaldeath = {
+void() tbaby_finaldeath = { // [FUNCTION]
 	// Check death states
 	if (self.deadflag == DEAD_DEAD) tbaby_die1();
 	else if (self.deadflag == DEAD_EXPLODE) tbaby_explode();
@@ -244,14 +243,14 @@ void() tbaby_finaldeath = {
 };
 
 // Classic death function
-void() tbaby_die = {
+void() tbaby_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	// Start death explosion
 	tbaby_finaldeath();
 };
 
-void() monster_tarbaby_precache = {
+void() monster_tarbaby_precache = { // [FUNCTION]
 	precache_model ("progs/qmaster/mon_tarbaby.mdl");
 	precache_sound("blob/sight1.wav");
 	precache_sound("blob/death1.wav");

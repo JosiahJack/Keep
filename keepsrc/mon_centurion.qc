@@ -27,7 +27,7 @@ $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8
 $frame paind9 paind10 paind11 paind12 paind13 paind14 paind15 paind16
 $frame paind17 paind18 paind19
 
-void() centurionhover = {
+void() centurionhover = { // [FUNCTION]
 	if (self.waitmin < time) {
 		self.waitmin = time + 4 + random()*4;
 		sound(self,CHAN_ITEM,"ad171/enforcer/cent_hover.wav",1,ATTN_IDLE);
@@ -70,7 +70,7 @@ void()	cent_run6	= [	$stand6,	cent_run7	] { ai_run(8); };
 void()	cent_run7	= [	$stand7,	cent_run8	] { ai_run(8); };
 void()	cent_run8	= [	$stand8,	cent_run1	] { ai_run(8); };
 
-void() cent_fire = {
+void() cent_fire = { // [FUNCTION]
 	local vector org, vec;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -161,7 +161,7 @@ void(entity inflictor, entity attacker, float damage) cent_pain = {
 };
 
 // Every death frame spawn some smoke and detect impact!
-void() cent_crash = {
+void() cent_crash = { // [FUNCTION]
 	if (self.state) {
 		// Spawn projectile smoke trails or smoke sprites
 		if (random() < 0.5) SpawnProjectileSmoke(self.origin, 150, 50, 150);

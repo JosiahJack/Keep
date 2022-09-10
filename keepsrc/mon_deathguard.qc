@@ -1,4 +1,4 @@
-void() deathguard_hit = {
+void() deathguard_hit = { // [FUNCTION]
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
 			sound(self,CHAN_WEAPON,"quoth/dguard/slmiss1.wav",1,ATTN_NORM);
@@ -29,7 +29,7 @@ void() deathguard_slash12 = [90, deathguard_slash13] { ai_face(); };
 void() deathguard_slash13 = [91, deathguard_slash14] { ai_face(); };
 void() deathguard_slash14 = [92, deathguard_run1] { ai_face(); };
 
-void(float dmgamount) dg_slice = {
+void(float dmgamount) dg_slice = { // [FUNCTION]
 	if (vlen(self.enemy.origin - self.origin) > 100)
 		return;
 
@@ -71,7 +71,7 @@ void() deathguard_slowcharge8 = [119, deathguard_slowcharge9] { ai_charge(6); };
 void() deathguard_slowcharge9 = [120, deathguard_slowcharge10] { ai_charge(3); };
 void() deathguard_slowcharge10 = [121, deathguard_run1] { ai_charge(2); };
 
-void() dg_fireball_touch = {
+void() dg_fireball_touch = { // [FUNCTION]
 	local vector org;
 
 	if (other == self.owner) return;
@@ -89,7 +89,7 @@ void() dg_fireball_touch = {
 	remove(self);
 };
 
-void() deathguard_shot = {
+void() deathguard_shot = { // [FUNCTION]
 	local vector org, vec, spot1, spot2;
 	local entity targ;
 

@@ -214,7 +214,7 @@ void()	hknight2_dieb8	= [	$deathb8,	hknight2_dieb9	] { monster_death_postcheck()
 void()	hknight2_dieb9	= [	$deathb9,	hknight2_dieb9	] { monster_deadbody_check(); };
 
 
-void() hknight2_die = {
+void() hknight2_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	
@@ -230,7 +230,7 @@ void() hknight2_die = {
 
 void() hknight2_multigrenade_touch;
 
-void() hknight2_minigrenade_explode = {
+void() hknight2_minigrenade_explode = { // [FUNCTION]
 	T_RadiusDamage(self, self.owner, 50, self.owner, DAMAGEALL); // make Warlord immune to his own multigrenades
 
 	if (other.health) {
@@ -242,7 +242,7 @@ void() hknight2_minigrenade_explode = {
 	BecomeExplosion();
 };
 
-void(float offsetAngle) hknight2_minigrenade_launch = {
+void(float offsetAngle) hknight2_minigrenade_launch = { // [FUNCTION]
 	local	entity missile;
 	local	float	tempRand;
 	
@@ -276,7 +276,7 @@ void(float offsetAngle) hknight2_minigrenade_launch = {
 	missile.think = hknight2_minigrenade_explode;
 };
 
-void() hknight2_multigrenade_explode = {
+void() hknight2_multigrenade_explode = { // [FUNCTION]
 	hknight2_minigrenade_launch(0);
 	hknight2_minigrenade_launch(72);
 	hknight2_minigrenade_launch(144);
@@ -285,7 +285,7 @@ void() hknight2_multigrenade_explode = {
 	remove (self);
 };
 
-void() hknight2_multigrenade_touch = {
+void() hknight2_multigrenade_touch = { // [FUNCTION]
 	if (other == self.owner) return;		// don't explode on owner
 	if (other.takedamage == DAMAGE_AIM) {
 		hknight2_minigrenade_explode();
@@ -296,7 +296,7 @@ void() hknight2_multigrenade_touch = {
 	if (self.velocity == '0 0 0') self.avelocity = '0 0 0';
 };
 
-void() hknight2_grenade_explode = {
+void() hknight2_grenade_explode = { // [FUNCTION]
 	T_RadiusDamage(self, self.owner, 40, world,DAMAGEALL);
 	R_Exp3(self.origin);
 
@@ -312,7 +312,7 @@ void() hknight2_grenade_explode = {
 	s_explode1();
 };
 
-void() hknight2_grenade_touch = {
+void() hknight2_grenade_touch = { // [FUNCTION]
 	if (other == self.owner) return;		// don't explode on owner
 	if (other.takedamage == DAMAGE_AIM) {
 		hknight2_grenade_explode();
@@ -323,7 +323,7 @@ void() hknight2_grenade_touch = {
 	if (self.velocity == '0 0 0') self.avelocity = '0 0 0';
 };
 
-void() hknight2_throw = {
+void() hknight2_throw = { // [FUNCTION]
 	local vector distancedelta, nozdistancedelta, org, follow; 
 	local	entity missile;
 	
@@ -404,7 +404,7 @@ void()	hknight2_throwgrenade31= [	$throw31,	hknight2_throwgrenade32] { ai_face()
 void()	hknight2_throwgrenade32= [	$throw32,	hknight2_throwgrenade33] { ai_face(); self.nextthink = time + 0.06; };
 void()	hknight2_throwgrenade33= [	$throw33,	hknight2_run1] { ai_face(); };
 
-float() hknight2_throwdistance = {
+float() hknight2_throwdistance = { // [FUNCTION]
 	local vector spot1, spot2;
 	local float r;
 
@@ -419,7 +419,7 @@ float() hknight2_throwdistance = {
 };
 
 //  Teleport Face to a slightly other position near its origin  (harder to hit)
-void() hknight2_homing_teleport = {
+void() hknight2_homing_teleport = { // [FUNCTION]
 	local vector spot, vec;
 
 	// Select teleport destination within a 55 radius.
@@ -439,7 +439,7 @@ void() hknight2_homing_teleport = {
 	self.angles_y = vectoyaw(self.enemy.origin - spot);
 };
 
-void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = {
+void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = { // [FUNCTION]
 	if (self.pain_finished > time) return;
 
 	self.pain_finished = time + 0.5;
@@ -447,12 +447,12 @@ void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = {
 	hknight2_homing_teleport();
 };
 
-void() hknight2_homing_death = {
+void() hknight2_homing_death = { // [FUNCTION]
 	R_Exp3(self.origin);
 	remove(self);
 };
 
-void() hknight2_homing_touch = {
+void() hknight2_homing_touch = { // [FUNCTION]
 	if (other.takedamage) {
 		if (other.classname != "player") {
 			hknight2_homing_teleport();
@@ -469,7 +469,7 @@ void() hknight2_homing_touch = {
 	}
 };
 
-void() hknight2_homing_think = {
+void() hknight2_homing_think = { // [FUNCTION]
 	local vector dir, offang, vec;
 
 	if (self.enemy.health < 1) { remove (self); return; } // to avoid endless homing above players corpse
@@ -505,7 +505,7 @@ void() hknight2_homing_think = {
 	self.think = hknight2_homing_think;	
 };
 
-void(vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
+void(vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = { // [FUNCTION]
 	newmis = spawn();
 	newmis.owner = self;
 	newmis.enemy = self.enemy;
@@ -532,7 +532,7 @@ void(vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
 	sound(newmis,CHAN_WEAPON,"q15/warlord/homing.wav",1,ATTN_NORM);
 };
 
-void() hknight2_homing_shot = {
+void() hknight2_homing_shot = { // [FUNCTION]
 	local vector offang, org, vec;
 	
 	offang = vectoangles (self.enemy.origin - self.origin);
@@ -577,7 +577,7 @@ void()	hknight2_magicb11 = [	$magicb11,	hknight2_magicb12] {};
 void()	hknight2_magicb12 = [	$magicb12,	hknight2_magicb13] {};
 void()	hknight2_magicb13 = [	$magicb13,	hknight2_run1] { ai_face(); };
 
-void() ram_scan = {
+void() ram_scan = { // [FUNCTION]
 	local vector dir, spot1, spot2;
 	local float r;	
 
@@ -638,8 +638,8 @@ void()	hknight2_smash1	= [	$smash1,	hknight2_smash2	] { ai_charge(1); };
 void()	hknight2_smash2	= [	$smash2,	hknight2_smash3	] { ai_charge(1); };
 void()	hknight2_smash3	= [	$smash3,	hknight2_smash4	] { ai_charge(1); };
 void()	hknight2_smash4	= [	$smash4,	hknight2_smash5	] { ai_charge(2);
-if (random()<0.5)
-	sound(self,CHAN_AUTO,"q15/warlord/attack2.wav",1,ATTN_NORM); };
+	if (random()<0.5) sound(self,CHAN_AUTO,"q15/warlord/attack2.wav",1,ATTN_NORM);
+};
 void()	hknight2_smash5	= [	$smash5,	hknight2_smash6	] { ai_charge(10); ai_melee(); };
 void()	hknight2_smash6	= [	$smash6,	hknight2_smash7	] { ai_charge(15); ai_melee(); };
 void()	hknight2_smash7	= [	$smash7,	hknight2_smash8	] { ai_charge(15); ai_melee(); monster_footstep(FALSE); };
@@ -648,12 +648,10 @@ void()	hknight2_smash9	= [	$smash9,	hknight2_smash10] { ai_charge(3); ai_melee()
 void()	hknight2_smash10= [	$smash10,	hknight2_smash11] { ai_charge(0); monster_footstep(FALSE); };
 void()	hknight2_smash11= [	$smash11,	hknight2_run1	] { ai_charge(0); };
 
-
-
 void()	hknight2_watk1	= [	$w_attack1,	hknight2_watk2	] { ai_charge(1); };
 void()	hknight2_watk2	= [	$w_attack2,	hknight2_watk3	] { ai_charge(1);
-if (random()<0.5)
-	sound(self,CHAN_AUTO,"q15/warlord/attack3.wav",1,ATTN_NORM); };
+	if (random()<0.5) sound(self,CHAN_AUTO,"q15/warlord/attack3.wav",1,ATTN_NORM);
+};
 void()	hknight2_watk3	= [	$w_attack3,	hknight2_watk4	] { ai_charge(10); monster_footstep(FALSE); };
 void()	hknight2_watk4	= [	$w_attack4,	hknight2_watk5	] { ai_charge(5); ai_melee(); };
 void()	hknight2_watk5	= [	$w_attack5,	hknight2_watk6	] { ai_melee(); };
@@ -675,16 +673,12 @@ void()	hknight2_watk20	= [	$w_attack20,	hknight2_watk21	] { ai_charge(10); ai_me
 void()	hknight2_watk21	= [	$w_attack21,	hknight2_watk22	] { ai_charge(10); ai_melee(); };
 void()	hknight2_watk22	= [	$w_attack22,	hknight2_run1	] { ai_charge(2); };
 
-
-
-
 void()	hknight2_duck1 = [	$duck1,		hknight2_duck2] { ai_face(); self.nextthink = time + 0.11; };
 void()	hknight2_duck2 = [	$duck2,		hknight2_duck3] { ai_face(); self.nextthink = time + 0.11; };
 void()	hknight2_duck3 = [	$duck3,		hknight2_duck4] { ai_face(); self.nextthink = time + 0.6; };	// am weitesten zusammengekauert !!!!!
 void()	hknight2_duck4 = [	$duck4,		hknight2_duck5] { ai_face(); self.nextthink = time + 0.11; };
 void()	hknight2_duck5 = [	$duck5,		hknight2_duck6] { ai_face(); self.nextthink = time + 0.11; };
 void()	hknight2_duck6 = [	$duck6,		hknight2_run1 ] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM; };
-
 
 void()	hknight2_dodge1 = [	$dodge1,	hknight2_dodge2	] { ai_face(); self.nextthink = time + 0.1; };
 void()	hknight2_dodge2 = [	$dodge2,	hknight2_dodge3	] { ai_face(); self.nextthink = time + 0.5; };	// am weitesten zur Seite gelehnt !!!!!
@@ -699,8 +693,7 @@ void()	hknight2_block4 = [	$block4,	hknight2_block5	] { ai_face(); self.nextthin
 void()	hknight2_block5 = [	$block5,	hknight2_block6	] { ai_face(); self.nextthink = time + 0.11; };
 void()	hknight2_block6 = [	$block6,	hknight2_run1	] { ai_face(); self.nextthink = time + 0.11; self.takedamage = DAMAGE_AIM; };
 
-
-void() hknight2_dodge = {
+void() hknight2_dodge = { // [FUNCTION]
 	local float zufall;
 	self.takedamage = DAMAGE_YES; 			// grenades bounces off of him
 	zufall = random();
@@ -712,7 +705,7 @@ void() hknight2_dodge = {
 		hknight2_dodge1();		// dodge animationen (zur seite)
 };
 
-void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
+void(entity inflictor, entity attacker, float damage) hknight2_pain = { // [FUNCTION]
 	self.touch = SUB_Null;
 	if (self.dodging) {
 		self.dodging = 0;
@@ -742,7 +735,7 @@ void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
 		hknight2_painb1();
 };
 
-void() hknight2_melee = {
+void() hknight2_melee = { // [FUNCTION]
 	self.lefty = self.lefty + 1;
 	sound(self,CHAN_WEAPON,"q15/warlord/slash1.wav",1,ATTN_NORM);
 	if (self.lefty == 1) {
@@ -756,7 +749,7 @@ void() hknight2_melee = {
 };
 
 // adds random ranged attacks
-void() hknight2_random_ranged_attack = {				
+void() hknight2_random_ranged_attack = { // [FUNCTION]			
 	local float zufall;
 
 	zufall = random();
@@ -785,7 +778,7 @@ void() hknight2_random_ranged_attack = {
 	}	
 };
 
-void() monster_hell_knight2_precache = {
+void() monster_hell_knight2_precache = { // [FUNCTION]
 	precache_model("progs/q15/k_spike.mdl"); // referenced in projectiles.qc
 	precache_model("progs/q15/h_grenade2.mdl");	// multi
 	precache_model("progs/q15/h_grenade1.mdl");	

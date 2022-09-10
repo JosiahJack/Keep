@@ -112,7 +112,7 @@ float() Draco_CanAttackTarget = {
 ////////////////////////////////////////////////////////////////////////////
 
 // Movement when not on a path.
-void() wyrm_glide = {
+void() wyrm_glide = { // [FUNCTION]
     local   entity  swap;
     local   float   sped, ofs, left;
 
@@ -142,7 +142,7 @@ void() wyrm_glide = {
 };
 
 // Normal move.
-void(entity targ) wyrm_move = {
+void(entity targ) wyrm_move = { // [FUNCTION]
     local   entity  swap, oe;
     local   float   sped, ofs, left, oy, nopath;
     local   vector  oang;
@@ -224,7 +224,7 @@ void(entity targ) wyrm_move = {
 
 //  Dragon Melee
 //  This returns the point of the dragon's mouth relative to its origin. All frames from 8 to 16 are part of the attack scene.
-vector() Ryu_Offset = {
+vector() Ryu_Offset = { // [FUNCTION]
     local   float   fr;
 
     // HACK:  If nightshade, convert its frames to dragon frames.
@@ -245,7 +245,7 @@ vector() Ryu_Offset = {
 	return '47 -1 3';
 };
 
-void() Ryu_Bite = {
+void() Ryu_Bite = { // [FUNCTION]
     local float damage;
 
     // Check if the bite attack can hit.
@@ -267,7 +267,7 @@ void() Ryu_Bite = {
 };
 
 //  Dragon Aiming. This returns the spot where a projectile will strike.  Dragons will shoot at the spot where the target is currently standing.
-vector() Ryu_TargetPoint = {
+vector() Ryu_TargetPoint = { // [FUNCTION]
     local vector end;
 
     // If the dragon has no enemy, aim straight ahead.
@@ -287,7 +287,7 @@ vector() Ryu_TargetPoint = {
 };
 
 //  This creates a fireball shot by a dragon.  Used by both PCs and NPCs.
-void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
+void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = { // [FUNCTION]
     if (damage) {
         Meteor_Launch(self,start, dir,sped,damage); // Big super fireball.
         newmis.delay = time + 2.5; // Same fuse as a standard player grenade.
@@ -314,7 +314,7 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
 //  p2 = Endpoint 1, generally where the target is when attack is launched.
 //  p3 = Endpoint 2, where the target is predicted to be after some time.
 //  p4 = Endpoint 3, a point chosen somewhere between p2 and p3.  Aim here!
-void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype)  Ryu_Multishot = {
+void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype)  Ryu_Multishot = { // [FUNCTION]
     local float bomb, sped2, frac, loop;
     local vector dir, err, p3, p4;
 
@@ -371,7 +371,7 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
 };
 
 //  This spawns a missile at the dragon's mouth then launches said missile at the target.  The missile cast varies by type.
-void() Ryu_Shot_Fire = {
+void() Ryu_Shot_Fire = { // [FUNCTION]
     local   entity  targ;   // Use shot leading if targ != world;
     local   vector  dir;    // Vector from 'start' to 'end'.
     local   vector  start;  // Location of dragon's mouth.
@@ -464,13 +464,13 @@ void() Ryu_Shot_Fire = {
 };
 
 // Used for delayed calls to Ryu_Shot_Fire by Ryu_Shot.
-void() Ryu_Shot_Think = {
+void() Ryu_Shot_Think = { // [FUNCTION]
     if (self.owner.health > 0) SUB_ThinkImmediate (self.owner, Ryu_Shot_Fire);
     remove (self);
 };
 
 // This calls the dragon's missile spawning function now or later. If delayed, a dummy entity to spawned to call the delayed function at the time designated by 'pause'.
-void(float pause) Ryu_Shot = {
+void(float pause) Ryu_Shot = { // [FUNCTION]
     local entity echo;
 
     if (pause) {
@@ -483,7 +483,7 @@ void(float pause) Ryu_Shot = {
         Ryu_Shot_Fire();
 };
 
-void() ryu_sfx_fly = {
+void() ryu_sfx_fly = { // [FUNCTION]
     // Not while Quad is sounding.
     if (self.super_sound < time) {
         if (self.waterlevel <= 1)     // Not while in the water.
@@ -493,7 +493,7 @@ void() ryu_sfx_fly = {
     }
 };
 
-void() ryu_sfx_fire = {
+void() ryu_sfx_fire = { // [FUNCTION]
     local float type;
 
     type = self.worldtype & RYU_ELEMENTS;
@@ -513,11 +513,11 @@ void() ryu_sfx_fire = {
         sound(self,CHAN_WEAPON,"drake/imp/shard.wav",1,ATTN_NORM);
 };
 
-void() ryu_sfx_idle = { sound(self,CHAN_VOICE, "drake/dragon/idle1.wav",1,ATTN_NORM); };
+void() ryu_sfx_idle = { sound(self,CHAN_VOICE, "drake/dragon/idle1.wav",1,ATTN_NORM); }; // [FUNCTION]
 
 //  Fly animation forward.  Used for stand, walk, and run anims.
 //  Stand = Dragon hovers in place.   Walk  = The dragon slowly glides along its path.   Run   = The dragon flies quickly toward the enemy.
-void() wyrm_fly_anim = {
+void() wyrm_fly_anim = { // [FUNCTION]
     local   float   fadd;
 
     if ((self.frame > 7) || (self.walkframe >= 13))
@@ -551,7 +551,7 @@ void() wyrm_fly   = [$fly1, wyrm_fly    ] {
     if (self.frame == $fly1 ) ai_stand(); // just updates seeing an enemy
 };
 
-void() wyrm_start = {
+void() wyrm_start = { // [FUNCTION]
     if (self.movetarget.classtype != CT_PATHCORNER && !self.charmer) {
         self.movetarget = world;
         self.ideal_yaw = self.angles_y;
@@ -560,7 +560,7 @@ void() wyrm_start = {
     wyrm_fly();
 };
 
-void() wyrm_go = {
+void() wyrm_go = { // [FUNCTION]
     if (self.classtype == CT_MONWYRM)
         wyrm_fly();
     else
@@ -586,7 +586,7 @@ void() dragon_bite16 = [$attack2,  dragon_bite17 ] { ryu_melee(); Ryu_Bite(); };
 void() dragon_bite17 = [$attack1,  ryu_go     ] { ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0; };
 
 // Check if missile attack is effective or not.
-float(float chance) Ryu_CanBite = {
+float(float chance) Ryu_CanBite = { // [FUNCTION]
     if (!self.th_missile) return TRUE; // Can't shoot.
     if (Ryu_NoShot(self)) return TRUE; // Not allowed to fire.
     if (self.enemy.solid <= SOLID_TRIGGER) return TRUE; // Missile attacks pass through non-solid enemies.
@@ -598,7 +598,7 @@ float(float chance) Ryu_CanBite = {
 //  Melee attack start.  About midway into the animation, the dragon decides whether to bite or to shoot something.  This is used by
 //  smart dragons to foil the 'run in-and-out' strategy used by players. (Also called 'shambler dance' by the authors of Quoth.)
 //  That is, run in to trigger melee attack, then run away to make said attack whiff.  
-void() dragon_strike = {
+void() dragon_strike = { // [FUNCTION]
     local float chance;
 
     if (self.inpain >= time) {
@@ -624,7 +624,7 @@ void() dragon_strike = {
 };
 
 //  This makes the dragon decide whether or not to use meteor instead of fire spray.
-float() Ryu_UseSpecial = {
+float() Ryu_UseSpecial = { // [FUNCTION]
     local   float   atype;
 
     if (self.spawnflags & SPAWN_WYRM) return TRUE;    // Big enough to spam multiple destructive blasts.
@@ -657,7 +657,7 @@ float() Ryu_UseSpecial = {
 };
 
 //  This selects the attack used based on type.
-void() Ryu_SetAttack = {
+void() Ryu_SetAttack = { // [FUNCTION]
     local   float   shots, element, fts, multi; // fts = Frames To Shoot. multi = Multishot attack if TRUE.
 
 	// Select attack type.
@@ -718,7 +718,7 @@ void() Ryu_SetAttack = {
 };
 
 // Standard missile attack for dragons.
-void() ryu_rapid_fire = {
+void() ryu_rapid_fire = { // [FUNCTION]
     if (!self.wait)
         self.wait = 0.1; // Do this to avoid infinite loop.
     else if (self.wait < 0.01)
@@ -733,7 +733,7 @@ void() ryu_rapid_fire = {
     self.delay = self.delay - 0.1;
 };
 
-void() dragon_ranged = {
+void() dragon_ranged = { // [FUNCTION]
     if (self.classtype == CT_MONWYRM) {
         wyrm_move (self.enemy);
     } else {
@@ -847,7 +847,7 @@ void() dragon_dieb4 = [$deathb4,  dragon_dieb5 ] {};
 void() dragon_dieb5 = [$deathb5,  dragon_dieb6 ] { monster_death_postcheck(); };
 void() dragon_dieb6 = [$deathb6,  dragon_dieb6  ] { monster_deadbody_check(); };
 
-void() dragon_die = {
+void() dragon_die = { // [FUNCTION]
     monster_death_precheck();
 
     self.angles_x = self.angles_z = 0; // Snap tilt angles back to zero now.
@@ -868,7 +868,7 @@ void() dragon_die = {
     }
 };
 
-void() wyrm_explode = {
+void() wyrm_explode = { // [FUNCTION]
     local entity swap;
     local vector org, vx, vy, vz;
 
@@ -915,21 +915,21 @@ void() wyrm_explode = {
     entity_remove(self,0.1);
 };
 
-void() ryu_go = {
+void() ryu_go = { // [FUNCTION]
     if (self.classtype == CT_MONWYRM)
         wyrm_fly();
     else
         ryu_run1();
 };
 
-void() wyrm_countdown = {
+void() wyrm_countdown = { // [FUNCTION]
     if (self.cnt > 0)
         self.cnt = self.cnt - 1;
     else
         self.think = wyrm_explode;
 };
 
-void() wyrm_die1  = [$death1,  wyrm_die2  ] {
+void() wyrm_die1  = [$death1,  wyrm_die2  ] { // [FUNCTION]
 	self.reviveframestart = $death13;
 	self.reviveframeend = $death1;
 };
@@ -964,7 +964,7 @@ void() wyrm_dieb9  = [$deathb6,  wyrm_dieb10 ] { death_puff(); DropCoin(2); self
 void() wyrm_dieb10 = [$deathb6,  wyrm_dieb10 ] { death_puff(); wyrm_countdown(); };
 
 // Special death for the dragon king.
-void() wyrm_die = {
+void() wyrm_die = { // [FUNCTION]
     monster_death_precheck();
     self.angles_x = self.angles_z = 0; // Snap tilt angles back to zero now.
 
@@ -982,7 +982,7 @@ void() wyrm_die = {
     } else wyrm_dieb1();
 };
 
-void() dragon_win = {
+void() dragon_win = { // [FUNCTION]
 	ryu_sfx_idle();
     if (self.movetarget || self.charmer)
         self.th_walk();
@@ -990,7 +990,7 @@ void() dragon_win = {
         self.th_stand();
 };
 
-void() monster_ryu_precache = {
+void() monster_ryu_precache = { // [FUNCTION]
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
     precache_model ("progs/drake/dr1_lw.mdl");    // Gib (left wing)
     precache_model ("progs/drake/dr1_rw.mdl");    // Gib (right wing)

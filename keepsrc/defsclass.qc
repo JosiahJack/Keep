@@ -265,7 +265,7 @@ float CT_MONPHOBETOR = 288;		// Final giant cloaked boss
 float CT_MONPSYDER = 289;		// Large floating spawner mini boss
 float CT_MONMANGLIOCH = 290;	// Strange floating alien creature Nehara MOD (Mindcrime)
 float CT_MONJUSTICE = 291;		// Large knight with flat sword
-
+float CT_MONARCHG = 292;        // Nehahra Arch Gaunt
 
 
 float CT_MONTURRETB = 295;		// Large ball surface turret // Bal MOD (Bal)
@@ -542,6 +542,7 @@ float CT_ARTEQUALIZER = 622;	// Equalizer Twin Shot, Drake
 float CT_ARTLEVITATION = 623;	// Boots of Levitation, Drake
 float CT_ARTOPTIMIZER = 624;	// Shotgun Optimizer, Drake
 float CT_SIGILBANE = 625;		// Seal of Bane, Drake
+float CT_ARTSUPERPACK = 626;    // Super Pack, Drake
 
 float CT_SLIDEBOX = 649;        // Ice brush for sliding around.
 float CT_SPIKESHOOTER = 650;	// Trap SPIKE shooter

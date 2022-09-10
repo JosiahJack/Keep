@@ -151,7 +151,7 @@ void()	zmaster_dieb7	= [	$deathb7,	zmaster_dieb8	] {};
 void()	zmaster_dieb8	= [	$deathb8,	zmaster_dieb9	] {};
 void()	zmaster_dieb9	= [	$deathb9,	zmaster_dieb9	] {};
 
-void() zmaster_die = {
+void() zmaster_die = { // [FUNCTION]
 	// check for gib
 	if (self.health < -40) {
 		sound(self,CHAN_VOICE, "player/udeath.wav",1,ATTN_NORM);
@@ -175,7 +175,7 @@ void() zmaster_die = {
 		zmaster_dieb1();
 };
 
-void() zmaster_seeker_hunt = {
+void() zmaster_seeker_hunt = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	// the missiles can only seek for a few seconds
 	self.gorging = self.gorging + 1;
@@ -187,13 +187,13 @@ void() zmaster_seeker_hunt = {
 	if (visible(self.enemy)) target_missile(self, self.enemy.origin, 4);
 };
 
-void() zmaster_start_seeker = {
+void() zmaster_start_seeker = { // [FUNCTION]
 	self.gorging = ceil(random()*20);
 	self.nextthink = time + 0.01 + random() * 0.5;
 	self.think = zmaster_seeker_hunt;
 };
 
-void(float offseth, float offsetv) zmaster_shot = {
+void(float offseth, float offsetv) zmaster_shot = { // [FUNCTION]
 	local entity firemis;
 	local vector	org, vec, dir;
 	
@@ -211,7 +211,7 @@ void(float offseth, float offsetv) zmaster_shot = {
 
 // looks for any nearby corpses or zombies to take over
 // and goes after the nearest
-float() zmaster_find_easy_victim = {
+float() zmaster_find_easy_victim = { // [FUNCTION]
 	local entity victim, enemyold;
 	local float curr_dist, min_dist, found_one, vdist;
 
@@ -254,8 +254,7 @@ float() zmaster_find_easy_victim = {
 	return found_one;
 };
 
-void()	zmaster_run1	= [	$walk1,		zmaster_run2	]
-{ zm_idle_sound();FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(2); };
+void()	zmaster_run1	= [	$walk1,	zmaster_run2] { zm_idle_sound();FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(2); };
 void()	zmaster_run2	= [	$walk2,	zmaster_run3	] { zmaster_run(5); };
 void()	zmaster_run3	= [	$walk3,	zmaster_run4	] { zmaster_run(5); };
 void()	zmaster_run4	= [	$walk4,	zmaster_run5	] { zmaster_run(4); };
@@ -277,7 +276,7 @@ void()	zmaster_run19	= [	$walk19,	zmaster_run20	] { zmaster_run(3); };
 void()	zmaster_run20	= [	$walk20,	zmaster_run1	] { zmaster_run(2); };
 
 // Turns the current enemy into a controlled zombie
-void() zmaster_zombify = {
+void() zmaster_zombify = { // [FUNCTION]
 	local entity temp;
 	local vector shift;
 
@@ -342,12 +341,12 @@ void() zmaster_zombify = {
 	self.wait = time + 3 + random()*3;
 };
 
-void()	zmaster_magica1 = [	$magica1,	zmaster_magica2	] {
+void()	zmaster_magica1 = [	$magica1,	zmaster_magica2	] { // [FUNCTION]
 	ai_face();
 	if (self.effects != EF_BRIGHTFIELD)
 		sound(self,CHAN_WEAPON,"items/protect.wav",1,ATTN_NORM);
 };
-void()	zmaster_magica2 = [	$magica1,	zmaster_magica3	] {
+void()	zmaster_magica2 = [	$magica1,	zmaster_magica3	] { // [FUNCTION]
 	ai_face();
 	self.effects = EF_BRIGHTFIELD;
 	self.nextthink = time + 0.25;
@@ -430,7 +429,7 @@ void()	zmaster_magicb11 = [	$magicb11,	zmaster_magicb12] { ai_face(); };
 void()	zmaster_magicb12 = [	$magicb12,	zmaster_magicb13] { ai_face(); };
 void()	zmaster_magicb13 = [	$magicb13,	zmaster_run1] { ai_face(); };
 
-void() zm_idle_sound = {
+void() zm_idle_sound = { // [FUNCTION]
 	if (random() < 0.2 && self.currentammo < time) {
 		if (random() < 0.5) {
 			sound(self,CHAN_VOICE, "custents/zmaster/idle1.wav",1,ATTN_NORM);
@@ -442,7 +441,7 @@ void() zm_idle_sound = {
 	}
 };
 
-void() zmaster_missile = {
+void() zmaster_missile = { // [FUNCTION]
 	if (corpse_status(self.enemy)) return;
 	if (self.gorging > time) return;
 
@@ -450,7 +449,7 @@ void() zmaster_missile = {
 	self.gorging = time + 2.5;
 };
 
-void() zmaster_melee = {
+void() zmaster_melee = { // [FUNCTION]
 	if (corpse_status(self.enemy) || self.enemy.classname == "monster_zombie" || self.enemy.classname == "monster_axzombie") {
 		self.gorging = 0;
 		zmaster_magica1();
@@ -467,7 +466,7 @@ void() zmaster_melee = {
 	}
 };
 
-void(entity inflictor, entity attacker, float damage) zmaster_pain = {
+void(entity inflictor, entity attacker, float damage) zmaster_pain = { // [FUNCTION]
 	if (self.pain_finished > time) return;
 
 	sound(self,CHAN_VOICE, "custents/zmaster/pain.wav",1,ATTN_NORM);
@@ -483,7 +482,7 @@ void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 	zmaster_pain1();
 };
 
-void() monster_zombie_master_precache = {
+void() monster_zombie_master_precache = { // [FUNCTION]
 	precache_model("progs/custents/zmaster.mdl");
 	precache_model("progs/k_spike.mdl");
 	precache_model("progs/custents/h_zmastr.mdl");
@@ -540,7 +539,7 @@ void() monster_zombie_master = { // [ENTITY]
 	monster_start();
 };
 
-void(float dist) zmaster_run = {
+void(float dist) zmaster_run = { // [FUNCTION]
 	local	vector	delta;
 	local	float	axis, direct, ang_rint, ang_floor, ang_ceil, r;
 
@@ -600,7 +599,7 @@ void(float dist) zmaster_run = {
 	movetogoal(dist);      // head straight in... done in engine C code...
 };
 
-float(entity testent) corpse_status = {
+float(entity testent) corpse_status = { // [FUNCTION]
 	if (testent.classname == "corpse")
 		return TRUE;
 	else if ((testent.health <= 0) && (testent.flags & (FL_MONSTER|FL_CLIENT))) {

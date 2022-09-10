@@ -134,13 +134,13 @@ void()	pinch_claw9 = [	$attackB18,		pinch_claw10 ] {};
 void()	pinch_claw10 = [	$attackB20,		pinch_run1 ] {};
 
 // TAIL FUNCTION (range)
-void() pinch_tailsound = {
+void() pinch_tailsound = { // [FUNCTION]
 	if (self.meleeattack < 1) sound(self,CHAN_WEAPON,"ad171/scorpion/tailfire1.wav", TRUE, TRUE);
 	else sound(self,CHAN_WEAPON,"ad171/scorpion/tailfire2.wav", TRUE, TRUE);
 	self.meleeattack = 1 - self.meleeattack;
 };
 
-void(vector tailofs) pinch_tailspike = {
+void(vector tailofs) pinch_tailspike = { // [FUNCTION]
 	local vector org, dir;
 
 	if (!self.enemy) return;
@@ -181,7 +181,7 @@ void()	pinch_tail10 = [	$attackA20,		pinch_tail11 ] {};
 void()	pinch_tail11 = [	$attackA22,		pinch_run1 ] { ai_face(); };
 
 // JUMP FUNCTION (range)
-void()	pinch_jumptouch = {
+void()	pinch_jumptouch = { // [FUNCTION]
 	if (self.health <= 0) return;
 
 	ai_jumpbreakable(20);			// Damage any breakables
@@ -259,16 +259,15 @@ void() pinch_leap13	= [	$attackC18, pinch_leap14] {
 void() pinch_leap14	= [	$attackC20, pinch_run1 ] {};
 
 // MINION - Grow and spin up from nothing
-void() pinch_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() pinch_grow1 = [$grow1, pinch_grow2 ] {};
-void() pinch_grow2 = [$grow2, pinch_grow3 ] { pinch_growangle(); };
-void() pinch_grow3 = [$grow3, pinch_grow4 ] { pinch_growangle(); };
-void() pinch_grow4 = [$grow4, pinch_grow5 ] { pinch_growangle(); };
-void() pinch_grow5 = [$grow5, pinch_grow6 ] { pinch_growangle(); };
-void() pinch_grow6 = [$grow6, pinch_grow7 ] { pinch_growangle(); };
-void() pinch_grow7 = [$grow7, pinch_grow8 ] { pinch_growangle(); };
-void() pinch_grow8 = [$grow8, pinch_grow9 ] { pinch_growangle(); };
-void() pinch_grow9 = [$grow9, pinch_grow10] { pinch_growangle(); };
+void() pinch_grow2 = [$grow2, pinch_grow3 ] { SUB_GrowAngle(); };
+void() pinch_grow3 = [$grow3, pinch_grow4 ] { SUB_GrowAngle(); };
+void() pinch_grow4 = [$grow4, pinch_grow5 ] { SUB_GrowAngle(); };
+void() pinch_grow5 = [$grow5, pinch_grow6 ] { SUB_GrowAngle(); };
+void() pinch_grow6 = [$grow6, pinch_grow7 ] { SUB_GrowAngle(); };
+void() pinch_grow7 = [$grow7, pinch_grow8 ] { SUB_GrowAngle(); };
+void() pinch_grow8 = [$grow8, pinch_grow9 ] { SUB_GrowAngle(); };
+void() pinch_grow9 = [$grow9, pinch_grow10] { SUB_GrowAngle(); };
 void() pinch_grow10= [$grow10, pinch_run1 ] {
 	if (pointcontents(self.origin) == CONTENT_SOLID) { // Is the scorpion stuck? cannot move?
 		self.health = self.gibhealth; // Time to die!
@@ -284,7 +283,7 @@ void() pinch_grow10= [$grow10, pinch_run1 ] {
 	}
 };
 
-void() pinch_grow = {
+void() pinch_grow = { // [FUNCTION]
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -345,7 +344,7 @@ void() pinch_die = {
 
 void() setup_scorpion;
 
-void() monster_scorpion_precache = {
+void() monster_scorpion_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_scorpion.mdl");
 	precache_model("progs/ad171/h_scorpion.mdl");
 	precache_model("progs/ad171/gib_scorpleg.mdl");
@@ -419,7 +418,7 @@ void() monster_wraithminion2 = {
 	monster_scorpion();
 };
 	
-void() setup_scorpion = {
+void() setup_scorpion = { // [FUNCTION]
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -470,7 +469,7 @@ void() setup_scorpion = {
 };
 
 // A code way to spawn scorpion (requires monster_scorpionspawn entity)
-void(vector minion_org, entity minion_targ) minion_scorpion = {
+void(vector minion_org, entity minion_targ) minion_scorpion = { // [FUNCTION]
 	local entity minion;
 	
 	// Check if there is space to spawn entity

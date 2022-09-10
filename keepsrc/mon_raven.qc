@@ -190,13 +190,13 @@ void()	raven_atk17  	= [ 	$atk17, 	raven_atk18	] { ai_charge(26); };
 void()	raven_atk18  	= [ 	$atk18, 	raven_atk19	] { ai_charge(26); };
 void()	raven_atk19  	= [ 	$atk19, 	raven_run1 	] { ai_charge(26); };
 
-void() raven_glidechoose = {
+void() raven_glidechoose = { // [FUNCTION]
 	if (random() < 0.5) raven_glide1();
 	else raven_glide12();
 };
 
 // Raven Claw and Bite --- This is not a melee attack! Uses very short hitscan to circumvent flying monster z axis melee calculations. 
-void() raven_melee = {
+void() raven_melee = { // [FUNCTION]
 	local float ldmg;
 	local vector org, dir;
 	if (self.health < 1) return;
@@ -217,7 +217,7 @@ void() raven_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn some touch blood (no explicit direction)
 };
 
-void() raven_wakeup = {
+void() raven_wakeup = { // [FUNCTION]
 	// Dead already?
 	if (self.health < 1) return;
 

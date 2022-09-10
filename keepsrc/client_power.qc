@@ -394,7 +394,8 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 	sprint(targ, ": ");
 	if (giver.ammo_nails)  {
 		targ.maxnails = SUB_ClampFloat(targ.maxnails + giver.ammo_nails,targ.maxnails,AMMO_MEGAMAXNAILS);
-		targ.ammo_nails = targ.maxnails; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) targ.ammo_nails = targ.ammo_nails + AMMO_NAILS_LGR;
+		else targ.ammo_nails = targ.maxnails; // max out ammo
 		sprint(targ, "Max nails increased by ");
 		sprint(targ, ftos(giver.ammo_nails));
 		sprint(targ, "!\n");
@@ -403,7 +404,8 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_rockets) {
 		targ.maxrockets = SUB_ClampFloat(targ.maxrockets + giver.ammo_rockets,targ.maxrockets,AMMO_MEGAMAXROCKETS);
-		targ.ammo_rockets = targ.maxrockets; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) targ.ammo_rockets = targ.ammo_rockets + AMMO_ROCKETS_LGR;
+		else targ.ammo_rockets = targ.maxrockets; // max out ammo
 		sprint(targ, "Max rockets increased by ");
 		sprint(targ, ftos(giver.ammo_rockets));
 		sprint(targ, "!\n");
@@ -412,7 +414,8 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_cells) {
 		targ.maxcells = SUB_ClampFloat(targ.maxcells + giver.ammo_cells,targ.maxcells,AMMO_MEGAMAXCELLS);
-		targ.ammo_cells = targ.maxcells; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) targ.ammo_cells = targ.ammo_cells + AMMO_CELLS_LGR;
+		else targ.ammo_cells = targ.maxcells; // max out ammo
 		sprint(targ, "Max cells increased by ");
 		sprint(targ, ftos(giver.ammo_cells));
 		sprint(targ, "!\n");
@@ -421,6 +424,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_lava_nails) {
 		targ.maxlavanails = SUB_ClampFloat(targ.maxlavanails + giver.ammo_lava_nails,targ.maxlavanails,AMMO_MEGAMAXLAVANAILS);
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_lava_nails > 0) targ.ammo_lava_nails = targ.ammo_lava_nails + AMMO_NAILS_LGR;
+		} else targ.ammo_lava_nails = targ.maxlavanails; // max out ammo
 		sprint(targ, "Max lava nails increased by ");
 		sprint(targ, ftos(giver.ammo_lava_nails));
 		sprint(targ, "!\n");
@@ -429,7 +435,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_multi_rockets) {
 		targ.maxmultirockets = SUB_ClampFloat(targ.maxmultirockets + giver.ammo_multi_rockets,targ.maxmultirockets,AMMO_MEGAMAXMULTIROCKETS);
-		targ.ammo_multi_rockets = targ.maxmultirockets; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_multi_rockets > 0) targ.ammo_multi_rockets = targ.ammo_multi_rockets + AMMO_ROCKETS_LGR;
+		} else targ.ammo_multi_rockets = targ.maxmultirockets; // max out ammo
 		sprint(targ, "Max multi-rockets ammo increased by ");
 		sprint(targ, ftos(giver.ammo_multi_rockets));
 		sprint(targ, "!\n");
@@ -437,8 +445,10 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 	}
 
 	if (giver.ammo_plasma) {
-		targ.maxplasma = SUB_ClampFloat(targ.maxplasma + giver.ammo_plasma,targ.maxplasma,AMMO_MEGAMAXNAILS);
-		targ.ammo_plasma = targ.maxplasma; // max out ammo
+		targ.maxplasma = SUB_ClampFloat(targ.maxplasma + giver.ammo_plasma,targ.maxplasma,AMMO_MEGAMAXPLASMA);
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_plasma > 0) targ.ammo_plasma = targ.ammo_plasma + AMMO_CELLS_LGR;
+		} else targ.ammo_plasma = targ.maxplasma; // max out ammo
 		sprint(targ, "Max poison ammo increased by ");
 		sprint(targ, ftos(giver.ammo_plasma));
 		sprint(targ, "!\n");
@@ -447,7 +457,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_poison) {
 		targ.maxpoison = SUB_ClampFloat(targ.maxpoison + giver.ammo_poison,targ.maxpoison,AMMO_MEGAMAXPOISON);
-		targ.ammo_poison = targ.maxpoison; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_poison > 0) targ.ammo_poison = targ.ammo_poison + AMMO_POISON_LGR;
+		} else targ.ammo_poison = targ.maxpoison; // max out ammo
 		sprint(targ, "Max poison ammo increased by ");
 		sprint(targ, ftos(giver.ammo_poison));
 		sprint(targ, "!\n");
@@ -456,7 +468,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_bolts) {
 		targ.maxbolts = SUB_ClampFloat(targ.maxbolts + giver.ammo_bolts,targ.maxbolts,AMMO_MEGAMAXBOLTS);
-		targ.ammo_bolts = targ.maxbolts; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_bolts > 0) targ.ammo_bolts = targ.ammo_bolts + AMMO_BOLTS_LGR;
+		} else targ.ammo_bolts = targ.maxbolts; // max out ammo
 		sprint(targ, "Max bolts increased by ");
 		sprint(targ, ftos(giver.ammo_bolts));
 		sprint(targ, "!\n");
@@ -465,7 +479,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_bloodcrystals) {
 		targ.maxblood = SUB_ClampFloat(targ.maxblood + giver.ammo_bloodcrystals,targ.maxblood,AMMO_MEGAMAXBLOOD);
-		targ.ammo_bloodcrystals = targ.maxblood; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_bloodcrystals > 0) targ.ammo_bloodcrystals = targ.ammo_bloodcrystals + AMMO_BLOOD_LGR;
+		} else targ.ammo_bloodcrystals = targ.maxblood; // max out ammo
 		sprint(targ, "Max blood crystals increased by ");
 		sprint(targ, ftos(giver.ammo_bloodcrystals));
 		sprint(targ, "!\n");
@@ -474,7 +490,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_voidshards) {
 		targ.maxvoid = SUB_ClampFloat(targ.maxvoid + giver.ammo_voidshards,targ.maxvoid,AMMO_MEGAMAXVOID);
-		targ.ammo_voidshards = targ.maxvoid; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_voidshards > 0) targ.ammo_voidshards = targ.ammo_voidshards + AMMO_VOID_LGR;
+		} else targ.ammo_voidshards = targ.maxvoid; // max out ammo
 		sprint(targ, "Max void shards increased by ");
 		sprint(targ, ftos(giver.ammo_voidshards));
 		sprint(targ, "!\n");
@@ -483,7 +501,9 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 
 	if (giver.ammo_elemental) {
 		targ.maxmana = SUB_ClampFloat(targ.maxmana + giver.ammo_elemental,targ.maxmana,AMMO_MEGAMAXMANA);
-		targ.ammo_elemental = targ.maxmana; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) { // For non-standard ammo, check if player has some before giving it.
+			if (targ.ammo_elemental > 0) targ.ammo_elemental = targ.ammo_elemental + AMMO_MANA_LGR;
+		} else targ.ammo_elemental = targ.maxmana; // max out ammo
 		sprint(targ, "Max elemental mana increased by ");
 		sprint(targ, ftos(giver.ammo_elemental));
 		sprint(targ, "!\n");
@@ -493,13 +513,15 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 	if (giver.ammo_shells || !amgiven) { // At least give something!
 		if (giver.ammo_shells <= 0) giver.ammo_shells = 100; // Drake default.
 		targ.maxshells = SUB_ClampFloat(targ.maxshells + giver.ammo_shells,targ.maxshells,AMMO_MEGAMAXSHELLS);
-		targ.ammo_shells = targ.maxshells; // max out ammo
+		if (giver.classtype == CT_ARTSUPERPACK) targ.ammo_shells = targ.ammo_shells + AMMO_SHELLS_LGR;
+		else targ.ammo_shells = targ.maxshells; // max out ammo
 		sprint(targ, "Max shells increased by ");
 		sprint(targ, ftos(giver.ammo_shells));
 		sprint(targ, "!\n");
 	}
 
 	targ.perms = targ.perms | POW_SHOTTYMAN;
+	bound_other_ammo(targ);
 	W_SetCurrentAmmo(targ,FALSE); // If changed current ammo, update it.
 };
 

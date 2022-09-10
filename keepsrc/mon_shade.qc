@@ -113,13 +113,13 @@ void(float dist, entity ent) Shade_FindBestPath = {
 };
 
 // Close in on the opponent.
-void() dark_melee = {
+void() dark_melee = { // [FUNCTION]
     ai_face();
     movetogoal(SPEED_RYU_MIN);
 };
 
 // Face and close in on the opponent while attacking.
-void() dark_missile = {
+void() dark_missile = { // [FUNCTION]
     ai_face();
     if (!QC_CloseEnough(SPEED_RYU_MIN)) walkmove (self.angles_y, SPEED_RYU_MIN); // Don't pass through goal.
 };
@@ -229,7 +229,7 @@ void() Shade_Meat = {
 ////////////////////////////////////////////////////////////////////////////
 
 // Set the nightshade's speed.  It gets faster when hurt -- "Now I'm angry!"
-void() shadow_speed = {
+void() shadow_speed = { // [FUNCTION]
     local float sped;
 
     if (self.max_health >= 1) {
@@ -241,7 +241,7 @@ void() shadow_speed = {
 };
 
 // This lets the nightshade make spooky noises as it drifts.  Assumes the nightshade has phased out and is not attacking.
-void() shade_sfx_idle = {
+void() shade_sfx_idle = { // [FUNCTION]
     if (self.waitmin < time) {
         if (random() < 0.01) {
 			local   float   r;
@@ -259,7 +259,7 @@ void() shade_sfx_idle = {
 };
 
 // This changes the nightshade to its invisible form.  The nightshade phases out and remains in place, totally silent.
-void(float in) shadow_phase = {
+void(float in) shadow_phase = { // [FUNCTION]
     if (in) { // Phase in.
         self.alpha = 0.7;
         self.takedamage = DAMAGE_AIM;
@@ -270,7 +270,7 @@ void(float in) shadow_phase = {
     }
 };
 
-void() shade_stand = {
+void() shade_stand = { // [FUNCTION]
     if (self.spawnflags & SPAWN_SOUL) {
         if (Wraith_FindSoul()) { self.th_run();  return; }
 	}
@@ -287,13 +287,13 @@ void()  shadow_stand7 = [$form1,  shadow_stand8  ] { self.alpha = 0.1; shade_sta
 void()  shadow_stand8 = [$form1,  shadow_stand9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_stand(); };
 void()  shadow_stand9 = [$form1,  shadow_stand9  ] { shade_stand(); };
 
-void()  shadow_stand = {
+void()  shadow_stand = { // [FUNCTION]
     if (self.takedamage) shadow_stand1();
     else shadow_stand8();
 };
 
 //  The nightshade phases out and moves along its path.
-void(float d) shade_walk = {
+void(float d) shade_walk = { // [FUNCTION]
     if (self.spawnflags & SPAWN_SOUL) {
         if (Wraith_FindSoul ()) { self.th_run();  return; }
 	}
@@ -309,13 +309,13 @@ void()  shadow_walk7  = [$form1,  shadow_walk8  ] { self.alpha = 0.1; shade_walk
 void()  shadow_walk8  = [$form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_walk(8); };
 void()  shadow_walk9  = [$form1,  shadow_walk9  ] { shade_walk(8); shade_sfx_idle(); };
 
-void()  shadow_walk = {
+void()  shadow_walk = { // [FUNCTION]
     if (self.takedamage) shadow_walk1();
     else shadow_walk8();
 };
 
 //  Run animation.  The nightshade flies quickly to find and close in on its target.
-void() shade_sfx_fly = {
+void() shade_sfx_fly = { // [FUNCTION]
     if (self.super_sound < time) { // Not while Quad is sounding.
         if (self.waterlevel <= 1) sound(self,CHAN_BODY,"drake/shade/fly.wav",1,ATTN_NORM); // Not while in the water.
         else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME)) sound(self,CHAN_BODY,"drake/dragon/flywater.wav",1,ATTN_NORM);
@@ -344,7 +344,7 @@ void()  shadow_run12  = [$fly4,  shadow_run13  ] { ai_run(self.speed); };
 void()  shadow_run13  = [$fly3,  shadow_run14  ] { ai_run(self.speed); };
 void()  shadow_run14  = [$fly2,  shadow_run1   ] { ai_run(self.speed); };
 
-void()  shadow_form = {
+void()  shadow_form = { // [FUNCTION]
     if (self.takedamage) shadow_run1();      // Already phased in.
     else shadow_form1(); // Materialize.
 };
@@ -368,7 +368,7 @@ void()  shadow_bite15 = [$attack3,  shadow_bite16 ] { dark_melee(); };
 void()  shadow_bite16 = [$attack2,  shadow_bite17 ] { dark_melee(); Ryu_Bite(); };
 void()  shadow_bite17 = [$attack1,  shadow_run1   ] { dark_melee(); self.attack_state = AS_STRAIGHT; };
 
-void() shadow_strike = {
+void() shadow_strike = { // [FUNCTION]
     self.alpha = 0.7;
     self.attack_state = AS_STRAIGHT;    // Nightshade does not strafe.
     traceline(self.origin, self.enemy.origin, TRUE, self); // If path crosses contents, use only the bite.
@@ -427,7 +427,7 @@ void() shadow_painc4 = [$painc4,  shadow_painc5 ] {};
 void() shadow_painc5 = [$painc5,  shadow_painc6 ] {};
 void() shadow_painc6 = [$painc6,  shadow_run1   ] {};
 
-void(entity inflictor, entity attacker, float damage) shadow_pain = {
+void(entity inflictor, entity attacker, float damage) shadow_pain = { // [FUNCTION]
     local   float   r, r1, r2;
 
     if (self.pain_finished > time) return; // Same size, standard pain.
@@ -458,7 +458,7 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
 };
 
 // DEATH - - - - - - - - - - - - - - - -
-void() shadow_boom = {
+void() shadow_boom = { // [FUNCTION]
 	// The nightshade releases its pawns and is forever destroyed.
     self.alpha = 1;
     self.deadflag = DEAD_DEAD;
@@ -487,7 +487,7 @@ void() shadow_die16 = [$nova16, shadow_die17 ] {};
 void() shadow_die17 = [$nova17, shadow_die18 ] { shadow_boom(); };
 void() shadow_die18 = [$nova18, shadow_die18  ] { entity_remove(self,0.1); };
 
-void() shadow_die = {
+void() shadow_die = { // [FUNCTION]
     monster_death_precheck();
     self.frame      = $nova1;
     self.alpha      = 0.7;
@@ -498,7 +498,7 @@ void() shadow_die = {
     shadow_die1();
 };
 
-void() monster_nightshade_precache = {
+void() monster_nightshade_precache = { // [FUNCTION]
     precache_model ("progs/drake/shade.mdl");
     precache_model ("progs/drake/soul.mdl");
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)

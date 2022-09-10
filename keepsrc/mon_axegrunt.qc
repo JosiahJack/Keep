@@ -122,7 +122,7 @@ void()	axe_runatkd4	= [	$axattd4,		axe_runatkd5	] { axeg_chop('30 -75 100'); };
 void()	axe_runatkd5	= [	$axattd5,		axe_runatkd6	] { axeg_chop('60 -150 200'); };
 void()	axe_runatkd6	= [	$axattd6,		axeg_run1	] { ai_charge_side(); };
 
-void()	axeg_atk = {
+void()	axeg_atk = { // [FUNCTION]
 	local float r;
 
 	if (self.pain_finished > time) return;

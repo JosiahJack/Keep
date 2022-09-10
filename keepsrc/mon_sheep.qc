@@ -49,7 +49,7 @@ void sheep_look1();
 void sheep_lookup1();
 void sheep_trot1();
 
-void() sheep_sound =  {
+void() sheep_sound =  { // [FUNCTION]
 	local float r, vol;
 
 	if (self.idletimer > time) return;
@@ -67,25 +67,25 @@ void() sheep_sound =  {
 	self.idletimer = time + 5 + (random() * 3);
 };
 
-void() sheep_turn =  {
+void() sheep_turn =  { // [FUNCTION]
    if (random() < 0.5)	self.angles_y += ((random() * self.yaw_speed) + (self.yaw_speed / 2.00000));
    else					self.angles_y -= ((random() * self.yaw_speed) + (self.yaw_speed / 2.00000));
 };
 
-void  (float dist) ai_sheep_move =  {
+void  (float dist) ai_sheep_move =  { // [FUNCTION]
 	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 	ChangeYaw();
 	movetogoal(dist);
 };
 
-void  ()sheep_think =  {
+void  ()sheep_think =  { // [FUNCTION]
    if (!(self.spawnflags & 1) && ((self.think == sheep_trot1 || self.think == sheep_gstep_a1 || self.think == sheep_gstep_b1) && random() < 0.10000)) sheep_turn();
    if ((((random() < 0.10000) && (random() < 0.20000)) && (self.pain_finished < time))) {
       sheep_sound();
    }
 };
 
-void() sheep_tran_think = {
+void() sheep_tran_think = { // [FUNCTION]
 	if (self.goalentity) {
 		ai_sheep_move (3);
 	} else {
@@ -236,7 +236,7 @@ void()	sheep_graze_b40	= [79,	sheep_graze_b1	] {
 	}
 };
 
-void() sheep_gstep_think = {
+void() sheep_gstep_think = { // [FUNCTION]
 	sheep_think();
 	if (self.goalentity) {
 		ai_sheep_move (0.3); // barely move slowly forward
@@ -359,7 +359,7 @@ void()	sheep_pain8		= [201,	sheep_wait1	] {
 	}
 };
 
-void(entity inflictor, entity attacker, float damage) sheep_pain =  {
+void(entity inflictor, entity attacker, float damage) sheep_pain =  { // [FUNCTION]
 	local float r, vol;
 
 	if (self.pain_finished > time) return;
@@ -496,7 +496,7 @@ void()	sheep_look60 	= [193,	sheep_wait1] {
 	}
 };
 
-void() sheep_bite =  {
+void() sheep_bite =  { // [FUNCTION]
 	makevectors(self.angles);
 	traceline ( (self.origin + self.view_ofs), ((self.origin + self.view_ofs) + (v_forward * 36.00000)), FALSE, self);
 	if (trace_ent.takedamage) {
@@ -507,7 +507,7 @@ void() sheep_bite =  {
 	}
 };
 
-void() sheep_run_think = {
+void() sheep_run_think = { // [FUNCTION]
 	if (self.enemy.classgroup == CG_HARMLESS || self.enemy.classtype == self.classtype && !visible(self.enemy)) {
 		sheep_trot1();
 	}

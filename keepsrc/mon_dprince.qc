@@ -298,7 +298,7 @@ void()	dprince_watk22	= [	$w_attack22,dprince_run1	] { ai_charge(3); };
 // Attack 1 - Slice (one hand slashing run attack)
 // Attack 2 - Smash (chop overhead to ground)
 // Attack 3 - W_Attack (two handed slashing attack)
-void() dprince_melee = {
+void() dprince_melee = { // [FUNCTION]
 	// Do heavy overhead attack against other monsters
 	if (self.enemy.flags & FL_MONSTER) dprince_smash1();
 	else {
@@ -316,7 +316,7 @@ void() dprince_melee = {
 };
 
 // Magic Attacks - Range Far = Rockets, Range Near = Hazard
-void() dprince_rocket = {
+void() dprince_rocket = { // [FUNCTION]
 	local vector org, dir, avel;
 	
 	if (!self.enemy) return;
@@ -339,7 +339,7 @@ void() dprince_rocket = {
 	launch_projectile(org,dir,avel,CT_PROJ_DPRINCE1,self.attack_speed);
 };
 
-void() dprince_magicframe = {
+void() dprince_magicframe = { // [FUNCTION]
 	if (self.health < 1) return;
 	if (!self.enemy) return;
 	
@@ -384,7 +384,7 @@ void() dprince_magicframe = {
 	if (self.walkframe > 10) self.th_run();
 };
 
-void() dprince_range = { self.walkframe = 0; dprince_magicframe(); };
+void() dprince_range = { self.walkframe = 0; dprince_magicframe(); }; // [FUNCTION]
 
 void()	dprince_painA1	= [	$painA1, dprince_painA2	] {};
 void()	dprince_painA2	= [	$painA2, dprince_painA3	] {};
@@ -404,7 +404,7 @@ void()	dprince_painD9	= [	$painD9, dprince_painD10	] {};
 void()	dprince_painD10	= [	$painD10, dprince_painD11	] {};
 void()	dprince_painD11	= [	$painD11, dprince_run1	] {};
 
-void(entity inflictor, entity attacker, float damage) dprince_pain = {
+void(entity inflictor, entity attacker, float damage) dprince_pain = { // [FUNCTION]
 	if (self.spawnflags & MON_GHOST_ONLY) return;
 	
 	// Check all pain conditions and set up what to do next
@@ -468,7 +468,7 @@ void()	dprince_dieb18	= [	$deathb18,	dprince_dieb19	] {};
 void()	dprince_dieb19	= [	$deathb19,	dprince_dieb20	] { monster_death_postcheck(); };
 void()	dprince_dieb20	= [	$deathb20,	dprince_dieb20	] { monster_deadbody_check(); };
 
-void() dprince_die = {
+void() dprince_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
@@ -479,7 +479,7 @@ void() dprince_die = {
 	}
 };
 
-void() monster_dprince_precache = {
+void() monster_dprince_precache = { // [FUNCTION]
 	precache_model ("progs/ad181/mon_dprince.mdl");
 	precache_model ("progs/ad181/h_dprince.mdl");
 	precache_model ("progs/ad181/w_dprincesword.mdl");

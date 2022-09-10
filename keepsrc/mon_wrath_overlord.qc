@@ -42,7 +42,7 @@
 
 float() overlord_smash;
 
-void() overlord_teleport = {
+void() overlord_teleport = { // [FUNCTION]
    local float chance;
    local entity theDest;
    local vector org;
@@ -138,7 +138,7 @@ void() overlord_at_c12 = [ 51.000, overlord_at_c13 ] { ai_charge(12); };
 void() overlord_at_c13 = [ 52.000, overlord_at_c14 ] { ai_charge(12); };
 void() overlord_at_c14 = [ 53.000, overlord_run01 ] { ai_charge(12); };
 
-float() overlord_smash = { // PM:  Changed from void to float type so overlord can shoot on a miss.
+float() overlord_smash = {  // [FUNCTION] PM:  Changed from void to float type so overlord can shoot on a miss.
 	local vector delta;
 	local float smashDmg;
 
@@ -162,7 +162,7 @@ float() overlord_smash = { // PM:  Changed from void to float type so overlord c
 	return TRUE;
 };
 
-void() overlord_melee = {
+void() overlord_melee = { // [FUNCTION]
    local float r;
 
    r = random();
@@ -190,9 +190,11 @@ void() overlord_msl_a10 = [ 63.000, overlord_msl_a11 ] { ai_charge(12); };
 void() overlord_msl_a11 = [ 64.000, overlord_msl_a12 ] { ai_charge(12); };
 void() overlord_msl_a12 = [ 65.000, overlord_run01 ] { overlord_teleport(); };
 
-void() overlord_missile = {
+void() overlord_missile = { // [FUNCTION]
 	if (self.spawnflags & 4) {
-		wraith_create_attachment();
+		SUB_CreateSelfAttachment(MODEL_PROJ_WBALL,0.85); // Make sure the attachments are setup ready
+		SUB_CreateSelfAttachment2(MODEL_PROJ_WBALL,0.85);
+		SUB_CreateSelfAttachment3(self.weaponglow,0.5);
 		if (random() < 0.7 && !self.enemy.burning) {
 			wraith_debuff1();
 		} else overlord_msl_a01();
@@ -214,7 +216,7 @@ void() overlord_pn_b05 = [ 84.000, overlord_pn_b06 ] {};
 void() overlord_pn_b06 = [ 85.000, overlord_pn_b07 ] {};
 void() overlord_pn_b07 = [ 86.000, overlord_run01 ] {};
 
-void(entity inflictor, entity attacker, float damage) overlord_pain = {
+void(entity inflictor, entity attacker, float damage) overlord_pain = { // [FUNCTION]
    if (self.pain_finished > time) return;
    if (random() > 0.2) return;
 
@@ -226,7 +228,7 @@ void(entity inflictor, entity attacker, float damage) overlord_pain = {
    sound(self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
 
-void(string gibName) ol_toss = {
+void(string gibName) ol_toss = { // [FUNCTION]
 	local vector flingVelocity;
 	local entity myGib;
 
@@ -287,7 +289,7 @@ void() overlord_die17 = [ 106.000, overlord_die18 ] {
 	self.nextthink = (time + 0.100);
 };
 
-void() overlord_die18 = [ 107.000, overlord_die19 ] {
+void() overlord_die18 = [ 107.000, overlord_die19 ] { // [FUNCTION]
    Tent_Explosion2(self.origin,0,4);
    ThrowGib(1,2);
    ThrowGib(2,2);
@@ -295,7 +297,7 @@ void() overlord_die18 = [ 107.000, overlord_die19 ] {
    self.nextthink = (time + 0.100);
 };
 
-void() overlord_die19 = [ 107.000, overlord_die19 ] {
+void() overlord_die19 = [ 107.000, overlord_die19 ] { // [FUNCTION]
    Tent_Explosion2(self.origin,0,4);
    ThrowGib(1,2);
    ThrowGib(2,2);
@@ -303,7 +305,7 @@ void() overlord_die19 = [ 107.000, overlord_die19 ] {
    entity_remove(self,0.1);
 };
 
-void() monster_super_wrath_precache = {
+void() monster_super_wrath_precache = { // [FUNCTION]
 	precache_model("progs/rogue/s_wrath.mdl");
 	precache_model("progs/ad171/mon_wraith_glow.mdl");
 	precache_model(MODEL_PROJ_WTRAIL);		// Hitscan blood bolt

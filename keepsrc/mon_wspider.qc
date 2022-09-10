@@ -115,7 +115,7 @@ void() spid_death9 = [17, spid_death10] {};
 void() spid_death10 = [18, spid_death11] { monster_death_postcheck(); };
 void() spid_death11 = [19, spid_death11] { monster_deadbody_check(); };
 
-void() spid_die = {
+void() spid_die = { // [FUNCTION]
 	monster_death_precheck();
 
 	if (!self.gibbed) {
@@ -133,7 +133,7 @@ void() spid_die = {
 	}
 };
 
-float() CheckSpidJump =  {
+float() CheckSpidJump =  { // [FUNCTION]
 	local vector dist;
 	local float d;
 
@@ -154,7 +154,7 @@ float() CheckSpidJump =  {
 	return 1;
 };
 
-void() spid_jump = {
+void() spid_jump = { // [FUNCTION]
 	if (!FL_ONGROUND) return;
 
 	ai_face();
@@ -164,14 +164,14 @@ void() spid_jump = {
 	SUB_RemoveFlags(self,FL_ONGROUND);
 };
 
-void() spid_attack = {
+void() spid_attack = { // [FUNCTION]
 	if (CheckSpidJump)
 		spid_jump();
 
 	spid_attack1();
 };
 
-void() SpidMissile = {
+void() SpidMissile = { // [FUNCTION]
 	local vector org, dir, yrand, zrand;
 
 	ai_face();
@@ -185,7 +185,7 @@ void() SpidMissile = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_WILLY,300);
 };
 
-void() monster_wspider_precache = {
+void() monster_wspider_precache = { // [FUNCTION]
 	precache_model("progs/ad171/gib_spidlegg.mdl");
 	precache_model("progs/gib2.mdl");
 	precache_model("progs/spider.mdl");

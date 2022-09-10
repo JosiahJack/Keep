@@ -21,7 +21,7 @@ $frame paind17 paind18 paind19
 
 void menf_ratk9();
 
-void() enforcer_shieldthink = {
+void() enforcer_shieldthink = { // [FUNCTION]
 	if (self.owner.health <= 0) { remove(self); return; }
 
 	local float strength, i;
@@ -43,7 +43,7 @@ void() enforcer_shieldthink = {
 	self.nextthink = time + 0.1;
 };
 
-void() enforcer_spawnshieldfx = {
+void() enforcer_spawnshieldfx = { // [FUNCTION]
 	local entity shieldfx;
 
 	shieldfx = spawn();
@@ -55,7 +55,7 @@ void() enforcer_spawnshieldfx = {
 	shieldfx.think = enforcer_shieldthink;
 };
 
-void() enforcer_updateshield = {
+void() enforcer_updateshield = { // [FUNCTION]
 	if (self.spawnflags & ULTRA_ENF) {
 		self.armorvalue = self.armorvalue + 2 + skill;
 		if (self.armorvalue > 30) self.armorvalue = 30;
@@ -63,8 +63,7 @@ void() enforcer_updateshield = {
 };
 
 // Yoinked from Zer
-
-void() particlethink = {
+void() particlethink = { // [FUNCTION]
 	if (self.wait < time)
 		remove(self);
 	particle (self.origin, self.oldorigin, 10, 4);
@@ -72,7 +71,7 @@ void() particlethink = {
 	self.nextthink = time + 0.05;
 };
 
-void() enforcer_fireparticlebeam = {
+void() enforcer_fireparticlebeam = { // [FUNCTION]
 	local vector org, mep, lead, spot;
 	local entity missile;
 	local float go, dot;
@@ -90,7 +89,6 @@ void() enforcer_fireparticlebeam = {
 	dot = (normalize(spot - org) * v_forward);
 	if ( dot < 0.75 ) spot = self.enemy.origin; // Too wacky an angle, just shoot at player
 	lead = normalize(spot - org);
-
 	missile = spawn();
 	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
@@ -109,7 +107,7 @@ void() enforcer_fireparticlebeam = {
 	missile.think = particlethink;
 };
 
-void() enforcer_missiletouch = {
+void() enforcer_missiletouch = { // [FUNCTION]
 	local float	damg;
 
 	if (other == self.owner) return; // don't explode on owner
@@ -126,7 +124,7 @@ void() enforcer_missiletouch = {
 	BecomeExplosion();
 };
 
-void() enforcer_firerocket = {
+void() enforcer_firerocket = { // [FUNCTION]
 	local vector org, mep, lead, spot;
 	local entity missile;
 	local float go;
@@ -161,7 +159,7 @@ void() enforcer_firerocket = {
 	missile.think = SUB_Remove;
 };
 
-void(float offset) enforcer_fireknight = {
+void(float offset) enforcer_fireknight = { // [FUNCTION]
 	local vector offang, org, vec;
 
 	offang = vectoangles (self.enemy.origin - self.origin);

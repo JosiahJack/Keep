@@ -84,7 +84,7 @@ void()	enf_run6	= [	$run6,		enf_run7	] { ai_run(14); enforcer_updateshield(); };
 void()	enf_run7	= [	$run7,		enf_run8	] { monster_footstep(FALSE); ai_run(7); enforcer_updateshield(); };
 void()	enf_run8	= [	$run8,		enf_run1	] { ai_run(11); enforcer_updateshield(); };
 
-void() enforcer_attack = {
+void() enforcer_attack = { // [FUNCTION]
 	local float edist;
 	edist = vlen(self.enemy.origin - self.origin);
 	if (self.spawnflags & ULTRA_ENF) {
@@ -103,7 +103,7 @@ void() enforcer_attack = {
 };
 
 // Basic enforcer laser attack
-void() enforcer_fire = {
+void() enforcer_fire = { // [FUNCTION]
 	local vector org, vec;
 
 	if (!self.enemy) return;
@@ -132,7 +132,7 @@ void()	enf_atk13	= [	$attack9,	enf_atk14	] { ai_face(); };
 void()	enf_atk14	= [	$attack10,	enf_run1	] { ai_face();SUB_CheckRefire (enf_atk1); };
 
 // - Defender enforcer (ssg/gl attack)
-void() defender_ssg = {
+void() defender_ssg = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
@@ -178,7 +178,7 @@ void()	def_atkgl9	= [	$attack9,	def_atkgl10] { ai_face(); };
 void()	def_atkgl10= [	$attack10,	enf_run1	] { ai_face(); };
 
 // - Eliminator enforcer (plasma attack)
-void() eliminator_fire = {
+void() eliminator_fire = { // [FUNCTION]
 	local vector org, vec;
 
 	if (!self.enemy) return;
@@ -347,7 +347,7 @@ void() enf_die = {
 	}
 };
 
-void() monster_enforcer_precache = {
+void() monster_enforcer_precache = { // [FUNCTION]
 	precache_model(MODEL_PROJ_LASER);	// Originally - progs/laser.mdl
 	precache_model("progs/enforcer.mdl");
 	precache_model("progs/h_mega.mdl");
@@ -428,7 +428,7 @@ void() monster_enforcer_precache = {
 };
 
 // QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_base_enforcer = {
+void() monster_base_enforcer = { // [FUNCTION]
 	local float r;
 	
 	if (!self.mdl) self.mdl = "progs/qmaster/mon_enforcer.mdl";
@@ -537,7 +537,7 @@ void() monster_defender = {
 	monster_base_enforcer();
 };
 
-void() gunner_chaingun = {
+void() gunner_chaingun = { // [FUNCTION]
     local vector p1, p2;
 
     makevectors(self.angles);

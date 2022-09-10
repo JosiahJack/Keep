@@ -180,7 +180,7 @@ void() ogre_smash12	= [	$smash12,		ogre_smash13 ] { ai_charge(0); };
 void() ogre_smash13	= [	$smash13,		ogre_smash14 ] { ai_charge(4); };
 void() ogre_smash14	= [	$smash14,		ogre_run1	] { ai_charge(12); };
 
-void() ogre_melee = {
+void() ogre_melee = { // [FUNCTION]
 	sound(self,CHAN_WEAPON,"ogre/ogsawatk.wav",1,ATTN_NORM);
 	if (random() > 0.5) ogre_smash1();
 	else ogre_swing1();
@@ -331,7 +331,7 @@ void()	ogre_bdie8	= [	$bdeath8,	ogre_bdie9	] {};
 void()	ogre_bdie9	= [	$bdeath9,	ogre_bdie10	] { monster_death_postcheck(); };
 void()	ogre_bdie10	= [	$bdeath10,	ogre_bdie10	] { monster_deadbody_check(); };
 
-void() ogre_die = {
+void() ogre_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) {
 		sound(self,CHAN_VOICE, "ogre/ogdth.wav",1,ATTN_NORM);
@@ -356,7 +356,7 @@ void() ogre_wakeup9	= [	$smash14,	ogre_run1	] {};
 
 // From the crazy mind of Madfox, comes fishing ogre!?!
 // Special idle animation - Flappy the fish waggles tail
-void() ogre_flappyfish = {
+void() ogre_flappyfish = { // [FUNCTION]
 	if (self.health < 1) return; // If dead, no more updates
 
 	self.nextthink = time + 0.1;
@@ -374,7 +374,7 @@ void() ogre_flappyfish = {
 };
 
 // Special idle animation - Ogre finally catches something!
-void() ogre_catchfish = {
+void() ogre_catchfish = { // [FUNCTION]
 	if (self.health < 1) return; // If dead, no more updates
 
 	self.nextthink = time + 0.1;
@@ -394,7 +394,7 @@ void() ogre_catchfish = {
 	} else self.think = ogre_catchfish;
 };
 
-void() ogre_fishing = {
+void() ogre_fishing = { // [FUNCTION]
 	if (self.health < 1) return; // If dead, no more updates
 
 	self.idlebusy = FALSE;
@@ -462,7 +462,7 @@ void()	ogre_fishd16= [$paind16, ogre_run1 ] {
 	self.th_die = ogre_die;
 };
 
-void() ogre_fishwakeup = {
+void() ogre_fishwakeup = { // [FUNCTION]
 	self.use = SUB_Null;	// Stop re-triggering
 	monster_sightsound();	// Classic wakeup sound
 
@@ -492,10 +492,10 @@ void() ogre_fishwakeup = {
 	ogre_fishd6();
 };
 
-void(entity inf, entity att, float dam) ogre_fishpain = { ogre_fishwakeup(); };
-void() ogre_fishdie = {};
+void(entity inf, entity att, float dam) ogre_fishpain = { ogre_fishwakeup(); }; // [FUNCTION]
+void() ogre_fishdie = {}; // [FUNCTION]
 
-void() ogre_fishsetup = {
+void() ogre_fishsetup = { // [FUNCTION]
 	self.takedamage = DAMAGE_YES; // Take direct damage only and grenades bounce!
 	self.noradiusdmg = TRUE;
 	self.health = MEGADEATH;

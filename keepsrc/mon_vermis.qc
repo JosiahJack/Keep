@@ -39,7 +39,7 @@
 // came.
 //=============================================================================
 
-void() vermis_start_go = {
+void() vermis_start_go = { // [FUNCTION]
 	if (!(self.spawnflags & 64)) self.origin_z = self.origin_z + 1;
 	self.takedamage = DAMAGE_AIM;
 	self.ideal_yaw = self.angles * '0 1 0';
@@ -72,7 +72,7 @@ void() vermis_start_go = {
 	self.nextthink = time + 0.1;
 };
 
-void() vermis_start = {
+void() vermis_start = { // [FUNCTION]
 	if (!(self.spawnflags & 64)) {
 		self.nextthink = self.nextthink + random() * 0.5;
 		self.think = vermis_start_go;
@@ -81,14 +81,14 @@ void() vermis_start = {
 	}
 };
 
-void() vermis_touch = {
+void() vermis_touch = { // [FUNCTION]
 	if (other.flags & FL_CLIENT && Align_Opposing(self,other)) {
 		T_Damage(other,self,self,3 + (2 * random()),DAMARMOR);
 		self.touch = SUB_Null;
 	}
 };
 
-void() vermis_coil1 = [2, vermis_coil1] { self.height = 8; };
+void() vermis_coil1 = [2, vermis_coil1] { self.height = 8; }; // [FUNCTION]
 
 void() vermis_idle2 = { // [FUNCTION]
 	self.nextthink = time + 0.1;

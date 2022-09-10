@@ -188,7 +188,7 @@ void() ambient_hevifals = { // [ENTITY]
 	ambient_sound_setup();
 };
 
-void() ambient_bublfals = { // [ENTITY]
+void() ambient_bublfals = { // [ENTITY], Redirect
 	self.noise = "custents/ambient/runwater.wav";
 	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
@@ -633,7 +633,7 @@ void() ambient_running_lava = { // [ENTITY]
 	ambient_sound_setup();
 };
 
-void() ambient_running_water = { ambient_bublfals(); };  // [ENTITY], Re-direct From custents, also used in travail as bublfals.wav
+void() ambient_running_water = { ambient_bublfals(); };  // [ENTITY], custents name, also used in travail as bublfals.wav
 
 void() ambient_rushing = { // [ENTITY]
 	self.noise = "drake/ambience/rushing.wav";

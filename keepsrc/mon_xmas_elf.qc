@@ -138,7 +138,7 @@ void() elf_magic11 = [$magic2, elf_magic12 ] {};
 void() elf_magic12 = [$magic1, elf_run1 ] {};
 
 // ELF 1 - SWING CANE - Both elf types can swing cane if within range
-void() elf_melee = {
+void() elf_melee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;

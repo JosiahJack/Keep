@@ -120,7 +120,7 @@ void() fog_controller_think = {
 	self.nextthink = time + FADEFOG_TIME;
 };
 
-void(float gf_den, vector gf_col, float gf_time) fade_fog = {
+void(float gf_den, vector gf_col, float gf_time) fade_fog = { // [FUNCTION]
 	if (!fog_control) return; // No controller active?
 
 	if (gf_den < 0) gf_den = 0; // Fog density can be higher than 1, check larger range
@@ -135,7 +135,7 @@ void(float gf_den, vector gf_col, float gf_time) fade_fog = {
 };
 
 // Setup the fog controller entity (called from client if defined)
-void() setup_fog_controller = {
+void() setup_fog_controller = { // [FUNCTION]
 	if (!fog_control) {
 		// Start off with the fog controller disabled
 		// if the worldspawn setup correctly then enable
@@ -187,7 +187,7 @@ void() setup_fog_controller = {
 };
 
 // Main sky fog functions
-void(entity client) change_skyfog = {
+void(entity client) change_skyfog = { // [FUNCTION]
 	if (!skyfog_control) return;
 	
 	// Update fog parameters to console buffer
@@ -198,7 +198,7 @@ void(entity client) change_skyfog = {
 };
 
 // Main sky fog controller loop
-void() skyfog_controller_think = {
+void() skyfog_controller_think = { // [FUNCTION]
 	// Has there been a change detected?
 	if (self.state == STATE_SETUP) {
 		// If sky fog fade time too low, instantly switch
@@ -231,7 +231,7 @@ void() skyfog_controller_think = {
 	self.nextthink = time + FADEFOG_TIME;
 };
 
-void(float gf_den, float gf_time) fade_skyfog = {
+void(float gf_den, float gf_time) fade_skyfog = { // [FUNCTION]
 	if (!skyfog_control) return; // No controller active?
 
 	gf_den = fog_check_range(gf_den); // Check Sky Fog density is range 0 - 1
@@ -241,7 +241,7 @@ void(float gf_den, float gf_time) fade_skyfog = {
 };
 
 // Setup the sky fog controller entity
-void() setup_skyfog_controller = {
+void() setup_skyfog_controller = { // [FUNCTION]
 	if (!skyfog_control) { // Start off with the sky fog controller disabled; if the worldspawn setup correctly then enable the controller and allow fog changes.
 		skyfog_active = FALSE;
 		skyfog_control = spawn();

@@ -38,22 +38,20 @@
 
 void() SGruntCheckAttack;
 
-// running
 // a stupid, lurching hopscotch-type maneouvre...
-
-void() sgrunt_run1 = [92, sgrunt_run2] { ai_run(20); };
-void() sgrunt_run2 = [93, sgrunt_run3] { monster_footstep(FALSE); ai_run(25); };
-void() sgrunt_run3 = [94, sgrunt_run4] { ai_run(6); };
-void() sgrunt_run4 = [95, sgrunt_run5] { ai_run(9); };
-void() sgrunt_run5 = [96, sgrunt_run6] { ai_run(20); };
-void() sgrunt_run6 = [97, sgrunt_run7] { monster_footstep(FALSE); ai_run(25); };
-void() sgrunt_run7 = [98, sgrunt_run8] { ai_run(3); };
-void() sgrunt_run8 = [99, sgrunt_run1] { ai_run(7); };
+void() sgrunt_run1 = [92, sgrunt_run2] { ai_run(20); }; // [FUNCTION]
+void() sgrunt_run2 = [93, sgrunt_run3] { monster_footstep(FALSE); ai_run(25); }; // [FUNCTION]
+void() sgrunt_run3 = [94, sgrunt_run4] { ai_run(6); }; // [FUNCTION]
+void() sgrunt_run4 = [95, sgrunt_run5] { ai_run(9); }; // [FUNCTION]
+void() sgrunt_run5 = [96, sgrunt_run6] { ai_run(20); }; // [FUNCTION]
+void() sgrunt_run6 = [97, sgrunt_run7] { monster_footstep(FALSE); ai_run(25); }; // [FUNCTION]
+void() sgrunt_run7 = [98, sgrunt_run8] { ai_run(3); }; // [FUNCTION]
+void() sgrunt_run8 = [99, sgrunt_run1] { ai_run(7); }; // [FUNCTION]
 
 // standing
 // stand50-stand71 is a standing loop.
 
-void() sgrunt_stand = {
+void() sgrunt_stand = { // [FUNCTION]
 	if ((self.frame < 50) || (self.frame >= 71))
 		self.frame = 50;
 
@@ -67,8 +65,7 @@ void() sgrunt_stand = {
 
 // walking
 
-void() sgrunt_swagger1 = [74, sgrunt_swagger2 ] 
-{
+void() sgrunt_swagger1 = [74, sgrunt_swagger2 ] { // [FUNCTION]
 	if (random() < 0.1)
 		sound(self,CHAN_VOICE, "sgrunt/infidle1.wav",1,ATTN_IDLE);
 
@@ -92,45 +89,31 @@ void() sgrunt_swagger12 = [85, sgrunt_swagger1 ] { ai_walk(6); };
 
 void() sgrunt_fire12;
 
-void() sgrunt_plasma_touch = {
+void() sgrunt_plasma_touch = { // [FUNCTION]
 	if (other == self.owner) return;
-
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-		remove(self);
-		return;
-	}
-
-// hit something that bleeds
-	if (other.takedamage)
-	{
+	if (other.takedamage) {
 		spawn_touchblood (self, other, 6);
 		T_Damage(other, self, self.owner, 6, DAMARMOR);
 	}	
 
 	// do sprite explosion
-
 	self.origin = self.origin - 8*normalize(self.velocity);
-
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
 	self.solid = SOLID_NOT;
-
 	self.think = BDW_SpriteGenericPlayOnce;
 	self.nextthink = time + 0.05;
-
 	self.frame = 0;
 	self.idleweaponframe = 6;
 	setmodel(self, "progs/kinn/s_plasgx.spr");
-
-	// make sound
 	sound(self,CHAN_VOICE, "drake/weapons/plasma1.wav",1,ATTN_NORM);
 };
 
-void(vector org, vector dir) sgrunt_spawn_plasma = {
+void(vector org, vector dir) sgrunt_spawn_plasma = { // [FUNCTION]
 	local entity plasma;
 	local float f;
 
@@ -161,7 +144,7 @@ void(vector org, vector dir) sgrunt_spawn_plasma = {
 	setorigin(plasma, org);
 };	
 
-void(vector ofs) sgrunt_death_plasma = {
+void(vector ofs) sgrunt_death_plasma = { // [FUNCTION]
 	local vector org, dir;
 
 	makevectors(self.angles);
@@ -175,7 +158,7 @@ void(vector ofs) sgrunt_death_plasma = {
 	sgrunt_spawn_plasma(org, dir);
 };
 
-void(float o_r, float o_z) sgrunt_plasma_launch = {
+void(float o_r, float o_z) sgrunt_plasma_launch = { // [FUNCTION]
 	local vector ofs, dir;
 	local entity en;
 	local float t;		
@@ -201,14 +184,14 @@ void(float o_r, float o_z) sgrunt_plasma_launch = {
 	if (self.cnt <= 0) self.think = sgrunt_fire12;
 };
 
-void() sgrunt_plasma1 = [194, sgrunt_plasma2] { sgrunt_plasma_launch(9, 24); };
-void() sgrunt_plasma2 = [194, sgrunt_plasma3] { sgrunt_plasma_launch(6, 22); };
-void() sgrunt_plasma3 = [194, sgrunt_plasma4] { sgrunt_plasma_launch(6, 19); };
-void() sgrunt_plasma4 = [194, sgrunt_plasma5] { sgrunt_plasma_launch(9, 17); };
-void() sgrunt_plasma5 = [194, sgrunt_plasma6] { sgrunt_plasma_launch(12, 19); };
-void() sgrunt_plasma6 = [194, sgrunt_plasma1] { sgrunt_plasma_launch(12, 22); };
+void() sgrunt_plasma1 = [194, sgrunt_plasma2] { sgrunt_plasma_launch(9, 24); }; // [FUNCTION]
+void() sgrunt_plasma2 = [194, sgrunt_plasma3] { sgrunt_plasma_launch(6, 22); }; // [FUNCTION]
+void() sgrunt_plasma3 = [194, sgrunt_plasma4] { sgrunt_plasma_launch(6, 19); }; // [FUNCTION]
+void() sgrunt_plasma4 = [194, sgrunt_plasma5] { sgrunt_plasma_launch(9, 17); }; // [FUNCTION]
+void() sgrunt_plasma5 = [194, sgrunt_plasma6] { sgrunt_plasma_launch(12, 19); }; // [FUNCTION]
+void() sgrunt_plasma6 = [194, sgrunt_plasma1] { sgrunt_plasma_launch(12, 22); }; // [FUNCTION]
 
-void() sgrunt_fire_loop = [194, sgrunt_fire_loop] {
+void() sgrunt_fire_loop = [194, sgrunt_fire_loop] { // [FUNCTION]
 	local vector dir;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -225,17 +208,17 @@ void() sgrunt_fire_loop = [194, sgrunt_fire_loop] {
 	if (self.cnt <= 0) self.think = sgrunt_fire12;	
 };
 
-void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face(); ai_forward(5); };
-void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face(); ai_back(1); };
-void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face(); ai_back(1); };
-void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face();sound(self,CHAN_WEAPON,"sgrunt/infatck3.wav",1,ATTN_NORM); };
-void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face(); ai_back(1); };
-void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face(); ai_forward(1); };
-void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face(); ai_forward(1); };
-void() sgrunt_fire8 = [191, sgrunt_fire9] { ai_face(); ai_forward(2); };
-void() sgrunt_fire9 = [192, sgrunt_fire10] { ai_face(); ai_back(2); };
-void() sgrunt_fire10 = [193, sgrunt_fire11] { ai_face(); ai_back(4); };
-void() sgrunt_fire11 = [194, sgrunt_fire12] {
+void() sgrunt_fire1 = [184, sgrunt_fire2] { ai_face(); ai_forward(5); }; // [FUNCTION]
+void() sgrunt_fire2 = [185, sgrunt_fire3] { ai_face(); ai_back(1); }; // [FUNCTION]
+void() sgrunt_fire3 = [186, sgrunt_fire4] { ai_face(); ai_back(1); }; // [FUNCTION]
+void() sgrunt_fire4 = [187, sgrunt_fire5] { ai_face();sound(self,CHAN_WEAPON,"sgrunt/infatck3.wav",1,ATTN_NORM); }; // [FUNCTION]
+void() sgrunt_fire5 = [188, sgrunt_fire6] { ai_face(); ai_back(1); }; // [FUNCTION]
+void() sgrunt_fire6 = [189, sgrunt_fire7] { ai_face(); ai_forward(1); }; // [FUNCTION]
+void() sgrunt_fire7 = [190, sgrunt_fire8] { ai_face(); ai_forward(1); }; // [FUNCTION]
+void() sgrunt_fire8 = [191, sgrunt_fire9] { ai_face(); ai_forward(2); }; // [FUNCTION]
+void() sgrunt_fire9 = [192, sgrunt_fire10] { ai_face(); ai_back(2); }; // [FUNCTION]
+void() sgrunt_fire10 = [193, sgrunt_fire11] { ai_face(); ai_back(4); }; // [FUNCTION]
+void() sgrunt_fire11 = [194, sgrunt_fire12] { // [FUNCTION]
 	ai_forward(1);
 	self.cnt = 10 + random()*10;	// number of shots to fire
 	self.cnt = rint(self.cnt);
@@ -244,10 +227,10 @@ void() sgrunt_fire11 = [194, sgrunt_fire12] {
 	else
 		sgrunt_fire_loop();
 };
-void() sgrunt_fire12 = [195, sgrunt_fire13] { ai_face(); ai_forward(6); };
-void() sgrunt_fire13 = [196, sgrunt_fire14] { ai_face(); ai_back(1); };
-void() sgrunt_fire14 = [197, sgrunt_fire15] { ai_face(); ai_back(2); };
-void() sgrunt_fire15 = [198, sgrunt_run1] {
+void() sgrunt_fire12 = [195, sgrunt_fire13] { ai_face(); ai_forward(6); }; // [FUNCTION]
+void() sgrunt_fire13 = [196, sgrunt_fire14] { ai_face(); ai_back(1); }; // [FUNCTION]
+void() sgrunt_fire14 = [197, sgrunt_fire15] { ai_face(); ai_back(2); }; // [FUNCTION]
+void() sgrunt_fire15 = [198, sgrunt_run1] { // [FUNCTION]
 	local vector spot1, spot2;
 	local float r;
 
@@ -274,7 +257,7 @@ void() sgrunt_fire15 = [198, sgrunt_run1] {
 	self.attack_finished = time + 1 + random()*2;
 };
 
-void() sgrunt_wallop = {
+void() sgrunt_wallop = { // [FUNCTION]
 	local vector delta;
 	local float ldmg;
 
@@ -303,7 +286,7 @@ void() sgrunt_smash7 = [205, sgrunt_smash8] { ai_face(); ai_back(7); };
 void() sgrunt_smash8 = [206, sgrunt_run1] { ai_face(); ai_back(4); };
 
 
-void() sgrunt_damage_skin = {
+void() sgrunt_damage_skin = { // [FUNCTION]
 	if (self.health <= 175)
 		self.skin = 1;
 	else

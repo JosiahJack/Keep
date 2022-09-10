@@ -153,14 +153,11 @@ void() dog_run10	= [	$run10  ,	dog_run11	] { monster_footstep(FALSE); ai_run(20)
 void() dog_run11	= [	$run11  ,	dog_run12	] { ai_run(64); };
 void() dog_run12	= [	$run12  ,	dog_run1	] { ai_run(32); };
 
-//===========================================================================
-// melee - dog_bite
 // Standardized layout (matching ai_melee (aisubs.qc)
 // Added z depth check on attacks +/- 64 units
 // Added extra blood (touch version, no arc)
 // Changed some explicit values to constant variables
-//===========================================================================
-void() dog_bite = {
+void() dog_bite = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -184,7 +181,6 @@ void() dog_bite = {
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-//----------------------------------------------------------------------
 void() dog_atta1	= [	$attack1,	dog_atta2	] { ai_charge(10); };
 void() dog_atta2	= [	$attack2,	dog_atta3	] { ai_charge(10); };
 void() dog_atta3	= [	$attack3,	dog_atta4	] { ai_charge(10); };
@@ -196,10 +192,8 @@ void() dog_atta6	= [	$attack6,	dog_atta7	] { ai_charge(10); };
 void() dog_atta7	= [	$attack7,	dog_atta8	] { monster_footstep(FALSE); ai_charge(10); };
 void() dog_atta8	= [	$attack8,	dog_run1	] { ai_charge(10); };
 
-
 // range - springy feet
-
-void() Dog_JumpTouch = {
+void() Dog_JumpTouch = { // [FUNCTION]
 	local	float	ldmg;
 
 	if (self.health < 1) return;
@@ -238,7 +232,6 @@ void() Dog_JumpTouch = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void() dog_leap1	= [	$leap1,		dog_leap2	] { ai_face(); };
 void() dog_leap2	= [	$leap2,		dog_leap3	] {
 	local float g;
@@ -272,9 +265,6 @@ void() dog_leap7	= [	$leap7,		dog_leap8	] { monster_footstep(FALSE); };
 void() dog_leap8	= [	$leap8,		dog_leap9	] { monster_footstep(FALSE); };
 void() dog_leap9	= [	$leap9,		dog_run1	] { ai_resetangles(); };
 
-/*======================================================================
-  PAIN
-========================================================================*/
 void() dog_pain1	= [	$pain1 ,	dog_pain2	] {};
 void() dog_pain2	= [	$pain2 ,	dog_pain3	] {};
 void() dog_pain3	= [	$pain3 ,	dog_pain4	] {};
@@ -282,7 +272,6 @@ void() dog_pain4	= [	$pain4 ,	dog_pain5	] {};
 void() dog_pain5	= [	$pain5 ,	dog_pain6	] {};
 void() dog_pain6	= [	$pain6 ,	dog_run1	] { monster_footstep(FALSE); };
 
-//----------------------------------------------------------------------
 void() dog_painb1	= [	$painb1 ,	dog_painb2	] {};
 void() dog_painb2	= [	$painb2 ,	dog_painb3	] {};
 void() dog_painb3	= [	$painb3 ,	dog_painb4	] { ai_pain(4); };
@@ -300,8 +289,7 @@ void() dog_painb14	= [	$painb14 ,	dog_painb15	] {};
 void() dog_painb15	= [	$painb15 ,	dog_painb16	] {};
 void() dog_painb16	= [	$painb16 ,	dog_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage)	dog_pain = {
+void(entity inflictor, entity attacker, float damage) dog_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -319,11 +307,9 @@ void(entity inflictor, entity attacker, float damage)	dog_pain = {
 	}
 };
 
-
 void() dog_die1		= [	$death1,	dog_die2	] {};
 void() dog_die2		= [	$death2,	dog_die3	] { monster_check_gib(); };
-void() dog_die3		= [	$death3,	dog_die4	] { monster_check_gib();
-	self.solid = SOLID_NOT; };
+void() dog_die3		= [	$death3,	dog_die4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() dog_die4		= [	$death4,	dog_die5	] {};
 void() dog_die5		= [	$death5,	dog_die6	] {};
 void() dog_die6		= [	$death6,	dog_die7	] {};
@@ -331,11 +317,9 @@ void() dog_die7		= [	$death7,	dog_die8	] {};
 void() dog_die8		= [	$death8,	dog_die9	] { monster_death_postcheck(); };
 void() dog_die9		= [	$death9,	dog_die9	] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() dog_dieb1		= [	$deathb1,	dog_dieb2	] {};
 void() dog_dieb2		= [	$deathb2,	dog_dieb3	] { monster_check_gib(); };
-void() dog_dieb3		= [	$deathb3,	dog_dieb4	] { monster_check_gib();
-	self.solid = SOLID_NOT; };
+void() dog_dieb3		= [	$deathb3,	dog_dieb4	] { monster_check_gib(); self.solid = SOLID_NOT; };
 void() dog_dieb4		= [	$deathb4,	dog_dieb5	] {};
 void() dog_dieb5		= [	$deathb5,	dog_dieb6	] {};
 void() dog_dieb6		= [	$deathb6,	dog_dieb7	] {};
@@ -343,8 +327,7 @@ void() dog_dieb7		= [	$deathb7,	dog_dieb8	] {};
 void() dog_dieb8		= [	$deathb8,	dog_dieb9	] { monster_death_postcheck(); };
 void() dog_dieb9		= [	$deathb9,	dog_dieb9	] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
-void() dog_die = {
+void() dog_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -359,7 +342,7 @@ void() dog_die = {
 
 void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire;
 
-void(vector st) Dog_Fire = {
+void(vector st) Dog_Fire = { // [FUNCTION]
     local   vector  dir, spot;
 
     makevectors(self.angles);
@@ -375,14 +358,14 @@ void() dog_fire4  = [$attack2, dog_fire5  ] { ai_face(); Dog_Fire('25 2 2'); };
 void() dog_fire5  = [$attack1, dog_run1   ] { ai_face(); };
 
 // Hell hounds' missile function.
-void() dog_missile = {
+void() dog_missile = { // [FUNCTION]
     if (vlen(self.enemy.origin - self.origin) < 200)
         dog_leap1();
     else
         dog_fire1();
 };
 
-void() monster_dog_precache = {
+void() monster_dog_precache = { // [FUNCTION]
 	precache_model ("progs/mon_dog.mdl");
 	precache_model ("progs/h_dog.mdl");
 	precache_sound("dog/idle.wav");
@@ -396,7 +379,7 @@ void() monster_dog_precache = {
 };
 
 // QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) Ambush
-void() monster_dog = {
+void() monster_dog = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -452,7 +435,7 @@ void() monster_dog = {
 	monster_start();
 };
 
-void() monster_hell_hound = {
+void() monster_hell_hound = { // [ENTITY]
 	if (self.skin == 0) self.skin = 3;
 	if (self.deathstring == "") self.deathstring = " was eaten by a Hell Hound\n";
 	monster_dog();

@@ -81,12 +81,12 @@ $frame deatha1 deatha2 deatha3 deatha4 deatha5 deatha6 deatha7 deatha8 deatha9 d
 $frame deatha11 deatha12 deatha13 deatha14 deatha15
 
 // flying + homing ghosts
-void(entity inflictor, entity attacker, float damage) ghost_followers_pain = {
+void(entity inflictor, entity attacker, float damage) ghost_followers_pain = { // [FUNCTION]
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin - '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 };
 
-void() ghost_followers_death = {
+void() ghost_followers_death = { // [FUNCTION]
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 4', '0 0 0', 1);	// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
@@ -96,7 +96,7 @@ void() ghost_followers_death = {
 	remove (self);
 };
 
-void() ghost_follower_touch = {
+void() ghost_follower_touch = { // [FUNCTION]
 	if (other.takedamage) {
 		if (!(self.enemy.flags & FL_CLIENT)) {
 			T_Damage(other, self, self.owner, 7, NOARMOR);
@@ -116,7 +116,7 @@ void() ghost_follower_touch = {
 	} else return;		// flies through walls
 };
 
-void() ghost_follower_think = {
+void() ghost_follower_think = { // [FUNCTION]
 	local vector dir, offang, vec;
 	local float zuffi;
 
@@ -193,7 +193,7 @@ void() ghost_follower_think = {
 };
 
 
-void(vector spawn_pos, vector spawn_vel) launch_ghost_follower = {
+void(vector spawn_pos, vector spawn_vel) launch_ghost_follower = { // [FUNCTION]
 	newmis = spawn();
 	newmis.owner = self;
 	newmis.enemy = self.enemy;
@@ -238,7 +238,7 @@ void(vector spawn_pos, vector spawn_vel) launch_ghost_follower = {
 	sound(newmis,CHAN_WEAPON,"q15/warlord/homing.wav", 0.5,ATTN_NORM);
 };
 
-void()	ghost_followers = {
+void()	ghost_followers = { // [FUNCTION]
 	local vector offang, org, vec;
 	
 	offang = vectoangles (self.enemy.origin - self.origin);
@@ -250,13 +250,13 @@ void()	ghost_followers = {
 };
 
 // homing fireball (shootable or not)
-void() reiver_fireball_death = {
+void() reiver_fireball_death = { // [FUNCTION]
 	if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 	R_Exp3 (self.origin);
 	remove (self);
 };
 
-void() reiver_fireball_touch = {
+void() reiver_fireball_touch = { // [FUNCTION]
 	if (other == self.owner) return;		// don't explode on owner
 	if (other.classgroup == CG_PROJALL) return;		// don't explode on projectiles
 
@@ -280,7 +280,7 @@ void() reiver_fireball_touch = {
 	remove (self);
 };
 
-void() reiver_fireball_homing = {
+void() reiver_fireball_homing = { // [FUNCTION]
 	local vector dir, vtemp;
 	vtemp = self.enemy.origin + '0 0 10';
 	
@@ -311,7 +311,7 @@ void() reiver_fireball_homing = {
 };
 
 
-void() reiver_fireball_no_homing = {
+void() reiver_fireball_no_homing = { // [FUNCTION]
 	self.movetype = MOVETYPE_FLYMISSILE;
 
 	if (self.enemy.health < 1) { remove(self); return; }
@@ -337,7 +337,7 @@ void() reiver_fireball_no_homing = {
 	self.think = reiver_fireball_no_homing;	
 };
 
-void() reiver_fireball = {
+void() reiver_fireball = { // [FUNCTION]
 	local entity missile;
 	local vector dir, org;
 
@@ -464,7 +464,7 @@ void()	reiver_wait_underground	= [	$raise1,	reiver_wait_underground	] { ai_stand
 };
 
 // Reiver can emerge from underground
-void()	reiver_idle_random = {			
+void()	reiver_idle_random = { // [FUNCTION]		
 	if (random() < 0.4) {
 		traceline (self.origin, self.origin - '0 0 77', TRUE, self);
 		self.origin_z = trace_endpos_z + 34; // Always align him towards ground beneath him. Reason: Walking monsters are always spawned above the floor and then droptofloor(). Flying monsters dont !! So that breakout animation looks right.
@@ -560,7 +560,7 @@ void()	reiver_run13	= [	$idle13,reiver_run1	] { ai_run(12); self.nextthink = tim
 };
 
 // MELEE
-void(float scratch_noise) reiver_melee_scratch = {
+void(float scratch_noise) reiver_melee_scratch = { // [FUNCTION]
 	local vector delta;
 	local float ldmg;
 
@@ -614,7 +614,7 @@ void()	reiver_melee_right13 = [	$meele_r13,	reiver_melee_right14	] { ai_charge(1
 void()	reiver_melee_right14 = [	$meele_r14,	reiver_melee_right15	] { ai_charge(10); self.nextthink = time + 0.07; };
 void()	reiver_melee_right15 = [	$meele_r15,	reiver_run1	] { ai_charge(10); self.nextthink = time + 0.07; };
 
-void()	reiver_melee = {
+void()	reiver_melee = { // [FUNCTION]
 	if (self.dodge_finished > time) self.dodge_finished = time;	// remove multi_shield, when in melee fight
 	
 	if (random() < 0.5)
@@ -624,7 +624,7 @@ void()	reiver_melee = {
 };	
 
 // RANGED
-void(vector ofs, float scal) reiver_hand1 = {
+void(vector ofs, float scal) reiver_hand1 = { // [FUNCTION]
 	local vector org;
 
 	makevectors(self.angles);
@@ -633,7 +633,7 @@ void(vector ofs, float scal) reiver_hand1 = {
 	self.owner.scale = scal;
 };
 
-void(vector ofs, float scal) reiver_hand2 = {
+void(vector ofs, float scal) reiver_hand2 = { // [FUNCTION]
 	local vector org;
 
 	makevectors(self.angles);
@@ -643,7 +643,7 @@ void(vector ofs, float scal) reiver_hand2 = {
 };
 
 // Vampire (life drain):
-void()	life_drain = {
+void()	life_drain = { // [FUNCTION]
 	local vector spot1, spot2;	
 	
 	spot1 = self.origin + '0 0 12';
@@ -657,7 +657,7 @@ void()	life_drain = {
 	if (self.health > self.max_health) self.health = self.max_health; // max cap
 };
 
-void()	life_drain_effect = {
+void()	life_drain_effect = { // [FUNCTION]
 	makevectors(self.enemy.angles);
 	local vector dir;
 	dir = normalize(self.origin - self.enemy.origin);
@@ -782,7 +782,7 @@ void()	reiver_shoot17	= [	$shoot17,	 reiver_run1	] { ai_face(); self.nextthink =
 // is started when enemy is RANGE_NEAR or RANGE_MID
 // RANGE_NEAR --> between 120 ... 500
 // RANGE_MID  --> between 500 ... 1000
-void() reiver_missile =	{					
+void() reiver_missile =	{ // [FUNCTION]				
 	local vector spot1, spot2, org, porg;	
 	local float r;	
 	local entity o, p;
@@ -881,7 +881,7 @@ void()	reiver_painb10	= [	$pain10, 	reiver_painb11	] { ai_face(); self.nextthink
 void()	reiver_painb11	= [	$pain11, 	reiver_painb12	] { ai_face(); self.nextthink = time + 0.075; };
 void()	reiver_painb12	= [	$pain12, 	reiver_run1	] { ai_face(); self.nextthink = time + 0.075; };
 
-void(entity inflictor, entity attacker, float damage) reiver_pain = {
+void(entity inflictor, entity attacker, float damage) reiver_pain = { // [FUNCTION]
 	// self.in_cocoon_shape = 0;	// remove invulnerability from cocoon shape
 
 	if (self.dodge_finished > time) return;
@@ -900,7 +900,7 @@ void(entity inflictor, entity attacker, float damage) reiver_pain = {
 };
 
 // DEATH, let him go back to hell with a big BANG
-void() reiver_death_touch = {    
+void() reiver_death_touch = { // [FUNCTION]    
 	monster_death_postcheck(); 
 	if (self.flags & FL_ONGROUND) {
 		self.solid = SOLID_NOT;
@@ -965,7 +965,7 @@ void()	reiver_death13	= [$deatha13, reiver_death14] { self.nextthink = time + 0.
 void()	reiver_death14	= [$deatha14, reiver_death15] { self.nextthink = time + 0.07; monster_death_postcheck(); };
 void()	reiver_death15	= [$deatha15, reiver_death15] { self.nextthink = time + 0.07; monster_deadbody_check(); };
 
-void() reiver_die = {
+void() reiver_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	self.dodge_finished = time - 1;		// just to be sure that the shield is gone
 	if (!self.gibbed) {
@@ -975,13 +975,13 @@ void() reiver_die = {
 };
 
 // Reiverճ multi_shield code:
-void() animate_shield = {
+void() animate_shield = { // [FUNCTION]
 	self.shield_finished = time + 0.07;
 	self.frame = self.frame + 1;
 	if (self.frame >= 20) self.frame = 0;
 };
 
-void() reiver_shield_think = {
+void() reiver_shield_think = { // [FUNCTION]
 	if (self.lefty) {
 		self.lefty = 0;
 		setmodel(self,"progs/q15/reiver_shield.mdl"); 
@@ -1024,7 +1024,7 @@ void() reiver_shield_think = {
 	self.nextthink = time + 0.01;
 };
 
-void() monster_reiver_precache = {
+void() monster_reiver_precache = { // [FUNCTION]
 	precache_model("progs/q15/reiver.mdl");
 	precache_model("progs/quoth/fireball.mdl");
 	precache_model("progs/ad171/misc_skull.mdl");

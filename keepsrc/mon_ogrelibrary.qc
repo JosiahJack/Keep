@@ -108,6 +108,7 @@ void() library_2archg = {
   self.th_die = archg_die;
   self.th_wins = archg_bow1;
   self.th_greet = archg_bow1;
+  self.classtype = CT_MONARCHG;
 }
 
 void() library_pain = {
@@ -394,7 +395,7 @@ var
   return 0;
 }*/
 
-void() cart_boom = {
+void() cart_boom = { // [FUNCTION]
   self.origin = self.origin + '0 0 8';
   if (self.gib1mdl != "") ThrowGib(11, 2);
 	if (self.gib2mdl != "") ThrowGib(12, 2);
@@ -416,7 +417,7 @@ void() cart_boom = {
   self.nextthink = time + 0.05;
 };
 
-void() cart_think = {
+void() cart_think = { // [FUNCTION]
   self.think = cart_think;
   if (self.health < 1) {
     self.think = self.th_die;
@@ -425,7 +426,7 @@ void() cart_think = {
   self.nextthink = time + 0.1;
 };
 
-void() misc_librarycart = {
+void() misc_librarycart = { // [ENTITY]
   precache_model("progs/nehahra/libcart.mdl");
   precache_model("progs/redfield/misc_bookrk.mdl");
   precache_model("progs/nehahra/frubble1.mdl");
@@ -456,7 +457,7 @@ void() misc_librarycart = {
   self.nextthink = time + 0.1;
 };
 
-void() ogrelib_throwcart = {
+void() ogrelib_throwcart = { // [FUNCTION]
   local entity cart;
   local vector spot;
 
@@ -490,7 +491,7 @@ void() ogrelib_throwcart = {
   cart.nextthink = time + 0.1;
 };
 
-void() monster_ogre_library_becomenormal = {
+void() monster_ogre_library_becomenormal = { // [FUNCTION]
   ogrelib_throwcart(); // Chuck it!
   self.mdl = "progs/ad171/mon_ogre.mdl";
   setmodel(self,self.mdl);
@@ -511,21 +512,21 @@ void() monster_ogre_library_becomenormal = {
 	self.th_wakeup = ogre_wakeup1;
 };
 
-void() oglib_run = {
+void() oglib_run = { // [FUNCTION]
   monster_ogre_library_becomenormal();
   self.th_run();
 };
 
-void(entity inflictor, entity attacker, float damage) oglib_pain = {
+void(entity inflictor, entity attacker, float damage) oglib_pain = { // [FUNCTION]
   oglib_run();
 };
 
-void() oglib_die = {
+void() oglib_die = { // [FUNCTION]
   monster_ogre_library_becomenormal();
   self.th_die();
 };
 
-void() oglib_stand = {
+void() oglib_stand = { // [FUNCTION]
   self.think = oglib_stand;
   self.nextthink = time + 0.1;
   if (self.walkframe >= 15) {
@@ -537,7 +538,7 @@ void() oglib_stand = {
   ai_stand();
 }
 
-void() oglib_cartsound = {
+void() oglib_cartsound = { // [FUNCTION]
   local float num;
 
   if (random() > 0.3) return;
@@ -551,7 +552,7 @@ void() oglib_cartsound = {
   }
 };
 
-void() oglib_walk = {
+void() oglib_walk = { // [FUNCTION]
   self.think = oglib_walk;
   self.nextthink = time + 0.1;
   self.walkframe = SUB_ClampFloat(self.walkframe + 1,0,15);
@@ -570,7 +571,7 @@ void() oglib_walk = {
   if (random() < 0.01) self.th_stand();
 };
 
-void() monster_oglib_precache = {
+void() monster_oglib_precache = { // [FUNCTION]
   monster_ogre_precache();
   precache_model("progs/nehahra/libogre.mdl");
   precache_model("progs/nehahra/libcart.mdl");
@@ -590,7 +591,7 @@ void() monster_oglib_precache = {
   precache_sound("nehahra/wall/woodbrk.wav");
 };
 
-void() monster_oglib = {
+void() monster_oglib = { // [ENTITY] Ogre pushing a library cart with books on it.  Tosses cart when hurt or killed.
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

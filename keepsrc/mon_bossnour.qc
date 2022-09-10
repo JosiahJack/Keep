@@ -157,22 +157,8 @@ void() nour_runframe = { // [FUNCTION]
 
 void() nour_run1 = { self.walkframe = 0; nour_runframe(); }; // [FUNCTION]
 
-// Attachment management (create, finish and delete)
-void() nour_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = MODEL_PROJ_NOUR2B;
-		self.attachment.alpha = 0.85;
-	}
-};
-
-
 // ATTACK A - Fire multiple spit/spikes
 // Block pain function from interrupting magic attack
-
 void(vector offset) nour_spike = { // [FUNCTION]
 	local vector dtarget, starget, ftarget, sorg, forg, dir;
 	
@@ -247,11 +233,8 @@ void(vector bombofs, float bombframe) Setup_NourBomb = { // [FUNCTION]
 	local vector org;
 	if (self.health < 1) return;
 	
-	// Check if attachment has been setup yet
-	if (!self.attachment) nour_create_attachment();
-	
-	// Frame 0 is start of the sequence (move everything into place)
-	if (bombframe == 0) {
+	SUB_CreateSelfAttachment(MODEL_PROJ_NOUR2B,0.85);
+	if (bombframe == 0) { // Frame 0 is start of the sequence (move everything into place)
 		self.attachment.state = STATE_ON;
 		setorigin(self.attachment, self.origin);
 		setmodel(self.attachment, self.attachment.mdl);
@@ -364,7 +347,7 @@ void(vector minofs, float minframe) Setup_NourMinChain = {
 };
 
 void(vector minofs, float minframe) Setup_NourMin = {
-	if (!self.attachment) nour_create_attachment(); // Re-use attachment for lightning
+	SUB_CreateSelfAttachment(MODEL_PROJ_NOUR2B,0.85); // Attachment for lightning
 	if (minframe == 0) { // Start of the sequence, move everything into place.
 		self.attachment.state = STATE_ON;
 		setorigin(self.attachment, self.origin);
@@ -375,7 +358,6 @@ void(vector minofs, float minframe) Setup_NourMin = {
 		self.attachment.skin = 1;
 		sound(self,CHAN_WEAPON,"ad171/wraith/attack3.wav",1,ATTN_NORM); // Start Spawning sound
 	} 
-
 	Setup_NourMinChain(minofs,minframe);
 	Fire_NourPlasma(minofs); // Generate a random bolt of electricity
 };

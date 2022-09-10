@@ -427,7 +427,13 @@ void() env_sprite = { // [ENTITY]
 void() info_sprite_static = { // [ENTITY]
 	self.classname = "env_sprite";
 	self.mdl = self.model;
-	env_sprite();
+	precache_model(self.mdl);
+	setmodel(self,self.mdl);
+	if (self.angles == '0 -1 0') self.angles = '-90 0 0';
+	else if (self.angles == '0 -2 0') self.angles = '90 0 0';
+	makevectors (self.angles);
+	setorigin(self,(self.origin - (v_forward * 0.200)));
+	makestatic(self);
 };
 
 void() raincloud_raindrip = { // [FUNCTION]
@@ -593,7 +599,7 @@ void() skyl_stand6	= [  5,	skyl_stand7  ] {}; // [FUNCTION]
 void() skyl_stand7	= [  6,	skyl_stand8  ] { if (!(self.spawnflags & 2)) { sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE); } }; // [FUNCTION]
 void() skyl_stand8	= [  7,	skyl_stand1  ] { self.effects = 0; self.nextthink = time + self.wait + (random() * self.waitmax); }; //time  lightning appears time + your time, [FUNCTION]
 
-void() model_skylight = { // [ENTITY]
+void() model_skylight = { // [ENTITY] Redirect
 	precache_model ("progs/madfox/skylight.spr");
 	self.solid = SOLID_BBOX;                               
 	self.movetype = MOVETYPE_NONE;

@@ -73,7 +73,7 @@ void() morph_run10 = [$mfrun10, morph_run11 ] { ai_run(15); };
 
 void() morph_run11 = [$mfrun11, morph_run1 ] { ai_run(11); };
 
-void() morph_stab2 = {
+void() morph_stab2 = { // [FUNCTION]
 	local float dist, attackDamage;
 	local vector org, dir;
 
@@ -135,7 +135,7 @@ void() morph_bigattack15 = [$mfatc15, morph_bigattack16 ] { ai_face(); };
 void() morph_bigattack16 = [$mfatc16, morph_bigattack17 ] { ai_face(); };
 void() morph_bigattack17 = [$mfatc01, morph_run1        ] { ai_face(); };
 
-void() morph_smack = {
+void() morph_smack = { // [FUNCTION]
 	local vector delta;
 	local float ldmg;
 
@@ -165,7 +165,7 @@ void() morph_knockback10 = [$mfknck10, morph_knockback11 ] { ai_face(); };
 void() morph_knockback11 = [$mfknck11, morph_knockback12 ] { ai_face(); };
 void() morph_knockback12 = [$mfknck12, morph_run1        ] { ai_face(); };
 
-void() morph_attack = {
+void() morph_attack = { // [FUNCTION]
 	local float attackChoice;
 
 	attackChoice = random();
@@ -174,7 +174,7 @@ void() morph_attack = {
 	else morph_knockback01();
 };
 
-void() morph_fire = {
+void() morph_fire = { // [FUNCTION]
 	local vector org, dir;
 
 	ai_face();
@@ -214,7 +214,6 @@ void() morph_painA8 = [$mfpain08, morph_painA9 ] {};
 void() morph_painA9 = [$mfpain09, morph_painA10 ] {};
 void() morph_painA10 = [$mfpain10, morph_run1 ] { morph_minionspawn(); };
 
-
 void() morph_painB1 = [$mfpbin01, morph_painB2 ] {};
 void() morph_painB2 = [$mfpbin02, morph_painB3 ] {};
 void() morph_painB3 = [$mfpbin03, morph_painB4 ] {};
@@ -223,7 +222,7 @@ void() morph_painB5 = [$mfpbin05, morph_painB6 ] {};
 void() morph_painB6 = [$mfpbin06, morph_painB7 ] {};
 void() morph_painB7 = [$mfpbin07, morph_run1 ] { morph_minionspawn(); };
 
-void(entity inflictor, entity attacker, float damage) morph_pain = {
+void(entity inflictor, entity attacker, float damage) morph_pain = { // [FUNCTION]
 	local float painChoice;
 
 	if (random() > 0.1) { morph_minionspawn(); return; }
@@ -262,7 +261,7 @@ void() morph_die19 = [$mfdth19, morph_die20 ] {};
 void() morph_die20 = [$mfdth20, morph_die21 ] { monster_death_postcheck(); };
 void() morph_die21 = [$mfdth21, morph_die21 ] { entity_remove(self,0.1); };
 
-void() morph_die = {
+void() morph_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	sound(self,CHAN_VOICE,"rogue/guard/death.wav",1,ATTN_NORM);
 	self.think = morph_die1;
@@ -313,7 +312,7 @@ void() morph_wake31 = [$start31, morph_stand1 ] {
 	}
 };
 
-void() morph_setup = {
+void() morph_setup = { // [FUNCTION]
 	self.classname = "monster_morph";
 	if (self.spawnflags & MORPH_AZTEC) {
 		self.mdl = "progs/rogue/mon_morph_az.mdl";	// Aztec
@@ -389,7 +388,7 @@ void() morph_setup = {
 	monster_start();
 };
 
-void() morph_use = {
+void() morph_use = { // [FUNCTION]
 	self.enemy = activator;
 	if (self.delay ) {
         	self.think = morph_wake1;
@@ -400,7 +399,7 @@ void() morph_use = {
 	}
 };
 
-void() morph_minionspawn = {
+void() morph_minionspawn = { // [FUNCTION]
 	local entity theDest, theChild;
 
 	if (self.owner) return;
@@ -422,7 +421,7 @@ void() morph_minionspawn = {
 	theChild.nextthink = time + 0.1 + random()*0.2;
 };
 
-void() morph_phased = { 
+void() morph_phased = { // [FUNCTION]
 	self.nextthink = time + 0.1;	// Keep looking for player
 	self.think = morph_phased;	// Keep looping
 	ai_stand(); 			// Keep looking

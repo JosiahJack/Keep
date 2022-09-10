@@ -37,7 +37,7 @@
 // Serves as an airborne turret.
 //=============================================================================
 
-void() sentinel_check_height = {
+void() sentinel_check_height = { // [FUNCTION]
 	//if (self.origin_z > self.enemy.origin_z) {
 		// if above the enemy
 	//	if ((self.origin_z - self.enemy.origin_z) > 16) ai_down(4);
@@ -46,11 +46,10 @@ void() sentinel_check_height = {
 	//}
 };
 
-void() SentinelFire = {
+void() SentinelFire = { // [FUNCTION]
 	local vector vec, org;
 
 	sentinel_check_height();
-
 	if (self.attack_finished < time) {
 		if (self.enemy == world || !enemy_vis) return;
 		if (self.spawnflags & 4) {

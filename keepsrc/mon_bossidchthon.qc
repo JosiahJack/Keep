@@ -27,7 +27,7 @@ $frame shockc9 shockc10
 entity	le1, le2;
 float	lightning_end;
 
-void() idchthon_tracking = {
+void() idchthon_tracking = { // [FUNCTION]
 	// Find a player
 	if (!self.enemy) {
 		self.enemy = find(world, classname, "player");
@@ -41,39 +41,39 @@ void() idchthon_tracking = {
 	if (self.enemy) self.th_missile();
 };
 
-void() idchthon_idle1	= [	$walk1, idchthon_idle2 ] { idchthon_tracking(); };
-void() idchthon_idle2	= [	$walk2, idchthon_idle3 ] {};
-void() idchthon_idle3	= [	$walk3, idchthon_idle4 ] {};
-void() idchthon_idle4	= [	$walk4, idchthon_idle5 ] {};
-void() idchthon_idle5	= [	$walk5, idchthon_idle6 ] {};
-void() idchthon_idle6	= [	$walk6, idchthon_idle7 ] {};
-void() idchthon_idle7	= [	$walk7, idchthon_idle8 ] {};
-void() idchthon_idle8	= [	$walk8, idchthon_idle9 ] {};
-void() idchthon_idle9	= [	$walk9, idchthon_idle10 ] {};
-void() idchthon_idle10	= [	$walk10, idchthon_idle11 ] { idchthon_tracking(); };
-void() idchthon_idle11	= [	$walk11, idchthon_idle12 ] {};
-void() idchthon_idle12	= [	$walk12, idchthon_idle13 ] {};
-void() idchthon_idle13	= [	$walk13, idchthon_idle14 ] {};
-void() idchthon_idle14	= [	$walk14, idchthon_idle15 ] {};
-void() idchthon_idle15	= [	$walk15, idchthon_idle16 ] {};
-void() idchthon_idle16	= [	$walk16, idchthon_idle17 ] {};
-void() idchthon_idle17	= [	$walk17, idchthon_idle18 ] {};
-void() idchthon_idle18	= [	$walk18, idchthon_idle19 ] {};
-void() idchthon_idle19	= [	$walk19, idchthon_idle20 ] {};
-void() idchthon_idle20	= [	$walk20, idchthon_idle21 ] {};
-void() idchthon_idle21	= [	$walk21, idchthon_idle22 ] { idchthon_tracking(); };
-void() idchthon_idle22	= [	$walk22, idchthon_idle23 ] {};
-void() idchthon_idle23	= [	$walk23, idchthon_idle24 ] {};
-void() idchthon_idle24	= [	$walk24, idchthon_idle25 ] {};
-void() idchthon_idle25	= [	$walk25, idchthon_idle26 ] {};
-void() idchthon_idle26	= [	$walk26, idchthon_idle27 ] {};
-void() idchthon_idle27	= [	$walk27, idchthon_idle28 ] {};
-void() idchthon_idle28	= [	$walk28, idchthon_idle29 ] {};
-void() idchthon_idle29	= [	$walk29, idchthon_idle30 ] {};
-void() idchthon_idle30	= [	$walk30, idchthon_idle31 ] {};
-void() idchthon_idle31	= [	$walk31, idchthon_idle1 ] { idchthon_tracking(); };
+void() idchthon_idle1	= [	$walk1, idchthon_idle2 ] { idchthon_tracking(); }; // [FUNCTION]
+void() idchthon_idle2	= [	$walk2, idchthon_idle3 ] {}; // [FUNCTION]
+void() idchthon_idle3	= [	$walk3, idchthon_idle4 ] {}; // [FUNCTION]
+void() idchthon_idle4	= [	$walk4, idchthon_idle5 ] {}; // [FUNCTION]
+void() idchthon_idle5	= [	$walk5, idchthon_idle6 ] {}; // [FUNCTION]
+void() idchthon_idle6	= [	$walk6, idchthon_idle7 ] {}; // [FUNCTION]
+void() idchthon_idle7	= [	$walk7, idchthon_idle8 ] {}; // [FUNCTION]
+void() idchthon_idle8	= [	$walk8, idchthon_idle9 ] {}; // [FUNCTION]
+void() idchthon_idle9	= [	$walk9, idchthon_idle10 ] {}; // [FUNCTION]
+void() idchthon_idle10	= [	$walk10, idchthon_idle11 ] { idchthon_tracking(); }; // [FUNCTION]
+void() idchthon_idle11	= [	$walk11, idchthon_idle12 ] {}; // [FUNCTION]
+void() idchthon_idle12	= [	$walk12, idchthon_idle13 ] {}; // [FUNCTION]
+void() idchthon_idle13	= [	$walk13, idchthon_idle14 ] {}; // [FUNCTION]
+void() idchthon_idle14	= [	$walk14, idchthon_idle15 ] {}; // [FUNCTION]
+void() idchthon_idle15	= [	$walk15, idchthon_idle16 ] {}; // [FUNCTION]
+void() idchthon_idle16	= [	$walk16, idchthon_idle17 ] {}; // [FUNCTION]
+void() idchthon_idle17	= [	$walk17, idchthon_idle18 ] {}; // [FUNCTION]
+void() idchthon_idle18	= [	$walk18, idchthon_idle19 ] {}; // [FUNCTION]
+void() idchthon_idle19	= [	$walk19, idchthon_idle20 ] {}; // [FUNCTION]
+void() idchthon_idle20	= [	$walk20, idchthon_idle21 ] {}; // [FUNCTION]
+void() idchthon_idle21	= [	$walk21, idchthon_idle22 ] { idchthon_tracking(); }; // [FUNCTION]
+void() idchthon_idle22	= [	$walk22, idchthon_idle23 ] {}; // [FUNCTION]
+void() idchthon_idle23	= [	$walk23, idchthon_idle24 ] {}; // [FUNCTION]
+void() idchthon_idle24	= [	$walk24, idchthon_idle25 ] {}; // [FUNCTION]
+void() idchthon_idle25	= [	$walk25, idchthon_idle26 ] {}; // [FUNCTION]
+void() idchthon_idle26	= [	$walk26, idchthon_idle27 ] {}; // [FUNCTION]
+void() idchthon_idle27	= [	$walk27, idchthon_idle28 ] {}; // [FUNCTION]
+void() idchthon_idle28	= [	$walk28, idchthon_idle29 ] {}; // [FUNCTION]
+void() idchthon_idle29	= [	$walk29, idchthon_idle30 ] {}; // [FUNCTION]
+void() idchthon_idle30	= [	$walk30, idchthon_idle31 ] {}; // [FUNCTION]
+void() idchthon_idle31	= [	$walk31, idchthon_idle1 ] { idchthon_tracking(); }; // [FUNCTION]
 
-void(vector orgofs) idchthon_missile = {
+void(vector orgofs) idchthon_missile = { // [FUNCTION]
 	local vector offang, org, vec, dir, mdest, avel;
 	local float projlen;
 
@@ -107,7 +107,7 @@ void(vector orgofs) idchthon_missile = {
 	launch_projectile(org,dir,avel,CT_PROJ_LAVA,self.attack_speed);
 };
 
-void() idchthon_face = {
+void() idchthon_face = { // [FUNCTION]
 	// Find a player
 	if (!self.enemy) {
 		self.enemy = find(world, classname, "player");
@@ -203,7 +203,6 @@ void() idchthon_shockb8 = [	$shockb2, idchthon_shockb9 ] {};
 void() idchthon_shockb9 = [	$shockb3, idchthon_shockb10 ] {};
 void() idchthon_shockb10 = [	$shockb4, idchthon_missile1 ] {};
 
-//----------------------------------------------------------------------
 void() idchthon_shockc1 = [	$shockc1, idchthon_shockc2 ] {};
 void() idchthon_shockc2 = [	$shockc2, idchthon_shockc3 ] {};
 void() idchthon_shockc3 = [	$shockc3, idchthon_shockc4 ] {};
@@ -215,8 +214,7 @@ void() idchthon_shockc8 = [	$shockc8, idchthon_shockc9 ] {};
 void() idchthon_shockc9 = [	$shockc9, idchthon_shockc10 ] {};
 void() idchthon_shockc10 = [	$shockc10, idchthon_death1 ] {};
 
-//----------------------------------------------------------------------
-void() lightning_fire = {
+void() lightning_fire = { // [FUNCTION]
 	local vector p1, p2;
 	
 	// done here, put the terminals back up
@@ -251,7 +249,7 @@ void() lightning_fire = {
 	WriteCoord (MSG_ALL, p2_z);
 };
 
-void() lightning_use = {
+void() lightning_use = { // [FUNCTION]
 	if (lightning_end >= time + 1) return;
 
 	le1 = find( world, target, "lightning");
@@ -270,8 +268,6 @@ void() lightning_use = {
 	lightning_end = time + 1;
 	sound(self,CHAN_VOICE, "misc/power.wav",1,ATTN_NORM);  // vanilla id1 sound
 	lightning_fire();		
-
-	
 	self = find (world, classname, "monster_boss");
 	if (!self) return;
 
@@ -305,7 +301,7 @@ void() boss_death10 = [$death9, SUB_Null] { // No plans to support map hacks any
 };
 
 // QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
-void() monster_boss = {
+void() monster_boss = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -345,10 +341,10 @@ void() monster_boss = {
 
 //QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) x
 // Just for boss level. Used for killing Cthon.
-void() event_lightning = { self.use = lightning_use; };
+void() event_lightning = { self.use = lightning_use; }; // [ENTITY]
 
 void() teleporttrain_next;
-void() teleporttrain_target = {
+void() teleporttrain_target = { // [FUNCTION]
 	local vector dir;
 
 	if (self.target != "") { // Path following, not entity I/O
@@ -372,7 +368,7 @@ void() teleporttrain_target = {
 	self.enemy = world;
 };
 
-void() teleporttrain_next = {
+void() teleporttrain_next = { // [FUNCTION]
 	if (!self.enemy) return;
 
 	// Work out how close to the next target (self.enemy)		
@@ -390,7 +386,7 @@ void() teleporttrain_next = {
 // Flying ball needed to teleport kill Shub-Niggurath
 // This is used for the final boss ONLY.  Flying ball needed to teleport kill Shub-Niggurath
 // Originallu used bmodel train functions, setup to work like the shalrath homing missile.
-void() misc_teleporttrain = {
+void() misc_teleporttrain = { // [ENTITY]
 	self.mdl = "progs/teleport.mdl";
 	precache_model (self.mdl);
 	self.solid = SOLID_TRIGGER;

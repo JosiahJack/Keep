@@ -710,7 +710,7 @@ void() StartFrame = { // [FUNCTION]
 	gibbed_this_frame = 0;
 };
 
-void() bodyque= {}; // [ENTITY] Just here so spawn functions don't complain after the world creates bodyques
+void() bodyque= {}; // [FUNCTION] Just here so spawn functions don't complain after the world creates bodyques.
 
 void() InitBodyQue = { // [FUNCTION], New Code from Inside3d forums (old system was terrible).  Oh hey, now called InsideQc.  Interesting.
 	local entity e, prev;

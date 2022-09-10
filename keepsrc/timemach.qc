@@ -1,7 +1,7 @@
 
 void() xpackEnding;
 
-void() time_chunk = {
+void() time_chunk = { // [FUNCTION]
    local entity timeChunk;
 
    timeChunk = spawn();
@@ -24,12 +24,12 @@ void() time_chunk = {
    timeChunk.nextthink = (time + MOVETYPE_FLY);
 };
 
-void() time_stop_shake = {
+void() time_stop_shake = { // [FUNCTION]
    SUB_UseTargets();
    remove(self);
 };
 
-void() time_boom = {
+void() time_boom = { // [FUNCTION]
    local entity stopShakeEnt;
 
    SUB_UseTargets();
@@ -72,7 +72,7 @@ void() time_boom = {
    stopShakeEnt.nextthink = (time + 0.7);
 };
 
-void() time_fall = {
+void() time_fall = { // [FUNCTION]
    if ( !self.pain_finished ) {
       if ( (self.origin_z < -20.000) ) {
          WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
@@ -96,7 +96,7 @@ void() time_fall = {
    self.think = time_fall;
 };
 
-void() time_crash = {
+void() time_crash = { // [FUNCTION]
    self.takedamage = DAMAGE_NO;
    self.movetype = MOVETYPE_FLY;
    self.solid = SOLID_NOT;
@@ -111,7 +111,7 @@ void() time_crash = {
 
 void(entity inflictor, entity attacker, float take) time_crash_pain = { time_crash(); }; // [FUNCTION], Compiler redirect.
 
-void(entity inflictor, entity attacker, float take) time_pain = {
+void(entity inflictor, entity attacker, float take) time_pain = { // [FUNCTION]
    local entity painEnt;
    local float painRnd;
 
@@ -150,7 +150,7 @@ void(entity inflictor, entity attacker, float take) time_pain = {
    }
 };
 
-void() time_die = { time_pain(world, world, 0); };
+void() time_die = { time_pain(world, world, 0); }; // [FUNCTION]
 
 void() item_time_machine = {
    precache_model ("progs/rogue/timemach.mdl");

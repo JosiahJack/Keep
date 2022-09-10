@@ -117,7 +117,7 @@ void()	octa_atka11	= [	$rush11,  	octa_atka12	] { ai_run(8); };
 void()	octa_atka12	= [	$rush12,  	octa_atka13	] { ai_run(16); if (self.enemydist <= 100) ai_melee(); };
 void()	octa_atka13	= [	$rush13,  	octa_run1	] { ai_run(22); if (self.enemydist <= 100) ai_melee(); sound(self,CHAN_VOICE,"tronyn/mon_bigfish_swim2.wav",1,ATTN_NORM); };
 
-void() octa_attack = {
+void() octa_attack = { // [FUNCTION]
 	sound(self,CHAN_WEAPON,"tronyn/mon_anglerfish_bite.wav",1,ATTN_NORM);
 	self.enemydist = range_distance(self.enemy,TRUE);
 	octa_atk1();

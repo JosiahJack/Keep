@@ -47,7 +47,7 @@
 
 void(vector p) newboss_missile;
 
-entity() FindNewBossSpot = {
+entity() FindNewBossSpot = { // [FUNCTION]
 	local entity spot;
 	local float cyc;
 	spot = find(world, classname, "info_boss_spot");
@@ -68,7 +68,7 @@ entity() FindNewBossSpot = {
 	return self;
 };
 
-void() newboss_face = {
+void() newboss_face = { // [FUNCTION]
 	if (self.enemy.health <= 0 || random() < 0.020000)
 	{
 		self.enemy = find(self.enemy, classname, "player");
@@ -80,41 +80,22 @@ void() newboss_face = {
 	ai_face();
 };
 
-void() newboss_rise1 = [1, newboss_rise2] {
+void() newboss_rise1 = [1, newboss_rise2] { // [FUNCTION]
 	setmodel(self, self.mdl);
 	setsize(self, VEC_HULL2_MIN, '32 32 256');
 	self.solid = SOLID_SLIDEBOX;
 	newboss_face();
 };
 
-void() newboss_rise2 = [2, newboss_rise3] { newboss_face(); };
-void() newboss_rise3 = [3, newboss_rise4]
-{
-	newboss_face();
-};
-void() newboss_rise4 = [4, newboss_rise5]
-{
-	newboss_face();
-};
-void() newboss_rise5 = [5, newboss_rise6]
-{
-	newboss_face();
-};
-void() newboss_rise6 = [6, newboss_rise7]
-{
-	newboss_face();
-};
-void() newboss_rise7 = [7, newboss_rise8]
-{
-	newboss_face();
-};
-void() newboss_rise8 = [8, newboss_missile1]
-{
-	self.takedamage = DAMAGE_AIM;
-	self.th_stand();
-};
+void() newboss_rise2 = [2, newboss_rise3] { newboss_face(); }; // [FUNCTION]
+void() newboss_rise3 = [3, newboss_rise4] { newboss_face(); }; // [FUNCTION]
+void() newboss_rise4 = [4, newboss_rise5] { newboss_face(); }; // [FUNCTION]
+void() newboss_rise5 = [5, newboss_rise6] { newboss_face(); }; // [FUNCTION]
+void() newboss_rise6 = [6, newboss_rise7] { newboss_face(); }; // [FUNCTION]
+void() newboss_rise7 = [7, newboss_rise8] { newboss_face(); }; // [FUNCTION]
+void() newboss_rise8 = [8, newboss_missile1] { self.takedamage = DAMAGE_AIM; self.th_stand(); }; // [FUNCTION]
 
-void() newboss_newplace = {
+void() newboss_newplace = { // [FUNCTION]
 	local entity newspot;
 	self.model = "";
 	self.nextthink = time + 1;
@@ -124,114 +105,41 @@ void() newboss_newplace = {
 	//self.origin_z = self.origin_z + 24;
 };
 
-void() newboss_sink1 = [8, newboss_sink2]
-{
-	self.takedamage = DAMAGE_NO;
-	setsize(self, VEC_HULL2_MIN, '32 32 0');
+void() newboss_sink1 = [8, newboss_sink2] { self.takedamage = DAMAGE_NO; setsize(self, VEC_HULL2_MIN, '32 32 0'); }; // [FUNCTION]
+void() newboss_sink2 = [7, newboss_sink3] {}; // [FUNCTION]
+void() newboss_sink3 = [6, newboss_sink4] {}; // [FUNCTION]
+void() newboss_sink4 = [5, newboss_sink5] {}; // [FUNCTION]
+void() newboss_sink5 = [4, newboss_sink6] {}; // [FUNCTION]
+void() newboss_sink6 = [3, newboss_sink7] {}; // [FUNCTION]
+void() newboss_sink7 = [2, newboss_sink8] {}; // [FUNCTION]
+void() newboss_sink8 = [1, newboss_newplace] { sound(self,CHAN_WEAPON,"boss1/out1.wav",1,ATTN_NORM); }; // [FUNCTION]
+
+void() newboss_idle1 = [16, newboss_idle2] { // [FUNCTION]
+	if (self.enemy.health > 0 && (random() < 0.5 || (skill == MOVETYPE_WALK && random() < 0.8))) newboss_missile1();
 };
 
-void() newboss_sink2 = [7, newboss_sink3] {};
+void() newboss_idle2 = [15, newboss_idle3] { newboss_face(); }; // [FUNCTION]
+void() newboss_idle3 = [14, newboss_idle4] { newboss_face(); }; // [FUNCTION]
+void() newboss_idle4 = [15, newboss_idle5] { newboss_face(); }; // [FUNCTION]
+void() newboss_idle5 = [16, newboss_idle6] { newboss_face(); }; // [FUNCTION]
+void() newboss_idle6 = [8, newboss_idle1] { newboss_face(); }; // [FUNCTION]
 
-void() newboss_sink3 = [6, newboss_sink4] {};
+void() newboss_missile1 = [9, newboss_missile2] { newboss_missile('66 0 180'); }; // [FUNCTION]
+void() newboss_missile2 = [10, newboss_missile3] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile3 = [11, newboss_missile4] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile4 = [12, newboss_missile5] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile5 = [13, newboss_missile6] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile6 = [14, newboss_missile7] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile7 = [15, newboss_missile8] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile8 = [16, newboss_missile9] { newboss_face(); }; // [FUNCTION]
+void() newboss_missile9 = [8, newboss_idle1] { newboss_face(); }; // [FUNCTION]
 
-void() newboss_sink4 = [5, newboss_sink5] {};
+void() newboss_hurt1 = [17, newboss_hurt2] { self.passive_state = FALSE; }; // [FUNCTION]
+void() newboss_hurt2 = [18, newboss_hurt3] {}; // [FUNCTION]
+void() newboss_hurt3 = [19, newboss_hurt4] {}; // [FUNCTION]
+void() newboss_hurt4 = [20, newboss_idle1] {}; // [FUNCTION]
 
-void() newboss_sink5 = [4, newboss_sink6] {};
-
-void() newboss_sink6 = [3, newboss_sink7] {};
-
-void() newboss_sink7 = [2, newboss_sink8]
-{};
-
-void() newboss_sink8 = [1, newboss_newplace]
-{
-	sound(self,CHAN_WEAPON,"boss1/out1.wav",1,ATTN_NORM);
-};
-
-void() newboss_idle1 = [16, newboss_idle2]
-{
-	if (self.enemy.health > 0 && (random() < 0.5 || (skill == MOVETYPE_WALK && random() < 0.8)))
-	{
-		newboss_missile1();
-	}
-};
-
-void() newboss_idle2 = [15, newboss_idle3]
-{
-	newboss_face();
-};
-
-void() newboss_idle3 = [14, newboss_idle4]
-{
-	newboss_face();
-};
-
-void() newboss_idle4 = [15, newboss_idle5]
-{
-	newboss_face();
-};
-
-void() newboss_idle5 = [16, newboss_idle6]
-{
-	newboss_face();
-};
-
-void() newboss_idle6 = [8, newboss_idle1]
-{
-	newboss_face();
-};
-
-void() newboss_missile1 = [9, newboss_missile2]
-{
-	newboss_missile('66 0 180');
-};
-
-void() newboss_missile2 = [10, newboss_missile3]
-{
-	newboss_face();
-};
-
-void() newboss_missile3 = [11, newboss_missile4]
-{
-	newboss_face();
-};
-
-void() newboss_missile4 = [12, newboss_missile5]
-{
-	newboss_face();
-};
-
-void() newboss_missile5 = [13, newboss_missile6]
-{
-	newboss_face();
-};
-
-void() newboss_missile6 = [14, newboss_missile7]
-{
-	newboss_face();
-};
-
-void() newboss_missile7 = [15, newboss_missile8]
-{
-	newboss_face();
-};
-
-void() newboss_missile8 = [16, newboss_missile9]
-{
-	newboss_face();
-};
-
-void() newboss_missile9 = [8, newboss_idle1]
-{
-	newboss_face();
-};
-
-void() newboss_hurt1 = [17, newboss_hurt2] { self.passive_state = FALSE; };
-void() newboss_hurt2 = [18, newboss_hurt3] {};
-void() newboss_hurt3 = [19, newboss_hurt4] {};
-void() newboss_hurt4 = [20, newboss_idle1] {};
-
-void(entity inflictor, entity attacker, float damage) newboss_damage = {
+void(entity inflictor, entity attacker, float damage) newboss_damage = { // [FUNCTION]
 	if (self.health <= 0) { self.th_die(); remove(self); return; }
 	if (random() < 0.2) {
 		newboss_sink1();
@@ -247,7 +155,7 @@ void(entity inflictor, entity attacker, float damage) newboss_damage = {
 	newboss_hurt1();
 };
 
-void() newboss_finale2 = {
+void() newboss_finale2 = { // [FUNCTION]
 	if (!(self.spawnflags & 2)) {
 		WriteByte(MSG_ALL, SVC_FINALE);
 		//if (!self.message) self.message = "Designers & Artists:\n
@@ -271,7 +179,7 @@ void() newboss_finale2 = {
 	remove(self);
 };
 
-void() newboss_finale = {
+void() newboss_finale = { // [FUNCTION]
 	local entity pos, pl;
 
 	AddToKills(self,self.enemy);
@@ -312,29 +220,29 @@ void() newboss_finale = {
 	self.think = newboss_finale2;
 };
 
-void() newboss_death1 = [17, newboss_death2] {};
-void() newboss_death2 = [18, newboss_death3] {};
-void() newboss_death3 = [19, newboss_death4] {};
-void() newboss_death4 = [20, newboss_death5] {};
-void() newboss_death5 = [21, newboss_death6] {};
-void() newboss_death6 = [22, newboss_death7] {};
-void() newboss_death7 = [23, newboss_death8] {};
-void() newboss_death8 = [24, newboss_death9] {};
-void() newboss_death9 = [25, newboss_death10] {};
-void() newboss_death10 = [26, newboss_death11] {};
-void() newboss_death11 = [27, newboss_death12] {};
-void() newboss_death12 = [28, newboss_death12] {
+void() newboss_death1 = [17, newboss_death2] {}; // [FUNCTION]
+void() newboss_death2 = [18, newboss_death3] {}; // [FUNCTION]
+void() newboss_death3 = [19, newboss_death4] {}; // [FUNCTION]
+void() newboss_death4 = [20, newboss_death5] {}; // [FUNCTION]
+void() newboss_death5 = [21, newboss_death6] {}; // [FUNCTION]
+void() newboss_death6 = [22, newboss_death7] {}; // [FUNCTION]
+void() newboss_death7 = [23, newboss_death8] {}; // [FUNCTION]
+void() newboss_death8 = [24, newboss_death9] {}; // [FUNCTION]
+void() newboss_death9 = [25, newboss_death10] {}; // [FUNCTION]
+void() newboss_death10 = [26, newboss_death11] {}; // [FUNCTION]
+void() newboss_death11 = [27, newboss_death12] {}; // [FUNCTION]
+void() newboss_death12 = [28, newboss_death12] { // [FUNCTION]
 	Tent_LavaSplash(self.origin,-50,"boss1/out1.wav");
 	entity_hide(self);
 };
 
-void() newboss_die = {
+void() newboss_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities.
 	sound(self,CHAN_VOICE, "boss1/death.wav",1,ATTN_NORM);
 	newboss_death1();
 };
 
-void(vector p) newboss_missile = {
+void(vector p) newboss_missile = { // [FUNCTION]
 	if (self.passive_state) return;
 	local vector offang;
 	local vector org;
@@ -374,7 +282,7 @@ void(vector p) newboss_missile = {
 	if (self.enemy.health <= 0) newboss_idle1();
 };
 
-void() newboss_awake = {
+void() newboss_awake = { // [FUNCTION]
 	self.use = SUB_Null;
 	self.flags = FL_MONSTER;
 	self.solid = SOLID_SLIDEBOX;
@@ -391,7 +299,7 @@ void() newboss_awake = {
 	Tent_LavaSplash(self.origin,-50,"boss1/out1.wav");
 };
 
-void() monster_virtus_precache = {
+void() monster_virtus_precache = { // [FUNCTION]
 	precache_model("progs/virtus/newboss.mdl");
 	precache_model("progs/lavaball.mdl");
 	precache_sound("weapons/rocket1i.wav");

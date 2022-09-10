@@ -16,9 +16,7 @@ void() finale_1;
 void() finale_2;
 void() finale_3;
 void() finale_4;
-entity	shub;
 
-//===========================================================================
 void() idshub_idle1 = [$idle1, idshub_idle2 ] {};
 void() idshub_idle2 = [$idle2, idshub_idle3 ] {};
 void() idshub_idle3 = [$idle3, idshub_idle4 ] {};
@@ -93,7 +91,7 @@ void() idshub_pain20 = [$shake20, idshub_pain20 ] { finale_4(); };
 
 // Final thrash, explosion and on screen text waffle
 
-void() finale_1 = {
+void() finale_1 = { // [FUNCTION]
 	intermission_running = INTERMISSION_ENDGAME;	//End of the game!
 	intermission_exittime = time + 100000;			// never allow exit
 
@@ -131,7 +129,7 @@ void() finale_1 = {
 };
 
 // Randomnly spawn 10 teleporter sparkle effects
-void() finale_2 = {
+void() finale_2 = { // [FUNCTION]
 	if (self.count < 0) finale_3();
 	else {
 		self.view_ofs_x = crandom()*50; // start a teleport splash inside shub
@@ -145,14 +143,14 @@ void() finale_2 = {
 	}
 };
 
-void() finale_3 = { // start shub thrashing wildly
+void() finale_3 = {  // [FUNCTION] Start shub thrashing wildly.
 	sound(self,CHAN_VOICE,"boss2/death.wav",1,ATTN_NORM);
 	lightstyle(0,"abcdefghijklmlkjihgfedcb");	
 	idshub_pain1();
 };
 
 // Called after thrash animation (last frame)
-void() finale_4 = {
+void() finale_4 = { // [FUNCTION]
 	sound(self,CHAN_VOICE, "boss2/pop2.wav",1,ATTN_NORM); // Play exploding sound
 	self.oldorigin = self.origin;
 
@@ -199,10 +197,10 @@ void() finale_4 = {
 	remove(self);	
 };
 
-void(entity inflictor, entity attacker, float damage) idshub_nopain = { self.health = self.max_health; };
+void(entity inflictor, entity attacker, float damage) idshub_nopain = { self.health = self.max_health; }; // [FUNCTION]
 
 // QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
-void() monster_oldone = {
+void() monster_oldone = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/oldone.mdl";
@@ -230,8 +228,6 @@ void() monster_oldone = {
 	self.takedamage = DAMAGE_YES;
 	self.th_pain = idshub_nopain;
 	self.th_die = finale_1;
-	shub = self;
-
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = SUB_Null;
 	monster_start();

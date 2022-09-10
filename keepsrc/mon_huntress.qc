@@ -70,17 +70,6 @@ void() elena_Phase3Run;
 void() elena_choosemelee;
 void() elena_choose_atk;
 
-// Attachment management (create, finish and delete)
-void() elena_create_attachment2 = {
-	// Are the attachments setup yet?
-	if (!self.attachment2) {
-		self.attachment2 = spawn();
-		//self.attachment2.owner = self;
-		self.attachment2.classtype = CT_ATTACHMENT;
-		self.attachment2.state = FALSE;
-	}
-};
-
 void() elena_setup_attachment2 = {
 	if (self.attachment2) {
 		self.attachment2.movetype = MOVETYPE_NOCLIP;
@@ -104,7 +93,7 @@ void(vector offset, float amount, float life, float clr, float style) elena_part
 	particle_explode(self.pos1, amount+random()*4, life+random()*0.5, clr, style);
 };
 
-void() rakuyo_run = {	
+void() rakuyo_run = { // [FUNCTION]
 	if (self.attachment.model == "") {
 		setmodel(self.attachment, "progs/redfield/huntress/rakuyo.mdl");
 	}
@@ -145,17 +134,12 @@ void()	elena_taunt27	= [	$taunt27,	elena_taunt28	] { ai_stand(); rakuyo_run(); }
 void()	elena_taunt28	= [	$taunt28,	elena_run1	] { ai_stand(); rakuyo_run();
 };
 
-void(float gprime) elena_usegun = {
+void(float gprime) elena_usegun = { // [FUNCTION]
 	if (self.health < 1) return;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment2) elena_create_attachment2();
-
-	// Gprime starts off the sequence
-	if (gprime == 0) elena_setup_attachment2();
-	
-	// Place pistol in correct position
-	setorigin(self.attachment2, self.origin);
+	SUB_CreateSelfAttachment2(MODEL_EVELYN,1.0);
+	if (gprime == 0) elena_setup_attachment2(); // Gprime starts off the sequence
+	setorigin(self.attachment2, self.origin); // Place pistol in correct position
 	self.attachment2.angles = self.angles;
 	self.attachment2.frame = self.frame;	
 };
@@ -204,7 +188,7 @@ void()	elena_idle12	= [	$idle12,	elena_idle1	] { rakuyo_run();
 				self.think = elena_idleb1;		// Check gun
 			}
 	}
-ai_stand();
+	ai_stand();
 };
 
 void()	elena_walk1	= [	$walk1,		elena_walk2	] { SUB_FinishAttachment2(); ai_walk(2); self.skin = 0;
@@ -225,25 +209,22 @@ void()	elena_walk14	= [	$walk14,	elena_walk15	] { ai_walk(4); rakuyo_run(); };
 void()	elena_walk15	= [	$walk15,	elena_walk16	] { ai_walk(6); rakuyo_run(); };
 void()	elena_walk16	= [	$walk16,	elena_walk1	] { ai_walk(2); rakuyo_run(); };
 
-float phase_Counter;
-void() stab_partring = {
+void() stab_partring = { // [FUNCTION]
 	particle_ring(self.origin + '0 0 -16', '0 0 4', '4 4 16', 60, 64, 1.2, 4);
 } 
 
-
 // Phase transition - Stab self with Rakuyo and scream
-
 void()	elena_transa1	= [	$transa1,	elena_transa2	] { rakuyo_run();
-self.skin = 0;
-self.pain_finished = time + 2.4;
-phase_Counter = phase_Counter + 1;
-local entity b;
-self.owner = spawn();
-b = self.owner;
-setmodel(b, MODEL_PROJ_KSPELL);
-setorigin(b, self.origin);
-b.nextthink = time + 2.3;
-b.think = SUB_Remove;
+	self.skin = 0;
+	self.pain_finished = time + 2.4;
+	self.bosswave = self.bosswave + 1;
+	local entity b;
+	self.owner = spawn();
+	b = self.owner;
+	setmodel(b, MODEL_PROJ_KSPELL);
+	setorigin(b, self.origin);
+	b.nextthink = time + 2.3;
+	b.think = SUB_Remove;
 };
 void()	elena_transa2	= [	$transa2,	elena_transa3	] { rakuyo_run(); };
 void()	elena_transa3	= [	$transa3,	elena_transa4	] { rakuyo_run(); };
@@ -251,8 +232,8 @@ void()	elena_transa4	= [	$transa4,	elena_transa5	] { rakuyo_run(); };
 void()	elena_transa5	= [	$transa5,	elena_transa6	] { rakuyo_run(); };
 void()	elena_transa6	= [	$transa6,	elena_transa7	] { rakuyo_run(); };
 void()	elena_transa7	= [	$transa7,	elena_transa8	] { rakuyo_run(); self.attachment.skin = 1;
-sound(self,CHAN_VOICE, "redfield/huntress/stabbed.wav",1,ATTN_NORM);
-spawn_touchblood(self, other, 24); 
+	sound(self,CHAN_VOICE, "redfield/huntress/stabbed.wav",1,ATTN_NORM);
+	spawn_touchblood(self, other, 24); 
 };
 void()	elena_transa8	= [	$transa8,	elena_transa9	] { rakuyo_run(); self.skin = 1; };
 void()	elena_transa9	= [	$transa9,	elena_transa10	] { ai_back(4); rakuyo_run(); };
@@ -265,56 +246,50 @@ void()	elena_transa15	= [	$transa15,	elena_transa16	] { rakuyo_run(); self.skin 
 void()	elena_transa16	= [	$transa16,	elena_transa17	] { rakuyo_run(); };
 void()	elena_transa17	= [	$transa17,	elena_transa18	] { rakuyo_run(); };
 void()	elena_transa18	= [	$transa18,	elena_transa19	] { rakuyo_run(); };
-void()	elena_transa19	= [	$transa19,	elena_transa20	] { rakuyo_run();
-sound(self,CHAN_VOICE, "redfield/huntress/blood_scream.wav",1,ATTN_NORM);
-local entity eb;
-self.owner = spawn();
-eb = self.owner;
-setmodel(eb, MODEL_FIREBLAST);
-setorigin(eb, self.origin);
-eb.angles = self.angles;
-eb.alpha = 0.3;
-eb.skin = 1;
-eb.nextthink = time + 0.5;
-eb.think = SUB_Remove;
+void()	elena_transa19	= [	$transa19,	elena_transa20	] {
+	rakuyo_run();
+	sound(self,CHAN_VOICE, "redfield/huntress/blood_scream.wav",1,ATTN_NORM);
+	local entity eb;
+	self.owner = spawn();
+	eb = self.owner;
+	setmodel(eb, MODEL_FIREBLAST);
+	setorigin(eb, self.origin);
+	eb.angles = self.angles;
+	eb.alpha = 0.3;
+	eb.skin = 1;
+	eb.nextthink = time + 0.5;
+	eb.think = SUB_Remove;
 };
 void()	elena_transa20	= [	$transa20,	elena_transa21	] { ai_forward(4); rakuyo_run();
-self.owner.frame = 1;
-self.owner.alpha = 0.25;
-ai_shockwave(MONAI_ELENAIMPACT, MONAI_ELENADAMAGE, MONAI_ELENARADIUS, MONAI_ELENAFORWARD, MONAI_ELENAUP);
-ThrowGib(11,6); 			// Blood toss
+	self.owner.frame = 1;
+	self.owner.alpha = 0.25;
+	ai_shockwave(MONAI_ELENAIMPACT, MONAI_ELENADAMAGE, MONAI_ELENARADIUS, MONAI_ELENAFORWARD, MONAI_ELENAUP);
+	ThrowGib(11,6); 			// Blood toss
 };
 void()	elena_transa21	= [	$transa21,	elena_transa22	] { rakuyo_run();
-self.owner.frame = 2;
-self.owner.alpha = 0.2;
+	self.owner.frame = 2;
+	self.owner.alpha = 0.2;
 };
 void()	elena_transa22	= [	$transa22,	elena_transa23	] { rakuyo_run();
-self.owner.frame = 3;
-self.owner.alpha = 0.1;
+	self.owner.frame = 3;
+	self.owner.alpha = 0.1;
 };
 void()	elena_transa23	= [	$transa23,	elena_run1	] { rakuyo_run();
-self.owner.frame = 4;
-self.owner.alpha = 0.05;
+	self.owner.frame = 4;
+	self.owner.alpha = 0.05;
 };
 
 // Check if HP is at 2/3 and setup phase 2 attack
-float() elena_Phase2Check = {
-	if (self.health > 1 && self.health < 650 && phase_Counter == 0) return TRUE;
+float() elena_Phase2Check = { // [FUNCTION]
+	if (self.health > 1 && self.health < 650 && self.bosswave == 0) return TRUE;
 	return FALSE;
 };
 
-void() elena_Phase2Run = {
-	if (elena_Phase2Check() == TRUE) { elena_transa1(); return; }
-};
+void() elena_Phase2Run = { if (elena_Phase2Check() == TRUE) elena_transa1(); return; }; // [FUNCTION]
 
-void() elena_PhaseGate = {
-	if (phase_Counter == 0) {
-		elena_Phase2Run();
-	}
-	else if (phase_Counter == 1) {
-		elena_Phase3Run();
-	}
-	else return;
+void() elena_PhaseGate = { // [FUNCTION]
+	if (self.bosswave == 0) elena_Phase2Run();
+	else if (self.bosswave == 1) elena_Phase3Run();
 }
 
 void()	elena_run1	= [	$walk1,		elena_run2	] { ai_run(5); rakuyo_run(); elena_PhaseGate(); self.skin = 0; SUB_FinishAttachment2(); };
@@ -335,7 +310,7 @@ void()	elena_run15	= [	$walk15,	elena_run16	] { ai_run(6); rakuyo_run(); elena_P
 void()	elena_run16	= [	$walk16,	elena_run1	] { ai_run(4); rakuyo_run(); elena_PhaseGate(); };
 
 // Fireball damage - Hitscan based on radius of blastsize per frame
-void(float fbfactor) fireblast = {
+void(float fbfactor) fireblast = { // [FUNCTION]
 	local vector	delta;
 	local float 	ldmg;
 	
@@ -354,7 +329,7 @@ void()	elena_blast1	= [	$blast1,	elena_blast2	] {
 	rakuyo_run();
 	self.skin = 0;
 	self.pain_finished = time + 2.8;
-	phase_Counter = phase_Counter + 1;
+	self.bosswave = self.bosswave + 1;
 };
 void()	elena_blast2	= [	$blast2,	elena_blast3	] { rakuyo_run(); };
 void()	elena_blast3	= [	$blast3,	elena_blast4	] { rakuyo_run(); };
@@ -421,26 +396,20 @@ void()	elena_blast26	= [	$blast26,	elena_blast27	] { rakuyo_run(); };
 void()	elena_blast27	= [	$blast27,	elena_blast28	] { ai_charge(2); rakuyo_run(); };
 void()	elena_blast28	= [	$blast28,	elena_run1	] { rakuyo_run(); };
 
-
-//----------------------------------------------------------------------
 // Check if HP is at 1/3 and setup phase 3
-//----------------------------------------------------------------------
-
-float() elena_Phase3Check = {
-	if (self.health > 1 && self.health < 350 && phase_Counter == 1) 
+float() elena_Phase3Check = { // [FUNCTION]
+	if (self.health > 1 && self.health < 350 && self.bosswave == 1) 
 		{
 		return TRUE;
 		}
 	return FALSE;
 };
 
-void() elena_Phase3Run = {
+void() elena_Phase3Run = { // [FUNCTION]
 	if (elena_Phase3Check() == TRUE) { elena_blast1(); return; }
 };
 
-void() check_FireTrig =
-// Is there any trigger for the fireblast?
-{
+void() check_FireTrig = {  // [FUNCTION] Is there any trigger for the fireblast?
 	if (self.noise != "") {
 		self.attachment3 = find(world, targetname, self.noise);
 			if (self.attachment3.classtype == CT_ELENABLAST) {
@@ -451,10 +420,8 @@ void() check_FireTrig =
 	}
 };
 
-/*======================================================================
- elena_melee (ai melee with added damage spice factor!)
-======================================================================*/
-void() elena_melee = {
+// ai melee with added damage spice factor!
+void() elena_melee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;			// removed before stroke
@@ -466,7 +433,7 @@ void() elena_melee = {
 	if (!CanDamage (self.enemy, self)) return;
 
 	// 3-10 damage depending on boss phase
-	ldmg = ((random() + random() + random()) * 2) + (2 * phase_Counter);
+	ldmg = ((random() + random() + random()) * 2) + (2 * self.bosswave);
 	if (ldmg < 3) ldmg = 3;
 	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
@@ -485,9 +452,8 @@ void() elena_melee = {
 	}
 };
 	
-//----------------------------------------------------------------------
 // Spinning leap - Jumps upward while spinning and slams down for heavy damage
-void() elena_SpinTouch = {
+void() elena_SpinTouch = { // [FUNCTION]
 	local float ldmg;
 	
 	if (self.health < 1) return;
@@ -518,7 +484,6 @@ void() elena_SpinTouch = {
 	self.nextthink = time + 0.1;
 };
 
-//===========================================================================
 void()	elena_spin1	= [	$spin1,		elena_spin2	] { ai_face();
 rakuyo_run();
 self.skin = 0;
@@ -546,7 +511,7 @@ void()	elena_spin5	= [	$spin5,		elena_spin6	] {
 	setmodel(sb, MODEL_ELENASPIN);
 	setorigin(sb, self.origin);
 	sb.angles = self.angles;
-	if (phase_Counter < 2) {
+	if (self.bosswave < 2) {
 		sb.skin = 0;
 		sb.alpha = 0.2;
 	} else {
@@ -559,27 +524,27 @@ void()	elena_spin5	= [	$spin5,		elena_spin6	] {
 };
 void()	elena_spin6	= [	$spin6,		elena_spin7	] { self.owner.frame = 1; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-if (phase_Counter > 0) ThrowGib(11,1); 			// Blood toss
+if (self.bosswave > 0) ThrowGib(11,1); 			// Blood toss
 };
 void()	elena_spin7	= [	$spin7,		elena_spin8	] { self.owner.frame = 2; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
+if (self.bosswave > 0) ThrowGib(11,2); 			// Blood toss
 };
 void()	elena_spin8	= [	$spin8,		elena_spin9	] { self.owner.frame = 3; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
+if (self.bosswave > 0) ThrowGib(11,2); 			// Blood toss
 };
 void()	elena_spin9	= [	$spin9,		elena_spin10	] { self.owner.frame = 4; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
+if (self.bosswave > 0) ThrowGib(11,2); 			// Blood toss
 };
 void()	elena_spin10	= [	$spin10,	elena_spin11	] { self.owner.frame = 5; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
+if (self.bosswave > 0) ThrowGib(11,2); 			// Blood toss
 };
 void()	elena_spin11	= [	$spin11,	elena_spin12	] { self.owner.frame = 6; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
-if (phase_Counter > 0) ThrowGib(11,2); 			// Blood toss
+if (self.bosswave > 0) ThrowGib(11,2); 			// Blood toss
 };
 void()	elena_spin12	= [	$spin12,	elena_spin12	] { self.owner.frame = 7; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
@@ -645,8 +610,8 @@ slb = self.owner;
 setmodel(slb, MODEL_ELENASLSH);
 setorigin(slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4; }
-	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1; }
+if (self.bosswave == 0) { slb.skin = 0; slb.alpha = 0.4; }
+	else if (self.bosswave == 1) { slb.skin = 2; slb.alpha = 1; }
 	else { slb.skin = 1; slb.alpha = 0.8; }
 slb.frame = 1;
 slb.nextthink = time + 0.1;
@@ -670,8 +635,8 @@ slb = self.owner;
 setmodel(slb, MODEL_ELENASLSH);
 setorigin(slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4; }
-	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1; }
+if (self.bosswave == 0) { slb.skin = 0; slb.alpha = 0.4; }
+	else if (self.bosswave == 1) { slb.skin = 2; slb.alpha = 1; }
 	else { slb.skin = 1; slb.alpha = 0.8; }
 slb.nextthink = time + 0.1;
 slb.think = SUB_Remove;
@@ -716,8 +681,8 @@ slb = self.owner;
 setmodel(slb, MODEL_ELENASLSH);
 setorigin(slb, self.origin);
 slb.angles = self.angles;
-if (phase_Counter == 0) { slb.skin = 0; slb.alpha = 0.4; }
-	else if (phase_Counter == 1) { slb.skin = 2; slb.alpha = 1; }
+if (self.bosswave == 0) { slb.skin = 0; slb.alpha = 0.4; }
+	else if (self.bosswave == 1) { slb.skin = 2; slb.alpha = 1; }
 	else { slb.skin = 1; slb.alpha = 0.8; }
 slb.frame = 2;
 slb.nextthink = time + 0.1;
@@ -731,10 +696,7 @@ void()	elena_cross8	= [	$cross8,		elena_cross9	] { ai_charge(2); rakuyo_run(); }
 void()	elena_cross9	= [	$cross9,		elena_cross10	] { ai_charge(8); rakuyo_run(); };
 void()	elena_cross10	= [	$cross10,		elena_run1	] { ai_charge(5); rakuyo_run(); };
 
-
-
-//----------------------------------------------------------------------
-void() elena_choosemelee = {
+void() elena_choosemelee = { // [FUNCTION]
 	// Make sure next attack is different to previous (randomly while loop)
 	self.lip = self.meleeattack;
 	while (self.lip == self.meleeattack) { self.lip = rint(random()*2);	}
@@ -755,7 +717,7 @@ void()	elena_pain7	= [	$pain7,		elena_pain8	] { rakuyo_run(); };
 void()	elena_pain8	= [	$pain8,		elena_pain9	] { rakuyo_run(); };
 void()	elena_pain9	= [	$pain9,		elena_run1	] { rakuyo_run(); };
 
-void(entity inflictor, entity attacker, float damage) elena_pain = {
+void(entity inflictor, entity attacker, float damage) elena_pain = { // [FUNCTION]
 	//Reset Evelyn pistol if holding
 	SUB_FinishAttachment2();	
 	
@@ -779,7 +741,7 @@ void(entity inflictor, entity attacker, float damage) elena_pain = {
 };
 
 // RANGE ATTACK 1 - Shoot the Evelyn Pistol!
-void() elena_shootgun = {
+void() elena_shootgun = { // [FUNCTION]
 	local vector org, vec;
 
 	if (!self.enemy) return;
@@ -830,7 +792,7 @@ void()	elena_shoot12	= [	$shoot12,	elena_shoot13	] { SUB_FinishAttachment2(); ra
 void()	elena_shoot13	= [	$shoot13,	elena_run1	] { rakuyo_run(); };
 
 // RANGE ATTACK 2 - Blood Spears - from Golem rock storm
-void() elena_bldspears =  {
+void() elena_bldspears =  { // [FUNCTION]
 	local float shotcount, zpart;
 	local vector org, dir, yrand, zrand;
 
@@ -862,7 +824,7 @@ void() elena_bldspears =  {
 };
 
 // RANGE ATTACK 3 - Blood and FIRE! - From Ad 1.8 BossJudicator
-void() elena_fireflameline = {
+void() elena_fireflameline = { // [FUNCTION]
 	local vector org, dir;
 	local float fire_col;
 
@@ -917,7 +879,7 @@ void()	elena_spear15	= [	$spear15,	elena_spear16	] { ai_face(); rakuyo_run(); el
 void()	elena_spear16	= [	$spear16,	elena_spear17	] { ai_face(); rakuyo_run(); elena_bldspears(); };
 void()	elena_spear17	= [	$spear17,	elena_spear18	] { ai_face(); rakuyo_run(); elena_bldspears(); };
 void()	elena_spear18	= [	$spear18,	elena_spear19	] { ai_face(); rakuyo_run();
-	if (phase_Counter > 1) elena_fireflameline(); };
+	if (self.bosswave > 1) elena_fireflameline(); };
 void()	elena_spear19	= [	$spear19,	elena_spear20	] { rakuyo_run(); };
 void()	elena_spear20	= [	$spear20,	elena_spear21	] { rakuyo_run(); };
 void()	elena_spear21	= [	$spear21,	elena_spear22	] { rakuyo_run(); elena_particles('20 0 24',6,0.5,4,512);
@@ -930,13 +892,13 @@ void()	elena_spear26	= [	$spear26,	elena_spear27	] { rakuyo_run(); };
 void()	elena_spear27	= [	$spear27,	elena_spear28	] { rakuyo_run(); };
 void()	elena_spear28	= [	$spear28,	elena_run1	] { rakuyo_run(); };
 
-void() elena_choose_atk = {
+void() elena_choose_atk = { // [FUNCTION]
 	local vector delta;
 	
 	delta = self.enemy.origin - self.origin;
 
 	if (vlen(delta) < MONAI_ELENARANGE) { 
-		if (phase_Counter < 1) { elena_shoot1(); }
+		if (self.bosswave < 1) { elena_shoot1(); }
 		else {
 			if (random() < 0.6) elena_spear1();
 				else elena_shoot1();
@@ -947,7 +909,7 @@ void() elena_choose_atk = {
 };
 
 // Only functions when monster spawns standing -- No walking / path corners
-void() elena_wakeup = {
+void() elena_wakeup = { // [FUNCTION]
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -997,7 +959,7 @@ void()	elena_die18	= [	$death18,	elena_die18	] {
 	entity_hide(self);
 };
 
-void() elena_die = {
+void() elena_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	SUB_FinishAttachment2();
 	SUB_RemoveAttachment2(); // Make sure Evelyn pistol is removed
@@ -1007,7 +969,7 @@ void() elena_die = {
 	}
 };
 
-void() monster_huntress_precache = {
+void() monster_huntress_precache = { // [FUNCTION]
 	precache_model ("progs/redfield/mon_huntress.mdl");
 	precache_model ("progs/redfield/huntress/rakuyo.mdl");
 	precache_model (MODEL_PROJ_KSPELL);
@@ -1119,7 +1081,7 @@ void() monster_huntress = {
 // -------- SPAWNFLAGS --------
 // -------- NOTES --------
 // Used to trigger events when the Huntress does a fireblast
-void() monster_huntress_firetrig = {
+void() monster_huntress_firetrig = { // [ENTITY]
 	self.classtype = CT_ELENABLAST;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;

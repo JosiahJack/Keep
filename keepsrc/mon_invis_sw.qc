@@ -12,13 +12,6 @@ $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8 idle9 idle10
 
 float INVIS_SWORD_REDFIELD = 2;
 
-// Redfield attachment eyes create
-void() sword_create_attachment = {
-	self.attachment = spawn();
-	self.attachment.classtype = CT_ATTACHMENT;
-	self.attachment.state = FALSE;
-};
-
 // Redfield attachment eyes setup
 void() sword_setup_attachment = {
 	if (self.attachment) {
@@ -33,10 +26,10 @@ void() sword_setup_attachment = {
 };
 
 // Redfield eye blinking (attachment is eyes)
-void() sword_eyecheck = {
+void() sword_eyecheck = { // [FUNCTION]
 	if (self.spawnflags & MON_SWORD_EYES) {
 		if (!self.attachment) { 
-			sword_create_attachment();
+			SUB_CreateSelfAttachment("",1.0);
 			sword_setup_attachment(); 
 		}
 		self.attachment.frame = self.frame;
@@ -49,7 +42,7 @@ void() sword_eyecheck = {
 void() sword_stand1 = [ 0.000, sword_stand1 ] { ai_stand(); };
 
 // Redfield idle sound
-void() sword_sound = {
+void() sword_sound = { // [FUNCTION]
 	self.count = self.count + 1;
 	if (self.count > 3) {
 		if (random() < 0.3) {
@@ -198,7 +191,7 @@ void() sword_walk8 = [$idle8, sword_walk9 ] { ai_walk(6); };
 void() sword_walk9 = [$idle9, sword_walk10 ] { ai_walk(6); };
 void() sword_walk10 = [$idle10, sword_walk1 ] { ai_walk(6); };
 
-void() sword_idlechoose = {
+void() sword_idlechoose = { // [FUNCTION]
 	if (self.spawnflags & MON_SWORD_LEAN) {
 		sword_lean1();
 	} else {
@@ -206,7 +199,7 @@ void() sword_idlechoose = {
 	}
 };
 
-void() sword_die = {
+void() sword_die = { // [FUNCTION]
    monster_death_precheck();
    if (self.attachment) self.attachment.movetype = MOVETYPE_NOCLIP;
 	if ( (random () < 0.500) ) {
@@ -218,7 +211,7 @@ void() sword_die = {
 	}
 };
 
-void() sword_pause = {
+void() sword_pause = { // [FUNCTION]
 	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
 		self.th_run = swordredfield_run1;
 		self.think = swordredfield_run1;
@@ -230,7 +223,7 @@ void() sword_pause = {
 	self.delay = FALSE;
 };
 
-void(entity inflictor,entity attacker, float damage) sword_pain = {
+void(entity inflictor,entity attacker, float damage) sword_pain = { // [FUNCTION]
 	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
 		self.th_run = swordredfield_run1;
 		self.think = swordredfield_run1;
@@ -243,7 +236,7 @@ void(entity inflictor,entity attacker, float damage) sword_pain = {
 	self.th_pain = SUB_Null_pain;
 };
 
-void() monster_sword_precache = {
+void() monster_sword_precache = { // [FUNCTION]
 	precache_model ("progs/rogue/mon_sword.mdl");
 	precache_model ("progs/redfield/mon_sword.mdl");
 	precache_model (MODEL_SWORDEYES);
@@ -274,6 +267,9 @@ void() monster_sword = {
 	self.th_run = sword_pause;
 	self.th_die = sword_die;
 	self.th_pain = sword_pain;
+	if (self.spawnflags & MON_SWORD_BLUE) {
+		if (!(self.spawnflags & INVIS_SWORD_REDFIELD)) self.spawnflags = self.spawnflags | INVIS_SWORD_REDFIELD;
+	}
 	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
 		self.mdl = "progs/redfield/mon_sword.mdl";
 		self.spawnflags = self.spawnflags | MON_SPAWN_NOSIGHT;

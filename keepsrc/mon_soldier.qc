@@ -126,7 +126,7 @@ void()	army_runback7	= [	$run2,	army_runback8	] { monster_footstep(FALSE); ai_fa
 void()	army_runback8	= [	$run1,	army_run1	] { ai_face(); ai_back(11); };
 
 // Move backwards to create some space to fire a rocket
-void() army_runbackcheck = {
+void() army_runbackcheck = { // [FUNCTION]
 	self.oldorigin = self.origin;
 	// If move backward works, run back animation
 	if (walkmove(self.angles_y+180, 16)) {
@@ -139,7 +139,7 @@ void() army_runbackcheck = {
 	}
 };
 
-void() army_fire = {
+void() army_fire = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
@@ -166,7 +166,7 @@ void()	army_atk7	= [	$shoot7,	army_atk8	] { ai_face();SUB_CheckRefire (army_atk1
 void()	army_atk8	= [	$shoot8,	army_atk9	] {};
 void()	army_atk9	= [	$shoot9,	army_run1	] { ai_face(); };
 
-void() army_dbs_fire = {
+void() army_dbs_fire = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
@@ -193,7 +193,7 @@ void()	army_dbshotgun7	= [	$shoot7,	army_dbshotgun8	] { ai_face();SUB_CheckRefir
 void()	army_dbshotgun8	= [	$shoot8,	army_dbshotgun9	] {};
 void()	army_dbshotgun9	= [	$shoot9,	army_run1	] { ai_face(); };
 
-void() army_fire_rocket = {
+void() army_fire_rocket = { // [FUNCTION]
 	local vector org, dir;
 	
 	if (!self.enemy) return;
@@ -209,7 +209,7 @@ void() army_fire_rocket = {
 	launch_projectile(org,dir,NO_SPIN,CT_PROJ_ARMY,self.attack_speed);
 };
 
-void() army_rocket_think = {
+void() army_rocket_think = { // [FUNCTION]
 	// Only do a limited amount of updates to the missile
 	self.count = self.count + 1;
 	if (self.count < (5+skill)) {
@@ -269,7 +269,7 @@ void()	army_grenade_atk7 = [	$shoot7, army_grenade_atk8	] { ai_face(); };
 void()	army_grenade_atk8 = [	$shoot8, army_grenade_atk9	] {};
 void()	army_grenade_atk9 = [	$shoot9, army_run1	] { ai_face(); };
 
-void() army_plasma_fire = {
+void() army_plasma_fire = { // [FUNCTION]
 	local vector org, vec;
 
 	if (!self.enemy) return;
@@ -293,7 +293,7 @@ void()	army_plasma_atk7 = [	$shoot7, army_plasma_atk8	] { ai_face();SUB_CheckRef
 void()	army_plasma_atk8 = [	$shoot8, army_plasma_atk9	] {};
 void()	army_plasma_atk9 = [	$shoot9, army_run1			] { ai_face(); };
 
-void() army_nailfire = {
+void() army_nailfire = { // [FUNCTION]
 	local	vector	dir, org;
 	local	entity	en;
 	local float type;

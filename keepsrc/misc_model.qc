@@ -262,7 +262,7 @@ void() misc_model_fade = { // [FUNCTION]
     else self.nextthink = time + FADEMODEL_TIME; // Keep looking, really fast!
 };
 
-void() misc_model_loopreset =  { self.waitmin = self.waitmin2 = self.waitmin3 = 0; }; // [FUNCTION], Reset animation loop counters
+void() misc_model_loopreset = { self.waitmin = self.waitmin2 = self.waitmin3 = 0; }; // [FUNCTION], Reset animation loop counters
 
 void() misc_model_on = { // [FUNCTION]
 	local float checkanim;

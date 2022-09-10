@@ -21,14 +21,14 @@ Please see cvar descriptions in included smc_config.cfg sample.
 ================================================================================================
 */
 
-void() carniv_idle_sound = {
+void() carniv_idle_sound = { // [FUNCTION]
 	if (random() < 0.2) {
 		if (random() < 0.5) sound(self,CHAN_VOICE, "q15/carnivean/idle1.wav",1,ATTN_IDLE);
 		else sound(self,CHAN_VOICE, "q15/carnivean/idle2.wav",1,ATTN_IDLE);
 	}
 };
 
-void(float loudness) carniv_footsteps = {
+void(float loudness) carniv_footsteps = { // [FUNCTION]
 	local float select;
 	select = random();
 	if (select <= 0.5)
@@ -37,7 +37,7 @@ void(float loudness) carniv_footsteps = {
 		sound(self,CHAN_AUTO,"q15/carnivean/step2.wav", loudness,ATTN_IDLE);
 };
 
-void() carniv_projectile_rock_touch = {
+void() carniv_projectile_rock_touch = { // [FUNCTION]
 	local vector dir, vel, detonate;
 	detonate = self.origin;
 	detonate = detonate - 10 * normalize(self.velocity);
@@ -70,8 +70,7 @@ void() carniv_projectile_rock_touch = {
 	remove(self);
 };
 
-
-void() carniv_projectile_rock_homing = {
+void() carniv_projectile_rock_homing = { // [FUNCTION]
 	if (self.enemy.health < 1)	remove (self); // to avoid endless homing above players corpse
 	if (self.attack_finished < time) { remove (self); return; }
 
@@ -100,7 +99,7 @@ void() carniv_projectile_rock_homing = {
 	self.think = carniv_projectile_rock_homing;	
 };
 
-void() carniv_projectile_rock_no_homing = {
+void() carniv_projectile_rock_no_homing = { // [FUNCTION]
 	self.frame = self.frame + 1;		// animation
 	if (self.frame >= 23)
 		self.frame = 0;
@@ -108,7 +107,7 @@ void() carniv_projectile_rock_no_homing = {
 	self.think = carniv_projectile_rock_no_homing;	
 };
 
-void() carniv_projectile_flame_touch = {
+void() carniv_projectile_flame_touch = { // [FUNCTION]
 	if (other == self.owner) return;// don't explode on owner
 
 	if (other.takedamage == DAMAGE_AIM) {
@@ -132,7 +131,7 @@ void() carniv_projectile_flame_touch = {
 	remove (self);
 };
 
-void() carniv_projectile = {
+void() carniv_projectile = { // [FUNCTION]
 	local entity missile;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -264,14 +263,13 @@ void() carniv_fire6 = [ 71, carniv_fire7 ] { self.nextthink = (time + 0.1); ai_f
 void() carniv_fire7 = [ 72, carniv_fire8 ] { self.nextthink = (time + 0.1); ai_face(); };
 void() carniv_fire8 = [ 73, carniv_run1 ] { self.nextthink = (time + 0.1); ai_face(); };
 
-void() carniv_missile = {
+void() carniv_missile = { // [FUNCTION]
 	if (random() <= 0.77) {
 		sound(self,CHAN_AUTO,"q15/carnivean/scream.wav",1,ATTN_NORM);
 		carniv_fire1();
 	}
 };
 
-/////  Pain
 void() carniv_pain1 = [ 85, carniv_pain2 ] {};
 void() carniv_pain2 = [ 86, carniv_pain3 ] {};
 void() carniv_pain3 = [ 87, carniv_pain4 ] {};
@@ -393,8 +391,7 @@ void() carniv_bdie38 = [ 175, carniv_bdie39 ] {};
 void() carniv_bdie39 = [ 176, carniv_bdie40 ] { monster_death_postcheck(); };
 void() carniv_bdie40 = [ 177, carniv_bdie40 ] { monster_deadbody_check(); };
 
-///////  Death
-void() carniv_die = {
+void() carniv_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -410,7 +407,7 @@ void() carniv_die = {
 	}
 };
 
-void() monster_carnivean_precache = {
+void() monster_carnivean_precache = { // [FUNCTION]
  	precache_model("progs/q15/carnivean.mdl");
 	precache_model("progs/q15/h_carnivean.mdl");
 	precache_model("progs/q15/carniv_rocks.mdl");
@@ -437,7 +434,7 @@ void() monster_carnivean_precache = {
 	}
 };
 
-void() monster_carnivean = {
+void() monster_carnivean = { // [FUNCTION]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

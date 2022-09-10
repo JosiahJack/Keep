@@ -125,7 +125,7 @@ void() mino_run10 = [$walk19, mino_run11 ] { ai_run(10);monster_footstep(FALSE);
 void() mino_run11 = [$walk21, mino_run12 ] { ai_run(4); };
 void() mino_run12 = [$walk23, mino_run ] { ai_run(9); };
 
-void() mino_run = {
+void() mino_run = { // [FUNCTION]
 	if (self.attack_rage) mino_rage1();
 	else mino_run1();
 };
@@ -145,7 +145,7 @@ void() mino_howl11 = [$howl29, mino_howl12 ] {};
 void() mino_howl12 = [$howl31, mino_run ] {};
 
 // MELEE ATTACK (claws)
-void(float side) mino_claw = {
+void(float side) mino_claw = { // [FUNCTION]
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -190,13 +190,13 @@ void() mino_slapR6 = [$bwalk17, mino_run ] {
 	else ShufflerFinishedGoonSlap();
 };
 
-void(float side) ShufflerDoSlap = {
+void(float side) ShufflerDoSlap = { // [FUNCTION]
 	if (side == 1) self.think = mino_slapL1;
 	else if (side == -1) self.think = mino_slapR1;
 	else self.think = mino_gore1;
 };
 
-void(float side) ShufflerCheckForSlap = {
+void(float side) ShufflerCheckForSlap = { // [FUNCTION]
 	local entity goon, best_goon;
 	local float dot, best_dot;
 	local vector vec;
@@ -241,7 +241,7 @@ void(float side) ShufflerCheckForSlap = {
 	}
 };
 
-void() ShufflerFinishedGoonSlap = {
+void() ShufflerFinishedGoonSlap = { // [FUNCTION]
 	if (!(self.monsterflags & MF_GOON_SLAP)) return;	
 
 	self.monsterflags = self.monsterflags - MF_GOON_SLAP;
@@ -259,7 +259,7 @@ void() mino_gore4 = [$gore8, mino_gore5 ] { ai_charge(34); };
 void() mino_gore5 = [$gore10, mino_gore6 ] { ai_charge(28);monster_footstep(FALSE); };
 void() mino_gore6 = [$gore12, mino_run ] { ai_charge(26); if (self.spawnflags & 2) { ShufflerCheckForSlap(0); self.nextthink = time + 0.05; } };
 
-void() mino_melee = {
+void() mino_melee = { // [FUNCTION]
 	if (self.attack_rage) mino_gore1(); // Switch to a faster more deadly melee attack if in rage mode
 	else {
 		// Randomly start left or right and then loop
@@ -269,7 +269,7 @@ void() mino_melee = {
 };
 
 // JUMP ATTACK - pre-rage only
-void() mino_JumpTouch = {
+void() mino_JumpTouch = { // [FUNCTION]
 	local float ldmg;
 
 	if (self.health < 1) return;
@@ -351,45 +351,6 @@ float(entity targ) minotaur_skin_type = {
 	}
 	// Default = blue version
 	return MINO_BLUE;
-};
-
-// RANGE ATTACK - Plasma Bolts (rocket)
-void() minotaur_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = MODEL_PROJ_MBALL;
-	}
-	if (!self.attachment2) {
-		self.attachment2 = spawn();
-		self.attachment2.owner = self;
-		self.attachment2.classtype = CT_ATTACHMENT;
-		self.attachment2.mdl = MODEL_PROJ_MBALL;
-	}
-};
-
-void() minotaur_finish_attachment = {
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-	if (self.attachment2) {
-		setmodel(self.attachment2, "");
-		self.attachment2.state = STATE_OFF;
-	}
-};
-
-void() minotaur_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-	if (self.attachment2) {
-		self.attachment2.think = SUB_Remove;
-		self.attachment2.nextthink = time + 0.1;
-	}
 };
 
 void(entity handent, vector orgofs, float dbframe) minotaur_handball = {
@@ -489,7 +450,7 @@ void() mino_magic12 = [$magic23, mino_magic13 ] { ai_forward(8);
 void() mino_magic13 = [$magic25, mino_magic14 ] {
 	// Remove hand attachments and setup particle explosion
 	// Create a cloud of particles which slowly raise upwards
-	minotaur_finish_attachment();
+	SUB_FinishAttachments();
 	ai_face();
 	makevectors(self.angles);
 	self.finalangle = self.origin + (v_forward * 44) + (v_up * 32);
@@ -559,15 +520,16 @@ void() mino_summon11 = [$howl21, mino_summon12 ] { mino_sumeffect();mino_sumball
 void() mino_summon12 = [$howl23, mino_summon13 ] { mino_sumeffect();mino_sumball(5); };
 void() mino_summon13 = [$howl25, mino_summon14 ] { mino_sumeffect();mino_sumball(6); };
 void() mino_summon14 = [$howl27, mino_summon15 ] { mino_sumeffect();mino_sumball(7); };
-void() mino_summon15 = [$howl29, mino_summon16 ] { minotaur_finish_attachment();
+void() mino_summon15 = [$howl29, mino_summon16 ] { SUB_FinishAttachments();
 	if (self.aflag == TRUE) particle_explode(self.pos1, 50, 3, self.part_style, PARTICLE_BURST_MINOTAUR); };
 void() mino_summon16 = [$howl31, mino_summon17 ] {};
 void() mino_summon17 = [$howl33, mino_summon18 ] { ai_face(); };
 void() mino_summon18 = [$howl35, mino_run ] { ai_face();SUB_AttackFinished (1 + 2*random()); };
 
 // Both type of minotaurs go through the same magic function
-void() mino_magic = {
-	minotaur_create_attachment(); // Make sure the attachments are setup ready
+void() mino_magic = { // [FUNCTION]
+	SUB_CreateSelfAttachment(MODEL_PROJ_MBALL,1.0); // Make sure the attachments are setup ready
+	SUB_CreateSelfAttachment2(MODEL_PROJ_MBALL,1.0);
 	if (self.spawnflags & MON_MINOTAUR_MINIONS && !self.minion_active) setup_minionsupport();
 	
 	// Is the target the player or monster?
@@ -587,7 +549,7 @@ void() mino_magic = {
 };
 
 // CHARGE ATTACK - just been hit with a long pain animation (pre-rage only)
-void(float dist) mino_chargecheck = {
+void(float dist) mino_chargecheck = { // [FUNCTION]
 	// turn, face and pursue enemy
 	ai_charge(dist);
 	// Close enough for melee combat?
@@ -605,7 +567,7 @@ void() mino_charge4 = [$charge7, mino_charge5 ] { mino_chargecheck(34); };
 void() mino_charge5 = [$charge9, mino_charge6 ] { mino_chargecheck(28);monster_footstep(FALSE); };
 void() mino_charge6 = [$charge11, mino_charge1 ] { mino_chargecheck(26); };
 
-void() mino_charge = {
+void() mino_charge = { // [FUNCTION]
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	self.attack_finished = time + 2 + random();
 	mino_charge1();
@@ -637,11 +599,10 @@ void() mino_shake10 = [$shake19, mino_run ] {
 	if (self.attack_rage == FALSE && infront(self.enemy)) self.think = mino_charge;
 };
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) mino_pain = {
+void(entity inflictor, entity attacker, float damage) mino_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
-	minotaur_finish_attachment();
+	SUB_FinishAttachments();
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -683,10 +644,10 @@ void() mino_death12 = [$death23, mino_death13 ] { ai_forward(4); };
 void() mino_death13 = [$death25, mino_death14 ] { monster_death_postcheck(); };
 void() mino_death14 = [$death25, mino_death14 ] { monster_deadbody_check(); };
 
-void() mino_die = {
+void() mino_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
-	minotaur_remove_attachment();
+	SUB_RemoveAttachments();
 	//delete_minionspace();
 
 	// regular death
@@ -696,7 +657,7 @@ void() mino_die = {
 	}
 };
 
-void() monster_minotaur_precache = {
+void() monster_minotaur_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_minotaur.mdl");
 	precache_model ("progs/ad171/h_minotaur.mdl");
 	precache_model (MODEL_PROJ_MBALL); // Creating attachment
@@ -726,7 +687,7 @@ void() monster_minotaur_precache = {
 };
 
 // QUAKED monster_minotaur (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-void() monster_minotaur = {
+void() monster_minotaur = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -811,13 +772,13 @@ void() monster_minotaur = {
 	monster_start();
 };
 
-void() monster_shuffler = {
+void() monster_shuffler = { // [ENTITY], Redirect
 	if (self.deathstring == "")  self.deathstring = " was gored by a Gauroch\n"; // from Kinn
 	self.classname = "monster_minotaur";
 	monster_minotaur();
 };
 
-void() monster_yakman = {
+void() monster_yakman = { // [ENTITY], Redirect
 	if (self.deathstring == "")  self.deathstring = " was crushed by a Yakman\n"; // from Hexen II / Quake 1.5
 	self.classname = "monster_minotaur";
 	monster_minotaur();

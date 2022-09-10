@@ -260,7 +260,7 @@ void()	spider_drop6 = [	$drop6,	spider_drop6 ] {
 	if (self.attack_timer < time || self.velocity_z == 0) spider_droptouch();
 };
 
-void() spider_wakeup = {
+void() spider_wakeup = { // [FUNCTION]
 	// Dead already?
 	if (self.health < 1) return;
 		
@@ -295,17 +295,15 @@ void() spider_wakeup = {
 
 
 // MINION - Grow and spin up from nothing
-
-void() spider_growangle = { self.angles_y = self.angles_y + self.lefty; };
 void() spider_grow1 = [$grow1, spider_grow2 ] {};
-void() spider_grow2 = [$grow2, spider_grow3 ] { spider_growangle(); };
-void() spider_grow3 = [$grow3, spider_grow4 ] { spider_growangle(); };
-void() spider_grow4 = [$grow4, spider_grow5 ] { spider_growangle(); };
-void() spider_grow5 = [$grow5, spider_grow6 ] { spider_growangle(); };
-void() spider_grow6 = [$grow6, spider_grow7 ] { spider_growangle(); };
-void() spider_grow7 = [$grow7, spider_grow8 ] { spider_growangle(); };
-void() spider_grow8 = [$grow8, spider_grow9 ] { spider_growangle(); };
-void() spider_grow9 = [$grow9, spider_grow10] { spider_growangle(); };
+void() spider_grow2 = [$grow2, spider_grow3 ] { SUB_GrowAngle(); };
+void() spider_grow3 = [$grow3, spider_grow4 ] { SUB_GrowAngle(); };
+void() spider_grow4 = [$grow4, spider_grow5 ] { SUB_GrowAngle(); };
+void() spider_grow5 = [$grow5, spider_grow6 ] { SUB_GrowAngle(); };
+void() spider_grow6 = [$grow6, spider_grow7 ] { SUB_GrowAngle(); };
+void() spider_grow7 = [$grow7, spider_grow8 ] { SUB_GrowAngle(); };
+void() spider_grow8 = [$grow8, spider_grow9 ] { SUB_GrowAngle(); };
+void() spider_grow9 = [$grow9, spider_grow10] { SUB_GrowAngle(); };
 void() spider_grow10= [$grow10, spider_run1 ] {
 	if (monster_revive_finish()) { // Die if stuck, else restore damagability, setup goals, and warn other monsters.  Then do this stuff:
 		self.angles_y = self.angles_y + self.lefty; // Finally spin back to original position
@@ -322,7 +320,7 @@ void() spider_grow10= [$grow10, spider_run1 ] {
 	}
 };
 
-void() spider_grow = {
+void() spider_grow = { // [FUNCTION]
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -343,7 +341,7 @@ void() spider_painu2	= [	$painup3,	spider_painu3	] {};
 void() spider_painu3	= [	$painup5,	spider_painu4	] {};
 void() spider_painu4	= [	$painup6,	spider_run1	] {};
 
-void(entity inflictor, entity attacker, float damage) spider_pain = {
+void(entity inflictor, entity attacker, float damage) spider_pain = { // [FUNCTION]
 	// Has the spider been hit while on the ceiling?
 	if (self.spawnflags & MON_VORELING_CEILING) {
 		self.pain_finished = time + 1;
@@ -467,7 +465,7 @@ void() monster_wraithminion = {
 	monster_spider();
 };
 
-void() setup_spider = {
+void() setup_spider = { // [FUNCTION]
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;

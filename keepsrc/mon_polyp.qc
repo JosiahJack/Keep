@@ -48,7 +48,7 @@ void() polyp_missile;
 void() polyp_die1;
 void() polyp_jump5;
 
-void() polypcheckdist = {
+void() polypcheckdist = { // [FUNCTION]
 	local vector dist;
 	local float d;
 	local vector oldorg;
@@ -199,7 +199,7 @@ void() polyp_walkfly2 = [154, polyp_walkfly3] { ai_runwalkfly(6,ai_walk); };
 void() polyp_walkfly3 = [155, polyp_walkfly4] { ai_runwalkfly(6,ai_walk); };
 void() polyp_walkfly4 = [156, polyp_walkfly1] { ai_runwalkfly(6,ai_walk); };
 
-void() polyp_invisible_sound = {
+void() polyp_invisible_sound = { // [FUNCTION]
 	if (self.ltime < time) {
 		sound(self,CHAN_VOICE, "quoth/polyp/idle2.wav", 1, 1.5);
 		self.ltime = time + 1;
@@ -283,7 +283,7 @@ void() polyp_hover2 = [154, polyp_hover3] { polypcheckdist(); };
 void() polyp_hover3 = [155, polyp_hover4] { polypcheckdist(); };
 void() polyp_hover4 = [156, polyp_hover1] { polypcheckdist(); };
 
-void() airthink = {
+void() airthink = { // [FUNCTION]
 	local entity head;
 
 	self.nextthink = time + 0.1;
@@ -300,7 +300,7 @@ void() airthink = {
 	}
 };
 
-void() airtouch = {
+void() airtouch = { // [FUNCTION]
 	Tent_Point(TE_GUNSHOT,self.origin);
 	if (other.takedamage == DAMAGE_AIM) {
 		other.velocity = other.velocity + self.velocity * 0.4 + '0 0 70';
@@ -310,7 +310,7 @@ void() airtouch = {
 	return;
 };
 
-void() polyp_air = {
+void() polyp_air = { // [FUNCTION]
 	local entity missile;
 	local vector vec;
 
@@ -422,14 +422,14 @@ void() polyp_die2 = [157, polyp_hover1] {
 	entity_remove(self,0.1);
 };
 
-void() polyp_die = {
+void() polyp_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	self.takedamage = DAMAGE_NO;
 	polyp_die1();
 };
 
-void() polyp_missile = {
+void() polyp_missile = { // [FUNCTION]
 	if (self.fly_sound > time) return;
 	if (random() < 0.3) return;
 
@@ -437,12 +437,12 @@ void() polyp_missile = {
 	polyp_air1();
 };
 
-void(entity inflictor, entity attacker, float damage) polyp_pain = {
+void(entity inflictor, entity attacker, float damage) polyp_pain = { // [FUNCTION]
 	if (self.flags & FL_NOTARGET) polyp_visible1();
 	else return;
 };
 
-void() monster_polyp_precache = {
+void() monster_polyp_precache = { // [FUNCTION]
 	precache_model("progs/quoth/polyp.mdl");
 	precache_model("progs/quoth/polyp_t1.mdl");
 	precache_model("progs/quoth/polyp_t2.mdl");

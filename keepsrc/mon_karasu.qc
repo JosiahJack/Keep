@@ -61,7 +61,6 @@ $frame rocks9 rocks10 rocks11 rocks12 rocks13
 $frame kick1 kick2 kick3 kick4 kick5 kick6 kick7 kick8
 $frame kick9 
 
-void() karasu_reset_attachment;
 void() spell_Transition;
 void() check_SpellTrig;
 
@@ -188,7 +187,7 @@ void()	karasu_walk14	= [	$walk14,	karasu_walk15	] { ai_walk(4); };
 void()	karasu_walk15	= [	$walk15,	karasu_walk16	] { ai_walk(6); };
 void()	karasu_walk16	= [	$walk16,	karasu_walk1	] { ai_walk(2); };
 
-void() spell_partring = {
+void() spell_partring = { // [FUNCTION]
 	particle_ring(self.origin + '0 0 -16', '0 0 4', '4 4 16', 60, 64, 1.4, 4);
 };
 
@@ -273,19 +272,17 @@ void() check_SpellTrig =
 	}
 };
 				
-//----------------------------------------------------------------------
-void()	karasu_run1	= [	$run1,		karasu_run2	] { ai_run(16);karasu_reset_attachment(); self.skin = 0;karasu_SpellRun(); };
-void()	karasu_run2	= [	$run2,		karasu_run3	] { monster_footstep(FALSE); ai_run(19);karasu_SpellRun(); };
-void()	karasu_run3	= [	$run3,		karasu_run4	] { ai_run(14);karasu_SpellRun(); };
-void()	karasu_run4	= [	$run4,		karasu_run5	] { ai_run(13);karasu_SpellRun(); };
-void()	karasu_run5	= [	$run5,		karasu_run6	] { ai_run(11);karasu_SpellRun(); };
-void()	karasu_run6	= [	$run6,		karasu_run7	] { ai_run(14);karasu_SpellRun(); };
-void()	karasu_run7	= [	$run7,		karasu_run8	] { monster_footstep(FALSE); ai_run(14);karasu_SpellRun(); };
-void()	karasu_run8	= [	$run8,		karasu_run9	] { ai_run(16);karasu_SpellRun(); };
-void()	karasu_run9	= [	$run9,		karasu_run10	] { ai_run(17);karasu_SpellRun(); };
-void()	karasu_run10	= [	$run10,		karasu_run1	] { ai_run(11);karasu_SpellRun(); };
+void()	karasu_run1	= [	$run1,		karasu_run2	] { ai_run(16); SUB_FinishAttachment(); self.skin = 0; karasu_SpellRun(); };
+void()	karasu_run2	= [	$run2,		karasu_run3	] { monster_footstep(FALSE); ai_run(19); karasu_SpellRun(); };
+void()	karasu_run3	= [	$run3,		karasu_run4	] { ai_run(14); karasu_SpellRun(); };
+void()	karasu_run4	= [	$run4,		karasu_run5	] { ai_run(13); karasu_SpellRun(); };
+void()	karasu_run5	= [	$run5,		karasu_run6	] { ai_run(11); karasu_SpellRun(); };
+void()	karasu_run6	= [	$run6,		karasu_run7	] { ai_run(14); karasu_SpellRun(); };
+void()	karasu_run7	= [	$run7,		karasu_run8	] { monster_footstep(FALSE); ai_run(14); karasu_SpellRun(); };
+void()	karasu_run8	= [	$run8,		karasu_run9	] { ai_run(16); karasu_SpellRun(); };
+void()	karasu_run9	= [	$run9,		karasu_run10	] { ai_run(17); karasu_SpellRun(); };
+void()	karasu_run10	= [	$run10,		karasu_run1	] { ai_run(11); karasu_SpellRun(); };
 
-//----------------------------------------------------------------------
 void()	karasu_strike1	= [	$strike1,	karasu_strike2	] { ai_charge(4); };
 void()	karasu_strike2	= [	$strike2,	karasu_strike3	] { ai_charge(10); };
 void()	karasu_strike3	= [	$strike3,	karasu_strike4	] { monster_footstep(FALSE); ai_charge(8); };
@@ -298,7 +295,6 @@ void()	karasu_strike8	= [	$strike8,	karasu_strike9	] { ai_charge(0); ai_melee();
 void()	karasu_strike9	= [	$strike9,	karasu_strike10	] { ai_charge(8); };
 void()	karasu_strike10	= [	$strike10,	karasu_run1	] { ai_charge(4); };
 
-//----------------------------------------------------------------------
 void()	karasu_kick1	= [	$kick1,		karasu_kick2	] { ai_charge(4);
 	sound(self,CHAN_VOICE, "redfield/karasu/melee_strike.wav",1,ATTN_NORM); };
 void()	karasu_kick2	= [	$kick2,		karasu_kick3	] { ai_charge(0); };
@@ -312,7 +308,7 @@ void()	karasu_kick9	= [	$kick9,		karasu_run1	] { ai_charge(8); };
 
 float karasu_sork;
 
-void() karasu_choosemelee = {
+void() karasu_choosemelee = { // [FUNCTION]
 	karasu_sork = karasu_sork + 1;
 
 	if (karasu_sork == 1)
@@ -342,14 +338,9 @@ void()	karasu_pain13	= [	$pain13,	karasu_pain14	] {};
 void()	karasu_pain14	= [	$pain14,	karasu_run1	] {};
 
 void(entity inflictor, entity attacker, float damage) karasu_pain = {
-	//Reset beam attachment
-	karasu_reset_attachment();	
-	
-	// Check all pain conditions and set up what to do next
+	SUB_FinishAttachment(); //Reset beam attachment
 	monster_pain_check(attacker, damage);
-
-	// Any pain animation/sound required?
-	if (self.pain_check > 0) {
+	if (self.pain_check > 0) { // Any pain animation/sound required?
 		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);	
 		if (self.pain_check == 1) karasu_pain1();
 		else if (self.pain_check == 2) {
@@ -361,36 +352,7 @@ void(entity inflictor, entity attacker, float damage) karasu_pain = {
 	}
 };
 
-// Attachment management (create, finish and delete)
-void() karasu_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		//self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.state = FALSE;
-	}
-};
-
-void() karasu_reset_attachment = {
-	if (self.attachment) {
-		if (self.attachment.state) {
-			// Move attachment into place ready for use
-			self.attachment.movetype = MOVETYPE_NONE;
-			self.attachment.solid = SOLID_NOT;
-			self.attachment.frame = 0;
-			self.attachment.skin = 0;
-			setmodel(self.attachment, "");
-			setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-			setorigin(self.attachment, self.origin);
-			// Using empty model, so reset angle, frame and skin.
-			self.attachment.angles = self.angles;
-			self.attachment.state = FALSE;
-		}
-	}
-};
-
-void() karasu_setup_attachment = {
+void() karasu_setup_attachment = { // [FUNCTION]
 	if (self.attachment) {
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
@@ -427,11 +389,8 @@ void(vector leftofs, vector rightofs, float spframe, float spalpha) karasu_charg
 	
 	if (self.health < 1) return;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) karasu_create_attachment();
-
-	// Frame 0 is start of the sequence (move everything into place)
-	if (spframe == 0) karasu_setup_attachment();
+	SUB_CreateSelfAttachment("",1.0);
+	if (spframe == 0) karasu_setup_attachment(); // Frame 0 is start of the sequence (move everything into place)
 
 	// Turn toward enemy
 	ai_face();
@@ -456,7 +415,7 @@ void(vector leftofs, vector rightofs, float spframe, float spalpha) karasu_charg
 };
 
 
-void()	karasu_beam1	= [	$beam1,		karasu_beam2	] { ai_face();karasu_reset_attachment();
+void()	karasu_beam1	= [	$beam1,		karasu_beam2	] { ai_face(); SUB_FinishAttachment();
 	self.lefty = 0;
 	sound(self,CHAN_WEAPON,"redfield/karasu/beam_charge.wav",1,ATTN_NORM); };
 void()	karasu_beam2	= [	$beam2,		karasu_beam3	] { ai_face(); };
@@ -485,10 +444,10 @@ void()	karasu_beam12	= [	$beam12,	karasu_beam13	] { karasu_charging('21 -9 25','
 	if (self.lefty == 1) kbeam_shoot('0 -48 16');
 	else kbeam_shoot('0 48 16');
 };
-void()	karasu_beam13	= [	$beam13,	karasu_run1	] { karasu_reset_attachment(); self.skin = 0; };
+void()	karasu_beam13	= [	$beam13,	karasu_run1	] { SUB_FinishAttachment(); self.skin = 0; };
 
 // RANGE ATTACK 2 - Lightning Blast (Hitscan)
-void() klight_shoot = {
+void() klight_shoot = { // [FUNCTION]
 	local vector org, dir;
 	if (self.health < 1) return;
 	
@@ -553,10 +512,8 @@ void()	karasu_lightning9	= [	$lightning9,		karasu_lightning10	] { klight_shoot()
 void()	karasu_lightning10	= [	$lightning10,		karasu_lightning11	] {};
 void()	karasu_lightning11	= [	$lightning11,		karasu_run1		] { self.skin = 0; };
 
-
 // RANGE ATTACK 3 - Rings - from Golem rock storm
-
-void() zring_particle = {
+void() zring_particle = { // [FUNCTION]
 
     	local    vector    org, vec;
     
@@ -567,7 +524,7 @@ void() zring_particle = {
     	self.nextthink = time + 0.1;
 }
 
-void() karasu_rocks = {
+void() karasu_rocks = { // [FUNCTION]
 	local float shotcount, zpart;
 	local vector org, dir, yrand, zrand;
 
@@ -621,7 +578,7 @@ void()	karasu_rocks11	= [	$rocks11,	karasu_rocks12	] {};
 void()	karasu_rocks12	= [	$rocks12,	karasu_rocks13	] {};
 void()	karasu_rocks13	= [	$rocks13,	karasu_run1	] {};
 
-void() karasu_choose_atk = {
+void() karasu_choose_atk = { // [FUNCTION]
 	local vector delta;
 	
 	delta = self.enemy.origin - self.origin;

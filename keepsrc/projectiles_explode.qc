@@ -1423,7 +1423,7 @@ void(vector spot, float base, float add, string text, float toponly) ShockWave =
 // Used by exploding barrels and MIRVs.  Yes, add 7 instead of 8.
 void() FlameWave = { ShockWave(self.origin,RING_FIRE,7,"progs/drake/s_wave.spr",FALSE); }; // [FUNCTION]
 
-void() ink_think = {
+void() ink_think = { // [FUNCTION]
     if (random() < 0.5) T_RadiusDamage(self,self,16,world,DAMAGEALL);
     if (random() < 0.5) {
 		particle(self.origin,crandom() * 20 * '1 1 1',4,4);
@@ -1440,18 +1440,18 @@ void() ink_think = {
 
 };
 
-void() ink_stand1 = [1, ink_stand2] { ink_think(); };  
-void() ink_stand2 = [2, ink_stand3] { ink_think(); };  
-void() ink_stand3 = [1, ink_stand4] { ink_think(); };  
-void() ink_stand4 = [3, ink_stand5] { ink_think(); };
-void() ink_stand5 = [13,ink_stand6] { ink_think(); };  
-void() ink_stand6 = [3, ink_stand7] { ink_think(); };  
-void() ink_stand7 = [14,ink_stand8] { ink_think(); };  
-void() ink_stand8 = [15,ink_stand9] { ink_think(); }; 
-void() ink_stand9 = [14,ink_stand10] { ink_think(); };  
-void() ink_stand10 = [16,ink_stand1] { ink_think(); };
+void() ink_stand1 = [1, ink_stand2] { ink_think(); }; // [FUNCTION]
+void() ink_stand2 = [2, ink_stand3] { ink_think(); }; // [FUNCTION]
+void() ink_stand3 = [1, ink_stand4] { ink_think(); }; // [FUNCTION]
+void() ink_stand4 = [3, ink_stand5] { ink_think(); }; // [FUNCTION]
+void() ink_stand5 = [13,ink_stand6] { ink_think(); }; // [FUNCTION]
+void() ink_stand6 = [3, ink_stand7] { ink_think(); }; // [FUNCTION]
+void() ink_stand7 = [14,ink_stand8] { ink_think(); }; // [FUNCTION]
+void() ink_stand8 = [15,ink_stand9] { ink_think(); }; // [FUNCTION]
+void() ink_stand9 = [14,ink_stand10] { ink_think(); }; // [FUNCTION]
+void() ink_stand10 = [16,ink_stand1] { ink_think(); }; // [FUNCTION]
 
-void() vermis_spore_explode = {
+void() vermis_spore_explode = { // [FUNCTION]
 	T_RadiusDamage(self, self.owner, 55, other,DAMAGEALL);
 	if (other)
 	{
@@ -1466,4 +1466,10 @@ void() vermis_spore_explode = {
 	self.velocity = VEC_ORIGIN;
 	self.touch = SUB_Null;
 	SUB_Remove();
+};
+
+void() nehahra_bspdamage = { // [FUNCTION]
+	if (self.enemy.classname == "player") return;
+	T_Damage(self.enemy, self, self, 2000, DAMARMOR);
+	sound(self,CHAN_BODY,"nehahra/boss3/step1.wav",1,ATTN_NONE);
 };

@@ -38,7 +38,7 @@
 // it back in the day.
 //=============================================================================
 
-void(float dist) spell_ai = {
+void(float dist) spell_ai = { // [FUNCTION]
 	if (self.style == 1) {
 		ai_stand();
 	} else {
@@ -64,13 +64,13 @@ void() spell_walk4 = [3, spell_walk5] { spell_ai(TE_LIGHTNING1); };
 void() spell_walk5 = [4, spell_walk6] { spell_ai(TE_LIGHTNING2); };
 void() spell_walk6 = [5, spell_walk1] { spell_ai(4); };
 
-void() spell_stand = { self.style = EQ_RANDOM;spell_walk1(); };
+void() spell_stand = { self.style = EQ_RANDOM;spell_walk1(); }; // [FUNCTION]
 
-void() spell_walk = { self.style = 2;spell_walk1(); };
+void() spell_walk = { self.style = 2;spell_walk1(); }; // [FUNCTION]
 
-void() spell_run = { self.style = 3;spell_walk1(); };
+void() spell_run = { self.style = 3;spell_walk1(); }; // [FUNCTION]
 
-void() Spell_MissileTouch = {
+void() Spell_MissileTouch = { // [FUNCTION]
 	local float damg;
 	if (other == self.owner) return;
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self);return; }
@@ -82,7 +82,7 @@ void() Spell_MissileTouch = {
 	BecomeExplosion();
 };
 
-void() Spell_launch_lava = {
+void() Spell_launch_lava = { // [FUNCTION]
 	local vector vec;
 
 	sound(self,CHAN_WEAPON,"shalrath/attack2.wav", EQ_RANDOM,ATTN_NORM);
@@ -111,7 +111,7 @@ void() spell_attacka7 = [13, spell_attacka8] { ai_face(); };
 void() spell_attacka8 = [14, spell_attacka9] { Spell_launch_lava(); ai_face(); };
 void() spell_attacka9 = [15, spell_run] { ai_face(); };
 
-void() Spell_push = {
+void() Spell_push = { // [FUNCTION]
 	local vector delta;
 	local float ldmg;
 	if (!(self.enemy.flags & FLx_CREATURE)) return;
@@ -135,7 +135,7 @@ void() spell_attackb7 = [22, spell_attackb8] { ai_face(); };
 void() spell_attackb8 = [23, spell_attackb9] { ai_face(); };
 void() spell_attackb9 = [24, spell_run] { ai_face(); };
 
-void() spell_attack = {
+void() spell_attack = { // [FUNCTION]
 	local vector delta;
 	delta = self.enemy.origin - self.origin;
 	if (vlen(delta) <= 90) {
@@ -185,7 +185,7 @@ void() spell_death21 = [49, spell_death22] {};
 void() spell_death22 = [50, spell_death23] {};
 void() spell_death23 = [51, spell_death23] { entity_remove(self,0.1); };
 
-void() spell_die = {
+void() spell_die = { // [FUNCTION]
 	self.effects = 0;
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
@@ -196,7 +196,7 @@ void() spell_die = {
 	}
 };
 
-void() monster_spellmaster_precache = {
+void() monster_spellmaster_precache = { // [FUNCTION]
 	precache_model("progs/madfox/mon_spellmas.mdl");
 	precache_model("progs/lavaball.mdl");
 	precache_sound("wizard/wdeath.wav");

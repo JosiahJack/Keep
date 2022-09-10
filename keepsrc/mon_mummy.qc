@@ -163,7 +163,7 @@ void() mummy_attc12 = [ 90.000, mummy_run1 ] {
    mummyFireGrenade ('-12.000 -19.000 29.000');
 };
 
-void() mummy_missile = {
+void() mummy_missile = { // [FUNCTION]
    local float r;
 
    r = random();
@@ -327,9 +327,9 @@ void(entity inflictor, entity attacker, float take) mummy_pain = {
    }
 };
 
-void() mummy_sleep = [ 172.000, mummy_sleep ] { ai_stand(); };
+void() mummy_sleep = [ 172.000, mummy_sleep ] { ai_stand(); }; // [FUNCTION]
 
-void() mummy_wake = {
+void() mummy_wake = { // [FUNCTION]
    self.th_stand = mummy_stand1;
    self.th_walk = mummy_walk1;
    self.th_pain = mummy_pain;

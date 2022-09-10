@@ -43,6 +43,7 @@ void(entity targ, float playdmg, float mondmg) ApplyFireDmg;
 float(vector source, float axedmg) GibFloorBody;
 void() BounceShot_Move;
 void() BounceShot_Seek;
+float() neh_findbsp;
 
 void() Touch_Bullet = { // [FUNCTION]
 	if (self.touchedvoid) return;				// Marked for removal already
@@ -1670,4 +1671,14 @@ void() Axe_Touch = {
         self.nextthink = time + 0.05;
         self.think = Axe_Watch;
     }
+};
+
+void() nehahra_wreckbsp = { // [FUNCTION] Used by weld fire.
+	if (self.waterlevel > 1) { remove(self); return; }
+	if (self.enemy.items & IT_SUIT) { remove(self); return; }
+	if ((other.flags & FLx_CREATURE)) { self.touch = WeldTouch; return; }
+	other = self.enemy;
+	nehahra_bspdamage();
+	neh_findbsp();
+	nehahra_bspdamage();
 };

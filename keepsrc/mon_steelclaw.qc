@@ -81,7 +81,7 @@ void() steelc_walk6 = [$walk11, steelc_walk7] { monster_footstep(FALSE); ai_walk
 void() steelc_walk7 = [$walk13, steelc_walk8] { ai_walk(4); };
 void() steelc_walk8 = [$walk15, steelc_walk1] { ai_walk(5); };
 
-void() steelc_runpause = {
+void() steelc_runpause = { // [FUNCTION]
 	// Do nothing is not to fight or dead
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -106,7 +106,7 @@ void()	steelc_runp11	= [	$idle11,steelc_runp12	] { steelc_runpause(); };
 void()	steelc_runp12	= [	$idle12,steelc_runp13	] { steelc_runpause(); };
 void()	steelc_runp13	= [	$idle13,steelc_runp1	] { steelc_runpause(); };
 
-void(float dist) steelc_checkpause = {
+void(float dist) steelc_checkpause = { // [FUNCTION]
 	// Do nothing is not to fight or dead
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -144,7 +144,7 @@ void()	steelc_slide7 = [$walk13, steelc_slide8 ] { ai_run_slide(6); };
 void()	steelc_slide8 = [$walk15, steelc_run1 ] { ai_run(4); };
 
 // BITE - bleed attack or simple bite
-void() steelc_melee = {
+void() steelc_melee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;

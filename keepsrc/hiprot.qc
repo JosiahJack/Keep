@@ -504,7 +504,7 @@ void() rotate_train_next = { // [FUNCTION]
 	}
 };
 
-void() rotate_train_find = {
+void() rotate_train_find = { // [FUNCTION]
 	local entity targ;
 
 	self.state = RSTATE_FIND;
@@ -535,7 +535,7 @@ void() rotate_train_find = {
 // Trains are moving platforms that players can ride.
 // If the train is the target of a button or trigger, it will not begin moving until activated.
 // The func_rotate_train entity is the center of rotation of all objects targeted by it.
-void() func_rotate_train = {
+void() func_rotate_train = { // [ENTITY]
 	if (!self.speed) self.speed = 100;
 	if (!self.target) dprint("\b[ROT TRAIN]\b missing target!\n");
 

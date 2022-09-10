@@ -367,7 +367,7 @@ void() servo_gibbed22 = [ 37, servo_gibbed23] {};
 void() servo_gibbed23 = [ 38, servo_gibbed24] { sound(self,CHAN_VOICE, "custents/mech/metal.wav", 0.25,ATTN_NORM); };
 void() servo_gibbed24 = [ 38, servo_gibbed24] {};
 
-void() servo_die = {
+void() servo_die = { // [FUNCTION]
 	self.solid = SOLID_NOT;
 	sound(self,CHAN_VOICE, "custents/mech/pow_dn.wav",1,ATTN_NORM);
 	remove(self.aiment);
@@ -382,7 +382,7 @@ void() servo_die = {
 	servo_die1();	
 };
 
-void() servo_attack = {
+void() servo_attack = { // [FUNCTION]
 	local vector dir, org;
 
 	dir = self.enemy.origin - (self.enemy.velocity*0.2 + self.enemy.velocity*0.3*random());
@@ -411,13 +411,13 @@ void() servo_attack = {
 	FireLaser(org, dir, 2);
 };
 
-void() servo_vollyattack= {
+void() servo_vollyattack= { // [FUNCTION]
 	servo_attack();
 	servo_attack();
 	self.aiment.attack_state = SERVOBOD_BOTH;
 };
 
-void() monster_servomech_precache = {
+void() monster_servomech_precache = { // [FUNCTION]
 	precache_model ("progs/custents/servobod.mdl");
 	precache_model ("progs/custents/servoleg.mdl");
 	precache_model ("progs/custents/servodie.mdl");
@@ -430,7 +430,7 @@ void() monster_servomech_precache = {
 	precache_sound("enforcer/enfire.wav");
 };
 
-void() monster_servomech = {
+void() monster_servomech = { // [ENTITY]
 	local entity bodent;
 
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
@@ -467,7 +467,7 @@ void() monster_servomech = {
 };
 
 // SERVOMECH, CONTROLLABLE
-void(entity targent) cservo_control_on = {
+void(entity targent) cservo_control_on = { // [FUNCTION]
 	local entity targcam;
 
 	if (!targent)  { dprint("ERROR: missing targent for cservo_control_on\n"); return; }
@@ -491,7 +491,7 @@ void(entity targent) cservo_control_on = {
 	sound(self,CHAN_VOICE, "custents/mech/pow_up.wav",1,ATTN_NORM);
 };
 
-void(entity targent) cservo_control_off= {
+void(entity targent) cservo_control_off= { // [FUNCTION]
 	local entity targcam;
 
 	if (!targent) { dprint("ERROR: missing targent for cservo_control_off\n"); return; }
@@ -518,7 +518,7 @@ void(entity targent) cservo_control_off= {
 
 void() cservo_attack;
 void() cservo_stand;
-void() cservo_think = {
+void() cservo_think = { // [FUNCTION]
 	local entity contplyr, temp;
 
 	contplyr = self.movetarget.owner;
@@ -552,7 +552,7 @@ void() cservo_think = {
 	}
 };
 
-void() cservo_attack= {
+void() cservo_attack= { // [FUNCTION]
 	if (self.attack_finished > time)
 		return;
 	local vector dir, org, fireang, targ;
@@ -591,9 +591,7 @@ void() cservo_attack= {
 	W_ShowHostile();
 };
 
-//=======================================================================
-
-void() cservo_bodthink = {
+void() cservo_bodthink = { // [FUNCTION]
 	local entity bod, tmpent, contplyr;
 	local vector tmpvec, viewang;
 
@@ -654,8 +652,6 @@ void() cservo_bodthink = {
 
 	self = tmpent;
 };
-
-//=======================================================================
 
 void() cservo_stand = [ 0, cservo_stand]
 { self.pos1 = '0 0 0'; cservo_bodthink();cservo_think(); };
@@ -790,7 +786,7 @@ void() cservo_turn17 = [ 17, cservo_turn18]
 void() cservo_turn18 = [ 18, cservo_turn1]
 { self.pos1 = '0 0 10.8'; cservo_bodthink();cservo_think(); };
 
-void(entity attacker, float damage) cservo_pain= {
+void(entity attacker, float damage) cservo_pain= { // [FUNCTION]
 	local float tmpflt;
 
 	if (self.pain_finished < time)
@@ -835,7 +831,7 @@ void(entity attacker, float damage) cservo_pain= {
 	}
 };
 
-void() cservo_die = {
+void() cservo_die = { // [FUNCTION]
 	if (self.movetarget.owner)
 		cservo_control_off(self.movetarget.owner);
 
@@ -845,7 +841,7 @@ void() cservo_die = {
 	servo_die();
 };
 
-void() cservo_apply_controlls = {
+void() cservo_apply_controlls = { // [FUNCTION]
 	local entity stemp;
 	local float tmpflt;
 
@@ -963,7 +959,7 @@ void() cservo_apply_controlls = {
 
 // now also has added targeting for the assasin and the mech
 // so that bugs will attack them as well
-void() cmech_attselect = {
+void() cmech_attselect = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 
 	while(1)
@@ -983,7 +979,7 @@ void() cmech_attselect = {
 };
 
 
-void() cservo_setup = {
+void() cservo_setup = { // [FUNCTION]
 	local entity tmpent;
 
 	self.origin_z = self.origin_z + 1;	// raise off floor a bit

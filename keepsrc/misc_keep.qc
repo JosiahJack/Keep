@@ -67,7 +67,7 @@ void() effect_pulse_start = { // [FUNCTION]
 	self.think = effect_pulse_loop;
 };
 
-void() effect_pulse = { // [ENTITY]
+void() effect_pulse = { // [ENTITY], Redirecty [sic Quoth]
 	precache_model("progs/null.spr"); //formerly s_null.spr
 	SetMovedir();
 	if (!(self.speed)) self.speed = 400;
@@ -301,36 +301,19 @@ void() misc_splash = { // [ENTITY]
 };
 
 void() light_globecolor = { // [ENTITY]
-   if ( (self.spawnflags & FLAG_REDORANGE) ) {
-      precache_model ("progs/s_light2.spr");
-      setmodel(self,"progs/s_light2.spr");
-      makestatic (self);
-   }
-   if ( (self.spawnflags & FLAG_YELLOW) ) {
-      precache_model ("progs/s_light3.spr");
-      setmodel(self,"progs/s_light3.spr");
-      makestatic (self);
-   }
-   if ( (self.spawnflags & FLAG_BLUE) ) {
-      precache_model ("progs/s_light4.spr");
-      setmodel(self,"progs/s_light4.spr");
-      makestatic (self);
-   }
-   if ( (self.spawnflags & FLAG_WHITE) ) {
-      precache_model ("progs/s_light5.spr");
-      setmodel(self,"progs/s_light5.spr");
-      makestatic (self);
-   }
-   if ( (self.spawnflags & FLAG_DARKRED) ) {
-      precache_model ("progs/s_light6.spr");
-      setmodel(self,"progs/s_light6.spr");
-      makestatic (self);
-   }
-   if ( (self.spawnflags & FALSE) ) {
-      precache_model ("progs/s_light.spr");
-      setmodel(self,"progs/s_light.spr");
-      makestatic (self);
-   }
+	if (self.count == 1) self.mdl = "progs/s_light2.spr";      // Red orange
+	else if (self.count == 2) self.mdl = "progs/s_light3.spr"; // Yellow
+	else if (self.count == 3) self.mdl = "progs/s_light4.spr"; // Blue
+	else if (self.count == 4) self.mdl = "progs/s_light5.spr"; // White
+	else if (self.count == 5) self.mdl = "progs/s_light6.spr"; // Dark red
+	else self.mdl = "progs/s_light.spr";					   // Normal
+
+	precache_model(self.mdl);
+	setmodel(self, self.mdl);
+	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
+	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
+	setup_vanilla_nostatic();
+	light_customstyle_start(); // Check for any custom light styles
 };
 
 void() misc_fan_break = { // [FUNCTION]

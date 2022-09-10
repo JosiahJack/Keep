@@ -73,7 +73,7 @@ void(float amount) item_ammo_set = {
 	// else leave self.aflag at user specified value to allow for custom ammo amount.
 };
 
-void (entity comboOwner) EnableComboWeapons = {
+void (entity comboOwner) EnableComboWeapons = { // [FUNCTION]
 	if (!(comboOwner.flags & FL_CLIENT)) return;
 
 	if (!(comboOwner.items & IT_LAVA_NAILGUN)) {
@@ -113,7 +113,7 @@ void (entity comboOwner) EnableComboWeapons = {
 	}
 };
 
-void() weapon_start = {
+void() weapon_start = { // [FUNCTION]
 	self.classgroup = CG_WEAPON;
 	self.touch2 = weapon_touch;
 	self.bbmins = VEC_ITEM_MIN;
@@ -685,6 +685,8 @@ void() weapon_chain_lightning = {
 	weapon_start();
 };
 
+void() weapon_chainlightning = { weapon_chain_lightning(); }; // [ENTITY], Redirect, Zerstorer's name
+
 void() weapon_blaster = {
 	item_setupmodel("progs/w_blaster.mdl",0);
 	self.weapon = IT_BLASTER;
@@ -775,7 +777,7 @@ void() weapon_flak = {
 
 // --> QUAKED weapon_stinger (0 .5 .8) (-16 -16 0) (16 16 32)
 // --> QUAKED weapon_mirv (0 .5 .8) (-16 -16 0) (16 16 32)
-void() weapon_stinger = {
+void() weapon_stinger = { // [ENTITY], Redirect from MIRV.
 	item_setupmodel("progs/drake/g_mirv.mdl",0);
 	precache_sound("drake/weapons/mirv1.wav");
 	self.weapon = IT_MIRV;
@@ -788,22 +790,20 @@ void() weapon_stinger = {
 };
 // PM:  Alternate name for the stinger rocket launcher.
 void() weapon_mirv = { self.classname = "weapon_stinger";  weapon_stinger(); };
-// PM:  Convert Zerstorer's weaksauce SRE to something more worthy.
-void() weapon_stunner = { self.classname = "weapon_stinger";  weapon_stinger(); };
 
-void() weapon_supershotgun_upright = {
+void() weapon_supershotgun_upright = { // [ENTITY], Redirect, from Lieutenant map, rare usage.
 	self.classname = "weapon_supershotgun";
 	self.mdl = "progs/lieutenant/up-shot.mdl";
 	weapon_supershotgun();
 };
 
-void() weapon_nailgun_upright = {
+void() weapon_nailgun_upright = { // [ENTITY], Redirect, from Lieutenant map, rare usage.
 	self.classname = "weapon_nailgun";
 	self.mdl = "progs/lieutenant/up-nail.mdl";
 	weapon_nailgun();
 };
 
-void() weapon_airgun = {
+void() weapon_airgun = { // [ENTITY]
 	item_setupmodel("progs/qmaster/g_airgun.mdl",0);
 	self.weapon = IT_AIRGUN;
 	self.classtype = CT_AIRGUN;
@@ -814,3 +814,4 @@ void() weapon_airgun = {
 void() weapon_sword = {}; // TODO: Make this for Qmaster's epic episode
 void() weapon_gshotgun = {}; // TODO: finish adding zerstorer quadshotgun
 void() weapon_sprocket = {}; // TODO: finish adding nehahra sprocket
+void() weapon_stunner = {}; // TODO: finish adding zerstorer ScREw Gun (SRE) aka stunner?  Drake had redirected to the MIRV as both this and that are guided player detonatable rockets.

@@ -95,7 +95,7 @@ void()	seek_sparks_fade2 = [0, seek_sparks_fade3] { self.alpha = 0.6; self.nextt
 void()	seek_sparks_fade3 = [0, seek_sparks_fade4] { self.alpha = 0.4; self.nextthink = time + 0.05; };
 void()	seek_sparks_fade4 = [0, SUB_Remove] { self.alpha = 0.2; self.nextthink = time + 0.05; };
 
-void() seek_spark = {
+void() seek_spark = { // [FUNCTION]
 	local float loopvar;
 	local entity spark;
 	
@@ -147,53 +147,21 @@ void() seek_spark = {
 	}
 };
 
-
-// Attachment management (create, finish and delete)
-
-void() seek_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-	}
-};
-
-//----------------------------------------------------------------------
-void() seek_finish_attachment = {
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-//----------------------------------------------------------------------
-void() seek_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-}
-
-//----------------------------------------------------------------------
-void() seek_setup_attachment = {
-	// Check if attachment has been setup yet
-	if (!self.attachment) seek_create_attachment();
+void() seek_setup_attachment = { // [FUNCTION]
+	SUB_CreateSelfAttachment("",1.0);
 	self.attachment.state = STATE_ON;
 	setmodel(self.attachment, self.weaponglow);
 	self.attachment.skin = 0;
 }
 
-//----------------------------------------------------------------------
-void() seek_update_attachment = {
+void() seek_update_attachment = { // [FUNCTION]
 	setorigin(self.attachment, self.origin);
 	self.attachment.angles = self.angles;
 	self.attachment.frame = self.frame;
 	self.attachment.alpha = 0.3 + random()*0.7;
 };
 
-
-void() seek_standframe = {
+void() seek_standframe = { // [FUNCTION]
 	// type of animation state
 	self.attack_timer = SEEKER_IDLE;
 
@@ -216,15 +184,13 @@ void() seek_standframe = {
 	else ai_stand();	
 };
 
-//----------------------------------------------------------------------
-void() seek_stand = { 
+void() seek_stand = { // [FUNCTION]
 	self.walkframe = 0; 
 	if (self.spawnflags & MON_SEEK_SHIELD) seek_setup_attachment(); 
 	seek_standframe();
 };
 
-
-void() seek_walkframe = {
+void() seek_walkframe = { // [FUNCTION]
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -274,14 +240,10 @@ void() seek_walkframe = {
 	else ai_run(self.distance*2);
 };
 
-//----------------------------------------------------------------------
-void() seek_walk = { self.walkframe = 0; self.lefty = FALSE; seek_walkframe(); };
-void() seek_run = { self.walkframe = 0; self.lefty = TRUE; seek_walkframe(); };
+void() seek_walk = { self.walkframe = 0; self.lefty = FALSE; seek_walkframe(); }; // [FUNCTION]
+void() seek_run = { self.walkframe = 0; self.lefty = TRUE; seek_walkframe(); }; // [FUNCTION]
 
-
-// Melee attack
-
-void() seek_punch = {
+void() seek_punch = { // [FUNCTION]
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -311,7 +273,7 @@ void() seek_melee8 = [$punch8, seek_melee9 ] {};
 void() seek_melee9 = [$punch9, seek_melee10 ] {};
 void() seek_melee10 = [$punch10, seek_run ] {};
 
-void(vector offset) seek_armattack = {
+void(vector offset) seek_armattack = { // [FUNCTION]
 	local vector org, dir, vec;
 
 	// Fire left arm rocket
@@ -337,7 +299,7 @@ void(vector offset) seek_armattack = {
 };
 
 // Range attack - 3 rockets from each arm
-void(vector leftofs, vector rightofs) seek_attack = {
+void(vector leftofs, vector rightofs) seek_attack = { // [FUNCTION]
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	
@@ -356,7 +318,7 @@ void(vector leftofs, vector rightofs) seek_attack = {
 	else if (self.state == SEEKER_ARMS_RIGHT) seek_armattack(rightofs);
 };
 
-void() seek_fireframe = {
+void() seek_fireframe = { // [FUNCTION]
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -396,10 +358,10 @@ void() seek_fireframe = {
 	else self.think = seek_fireframe;
 };
 
-void() seek_fire = { self.walkframe = 0; seek_fireframe(); };
+void() seek_fire = { self.walkframe = 0; seek_fireframe(); }; // [FUNCTION]
 
 // This robot does not feel pain, just exploding debris
-void() seek_arm_explode = {
+void() seek_arm_explode = { // [FUNCTION]
 	particle_dust(self.pos2, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnExplosion(EXPLODE_BIG, self.pos2, "ad171/seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
@@ -418,7 +380,7 @@ void() seek_arm_explode = {
 	self.nextthink = time + 0.1;
 };
 
-void(entity inflictor, entity attacker, float damage) seek_pain = {
+void(entity inflictor, entity attacker, float damage) seek_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -468,7 +430,7 @@ void(entity inflictor, entity attacker, float damage) seek_pain = {
 	}
 };
 
-void() seek_explode = {
+void() seek_explode = { // [FUNCTION]
 	entity_hide(self); // Hide and Seek
 	Tent_Explosion(self.origin); // Regular ID particle explosion
 	T_RadiusDamage(self, self, self.death_dmg, world, DAMAGEALL);
@@ -485,7 +447,7 @@ void() seek_explode = {
 	if (self.state != SEEKER_HEADLESS) ThrowGib(25, 1); // If head still on shoulders, throw that as well!
 };
 
-void() seek_dieframe = {
+void() seek_dieframe = { // [FUNCTION]
 	self.attack_timer = SEEKER_DIE; // type of animation state
 	if (self.walkframe == 2) self.solid = SOLID_NOT;
 
@@ -517,7 +479,7 @@ void() seek_dieframe = {
 	}
 };
 
-void() seek_die = {
+void() seek_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// Long death sound with comedy bing at the end!
@@ -550,7 +512,7 @@ void() seek_die = {
 	seek_dieframe();
 };
 
-void() seek_shield = {
+void() seek_shield = { // [FUNCTION]
 	// Setup particle emitter for shield effect
 	self.part_active = PARTICLE_STYLE_FFIELD;
 	self.spr_frame = PARTICLE_BURST_BLUE;
@@ -563,12 +525,12 @@ void() seek_shield = {
 	seek_stand();
 };
 
-void() seek_wakeup = {
+void() seek_wakeup = { // [FUNCTION]
 	// Check for sudden death!
 	if (self.health < 0) return;
 	
 	self.use = SUB_Null;				// no re-trigger
-	seek_finish_attachment();			// Remove shield + spawnflag
+	SUB_FinishAttachment();	// Remove shield + spawnflag
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_SEEK_SHIELD);
 	
 	// Switch off shield sound
@@ -592,7 +554,7 @@ void() seek_wakeup = {
 	monster_targets();					// Check for targets
 };
 
-void() monster_seeker_precache = {
+void() monster_seeker_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_seeker.mdl");
 	precache_model ("progs/ad171/h_seeker.mdl");
 	precache_model ("progs/ad171/mon_seeker_glow.mdl");	// Glowing blue shield

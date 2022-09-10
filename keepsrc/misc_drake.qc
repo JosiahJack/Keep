@@ -279,7 +279,7 @@ void() misc_statue = { // [ENTITY]
 };
 
 // A statue of Hexen2's praying angel.  For Arcanum.
-void() misc_statue_angel = { misc_statue(); }; // [ENTITY]
+void() misc_statue_angel = { misc_statue(); }; // [ENTITY], Redirect
 
 void(entity inflictor, entity attacker, float damage) tree_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;
@@ -339,4 +339,108 @@ void() misc_tree = { // [ENTITY]
 
 	self.gibtype = GIBTYPE_WOOD;
     misc_decor();
+};
+
+void() misc_spikes_touch = {
+    if (!other.takedamage) return; // Can't kill me.
+    if (other.health < 1) return;     // Already dead.
+    if ((other.origin_z + other.mins_z) < (self.origin_z + self.maxs_z)) return; // Below spikes.
+
+    sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM);
+    if (self.dmg == 1000) self.dmg = other.health;
+    T_Damage(other,self,self,self.dmg,DAMARMOR); // Squish!
+};
+
+// --> QUAKED misc_spikes (0 .5 .8) (-32 -32 0) (32 32 48)
+// Spikes for roman start map.  (Which I built!)
+// Custom made to avoid placing lots of thin
+// brushes which can greatly increase vis times
+// (and maybe r_speeds for that matter).
+void() misc_spikes = {
+    self.solid      = SOLID_BBOX;
+    self.movetype   = MOVETYPE_NONE;
+    precache_model("progs/drake/spikes32.mdl");
+    precache_sound("drake/bane/hit.wav");
+    self.takedamage = DAMAGE_NO;
+    self.classname  = "spikes";
+    self.touch      = misc_spikes_touch;
+    if (self.dmg == 0) self.dmg = 1000;
+    if (self.dmg < 0) {
+        self.dmg = 0;
+        self.touch = SUB_Null;
+        self.solid = SOLID_NOT;
+    }
+    setall (self, "progs/drake/spikes32.mdl", '-32 -32 0', '32 32 48', self.origin);
+    self.oldorigin = self.origin;
+    self.origin_z   = self.origin_z + 2;
+    if (self.deathstring == "") self.deathstring = " was impaled on spikes";
+    if (!droptofloor()) {
+        dprint(self.classname); dprint(" would fall out of level at ");
+        dprint(vtos(self.origin)); dprint(", left in place\n");
+        setorigin(self,self.oldorigin);
+    }
+};
+
+//  Wanted Poster -- nsoe1+2.
+// Death anim for the poster, which is a simple fade away.
+void() wanted_fade = { // [FUNCTION]
+    if (self.alpha <= self.cnt) {SUB_Remove();  return;}
+    if (self.burning) particle(self.origin, '0 0 100', 1, 50);
+    self.nextthink = time + 0.1;
+    self.think = wanted_fade;
+    self.alpha = self.alpha - self.cnt;
+};
+
+// Called when poster is destroyed.
+void() wanted_die = {
+    if (self.alpha <= self.cnt) { // Cannot remove now in case we are in a .chain loop.
+        self.nextthink  = time + 0.1;
+        self.think      = SUB_Remove;
+    } else { // Kill it.
+        self.takedamage = DAMAGE_NO;
+        wanted_fade();
+    }
+};
+
+void() wanted_touch = { // Added so it can go up in smoke.  -Qmaster
+    if (!other) return;
+    if (!(other.flags & FLx_CREATURE)) return;
+    if (self.pain_finished > time) return;
+
+    self.pain_finished = time + 0.2;
+    if (other.burning && !InLiquid(self.origin)) {
+        sound(self,CHAN_AUTO,"player/slimbrn2.wav",1,ATTN_NORM);
+        self.burning = TRUE;
+        particle(self.origin, '0 0 100', 1, 50);
+        T_Damage(self,other,other,random() * 2,DAMARMOR);
+    }
+};
+
+//============
+// --> QUAKED misc_wanted (0 1 0) (-8 -8 -8) (8 8 8)
+// Places a wanted poster on a wall.  Otherwise, same as Hip's wallsprite.
+// Angles should be opposite of face.
+//
+// Update:  Wanted poster can be destroyed.
+//============
+void() misc_wanted = {
+    if (!self.model) self.model = "progs/drake/wanted.mdl";
+    precache_model(self.model);
+    setmodel(self,self.model);
+    if (self.angles == '0 -1 0') self.angles = '-90 0 0';
+    else if (self.angles == '0 -2 0') self.angles = '90 0 0';
+
+    makevectors (self.angles);
+    setorigin (self, self.origin - ( v_forward * 0.2 ) ); // Pull the sprite away from the wall slightly to get rid of z sort errors.
+    if (self.health == 0) self.health = 10;
+    if (self.health) {
+        self.alpha      = 1;
+        self.cnt        = 0.15; // Was 0.25, made slower. -Qmaster
+        self.solid      = SOLID_TRIGGER;
+        self.touch      = wanted_touch;
+        self.movetype   = MOVETYPE_NONE;
+        self.takedamage = DAMAGE_YES;
+        self.health     = 10;
+        self.th_die     = wanted_die;
+    } else makestatic(self);
 };

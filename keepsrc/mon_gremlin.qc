@@ -7,12 +7,12 @@ void() gremlin_look1;
 void() gremlin_flip1;
 void() gremlin_flip8;
 
-float(float ammo) gremlin_ammo_steal = {
+float(float ammo) gremlin_ammo_steal = { // [FUNCTION]
 	if (ammo > GREMLIN_AMMO_TAKE) return GREMLIN_AMMO_TAKE;
 	return ammo;
 };
 
-void() gremlin_steal_shells = {
+void() gremlin_steal_shells = { // [FUNCTION]
       local float amount;
 
       amount = gremlin_ammo_steal(self.enemy.ammo_shells);
@@ -21,7 +21,7 @@ void() gremlin_steal_shells = {
       self.currentammo = self.ammo_shells;
 };
 
-void() gremlin_steal_nails = {
+void() gremlin_steal_nails = { // [FUNCTION]
       local float amount;
 
       amount = gremlin_ammo_steal(self.enemy.ammo_nails);
@@ -30,56 +30,56 @@ void() gremlin_steal_nails = {
       self.currentammo = self.ammo_nails;
 };
 
-void() gremlin_steal_rockets = {
+void() gremlin_steal_rockets = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_rockets);
       self.enemy.ammo_rockets = (self.enemy.ammo_rockets - amount);
       self.ammo_rockets = (self.ammo_rockets + amount);
       self.currentammo = self.ammo_rockets;
 };
 
-void() gremlin_steal_cells = {
+void() gremlin_steal_cells = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_cells);
       self.enemy.ammo_cells = (self.enemy.ammo_cells - amount);
       self.ammo_cells = (self.ammo_cells + amount);
       self.currentammo = self.ammo_cells;
 };
 
-void() gremlin_steal_bolts = {
+void() gremlin_steal_bolts = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_bolts);
       self.enemy.ammo_bolts = (self.enemy.ammo_bolts - amount);
       self.ammo_bolts = (self.ammo_bolts + amount);
       self.currentammo = self.ammo_bolts;
 };
 
-void() gremlin_steal_poison = {
+void() gremlin_steal_poison = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_poison);
       self.enemy.ammo_poison = (self.enemy.ammo_poison - amount);
       self.ammo_poison = (self.ammo_poison + amount);
       self.currentammo = self.ammo_poison;
 };
 
-void() gremlin_steal_multi_rockets = {
+void() gremlin_steal_multi_rockets = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_multi_rockets);
       self.enemy.ammo_multi_rockets = (self.enemy.ammo_multi_rockets - amount);
       self.ammo_multi_rockets = (self.ammo_multi_rockets + amount);
       self.currentammo = self.ammo_multi_rockets;
 };
 
-void() gremlin_steal_lava_nails = {
+void() gremlin_steal_lava_nails = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_lava_nails);
       self.enemy.ammo_lava_nails = (self.enemy.ammo_lava_nails - amount);
       self.ammo_lava_nails = (self.ammo_lava_nails + amount);
       self.currentammo = self.ammo_lava_nails;
 };
 
-void() gremlin_steal_plasma = {
+void() gremlin_steal_plasma = { // [FUNCTION]
       float amount = gremlin_ammo_steal(self.enemy.ammo_plasma);
       self.enemy.ammo_plasma = (self.enemy.ammo_plasma - amount);
       self.ammo_plasma = (self.ammo_plasma + amount);
       self.currentammo = self.ammo_plasma;
 };
 
-entity () GremlinFindVictim = {
+entity () GremlinFindVictim = { // [FUNCTION]
    local entity head, selected;
    local float dist, head_dist;
 
@@ -288,14 +288,14 @@ float() GremlinFindTarget = {
    return result;
 };
 
-void(float dist) gremlin_walk = {
+void(float dist) gremlin_walk = { // [FUNCTION]
    movedist = dist;
    if (GremlinFindTarget()) return;
 
    movetogoal(dist);
 };
 
-void() gremlin_stand = {
+void() gremlin_stand = { // [FUNCTION]
    if ( FindTarget () )
       return ;
 
@@ -305,7 +305,7 @@ void() gremlin_stand = {
    }
 };
 
-float () GremlinCheckNoAmmo = {
+float () GremlinCheckNoAmmo = { // [FUNCTION]
    if (self.currentammo > 0) return TRUE;
 
    self.stoleweapon = FALSE;
@@ -468,7 +468,7 @@ void() gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run (12); };
 void() gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run (8); };
 void() gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run (2); monster_footstep(FALSE); }; // Was 0, -Qmaster
 
-void() Gremlin_JumpTouch = {
+void() Gremlin_JumpTouch = { // [FUNCTION]
    if ( (self.health <= FALSE) ) return ;
 
    if ( !checkbottom (self) ) {
@@ -519,7 +519,7 @@ void() gremlin_shot4 = [ 138.000, gremlin_shot5 ] {};
 void() gremlin_shot5 = [ 139.000, gremlin_shot6 ] {};
 void() gremlin_shot6 = [ 140.000, gremlin_run1 ] {};
 
-void() GremlinFireSpikes = {
+void() GremlinFireSpikes = { // [FUNCTION]
 	local vector dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
@@ -540,7 +540,7 @@ void() GremlinFireSpikes = {
 	}
 };
 
-void() GremlinFireLavaSpikes = {
+void() GremlinFireLavaSpikes = { // [FUNCTION]
 	local vector dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
@@ -597,7 +597,7 @@ void() gremlin_lava_snail6 = [ 135.000, gremlin_lava_snail7 ] { GremlinFireLavaS
 void() gremlin_lava_snail7 = [ 135.000, gremlin_lava_snail8 ] { GremlinFireLavaSpikes(); };
 void() gremlin_lava_snail8 = [ 135.000, gremlin_run1 ] { GremlinFireLavaSpikes(); sound(self,CHAN_WEAPON,"rogue/weapons/snail.wav",1,ATTN_NORM); };
 
-void() GremlinFireLaser = {
+void() GremlinFireLaser = { // [FUNCTION]
 	local vector org, dir;
 
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;

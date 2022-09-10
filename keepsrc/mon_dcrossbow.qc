@@ -277,8 +277,8 @@ void()	dcrossbow_stop5 = [	$tstop5,	dcrossbow_stop6	] {};
 void()	dcrossbow_stop6 = [	$tstop6,	dcrossbow_stop7	] {};
 void()	dcrossbow_stop7 = [	$tstop7,	dcrossbow_run1 ] { self.weaponstate = CROSS_DOWN; };
 
-void() dcrossbow_shot = {
-	local	vector org, dir;
+void() dcrossbow_shot = { // [FUNCTION]
+	local vector org, dir;
 
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -362,7 +362,7 @@ void()	dcrossbow_slideup7 = [	$tready7,	dcrossbow_slide1	] { ai_face();
 	self.weaponstate = CROSS_UP;		// Crossbow animation in correct state for slide/hold
 };
 
-void() dcrossbow_checkslide = {
+void() dcrossbow_checkslide = { // [FUNCTION]
 	if (self.weaponstate == CROSS_DOWN) dcrossbow_slideup1();
 	else dcrossbow_slide1();
 };
@@ -429,7 +429,7 @@ void()	dcrossbow_smash9	= [	$smash10,	dcrossbow_smash10	] { ai_charge(1); };
 void()	dcrossbow_smash10	= [	$smash12,	dcrossbow_smash11	] { ai_charge(1); };
 void()	dcrossbow_smash11	= [	$smash13,	dcrossbow_smash1	] { dcrossbow_checkmelee(); };
 
-void() dcrossbow_melee = {
+void() dcrossbow_melee = { // [FUNCTION]
 	// Cycle between different melee attacks
 	self.meleeattack = self.meleeattack + 1;
 	if (self.meleeattack == 1) dcrossbow_slice1();

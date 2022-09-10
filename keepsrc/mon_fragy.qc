@@ -27,7 +27,7 @@ void() frag_swimwalk1;
 void() frag_frog1;
 
 // Changes whether we are a swimmer or a walker
-void() frog_mode = {
+void() frog_mode = { // [FUNCTION]
 	if (InWater(self.origin) || InSlime(self.origin)
         || InWater(self.origin + '0 0 -25') || InSlime (self.origin + '0 0 -25')) {
 		if (!self.lefty && self.attack_finished < time) {
@@ -49,7 +49,7 @@ void() frog_mode = {
 	}
 };
 
-void()	Frag_JumpTouch = {
+void() Frag_JumpTouch = { // [FUNCTION]
 	local	float	ldmg;
 
 	if (self.attack_finished >= time) return;
@@ -339,7 +339,7 @@ void() monster_fragy_precache = {
 };
 
 //QUAKED monster_fragy (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-void() monster_fragy = {
+void() monster_fragy = { // [ENTITY] Redirect
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -370,4 +370,4 @@ void() monster_fragy = {
 	monster_start();
 };
 
-void() monster_frog = { self.classname = "monster_fragy"; monster_fragy(); };
+void() monster_frog = { self.classname = "monster_fragy"; monster_fragy(); }; // [ENTITY]

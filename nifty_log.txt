@@ -1,0 +1,131 @@
+Comparing .fgd entities to .qc entities...
+Finding all entities in .fgd file...
+Finding all entities in .qc files...
+Could not find qc entity `weapon_plasma` in fgd
+Could not find qc entity `bdw_monsterspawn_gang` in fgd
+Could not find qc entity `misc_flag` in fgd
+Could not find qc entity `monster_coil` in fgd
+Could not find qc entity `monster_deathguard` in fgd
+Could not find qc entity `dknight_ghostnull` in fgd
+Could not find qc entity `monster_dknightghost` in fgd
+Could not find qc entity `super_enforcer_fire` in fgd
+Could not find qc entity `flytrap_digest` in fgd
+Could not find qc entity `info_fli` in fgd
+Could not find qc entity `monster_imp` in fgd
+Could not find qc entity `monster_afrit` in fgd
+Could not find qc entity `monster_hell_knight_champion { 
+void() monster_hell_knight_champion {` in fgd
+Could not find qc entity `monster_lord` in fgd
+Could not find qc entity `monster_warrior` in fgd
+Could not find qc entity `monster_mcorn` in fgd
+Could not find qc entity `monster_me` in fgd
+Could not find qc entity `monster_guardian` in fgd
+Could not find qc entity `monster_fragwiz` in fgd
+Could not find qc entity `nehahra_checkvolume` in fgd
+Could not find qc entity `monster_ogre_marksman` in fgd
+Could not find qc entity `monster_ogre_fishing` in fgd
+Could not find qc entity `monster_ogre_spikeshooter` in fgd
+Could not find qc entity `monster_dreadnaught` in fgd
+Could not find qc entity `queen_ghostnull` in fgd
+Could not find qc entity `monster_ranger` in fgd
+Could not find qc entity `monster_raven` in fgd
+Could not find qc entity `monster_dragon_wyrm` in fgd
+Could not find qc entity `monster_scorpion` in fgd
+Could not find qc entity `monster_skullwiz` in fgd
+Could not find qc entity `info_skullwiz_link` in fgd
+Could not find qc entity `trap_spike_mine` in fgd
+Could not find qc entity `info_spirit_link` in fgd
+Could not find qc entity `info_spirit_destination` in fgd
+Could not find qc entity `monster_servomech` in fgd
+Could not find qc entity `func_servomech` in fgd
+Could not find qc entity `trigger_servomech` in fgd
+Could not find qc entity `monster_steelclaw` in fgd
+Could not find qc entity `monster_tarbaby` in fgd
+Could not find qc entity `monster_tarbaby_mitosis` in fgd
+Could not find qc entity `tur_walk` in fgd
+Could not find qc entity `tur_death` in fgd
+Could not find qc entity `monster_tur` in fgd
+Could not find qc entity `monster_turret` in fgd
+Could not find qc entity `monster_ubs` in fgd
+Could not find qc entity `monster_newboss` in fgd
+Could not find qc entity `monster_vomit` in fgd
+Could not find qc entity `monster_voreling` in fgd
+Could not find qc entity `monster_wizard` in fgd
+Could not find qc entity `monster_wizboss` in fgd
+Could not find qc entity `monster_drake` in fgd
+Could not find qc entity `monster_wolf` in fgd
+Could not find qc entity `monster_wraith` in fgd
+Could not find qc entity `monster_xmas_elf` in fgd
+Could not find qc entity `monster_xmas_raindeer` in fgd
+Could not find qc entity `monster_xmas_santa` in fgd
+Could not find qc entity `monster_xmas_snowman` in fgd
+Could not find qc entity `monster_zombie_master` in fgd
+Could not find qc entity `monster_zombiep` in fgd
+Could not find qc entity `misc_particle_trail` in fgd
+Could not find qc entity `misc_bellredfield` in fgd
+Could not find qc entity `misc_vase` in fgd
+Could not find qc entity `misc_modelrdm` in fgd
+Could not find qc entity `func_robot` in fgd
+Could not find qc entity `func_robot_controller` in fgd
+Could not find qc entity `ambient_custom_loop` in fgd
+Could not find qc entity `env_sound` in fgd
+Could not find qc entity `item_sphere` in fgd
+Could not find qc entity `func_shadow` in fgd
+Could not find qc entity `trigger_timer` in fgd
+Could not find qc entity `trigger_playerparticles` in fgd
+Could not find qc entity `trigger_lightstyle` in fgd
+Could not find qc entity `item_flag` in fgd
+Could not find qc entity `func_ctf_wall` in fgd
+Could not find qc entity `item_time_machine` in fgd
+Could not find qc entity `item_time_core` in fgd
+Could not find qc entity `trap_gravity_well` in fgd
+Could not find qc entity `trigger_fallspeed` in fgd
+Could not find qc entity `trigger_skyfog` in fgd
+Could not find qc entity `trigger_version` in fgd
+Could not find qc entity `trigger_cvarset` in fgd
+Could not find qc entity `trigger_prerequisit` in fgd
+Could not find fgd entity `item_artifact_dragon` in qc files
+Could not find fgd entity `path_corner` in qc files
+Could not find fgd entity `trigger_camera` in qc files
+Could not find fgd entity `trigger_camera_point` in qc files
+Could not find fgd entity `trigger_jump` in qc files
+Could not find fgd entity `trigger_touchsound` in qc files
+Could not find fgd entity `trigger_remove` in qc files
+Could not find fgd entity `trigger_setgravity` in qc files
+Could not find fgd entity `trigger_setcvar` in qc files
+Could not find fgd entity `info_particles` in qc files
+Could not find fgd entity `count` in qc files
+Could not find fgd entity `misc_boom` in qc files
+Could not find fgd entity `misc_smokemaker` in qc files
+Could not find fgd entity `this` in qc files
+Could not find fgd entity `misc_gtkmodel` in qc files
+Could not find fgd entity `mapobject_custom` in qc files
+Could not find fgd entity `light_fluoropost_dead` in qc files
+Could not find fgd entity `light_fix_dead` in qc files
+Could not find fgd entity `light_ceil_dead` in qc files
+Could not find fgd entity `light_marsh` in qc files
+Could not find fgd entity `path_rotate` in qc files
+Could not find fgd entity `no` in qc files
+Could not find fgd entity `monster_soldier` in qc files
+Could not find fgd entity `monster_soldier_elite` in qc files
+Could not find fgd entity `monster_hell_knight_champion` in qc files
+Could not find fgd entity `monster_death_guard` in qc files
+Could not find fgd entity `monster_death_lord` in qc files
+Could not find fgd entity `monster_shalrath_boss` in qc files
+Could not find fgd entity `monster_freddie` in qc files
+Could not find fgd entity `monster_edie` in qc files
+Could not find fgd entity `monster_carnivean` in qc files
+Could not find fgd entity `monster_zerstorer` in qc files
+Could not find fgd entity `monster_archer_lord` in qc files
+Could not find fgd entity `monster_acolyte` in qc files
+Could not find fgd entity `monster_warlock` in qc files
+Could not find fgd entity `turretbal_unique` in qc files
+Could not find fgd entity `func_detail` in qc files
+Could not find fgd entity `func_group` in qc files
+Could not find fgd entity `func_detail_fence` in qc files
+Could not find fgd entity `func_detail_illusionary` in qc files
+Could not find fgd entity `func_detail_wall` in qc files
+Could not find fgd entity `func_illusionary_visblocker` in qc files
+Could not find fgd entity `viewthing` in qc files
+Could not find fgd entity `misc_external_map` in qc files
+Comparison results:  ...Missing 82 entities in the .fgd file ...Missing 44 entities in the .qc files

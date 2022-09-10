@@ -1214,7 +1214,7 @@ void() Burn_Think = { // [FUNCTION]
         if (InLiquid(spot)) { // Hide the flame and make steam in its place.  Hiss!!
 			setmodel(self, "");
 			sound(self,CHAN_AUTO,"player/slimbrn2.wav",1,ATTN_NORM);
-			particle(spot, '0 0 100', 1, 50); 
+			particle(spot, '0 0 100', 1, 50);
         } else Burn_Burn(); // Flame is not in the water, keep burning until it's out of fuel.
     } else { // Standard burn mode.
         if (targ.health < 1) { Smokey(targ); Burn_Null(targ); return; } // If enemy is dead, snuff current flame and create smoker that puffs smoke and a few embers for a second or two.

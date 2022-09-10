@@ -124,7 +124,7 @@ void() archer_stand18 = [$waitA18, archer_stand1  ] { ai_stand(); };
 // WALK
 void() archer_draw = { sound(self,CHAN_WEAPON,"drake/archer/draw.wav",1,ATTN_NORM); };
 
-void() archer_growl = {
+void() archer_growl = { // [FUNCTION]
     if (random() < 0.1) {
         if (self.classtype == CT_MONARCHERLORD) {
             if (random() < 0.7)
@@ -163,13 +163,13 @@ float   ARCHER_FAR      = 500;
 void() archer_fire1;
 
 // Emulate Hexen2 behavior.
-float() archer_face = {
+float() archer_face = { // [FUNCTION]
     if (visible(self.enemy)) { ai_face();  return TRUE; }
     else { self.think = archer_run1;  return FALSE; }
 };
 
 // Animate the archer bowstring pull and hold.
-void() archer_hold = {
+void() archer_hold = { // [FUNCTION]
     local float chance, dist, r;
 
     r = 1;
@@ -298,38 +298,33 @@ void() archer_attackb5 = [$draw10, archer_attackb6  ] { archer_face(); ai_back(8
 void() archer_attackb6 = [$draw12, archer_attackb7  ] { archer_face(); monster_footstep(FALSE); ai_back(4); };
 void() archer_attackb7 = [$draw13, archer_hold      ] { archer_face(); };
 
-void() archer_attack = {
+void() archer_attack = { // [FUNCTION]
     if (enemy_range < RANGE_MID)    // Range set by CheckAttack.
         archer_attackb1();     // Step back.
     else
         archer_attack1();      // Step forward.
 };
 
-void() archer_fire1    = [$fire2,  archer_fire2    ] { ai_face();
-    local   float   chance, up;
+void() archer_fire1    = [$fire2,  archer_fire2    ] { // [FUNCTION]
+    local float chance, up;
 
+    ai_face();
     // Check for upgrade chance.
     chance = (0.5 - (range(self.enemy) * 0.2));
-    if (chance < 0)
-        up = chance = 0;
-    else
-        up = (random() < chance);       // Upgrade arrow type if TRUE.
+    if (chance < 0) up = chance = 0;
+    else up = (random() < chance);       // Upgrade arrow type if TRUE.
 
-    // Launch!
-    M_FireAkArrow ('16 8 24', up);
+    M_FireAkArrow('16 8 24', up); // Launch!
 
     // Normal Hexen2 refire check.
-    if (self.enemy.health <= 0)
-        chance = 0;     // Enemy is dead.
+    if (self.enemy.health <= 0) chance = 0;     // Enemy is dead.
     else {
         chance = chance + (skill * 0.1);
         if (self.classtype != CT_MONARCHERLORD) chance = chance - 0.3;
     }
 
-    if (random() < chance)
-        self.think = archer_redraw5;
-    else
-        SUB_CheckRefire (archer_redraw5);
+    if (random() < chance) self.think = archer_redraw5;
+    else SUB_CheckRefire (archer_redraw5);
 };
 void() archer_fire2    = [$fire4,  archer_fire3    ] { ai_face(); };
 // The rest is a transition scene from fire to run.
@@ -344,7 +339,7 @@ void() archer_fire10   = [$tranB16, archer_run1    ] { ai_run(8); };
 
 // PAIN - - - - - - - - - - - - - - - -
 // Counter means counterattack here.  Use at end of pain anims.
-void() archer_counter = {
+void() archer_counter = { // [FUNCTION]
     if (self.enemy)
         if (visible(self.enemy))
             if (infront(self.enemy))

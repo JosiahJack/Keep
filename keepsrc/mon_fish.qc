@@ -27,7 +27,7 @@ float FISH_STAND = 1;
 float FISH_WALK = 2;
 float FISH_RUN = 4;
 
-void() f_swim = {
+void() f_swim = { // [FUNCTION]
 	if (self.health < 1) return; // Do nothing if dead
 	
 	self.nextthink = time + 0.1;
@@ -48,10 +48,10 @@ void() f_swim = {
 	else ai_fish_movement("ai_run",self.move_state_z);
 };
 
-void() f_stand1 = [$swim1, f_swim ] { ai_stand(); };
-void() f_standS1 = [$swimS1, f_swim ] { ai_stand(); };
+void() f_stand1 = [$swim1, f_swim ] { ai_stand(); }; // [FUNCTION]
+void() f_standS1 = [$swimS1, f_swim ] { ai_stand(); }; // [FUNCTION]
 
-void() f_stand = { 
+void() f_stand = { // [FUNCTION]
 	self.walkframe = 0; self.state = FISH_STAND; 
 	if (self.spawnflags & MON_FISH_SMALL) f_standS1();
 	else f_stand1();
@@ -60,22 +60,22 @@ void() f_stand = {
 void() f_walk1 = [$swim1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y); };
 void() f_walkS1 = [$swimS1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y); };
 
-void() f_walk = {
+void() f_walk = { // [FUNCTION]
 	self.walkframe = 0; self.state = FISH_WALK; 
 	if (self.spawnflags & MON_FISH_SMALL) f_walkS1();
 	else f_walk1();
 };
 
-void() f_run1 = [$swim1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z); };
-void() f_runS1 = [$swimS1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z); };
+void() f_run1 = [$swim1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z); }; // [FUNCTION]
+void() f_runS1 = [$swimS1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z); }; // [FUNCTION]
 
-void() f_run = {
+void() f_run = { // [FUNCTION]
 	self.walkframe = 0; self.state = FISH_RUN; 
 	if (self.spawnflags & MON_FISH_SMALL) f_runS1();
 	else f_run1();
 };
 
-void() fish_melee = {
+void() fish_melee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;				// removed before stroke
@@ -92,7 +92,7 @@ void() fish_melee = {
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-void() f_attack2 = {
+void() f_attack2 = { // [FUNCTION]
 	if (self.health < 1) return; // Do nothing if dead
 
 	self.nextthink = time + 0.1;
@@ -109,17 +109,17 @@ void() f_attack2 = {
 	else ai_fish_movement("ai_charge",self.move_state_y);
 };
 
-void() f_attack1 = [$attack1, f_attack2 ] {};
-void() f_attackS1 = [$attackS1, f_attack2 ] {};
+void() f_attack1 = [$attack1, f_attack2 ] {}; // [FUNCTION]
+void() f_attackS1 = [$attackS1, f_attack2 ] {}; // [FUNCTION]
 
-void() f_attack = {
+void() f_attack = { // [FUNCTION]
 	self.walkframe = 0;
 	ai_fish_movement("ai_charge",self.move_state_y);
 	if (self.spawnflags & MON_FISH_SMALL) f_attackS1();
 	else f_attack1();
 };
 
-void() f_pain2 = {
+void() f_pain2 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	
 	// Keep moving the animation frame forward
@@ -132,17 +132,17 @@ void() f_pain2 = {
 	if (self.walkframe > 1) ai_fish_movement("ai_pain",self.move_state_y/2);	
 };
 
-void() f_pain1 = [$pain1, f_pain2 ] {};
-void() f_painS1 = [$painS1, f_pain2 ] {};
+void() f_pain1 = [$pain1, f_pain2 ] {}; // [FUNCTION]
+void() f_painS1 = [$painS1, f_pain2 ] {}; // [FUNCTION]
 
-void(entity inflictor, entity attacker, float damage) fish_pain = {
+void(entity inflictor, entity attacker, float damage) fish_pain = { // [FUNCTION]
 	if (self.health < 1) return;
 	self.walkframe = 0; 
 	if (self.spawnflags & MON_FISH_SMALL) f_painS1();
 	else f_pain1();
 };
 
-void() f_death2 = {
+void() f_death2 = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 
 	self.walkframe = self.walkframe + 1; // Keep moving the animation frame forward
@@ -156,10 +156,10 @@ void() f_death2 = {
 	if (self.walkframe > 19) monster_deadbody_check();
 };
 
-void() f_death1 = [$death1, f_death2 ] {};
-void() f_deathS1 = [$deathS1, f_death2 ] {};
+void() f_death1 = [$death1, f_death2 ] {}; // [FUNCTION]
+void() f_deathS1 = [$deathS1, f_death2 ] {}; // [FUNCTION]
 
-void() fish_die = {
+void() fish_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
@@ -171,7 +171,7 @@ void() fish_die = {
 	}
 };
 
-void() monster_fish_precache = {
+void() monster_fish_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_fish.mdl");
 	precache_sound("fish/idle.wav");
 	precache_sound("fish/death.wav");

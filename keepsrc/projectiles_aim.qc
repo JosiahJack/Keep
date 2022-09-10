@@ -628,7 +628,7 @@ void() OgreFireADNails = {
 };
 
 // FLAMES PATTERN 2 - straight line towards player
-void() judge_fireflameline = {
+void() judge_fireflameline = { // [FUNCTION]
 	local vector org, dir;
 	local float fire_col;
 
@@ -648,7 +648,7 @@ void() judge_fireflameline = {
 	Launch_Trail (org, dir, fire_col, "");
 };
 
-void() pyro_fire = {
+void() pyro_fire = { // [FUNCTION]
 	local vector org, dir, targ_org;
 
 	if (self.health < 1) return;
@@ -662,7 +662,7 @@ void() pyro_fire = {
 	pyroflame_spawn(org, dir);
 };
 
-void(vector org, float type) M_LaunchFlameWall = {
+void(vector org, float type) M_LaunchFlameWall = { // [FUNCTION]
 	local vector torg, dir, ang;
 	local float targetang, fire_life;
 
@@ -691,7 +691,7 @@ void(vector org, float type) M_LaunchFlameWall = {
 	Launch_Flame(self,org,dir,type,-1,fire_life,SPEED_FLAME);
 };
 
-void() M_FireOctopusInk = {
+void() M_FireOctopusInk = { // [FUNCTION]
 	local vector org, dir, vec;
 	local float loopvar;
 
@@ -712,7 +712,7 @@ void() M_FireOctopusInk = {
 };
 
 //  Throwing Axe -- Used by axeman and overlord.
-void(vector st, string axe) M_FireAxe = {
+void(vector st, string axe) M_FireAxe = { // [FUNCTION]
     local vector org, dir;
     local entity targ;
 
@@ -726,7 +726,7 @@ void(vector st, string axe) M_FireAxe = {
 };
 
 // Shalmissile attack.  Used by shal-rath and others.
-void(vector st, float damage, string sfx) M_Shal_Ex = {
+void(vector st, float damage, string sfx) M_Shal_Ex = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound (self, CHAN_WEAPON, sfx, 1, ATTN_NORM);
     self.attack_speed = 400;

@@ -17,7 +17,7 @@ void() eidolon_start;
 void() revive_frames;
 
  // Trigger to make angry and/or spawn.
-void() monster_use = {
+void() monster_use = { // [FUNCTION]
 	if (self.enemy && !(IsInsane(self))) return; // Busy with another enemy or dead?  And not crazy
 	if (self.health < 1) return;
 	
@@ -49,7 +49,7 @@ void() monster_use = {
 // content and applies a modifier damage (they die too slow otherwise).
 // * If a monster is in liquid there is often no way out!
 // * Moves the content check to the monsters feet (shallow liquid)
-void() monster_liquid_check = {
+void() monster_liquid_check = { // [FUNCTION]
 	local float monster_dmg;
 	local vector monster_feet;
 
@@ -104,7 +104,7 @@ void() monster_liquid_check = {
 // - easier to add any exceptions this way
 // - zombies have their own unique idle routine
 // - tarby added using sight sound
-void() monster_idle_sound = {
+void() monster_idle_sound = { // [FUNCTION]
 	local float r;
 
 	// No monsters, dead and timer not reset?
@@ -150,7 +150,7 @@ void() monster_idle_sound = {
 // monster_sightsound
 // - Switched sound channel to CHAN_BODY so death always stops it
 // - Randomnly get sound file cut off using voice channel
-void() monster_sightsound = {
+void() monster_sightsound = { // [FUNCTION]
 	local float	rsnd;
 
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
@@ -206,7 +206,7 @@ void() monster_sightsound = {
 // This function will play a footstep sound
 // * Types : Slow, Drag, Light, Medium, Heavy, Large
 // * called from animation blocks to sync with sound
-void(float altfoot) monster_footstep = {
+void(float altfoot) monster_footstep = { // [FUNCTION]
 	local float footstep, footstepnext, footvol;
 	local string footstepwav;
 	
@@ -338,7 +338,7 @@ void(float altfoot) monster_footstep = {
 };
 
 // PRE/POST CHECK conditions for monster death
-void() monster_death_precheck = {
+void() monster_death_precheck = { // [FUNCTION]
 	local float loop;
 
 	if (self.flags & FL_MONSTER) {
@@ -370,7 +370,7 @@ void() monster_death_precheck = {
 	}
 };
 
-void() monster_death_postcheck = {
+void() monster_death_postcheck = { // [FUNCTION]
 	self.blockudeath = TRUE; // Body is dead, no human death noise
 	if (!self.gibbed) self.bodyonflr = MON_ONFLR;
 	self.solid = SOLID_TRIGGER; // Allow for the dead body/head to touch triggers (void/hurt)
@@ -378,7 +378,7 @@ void() monster_death_postcheck = {
 	self.touch = SUB_Null;
 };
 
-void() monster_deadbody_check = {
+void() monster_deadbody_check = { // [FUNCTION]
 	if (self.deadflag == DEAD_FINISHED) return; // Exit condition, body no longer has any interaction
 	
 	// Check for deadflag first, if touched something this will be changed
@@ -406,7 +406,7 @@ void() monster_deadbody_check = {
 };
 
 // When a mosnter dies, it fires all of its targets with the current enemy as activator.
-void() monster_death_use = {
+void() monster_death_use = { // [FUNCTION]
 	SUB_RemoveFlags(self,FL_FLY); // fall to ground or stop swimming
 	SUB_RemoveFlags(self,FL_SWIM); 
 
@@ -421,7 +421,7 @@ void() monster_death_use = {
 };
 
 // A clean way to kill/remove a monster from a map.  deathfunc to go through existing death function.  gibdeath for explosion of blood and guts
-void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = {
+void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = { // [FUNCTION]
 	dprint("\b[MON_KILL]\b ");
 	dprint(targ.classname);
 	dprint(" dropped dead!\n");
@@ -462,7 +462,7 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = {
   * 2 = Sound + Long Animation
   * 3 = Sound ONLY
 ======================================================================*/
-void(entity attacker, float damage) monster_pain_check = {
+void(entity attacker, float damage) monster_pain_check = { // [FUNCTION]
 	self.pain_check = 0;	// Reset pain check
 	
 	// already dying, don't go into pain frame
@@ -482,7 +482,7 @@ void(entity attacker, float damage) monster_pain_check = {
 	else self.pain_check = 1;
 };
 
-void(entity targ, entity charmmaster) ApplyHornCharm = {
+void(entity targ, entity charmmaster) ApplyHornCharm = { // [FUNCTION]
 	targ.charmer = charmmaster;
 	targ.charmed = TRUE;
 	targ.horn_active = TRUE;
@@ -490,7 +490,7 @@ void(entity targ, entity charmmaster) ApplyHornCharm = {
 	targ.effects = (targ.effects | EF_DIMLIGHT);
 };
 
-float() FollowSetup = {
+float() FollowSetup = { // [FUNCTION]
 	if (self.target != "") {
 		self.charmer = world;
 		if (self.event != "") {
@@ -530,7 +530,7 @@ float() FollowSetup = {
 };
 
 // Second part of setup function).  Checks for any targets to get angry at or stand/walk around
-void() monster_targets = {
+void() monster_targets = { // [FUNCTION]
 	self.enemy = self.goalentity = self.movetarget = world; // Reset everything first
 
 	// Monsters can spawn angry at the player/activator.  The target key can point to a path_corner.  If the target key points at another monster they will infight
@@ -565,7 +565,7 @@ void() monster_targets = {
 	self.think = self.th_stand;	// No angrytarget, enemy or path corner, stand around waiting.
 };
 
-void() monster_reset_movement_type = {
+void() monster_reset_movement_type = { // [FUNCTION]
 	if (self.classmove == MON_MOVESTATIC) self.movetype = MOVETYPE_NONE; // Not all monsters are step movement, some are stationary
 	else self.movetype = MOVETYPE_STEP;
 
@@ -582,7 +582,7 @@ void() monster_reset_movement_type = {
 	}
 };
 
-void() monster_reset_runtime_attributes = {
+void() monster_reset_runtime_attributes = { // [FUNCTION]
 	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 
@@ -594,7 +594,7 @@ void() monster_reset_runtime_attributes = {
 };
 
 // Setup monster ready for action
-void() monster_spawn = {
+void() monster_spawn = { // [FUNCTION]
 	local float pconts;
 
 	// Check if the monster can spawn without telefragging something
@@ -700,7 +700,6 @@ void() monster_spawn = {
 		self.temperament = TEMPRA_CALM;
 		self.vulnerability = VULN_SERAPHIC;
 	}
-
 
 	if (self.alignment == NEUTRAL) self.passive_state = 1;
 	setup_passivestate(self); // Check for passive mode and add (defaults) extra variables
@@ -926,19 +925,18 @@ void() monster_spawn = {
 	if (self.health > 0) monster_targets();
 };
 
-void() monster_spawndelay = {
+void() monster_spawndelay = { // [FUNCTION]
 	if (developer > 1) dprint("Spawning delay monster!\n");
 	self.think = monster_spawn;
 	self.nextthink = time + self.spawndelay;
 };
 
 // Setup bounding box for monster (based on types)
-void() monster_bbox =  {
+void() monster_bbox =  { // [FUNCTION]
 	if (self.bboxtype == BBOX_CUSTOM && VectorIsAllZeros(self.bbmins)
         && VectorIsAllZeros(self.bbmaxs)) return; // We already set self.bbmins
-												 // and self.bbmaxs, unless we
-												 // didn't lol.
-
+												  // and self.bbmaxs, unless we
+												  // didn't lol.
 	if (self.bboxtype == BBOX_TINY)
 		// Lost Soul, Scorpion, Spider, Voreling
 		{ self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 16'; }
@@ -1015,7 +1013,7 @@ void() monster_bbox =  {
 	else { self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 40'; }
 };
 
-float(string mname) monster_checkminion = {
+float(string mname) monster_checkminion = { // [FUNCTION]
 	if (mname == "" || mname == "") return FALSE;
 	precache_monster(mname);
 	if (!self.minion_spawn_time || !(self.minion_spawn_time & MONANIM_SPECIFIC)) self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIFIC;
@@ -1025,7 +1023,7 @@ float(string mname) monster_checkminion = {
 };
 
 // Check all spawn conditions.  return TRUE = do NOT spawn, got a problem
-float() monster_checkspawn = {
+float() monster_checkspawn = { // [FUNCTION]
 	if (deathmatch) { entity_hide(self); return TRUE; } // Classic exception - Multiplayer (modes 1 & 2)
 	if (cvar("nomonsters") != 0) {
 		if (self.target != "") {
@@ -1062,7 +1060,7 @@ float() monster_checkspawn = {
 };
 
 // Main entry point for ALL monster routines
-void() monster_start = {
+void() monster_start = { // [FUNCTION]
 	precache_monster(self.classname);   // Always precache it even if it fails to spawn. This to preserve the save files.
 	if (self.minion_name != "") monster_checkminion(self.minion_name); // Precache any minion monster if we have a counter and if we have a minion name
 
@@ -1151,9 +1149,9 @@ void() monster_start = {
 };
 
 // Map hacks are supported in this MOD.  Qmaster is evil again.
-void() walkmonster_start_go = { monster_start(); };
-void() flymonster_start_go = { monster_start(); };
-void() swimmonster_start_go = { monster_start(); };
+void() walkmonster_start_go = { monster_start(); }; // [FUNCTION]
+void() flymonster_start_go = { monster_start(); }; // [FUNCTION]
+void() swimmonster_start_go = { monster_start(); }; // [FUNCTION]
 
 /*======================================================================
 //QUAKED monster_x (1 0 0) (x y z) (x y z) AMBUSH x x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
@@ -1217,7 +1215,7 @@ XXX, x health points.
 ======================================================================*/
 
 // if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-void(entity e) sendmonsterdevdata {
+void(entity e) sendmonsterdevdata { // [FUNCTION]
 	if (!world.deventity) return;
 
 	world.deventity.enemyhealth = world.deventity.enemyhealth + e.health;

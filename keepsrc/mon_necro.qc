@@ -39,7 +39,7 @@ float   NSA_SUMMON_IMPS         = 4;
 float   NECRO_MAX_IMPS      = 5;    // Maximum imps.
 
 // Alternate thinking for necrobolts.  Used by necromancer boss.
-void() NecroBolt_Summon = {
+void() NecroBolt_Summon = { // [FUNCTION]
     if (self.delay <= time) {
 		if (self.master.flags & FLx_CREATURE)
 		if (self.enemy) {
@@ -55,7 +55,7 @@ void() NecroBolt_Summon = {
     NecroBolt_Think();
 };
 
-void() acolyte_fire = {
+void() acolyte_fire = { // [FUNCTION]
     local vector org, dir;
 
     makevectors(self.angles);
@@ -68,10 +68,9 @@ void() acolyte_fire = {
 // number of bounces allowed before exploding.  With no bounces (hits = 0),
 // the fireball may bounce up to the nemesant standard of three times without
 // exploding.  What 'hits' does is change the bounces to 3 - hits.
-void(float hits) sorcerer_fire =
-    { M_FireSmart ('8 -5 12');  newmis.count = hits; };
+void(float hits) sorcerer_fire = { M_FireSmart ('8 -5 12');  newmis.count = hits; }; // [FUNCTION]
 
-void(vector st) warlock_fire = {
+void(vector st) warlock_fire = { // [FUNCTION]
     local   vector  org, dir, vec;
     local   entity  targ;       // Lead shots toward this target.
 
@@ -106,11 +105,8 @@ void(vector st) warlock_fire = {
             newmis.think = NecroBolt_Summon;
 };
 
-
-//=============================================================================
-
 // STAND - - - - - - - - - - - - - - - -
-void() necro_idlesound = {
+void() necro_idlesound = { // [FUNCTION]
 // PM:  Replaced fwiz code with nemesants'.  This is due to replaced sounds.
     if (self.waitmin < time)
     {
@@ -209,7 +205,7 @@ void() necro3_walk12 = [$Hrun12, necro3_walk1  ] { ai_walk(8); };
 
 // Casting scenes are used when necro uses special abilities such as
 // teleportation, shielding, or summoning.
-void() necro_face = {
+void() necro_face = { // [FUNCTION]
     if (self.worldtype) {
 		// Attempting a special atttack.
         if (self.fallen)
@@ -240,7 +236,7 @@ void() necro3_cast2  = [$Hatak2,   necro3_cast3  ] { ai_face(); };
 void() necro3_cast3  = [$Hatak7,   necro3_cast4  ] { ai_face(); };
 void() necro3_cast4  = [$Hatak8,   necro3_run1   ] { ai_face(); necro_activate_special(); };
 
-void() necro_cast = {
+void() necro_cast = { // [FUNCTION]
     if (self.height == NECRO_ACOLYTE)
         necro1_cast1();
     else if (self.height == NECRO_SORCERER)
@@ -252,7 +248,7 @@ void() necro_cast = {
 float   RANGE_NECROSHIELD   = 150;
 float   DELAY_NECROSHIFT    = 1.5;  // Can't teleport to dodge missiles.
 
-float(vector org) necro_clear = {
+float(vector org) necro_clear = { // [FUNCTION]
     local   entity  head;
 
     head = findradius(org, 120);
@@ -267,7 +263,7 @@ float(vector org) necro_clear = {
 };
 
 // 'drop':  0 = No bomb, 1 = drop bomb, 2 = teleport only when attacking.
-float(entity targ, vector spot, float drop) necro_teleport = {
+float(entity targ, vector spot, float drop) necro_teleport = { // [FUNCTION]
     local   vector  org;
     local   float   bomb;
 
@@ -305,7 +301,7 @@ float(entity targ, vector spot, float drop) necro_teleport = {
 };
 
 // Called when teleporting away from an attack.
-float() necro_teledef = {
+float() necro_teledef = { // [FUNCTION]
     if (self.waitmax <= time)   // Don't spam teleport as a defense.
         return  necro_teleport (self.enemy, self.origin, FALSE);
     return FALSE;
@@ -313,7 +309,7 @@ float() necro_teledef = {
 
 // Look for enemy missiles infront of the necro.  We don't care which
 // missile is found, just whether or not any are found, so return T or F.
-float() necro_find = {
+float() necro_find = { // [FUNCTION]
     if (self.enemy)
     {
         local   entity  head;
@@ -336,7 +332,7 @@ float() necro_find = {
 // Searches for missiles to defend against.  If none are found, then move.
 // Called by sorcerer and warlock.  Update:  Called by acolyte code now
 // because necro boss starts in acolyte mode.
-void() necro_run = {
+void() necro_run = { // [FUNCTION]
     if (!self.mirror_finished)
         self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
 
@@ -427,14 +423,14 @@ void() necro3_run6  = [$Hrun11, necro3_run1  ] { necro_run(); };
 // ATTACK - - - - - - - - - - - - - - -
 void() ai_repel;    // In 'nemesant.qc'.
 
-float() necro_encore = {
+float() necro_encore = { // [FUNCTION]
     if (self.classtype == CT_MONNECRO) return TRUE;
     if (SUB_IgnorePain()) return TRUE;
     if (skill >= 2 && random() < 0.25) return TRUE;
     return FALSE;
 };
 
-void() necro_run_check = { 
+void() necro_run_check = {  // [FUNCTION]
 	// PM:  Hack for non-specials.
     if (self.height == NECRO_SORCERER)
         self.think = necro2_run1;
@@ -444,7 +440,8 @@ void() necro_run_check = {
 
 // PM:  Sped up acolyte's swings due to frame rate differences between
 // Quake and Hexen2.
-void() necro1_melee1 = [$Siatak2,  necro1_melee2 ] { ai_charge(3);
+void() necro1_melee1 = [$Siatak2,  necro1_melee2 ] { // [FUNCTION]
+    ai_charge(3);
     if (self.classtype == CT_MONNECRO)
         self.cnt = 2;   // Extra swings.
     else
@@ -468,7 +465,7 @@ void() necro1_melee4 = [$Siatak8,  necro1_melee5 ] { ai_charge(2); ai_melee();
 };
 void() necro1_melee5 = [$Siatak10, necro1_melee6 ] { ai_charge(1); };
 void() necro1_melee6 = [$Siatak12, necro1_run1   ] { ai_charge(0); necro_run_check(); };
-void() necro1_melee = {
+void() necro1_melee = { // [FUNCTION]
     if (InMeleeRange (80))
         necro1_melee1();
     else
@@ -539,7 +536,7 @@ void() necro2_attack6  = [$Statak6,  necro2_attack7  ] { ai_face(); };
 void() necro2_attack7  = [$Statak7,  necro2_attack8  ] { ai_face(); };
 void() necro2_attack8  = [$Statak8,  necro2_run1     ] { ai_face(); };
 
-float() necro4_gangup = {
+float() necro4_gangup = { // [FUNCTION]
     local   entity  head;
 
     head = findradius (self.origin, 120);
@@ -578,7 +575,8 @@ void() necro3_attack5  = [$Hatak8,  necro3_run1     ] { ai_face();
     if (necro_encore ())
         warlock_fire('14 8 27');
 };
-void() necro3_melee = {
+
+void() necro3_melee = { // [FUNCTION]
 // If necro is not close enough to repel target, he will zap the enemy
 // continuously with bolts, which is a bit overkill.  Instead, charge
 // most of the time.
@@ -588,7 +586,7 @@ void() necro3_melee = {
     necro3_attack1();
 };
 
-void() necro_activate_special = {
+void() necro_activate_special = { // [FUNCTION]
     local   float   wtype;
 
     wtype = self.worldtype;
@@ -681,7 +679,7 @@ void() necro_activate_special = {
     }
 };
 
-void() necro4_attack = {
+void() necro4_attack = { // [FUNCTION]
     local   entity  head;
     local   float   safe, yes;
 
@@ -797,10 +795,10 @@ void() necro4_attack = {
 };
 
 // PAIN
-void(void() skip) necro_skip = { if (random() < 0.5) skip(); };
+void(void() skip) necro_skip = { if (random() < 0.5) skip(); }; // [FUNCTION]
 
 // Check for an escape during pain.
-void() necro_telepain = {
+void() necro_telepain = { // [FUNCTION]
     if (self.classtype == CT_MONNECRO) {
         if (self.enemy) {
             if ((random() < 0.25) || (self.liquidbase <= CONTENT_SLIME)) necro_teleport (self.enemy, self.origin, TRUE);
@@ -834,7 +832,7 @@ void() necro3_pain5  = [$Hpain7,  necro3_pain6  ] { necro_skip(necro3_pain6); };
 void() necro3_pain6  = [$Hpain8,  necro3_run1   ] { necro_telepain(); };
 
 // Named (foo)switch as C's switch.
-void() necro_painswitch = {
+void() necro_painswitch = { // [FUNCTION]
     if (self.height == NECRO_ACOLYTE)
         necro1_pain1();
 //    else if ((self.frame >= $Siatak1 ) && (self.frame <= $Siwait12 ))
@@ -847,7 +845,7 @@ void() necro_painswitch = {
 
 // Check for weapon breakage and update ai accordingly.
 // As weapon breaks, the necro uses stronger moves.  Only boss should use.
-float() Necro_WeaponBroke = {
+float() Necro_WeaponBroke = { // [FUNCTION]
     local   vector  org, vel, spin;
     local   float   head, shaft;
 
@@ -917,7 +915,7 @@ float() Necro_WeaponBroke = {
     return TRUE;
 };
 
-void(entity inflictor, entity attacker, float damage) necro_pain = {
+void(entity inflictor, entity attacker, float damage) necro_pain = { // [FUNCTION]
 	// Update:  Check for evolution/weapon breakage for boss necro.
     if (self.classtype == CT_MONNECRO)
     if (Necro_WeaponBroke ()) {
@@ -947,7 +945,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
 };
 
 // Standard death functions.
-void() necro_die1  = [$deathA2,  necro_die2  ] {
+void() necro_die1  = [$deathA2,  necro_die2  ] { // [FUNCTION]
 	self.reviveframestart = $deathA20;
 	self.reviveframeend = $deathA2;
 };
@@ -962,7 +960,7 @@ void() necro_die9  = [$deathA18, necro_die10 ] { ai_forward(4); };
 void() necro_die10 = [$deathA19, necro_die11 ] { ai_forward(1); monster_death_postcheck(); };
 void() necro_die11 = [$deathA20, necro_die11 ] { ai_forward(1); monster_deadbody_check(); };
 
-void() necro_die = {
+void() necro_die = { // [FUNCTION]
 	self.gib1mdl = self.gib2mdl = self.gib3mdl = ""; // Don't drop more wands!
 
 	// Wand is usable weapon so don't let the sorcerer drop his wand.
@@ -977,7 +975,7 @@ void() necro_die = {
 	}
 };
 
-void() necro_cache = {
+void() necro_cache = { // [FUNCTION]
     precache_model("progs/drake/necro.mdl");
     precache_model("progs/drake/h_necro.mdl");
     precache_model("progs/drake/r_bolt.mdl");
@@ -1089,12 +1087,12 @@ void() monster_necromancer = {
 	if (self.classtype != CT_CACHENECRO) setup_necro();
 };
 
-void() monster_necrominion = { 
+void() monster_necrominion = { // [ENTITY]
 	self.classtype = CT_CACHENECRO;
 	monster_necromancer();
 };
 
-void() setup_necro = {
+void() setup_necro = { // [FUNCTION]
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;

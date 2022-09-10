@@ -90,32 +90,6 @@ void() shal_run10	= [	$walk11,	shal_run11	] { ai_run(0); };
 void() shal_run11	= [	$walk12,	shal_run12	] { ai_run(4); };
 void() shal_run12	= [	$walk1,		shal_run1	] { ai_run(5); };
 
-// Attachment management (create, finish and delete)
-void() shalrath_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.mdl = MODEL_PROJ_SBALL;
-		self.attachment.alpha = 0.85;
-	}
-};
-
-void() shalrath_finish_attachment = {
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-void() shalrath_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-};
-
 // RANGE ATTACK 1 - Homing Missile Attack
 void() ShalMissile = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -165,7 +139,7 @@ void() shal_attack5		= [$attack5,	shal_attack6 ] { ai_face(); };
 void() shal_attack6		= [$attack6,	shal_attack7 ] { Setup_ShalHome('-26 12 20',0); };
 void() shal_attack7		= [$attack7,	shal_attack8 ] { Setup_ShalHome('-18 10 30',2); };
 void() shal_attack8		= [$attack8,	shal_attack9 ] { Setup_ShalHome('12 8 36',7); };
-void() shal_attack9		= [$attack9,	shal_attack10] { shalrath_finish_attachment();ShalMissile(); };
+void() shal_attack9		= [$attack9,	shal_attack10] { SUB_FinishAttachment(); ShalMissile(); };
 void() shal_attack10	= [$attack10,	shal_attack11] {};
 void() shal_attack11	= [$attack11,	shal_run1    ] {};
 
@@ -209,16 +183,14 @@ void() shal_minion5		= [$attack5,	shal_minion6 ] { Setup_ShalrathEgg('-28 18 16'
 void() shal_minion6		= [$attack6,	shal_minion7 ] { Setup_ShalrathEgg('-26 12 20',3); };
 void() shal_minion7		= [$attack7,	shal_minion8 ] { Setup_ShalrathEgg('-18 10 30',4); };
 void() shal_minion8		= [$attack8,	shal_minion9 ] { Setup_ShalrathEgg('12 8 36',5); };
-void() shal_minion9		= [$attack9,	shal_minion10] { shalrath_finish_attachment();Create_Egg('12 8 36'); };
+void() shal_minion9		= [$attack9,	shal_minion10] { SUB_FinishAttachment(); Create_Egg('12 8 36'); };
 void() shal_minion10	= [$attack10,	shal_minion11] {};
 void() shal_minion11	= [$attack11,	shal_run1    ] {};
 
-void() shal_magic = {
+void() shal_magic = { // [FUNCTION]
 	local entity miniondef;
 	
-	// Make sure the attachments are setup ready
-	shalrath_create_attachment();
-
+	SUB_CreateSelfAttachment(MODEL_PROJ_SBALL,0.85); // Make sure the attachments are setup ready
 	if (self.spawnflags & MON_SHALRATH_MINIONS && !self.minion_active) {
 		// Check for minion template first
 		miniondef = find(world,classname,"monster_shalrathminion");
@@ -257,18 +229,18 @@ void() shal_magic = {
 	else shal_attack1();
 };
 
-void() shal_pain1 = [$pain1, shal_pain2 ] {};
-void() shal_pain2 = [$pain2, shal_pain3 ] { shalrath_finish_attachment(); };
-void() shal_pain3 = [$pain3, shal_pain4 ] {};
-void() shal_pain4 = [$pain4, shal_pain5 ] {};
-void() shal_pain5 = [$pain5, shal_run1  ] {};
+void() shal_pain1 = [$pain1, shal_pain2 ] {}; // [FUNCTION]
+void() shal_pain2 = [$pain2, shal_pain3 ] { SUB_FinishAttachment(); }; // [FUNCTION]
+void() shal_pain3 = [$pain3, shal_pain4 ] {}; // [FUNCTION]
+void() shal_pain4 = [$pain4, shal_pain5 ] {}; // [FUNCTION]
+void() shal_pain5 = [$pain5, shal_run1  ] {}; // [FUNCTION]
 
-void(entity inflictor, entity attacker, float damage) shal_pain = {
+void(entity inflictor, entity attacker, float damage) shal_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
 	// Hide any attachments
-	shalrath_finish_attachment();
+	SUB_FinishAttachment();
 	
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -291,9 +263,9 @@ void() shal_death5 = [$death5, shal_death6 ] {};
 void() shal_death6 = [$death6, shal_death7 ] { monster_death_postcheck(); };
 void() shal_death7 = [$death7, shal_death7 ] { monster_deadbody_check(); };
 
-void() shal_die = {
+void() shal_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-	shalrath_remove_attachment(); // Make sure any attachments are removed
+	SUB_RemoveAttachment(); // Make sure any attachments are removed
 
 	// Normal death
 	if (!self.gibbed) {
@@ -302,7 +274,7 @@ void() shal_die = {
 	}
 };
 
-void() monster_shalrath_precache = {
+void() monster_shalrath_precache = { // [FUNCTION]
 	precache_model("progs/ad171/mon_shalrath.mdl");
 	precache_model("progs/ad171/h_shalrath.mdl");
 	precache_model(MODEL_PROJ_SHAL);		// Original - progs/v_spike.mdl

@@ -174,7 +174,7 @@ void() hogreham_slam17	= [	$slam17,	hogreham_run1 ] {
 	}
 };
 
-void() hogreham_melee = {
+void() hogreham_melee = { // [FUNCTION]
 	// Hammer ogres don't get interrupted with pain for melee
 	self.pain_finished = time + 2;
 	if (self.spawnflags & MON_HOGRE_METAL) hogreham_slam1();

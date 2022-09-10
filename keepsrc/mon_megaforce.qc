@@ -51,7 +51,7 @@ float MEGAF_IDLE = 0;
 float MEGAF_WALK = 1;
 float MEGAF_RUN = 2;
 
-void() megaf_shieldon = {
+void() megaf_shieldon = { // [FUNCTION]
 	self.takedamage = DAMAGE_YES;	// Grenades bounce off
 	self.bouncegrenade = TRUE;		// Warning to other monsters
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
@@ -69,7 +69,7 @@ void() megaf_shieldon = {
 	// Magical AoA weapons still go through
 };
 
-void() megaf_shieldoff = {
+void() megaf_shieldoff = { // [FUNCTION]
 	self.takedamage = DAMAGE_AIM;	// Grenades make contact
 	self.bouncegrenade = FALSE;		// Reset to default
 	self.reflectlightning = FALSE;	// Reflect lightning strikes
@@ -84,15 +84,15 @@ void() megaf_shieldoff = {
 	self.resist_poison = self.resist_acid = 0;
 };
 
-void() megaf_shieldsound_on = {
+void() megaf_shieldsound_on = { // [FUNCTION]
 	sound(self,CHAN_ITEM,"ad181/deflector/shield_on.wav",1,ATTN_NORM);
 };
 
-void() megaf_shieldsound_off = {
+void() megaf_shieldsound_off = { // [FUNCTION]
 	sound(self,CHAN_ITEM,"ad181/deflector/shield_off.wav",1,ATTN_NORM);
 };
 
-void() megaf_shieldparticle = {
+void() megaf_shieldparticle = { // [FUNCTION]
 	self.pos1 = self.origin;
 	// Randomize position from middle to feet (particles float up)
 	self.pos1_z = self.pos1_z - (random()*20);
@@ -228,7 +228,7 @@ void()	megaf_fast7= [$run7, megaf_fast8] {
 void()	megaf_fast8= [$run8, megaf_fast1] { megaf_run(11); };
 
 // Melee/Close attack (Plasma Canon)
-void() megaf_fire_plasma = {
+void() megaf_fire_plasma = { // [FUNCTION]
 	local vector org, targ_org, dir;
 
 	if (!self.enemy) return;

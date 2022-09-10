@@ -2,7 +2,7 @@ void() dlord_move1;
 void() dlord_run1;
 void() dlord_idle_sound;
 
-void() dguard_hit = {
+void() dguard_hit = { // [FUNCTION]
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
 			sound(self,CHAN_WEAPON,"quoth/dguard/slmiss1.wav",1,ATTN_NORM);
@@ -17,7 +17,7 @@ void() dguard_hit = {
 	if (self.poisonous) PoisonDeBuff(self.enemy);
 };
 
-void(void() thinkst) SUB_DLordCheckRefire = {
+void(void() thinkst) SUB_DLordCheckRefire = { // [FUNCTION]
 	local vector spot1;
 	local vector spot2;
 	local entity targ;
@@ -39,7 +39,7 @@ void(void() thinkst) SUB_DLordCheckRefire = {
 	self.think = thinkst;
 };
 
-void() dlord_shot_think = {
+void() dlord_shot_think = { // [FUNCTION]
 	if (self.enemy.health < 1)
 		return;
 
@@ -50,7 +50,7 @@ void() dlord_shot_think = {
 	self.think = dlord_shot_think;	
 };
 
-void(float offset) dlord_shot = {
+void(float offset) dlord_shot = { // [FUNCTION]
 	local vector offang;
 	local vector org;
 	local vector vec;
@@ -83,13 +83,13 @@ void(float offset) dlord_shot = {
 	newmis.velocity = vec * 750;
 };
 
-void() shieldon = {
+void() shieldon = { // [FUNCTION]
 	self.shield = 1;
 	self.effects = EF_BRIGHTFIELD;
 	self.takedamage = DAMAGE_YES;
 };
 
-void() shieldoff = {
+void() shieldoff = { // [FUNCTION]
 	self.shield = 0;
 	self.effects = 0;
 	self.takedamage = DAMAGE_AIM;
@@ -185,7 +185,7 @@ void() dlord_dieb7 = [60, dlord_dieb8] {};
 void() dlord_dieb8 = [61, dlord_dieb9] { monster_death_postcheck(); };
 void() dlord_dieb9 = [62, dlord_dieb9] { monster_deadbody_check(); };
 
-void() dlord_die = {
+void() dlord_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -197,7 +197,7 @@ void() dlord_die = {
 	}
 };
 
-void(float vertoffset) dlord_light = {
+void(float vertoffset) dlord_light = { // [FUNCTION]
 	local vector org, org2, dir, offang;
 
 	offang_z = offang_z + vertoffset;
@@ -323,9 +323,8 @@ void() dlord_watk20 = [152, dlord_watk21] { ai_charge(6); };
 void() dlord_watk21 = [153, dlord_watk22] { ai_charge(TE_WIZSPIKE); };
 void() dlord_watk22 = [154, dlord_run1] { ai_charge(3); };
 
-void() dlord_idle_sound = {
-	if (random() < 0.2)
-		sound(self,CHAN_VOICE, "quoth/dlord/idle.wav",1,ATTN_NORM);
+void() dlord_idle_sound = { // [FUNCTION]
+	if (random() < 0.2) sound(self,CHAN_VOICE, "quoth/dlord/idle.wav",1,ATTN_NORM);
 };
 
 void(entity inflictor, entity attacker, float damage) dlord_pain = {
@@ -339,7 +338,7 @@ void(entity inflictor, entity attacker, float damage) dlord_pain = {
 	dlord_pain1();
 };
 
-void() magic_choice = {
+void() magic_choice = { // [FUNCTION]
 	local vector dist;
 	local float d;
 	dist = self.enemy.origin - self.origin;

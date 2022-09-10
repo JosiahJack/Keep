@@ -197,21 +197,19 @@ wait    : -1 = trigger once only
 -------- NOTES --------
 Change the monster passive state
 ======================================================================*/
-void() trigger_monsterpassivestate_use = {
+void() trigger_monsterpassivestate_use = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 
-	// Loop around target(s) and update move speed
 	self.enemy = find (world, targetname, self.target);
-	while(self.enemy) {
+	while(self.enemy) { // Loop around target(s) and update move speed
 		change_passivestate(self.enemy, self.state); // All error checks in function
 		self.enemy = find (self.enemy, targetname, self.target); // Are there anymore targets left in the list?
 	} 
 	
-	// Trigger once functionality?
-	if (self.wait < 0) self.estate = ESTATE_OFF;
+	if (self.wait < 0) self.estate = ESTATE_OFF; // Trigger once functionality?
 };
 
-void() trigger_monsterpassivestate = {
+void() trigger_monsterpassivestate = { // [ENTITY]
 	self.classtype = CT_TRIGMONATTACK;
 	if (SUB_HideIfNoTarget()) return;
 	
@@ -224,7 +222,7 @@ void() trigger_monsterpassivestate = {
 	self.estate = ESTATE_ON;
 };
 
-void() UpdateCharmerGoal = {
+void() UpdateCharmerGoal = { // [FUNCTION]
    local entity targ;
    local vector d;
 
@@ -246,7 +244,7 @@ void() UpdateCharmerGoal = {
    }
 };
 
-void() HuntCharmer = {
+void() HuntCharmer = { // [FUNCTION]
 	self.huntingcharmer = TRUE;
 	UpdateCharmerGoal();
 	if (self.th_walk) self.think = self.th_walk;

@@ -380,7 +380,7 @@ void()	dfury_watk22= [	$w_attack22,dfury_run1	] { ai_charge(21);
 	}
 };
 
-void() dfury_melee = {
+void() dfury_melee = { // [FUNCTION]
 	// Use heavy overhead smash for monsters
 	if (self.enemy.flags & FL_MONSTER) dfury_smash1();
 	else {
@@ -397,7 +397,7 @@ void() dfury_melee = {
 
 // Magic attacks (glowing swords)
 // Magic Attack A - Spray of spikes from raised up swords
-void(float offset) dfury_magica_shot = {
+void(float offset) dfury_magica_shot = { // [FUNCTION]
 	local float shotcount;
 	local vector soffset, dir, offang;
 
@@ -435,7 +435,7 @@ void(float offset) dfury_magica_shot = {
 };
 
 // Magic Attack B - 3 x rockets launched in an arc
-void() dfury_magicb_shot = {
+void() dfury_magicb_shot = { // [FUNCTION]
 	local float offset, shotcount;
 	local vector soffset, dir, offang, avel;
 
@@ -473,7 +473,7 @@ void() dfury_magicb_shot = {
 	}
 };
 
-void(float skincolor) dfury_attachment_setup = {
+void(float skincolor) dfury_attachment_setup = { // [FUNCTION]
 	if (self.attachment && self.attachment.state != STATE_ON) {
 		self.attachment.state = STATE_ON;
 		setmodel(self.attachment, self.weaponglow);
@@ -486,7 +486,7 @@ void(float skincolor) dfury_attachment_setup = {
 	}
 };
 
-void() dfury_attachment_update = {		
+void() dfury_attachment_update = { // [FUNCTION]	
 	if (self.attachment) {
 		setorigin(self.attachment, self.origin);
 		self.attachment.angles = self.angles;
@@ -533,7 +533,7 @@ void()	dfury_magicb13 = [	$magica13,	dfury_run1] {};
 
 // MagicB is explosive so only use if there is range available
 // Otherwise randomly pick between the two types (spikes/rockets)
-void() dfury_magic = {
+void() dfury_magic = { // [FUNCTION]
 	SUB_AttackFinished (2 + random());
 	self.enemydist = range_distance(self.enemy, FALSE);
 	if (self.enemydist < MONAI_JUMPFURYNEAR) dfury_magica1();
@@ -542,7 +542,6 @@ void() dfury_magic = {
 		else dfury_magicb1();
 	}
 };
-
 
 void()	dfury_painA1	= [	$painA1,		dfury_painA2	] {};
 void()	dfury_painA2	= [	$painA2,		dfury_painA3	] {};
@@ -562,7 +561,7 @@ void()	dfury_painD9	= [	$painD9,		dfury_painD10	] {};
 void()	dfury_painD10	= [	$painD10,		dfury_painD11	] {};
 void()	dfury_painD11	= [	$painD11,		dfury_run1	] {};
 
-void(entity inflictor, entity attacker, float damage)	dfury_pain = {
+void(entity inflictor, entity attacker, float damage) dfury_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 	
@@ -607,7 +606,6 @@ void()	dfury_die14	= [	$death15,	dfury_die15	] {
 void()	dfury_die15	= [	$death16,	dfury_die16	] { monster_death_postcheck(); };
 void()	dfury_die16	= [	$death17,	dfury_die16	] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void()	dfury_dieb1	= [	$deathb1,	dfury_dieb2	] {};
 void()	dfury_dieb2	= [	$deathb2,	dfury_dieb3	] { monster_check_gib(); };
 void()	dfury_dieb3	= [	$deathb3,	dfury_dieb4	] { monster_check_gib();
@@ -625,7 +623,7 @@ void()	dfury_dieb12= [	$deathb12,	dfury_dieb13] {};
 void()	dfury_dieb13= [	$deathb13,	dfury_dieb14] { monster_death_postcheck(); };
 void()	dfury_dieb14= [	$deathb14,	dfury_dieb14] { monster_deadbody_check(); };
 
-void() dfury_die = {
+void() dfury_die = { // [FUNCTION]
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -637,7 +635,7 @@ void() dfury_die = {
 	}
 };
 
-void(float soundtype) dfury_grunt_sound = {
+void(float soundtype) dfury_grunt_sound = { // [FUNCTION]
 	if (soundtype == DFURY_SOUND_PULLAPART)
 		sound(self,CHAN_WEAPON,"ad171/dknight/dfury_grunt3.wav",1,ATTN_NORM);
 	else if (soundtype == DFURY_SOUND_OVERSMASH)
@@ -655,7 +653,7 @@ void(float soundtype) dfury_grunt_sound = {
 	}
 };
 
-void() monster_dfury_precache = {
+void() monster_dfury_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_dfury.mdl");
 	precache_model ("progs/ad171/h_dfury.mdl");
 	precache_model ("progs/ad171/mon_dfury_glow.mdl");		// Glowing magical swords

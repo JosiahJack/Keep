@@ -138,6 +138,7 @@ float() can_eat_bones;
 void MakeIcyExp (vector org);
 void(string explosound, float g1cnt, float g2cnt, float g3cnt) ExplosiveGibDeath;
 void(entity targ) ResetDebuffBurning;
+void() SeekCube;
 
 // Only load extra gibs when there is a monster requiring them
 // There are separate gib models because of particle trail colours
@@ -404,6 +405,8 @@ void() TouchGib = { // [FUNCTION]
 
 // Was originally in player.qc; moved here instead.  Spawns a gib model and throws it up into the air to bounce around.
 void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
+	local entity cube;
+
 	while (gib_qty > 0) {
 		gibitem = spawn();
 		if (!gibitem) return;
@@ -563,10 +566,23 @@ void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 		gibitem.think = RemoveGib;
 		gibitem.th_die = SUB_Null;
 		gibitem.th_pain = SUB_Null_pain;
-
 		if (gibitem.physicsflags) {
 			Gyro_Object_Activate(gibitem,MASS_GIB);
 			if (gibitem.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(gibitem,BOUY_GIB);
+		}
+
+		cube = find(world, classname, "BloodCube");
+		while(cube != world) {
+			if (cube.state == STATE_ON) {
+				if (visible(cube)) {
+					gibitem.movetype = MOVETYPE_FLY;
+					gibitem.solid = SOLID_BBOX;
+					gibitem.enemy = cube;
+					gibitem.think = SeekCube;
+					gibitem.nextthink = time + 0.2 + random()*1;
+				}
+			}
+			cube = find(cube, classname, "BloodCube");
 		}
 		gib_qty = gib_qty - 1;
 	}

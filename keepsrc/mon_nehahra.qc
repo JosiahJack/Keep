@@ -16,13 +16,7 @@ void() nehahra_checkvolume = {
 	self.volume = 0.2;
 };
 
-void() nehahra_bspdamage = {
-	if (self.enemy.classname == "player") return;
-	T_Damage(self.enemy, self, self, 2000, DAMARMOR);
-	sound(self,CHAN_BODY,"nehahra/boss3/step1.wav",1,ATTN_NONE);
-};
-
-float() neh_findbsp = {
+float() neh_findbsp = { // [FUNCTION]
 	local entity head;
 	head = findradius(self.origin, 300);
 	while (head) {
@@ -37,17 +31,7 @@ float() neh_findbsp = {
 	return FALSE;
 };
 
-void() nehahra_wreckbsp = {
-	if (self.waterlevel > 1) { remove(self); return; }
-	if (self.enemy.items & IT_SUIT) { remove(self); return; }
-	if ((other.flags & FL_MONSTER) || (other.flags & FL_CLIENT)) { self.touch = WeldTouch; return; }
-	other = self.enemy;
-	nehahra_bspdamage();
-	neh_findbsp();
-	nehahra_bspdamage();
-};
-
-void() kill_nehahra = {
+void() kill_nehahra = { // [FUNCTION]
 	local float num;
 	local entity head;
 	local string pie1;
@@ -65,12 +49,12 @@ void() kill_nehahra = {
 	remove(self);
 };
 
-void(entity inflictor, entity attacker, float damage) bod_neh_pain = {
+void(entity inflictor, entity attacker, float damage) bod_neh_pain = { // [FUNCTION]
 	self.charmer.enemy = attacker;
 	T_Damage(self.charmer, attacker, self, 1, DAMARMOR);
 };
 
-void() nehahra_frame = {
+void() nehahra_frame = { // [FUNCTION]
 	local float num, t;
 	local vector dave;
 	local entity head;
@@ -106,7 +90,7 @@ void() nehahra_frame = {
 	self.nextthink = time + 0.1;
 };
 
-void() nehahra_carnify_body = {
+void() nehahra_carnify_body = { // [FUNCTION]
 	local vector dave;
 	local entity body;
 
@@ -132,7 +116,7 @@ void() nehahra_carnify_body = {
 	body.nextthink = time + 0.3;
 };
 
-void() nehahra_carnify_head = {
+void() nehahra_carnify_head = { // [FUNCTION]
 	local vector dave;
 	local entity head;
 
@@ -158,7 +142,7 @@ void() nehahra_carnify_head = {
 	head.nextthink = time + 0.5;
 };
 
-float() nehahra_checkhit = {
+float() nehahra_checkhit = { // [FUNCTION]
 	local entity mark;
 	local vector delta, dave;
 	local float num;
@@ -181,7 +165,7 @@ float() nehahra_checkhit = {
 
 void() nehahra_handlebsp;
 
-void(float dist) nehahra_motion = {
+void(float dist) nehahra_motion = { // [FUNCTION]
 	local entity putz;
 
 	movedist = dist;
@@ -225,7 +209,7 @@ void(float dist) nehahra_motion = {
 	movetogoal(dist);
 };
 
-void() nehahra_damage = {
+void() nehahra_damage = { // [FUNCTION]
 	local float ldmg;
 
 	if (!(self.enemy)) return;
@@ -245,7 +229,7 @@ void() nehahra_damage = {
 	}
 };
 
-void() nehahra_field_goal = {
+void() nehahra_field_goal = { // [FUNCTION]
 	local entity mark;
 
 	mark = self.enemy;
@@ -259,7 +243,7 @@ void() nehahra_field_goal = {
 	}
 };
 
-void() nehahra_stand = [self.walkframe, nehahra_stand] {
+void() nehahra_stand = [self.walkframe, nehahra_stand] { // [FUNCTION]
 	self.touch = SUB_Null;
 	if (self.walkframe >= 14) self.walkframe = 0;
 	self.frame = self.walkframe;
@@ -271,7 +255,7 @@ void() nehahra_goal;
 void(entity targ) face_bsp;
 void() nehahra_bspfire;
 
-void() nehahra_bspspit = [25, nehahra_bspspit] {
+void() nehahra_bspspit = [25, nehahra_bspspit] { // [FUNCTION]
 	self.touch = SUB_Null;
 	if (self.walkframe >= 12) {
 		self.walkframe = 0;
@@ -292,7 +276,7 @@ void() nehahra_bspspit = [25, nehahra_bspspit] {
 	}
 };
 
-void() nehahra_spitting = [14, nehahra_spitting] {
+void() nehahra_spitting = [14, nehahra_spitting] { // [FUNCTION]
 	self.touch = SUB_Null;
 	if (self.walkframe >= 11) {
 		self.walkframe = 0;
@@ -305,7 +289,7 @@ void() nehahra_spitting = [14, nehahra_spitting] {
 	if (self.walkframe > 3 && self.walkframe < 10) nehahra_spitfire();
 };
 
-void() nehahra_missile =  {
+void() nehahra_missile =  { // [FUNCTION]
 	local vector spot;
 
 	self.walkframe = 0;
@@ -317,9 +301,13 @@ void() nehahra_missile =  {
 	nehahra_spitting();
 };
 
-void() nehahra_squashing = { if (other.takedamage) if (other.health > 0) if (infront(other)) T_Damage(other, self, self, 20, DAMARMOR); };
+void() nehahra_squashing = { // [FUNCTION]
+	if (other.takedamage)
+		if (other.health > 0)
+			if (infront(other)) T_Damage(other, self, self, 20, DAMARMOR);
+};
 
-void() nehahra_goal = [52, nehahra_goal] {
+void() nehahra_goal = [52, nehahra_goal] { // [FUNCTION]
 	self.touch = nehahra_squashing;
 	if (self.walkframe >= 24) self.walkframe = 0;
 
@@ -345,14 +333,14 @@ void() nehahra_goal = [52, nehahra_goal] {
 	}
 };
 
-void(entity targ) face_bsp = {
+void(entity targ) face_bsp = { // [FUNCTION]
 	local vector spot1;
 	spot1 = targ.absmin + (targ.absmax - targ.absmin) * 0.5;
 	self.ideal_yaw = vectoyaw(spot1 - self.origin);
 	ChangeYaw();
 };
 
-void() nehahra_bspfire = {
+void() nehahra_bspfire = { // [FUNCTION]
 	local vector org, vec, spot;
 
 	makevectors(self.angles);
@@ -362,7 +350,7 @@ void() nehahra_bspfire = {
 	WeldFire(org, vec);
 };
 
-void() nehahra_sounds =  {
+void() nehahra_sounds =  { // [FUNCTION]
 	local float num;
 
 	nehahra_checkvolume();
@@ -408,7 +396,7 @@ void() nehbsp_smash10 = [48, nehbsp_smash11] {};
 void() nehbsp_smash11 = [47, nehbsp_smash12] { self.enemy = self.oldenemy; };
 void() nehbsp_smash12 = [46, nehahra_goal] {};
 
-void() nehahra_handlebsp = {
+void() nehahra_handlebsp = { // [FUNCTION]
 	self.walkframe = 0;
 	if (random() < 0.3) {
 		nehahra_bspspit();
@@ -435,7 +423,7 @@ void() nehahra_kick7 = [43, nehahra_kick8] { nehahra_damage(); nehahra_field_goa
 void() nehahra_kick8 = [44, nehahra_kick9] {};
 void() nehahra_kick9 = [42, nehahra_goal] {};
 
-void() nehahra_melee = {
+void() nehahra_melee = { // [FUNCTION]
 	nehahra_sounds();
 	if (random() < 0.5)
 		nehahra_smash1();
@@ -443,7 +431,7 @@ void() nehahra_melee = {
 		nehahra_kick1();
 };
 
-float(entity targ) visible_bsp = {
+float(entity targ) visible_bsp = { // [FUNCTION]
 	local vector spot1;
 	local vector spot2;
 	spot1 = self.origin + self.view_ofs;
@@ -454,7 +442,7 @@ float(entity targ) visible_bsp = {
 	return FALSE;
 };
 
-void() nehahra_die = [76, n_die2] {
+void() nehahra_die = [76, n_die2] { // [FUNCTION]
 	monster_death_precheck();
 	nehjet();
 	nehjet();

@@ -446,8 +446,8 @@ void() light_fluorospark = { // [ENTITY]
 void() light_globe = { // [ENTITY]
 	self.mdl = "progs/s_light.spr";
 	precache_model (self.mdl);
-	setmodel(self, self.mdl);
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
+	setmodel(self,self.mdl);
+	setsize(self,VEC_ORIGIN, VEC_ORIGIN);
 	self.classtype = CT_LIGHTSTATIC; // Default = static entity, check done in static function
 	setup_vanilla_nostatic();
 	light_customstyle_start(); // Check for any custom light styles

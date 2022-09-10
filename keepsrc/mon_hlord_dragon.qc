@@ -41,7 +41,7 @@ void() ryu_sfx_fly;
 void() hlorddragon_fireball;
 void() hlorddragon_melee1;
 
-void() hlorddragon_check_attack = {
+void() hlorddragon_check_attack = { // [FUNCTION]
     local   vector  vec;
     local   float   dot;
 
@@ -86,7 +86,7 @@ void() hlorddragon_check_attack = {
 // ===================================
 // dragon_untilt (Added by PM)
 // ===================================
-void() hlorddragon_untilt = {
+void() hlorddragon_untilt = { // [FUNCTION]
     if (self.angles_z != 0)
     {
         if (self.angles_z < -5)
@@ -101,7 +101,7 @@ void() hlorddragon_untilt = {
 // ===================================
 // dragon_move 
 // ===================================
-void(float dist) hlorddragon_move = {
+void(float dist) hlorddragon_move = { // [FUNCTION]
     local   vector  moveDir, moveAngles;
     local   float   leftTurn, rightTurn, turnOffset, onpath; // onpath is TRUE if flying toward path_corner.
     local   entity  oldEnemy, targ;       // Goal the dragon should aim/move toward.    
@@ -302,7 +302,7 @@ void() hlorddragon_walk13 = [$drgfly13, hlorddragon_walk1 ]
 // ===========================================
 // dragon_fireball
 // ===========================================
-void() hlorddragon_fireball = {
+void() hlorddragon_fireball = { // [FUNCTION]
     local   float   fireCount;
     local   vector  org, dir;
     local   float   distortion;
@@ -363,7 +363,7 @@ void() hlorddragon_fireball = {
 };
 
 // melee attacks
-void() hlorddragon_tail = {
+void() hlorddragon_tail = { // [FUNCTION]
     local float dist;
     local vector dir;
     
@@ -401,9 +401,6 @@ void() hlorddragon_melee11 = [$drgslh11, hlorddragon_melee12] { hlorddragon_move
 void() hlorddragon_melee12 = [$drgslh12, hlorddragon_melee13] { hlorddragon_move(10); };
 void() hlorddragon_melee13 = [$drgslh13, hlorddragon_walk1  ] { hlorddragon_move(10); };
 
-// ===================================
-// pain
-// ===================================
 void() hlorddragon_painA1 = [$drgpan1a, hlorddragon_painA2 ] { hlorddragon_move(12); };
 void() hlorddragon_painA2 = [$drgpan1b, hlorddragon_painA3 ] { hlorddragon_move(12); };
 void() hlorddragon_painA3 = [$drgpan1c, hlorddragon_walk5  ] { hlorddragon_move(12); };
@@ -428,7 +425,7 @@ void() hlorddragon_painF1 = [$drgpan6a, hlorddragon_painF2 ] { hlorddragon_move(
 void() hlorddragon_painF2 = [$drgpan6b, hlorddragon_painF3 ] { hlorddragon_move(12); };
 void() hlorddragon_painF3 = [$drgpan6c, hlorddragon_walk2  ] { hlorddragon_move(12); };
 
-void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
+void(entity inflictor, entity attacker, float damage) hlorddragon_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;
     if (SUB_IgnorePain()) return;
     if (self.dragonAttacking) return; // PM:  Don't flinch while attacking.
@@ -452,7 +449,7 @@ void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
     }
 };
 
-void() hlorddragon_boom = {
+void() hlorddragon_boom = { // [FUNCTION]
     self.velocity = self.part_vel;
     ThrowGib(1,15);
     ThrowGib(2,15);
@@ -462,7 +459,7 @@ void() hlorddragon_boom = {
     remove(self);
 };
 
-void() hlorddragon_nuke = {
+void() hlorddragon_nuke = { // [FUNCTION]
     local entity swap;
 
 	// Lavasplash particles form a box with a size of 270x270x64. 135 * 1.4142 = 190.9188.  So use 160 damage for explosion "radius" of 200.
@@ -475,12 +472,12 @@ void() hlorddragon_nuke = {
     self = swap;
 };
 
-void() hlorddragon_parts = {
+void() hlorddragon_parts = { // [FUNCTION]
 	monster_ThrowGib();
     sound(self,CHAN_BODY,"player/teledth1.wav",1,ATTN_NONE);
 };
 
-void() hlorddragon_explode =  {
+void() hlorddragon_explode =  { // [FUNCTION]
     if (self.deadflag > DEAD_DYING) return;  // Already exploded.
         
     if (vlen(self.velocity) < 100 || self.flags & FL_INWATER) {
@@ -498,7 +495,7 @@ void() hlorddragon_explode =  {
     }
 };
 
-void() hlorddragon_squish = {
+void() hlorddragon_squish = { // [FUNCTION]
     if (other.solid == SOLID_BSP) {
         self.velocity = '0 0 0';
         hlorddragon_explode();
@@ -509,7 +506,7 @@ void() hlorddragon_squish = {
         T_Damage(other, self, self, 200, DAMARMOR);
 };
 
-void() hlorddragon_death1  = [$drgdth01, hlorddragon_death2  ] {
+void() hlorddragon_death1  = [$drgdth01, hlorddragon_death2  ] { // [FUNCTION]
     self.use      = SUB_Null;
     makevectors(self.angles);
     self.velocity = 300 * v_forward - 40 * v_up;
@@ -551,7 +548,7 @@ void() hlorddragon_death21 = [$drgdth21, SUB_Null       ] {
 };
 
 // Morphs the dark lord into the beast.  See hknight for dark lord.
-void() darklord_thebeast = {
+void() darklord_thebeast = { // [FUNCTION]
     hlorddragon_nuke();     // Spawn a big explosion.
 
     self.flags = (self.flags | FL_FLY) - (self.flags & FL_GODMODE);

@@ -189,7 +189,6 @@ void() drole_rage6 = [$run6, drole_rage7 ] { ai_run(26); };
 void() drole_rage7 = [$run7, drole_rage8 ] { ai_run(30); };
 void() drole_rage8 = [$run8, drole_run ] { monster_footstep(FALSE); ai_run(28); };
 
-//----------------------------------------------------------------------
 void() drole_run1 = [$walk1, drole_run2 ] { monster_footstep(FALSE); ai_run(15); };
 void() drole_run2 = [$walk2, drole_run3 ] { monster_idle_sound(); ai_run(14); };
 void() drole_run3 = [$walk3, drole_run4 ] { ai_run(14); };
@@ -199,14 +198,13 @@ void() drole_run6 = [$walk6, drole_run7 ] { ai_run(17); };
 void() drole_run7 = [$walk7, drole_run8 ] { ai_run(13); };
 void() drole_run8 = [$walk8, drole_run ] { ai_run(8); };
 
-//----------------------------------------------------------------------
-void() drole_run = {
+void() drole_run = { // [FUNCTION]
 	if (self.attack_rage) drole_rage1();
 	else drole_run1();
 };
 
 // MELEE ATTACK - Double claws
-void(float side) drole_claw = {
+void(float side) drole_claw = { // [FUNCTION]
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -228,7 +226,7 @@ void(float side) drole_claw = {
 	}
 };
 
-void(float ragespd) drole_charge = {
+void(float ragespd) drole_charge = { // [FUNCTION]
 	if (self.attack_rage) ai_charge(ragespd);
 	else ai_charge(rint(ragespd*0.7));
 }
@@ -275,7 +273,7 @@ void() drole_clawL16 = [$clawL16, drole_run ] { drole_charge(28);
 	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && visible(self.enemy)) drole_clawR1();
 };
 
-void() drole_melee = {
+void() drole_melee = { // [FUNCTION]
 	if (random() < 0.5) drole_clawR1();
 	else drole_clawL1();
 };
@@ -294,7 +292,7 @@ void() drole_rocket4 = [ 3, SUB_Remove ] {
 	else self.velocity = self.velocity * 4.5;
 };
 
-void() drole_fire = {
+void() drole_fire = { // [FUNCTION]
 	local vector org, dir, avel;
 	if (!self.enemy) return;
 	if (self.health < 1) return;

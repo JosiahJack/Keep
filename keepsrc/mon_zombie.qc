@@ -228,7 +228,7 @@ void() zombie_attc11	= [	$attc11,	zombie_attc12	] { ai_face();
 	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() zombie_attc12	= [	$attc12,	zombie_run1		] { ai_face();ZombieThrowFlesh('-12 -19 29'); };
 
-void() zombie_missile = {
+void() zombie_missile = { // [FUNCTION]
 	self.lip = self.meleeattack;
 	// Don't pick the same attack twice in a row
 	while (self.lip == self.meleeattack) {
@@ -241,9 +241,7 @@ void() zombie_missile = {
 	else zombie_attc1();
 };
 
-
 // PAIN
-
 void() zombie_paina1	= [	$paina1,	zombie_paina2	] {};
 void() zombie_paina2	= [	$paina2,	zombie_paina3	] { ai_painforward(3); };
 void() zombie_paina3	= [	$paina3,	zombie_paina4	] { ai_painforward(1); };
@@ -375,7 +373,7 @@ void() zombie_paine30	= [	$paine30,	zombie_run1		] {
  * Be careful blocking zombie pain function with pain_finished
  * zombies react in 2 ways, minor pain (a,c,d) and full knockdown (b,e)
 ======================================================================*/
-void(entity inflictor, entity attacker, float take) zombie_pain = {
+void(entity inflictor, entity attacker, float take) zombie_pain = { // [FUNCTION]
 	self.health = self.max_health;				// reset health	
 	if (take < MONAI_ZOMBIELOW_DAM) return;		// totally ignore
 	if (self.inpain > 0) return;				// in pain animation, do nothing
@@ -402,7 +400,7 @@ void(entity inflictor, entity attacker, float take) zombie_pain = {
 /*=============================================================================
  ZOMBIE WAKEUP (check if can get up)
 =============================================================================*/
-void() zombie_wakeup	= {
+void() zombie_wakeup = { // [FUNCTION]
 	if (self.gibbed) return;			// Do nothing dead
 
 	self.th_stand = zombie_stand1;
@@ -440,16 +438,14 @@ void() zombie_wakeup	= {
 	}
 };
 
-void(entity inflictor, entity attacker, float damage) zombie_wakeup_pain = { zombie_wakeup(); };
+void(entity inflictor, entity attacker, float damage) zombie_wakeup_pain = { zombie_wakeup(); }; // [FUNCTION]
 
-void() zombie_sleep = [self.frame,zombie_sleep] { ai_stand(); };
+void() zombie_sleep = [self.frame,zombie_sleep] { ai_stand(); }; // [FUNCTION]
 
-//----------------------------------------------------------------------
 // Puts the zombie on the floor with a random Yaw rotation
 // paintype = 0 Setup on floor with use trigger
 // paintype > 0 On floor and waiting to get back up
-//----------------------------------------------------------------------
-void(float frameno) zombie_onground = {
+void(float frameno) zombie_onground = { // [FUNCTION]
 	self.health = self.max_health;	// reset health
 	self.inpain = 2;				// Lying on floor, no pain
 	self.count = 0;					// Reset get up tries
@@ -509,12 +505,12 @@ void() zombie_escape14=[$cruc_14, zombie_escape15] {
 	setorigin ( self, self.origin + v_forward * 8);
 	self.nextthink=time+0.15;
 };
-void() zombie_escape15=[ $cruc_15, zombie_escape16] {
+void() zombie_escape15=[ $cruc_15, zombie_escape16] { // [FUNCTION]
 	makevectors (self.angles);
 	setorigin ( self, self.origin + v_forward * 8);
 	self.nextthink=time+0.15;
 };
-void() zombie_escape16 = [ $cruc_16, zombie_run1 ] {
+void() zombie_escape16 = [ $cruc_16, zombie_run1 ] { // [FUNCTION]
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	self.takedamage = DAMAGE_AIM;
@@ -528,15 +524,15 @@ void() zombie_escape16 = [ $cruc_16, zombie_run1 ] {
 	self.velocity_z = self.velocity_z + 25;
 };
 
-void() zombie_escape =  {
+void() zombie_escape =  { // [FUNCTION]
 	if (!self.pain_finished) self.pain_finished = time + self.delay;
 	self.think = zombie_cruc1;
 	self.nextthink = time + 0.1;
 };
 
-void(entity inflictor, entity attacker, float damage) zombie_escape_pain = { zombie_escape(); };
+void(entity inflictor, entity attacker, float damage) zombie_escape_pain = { zombie_escape(); }; // [FUNCTION]
 
-void() zombie_sneaky = {
+void() zombie_sneaky = { // [FUNCTION]
 	self.takedamage = DAMAGE_NO;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
@@ -566,7 +562,7 @@ void() zombie_sneaky = {
 // 5 = its a knockout!
 // 6 = get up and moan about it
 // 7 = fire zombie gib
-void(float type) zombie_sound = {
+void(float type) zombie_sound = { // [FUNCTION]
 	if (self.health < 1) return; // check for gibbed or idle sound block
 	if (self.spawnflags & MON_SPAWN_NOIDLE && type < 3) return;
 	
@@ -594,14 +590,14 @@ void(float type) zombie_sound = {
 	}
 };
 
-void() zombie_die = {
+void() zombie_die = { // [FUNCTION]
 	self.health = self.gibhealth; // Force gib
 	monster_death_precheck();
 };
 
 // zombie_lurk is an improved version of what zombie did in zombie_crucXX
 // with an added check for enemies if they're sneaky types... 
-void() zombie_lurk = {
+void() zombie_lurk = { // [FUNCTION]
 	if (self.spawnflags & SPAWN_SNEAKY) {
 		if (!self.pain_finished) { // Not pausing before attack, but looking for player.
 			if(FindTarget()) return;
@@ -623,7 +619,7 @@ void() zombie_cruc4	= [$cruc_4,zombie_cruc5] { zombie_lurk(); };
 void() zombie_cruc5	= [$cruc_5,zombie_cruc6] { zombie_lurk(); };
 void() zombie_cruc6	= [$cruc_6,zombie_cruc1] { zombie_lurk(); };
 
-void() zombie_cruc_spawn = {
+void() zombie_cruc_spawn = { // [FUNCTION]
 	self.use = SUB_Null;				// No more triggers
 	self.solid = SOLID_BBOX;			// Interact with objects
 	self.movetype = MOVETYPE_FLY;		// Cannot be movetype_none
@@ -644,7 +640,7 @@ void() zombie_cruc_spawn = {
 	zombie_cruc1();					// Time to do some moaning
 };
 
-void() zombie_cruc_setup = {
+void() zombie_cruc_setup = { // [FUNCTION]
 	// Setup AI functions
 	self.th_stand = self.th_walk = self.th_run = zombie_cruc1;
 	self.th_pain = SUB_Null_pain;
@@ -683,7 +679,7 @@ void() zombie_cruc_setup = {
 	monster_start();
 };
 
-void() monster_zombie_precache = {
+void() monster_zombie_precache = { // [FUNCTION]
 	precache_model ("progs/ad171/mon_zombie.mdl");
 	precache_model ("progs/ad181/h_zombie.mdl");
 	precache_sound("zombie/z_idle.wav");	// Idle A

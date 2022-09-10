@@ -83,7 +83,7 @@ void() raind_run7 = [$run3, raind_run8 ] { ai_run(10); };
 void() raind_run8 = [$run4, raind_run1 ] { monster_footstep(FALSE); ai_run(15); };
 
 // MELEE : Antler attack
-void() raind_melee = {
+void() raind_melee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -118,7 +118,7 @@ void() raind_ram4 = [$rattack4, raind_run1 ] {
 };
 
 // RANGE : Rockets from backpack
-void(vector sideofs) raind_attack = {
+void(vector sideofs) raind_attack = { // [FUNCTION]
 	local vector org, dir, vec;
 	
 	if (!self.enemy) return;
@@ -164,9 +164,7 @@ void() raind_shoot8 = [$rattack4, raind_run1 ] {
 	raind_attack('-2 12 12');
 };
 
-
 // PAIN : quick reflection
-
 void() raind_pain1 = [$rattack1, raind_pain2 ] {};
 void() raind_pain2 = [$rattack2, raind_pain3 ] { ai_pain(4); };
 void() raind_pain3 = [$rattack3, raind_pain4 ] {};
@@ -189,7 +187,7 @@ void(entity inflictor, entity attacker, float damage) raind_pain = {
 	}
 };
 
-void() raind_die = {
+void() raind_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// There is no death animation
@@ -197,7 +195,7 @@ void() raind_die = {
 	ExplosiveGibDeath(self.death_sound,0,0,0);
 };
 
-void() raind_deadbody = {
+void() raind_deadbody = { // [FUNCTION]
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL; // Setup bounding box based on presets
 	monster_bbox();
 

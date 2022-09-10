@@ -80,7 +80,7 @@ void() santa_seatB4 = [$sitB4, santa_seatB5 ] {};
 void() santa_seatB5 = [$sitB5, santa_seatB6 ] {};
 void() santa_seatB6 = [$sitB6, santa_seatB1 ] { self.th_stand(); };
 
-void() santa_trigger = {
+void() santa_trigger = { // [FUNCTION]
 	if (self.waitmin > time) return; // Trigger Once
 	
 	self.waitmin = LARGE_TIMER;
@@ -92,7 +92,7 @@ void() santa_trigger = {
 	self.ltime = self.nextthink;
 };
 
-void() santa_seated = {
+void() santa_seated = { // [FUNCTION]
 	// Keep resetting health/touch function
 	self.health = self.max_health;
 	self.use = santa_trigger;
@@ -122,7 +122,7 @@ void() santa_run5 = [$run5, santa_run6 ] { ai_run(24); };
 void() santa_run6 = [$run6, santa_run1 ] { monster_footstep(FALSE); ai_run(20); };
 
 // MELEE : Sack of Presents
-void() SantaMelee = {
+void() SantaMelee = { // [FUNCTION]
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -169,7 +169,7 @@ void() santa_sack10 = [$sack10, santa_run1 ] {
 };
 
 // RANGE : Rocket Gun
-void() Santa_FireSnow = {
+void() Santa_FireSnow = { // [FUNCTION]
 	local vector org, dir, spot1, spot2;
 	
 	// Keep adding up projectile counter
@@ -218,15 +218,13 @@ void() santa_snow4 = [$attack4, santa_run1 ] { ai_trackenemy();
 	}	
 };
 
-void() santa_snowstart = {
+void() santa_snowstart = { // [FUNCTION]
 	self.attack_track = self.enemy.origin;
 	self.attack_chance = self.attack_timer = 0;
 	santa_snow1();
 };
 
-
 // PAIN : quick reflection
-
 void() santa_painA1 = [$painA1, santa_painA2 ] {};
 void() santa_painA2 = [$painA2, santa_painA3 ] {};
 void() santa_painA3 = [$painA3, santa_painA4 ] {};
@@ -239,7 +237,7 @@ void() santa_painB3 = [$painB3, santa_painB4 ] {};
 void() santa_painB4 = [$painB4, santa_painB5 ] {};
 void() santa_painB5 = [$painB5, santa_run1 ] {};
 
-void(entity inflictor, entity attacker, float damage) santa_pain = {
+void(entity inflictor, entity attacker, float damage) santa_pain = { // [FUNCTION]
 	// Good santa cannot feel pain or die
 	if (self.spawnflags & MON_SANTA_GOOD) return;
 	
@@ -261,9 +259,7 @@ void(entity inflictor, entity attacker, float damage) santa_pain = {
 	}
 };
 
-
 // Typical forward/backward death animation
-
 void() santa_die1 = [$death1, santa_die2] {};
 void() santa_die2 = [$death2, santa_die3] { monster_check_gib(); };
 void() santa_die3 = [$death3, santa_die4] { monster_check_gib();
@@ -287,7 +283,7 @@ void() santa_dieb7 = [$bdeath7, santa_dieb8] {};
 void() santa_dieb8 = [$bdeath8, santa_dieb9] { ai_back(4);monster_death_postcheck(); };
 void() santa_dieb9 = [$bdeath9, santa_dieb9] { monster_deadbody_check(); };
 
-void() santa_die = {
+void() santa_die = { // [FUNCTION]
 	// Good santa cannot feel pain or die
 	if (self.spawnflags & MON_SANTA_GOOD) return;
 	
@@ -304,7 +300,7 @@ void() santa_die = {
 	}
 };
 
-void() monster_xmas_santa_precache = {
+void() monster_xmas_santa_precache = { // [FUNCTION]
 	precache_model ("progs/xmas/mon_santa.mdl");
 	precache_model ("progs/xmas/h_santa.mdl");
 	precache_model ("progs/xmas/gib_santagun.mdl");

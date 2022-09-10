@@ -230,7 +230,7 @@ void() sham_cswingr5 = [$swingr7,  sham_cswingr6 ] { ai_charge(6);  sham_meleeat
 void() sham_cswingr6 = [$swingr9,  sham_run1     ] { ai_charge(6);
 if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_cswingl1; };
 
-void() sham_melee = {
+void() sham_melee = { // [FUNCTION]
 	self.meleeattack = random();
 	if (self.classtype == CT_MONSHAMVILE) {
 		// Try to start with a smash
@@ -245,19 +245,8 @@ void() sham_melee = {
 	}
 };
 
-// Attachment management (create, finish and delete)
-void() sham_create_attachment = {
-	// Are the attachments setup yet?
-	if (!self.attachment) {
-		self.attachment = spawn();
-		self.attachment.owner = self;
-		self.attachment.classtype = CT_ATTACHMENT;
-		self.attachment.alpha = 0.85;
-	}
-};
-
 // Classic hitscan lightning
-void() sham_lightning = {
+void() sham_lightning = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.health < 1) return;
@@ -276,14 +265,14 @@ void() sham_lightning = {
 	else LightningDamage(org, trace_endpos, self, 10); // Standard player lightning damage function
 };
 
-void(vector leftofs, vector rightofs, float litframe) sham_casting = {
+void(vector leftofs, vector rightofs, float litframe) sham_casting = { // [FUNCTION]
 	local vector dir;
 	local float litpoint;
 
 	if (self.health < 1) return;
 	if (self.classtype == CT_MONSHAMVILE) return;
 
-	if (!self.attachment) sham_create_attachment(); // Check if attachment has been setup yet
+	SUB_CreateSelfAttachment("",0.85);
 	if (litframe == 0) { // Frame 0 is start of the sequence (move everything into place)
 		setorigin(self.attachment, self.origin);
 		setmodel(self.attachment, MODEL_PROJ_SHAMLIT);
@@ -306,7 +295,7 @@ void(vector leftofs, vector rightofs, float litframe) sham_casting = {
 	particle_explode(self.pos3, 5+random()*5, 0.2+random(), PARTICLE_BURST_BLUE, PARTICLE_BURST_SKULLUP); // Spawn some particles randomly along the lighting beam
 };
 
-void() CastVileFire = {
+void() CastVileFire = { // [FUNCTION]
     local vector org, spot;
     local float damage, direct;
 
@@ -337,7 +326,7 @@ void() CastVileFire = {
     SpawnExplosion(EXPLODE_SMALL,spot,"");
 };
 
-void() VileMagicThink = {
+void() VileMagicThink = { // [FUNCTION]
     local vector v1, v2;
 
     if (self.delay <= time) { SUB_FinishAttachments(); return; }
@@ -366,7 +355,7 @@ void() sham_magic2 = [$magic2, sham_magic3 ] {
 	if (self.classtype == CT_MONSHAMVILE) ai_face();
 	else sham_casting('0 43 61','16 -4 75',0);
 };
-void() sham_magic3 = [$magic3, sham_magic3b ] {
+void() sham_magic3 = [$magic3, sham_magic3b ] { // [FUNCTION]
 	ai_face();
 	if (self.classtype == CT_MONSHAMVILE) { // Sham-vile magic.
 		// PM:  Changed effects thinking so it sticks to shambler in case it moves.  Also, use custom sprite file for classic fireball so it gets drawn.
@@ -389,13 +378,13 @@ void() sham_magic3 = [$magic3, sham_magic3b ] {
 		self.nextthink = self.nextthink + 0.1;  // Extend delay a bit more.
 	} else sham_casting('-16 42 69','7 0 80',1);
 };
-void() sham_magic3b = [$magic3, sham_magic4 ] {
+void() sham_magic3b = [$magic3, sham_magic4 ] { // [FUNCTION]
 	if (self.classtype == CT_MONSHAMVILE) { sham_magic4(); return; }
 
 	ai_face();
 	sham_casting('-14 38 68','8 6 78',2);
 };
-void() sham_magic4 = [$magic4, sham_magic5 ] {
+void() sham_magic4 = [$magic4, sham_magic5 ] { // [FUNCTION]
 	monster_footstep(FALSE);
 	if (self.classtype == CT_MONSHAMVILE) { 
 		if (self.attachment2) {
@@ -407,7 +396,7 @@ void() sham_magic4 = [$magic4, sham_magic5 ] {
 		}
 	} else sham_casting('-22 35 75','6 3 80',3);
 };
-void() sham_magic5 = [$magic5, sham_magic6 ] {
+void() sham_magic5 = [$magic5, sham_magic6 ] { // [FUNCTION]
 	if (self.classtype == CT_MONSHAMVILE) {
 		if (self.attachment2) {
 			self.attachment2.frame = self.attachment2.frame + 1; // Frame 2.
@@ -419,37 +408,37 @@ void() sham_magic5 = [$magic5, sham_magic6 ] {
 		self.think = shamvile_magic6;
 	} else sham_casting('-3 26 88','19 -9 81',4);
 };
-void() sham_magic6 = [$magic6, sham_magic9 ] {
+void() sham_magic6 = [$magic6, sham_magic9 ] { // [FUNCTION]
 	if (self.classtype == CT_MONSHAMVILE) { shamvile_magic6(); return; }
 
 	sham_lightning();
 	sound(self,CHAN_WEAPON,"shambler/sboom.wav",1,ATTN_NORM);
 };
-void() sham_magic9 = [$magic9, sham_magic10 ] { sham_lightning(); };
-void() sham_magic10= [$magic10,sham_magic11 ] { sham_lightning();monster_footstep(FALSE); };
-void() sham_magic11= [$magic11,sham_magic12 ] {
+void() sham_magic9 = [$magic9, sham_magic10 ] { sham_lightning(); }; // [FUNCTION]
+void() sham_magic10= [$magic10,sham_magic11 ] { sham_lightning();monster_footstep(FALSE); }; // [FUNCTION]
+void() sham_magic11= [$magic11,sham_magic12 ] { // [FUNCTION]
 	if (skill == SKILL_NIGHTMARE && self.classtype != CT_MONSHAMVILE) sham_lightning();
 };
-void() sham_magic12 = [$magic12, sham_run1] {};
+void() sham_magic12 = [$magic12, sham_run1] {}; // [FUNCTION]
 
-void() shamvile_magic6  = [$magic6,  shamvile_magic9  ] {
+void() shamvile_magic6  = [$magic6,  shamvile_magic9  ] { // [FUNCTION]
     SUB_FinishAttachments();
     CastVileFire(); // Arch-Vile attack knockoff.
 	self.think = shamvile_magic9;
 	self.nextthink = time + 0.1;
 };
-void() shamvile_magic9  = [$magic9,  shamvile_magic10 ] {
+void() shamvile_magic9  = [$magic9,  shamvile_magic10 ] { // [FUNCTION]
 	ai_face();
 	self.think = shamvile_magic10;
 	self.nextthink = time + 0.1;
 };
-void() shamvile_magic10 = [$magic10, shamvile_magic11 ] { ai_face(); };
-void() shamvile_magic11 = [$magic11, sham_magic12     ] {
+void() shamvile_magic10 = [$magic10, shamvile_magic11 ] { ai_face(); }; // [FUNCTION]
+void() shamvile_magic11 = [$magic11, sham_magic12     ] { // [FUNCTION]
 	ai_face();
 };
 
 // PM:  Sha'Vile missile attack.  Can choose either to lob fireballs or to spawn an explosion.
-void() shamvile_magic = {
+void() shamvile_magic = { // [FUNCTION]
     local float chance;
 
     if (range (self.enemy) > RANGE_MID) chance = random() * 0.6; // Arch-Vile has max range of 1024, unless shot.

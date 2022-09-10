@@ -448,10 +448,8 @@ void(vector start, vector end, float color1, float color2, float density, float 
         points = ceil(points);
         dist = -24;
     } else { // Sparse, broken trail.  Useful for frost trails.
-        if (deathmatch || coop)
-            points = 2;
-        else
-            points = 3;
+        if (deathmatch || coop) points = 2;
+        else points = 3;
         dist = dist / points;
         dist = 0 - dist;
     }
@@ -462,10 +460,8 @@ void(vector start, vector end, float color1, float color2, float density, float 
         particle (end, delta, full, density);
         end = end + next;
         points = points - 1;
-        if (full == color1)
-            full = color2;
-        else
-            full = color1;
+        if (full == color1) full = color2;
+        else full = color1;
     }
 };
 
