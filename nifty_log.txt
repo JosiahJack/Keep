@@ -3,22 +3,13 @@ Finding all entities in .fgd file...
 Finding all entities in .qc files...
 Could not find qc entity `weapon_plasma` in fgd
 Could not find qc entity `bdw_monsterspawn_gang` in fgd
-Could not find qc entity `misc_flag` in fgd
 Could not find qc entity `monster_coil` in fgd
-Could not find qc entity `monster_deathguard` in fgd
 Could not find qc entity `dknight_ghostnull` in fgd
 Could not find qc entity `monster_dknightghost` in fgd
-Could not find qc entity `super_enforcer_fire` in fgd
-Could not find qc entity `flytrap_digest` in fgd
-Could not find qc entity `info_fli` in fgd
-Could not find qc entity `monster_imp` in fgd
-Could not find qc entity `monster_afrit` in fgd
 Could not find qc entity `monster_hell_knight_champion { 
 void() monster_hell_knight_champion {` in fgd
 Could not find qc entity `monster_lord` in fgd
-Could not find qc entity `monster_warrior` in fgd
 Could not find qc entity `monster_mcorn` in fgd
-Could not find qc entity `monster_me` in fgd
 Could not find qc entity `monster_guardian` in fgd
 Could not find qc entity `monster_fragwiz` in fgd
 Could not find qc entity `nehahra_checkvolume` in fgd
@@ -27,7 +18,6 @@ Could not find qc entity `monster_ogre_fishing` in fgd
 Could not find qc entity `monster_ogre_spikeshooter` in fgd
 Could not find qc entity `monster_dreadnaught` in fgd
 Could not find qc entity `queen_ghostnull` in fgd
-Could not find qc entity `monster_ranger` in fgd
 Could not find qc entity `monster_raven` in fgd
 Could not find qc entity `monster_dragon_wyrm` in fgd
 Could not find qc entity `monster_scorpion` in fgd
@@ -53,12 +43,7 @@ Could not find qc entity `monster_voreling` in fgd
 Could not find qc entity `monster_wizard` in fgd
 Could not find qc entity `monster_wizboss` in fgd
 Could not find qc entity `monster_drake` in fgd
-Could not find qc entity `monster_wolf` in fgd
 Could not find qc entity `monster_wraith` in fgd
-Could not find qc entity `monster_xmas_elf` in fgd
-Could not find qc entity `monster_xmas_raindeer` in fgd
-Could not find qc entity `monster_xmas_santa` in fgd
-Could not find qc entity `monster_xmas_snowman` in fgd
 Could not find qc entity `monster_zombie_master` in fgd
 Could not find qc entity `monster_zombiep` in fgd
 Could not find qc entity `misc_particle_trail` in fgd
@@ -116,6 +101,7 @@ Could not find fgd entity `monster_freddie` in qc files
 Could not find fgd entity `monster_edie` in qc files
 Could not find fgd entity `monster_carnivean` in qc files
 Could not find fgd entity `monster_zerstorer` in qc files
+Could not find fgd entity `monster_minotaurminion` in qc files
 Could not find fgd entity `monster_archer_lord` in qc files
 Could not find fgd entity `monster_acolyte` in qc files
 Could not find fgd entity `monster_warlock` in qc files
@@ -128,4 +114,4 @@ Could not find fgd entity `func_detail_wall` in qc files
 Could not find fgd entity `func_illusionary_visblocker` in qc files
 Could not find fgd entity `viewthing` in qc files
 Could not find fgd entity `misc_external_map` in qc files
-Comparison results:  ...Missing 82 entities in the .fgd file ...Missing 44 entities in the .qc files
+Comparison results:  ...Missing 67 entities in the .fgd file ...Missing 45 entities in the .qc files

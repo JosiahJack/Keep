@@ -46,8 +46,8 @@ void() misc_sparks_fade1;
 void() misc_flag = { // [ENTITY]
 	precache_model ("progs/rubicon2/flag.mdl");
 	setmodel(self, "progs/rubicon2/flag.mdl");
-	self.frame = (self.spawnflags & 3);
-	makestatic (self);
+	if (self.frame == 0) self.frame = (self.spawnflags & 3); // 1 = Not Animated, 2 = Big
+	makestatic(self);
 };
 
 void() sparks_use = { // [FUNCTION]

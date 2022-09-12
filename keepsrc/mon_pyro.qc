@@ -331,7 +331,7 @@ void() monster_fumigator = {
 	monster_start();
 };
 
-void() monster_dreadnaught = {
+void() monster_dreadnaught = { // [ENTITY], Redirect
 	if (self.deathstring == "")  self.deathstring = " was incinerated by a Dreadnaught\n";
 	self.classname = "monster_pyro";
 	monster_pyro();

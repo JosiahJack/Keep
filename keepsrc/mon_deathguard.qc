@@ -249,7 +249,7 @@ void() monster_deathguard_precache = {
 	precache_sound("quoth/dguard/slmiss2.wav");
 };
 
-void() monster_deathguard = {
+void() monster_deathguard = { // [ENTITY], Redirect
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -282,7 +282,7 @@ void() monster_deathguard = {
 	monster_start();
 };
 
-void() monster_death_guard = {
+void() monster_death_guard = { // [ENTITY], Correct Quoth name
 	self.classname = "monster_deathguard";
 	monster_deathguard();
 };

@@ -54,8 +54,6 @@ void() queen_stand = { self.movetype = MOVETYPE_NONE; };
 
 void() queen_walk1= [$spell1, queen_walk1] { huntressmodel_walk(5); }; //Unfinished and unused walking animation
 
-void() queen_ghostnull = {}; // The Ghost Queen system (this is not a monster)
-
 void() redqueen_setup_attachment = {
 	if (self.attachment) {
 		self.attachment.movetype = MOVETYPE_NONE;

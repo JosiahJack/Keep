@@ -620,7 +620,7 @@ void() monster_commando = {
 };
 
 void() army_nailfire;
-void() super_enforcer_fire = {
+void() super_enforcer_fire = { // [FUNCTION]
 	ai_face();
 	army_nailfire();
 };

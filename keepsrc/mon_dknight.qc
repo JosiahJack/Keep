@@ -473,12 +473,7 @@ void() dknight_die = { // [FUNCTION]
 	}
 };
 
-
-
 // The Death Knight ghost system (this is not a monster)
-
-void() dknight_ghostnull = {};
-
 void() dknight_ghost_glow = { // [FUNCTION]
 	if (self.attachment) {
 		self.attachment.frame = self.frame;

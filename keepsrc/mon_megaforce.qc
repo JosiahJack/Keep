@@ -512,4 +512,4 @@ void() monster_megaforce = {
 	monster_start();
 };
 
-void() monster_me = { self.classname = "monster_megaforce"; monster_megaforce(); };
+void() monster_me = { self.classname = "monster_megaforce"; monster_megaforce(); }; // [ENTITY], Redirect

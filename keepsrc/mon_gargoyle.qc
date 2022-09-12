@@ -761,26 +761,26 @@ void() monster_gargoyle = {
 	if (self.classtype != CT_CACHEGARGOYLE) setup_gargoyle(); // Cache gargoyle is a special class used for precache only
 };
 
-void() monster_minotaurminion = { 
+void() monster_minotaurminion = { // [ENTITY], Redirect
 	self.classtype = CT_CACHEGARGOYLE; 
 	monster_gargoyle();
 };
 
 // From Kinn
-void() monster_imp = {
+void() monster_imp = { // [ENTITY], Redirect
 	if (self.deathstring == "")  self.deathstring = " was incinerated by an Imp\n";
 	monster_gargoyle();
 };
 
 // From Kinn
-void() monster_impling = {
+void() monster_impling = { // [ENTITY]
 	self.classtype = CT_MONGARGOYLE_MINI;
 	if (self.deathstring == "")  self.deathstring = " was incinerated by an Impling\n";
 	monster_gargoyle();
 };
 
 // From Kinn
-void() monster_imp_lord = {
+void() monster_imp_lord = { // [ENTITY]
 	local float rnd;
 
 	if (self.deathstring == "") {
@@ -796,7 +796,7 @@ void() monster_imp_lord = {
 };
 
 // From Quake 1.5
-void() monster_afrit = {
+void() monster_afrit = { // [ENTITY], Redirect
 	if (self.deathstring == "")  self.deathstring = " was burned down by the Afrits\n";
 	self.classname = "monster_imp";
 	monster_gargoyle();

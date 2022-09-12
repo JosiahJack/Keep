@@ -104,7 +104,7 @@ void() hack7 = [ 27,  hack8  ] {};
 void() hack8 = [ 20,  welt1  ] {};
 
 // Readers?
-void() flytrap_digest = {
+void() flytrap_digest = { // [FUNCTION]
 	if (self.enemy.health < 1 && self.enemy.flags & FL_MONSTER) {
 		if (vlen(self.enemy.origin - self.origin) < 64) {
 			self.count = self.enemy.max_health;
@@ -339,7 +339,7 @@ void() monster_flytrap_ground = {
 	monster_start();
 };
 
-void() info_fli = {
+void() info_fli = { // [ENTITY], Redirect
 	self.classname = "monster_flytrap_ground";
 	monster_flytrap_ground();
 };

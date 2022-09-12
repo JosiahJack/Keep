@@ -3201,8 +3201,7 @@ color(128 0 128) = TrigBasic [
 	wait(integer) : "Spawn time randomness (def=2)"
 ]
 
-@PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 192)
-	color(128 128 192) = misc_smoke : "Smoke Model/Particle" [
+@PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 192) color(128 128 192) = misc_smoke : "Smoke Model/Particle" [
 	spawnflags(Flags) = [
 		 2 : "No DP Model" : 0
 		 4 : "No DP Effects" : 0
@@ -3226,8 +3225,7 @@ color(128 0 128) = TrigBasic [
 	height(integer) : "DP % of velocity direction"
 ]
 
-@PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 192)
-	color(128 128 192) = misc_smokemaker : "Smoke Particle Fountain" [
+@PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 192) color(128 128 192) = misc_smokemaker : "Smoke Particle Fountain" [
 	angles(string) : "Pitch Yaw Roll"
 	wait(integer) : "Life of Projectiles"
 	cnt(integer) : "Time Between Bursts(def=0.2, -1=rand 0to1)"
@@ -3621,6 +3619,18 @@ color(128 0 128) = TrigBasic [
 	angles(string) : "Pitch, yaw, roll"
 	avelocity(string) : "Spinning axis"
 	skin(integer) : "Red or Blue"
+]
+
+// MISC_FLAG
+// A hanging banner, gently waving in the wind. Normal dimensions: 64 wide by 144 long.
+// BIG Banner is twice as big: 128 wide by 288 long.
+@PointClass base(Appearflags, Targetname, Target) size(0 0 0, 4 64 144) color(255 255 64) studio("progs/rubicon2/flag.mdl") = misc_flag : "Flag" [
+	spawnflags(flags) =
+	[
+		1 : "Not animated" : 0
+		2 : "Big one" : 0
+	]
+	frame(integer) : "Override frame (def=spawnflags & 3)"
 ]
 
 //======================================================================
@@ -4903,18 +4913,29 @@ color(128 0 128) = TrigBasic [
 	delay(integer) : "Delay before attack" : 10
 ]
 
-@PointClass base(MonTall) studio("progs/mon_karasu.mdl") = monster_karasu: "Lord Karasu" [
+@PointClass base(MonTall) studio("progs/redfield/mon_karasu.mdl") = monster_karasu: "Lord Karasu" [
 	noise(string) : "Points to Karasu spell trigger"
 ]
-@PointClass base(MonTall) studio("progs/mon_huntress.mdl") = monster_huntress : "Elena the Blood Huntress" [
+@PointClass base(MonTall) studio("progs/redfield/mon_huntress.mdl") = monster_huntress : "Elena the Blood Huntress" [
 	spawnflags(flags) = [ 
 		2 : "TAUNT" : 0
 	]
 	noise(string) : "Points to Huntress fireblast trigger"
 ]
-@PointClass base(MonTall) studio("progs/mon_spirit.mdl") = monster_spirit : "Vengeful Spirit" [
+@PointClass base(MonTall) studio("progs/redfield/mon_spirit.mdl") = monster_spirit : "Vengeful Spirit" [
 	bodyphased (integer) : "Starts phased out"
 	bodystatic (integer) : "Prevents teleporting"
+]
+@PointClass base(Appearflags, targetname, target) size(-48 -48 -24, 48 48 88) studio("progs/redfield/mon_wolf.mdl") = monster_wolf : "Moonlight Guardian" [
+	spawnflags(flags) = [ 
+		1 : "Ambush" : 0 : "Wakeup when player is seen"
+		2 : "Howl" : 0 : "Howl after seeing player (angry)"
+		8 : "Silent" : 0 : "No wakeup sight sound"
+		16 : "NoIdle" : 0 : "No idle sounds (cupboard monster)"
+		32 : "NoGFX" : 0 : "No teleport spawn effect or sound"
+		64 : "Delay" : 0 : "Will wait for trigger before spawning"
+		128 : "Angry" : 0 : "Will spawn angry at the player"	
+	]	
 ]
 
 @PointClass base(MonWide) studio("progs/rogue/mon_lavaman.mdl") = monster_lava_man : "Hephesteus" [
@@ -4984,6 +5005,44 @@ color(128 0 128) = TrigBasic [
 ]
 
 @PointClass base(MonTall) model({"path": "progs/qmaster/mon_enforcer.mdl","skin": 13,"frame": 0}) = monster_gunner: "Chaingunner" []
+@PointClass base(MonTall) studio("progs/drake/ranger.mdl") size(-16 -16 -24, 16 16 40) = monster_ranger : "Ranger" [
+	items(choices) : "Ranger starting items. Will use against player, can drop." : 0 = [
+		-1 : "No items"
+		1 : "Shotgun"
+		2 : "Super Shotgun"
+		4 : "Nailgun"
+		8 : "Super Nailgun"
+		16 : "Grenade Launcher"
+		32 : "Rocket Launcher"
+		64 : "Thunderbolt"
+		4096 : "Axe"
+		8192 : "Green Armor"
+		16384 : "Yellow Armor"
+		32768 : "Red Armor" 
+	]
+	drama1(choices) : "Drake Map Arsenal; custom weapons. Overrides 'items' field when used. Will use against player, can drop." : 0 = [
+		1 : "Grapple"
+		2 : "Axe"
+		4 : "Chainsaw"
+		8 : "Shotgun"
+		16 : "Ruby Wand"
+		32 : "Nailgun"
+		64 : "Double Barrelled Shotgun"
+		128 : "Blaster"
+		256 : "Grenade Launcher"
+		512 : "Super Nailgun"
+		1024 : "Sidewinder Launcher"
+		2048 : "Rocket Launcher"
+		4096 : "Hyperblaster"
+		8192 : "Plasma Gun"
+		16384 : "Thunderbolt"
+		32758 : "Chain Thunderbolt"
+		65536 : "MIRV Launcher"
+		131072 : "Mjolnir"
+		262144 : "Buriza-Do Kyanon"
+	]
+	spawnflags(Flags) = [ 4: "Melee (axe). See manual for very important note" : 0]
+]
 
 @PointClass base(MonTall) studio("progs/ad171/mon_fumigator.mdl") = monster_fumigator : "Fumigator" []
 @PointClass base(MonTall) studio("progs/ad171/mon_pyro.mdl") = monster_pyro : "Pyro" []
@@ -5006,6 +5065,7 @@ color(128 0 128) = TrigBasic [
 	frame(integer) : "Statue Pose def=44" :  : "Override statue pose"
 	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
 ]
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_knight.mdl","skin": 2,"frame", 0}) = monster_warrior : "Knight" []
 @PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") = monster_hell_knight : "Hell knight" [
 	spawnflags(flags) = [ 
 		2 : "Stone Statue" : 0
@@ -5060,7 +5120,14 @@ color(128 0 128) = TrigBasic [
 	]
 ]
 
-@PointClass base(MonWide) studio("progs/ogre.mdl") = monster_ogre : "Ogre" [
+@PointClass base(MonWide) studio("progs/ad171/mon_ogre.mdl") = monster_ogre : "Ogre" [
+	spawnflags(flags) = [
+		2 : "Multi-grenades" : 0
+		4 : "Green Skin" : 0
+		4096 : "Shoot Nails" : 0
+	]
+]
+@PointClass base(MonWide) studio("progs/ad171/mon_ogre.mdl") = monster_ogre_marksman : "Ogre" [
 	spawnflags(flags) = [
 		2 : "Multi-grenades" : 0
 		4 : "Green Skin" : 0
@@ -5070,8 +5137,7 @@ color(128 0 128) = TrigBasic [
 @PointClass base(MonWide) studio("progs/nehahra/libogre.mdl") = monster_oglib : "Ogre Librarian" []
 
 //_____Fishing OGRE needs some spawnflags and keys removed_____
-@PointClass base(MonWide) studio("progs/ad171/mon_ogrefish.mdl") = monster_ogre_fishing : "Ogre Fishing" 
-[spawnflags(flags) = [ 4 : "Green Skin" : 0 ] ]
+@PointClass base(MonWide) studio("progs/ad171/mon_ogrefish.mdl") = monster_ogre_fishing : "Ogre Fishing" [spawnflags(flags) = [ 4 : "Green Skin" : 0 ] ]
 //_____Ghost Ogre has Limited Settings_____
 @PointClass base(TrigOFF,Appearflags,Targetname) studio("progs/ad171/mon_ogrefish.mdl") = monster_ogre_fishing_ghost : "Ghost Ogre Fishing" [
     spawnflags(flags) = [
@@ -5644,6 +5710,31 @@ color(128 0 128) = TrigBasic [
 		3 : "Blue with lit helmet"
 	]
 ]
+
+@PointClass base(MonShort) studio("progs/xmas/mon_elf.mdl") = monster_xmas_elf : "Mad tiny elf with a candy cane club" [
+	spawnflags(flags) = [
+		2 : "Magical (stronger)" : 0
+	]
+]
+
+@PointClass base(MonShort) studio("progs/xmas/mon_raindeer.mdl") = monster_xmas_raindeer : "Raindeer with a rocket launcher pack" [
+	spawnflags(flags) = [
+		2 : "Dead Corpse" : 0
+	]
+]
+
+@PointClass base(MonShort) studio("progs/xmas/mon_snowman.mdl") = monster_xmas_snowman : "Snowman that shoots nails" [
+	attack_count(integer) : "Nails per shot (def=5)"
+]
+
+@PointClass base(MonShort) studio("progs/xmas/mon_snowman.mdl") = monster_xmas_santa : "Santa Boss or Good Santa to be saved" [
+	spawnflags(flags) = [
+		2 : "Good" : 0
+	]
+]
+
+
+
 
 @PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) = event_lightning : "Chthon's lightning" []
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) studio("progs/teleport.mdl") = misc_teleporttrain : "Moving teleport destination" [
