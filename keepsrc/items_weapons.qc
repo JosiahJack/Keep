@@ -671,10 +671,6 @@ void() weapon_plasmalightning = {
 	weapon_start();
 };
 
-void() weapon_plasma = {
-	weapon_plasmalightning(); // TODO: Add Doom-like plasmagun per Tronyn.
-};
-
 void() weapon_chain_lightning = {
 	item_setupmodel("progs/drake/g_light2.mdl",0);
 	self.weapon = IT2_CHAINLIGHTNING;

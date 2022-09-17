@@ -2628,7 +2628,7 @@ void() version_touch = { // [FUNCTION]
    centerprint(other,self.message);
 };
 
-void() trigger_version = { // [ENTITY]
+void() trigger_version = { // [ENTITY], Legacy.  Notifies player that this is a shareware demo.
    self.touch = version_touch;
    InitTrigger();
 };

@@ -412,5 +412,5 @@ void() monster_manticore = {
 	monster_start();
 };
 
-void() monster_mcorn = { self.classname = "monster_manticore"; monster_manticore(); };
+void() monster_mcorn = { self.classname = "monster_manticore"; monster_manticore(); }; // [ENTITY], Redirect
 void() monster_lichfiend = { self.exactskin = 1; self.skin = 1; monster_manticore(); };

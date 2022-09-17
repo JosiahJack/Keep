@@ -95,8 +95,8 @@ void() tur_stand = { // [FUNCTION]
 	self.think = tur_stand;
 	self.nextthink = time + 0.1;
 };
-
-void() tur_walk = {
+ 
+void() tur_walk = { // [FUNCTION]
 	self.think = tur_stand;
 	self.nextthink = time + 0.1;
 };
@@ -118,7 +118,7 @@ void() tur_run = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 };
 
-void() tur_death = {
+void() tur_death = { // [FUNCTION]
 	Tent_Explosion(self.origin);
 	self.trigger_field.think = SUB_Remove;
 	self.trigger_field.nextthink = time + 0.1;
@@ -189,7 +189,7 @@ void() tur_launch = { // [FUNCTION]
 	v1_x = 0 - v1_x;
 	makevectors(v1);
 	v1 = v_forward;
-	if (self.spawnflags & FL_SWIM) {
+	if (self.spawnflags & 2) {
 		sound(self,CHAN_WEAPON,"drake/drone/enfire.wav",1,ATTN_NORM);
 		if (self.ammo_cells & 1) {
 			launch_projectile(self.origin + v_right*14,v1,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);

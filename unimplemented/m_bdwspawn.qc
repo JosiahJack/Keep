@@ -565,7 +565,7 @@ void() BDW_GangMonsterSpawnerUse = {
 // for small monstes, with xy dimensions of 32 (knights, hellknights etc.) it is 36
 // basically, just add 4 units to the xy size. it adds a gap of one pixel between the monster
 // and the teledeath box of the adjacent monster.
-void() bdw_monsterspawn_gang = {
+//void() bdw_monsterspawn_gang = { TODO: Add this
 	local float c;
 
 	if (!BDW_CountMonsterTypes()) objerror("monsterspawner: bad monstertype\n");

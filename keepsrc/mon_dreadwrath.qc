@@ -74,7 +74,7 @@ void(float ofs) nehwraith_shot;
 void() ai_drain;
 
 // Used by phase-capable wraiths.
-void(void() func1, void() func2) wraith_start = {
+void(void() func1, void() func2) wraith_start = { // [FUNCTION]
     if (self.spawnflags & SPAWN_SOUL) { // Resolve any conflict between phase by ambush or aether.
         if (self.health < self.max_health)
             if (self.health < WRAITH_HP_CRITICAL) {
@@ -87,12 +87,12 @@ void(void() func1, void() func2) wraith_start = {
     else func2 ();                // Wraith was phased out.
 };
 
-void() wraith_flash = {
+void() wraith_flash = { // [FUNCTION]
     if (!self.modelindex)
         if (random() < 0.2) SUB_Flash();
 };
 
-void() wraith_idle_sfx = {
+void() wraith_idle_sfx = { // [FUNCTION]
     // Note:  skin 0 is the normal wrath skin.  skin 1 is a grayscale version
     // with red eyes.  The latter is used for the ghostly wraith.  From here on,
     // any conditional with 'self.skin' will assume wraith and not wrath.
@@ -104,16 +104,15 @@ void() wraith_idle_sfx = {
     }
 };
 
-void() wraith_stand_fx = {
+void() wraith_stand_fx = { // [FUNCTION]
     if (random() < 0.3) SUB_Flash();
     if (random() < 0.05) sound(self,CHAN_VOICE,"nehahra/wraith/idle.wav",1,ATTN_IDLE);
 };
 
-void() ai_shield_on = {
-    if (self.spawnflags & 2)
-        ReflectorShield (self);
+void() ai_shield_on = { // [FUNCTION]
+    if (self.spawnflags & 2) ReflectorShield (self);
 };
-void() ai_shield_off = {
+void() ai_shield_off = { // [FUNCTION]
     if (self.spawnflags & 2)
         if (!self.mirror_finished)
             self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);

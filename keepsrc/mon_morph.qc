@@ -450,6 +450,6 @@ void() monster_morph = {
 	morph_setup();
 };
 
-void() monster_guardian = { self.classname = "monster_morph"; monster_morph(); };
+void() monster_guardian = { self.classname = "monster_morph"; monster_morph(); }; // [ENTITY], Redirect
 
 void() info_morph_destination = {};

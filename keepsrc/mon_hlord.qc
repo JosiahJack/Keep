@@ -815,8 +815,8 @@ void() monster_hell_lord_precache = { // [FUNCTION]
     precache_sound("drake/weapons/fwalltap.wav");
 };
 
-void() monster_hell_lord = { monster_hell_knight(); };
-void() monster_lord = { self.classname = "monster_hell_lord";  monster_hell_knight(); };
+void() monster_hell_lord = { monster_hell_knight(); }; // [ENTITY]
+void() monster_lord = { self.classname = "monster_hell_lord";  monster_hell_knight(); }; // [ENTITY], Redirect
 
 // For Rapture's hkboss.
 void() monster_hkboss_precache = { // [FUNCTION]

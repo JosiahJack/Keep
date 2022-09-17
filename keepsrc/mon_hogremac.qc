@@ -352,7 +352,7 @@ void() monster_hogremac_precache = {
 };
 
 // QUAKED monster_hogremac (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
-// { model(":progs/ad171/mon_hogremac.mdl"); }
+// { model("progs/ad171/mon_hogremac.mdl"); }
 // Ogre, 200 health points.
 // -------- SPAWNFLAGS --------
 // METAL : Chain mail metal armour and +100HP

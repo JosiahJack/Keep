@@ -1,4 +1,4 @@
-void() nehahra_checkvolume = {
+void() nehahra_checkvolume = { // [FUNCTION]
 	local vector dave;
 	local float num;
 	local entity head;

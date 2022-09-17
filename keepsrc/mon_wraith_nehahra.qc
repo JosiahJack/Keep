@@ -48,7 +48,7 @@ void() nehwraith_melee;
 void() nehwraith_run1;
 void() nehwraith_attack;
 
-void() death_aura = {
+void() death_aura = { // [FUNCTION]
 	if (self.alpha < 1) return;
 	if (other.health < 1) return;
 	if (other.takedamage == DAMAGE_NO) return;
@@ -356,7 +356,7 @@ void() nehwraith_painb10 = [ 89, nehwraith_painb11 ] {}; // [FUNCTION]
 void() nehwraith_painb11 = [ 90, nehwraith_painb12 ] {}; // [FUNCTION]
 void() nehwraith_painb12 = [ 91, nehwraith_run1    ] {}; // [FUNCTION]
 
-void() nehwraith_materialize = {
+void() nehwraith_materialize = { // [FUNCTION]
 	ai_face();
 	if (!walkmove(self.ideal_yaw, 8) || pointcontents(self.origin) == CONTENT_SOLID) {  // If we collide, keep moving towards player and check again.
 		self.solid = SOLID_NOT;

@@ -315,7 +315,7 @@ void() monster_turret_precache = {
 	precache_sound("custents/turret/plasbult.wav");
 };
 
-void() monster_turret = {
+void() monster_turret = { // [ENTITY], Redirect
 	local vector endorg;
 
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)

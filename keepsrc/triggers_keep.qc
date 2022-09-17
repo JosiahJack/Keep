@@ -57,7 +57,7 @@ void() keyuser_setup;
 
 void() trigger_remove = { self.classname = "trigger_void"; trigger_void(); }; // [ENTITY], redirect to AD's improved safer version.
 
-void() trigger_setgravity = { // [ENTITY], redirect to AD's improved version.
+void() trigger_setgravity = { // [ENTITY], Redirect to AD's improved version.
 	self.classname = "trigger_gravity";
 	self.spawnflags = self.spawnflags | TRIG_GRAVITYPLAYONLY;
 	trigger_gravity();
@@ -409,47 +409,23 @@ void() trigger_dive = { InitTrigger();  trigger_dive_spawn(); }; // [ENTITY]
 
 void() trigger_dive_point = { InitPointTrigger();  trigger_dive_spawn(); }; // [ENTITY]
 
-void() keytrigger_use = { // [FUNCTION]
-   if (!(activator.flags & FL_CLIENT)) return;
-   if ( (activator.health <= FALSE) ) return;
-   if (self.attack_finished > time) return;
-
-   self.attack_finished = (time + FL_SWIM);
-   if ((self.items & activator.items) != self.items) {
-      centerprint(activator, "You need a special type of key\n to fit this lock.");
-      sound(self,CHAN_VOICE,self.noise3,TRUE,ATTN_NORM);
-      return;
-   }
-
-   self.touch = SUB_Null;
-   self.use = SUB_Null;
-   self.nextthink = (time + 0.100);
-   self.think = SUB_Remove;
-   self.message = "";
-   SUB_UseTargets();
-};
-
-void() keytrigger_touch = { // [FUNCTION]
-   activator = other;
-   keytrigger_use();
-};
-
-void() trigger_usekey_skeleton = { // [ENTITY]
-   self.use = keytrigger_use;
-   self.touch = keytrigger_touch;
-   if (!self.items) self.items = IT2_KEY_SKELETON;
-   precache_sound("doors/runetry.wav");
-   self.noise3 = "doors/runetry.wav";
-   InitTrigger();
-};
-
 void() requisit_use = { // [FUNCTION]
    if (!(activator.flags & FL_CLIENT)) return;
    if (activator.health <= 0) return;
-   if (!(self.items & activator.items) || !(self.items2 & activator.items2) || !(self.moditems & activator.moditems) || !(self.perms & activator.perms)) return;
    if (self.attack_finished > time) return;
 
    self.attack_finished = (time + 2);
+   if (!(self.items & activator.items)
+         && !(self.items2 & activator.items2)
+         && !(self.moditems & activator.moditems)
+         && !(self.perms & activator.perms)) {
+      if (self.message != "") {
+         centerprint(activator,self.message);
+         if (self.noise != "") sound(activator,CHAN_VOICE, self.noise, self.volume,ATTN_NORM); // Use custom lock sound(default = talktalk)
+      }
+      return;
+   }
+
    self.touch = SUB_Null;
    self.use = SUB_Null;
    self.nextthink = (time + 0.100);
@@ -458,18 +434,33 @@ void() requisit_use = { // [FUNCTION]
 };
 
 void() requisit_touch = { // [FUNCTION]
+	if (!(other.flags & FL_CLIENT)) return;
+	if (other.health <= 0) return;
+
 	activator = other;
-	keytrigger_use();
+	requisit_use();
 };
 
 void() trigger_prerequisit = { // [ENTITY]
+   keyuser_setup();
 	self.use = requisit_use;
 	self.touch = requisit_touch;
-	if (!self.items && !self.items2 && !self.moditems && !self.perms) self.items = IT_KEY1;
+	if (!self.items && !self.items2 && !self.moditems && !self.perms) {
+      if (self.message == "") self.message = "You need the silver key";
+      self.items = IT_KEY1;
+   }
 	InitTrigger();
+   trigger_bmodel_setup(); // Setup Entity State functionality
 };
 
-void() hipkeytrigger_success = { // [FUNCTION]
+
+void() trigger_usekey_skeleton = { // [ENTITY], Redirect
+   if (self.items <= 0) self.items = IT2_KEY_SKELETON;
+   if (self.message == "") self.message = "You need a special type of key\n to fit this lock.";
+   trigger_prerequisit();
+};
+
+void() keytrigger_success = { // [FUNCTION]
    self.touch = SUB_Null;
    self.use = SUB_Null;
    self.nextthink = (time + 0.100);
@@ -479,20 +470,20 @@ void() hipkeytrigger_success = { // [FUNCTION]
    SUB_UseTargets();
 };
 
-void() hipkeytrigger_use = { // [FUNCTION]
+void() keytrigger_use = { // [FUNCTION]
 	if (!(activator.flags & FL_CLIENT)) return;
 	if (self.attack_finished > time) return;
 
 	self.attack_finished = (time + 2);
-	keyuser_attempt(hipkeytrigger_success,activator);
+	keyuser_attempt(keytrigger_success,activator);
 };
 
-void() hipkeytrigger_touch = { // [FUNCTION]
+void() keytrigger_touch = { // [FUNCTION]
 	if (!(other.flags & FL_CLIENT)) return;
 	if (other.health <= 0) return;
 
 	activator = other;
-	hipkeytrigger_use();
+	keytrigger_use();
 };
 
 void() trigger_usekey = { // [ENTITY]
@@ -503,10 +494,12 @@ void() trigger_usekey = { // [ENTITY]
 
 	if (!(self.spawnflags & 8) && !(self.spawnflags & 16) && self.customkey <= 0) self.spawnflags = self.spawnflags | 16; // If normal door settings aren't set, default to hipnotic default.
 
+   if (self.wait <= 0) self.wait = 2;
 	keyuser_setup();
-	self.use = hipkeytrigger_use;
-	self.touch = hipkeytrigger_touch;
+	self.use = keytrigger_use;
+	self.touch = keytrigger_touch;
 	InitTrigger();
+   trigger_bmodel_setup(); // Setup Entity State functionality
 };
 
 // Thought this could be fun.  Good for ice or slick muddy surfaces. -Qmaster

@@ -992,7 +992,7 @@ void() hknight_champion_magic = { // [FUNCTION]
 	else hknight_magicb1();
 };
 
-void() monster_hell_knight_champion { // [ENTITY]
+void() monster_hell_knight_champion = { // [ENTITY]
 	if (self.deathstring == "")  self.deathstring = " was conquered by a Champion Death Knight\n";
 	monster_hell_knight();
 }

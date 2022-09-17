@@ -1285,15 +1285,6 @@ void() misc_particle_burst_setup = { // [FUNCTION]
 // -------- SPAWNFLAGS --------
 // -------- NOTES --------
 // A particle emitter that fires a burst
-
-// QUAKED misc_particle_trail (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
-// -------- KEYS --------
-// targetname    : Trigger Particle Emitter
-// target        : Name of entity (only one) to add trail effect
-// part_style    : 1=yellow, 2=green, 3=red, 4=blue, 5=purple, 6=fire, 7=white
-// -------- SPAWNFLAGS --------
-// -------- NOTES --------
-// A particle emitter that adds a trail effect to another entity
 void() misc_particle_burst = { // [ENTITY]
 	self.classtype = CT_PARTICLEEMIT;
 	self.pemit_source = self;
@@ -1524,6 +1515,14 @@ void() misc_particle_trail_disable = { // [FUNCTION]
 	else self.traileffectnum = 0;
 };
 
+// QUAKED misc_particle_trail (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
+// -------- KEYS --------
+// targetname    : Trigger Particle Emitter
+// target        : Name of entity (only one) to add trail effect
+// part_style    : 1=yellow, 2=green, 3=red, 4=blue, 5=purple, 6=fire, 7=white
+// -------- SPAWNFLAGS --------
+// -------- NOTES --------
+// A particle emitter that adds a trail effect to another entity
 void() misc_particle_trail = { // [ENTITY]
 	self.classtype = CT_PARTICLEEMIT;
 	self.pemit_source = self;

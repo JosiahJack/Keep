@@ -977,7 +977,7 @@ void() misc_vase_setup = { // [FUNCTION]
 };
 
 // QUAKED misc_vase (0 0.5 0.8) (-16 -16 0) (16 16 16) FLAME LARGE x x x x STARTOFF
-// { model(":progs/vase.mdl"); }
+// { model("progs/ad181/brk_vase1.mdl"); }
 // -------- KEYS --------
 // target        : trigger events when vase breaks
 // health        : Amount of health before breaking (def = 1)

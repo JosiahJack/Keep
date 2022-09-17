@@ -117,7 +117,7 @@ void() wrath_at_c13 = [ 52.000, wrath_at_c14 ] { ai_charge(12); };
 void() wrath_at_c14 = [ 53.000, wrath_at_c15 ] { ai_charge(12); };
 void() wrath_at_c15 = [ 54.000, wrath_run01 ] { ai_charge(12); };
 
-void() wrath_attack = {
+void() wrath_attack = { // [FUNCTION]
    local float r;
 
    r = random();

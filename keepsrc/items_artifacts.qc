@@ -985,6 +985,7 @@ void() item_artifact_shambler = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/drake/doll03.mdl";
     if (self.netname == "") self.netname = "Shambler Doll";
     if (self.noise == "") self.noise = "drake/items/shambler.wav";
+    self.netname = "Shambler Doll";
 	self.classname = "item_artifact_horn";
 	item_artifact_horn();
 };
@@ -996,6 +997,23 @@ void() item_artifact_monster = { // [ENTITY], Redirect
 	self.classname = "item_artifact_horn";
 	item_artifact_horn();
 };
+
+//============
+// --> QUAKED item_artifact_dragon (0 .5 .8) (-16 -16 -24) (16 16 32) Cycle
+// Gives the player a pet dragon.  Replaces old Draco bot item.
+// Cycle:  Item type changes every 2 seconds.
+//============
+void() item_artifact_dragon = { // [ENTITY]
+    self.mdl = "progs/drake/draco.mdl";
+    self.noise = "weapons/pkup.wav";
+    self.netname = "Dragon Doll";
+    self.skin = self.skin & 7;
+    if (self.skin > 4) self.skin = 0;
+	self.exactskin = self.skin;
+    item_artifact_horn();
+};
+void() item_draco = {self.classname = "item_artifact_dragon"; item_artifact_dragon();}; // [ENTITY], Redirect
+void() item_dragon = {self.classname = "item_artifact_dragon"; item_artifact_dragon();}; // [ENTITY], Redirect
 
 void() item_artifact_berserker = { // [ENTITY]
 	item_setupmodel("progs/drake/zerkhelm.mdl",0);
@@ -1139,8 +1157,8 @@ void() PlaceItem = {
 };
 
 void() item_zerlogo = {
-	precache_model ("progs/zerlogo.mdl");
-	setmodel (self, "progs/zerlogo.mdl");
+	precache_model ("progs/zerstorer/zerlogo.mdl");
+	setmodel (self, "progs/zerstorer/zerlogo.mdl");
 	setsize (self, '-16 -16 0', '16 16 56');
 	self.oldorigin = self.origin;
 	self.nextthink = time + 0.2; // Start after other solids
@@ -1148,10 +1166,10 @@ void() item_zerlogo = {
 };
 
 void() item_tree = {
-	precache_model ("progs/tree.mdl");
+	precache_model ("progs/zerstorer/tree.mdl");
 	if (self.wait) self.skin = self.wait;
 	if (self.dmg) self.frame = self.dmg;
-	setmodel (self, "progs/tree.mdl");
+	setmodel (self, "progs/zerstorer/tree.mdl");
 	setsize (self, '-16 -16 0', '16 16 86');
 	self.oldorigin = self.origin;
 	self.nextthink = time + 0.2; // Start after other solids

@@ -1545,8 +1545,7 @@ The flag waves 90 degrees off from the entity angle. If
 you want the flag to point at 180, set then entity angle
 to 90.
 */
-void() item_flag_team2 =
-{
+void() item_flag_team2 = {
 	if (!deathmatch) {
 		remove(self);
 		return;

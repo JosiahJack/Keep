@@ -1143,4 +1143,4 @@ void() monster_ryu_wyrm = {
     monster_ryu();
 };
 
-void() monster_dragon_wyrm = { monster_ryu_wyrm(); }; // Drake re-direct.
+void() monster_dragon_wyrm = { monster_ryu_wyrm(); }; // [ENTITY], Drake Redirect.

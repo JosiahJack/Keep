@@ -290,7 +290,7 @@ void()	dfury_boss_jump12	= [ 	$lunge12,	dfury_boss_run1	] {
 	dfury_boss_footsteps (1);
 };
 
-void() bossdeath_2 = {
+void() bossdeath_2 = { // [FUNCTION]
 	local entity shake;
 
 	// if (ext_dppart) pointparticles(particleeffectnum("BOSS_DEATH_FIN"), self.origin, '0 0 0', 1);
@@ -312,7 +312,7 @@ void() bossdeath_2 = {
 void()	dfury_boss_loop1	= [	$death8,	dfury_boss_loop2 ] {};
 void()	dfury_boss_loop2	= [	$death9,	dfury_boss_loop1 ] {};
 
-void() Genocide = {
+void() Genocide = { // [FUNCTION]
 	local entity head;
 
 	if (deathmatch || coop) return;
@@ -329,7 +329,7 @@ void() Genocide = {
 	}
 };
 
-void() bossdeath_ef = {
+void() bossdeath_ef = { // [FUNCTION]
 	local entity killmonsters, deatheffect;
 
 	deatheffect = spawn();
@@ -373,21 +373,6 @@ void()	dfury_boss_die14	= [	$death14,	dfury_boss_die15] { sound(self,CHAN_AUTO,"
 void()	dfury_boss_die15	= [	$death15,	dfury_boss_die16] {};
 void()	dfury_boss_die16	= [	$death16,	dfury_boss_die17] { monster_death_postcheck(); };
 void()	dfury_boss_die17	= [	$death17,	dfury_boss_die17] { monster_deadbody_check(); };
-
-// void()	dfury_boss_dieb1	= [	$deathb1,	dfury_boss_dieb2	] { self.colormod = '1 1 1'; };
-// void()	dfury_boss_dieb2	= [	$deathb2,	dfury_boss_dieb3	] {};
-// void()	dfury_boss_dieb3	= [	$deathb3,	dfury_boss_dieb4	] { self.solid = SOLID_NOT; };
-// void()	dfury_boss_dieb4	= [	$deathb4,	dfury_boss_dieb5	] {};
-// void()	dfury_boss_dieb5	= [	$deathb5,	dfury_boss_dieb6	] {};
-// void()	dfury_boss_dieb6	= [	$deathb6,	dfury_boss_dieb7	] { sound(self,CHAN_AUTO,"q15/dfury/fall.wav",1,ATTN_IDLE); };
-// void()	dfury_boss_dieb7	= [	$deathb7,	dfury_boss_dieb8	] {};
-// void()	dfury_boss_dieb8	= [	$deathb8,	dfury_boss_dieb9	] { Monster_Animation_EarthQuake(20,377); };
-// void()	dfury_boss_dieb9	= [	$deathb9,	dfury_boss_dieb10	] {};
-// void()	dfury_boss_dieb10	= [	$deathb10,	dfury_boss_dieb11	] {};
-// void()	dfury_boss_dieb11	= [	$deathb11,	dfury_boss_dieb12	] {};
-// void()	dfury_boss_dieb12	= [	$deathb12,	dfury_boss_dieb13	] {};
-// void()	dfury_boss_dieb13	= [	$deathb13,	dfury_boss_dieb14	] { monster_death_postcheck(); };
-// void()	dfury_boss_dieb14	= [	$deathb14,	dfury_boss_dieb14	] { monster_deadbody_check(); };
 
 // creates as many gib-sets as defined in cvar 'gibsmultiplier'
 void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{

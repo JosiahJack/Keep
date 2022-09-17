@@ -178,8 +178,7 @@ void() wraith_fire_think = {
 	else self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
-void(vector start_org) wraith_debuff_explode = {
+void(vector start_org) wraith_debuff_explode = { // [FUNCTION]
 	local float fire_loop;
 	local vector fire_angles, org, dir;
 	
@@ -218,7 +217,7 @@ void(vector start_org) wraith_debuff_explode = {
 	}
 };
 
-void() wraith_debuff_trail = {
+void() wraith_debuff_trail = { // [FUNCTION]
 	local vector org, orgofs, dir, tvec, tang;
 	local float tdist, tloop, tcount, tpc;
 	local entity tent;
@@ -308,7 +307,7 @@ void() wraith_debuff_trail = {
 	wraith_debuff_explode(self.finaldest); // Large circular flame explosion
 };
 
-void(entity handent, vector orgofs, vector orgside, float dbframe) wraith_debuffball = {
+void(entity handent, vector orgofs, vector orgside, float dbframe) wraith_debuffball = { // [FUNCTION]
 	local vector org;
 	
 	// Frame 0 is start of the sequence (move everything into place)
@@ -329,7 +328,7 @@ void(entity handent, vector orgofs, vector orgside, float dbframe) wraith_debuff
 	handent.frame = dbframe;
 };
 
-void(vector orgofs, float dbframe) wraith_debuff = {
+void(vector orgofs, float dbframe) wraith_debuff = { // [FUNCTION]
 	if (self.health < 1) return;
 	
 	if (dbframe == 0) {
@@ -370,7 +369,7 @@ void(vector orgofs, float dbframe) wraith_debuff = {
 	wraith_debuffball(self.attachment2, orgofs, -v_right, dbframe);
 };
 
-//----------------------------------------------------------------------
+
 // RANGE ATTACK 1 - Swing arms forward with hand meeting together
 //
 // The debuff attack is a hitscan attack but it does have 1s animation
@@ -406,7 +405,7 @@ void() wraith_magicA14 = [$magicA14, wraith_run1 ] {
 // Create a ball of blood and throw it towards the player
 // Turning the ball into a pile of bones/nails
 
-void(vector orgofs, float nbframe) wraith_nailball = {
+void(vector orgofs, float nbframe) wraith_nailball = { // [FUNCTION]
 	local vector org;
 	if (self.health < 1) return;
 
@@ -437,7 +436,7 @@ void(vector orgofs, float nbframe) wraith_nailball = {
 	self.attachment.frame = nbframe;
 };
 
-void(vector boneofs) wraith_firenails = {
+void(vector boneofs) wraith_firenails = { // [FUNCTION]
 	local vector org, dir;
 	local float bone_type;
 	if (self.health < 1) return;
@@ -493,7 +492,7 @@ void() wraith_magicC15 = [$magicC15, wraith_run1 ] { ai_face(); };
 // Create a ball of green goo and throw it towards the player
 // Once ball has landed, hatch/explode and create spider (brown/green)
 
-void(vector eggofs, float eggframe) Setup_WraithEgg = {
+void(vector eggofs, float eggframe) Setup_WraithEgg = { // [FUNCTION]
 	local vector org;
 	if (self.health < 1) return;
 	
@@ -550,7 +549,7 @@ void() wraith_magicB11 = [$magicB11, wraith_magicB12 ] {};
 void() wraith_magicB12 = [$magicB12, wraith_magicB13 ] { ai_face(); };
 void() wraith_magicB13 = [$magicB13, wraith_run1 ] { ai_face(); };
 
-void() wraith_magic = {
+void() wraith_magic = { // [FUNCTION]
 	local entity truetarg;
 	
 	SUB_CreateSelfAttachment(MODEL_PROJ_WBALL,0.85); // Make sure the attachments are setup ready
@@ -611,7 +610,7 @@ void() wraith_painB9 = [$painB9, wraith_painB10 ] {};
 void() wraith_painB10 = [$painB10, wraith_painB11 ] {};
 void() wraith_painB11 = [$painB11, wraith_run1 ] {};
 
-void(entity inflictor, entity attacker, float damage) wraith_pain = {
+void(entity inflictor, entity attacker, float damage) wraith_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -640,7 +639,7 @@ void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	}
 };
 
-void(float fx) wrath_deatheffects = {
+void(float fx) wrath_deatheffects = { // [FUNCTION]
 	// Throw gibs, but create more XY outward velocity
 	self.max_health = MON_XYGIBVELOCITY;
 	monster_ThrowGib();
@@ -672,7 +671,7 @@ void() wraith_death11 = [$death11, wraith_death13] {};
 void() wraith_death13 = [$death13, wraith_death15] {};
 void() wraith_death15 = [$death15, wraith_death15] { wrath_deatheffects(TE_EXPLOSION); };
 
-void() wraith_die = {
+void() wraith_die = { // [FUNCTION]
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
 	sound(self,CHAN_VOICE, "ad171/wraith/death1.wav",1,ATTN_NORM);

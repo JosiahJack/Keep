@@ -87,7 +87,6 @@
 //.syncpoint#	float (TRUE || FALSE) used to set .syncronize value
 //		   I could have just used synctarg# but this lets you test with it on or off like real robots
 //.poindex	float value for the next point (1-50)
-//.syncronize	float (TRUE || FALSE) for whether or not to wait for input from other robot once at point
 //.synctarg#	string for robot to sync with, works like target and allows seemless brush travel for infinite loops
 //.syncerbot	string for holding the current robot name to sync with
 //.curpoint	vector for current point to travel to (not there yet)

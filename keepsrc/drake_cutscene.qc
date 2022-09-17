@@ -495,9 +495,9 @@ void(float pt) trigger_camera_spawn = { // [FUNCTION]
 // key gives a starting script number, and the "script_delay" key is the
 // amount of time(seconds) to stay on the first script page.
 // If the trigger_camera has a targetname, it will only enter camera mode after it has been fired.
-void() trigger_camera = { trigger_camera_spawn(FALSE); }; // [ENTITY]
+void() trigger_camera = { trigger_camera_spawn(FALSE); }; // [ENTITY], Redirect
 
-void() trigger_camera_point = { trigger_camera_spawn(TRUE); }; // [ENTITY]
+void() trigger_camera_point = { trigger_camera_spawn(TRUE); }; // [ENTITY], Redirect
 
 // Scripting function - dhm
 // The original timing idea for scripts was inspired by Zoid.  Study the code for Zoid's CTF, it is an excellent example of good Quake-C coding.

@@ -1,117 +1,669 @@
-Comparing .fgd entities to .qc entities...
-Finding all entities in .fgd file...
-Finding all entities in .qc files...
-Could not find qc entity `weapon_plasma` in fgd
-Could not find qc entity `bdw_monsterspawn_gang` in fgd
-Could not find qc entity `monster_coil` in fgd
-Could not find qc entity `dknight_ghostnull` in fgd
-Could not find qc entity `monster_dknightghost` in fgd
-Could not find qc entity `monster_hell_knight_champion { 
-void() monster_hell_knight_champion {` in fgd
-Could not find qc entity `monster_lord` in fgd
-Could not find qc entity `monster_mcorn` in fgd
-Could not find qc entity `monster_guardian` in fgd
-Could not find qc entity `monster_fragwiz` in fgd
-Could not find qc entity `nehahra_checkvolume` in fgd
-Could not find qc entity `monster_ogre_marksman` in fgd
-Could not find qc entity `monster_ogre_fishing` in fgd
-Could not find qc entity `monster_ogre_spikeshooter` in fgd
-Could not find qc entity `monster_dreadnaught` in fgd
-Could not find qc entity `queen_ghostnull` in fgd
-Could not find qc entity `monster_raven` in fgd
-Could not find qc entity `monster_dragon_wyrm` in fgd
-Could not find qc entity `monster_scorpion` in fgd
-Could not find qc entity `monster_skullwiz` in fgd
-Could not find qc entity `info_skullwiz_link` in fgd
-Could not find qc entity `trap_spike_mine` in fgd
-Could not find qc entity `info_spirit_link` in fgd
-Could not find qc entity `info_spirit_destination` in fgd
-Could not find qc entity `monster_servomech` in fgd
-Could not find qc entity `func_servomech` in fgd
-Could not find qc entity `trigger_servomech` in fgd
-Could not find qc entity `monster_steelclaw` in fgd
-Could not find qc entity `monster_tarbaby` in fgd
-Could not find qc entity `monster_tarbaby_mitosis` in fgd
-Could not find qc entity `tur_walk` in fgd
-Could not find qc entity `tur_death` in fgd
-Could not find qc entity `monster_tur` in fgd
-Could not find qc entity `monster_turret` in fgd
-Could not find qc entity `monster_ubs` in fgd
-Could not find qc entity `monster_newboss` in fgd
-Could not find qc entity `monster_vomit` in fgd
-Could not find qc entity `monster_voreling` in fgd
-Could not find qc entity `monster_wizard` in fgd
-Could not find qc entity `monster_wizboss` in fgd
-Could not find qc entity `monster_drake` in fgd
-Could not find qc entity `monster_wraith` in fgd
-Could not find qc entity `monster_zombie_master` in fgd
-Could not find qc entity `monster_zombiep` in fgd
-Could not find qc entity `misc_particle_trail` in fgd
-Could not find qc entity `misc_bellredfield` in fgd
-Could not find qc entity `misc_vase` in fgd
-Could not find qc entity `misc_modelrdm` in fgd
-Could not find qc entity `func_robot` in fgd
-Could not find qc entity `func_robot_controller` in fgd
-Could not find qc entity `ambient_custom_loop` in fgd
-Could not find qc entity `env_sound` in fgd
-Could not find qc entity `item_sphere` in fgd
-Could not find qc entity `func_shadow` in fgd
-Could not find qc entity `trigger_timer` in fgd
-Could not find qc entity `trigger_playerparticles` in fgd
-Could not find qc entity `trigger_lightstyle` in fgd
-Could not find qc entity `item_flag` in fgd
-Could not find qc entity `func_ctf_wall` in fgd
-Could not find qc entity `item_time_machine` in fgd
-Could not find qc entity `item_time_core` in fgd
-Could not find qc entity `trap_gravity_well` in fgd
-Could not find qc entity `trigger_fallspeed` in fgd
-Could not find qc entity `trigger_skyfog` in fgd
-Could not find qc entity `trigger_version` in fgd
-Could not find qc entity `trigger_cvarset` in fgd
-Could not find qc entity `trigger_prerequisit` in fgd
-Could not find fgd entity `item_artifact_dragon` in qc files
-Could not find fgd entity `path_corner` in qc files
-Could not find fgd entity `trigger_camera` in qc files
-Could not find fgd entity `trigger_camera_point` in qc files
-Could not find fgd entity `trigger_jump` in qc files
-Could not find fgd entity `trigger_touchsound` in qc files
-Could not find fgd entity `trigger_remove` in qc files
-Could not find fgd entity `trigger_setgravity` in qc files
-Could not find fgd entity `trigger_setcvar` in qc files
-Could not find fgd entity `info_particles` in qc files
-Could not find fgd entity `count` in qc files
-Could not find fgd entity `misc_boom` in qc files
-Could not find fgd entity `misc_smokemaker` in qc files
-Could not find fgd entity `this` in qc files
-Could not find fgd entity `misc_gtkmodel` in qc files
-Could not find fgd entity `mapobject_custom` in qc files
-Could not find fgd entity `light_fluoropost_dead` in qc files
-Could not find fgd entity `light_fix_dead` in qc files
-Could not find fgd entity `light_ceil_dead` in qc files
-Could not find fgd entity `light_marsh` in qc files
-Could not find fgd entity `path_rotate` in qc files
-Could not find fgd entity `no` in qc files
-Could not find fgd entity `monster_soldier` in qc files
-Could not find fgd entity `monster_soldier_elite` in qc files
-Could not find fgd entity `monster_hell_knight_champion` in qc files
-Could not find fgd entity `monster_death_guard` in qc files
-Could not find fgd entity `monster_death_lord` in qc files
-Could not find fgd entity `monster_shalrath_boss` in qc files
-Could not find fgd entity `monster_freddie` in qc files
-Could not find fgd entity `monster_edie` in qc files
-Could not find fgd entity `monster_carnivean` in qc files
-Could not find fgd entity `monster_zerstorer` in qc files
-Could not find fgd entity `monster_minotaurminion` in qc files
-Could not find fgd entity `monster_archer_lord` in qc files
-Could not find fgd entity `monster_acolyte` in qc files
-Could not find fgd entity `monster_warlock` in qc files
-Could not find fgd entity `turretbal_unique` in qc files
-Could not find fgd entity `func_detail` in qc files
-Could not find fgd entity `func_group` in qc files
-Could not find fgd entity `func_detail_fence` in qc files
-Could not find fgd entity `func_detail_illusionary` in qc files
-Could not find fgd entity `func_detail_wall` in qc files
-Could not find fgd entity `func_illusionary_visblocker` in qc files
-Could not find fgd entity `viewthing` in qc files
-Could not find fgd entity `misc_external_map` in qc files
-Comparison results:  ...Missing 67 entities in the .fgd file ...Missing 45 entities in the .qc files
+Checking all bsp files...
+Checking generated /home/qmaster/QUAKE/keep/maps/ORL_movingchains.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/allitems.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/asset_library.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_batt0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_batt1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_bh10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_bh100.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_bh25.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_lnail0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_lnail1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_mrock0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_mrock1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_nail0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_nail1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_plas0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_plas1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_rock0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_rock1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_shell0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_shell1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_wbh10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/b_wbh25.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/ctf1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/dreams1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/droletest1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/eftest.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/eftest2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/egyp_upsidwn_pyramid.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/end3.ent
+* Failed to find sky: bloodline_
+Checking generated /home/qmaster/QUAKE/keep/maps/end3test.ent
+* Failed to find sky: bloodline_
+Checking generated /home/qmaster/QUAKE/keep/maps/end4.ent
+* Failed to find sky: hellsky5
+Checking generated /home/qmaster/QUAKE/keep/maps/engine1.ent
+* Failed to find sky: grimmnight_
+* No matching targetname for target value of conv1wp3
+* No matching targetname for target value of conv2wp1
+* No matching targetname for target value of conv1wp2
+* No matching targetname for target value of conv2wp45
+* No matching targetname for target value of conv1wp4
+* No matching targetname for target value of conv2wp2
+* No matching targetname for target value of conv1wp5
+* No matching targetname for target value of conv2wp23
+* No matching targetname for target value of conv3strip2wp1
+* No matching targetname for target value of conv3wp1
+* No matching targetname for target value of conv3strip1wp1
+* No matching targetname for target value of conv3wp5
+* No matching targetname for target value of conv3strip1wp4
+* No matching targetname for target value of conv3strip2wp4
+* No matching targetname for target value of secretdoor3
+* No matching targetname for target value of startmusic
+=== 16 issues found in /home/qmaster/QUAKE/keep/maps/engine1.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/finaletest1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/gr1m1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/helm18.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hex2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip1m1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip1m2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip1m3.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip1m4.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip1m5.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip2m1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip2m2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip2m3.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip2m4.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip2m5.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip2m6.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip3m1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip3m2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip3m3.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hip3m4.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hipdm1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/hipend.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/kpbonus.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/kpcrypt1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/kpdung.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/kpkeep.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/kplibry.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/kpstart.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/limbo2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/miscmodels.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/mj3m1.ent
+* Failed to find sky: redbone_
+Checking generated /home/qmaster/QUAKE/keep/maps/mj3m2.ent
+* Failed to find sky: redbone_
+Checking generated /home/qmaster/QUAKE/keep/maps/mj3m3.ent
+* Failed to find sky: redbone_
+* No matching targetname for target value of keyTrap
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/mj3m3.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/mj3m4.ent
+* Failed to find sky: redbone_
+* No matching targetname for target value of gremTrap1
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/mj3m4.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/mj3m5.ent
+* Failed to find sky: redbone_
+Checking generated /home/qmaster/QUAKE/keep/maps/mj3m6.ent
+* Failed to find sky: voidsmoke_
+Checking generated /home/qmaster/QUAKE/keep/maps/mj4m1.ent
+* Failed to find sky: kradegar_
+* No matching targetname for target value of erubusblast1
+* No matching targetname for target value of erubusblast2
+=== 2 issues found in /home/qmaster/QUAKE/keep/maps/mj4m1.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/mj4m2.ent
+* Failed to find sky: snowmoon_
+Checking generated /home/qmaster/QUAKE/keep/maps/mj4m2vis.ent
+* Failed to find sky: snowmoon_
+Checking generated /home/qmaster/QUAKE/keep/maps/mj4m3.ent
+* Failed to find sky: miramfx_
+* No matching targetname for target value of iwblfychapo
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/mj4m3.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/old_start.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/puztests.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/qbsp_faces.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/qcastle.ent
+* No matching targetname for target value of pathendwp1
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/qcastle.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/qcastletests.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/qcastletests01.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/quake_castle.ent
+* Failed to find sky: underverse_
+Checking generated /home/qmaster/QUAKE/keep/maps/quake_castle01.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m3.ent
+* No matching targetname for target value of t69
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/r1m3.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m4.ent
+* No matching targetname for target value of t273
+* No matching targetname for target value of t275
+* No matching targetname for target value of t370
+* No matching targetname for target value of t290
+* No matching targetname for target value of t288
+* No matching targetname for target value of t333
+=== 6 issues found in /home/qmaster/QUAKE/keep/maps/r1m4.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m5.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m6.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r1m7.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m3.ent
+* No matching targetname for target value of t40
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/r2m3.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m4.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m5.ent
+* No matching targetname for target value of t672
+* No matching targetname for target value of t24
+=== 2 issues found in /home/qmaster/QUAKE/keep/maps/r2m5.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m6.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m7.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/r2m8.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/rogtests.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/rogtests2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/rogtests3.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/singmontest.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/spcscr.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/start.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/start2.ent
+* Failed to find sky: sunrisedark_
+* No matching targetname for target value of glass_shortcut
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/start2.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/statuegarden.ent
+* Failed to find sky: storm
+Checking generated /home/qmaster/QUAKE/keep/maps/tbg1.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/terracity.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test1000.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_ai.ent
+* No matching targetname for target value of flytrap1
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_ai.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/test_aishrinesflytraps.ent
+* No matching targetname for target value of flytrap1
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_aishrinesflytraps.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/test_ammo_weapons.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_angletarget.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_airtank.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_blastbelt.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_jboots.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_lavashield.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_bal_knights.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_boxkeep.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_boxkeep2.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_breakable_exceptions.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_breakable_pot.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_brushes.ent
+* No matching targetname for target value of counter1
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_brushes.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/test_chaos1.ent
+* Failed to find sky: moonhigh_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_corpse_model.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_corpsemodel.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_custom_hud.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_door_elevator.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_fading_bmodel.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_fireworks.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_func_breakable_flesh.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_func_train.ent
+* Failed to find sky: moonhigh_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_gibfountain.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_grapplehook.ent
+* Failed to find sky: moonhigh_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_hazard_dmg.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_inquisitor.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_intermission_cam.ent
+* Failed to find sky: moonhigh_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_item_progression.ent
+* Failed to find sky: moonrise_
+* No matching targetname for target value of item_error_2
+* No matching targetname for target value of shell_respawn
+* No matching targetname for target value of item_error_4b
+=== 3 issues found in /home/qmaster/QUAKE/keep/maps/test_item_progression.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/test_light_static.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_light_styles.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_liquids.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_liquids_nosplitturb.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_mapvar_portals.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_marshlight.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_camera.ent
+* Failed to find sky: moonhigh_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_gibfountain.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_mangle.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_model.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_spark.ent
+* Failed to find sky: moonrise_
+Checking extent /home/qmaster/QUAKE/keep/maps/test_monster.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_chthon3.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_deflector.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_dprince.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_floyd.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_judicator.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_justice.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_minotaur.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_nour.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_pathing.ent
+* Failed to find sky: moonhigh_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_rocketeer.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_tarbaby.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_part_trail.ent
+* Failed to find sky: moonrise_
+* No matching targetname for target value of no_target_1
+=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_part_trail.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/test_partfield.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_passivestate.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_pg_upgrade.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_playerfall.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_playerhpmax.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_precache.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_qrobot.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_qrobotstripd.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_randomizer.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_rope.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_ruins.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_scale.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_sightgroup.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_switch_shadow.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_teleport_instant.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_teleporter.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_template.ent
+* No matching targetname for target value of door1
+* No matching targetname for target value of door2
+* No matching targetname for target value of door3
+=== 3 issues found in /home/qmaster/QUAKE/keep/maps/test_template.bsp
+Checking generated /home/qmaster/QUAKE/keep/maps/test_tjunc01.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_tjunc02.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_tjunc03.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_fog.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_give.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_gravity.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_health.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_ladder.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_monsterjump.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_monsterkill.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_push.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_relay.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_skyfog.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_takeartifact.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_teleport.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_teleport2.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_teleport3.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_timer.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_velocity.ent
+* Failed to find sky: moonrise_
+Checking generated /home/qmaster/QUAKE/keep/maps/test_weapons.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/test_wetsuit.ent
+* Failed to find sky: moonrise_
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick05.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick06.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick07.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick08.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick09.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick11.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick12.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick13.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick14.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick15.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick16.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick17.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick18.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick19.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick20.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick21.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick22.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick23.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick24.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick25.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick26.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick27.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick28.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass05.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass06.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass07.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass08.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass09.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass11.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass12.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass13.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass14.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass15.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass16.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal05.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal06.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal07.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal08.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal09.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal11.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal12.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal13.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal14.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal15.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal16.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal17.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal18.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal19.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal20.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock05.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock06.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock07.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock08.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock09.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock11.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock12.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock13.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock14.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock15.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock16.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock17.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock18.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock19.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock20.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock21.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock22.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock23.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock24.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood05.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood06.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood07.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood08.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood09.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood11.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood12.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_concrete.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_greybrick.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_greybrick2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_indyrubble.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_sandstone.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/baserub1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/baserub1_paradise.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/baserub2_paradise.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/bz8_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr81_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr82_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr83_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr84_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/crate_r1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/explodebox_1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/explodebox_2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/explodebox_3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/glass01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/grate_r1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ikcrate_r1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ikcrate_r2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/paradise_column1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/paradise_column2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/pbt04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/phk_03brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/rock_sw01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/rock_sw02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/rock_sw03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/sfloor4_2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/tech10_2d1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/tech10_2d2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/wood_paradise.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/az_chain1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/az_chain2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/az_chain3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bchains1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bchains2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge2b.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge3.ent
+* Failed to find sky: morningdew_
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge4.ent
+* Failed to find sky: miramfx_
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2l.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2p.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2r.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2rl.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains4.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains4p.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains5.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains5l.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains5p.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_thanshelf.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/sep_chain2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/sep_chain3.ent
+Checking generated /home/qmaster/QUAKE/keep/maps/bmodels/zornrach_glider.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/debris/brick01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/debris/wood1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_column1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock4.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_ice05.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_kbr1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_kjw1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_rtex01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_wood1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/azr1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/azr2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/azr3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk5.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_4brk1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_4brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_brk3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_brk4.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city2_3d1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city2_3rd.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city4_2_brk1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city4_2_brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city4_2_brk3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city6_8brk1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city6_8brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/floor015_brk1.ent
+* Failed to find sky: moonrise_
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/floor015_brk2.ent
+* Failed to find sky: moonrise_
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/floor015_brk3.ent
+* Failed to find sky: moonrise_
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/plat_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rot_p.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/waa1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/wbrick15_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/win1ah_brk.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/win1ah_brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/wiz14_brk1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/wiz14_brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ws14_brk1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ws14_brk2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ws14_brk3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/mjolnir/dish03.ent
+* Failed to find sky: morningdew_
+Checking extent /home/qmaster/QUAKE/keep/maps/mjolnir/truckee.ent
+* Failed to find sky: morningdew_
+Checking generated /home/qmaster/QUAKE/keep/maps/mjolnir/wheel.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/models/rubble1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/models/rubble2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_obj_wwheel.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_hall2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_hall3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_part1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_part2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/nsoe2/b_barrel.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/nsoe2/b_wbh10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/nsoe2/b_wbh25.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_bio_l.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_bio_s.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_plas_l.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_plas_s.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/quoth/kellbase1_fan.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022a.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022b.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022c.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022d.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330a.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330b.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330c.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330d.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340a.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340b.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340c.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340d.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413ra.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413rb.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413rc.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413rd.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1a.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1b.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1c.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1d.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door3.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door4.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/rock1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/rock2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/spdcrate_r1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/speedbzvent1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/speedbzvent2.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar01.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar02.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar03.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar04.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_batt0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_batt1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_bh10.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_bh100.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_bh25.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_nail0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_nail1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_rock0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_rock1.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_shell0.ent
+Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_shell1.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/allitems.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/cryptbridge.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/droletest1.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/end3.ent
+* Failed to find sky: bloodline_
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/end4.ent
+* Failed to find sky: heather_
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/finaletest1.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/mappi.ent
+* No matching targetname for target value of halltele_t
+=== 1 issues found in /home/qmaster/QUAKE/keep/mapsrc/mappi.bsp
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/rogtests.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_ai.ent
+* No matching targetname for target value of flytrap1
+=== 1 issues found in /home/qmaster/QUAKE/keep/mapsrc/test_ai.bsp
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_aishrinesflytraps.ent
+* No matching targetname for target value of flytrap1
+=== 1 issues found in /home/qmaster/QUAKE/keep/mapsrc/test_aishrinesflytraps.bsp
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_boxkeep.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_fireworks.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_inquisitor.ent
+Checking extent /home/qmaster/QUAKE/keep/mapsrc/test_monster.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_rope.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_weapons.ent
+Checking generated /home/qmaster/QUAKE/keep/mapsrc/wheel.ent
+Failed to generate /home/qmaster/QUAKE/keep/progs/dwell/b_bh25.ent
+Checking extent /home/qmaster/QUAKE/keep/progs/gw/b_explob.ent
+Checking extent /home/qmaster/QUAKE/keep/progs/gw/m_bridge1.ent
+Checking extent /home/qmaster/QUAKE/keep/progs/quoth/box_l.ent
+Checking extent /home/qmaster/QUAKE/keep/progs/quoth/box_s.ent
+Failed to generate /home/qmaster/QUAKE/keep/qcsources/InventoryExamples/source/maps/start.ent
+Checking generated /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/emitters.ent
+Checking generated /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/switches.ent
+Checking generated /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/water.ent
+Checking extent /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/models/rubble1.ent
+Checking extent /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/models/rubble2.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/chicken_qc/chick.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/death/maps/shred.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/golem_qc/bad05.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serp0.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serp1.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serp2.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serptest.ent
+Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/melyta/maps/melyta.ent
+Done checking bsp files!
+Mod file check complete!

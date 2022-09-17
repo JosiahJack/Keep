@@ -86,7 +86,7 @@ NOPAUSE   : Train does not pause on this path corner
 Node based path routing system
 
 ======================================================================*/
-entity(string arrowmdl, vector arroworg) path_corner_spawnarrow = {
+entity(string arrowmdl, vector arroworg) path_corner_spawnarrow = { // [FUNCTION]
 	local entity arrow;
 
 	arrow = spawn();
@@ -105,7 +105,7 @@ entity(string arrowmdl, vector arroworg) path_corner_spawnarrow = {
 // Backward - PATH_BACKLINK (self.attachment3)
 // PATHC_DEADEND = Back link is missing
 // Original logic did not cope with broken or missing target/target2.  Moved red arrow updates to the end to catch all broken links
-void() path_corner_updatearrow = {
+void() path_corner_updatearrow = { // [FUNCTION]
 	if (self.spawnflags & PATHC_TARGET2 && self.state == STATE_ROUTE2) {
 		// ROUTE 2 (forward2) active
 		if (self.attachment) { self.attachment.skin = ARROW_GREENL; self.attachment.alpha = self.alpha; }
@@ -128,7 +128,7 @@ void() path_corner_updatearrow = {
 	if (!(self.spawnflags & PATHC_BACKLINK) && self.attachment3) { self.attachment3.skin = ARROW_RED; self.attachment3.alpha = self.alpha; }
 };
 
-void() path_corner_setuparrow = {
+void() path_corner_setuparrow = { // [FUNCTION]
 	if (query_configflag(SVR_DEVHELPER) || developer < 2) return; // Visual AI pathing only active in dev mode
 
 	if (!self.alpha) self.alpha = 0.35; // Setup default alpha for arrows
@@ -180,7 +180,7 @@ void() path_corner_setuparrow = {
 	path_corner_updatearrow(); // Update arrows if route logic active
 };
 
-void() path_corner_setuptargets = {
+void() path_corner_setuptargets = { // [FUNCTION]
 	local entity fdest;
 	
 	self.movetarget = self.movetarget2 = self.movetarget3 = world; // Reset primary, secondary and backlink target entities
@@ -278,7 +278,7 @@ void() path_corner_setuptargets = {
 };
 
 // This is a TRIGGER entry point only!
-void() path_corner_use = {
+void() path_corner_use = { // [FUNCTION]
 	// Change spawnflags NOPAUSE (-1=NO, 1=YES, 2=Toggle)
 	if (other.corner_pause) {
 		// Store the parameter locally so it can modified
@@ -351,7 +351,7 @@ void() path_corner_use = {
 	if (developer > 0) path_corner_updatearrow();
 };
 
-void() path_corner_stop = {
+void() path_corner_stop = { // [FUNCTION]
 	other.goalentity = other.movetarget = world;
 	other.pausetime = time + LARGE_TIMER;
 	other.think = other.th_stand;
@@ -360,7 +360,7 @@ void() path_corner_stop = {
 
 void() ogle_pushcart1;
 
-void(entity mon, entity obj) give_monster_object = {
+void(entity mon, entity obj) give_monster_object = { // [FUNCTION]
 	local entity tself;
 	local vector org, out, up;
 
@@ -381,12 +381,12 @@ void(entity mon, entity obj) give_monster_object = {
 	self = tself; // restore previous self
 };
 
-void(entity mon) take_monster_object = {
+void(entity mon) take_monster_object = { // [FUNCTION]
 	mon.hasobject = "";
 	mon.entattachment = world;
 };
 
-void() path_corner_touch = {
+void() path_corner_touch = { // [FUNCTION]
 	if (!(other.flags & FL_MONSTER)) return;	// ONLY Monsters can use path corners
 	if (other.health < 1) return;				// Dead things don't need path guidance
 	if (other.enemy) return;					// In combat, no time to follow paths
@@ -459,7 +459,7 @@ void() path_corner_touch = {
 };
 
 // Used by monsters, func_trains and tether system
-void() path_corner = {
+void() path_corner = { // [ENTITY]
 	// Really need to prevent path corners with no targetname otherwise it will cause problems with linking later
 	if (self.targetname == "") {
 		dprint("\b[PATH_CORNER]\b Missing targetname!\n");

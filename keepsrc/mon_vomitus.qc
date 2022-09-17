@@ -390,7 +390,7 @@ void() monster_vomit_precache = { // [FUNCTION]
 // multiple bboxs.  Since Nehahra used standard shambler size, and
 // the shambler is nearly as fat, use that size.
 // Note to self:  Quoth's gug is even fatter, yet it uses shambler bbox.
-void() monster_vomit = {
+void() monster_vomit = { // [ENTITY] Redirect
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

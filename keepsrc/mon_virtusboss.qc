@@ -310,7 +310,7 @@ void() monster_virtus_precache = { // [FUNCTION]
 	precache_sound("boss1/death.wav");
 };
 
-void() monster_newboss = {
+void() monster_newboss = { // [ENTITY], Redirect
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/virtus/newboss.mdl";
@@ -338,6 +338,6 @@ void() monster_newboss = {
 	self.use = newboss_awake;
 };
 
-void() monster_virtus = { self.classname = "monster_newboss"; monster_newboss(); };
+void() monster_virtus = { self.classname = "monster_newboss"; monster_newboss(); }; // [ENTITY]
 
-void() info_boss_spot = {};
+void() info_boss_spot = {}; // [ENTITY] Resurface point

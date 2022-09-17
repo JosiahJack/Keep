@@ -756,7 +756,14 @@ void() trigger_lightstyle = { // [ENTITY]
 	// Custom remap or string are required
 	if (self.customstyle_remap < 1 && self.customstyle_string == "") {
 		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
-		dprint("\b[TRIG_LS]\b remap or string missing!\n");
+		dprint("\b[trigger_lightstyle]\b customstyle_remap or customstyle_string missing!\n");
+		remove(self);
+		return;
+	}
+
+	if (self.style < 1 || self.style > 63) {
+		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
+		dprint("\b[trigger_lightstyle]\b Style out of bounds, must be between 1 and 63!\n");
 		remove(self);
 		return;
 	}

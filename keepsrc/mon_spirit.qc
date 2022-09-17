@@ -733,7 +733,7 @@ void() monster_spirit = {
 // -------- SPAWNFLAGS --------
 // -------- NOTES --------
 // Teleport destination for Vengeful Spirit ONLY
-void() info_spirit_link = {
+void() info_spirit_link = { // [FUNCTION]
 	local entity currlink, master;
 	local float loopcondition;
 	

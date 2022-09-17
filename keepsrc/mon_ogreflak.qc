@@ -191,7 +191,7 @@ void() monster_ogre_spikeshooter_precache = {
 	precache_sound("weapons/skotch.wav");
 };
 
-void() monster_ogre_spikeshooter = {
+void() monster_ogre_spikeshooter = { // [ENTITY], Redirect.  monster_ogre_flak is the normal fgd name.
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 		
@@ -245,6 +245,6 @@ void() monster_ogre_spikeshooter = {
 	monster_start();
 };
 
-void() monster_ogre_flak = {
+void() monster_ogre_flak = { // [ENTITY]
 	monster_ogre_spikeshooter();
 };

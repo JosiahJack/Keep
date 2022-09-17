@@ -819,7 +819,7 @@ void() monster_skull_wizard_lord = { self.classname = "monster_skullwiz"; self.s
 // distance : Minimum distance enemy needs to be before spawning
 // -------- NOTES --------
 // Teleport destination for skull wizard ONLY
-void() info_skullwiz_link = {
+void() info_skullwiz_link = { // [FUNCTION]
 	local entity currlink, master;
 	local float loopcondition;
 

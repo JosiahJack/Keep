@@ -1158,10 +1158,10 @@ void() setup_necro = { // [FUNCTION]
     monster_start();
 };
 
-void() monster_acolyte = { self.classtype = CT_MONACOLYTE; monster_necromancer(); };
-void() monster_sorcerer = { self.classtype = CT_MONSORCERER; monster_necromancer(); };
-void() monster_warlock = { self.classtype = CT_MONWARLOCK; monster_necromancer(); };
+void() monster_acolyte = { self.classtype = CT_MONACOLYTE; monster_necromancer(); }; // [ENTITY]
+void() monster_sorcerer = { self.classtype = CT_MONSORCERER; monster_necromancer(); }; // [ENTITY]
+void() monster_warlock = { self.classtype = CT_MONWARLOCK; monster_necromancer(); }; // [ENTITY]
 
 // Coven of Ebony entities.
-void() monster_fragwiz = { monster_acolyte(); };
-void() monster_sorceror = { monster_sorcerer(); };// PM:  Spelled 'sorcerer' NOT 'sorceror'.
+void() monster_fragwiz = { monster_acolyte(); }; // [ENTITY], Redirect
+void() monster_sorceror = { monster_sorcerer(); };// [ENTITY], Redirect.  PM:  Spelled 'sorcerer' NOT 'sorceror'.
