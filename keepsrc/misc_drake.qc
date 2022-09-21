@@ -195,8 +195,8 @@ void() misc_decor = { // [ENTITY]
         self.pos2 = '16 16 86';
     }
 	precache_model(self.mdl);
-	setmodel(self, self.mdl);
-    setsize (self, self.pos1, self.pos2);
+	setmodel(self,self.mdl);
+    setsize(self,self.pos1,self.pos2);
     self.nextthink  = time + 0.2;   // items start after other solids
     self.think = PlaceDecor;
 };
@@ -209,10 +209,9 @@ void(float loop, float dm) statue_pieces = { // [FUNCTION]
     self.health = dm;   // So the rocks have some velocity.
     sound(self,CHAN_AUTO,"drake/misc/wallbrk.wav",1,ATTN_NORM);
     do {
-        if (random() < 0.5)
-			ThrowGib(11, 1); // gib1mdl  ThrowTreeChunks ("progs/drake/imp_rock.mdl");
-        else
-			ThrowGib(12, 1); // gib2mdl ThrowTreeChunks ("progs/drake/st_gib3.mdl");
+        if (random() < 0.5) ThrowGib(11, 1); // gib1mdl  ThrowTreeChunks ("progs/drake/imp_rock.mdl");
+        else ThrowGib(12, 1); // gib2mdl ThrowTreeChunks ("progs/drake/st_gib3.mdl");
+
         loop = loop - 1;
     } while (loop > 0);
     self.health = hp;

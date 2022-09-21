@@ -46,7 +46,8 @@
 							// FINALIZED: It's done. Add comment header, final
 							//            code cleanups, final comments. Add to
 							//			  documentation.  All tests pass.
-							// N/A Does not apply.
+							// N/A: Does not apply.  Contains only definitions
+							//      and no code to test or verify.
 
 //============================ Overall Mod Notes ==============================
 // You will note that there are some odd tags in the comments on all functions.

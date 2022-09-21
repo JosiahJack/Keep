@@ -55,7 +55,7 @@ void(float strong) monster_tarbaby_mitosis_setup = { // [FUNCTION]
 		if (self.skin <= 0) self.skin = self.exactskin = 2;
 	} else {
 		if (self.health < 1) self.health = 60;
-		if (self.skin <= 0) self.skin = self.exactskin = 1;
+		if (self.skin <= 0) self.skin = self.exactskin = 24;
 	}
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
 	if (self.minion_name == "") {

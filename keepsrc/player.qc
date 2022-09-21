@@ -129,6 +129,10 @@ void() player_axeoldd4 = [ 140.000, player_run ]	   { if (!frame_pause())  self.
 void(float fr, float wf) playham_frame = { // [FUNCTION]
 	if (frame_pause()) return;
 
+	if (self.weapon == IT2_MJOLNIR && !self.weaponismoditems) {
+		if (self.hammer_finished >= time) { self.weaponframe=0; return; }
+	}
+
     self.frame = fr;
     if (wf) self.weaponframe=wf;
     else {
@@ -196,9 +200,9 @@ void() player_run = [ 6, player_run ] { // [FUNCTION]
 		 || (self.weapon == IT2_MJOLNIR && !self.weaponismoditems && self.ammo_cells > 0)) {
 		if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 			if (random() < 0.5) {
-				sound(self,CHAN_AUTO,"tronyn/lightning_component_electrified.wav", 0.4,ATTN_NORM);
-				self.idletimer = time + 1.59; // In Drake, the frames are grouped, so play sound periodically.
-			} else {
+			//	sound(self,CHAN_AUTO,"tronyn/lightning_component_electrified.wav", 0.4,ATTN_NORM);
+			//	self.idletimer = time + 1.59; // In Drake, the frames are grouped, so play sound periodically.
+			//} else {
 				sound(self,CHAN_AUTO,"tronyn/lightning_rod_electrified.wav", 0.4,ATTN_NORM);
 				self.idletimer = time + 2.41; // In Drake, the frames are grouped, so play sound periodically.
 			}
@@ -610,12 +614,17 @@ void() player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_fra
 void() player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]
 void() player_mjolnir2 = [ 39.000, player_mjolnir3 ] { if (!frame_pause()) playham_frame(39,2); }; // [FUNCTION]
 void() player_mjolnir3 = [ 40.000, player_mjolnir4 ] { // [FUNCTION]
-	if (frame_pause()) return;
-
-	playham_frame(40,3);
-	if (HIP_ThrowMjolnir()) self.think = player_mjolnir4t; // TRUE if the hammer hits something or gets thrown.
+	if (!frame_pause()) {
+		playham_frame(40,3);
+		if (HIP_ThrowMjolnir()) self.think = player_mjolnir4t; // TRUE if the hammer hits something or gets thrown.
+	}
 };
-void() player_mjolnir4 = [ 41.000, player_mjolnir5 ] { if (frame_pause()) return; playham_frame(41,4); W_FireMjolnir(); }; // [FUNCTION]
+void() player_mjolnir4 = [ 41.000, player_mjolnir5 ] {
+	if (!frame_pause()) {
+		playham_frame(41,4);
+		W_FireMjolnir();
+	}
+}; // [FUNCTION]
 void() player_mjolnir5 = [ 42.000, player_mjolnir6 ] { playham_frame(42,4); }; // [FUNCTION]
 void() player_mjolnir6 = [ 43.000, player_run ] { playham_frame(43,0); }; // [FUNCTION]
 

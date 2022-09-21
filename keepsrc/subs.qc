@@ -484,9 +484,15 @@ void() tdeath_touch = { // [FUNCTION]
 	}
 };
 
+float last_tdeath;
+
 void(vector org, entity death_owner) spawn_tdeath = { // [FUNCTION]
 	local entity death;
 
+
+	if ((time - last_tdeath < 0.510)) { dprint("skipped teledeath for "); dprint(death_owner.classname); dprint(", with self of "); dprint(self.classname); return; }
+
+	last_tdeath = time;
 	death = spawn();
 	death.classname = "teledeath";
 	death.owner = death_owner;

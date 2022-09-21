@@ -89,53 +89,20 @@ void() Vomit_Spawn = {
     // 100% chance of vomiting meat when we've spit up all our minion spawns.
 	if (self.minion_count >= self.minion_maxcount) { Vomit_Meat(0); return; }
 
-	self.minion_count = self.minion_count + 1;
-	newmis = spawn();
 	sound(newmis,CHAN_VOICE,"rogue/blob/mytosis.wav",1,ATTN_NORM);
-	newmis.classname = "monster_tarbaby";
-	newmis.classtype = CT_MONSPAWN;
-	newmis.classgroup = CG_SPAWN;
-	newmis.movetype = MOVETYPE_STEP;
-	newmis.classmove = MON_MOVEWALK;
-	newmis.resist_shells = newmis.resist_nails = 0;
-	newmis.resist_rockets = newmis.resist_cells = 0;
-	newmis.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
-	newmis.bboxtype = BBOX_TALL;
-	newmis.gibbed = FALSE;
-	newmis.pain_flinch = 20;
-	newmis.death_dmg = DAMAGE_TARBABY;
-	newmis.health = 80;
-	newmis.owner = newmis.master = self;
-	newmis.death_sound = "blob/death1.wav";
-	newmis.idle_sound = "blob/sight1.wav";
-	newmis.sight_sound = self.idle_sound;
-	newmis.pain_sound = self.idle_sound;
-	newmis.solid = SOLID_SLIDEBOX;
-	newmis.takedamage = DAMAGE_AIM;
-	newmis.skin = self.skin;
+	SpawnMinion(self.minion_name,self.origin,self.enemy);
+	if (self.skin == 1) newmis.skin = newmis.exactskin = 4;
+	else newmis.skin = newmis.exactskin = 0;
+
 	newmis.lastorigin = newmis.origin;           
     newmis.angles_x   = 0;
     newmis.angles_y   = self.angles_y;
     newmis.angles_z   = 0;
     newmis.fixangle   = TRUE;
-	newmis.th_stand = tbaby_stand1;
-	newmis.th_walk = tbaby_walk1;
-	newmis.th_run = tbaby_run1;
-	newmis.th_jump = tbaby_jump1;
-	newmis.th_jumpexit = tbaby_jump5;
-	newmis.th_missile = tbaby_jump1;
-	newmis.th_melee = tbaby_jump1;
-	newmis.th_die = tbaby_die1;
-	newmis.th_pain = tbaby_pain;
-	// Override normal ai with flying ai, since it is launched out of vomitus.
-    newmis.enemy = self.enemy;
-	monster_bbox();
-	setmodel(newmis, "progs/qmaster/mon_tarbaby.mdl");
 	setorigin(newmis, self.origin);
-	setsize (newmis, '-16 -16 -24', '16 16 40');
-	newmis.think = tbaby_jump5;
-	newmis.nextthink = time + 0.05;
-	AddToTotals(newmis);
+	newmis.th_run = tbaby_jump5;
+	newmis.th_stand = tbaby_jump5;
+	newmis.nextthink = time + 0.1;
 };
 
 // Vomitus chews on the target.
@@ -277,13 +244,19 @@ void() vom_attack6  = [$attack6,  vom_attack7  ] { ai_face(); };
 void() vom_attack7  = [$attack7,  vom_attack8  ] { ai_face(); };
 void() vom_attack8  = [$attack8,  vom_attack9  ] { ai_face(); };
 void() vom_attack9  = [$attack9,  vom_attack10 ] { ai_face(); };
-void() vom_attack10 = [$attack10, vom_attack11 ] { ai_face();
-    if (random() < 0.5)
-        sound(self,CHAN_WEAPON,"drake/vomitus/flesh1.wav",1,ATTN_NORM);
-    else
-        sound(self,CHAN_WEAPON,"drake/vomitus/flesh2.wav",1,ATTN_NORM);
+void() vom_attack10 = [$attack10, vom_attack11 ] {
+	local entity enem;
 
+	ai_face();
+    if (random() < 0.5) sound(self,CHAN_WEAPON,"drake/vomitus/flesh1.wav",1,ATTN_NORM);
+    else sound(self,CHAN_WEAPON,"drake/vomitus/flesh2.wav",1,ATTN_NORM);
+
+	enem = self.enemy;
 	Vomit_Spawn();
+	self.enemy = enem;
+	newmis.enemy = self.enemy;
+	newmis.attack_instant = TRUE;
+	newmis.frame = 54;
 	self.think = vom_end1;
 };
 void() vom_attack11 = [$attack11, vom_attack12 ] { ai_face(); Vomit_Meat(0.5); };

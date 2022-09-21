@@ -1,669 +1,1407 @@
+Found file with bad capitalization: QUAKE/mjolnir/progs/hrimfaxi/bannerdrag.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/hrimfaxi/bannersd.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/hrimfaxi/chain3.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/hrimfaxi/flag1.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/hrimfaxi/skullhuman.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/progs/alouette.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/progs/h_alouet.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/mad_serp/progs/serpent.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/mad_serp/progs/v_mygun.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/q15/fiend.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/q15/player_decap.MDL
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dsbgsit2.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dsbrsdth.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dsclaw.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dsdmact.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dsdmpain.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dspopain.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dsposact.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/archville/sound/dssgtdth.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/atk.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/die.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/dieb.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/idle.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/idle1.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/pain.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/painb.WAV
+Found file with bad capitalization: QUAKE/mjolnir/progs/madfox/chicken/sound/chick/stero/walk.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/mjolnir/ammo_void_shards.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/mjolnir/flap_wing.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/mjolnir/mon_voidwraith_spawn.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/mjolnir/water_holy_heal.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/tronyn/flap_wing.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/tronyn/mon_voidwraith_spawn.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/tronyn/prayer_baldur.WAV
+Found file with bad capitalization: QUAKE/mjolnir/sound/tronyn/water_holy_heal.WAV
 Checking all bsp files...
-Checking generated /home/qmaster/QUAKE/keep/maps/ORL_movingchains.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/allitems.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/asset_library.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_batt0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_batt1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_bh10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_bh100.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_bh25.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_lnail0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_lnail1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_mrock0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_mrock1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_nail0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_nail1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_plas0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_plas1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_rock0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_rock1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_shell0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_shell1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_wbh10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/b_wbh25.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/ctf1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/dreams1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/droletest1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/eftest.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/eftest2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/egyp_upsidwn_pyramid.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/end3.ent
-* Failed to find sky: bloodline_
-Checking generated /home/qmaster/QUAKE/keep/maps/end3test.ent
-* Failed to find sky: bloodline_
-Checking generated /home/qmaster/QUAKE/keep/maps/end4.ent
-* Failed to find sky: hellsky5
-Checking generated /home/qmaster/QUAKE/keep/maps/engine1.ent
-* Failed to find sky: grimmnight_
-* No matching targetname for target value of conv1wp3
-* No matching targetname for target value of conv2wp1
-* No matching targetname for target value of conv1wp2
-* No matching targetname for target value of conv2wp45
-* No matching targetname for target value of conv1wp4
-* No matching targetname for target value of conv2wp2
-* No matching targetname for target value of conv1wp5
-* No matching targetname for target value of conv2wp23
-* No matching targetname for target value of conv3strip2wp1
-* No matching targetname for target value of conv3wp1
-* No matching targetname for target value of conv3strip1wp1
-* No matching targetname for target value of conv3wp5
-* No matching targetname for target value of conv3strip1wp4
-* No matching targetname for target value of conv3strip2wp4
-* No matching targetname for target value of secretdoor3
-* No matching targetname for target value of startmusic
-=== 16 issues found in /home/qmaster/QUAKE/keep/maps/engine1.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/finaletest1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/gr1m1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/helm18.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hex2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip1m1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip1m2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip1m3.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip1m4.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip1m5.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip2m1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip2m2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip2m3.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip2m4.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip2m5.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip2m6.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip3m1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip3m2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip3m3.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hip3m4.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hipdm1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/hipend.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/kpbonus.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/kpcrypt1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/kpdung.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/kpkeep.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/kplibry.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/kpstart.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/limbo2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/miscmodels.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/mj3m1.ent
-* Failed to find sky: redbone_
-Checking generated /home/qmaster/QUAKE/keep/maps/mj3m2.ent
-* Failed to find sky: redbone_
-Checking generated /home/qmaster/QUAKE/keep/maps/mj3m3.ent
-* Failed to find sky: redbone_
-* No matching targetname for target value of keyTrap
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/mj3m3.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/mj3m4.ent
-* Failed to find sky: redbone_
-* No matching targetname for target value of gremTrap1
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/mj3m4.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/mj3m5.ent
-* Failed to find sky: redbone_
-Checking generated /home/qmaster/QUAKE/keep/maps/mj3m6.ent
-* Failed to find sky: voidsmoke_
-Checking generated /home/qmaster/QUAKE/keep/maps/mj4m1.ent
-* Failed to find sky: kradegar_
-* No matching targetname for target value of erubusblast1
-* No matching targetname for target value of erubusblast2
-=== 2 issues found in /home/qmaster/QUAKE/keep/maps/mj4m1.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/mj4m2.ent
-* Failed to find sky: snowmoon_
-Checking generated /home/qmaster/QUAKE/keep/maps/mj4m2vis.ent
-* Failed to find sky: snowmoon_
-Checking generated /home/qmaster/QUAKE/keep/maps/mj4m3.ent
-* Failed to find sky: miramfx_
-* No matching targetname for target value of iwblfychapo
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/mj4m3.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/old_start.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/puztests.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/qbsp_faces.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/qcastle.ent
-* No matching targetname for target value of pathendwp1
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/qcastle.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/qcastletests.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/qcastletests01.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/quake_castle.ent
-* Failed to find sky: underverse_
-Checking generated /home/qmaster/QUAKE/keep/maps/quake_castle01.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m3.ent
-* No matching targetname for target value of t69
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/r1m3.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m4.ent
-* No matching targetname for target value of t273
-* No matching targetname for target value of t275
-* No matching targetname for target value of t370
-* No matching targetname for target value of t290
-* No matching targetname for target value of t288
-* No matching targetname for target value of t333
-=== 6 issues found in /home/qmaster/QUAKE/keep/maps/r1m4.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m5.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m6.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r1m7.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m3.ent
-* No matching targetname for target value of t40
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/r2m3.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m4.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m5.ent
-* No matching targetname for target value of t672
-* No matching targetname for target value of t24
-=== 2 issues found in /home/qmaster/QUAKE/keep/maps/r2m5.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m6.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m7.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/r2m8.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/rogtests.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/rogtests2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/rogtests3.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/singmontest.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/spcscr.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/start.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/start2.ent
-* Failed to find sky: sunrisedark_
-* No matching targetname for target value of glass_shortcut
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/start2.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/statuegarden.ent
-* Failed to find sky: storm
-Checking generated /home/qmaster/QUAKE/keep/maps/tbg1.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/terracity.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test1000.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_ai.ent
-* No matching targetname for target value of flytrap1
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_ai.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/test_aishrinesflytraps.ent
-* No matching targetname for target value of flytrap1
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_aishrinesflytraps.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/test_ammo_weapons.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_angletarget.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_airtank.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_blastbelt.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_jboots.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_artifact_lavashield.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_bal_knights.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_boxkeep.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_boxkeep2.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_breakable_exceptions.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_breakable_pot.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_brushes.ent
-* No matching targetname for target value of counter1
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_brushes.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/test_chaos1.ent
-* Failed to find sky: moonhigh_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_corpse_model.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_corpsemodel.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_custom_hud.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_door_elevator.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_fading_bmodel.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_fireworks.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_func_breakable_flesh.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_func_train.ent
-* Failed to find sky: moonhigh_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_gibfountain.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_grapplehook.ent
-* Failed to find sky: moonhigh_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_hazard_dmg.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_inquisitor.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_intermission_cam.ent
-* Failed to find sky: moonhigh_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_item_progression.ent
-* Failed to find sky: moonrise_
-* No matching targetname for target value of item_error_2
-* No matching targetname for target value of shell_respawn
-* No matching targetname for target value of item_error_4b
-=== 3 issues found in /home/qmaster/QUAKE/keep/maps/test_item_progression.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/test_light_static.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_light_styles.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_liquids.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_liquids_nosplitturb.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_mapvar_portals.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_marshlight.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_camera.ent
-* Failed to find sky: moonhigh_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_gibfountain.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_mangle.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_model.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_misc_spark.ent
-* Failed to find sky: moonrise_
-Checking extent /home/qmaster/QUAKE/keep/maps/test_monster.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_chthon3.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_deflector.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_dprince.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_floyd.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_judicator.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_justice.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_minotaur.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_nour.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_pathing.ent
-* Failed to find sky: moonhigh_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_rocketeer.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_monster_tarbaby.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_part_trail.ent
-* Failed to find sky: moonrise_
-* No matching targetname for target value of no_target_1
-=== 1 issues found in /home/qmaster/QUAKE/keep/maps/test_part_trail.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/test_partfield.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_passivestate.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_pg_upgrade.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_playerfall.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_playerhpmax.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_precache.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_qrobot.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_qrobotstripd.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_randomizer.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_rope.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_ruins.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_scale.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_sightgroup.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_switch_shadow.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_teleport_instant.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_teleporter.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_template.ent
-* No matching targetname for target value of door1
-* No matching targetname for target value of door2
-* No matching targetname for target value of door3
-=== 3 issues found in /home/qmaster/QUAKE/keep/maps/test_template.bsp
-Checking generated /home/qmaster/QUAKE/keep/maps/test_tjunc01.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_tjunc02.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_tjunc03.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_fog.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_give.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_gravity.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_health.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_ladder.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_monsterjump.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_monsterkill.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_push.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_relay.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_skyfog.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_takeartifact.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_teleport.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_teleport2.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_teleport3.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_timer.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_trigger_velocity.ent
-* Failed to find sky: moonrise_
-Checking generated /home/qmaster/QUAKE/keep/maps/test_weapons.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/test_wetsuit.ent
-* Failed to find sky: moonrise_
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick05.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick06.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick07.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick08.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick09.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick11.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick12.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick13.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick14.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick15.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick16.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick17.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick18.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick19.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick20.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick21.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick22.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick23.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick24.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick25.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick26.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick27.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/brick28.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass05.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass06.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass07.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass08.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass09.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass11.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass12.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass13.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass14.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass15.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/glass16.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal05.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal06.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal07.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal08.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal09.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal11.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal12.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal13.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal14.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal15.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal16.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal17.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal18.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal19.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/metal20.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock05.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock06.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock07.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock08.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock09.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock11.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock12.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock13.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock14.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock15.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock16.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock17.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock18.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock19.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock20.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock21.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock22.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock23.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/rock24.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/sandstone04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood05.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood06.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood07.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood08.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood09.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood11.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ad_brk/wood12.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_concrete.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_greybrick.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_greybrick2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_indyrubble.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ad_sandstone.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/baserub1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/baserub1_paradise.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/baserub2_paradise.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/bz8_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr81_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr82_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr83_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/cr84_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/crate_r1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/explodebox_1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/explodebox_2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/explodebox_3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/glass01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/grate_r1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ikcrate_r1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/ikcrate_r2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/paradise_column1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/paradise_column2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/pbt04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/phk_03brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/rock_sw01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/rock_sw02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/rock_sw03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/sfloor4_2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/tech10_2d1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/tech10_2d2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/base_brk/wood_paradise.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/az_chain1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/az_chain2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/az_chain3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bchains1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bchains2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge2b.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge3.ent
-* Failed to find sky: morningdew_
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_bridge4.ent
-* Failed to find sky: miramfx_
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2l.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2p.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2r.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains2rl.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains4.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains4p.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains5.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains5l.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_chains5p.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/m_thanshelf.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/sep_chain2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/bmodels/sep_chain3.ent
-Checking generated /home/qmaster/QUAKE/keep/maps/bmodels/zornrach_glider.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/debris/brick01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/debris/wood1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_column1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ad_rock4.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_ice05.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_kbr1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_kjw1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_rtex01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/az_wood1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/azr1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/azr2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/azr3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/booksh1w_brk5.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_4brk1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_4brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_brk3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/brick2_brk4.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city2_3d1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city2_3rd.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city4_2_brk1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city4_2_brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city4_2_brk3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city6_8brk1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/city6_8brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/floor015_brk1.ent
-* Failed to find sky: moonrise_
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/floor015_brk2.ent
-* Failed to find sky: moonrise_
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/floor015_brk3.ent
-* Failed to find sky: moonrise_
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/plat_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rock_sw04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/rot_p.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/waa1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/wbrick15_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/win1ah_brk.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/win1ah_brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/wiz14_brk1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/wiz14_brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ws14_brk1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ws14_brk2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/medieval_brk/ws14_brk3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/mjolnir/dish03.ent
-* Failed to find sky: morningdew_
-Checking extent /home/qmaster/QUAKE/keep/maps/mjolnir/truckee.ent
-* Failed to find sky: morningdew_
-Checking generated /home/qmaster/QUAKE/keep/maps/mjolnir/wheel.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/models/rubble1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/models/rubble2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_obj_wwheel.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_hall2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_hall3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_part1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/ne_ruins/ne_ruins_part2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/nsoe2/b_barrel.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/nsoe2/b_wbh10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/nsoe2/b_wbh25.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_bio_l.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_bio_s.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_plas_l.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/quoth/b_plas_s.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/quoth/kellbase1_fan.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022a.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022b.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022c.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/022d.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330a.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330b.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330c.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/330d.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340a.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340b.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340c.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/340d.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413ra.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413rb.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413rc.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/413rd.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1a.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1b.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1c.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/rtex_brk/wood3_1d.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door3.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/door4.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/rock1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/rock2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/spdcrate_r1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/speedbzvent1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/speedbz_brk/speedbzvent2.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar01.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar02.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar03.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/tar_brk/tar04.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_batt0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_batt1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_bh10.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_bh100.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_bh25.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_nail0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_nail1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_rock0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_rock1.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_shell0.ent
-Checking extent /home/qmaster/QUAKE/keep/maps/travail/b_shell1.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/allitems.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/cryptbridge.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/droletest1.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/end3.ent
-* Failed to find sky: bloodline_
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/end4.ent
-* Failed to find sky: heather_
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/finaletest1.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/mappi.ent
-* No matching targetname for target value of halltele_t
-=== 1 issues found in /home/qmaster/QUAKE/keep/mapsrc/mappi.bsp
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/rogtests.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_ai.ent
-* No matching targetname for target value of flytrap1
-=== 1 issues found in /home/qmaster/QUAKE/keep/mapsrc/test_ai.bsp
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_aishrinesflytraps.ent
-* No matching targetname for target value of flytrap1
-=== 1 issues found in /home/qmaster/QUAKE/keep/mapsrc/test_aishrinesflytraps.bsp
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_boxkeep.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_fireworks.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_inquisitor.ent
-Checking extent /home/qmaster/QUAKE/keep/mapsrc/test_monster.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_rope.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/test_weapons.ent
-Checking generated /home/qmaster/QUAKE/keep/mapsrc/wheel.ent
-Failed to generate /home/qmaster/QUAKE/keep/progs/dwell/b_bh25.ent
-Checking extent /home/qmaster/QUAKE/keep/progs/gw/b_explob.ent
-Checking extent /home/qmaster/QUAKE/keep/progs/gw/m_bridge1.ent
-Checking extent /home/qmaster/QUAKE/keep/progs/quoth/box_l.ent
-Checking extent /home/qmaster/QUAKE/keep/progs/quoth/box_s.ent
-Failed to generate /home/qmaster/QUAKE/keep/qcsources/InventoryExamples/source/maps/start.ent
-Checking generated /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/emitters.ent
-Checking generated /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/switches.ent
-Checking generated /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/water.ent
-Checking extent /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/models/rubble1.ent
-Checking extent /home/qmaster/QUAKE/keep/qcsources/extras_r4/extras_r4/extras/maps/models/rubble2.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/chicken_qc/chick.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/death/maps/shred.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/golem_qc/bad05.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serp0.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serp1.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serp2.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/mad_serp/maps/serptest.ent
-Checking generated /home/qmaster/QUAKE/keep/unimplemented/madfox/melyta/maps/melyta.ent
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of shubupsd
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of shubupsd
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of path2wp2
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of prog1
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of prog1
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of ogle2
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of pushcart1
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of angryogle1
+QUAKE/mjolnir/maps/asset_library.bsp:: No activator targetting targetname value of angry1
+QUAKE/mjolnir/maps/asset_library.bsp:: 9 issues found
+QUAKE/mjolnir/maps/end1.bsp:: Failed to find sky: stars
+QUAKE/mjolnir/maps/end1.bsp:: 1 issues found
+QUAKE/mjolnir/maps/end2.bsp:: Failed to find sky: stars2
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of platwizes
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of wizeslast
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of endbane
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of skargtig
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of quakedoorel
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of gargers
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of gugguardpath2
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of gugguardpath2
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of 
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of 
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of 
+QUAKE/mjolnir/maps/end2.bsp:: No matching targetname for target value of 
+QUAKE/mjolnir/maps/end2.bsp:: No activator targetting targetname value of dragonsdie
+QUAKE/mjolnir/maps/end2.bsp:: No activator targetting targetname value of woooderdoorer
+QUAKE/mjolnir/maps/end2.bsp:: No activator targetting targetname value of mazebars1
+QUAKE/mjolnir/maps/end2.bsp:: No activator targetting targetname value of gugsightblock
+QUAKE/mjolnir/maps/end2.bsp:: No activator targetting targetname value of dguard1p2
+QUAKE/mjolnir/maps/end2.bsp:: 18 issues found
+QUAKE/mjolnir/maps/end3.bsp:: Failed to find sky: bloodline_
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of letter
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of stormshutter
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of stormshutter
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of coin4
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of coin4
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level1lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level1lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of saff1
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of toplit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of letter
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of letter
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level2lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level3lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of dragonhallwins
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of dragonhallwins
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level1lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level1lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of quadsec
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of quadsec
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level1lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of quadsec
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of quadsec
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of level1lit
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of spotlights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: No activator targetting targetname value of runelights
+QUAKE/mjolnir/maps/end3.bsp:: 1061 issues found
+QUAKE/mjolnir/maps/end4.bsp:: Failed to find sky: heather_
+QUAKE/mjolnir/maps/end4.bsp:: 1 issues found
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj3m1.bsp:: No activator targetting targetname value of camera2
+QUAKE/mjolnir/maps/mj3m1.bsp:: 9 issues found
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of 2ndWave
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of 2ndWave
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj3m2.bsp:: No activator targetting targetname value of camera2
+QUAKE/mjolnir/maps/mj3m2.bsp:: 11 issues found
+QUAKE/mjolnir/maps/mj3m3.bsp:: No matching targetname for target value of keyTrap
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of camera2
+QUAKE/mjolnir/maps/mj3m3.bsp:: No activator targetting targetname value of exitDrop
+QUAKE/mjolnir/maps/mj3m3.bsp:: 11 issues found
+QUAKE/mjolnir/maps/mj3m4.bsp:: No matching targetname for target value of gremTrap1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj3m4.bsp:: No activator targetting targetname value of camera2
+QUAKE/mjolnir/maps/mj3m4.bsp:: 10 issues found
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of bossWave
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of bossWave
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of bossWave
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of bossWave
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of bossWave
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of bossWave
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj3m5.bsp:: No activator targetting targetname value of camera2
+QUAKE/mjolnir/maps/mj3m5.bsp:: 15 issues found
+QUAKE/mjolnir/maps/mj3m6.bsp:: Failed to find sky: voidsmoke_
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of camera2_1
+QUAKE/mjolnir/maps/mj3m6.bsp:: No activator targetting targetname value of camera2_2
+QUAKE/mjolnir/maps/mj3m6.bsp:: 11 issues found
+QUAKE/mjolnir/maps/mj4m1.bsp:: No matching targetname for target value of erubusblast1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No matching targetname for target value of erubusblast2
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of bannerpointnodoor
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of ava1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wtrslkberdup1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of ujflbsptagad1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of sigmonpath1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of clawkeygatemes
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of notadoorflag
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of mist2pivot
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of mist1pivot
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of camera2nd
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of camera3rd
+QUAKE/mjolnir/maps/mj4m1.bsp:: No activator targetting targetname value of sigmonpath2
+QUAKE/mjolnir/maps/mj4m1.bsp:: 22 issues found
+QUAKE/mjolnir/maps/mj4m2.bsp:: No matching targetname for target value of bottomport3
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of sigilget
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of sigilget
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of cagesecretdoor
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of cagesecretdoor
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_4
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_4
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_4
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of dragonsecret
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of dragonsecret
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of goldkeyget
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of goldkeyget
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of goldkeyget
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of goldkeyget
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of shrine1candles_6
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of You found a secret!
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of camera2nd
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of camera3rd
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of cavesecretdoor
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of tetherspot14
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of tetherspot15
+QUAKE/mjolnir/maps/mj4m2.bsp:: No activator targetting targetname value of tetherspot16
+QUAKE/mjolnir/maps/mj4m2.bsp:: 54 issues found
+QUAKE/mjolnir/maps/mj4m3.bsp:: No matching targetname for target value of topreturn
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of windin
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of pentbell
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of chubushrub
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of chubushrub
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of delaywave
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of mivarsh
+QUAKE/mjolnir/maps/mj4m3.bsp:: No activator targetting targetname value of mivarsh
+QUAKE/mjolnir/maps/mj4m3.bsp:: 19 issues found
+QUAKE/mjolnir/maps/mj4m4.bsp:: No matching targetname for target value of iwblfychapo
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of centerspinactivateZZZ
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of blockeractivator
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of bigguyfloor
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap1p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap2p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap3p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap4p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap5p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap6p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap7p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of wmap8p1
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of camera2nd
+QUAKE/mjolnir/maps/mj4m4.bsp:: No activator targetting targetname value of camera3rd
+QUAKE/mjolnir/maps/mj4m4.bsp:: 14 issues found
+QUAKE/mjolnir/maps/start.bsp:: No matching targetname for target value of tp1
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of gaterelaykill
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of easyskill
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of tp
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of explosion
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of nightmaresound
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of spin_spin1
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of spin_spin2
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of player
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of nightmarebutton
+QUAKE/mjolnir/maps/start.bsp:: No activator targetting targetname value of nightmarereturndoor
+QUAKE/mjolnir/maps/start.bsp:: 11 issues found
+QUAKE/mjolnir/maps/start2.bsp:: No matching targetname for target value of glass_shortcut
+QUAKE/mjolnir/maps/start2.bsp:: No activator targetting targetname value of rune6
+QUAKE/mjolnir/maps/start2.bsp:: No activator targetting targetname value of rune6
+QUAKE/mjolnir/maps/start2.bsp:: No activator targetting targetname value of statues
+QUAKE/mjolnir/maps/start2.bsp:: No activator targetting targetname value of statues
+QUAKE/mjolnir/maps/start2.bsp:: No activator targetting targetname value of svrkydropen
+QUAKE/mjolnir/maps/start2.bsp:: 6 issues found
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: No activator targetting targetname value of spritebank1
+QUAKE/mjolnir/maps/statuegarden.bsp:: 68 issues found
 Done checking bsp files!
 Mod file check complete!

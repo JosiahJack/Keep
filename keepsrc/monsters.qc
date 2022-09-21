@@ -675,7 +675,7 @@ void() monster_spawn = { // [FUNCTION]
 	if (self.bouncegrenade) self.takedamage = DAMAGE_YES; // Should grenades bounce off the body?
 	else self.takedamage = DAMAGE_AIM;			// Can receive damage
 
-	self.velocity = '0 0 0';					// Make sure stationary
+	//self.velocity = '0 0 0';					// Make sure stationary
 	self.deadflag = DEAD_NO;					// used to stop death re-triggering
 	monster_reset_runtime_attributes();
 	if (!self.pain_flinch) self.pain_flinch = self.health;
@@ -1144,6 +1144,7 @@ void() monster_start = { // [FUNCTION]
 		self.nextthink = time + 0.1 + random()*0.4; // Variable start delay on
 													// all monsters to reduce
 													// packet errors.  Min 0.1.
+		if (time > 0.5) self.nextthink = time + 0.1; // After 0.5s into map, just spawn right away.
 		self.think = monster_spawn;
 	}
 };

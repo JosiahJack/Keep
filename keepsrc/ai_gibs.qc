@@ -270,10 +270,14 @@ void() RemoveGib_Final = { // [FUNCTION]
 };
 
 void() RemoveGib = { // [FUNCTION]
+	local float maxgibs;
+
+	maxgibs = 8000;
+	if (ext_ftepart) maxgibs = 12000;
 	if (self.owner.classtype == CT_MISCGIBF
 		|| self.owner.classgroup == CG_TEMPENT
 		|| (total_monsters - killed_monsters) > 300
-		|| (totaledicts < 8000 && !ext_ftepart)) {
+		|| (totaledicts < maxgibs)) {
 		self.touch = SUB_Null;
 		self.classtype = 0;
 		self.classgroup = 0;
@@ -765,7 +769,7 @@ void() monster_ThrowGib = { // [FUNCTION]
 
 // Check health for gib condition, and gib if so
 void() monster_check_gib = { // [FUNCTION]
-	if (!ext_ftepart && gibbed_this_frame > 10 && !self.gibondeath) {
+	if (gibbed_this_frame > 10 && !self.gibondeath) {
 		if (developer > 1) dprint("Gibbed more than 10 enemies this frame! Skipped gibbing more!\n");
 		return;
 	}

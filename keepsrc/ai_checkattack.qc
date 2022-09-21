@@ -704,16 +704,15 @@ void() WizardCheckAttack = {
 	}	
 
 	if (self.classtype == CT_MONSENTINEL) { TurretMode(1); return; }
-	if (!enemy_vis) return; // Do nothing if cannot see enemy or waiting for attack timer
 	if (time < self.attack_finished) return;
+	if (!enemy_vis) return; // Do nothing if cannot see enemy or waiting for attack timer
 	if (TurretMode(0)) return; // Range attack only for turret.
 
 	// Range attack (spit)
 	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 	// The original id behaviour is wizards run until within range
 	if (enemy_range == RANGE_FAR || visblocked(SUB_entEnemyTarget()) ) {
-		if (self.attack_state != AS_STRAIGHT) 
-			self.attack_state = AS_STRAIGHT;
+		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
 		return;
 	}
 	SetSelfAttackChances(0.9,0.6,0.2);
@@ -723,6 +722,7 @@ void() WizardCheckAttack = {
 		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT; // keep moving forward to enemy target
 	} else {
 		if (self.attack_state != AS_SLIDING) {
+			dprint("Wizard is sliding\n");
 			self.attack_state = AS_SLIDING;
 			if (self.th_slide) self.th_slide();
 			else self.attack_state = AS_STRAIGHT;

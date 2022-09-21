@@ -1007,6 +1007,7 @@ void() Thor_Pulse = { // [FUNCTION]
     self.nextthink = time + 0.2;
     self.count = self.count - 1;
 	BurstLit_Discharge(self.master);
+	self.think = Thor_Pulse;
 };
 
 // Spawns a special discharge entity for Mjolnir impacts.

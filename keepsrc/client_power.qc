@@ -692,7 +692,7 @@ void() ClientPowerups = { // [FUNCTION]
 		if (self.in_a_vehicle) self.modelindex = modelindex_null;
 		else {
 			if (self.weapon == IT2_MJOLNIR && !self.weaponismoditems) {
-				if (self.hammer_finished != 0) self.modelindex = modelindex_hamout; // Hammer has been thrown out.
+				if (self.hammer_finished >= time) self.modelindex = modelindex_hamout; // Hammer has been thrown out.
 				else self.modelindex = modelindex_hammer; // We are holding the hammer.
 			} else if (self.weapon == IT_AXE && self.perms & IT_CHAINSAW && !self.weaponismoditems) self.modelindex = modelindex_saw;
 			else if (self.weaponmodel == "") self.modelindex = modelindex_hamout;

@@ -1931,6 +1931,7 @@ float() HIP_ThrowMjolnir = { // [FUNCTION]
     local float damage, stat;
 
 	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
+	if (self.hammer_finished >= time) return FALSE;
 
     source = self.origin + '0 0 16';
     makevectors(self.v_angle);

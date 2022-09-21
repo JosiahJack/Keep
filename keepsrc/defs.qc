@@ -434,8 +434,11 @@ string(vector v) vtos				= #27;
 void(entity targ) entity_stop;
 entity testlastspawn;
 entity() spawn = {
+	local float emax;
 
-	if (totaledicts >= 8191 && !ext_ftepart) {
+	emax = 8191;
+	if (ext_ftepart) emax = 14999;
+	if (totaledicts >= emax) {
 		if (developer > 1) {
 			dprint("WARNING: Out of edicts!  Reached ");
 			dprint(ftos(totaledicts));
@@ -447,7 +450,7 @@ entity() spawn = {
 		entity_stop(newmis);
 		return newmis;
 	}
-	if ((totaledicts - startframe_edicts) > 100 && framecount > 15 && !ext_ftepart) {
+	if ((totaledicts - startframe_edicts) > 100 && framecount > 15) {
 		if (developer > 1) dprint("WARNING: Spawned 100 new entities this frame! Stopped until next frame!\n");
 		if (!newmis) return world;
 
@@ -522,7 +525,8 @@ void(float step) movetogoal = {
 	if (self.movespeed < 0) return;
 	if (self.tetherlock == TRUE) return;
 	if (self.movetype == MOVETYPE_NOCLIP) QC_MoveToGoal(step,TRUE); // Ghostly
-	else if (self.flags & FL_SWIM || self.flags & FL_FLY) movetogoalplus(step);
+	else if (self.flags & FL_SWIM) movetogoalplus(step);
+	else if (self.flags & FL_FLY) QC_MoveToGoal(step,FALSE);
 	else movetogoal_builtin(step);
 };
 string(string s) precache_file			= #68; // Only in world.qc. No effect

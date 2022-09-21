@@ -946,12 +946,14 @@ void(string mname) BeMonsterFromString = {
 			// self.think1 = FoundTarget;
 		}
 	}
-	dprint("BeMonsterFromString is now a ");
-	dprint(self.classname);
-	dprint(" at ");
-	dprint(vtos(self.origin));
-	if (self.enemy) dprint(", and has an enemy\n");
-	else dprint("\n");
+	if (developer > 1) {
+		dprint("BeMonsterFromString is now a ");
+		dprint(self.classname);
+		dprint(" at ");
+		dprint(vtos(self.origin));
+		if (self.enemy) dprint(", and has an enemy\n");
+		else dprint("\n");
+	}
 	newmis = self;
 	self = spawner;
 };
@@ -961,27 +963,16 @@ void(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
 	if (!InOpenOrLiquid(minion_org)) return; // Check if there is space to spawn entity
 	
 	update_minioncount(self,1);				// Update spawn counters.  Self = minotaur, there is no egg
-	newmis = spawn();
-	BeMonsterFromString(monstername);
+	BeMonsterFromString(monstername);		// Temporarily use self to be "monster_something" then reassign to newmis and restore self.
 	setorigin(newmis, minion_org);			// Move to new location
-	if (developer > 0) spawn_marker(minion_org,'0 0 0',0,SPNMARK_YELLOW);
 	newmis.owner = self;					// Spawner Parent Link
 	newmis.enemy = minion_targ;				// Target to attack
 	newmis.infightextra = self.infightextra;
 	newmis.alignment = self.alignment;
 	newmis.temperament = self.temperament;
 	newmis.vulnerability = self.vulnerability;
-	// Check for poison gibs being cached first
-	if (gibpoison && self.poisonous == TRUE) {
-		newmis.poisonous = self.poisonous;	// carry over from host spawner 
-		newmis.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-	}
 	newmis.minion_active = TRUE;			// Minion flag
 	newmis.bodyfadeaway = TRUE;				// Get rid of body
-	newmis.spawnflags = 0;
-	newmis.effects = 0;
-	newmis.nextthink = time + 0.01;
-	newmis.think = newmis.th_run;
 };
  
 float(vector spot) SpawnMinionInRadius = {

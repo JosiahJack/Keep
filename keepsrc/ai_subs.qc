@@ -154,7 +154,9 @@ void(float dist) ai_run_slide = {
 	local float	ofs;
 
 	MonsterDeBuff();
-	ai_face();
+	// It is better to re-calcuate this than wait for ai_run to update
+	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);	
+	ChangeYaw (); // Code function
 	if (self.lefty > 0) ofs = 90;
 	else ofs = -90;
 	

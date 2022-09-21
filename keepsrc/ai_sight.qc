@@ -380,7 +380,7 @@ void() FoundTarget = {
 	// Check for Liquid surface block entity key if the monster has range attack, can NOW see through liquid surface
 	if (self.liquidblock == TRUE && self.th_missile) self.liquidblock = FALSE;
 
-	if (self.charmed ) {
+	if (self.charmed) {
 		if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) && !(IsInsane(self))) {
 			self.enemy = world;
 			return;

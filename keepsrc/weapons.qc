@@ -1497,17 +1497,22 @@ void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 				}
 			}
 		} else if (targ.weapon == IT2_MJOLNIR) {
-			targ.currentammo = targ.ammo_cells;
-			if (self.tome_finished) targ.weaponmodel = "progs/violentrumble/v_hammerpw.mdl";
-			else targ.weaponmodel = "progs/violentrumble/v_hammer.mdl";
+			if (targ.hammer_finished >= time) {
+				targ.weaponmodel = "";
+				targ.currentammo = 0;
+			} else {
+				targ.currentammo = targ.ammo_cells;
+				if (targ.tome_finished) targ.weaponmodel = "progs/violentrumble/v_hammerpw.mdl";
+				else targ.weaponmodel = "progs/violentrumble/v_hammer.mdl";
+			}
 		} else if (targ.weapon == IT2_CROSS) {
 			targ.weaponmodel =  "progs/drake/v_wand.mdl";
 		} else if (targ.weapon == IT2_GRAPPLE) {
 			targ.currentammo = 0;
 			targ.weaponmodel = "progs/drake/v_grpple.mdl";
-			if (self.hook) {
-				if (self.hook.count) {
-					self.weaponframe = 1;   // Hook is still out.
+			if (targ.hook) {
+				if (targ.hook.count) {
+					targ.weaponframe = 1;   // Hook is still out.
 				}
 			}
 		} else if (targ.weapon == IT_SANGUINATORS) {
@@ -1755,7 +1760,7 @@ void() W_Attack = { // [FUNCTION]
 			}
 		} else if (self.weapon == IT2_LASER_CANNON) player_laser1();
 		else if (self.weapon == IT2_MJOLNIR) {
-			if (self.ammo_cells < COST_MJOLNIR) {
+			if (self.ammo_cells < COST_MJOLNIR && self.hammer_finished == 0) {
 				W_Reload(0.4);
 				player_hammer1();
 			} else {

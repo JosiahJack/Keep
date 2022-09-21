@@ -290,7 +290,7 @@ void(vector spot, float base, float add, string text) MakeAnyExplosion = { // [F
     self = swap;
 };
 
-void(float base, float add) BecomeFancy = { BecomeAnyExplosion (base, add, "progs/drake/s_fancy.spr"); }; // [FUNCTION]
+void(float base, float add) BecomeFancy = { BecomeAnyExplosion(base,add,"progs/drake/s_fancy.spr"); }; // [FUNCTION]
 
 void(vector spot, float base, float add) MakeFancy = { MakeAnyExplosion (spot, base, add, "progs/drake/s_fancy.spr"); }; // [FUNCTION]
 
@@ -793,58 +793,57 @@ void(vector spot, vector x1, vector x2) Particle_Explosion = { // [FUNCTION]
 	sped = x1_x;
 	rgb = x1_y;
 	den = x1_z;
-    particle (spot, '0 0 1' * sped, rgb, den);
-    particle (spot, '.5076 .3688 .7787' * sped, rgb, den);
-    particle (spot, '-.1939 .5967 .7787' * sped, rgb, den);
-    particle (spot, '-.6274 0 .7787' * sped, rgb, den);
-    particle (spot, '-.1939 -.5967 .7787' * sped, rgb, den);
-    particle (spot, '.5076 -.3688 .7787' * sped, rgb, den);
-    particle (spot, '.7905 .5743 .2128' * sped, rgb, den);
-    particle (spot, '-.3019 .9293 .2128' * sped, rgb, den);
-    particle (spot, '-.9771 0 .2128' * sped, rgb, den);
-    particle (spot, '-.3019 -.9293 .2128' * sped, rgb, den);
-    particle (spot, '.7905 -.5743 .2128' * sped, rgb, den);
-    particle (spot, '.7236 .5257 -.4473' * sped, rgb, den);
-    particle (spot, '-.2763 .8507 -.4473' * sped, rgb, den);
-    particle (spot, '-.8944 0 -.4473' * sped, rgb, den);
-    particle (spot, '-.2763 -.8507 -.4473' * sped, rgb, den);
-    particle (spot, '.7236 -.5257 -.4473' * sped, rgb, den);
-    particle (spot, '.8944 0 .4473' * sped, rgb, den);
-    particle (spot, '.2763 .8507 .4473' * sped, rgb, den);
-    particle (spot, '-.7236 .5257 .4473' * sped, rgb, den);
-    particle (spot, '-.7236 -.5257 .4473' * sped, rgb, den);
-    particle (spot, '.2763 -.8507 .4473' * sped, rgb, den);
-    particle (spot, '.9771 0 -.2128' * sped, rgb, den);
-    particle (spot, '.3019 .9293 -.2128' * sped, rgb, den);
-    particle (spot, '-.7905 .5743 -.2128' * sped, rgb, den);
-    particle (spot, '-.7905 -.5743 -.2128' * sped, rgb, den);
-    particle (spot, '.3019 -.9293 -.2128' * sped, rgb, den);
-    particle (spot, '.6274 0 -.7787' * sped, rgb, den);
-    particle (spot, '.1939 .5967 -.7787' * sped, rgb, den);
-    particle (spot, '-.5076 .3688 -.7787' * sped, rgb, den);
-    particle (spot, '-.5076 -.3688 -.7787' * sped, rgb, den);
-    particle (spot, '.1939 -.5967 -.7787' * sped, rgb, den);
-    particle (spot, '0 0 -1' * sped, rgb, den);
+    particle(spot, '0 0 1' * sped, rgb, den);
+    particle(spot, '.5076 .3688 .7787' * sped, rgb, den);
+    particle(spot, '-.1939 .5967 .7787' * sped, rgb, den);
+    particle(spot, '-.6274 0 .7787' * sped, rgb, den);
+    particle(spot, '-.1939 -.5967 .7787' * sped, rgb, den);
+    particle(spot, '.5076 -.3688 .7787' * sped, rgb, den);
+    particle(spot, '.7905 .5743 .2128' * sped, rgb, den);
+    particle(spot, '-.3019 .9293 .2128' * sped, rgb, den);
+    particle(spot, '-.9771 0 .2128' * sped, rgb, den);
+    particle(spot, '-.3019 -.9293 .2128' * sped, rgb, den);
+    particle(spot, '.7905 -.5743 .2128' * sped, rgb, den);
+    particle(spot, '.7236 .5257 -.4473' * sped, rgb, den);
+    particle(spot, '-.2763 .8507 -.4473' * sped, rgb, den);
+    particle(spot, '-.8944 0 -.4473' * sped, rgb, den);
+    particle(spot, '-.2763 -.8507 -.4473' * sped, rgb, den);
+    particle(spot, '.7236 -.5257 -.4473' * sped, rgb, den);
+    particle(spot, '.8944 0 .4473' * sped, rgb, den);
+    particle(spot, '.2763 .8507 .4473' * sped, rgb, den);
+    particle(spot, '-.7236 .5257 .4473' * sped, rgb, den);
+    particle(spot, '-.7236 -.5257 .4473' * sped, rgb, den);
+    particle(spot, '.2763 -.8507 .4473' * sped, rgb, den);
+    particle(spot, '.9771 0 -.2128' * sped, rgb, den);
+    particle(spot, '.3019 .9293 -.2128' * sped, rgb, den);
+    particle(spot, '-.7905 .5743 -.2128' * sped, rgb, den);
+    particle(spot, '-.7905 -.5743 -.2128' * sped, rgb, den);
+    particle(spot, '.3019 -.9293 -.2128' * sped, rgb, den);
+    particle(spot, '.6274 0 -.7787' * sped, rgb, den);
+    particle(spot, '.1939 .5967 -.7787' * sped, rgb, den);
+    particle(spot, '-.5076 .3688 -.7787' * sped, rgb, den);
+    particle(spot, '-.5076 -.3688 -.7787' * sped, rgb, den);
+    particle(spot, '.1939 -.5967 -.7787' * sped, rgb, den);
+    particle(spot, '0 0 -1' * sped, rgb, den);
 
 	// Vertices of an icosahedron (d20).
 	sped = x2_x;
 	rgb = x2_y;
 	den = x2_z;
 	// Golden ratio = (1 + sqrt(5)) / 2.  (1:1.618)
-    particle (spot, '0 .5257 .8507' * sped, rgb, den);
-    particle (spot, '0 -.5257 .8507' * sped, rgb, den);
-    particle (spot, '0 -.5257 -.8507' * sped, rgb, den);
-    particle (spot, '0 .5257 -.8507' * sped, rgb, den);
-    particle (spot, '.5257 .8507 0' * sped, rgb, den);
-    particle (spot, '-.5257 .8507 0' * sped, rgb, den);
-    particle (spot, '-.5257 -.8507 0' * sped, rgb, den);
-    particle (spot, '.5257 -.8507 0' * sped, rgb, den);
-    particle (spot, '.8507 0 .5257' * sped, rgb, den);
-    particle (spot, '.8507 0 -.5257' * sped, rgb, den);
-    particle (spot, '-.8507 0 -.5257' * sped, rgb, den);
-    particle (spot, '-.8507 0 .5257' * sped, rgb, den);
+    particle(spot, '0 .5257 .8507' * sped, rgb, den);
+    particle(spot, '0 -.5257 .8507' * sped, rgb, den);
+    particle(spot, '0 -.5257 -.8507' * sped, rgb, den);
+    particle(spot, '0 .5257 -.8507' * sped, rgb, den);
+    particle(spot, '.5257 .8507 0' * sped, rgb, den);
+    particle(spot, '-.5257 .8507 0' * sped, rgb, den);
+    particle(spot, '-.5257 -.8507 0' * sped, rgb, den);
+    particle(spot, '.5257 -.8507 0' * sped, rgb, den);
+    particle(spot, '.8507 0 .5257' * sped, rgb, den);
+    particle(spot, '.8507 0 -.5257' * sped, rgb, den);
+    particle(spot, '-.8507 0 -.5257' * sped, rgb, den);
+    particle(spot, '-.8507 0 .5257' * sped, rgb, den);
 };
-
 // Spawns particles within an ent.  Bounds are the entity's hull boundaries.
 void(entity ent, float color1, float color2) Particle_Cube = { // [FUNCTION]
     local vector spot;
@@ -865,8 +864,8 @@ void() Plasma_Fx = { // [FUNCTION]
     else sound(self,CHAN_AUTO,"drake/weapons/zap2.wav",1,ATTN_NORM);
 
 	self.effects = EF_MUZZLEFLASH;
-	Particle_Explosion (self.origin, '6 9 2', '10 41 3');
-    BecomeFancy (X32_PLASMA_BLUE, 6);
+	Particle_Explosion(self.origin, '6 9 2', '10 41 3');
+    BecomeFancy(X32_PLASMA_BLUE, 6);
 };
 
 // Remove a thrown hammer.

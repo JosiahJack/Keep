@@ -1290,7 +1290,7 @@
 ]
 
 @PointClass base(Appearflags, Target) size(-16 -16 -16, 16 16 32) studio("progs/zerstorer/bloodcb.mdl") = item_bloodcube : "The Bloodcube!" []
-@PointClass base(Appearflags, Target) size(-16 -16 0, 16 16 32) = item_zerlogo : "Zerstorer logo" []
+@PointClass base(Appearflags, Target) size(-16 -16 0, 16 16 32) studio("progs/zerstorer/zerlogo.mdl") = item_zerlogo : "Zerstorer logo" []
 @PointClass base(Appearflags, Target) size(-16 -16 0, 16 16 32) = item_tree : "Tree" []
 
 @PointClass size(-16 -16 -16, 16 16 16) color(255 200 128) = info_shrine : "Shrine Effects (bless if player targets, desecrate if breakable)" [

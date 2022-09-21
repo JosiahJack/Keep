@@ -158,8 +158,8 @@ void()	Tar_JumpTouch = { // [FUNCTION]
 	} else self.think = self.th_jump; // Original ID behaviour, constantly jump around like crazy
 	self.nextthink = time + 0.1;
 };
-
-void() tbaby_fly1 = [$fly1, tbaby_fly2] {};
+	
+void() tbaby_fly1 = [$fly1, tbaby_fly2] { self.classmove = MON_MOVEWALK; };
 void() tbaby_fly2 = [$fly2, tbaby_fly3] {};
 void() tbaby_fly3 = [$fly3, tbaby_fly4] {};
 void() tbaby_fly4 = [$fly4, tbaby_fly1] { 
@@ -171,7 +171,7 @@ void() tbaby_jump1 = [$jump1, tbaby_jump2] { ai_face(); };
 void() tbaby_jump2 = [$jump2, tbaby_jump3] { ai_face(); };
 void() tbaby_jump3 = [$jump3, tbaby_jump4] { ai_face(); };
 void() tbaby_jump4 = [$jump4, tbaby_jump5] { ai_face(); };
-void() tbaby_jump5 = [$jump5, tbaby_jump6] {	
+void() tbaby_jump5 = [$jump5, tbaby_jump6] {
 	self.movetype = MOVETYPE_BOUNCE;
 	self.touch = Tar_JumpTouch;
 	makevectors(self.angles);
@@ -181,7 +181,7 @@ void() tbaby_jump5 = [$jump5, tbaby_jump6] {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.cnt = 0;
 };
-void() tbaby_jump6 = [$jump6, tbaby_fly1] {};
+void() tbaby_jump6 = [$jump6, tbaby_fly1] { self.th_run = tbaby_run1; };
 
 // There is no pain animation, just the chance of pain sounds
 void(entity inflictor, entity attacker, float damage) tbaby_pain = {
