@@ -511,6 +511,11 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 		newmis.mdl = MODEL_PROJ_SHAL;
 		newmis.dpp_name = DPP_TEVORESPIKE;
 		newmis.avelocity = vecrand(100,200,FALSE);
+	} else if (proj_type == CT_PROJ_SHALHKBOSS) {
+		dir = SetNewmisCommonHomingRocketParameters(org,dir);
+		newmis.mdl = "progs/drake/v_spike.mdl";
+		newmis.dpp_name = DPP_TEVORESPIKE;
+		newmis.avelocity = vecrand(100,200,FALSE);
 	} else if (proj_type == CT_PROJ_SERG) {
 		dir = SetNewmisCommonHomingRocketParameters(org,dir);
 		newmis.mdl = MODEL_PROJ_SERG;
@@ -2411,7 +2416,7 @@ float(entity ent) ImmuneToBurning = { // [FUNCTION]
     if (ent.radsuit_finished) return TRUE; // Envirosuit
 	if (ent.therm_finished) return TRUE; // Thermal protection suit
 	if (ent.moditems & IT_ARTLAVASHIELD) return TRUE; // Lava Shield
-    if (ent.cross_finished) return TRUE; // Update 1/6/10:  Cross of Protection
+    if (ent.cross_finished >= time) return TRUE; // Update 1/6/10:  Cross of Protection
     if (ent.solid == SOLID_BSP) return TRUE; // Flames don't look good on brush entities.
     return FALSE; // BURN BABY BURN!
 };

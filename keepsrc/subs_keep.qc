@@ -295,8 +295,16 @@ float() SUB_HideIfNoTarget = { // [FUNCTION]
 
 // Check for random rotation setup and angle limits
 void() SUB_CheckRandomizedAngles = { // [FUNCTION]
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 0;
+	local float loopiter;
+
+	if (self.angles_y == -1) self.angles_y = rint(random()*359);
+	loopiter = 0;
+	while (self.angles_y > 360) {
+		if (loopiter >= 20) return;
+
+		loopiter = loopiter + 1;
+		self.angles_y = self.angles_y - 360;
+	}
 };
 
 entity(string attmodel, float attalpha) SUB_CreateAttachment = { // [FUNCTION]

@@ -215,7 +215,7 @@ void(float dist, float noclip) QC_MoveToGoal = {
     }
 
     // If next step hits goal, stop.
-	if (self.goalentity && !noclip) {
+	if ((self.goalentity || self.enemy) && !noclip) {
         if (QC_CloseEnough(dist)) return;
     }
 

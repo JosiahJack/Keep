@@ -833,9 +833,7 @@ void() monster_hkboss_precache = { // [FUNCTION]
     precache_sound("hknight/pain1.wav");
     precache_sound("hknight/sight1.wav");
     precache_sound("drake/hknight/death1.wav");
-    precache_sound("drake/hknight/sboom.wav");
-    precache_sound("drake/hknight/sboom2.wav");
-    precache_model ("progs/drake/v_spike.mdl");       // Used by hkboss.
+    precache_model("progs/drake/v_spike.mdl");       // Used by hkboss.
     precache_sound("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
 

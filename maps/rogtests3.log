@@ -1,0 +1,83 @@
+---- qbsp / ericw-tools v0.18.1-32-g6660c5f ----
+Input file: /home/qmaster/QUAKE/tests/rogtests3.map
+Output file: /home/qmaster/QUAKE/keep/maps/rogtests3.bsp
+
+---- LoadMapFile ----
+*** WARNING 06: No info_player_deathmatch entities in level
+         1795 faces
+          307 brushes
+          385 entities
+           29 unique texnames
+          273 texinfo
+
+Opened WAD: /home/qmaster/QUAKE/tests/../Other/Compiling/quake.wad
+Processing hull 0...
+---- Brush_LoadEntity ----
+          301 brushes
+          297 planes
+---- CSGFaces ----
+         1759 brushfaces
+         1752 csgfaces
+         1362 mergedfaces
+---- SolidBSP ----
+         1868 split nodes
+          843 solid leafs
+          967 empty leafs
+           59 water leafs
+            0 detail leafs
+            0 detail illusionary leafs
+            0 detail fence leafs
+            0 illusionary visblocker leafs
+         6924 leaffaces
+         6748 nodefaces
+---- Portalize ----
+         1026 vis leafs
+         1026 vis clusters
+         2859 vis portals
+---- FillOutside ----
+          354 outleafs
+---- MergeAll ----
+         1363 mergefaces
+---- SolidBSP ----
+         1036 split nodes
+          589 solid leafs
+          407 empty leafs
+           41 water leafs
+            0 detail leafs
+            0 detail illusionary leafs
+            0 detail fence leafs
+            0 illusionary visblocker leafs
+         4610 leaffaces
+         4421 nodefaces
+---- Portalize ----
+          448 vis leafs
+          448 vis clusters
+         1288 vis portals
+---- Tjunc ----
+         2311 world edges
+        12835 edge points
+         1935 edges added by tjunctions
+            0 faces added by tjunctions
+---- MakeFaceEdges ----
+---- GrowRegions ----
+Processing hull 1...
+Processing hull 2...
+---- WriteBSPFile ----
+Wrote /home/qmaster/QUAKE/keep/maps/rogtests3.bsp
+          614 planes            12280
+         5278 vertexes          63336
+         1066 nodes             46904
+          198 texinfo            7920
+         4477 faces            125356
+         2272 clipnodes         27264
+          479 leafs             21076
+         4666 marksurfaces      18664
+        19814 surfedges         79256
+         9908 edges             79264
+           29 textures         273280
+              lightdata             0
+              visdata               0
+              entdata           35581
+
+0.193 seconds elapsed
+Peak memory usage: 21729440 (20.7M)

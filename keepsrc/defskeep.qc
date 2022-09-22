@@ -49,7 +49,7 @@
 // -ijed
 //=============================================================================
 
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.96.1\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.96.2\n";
 .float mapversion;
 .string target3, target4;
 float total_denizens; // Used to track total harmless denizens
@@ -347,7 +347,6 @@ string MODEL_VWEAP_PLASM = "progs/v_plasma2.mdl";		// Plasma Gun
 string MODEL_VWEAP_PROX = "progs/hipnotic/v_prox.mdl";			// Proximity Gun
 string MODEL_VWEAP_LCAN = "progs/hipnotic/v_laserg.mdl";			// Laser Cannon
 string MODEL_PROJ_GRENADEMULTI = "progs/rogue/mervup.mdl";			// Multi-Grenade for Monsters
-string SOUND_ARTCROSS2 = "quoth/items2/crosuse.wav";			// Active
 string SOUND_ARTEMPATH2 = "hipnotic/items/empathy2.wav";		// Active
 
 .float slimealpha;

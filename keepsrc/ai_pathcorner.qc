@@ -274,7 +274,6 @@ void() path_corner_setuptargets = { // [FUNCTION]
 		self.nextthink = time + 0.5 + random();
 		self.think = path_corner_setuparrow;
 	}
-	
 };
 
 // This is a TRIGGER entry point only!
@@ -487,7 +486,7 @@ void() path_corner = { // [ENTITY]
 	self.solid = SOLID_TRIGGER;				// always touchable
 	self.movetype = MOVETYPE_NONE;			// Does not move
 	self.classtype = CT_PATHCORNER;			// Self identification
-	setsize (self, '-8 -8 -16', '8 8 16');	// Size of trigger
+	setsize(self, '-8 -8 -16', '8 8 16');	// Size of trigger
 	self.touch = path_corner_touch;			// Useable by monsters
 	self.use = path_corner_use;				// Used by trigger events
 	

@@ -155,6 +155,7 @@ void() info_givepower = { // [ENTITY]
 	} else if (self.style == 16) {
 		self.classtype = CT_ARTTRINITY;
 	} else if (self.style == 17) {
+		precache_sound("quoth/items2/crosuse.wav");
 		self.classtype = CT_ARTCROSS;
 	} else if (self.style == 18) {
 		self.classtype = CT_ARTHASTE;
@@ -863,8 +864,8 @@ void() item_artifact_cross = { // [ENTITY]
 	item_setupnoise("quoth/items2/crostake.wav");
 	self.noise2 = "quoth/items2/crosend.wav";
 	precache_sound(self.noise2);
+	precache_sound("quoth/items2/crosuse.wav");
 	if (self.netname == "") self.netname = "Cross of Deflection";
-	self.items = IT_QUAD;
 	self.classtype = CT_ARTCROSS;
 	self.part_active = PARTICLE_STYLE_QUAD;
 	self.respawn_style = PARTICLE_BURST_BLUE + PARTICLE_BURST_CENTER;

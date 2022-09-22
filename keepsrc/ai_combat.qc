@@ -808,7 +808,18 @@ void(entity inflictor, entity attacker, float dmg, entity ignore, float checkcla
 							// e.g. 9 damage = 10% chance.
 							Burn_Add(head,attacker,MAX_BURN_DAMAGE);
 						}
-						T_Damage(head,inflictor,attacker,points,DAMSPLASH); // Any damage left? Check for poison as well
+
+						if (head.cross_finished >= time) {
+							if ((head.flags & FL_CLIENT)) {
+								if (self.cross_sound < time) {
+									sound(self,CHAN_ITEM,"quoth/items2/crosuse.wav",1.0,ATTN_NORM);
+									self.cross_sound = time + 0.5;
+								}
+								dir = head.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
+								dir = normalize(dir);
+								head.velocity = head.velocity + dir * points * 8;
+							}
+						} else T_Damage(head,inflictor,attacker,points,DAMSPLASH); // Any damage left? Check for poison as well
 					}
 					if (attacker.poisonous) PoisonDeBuff(head);
 				}

@@ -372,6 +372,7 @@ void(entity targ) BleedDeBuff = {
 	local float pain_type;
 	
 	if (!(targ.flags & FL_CLIENT)) return; // Sanity check!
+	if (targ.cross_finished >= time) return;
 	if (targ.health <= DEBUFF_BLEED_MIN) return; // Check for bleeding and minimum amount of health for debuff
 	if (targ.bleeding == TRUE) { T_Damage(targ,self,self,DEBUFF_BLEED_MIN,DAMARMOR); return; } // Do minimum damage, checked min does not kill before
 	if (targ.items & IT_SUIT || Indestructable(targ)) { T_Damage(targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
@@ -421,6 +422,7 @@ void(entity targ) BurnDeBuff = {
 	if (targ.flags & FLx_CREATURE == FALSE) return; // Affects players and monsters
 	if (targ.waterlevel >= 3) return;
 	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) return;
+	if (targ.cross_finished >= time) return;
 	
 	// if debuff not active, starting burning!
 	if (!targ.burning) {
@@ -448,6 +450,7 @@ void(entity targ) PoisonDeBuff = {
 	// Immune to debuff if using Pent of Protection or BioSuit
 	if (targ.flags & FLx_CREATURE == FALSE) return; // Affects players and monsters 
 	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) return;
+	if (targ.cross_finished >= time) return;
 	if (targ.poisoned) return;	// Only poison once
 	
 	// work out time remaining on debuff

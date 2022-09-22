@@ -729,7 +729,10 @@ void(vector st, string axe) M_FireAxe = { // [FUNCTION]
 void(vector st, float damage, string sfx) M_Shal_Ex = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound (self, CHAN_WEAPON, sfx, 1, ATTN_NORM);
-    self.attack_speed = 400;
-	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
+    if (self.classtype != CT_MONSHAL) self.attack_speed = 400;
+    else self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
+
+	if (self.classname == "monster_hkboss") launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHALHKBOSS,self.attack_speed);
+	else launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
     if (damage) newmis.dmg  = damage;
 };

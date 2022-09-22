@@ -284,7 +284,7 @@ void(float offset) hknight_shot = {
 
 void() lord_magica7;
 
-// Magic attack A (over head attack) - not used
+// Magic attack A (over head attack)
 void()	hknight_magica1 = [	$magica1,	hknight_magica2	] { ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") { bane_strafe(); } };
 void()	hknight_magica2 = [	$magica2,	hknight_magica3	] { ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") { bane_strafe(); } };
 void()	hknight_magica3 = [	$magica3,	hknight_magica4	] { ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") { bane_strafe(); } };
@@ -353,14 +353,14 @@ void()	hknight_magica14 = [	$magica14,	hknight_run1	] {
 
 void() darklord_magicb6;
 
-// Magic attack B (pointing sword) - not used
+// Magic attack B (pointing sword)
 void()	hknight_magicb1 = [	$magicb1,	hknight_magicb2	] { ai_face(); };
 void()	hknight_magicb2 = [	$magicb2,	hknight_magicb3	] { ai_face(); };
 void()	hknight_magicb3 = [	$magicb3,	hknight_magicb4	] { ai_face(); };
 void()	hknight_magicb4 = [	$magicb4,	hknight_magicb5	] { ai_face(); };
 void()	hknight_magicb5 = [	$magicb5,	hknight_magicb6	] {
-	if (self.classname == "monster_dark_lord")
-		{ self.think = darklord_magicb6; return; }
+	if (self.classname == "monster_dark_lord") { self.think = darklord_magicb6; return; }
+
 	ai_face();
 };
 
@@ -370,7 +370,7 @@ void()	hknight_magicb6 = [	$magicb6,	hknight_magicb7	] { ai_face(); };
 void()	hknight_magicb7 = [	$magicb7,	hknight_magicb8	] { hknight_shot(-2); };
 void()	hknight_magicb8 = [	$magicb8,	hknight_magicb9	] { hknight_shot(-1); };
 void()	hknight_magicb9 = [	$magicb9,	hknight_magicb10] {
-	if (self.classname == "monster_hkboss") ShalMissile();
+	if (self.classname == "monster_hkboss") M_Shal_Ex('0 8 20',0,"drake/hkboss/iceball.wav");
 	hknight_shot(0);
 };
 void()	hknight_magicb10 = [	$magicb10,	hknight_magicb11] { hknight_shot(1); };

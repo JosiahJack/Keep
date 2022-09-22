@@ -913,6 +913,39 @@ void() ClientPowerups = { // [FUNCTION]
 		if (self.blastbelt_finished < time) ResetPowerBlastbelt(self,0); // Update inventory and timers
 	}
 
+	if (self.cross_finished) {
+		if (self.cross_finished < time + 3) {
+			if (self.cross_time == 1) {
+				sprint(self, "Cross of Deflection is wearing off\n");
+				stuffcmd(self, "bf\n");
+				sound(self, CHAN_AUTO, "quoth/items2/crosend.wav", 1, ATTN_NORM);
+				self.cross_time = time + 1;
+			}
+			if (self.cross_time < time) {
+				self.cross_time = time + 1;
+				stuffcmd(self, "bf\n");
+			}
+		}
+		if (self.cross_finished < time) {
+			self.cross_finished = self.cross_time = 0;
+			self.cross_start = 2;
+			stuffcmd(self, "v_cshift 0 0 0 0\n");
+		}
+		if (self.cross_finished > time) {
+			self.effects = self.effects | EF_DIMLIGHT;
+		} else {
+			self.effects = self.effects - (self.effects & EF_DIMLIGHT);
+		}
+	}
+	if (self.cross_start == 1) {
+		stuffcmd(self, "v_cshift 255 255 0 40\n");
+		self.cross_start = 2;
+	}
+	if (self.cross_start == 0 && self.cross_finished < time) {
+		stuffcmd(self, "v_cshift 0 0 0 0\n");
+		self.cross_start = 2;
+	}
+
 	// Jump Boots - Vertical Height Exploration
 	if (self.jumpboots_finished > 0) {
 		// sound and screen flash when items starts to run out

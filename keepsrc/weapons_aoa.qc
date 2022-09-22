@@ -141,7 +141,7 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 {
 	local	float 	points, distance, loopiter;
 	local	entity	head;
-	local	vector	org, imporg;
+	local	vector	org, imporg, dir;
 
 	// Cannot hurt the world or enemy targets (fake flying markers)
 	if (attacker.noradiusdmg) return;
@@ -192,6 +192,23 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 								// Check for glancing damage or if too far away
 								if (head.classgroup == CG_ZOMBIE && points > (head.health*0.25)) points = DAMAGE_ZOMBIECLASS;
 								if (points > 0) {
+									if ((inflictor.classgroup == CG_PROJFIRE
+										|| attacker.classgroup == CG_PROJFIRE)
+										&& (random() < (damage+1)*0.01)) {
+										// Chance to burn equals (damage + 1)%. 
+										// e.g. 9 damage = 10% chance.
+										Burn_Add(head,attacker,MAX_BURN_DAMAGE);
+									}
+
+									if (head.cross_finished >= time && (head.flags & FL_CLIENT)) {
+										if (self.cross_sound < time) {
+											sound(self,CHAN_ITEM,"quoth/items2/crosuse.wav",1.0,ATTN_NORM);
+											self.cross_sound = time + 0.5;
+										}
+										dir = head.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
+										dir = normalize(dir);
+										head.velocity = head.velocity + dir * points * 8;
+									}
 									// Any damage left? Check for poison as well
 									T_Damage(head, inflictor, attacker, points, DAMSPLASH);
 									if (attacker.poisonous) PoisonDeBuff(head);
@@ -202,6 +219,20 @@ void(entity inflictor, entity attacker, float damage, float radius, entity ignor
 				}
 			}
 		}
+
+		// From bsqmsafe
+		if (head.classtype == CT_TEMPGIB || head.frozen) {
+			SUB_RemoveFlags(head,FL_ONGROUND);
+			dir = head.origin - ((inflictor.absmin + inflictor.absmax) * 0.5);
+			dir = normalize(dir);
+			if (head.frozen) {
+				head.velocity = head.velocity + dir*damage*2; // Half as much for frozen enemies
+				head.health = head.health - points;
+			} else head.velocity = head.velocity + dir*damage*4;
+			if (head.velocity_z < 10) head.velocity_z = 10;
+			head.velocity_z = vlen(head.velocity) * 0.5;
+		}
+
 		head = head.chain;
 	}
 };

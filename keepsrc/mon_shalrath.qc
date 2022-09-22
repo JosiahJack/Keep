@@ -92,10 +92,7 @@ void() shal_run12	= [	$walk1,		shal_run1	] { ai_run(5); };
 
 // RANGE ATTACK 1 - Homing Missile Attack
 void() ShalMissile = {
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound(self,CHAN_WEAPON,"shalrath/attack2.wav",1,ATTN_NORM);
-	self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
-	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
+	M_Shal_Ex('0 8 20',0,"shalrath/attack2.wav");
 };
 
 void(vector hmofs, float hmframe) Setup_ShalHome = {

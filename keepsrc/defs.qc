@@ -526,7 +526,7 @@ void(float step) movetogoal = {
 	if (self.tetherlock == TRUE) return;
 	if (self.movetype == MOVETYPE_NOCLIP) QC_MoveToGoal(step,TRUE); // Ghostly
 	else if (self.flags & FL_SWIM) movetogoalplus(step);
-	else if (self.flags & FL_FLY) QC_MoveToGoal(step,FALSE);
+	//else if (self.flags & FL_FLY) QC_MoveToGoal(step,FALSE);
 	else movetogoal_builtin(step);
 };
 string(string s) precache_file			= #68; // Only in world.qc. No effect

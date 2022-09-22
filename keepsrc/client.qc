@@ -1540,7 +1540,7 @@ void() PlayerPostThink = {
 	if (self.target2 != "") trigger_strs(self.target2, self); self.target2 = ""; // Any spawn targets to update?
 	if (self.movetype == MOVETYPE_FLY && self.waterlevel && self.waterlevel < 2) self.velocity = self.velocity * 0.7; // flight adjustment we have boots of levitation
 	W_WeaponFrame(); // Shooting, impulse commands, and Quad updates.
-	if (map_fallspeeddebug == TRUE && developer > 1 && self.jump_flag != 0) { dprint(ftos(self.jump_flag)); dprint(" "); }// Show the player fall speed/velocity to the console.  Useful for showing what map unit heights affect damage values
+	if (map_fallspeeddebug == TRUE && developer > 1 && self.jump_flag != 0) { dprint("Jump flag: "); dprint(ftos(self.jump_flag)); dprint("\n"); }// Show the player fall speed/velocity to the console.  Useful for showing what map unit heights affect damage values
 	
 	// Is the player sliding on top of an entity? (not on ground).  Need postthink check because player starts at 0,0,0 floating :P
 	if (self.velocity_z == 0 && !(self.flags & FL_ONGROUND) && postthink) {
@@ -1593,7 +1593,7 @@ void() PlayerPostThink = {
 			if (!(self.perms & POW_ARMORNINJA)) sound(self,CHAN_BODY,"player/h2ojump.wav",1,ATTN_NORM); // Player hits water surface
 
 			// Check if damage can be applied after hitting water surface.  Cannot check jump flag velocity because player hit water
-			if (map_falldmgwater > 0 && !((self.perms & POW_ARMORNINJA) || self.water_blessed)) {
+			if (map_falldmgwater > 0 && !((self.perms & POW_ARMORNINJA) || self.water_blessed) && self.cross_finished < time) {
 				T_Damage(self, world, world, map_falldmgwater, DAMARMOR);
 				sound(self,CHAN_VOICE, "player/land.wav",1,ATTN_NORM); // Play on different channel so it does not conflict, land.wav  = light huh sound(floor impact and no damage)
 				self.deathtype = "falling";
@@ -1601,7 +1601,7 @@ void() PlayerPostThink = {
 		}
 		else if (self.jump_flag < map_fallspeedhigh) {
 			if (!((self.perms & POW_ARMORNINJA) || self.water_blessed)) { // Prevent fall damage with Ninja Armor or Water Shrine desecration
-				if (map_falldmg > 0) {
+				if (map_falldmg > 0 && self.cross_finished < time) {
 					T_Damage(self, world, world, map_falldmg, DAMARMOR);
 					sound(self,CHAN_VOICE, "player/land2.wav",1,ATTN_NORM); // land2.wav = heavy huh sound and nasty bone crunching sound
 					self.deathtype = "falling";
@@ -1742,7 +1742,6 @@ void() PlayerJump = {
 
 // Deals with water, slime and lava
 void() WaterMove = {
-	if (developer > 1) dprint (ftos(self.waterlevel));
 	if (self.movetype == MOVETYPE_NOCLIP) { self.air_finished = time + 10; return; } // Fix noclip water gasping bug by giving air to the player
 	if (self.health < 0) return;
 
@@ -1754,7 +1753,7 @@ void() WaterMove = {
 		}
 		self.air_finished = time + WATER_AIR;
 		self.dmg = map_hazarddmg_x;
-	} else if (self.air_finished < time && !self.air_blessed) {	// drown!
+	} else if (self.air_finished < time && !self.air_blessed && self.cross_finished < time) {	// drown!
 		if (self.pain_finished < time) {
 			self.dmg = self.dmg + map_hazarddmg_x; // Keep increasing drowning damage
 			if (self.dmg > 15) self.dmg = 10;
@@ -1771,7 +1770,7 @@ void() WaterMove = {
 		return;
 	}
 
-	if (self.watertype == CONTENT_LAVA && self.resist_fire < 1) {	// do damage
+	if (self.watertype == CONTENT_LAVA && self.resist_fire < 1 && self.cross_finished < time) {	// do damage
 		if (self.moditems & IT_ARTLAVASHIELD) PlayLavaShieldSound(self); // Check for lava shield and play reminder it exists
 		else {
 			if (self.dmgtime < time && self.therm_finished < time) {
@@ -1783,7 +1782,7 @@ void() WaterMove = {
 				if (self.funcwaterdmg_finished < time) T_Damage(self, world, world, map_hazarddmg_z*self.waterlevel*(1-self.resist_fire), DAMARMOR);
 			}
 		}
-	} else if (self.watertype == CONTENT_SLIME && self.resist_acid < 1) {	// do damage
+	} else if (self.watertype == CONTENT_SLIME && self.resist_acid < 1 && self.cross_finished < time) {	// do damage
 		if (self.dmgtime < time && self.radsuit_finished < time && self.therm_finished < time) {
 			self.dmgtime = time + 1;
 			if (self.funcwaterdmg_finished < time) T_Damage(self, world, world, map_hazarddmg_y*self.waterlevel * (1-self.resist_acid), DAMARMOR);

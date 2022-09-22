@@ -991,7 +991,7 @@ void() max_shalrath4() = {
 
 void() max_shalrath5() = {
   #69 max_shalrath6;
-  ShalMissile();
+  M_Shal_Ex('0 8 20',0,"shalrath/attack2.wav");
 };
 
 void() max_shalrath6 = {
