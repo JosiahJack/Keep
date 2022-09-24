@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: Drake by Patrick Martin, Hexen2
 //
@@ -426,9 +426,7 @@ void() misc_wanted = {
     if (!self.model) self.model = "progs/drake/wanted.mdl";
     precache_model(self.model);
     setmodel(self,self.model);
-    if (self.angles == '0 -1 0') self.angles = '-90 0 0';
-    else if (self.angles == '0 -2 0') self.angles = '90 0 0';
-
+    SetSelfAnglesUpDown();
     makevectors (self.angles);
     setorigin (self, self.origin - ( v_forward * 0.2 ) ); // Pull the sprite away from the wall slightly to get rid of z sort errors.
     if (self.health == 0) self.health = 10;

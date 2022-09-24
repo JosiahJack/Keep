@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Drake, Zerstorer, Qtest, id1
+// Attributions: Drake by Patrick Martin, Zerstorer, Qtest, id1
 //
 //
 // Distribution / Copyright / Permissions 

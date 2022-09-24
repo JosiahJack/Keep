@@ -1,3 +1,41 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 16
+//
+// Implements: Bandit and Goblin
+//
+// Description:
+// Medieval soldier variant armed with a bow.
+//=============================================================================
+
 $cd id1/models/soldier3
 $origin 0 -6 24
 $base base        
@@ -27,8 +65,6 @@ $frame decapb9 decapb10 decapb11
 $frame runb1 runb2 runb3 runb4 runb5 runb6
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10 walk11
 $frame standb1 standb2 standb3 standb4 standb5 standb6
-
-//  BANDIT / GOBLIN  (Soldier variant armed with a bow.)
 
 void() bandit_fire = { // [FUNCTION]
     local vector org, dir;
@@ -247,8 +283,9 @@ void() monster_bandit = {
         if (self.health < 100) { self.health = self.max_health = 100; }
         self.ryuflags = RYU_ALERT | RYU_REBEL;
 		if (self.deathstring == "") {
-			self.deathstring = " was shot by a Rebel\n";
-			if (self.skin == 1) self.deathstring = " was hoodwinked by a Bandit\n";
+            if (random() < 0.5) self.deathstring = " was hoodwinked by a Bandit\n";
+			self.deathstring = " was shot by a Bandit\n";
+			if (self.skin == 1) self.deathstring = " was shot by a Goblin\n";
 		}
     }
 

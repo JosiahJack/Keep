@@ -1,30 +1,61 @@
-void() wallsprite = { // [ENTITY]
-   if (!self.model) self.model = "progs/hipnotic/s_blood1.spr";
-   precache_model(self.model);
-   setmodel(self,self.model);
-   if ( (self.angles == '0.000 -1.000 0.000') ) self.angles = '-90.000 0.000 0.000';
-   else if ( (self.angles == '0.000 -2.000 0.000') ) self.angles = '90.000 0.000 0.000';
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Hipnotic
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 3
+//
+// Implements: Shotgun Bullet Holes and Wall Sprite
+//
+// Description:
+// When firing shotguns, will place a bullet hole sprite on a hit wall.
+//
+// wallsprite is a blood decal sprite.
+//=============================================================================
 
-   makevectors(self.angles);
-   setorigin(self,(self.origin - (v_forward * 0.200)));
-   makestatic (self);
+void() wallsprite = { // [ENTITY], Blood sprite in hipnotic.
+   if (!self.model) self.model = "progs/hipnotic/s_blood1.spr";
+   info_sprite_static();
 };
 
 void() InitBulletHoles = { // [FUNCTION]
-   bulletholes = nullentity;
-   lastbullet = nullentity;
+   bulletholes = world;
+   lastbullet = world;
    numbulletholes = FALSE;
 };
 
 void() remove_bullethole = { // [FUNCTION]
-   local entity ent;
+   if (!bulletholes) return;
+   if (bulletholes.classname != "bullethole") return;
 
-   if (bulletholes == nullentity) objerror ("remove_bullethole: bulletholes == nullentity! ");
-   ent = bulletholes;
-   if (ent.classname != "bullethole")  objerror ("remove_bullethole: Tried to remove non-bullethole!");
    bulletholes = bulletholes.lastvictim;
-   remove(ent);
-   if (lastbullet == ent) lastbullet = nullentity;
+   remove(bulletholes);
+   if (lastbullet == bulletholes) lastbullet = world;
    numbulletholes = (numbulletholes - TRUE);
 };
 
@@ -49,9 +80,9 @@ void(vector pos) placebullethole = { // [FUNCTION]
    new.nextthink = (time + 300.000);
    numbulletholes = (numbulletholes + TRUE);
    if (numbulletholes > 32) remove_bullethole();
-   if (lastbullet != nullentity) lastbullet.lastvictim = new;
+   if (lastbullet) lastbullet.lastvictim = new;
    else bulletholes = new;
 
-   new.lastvictim = nullentity;
+   new.lastvictim = world;
    lastbullet = new;
 };

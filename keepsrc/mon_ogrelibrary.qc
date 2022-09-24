@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Drake, Nehahra
+// Attributions: Drake by Patrick Martin, Nehahra
 //
 //
 // Distribution / Copyright / Permissions 

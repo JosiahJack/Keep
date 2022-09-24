@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Drake, Doom, id1
+// Attributions: Drake by Patrick Martin, Doom, id1
 //
 //
 // Distribution / Copyright / Permissions 
@@ -633,3 +633,13 @@ void() monster_shambler = {
 };
 
 void() monster_shamvile = { self.spawnflags = self.spawnflags | 2; monster_shambler(); };
+
+// TODO: Add monster_armagon variant that uses all black skin with quad damage from anevil (An Old Old Evil early Drake variant)
+// and shoots fire using new_sham_magica
+//void() monster_armagon = {
+//	self.classname = "monster_shambler";
+//	self.skin = 1; // All black
+//	self.health = (skill + 1) * 1500;
+//	self.super_damage_finished = 999999;
+//	monster_shambler();
+//};

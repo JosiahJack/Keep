@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: extras_r4, extras_r5 (as of 2019, still active then)
 //				Written by Frank Condello <pox@planetquake.com>

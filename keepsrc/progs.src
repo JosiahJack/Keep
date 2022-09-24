@@ -459,7 +459,7 @@ mon_queen.qc				// Queen, Redfield, DENIZEN, non-combatant queen of the tower wh
 //mon_ranger.qc				// Ranger, Drake, implemenation of the player as a singleplayer monster.  Capable of being a buddy.
 mon_ogrelibrary.qc				// Nehahra library ogre and his cart
 
-dmatch.qc					// Rogue deathmatch stuff
+dmatch.qc					// REFINED Rogue deathmatch stuff
 
 // Spawn System
 //-----------------------------------------------------------------------------

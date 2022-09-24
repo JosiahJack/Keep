@@ -1,4 +1,53 @@
-// dmatch - general deathmatch additions
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Rogue
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 6
+//
+// Implements: Deathmatch Tag (Teamplay 3)
+//
+// Description:
+// When cvar teamplay is set to 3, Deathmatch Tag is enabled.  A tag token can
+// be placed in a map using dmatch_tag_token entity to provide the tag.  A
+// player with the tag token will be IT and granted:
+// - 3 frags per kill
+// - Gain quad damage after 5 kills
+// - Lose the tag after 10 kills
+//
+// Killing the player who has the token will grant you the token and grant 5
+// frags for the kill.  Tag, I'm IT!
+//
+// The token will float above its owning player's head indicating to others
+// who is IT.
+//
+// All other kills are only worth 1 frag.
+//=============================================================================
 
 void() tag_token_touch;
 
@@ -6,7 +55,7 @@ void() tag_token_respawn = { // [FUNCTION]
 	local entity spawnPoint;
 	local entity tagToken;
 	
-	tagToken = find (world, classname, "dmatch_tag_token");
+	tagToken = find(world,classname,"dmatch_tag_token");
 	if(tagToken == world) return;
 		
 	spawnPoint = SelectSpawnPoint();
@@ -30,11 +79,11 @@ void() tag_token_fall = { // [FUNCTION]
 void() tag_token_drop = { // [FUNCTION]
 	local entity tagToken;
 	
-	tagToken = find (world, classname, "dmatch_tag_token");
+	tagToken = find(world,classname,"dmatch_tag_token");
 	if(tagToken == world) return;
 		
-	bprint ( tagToken.owner.netname );
-	bprint ( " lost the tag token!\n");
+	bprint(tagToken.owner.netname);
+	bprint(" lost the tag token!\n");
 	tagToken.tag_frags = 0;
 	tagToken.solid = SOLID_TRIGGER;
 	tagToken.owner = world;
@@ -73,9 +122,7 @@ void() tag_token_touch = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 };
 
-/*QUAKED dmatch_tag_token (1 1 0) (-16 -16 -16) (16 16 16)
-The deathmatch tag token.
-*/
+// QUAKED dmatch_tag_token (1 1 0) (-16 -16 -16) (16 16 16) The deathmatch tag token.
 void() dmatch_tag_token = { // [ENTITY]
 	if ( cvar("teamplay") != TEAM_DMATCH_TAG ) { remove (self); return; }
 

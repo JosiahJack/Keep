@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: All, primarily ID
 //
@@ -246,6 +246,7 @@ float	SVC_FINALE			= 31;
 float	SVC_CDTRACK			= 32;
 float	SVC_SELLSCREEN		= 33;
 float	SVC_CUTSCENE		= 34;
+float	SVC_UPDATEENTITY    = 128;
 float	TE_SPIKE		= 0;
 float	TE_SUPERSPIKE	= 1;
 float	TE_GUNSHOT		= 2;

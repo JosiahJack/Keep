@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: Hipnotic (Ritual Entertainment)
 //
@@ -73,7 +73,6 @@ float modelindex_hammer;
 .float spawnsolidtype;
 .string spawnmodel;
 .void() spawnthink;
-entity nullentity;
 entity bulletholes;
 entity lastbullet;
 float numbulletholes;

@@ -4,7 +4,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: Copper
 //

@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: Markie, Arcane Dimensions, and Copper
 //   Algorithm "xor" from p. 4 of Marsaglia, "Xorshift RNGs"

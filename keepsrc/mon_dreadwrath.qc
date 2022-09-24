@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Drake, Rogue
+// Attributions: Drake by Patrick Martin, Rogue
 //
 //
 // Distribution / Copyright / Permissions 

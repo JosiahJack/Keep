@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: All
 //
@@ -126,6 +126,11 @@ float() check_bmodel_keys = { // [FUNCTION]
 		// Do nothing with this entity
 		return TRUE;
 	} else return FALSE;
+};
+
+void() SetSelfAnglesUpDown = {
+	if (self.angles == '0 -1 0') self.angles = '-90 0 0'; // Up
+	else if (self.angles == '0 -2 0') self.angles = '90 0 0'; // Down, yes positive rotation on the unit circle from 0 would go towards down.
 };
 	
 // QuakeEd only writes a single float for angles (bad idea), so up and down are just constant angles.

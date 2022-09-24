@@ -408,7 +408,7 @@ void() env_sprite = { // [ENTITY]
 
 	precache_model(self.mdl);
 	setmodel(self,self.mdl);
-	if (self.alpha <= 0) self.alpha = 1;
+	SetSelfAnglesUpDown();
 	self.pos1_x = self.frame;
 	self.pos1_y = self.alpha;
 	self.use = env_sprite_use;
@@ -425,12 +425,12 @@ void() env_sprite = { // [ENTITY]
 };
 
 void() info_sprite_static = { // [ENTITY]
-	self.classname = "env_sprite";
-	self.mdl = self.model;
+	if (self.mdl == "") self.mdl = self.model;
+	if (self.mdl == "") { dprint("info_sprite_static with no model, removing\n"); remove(self); return; }
+
 	precache_model(self.mdl);
 	setmodel(self,self.mdl);
-	if (self.angles == '0 -1 0') self.angles = '-90 0 0';
-	else if (self.angles == '0 -2 0') self.angles = '90 0 0';
+	SetSelfAnglesUpDown();
 	makevectors (self.angles);
 	setorigin(self,(self.origin - (v_forward * 0.200)));
 	makestatic(self);

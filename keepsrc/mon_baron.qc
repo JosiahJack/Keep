@@ -1,3 +1,43 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 5
+// Function count: 214
+//
+// Implements: Baron, Fire Baron, Earth Baron, Wind Baron, Water Baron
+//
+// Description:
+// Specialty knight with 4 alternative bosses with unique abilities, see below.
+// Draws sword when alerted.  If Ambush spawnflag 1 is set, will not make idle
+// noises.  Spawnflag 4 disables jumping.
+//=============================================================================
+
 //  Frames:
 //     0 -  10  Wave (with sword on back -- idle taunt?)
 //    11 -  21  Point (super missile attack for Rapture baron)

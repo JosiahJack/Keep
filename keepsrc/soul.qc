@@ -3,9 +3,9 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Drake, Nehahra
+// Attributions: Drake by Patrick Martin, Nehahra
 //
 //
 // Distribution / Copyright / Permissions 
