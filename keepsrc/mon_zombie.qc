@@ -5,7 +5,8 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: id1, Rogue, Hipnotic
+// Attributions: id1, Mission Pack 2 (Rogue), Mission Pack 1 (Hipnotic) by 
+//               Ritual Entertainment
 //
 //
 // Distribution / Copyright / Permissions 

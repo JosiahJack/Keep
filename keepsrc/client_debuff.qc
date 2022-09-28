@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: My own and Arcane Dimensions (AD)
+// Attributions: Qmaster, Arcane Dimensions (AD)
 //
 //
 // Distribution / Copyright / Permissions 

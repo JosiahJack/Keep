@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: All, primarily ID
+// Attributions: All, primarily id1
 //
 //
 // Distribution / Copyright / Permissions 

@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Rogue
+// Attributions: Mission Pack 2 (Rogue)
 //
 //
 // Distribution / Copyright / Permissions 

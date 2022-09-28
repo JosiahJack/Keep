@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Mod attributions: Arcane Dimensions (AD), derived from Hipnotic
+// Attributions: Arcane Dimensions (AD), derived from Mission Pack 1 (Hipnotic)
 //
 //
 // Distribution / Copyright / Permissions 

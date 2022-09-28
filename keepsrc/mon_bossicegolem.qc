@@ -1,5 +1,51 @@
-// ICE GOLEM (Heavily Inspired by Ne_Ruins MOD) (Hexen2 Model)
-// FIRE GOLEM (Recreated attempting to follow Ne_Ruins MOD by Necros)
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), ne_ruins by necros, Hexen2
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 174
+//
+// Implements: Ice Golem and Lava Golem
+//
+// Description:
+// The Ice Golem is a giant version of the normal golem rock giant.  Able to
+// stomp the ground to send shards of ice towards you and causes the ceiling to
+// drop down chunks of debris if a ceiling is present above it.  Resists all
+// freezing and cold damage.
+//
+// The Lava Golem version is the opposite having fire abilities.  Has fire
+// resistance.  Recreated attempting to follow Ne_Ruins MOD by Necros.
+//
+// Both are able to use monster_icegolem_wavetrig entity to indicate column
+// smash event and trigger other events; intended to be used to target monsters
+// to spawn in and assist the golem who is intened to be used as a boss.
+//=============================================================================
+
 // (000) standing still with heavy breathing
 $frame wait1 wait2 wait3 wait4 wait5 wait6 wait7 wait8
 $frame wait9 wait10 wait11 wait12 wait13 wait14 wait15 wait16

@@ -5,8 +5,8 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Rogue, Feb'97 by ZOID <zoid@threewave.com> under contract to
-//               id software for Rogue Entertainment
+// Attributions: Feb'97 by ZOID <zoid@threewave.com> under contract to id
+//               software for Rogue Entertainment for Mission Pack 2 (Rogue)
 // 
 //
 //

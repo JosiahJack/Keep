@@ -1,6 +1,43 @@
-/*==============================================================================
-Chthon (ID software Version)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), id1
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 117
+//
+// Implements: Chthon (vanilla version)
+//
+// Description:
+// A giant lava being who's presence is only visible as a torso jutting out of
+// a pool of lava.  Can only be killed by using the environment to electrocute
+// him with a bolt of lightning.
+//=============================================================================
+
 $frame rise1 rise2 rise3 rise4 rise5 rise6 rise7 rise8 rise9 rise10
 $frame rise11 rise12 rise13 rise14 rise15 rise16 rise17 
 
@@ -342,59 +379,3 @@ void() monster_boss = { // [ENTITY]
 //QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) x
 // Just for boss level. Used for killing Cthon.
 void() event_lightning = { self.use = lightning_use; }; // [ENTITY]
-
-void() teleporttrain_next;
-void() teleporttrain_target = { // [FUNCTION]
-	local vector dir;
-
-	if (self.target != "") { // Path following, not entity I/O
-		// Find next target entity
-		self.enemy = find (world, targetname, self.target);
-		if (self.enemy) {
-			// Work out distance and angle to turn towards
-			dir = normalize(self.enemy.origin - self.origin);
-			self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
-			self.velocity = dir * self.speed;
-	
-			// Shift target to next target in the entity chain
-			self.target = self.enemy.target;
-			self.nextthink = time + 0.1;
-			self.think = teleporttrain_next;
-			return;
-		}
-	}
-	// No target or entity to follow, full stop
-	self.velocity = '0 0 0';
-	self.enemy = world;
-};
-
-void() teleporttrain_next = { // [FUNCTION]
-	if (!self.enemy) return;
-
-	// Work out how close to the next target (self.enemy)		
-	self.t_length = vlen(self.enemy.origin - self.origin);
-	if (self.t_length < 64) teleporttrain_target();
-	else {
-		// Keep checking
-		self.nextthink = time + 0.1;
-		self.think = teleporttrain_next;
-	}		
-};
-
-// QUAKED misc_teleporttrain (0 0.5 0.8) (-8 -8 -8) (8 8 8) x
-// This is used for the final boss ONLY
-// Flying ball needed to teleport kill Shub-Niggurath
-// This is used for the final boss ONLY.  Flying ball needed to teleport kill Shub-Niggurath
-// Originallu used bmodel train functions, setup to work like the shalrath homing missile.
-void() misc_teleporttrain = { // [ENTITY]
-	self.mdl = "progs/teleport.mdl";
-	precache_model (self.mdl);
-	self.solid = SOLID_TRIGGER;
-	self.movetype = MOVETYPE_FLY; // Push movetype cannot rotate, fly can
-	self.use = teleporttrain_target;
-	self.avelocity = vecrand(50,250,FALSE);
-	setmodel(self, self.mdl);
-	setsize (self, VEC_ORIGIN , VEC_ORIGIN);
-	if (!self.speed) self.speed = 100;
-	if (SUB_HideIfNoTarget()) return;
-};

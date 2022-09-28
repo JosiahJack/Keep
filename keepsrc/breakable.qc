@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: My own, Arcane Dimensions, Rubicon 2, and ne_ruins
+// Attributions: Qmaster, Arcane Dimensions, Rubicon 2, and ne_ruins
 //
 //
 // Distribution / Copyright / Permissions 

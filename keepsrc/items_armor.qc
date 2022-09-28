@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: ID1 and Drake with some from Arcane Dimensions (AD)
+// Attributions: ID1, Drake, Arcane Dimensions (AD)
 //
 //
 // Distribution / Copyright / Permissions 
