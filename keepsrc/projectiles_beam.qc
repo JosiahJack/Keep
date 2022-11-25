@@ -969,7 +969,7 @@ void(vector spot) M_Slam = { // [FUNCTION]
     }
 };
 
-// Fires a cone of electric death that zaps everyone within 30 degrees of the aim vector infront of start point, up to a range defined by radius. Attacker is assumed to be self.
+// Fires a cone of electric death that zaps everyone within ang degrees of the aim vector infront of start point, up to a range defined by radius. Attacker is assumed to be self.
 void(vector start, vector dir, float damage, float radius, float ang) DeathRay = { // [FUNCTION]
     local entity attacker, inflictor, head, ent;
     local vector end, vec;

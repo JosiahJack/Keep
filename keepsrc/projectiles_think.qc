@@ -712,41 +712,43 @@ entity(entity attacker, vector org, vector dir, float radius, float scope) Super
     head = findradius(org, radius);
     while (head) {
 		// Target must be a living creature without any stealth tech.
-        if (head.health > 0)
-        if (!head.invisible_finished)
-        if (!(head.flags & FL_NOTARGET))
-        if (head.flags & FLx_CREATURE)
-        if (!(head.charmer == attacker)) {
-			// Get the target whose direction matches aim vector the closest.
-            end = Midpoint (head);
-            vec = normalize (end - org);
-            dotproduct = vec * dir;
-            if (dotproduct > scope) {
-                traceline (org, end, TRUE, head);
-                if (trace_fraction == 1) {
-					// Accept as a possible target and make a chain of targets.
-                    head.chain2 = world;
-                    head.frate2 = dotproduct;
-                    if (targ) {
-						// Sort the chain by dot product in descending order.
-                        old = world;
-                        link = targ;
-                        while (link) {
-                            if (dotproduct > link.frate2) {
-								// This target is more desirable.
-                                head.chain2 = link;
-                                if (old) old.chain2 = head;
-                                else targ = head;
+        if (head.health > 0) {
+            if (!Invisible(head)) {
+                if (head.flags & FLx_CREATURE) {
+                    if (Align_Opposing(attacker,head) || attacker.enemy == head) {
+                        // Get the target whose direction matches aim vector the closest.
+                        end = Midpoint (head);
+                        vec = normalize (end - org);
+                        dotproduct = vec * dir;
+                        if (dotproduct > scope) {
+                            traceline (org, end, TRUE, head);
+                            if (trace_fraction == 1) {
+                                // Accept as a possible target and make a chain of targets.
+                                head.chain2 = world;
+                                head.frate2 = dotproduct;
+                                if (targ) {
+                                    // Sort the chain by dot product in descending order.
+                                    old = world;
+                                    link = targ;
+                                    while (link) {
+                                        if (dotproduct > link.frate2) {
+                                            // This target is more desirable.
+                                            head.chain2 = link;
+                                            if (old) old.chain2 = head;
+                                            else targ = head;
 
-                                link = world;   // End this sub-loop.
-                            } else {
-								// Next!
-                                old = link;
-                                link = link.chain2;
-                                if (!link) old.chain2 = head;
+                                            link = world;   // End this sub-loop.
+                                        } else {
+                                            // Next!
+                                            old = link;
+                                            link = link.chain2;
+                                            if (!link) old.chain2 = head;
+                                        }
+                                    }
+                                } else targ = head;
                             }
                         }
-                    } else targ = head;
+                    }
                 }
             }
         }
@@ -808,15 +810,19 @@ void() Sidewinder_Think = { // [FUNCTION]
     local float sped, d1, d2;
 
     if (self.delay < time) {
-        if (self.classgroup == CG_PROJROCKETS) Touch_Missile(); // Out of gas.
-        else remove(self); // For acolytes' venom shots.
+        if (self.classgroup == CG_PROJROCKETS) {
+            other = self.enemy;
+            Touch_Missile(); // Out of gas.
+        } else remove(self); // For acolytes' venom shots.
         return;
     }
 
-    if (self.enemy) sped = !Invisible(self.enemy);
-    else sped = FALSE;
-
-    if (sped) {
+    if (self.enemy && !Invisible(self.enemy)) {
+        if (vlen(self.enemy.origin - self.origin) < 40) {
+            other = self.enemy;
+            Touch_Missile();
+            return;
+        }
         vec = Aimpoint (self.enemy);    // Was self.enemy.origin;
         Sidewind_Face (vec);
         if (!self.volume) { // Lose track if missile flies past its target.

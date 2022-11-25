@@ -842,7 +842,7 @@
 }
 // entity 65
 {
-"classname" "monster_super_wrath"
+"classname" "monster_wrath"
 "origin" "192 -48 128"
 "spawnflags" "4"
 }
@@ -861,4 +861,9 @@
 "classname" "misc_model"
 "origin" "-16 -512 184"
 "mdl" "progs/kurok/palmleav.mdl"
+}
+// entity 68
+{
+"classname" "weapon_sidewinder"
+"origin" "-192 96 -8"
 }

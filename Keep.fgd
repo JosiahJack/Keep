@@ -1,9 +1,12 @@
-//======================================================================
+//=============================================================================
 // ENTITIES FGD file
 // MOD    : Keep
 // VERSION: v0.96
 // Editor : Trenchbroom 
-//======================================================================
+//=============================================================================
+
+// Base classes
+// These are the generic patterns to apply to a large large number of entities
 @baseclass = Appearflags [
 	spawnflags(Flags) = [
 		256 : "Not in Easy" : 0 : "Will not spawn for EASY skill"
@@ -45,7 +48,7 @@
         -1 : "Disabled"
          0 : "Default"
          1 : "Enabled"
-    ]   	
+    ]	
 	_range(integer) : "Global Light Range" :  : "Scales the brightness range of all lights without affecting their fade distance. Values more than 0.5 makes lights brighter and values less than 0.5 makes lights less bright. The same effect can be achieved on individual lights by adjusting both the 'light' and 'wait' attributes."
 	_dist(integer) : "Global Light Scale" :  : "Scales the fade distance of all lights by a factor of 'n'. If 'n' is more than 1 lights fade more quickly with distance and if 'n' is less than 1, lights fade more slowly with distance and the light reaches further."
 	_gamma(integer) : "Lightmap gamma" :  : "Adjust brightness of the final lightmap. Default 1, values >1 are brighter while values <1 are darker."
@@ -204,8 +207,6 @@
 	armourvalue(integer) : "Armour Quantity" :  : "Quantity of armour to reset player (100/150/200)"
 	no_axestart(integer) : "Set to 1 to start the player with no axe and no shotgun!"
 
-//_____Engine  Setup_____   
-    
 	sprite_particles(choices) : "Sprite Particles ONLY" :  : "Switch all custom particles to sprites (builtins excluded)." = [
 		 0 : "Default"
 		 1 : "Enabled"
@@ -229,9 +230,6 @@
     mapvar_update(string) : "Map Variables (Range X->Y=Z)" :  : "Essentially (X->Y=Z) simply states that, X thru Y is a range of variables(0-132 available) and that Z is a value of either 0 or 1. Thus, setting 'mapvar_update' to '0 3 1' would set variables 0 thru 3 to equal 1."
 	compilerstyle_start(integer) : "Starting point for target lights (set by compiler)"
   
- //Patch2 additions  
- //_____Jumping and Falling_____ 
- 
    	jump_height(integer) : "Jump boots velocity (def=270)" : : "When jumping you get a 270 velocity boost, which combined with other movement can be up to 600+"
    	fall_dmg(integer) : "Fall damage (def=5, <-1=no dmg/sound)" : : "Custom fall damage, values <-1 disables sound and damage"
 	fall_dmgwater(integer) : "Water damage (def=0, >0=dmg+sound)" : :  "Custom water damage, from falling, values >0 enables sound and damage"  
@@ -239,7 +237,7 @@
 	fall_heighthigh(integer) : "Fall height sound+damage (def=650)" : : "Custom fall height that triggers a bone crush sound with inflicting player damage"	
 	fall_speeddebug(integer) : "Set to 1 to display players fall velocity to console"
 
-	// Specialty mod independently toggleable options
+	// Mod independently toggleable options
 	copperoptions(Flags) = [
 		1 : "Shotguns always pierce" : 0
 		2 : "Imprecise vore ball tracking" : 0
@@ -261,7 +259,9 @@
 	]
 	doomoptions(Flags) = [
 		1 : "Shotguns always have knockback" : 0
-	]	
+	]
+
+	// Drake music system
 	noise(string) : "Start music for Secondary Drake Music System" : : "Example music/shadows.wav"
 	noise2(string) : "Intermission music for Secondary Drake Music System" : : "Example music/soultrap.wav"
 	noise3(string) : "Episode end music for Secondary Drake Music System" : : "Example music/halo.wav"
@@ -347,14 +347,13 @@
 @PointClass base(Sound) = ambient_whnoise : "Wierd Humming" []
 @PointClass base(Sound) = ambient_zzxzz : "Strange Machinery" []
 
-//_____Custom Sounds_____
-//setup base for custom sounds
+// Custom Sounds
 @baseclass base(Targetname,Appearflags) size(-16 -16 -8, 16 16 8) color(230 230 0) = CustomSound []
 
-//@baseclass for custom ambients SPAWNFLAGS, a couple don't require these 
+// Custom ambients SPAWNFLAGS, a couple don't require these 
 @baseclass = AmbCustSpwnFlags [	
 	spawnflags(Flags) = [
-		2 : "Play One"  : 0 
+		2 : "Play Once"  : 0 
 		64 : "Start OFF" : 0
 	]
 ]
@@ -389,15 +388,13 @@
 ]
 
 @PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Appearflags) = play_sound_triggered : "Triggered sound" [
-	spawnflags(flags) =
-	[
+	spawnflags(flags) = [
 		1 : "Toggle" : 0
 	]
  	volume(string) : "Volume" : "1.0"
 	noise(string) : "Sound to play"
 	impulse(integer) : "Channel (0 to 7)" : 0
-	speed(choices) : "Attenuation" : 1 = 
-	[
+	speed(choices) : "Attenuation" : 1 = [
 		-1: "no attenuation"
 		1: "normal"
 		2: "idle"
@@ -410,8 +407,7 @@
 	wait(string) : "Wait (Random)" : "20"
 	delay(string) : "Minimum delay" : "2"
 	impulse(integer) : "Channel (0 to 7)" : 0
-	speed(choices) : "Attenuation" : 1 = 
-	[
+	speed(choices) : "Attenuation" : 1 = [
 		-1: "no attenuation"
 		1: "normal"
 		2: "idle"
@@ -422,8 +418,7 @@
 	wait(string) : "Wait (Random)" : "20"
 	delay(string) : "Minimum delay" : "2"
  	volume(string) : "Volume" : "1.0"
-	speed(choices) : "Attenuation" : 1 = 
-	[
+	speed(choices) : "Attenuation" : 1 = [
 		-1: "no attenuation"
 		1: "normal"
 		2: "idle"
@@ -913,13 +908,13 @@
 @baseclass = AmmoLid [ spawnflags(flags) = [ 2 : "Lid" : 0 ] ]
 
 //----------------------------------------------------------------------
-@PointClass base(Items,ItemSize,ItemWorldType) studio(
-        {{
-            spawnflags & 2 ->   "progs/ad171/health_100.mdl",
-            spawnflags & 1 ->   "progs/ad171/health_15.mdl",
-                                "progs/ad171/health_25.mdl"
-        }}) = item_health : "Health pak" [
-//@PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad171/health_25.mdl") = item_health : "Health pak" [
+//@PointClass base(Items,ItemSize,ItemWorldType) studio(
+       // {{
+       //     spawnflags & 2 ->   "progs/ad171/health_100.mdl",
+       //    spawnflags & 1 ->   "progs/ad171/health_15.mdl",
+       //                         "progs/ad171/health_25.mdl"
+       // }}) = item_health : "Health pak" [
+@PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad171/health_25.mdl") = item_health : "Health pak" [
 	spawnflags(flags) = [
 		1 : "Rotten" : 0
 		2 : "Megahealth" : 0
@@ -927,16 +922,16 @@
 ]
 @PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad181/health_5.mdl") = item_healthvial : "Health Vial" []
 //----------------------------------------------------------------------
-@PointClass base(AmmoBase,AmmoLid) studio({{
-	spawnflags & 1 ->	"progs/ad171/ammo_shells1.mdl",
-						"progs/ad171/ammo_shells0.mdl"
-}}) = item_shells : "Shells" []
-//@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_shells1.mdl") = item_shells : "Shells" []
-@PointClass base(AmmoBase,AmmoLid) studio({{
-	spawnflags & 1 ->	"progs/ad171/ammo_nails1.mdl",
-						"progs/ad171/ammo_nails0.mdl"
-}}) = item_spikes : "Nails" []
-//@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_nails0.mdl") = item_spikes : "Nails" []
+//@PointClass base(AmmoBase,AmmoLid) studio({{
+//	spawnflags & 1 ->	"progs/ad171/ammo_shells1.mdl",
+//						"progs/ad171/ammo_shells0.mdl"
+//}}) = item_shells : "Shells" []
+@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_shells1.mdl") = item_shells : "Shells" []
+//@PointClass base(AmmoBase,AmmoLid) studio({{
+//	spawnflags & 1 ->	"progs/ad171/ammo_nails1.mdl",
+//						"progs/ad171/ammo_nails0.mdl"
+//}}) = item_spikes : "Nails" []
+@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_nails0.mdl") = item_spikes : "Nails" []
 @PointClass base(AmmoBase) studio("progs/ad171/ammo_rockets0.mdl") = item_rockets : "Rockets" []
 @PointClass base(AmmoBase) studio("progs/ad171/ammo_battery0.mdl") = item_cells : "Cells" []
 @PointClass base(AmmoBase) studio("maps/b_plas0.bsp") = item_plasma : "Plasma" []
@@ -1424,9 +1419,8 @@
 	]
 ]
 
-//_____baseclass for BModel lighting options_____
-@baseclass = FuncLighting [			
-
+// BModel lighting options
+@baseclass = FuncLighting [
     _separator_ignore_me(string) : "----- Lighting Options -----" :  : "ignore, editor use only."
 	
 	_minlight(integer) : "Min Light" :  : "Set the minimum light level for every surface of a brush model(BModel). A very useful feature for BModels to make them fit more 'naturally' into their surroundings. Especially where often times light can leave compeletely unlit(black) faces due to their nature(non-static w/hidden faces)."
@@ -2018,7 +2012,7 @@
 ]
 //Patch2 addition | ON HOLD| light.exe issue, crashes if bouce lighting is enabled in worldspawn
 //_____FUNC SHADOW_____
-@SolidClass base(AppearFlags,targetname,target) = func_shadow : "An Invisible bmodel that casts shadows." [
+@SolidClass base(Appearflags,Targetname,Target) = func_shadow : "An Invisible bmodel that casts shadows." [
 	spawnflags(flags) = [
 	    2 : "Fading" : 0 : "Will gradually fade over time (speed)"
 		64 : "Start OFF" : 0 : "Starts off, waits for trigger"
@@ -2228,7 +2222,7 @@ color(128 0 128) = TrigBasic [
 ]
 
 //_____TRIGGER TIMER_____
-@PointClass base(AppearFlags, targetname, target) color(128 0 25) size(-8 -8 -8, 8 8 8) = trigger_timer : "A timer with three (gold/siver/bronze) event triggers" [
+@PointClass base(Appearflags,Targetname,Target) color(128 0 25) size(-8 -8 -8, 8 8 8) = trigger_timer : "A timer with three (gold/siver/bronze) event triggers" [
 	spawnflags(flags) = [
 		32 : "Start Disabled"
 		61 : "Start Off"
@@ -2342,7 +2336,7 @@ color(128 0 128) = TrigBasic [
 		 1 : "Free Movement"
 	]
 ]
-@PointClass base(AppearFlags,targetname,target) size(-8 -8 -16, 8 8 16) color(128 0 128) = trigger_monsterpassivestate : "Change the monster(s) passive state" [
+@PointClass base(Appearflags,Targetname,Target) size(-8 -8 -16, 8 8 16) color(128 0 128) = trigger_monsterpassivestate : "Change the monster(s) passive state" [
 	state(choices) : "State to change to" = [
 	   -1 : "Toggle"
 		0 : "Off"
@@ -2521,7 +2515,7 @@ color(128 0 128) = TrigBasic [
 	fog_colour(string) : "Fog Colour (0.1 0.1 0.1)"
 ]
 //_____TRIGGER SKY FOG_____
-@SolidClass base(AppearFlags,targetname,target)	= trigger_skyfog : "Trigger Skyfog - change global sky fog to new value over time" [
+@SolidClass base(Appearflags,Targetname,Target)	= trigger_skyfog : "Trigger Skyfog - change global sky fog to new value over time" [
 	spawnflags(flags) = [ 
 		1 : "No Touch" : 0 : "can only be triggered via other entities"
 		64 : "Start OFF" : 0 : "Starts off, waits for trigger"
@@ -2625,6 +2619,11 @@ color(128 0 128) = TrigBasic [
 	yaw_speed(integer) : "Spawn rate (def=0.5s)"
 	old_velocity(string) : "Vector of XYZRandomSpeed ZBase ZRand (def=5 10 15)"
 ]
+
+@BaseClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) color(0 128 192) = Misc [
+	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
+]
+
 @SolidClass base(Misc) = func_drips : "Dripping water volume" [
 	spawnflags(Flags) = [ 
 		2 : "Silent" : 0
@@ -2729,9 +2728,8 @@ color(128 0 128) = TrigBasic [
 	target2(target_destination) : "Targets to trigger when entity is activated"
 	style(integer) : "Style to remap, must be number >= 1 and <= 63"
 	wait(integer) : "-1 will only do once"
-	customstyle_remap : "Re-use another light style (1-63)"
-	customstyle_string : "Light value string made up of a-z letters"
-	
+	customstyle_remap(integer) : "Re-use another light style (1-63)"
+	customstyle_string(string) : "Light value string made up of a-z letters"
 ]
 
 @SolidClass base(TrigOFF,Targetname,Target) = trigger_remove : "Trigger Void" [
@@ -3211,7 +3209,7 @@ color(128 0 128) = TrigBasic [
 	]
 ]
 
-@PointClass base(Appearflags, target, targetname) size (-10 -10 -16, 10 10 16) studio("progs/ad181/vase.mdl") = misc_vase : "Breakable Vase" [
+@PointClass base(Appearflags, Target, Targetname) size (-10 -10 -16, 10 10 16) studio("progs/ad181/brk_vase1.mdl") = misc_vase : "Breakable Vase" [
 	spawnflags(flags) = [
 		1 : "Flame" : 0
 		2 : "Large" : 0 
@@ -3223,7 +3221,7 @@ color(128 0 128) = TrigBasic [
 ]
 
 @PointClass base(Appearflags,Targetname) size(-64 -64 -80, 64 64 88) color(0 128 192) studio("progs/drake/bellring.mdl") = misc_bell : "Bell, Shootable" []
-@PointClass base(Appearflags, target, targetname) size (-16 -16 0, 16 16 32) studio("progs/redfield/tower_bell.mdl") = misc_bellredfield : "Shootable Bell" [
+@PointClass base(Appearflags, Target, Targetname) size (-16 -16 0, 16 16 32) studio("progs/redfield/tower_bell.mdl") = misc_bellredfield : "Shootable Bell" [
 	spawnflags(flags) = [ 
 		64 : "Start Off" : 0
 	]
@@ -3382,10 +3380,6 @@ color(128 0 128) = TrigBasic [
     speed(integer) : "Random  Direction (-1=disable)"
 ]
 
-@BaseClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8)
-	color(0 128 192) = Misc [
-	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
-]
 @PointClass base(Misc) = misc_fireball : "Small fireball" [
 	spawnflags(Flags) = [ 
 		32 : "Slime" : 0
@@ -3564,7 +3558,7 @@ color(128 0 128) = TrigBasic [
 @PointClass = fx_sound : "FX Sound" [
 	noise(string) : "Noise" : : "Path to the sound - example: 'misc/mysound.wav'"
 	noise1(string) : "Noise1" : : "Path to the shutoff sound. Use 'misc/null.wav' to abruptly mute 'noise' when toggled off. If 'noise1' is empty, 'noise' is allowed to finish when paused (or continue if it's a looped WAV)."
-	distance(float) : "Distance (attenuation)" : 1 : "Sound attenuation (defaults to ATTN_NORM)."
+	distance(float) : "Distance (attenuation)" : "1" : "Sound attenuation (defaults to ATTN_NORM)."
 	volume(integer) : "Volume" : 1 : "Sound volume."
 	count(integer) : "Count" : 1 : "Number of times to play the sound each time it's triggered (-1 is infinite loop)."
 	pausetime(integer) : "Pause Time" : 0 : "Delay in seconds before playing the next loop (omit or set to 0 if 'count' is 1)"
@@ -3697,7 +3691,7 @@ color(128 0 128) = TrigBasic [
 ]
 @PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({"path": mdl,"skin": pos2,"frame": pos1}) = mapobject_custom : "This is a duplicate of misc_model for quoth map compatibility" []
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16)
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16)
 	color(255 128 64) studio({"path" : mdl,"skin" : skin,"frame": frame}) = misc_modelrdm : "Model Random Animation" [
 	mdl(string) : "Model to load (progs/model.mdl)"
 	skin(integer): "The skin number"
@@ -3747,8 +3741,6 @@ color(128 0 128) = TrigBasic [
 	wait(integer) : "Time to stand still before moving to next actor_target (target) (def=0, stay forever)"
 	speed(integer): "How fast to run to this target (def=10)"
 ]
-
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/player.mdl") = monster_decoy : "decoy player" []
 
 @PointClass base(TrigOFF, Appearflags, Targetname) = misc_bob : "Bobbing models, gently up and down" [
 	spawnflags(Flags) = [
@@ -3831,59 +3823,59 @@ color(128 0 128) = TrigBasic [
 	pos1(string) : "X=top digits, Y=lower digits"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio({"path" : mdl}) = misc_godray : "Animated Godrays" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio({"path" : mdl}) = misc_godray : "Animated Godrays" [
 	spawnflags(Flags) = [64 : "Start Off" : 0]
 	mdl(string) : "Model to load (progs/model.mdl)"
 	angles(string) : "Facing angle"
 	alpha(integer) : "Starting alpha"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -24, 16 16 40) color(255 128 64) = misc_barmaid : "Animated Barmaid model" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -24, 16 16 40) color(255 128 64) = misc_barmaid : "Animated Barmaid model" [
 	spawnflags(Flags) = [64 : "Start Off" : 0]
 	angles(string) : "Facing angle"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_cshiftflash : "CShift flash effect. Always starts off and waits for trigger" []
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_cshiftflash : "CShift flash effect. Always starts off and waits for trigger" []
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/alice.mdl") = misc_alice : "Alice" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/alice.mdl") = misc_alice : "Alice" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/cat.mdl") = misc_cat : "Black Cat" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/cat.mdl") = misc_cat : "Black Cat" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/cutscene_karasu.mdl") = misc_karasucutscene : "Cutscene models" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/cutscene_karasu.mdl") = misc_karasucutscene : "Cutscene models" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 ]
 
-@PointClass base(Appearflags, targetname, target) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/ufo.mdl", "frame": 49}) = misc_ufo : "Secret UFO model" [
+@PointClass base(Appearflags, Targetname, Target) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/ufo.mdl", "frame": 49}) = misc_ufo : "Secret UFO model" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/wolf_cutscene.mdl") = misc_wolfscene : "Cutscene models" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/wolf_cutscene.mdl") = misc_wolfscene : "Cutscene models" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_huntress_spawn : "Cutscene models" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_huntress_spawn : "Cutscene models" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/intro/old_one.mdl") = misc_intro_oldone : "Cutscene models" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/intro/old_one.mdl") = misc_intro_oldone : "Cutscene models" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 	noise(string) : "Target to fire on first frame"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/ad181/mon_knight.mdl", "frame": 121}) = misc_saluteknight : "Cutscene models" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/ad181/mon_knight.mdl", "frame": 121}) = misc_saluteknight : "Cutscene models" [
 	angles(string) : "Pitch, yaw, roll"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/fountain_water.mdl") = misc_waterfountain : "Animated water for fountain" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio("progs/redfield/fountain_water.mdl") = misc_waterfountain : "Animated water for fountain" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 	alpha(integer) : "Alpha"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/fx_fire.mdl", "frame": frame}) = misc_firefx : "Animated fire mesh" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/fx_fire.mdl", "frame": frame}) = misc_firefx : "Animated fire mesh" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 	alpha(integer) : "Alpha"
 	angles(string) : "Pitch, yaw, roll"
@@ -3898,14 +3890,14 @@ color(128 0 128) = TrigBasic [
 	angles(string) : "Pitch, yaw, roll"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/spiral_portal.mdl", "frame": 9}) = misc_spiral : "Spiral Portal" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/spiral_portal.mdl", "frame": 9}) = misc_spiral : "Spiral Portal" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 	alpha(integer) : "Alpha"
 	angles(string) : "Pitch, yaw, roll"
 	avelocity(string) : "Spinning axis"
 ]
 
-@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/portal_runes.mdl", "skin" : skin}) = misc_redrunes : "Portal Runes" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) studio({"path": "progs/redfield/portal_runes.mdl", "skin" : skin}) = misc_redrunes : "Portal Runes" [
 	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
 	alpha(integer) : "Alpha"
 	angles(string) : "Pitch, yaw, roll"
@@ -4623,7 +4615,7 @@ color(128 0 128) = TrigBasic [
 		]	
 ]
 
-@PointClass base(AppearFlags) size(-8 -8 -8, 8 8 8) color(128 128 192) = misc_marshlight : "Marsh lights" [
+@PointClass base(Appearflags) size(-8 -8 -8, 8 8 8) color(128 128 192) = misc_marshlight : "Marsh lights" [
 	spawnflags(flags) = [ 64 : "Start OFF" : 0 : "Starts off, waits for trigger" ]
 	targetname(target_source) : "Name" : : "Toggleable (use trigger ent for exact state)"
 	color(choices) : "Color" = [
@@ -4840,22 +4832,6 @@ color(128 0 128) = TrigBasic [
 	break_template3(string) : "Override random monster classname 11 of 13 (e.g. monster_dog)"
 	break_template4(string) : "Override random monster classname 12 of 13 (e.g. monster_dog)"
 	break_template5(string) : "Override random monster classname 13 of 13 (e.g. monster_dog)"
-]
-
-@PointClass base(MonShort,MonsterFamilies,RandomSpawnsStrings) = func_spawn_small : "Monster Spawner" [
-	spawnclassname(string) : "Monster To Spawn"
-	cnt(integer) : "Number to spawn" : 1
-	spawnflags(flags) = [
-		2 : "Random Monster" : 0 : "Pick a random monster from the entire list (caches 13 types)"
-	]
-]
-
-@PointClass base(MonWide,MonsterFamilies,RandomSpawnsStrings) = func_spawn : "Monster Spawner" [
-	spawnclassname(string) : "Monster To Spawn"
-	cnt(integer) : "Number to spawn" : 1
-	spawnflags(flags) = [
-		2 : "Random Monster" : 0 : "Pick a random monster from the entire list"
-	]
 ]
 
 //======================================================================
@@ -5183,6 +5159,22 @@ color(128 0 128) = TrigBasic [
 	jumprange(vector) : "Range at which the monster will attempt a jump attack - x y 0, for example 200 300 0, which means the monster will attempt jumps when the player is between 200 and 300 units from it"
 ]
 
+@PointClass base(MonShort,MonsterFamilies,RandomSpawnsStrings) = func_spawn_small : "Monster Spawner" [
+	spawnclassname(string) : "Monster To Spawn"
+	cnt(integer) : "Number to spawn" : 1
+	spawnflags(flags) = [
+		2 : "Random Monster" : 0 : "Pick a random monster from the entire list (caches 13 types)"
+	]
+]
+
+@PointClass base(MonWide,MonsterFamilies,RandomSpawnsStrings) = func_spawn : "Monster Spawner" [
+	spawnclassname(string) : "Monster To Spawn"
+	cnt(integer) : "Number to spawn" : 1
+	spawnflags(flags) = [
+		2 : "Random Monster" : 0 : "Pick a random monster from the entire list"
+	]
+]
+
 @PointClass base(MonArmagon) studio("progs/hipnotic/armabody.mdl") = monster_armagon : "Armagon" []
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") = monster_army : "Grunt" []
 @PointClass base(MonTall) studio("progs/mon_axeman.mdl") = monster_axeman : "Axe Knight" []
@@ -5236,7 +5228,7 @@ color(128 0 128) = TrigBasic [
 	bodyphased (integer) : "Starts phased out"
 	bodystatic (integer) : "Prevents teleporting"
 ]
-@PointClass base(Appearflags, targetname, target) size(-48 -48 -24, 48 48 88) studio("progs/redfield/mon_wolf.mdl") = monster_wolf : "Moonlight Guardian" [
+@PointClass base(Appearflags, Targetname, Target) size(-48 -48 -24, 48 48 88) studio("progs/redfield/mon_wolf.mdl") = monster_wolf : "Moonlight Guardian" [
 	spawnflags(flags) = [ 
 		1 : "Ambush" : 0 : "Wakeup when player is seen"
 		2 : "Howl" : 0 : "Howl after seeing player (angry)"
@@ -5247,7 +5239,7 @@ color(128 0 128) = TrigBasic [
 		128 : "Angry" : 0 : "Will spawn angry at the player"	
 	]	
 ]
-@PointClass base(MonTiny) studio({{spawnflags & 2 -> 	{"path": "progs/mon_raven.mdl", "frame": 107},spawnflags & 4 -> 	{"path": "progs/mon_raven.mdl", "frame": 107},"progs/mon_raven.mdl" }}) = monster_raven : "Raven" [
+@PointClass base(MonTiny) studio("progs/redfield/mon_raven.mdl") = monster_raven : "Raven" [
 	spawnflags(flags) = [ 
 		2 : "Perch" : 0
 		4 : "Feed" : 0 
@@ -5360,6 +5352,8 @@ color(128 0 128) = TrigBasic [
 	spawnflags(Flags) = [ 4: "Melee (axe). See manual for very important note" : 0]
 ]
 
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/player.mdl") = monster_decoy : "decoy player" []
+
 @PointClass base(MonTall) studio("progs/ad171/mon_fumigator.mdl") = monster_fumigator : "Fumigator" []
 @PointClass base(MonTall) studio("progs/ad171/mon_pyro.mdl") = monster_pyro : "Pyro" []
 @PointClass base(MonTall) studio("progs/ad171/mon_centurion.mdl") = monster_centurion : "Centurion" []
@@ -5381,7 +5375,7 @@ color(128 0 128) = TrigBasic [
 	frame(integer) : "Statue Pose def=44" :  : "Override statue pose"
 	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
 ]
-@PointClass base(MonShort) model({"path": "progs/ad171/mon_knight.mdl","skin": 2,"frame", 0}) = monster_warrior : "Knight" []
+@PointClass base(MonShort) model({"path": "progs/ad171/mon_knight.mdl","skin": 2,"frame":0}) = monster_warrior : "Knight" []
 @PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") = monster_hell_knight : "Hell knight" [
 	spawnflags(flags) = [ 
 		2 : "Stone Statue" : 0
@@ -5395,7 +5389,6 @@ color(128 0 128) = TrigBasic [
 @PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") = monster_hell_pointknight : "Hell knight" [
 	spawnflags(flags) = [ 
 		2 : "Stone Skin" : 0
-		128: "N/A" : 0
 	]
 	target(target_destination) : "target" :  : "target for electricity"
 	target2(target_destination) : "target2" : : "trigger to fire no pointing"
@@ -5558,7 +5551,7 @@ color(128 0 128) = TrigBasic [
 		4 : "On Ceiling" : 0 
 	] 
 ]
-@PointClass base(MonTiny, JumpingMon) model({"path": "progs/mon_steelclaw.mdl", "skin": 0, "frame": 0}) = monster_steelclaw : "Steelclaw, 75 health points." []
+@PointClass base(MonTiny, JumpingMon) model({"path": "progs/ad181/mon_steelclaw.mdl", "skin": 0, "frame": 0}) = monster_steelclaw : "Steelclaw, 75 health points." []
 
 @PointClass base(MonTiny) studio("progs/ad171/mon_boil.mdl") = monster_boil : "Boil" [
   	spawnflags(flags) = [

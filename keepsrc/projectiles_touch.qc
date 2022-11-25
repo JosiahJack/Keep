@@ -551,6 +551,7 @@ void() Touch_Missile = { // [FUNCTION]
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 	if (self.oldenemy && other.classtype == self.oldenemy.classtype) return; // Stop packs of owners killing each other
 	if (self.classtype == CT_PROJ_SKULLW && self.th_updmissile != SUB_Null) { self.th_updmissile(); return; } // Guardian skull wizards have special poison explosion
+	if (Reflected_Damage (COURAGE_DAMAGE)) return;
 
 	if (ai_immunebreakable(self.owner, other)) { // Check for breakable/pushable monster immunity
 		SpawnExplosion(EXPLODE_BURST_SMOKE,self.origin,SOUND_RESIST_ROCKET); // Show ammo resistance
@@ -598,6 +599,7 @@ void() Touch_Missile = { // [FUNCTION]
 			else if (self.classtype == CT_PROJ_JUDGER) self.pos1 = DAMAGE_RLJUDGE;
 			else if (self.classtype == CT_PROJ_JUSTICER) self.pos1 = DAMAGE_RLJUDGE;
 			else if (self.classtype == CT_PROJ_RAINDEER) self.pos1 = DAMAGE_RLRAINDEER;
+			else if (self.classtype == CT_PROJ_SIDEWINDER) self.pos1 = '90 20 120';
 
 			// Instant death explosion for zombies from rocket explosions!  It doesn't make sense that this wasn't originally a default for explosives. this will affect _zombie, _zombiek, monster types.
 			if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) {

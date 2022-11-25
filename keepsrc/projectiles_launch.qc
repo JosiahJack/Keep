@@ -1695,7 +1695,7 @@ void(vector start, vector dir, entity targ) Sidewinder_Launch = { // [FUNCTION]
     newmis.movetype     = MOVETYPE_FLYMISSILE;
     newmis.solid        = SOLID_BBOX;
     newmis.classname    = "rocket";
-    newmis.yaw_speed    = 30;   // For sidewinding code.
+    newmis.yaw_speed    = 5;   // For sidewinding code.
     newmis.speed        = 450;
     newmis.height       = 50;
     newmis.velocity     = dir * (450 + (random() * 50));
@@ -1703,6 +1703,11 @@ void(vector start, vector dir, entity targ) Sidewinder_Launch = { // [FUNCTION]
     newmis.dmg          = 90;
     newmis.oldenemy     =
     newmis.enemy        = targ;
+	if (newmis.enemy) {
+		dprint("Sidewinder has target of ");
+		dprint(newmis.enemy.classname);
+		dprint("\n");
+	}
     newmis.ideal_yaw    = newmis.angles_y;
     newmis.cnt          = 0;
     newmis.lefty        = 1;

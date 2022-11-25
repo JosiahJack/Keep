@@ -269,7 +269,7 @@ void() reiver_fireball_touch = { // [FUNCTION]
 		if (random() <= 0.3) {
 			ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
 			sound(other,CHAN_AUTO,"player/inflame.wav",1,ATTN_NORM); 		// play ignition sound
-			sound(other, 120, "zombie/corpse_fire.wav",1,ATTN_NORM); 	       	// play fire loop sound
+			sound(other,CHAN_VOICE, "zombie/corpse_fire.wav",1,ATTN_NORM); 	       	// play fire loop sound
 		}
 	} else {
 		// wall
