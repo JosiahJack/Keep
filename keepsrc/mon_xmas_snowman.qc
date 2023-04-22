@@ -160,11 +160,8 @@ void(entity inflictor, entity attacker, float damage) snowm_pain = {
 
 void() snowm_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-
-	// There is no death animation
-	if (random() < 0.5) sound(self,CHAN_BODY,self.death_sound,1,ATTN_NORM);
-	else sound(self,CHAN_BODY,self.death_sound2,1,ATTN_NORM);
-	ExplosiveGibDeath(self.death_sound,0,0,0);
+	monster_deathsound();
+	ExplosiveGibDeath(self.death_sound,0,0,0); // There is no death animation
 };
 
 void() monster_xmas_snowman_precache = {

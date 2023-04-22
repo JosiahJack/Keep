@@ -316,28 +316,19 @@ void()	enf_fdie11	= [	$fdeath11,	enf_fdie11	] { monster_deadbody_check(); };
 
 void()	lth_fdie1;
 
-void() enf_die = {
-	local float r;
-	
+void() enf_die = {	
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
-		if (self.classtype == CT_MONENF_ULTRA) {
-			r = random();
-			if (r < 0.333)		sound(self,CHAN_VOICE, "lunaran/enforcer/ue_die1.wav",1,ATTN_NORM);
-			else if (r < 0.666)	sound(self,CHAN_VOICE, "lunaran/enforcer/ue_die2.wav",1,ATTN_NORM);
-			else 				sound(self,CHAN_VOICE, "lunaran/enforcer/ue_die3.wav",1,ATTN_NORM);
-		} else if (self.classtype == CT_MONENF_GUNNER) {
-			if (random() < 0.5)	sound(self,CHAN_VOICE, "drake/gunner/death1.wav",1,ATTN_NORM);
-			else				sound(self,CHAN_VOICE, "drake/gunner/death2.wav",1,ATTN_NORM);
-		} else {
-			sound(self,CHAN_VOICE, "enforcer/death1.wav",1,ATTN_NORM);
-		}
-
+		monster_deathsound();
 		if (self.classtype == CT_MONSUPERENFORCER) {
-			if (self.spawnflags & ENFORCER_LAVANG) DropWeapon(MODEL_GWEAP_LSNG,IT_LAVA_SUPER_NAILGUN,CT_LAVASNG);
-			else DropWeapon(MODEL_GWEAP_SNG,IT_SUPER_NAILGUN,CT_SUPER_NAILGUN);
+			if (self.spawnflags & ENFORCER_LAVANG) {
+				DropWeapon(MODEL_GWEAP_LSNG,IT_LAVA_SUPER_NAILGUN,CT_LAVASNG);
+			} else {
+				DropWeapon(MODEL_GWEAP_SNG,IT_SUPER_NAILGUN,CT_SUPER_NAILGUN);
+			}
+
 			lth_fdie1();
 			return;
 		}
@@ -379,9 +370,6 @@ void() monster_enforcer_precache = { // [FUNCTION]
 	precache_sound("lunaran/enforcer/me_fire1.wav");
 	precache_sound("zerstorer/weapons/rocket1i.wav");
 	precache_sound("items/protect3.wav");
-	precache_sound("lunaran/enforcer/ue_die1.wav");
-	precache_sound("lunaran/enforcer/ue_die2.wav");
-	precache_sound("lunaran/enforcer/ue_die3.wav");
 	precache_sound("lunaran/enforcer/ue_site1.wav");
 	precache_sound("lunaran/enforcer/ue_site2.wav");
 	precache_sound("lunaran/enforcer/ue_site3.wav");
@@ -437,15 +425,14 @@ void() monster_base_enforcer = { // [FUNCTION]
 	if (self.classtype == CT_MONENF_ULTRA) {
 		self.pain_sound = "lunaran/enforcer/ue_pain1.wav";
 		r = random();
-		if (r < 0.5)
-			self.pain_sound2 = "lunaran/enforcer/ue_pain2.wav";
-		else
-			self.pain_sound2 = "lunaran/enforcer/ue_pain3.wav";
+		if (r < 0.5) self.pain_sound2 = "lunaran/enforcer/ue_pain2.wav";
+		else self.pain_sound2 = "lunaran/enforcer/ue_pain3.wav";
 	} else {
 		if (self.pain_sound == "") self.pain_sound = "enforcer/pain1.wav";
 		if (self.pain_sound2 == "") self.pain_sound2 = "enforcer/pain2.wav";
 	}
 	if (!self.gib1sound) self.gib1sound = GIB_IMPACT_WOOD;
+	if (self.death_sound == "") self.death_sound = "enforcer/death1.wav";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -484,6 +471,9 @@ void() monster_enforcer = {
 		self.skin = 12;
 		enforcer_spawnshieldfx();
 		self.classtype = CT_MONENF_ULTRA;
+		self.death_sound = "lunaran/enforcer/ue_die1.wav";
+		self.death_sound2 = "lunaran/enforcer/ue_die2.wav";
+		self.death_sound3 = "lunaran/enforcer/ue_die3.wav";
 		if (self.deathstring == "")  self.deathstring = " was vaporized by an Ultra-enforcer\n";
 	} else {
 		if (self.spawnflags & MEGA_ENF) {
@@ -579,6 +569,8 @@ void() monster_gunner = {
     self.hello_sound = "drake/gunner/idle.wav";
     self.pain_sound = "drake/gunner/pain1.wav";
     self.pain_sound2= "drake/gunner/pain2.wav";
+	self.death_sound = "drake/gunner/death1.wav";
+	self.death_sound2 = "drake/gunner/death2.wav";
     self.th_missile = gunner_gun1;
 	if (self.deathstring == "") {
 		if (random() < 0.5)	self.deathstring = " was perforated by a Chaingunner\n";

@@ -203,6 +203,44 @@ void() monster_sightsound = { // [FUNCTION]
 	}
 };
 
+// Picks a set of random values to check based on how many death sounds are
+// defined for the particular monster to play an evenly random distribution.
+void() monster_deathsound = {
+	local float r; // Holds the random value.
+
+	if (self.gibbed) return; // Can't speak if dead so no cries of anguish.
+	if (self.death_sound == "") { // Check and move 2/3 into empty default.
+		if (self.death_sound3 != "") {
+			self.death_sound = self.death_sound3;
+			self.death_sound3 = ""; // No sense doing extra work below.
+		} else if (self.death_sound2 != "") {
+			self.death_sound = self.death_sound2;
+			self.death_sound2 = ""; // No sense doing extra work below.
+		} else {
+			return; // Have to at least define one, yeesh.
+		}
+	}
+
+	r = random();
+	if (self.death_sound3 != "") { // Do the version with thirds.
+		if (r < 0.333 && self.death_sound3 != "") {
+			sound(self,CHAN_VOICE,self.death_sound3,1,ATTN_NORM);
+		} else if (r < 0.666 && self.death_sound2 != "") {
+			sound(self,CHAN_VOICE,self.death_sound2,1,ATTN_NORM);
+		} else {
+			sound(self,CHAN_VOICE,self.death_sound,1,ATTN_NORM);
+		}
+	} else if (self.death_sound2 != "") { // Go halvsies.
+		if (r < 0.5 && self.death_sound2 != "") {
+			sound(self,CHAN_VOICE,self.death_sound2,1,ATTN_NORM);
+		} else {
+			sound(self,CHAN_VOICE,self.death_sound,1,ATTN_NORM);
+		}
+	} else { // Just the one
+		sound(self,CHAN_VOICE,self.death_sound,1,ATTN_NORM);
+	}
+};
+
 // This function will play a footstep sound
 // * Types : Slow, Drag, Light, Medium, Heavy, Large
 // * called from animation blocks to sync with sound
@@ -549,7 +587,7 @@ void() monster_targets = { // [FUNCTION]
 			if (Invisible(self.enemy)) self.enemy = world;
 
 			// Check the enemy is a player/monster and alive
-			if (self.enemy.health > 0 && self.health > 0) {
+			if (self.enemy.health > 0 && self.health > 0 && self.enemy.solid != SOLID_NOT) { // Don't sound if enemy is a camera currently.
 				self.nextthink = time + 0.1;
 				self.think = FoundTarget;
 				if (self.health > 0) monster_sightsound();	// Wake up sound

@@ -551,16 +551,18 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	if (!TeamHealthDam(targ, inflictor, attacker, damage)) return; // same team --ZOID
 
 	if (deathmatch) take = RuneApplyEarth(take, targ); // rune power up (Earth Magic)
-	
-	//------------------------------------------------------\\__
-	//------------//                                              \\
-	//---//                                                            _
-	//                                                                   \
-	targ.health = targ.health - take; // DO THE DAMAGE  --------- DO IT!!!
-	//                                                                 _ /
-	//---\\                                                       //
-	//------------\\                                          __
-	//----------------------- OUCH! ------------------------//
+
+    	//
+	    //------------------------------------------------------\\__
+	    //------------//                                              \\
+	    //---//                                                            _
+/**\***///                                                                   \
+/***\**/targ.health = targ.health - take; // DO THE DAMAGE  --------- DO IT!!! >
+/****\*///                                                                 _ /
+	    //---\\                                                       //
+	    //------------\\                                          __
+	    //----------------------- OUCH! ------------------------//
+	    //
 
 	// Apply berserker helm life leech to heal the attacker if the target still has health
 	if (attacker.perms & POW_VAMPIRE && targ.health > 0) {
@@ -639,8 +641,8 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 	
 	if (targ.health < 1) {
-		if (inflictor.classtype == CT_FROSTSHARD
-			&& targ.resist_cold < 1 && targ.classgroup != CG_HARMLESS) {
+		if (inflictor.classtype == CT_FROSTSHARD && targ.resist_cold < 1
+			&& targ.classgroup != CG_HARMLESS) {
 			targ.frozen = TRUE;
 		}
 		Killed(targ,attacker);

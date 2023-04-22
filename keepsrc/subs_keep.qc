@@ -498,6 +498,7 @@ float(entity targ) Invisible = { // [FUNCTION]
 	if (targ.flags & FL_NOTARGET) return TRUE;
 	if (targ.items & IT_INVISIBILITY) return TRUE;
 	if (targ.invisible_finished > time) return TRUE;
+	if (cinematic_running && targ.flags & FL_CLIENT && targ.solid == SOLID_NOT) return TRUE; // Prevent seeing players who are cameras but not ghosts and such.
 	return FALSE;
 };
 

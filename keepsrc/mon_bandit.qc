@@ -189,20 +189,10 @@ void() bandit_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		// regular death
-		if (self.classtype == CT_MONBANDIT) {
-			sound(self,CHAN_VOICE, "soldier/death1.wav",1,ATTN_NORM);
-		} else {
-			if (random() < 0.5) {
-				sound(self,CHAN_VOICE, "drake/goblin/death1.wav",1,ATTN_NORM);
-			} else {
-				sound(self,CHAN_VOICE, "drake/goblin/death2.wav",1,ATTN_NORM);
-			}
-		}
-		if (random() < 0.5) army_die1();		// Forward
-		else army_cdie1();									// Backward/side
+        monster_deathsound();
+		if (random() < 0.5) army_die1(); // Forward
+		else army_cdie1();				 // Backward/side
 	}
-
 };
 
 void() monster_bandit_precache = {
@@ -245,6 +235,11 @@ void() monster_bandit = {
 		self.pain_sound2 = "drake/goblin/pain2.wav";
 		self.hello_sound = "drake/goblin/idle1.wav";
 		self.sight_sound = "drake/goblin/sight1.wav";
+		self.sight_sound2 = "drake/goblin/sight2.wav";
+		self.sight_sound3 = "drake/goblin/sight3.wav";
+		self.sight_sound4 = "drake/goblin/sight4.wav";
+		self.death_sound = "drake/goblin/death1.wav";
+		self.death_sound2 = "drake/goblin/death2.wav";
 	} else {
 		self.classtype = CT_MONBANDIT;
 		self.idle_sound = "soldier/idle.wav";
@@ -252,6 +247,7 @@ void() monster_bandit = {
 		self.pain_sound2 = "soldier/pain2.wav";
 		self.hello_sound = "soldier/idle.wav";
 		self.sight_sound = "soldier/sight1.wav";
+		self.death_sound = "soldier/death1.wav";
 	}
 
 	self.ammo_nails = rint(random()*3);

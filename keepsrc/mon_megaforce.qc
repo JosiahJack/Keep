@@ -417,20 +417,12 @@ void() megaf_fdie11= [$fdeath11, megaf_fdie11] { monster_deadbody_check(); };
 void() megaf_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
-
+	megaf_shieldsound_off(); // Turn off shield
 	// regular death
 	if (!self.gibbed) {
-		// Turn off shield
-		megaf_shieldsound_off();
-
-		// Typical forward/backward death + unique sound
-		if (random() > 0.5) {
-			megaf_die1();
-			sound(self,CHAN_VOICE, self.death_sound2,1,ATTN_NORM);
-		} else {
-			megaf_fdie1();
-			sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
-		}
+		monster_deathsound();
+		if (random() > 0.5) megaf_die1(); // Typical forward/backward death
+		else megaf_fdie1();
 	}
 };
 

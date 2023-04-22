@@ -460,6 +460,7 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		pain_sound2;		// Alternative Pain sound wav file
 .string		death_sound;		// Death sound wav file
 .string		death_sound2;		// Alternative death sound wav file
+.string		death_sound3;		// Alternative death sound wav file
 .float		death_dmg;			// Used by tarbaby for explosive damage on death
 .string		deathstring;		// Used by client for player death messages
 .string		customsound;		// Custom sound for Judicator/Justice sounds

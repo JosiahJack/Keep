@@ -239,20 +239,16 @@ void() elf_leap6 = [$jump6, elf_leap7 ] {
 	self.oldorigin = self.origin;
 };
 
-//----------------------------------------------------------------------
 void() elf_leap7 = [$jump7, elf_leap8] { monster_footstep(FALSE); };
 void() elf_leap8 = [$jump8, elf_run1] { ai_resetangles(); };
 
-
 // Elven Pain!
-
 void() elf_pain1 = [$pain1, elf_pain2 ] {};
 void() elf_pain2 = [$pain2, elf_pain3 ] {};
 void() elf_pain3 = [$pain3, elf_pain4 ] {};
 void() elf_pain4 = [$pain4, elf_pain5 ] {};
 void() elf_pain5 = [$pain5, elf_run1 ] {};
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) elf_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -272,7 +268,6 @@ void(entity inflictor, entity attacker, float damage) elf_pain = {
 
 
 // Typical forward/backward death animation
-
 void() elf_die1 = [$death1, elf_die2] {};
 void() elf_die2 = [$death2, elf_die3] { monster_check_gib(); };
 void() elf_die3 = [$death3, elf_die4] { monster_check_gib();
@@ -287,7 +282,6 @@ void() elf_die7 = [$death7, elf_die8] {};
 void() elf_die8 = [$death8, elf_die9] { monster_death_postcheck(); };
 void() elf_die9 = [$death9, elf_die9] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() elf_dieb1 = [$bdeath1, elf_dieb2] {};
 void() elf_dieb2 = [$bdeath2, elf_dieb3] { monster_check_gib(); };
 void() elf_dieb3 = [$bdeath3, elf_dieb4] { monster_check_gib();
@@ -299,24 +293,14 @@ void() elf_dieb7 = [$bdeath7, elf_dieb8] {};
 void() elf_dieb8 = [$bdeath8, elf_dieb9] { ai_back(4);monster_death_postcheck(); };
 void() elf_dieb9 = [$bdeath9, elf_dieb9] { monster_deadbody_check(); };
 
-//----------------------------------------------------------------------
 void() elf_die = {
-	// Sync cane to elf skin
-	self.gib1skin = self.exactskin;
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	self.gib1skin = self.exactskin; // Sync cane to elf skin
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
-		// Pick a random death sound
-		if (random() > 0.5)
-			sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
-		else 
-			sound(self,CHAN_VOICE, self.death_sound2,1,ATTN_NORM);
-
-		// Pick a random fall direction
-		if (random() > 0.5) elf_die1();
+		monster_deathsound();
+		if (random() > 0.5) elf_die1(); // Pick a random fall direction
 		else elf_dieb1();
 	}
 };

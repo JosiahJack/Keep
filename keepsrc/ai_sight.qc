@@ -676,7 +676,7 @@ float() FindTarget = { // [FUNCTION]
 		}
 	}
 	
-	if (client == self.enemy) return FALSE; // if we assigned to a nearby angry monster sight_entity above, we'd never be here if this if were true, FYI
+	if (client == self.enemy) return FALSE; // If we assigned to a nearby angry monster sight_entity above, we'd never be here if this if were true, FYI
 	enemy_range = range(client);
 
 	if (!self.charmed) {
