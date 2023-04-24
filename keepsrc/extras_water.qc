@@ -57,7 +57,7 @@
 // limited to func_water, but the odd intersecting geometry sometimes required
 // by func_water makes it more prone to expose this bug. TEST YOUR MAPS!  These
 // problems can usually be overcome by butting up the water edges with it's
-// "container" geometry.  (Yes that's exaclty what I warned against previously)
+// "container" geometry.  (Yes that's exactly what I warned against previously)
 // You can disable mirroring in eQBSP per-entity by setting the "_nomirror" key
 // to a non-zero value, and use "METHOD 2" to backface the problem brush.
 //
