@@ -413,7 +413,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	if (self.state == STATE_OFF) return;		// Waiting for trigger?
 	if (!self.goalentity) return;				// Always need target
 	if (!trigger_teleportable()) return;
-	
+
 	if (!VectorIsAllZeros(self.movedir)) { // Did the trigger have an angle key setup?
 		if (!other.health) self.pos1 = vectoangles(other.velocity); // Projectiles (no health) are based on velocity
 		else self.pos1 = other.angles; // Player/Monster can use angles field instead

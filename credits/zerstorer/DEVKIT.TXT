@@ -1,0 +1,887 @@
+Cut-scene Construction Kit    	by Darin McNeil		1/15/97
+Zerstörer enhancements  v.090   		1/20/97
+v.092 - 1/26/97, v.095 - 2/2/97, v.098 - 2/10/97 - never released,
+v.099 - 2/15/97   (1 month anniversary of 'Vision of Hatred'!),
+v.100 - 2/21/97, v.101 - 2/26/97, v.105 - 3/5/97, v.110 - 3/13/97,
+v.111 - 3/15/97, v.115 - 3/21/97, v.120 - 3/31/97, v.125 - 4/6/97,
+v.127 - 4/12/97, v.130 - 5/15/97, v.135 - 5/17/97, v.138 - 5/29/97
+v.140 - 6/7/97,  v.145 - 6/15/97, v.170 - 7/27/97, v.999 - 9/27/97
+
+===================================================================
+ 	   Zerstörer QuakeC Development Kit
+===================================================================
+What's New - v.999 - 9/27/97
+----------------------------
+1.  Well, two months of hard work and nothing new to show for it,
+    except a finished product of course.  :)  Now I know why games
+    are delayed often, it takes a whole lot of work after you
+    finish making cool new things to make it into a fun game.  A
+    million and one little things have to be dealth with, decided
+    upon, fixed, etc. before you have a clean polished product.
+    That's what I've learned the last 2 months, I suppose.
+2.  I was going to document the code more thoroughly, and comment
+    more about the way things work ... but a couple things have
+    changed my mind.  One being that I'm tired, out of time, and
+    just don't feel like it right now.  Two, Quake2 is coming out
+    very soon, and QuakeC will quickly die off ... so this code is
+    not terribly useful to anyone.  If anyone has any questions, after
+    thoroughly reviewing the code, feel free to send me some mail and
+    I'll try and help you out.
+3.  I've left in all the diary entries into this document mainly just
+    for educational and entertainment value.  A lot of the stuff
+    mentioned is no longer valid, or just wrong now.  Please look at
+    the END of the document for correct entity descriptions, etc.
+
+------------------------------------------------------------------
+
+What's New - v.170 - 7/27/97
+----------------------------
+1.  Ugh.  There's been a million changes.  I don't think I'll try
+    and list everything, just since the last progs update.
+2.  Chaingun is getting pretty cool.  New name???  I put in tracer
+    shots that are dynamic lights, and was able to make it so that
+    it doesn't drastically slow down Quake.  You may not all like
+    the effect, but I think it's pretty cool.  I also made it a
+    bit stronger in DM.  oh yeah, and I also fixed other little 
+    things, like it aiming too high, no kickback, etc.  Feedback?
+3.  Tweaked bloodcube for DM, it does a lot less damage now.  The
+    bloodcube also now sucks in gibs from the gib_fountain.  :)
+4.  Debugged chain-lightning gun.  Almost done with this one.  It
+    is a little less powerful in DM, and the double-hit bug (which
+    is why it was REALLY too powerful) is gone.
+5.  When you hit someone with the chainsaw, it slows them down to 2/3
+    speed ... not sure if this will work well, lemme know.
+6.  Courage armor doesn't offer 100% protection anymore, just 90%.
+    I didn't get around to reflecting other weapons yet, waiting
+    for more feedback.
+7.  Fixed up the actor.  I'll document using him a little later.
+8.  Randomly selected spawn-spots in DM!!! YAY!
+9.  Fixed up some of the messages, let me know if I missed some.
+10. I'm sure I've done more in the last few days, but that's the
+    important stuff.  This is a pretty substantial update.  :)
+
+------------------------------------------------------------------
+
+What's New - v.145 - 6/15/97
+----------------------------
+1.  The new ME model is great.  His particle cannon is faster now,
+    and he uses it a bit more often.  I achieved my goal of making
+    a guy that you can't just circle strafe around picking off.
+    "monster_me"
+2.  The chainsaw gibs zombies, 'nuff said.  "weapon_chainsaw"
+3.  The laser turret is deadly, shooting a logical spread of lasers
+    that are sure to peg you.  Neat.  The classname is now "monster_lt"!
+    Kandyman needs small names to keep his entity size down.
+4.  All the sound code is in there, you'll get lots of errors until
+    Ratmonkey gets the new sounds out.
+5.  The Actor (misc_hostage) is 'sf64' compliant now.
+6.  Lots of little bug fixes/tweaks.  (No more WMIW errors, bloodcube, death messages, etc.)
+
+------------------------------------------------------------------
+
+What's New - v.140 - 6/7/97
+----------------------------
+1.  The Mega-enforcer is here for you guys to check out.  To put him
+    in a map, use "monster_me".  His tracking side-winder missile is
+    pretty cool, if I do say so myself.  It will not make 180 degree
+    turns, so if you are able to dodge it then it will lose 'sight' of
+    you when it passes and continue in a straight line.  He should also
+    use his Particle-cannon occasionally when you are in range.  The
+    force-field is as good as I can get it with particles.  The model
+    could be edited to produce some other effect if you guys don't think
+    the particles cut it.  Also, I removed the dynamic light from the
+    missile and explosion, which makes for almost NO slowdown while
+    fighting these guys.  But, should I try putting it back in on the
+    explosion?
+2.  The chainsaw animates all the time and plays an idle sound.  Pretty
+    nice.  I also fixed the bug where picking up a backpack caused it
+    to play the startup sound again.  Please report any other bugs or
+    suggestions.
+3.  You can put nice looking trees in your level.  Use "item_tree" and
+    select a skin using a "wait" of 0 or 1.
+4.  When you press '1' to abort a cut-scene, it now immediately tells
+    you, "Aborting cut-scene...", and returns you to the game 1.5
+    seconds later.  Much nicer.  I also applied the optimizations to
+    the Zerstorer code base, man is it smooth.
+
+------------------------------------------------------------------
+
+What's New - v.138 - 5/29/97
+----------------------------
+1.  Fixed up fish, now gibable and they become SOLID_NOT sooner 
+    during their normal death.
+2.  New enforcer attack.  Use a "wait" "1", just like for the Ogre.
+    It is an Ion-splitter Model 31337. ;)  Blue and Yellow particle
+    beam, 20 points damage.  They have perfect aim, but their
+    reflexes are .1 seconds slow.  So you better circle strafe like
+    a madman, you can actually also just run backwards to evade it.
+    I may have to fix that.  Let me know what you think.
+3.  Second brik_hit sound for exploding walls.  These are getting
+    less cheesy, and pretty cool in SMALL quantities.  Yes Dave, you
+    may have to cut back.  :)
+4.  The actor is a little more scriptable, take a look at the demo
+    map and dk.bsp for examples of what you can do.
+5.  The Chainsaw!  '1' toggles between axe and chainsaw after you
+    get it.  'weapon_chainsaw' is the classname, after we get
+    a 'g_saw.mdl' to go with it.  It needs 3 sounds, 'sawidle.wav',
+    'sawatck.wav', and 'sawguts.wav'.  The last is played when ripping
+    into flesh.  Yummy!
+6.  Camera points trigger targets when you get to them in a cut-scene.
+    See the new demo map for an example, listen for kandyman's voice.
+    This took me way longer then it should have, and then I thought,
+    "Hey, if I would have made it so that a script-item can trigger a
+    target, it would have been SOOOO much easier, and actually more
+    useful since the scripts can be timed however you want."  Ugh.  I
+    need to think before I code.  :(  I may go back and do it that
+    way later.  What do you think?
+7.  I can detect if the player is using glquake, and am fixing the
+    rain sprites to fit which game is playing.  This really made me
+    smile.  :)  Has anyone ever used the console command 'gl_cull'?
+    I'm counting on noone changing it from the default value, because
+    that's how I check if glquake is running.  I may try and find an
+    even more obscure glquake-only console command to do the check with.
+    Any suggestions?
+8.  New trog magic-ball-explosion model.  I love the swirl of small
+    fire around the ball, in fact, I wish it was all a swirl of small
+    fire pieces.  heh, Ok, so maybe not ALL, but at least some more.
+    Please Rig, pretty please?
+9.  I feel like I'm forgetting something.  I'm sure there are a few
+    bugs to be found, and lots of tweaking, so let me know what you
+    think.
+
+------------------------------------------------------------------
+
+What's New - v.135 - 5/17/97
+----------------------------
+1.  Added all the new stuff that Rig has been doing.  There are now
+    real entities for the chain-lightning gun and the stun_gun.
+    (weapon_chainlightning, weapon_stunner)  I also tightened up
+    the code integrating them into id's weapon system, but I'm not
+    completely finished just yet.  I'm still fine-tuning the weapons
+    so suggestions are extremely welcome.
+2.  I included the new models and sound, just to make sure everyone has 
+    the same copies and stuff.  Put 'stunfire.wav' in './sound/weapons/'.
+3.  The troglodyte is expecting to use his own sounds, so you'll get
+    lots of errors until Ratmonkey sends them out.  I hear he's working 
+    on them now.
+
+------------------------------------------------------------------
+
+What's New - v.130 - 5/15/97
+----------------------------
+1.  SF64 monsters are finished, and pretty damn good if I can take
+    a minute to toot my own horn.  :)  Only change:  if you want
+    the monster to simulate teleporting in, put a "style" "1".
+2.  Buzzsaw Ogre!  Give a normal Ogre a "wait" "1" and he will shoot
+    three blades at you instead of a grenade.  Play around him and
+    see if he is accurate enough, or too accurate.  Suggestions are
+    also welcome, and he could use a modified skin also.
+3.  Actor-bot.  A very basic bot whose actions are scriptable.  He
+    was designed for cut-scenes, but will be used by Killme in 'MM'.
+    When triggered, the bot's behavior will cease to be scripted, and
+    it will become an enemy.  A mindless Quake enemy (id AI), not a
+    ReaperBot or anything.  I'll save my attempt at AI for a real
+    monster that we'll add, like that wizard guy Rig got from qtest.
+    I'll provide instructions on using the Actor-bot after he is
+    more complete, for now just see 'DK.bsp'.
+4.  The troglodyte is here in pre-alpha form.  His AI is stolen from
+    the 'wizard/scrag' so he is pretty stupid right now.  But you
+    can check out my first attempts at his attacks.  I'm sure Rig
+    will want to make a cool animated flaming fireball to replace
+    my eyeball, and perhaps other things as well.  Ratmonkey needs
+    to get cranking on some killer sounds, evil chanting and magical
+    effect sounds.
+5.  The chain-lightning gun has been tweaked a bit.  Give it a run.
+6.  There's a new map, DK.bsp, to showcase some of the new stuff
+    in the devkit.  I was really sick of seeing acs.bsp, so I made
+    this one a little prettier.  It has some actor/drones and a 
+    couple troglodytes.
+7.  There are some things I did specifically for MM, like the
+    teleporter that sends monsters and players to different places,
+    and the actor AI, which shouldn't be needed in other maps.  Let
+    me know if you have any questions.
+
+------------------------------------------------------------------
+
+What's New - v.127 - 4/12/97
+----------------------------
+1.  The stun gun plasma projectile now bounces off walls and will
+    explode when it hits something after 5 seconds have passed, or
+    when it hits a living object.  Neato.
+2.  SF64 monsters!!  Replaces teleporting monsters.  Just put a
+    monster where you would like it to eventually show up, and give
+    it a "spawnflags" "64", and a targetname.  When it is triggered
+    it will magically appear.  It is silent by default, but if you
+    want the teleport flash and noise, give it a "dmg" "1".
+3.  I increased the Bloodcubes attack rate when you're running
+    around.  It is much more helpful against the Shamblers at the
+    bottom of GYG now.
+
+------------------------------------------------------------------
+
+What's New - v.125 - 4/6/97
+----------------------------
+1.  The Stun-Gun!!  There are a couple ways you can test this new
+    weapon.  You can use it as a normal weapon, by binding '9' to
+    "impulse 254" (console> bind 9 "impulse 254").  This will make
+    the number '9' select the stun gun, like all other weapons.  The
+    Stun-gun currently uses rockets for some reason.  You can also
+    bind a key to "impulse 41", and that will fire a stun plasma.
+    When the plasma ball hits a monster, it will freeze in it's tracks
+    until it is attacked.  It will stay frozen forever if you like, I
+    could have also made it so that it just froze for 5-seconds, and
+    then contiunued what it was doing.  Which is better??
+    To see what happens when a player gets hit, walk up to a wall and
+    shoot it.  :)  If you are in developer mode, or playing with an
+    old version of Quake (older than 1.07), you will get some debug
+    messages while playing with the stun gun.
+2.  func_frames are back in for Ace_Dave.
+3.  That's it, hot dammit!
+
+------------------------------------------------------------------
+
+What's New - v.120 - 3/31/97
+----------------------------
+1.  Silent teleporting:  if a teleporter is given a "spawnflags" "8"
+    then it will transport the entity to the destination without
+    making a sound or a particle flash.  Good for placing monsters
+    somewhere without it seeming like they teleported in.
+2.  Particle Streams!  Watch the statues when you push the button
+    in that room, I put some streams above them.  Docs are at the
+    END of the entity list at the bottom of this document.
+3.  Increased range of chained lightning, and tweaked the lightning
+    positioning.
+4.  Learned how to use Hipnotic rotation.  Put new stuff in Acs.bsp.
+5.  uhm...I'm pretty sure I tweaked other stuff, I think I rewrote
+    some of the bloodcube timing stuff that was left over from the
+    old gameplay type.  So if you notice anything weird, let me know.
+
+------------------------------------------------------------------
+
+What's New - v.115 - 3/21/97
+----------------------------
+1.  A trigger_quake can now be started by triggering it.  Thanks
+    to Kandyman for the suggestion.
+2.  Hipnotic triggerable sound entities.  Documented below.
+3.  Monster statues!  courtesy of Ace_Dave!  There are three statues
+    right now, Fiend, Shambler, and Hellknight (2 poses).  To make a
+    monster a statue, give it a "spawnflags" "2", and for the second
+    Hellknight pose use "4".  You may target a statue, and when it
+    is triggered the monster will come to life.
+4.  A bit of bug fixing and stuff thoughout code base.
+
+------------------------------------------------------------------
+
+What's New - v.111 - 3/15/97
+----------------------------
+1.  Hipnotic Rotation!  Be cautious with the power you now wield.
+    The trigger_hurt is also from Hipnotic now as well.  Please
+    read Hipnotic's instructions on these things, for I have not 
+    had time to play with them.
+2.  The trigger_quake will trigger all targets when a level starts
+    during Deathmatch play.  For an example of why this is important
+    play ACS.bsp in Deathmatch with a previous devkit.
+
+------------------------------------------------------------------
+
+What's New - v.110 - 3/13/97
+----------------------------
+1.  For Dave:  Zombie spawnflags "8" will spawn a crucified zombie that
+    does not move around, and also, if you have a sleeping zombie
+    that you want to stay asleep until triggered, add a "wait" "1"
+    to it, and of course give it a targetname to be triggered.
+    There is an example in the gravity room of acs.bsp.
+2.  Chain-Lightning Gun!  You get one when you pick up a normal
+    lightning gun (for now), or do an Impulse 9 (Dr. Rig should know
+    about that :).  Press '8' a second time to select the chain-gun.
+    If someone wants to make a new model or something, do it.  You
+    shoot out a 50 Volt charge, and it loses 5 Volts every time it
+    chains to an enemy.  So you have the potential to harm 10 enemies
+    per shot, with the last enemy taking 5 damage points.  Comments?
+3.  Tele-attack testing.  The shambler has the ability to detect 
+    incoming projectiles, and teleport directly behind you, or in
+    front of you.  The shambler is not a good monster to have done
+    this to, because it has long attack sequences, and it won't
+    teleport in the middle of an attack.  I think it would be cool
+    to have an end boss like this, but have the attack sequence be
+    shorter.  That way, you'd have to time it perfectly to hit the boss
+    just as he was attacking, and if you were too late or early, he 
+    would teleport right behind you.  That would (finally) be a 
+    challenging boss.  One bad mofo.
+4.  The func_frames have the same sound support that the func_trains
+    have.  Much better, but I'm thinking func_frames may be obselete.
+    I am okay with putting a SMALL bit of rotating doors, etc. in ACS,
+    but not continuous rotating trains, etc.  So if you want rotation
+    merged in, and improved, let me know.  You guys are the boss.
+    I'm not putting in bobbing water though, I have to draw the line
+    on wasted cycles somewhere.  :)
+5.  I'm pretty sure I did other things, (oh yeah, the bloodcube has
+    totally reworked gameplay), but I can't remember anything else
+    right now.  Enjoy.
+
+-------------------------------------------------------------------
+
+What's New - v.105 - 3/5/97
+----------------------------
+1.  For Killme:  Zombie spawnflags "4" will spawn a dead zombie, and
+    a 'misc_hostage' spawnflags "1" will spawn a player character
+    that will stand in place.  Neither can be damaged/killed.
+2.  Dark-angel Wings!  The ogre head near the hostage is the .mdl
+    right now for the wings. Press spacebar to flap them.  You fly
+    in the direction you are looking, so look up to fly high.
+    It'll need a .mdl.  Impulse 40 to cheat.
+3.  Courage Armor!  100% protection from damage while it lasts.
+    Rockets give half-damage on impact, grenades bounce off, nail 
+    reflect right back at you -> if you are hit in the chest.  If 
+    you are shot in the back, it is like you're not even wearing armor.
+    This is all subject to change.  Try it, let me know what you think.
+    Needs a .mdl.  Impulse 41 to cheat.
+4.  The trigger_push can be targeted.  If targeted, it will start out
+    OFF, and will turn ON after being triggered.  The trigger_gravity
+    works the same way, and they both will TOGGLE if triggered
+    repeatedly.
+5.  For Kandy:  Implemented Newton's Laws of Motion.  If you shoot
+    while in the air, you are pushed back a little.  It varies
+    depending on what you are shooting.  Kandy also suggested that the
+    amount that a creature is pushed back by getting shot should
+    be increased, but I haven't done it yet.  What is you guys
+    opinion on that?
+6.  The bloodcube should work properly with levels with more than
+    one bloodcube in them now.  It used to get confused about sucking
+    the gibs.  I think I fixed it.
+
+------------------------------------------------------------------
+
+What's New - v.101 - 2/26/97
+----------------------------
+1.  You may change the speed of a func_train after each path_corner in
+    its path.  The train reads the "speed" value of the corner it is
+    about to go to.  Place the speed value on the corner that the
+    train will be APPROACHING.  Geez, what a redundant explanation.
+2.  The gib_fountain!  Most of the work was done by Ace_Dave.  You
+    place a misc_fireball, and give it a "spawnflags" of "2".  Also,
+    if targeted the fountain won't start until triggered.
+3.  The exploding wall will now explode when triggered.  I don't
+    feel so bad about using the exploding wall anymore, for I went
+    through and rewrote most of it.  :)
+4.  Fixed one of Kandyman's problems with the CCK.  I will probably
+    do a full-scale professional rewrite of the CCK before we are
+    through.  It is good right now, but I want it bullet-proof.
+    (since writing the above, I have started the rewrite of the CCK,
+    and it is much more solid now.)
+5.  Fixed up some of the entity documentation.  Make sure you read it,
+    because some things may have changed and not been mentioned up here.
+6.  I almost forgot, the bloodcube teleports with you (sorta) so you
+    don't lose the poor fellow anymore.  He will also stay with you
+    through cut-scenes, but I haven't suspended time for him (like I
+    did for the other power-ups) yet.  I had a good birthday: good
+    mexican food, spent some time with my family and girlfriend, and
+    did some QuakeC coding - all in one day.  Who could ask for anything
+    more?
+7.  Oh yeah, I'm scrapping the spear.  It will never work perfectly with
+    Quake.  You'd need perfect collision detection for it to look good,
+    and we just don't have that in Quake.  It's one of the VERY FEW
+    things I can gripe about.  :)
+
+------------------------------------------------------------------
+
+What's New - v.100 - 2/21/97
+----------------------------
+1.  Updated documentation with list of all modified entities.
+2.  Triggers that must be triggered before they are triggerable. 
+	("spawnflags" "2")
+3.  New sounds for func_train.  Sounds 2-5 correspond with the sounds
+    for func_door sounds 1-4.
+4.  func_train hurt-on-touch now hurts player even if he isn't moving.
+    A consequence of this is that the func_train is not solid, so you
+    may need me to put it back to the old way.  If the "dmg" is high,
+    then the player is repelled from func_train when hit, and will die
+    before ever being able to tell that the train is not solid.  Play
+    with it.  ("spawnflags" "1")
+5.  Teleporters can be made to teleport you to random locations!  See
+    end of document for instructions. 
+6.  func_train can be a teleporter!  You may either target a teleport
+    destination using the "netname" field, or it can be a random teleporter.
+7.  The spear is included in this devkit.  You must have rockets, and
+    the nailgun to use it.  Press '4' twice to activate it.  There are
+    serious bugs, so don't expect much.
+
+-------------------------------------------------------------------
+What's New - v.099 - 2/15/97
+----------------------------
+1.  BloodCube has a bit of intelligence when moving now.  It won't go
+    through walls quite as much now, not perfect, but a lot better.
+2.  BloodCube has a whole new Attack method.  No more lightning.  I wrote
+    a brand new effect, the particle stream, just for this.  Cool.
+3.  If a func_train hits a corner with a "wait" of "-1", it will stop and
+    wait to be triggered.  When triggered, it will continue to the next
+    corner point.  Killme, go make your elevator.  :)
+4.  Check out the ACS map for examples of almost everything.
+5.  Coming soon - The crucify spear!
+
+-----------------------------------------------------------------------
+
+What's New - v.098 - 2/10/97
+----------------------------
+1.  Ace_Dave added the following:
+    a. Silent push brush  ("spawnflags" "2")
+    b. Lightning styles  (Light styles 15,16,17)
+	and a good random thunder sound effect. ("ambient_thunder")
+    c. Rain Mod from QuakeX  ("func_rain" and "ambient_rain")
+    d. Sleeping zombies  ("spawnflags" "2")
+    e. Exploding walls  ("exploding_wall")
+	Give the wall a "health" that you want it take to destroy it,
+	and you may target other things to happen when the wall breaks.
+
+Please direct any questions about these mods to Ace_Dave, as I have not had
+time to adequately test them.
+
+2.  "trigger_gravity":  I wasn't happy with the gravity change code,
+it just wasn't good enough.  But it did get me thinking, and
+convinced me that there had to be a better way.  Of course there was, 
+now you place a trigger like a water brush.  If you want a room to have 
+a different gravity, fill the ENTIRE room with the "trigger_gravity" 
+brush.  To specify the gravity, just put a "gravity" field in the trigger 
+with the value you want.
+It should work well in both single and multi-player games now.  :)
+
+3.  The BloodCube:  The cube is now up to a solid BETA status.  Most of the
+code has been rewritten since the demo I gave all of you.  I will talk later
+about the specifics of the Cube, which are always in motion.
+
+4.  ACS.BSP has been updated with examples of the lightning light and sound
+(we need a more menacing thunder sound), an exploding wall, the Bloodcube
+(no, it won't go through the teleporter), it is now multi-player friendly.
+-----------------------------------------------------------------
+
+What's New - v.095 - 2/2/97
+--------------------
+1.  func_train can now take a spawnflag of '1'.  This will make the
+train hurt you on 'touch'.  The player must be moving towards the
+train for it to hurt them.  
+
+2.  func_plat can now take a spawnflag of '2'.  This will make it a
+toggle-only platform.  You must trigger the platform for it to move,
+I used a shootable button in my test-level.  The platform will stay
+in it's current state (UP or DOWN) until triggered.
+
+3.  You can now link a trigger_camera to a couple of trigger_cvarsets.
+The CVARs will change for the cut-scene, and then automatically go back
+to their original values at the end of the cut-scene.  I used this to
+change 'fov' and 'v_idlescale' on one of the cut-scenes in the test-level
+to produce a nightmare like vision.  Yes, the trigger_camera is also 
+linked to the first camera of the CS.
+
+4.  True gib physics!!!!!  Inspired by Hipnotic, and prodded by Killme,
+I set out to put realistic physics into the gib code, and about 15
+minutes later, voila!  A truly satisfying experience.  I spent the next
+hour and a half just blowing up the new respawning hostage I stuck in
+the test level.  ;)  It is so cool to toss a grenade behind him, and
+have the gibs come flying at you like they should.  (make sure you hit
+the player/hostage with a few shotgun blasts first, so that you get a
+high-velocity gib)
+
+-----------------------------------------------------------------------
+What's New - v.092 - 1/26/97
+--------------------
+     If you add a 'delay' field to cameras with a value of "1", the
+camera will not track the focal_point while moving.  (You can set a
+new focal point for that camera however, see the 3rd scene in acs.map)
+     I added support for func_frame animation, using Matt Houser's rip-
+off of dimensionality's frames.  I modified it just slightly to fix a
+bug or two.  I put a VERY nice looking rotating door in acs.map!
+Look at acs.map and frames.qc for instructions.  One of the fixes I did
+was to make the final animation frame NOT solid, so now you can use the
+func_frames as a door, and not worry about the screwed up bounding box.
+You will have to make sure the final animation frame (the one that you
+want it stop at) is not in a place that the player would walk through.
+
+---------------------------------------------------------------------
+
+			* Overview *
+
+     First, cut-scenes will only activate in single-player.
+During multiplayer, the triggers are removed.  A level made with
+cut-scenes will play fine without the progs.dat, but the player will
+receive a bunch of errors when starting the level.  Similar to
+starting a CTF map without running its progs.dat.
+     The progs.dat included allows for cut-scenes to be designed
+into custom levels.  The level-designer places a trigger in the
+level, and when the player touches it he/she is transported to a
+camera entity in the level.  Multiple cameras can be placed, and linked
+to form a moving camera.  Each camera in the chain can have a 'wait' and
+'speed'.  'wait' is how long the camera will remain still at that point,
+and 'speed' is the speed of the camera as it APPROACHES THIS point.
+You now also place a focal point that you want the camera to face.  
+Each camera that you place in a chain can have a different focal point
+that it will face as it APPROACHES THAT point.  You may also specify
+that a camera NOT focus on the focal point while moving.  You may now
+also change any CVAR that you want to for the cut-scene.
+     Script entities are placed in the level and their message keys are 
+displayed during the cut-scene.  The player remains in camera mode until 
+the last script is displayed.  The player then returns to the game in 
+the same condition as they were when they left.
+
+This comes straight from acs.map:
+-------------------------------------------------------------------
+// *** Scripts remain the same.
+
+{
+  "classname" "info_script"
+  "origin" "316 -28 0"
+  "script_num" "1"
+  "next_script" "0"
+  "script_delay" "10"
+  "message" "The downward spiral.\n"
+}
+{
+  "classname" "info_script"
+  "origin" "316 -28 0"
+  "script_num" "2"
+  "next_script" "3"
+  "script_delay" "6"
+  "message" "The shambler awaits your doom.\n"
+}
+{
+  "classname" "info_script"
+  "origin" "316 -28 0"
+  "script_num" "3"
+  "next_script" "4"
+  "script_delay" "6"
+  "message" "He sits there.\n"
+}
+{
+  "classname" "info_script"
+  "origin" "316 -28 0"
+  "script_num" "4"
+  "next_script" "0"
+  "script_delay" "15"
+  "message" "Dramatic cut.\n"
+}
+
+// ***** The second cut-scene *****
+
+{
+  "classname" "trigger_camera"
+  "script" "2"
+  "script_delay" "5"
+  "focal_point" "focal2"
+  "target" "target25"
+  {
+	//brush data
+  }
+}
+{
+  "classname" "info_focal_point"
+  "origin" "992 -680 -4"
+  "targetname" "focal2"
+}
+{
+  "classname" "info_movie_camera"
+  "origin" "460 -536 148"
+  "targetname" "target25"
+  "target" "target27"
+  "wait" "2"
+}
+{
+  "classname" "info_movie_camera"
+  "origin" "884 -652 28"
+  "targetname" "target27"
+  "target" "target32"
+  "speed" "50"		// *** new: speed is for the approach to this spot
+  "wait" "5"
+}
+{
+  "classname" "info_movie_camera"
+  "origin" "556 -672 108"
+  "targetname" "target32"
+  "speed" "2000"		// *** new: change of speed
+  "focal_point" "focal3"	// *** new: each camera can change focal point
+}
+{
+  "classname" "info_focal_point"
+  "origin" "440 -672 116"
+  "targetname" "focal3"
+}
+{
+  "classname" "trigger_cvarset"
+  "netname" "fov"		// CVAR you want to change.
+  "message" "150"		// the value to change it to.
+  "targetname" "target25"	// linked to the trigger_camera
+  {
+	// brush data
+  }
+}
+{
+  "classname" "trigger_cvarset"
+  "netname" "v_idlescale"	// CVAR you want to change.
+  "message" "40"		// the value to change it to.
+  "targetname" "target25"	// linked to the trigger_camera
+  {
+	// brush data
+  }
+}
+
+-------------------------------------------------------------------
+                 * General Operating Instructions *
+
+	The trigger_camera and the info_movie_camera are linked just as
+you would normally link objects, such as teleports with their destination.
+If you link the first camera to another camera, the camera will move to
+that point at the 'speed' you gave on the second camera.  You can string
+as many cameras along as you wish, and the camera will automatically stop
+when it hits the last one.  You can change the speed at each camera, or if 
+you don't put a 'speed' on consecutive cameras it will keep its current 
+speed.  If you place a "delay" field with a value of "1", the camera
+will not track the focal-point while moving.  See third cut-scene in
+the acs.map.  
+	You can also target any number of 'trigger_cvarset'
+entities to take effect during the cut-scene.  The original values of
+the CVARs will be returned at the end of the cut-scene automatically.
+	The view tracking can be a bit jerky if the camera is moving
+slowly and perpindicular to the focal-point.  You'll have to fool around 
+with directions and 'speed' to find a good smooth path.
+	The trigger_camera also starts the script sequence, by naming the 
+first script and the duration to display it (in seconds).  The cut-scene is
+exited only by reaching a script with a '0' in the "next_script" field.
+If you want no scripts during the scene, or want to pause with a blank
+screen between scripts, just put a info_script in the sequence that has
+a "message" as "".  The operation is pretty straight-forward.
+	No model is placed where the player was, it would be simple to do,
+but I didn't need to.  It only would be needed if you wanted a cut-scene
+that showed the main character standing in place.   :)
+	If monsters are attacking the player when he hits the trigger_camera
+they will continue to move towards him as a camera, but they will not
+attack it.  They will just run around it looking kind of nervous.  You
+can link a monster to the trigger, and the trigger will not work until
+the monster has been killed.  I placed my cameras in areas that the player
+had not been to already to make extra certain that no leftover monsters
+were running towards the camera.  Monsters that have not seen you already
+will NOT mistakingly target the camera during a cut-scene.
+
+-----------------------------------------------------------------
+		 * New and Modified Entities *
+
+Listed here are the entity descriptions taken straight from the source
+code.  I'm not going to repeat the cut-scene entities, because they have
+already been addressed in this document.  These descriptions are in 
+Carmack's QuakeEd format, so if you are using that editor (or Thunder - 
+the editor I'm waiting for), then you get all of this within the editor.
+ :)  If you are unfamiliar with the format, let me go through an example:
+
+/*QUAKED entity_classname (.5 .5 .5) (-8 -8 -8) (8 8 32) ? SF1 SF2 SF4 SF8 SF16
+Description, along with "field" listing.  The entity_classname is what
+you put in the "classname" field when placing the entity.  The numbers in
+parentheses have to do with the size, and may be used by QuakeEd when
+drawing a box to represent the entity, ignore them.  There is sometimes
+a question mark after the last set of numbers, I don't know why, ignore it.
+After that are a list of SPAWNFLAGS options.  The first one listed is
+selected by placing a value of "1" in the "spawnflags" field when placing
+an entity.  Each subsequent option number is an appropriate multiple of 2.
+So the sixth option would be "spawnflags" "32".  You can select multiple spawn functions by adding up the numbers, so if you want SF2 and SF8, then you would place a "spawnflags" "10" in the entity.
+*/
+
+Now to the real entities:
+
+/* ------------------------------ */
+/* |	  trigger_cvarset		  | */
+/* ------------------------------ */
+/*QUAKED trigger_cvarset (.5 .5 .5) (-8 -8 -8) (8 8 32)
+You can set any CVAR in a cutscene with this trigger.  Put the CVAR name
+in "netname", the value in "message", and the ORIGINAL value in "script".  
+Useful CVAR's are sv_gravity, sv_friction, fov, and v_idlescale.
+*/
+
+/* ------------------------------ */
+/* |	   trigger_gravity 	  | */
+/* ------------------------------ */
+/*QUAKED trigger_gravity (.5 .5 .5) (-8 -8 -8) (8 8 32)
+This will change the gravity for objects that are inside it.
+Put the value to change gravity to in the "gravity" field.
+Ziggurat Vertigo used '100' for its low gravity.
+*/
+
+/* ------------------------------ */
+/* |	   trigger_quake		  | */
+/* ------------------------------ */
+/*QUAKED trigger_quake (.5 .5 .5) (-8 -8 -8) (8 8 32)
+Starts an earthquake.  Players view will shake for amount of time you
+put in "wait".  Place the richter scale of the quake in the "dmg" field.
+It will also trigger all targets like a 'trigger_once'.
+*/
+
+/* ------------------------------ */
+/* |       item_bloodcube       | */
+/* ------------------------------ */
+/*QUAKED item_bloodcube (0 .5 .8) (-16 -16 -24) (16 16 32)
+A New powerup!
+*/
+
+----------------------
+/*QUAKED misc_fireball (0 .5 .8) (-8 -8 -8) (8 8 8) NOTHING GIB_FOUNTAIN
+Lava Balls and Gib Fountain.  "speed" field for vertical velocity.  If
+a "targetname" is given, the fountain/fireball will remain dormant until
+it is triggered.
+
+GIB_FOUNTAIN(2) causes the fireball to be a random gib piece, and occasionally it will spit out an entire player amount of gibs. 
+*/
+
+------------
+/*QUAKED func_rain (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
+ambient rain effect
+*/
+------------
+/*QUAKED ambient_rain (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
+Use this for the rain sound
+*/
+------------
+/*QUAKED ambient_thunder (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
+A random thunder clap
+*/
+
+/*QUAKED exploding_wall
+When the exploding wall is shot, it "gibs" into rubble.
+"target"  all entities with a matching targetname will be used when killed.
+"targetname"  , the wall will explode when triggered.
+"health"  the amount of damage needed to destroy the wall - default "100"
+*/
+
+-----------------------
+/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush/sleeping
+
+If crucified, stick the bounding box 12 pixels back into a wall to look right.
+
+ambush/sleeping (2) is Ace_Dave's sleeping zombie mod.
+*/
+
+-----------------------------------------------------------
+/*QUAKED func_plat (0 .5 .8) ? PLAT_LOW_TRIGGER PLAT_TOGGLE
+speed	default 150
+
+Plats are always drawn in the extended position, so they will light 
+correctly.  If the plat is the target of another trigger or button, 
+it will start out disabled in the extended position until it is trigger, 
+when it will lower and become a normal plat.  If the "height" key is set, 
+that will determine the amount the plat moves, instead of being implicitly 
+determined by the model's height.  
+
+PLAT_TOGGLE(2) will force the platform to be triggered to move between states.
+
+Set "sounds" to one of the following:
+1) base fast
+2) chain slow
+*/
+
+---------------------
+/***  func_train ***/
+---------------------
+/*QUAKED func_train (0 .5 .8) ? TRAIN_TOUCH TRAIN_TELEPORTER
+Trains are moving platforms that players can ride.
+The targets origin specifies the min point of the train at each corner.
+The train spawns at the first target it is pointing at.
+If the train is the target of a button or trigger, it will not begin 
+moving until activated.  You may now also put a "speed" field on a
+path_corner, and the train will travel that speed when APPROACHING that
+point.  
+
+TRAIN_TOUCH(1) will cause the train to hurt the player on touch.
+TRAIN_TELEPORTER(2) will make a teleporter out of the train.  If you want to
+ target a specific destination, use the "netname" field to target it. Or,
+ if you want to use random teleport destinations, you MUST USE a "spawnflags"
+ of "6" on the func_train.  This will make it a random teleporter.
+
+speed:	default 100
+dmg:	default	2
+sounds:
+0) None
+1) ratchet metal
+2) stone
+3) base
+4) stone chain
+5) screechy metal
+*/
+
+--------------------------------------------------------
+/*QUAKED trigger_multiple (.5 .5 .5) ? NOTOUCH TRIGGERED
+Variable sized repeatable trigger.  Must be targeted at one or more 
+entities.  If "health" is set, the trigger must be killed to activate 
+each time.  If "delay" is set, the trigger waits some time after activating 
+before firing.  "wait" : Seconds between triggerings. (.2 default) If 
+notouch is set, the trigger is only fired by other entities, not by 
+touching.  
+
+NOTOUCH(1) has been obsoleted by trigger_relay!
+TRIGGERED(2) causes the trigger to be inactive until it is triggered by
+ another entity.
+
+sounds
+1)	secret
+2)	beep beep
+3)	large switch
+4)
+set "message" to text string
+*/
+
+/*----------------------------------*/
+/*|      info_teleport_random      |*/
+/*----------------------------------*/
+/*QUAKED info_teleport_random (.5 .5 .5) (-8 -8 -8) (8 8 32)
+This is a random destination marker for a RANDOM teleporter.
+*/
+
+-------------------------
+/*QUAKED trigger_teleport (.5 .5 .5) ? PLAYER_ONLY SILENT RANDOM STEALTH
+Any object touching this will be transported to the corresponding 
+info_teleport_destination entity. You must set the "target" field, 
+and create an object with a "targetname" field that matches. 
+
+If the trigger_teleport has a targetname, it will only teleport entities 
+when it has been fired.
+
+SILENT(2) eliminates the teleporter ambient noise (good for hidden monster teleporters.
+RANDOM(4) causes the teleporter to send the player to a random destination
+ among the info_teleport_random markers in the level.  You MUST place a
+ "count" field that is the number of info_teleport_random entities you
+ placed.
+STEALTH(8) eliminates the particle flash and noise when an entity is teleported.
+*/
+
+/*QUAKED play_sound_triggered (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) toggle
+play a sound when it is used
+"toggle" determines whether sound should be stopped when triggered again
+"volume" how loud (1 default full volume)
+"noise" sound to play
+"impulse" channel on which to play sound (0-7) (0 automatic is default)
+"speed" attenuation factor
+   -1 - no attenuation
+    1 - normal
+    2 - idle
+    3 - static
+*/
+
+/*QUAKED play_sound (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)
+play a sound on a periodic basis
+"volume" how loud (1 default full volume)
+"noise" sound to play
+"wait" random time between sounds (default 20)
+"delay" minimum delay between sounds (default 2)
+"impulse" channel on which to play sound (0-7) (0 automatic is default)
+"speed" attenuation factor
+   -1 - no attenuation
+    1 - normal
+    2 - idle
+    3 - static
+*/
+
+/*QUAKED misc_particle_stream (0 .5 .8) (-8 -8 -8) (8 8 8)
+A particle stream!  It appears when triggered, like event_lightning.
+This entity is one end of the stream, target another entity as the 
+other end-point.  I used the info_notnull, but you should be able to 
+target anything (like monsters).  You'll have to play around with 
+the colors, the bloodcube uses 73 and 225.
+
+"target"   This entities origin is the end-point of the stream
+"dmg"  1st Color  -  Use if you want a single color stream
+"cnt"  2nd Color  -  Mixes particles of both colors
+"noise"  Sound to play when triggered, none if blank.
+*/

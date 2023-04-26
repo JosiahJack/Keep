@@ -494,9 +494,6 @@ float last_tdeath;
 void(vector org, entity death_owner) spawn_tdeath = { // [FUNCTION]
 	local entity death;
 
-
-	if ((time - last_tdeath < 0.510)) { dprint("skipped teledeath for "); dprint(death_owner.classname); dprint(", with self of "); dprint(self.classname); return; }
-
 	last_tdeath = time;
 	death = spawn();
 	death.classname = "teledeath";
@@ -504,10 +501,13 @@ void(vector org, entity death_owner) spawn_tdeath = { // [FUNCTION]
 	death.movetype = MOVETYPE_NONE;
 	death.solid = SOLID_TRIGGER;
 	death.angles = '0 0 0';
-	setsize (death, death_owner.mins - '1 1 1', death_owner.maxs + '1 1 1');
+	setsize(death, death_owner.mins - '1 1 1', death_owner.maxs + '1 1 1');
 	setorigin(death, org);
 	death.touch = tdeath_touch;
 	death.nextthink = time + 0.2;
 	death.think = SUB_Remove;
-	force_retouch = 2; // !! This is extremely costly on the engine because it re-checks every trigger in the map to see if it is touching something.
+
+	// !! This is extremely costly on the engine because it re-checks every
+	// trigger in the map to see if it is touching something.
+	if ((time - last_tdeath) >= 0.10) force_retouch = 2;
 };

@@ -746,6 +746,8 @@ void() monster_ThrowGib = { // [FUNCTION]
 		if (self.max_health == MON_NOGIBVELOCITY) ThrowGib(4, rint(random()*4)); // If monster set for low velocity throw extra gibs instead
 		else ThrowGib(25, 1); // Throw a head gib instead of switch to one
 	}
+
+	if (newmis == world) ThrowGib(4, 1); // Throw at least 1 gib to set newmis.
 	newmis.bodyonflr = "";// MON_ONFLR; // Set the last thrown gib to be the respawn source. TODO: not ready yet.
 	newmis.classname = self.classname;
 	newmis.health = 0;

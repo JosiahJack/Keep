@@ -451,7 +451,7 @@ entity() spawn = {
 		entity_stop(newmis);
 		return newmis;
 	}
-	if ((totaledicts - startframe_edicts) > 100 && framecount > 15) {
+	if ((totaledicts - startframe_edicts) > 10000 && framecount > 15) {
 		if (developer > 1) dprint("WARNING: Spawned 100 new entities this frame! Stopped until next frame!\n");
 		if (!newmis) return world;
 
@@ -461,14 +461,14 @@ entity() spawn = {
 	}
 
 	totaledicts = totaledicts + 1;
-	//if (self) {
-	//	dprint("self: ");
-	//	dprint(self.classname);
-	//	dprint(" -- ");
-	//}
-	//dprint("spawned new entity ");
-	//dprint(ftos(totaledicts));
-	//dprint("\n");
+	if (self) {
+		dprint("self: ");
+		dprint(self.classname);
+		dprint(" -- ");
+	}
+	dprint("spawned new entity ");
+	dprint(ftos(totaledicts));
+	dprint("\n");
 	testlastspawn = spawn_builtin();
 	return testlastspawn;
 };
