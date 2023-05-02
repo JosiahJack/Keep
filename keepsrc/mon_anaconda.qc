@@ -139,7 +139,7 @@ void() monster_coil = {
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "progs/anaconda/coils.mdl");
 	setsize(self, VEC_HULL2_MIN, VEC_HULL2_MAX); // Big blocker
-	self.health = 8000; // Not killable, not really
+	if (self.health < 1) self.health = 8000; // Not killable, not really
 	self.th_stand = coil_stand1;
 	self.th_walk = coil_walk01;
 	self.th_run = coil_awake;

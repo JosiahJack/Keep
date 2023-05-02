@@ -327,9 +327,12 @@ void() monster_flytrap_ground = {
 	self.th_pain = catch1;
 	if (self.health < 1) self.health = 150;
 	self.gibhealth = -40;
-	self.bbmins = '16 16 16';	// Special Size
-	self.bbmaxs = '24 24 24';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '16 16 16';	// Special Size
+		self.bbmaxs = '24 24 24';
+		self.bboxtype = BBOX_CUSTOM;
+	}
+
 	self.alignment = GOOD;
 	self.vulnerability = VULN_NORMAL;
 	self.use = test1;
@@ -544,9 +547,12 @@ void() monster_flytrap = {
 	self.th_pain = flytrap_pain1;
 	if (self.health < 1) self.health = 150;
 	self.gibhealth = -40;
-	self.bbmins = '16 16 16';	// Special Size
-	self.bbmaxs = '24 24 24';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '16 16 16';	// Special Size
+		self.bbmaxs = '24 24 24';
+		self.bboxtype = BBOX_CUSTOM;
+	}
+
 	self.alignment = GOOD;
 	self.vulnerability = VULN_NORMAL;
 	if (self.deathstring == "") self.deathstring = " was ingested by a Venus Fly Trap\n";

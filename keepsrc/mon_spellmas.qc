@@ -220,9 +220,12 @@ void() monster_spellmaster = {
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
-	self.bbmins = '-32 -32 -24';	// Special Size
-	self.bbmaxs = '32 32 192';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '-32 -32 -24';	// Special Size
+		self.bbmaxs = '32 32 192';
+		self.bboxtype = BBOX_CUSTOM;
+	}
+
 	if (self.health < 1) self.health = 2400;
 	self.gibhealth = -40;
 	self.gibbed = FALSE;

@@ -1683,7 +1683,8 @@ void() monster_judicator = { // [ENTITY]
 	self.classtype = CT_MONJUDGE;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-	self.health = self.max_health = MEGADEATH;
+	if (self.health < 1) self.health = MEGADEATH;
+	self.max_health = self.health;
 	self.pain_finished = LARGE_TIMER;		
 	self.takedamage = DAMAGE_NO;	// Immune to damage
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)

@@ -429,7 +429,7 @@ void() misc_wanted = {
     SetSelfAnglesUpDown();
     makevectors (self.angles);
     setorigin (self, self.origin - ( v_forward * 0.2 ) ); // Pull the sprite away from the wall slightly to get rid of z sort errors.
-    if (self.health == 0) self.health = 10;
+    if (self.health < 1) self.health = 10;
     if (self.health) {
         self.alpha      = 1;
         self.cnt        = 0.15; // Was 0.25, made slower. -Qmaster

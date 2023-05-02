@@ -378,6 +378,7 @@ void() monster_xmas_santa = { // [ENTITY]
 	self.th_die = santa_die;
 	self.meleerange = MONAI_MELEESANTA;
 	self.meleerangez = 48;
+	self.classgroup = CG_XMAS;
 
 	// Check for GOOD Santa setup?
 	if (self.spawnflags & MON_SANTA_GOOD) {
@@ -400,19 +401,17 @@ void() monster_xmas_santa = { // [ENTITY]
 		self.reflectplasma = TRUE;		// Reflect plasma projectiles
 		self.reflectaxe = TRUE;			// Prevent axe damage
 		self.nomonstercount = TRUE;
-		self.alignment = GOOD;
-		self.classgroup = CG_HARMLESS;
 		self.health = self.max_health = MEGADEATH;
 		self.gibhealth = MON_NEVERGIB;
 		self.exactskin = 1;
-		// Direct every state to the sit function
-		self.th_stand = santa_seated;
+		self.th_stand = santa_seated; // Direct every state to the sit function
 		self.th_walk = santa_seated;
 		self.th_run = santa_seated;
 		self.waitmin = 0;
+		SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
+		self.alignment = GOOD;
 	} else {
 		// Default EVIL Santa!
-		self.classgroup = CG_XMAS;
 		self.th_checkattack = SantaCheckAttack;
 		self.th_stand = santa_stand1;
 		self.th_walk = santa_walk1;

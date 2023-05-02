@@ -362,9 +362,9 @@ void() monster_raven = {
 	}
 
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONRAVEN;
-	self.classgroup = CG_HARMLESS;
+	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	monster_start();
 };

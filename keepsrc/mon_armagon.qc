@@ -606,7 +606,7 @@ void() monster_armagon = {
 	setorigin(self,self.origin);
 	setorigin(body,body.origin);
 	self.yaw_speed = 9;
-	self.health = 3000.000;
+	if (self.health < 1) self.health = 3000.000;
 	self.worldtype = 0.850;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	self.resist_cells = 0.5;

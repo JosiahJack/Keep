@@ -449,9 +449,12 @@ void() monster_boglord = {
 	self.sight_sound = "ad171/boglord/sight.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-32 -32 -24';	// Special Size
-	self.bbmaxs = '32 32 80';
-	self.bboxtype = BBOX_CUSTOM;	// Custom size
+	if (self.bboxtype < 1) {
+		self.bbmins = '-32 -32 -24';	// Special Size
+		self.bbmaxs = '32 32 80';
+		self.bboxtype = BBOX_CUSTOM;	// Custom size
+	}
+
 	self.gibhealth = -60;			// Shambler gibness!
 	self.gibbed = FALSE;			// Starts complete
 	self.pain_flinch = 400;			// Really low chance of pain

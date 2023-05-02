@@ -68,6 +68,7 @@
 // COPYING.TXT				// N/A GNU GPL v2.0 License
 // qc_highlight.xml			// N/A Handy highlighting for IDE's
 //
+
 //====================== Start of actual mod code =============================
 ../progs.dat				// N/A Instruction to place progs.dat file one
 							// folder up.  `../` is the terminal command for

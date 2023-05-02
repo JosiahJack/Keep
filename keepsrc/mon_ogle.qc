@@ -523,9 +523,9 @@ void() monster_ogle =  {
 	self.steptype = FS_TYPELIGHT;
 	if (self.deathstring == "")  self.deathstring = " was mined by an Ogle\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONOGLE;
-	self.classgroup = CG_HARMLESS;
+	self.classgroup = CG_OGRE;
 	self.classmove = MON_MOVEWALK;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	monster_start();
 };

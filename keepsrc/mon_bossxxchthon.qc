@@ -371,11 +371,14 @@ void() monster_chthon = {
 	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-80 -80 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective
-	self.bbmaxs = '80 80 256';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '-80 -80 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective
+		self.bbmaxs = '80 80 256';
+		self.bboxtype = BBOX_CUSTOM;
+	}
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	self.health = self.max_health = MEGADEATH;
+	if (self.health < 1) self.health = MEGADEATH;
+	self.max_health = self.health;
 	self.pain_finished = LARGE_TIMER;
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.gibbed = FALSE;			// Still in one piece

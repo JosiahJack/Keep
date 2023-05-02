@@ -221,13 +221,13 @@ void() monster_beez = {
 	self.th_die = swrm_die;
 	self.touch = beez_touch;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	if (self.deathstring == "") {
 		if (random() < 0.5) self.deathstring = " was swarmed by Bees\n";
 		else self.deathstring = " was stung to death by Bees\n";
 	}
 	self.classtype = CT_MONBEEZ;
-	self.classgroup = CG_HARMLESS;
+	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	monster_start();
 };

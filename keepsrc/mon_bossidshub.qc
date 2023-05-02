@@ -254,9 +254,11 @@ void() monster_oldone = { // [ENTITY]
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	// Use to be 128 square, reduced size to help with
 	// radius/splash damage being more effective
-	self.bbmins = '-96 -96 -24';	// has own entity setup
-	self.bbmaxs = '96 96 192';
-	self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
+	if (self.bboxtype < 1) {
+		self.bbmins = '-96 -96 -24';	// has own entity setup
+		self.bbmaxs = '96 96 192';
+		self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
+	}
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.gibbed = FALSE;			// Still in one piece
@@ -269,7 +271,8 @@ void() monster_oldone = { // [ENTITY]
 	if (self.message == "") self.message = "Congratulations and well done! You have\nbeaten the hideous Shub-Niggurath, and\nher hundreds of ugly changelings and\nmonsters. You have proven that your\nskill and your cunning are greater than\nall the powers of Quake. You are the\nmaster now. Id Software salutes you.";
 	self.classtype = CT_MONIDSHUB;
 	self.classgroup = CG_BOSS;
-	self.health = self.max_health = 40000;		// kill by telefrag
+	if (self.health < 1) self.health = 40000;
+	self.max_health = self.health;
 	self.think = idshub_idle1;
 	self.nextthink = time + 0.1;	
 	self.takedamage = DAMAGE_YES;

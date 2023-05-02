@@ -641,9 +641,9 @@ void() monster_sheep =  {
 	self.th_run = sheep_run1;
 	if (self.deathstring == "")  self.deathstring = " fed himself to a sheep\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONSHEEP;
-	self.classgroup = CG_HARMLESS;
+	self.classgroup = CG_DOG;
 	self.classmove = MON_MOVEWALK;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	monster_start();
 };

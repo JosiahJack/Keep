@@ -818,9 +818,12 @@ void() setup_gargoyle = { // [FUNCTION]
 	} else if (self.classtype == CT_MONGARGOYLE_MEGA) {
 		if (self.skin > 4) self.skin = 4;
 		if (self.exactskin > 4) self.exactskin = 4;
-		self.bbmins = '-32 -32 -24';	// Special Size
-		self.bbmaxs = '32 32 16';
-		if (self.bboxtype < 1) self.bboxtype = BBOX_CUSTOM;
+		if (self.bboxtype < 1) {
+			self.bbmins = '-32 -32 -24';	// Special Size
+			self.bbmaxs = '32 32 16';
+			self.bboxtype = BBOX_CUSTOM;
+		}
+
 		if (self.health < 1) self.health = 300; // Hexen2 had 600, Drake used 300 for better Quake balance.
 		self.gibhealth = -80;				// Need a powerful weapon to GIB
 		self.mass = MASS_HEAVY;

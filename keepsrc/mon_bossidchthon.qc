@@ -207,8 +207,13 @@ void() idchthon_awake = {
 	self.velocity = '0 0 0';
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	if (skill == SKILL_EASY) self.health = 1;
-	else self.health = 3;
+	if (self.health < 1) {
+		if (skill == SKILL_EASY) self.health = 1;
+		else self.health = 3;
+		self.lefty = 1;
+	}
+
+	if (self.lefty < 1) self.lefty = 1;
 	self.enemy = activator;
 
 	// DP particle spark and smoke effect to Chthon 
@@ -311,7 +316,7 @@ void() lightning_use = { // [FUNCTION]
 	self.enemy = activator;
 	if (le1.state == STATE_TOP && self.health > 0) {
 		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
-		self.health = self.health - 1; // advance the boss pain if down
+		self.health = self.health - self.lefty; // advance the boss pain if down
 		if (self.health >= 2) idchthon_shocka1();
 		else if (self.health == 1) idchthon_shockb1();
 		else if (self.health == 0) idchthon_shockc1();
@@ -347,9 +352,11 @@ void() monster_boss = { // [ENTITY]
 	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-80 -80 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective
-	self.bbmaxs = '80 80 256';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '-80 -80 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective
+		self.bbmaxs = '80 80 256';
+		self.bboxtype = BBOX_CUSTOM;
+	}
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
 	self.health = 3;
 	self.takedamage = DAMAGE_NO;	// Cannot be damaged

@@ -280,12 +280,15 @@ void() monster_firetopboss = { // [ENTITY]
 	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-128 -128 -24';		// has own entity setup
-	self.bbmaxs = '128 128 256';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '-128 -128 -24';		// has own entity setup
+		self.bbmaxs = '128 128 256';
+		self.bboxtype = BBOX_CUSTOM;
+	}
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	self.health = self.max_health = MEGADEATH;
+	if (self.health < 1) self.health = MEGADEATH;
+	self.max_health = self.health;
 	self.takedamage = DAMAGE_NO;
 	self.classtype = CT_MONFIRETOP;
 	self.classgroup = CG_BOSS;

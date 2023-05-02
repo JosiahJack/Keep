@@ -1648,7 +1648,7 @@ float MIN_THROWSPD = 200;		// Monster jump speed
 float MIN_THROWRND = 50;		// Some randomness
 float MIN_THROWSIDE = 50;		// Sideways movement (+/-)
 
-float(entity targ, vector s_offset, vector targang, float nomonsters) visang;
+//float(entity targ, vector s_offset, vector targang, float nomonsters) visang;
 
 float EIDOLON_PHASE1 = 1;	// Trapped in cage
 float EIDOLON_PHASE2 = 2;	// Fighting

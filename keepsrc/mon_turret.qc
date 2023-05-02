@@ -325,9 +325,12 @@ void() monster_turret = { // [ENTITY], Redirect
 	self.gib1mdl = "progs/custents/turetgib.mdl";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-12 -12 -6';	// Special Size
-	self.bbmaxs = '12 12 12';
-	self.bboxtype = BBOX_CUSTOM;	// Custom size
+	if (self.bboxtype < 1) {
+		self.bbmins = '-12 -12 -6';	// Special Size
+		self.bbmaxs = '12 12 12';
+		self.bboxtype = BBOX_CUSTOM;	// Custom size
+	}
+
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
 	if (self.health < 1) self.health = 100;
 	self.max_health = self.health;

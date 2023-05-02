@@ -901,11 +901,6 @@ void() iceg_setup = { // [FUNCTION]
 	self.reflectnails = TRUE;		// Reflect nail projectiles
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
-	self.bosswave = 1; // Setup boss waves and overall health
-	self.bosswavetotal = 5;
-	self.bosswaveqty = 500;
-	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	SUB_BossWaveSetupHP(); // Setup boss wave HP + trigger event
 	self.th_checkattack = IcegCheckAttack;
 	self.th_stand = self.th_walk = self.th_run = SUB_Null; // default = No think functions
 	self.th_missile = self.th_die = SUB_Null;
@@ -1000,12 +995,23 @@ void() monster_icegolem = { // [ENTITY]
 	if (self.sight_sound == "") self.sight_sound = "ad171/golem/sight.wav"; // Roar!
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-32 -32 -24';	// Special Size
-	self.bbmaxs = '32 32 128';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '-32 -32 -24';	// Special Size
+		self.bbmaxs = '32 32 128';
+		self.bboxtype = BBOX_CUSTOM;
+	}
+
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
 	self.steptype = FS_TYPEGIANT;	// Giant sound
-	self.health = self.max_health = MEGADEATH;
+	if (!self.health) {
+		self.health = 50000;
+		self.bosswave = 1; // Setup boss waves and overall health
+		self.bosswavetotal = 5;
+		self.bosswaveqty = 500;
+		self.max_health = self.bosswavetotal * self.bosswaveqty;
+		SUB_BossWaveSetupHP(); // Setup boss wave HP + trigger event
+	}
+
 	if (self.classtype <= 0) self.classtype = CT_MONICEGOLEM;
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;

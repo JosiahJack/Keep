@@ -366,9 +366,12 @@ void() monster_manticore = {
 	self.steptype = FS_TYPECUSTOM;
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
-	self.bbmins = '-48 -48 -24';	// Special Size
-	self.bbmaxs = '48 48 24';
-	self.bboxtype = BBOX_CUSTOM;	// Custom size
+	if (self.bboxtype < 1) {
+		self.bbmins = '-48 -48 -24';	// Special Size
+		self.bbmaxs = '48 48 24';
+		self.bboxtype = BBOX_CUSTOM;	// Custom size
+	}
+
 	if (self.health < 1) {
 		self.health = 2400;
 		if (skill > 1) self.health = self.health + 600; // 3000 on hard/nightmare

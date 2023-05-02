@@ -891,7 +891,8 @@ void() monster_nour = {
 	// Check for boss version of Nouronihar?
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		// Reset spawnflag, other values not required
-		self.health = self.max_health = MEGADEATH;
+		if (self.health < 1) self.health = MEGADEATH;
+		self.max_health = self.health;
 		self.pain_finished = LARGE_TIMER;		
 		self.takedamage = DAMAGE_NO;	// Immune to damage
 		self.flags = FL_MONSTER;		// Reset flag (no user settings)

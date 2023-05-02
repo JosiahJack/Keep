@@ -490,9 +490,9 @@ void() monster_voidwraith = { // [ENTITY]
 	self.th_melee = nehwraith_melee;
 	if (self.deathstring == "")  self.deathstring = " was dispelled by a Void Wraith\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONWRAITHNEHAHRA;
-	self.classgroup = CG_HARMLESS; // DENIZEN!
+	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEFLY;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	monster_start();
 };

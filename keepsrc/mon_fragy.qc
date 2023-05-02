@@ -363,10 +363,10 @@ void() monster_fragy = { // [ENTITY] Redirect
     self.th_missile = frag_jump1;
 	self.th_checkattack = FragCheckAttack;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONFROG;
-	self.classgroup = CG_HARMLESS;
+	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVEWALK;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	monster_start();
 };
 

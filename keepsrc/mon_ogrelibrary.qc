@@ -630,10 +630,10 @@ void() monster_oglib = { // [ENTITY] Ogre pushing a library cart with books on i
   if (self.deathstring == "")  self.deathstring = " was destroyed by an Ogre Librarian\n";
   self.pain_finished = time + 1;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.classtype = CT_MONOGRE;		// Old style ogre
 	if (self.classname != "monster_ogre_marksman") self.classgroup = CG_OGRE; // One big happy ogre family! Except for those pesky marksmen (preserve original ID1 infight ability)
-  SetDefaultDenizenAttributes(self);
+	self.classtype = CT_MONOGRE;		// Old style ogre
+  self.classgroup = CG_OGRE;
 	self.classmove = MON_MOVEWALK;
-  self.classgroup = CG_HARMLESS;
+  SetDefaultDenizenAttributes(self);
   monster_start();
 };

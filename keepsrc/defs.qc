@@ -38,6 +38,15 @@
 // Mod specific variables are defined in their own defs files.
 //=============================================================================
 
+#pragma optimise assignments
+#pragma optimise shortenifs
+#pragma optimise nonvec_parms
+#pragma optimise noduplicatestrings
+#pragma optimise unreferenced
+#pragma optimise constantarithmatic
+#pragma optimise locals_overlapping
+//#pragma warning enable F302
+#pragma optimise constantarithmatic
 //------------------ SOURCE FOR GLOBALVARS_T C STRUCTURE ----------------------
 entity		self;				// Autopopulated entity when thinking.  Overrideable before calling other functions that rely on proper entity to be self.
 entity		other;				// Autopopulated entity when a touch is registered.  This is what touched self.  Overrideable before calling other functions that rely on proper entity to be other.

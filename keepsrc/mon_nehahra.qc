@@ -579,6 +579,7 @@ void() monster_nehahra = {
 		self.bbmaxs = '60 60 300';
 		self.bboxtype = BBOX_CUSTOM;// Custom BBox size
 	}
+
 	self.yaw_speed = 30;
 	if (self.health < 1) self.health = 2000;
 	self.gibhealth = MON_NEVERGIB;

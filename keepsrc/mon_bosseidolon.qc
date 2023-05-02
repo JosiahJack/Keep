@@ -611,9 +611,11 @@ void() monster_eidolon = { // [ENTITY]
 	self.sight_sound = "ne_ruins/eidolon/sight.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-32 -32 -24';	// Special Size
-	self.bbmaxs = '32 32 128';
-	self.bboxtype = BBOX_CUSTOM;
+	if (self.bboxtype < 1) {
+		self.bbmins = '-32 -32 -24';	// Special Size
+		self.bbmaxs = '32 32 128';
+		self.bboxtype = BBOX_CUSTOM;
+	}
 	if (self.bossflag >= 0) self.bossflag = TRUE; // Boss flag
 	if (self.poisonous >= 0) self.poisonous = FALSE;
 	if (self.deathstring == "") self.deathstring = " was pulverized by the Sculptor\n";

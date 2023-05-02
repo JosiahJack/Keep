@@ -347,9 +347,12 @@ void() monster_shub = { // [ENTITY]
 	self.sight_sound = "ad171/shub/sight1.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	self.bbmins = '-96 -96 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective.
-	self.bbmaxs = '96 96 192';
-	self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
+	if (self.bboxtype < 1) {
+		self.bbmins = '-96 -96 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective.
+		self.bbmaxs = '96 96 192';
+		self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
+	}
+
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
 	self.health = self.max_health = MEGADEATH;
 	self.pain_finished = LARGE_TIMER;
