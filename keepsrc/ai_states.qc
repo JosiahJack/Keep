@@ -62,7 +62,27 @@ void() ai_stand = {
 	self.lastorigin = self.origin;		// Save for cinematic interpolation
 	if (self.health < 1) return;		// Health < 0, no more standing
 
-	check_tethertimer();				// Check for tethering system
+	// Check tethering system timer
+	if (self.tethered) {
+		if (self.tethertarg) {
+			if (self.enemy) {
+				// Has the timer been reached?
+				if (self.tethertimer < time) {
+					self.tetherlock = FALSE;			// Make sure not set
+					self.goalentity = self.movetarget = self.tethertarg;
+					self.tethertimer = LARGE_TIMER;		// Timer no longer needed
+					self.pausetime = 0;					// Start walking
+				} else {
+					// Check to see if facing enemy is active?
+					if (self.tetherturn && self.tetherfocus) {
+						self.ideal_yaw = vectoyaw(self.tetherfocus.origin - self.origin);
+						ChangeYaw();			
+					}
+				}
+			}
+		}
+	}
+
 	MonsterDeBuff();					// Check and apply poison
 	if (self.classtype == CT_MONEIDOLON) {
 		FindTarget(); // Keep looking for a player
@@ -75,7 +95,7 @@ void() ai_stand = {
 		return;
 	}
 
-	if (FindTarget ()) return; // Found an enemy?
+	if (FindTarget()) return; // Found an enemy?
 	if (self.classtype == CT_MONVERMIS) return;
 
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 

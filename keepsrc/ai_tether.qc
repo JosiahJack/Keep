@@ -154,24 +154,3 @@ float() check_tethersystem = { // [FUNCTION]
 	}
 	return FALSE;
 };
-
-// Check tether timer for stand function
-void() check_tethertimer = { // [FUNCTION]
-	if (self.tethered == FALSE) return;		// System active?
-	if (!self.tethertarg) return;			// No target active
-	if (self.enemy) return;					// In combat?
-	
-	// Has the timer been reached?
-	if (self.tethertimer < time) {
-		self.tetherlock = FALSE;			// Make sure not set
-		self.goalentity = self.movetarget = self.tethertarg;
-		self.tethertimer = LARGE_TIMER;		// Timer no longer needed
-		self.pausetime = 0;					// Start walking
-	} else {
-		// Check to see if facing enemy is active?
-		if (self.tetherturn && self.tetherfocus) {
-			self.ideal_yaw = vectoyaw(self.tetherfocus.origin - self.origin);
-			ChangeYaw();			
-		}
-	}
-};

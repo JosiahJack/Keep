@@ -480,14 +480,13 @@ void(float wakeupothers) FoundHuntTarget = {
 };
 
 entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
-	local float dist;
+	local float dist, remaining;
 	local entity head;
 
-	if ((total_monsters - killed_monsters) > 1000) {
+	remaining = (total_monsters - killed_monsters);
+	if (remaining > 1000) {
 		if (random() < 0.99) return world;
-	}
-
-	if ((total_monsters - killed_monsters) > 500) {
+	} else if (remaining > 500) {
 		if (random() < 0.5) return world;
 	}
 
@@ -496,7 +495,6 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 	}
 
 	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
-	if (random() < 0.333 && ((total_monsters - killed_monsters) > 100)) dist = 256;
 	head = world;
 	// Shorter sight charmers to keep closer to player who summoned us, maybe.
 	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; 
@@ -514,14 +512,14 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 				if (head.alignment != NEUTRAL) {
 					if (!Invisible(head)) {
 						if (findopposing) {
-							if (!Align_Match(self,head)) {
+							if ((self.alignment != head.alignment)) { // Inlined Align_Match
 								// Nested visible() to improve performance by
 								// not checking visibility of dead potential
 								// enemies.
 								if (visible(head)) return head;
 							}
 						} else {
-							if (Align_Match(self,head)) {
+							if ((self.alignment == head.alignment)) { // Inlined Align_Match
 								if (visible(head)) return head;
 							}
 						}

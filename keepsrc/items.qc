@@ -97,7 +97,9 @@ void() item_thinkloop = { // [FUNCTION]
 	}
 
 	if (self.classtype == CT_ARTSECRETHUNTER) {
-		SUB_AdvanceFrame(0,17);
+		self.walkframe = SUB_ClampFloat(self.frame + 1,0,17); // Inlined SUB_AdvanceFrame for performance.
+		self.frame = self.walkframe;
+		if (self.walkframe >= 17) self.walkframe = 0;
 		if (random() < 0.05 && self.skin <= 0) self.skin = 1;
 		else if (self.skin >= 1) self.skin = 0; // Blink
 	}

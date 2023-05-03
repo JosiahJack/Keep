@@ -1584,13 +1584,13 @@ void() BaronBossCheckAttack = {
     local float r;
 
 	// If target is not in LOS, use an attack that doesn't care about line-of-fire.  This will harass a player that tries to hide and spam grenades from a safe spot.
-    if ((enemy_range <= RANGE_MID) && (time >= self.attack_finished) && (self.waitmax < time) && (random() < 0.01)) { // Use only after a delay.
+    if ((enemy_range == RANGE_MID || enemy_range == RANGE_MELEE) && (time >= self.attack_finished) && (self.waitmax < time) && (random() < 0.01)) { // Use only after a delay.
         r = random();
         if (self.level == BARON_FIRE) {
             baron_cast1();
         } else if (self.level == BARON_EARTH) {
             if ((r < 0.5) && !super_active && QuakeHurts(self.enemy)) baron_slam1();
-            else if (BaronGolem_Check ()) baron_cast1();
+            else if (BaronGolem_Check()) baron_cast1();
             else return;
         } else if (self.level == BARON_AIR) {
             if (UpIsSky (self.enemy.origin, self.enemy)) {

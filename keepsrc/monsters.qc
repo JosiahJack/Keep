@@ -53,10 +53,10 @@ void() monster_liquid_check = { // [FUNCTION]
 	local float monster_dmg;
 	local vector monster_feet;
 
+	if (self.health < 1) return;
 	if (self.no_liquiddmg) return;
 	if (query_configflag(SVR_LIQDAM)) return;
 	if (!(self.flags & FL_MONSTER)) return;
-	if (self.health < 1) return;
 	if (self.liquidcheck > time) return;
 
 	self.liquidcheck = time + LIQUID_TIMER; // Reset liquid damage timer

@@ -269,13 +269,13 @@ void() baron_fist = { // [FUNCTION]
     delta = self.enemy.origin - self.origin;
 
     // Check if fist can hit.
-    if (!InMeleeRange(80)) return; // Nehahra uses 100 -- too far!
+    if (!InMeleeRange(self.meleerange)) return;
     if (!CanDamage(self.enemy,self)) return;
     if (!self.enemy.takedamage) return; // For mega-enforcer.
     if (!self.level && IsGhost(self.enemy)) return; // Elemental bosses can hit, but not moogles.  For wraith.
         
     // Fist connects.
-    if (self.level) damage = SUB_MeleeDamage (45);  // Max damage of 135!  o_O
+    if (self.level) damage = SUB_MeleeDamage(45);  // Max damage of 135!  o_O
     else { // In Nehahra, baron had damage set to 1d11+10, but was overriden by 1d5+10.  Bug or intended, since his sword does so much more damage, I'll make it do 1d10+10.
         damage = random()*10 + 10; // 10-20 damage.
     }
@@ -333,6 +333,7 @@ void() baron_fasts2  = [$smack3,  baron_fasts3  ] { ai_charge(4); };
 void() baron_fasts3  = [$smack6,  baron_smack7  ] { ai_charge(2); };
 
 void() baron_melee = { // [FUNCTION]
+    dprint("baron melee\n");
     if (self.state) {
 		self.state = FALSE;
         if (self.level) self.think = baron_fasts1;
@@ -1109,19 +1110,19 @@ void() monster_baron = {
 		// Set default health for Rapture's elemental barons.
 		if (self.level == BARON_WATER) {
 			if (self.health < 1) self.health = 1000;
-			if (self.deathstring == "")  self.deathstring = " was liquidated by the Water Baron\n";
+			if (self.deathstring == "") self.deathstring = " was liquidated by the Water Baron\n";
 		} else if (self.level == BARON_FIRE) {
 			if (self.health < 1) self.health = 1400;
-			if (self.deathstring == "")  self.deathstring = " was scorched by the Fire Baron\n";
+			if (self.deathstring == "") self.deathstring = " was scorched by the Fire Baron\n";
 		} else if (self.level == BARON_EARTH) {
 			if (self.health < 1) self.health = 1900;
-			if (self.deathstring == "")  self.deathstring = " was buried by the Earth Baron\n";
+			if (self.deathstring == "") self.deathstring = " was buried by the Earth Baron\n";
 			self.mass = MASS_SUPER;   // Is one with the earth.
 		} else if (self.level == BARON_AIR) {
 			if (self.health < 1) self.health = 2200;
-			if (self.deathstring == "")  self.deathstring = " was blown away by the Wind Baron\n";
+			if (self.deathstring == "") self.deathstring = " was blown away by the Wind Baron\n";
 		}
-		if (cvar("skill") >= 1) self.th_checkattack = BaronBossCheckAttack; // Only on hard??
+		if (skill >= 1) self.th_checkattack = BaronBossCheckAttack; // Only on hard??
     } else {
         if (self.health < 1) self.health = 500;
 		if ( (random () < 0.500) ) {
@@ -1140,6 +1141,8 @@ void() monster_baron = {
     self.th_walk    = baron_walk;
     self.th_run     = baron_run;
     self.th_melee   = baron_melee;
+	self.meleerange = 100;
+	self.meleerangez = 48;
     self.th_missile = baron_missile;
     self.th_pain    = baron_pain;
     self.th_die     = baron_die;
