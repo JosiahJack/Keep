@@ -18,3 +18,8 @@ jobs:
           chmod +x ./keepsrc/fteqcc64
           cd ./keepsrc
           ./fteqcc64 -v -Fkce -Fifvector -Fvectorlogic
+      - name: Upload progs.dat
+        uses: actions/upload-artifact@v3
+        with:
+          name: progs.dat
+          path: progs.dat
