@@ -6,3 +6,5 @@ For the actual readme, please refer to the [Tome of Keep](https://josiahjack.git
 [Readme source files](https://github.com/JosiahJack/KeepModReadme)
 
 ![Compile Status](https://github.com/JosiahJack/Keep/actions/workflows/compile.yml/badge.svg)
+
+![LicenseGPL](https://img.shields.io/badge/License-GPL-blue)
