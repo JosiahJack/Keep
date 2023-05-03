@@ -552,7 +552,7 @@ void() weapon_mjolnir = {
 	item_setupmodel("progs/hipnotic/g_hammer.mdl",0);
 	self.weapon = IT2_MJOLNIR;
 	self.classtype = CT_MJOLNIR;
-	if (self.netname == "") self.netname = "Mjolnir's Hammer";
+	if (self.netname == "") self.netname = "Mjolnir (Thor's Hammer)";
 	item_ammo_set(60); // Drake changed from 30 to 60 since it has so much extra cool stuff.  Oddly, it uses 25 now and not 30 so, weird number here. -Qmaster	
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + self.aflag;
 	self.absmin = '-16 -16 -8';
@@ -563,7 +563,7 @@ void() weapon_wand = {
 	item_setupmodel(MODEL_GWEAP_WAND,0);
 	self.weapon = IT2_CROSS;
 	self.classtype = CT_WAND;
-	if (self.netname == "") self.netname = "Magic Wand";
+	if (self.netname == "") self.netname = "Freyr's Wand (Light Bringer)";
 	weapon_start();
 };
 
@@ -571,7 +571,7 @@ void() weapon_crossbow = {
 	item_setupmodel("progs/g_crossbow.mdl",0);
 	self.weapon = IT_EXTRA_WEAPON;
 	self.classtype = CT_EXTRA_WEAPON; 
-	if (self.netname == "") self.netname = "Crossbow";
+	if (self.netname == "") self.netname = "Hodr's Crossbow (Fatal)";
 	item_ammo_set(AMMO_BOLTS_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_bolts = world.deventity.ammo_bolts + self.aflag;
 	weapon_start();
@@ -585,7 +585,7 @@ void() weapon_buriza = {
 	precache_sound("drake/weapons/freeze.wav");
 	self.weapon = IT_FROSTBOW;
 	self.classtype = CT_FROSTBOW;
-	if (self.netname == "") self.netname = "Asgard Arbalest";
+	if (self.netname == "") self.netname = "Asgard Arbalest (Skadi's Breath)";
 	item_ammo_set(AMMO_BOLTS_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_bolts = world.deventity.ammo_bolts + self.aflag;
 	weapon_start();
@@ -697,7 +697,7 @@ void() weapon_rapier = {
 	item_setupmodel("progs/aoa/g_rapier.mdl",0);
 	self.weapon = IT_RAPIER;
 	self.classtype = CT_RAPIER;
-	if (self.netname == "") self.netname = "Ghost Rapier";
+	if (self.netname == "") self.netname = "Ghost Rapier (Loki's Laevateinn)"; // Lævateinn
 	weapon_start();
 };
 
@@ -705,7 +705,7 @@ void() weapon_mace = {
 	item_setupmodel("progs/aoa/g_mace.mdl",0);
 	self.weapon = IT_MACE;
 	self.classtype = CT_MACE;
-	if (self.netname == "") self.netname = "Vampiric Mace";
+	if (self.netname == "") self.netname = "Blood Mace (Baldr's Maul)";
 	item_ammo_set(AMMO_BLOOD_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_bloodcrystals = world.deventity.ammo_bloodcrystals + self.aflag;
 	weapon_start();
@@ -715,7 +715,7 @@ void() weapon_ice = {
 	item_setupmodel("progs/redfield/g_lightstaff.mdl",0);
 	self.weapon = IT_ICE;
 	self.classtype = CT_ICE;
-	if (self.netname == "") self.netname = "Blizzard Sphere";
+	if (self.netname == "") self.netname = "Blizzard Sphere (Ran's Staff)";
 	item_ammo_set(AMMO_ELEMENTAL_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_elemental = world.deventity.ammo_elemental + self.aflag;
 	weapon_start();
@@ -725,7 +725,7 @@ void() weapon_scimitar = {
 	item_setupmodel("progs/aoa/g_scimitar.mdl",0);
 	self.weapon = IT_SCIMITAR;
 	self.classtype = CT_SCIMITAR;
-	if (self.netname == "") self.netname = "Fire Scimitar";
+	if (self.netname == "") self.netname = "Fire Scimitar (Surtr's Sword)";
 	item_ammo_set(AMMO_ELEMENTAL_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_elemental = world.deventity.ammo_elemental + self.aflag;
 	weapon_start();
@@ -735,7 +735,7 @@ void() weapon_voidstaff = {
 	item_setupmodel("progs/aoa/g_voidstaff.mdl",0);
 	self.weapon = IT_VOID_STAFF;
 	self.classtype = CT_VOID_STAFF;
-	if (self.netname == "") self.netname = "Void Staff";
+	if (self.netname == "") self.netname = "Void Staff (Gridr's Gridarvolr)"; // Gríðarvölr
 	item_ammo_set(AMMO_VOID_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_voidshards = world.deventity.ammo_voidshards + self.aflag;
 	weapon_start();
@@ -745,7 +745,7 @@ void() weapon_gungnir = {
 	item_setupmodel("progs/aoa/g_gungnir.mdl",0);
 	self.weapon = IT_GUNGNIR;
 	self.classtype = CT_GUNGNIR;
-	if (self.netname == "") self.netname = "Gungnir";
+	if (self.netname == "") self.netname = "Gungnir (Odin's Spear)";
 	item_ammo_set(AMMO_VOID_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_voidshards = world.deventity.ammo_voidshards + self.aflag;
 	weapon_start();
@@ -755,7 +755,7 @@ void() weapon_sanguinators = {
 	item_setupmodel("progs/aoa/g_sanguinators.mdl",0);
 	self.weapon = IT_SANGUINATORS;
 	self.classtype = CT_SANGUINATORS;
-	if (self.netname == "") self.netname = "Sanguinators";
+	if (self.netname == "") self.netname = "Sanguinators (Hel's Claws)";
 	item_ammo_set(AMMO_BLOOD_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_bloodcrystals = world.deventity.ammo_bloodcrystals + self.aflag;
 	weapon_start();
