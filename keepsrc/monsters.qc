@@ -153,6 +153,10 @@ void() monster_idle_sound = { // [FUNCTION]
 void() monster_sightsound = { // [FUNCTION]
 	local float	rsnd;
 
+	dprint(self.classname);
+	dprint(" aggroed, alignment:");
+	dprint(ftos(self.alignment));
+	dprint("\n");
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
 
@@ -554,7 +558,9 @@ float() FollowSetup = { // [FUNCTION]
 	} else if (self.event != "") {
 		self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target
 		if (self.charmer) {
-			self.alignment = self.charmer.alignment;
+			if (self.charmer.flags & FLx_CREATURE) {
+				self.alignment = self.charmer.alignment;
+			}
 			self.charmed = TRUE;
 			self.goalentity = self.movetarget;
 			self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);

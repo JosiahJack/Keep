@@ -332,6 +332,7 @@ void() SetNewmisCommonPlasmaParameters = {
 
 void(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile = { // [FUNCTION]
 	local vector vec;
+	local entity targ;
 	
 	if (!InOpenOrLiquid(org)) return; // Check if there is space to spawn entity
 
@@ -354,7 +355,8 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 		newmis.classgroup = CG_PROJLAVANAILS;
 	}
 
-	// Switch model collision based on auto aim functionality.  Monsters always use large collision (otherwise infighting would be less)
+	// Switch model collision based on auto aim functionality.  Monsters always
+	// use large collision (otherwise infighting would be less)
 	if (self.flags & FL_CLIENT) {
 		if (playerprojsize == 0) newmis.movetype = MOVETYPE_FLYMISSILE;	// Large collision
 		else newmis.movetype = MOVETYPE_FLY;		// Small collision
@@ -692,6 +694,31 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 	} else if (proj_type == CT_PROJ_ROCKET) {
 		SetNewmisCommonRocketParameters();
 		newmis.mdl = MODEL_PROJ_ROCKET;
+	} else if (proj_type == CT_PROJ_SIDEWINDER) {
+		SetNewmisCommonRocketParameters();
+		newmis.movetype     = MOVETYPE_FLYMISSILE;
+		newmis.yaw_speed    = 5;   // For sidewinding code.
+		newmis.height       = 50;
+		newmis.angles       = vectoangles(newmis.velocity);
+		newmis.dmg          = 90;
+    	targ = SuperRocket_Target(self,org,dir,2000,0.5); // Select a target in front of the player's sights.
+		newmis.oldenemy     = newmis.enemy = targ;
+		if (newmis.enemy) {
+			dprint("Sidewinder has target of ");
+			dprint(newmis.enemy.classname);
+			dprint("\n");
+		}
+		newmis.ideal_yaw    = newmis.angles_y;
+		newmis.cnt          = 0;
+		newmis.lefty        = 1;
+		newmis.pos2         = org + (dir * ((newmis.speed + newmis.height) * 5)); // Get the spot we want to hit if fired straight without a target.
+		newmis.speed        = newmis.speed + (random() * 50);
+		newmis.touch        = Touch_Missile;
+		newmis.delay        = time + 2.5;       // Total duration
+		newmis.nextthink    = time + 0.2;       // Was T+0.25
+		newmis.think        = Sidewinder_Think;
+		newmis.think1       = Old_Explosion1;
+		newmis.mdl = "progs/drake/memissil.mdl";
 	} else if (proj_type == CT_PROJ_ROCKETSUPER) {
 		SetNewmisCommonRocketParameters();
 		newmis.mdl = MODEL_PROJ_ROCKET;
@@ -1685,40 +1712,6 @@ void() RainStorm = { // [FUNCTION]
     newmis.wait     = 1 / 20;
     newmis.distance = 64;
     newmis.nextthink= 0.01;
-};
-
-// Update 4/2/10:  Adapted for player use.  Mega enforcer still uses this.
-void(vector start, vector dir, entity targ) Sidewinder_Launch = { // [FUNCTION]
-    newmis = spawn();
-	newmis.classgroup = CG_PROJROCKETS;
-    newmis.master       = newmis.owner      = self;
-    newmis.movetype     = MOVETYPE_FLYMISSILE;
-    newmis.solid        = SOLID_BBOX;
-    newmis.classname    = "rocket";
-    newmis.yaw_speed    = 5;   // For sidewinding code.
-    newmis.speed        = 450;
-    newmis.height       = 50;
-    newmis.velocity     = dir * (450 + (random() * 50));
-    newmis.angles       = vectoangles(newmis.velocity);
-    newmis.dmg          = 90;
-    newmis.oldenemy     =
-    newmis.enemy        = targ;
-	if (newmis.enemy) {
-		dprint("Sidewinder has target of ");
-		dprint(newmis.enemy.classname);
-		dprint("\n");
-	}
-    newmis.ideal_yaw    = newmis.angles_y;
-    newmis.cnt          = 0;
-    newmis.lefty        = 1;
-	newmis.classtype 	= CT_PROJ_SIDEWINDER;
-    newmis.pos2         = start + (dir * ((newmis.speed + newmis.height) * 5)); // Get the spot we want to hit if fired straight without a target.
-    newmis.touch        = Touch_Missile;
-    newmis.delay        = time + 2.5;       // Total duration
-    newmis.nextthink    = time + 0.2;       // Was T+0.25
-    newmis.think        = Sidewinder_Think;
-    newmis.think1       = Old_Explosion1;
-    setall(newmis,"progs/drake/memissil.mdl",VEC_ORIGIN,VEC_ORIGIN,start);
 };
 
 // Launches a sidewinding poison shot.  Used by acolytes.

@@ -549,7 +549,7 @@ void() Touch_Missile = { // [FUNCTION]
 	if (InSky(self.origin)) { entity_remove(self, 0.1); return; }
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
-	if (self.oldenemy && other.classtype == self.oldenemy.classtype) return; // Stop packs of owners killing each other
+	//if (self.oldenemy && other.classtype == self.oldenemy.classtype) return; // Stop packs of owners killing each other
 	if (self.classtype == CT_PROJ_SKULLW && self.th_updmissile != SUB_Null) { self.th_updmissile(); return; } // Guardian skull wizards have special poison explosion
 	if (Reflected_Damage (COURAGE_DAMAGE)) return;
 
@@ -599,7 +599,9 @@ void() Touch_Missile = { // [FUNCTION]
 			else if (self.classtype == CT_PROJ_JUDGER) self.pos1 = DAMAGE_RLJUDGE;
 			else if (self.classtype == CT_PROJ_JUSTICER) self.pos1 = DAMAGE_RLJUDGE;
 			else if (self.classtype == CT_PROJ_RAINDEER) self.pos1 = DAMAGE_RLRAINDEER;
-			else if (self.classtype == CT_PROJ_SIDEWINDER) self.pos1 = '90 20 120';
+			else if (self.classtype == CT_PROJ_SIDEWINDER) {
+				self.pos1 = '90 20 120';
+			}
 
 			// Instant death explosion for zombies from rocket explosions!  It doesn't make sense that this wasn't originally a default for explosives. this will affect _zombie, _zombiek, monster types.
 			if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) {
@@ -631,9 +633,10 @@ void() Touch_Missile = { // [FUNCTION]
 				if (self.pos1_z > 0) T_RadiusDamage(self, self.owner, self.pos1_z, other, DAMAGEALL);
 			}
 		}
-		
-		if (other.resist_rockets > 0 || (other.resist_multi_rockets && self.classgroup == CG_PROJMULTIROCKETS)) Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET); // Rocket resistance is shown with puffs of smoke
-		else {
+
+		if (other.resist_rockets > 0 || (other.resist_multi_rockets && self.classgroup == CG_PROJMULTIROCKETS)) {
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET); // Rocket resistance is shown with puffs of smoke
+		} else {
 			if (self.poisonous == TRUE) { self.height = EXPLODE_POISON_MED; PoisonDeBuff(other); } // Check for poison debuff (using poisonous flag).  Use new poison explosion.
 			self.origin = self.origin - 8*normalize(self.velocity); // Move the explosion effect higher up from point of contact
 			if (self.classtype == CT_PROJ_ROCKETSUPER || self.classtype == CT_PROJ_SIDEWINDER) self.height = EXPLODE_SMALL; // Because it's used for the think function to adjsut velocity over time.

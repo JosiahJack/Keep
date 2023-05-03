@@ -470,14 +470,16 @@ entity() spawn = {
 	}
 
 	totaledicts = totaledicts + 1;
-	if (self) {
-		dprint("self: ");
-		dprint(self.classname);
-		dprint(" -- ");
+	if (developer > 1) {
+		if (self) {
+			dprint("self: ");
+			dprint(self.classname);
+			dprint(" -- ");
+		}
+		dprint("spawned new entity ");
+		dprint(ftos(totaledicts));
+		dprint("\n");
 	}
-	dprint("spawned new entity ");
-	dprint(ftos(totaledicts));
-	dprint("\n");
 	testlastspawn = spawn_builtin();
 	return testlastspawn;
 };

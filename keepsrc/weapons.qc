@@ -517,8 +517,7 @@ void() W_FireSidewinder = { // [FUNCTION]
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;
-    targ = SuperRocket_Target(self, start, dir, 2000, 0.5); // Select a target in front of the player's sights.
-    Sidewinder_Launch(start, dir, targ);
+	launch_projectile(start,dir,NO_SPIN,CT_PROJ_SIDEWINDER,450);
 };
 
 void() W_FireAirFist = { launch_horn(); }; // Redirect for consistent and clear naming. -Qmaster
