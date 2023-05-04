@@ -9,4 +9,6 @@ For the actual readme, please refer to the [Tome of Keep](https://josiahjack.git
 
 ![Downloads](https://img.shields.io/github/downloads/JosiahJack/Keep/total?color=darkgree&label=Downloads&style=for-the-badge)
 
+![LOC](https://img.shields.io/tokei/lines/github.com/JosiahJack/Keep?color=yellow&label=Lines%20of%20Code)
+
 ![LicenseGPL](https://img.shields.io/badge/License-GPL-blue)
