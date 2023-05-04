@@ -7,4 +7,6 @@ For the actual readme, please refer to the [Tome of Keep](https://josiahjack.git
 
 ![Compile Status](https://github.com/JosiahJack/Keep/actions/workflows/compile.yml/badge.svg)
 
+![Downloads](https://img.shields.io/github/downloads/JosiahJack/Keep/total?color=darkgree&label=Downloads&style=for-the-badge)
+
 ![LicenseGPL](https://img.shields.io/badge/License-GPL-blue)
