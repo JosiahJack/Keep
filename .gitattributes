@@ -1,7 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-*.qc linguist-language=Quake
-*.csqc linguist-language=Quake
-*.src linguist-language=Quake
+*.qc linguist-language=QuakeC
+*.hc linguist-language=HexenC
+*.csqc linguist-language=QuakeC
+*.src linguist-language=QuakeC
 *.rc linguist-language=Quake
 *.lst linguist-language=Quake
+*.html linguist-detectable=false
