@@ -6,7 +6,7 @@ Output file: test_template.bsp
 *** WARNING 06: No info_player_deathmatch entities in level
           282 faces
            47 brushes
-           69 entities
+           66 entities
            10 unique texnames
           106 texinfo
 
@@ -85,7 +85,7 @@ Wrote test_template.bsp
            10 textures         111804
               lightdata             0
               visdata               0
-              entdata            6073
+              entdata            5888
 
-0.031 seconds elapsed
-Peak memory usage: 2813752 (2.7M)
+0.018 seconds elapsed
+Peak memory usage: 2813608 (2.7M)

@@ -39,7 +39,7 @@ WARNING: Leaf portals saw into leaf (57)
 WARNING: Leaf portals saw into leaf (58)
 average leafs visible: 30
 c_noclip: 0
-c_chains: 24391
+c_chains: 24976
 visdatasize:466  compressed from 472
 Writing test_template.bsp as BSP version BSP2
   0.1 seconds elapsed
