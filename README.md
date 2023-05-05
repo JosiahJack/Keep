@@ -5,6 +5,8 @@ For the actual readme, please refer to the [Tome of Keep](https://josiahjack.git
 
 [Readme source files](https://github.com/JosiahJack/KeepModReadme)
 
+![tag](https://img.shields.io/github/v/tag/JosiahJack/Keep?label=Latest%20Release)
+
 ![Compile Status](https://github.com/JosiahJack/Keep/actions/workflows/compile.yml/badge.svg)
 
 ![Downloads](https://img.shields.io/github/downloads/JosiahJack/Keep/total?color=darkgree&label=Downloads&style=for-the-badge)
