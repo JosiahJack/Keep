@@ -7,3 +7,4 @@
 *.rc linguist-language=Quake
 *.lst linguist-language=Quake
 *.html linguist-detectable=false
+*.htm linguist-detectable=false
