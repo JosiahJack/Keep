@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 47
+// Function count: 48
 //
 // Implements: AI Core Movement Subroutines
 //
@@ -149,6 +149,23 @@ void() ai_charge_side = {
 	walkmove(heading, 20);
 };
 
+// Move to the side of ideal_yaw.  Set ideal_yaw prior to a call to this 
+// function.  Called by 'ai_run_strafe'.
+float(float dist) ai_run_side = {
+    local   float   ofs;
+    
+	// Only called by other ai_ functions, no MonsterDeBuff();
+    if (self.lefty) ofs = 90;
+    else ofs = -90;
+
+	// Tests if monsters can strafe or not by moving the monster
+    if (walkmove(self.ideal_yaw + ofs, dist)) return TRUE;
+
+	self.lefty = rint(1 - self.lefty); // Switch strafe sides for later use
+    if (walkmove (self.ideal_yaw - ofs, dist)) return TRUE;
+	return FALSE;
+};
+
 // Strafe sideways, but stay at aproximately the same range
 void(float dist) ai_run_slide = {
 	local float	ofs;
@@ -157,16 +174,9 @@ void(float dist) ai_run_slide = {
 	// It is better to re-calcuate this than wait for ai_run to update
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);	
 	ChangeYaw(); // Code function
-	if (self.lefty > 0) ofs = 90;
-	else ofs = -90;
-	
-	// Tests if monsters can strafe or not by moving the monster
-	if (walkmove (self.ideal_yaw + ofs, dist)) return;
-	
-	self.lefty = rint(1 - self.lefty); // Switch strafe sides for later use
-	if (walkmove (self.ideal_yaw - ofs, dist)) return;
+	if (ai_run_side(dist)) return;
 
-	walkmove (self.ideal_yaw - 180, dist); // Try moving backwards if both sides are blocked
+	walkmove(self.ideal_yaw - 180, dist); // Try moving backwards if both sides are blocked
 };
 
 // Turn 90 degrees and move to the side
@@ -202,6 +212,29 @@ void(float dist) ai_run_backward = {
 	
 	self.attack_state = AS_SIDESTEP; // Cannot walk backwards, move sideways instead
 };
+
+// Specialized behavior for soldier rebel NPCs.
+// Modifies move distances and possibly attack state.
+float(float d) ai_run_rebel = {
+    local float dist;
+
+    if (!self.enemy) return d * 2;  // Speed up rebels so they can keep up with
+	if (!self.th_missile) return d; // player when friendly, else normal.
+
+	// If the enemy is too close for comfort, back off.
+	// Note:  Don't check for visibility.
+	self.attack_state = AS_STRAIGHT;
+	if (infront(self.enemy)) {
+		dist = vlen(self.enemy.origin - self.origin);
+		if (dist < 300) { // Enemy is close.
+			if (dist < 250) d = 0 - d;           // Backpedal
+			else self.attack_state = AS_SLIDING; // Sidestep.
+		}
+	}
+
+	return d;
+};
+
 
 // Check if the monster is allowed to break the breakable!?!
 float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable = {
@@ -656,32 +689,22 @@ void(float dist) ai_run_bank = {
 	}
 };
 
-// Move to the side of ideal_yaw.  Set ideal_yaw prior to a call to this function.  Called by 'ai_run_strafe'.
-void(float dist) ai_run_side = {
-    local   float   ofs;
-    
-    if (self.lefty) ofs = 90;
-    else ofs = -90;
-
-    if (walkmove (self.ideal_yaw + ofs, dist)) return;
-
-    self.lefty = !self.lefty;
-    walkmove (self.ideal_yaw - ofs, dist);
-};
-
-
-// Formerly ai_run_slide for Drake.  Strafe sideways, but stay at aproximately the same range
+// Formerly ai_run_slide for Drake.  Strafe sideways, but stay at aproximately 
+// the same range
 // PM:  Renamed to 'ai_run_strafe', and added float argument 'dist'.
 //
 // For guaranteed circle-strafing, do the following:
 //  { ai_face(); ai_run_side(dist); ai_face(); }
 //
-// The above description, which describes circle-strafing, is only true if enemy_yaw updates each frame, which is true only if this is called from
-// ai_run.  If called directly, enemy_yaw probably will not be set, and the monster will simply move to the side.
+// The above description, which describes circle-strafing, is only true if 
+// enemy_yaw updates each frame, which is true only if this is called from
+// ai_run.  If called directly, enemy_yaw probably will not be set, and the 
+// monster will simply move to the side.
 void(float dist) ai_run_strafe = {
+	MonsterDeBuff();
     self.ideal_yaw = enemy_yaw;
     ChangeYaw();
-    ai_run_side (dist);
+    ai_run_side(dist);
 };
 
 void(entity destEnt, float radius, vector offset) ai_orbit = {

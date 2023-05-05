@@ -221,7 +221,10 @@ float(float attTime) StandardVisCheckFailed = {
 void() CheckAttack = { // [FUNCTION]
 	local float tevis;
 
+	if (self.classtype == CT_MONBARON) dprint("checking attack for baron 0\n");
 	if  (IsSoldier()) {
+		if (self.classtype == CT_MONBARON) dprint("checking attack for baron 1\n");
+
 		if (TurretMode(2 + random())) return; // Range attack only for turret.
 
 		// If enemy is within melee range, just keep on attacking!
@@ -233,22 +236,33 @@ void() CheckAttack = { // [FUNCTION]
 			return;
 		}
 	}
+
+	if (self.classtype == CT_MONBARON) dprint("checking attack for baron 2\n");
+
 	// Does the monster have a clear shot?  Sightline can be blocked by monsters
 	// Ghosts can presumably see through walls.
-	if (visblocked(self.enemy) && !IsGhost(self)) return;  
+	if (visblocked(self.enemy)) {
+		if (self.classtype == CT_MONBARON) dprint("checking attack for baron 3\n");
+		if (!IsGhost(self)) return; // Nested for performance.
+	}
 
 	// Melee attack
 	// enemy_range is checked before this function (ai_run - ai.qc)
 	// If the monster is within melee range they instantly attack
-	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.th_melee) {
+	if ((ai_checkmelee(self.meleerange,self.meleerangez)
+		|| (self.classtype == CT_MONBARON && enemy_range == RANGE_MELEE)) && self.th_melee) {
 		self.attack_state = AS_MELEE;
 		self.th_melee();
 		return;
 	}
 
+	if (self.classtype == CT_MONBARON) dprint("checking attack for baron 4\n");
+
+
 	tevis = enemy_vis;
 	enemy_vis = TRUE;
 	if (StandardVisCheckFailed(2 + random())) return;
+
 	enemy_vis = tevis;
 	if (!self.th_missile) return;
 
@@ -1584,37 +1598,50 @@ void() BaronBossCheckAttack = {
     local float r;
 
 	// If target is not in LOS, use an attack that doesn't care about line-of-fire.  This will harass a player that tries to hide and spam grenades from a safe spot.
-    if ((enemy_range == RANGE_MID || enemy_range == RANGE_MELEE) && (time >= self.attack_finished) && (self.waitmax < time) && (random() < 0.01)) { // Use only after a delay.
-        r = random();
-        if (self.level == BARON_FIRE) {
-            baron_cast1();
-        } else if (self.level == BARON_EARTH) {
-            if ((r < 0.5) && !super_active && QuakeHurts(self.enemy)) baron_slam1();
-            else if (BaronGolem_Check()) baron_cast1();
-            else return;
-        } else if (self.level == BARON_AIR) {
-            if (UpIsSky (self.enemy.origin, self.enemy)) {
-                if ((r < 0.5) && !super_active)
-                    baron_slam1();
-                else
-                    baron_cast1();
-            } else if (!super_active)
-                baron_slam1();
-            else return;
-        } else if (self.level == BARON_WATER) {
-            if ((r < 0.5) && !super_active)
-                baron_cast1();
-            else
-                baron_slam1();
-        } else return;
-        SUB_AttackFinished (2*r);
-        return;
-    }
+    if (enemy_range > RANGE_MID) return;
+	if (time < self.attack_finished) return;
+	if (self.waitmax >= time) { // Use special attacks only after a delay.
+		if (ai_checkmelee(self.meleerange,self.meleerangez)) self.th_melee();
+		return; 
+	}
+
+	if (random() > 0.5) { // Was 0.01 in Drake.  No idea how that worked.
+		if (ai_checkmelee(self.meleerange,self.meleerangez)) self.th_melee();
+		return; 
+	}
+
+	r = random();
+	if (self.level == BARON_FIRE) {
+		baron_cast1();
+	} else if (self.level == BARON_EARTH) {
+		if ((r < 0.5) && !super_active && QuakeHurts(self.enemy)) baron_slam1();
+		else if (BaronGolem_Check()) baron_cast1();
+		else return;
+	} else if (self.level == BARON_AIR) {
+		if (UpIsSky (self.enemy.origin, self.enemy)) {
+			if ((r < 0.5) && !super_active)
+				baron_slam1();
+			else
+				baron_cast1();
+		} else if (!super_active)
+			baron_slam1();
+		else return;
+	} else if (self.level == BARON_WATER) {
+		if ((r < 0.5) && !super_active)
+			baron_cast1();
+		else
+			baron_slam1();
+	} else if (ai_checkmelee(self.meleerange,self.meleerangez)) {
+		self.th_melee();
+		return;
+	}
+	SUB_AttackFinished (2*r);
 };
 
 float(float midrange, float usechance) SpecialBossRangeAttacks = {
 	//  Only range attack if cooldown has finished
 	if (time <= self.attack_finished) return FALSE;
+
 	if (self.enemydist < midrange && random() < 0.75
 		|| (usechance && self.attack_chance > random())) {
 		// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s

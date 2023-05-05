@@ -443,7 +443,6 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	adamant = 0;
 	oldarmorvalue = targ.armorvalue;
 	adamant = (targ.perms & POW_ARMORONYX) || (targ.perms & POW_ARMORONYXPOWER) || (targ.perms & POW_ARMORBERSERKER);
-
 	if (checkarmor == DAMARMOR || checkarmor == DAMSPLASH) {
 		// Normal armor handling, armor 1, 2, and inv(3) --------------
 		save = ceil(targ.armortype*damage);
@@ -482,6 +481,9 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		if (targ.perms & POW_ARMORCOURAGE) {
 			if (UseCourage(targ,inflictor.origin)) {
 				saveperms = ceil(ARMOR_COURAGE_TYPE*take); // Apply another armor reduction
+				dprint("courage protection");
+				dprint(ftos(saveperms));
+				dprint("\n");
 			}
 		}
 		take = ceil(take-saveperms);

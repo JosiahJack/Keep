@@ -5,7 +5,7 @@
 "mapversion" "220"
 "classname" "worldspawn"
 "_tb_def" "external:/home/qmaster/QUAKE/keep/Keep.fgd"
-"wad" "/home/qmaster/QUAKE/Other/Compiling/quake.wad"
+"wad" "/home/qmaster/QUAKE/Other/Compiling/quake.wad;/home/qmaster/QUAKE/Other/Compiling/statuegarden.wad;/home/qmaster/QUAKE/Other/Compiling/end1.wad;/home/qmaster/QUAKE/Other/Compiling/mj4m5.wad;/home/qmaster/QUAKE/Other/Compiling/hexetic.wad;/home/qmaster/QUAKE/Other/Compiling/mj3m1.wad"
 "_dirt" "1"
 "_bounce" "1"
 "_sunlight2" "80"
@@ -842,7 +842,7 @@
 }
 // entity 65
 {
-"classname" "monster_wrath"
+"classname" "monster_baron_water"
 "origin" "192 -48 128"
 "spawnflags" "4"
 }

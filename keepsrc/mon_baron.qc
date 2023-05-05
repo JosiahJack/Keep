@@ -333,7 +333,6 @@ void() baron_fasts2  = [$smack3,  baron_fasts3  ] { ai_charge(4); };
 void() baron_fasts3  = [$smack6,  baron_smack7  ] { ai_charge(2); };
 
 void() baron_melee = { // [FUNCTION]
-    dprint("baron melee\n");
     if (self.state) {
 		self.state = FALSE;
         if (self.level) self.think = baron_fasts1;

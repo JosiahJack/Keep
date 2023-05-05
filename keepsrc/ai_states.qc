@@ -187,7 +187,9 @@ void(float dist) ai_run = {
 	local entity e, client;
 
 	if (self.health < 1) return;	// Health < 0, no more running
+
 	MonsterDeBuff();			// Check and apply poison
+    if (self.ryuflags & RYU_REBEL) dist = ai_run_rebel (dist);
 	if (self.slow_finished > time) dist = dist * 0.5;
 	movedist = dist;
 	winner = FALSE;
@@ -196,7 +198,9 @@ void(float dist) ai_run = {
 			if (visible(self.enemy)) {
 				self.carry_time = 0;
 				winner = TRUE;
-				self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin); // Set yaw in case we need to face the fallen during the dance.
+
+ 				// Set yaw in case we need to face the fallen during the dance.
+				self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
 			} else {
 				self.carry_time = self.carry_time + 0.1;	
 			}
@@ -358,7 +362,7 @@ void(float dist) ai_run = {
 	}
 
 	if (check_passivestate_system(self)) return; // Check for the passive state system (reset/timer etc)
-	
+
 	CheckBlockedBreakable(); // Check if blocked by breakables
 	if (self.attack_state == AS_MISSILE) {
 		// Turn in place until within an angle to launch a missile attack
@@ -396,12 +400,34 @@ void(float dist) ai_run = {
 			self.enemy = e;
 			Ryu_VerticalSlide(dist, self.enemy);
 			return;
+		} else if (self.classtype == CT_MONBARON) {
+			ai_run_strafe(dist);
+			return;
 		}
 		ai_run_slide(dist); return; // normal
 	} else if (self.attack_state == AS_SIDESTEP) {
 		ai_run_sidestep(dist); return;
 	} else if (self.attack_state == AS_BACKWARD) {
 		ai_run_backward(dist); return;
+	} else if (self.attack_state == AS_VERTICAL) {
+        if (self.lefty) dist = 0 - dist;
+		ai_up (dist); 
+		return;
+	} else if (self.attack_state == AS_FLANKING) {
+		if (enemy_vis) {
+			if (enemy_range <= RANGE_NEAR) {
+				if (ai_checkmelee(self.meleerange,self.meleerangez)){
+				//if (InMeleeRange (160)) { // Attempt Quoth enforcers' flanking maneuvers.
+					if (self.lefty) enemy_yaw = enemy_yaw + 90;
+					else enemy_yaw = enemy_yaw - 90;
+					self.ideal_yaw = anglemod(enemy_yaw);
+					ChangeYaw();
+					if (walkmove(self.ideal_yaw, dist)) return;
+
+					if (FacingIdeal()) self.lefty = !self.lefty;
+				}
+			}
+		}
 	}
 
 	// head straight in
