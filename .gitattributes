@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.qc linguist-language=QuakeC
+*.csqc linguist-language=QuakeC
+*.src linguist-language=QuakeC
+*.rc linguist-language=QConsole
+*.lst linguist-language=QConsole
