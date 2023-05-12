@@ -176,7 +176,7 @@ float   RYU_REAPER      = 8388608;  // Soul collector.
 float   SPEED_HOOK      = 500;      // Was 500 in Roman, 1000 in original.
 float   SPEED_BURIZA    = 2000;     // Was 1000.
 
-float   XFL_HUNGRY      = 1;    // Eats items.  (Was Draco before removal.)
+float   XFL_HUNGRY      = 1;    // Eats items.  (Was Draco before removal.) NOT DOING.  Eating items is no fun and makes balancing maps too difficult. -Qmaster
 float   XFL_GHOUL       = 4;    // Allowed to eat gibs.  "Brains!"
 float   XFL_USE_AMMO    = 64;     // Monster needs ammo to shoot guns.
 float   XFL_NO_AIR      = 128;    // Doesn't need to breathe.
@@ -202,7 +202,7 @@ vector      damage_velocity;// Set by 'T_Damage' for gib velocity.
 .float      spawned;    	// TRUE if created/summoned after a level load.
 .float 		spawnskin;
 .void()     th_revive;  	// Resurrection scene.
-.void()     th_spawn;   	// Respawn function.
+.void()     th_spawn;   	// Respawn function.  E.g. after skullwiz teleports away, this is it coming back.
 .string 	hello_sound;
 .float      waitmin, waitmax;
 .float      xfl, xf2;   	// Extra flags without C code connections.

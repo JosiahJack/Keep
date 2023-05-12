@@ -510,7 +510,7 @@ float DOOM_SHOTGUN_PIERCE			= 2;		// TODO: Shotgun projectiles pierce through mu
 float DOOM_MONSTERS_NM_RESPAWN		= 4;		// TODO: When skill is Nightmare (>=3), this enables monster respawning.  When respawning, corpse dissappears with teleglitter, monsters respawn with teleglitter, and the monster's previous enemy is remembered if a player and still alive.  Respawn is 8 to 300 seconds.
 
 .float hipnoticoptions;
-float HIPNOTIC_OLDMJOLNIR			= 1;		// Default is off = Drake throwable Mjolnir if held down + aDaya mod jam version for Tome.  On is just lightning ground smack and whack damage similar to Quoth simple hammer whack.
+float HIPNOTIC_OLDMJOLNIR			= 1;		// Default is off = Drake throwable Mjolnir if held down.  On is just lightning ground smack and whack damage similar to Quoth simple hammer whack + aDaya mod jam version for Tome.
 float HIPNOTIC_BULLETHOLES			= 2;		// Shotguns place bullet hole sprites on world walls.  Default is off.
 
 .float spirit_blessed;
@@ -675,3 +675,4 @@ entity fliquid_head; // Borrowed schema from Gyro physics to handle checking all
 
 float gibbed_this_frame;
 float total_goodmonsters;
+.entity hammer; // The thrown mjolnir!

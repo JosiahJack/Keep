@@ -1,3 +1,41 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions, All
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 26
+//
+// Implements: Monster Starting and Common Behavior
+//
+// Description:
+// Allows monsters to begin, spawn via delay spawnflag or be targetted to wake.
+//=============================================================================
+
 float MONAI_ZOMBIEFLR = 1;		// start on floor
 float MONAI_ZOMBIEUPB = 2;		// zombie painb - 28 frames (9 = on ground)
 float MONAI_ZOMBIEUPD = 4;		// knight paind - 35 frames (12 = on ground)
@@ -609,31 +647,31 @@ void() monster_targets = { // [FUNCTION]
 	self.think = self.th_stand;	// No angrytarget, enemy or path corner, stand around waiting.
 };
 
-void() monster_reset_movement_type = { // [FUNCTION]
-	if (self.classmove == MON_MOVESTATIC) self.movetype = MOVETYPE_NONE; // Not all monsters are step movement, some are stationary
-	else self.movetype = MOVETYPE_STEP;
+void(entity ent) monster_reset_movement_type = { // [FUNCTION]
+	if (ent.classmove == MON_MOVESTATIC) ent.movetype = MOVETYPE_NONE; // Not all monsters are step movement, some are stationary
+	else ent.movetype = MOVETYPE_STEP;
 
-	if (self.classtype == CT_MONWRAITHNEHAHRA) self.movetype = MOVETYPE_NOCLIP;
+	if (ent.classtype == CT_MONWRAITHNEHAHRA) ent.movetype = MOVETYPE_NOCLIP;
 
-	if (self.classmove == MON_MOVEFLY ) { // Flying Monsters
-		if (!self.yaw_speed) self.yaw_speed = 15;
-		self.flags = self.flags | FL_FLY;
-	} else if (self.classmove == MON_MOVESWIM ) { // Swimming Monsters	
-		if (!self.yaw_speed) self.yaw_speed = 10;
-		self.flags = self.flags | FL_SWIM;
+	if (ent.classmove == MON_MOVEFLY ) { // Flying Monsters
+		if (!ent.yaw_speed) ent.yaw_speed = 15;
+		ent.flags = ent.flags | FL_FLY;
+	} else if (ent.classmove == MON_MOVESWIM ) { // Swimming Monsters	
+		if (!ent.yaw_speed) ent.yaw_speed = 10;
+		ent.flags = ent.flags | FL_SWIM;
 	} else {
-		if (!self.yaw_speed) self.yaw_speed = 20; // Default walking/static monsters
+		if (!ent.yaw_speed) ent.yaw_speed = 20; // Default walking/static monsters
 	}
 };
 
-void() monster_reset_runtime_attributes = { // [FUNCTION]
-	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
-	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
+void(entity ent) monster_reset_runtime_attributes = { // [FUNCTION]
+	ent.liquidbase = ent.liquidcheck = 0;		// Used for liquid content damage
+	ent.dmgcombined = ent.dmgtimeframe = 0;	// combined damage over 0.1s
 
 	// Long time before first idle sound(except scorpions!)
-	if (self.idletimer < 1) {
-		if (self.classtype == CT_MONSCORPION) self.idletimer = time + 0.1 + random();
-		else self.idletimer = time + 4 + (random() * 4);
+	if (ent.idletimer < 1) {
+		if (ent.classtype == CT_MONSCORPION) ent.idletimer = time + 0.1 + random();
+		else ent.idletimer = time + 4 + (random() * 4);
 	}
 };
 
@@ -648,7 +686,7 @@ void() monster_spawn = { // [FUNCTION]
 		setsize (self, self.bbmins, self.bbmaxs);
 		setorigin(self, self.oldorigin); // reset origin, just in case been moved since last
 		self.lastorigin = self.origin; // Save origin for cinematic camera angle interpolation
-		monster_reset_movement_type(); // Make sure movement flag types are correct
+		monster_reset_movement_type(self); // Make sure movement flag types are correct
 		if (!walkmove (0, 0)) {  // If we collide, switch off monster and wait again.
 			self.solid = SOLID_NOT;
 			setmodel(self,"");
@@ -701,8 +739,8 @@ void() monster_spawn = { // [FUNCTION]
 
 	if (self.think1) self.use = self.think1;	// different use function?
 	else self.use = monster_use;				// default trigger event
-	if (self.classtype != CT_MONWRAITHNEHAHRA) self.solid = SOLID_SLIDEBOX;				// Standard monster movement
-	monster_reset_movement_type();				// Standard monster movement
+	if (self.classtype != CT_MONWRAITHNEHAHRA) self.solid = SOLID_SLIDEBOX;
+	monster_reset_movement_type(self);			// Standard monster movement
 	setmodel(self, self.mdl);					// Setup model
 	self.mindex2 = self.modelindex;
 	self.skin = self.skin_override;				// Restore any skins
@@ -721,7 +759,7 @@ void() monster_spawn = { // [FUNCTION]
 
 	//self.velocity = '0 0 0';					// Make sure stationary
 	self.deadflag = DEAD_NO;					// used to stop death re-triggering
-	monster_reset_runtime_attributes();
+	monster_reset_runtime_attributes(self);
 	if (!self.pain_flinch) self.pain_flinch = self.health;
 	if (!self.switchoverride) self.switchoverride = 1;
 	Resist_CheckRange(self); // Double check that all ammo resistance are within range
@@ -1107,7 +1145,6 @@ float() monster_checkspawn = { // [FUNCTION]
 void() monster_start = { // [FUNCTION]
 	precache_monster(self.classname);   // Always precache it even if it fails to spawn. This to preserve the save files.
 	if (self.minion_name != "") monster_checkminion(self.minion_name); // Precache any minion monster if we have a counter and if we have a minion name
-
 	SUB_CheckRandomizedAngles();		// Handle randomized rotation, if set.  Bound angles to range of 0 to 360.
 	self.flags = FL_MONSTER;			// Always reset this flag
 	self.ticktimer = 0.1;				// Model animations at 10fps
@@ -1134,9 +1171,11 @@ void() monster_start = { // [FUNCTION]
 	}
 	if (!self.classgroup) self.classgroup = CG_MONSTERS;
 	monster_bbox(); // Setup bounding box based on presets
-
 	if (self.spawnflags & MON_SPAWN_DELAY && self.targetname == "") { // Cannot delay spawn a monster if nothing can trigger it!?!
-		dprint("\b[MONSTER]\b Cannot delay spawn without targetname! Spawning immediately\n");
+		dprint(self.classname);
+		dprint(" at ");
+		dprint(vtos(self.origin));
+		dprint(" cannot delay spawn without targetname! Spawning immediately\n");
 		self.spawnflags = self.spawnflags - MON_SPAWN_DELAY;
 		self.brain = self.brain - 32;
 	}
@@ -1149,7 +1188,14 @@ void() monster_start = { // [FUNCTION]
 			dprint(") - no monster count\n");
 		}
 	} else {
-		AddToTotals(self); // Default state - update monster total
+		if (!((self.spawnflags & MON_STATUE) && self.targetname == "")) {
+			AddToTotals(self); // Default state - update monster total
+		} else {
+			dprint(self.classname);
+			dprint(" at ");
+			dprint(vtos(self.origin));
+			dprint(", set as statue has no targetname, assuming decorative and not adding to monster count\n");
+		}
 	}
 	
 	if (self.sight_sound) { // Ensure randomized sightsound works

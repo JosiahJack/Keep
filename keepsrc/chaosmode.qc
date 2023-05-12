@@ -262,9 +262,7 @@ void() disable_randflags = { // [FUNCTION]
 // Used INTERNALLY to the randomizer function
 float() check_randflags = { // [FUNCTION]
 	randomflags = cvar("scratch3");
-	if (randomflags & RND_FAMILYSPAWN) return TRUE;
-	else if (randomflags & RND_BBOXSPAWN) return TRUE;
-	else return FALSE;
+	return ((randomflags & RND_FAMILYSPAWN) || (randomflags & RND_BBOXSPAWN));
 };
 
 // Used INTERNALLY to clean chaos flag of internal bit values

@@ -1221,7 +1221,7 @@ void() NecroBolt_Touch = { // [FUNCTION]
 void() Thor_Touch = { // [FUNCTION]
     local vector org;
     local float damage, dmg1, dmg2, hitCorpse;
-    local entity  swap;
+    local entity  swap, oenemy;
 
     if (other == self.master) { Thor_Remove(); return; } // Returned to attacker, so simply catch the hammer.
     if (Reflected()) return;
@@ -1233,13 +1233,19 @@ void() Thor_Touch = { // [FUNCTION]
 
     self.enemy = self.owner = other;
     if (other && other.takedamage) { // Hammers do not draw blood like edged weapons, so no spawn_touchblood. After all, this is why clerics in AD&D can use only blunt weapons. Hammer in melee may draw blood, but not when thrown.
+		oenemy = other.enemy;
         damage = 50;
         if (other.classname == "monster_zombie") damage = other.health + fabs(other.gibhealth * 1.1);
         sound(self,CHAN_WEAPON,"zombie/z_hit.wav",1,ATTN_NORM);
 		if (GibFloorBody(trace_endpos,200)) {
 			hitCorpse = TRUE;
 		} else T_Damage(other, self, self.master, damage, DAMARMOR);
-        if (self.ammo_cells > 0) {
+
+		if (other.alignment == NEUTRAL && oenemy == self.master) {
+			other.enemy = other.oldenemy = world;
+		}
+
+        if (self.ammo_cells > 0 && other.alignment != NEUTRAL) {
             damage = self.dmg;
             org = Midpoint(self.master);
             if (vlen(self.origin - org) > damage + 40) { // Discharge.
@@ -1264,9 +1270,9 @@ void() Thor_Touch = { // [FUNCTION]
 				// Don't move sprite back because hammer is still there.
                 sound(self,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",1,ATTN_NORM);
                 Rocket_Explosion2(self.origin, 244, 3);
-                Thor_Discharge(); // Spawn new, separate explosion entity.
 				MakeFancy(self.origin, X56_PLASMA_BLUE, 6); // Spawn a second entity for the explosion sprite.
                 if (self.master.tome_finished) {
+                	Thor_Discharge(3); // Spawn new, separate explosion entity.
                     ShockWave(self.origin + '0 0 4', RING_BLUE, 6, "progs/drake/s_wave.spr",FALSE);
                     swap = self;
                     self = self.master;
@@ -1274,13 +1280,16 @@ void() Thor_Touch = { // [FUNCTION]
                     DeathRay(swap.origin,'0 0 0',100,1000,-2); // Use BFG9000-like trace attack instead of static field.
                     Divine_Wrath(4,2);
                     self = swap;
-                } else ShockWave (self.origin + '0 0 4',RING_BLUE,4,"progs/drake/s_wave.spr",FALSE);
+                } else {
+                	Thor_Discharge(2); // Spawn new, separate explosion entity.
+					ShockWave(self.origin + '0 0 4',RING_BLUE,4,"progs/drake/s_wave.spr",FALSE);
+				}
             }
         }
     } else {   // Hammer slammed a wall or something.
         if (pointcontents(self.origin) != CONTENT_SKY) {
             org = self.origin - 8*normalize(self.velocity);
-            Tent_Point (TE_GUNSHOT, org);
+            Tent_Point(TE_GUNSHOT, org);
 			if (GibFloorBody(self.origin,200)) {
 				sound(self,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",1,ATTN_NORM);
 				return;
@@ -1341,7 +1350,7 @@ void() Buriza_Touch = { // [FUNCTION]
     T_RadiusDamage(self, self.master, 60, world, DAMAGEALL);
     self.origin = self.origin - 8*normalize(self.velocity);
     sound(self,CHAN_AUTO,"drake/weapons/icewall.wav",1,ATTN_NORM); // Don't spawn shockwaves like the dragons' iceballs.
-    Particle_Explosion (self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2(self.origin, 32, 16);'.
+    Particle_Explosion(self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2(self.origin, 32, 16);'.
     BecomeIcyExp();
 };
 

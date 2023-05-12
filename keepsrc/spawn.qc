@@ -725,8 +725,8 @@ void(string mname) BeMonsterFromString = {
 	// self.spawnnotelefrag = TRUE; // Prevent spawngibbing ourselves
 	self.randomized = TRUE; // Prevent chaosmode randomizing us yet again
 	self.owner = last; // Pass through
-	spawner.enemy = self;
-	self.master = spawner;
+	if (!(spawner.flags & FL_CLIENT)) spawner.enemy = self;
+	self.master = self.owner = spawner;
 
 	// if (self.spawnflags & 64) self.spawnflags = self.spawnflags - 64; // No delay spawn
 	self.classname = mname;
@@ -961,6 +961,11 @@ void(string mname) BeMonsterFromString = {
 	}
 	newmis = self;
 	self = spawner;
+};
+
+// Used to allow a monster to think itself into existence.  I think therefore...
+void() BeMonsterFromClassname = {
+	BeMonsterFromString(self.classname);
 };
 
 // A code way to spawn minions

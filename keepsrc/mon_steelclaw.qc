@@ -269,7 +269,6 @@ void() steelc_die9 = [$death17, steelc_die10] { monster_death_postcheck(); };
 void() steelc_die10 = [$death19, steelc_die10] { monster_deadbody_check(); };
 
 void() steelc_die = {
-	self.max_health = MON_NOGIBVELOCITY; // Gibs don't bounce far
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) {
 		sound(self,CHAN_VOICE, self.death_sound,1,ATTN_NORM);
@@ -316,6 +315,7 @@ void() monster_steelclaw = { // [ENTITY]
 	if (self.health < 1) self.health = 75;
 	self.gibhealth = -20;
 	self.gibbed = FALSE;
+	self.gftype = MON_NOGIBVELOCITY; // Low gib directional modifier
 	self.idlemoreoften = TRUE;			// More creepy idle sounds
 	self.pain_flinch = 10;				// Always flinch
 	self.steptype = FS_TYPELIGHT;
@@ -330,7 +330,6 @@ void() monster_steelclaw = { // [ENTITY]
 	if (VectorIsAllZeros(self.jumpdist)) self.jumpdist = '650 0 50';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPSTEELNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSTEELFAR;
-
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = SteelclawCheckAttack;	
 	self.th_stand = steelc_idle1;

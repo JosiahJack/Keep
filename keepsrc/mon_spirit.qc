@@ -121,7 +121,6 @@ void() spirit_remove_glow = { // [FUNCTION]
 	}
 };
 
-
 void() spirit_alphacontrol = { // [FUNCTION]
 	if (self.alpha < 1) { 
 		self.alpha = self.alpha + 0.5;
@@ -224,127 +223,6 @@ void() spirit_ifin1 = { // [FUNCTION]
 	spirit_run1();
 };
 
-// Find new teleport location
-void() spirit_fade = { // [FUNCTION]
-	local float dist, edist, fadefinished, fadecount;
-	local vector org, org_ofs, angle_vec;
-
-	fadefinished = TRUE; fadecount = 0;
-	org = angle_vec = org_ofs = '0 0 0'; 
-	org_ofs_z = 16;
-	self.oldorigin = self.origin;
-	
-	// Trace upwards to find ceiling or maximum teleport height
-	traceline(self.origin, self.origin+org_ofs, TRUE, self);
-	org_ofs = trace_endpos;
-	
-	// Loop around for possible locations
-	while(fadefinished) {
-		fadecount = fadecount + 1;		// next loop
-		angle_vec_y = random() * 360;		// Random direction
-		makevectors(angle_vec);				// make vector
-		
-		// Generate random angle and trace teleport direction
-		dist = self.distmin + (random() * self.distmax);
-		org = org_ofs + (v_forward * dist);
-		traceline(org_ofs, org, TRUE, self);
-		
-		// Check distance is far enough away from enemy
-		// Move away from any walls (traceline is surface contact)
-		dist = vlen(trace_endpos - org_ofs) - 32;
-		org = org_ofs + (v_forward * dist);
-		edist = vlen(self.enemy.origin - org);
-
-		// Is the enemy far enough away?
-		if (edist > MONAI_CLOSESPIRIT) {
-			// Trace down to floor below new point
-			traceline(org, org - '0 0 512', TRUE, self);
-			org = trace_endpos + self.view_ofs;
-			
-			// The teleport fuction is working with a radius command
-			// and this will ignore walls and just find any position
-			// in all directions. This can lead to the spirit
-			// teleporting behind walls or other parts of the map!
-			// This can be prevent in two ways:
-			// 1) linesight between spirit and player
-			// - can leads to less interesting locations (always insight)
-			// 2) linesight between new location and old
-			// - This allows spirit to teleport around corner
-			//   and still be within the same area!
-			//
-			// Trace through monsters and check trace fraction
-			traceline(org, self.origin, TRUE, self);
-			if (trace_fraction == 1) fadefinished = FALSE;
-		}
-
-		// Been looping too long, back to original location
-		if (fadecount > 10) {
-			fadefinished = FALSE;
-			org = self.origin;
-		}
-	}
-	
-	// Move to new location
-	self.solid = SOLID_SLIDEBOX;				// Standard monster movement
-	setmodel(self, self.mdl);					// Setup model
-	setsize (self, self.bbmins, self.bbmaxs);		// Restore BB size
-	setorigin(self, org);						// move to new location
-	
-	// Test if new location is solid?
-	if (!walkmove (0, 0)) {
-		self.solid = SOLID_NOT;					// No world interaction yet
-		setmodel(self,"");						// Turn off model
-		//spirit_glow();						// Turn off glow
-		setorigin(self, self.oldorigin);		// restore original location
-		self.nextthink = time + 1;				// Keep checking
-		self.think = spirit_fade;
-	}
-	else spirit_ifin1();
-};
-
-// Cycle around teleport chain lists instead
-void() spirit_waitforlink = { // [FUNCTION]
-	self.nextthink = time + 0.5 + random();
-	self.think = spirit_waitforlink;
-	setorigin(self, self.movelast.origin);	// move to new location
-	self.enemydist = range_distance(self.enemy, FALSE);
-
-	// Is the enemy too close or dead?
-	if (self.enemydist > self.movelast.distance || self.enemy.health < 1) {
-		// Move to new location
-		self.solid = SOLID_SLIDEBOX;				// Standard monster movement
-		setmodel(self, self.mdl);					// Setup model
-		setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	
-		// Test if new location is solid?
-		if (!walkmove (0, 0)) {
-			self.solid = SOLID_NOT;					// No world interaction yet
-			setmodel(self,"");						// Turn off model
-			spirit_glow();						// Turn off glow
-		}
-		else spirit_ifin1();
-	}
-};
-
-void() spirit_checkfadelist = { // [FUNCTION]
-		// Does the fade list exist already?
-	if (self.movelast.classtype != CT_SPIRITTELEPORT) {
-		self.movelast = find(world,targetname,self.target2);
-		// Does the entity chain exist?
-		if (self.movelast.classtype == CT_SPIRITTELEPORT)
-			spirit_waitforlink();
-		else {
-			// target2 is not valid, do regular teleport
-			self.target2 = "";
-			spirit_fade();
-		}
-	} else {
-		// Move forward in chain and try next spawn location
-		self.movelast = self.movelast.enemy;
-		spirit_waitforlink();
-	}
-};
-
 // spin and fade to invisible
 void() spirit_spin1	= [$spin1,	spirit_spin2    ] { // [FUNCTION]
 	self.pain_finished = time + 1.2;			// no pain during teleportation
@@ -372,8 +250,8 @@ void() spirit_spin11	= { // [FUNCTION]
 	spirit_glow();
 	self.attachment.movetype = MOVETYPE_NOCLIP;
 	// Check if a chain list has been defined
-	if (self.target2 != "") spirit_checkfadelist();
-	else spirit_fade();
+	if (self.target2 != "") SUB_CheckSpawnLinkList();
+	else SUB_FindRandomSpawnSpot();
 };
 
 void()	spirit_slasha1	= [	$slasha1,	spirit_slasha2	] { ai_charge(20); spirit_alphacontrol(); spirit_glow(); }; // [FUNCTION]
@@ -526,28 +404,15 @@ void() spirit_wakeup = { // [FUNCTION]
 	self.th_walk = spirit_walk1;
 	self.th_run = spirit_run1;
 	self.th_melee = spirit_chooseatk;
-
-	// Temporarily restore model/bound box
-	self.solid = SOLID_SLIDEBOX;
+	self.th_spawn = spirit_ifin1;
 	self.movetype = MOVETYPE_STEP;
-	setmodel(self, self.mdl);
-	setsize (self, self.bbmins, self.bbmaxs);
-		
-	// Can the spirit move?
-	if (!walkmove (0, 0)) {
-		// Something blocking, teleport elsewhere
-		self.solid = SOLID_NOT;
-		setmodel(self,"");
-		spirit_glow();
-		self.nextthink = time + 0.1;
-		self.think = spirit_fade;
-	}
-	else spirit_ifin1();
+	SUB_FindRandomSpawnSpotFinish(self.origin);
 };
 
 
-void()	spirit_pain1	= [	$pain1,		spirit_pain2	] { sound(self,CHAN_VOICE, "redfield/spirit/pain.wav",1,ATTN_NORM);
-spirit_glow();
+void()	spirit_pain1	= [	$pain1,		spirit_pain2	] {
+	sound(self,CHAN_VOICE, "redfield/spirit/pain.wav",1,ATTN_NORM);
+	spirit_glow();
 };
 void()	spirit_pain2	= [	$pain2,		spirit_pain3	] { ai_back(2); spirit_glow(); };
 void()	spirit_pain3	= [	$pain3,		spirit_pain4	] { ai_back(4); spirit_glow(); };
@@ -581,8 +446,8 @@ void(entity inflictor, entity attacker, float damage) spirit_pain = { // [FUNCTI
 void()	spirit_death1	= [	$death1,	spirit_death2	] { self.skin = 0; spirit_glow();
 	sound(self,CHAN_VOICE, "redfield/spirit/death.wav",1,ATTN_NORM);
 };
-void()	spirit_death2	= [	$death2,	spirit_death3	] { spirit_glow(); };
-void()	spirit_death3	= [	$death3,	spirit_death4	] { self.solid = SOLID_NOT; spirit_glow(); };
+void()	spirit_death2	= [	$death2,	spirit_death3	] { spirit_glow(); monster_check_gib(); };
+void()	spirit_death3	= [	$death3,	spirit_death4	] { self.solid = SOLID_NOT; spirit_glow(); monster_check_gib(); };
 void()	spirit_death4	= [	$death4,	spirit_death5	] { spirit_glow(); };
 void()	spirit_death5	= [	$death5,	spirit_death6	] { spirit_glow(); };
 void()	spirit_death6	= [	$death6,	spirit_death7	] { spirit_glow(); };
@@ -601,28 +466,13 @@ void()	spirit_death12	= [	$death12,	spirit_death12	] {
 };
 
 void() spirit_die = { // [FUNCTION]
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	if (self.gibbed) return;
 
-	// Special death, Instantly vaporize cloak
-	// This is really a gib death without the gibs!
-	if (self.health < -45) {
-		// Play gib death sound
-		sound(self,CHAN_VOICE, "redfield/spirit/deathb.wav",1,ATTN_NORM);
-		self.origin = self.origin + '0 0 24';
-		Tent_Explosion2(self.origin,1,15);
-		self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
-		ThrowGib(11,1); 			// Throw sword
-		spirit_glow_off();
-		spirit_remove_glow();
-		entity_hide(self);
-	}
 	// Regular death, collapse and fade away
-	else {
-		// Large particle explosion upwards
-		particle_explode(self.origin, 100, 3, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
-		spirit_death1();
-	}
+	// Large particle explosion upwards
+	particle_explode(self.origin,100,3,PARTICLE_BURST_WHITE,PARTICLE_BURST_SKULLUP);
+	spirit_death1();
 };
 
 void() spirit_sword_sound = { // [FUNCTION]
@@ -634,23 +484,23 @@ void() spirit_sword_sound = { // [FUNCTION]
 
 void() monster_spirit_precache = { // [FUNCTION]
 	precache_model ("progs/redfield/mon_spirit.mdl");
-	precache_model ("progs/redfield/mon_spirit_glow.mdl"); // Glowing aura attachment
+	precache_model ("progs/redfield/mon_spirit_glow.mdl"); // Glowing aura 
 	precache_model ("progs/redfield/sword_spirit.mdl");
-	precache_model (MODEL_SCREAM);			// Scream blast
-	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
+	precache_model (MODEL_SCREAM);			          // Scream blast
+	precache_model(MODEL_PROJ_RINGSHOCK);	          // Ground shockwave
 	precache_sound("redfield/spirit/idle1.wav");
 	precache_sound("redfield/spirit/idlecom1.wav");
 	precache_sound("redfield/spirit/idlecom2.wav");
 	precache_sound("redfield/spirit/slash1.wav");
 	precache_sound("redfield/spirit/slash2.wav");
 	precache_sound("redfield/spirit/slash3.wav");
-	precache_sound("redfield/spirit/scream.wav");			// Screaming explosion
-	precache_sound("redfield/spirit/pain.wav");			// Long pain		
+	precache_sound("redfield/spirit/scream.wav");     // Screaming explosion
+	precache_sound("redfield/spirit/pain.wav");	      // Long pain		
 	precache_sound("redfield/spirit/death.wav");
 	precache_sound("redfield/spirit/deathb.wav");
-	precache_sound("redfield/spirit/fadeout.wav");			// Fade away
-	precache_sound("redfield/spirit/idle_laugh.wav");		// laughing animation
-	precache_sound("redfield/spirit/spin_laugh.wav");		// laughing from spin
+	precache_sound("redfield/spirit/fadeout.wav");	  // Fade away
+	precache_sound("redfield/spirit/idle_laugh.wav"); // laughing animation
+	precache_sound("redfield/spirit/spin_laugh.wav"); // laughing from spin
 	precache_sound("redfield/spirit/sight.wav");
 };
 
@@ -670,8 +520,9 @@ void() monster_spirit = {
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	if (self.health < 1) self.health = 225;
-	self.gibhealth = MON_NEVERGIB;	// Cannot be gibbed by weapons
+	self.gibhealth = -45;
 	self.gibbed = FALSE;			// Still in one piece
+	self.gftype = MON_NOGIBVELOCITY; // Low gib directional modifier
 	self.pain_flinch = 20;			// Easy to stun
 	self.pain_timeout = 2;				// Long pause on pain
 	self.steptype = FS_FLYING;
@@ -717,7 +568,8 @@ void() monster_spirit = {
 		self.th_run = spirit_run1;
 		self.th_melee = spirit_chooseatk;
 	}
-	
+	self.th_spawn = spirit_ifin1;
+	self.height = 16;
 	self.classtype = CT_MONSPIRIT;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEWALK;		
@@ -733,52 +585,6 @@ void() monster_spirit = {
 // -------- SPAWNFLAGS --------
 // -------- NOTES --------
 // Teleport destination for Vengeful Spirit ONLY
-void() info_spirit_link = { // [FUNCTION]
-	local entity currlink, master;
-	local float loopcondition;
-	
-	// Teleport destination already been linked
-	if (self.enemy) return;
-	
-	// The master entity is the start of the chain
-	// the currlink is a link in the chain
-	master = self;
-	loopcondition = TRUE;
-	
-	while (loopcondition) {
-		// Setup next link to master and find next link
-		self.enemy = master;
-		currlink = find(world, targetname, self.target);
-		// reached end of list?
-		if (!currlink || currlink == master) 
-			loopcondition = FALSE;
-		else {
-			// Move forward in the chain
-			self.enemy = currlink;
-			self = currlink;
-		}
-	}
-};
-
-void() info_spirit_destination = {
-	// All teleportation points need to be part of a chain otherwise the Spirit would have to use findradius which is expensive if lots of entities are around.
-	if (SUB_HideIfNoTargetname()) return;
-	if (SUB_HideIfNoTarget()) return;
-	
-	self.classtype = CT_SPIRITTELEPORT;
-	self.mangle = self.angles;
-	// Setup minimum player spawn distance
-	if (self.distance <=0) self.distance = MONAI_CLOSESPIRIT;
-	// Setup if the destination is active or not
-	self.state = FALSE;
-
-	// Check for targetname->target loops
-	if (self.targetname == self.target) {
-		self.enemy = self;
-		self.owner = self;
-	} else {
-		// Wait for all targets to spawn
-		self.think = info_spirit_link;
-		self.nextthink = time + 0.2 + random();
-	}
+void() info_spirit_destination = { // [ENTITY]
+	info_skullwiz_destination();
 };

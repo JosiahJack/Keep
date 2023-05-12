@@ -121,11 +121,11 @@ float(entity decider, entity targ) Classgroup_Match = { // [FUNCTION]
 float(entity decider, entity targ) Align_NonHostile = { // [FUNCTION]
     local entity pat;
 
-	if (Align_Match(decider, targ) && !(IsInsane(decider))) return TRUE; // Same team
 	if (decider.flags & FL_MONSTER) {
 		if (decider.enemy == targ) return FALSE;
 		if (targ.enemy == decider) return FALSE;
 	}
+	if (Align_Match(decider, targ) && !(IsInsane(decider))) return TRUE; // Same team
     return FALSE; // Not allies if either side is the world or other non-creature hazard.
 };
 
@@ -160,7 +160,6 @@ float(entity targ) IsLeader = { // [FUNCTION]
 void(entity targ) SetDefaultDenizenAttributes = { // [FUNCTION]
 	if (targ.alignment == 0) {
 		targ.alignment = NEUTRAL;
-		targ.gibhealth = MON_NEVERGIB;
 	} else if (targ.alignment == -1) {
 		targ.alignment = 0;
 		targ.passive_state = 0;

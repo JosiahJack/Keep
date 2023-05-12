@@ -28,18 +28,22 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 6
+// Function count: 5
 //
 // Implements: Enemy Revive System
 //
 // Description:
 // Provides means for reviving dead monsters.  Normally used by magical bosses.
+//
+// Provides a way for players to revive denizens using Mjolnir in a similar
+// manner that one would use the Shadow Axe to gib corpses and fallen zombies.
 //=============================================================================
 
 void(entity targ, entity charmmaster) ApplyHornCharm;
-void() monster_reset_movement_type;
-void() monster_reset_runtime_attributes;
+void(entity ent) monster_reset_movement_type;
+void(entity ent) monster_reset_runtime_attributes;
 void(string mname) BeMonsterFromString;
+void() BeMonsterFromClassname;
 
 // To be called after revive animation is completed to restore takedamage.
 float() monster_revive_finish = { // [FUNCTION]
@@ -78,53 +82,6 @@ void() revive_frames = { // [FUNCTION]
 	}
 };
 
-float() SelfHasRoom = {
-	local vector v1, v2; // Used to preserve before setsize call.
-
-	if (self.maxs_x != self.bbmaxs_x) {
-		v1 = self.mins;
-		v2 = self.maxs;
-		setsize(self,self.bbmins,self.bbmaxs);
-		if (walkmove(0,0)) return TRUE;
-		setsize(self,v1,v2);
-	} else {
-		if (walkmove(0,0)) return TRUE;
-	}
-	return FALSE;
-};
-
-void() revive_gibbed = { // [FUNCTION]
-	local float dist, spd;
-	local vector dir;
-
-	if (InSky(self.origin)) { entity_remove(self, 0.1); return; }
-	if (self.touchedvoid) return;	
-
-	dist = vlen(self.pos1 - self.origin);
-	if (dist < 32 || self.attack_finished < time) {
-		setorigin(self,self.pos1); // Put back at spot.
-		self.velocity = 0;
-		if (SelfHasRoom()) {
-			particle(self.origin + vecrand(0,4,16),'0 0 100',9,15); // Magical particles...
-			particle(self.origin + vecrand(0,4,16),'0 0 100',41,15); // ...indicate this is unusual.
-			setsize(self,self.bbmins,self.bbmaxs);
-			BeMonsterFromString(self.classname);
-			self.think = SUB_Remove;
-			self.nextthink = time + 0.1;
-			return;
-		}
-	}
-	self.touch = SUB_Null;
-	dir = vectoangles(self.pos1 - self.origin);
-	dir = normalize(dir);
-	if (dist > 512) spd = SUB_ClampFloat(self.speed,150,self.speed);
-	else if (dist < 128) spd = SUB_ClampFloat(self.speed * 0.8,25,self.speed);
-	else spd = SUB_ClampFloat(self.speed,75,self.speed);
-	self.velocity = dir * spd;
-	self.think = revive_gibbed;
-	self.nextthink = time + 0.1;
-};
-
 void() ai_ritual = { // [FUNCTION]
     local entity temp;
 
@@ -136,94 +93,95 @@ void() ai_ritual = { // [FUNCTION]
     }
 };
 
-// Checks if 'self' can be raised from the dead.
-// Must use self because this requires a walkmove to ensure area is clear to become solid.
-// Called by 'monster_revive'.
-// Note:  findradius may be safe to use, since it is useless for detecting
-// entities with SOLID_NOT, barring DarkPlaces engine.
-float() CanSelfRevive = { // [FUNCTION]
-	if (self.gibbed) return FALSE; // Need a body!
-	if (!self.th_revive) return FALSE; // Only if there is a legitimate revive animation.
-	if (!(self.flags & FL_MONSTER)) return FALSE; // Only revive monsters.  Players have their own thing for coop but naught else.
-	if (self.health > 0) return FALSE; // Only revive the dead!
-	if (self.gorging) return FALSE; // Don't revive monsters who are being eaten by gremlins currently.
-	if (self.touchedvoid) return FALSE;
-	if (InSky(self.origin)) { entity_remove(self, 0.1); return FALSE; }
-
-    if (self.modelindex) {
-		return SelfHasRoom();
-	}
-    return FALSE;
-};
-
 // 'ent' = entity to be resurrected, 'god' = the one resurrecting ent.
-// Note:  'CanSelfRevive' always returns FALSE, if ent == world.
 float(entity ent, entity god) monster_revive = { // [FUNCTION]
-    local entity os;
     local float good;
 
-	if (frame_pause()) return FALSE;
-	if (!ent) return FALSE; // Can't revive the world.
+	if (intermission_running > 0) return FALSE;
+	if (!ent) return FALSE; // Must be an entity!
+	if (ent == world) return FALSE; // Can't revive the world.
 	if (!god) return FALSE; // The world isn't magical.  Only entities can revive stuff. 
 	if ((god.flags & FL_MONSTER) && (ent.classgroup == CG_HARMLESS || ent.alignment == NEUTRAL)) return FALSE; // Only player can save denizens.
-    if ((god.flags & FL_MONSTER) && Align_Opposing(ent,god) && !IsInsane(god)) return FALSE; // Monsters only revive friendlies, unless insane.  Players will convert them to their side.
-	if (pointcontents(ent.origin) == CONTENT_SOLID) { 
+    if ((god.flags & FL_MONSTER) && (Align_Opposing(ent,god) || IsInsane(god))) return FALSE; // Monsters only revive friendlies, unless insane.  Players will convert them to their side.
+	if (pointcontents(ent.origin) == CONTENT_SOLID) {
 		ent.origin = ent.origin + '0 0 4';
-		if (pointcontents(ent.origin) == CONTENT_SOLID) return FALSE;
+		if (pointcontents(ent.origin) == CONTENT_SOLID) {
+			ent.origin = ent.origin + '0 0 4';
+			if (pointcontents(ent.origin) == CONTENT_SOLID) return FALSE; // Welp, we tried
+		}
 	}
 
-    os = self;
-    self = ent;
-    if ((god == ent) && !CanSelfRevive()) { self = os; return FALSE; } // No self-ressurecting; only Jesus can do that.
+	if (InSky(ent.origin)) { entity_remove(ent, 0.1); return FALSE; }
+    if (!(ent.flags & FL_MONSTER) || ent.health > 0 || ent.gorging
+		|| ent.touchedvoid
+		|| (god == ent)) { // No self-ressurecting; only Jesus can do that 
+						   // because he is God.
+
+		return FALSE;
+	}
 
 	// Ok do the revive now, all good to go here.
 	if ((god.flags & FL_CLIENT)) { // Player is reviving the target.
-		if (((self.enemy == god && self.classgroup == CG_HARMLESS) || Align_Match(self.enemy,god)) || self.enemy.health < 1) self.enemy = self.oldenemy = world; // Good monsters remember their enemy.
-		killed_denizens = killed_denizens - 1; // Woot woot!  One step closer to Thor's Blessing!
+		ent.enemy = ent.oldenemy = world; // Whoever player can revive forgets.
+		if (ent.alignment == EVIL) ent.alignment = god.alignment;
 	} else { // A plain old map entity or a monster is reviving a monster.
-		if (god.oldenemy == self) god.oldenemy = world; // Prevent repeat infighting.
-		if (god.enemy == self) { // Switch to oldenemy (could be world) to prevent repeat infighting.  Yeah I already killed you.  We're good bro.
-			if (god.goalentity == self) god.goalentity = god.oldenemy;
+		if (god.oldenemy == ent) god.oldenemy = world; // Prevent repeat infighting.
+		if (god.enemy == ent) {
+			// Switch to oldenemy (could be world) to prevent repeat infighting.
+			// Yeah I already killed you.  We're good bro.
+			if (god.goalentity == ent) god.goalentity = god.oldenemy;
 			god.enemy = god.oldenemy;
 		}
-		if (IsInsane(god) && !Align_Match(self,god)) self.enemy = self.movetarget = self.goalentity = god; // Ressurected good are smart enough to realize they still hate their ressurector, who would only have ressurected an opposing monster if they were insane.
-		else self.enemy = self.movetarget = self.goalentity = god.oldenemy; // Reset all enemy dependant fields.
-		if (self.enemy) self.search_time = time + 5;
-		else self.search_time = time + 3;
+		if (IsInsane(god) && !Align_Match(ent,god)) {
+			// Ressurected good are smart enough to realize they still hate
+			// their ressurector, who would only have ressurected an opposing
+			// monster if they were insane.
+			ent.enemy = ent.movetarget = ent.goalentity = god;
+		} else {
+			// Reset all enemy dependant fields.
+			ent.enemy = ent.movetarget = ent.goalentity = god.oldenemy;
+		}
 
-		killed_monsters = killed_monsters - 1; // Ahh, nasty reviver hurting my stats!
+		if (ent.enemy) ent.search_time = time + 5;
+		else ent.search_time = time + 3;
 	}
+
+	if (ent.alignment == NEUTRAL || ent.classgroup == CG_HARMLESS) {
+		// Woot!  One step closer to Thor's Blessing!
+		killed_denizens = killed_denizens - 1; 
+	} else { // Ahh, nasty reviver hurting my stats!
+		killed_monsters = killed_monsters - 1;
+	}
+
+	ent.master = god;
+	if (ent.distmin == 0) ent.distmin = 0;
+	if (ent.distmax == 0) ent.distmax = 256;
+	particle(ent.origin + vecrand(0,4,16),'0 0 100',9,15); // Magical particles...
+	particle(ent.origin + vecrand(0,4,16),'0 0 100',41,15); // ...indicate this is unusual.
 	update_hud_totals(HUD_MONSTERS);
-	sound(self,CHAN_AUTO,"drake/misc/dsslop.wav",1,ATTN_NORM); // Play classic arch-vile resurrection sound.
-	self.pain_finished  = time + 3;  // Don't interrupt ressurection reanimation.
-	clear_trigstrs(self); // Sever all targeting links.
-	self.use = SUB_Null;
-	self.solid = SOLID_SLIDEBOX; // Restore physical properties then re-animate.
-	self.lastorigin = self.origin; // Save origin for cinematic camera angle interpolation
-	monster_reset_movement_type();
-	self.deadflag = DEAD_NO;
-	self.velocity = '0 0 0'; // Make sure stationary
-	monster_reset_runtime_attributes();
-	if (self.max_health < 30) self.max_health = 30; // Have at least some health!
-	self.health = self.max_health;
-	self.ideal_yaw = self.angles * '0 1 0';
-
-	// Reset size in case it was changed by crushing brushes and the like.
-	// Calling setsize or setorigin also updates the solid change now,
-	// which without it, a solid change could get delayed until the
-	// next frame.  A delayed solid change may allow another monster
-	// to fuse with self and both will get stuck -- not good.
-	if (self.gibbed) {
-		self.think = revive_gibbed;
-		self.attack_finished = time + 10; // Maximum time to try to return before we poof there.
-	} else {
-		setsize(self,self.bbmins,self.bbmaxs);
-		self.think = self.th_revive;
-		self.walkframe = self.frame;
-		if (self.frame < self.reviveframestart) self.reviveframestart = self.frame;
-	}
-	self.nextthink = time + 0.1;
-    self = os;
+	sound(ent,CHAN_AUTO,"drake/misc/dsslop.wav",1,ATTN_NORM); // Play classic arch-vile resurrection sound.
+	ent.pain_finished  = time + 3;  // Don't interrupt ressurection reanimation.
+	clear_trigstrs(ent); // Sever all targeting links.
+	ent.use = SUB_Null;
+	monster_reset_movement_type(ent);
+	ent.deadflag = DEAD_NO;
+	ent.bodyonflr = "";
+	ent.velocity = '0 0 0'; // Make sure stationary
+	monster_reset_runtime_attributes(ent);
+	if (ent.max_health < 1) ent.max_health = 1; // Have at least some health!
+	ent.health = ent.max_health;
+	ent.ideal_yaw = ent.angles * '0 1 0';
+	ent.lastorigin = ent.origin;
+	if (ent.th_revive) ent.th_spawn = ent.th_revive;
+	if (ent.gibbed) ent.th_spawn = BeMonsterFromClassname;
+	ent.walkframe = ent.frame;
+	if (ent.frame < ent.reviveframestart) ent.reviveframestart = ent.frame;
+	ent.height = ent.view_ofs_z;
+	ent.distmin = 4;
+	ent.distmax = 80;
+	if (ent.alignment == NEUTRAL) ent.enemy = ent.oldenemy = world;
+	ent.think = SUB_FindRandomSpawnSpot;
+	ent.nextthink = time + 0.1;
     return TRUE;
 };
 
@@ -235,24 +193,26 @@ float(float d) ai_medic = { // [FUNCTION]
     hp = 0;	// HACK:  Bane -- Don't revive things with too much hp.  Update:  At least until after Bane clones himself.
     if (self.classname == "monster_bane" && self.waitmin) hp = 300; // This is zero after Bane spawns clones.
     goal = self.goalentity;
-    head = nextent (world);
+    head = nextent(world);
     while (head) {
-        if (head.flags & FL_MONSTER)
-        if (head.deadflag == DEAD_DEAD || head.health <= 0)
-		if (!head.gibbed) // Disabled gib regathering for now, too many issues.
-		if ((Align_NonHostile(self,head) && (self.flags & FL_CLIENT))
-            || (!hp || hp <= head.max_health || (self.flags & FL_CLIENT))) {
-            self.goalentity = head; // QC_CloseEnough checks against goalentity.
-            if (QC_CloseEnough(d)) {
-                if (monster_revive(head,self)) {
-					if ((self.flags & FL_MONSTER)) {
-						self.fallen = head;
-						self.goalentity = goal;
+        if (head.flags & FL_MONSTER || head.classtype == CT_TEMPGIB) {
+			if (head.deadflag == DEAD_DEAD || head.health <= 0) {
+				if ((/*Align_NonHostile(self,head)*/head.alignment == NEUTRAL && (self.flags & FL_CLIENT))
+					|| ((!hp || hp <= head.max_health) && !(self.flags & FL_CLIENT))) {
+
+					self.goalentity = head; // QC_CloseEnough checks against goalentity.
+					if (QC_CloseEnough(d)) {
+						if (monster_revive(head,self)) {
+							if ((self.flags & FL_MONSTER)) {
+								self.fallen = head;
+								//self.goalentity = goal;
+							}
+							return TRUE;
+						}
 					}
-					return TRUE;
-                }
-            }
-        }
+				}
+			}
+		}
         head = nextent(head);
     }
     self.fallen = world;

@@ -226,9 +226,9 @@ void(entity targ) entity_hide = {
 	if (targ == world) return;			// Targ is wrong
 	if (targ.flags & FL_CLIENT) return;
 
-	entity_stop(targ);					// No world interaction
-	targ.modelindex = 0;				// Make sure no model
-	setmodel(targ, "");				// invisible
+	entity_stop(targ);					// No world interaction.
+	targ.modelindex = 0;				// Make sure no model.
+	setmodel(targ, "");				    // Invisible.
 };
 
 void(entity targ, float removetime) entity_remove = {

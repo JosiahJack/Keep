@@ -1032,8 +1032,8 @@ void(entity inflictor, entity attacker, float damage) gremlin_pain = {
 };
 
 void() gremlin_spawn1 = [ 84.000, gremlin_spawn2 ] { self.nextthink = (time + 0.300); self.th_pain = SUB_Null_pain; };
-void() gremlin_spawn2 = [ 85.000, gremlin_spawn3 ] { self.nextthink = (time + 0.300); };
-void() gremlin_spawn3 = [ 86.000, gremlin_spawn4 ] { self.nextthink = (time + 0.300); };
+void() gremlin_spawn2 = [ 85.000, gremlin_spawn3 ] { self.nextthink = (time + 0.300); monster_check_gib(); };
+void() gremlin_spawn3 = [ 86.000, gremlin_spawn4 ] { self.nextthink = (time + 0.300); monster_check_gib(); };
 void() gremlin_spawn4 = [ 87.000, gremlin_spawn5 ] { self.nextthink = (time + 0.300); };
 void() gremlin_spawn5 = [ 88.000, gremlin_spawn6 ] { self.nextthink = (time + 0.300); };
 void() gremlin_spawn6 = [ 89.000, gremlin_run1 ] { self.th_pain = gremlin_pain; };
@@ -1048,8 +1048,8 @@ void() gremlin_die7 = [ 110.000, gremlin_die8 ] { ai_forward(2); };
 void() gremlin_die8 = [ 111.000, gremlin_die9 ] { ai_forward(1); };
 void() gremlin_die9 = [ 112.000, gremlin_die10 ] { ai_forward(2); };
 void() gremlin_die10 = [ 113.000, gremlin_die11 ] { ai_forward(1); };
-void() gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward(2); };
-void() gremlin_die12 = [ 115.000, gremlin_die12 ] {};
+void() gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward(2); monster_death_postcheck(); };
+void() gremlin_die12 = [ 115.000, gremlin_die12 ] { monster_deadbody_check(); };
 
 void() Gremlin_FlipTouch = {
    if (!checkbottom(self)) {
@@ -1073,8 +1073,8 @@ void() gremlin_flip1 = [ 116.000, gremlin_flip2 ] {
    SUB_RemoveFlags(self,FL_ONGROUND);
    sound(self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM);
 };
-void() gremlin_flip2 = [ 117.000, gremlin_flip3 ] { ai_face(); };
-void() gremlin_flip3 = [ 118.000, gremlin_flip4 ] {};
+void() gremlin_flip2 = [ 117.000, gremlin_flip3 ] { ai_face(); monster_check_gib(); };
+void() gremlin_flip3 = [ 118.000, gremlin_flip4 ] { monster_check_gib(); };
 void() gremlin_flip4 = [ 119.000, gremlin_flip5 ] {};
 void() gremlin_flip5 = [ 120.000, gremlin_flip6 ] {};
 void() gremlin_flip6 = [ 121.000, gremlin_flip7 ] { self.touch = Gremlin_FlipTouch; self.bodyonflr = MON_ONFLR; };
@@ -1090,15 +1090,15 @@ void() gremlin_die = {
       DropBackpack();
       self.stoleweapon = FALSE;
    }
+
+   if (self.gibbed) return;
+
    makevectors(self.angles);
    vec = normalize ((damage_attacker.origin - self.origin));
    dot = (vec * v_forward);
-   if (!self.gibbed) {
-      if ( (((dot > 0.700) && (random () < 0.500)) && (self.flags & FL_ONGROUND)) ) {
-         gremlin_flip1();
-      } else gremlin_die1();
-   }
-   
+   if ( (((dot > 0.700) && (random () < 0.500)) && (self.flags & FL_ONGROUND)) ) {
+      gremlin_flip1();
+   } else gremlin_die1();
 };
 
 float () GremlinWeaponAttack = {

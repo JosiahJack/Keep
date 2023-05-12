@@ -453,7 +453,6 @@ void() voreling_dieB6 = [	$deathB6, voreling_dieB7	] { monster_death_postcheck()
 void() voreling_dieB7 = [	$deathB7, voreling_dieB7	] { monster_deadbody_check(); };
 
 void() voreling_die = { // [FUNCTION]
-	if (random() < 0.5) self.max_health = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far
 	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE; // Has the voreling died while on the ceiling?
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) { // regular death
@@ -536,6 +535,7 @@ void() monster_swampling = { // [ENTITY]
 	self.sight_sound = "ad171/swampling/sight2.wav";
 	if (self.poisonous == 0) self.poisonous = TRUE;
 	if (self.deathstring == "") self.deathstring = " was bitten by a Swampling\n";
+	setup_voreling(); // Cache voreling is a special class used for precache only
 };
 
 void() monster_shalrathminion = { 
@@ -549,6 +549,7 @@ void() setup_voreling = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
 	self.gibbed = FALSE;
+	if (random() < 0.5) self.gftype = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far
 	self.pain_flinch = 10;				// Always flinch
 	self.steptype = FS_TYPELIGHT;
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe

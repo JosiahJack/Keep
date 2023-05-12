@@ -643,8 +643,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 	
 	if (targ.health < 1) {
-		if (inflictor.classtype == CT_FROSTSHARD && targ.resist_cold < 1
-			&& targ.classgroup != CG_HARMLESS) {
+		if (inflictor.classtype == CT_FROSTSHARD && targ.resist_cold < 1) {
 			targ.frozen = TRUE;
 		}
 		Killed(targ,attacker);

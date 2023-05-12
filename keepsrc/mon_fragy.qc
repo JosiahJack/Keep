@@ -328,7 +328,8 @@ float()	CheckFragJump = {
 };
 
 void() monster_fragy_precache = {
-	precache_model ("progs/madfox/mon_fragy.mdl");
+	precache_model("progs/madfox/mon_fragy.mdl");
+	precache_model("progs/madfox/h_fragy.mdl");
 	precache_sound("fish/death.wav");
 	precache_sound("fish/bite.wav");
 	precache_sound("fish/idle.wav");
@@ -344,6 +345,7 @@ void() monster_fragy = { // [ENTITY] Redirect
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/madfox/mon_fragy.mdl";
+	self.headmdl = "progs/madfox/h_fragy.mdl";
 	self.idle_sound = "fish/idle.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

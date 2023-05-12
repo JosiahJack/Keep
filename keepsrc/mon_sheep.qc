@@ -608,8 +608,9 @@ void() sheep_die = {
 };
 
 void() monster_sheep_precache =  {
-	precache_model ("progs/hexen2/mon_sheep.mdl");
-	precache_model ("progs/hexen2/mon_sheep_extra.mdl");
+	precache_model("progs/hexen2/mon_sheep.mdl");
+	precache_model("progs/hexen2/mon_sheep_extra.mdl");
+	precache_model("progs/madfox/h_sheep.mdl");
 	precache_sound("sheep/sheep1.wav");
 	precache_sound("sheep/sheep2.wav");
 	precache_sound("sheep/sheep3.wav");
@@ -622,13 +623,14 @@ void() monster_sheep =  {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/hexen2/mon_sheep.mdl";
+	self.headmdl = "progs/madfox/h_sheep.mdl";
 	self.sight_sound = "sheep/sheep1.wav";
 	self.death_sound = "sheep/sheepfly.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_DOG;
 	if (self.health < 1) self.health = 150; // Fairly stout, can resist one rocket blast from a careless player
-	self.gibhealth = -10; 				// Highly likely to gib
+	self.gibhealth = -15; 				// Highly likely to gib
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;				// Likely always flinch
 	self.th_pain = sheep_pain;

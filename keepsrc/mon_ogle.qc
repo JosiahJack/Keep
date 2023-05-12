@@ -472,7 +472,8 @@ void() ogle_die = { // [FUNCTION]
 };
 
 void() monster_ogle_precache =  { // [FUNCTION]
-	precache_model ("progs/heretic2/mon_ogle.mdl");
+	precache_model("progs/heretic2/mon_ogle.mdl");
+	precache_model("progs/h_ogle.mdl");
 	precache_sound("ogle/cheer1.wav");
 	precache_sound("ogle/cheer2.wav");
 	precache_sound("ogle/cheer3.wav");
@@ -500,6 +501,7 @@ void() monster_ogle =  {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/heretic2/mon_ogle.mdl";
+	self.headmdl = "progs/madfox/h_ogle.mdl";
 	self.sight_sound = "ogle/enrage1.wav";
 	self.sight_sound2 = "ogle/enrage2.wav";
 	self.death_sound = "ogle/death.wav";

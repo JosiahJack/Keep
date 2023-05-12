@@ -80,7 +80,6 @@ float MONAI_WOLFRANGE = 1500;		// Moonlight Guardian energy sword range
 float MONAI_SPIRITSOLID = 1;		// Regular spawn state
 float MONAI_SPIRITINVIS = 2;		// Invisible
 float MONAI_MELEESPIRIT = 120;		// Melee range
-float MONAI_CLOSESPIRIT = 192;		// Too close, teleport away
 float MONAI_RANGESPIRIT = 256;		// Distance to be after teleport
 vector MONAI_SPIRITIMPACT = '16 0 0';	// Blast radius centre
 float MONAI_SPIRITDAMAGE = 12;		// Impact damage

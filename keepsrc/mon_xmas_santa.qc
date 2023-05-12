@@ -402,7 +402,7 @@ void() monster_xmas_santa = { // [ENTITY]
 		self.reflectaxe = TRUE;			// Prevent axe damage
 		self.nomonstercount = TRUE;
 		self.health = self.max_health = MEGADEATH;
-		self.gibhealth = MON_NEVERGIB;
+		self.gibhealth = -120;
 		self.exactskin = 1;
 		self.th_stand = santa_seated; // Direct every state to the sit function
 		self.th_walk = santa_seated;

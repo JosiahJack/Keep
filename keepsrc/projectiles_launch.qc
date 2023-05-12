@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 103
+// Function count: 102
 //
 // Implements: Projectile System for Players and Monsters
 //
@@ -109,7 +109,6 @@ void(vector pos) placebullethole;
 void(float damage, vector dir, float addedtime) TraceExploAttack;
 void() nehahra_wreckbsp;
 void(float reload) W_Reload;
-void() W_FireThor;
 void() player_failedairgun1;
 void(float num_bubbles) death_bubbles;
 void() player_airgun1;
@@ -1800,7 +1799,7 @@ void(vector p, float sped) boss_meteor = { // [FUNCTION]
             org = self.origin + org*sped;
         }
     }
-		
+
     d = self.enemy.origin; // lead the player on hard mode
     if (skill >= 2) d = Aim_Lead (org, d, sped, self.enemy);
     vec = normalize (d - org);
@@ -1816,13 +1815,6 @@ void(vector p, float sped) boss_meteor = { // [FUNCTION]
 // In that respect, it is similar to the soulcube from Doom3.
 // If the hammer hits a target, the hammer will discharge like
 // the plasma balls from DoE.
-
-// Checks if self has enough power to throw the hammer.
-float() HasPowerToThrow = { // [FUNCTION]
-    if (self.tome_finished) return TRUE;
-    if (self.ammo_cells >= COST_MJOLNIR) return TRUE;
-    return FALSE;
-};
 
 // This throws the mighty hammer.
 void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
@@ -1863,6 +1855,7 @@ void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
         }
         self.weaponmodel = "";
     }
+	self.hammer = newmis;
     self.hammer_finished = time + 10;    // Automatically returns later.
 };
 
@@ -1891,100 +1884,9 @@ void(vector spot) HIP_FireMjolnirShockwave = { // [FUNCTION]
         if (pointcontents (spot) > CONTENT_WATER) BurstLit_Chain(newmis,self,30,self,spot,'1 350 4',2); // No discharge for you!
         Divine_Wrath(1,1);
     }
-    Hammer_Block(newmis,damage); // PM: Added on 12/23/09. (Just in time for Christmas! -Qmaster)
+    Hammer_Block(newmis,damage); // PM: Added on 12/23/09. (Just in time for 
+								 // Christmas! -Qmaster)
     remove(newmis);
-};
-
-// Checks if the super slam is safe to use.
-float() Thor_Safe = { // [FUNCTION]
-    if (deathmatch) return TRUE;    // Allow for possible net frag gain.
-    if (self.cross_finished) return TRUE; // Immune to radius damage.
-    if (self.radsuit_finished) return TRUE; // Inherited wetsuit powers...protected from lightning damage.
-    if (self.waterlevel <= 1) return TRUE; // Not in the water.
-    return Indestructable(self);
-};
-
-// Slammed the ground, so fire off some lightning.
-float(vector spot) HIP_SlamMjolnir = { // [FUNCTION]
-	if (self.hammer_finished >= time) return FALSE;
-
-    if (self.ammo_cells >= COST_MJOLNIR) {
-		if (Thor_Safe()) { // Super slam.  Update 11/30/09:  Don't discharge if deadly.
-			Quake_Spawn(self,800,10,spot,TRUE,2,VEC_QUAKE);
-			HIP_FireMjolnirLightning(); dprint("Slam safe\n");
-			if (self.tome_finished) Divine_Wrath(6, 2); // Do after Hip lightning.
-			if (!lightzero_finished) sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
-			if (self.tome_finished) StaticField(self,400); // Soften 'em up before delayed smashing. Was 500.
-			W_Reload(1.5);
-		} else HIP_FireMjolnirShockwave(spot); // Mini-slam.
-	}
-	return TRUE;
-};
-
-float() Hip_ThrewMjolnir = { // [FUNCTION]
-	if (self.hammer_finished >= time) return TRUE;
-	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
-	if (HasPowerToThrow()) { W_FireThor();  return TRUE; } // Throw if player has the juice.
-    return FALSE;
-};
-
-// PM:  Called on third frame of attack, before the slam on the fourth.
-float() HIP_ThrowMjolnir = { // [FUNCTION]
-    local vector org, source;
-    local float damage, stat;
-
-	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
-	if (self.hammer_finished >= time) return FALSE;
-
-    source = self.origin + '0 0 16';
-    makevectors(self.v_angle);
-    traceline(source,source + v_forward * 80,FALSE,self);
-    org = trace_endpos - v_forward * 4;
-    if (trace_ent.takedamage) {
-        stat = 0;
-		damage = 50;
-		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
-		sound(self,CHAN_WEAPON,"zombie/z_hit.wav",1,ATTN_NORM);
-		SpawnBlood(trace_ent,org,'0 0 50',damage,225);
-		if (trace_ent.alignment == NEUTRAL && trace_ent.enemy == self) {
-			trace_ent.enemy = trace_ent.oldenemy = world;
-			return TRUE;
-		}
-
-		T_Damage(trace_ent, self, self, damage, DAMARMOR);
-		if (random() < 0.2) stat = 1; // Multiple procs are checked independently of each other, and may activate simultaneously.
-		if (self.tome_finished) {
-			if (random() < 0.1) { // Thunderstorm proc.
-				if (!Divine_Wrath(3,1)) stat = stat + 1; // 3 shots, 1 sec of darkness.
-			} else Divine_Wrath(1,1);
-		}
-
-		if (stat) {
-			stat = stat + 1;
-			stat = stat * 100 + 100;
-			StaticField(trace_ent,stat);
-		}
-        return TRUE;
-    } else if (trace_fraction < 1.0) { // Hit wall
-        if (other.solid == SOLID_BSP && trace_plane_normal * '0 0 1' > COS45) {
-			if (HIP_SlamMjolnir(trace_endpos)) return TRUE;
-		} // Check for premature hit on the ground.
-
-		if (GibFloorBody(trace_endpos,200)) {
-			sound(self,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",1,ATTN_NORM);
-			return TRUE;
-		}
-        sound(self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",1,ATTN_NORM);
-        Tent_Point(TE_GUNSHOT, org);
-        return TRUE;
-    } else { // Whiff
-		if (!(self.flags & FL_CLIENT)) { // Frikbot code!  Emulate a double-click, since required timing varies.
-			if (random() < (skill * 0.1 + 0.7)) return FALSE; // Frikbot tries to throw hammer.  With lag, enforce a chance of failure.
-		}
-        self.attack_finished = self.attack_finished + 0.1;  // Update 12/11/09:  T+0.6+0.1=T+0.7.  Changed rate in impulse.qc.
-        return Hip_ThrewMjolnir(); // Aww yeah!
-    }
-	return FALSE;
 };
 
 void(float damage, vector dir, float addedtime) TraceExploAttack = { // [FUNCTION]

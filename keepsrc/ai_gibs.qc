@@ -59,6 +59,7 @@
 .string		gib1soundx;			// Gib custom impact sound
 .string		gib2soundx;			// Gib custom impact sound
 .string		gib3soundx;			// Gib custom impact sound
+.float      gftype;				// Gib velocity type
 .vector		gibvel;				// X=Forward RND, Y=Left/Right RND, Z=0
 .vector		gibmins;			// Minimum bounding box for model
 .vector		gibmaxs;			// Maximum bounding box for model
@@ -139,6 +140,9 @@ void MakeIcyExp (vector org);
 void(string explosound, float g1cnt, float g2cnt, float g3cnt) ExplosiveGibDeath;
 void(entity targ) ResetDebuffBurning;
 void() SeekCube;
+void() spirit_glow_off;
+void() spirit_remove_glow;
+void(vector spot, float rgb, float add) Tent_Explosion2;
 
 // Only load extra gibs when there is a monster requiring them
 // There are separate gib models because of particle trail colours
@@ -213,32 +217,32 @@ void(entity gibent) DPP_blood_trail = { // [FUNCTION]
 // Takes the angle between self and enemy and projects backwards
 vector(float gibforce) DirectionForDamage = { // [FUNCTION]
 	local vector gvel;
-	local float gftype;
+	local float tgftype;
 	
 	// Horrible hack!!! Need a way to override max_health.  Sometimes gibs are thrown when monsters are not dead.  This will create the correct velocity while alive
-	if (self.gibdir < 0) gftype = self.gibdir;
-	else gftype = self.max_health;
+	if (self.gibdir < 0) tgftype = self.gibdir;
+	else tgftype = self.gftype;
 	
 	// Gentle fountain, not much upward motion
-	if (gftype == MON_GIBFOUNTAIN) {
+	if (tgftype == MON_GIBFOUNTAIN) {
 		return NewVector(crandom()*100,crandom()*100,100+(100*random()));
-	} else if (gftype == MON_GIBEXPLOSION) {
+	} else if (tgftype == MON_GIBEXPLOSION) {
 		return NewVector(crandom()*250,crandom()*250,400+(100*random())); // Party popper version, large explosion
-	} else if (gftype == MON_XYGIBVELOCITY) {
+	} else if (tgftype == MON_XYGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
 		gvel = v_forward * (50 + (100 * random()));
 		gvel = gvel + (v_right * (200 * crandom()));
 		gvel_z = 100 + (100 * random());
-	} else if (gftype == MON_NOGIBVELOCITY) {
+	} else if (tgftype == MON_NOGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
 		gvel = v_forward * (50 + (100 * random()));
 		gvel = gvel + (v_right * (100 * crandom()));
 		gvel_z = 30;
-	} else if (gftype == MON_GIBTARGET) {
+	} else if (tgftype == MON_GIBTARGET) {
 		// Designed for non monster entities (overwrites self entity keys).  Check for any angletarget entity tracking setup
 		if (self.target != "") TargetMovedir(self, FALSE); // Converted from angletarget, not used to run entity I/O
 		// default movedir movement
@@ -322,15 +326,65 @@ void() CheckFloorGib = { // [FUNCTION]
 	} else RemoveGib(); // Is it time for the gib to fade away?
 };
 
-float() Gib_Eaten;
+// Drake - Checks if gib should be eaten.  TRUE = yes.
+float() Gib_Eaten = { // [FUNCTION]
+    local float leave, gibs;
+
+	// Can't eat the heads for Denizens we might res!
+	if (self.bodyonflr == MON_ONFLR && self.alignment == NEUTRAL) return FALSE; 
+	if (self.owner.flags & FL_CLIENT && self.headmdl != "") return FALSE; // Can't eat players!
+    if (!(other.xfl & XFL_GHOUL)) return FALSE; // Can't eat gibs.
+
+	// Qmaster's Versus mode where gamemasters collect gibs to buy monsters.
+	if (can_eat_bones()) {
+		if (self.headmdl != "") self.count = self.count + 1; // Bonus for heads!
+		sprint(other, "You got ");
+		sprint(other, ftos(self.count));
+		if (self.count == 1) sprint(other, " bone!\n");
+		else sprint(other, " bones!\n");
+		Safe_stuffcmd(other, "bf\n");
+		bones = bones + self.count;
+		sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
+		entity_hide(self); // Remove the gib
+	}
+    if (self.healamount < 1) return FALSE;   // Gib has no food value.
+
+    leave = 1;
+    if (T_Heal(other,self.healamount,FALSE)) leave = 0;
+    if ((!(other.xfl & XFL_HUNGRY)) && leave) return FALSE;
+
+    if (self.headmdl != "") { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
+    	// The big crunch when eating a head!
+        sound(other,CHAN_ITEM,"zerstorer/cube/bc_gulp.wav",1,ATTN_NORM);
+        gibs = 3;
+        while (gibs > 0) {
+            SpawnMeatSpray(self,other,100 * crandom()); // Throw some meat chunks.
+            gibs = gibs - 1;
+        }
+
+        ResetDebuffBurning(self);
+        self.solid      = SOLID_NOT;
+        self.touch      = SUB_Null;
+        self.use        = SUB_Null;
+        self.targetname = "";
+        self.nextthink  = 0.01; // Removing head now can wreck links.  Do it next frame.
+        self.think      = RemoveGib; // Remove!
+    } else {
+    	sound(other,CHAN_ITEM,"zerstorer/cube/bc_attck.wav",1,ATTN_NORM);
+        remove(self);
+    }
+    Safe_stuffcmd (other, "bf\n");
+    return 1;
+};
 
 void() TouchGib = { // [FUNCTION]
 	local vector dir;
 
 	if (InSky(self.origin)) { entity_remove(self, 0.1); return; } // Always check for sky and void functions first
 	if (self.touchedvoid) return; // Marked for removal
+	if (other == self.owner) return;			// Ignore original monster
+	if (other.health <= 0) return;
     if (Gib_Eaten()) return; // This will remove self if TRUE.
-
 
 	// Check if the gib can damage on touch
 	if (self.gib1dmg > 0 && other.flags & FLx_CREATURE && other.takedamage) {
@@ -343,9 +397,7 @@ void() TouchGib = { // [FUNCTION]
 	
 	// Check rest of touch restrictions
 	if (self.waitmin > time) return;			// Touch function disabled
-	if (other == self.owner) return;			// Ignore original monster
 	if (other.classgroup == CG_TEMPENT || IsProjectile(other)) return;	// Ignore other temp entities
-	if (other.health < 0) return;
 
 	self.waitmin = time + 2 + random() * 2; // Block multiple touch of impact sound
 	if (self.pain_finished > time + 0.1) { // Is there any time left to setup floor checks
@@ -400,20 +452,20 @@ void() TouchGib = { // [FUNCTION]
 	if (self.noise != "") sound(self,CHAN_VOICE, self.noise, 1, self.volume); // Has any impact sounds been defined?
 	if (other.flags & FLx_CREATURE) {
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
-		self.velocity_x = self.velocity_x + other.velocity_x*2;
-		self.velocity_y = self.velocity_y + other.velocity_y*2;
-		self.velocity_z = vlen(self.velocity) * 0.5;
+		self.velocity = NewVector(self.velocity_x + other.velocity_x*2,
+								  self.velocity_y + other.velocity_y*2,
+								  vlen(self.velocity) * 0.5);
 		self.avelocity = crandom() * '0 600 0';
 	}
 };
 
 // Was originally in player.qc; moved here instead.  Spawns a gib model and throws it up into the air to bounce around.
-void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
+entity(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 	local entity cube;
 
 	while (gib_qty > 0) {
 		gibitem = spawn();
-		if (!gibitem) return;
+		if (!gibitem || gibitem == world) return world;
 
 		gibitem.owner = self;
 		gibitem.classname = "item_gib";
@@ -514,6 +566,7 @@ void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 		// Bounce like a grenade have trigger/touch impact
 		gibitem.movetype = MOVETYPE_BOUNCE;
 		gibitem.solid = SOLID_TRIGGER;
+		gibitem.gibbed = TRUE;
 		setmodel(gibitem, gibitem.mdl);
 		// Allow for custom bounding box for gib models
 		if (!(VectorIsAllZeros(self.gibmins))) setsize (gibitem, self.gibmins, self.gibmaxs);
@@ -525,19 +578,16 @@ void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 		// Special head gib (plenty of upward motion)
 		if (gib_no == 25) {
 			gibitem.oldorigin = self.origin;
-			setorigin(gibitem, gibitem.oldorigin);	
-			gibitem.velocity_x = 50 * crandom();
-			gibitem.velocity_y = 50 * crandom();
-			gibitem.velocity_z = 200 + 100 * random();
-			gibitem.gorging = TRUE; // don't eat heads
-			gibitem.avelocity = '0 0 0';
-			gibitem.avelocity_y = 200 + random() * 200;
+			setorigin(gibitem, gibitem.oldorigin);
+			gibitem.velocity = NewVector(50 * crandom(),50 * crandom(),
+										 200 + (100 * random()));	
+			gibitem.gorging = TRUE; // Prevent gremlins eating heads.
+			gibitem.avelocity = NewVector(0,200 + (random() * 200),0);
 			gibitem.angles_y = gibitem.ideal_yaw = random() * 360;
-			gibitem.headmdl = "TRUE";
+			gibitem.headmdl = "TRUE"; // Flag to be eatable by vomitus.
 		} else {
 			// Make sure gibs fountain items have correct origins
 			if (self.classtype == CT_MISCGIBF) gibitem.oldorigin = self.origin;
-			gibitem.healamount = 3 + (random() * 7);
 			if (VectorIsAllZeros(gibitem.oldorigin)) {
 				gibitem.oldorigin_x = crandom()*(self.bbmaxs_x*0.75);
 				gibitem.oldorigin_y = crandom()*(self.bbmaxs_y*0.75);
@@ -563,7 +613,8 @@ void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 			gibitem.gravity = 0.35;
 			gibitem.velocity_z = 0;
 		}
-	
+
+		if (!gibitem.healamount) gibitem.healamount = 3 + (random() * 7);	
 		gibitem.touch = TouchGib;
 		gibitem.nextthink = time + GIB_FADETIME + random() * GIB_FADETIME;
 		gibitem.pain_finished = gibitem.nextthink;
@@ -590,11 +641,14 @@ void(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 		}
 		gib_qty = gib_qty - 1;
 	}
-	newmis = gibitem; // Pass along last thrown gib for later.
+
+	return gibitem; // Pass along last thrown gib for later.
 };
 
 // Explode monster into a shower of gibs (throw head as well)
 void() monster_ThrowGib = { // [FUNCTION]
+	local entity last;
+
 	// New gib sounds.  Zombies have special gib sound because they always go that way!  Stone enemies are just a pile of rubble and dust!
 	if (self.classgroup == CG_ZOMBIE)
 		sound(self,CHAN_VOICE, "zombie/z_gib.wav",1,ATTN_NORM);
@@ -631,7 +685,7 @@ void() monster_ThrowGib = { // [FUNCTION]
 	// GIB 3 - slice (medium)
 	// GIB 4 - blob (small)
 	// GIB 5 - blob (medium)
-	if (self.classtype == CT_MONDEMON) { 
+	if (self.classtype == CT_MONDEMON) {
 		ThrowGib(4, 1 + rint(random()*2));
 		ThrowGib(5, 3 + rint(random()*2));
 	} else if (self.classtype == CT_MONDROLE) { 
@@ -734,6 +788,18 @@ void() monster_ThrowGib = { // [FUNCTION]
 		// Throw extra gibs
 		ThrowGib(25,1); // headmdl //2nd uzi
 		ThrowGib(12,1);
+	} else if (self.classtype == CT_MONSPIDER) {
+		ThrowGib(4, rint(random()*4)); 
+	} else if (self.classtype == CT_MINIONSPIDER) {
+		ThrowGib(4, rint(random()*4)); 
+	} else if (self.classtype == CT_MONSPIRIT) {
+		// Instantly vaporize cloak, a gib death without the gibs!
+		sound(self,CHAN_VOICE, "redfield/spirit/deathb.wav",1,ATTN_NORM);
+		self.origin = self.origin + '0 0 24';
+		Tent_Explosion2(self.origin,1,15);
+		// Throw sword (11) done above.
+		spirit_glow_off();
+		spirit_remove_glow();
 	} else {
 		// Default humanoid explosion
 		if (random()<0.5) ThrowGib(2, 2);
@@ -742,37 +808,39 @@ void() monster_ThrowGib = { // [FUNCTION]
 	}				
 
 	// Throw head last because all previous gibs rely on the origin
-	if (self.headmdl != "") {
-		if (self.max_health == MON_NOGIBVELOCITY) ThrowGib(4, rint(random()*4)); // If monster set for low velocity throw extra gibs instead
-		else ThrowGib(25, 1); // Throw a head gib instead of switch to one
-	}
+	if (self.headmdl != "") last = ThrowGib(25, 1); // Throw a head gib instead of switch to one
+	else last = ThrowGib(4, 1); // Throw at least 1 gib to be a "head".
 
-	if (newmis == world) ThrowGib(4, 1); // Throw at least 1 gib to set newmis.
-	newmis.bodyonflr = "";// MON_ONFLR; // Set the last thrown gib to be the respawn source. TODO: not ready yet.
-	newmis.classname = self.classname;
-	newmis.health = 0;
-	newmis.flags = FL_MONSTER;
-	newmis.gibbed = TRUE;
-	newmis.alignment = self.alignment;
-	newmis.bouncegrenade = self.bouncegrenade;
-	newmis.classgroup = self.classgroup;
-	newmis.classmove = self.classmove;
-	newmis.classtype = self.classtype;
-	newmis.yaw_speed = self.yaw_speed;
-	newmis.liquidbase = self.liquidbase;
-	newmis.liquidcheck = self.liquidcheck;
-	newmis.max_health = self.max_health * 0.5;
-	newmis.bbmins = self.bbmins;
-	newmis.bbmaxs = self.bbmaxs;
-	newmis.pos1 = self.origin; // Respawn point
+	if (last && last != world) {
+		if (self.alignment == NEUTRAL || self.classgroup == CG_HARMLESS) last.bodyonflr = MON_ONFLR; // Set the last thrown gib to be the respawn source.  This is usually the head.
+		last.classname = self.classname;
+		last.health = 0;
+		if (self.alignment == NEUTRAL || self.classgroup == CG_HARMLESS) last.think = SUB_Null;
+		last.flags = FL_MONSTER;
+		last.deadflag = DEAD_DEAD; // Needed for ai_medic
+		last.gibbed = TRUE;
+		last.alignment = self.alignment;
+		last.bouncegrenade = self.bouncegrenade;
+		last.classgroup = self.classgroup;
+		last.classmove = self.classmove;
+		last.classtype = self.classtype;
+		last.yaw_speed = self.yaw_speed;
+		last.liquidbase = self.liquidbase;
+		last.liquidcheck = self.liquidcheck;
+		last.max_health = self.max_health * 0.5;
+		last.bbmins = self.bbmins;
+		last.bbmaxs = self.bbmaxs;
+		last.pos1 = self.origin; // Respawn point
+		last.gib1dmg = 0; // Make sure head can't dissappear!
+	}
 	self.gibbed = TRUE; // Monster has offically gone to pieces ;)
 	entity_hide(self); // Finally hide monster
 };
 
 // Check health for gib condition, and gib if so
 void() monster_check_gib = { // [FUNCTION]
-	if (gibbed_this_frame > 10 && !self.gibondeath) {
-		if (developer > 1) dprint("Gibbed more than 10 enemies this frame! Skipped gibbing more!\n");
+	if (gibbed_this_frame > 20 && !self.gibondeath) {
+		if (developer > 1) dprint("Gibbed more than 20 enemies this frame! Skipped gibbing more!\n");
 		return;
 	}
 
@@ -788,73 +856,26 @@ void() monster_check_gib = { // [FUNCTION]
 	}
 };
 
-// Drake - Checks if gib should be eaten.  TRUE = yes.
-float() Gib_Eaten = { // [FUNCTION]
-    local float leave, gibs;
-
-    if (other.health <= 0) return FALSE;   // Dead.
-	if (can_eat_bones()) {
-		sprint(other, "You got ");
-		sprint(other, ftos(self.count));
-		if (self.count == 1) sprint(other, " bone!\n");
-		else sprint(other, " bones!\n");
-		Safe_stuffcmd(other, "bf\n");
-		bones = bones + self.count;
-		sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
-		entity_hide(self); // Remove the gib
-	}	
-    if (self.healamount < 1) return FALSE;   // Gib has no food value.
-	if (other.classtype != CT_MONVOMITUS) return FALSE; // only vomitus can eat gibs
-
-    leave = 1;
-
-	// Not including morphing into a dragon in Keep.  -Qmaster
-    if (T_Heal (other, self.healamount, FALSE)) leave = 0;
-
-    if ((!(other.xfl & XFL_HUNGRY)) && leave) return FALSE;
-
-    if (self.headmdl != "") { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
-    	// The big crunch when eating a head!
-        sound(other,CHAN_ITEM,"zerstorer/cube/bc_gulp.wav",1,ATTN_NORM);
-        gibs = 3;
-        while (gibs > 0) {
-            SpawnMeatSpray (self,other, 100 * crandom()); // Throw some meat chunks.
-            gibs = gibs - 1;
-        }
-
-        // Removing head now can wreck links.  Do it next frame.
-        ResetDebuffBurning(self);
-        self.solid      = SOLID_NOT;
-        self.touch      = SUB_Null;
-        self.use        = SUB_Null;
-        self.targetname = "";
-        // Remove!
-        self.nextthink  = 0.01;
-        self.think      = RemoveGib;
-    } else {
-    	sound(other,CHAN_ITEM,"zerstorer/cube/bc_attck.wav",1,ATTN_NORM);
-        remove (self);
-    }
-    Safe_stuffcmd (other, "bf\n");
-    return 1;
-};
-
 void(entity targ, entity attacker) Killed;
 
 // Gib a body on the floor (special setup)
 void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	local entity tself, tother;
 	
-	if (onflr.classgroup == CG_HARMLESS) return;
+	if (onflr.classtype == CT_TEMPGIB) return; // Don't gib gibs.
+	if (!onflr || onflr == world) return;
 
 	onflr.bodyonflr = "";	// no more body gibbing
 	tself = self; tother = other;	// save self/other
 	self = onflr; other = tself;	// switch around
-	if (onflr.classgroup == CG_ZOMBIE && (onflr.classtype != CT_MONMUMMY || self.tome_finished)) { // Mummy's are too powerful for this without tome.
+
+	// Mummy's are too powerful for this without tome.
+	if (self.classgroup == CG_ZOMBIE
+		&& (self.classtype != CT_MONMUMMY || tself.tome_finished)) {
 		self.health = 0;
 		Killed(onflr, tself);
 	} else {
-		self.max_health = MON_NOGIBVELOCITY; // use minimal velocity
+		self.gftype = MON_NOGIBVELOCITY; // Low gib directional modifier
 		monster_ThrowGib();			// throw parts
 	}
 

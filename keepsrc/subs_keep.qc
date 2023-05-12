@@ -37,6 +37,9 @@
 // functionality.
 //=============================================================================
 
+void() SUB_FindRandomSpawnSpot;
+void() spirit_glow;
+
 //  This makes an entity do a think function right now.  From Drake.
 void(entity ent, void() thinkst) SUB_ThinkImmediate = { // [FUNCTION]
     local entity swap;
@@ -48,17 +51,17 @@ void(entity ent, void() thinkst) SUB_ThinkImmediate = { // [FUNCTION]
 };
 
 // This reduces a lot of boilerplate code assigning a think and nextthink.
-void(entity targ, void() th_think, float th_time) SUB_Think = { // [FUNCTION]
-	if (th_time <= 0) { SUB_ThinkImmediate(targ,th_think); return; }
+void(entity targ, void() th_think, float delaytime) SUB_Think = { // [FUNCTION]
+	if (delaytime <= 0) { SUB_ThinkImmediate(targ,th_think); return; }
 
 	targ.think = th_think;
 	if (targ.bsporigin > 0 && targ.solid > SOLID_TRIGGER) {
-		targ.nextthink = targ.ltime + th_time;
-	} else targ.nextthink = time + th_time;
+		targ.nextthink = targ.ltime + delaytime; // Brush entities use ltime.
+	} else targ.nextthink = time + delaytime;    // Point entities use time.
 };
 
-void(void() th_think, float th_time) SUB_SelfThink = { // [FUNCTION]
-	SUB_Think(self,th_think,th_time);
+void(void() th_think, float delaytime) SUB_SelfThink = { // [FUNCTION]
+	SUB_Think(self,th_think,delaytime);
 };
 
 float (entity o) IsProjectile = { // [FUNCTION]
@@ -607,8 +610,151 @@ entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
 	newmis = spawn(); // Generate random point to spawn at.
 	setorigin(newmis,vecrand(SUB_ReverseClampFloat(crandom() * 192,-128,128),128,TRUE));
 	traceline(newmis.origin,self.enemy.origin,FALSE,self);
+	newmis.think = SUB_Remove;
+	newmis.nextthink = time + 0.05; // Ensure this tempent is removed!
 	if (trace_ent == self.enemy) return newmis;
 	return world;
+};
+
+// Wait for enemy to be far enough away from found spawn location (def=192).
+void() SUB_WaitForSpawnLink = { // [FUNCTION]
+	self.nextthink = time + 0.5 + random();
+	self.think = SUB_WaitForSpawnLink;
+	setorigin(self, self.movelast.origin);	// move to new location
+	self.enemydist = range_distance(self.enemy,FALSE);
+
+	// Is the enemy too close or dead?
+	if (self.enemydist > self.movelast.distance || self.enemy.health < 1) {
+		// Move to new location
+		self.solid = SOLID_SLIDEBOX;				// Standard monster movement
+		setmodel(self, self.mdl);					// Setup model
+		setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
+	
+		// Test if new location is solid?
+		if (!walkmove (0, 0)) {
+			self.solid = SOLID_NOT;					// No world interaction yet
+			setmodel(self,"");						// Turn off model
+			if (self.classtype == CT_MONSPIRIT) spirit_glow();
+		} else self.th_spawn();
+	}
+};
+
+// Cycle around teleport location chain list to pick a mapper specified spot.
+void() SUB_CheckSpawnLinkList = { // [FUNCTION]
+	// Does the blink list exist already?
+	if (self.movelast.classtype != CT_SKULLTELEPORT) {
+		self.movelast = find(world,targetname,self.target2);
+		// Does the entity chain exist?
+		if (self.movelast.classtype == CT_SKULLTELEPORT) SUB_WaitForSpawnLink();
+		else {
+			self.target2 = ""; // target2 is not valid, do regular teleport
+			SUB_FindRandomSpawnSpot();
+		}
+	} else {
+		// Move forward in chain and try next spawn location
+		self.movelast = self.movelast.enemy;
+		SUB_WaitForSpawnLink();
+	}
+};
+
+// Finishes restoring solidity and model, else keep checking.
+void(vector org) SUB_FindRandomSpawnSpotFinish = { // [FUNCTION]
+	if (!self.th_spawn) self.th_spawn = self.th_stand;
+	if (!self.th_spawn) {
+		SUB_SelfThink(SUB_Remove,0.1);
+		dprint("Entity ");
+		dprint(self.classname);
+		dprint(" had no th_spawn and now th_stand fallback, removed\n");
+		return;
+	}
+
+	// Move to new location
+	self.solid = SOLID_SLIDEBOX;				// Standard monster movement
+	setmodel(self, self.mdl);					// Setup model
+	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
+	setorigin(self, org);						// move to new location
+	
+	// Test if new location is solid?
+	if (!walkmove (0, 0)) {
+		self.solid = SOLID_NOT;					// No world interaction yet
+		setmodel(self,"");						// Turn off model
+		setorigin(self, self.oldorigin);		// restore original location
+		if (self.classtype == CT_MONSPIRIT) spirit_glow();
+		self.nextthink = time + 1;				// Keep checking
+		self.think = SUB_FindRandomSpawnSpot;
+	} else self.th_spawn();
+};
+
+// Find new teleport location.  Requires:
+// self.height to be set.
+// self.distmin to be set (min range)
+// self.meleerange to be set mid range.  Enemy must be further than this.
+// self.distmax to be set for max range.  Furthest point to spawn from start.
+void() SUB_FindRandomSpawnSpot = { // [FUNCTION]
+	local float dist, edist, blinkfinished, blinkcount;
+	local vector org, org_ofs, angle_vec;
+
+	blinkfinished = TRUE; blinkcount = 0;
+	org = angle_vec = org_ofs = '0 0 0'; 
+	org_ofs_z = self.height;
+	self.oldorigin = self.origin;
+	
+	// Trace upwards to find ceiling or maximum teleport height
+	traceline(self.origin, self.origin+org_ofs, TRUE, self);
+	org_ofs = trace_endpos;
+	
+	// Loop around for possible locations
+	while(blinkfinished) {
+		blinkcount = blinkcount + 1;		// next loop
+		angle_vec_y = random() * 360;		// Random direction
+		makevectors(angle_vec);				// make vector
+		
+		// Generate random angle and trace teleport direction
+		dist = self.distmin + (random() * self.distmax);
+		org = org_ofs + (v_forward * dist);
+		traceline(org_ofs, org, TRUE, self);
+		
+		// Check distance is far enough away from enemy
+		// Move away from any walls (traceline is surface contact)
+		dist = vlen(trace_endpos - org_ofs) - 32;
+		org = org_ofs + (v_forward * dist);
+		if (self.enemy) {
+			edist = vlen(self.enemy.origin - org);
+		} else {
+			// No enemy so guarantee spawn.
+			edist = self.meleerange + 1;
+		}
+
+		// Is the enemy far enough away?
+		if (edist > self.meleerange || !self.enemy) {
+			// Trace down to floor below new point
+			traceline(org, org - '0 0 512', TRUE, self);
+			org = trace_endpos + self.view_ofs;
+			
+			// The teleport fuction is working with a radius command
+			// and this will ignore walls and just find any position
+			// in all directions. This can lead to the monster (e.g. skullwiz)
+			// teleporting behind walls or other parts of the map!
+			// This can be prevent in two ways:
+			// 1) linesight between this monster and player
+			// - can leads to less interesting locations (always insight)
+			// 2) linesight between new location and old
+			// - This allows this monster to teleport around corner
+			//   and still be within the same area!
+			//
+			// Trace through monsters and check trace fraction
+			traceline(org, self.origin, TRUE, self);
+			if (trace_fraction == 1) blinkfinished = FALSE;
+		}
+
+		// Been looping too long, back to original location
+		if (blinkcount > 10) {
+			blinkfinished = FALSE;
+			org = self.origin;
+		}
+	}
+	
+	SUB_FindRandomSpawnSpotFinish(org);
 };
 
 // Setup wave HP and trigger boundaries

@@ -607,7 +607,7 @@ void() SUB_regen;
 void() monster_sightsound;
 void() monster_liquid_check;
 void() monster_death_use;
-void(float gib_no, float gib_qty) ThrowGib;
+entity(float gib_no, float gib_qty) ThrowGib;
 void() monster_ThrowGib;
 void() SUB_Null;
 void() SUB_UseTargets;

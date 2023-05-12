@@ -681,20 +681,16 @@ void() LaunchBoulder = {
 	boulder.classgroup = CG_PROJALL;
 	boulder.movetype = MOVETYPE_BOUNCE;
 	boulder.solid = SOLID_BBOX;
-	
 	setmodel(boulder, "progs/aoa/boulder.mdl"); //remember to precache
 	setsize(boulder, '0 0 0', '0 0 0');
 	org = self.origin + '0 0 24' + v_forward*8 + v_up*8;
 	setorigin(boulder, org);
-	
 	boulder.velocity = v_forward*1200 + v_up*120;
 	boulder.touch = T_BoulderTouch;
 	boulder.dmg = 120;
-	
 	boulder.nextthink = time + 3;
 	boulder.think = SUB_Remove;
 	sound(self,CHAN_WEAPON,"aoa/rockattack.wav",1,ATTN_NORM);
-
 };
 
 void() ChainedLightning = {
@@ -704,48 +700,36 @@ void() ChainedLightning = {
 	traceline(self.origin, self.enemy.origin, FALSE, self);
 	Tent_Beam(TE_LIGHTNING1,self,self.origin,trace_endpos);
 	damage = 30;
-	if (self.enemy.classname == "player")//half damage to players
-		damage = damage * 0.5;
-	
+	if (self.enemy.classname == "player") damage = damage * 0.5;
 	if (self.enemy.bodyonflr == MON_ONFLR) {
 		monster_flrbody_gib(self.enemy, damage * 2);
 	} else LightningDamage(self.origin, trace_endpos, self.owner, damage);
 	remove(self);
 };
 
-void(entity target) LightningTarget = //called once per target of the storm, up to 5 targets
-{
-	local entity cloud;
-	
-	cloud = spawn();
-	cloud.enemy = target;
-	cloud.owner = self.owner;
-	cloud.nextthink = time;
-	cloud.think = ChainedLightning;	
-	setorigin(cloud, self.origin);
-};
-
 void() StormFindTargets = {
-	local entity nearbyTargets;
+	local entity nearbyTargets, cloud;
 	local float targets;
 
-	if (self.tome_finished)//tome hgas max 10 targets, otherwise max 5
-		targets = 10;
-	else
-		targets = 5;
+	// Tome doubles max targets.
+	if (self.tome_finished) targets = 10;
+	else targets = 5;
 	
 	nearbyTargets = findradius(self.origin, 512);
-	while (nearbyTargets && targets >0)
-	{
+	while (nearbyTargets && targets >0) {
 		traceline(self.origin, nearbyTargets.origin, TRUE, self);//was TRUE
 		if (nearbyTargets.takedamage > 0
 			&& nearbyTargets != world
 			&& trace_fraction == 1
 			&& (nearbyTargets.health > 0 || nearbyTargets.bodyonflr == MON_ONFLR)
 			&& nearbyTargets != self.owner
-			&& Align_Opposing(self.owner,nearbyTargets))
-		{
-			LightningTarget(nearbyTargets); //attacks secondary target with lightning
+			&& Align_Opposing(self.owner,nearbyTargets)) { // Attacks secondary target with lightning
+			cloud = spawn();
+			cloud.enemy = nearbyTargets;
+			cloud.owner = self.owner;
+			cloud.nextthink = time;
+			cloud.think = ChainedLightning;	
+			setorigin(cloud, self.origin);
 			targets = targets - 1;
 		}
 		nearbyTargets = nearbyTargets.chain;

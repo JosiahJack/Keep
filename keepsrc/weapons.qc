@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 36
+// Function count: 34
 //
 // Implements: Weapons System for the Player
 //
@@ -71,7 +71,9 @@ void() player_crossbow5;
 void() player_crossbow6;
 void() player_laser1;
 void() player_hammer1;
+void() player_hammer1original;
 void() player_mjolnir1;
+void() player_mjolnir1original;
 void() player_prox_grenade1;
 void() player_wand1;
 void() player_grapple1;
@@ -86,7 +88,6 @@ void() player_xbow1;
 void() W_FireSparks;
 void(entity ent) ReflectSound;
 void(float pause, void() thinkst) Echo_Shot;
-float() Hip_ThrewMjolnir;
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
 void() player_lava_nail1;
 void() player_lava_snail1;
@@ -319,20 +320,28 @@ float(vector source, float axedmg) GibFloorBody = {
 	onflr = find(world, bodyonflr, MON_ONFLR);
 	while (onflr) {
 		src_dist = vlen(source - onflr.origin);
-		if (src_dist < RANGE_CHOPAXE) {			// Is the body close to the player?
+		if (src_dist < RANGE_PLAYAXE) { // Is the body close to the player?
+			dprint("GibFloorBody check made it past src_dist\n");
 			org = onflr.origin - '0 0 16';		// move origin close to floor
 			makevectors(self.v_angle);			// Calculate viewing angle
 			vec = normalize (org - self.origin);
 			dotprod = vec * v_forward;
-			if (dotprod > 0.6) {				// Is the body infront of the player
+			// Is the body infront of the player or touching thrown mjolnir?
+			if (dotprod > 0.6 || self.classname == "Mjolnir") {
 				onflr.origin = org;				// Move gib closer to floor
-				if (self.weapon == IT2_MJOLNIR && !self.weaponismoditems) {
-					if (ai_medic(64)) {
-						dprint("Slam revive!\n");
-					} else monster_flrbody_gib(onflr, axedmg*4);
-				} else monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
+				dprint("GibFloorBody check made it past dotprod\n");
 				W_ShowHostile(); // Wake monsters up, we hit stuff.
-				return TRUE;														// Finished
+				if ((self.weapon == IT2_MJOLNIR && !self.weaponismoditems)
+					|| self.classname == "Mjolnir") {
+					if (ai_medic(64)) {
+						return TRUE; // True = don't do attack pain now.
+					}
+				}
+
+				if (!onflr.gibbed && onflr.classtype != CT_TEMPGIB) {
+					monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
+					return TRUE; // Finished
+				}
 			}
 		}
 		onflr = find(onflr,bodyonflr, MON_ONFLR); // See if there are anymore bodies close by
@@ -340,45 +349,76 @@ float(vector source, float axedmg) GibFloorBody = {
 	return FALSE;
 };
 
-void() HIP_FireMjolnir = { // [FUNCTION]
-	local vector org, source, tvec, newpos;
-	local float damage;
-	local entity tester, stemp;
+void() W_FireMjolnirOriginal = { // [FUNCTION]
+	local vector org, source, ang, tvec, newpos;
+	local float damage, cells;
+	local entity tester, stemp, found;
 
-	// Since throwing the hammer on frame three can be almost impossible with
-	// lag, allow throwing on frame four, even if animation would make the
-	// throw appear a bit late.  Better to have forgiving controls and happy
-	// players than "fake difficulty" for animation's sake.
-    if (Hip_ThrewMjolnir() || self.hammer_finished >= time) return;
 
+	if (self.tome_finished > 0) {
+		//adaya bfg lightning ball spawn!
+		if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
+			source = (source + (v_forward * 32));
+			traceline(source,(source - (v_up * 50)),FALSE,self);
+			self.ammo_cells = (self.ammo_cells - 15);
+			self.currentammo = (self.currentammo - 15);
+			SpawnLightningOrb();
+			W_Reload(0.8);
+			return;
+		}
+		org = (trace_endpos - (v_forward * 4));
+		if ( trace_ent.takedamage ) {
+			if (self.ammo_cells >= 15) damage = 300.000;
+			else damage = 80;
+
+			trace_ent.axhitme = TRUE;
+			SpawnBlood(trace_ent, org,v_forward,damage,0);
+			T_Damage(trace_ent,self,self,damage, DAMARMOR);
+			if (self.ammo_cells >= 15) {
+				SpawnLightningOrb();
+				self.ammo_cells = (self.ammo_cells - 15);
+				self.currentammo = (self.currentammo - 15);
+			}
+		} else {
+			if ( (trace_fraction != TRUE) ) {
+				sound(self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM); //tink, nothin
+				Tent_Point(TE_GUNSHOT,org);
+			} else sound(self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM); //swoosh
+		}
+		W_Reload(0.4);
+		return;
+	}
+
+	// Normal original Hipnotic Mjolnir
 	W_Reload(0.4);
 	source = (self.origin + '0 0 16');
-	makevectors(self.v_angle);
-	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
+	makevectors (self.v_angle);
+	traceline (source,(source + (v_forward * 32)),FALSE,self);
+	found = trace_ent;
 	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15)) ) {
-		source = (source + (v_forward * RANGE_PLAYAXE));
-		traceline (source,(source - (v_up * 50)),FALSE,self);
+		source = (source + (v_forward * 32));
+		traceline(source,(source - (v_up * 50.000)),FALSE,self);
 		if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
 			HIP_FireMjolnirLightning();
-			W_Reload(1);
-			return;
+			W_Reload(1.5);
+			return ;
 		}
 	}
 	org = (trace_endpos - (v_forward * 4));
-
-	// REFLECTION stuff like blue shields
-	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
-
-	// BLEEDING/DAMAGE stuff with unique impact sounds
-	else if (trace_ent.takedamage) {
+	if (found.reflectaxe) {
+		Resist_Effects(found,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
+	} else if ( found.takedamage ) {
 		damage = 50;
-		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
-		trace_ent.axhitme = TRUE;
-		SpawnBlood(trace_ent,org,v_forward,damage,0);
-		HIP_FireMjolnirLightning(); dprint("Hit targ slam takedamage\n");
-		T_Damage(trace_ent,self,self,damage,DAMARMOR);
+		if ((found.classgroup == CG_ZOMBIE)
+			&& found.classname != "monster_mummy") {
+
+			damage = found.max_health * 2;
+		}
+		found.axhitme = TRUE;
+		SpawnBlood(found,org,v_forward,damage,0);
+		T_Damage(found,self,self,damage,DAMARMOR);
 	} else {
-		if (trace_fraction != TRUE) {
+		if ((trace_fraction != 1.00)) {
 			sound(self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM);
 			tester = spawn();
 			setorigin(tester,org);
@@ -398,70 +438,109 @@ void() HIP_FireMjolnir = { // [FUNCTION]
 		} else {
 			sound(self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM);
 		}
-   }
-   W_Reload(0.4);
-};
-
-void() HIP_FireMjolnir2 = { // [FUNCTION]
-	local vector org, source;
-	local float damage;
-
-	W_Reload(0.4);
-	source = (self.origin + '0.000 0.000 16.000');
-	makevectors(self.v_angle);
-	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
-	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
-		source = (source + (v_forward * RANGE_PLAYAXE));
-		traceline (source,(source - (v_up * 50.000)),FALSE,self);
-		self.ammo_cells = (self.ammo_cells - 15.000);
-		self.currentammo = (self.currentammo - 15.000);
-		SpawnLightningOrb();
-		W_Reload(0.8);
-		return;
-	}
-	org = (trace_endpos - (v_forward * 4));
-	if ( trace_ent.takedamage ) {
-		if (self.ammo_cells >= 15) damage = 300.000;
-		else damage = 80;
-
-		trace_ent.axhitme = TRUE;
-		SpawnBlood(trace_ent, org,v_forward,damage,0);
-		T_Damage(trace_ent,self,self,damage, DAMARMOR);
-		if (self.ammo_cells >= 15) {
-		SpawnLightningOrb();
-		self.ammo_cells = (self.ammo_cells - 15.000);
-		self.currentammo = (self.currentammo - 15.000);
-	}
-	} else {
-		if ( (trace_fraction != TRUE) ) {
-			sound(self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM); //tink, nothin
-			Tent_Point(TE_GUNSHOT,org);
-		} else sound(self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM); //swoosh
 	}
 	W_Reload(0.4);
 };
 
-void() W_FireMjolnir = { // [FUNCTION]
-	if (world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) {
-		if (self.tome_finished > 0) {
-			HIP_FireMjolnir2(); //adaya bfg lightning ball spawn!
-		} else { 
-			HIP_FireMjolnir(); // Standard Drake Mjolinr throwing
+float() W_FireMjolnir = { // [FUNCTION]
+    local vector org, source;
+    local float damage, stat;
+	local entity targ, found, oenemy;
+
+	if (self.hammer_finished >= time) {
+		if (self.hammer) self.hammer.owner = world;
+		return FALSE;
+	}
+
+    source = self.origin + '0 0 16';
+    makevectors(self.v_angle);
+    traceline(source,source + v_forward * 80,FALSE,self);
+	found = trace_ent; // Save entity as traceline is called by shockwave below.
+    org = trace_endpos - v_forward * 4;
+	if (GibFloorBody(trace_endpos,200)) {
+		sound(self,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",1,ATTN_NORM);
+		SpawnBlood(found,org,'0 0 50',damage,225);
+		return TRUE;
+	}
+
+	if (found && found != world) {
+		// REFLECTION stuff like blue shields
+		if (found.reflectaxe) Resist_Effects(found,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
+		else if (found.takedamage) {
+			oenemy = found.enemy;
+			damage = 50;
+			if ((found.classgroup == CG_ZOMBIE) && found.classname != "monster_mummy") damage = found.max_health * 2;
+			sound(self,CHAN_WEAPON,"zombie/z_hit.wav",1,ATTN_NORM);
+			SpawnBlood(found,org,'0 0 50',damage,225);
+			found.axhitme = TRUE;
+			HIP_FireMjolnirLightning();
+			T_Damage(found, self, self, damage, DAMARMOR);
+
+			// Multiple procs are checked independently of each other, and may
+			// activate simultaneously.
+			stat = 0;
+			if (random() < 0.2) stat = 1;
+			if (self.tome_finished) {
+				if (random() < 0.1) { // Thunderstorm proc.
+					if (!Divine_Wrath(3,1)) stat = stat + 1; // 3 shots, 1 sec of darkness.
+				} else Divine_Wrath(1,1);
+			}
+
+			if (stat) {
+				stat = stat + 1;
+				stat = (stat * 100) + 100; // 300 to 400
+				StaticField(found,stat);
+			}
+
+			if (found.alignment == NEUTRAL && oenemy == self) {
+				found.enemy = found.oldenemy = world;
+			}
+
+			return TRUE;
 		}
-	} else {
-		HIP_FireMjolnir(); // Standard Drake Mjolinr throwing
-	}
-};
+    } else if (trace_fraction < 1.0) { // Hit wall
+        sound(self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",1,ATTN_NORM);
+        Tent_Point(TE_GUNSHOT,org);
 
-void() W_FireThor = { // [FUNCTION]
-    local entity targ;
+		// Check for premature hit on the ground.
+        if (other.solid == SOLID_BSP && trace_plane_normal * '0 0 1' > COS45) {
+			if (self.ammo_cells >= COST_MJOLNIR) {
+				// Slammed the ground, so fire off some lightning.
+				if (deathmatch // Allow for possible net frag gain.
+					|| self.cross_finished     // Immune to radius damage.
+					|| self.radsuit_finished   // Inherited wetsuit powers...protected
+											// from lightning damage.
+					|| self.waterlevel <= 1    // Not in the water.
+					|| Indestructable(self)) { // Super slam.  Update 11/30/09:  Don't
+											// discharge if deadly.
+					Quake_Spawn(self,800,10,org,TRUE,2,VEC_QUAKE);
+					HIP_FireMjolnirLightning();
+					if (self.tome_finished) {
+						Divine_Wrath(6, 2); // Do after Hip lightning.
+						StaticField(self,400); // Soften 'em up before delayed
+											   // smashing. Was 500.
+					}
+					if (!lightzero_finished) sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
+					W_Reload(1.5);
+				} else HIP_FireMjolnirShockwave(org); // Mini-slam.
+			}
+		}
+        return TRUE;
+    } else { // Whiff
+		if (!(self.flags & FL_CLIENT)) { // Frikbot code!  Emulate a double-click, since required timing varies.
+			if (random() < (skill * 0.1 + 0.7)) return FALSE; // Frikbot tries to throw hammer.  With lag, enforce a chance of failure.
+		}
+        self.attack_finished = self.attack_finished + 0.1;  // Update 12/11/09:  T+0.6+0.1=T+0.7.  Changed rate in impulse.qc.
+		sound(self,CHAN_WEAPON,"knight/sword1.wav",1,ATTN_NORM);
 
-    if (frame_pause()) return; // There is a delay before firing, so don't throw if not an appropriate time.
-    if (!HasPowerToThrow()) return; // No ammo or power!
-
-    targ = W_ThorTarget(); // This calls 'makevectors(self.v_angle)'.
-    sound(self,CHAN_WEAPON,"knight/sword1.wav",1,ATTN_NORM);
-    Thor_Launch(self.origin + '0 0 12',v_forward,targ); // We can throw.
+		// Throw if player has the juice.
+		if (!frame_pause() && (self.tome_finished || self.ammo_cells >= COST_MJOLNIR)) {   
+			targ = W_ThorTarget(); // This calls 'makevectors(self.v_angle)'.
+			Thor_Launch(self.origin + '0 0 12',v_forward,targ); // Do it!
+			return TRUE;
+		}
+    }
+	return FALSE;
 };
 
 void() W_FireProximityGrenade = { // [FUNCTION]
@@ -581,9 +660,11 @@ void() W_FireAxe = { // [FUNCTION]
 	if (developer > 0 && self.flags & FL_GODMODE && self.flags & FL_FLY) {
 		traceline(source,source +(v_forward* RANGE_PLAYAXE),FALSE,self);
 		if (trace_fraction < 1.0) {
-			if (trace_ent.flags & FL_MONSTER && trace_ent.health > 0) {
-				dprint("\n\b[DEBUG]\b system active, changing monster\n");
-				trace_ent.debuglvl = 1 - trace_ent.debuglvl;
+			if (trace_ent && trace_ent != world) {
+				if (trace_ent.flags & FL_MONSTER && trace_ent.health > 0) {
+					dprint("\n\b[DEBUG]\b system active, changing monster\n");
+					trace_ent.debuglvl = 1 - trace_ent.debuglvl;
+				}
 			}
 		}
 		return;
@@ -597,21 +678,23 @@ void() W_FireAxe = { // [FUNCTION]
 	if (trace_fraction == 1) return;	// No contact, no hit
 
 	W_ShowHostile();
-	if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
-		// Mark the monster with type of axe used and change damage
-		if (self.moditems & IT_UPGRADE_AXE) {
-			axedmg = DAMAGE_PLAYAXE2;
-			trace_ent.axhitme = 2;
-		} else {
-			axedmg = DAMAGE_PLAYAXE1;
-			trace_ent.axhitme = 1;
-		}
+	if (trace_ent && trace_ent != world) {
+		if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
+			// Mark the monster with type of axe used and change damage
+			if (self.moditems & IT_UPGRADE_AXE) {
+				axedmg = DAMAGE_PLAYAXE2;
+				trace_ent.axhitme = 2;
+			} else {
+				axedmg = DAMAGE_PLAYAXE1;
+				trace_ent.axhitme = 1;
+			}
 
-		if (self.tome_finished) {
-			axedmg = axedmg * 2;
-			if (trace_ent.classgroup == CG_ZOMBIE) axedmg = 120;
+			if (self.tome_finished) {
+				axedmg = axedmg * 2;
+				if (trace_ent.classgroup == CG_ZOMBIE) axedmg = 120;
+			}
+			T_Damage(trace_ent,self,self, axedmg, DAMARMOR);
 		}
-		T_Damage(trace_ent,self,self, axedmg, DAMARMOR);
 	}
 	MeleeImpactEffects(axedmg,'0 0 1',FALSE);
 };
@@ -630,29 +713,31 @@ void() W_FireSaw = { // [FUNCTION]
     if (trace_fraction == 1) return;
 
     spot = trace_endpos - v_forward*4;        // 'org'
-    if (trace_ent.takedamage) {
-        damage = 40;
+	if (trace_ent && trace_ent != world) {
+		if (trace_ent.takedamage) {
+			damage = 40;
 
-		// Suck life like Heretic's necro gauntlets.
-        if (self.tome_finished && trace_ent.flags & FLx_CREATURE) {
-			save = ignore = 0;
-			if (trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH) {
-                    save = 0.5;      // Assume life drain attack.
-                    ignore = TRUE;          // Exceed normal health limit.
-			} else save = 0.1;
+			// Suck life like Heretic's necro gauntlets.
+			if (self.tome_finished && trace_ent.flags & FLx_CREATURE) {
+				save = ignore = 0;
+				if (trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH) {
+						save = 0.5;      // Assume life drain attack.
+						ignore = TRUE;          // Exceed normal health limit.
+				} else save = 0.1;
 
-            if (self.dmg > trace_ent.health)
-                save = ceil(trace_ent.health * save);
-            else
-                save = ceil(self.dmg * save);
+				if (self.dmg > trace_ent.health)
+					save = ceil(trace_ent.health * save);
+				else
+					save = ceil(self.dmg * save);
 
-            if ((self.perms & POW_VAMPIRE) && (!(trace_ent.classgroup & CG_ZOMBIE))) save = save + ceil(1.2 * save);
-			if (save > 0) T_Heal (self, save, ignore);
+				if ((self.perms & POW_VAMPIRE) && (!(trace_ent.classgroup & CG_ZOMBIE))) save = save + ceil(1.2 * save);
+				if (save > 0) T_Heal (self, save, ignore);
+			}
+
+			if (self.weaponframe & 1) SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			T_Damage(trace_ent, self, self, damage, DAMARMOR);
 		}
-
-        if (self.weaponframe & 1) SpawnMeatSpray(self,trace_ent,(crandom() * 300));
-        T_Damage(trace_ent, self, self, damage, DAMARMOR);
-    }
+	}
 	MeleeImpactEffects(damage,'0 0 5',TRUE);
 };
 
@@ -1353,7 +1438,7 @@ void() W_FireBeam = { // [FUNCTION]
 void(float damage) W_FireBFG = { // [FUNCTION]
         local entity tempen;
         local vector orgen, orgo, dir, tdir, dorg;
-        local float donerail;
+        local float donerail, loopiter;
 
         makevectors(self.v_angle);
         sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
@@ -1362,30 +1447,34 @@ void(float damage) W_FireBFG = { // [FUNCTION]
         orgo = self.origin + self.view_ofs + v_forward*8;
         dir = v_forward;
         traceline (orgo, orgo + v_forward*2048, FALSE, self);
-
+		loopiter = 20;
         while(!donerail) {
-			if (trace_ent.takedamage) {
-				orgen = trace_endpos + dir*4;
-				dorg = trace_endpos - dir*4;
-				SpawnBlood(trace_ent, dorg, '0 0 0', damage,0);
-				T_Damage(trace_ent, self, self, damage,DAMARMOR);
-				if (trace_ent.movetype != MOVETYPE_PUSH && trace_ent.classname != "monster_oldone" && trace_ent.classname != "monster_boss") {
-					tdir = trace_endpos - orgo;
-					tdir = normalize(tdir);
-					trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
-					trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
+			loopiter = loopiter - 1;
+			if (trace_ent && trace_ent != world) {
+				if (trace_ent.takedamage) {
+					orgen = trace_endpos + dir*4;
+					dorg = trace_endpos - dir*4;
+					SpawnBlood(trace_ent, dorg, '0 0 0', damage,0);
+					T_Damage(trace_ent, self, self, damage,DAMARMOR);
+					if (trace_ent.movetype != MOVETYPE_PUSH && trace_ent.classname != "monster_oldone" && trace_ent.classname != "monster_boss") {
+						tdir = trace_endpos - orgo;
+						tdir = normalize(tdir);
+						trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
+						trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
 
-					if (trace_ent.velocity_z < 270)
-					trace_ent.velocity_z = trace_ent.velocity_z + 270;
+						if (trace_ent.velocity_z < 270)
+						trace_ent.velocity_z = trace_ent.velocity_z + 270;
+					}
+				} else {
+					dorg = trace_endpos - dir*4;
+					donerail = TRUE;
 				}
-			} else {
-				dorg = trace_endpos - dir*4;
-				donerail = TRUE;
+				tempen = self;
+				self = trace_ent;
+				traceline(orgen, orgen + dir*2048, FALSE, self);
+				self = tempen;
 			}
-			tempen = self;
-			self = trace_ent;
-			traceline(orgen, orgen + dir*2048, FALSE, self);
-			self = tempen;
+			if (loopiter < 1) donerail = TRUE; // Kill while loop.
         }
         newmis = spawn();
         newmis.solid = SOLID_NOT;
@@ -1759,12 +1848,21 @@ void() W_Attack = { // [FUNCTION]
 			}
 		} else if (self.weapon == IT2_LASER_CANNON) player_laser1();
 		else if (self.weapon == IT2_MJOLNIR) {
-			if (self.ammo_cells < COST_MJOLNIR && self.hammer_finished == 0) {
-				W_Reload(0.4);
-				player_hammer1();
+			if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR)) {
+				W_Reload(0.8);
+				if ( (self.ammo_cells < SVC_INTERMISSION) ) {
+					player_hammer1original();
+				} else {
+					player_mjolnir1original();
+				}
 			} else {
-				W_Reload(0.4);
-				player_mjolnir1();
+				if (self.ammo_cells < COST_MJOLNIR && self.hammer_finished == 0) {
+					W_Reload(0.4);
+					player_hammer1();
+				} else {
+					W_Reload(0.4);
+					player_mjolnir1();
+				}
 			}
 		} else if (self.weapon == IT2_GRAPPLE) {
 				if (self.hook) {
@@ -2699,15 +2797,17 @@ void(float gibDeath) Cheat_KillRay = { // [FUNCTION]
 		vel = vel * 200;
 		org = trace_endpos - dir*4;
 		if (!InSky(org)) { // Check for sky content? skies don't impact or bleed
-			if (trace_ent.takedamage) {
-				dmg = trace_ent.health + 1;
-				if (gibDeath) dmg = dmg - trace_ent.gibhealth + 1;
-				if (trace_ent.flags & FL_MONSTER) SpawnBlood(trace_ent,org + (crandom() * 4 * '1 1 1'),vel*0.2,dmg*2,0); // Hitting monsters does twice the amount of blood effects
-				else SpawnBlood(trace_ent,org + (crandom() * 4 * '1 1 1'),vel*0.2,dmg,0);
+			if (trace_ent && trace_ent != world) {
+				if (trace_ent.takedamage) {
+					dmg = trace_ent.health + 1;
+					if (gibDeath) dmg = dmg - trace_ent.gibhealth + 1;
+					if (trace_ent.flags & FL_MONSTER) SpawnBlood(trace_ent,org + (crandom() * 4 * '1 1 1'),vel*0.2,dmg*2,0); // Hitting monsters does twice the amount of blood effects
+					else SpawnBlood(trace_ent,org + (crandom() * 4 * '1 1 1'),vel*0.2,dmg,0);
 
-				if (trace_ent.vulnerability > 0) trace_ent.vulnerability = 0;
-				T_Damage(trace_ent,self,self,dmg,DAMARMOR);
-				if (trace_ent.classtype == CT_TARGETDUMMY) MarkAttack(org, trace_ent.wait); // Check for target dummy (manually create marker)
+					if (trace_ent.vulnerability > 0) trace_ent.vulnerability = 0;
+					T_Damage(trace_ent,self,self,dmg,DAMARMOR);
+					if (trace_ent.classtype == CT_TARGETDUMMY) MarkAttack(org, trace_ent.wait); // Check for target dummy (manually create marker)
+				} else Tent_Point(TE_GUNSHOT,org); // Hit something that does not bleed (often world)
 			} else Tent_Point(TE_GUNSHOT,org); // Hit something that does not bleed (often world)
 		}
 	} 

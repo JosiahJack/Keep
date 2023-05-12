@@ -270,7 +270,6 @@ void() monster_bandit = {
     self.th_pain    = bandit_pain;
     self.th_die     = bandit_die;
     self.th_checkattack = SoldierCheckAttack;
-    self.th_spawn   = monster_bandit;
     self.height     = 2;
     self.ryuflags   = RYU_INSANE;
 

@@ -735,7 +735,7 @@ float MON_XYGIBVELOCITY = -2;		// Gib system will add more XY velocity
 float MON_GIBFOUNTAIN = -3;			// Gibs fly up and outwards (fountain)
 float MON_GIBEXPLOSION = -4;		// Gibs fly upwards with force
 float MON_GIBTARGET = -5;			// Gibs fly in target direction
-float MON_NEVERGIB = -300;			// Monster can never be gibbed
+float MON_NEVERGIB = -9999;			// Monster can never be gibbed
 
 // Used in AI.QC routine for AI distance checks
 float MON_RANGE_MELEE = 120;		// Melee range
@@ -833,7 +833,6 @@ float MON_ZOMIDHACK = 3;		// Used to switch ID hack around
 
 // Player
 float RANGE_PLAYAXE = 72;		// Distance for fire axe (player)
-float RANGE_CHOPAXE = 72;		// Player distance to chop up bodies, changed from 64 to match full range -Qmaster
 float DAMAGE_PLAYAXE1 = 24;		// Default axe damage, changed to match one shotgun blast (6 x 4 = 24) -Qmaster
 float DAMAGE_PLAYAXE2 = 56;		// Enhanced axe damage, was 35 (measly), changed to match double shotgun blast (14 x 4 = 56) - Qmaster
 

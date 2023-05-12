@@ -378,6 +378,7 @@ void() monster_vomit = { // [ENTITY] Redirect
 	if (self.health < 1) self.health = 400;  // Nehahra used 300 health, but Doom cacodemon has 400.   Note from Qmaster...OK, not sure how that's relevant lol
 	self.gibhealth = MON_NEVERGIB;
 	self.gibbed = FALSE;
+    self.xfl = XFL_GHOUL; // It's a meatwad.  Eats gibs.
 	self.pain_flinch = 20;
 	if (self.death_dmg < 1) self.death_dmg = DAMAGE_TARBABY; // Allow for extra functionality (death damage and poison)
     self.mass   = MASS_HEAVY;

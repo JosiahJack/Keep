@@ -371,7 +371,6 @@ void(entity inflictor, entity attacker, float damage) spider_pain = { // [FUNCTI
 	}
 };
 
-
 void() spider_die1		= [	$death1,	spider_die2	] {};
 void() spider_die2		= [	$death3,	spider_die3	] { monster_check_gib(); };
 void() spider_die3		= [	$death5,	spider_die4	] { monster_check_gib();
@@ -385,20 +384,12 @@ void() spider_die9		= [	$death17,	spider_die10] { monster_death_postcheck(); };
 void() spider_die10		= [	$death19,	spider_die10] { monster_deadbody_check(); };
 
 void() spider_die = {
-	// Spiders are small, gibs don't bounce far
-	self.max_health = MON_NOGIBVELOCITY;
-
-	// Has the spider died while on the ceiling?
-	if (self.spawnflags & MON_VORELING_CEILING)
-		self.gibondeath = TRUE;
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// regular death
+	// Always gib if died while on the ceiling
+	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE;
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) {
 		sound(self,CHAN_VOICE, "drake/spider/death.wav",1,ATTN_NORM);
-		spider_die1();
+		spider_die1(); // regular death
 	}
 };
 
@@ -470,6 +461,7 @@ void() setup_spider = { // [FUNCTION]
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
 	self.gibbed = FALSE;
+	self.gftype = MON_NOGIBVELOCITY; // Low gib directional modifier
 	self.pain_flinch = 10;				// Always flinch
 	self.steptype = FS_TYPELIGHT;
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe

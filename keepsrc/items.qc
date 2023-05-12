@@ -504,6 +504,13 @@ float(entity hpplayer, entity hpitem) health_pickupcondition = { // [FUNCTION]
 // returns TRUE if healamount applied
 float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
 	if (!targ) return FALSE;
+	if (targ == world) return FALSE;
+
+	// TODO Not including morphing into a dragon in Keep yet.  -Qmaster
+	//if (targ.form_active) { // Morphed clients use armorvalue as health.
+	//	T_Repair(targ,t_healamount,ignore); 
+	//	return FALSE;
+	//}
 	if (targ.health <= 0) return FALSE;
 	if ((!ignore) && (targ.health >= targ.max_health)) return FALSE;
 	

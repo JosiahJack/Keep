@@ -447,7 +447,7 @@ void() Geyser_Erupt = { // [FUNCTION]
 
     T_RadiusDamage(self, self.owner, 60, world, DAMAGEALL);
     sound(self,CHAN_WEAPON,"drake/misc/wallbrk.wav",1,ATTN_NORM);
-	ShockWave (self.origin, RING_QUAKE, 5, "progs/drake/s_wave.spr",FALSE);
+	ShockWave(self.origin, RING_QUAKE, 5, "progs/drake/s_wave.spr",FALSE);
 
 	// Do rock spray from below.
     swap = self;

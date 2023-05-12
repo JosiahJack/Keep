@@ -603,9 +603,13 @@ void() player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	playham_frame(34,3);
-	if (HIP_ThrowMjolnir()) self.think = player_hammer4t; // TRUE if the hammer hits something or gets thrown.
+	if (W_FireMjolnir()) self.think = player_hammer4t; // TRUE if the hammer hits something or gets thrown.
 	self.nextthink = time + 0.05;
 };
+// Since throwing the hammer on frame three can be almost impossible with
+// lag, allow throwing on frame four, even if animation would make the
+// throw appear a bit late.  Better to have forgiving controls and happy
+// players than "fake difficulty" for animation's sake.
 void() player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir(); }; // [FUNCTION]
 void() player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05; }; // [FUNCTION]
 void() player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05; }; // [FUNCTION]
@@ -616,17 +620,31 @@ void() player_mjolnir2 = [ 39.000, player_mjolnir3 ] { if (!frame_pause()) playh
 void() player_mjolnir3 = [ 40.000, player_mjolnir4 ] { // [FUNCTION]
 	if (!frame_pause()) {
 		playham_frame(40,3);
-		if (HIP_ThrowMjolnir()) self.think = player_mjolnir4t; // TRUE if the hammer hits something or gets thrown.
+		if (W_FireMjolnir()) self.think = player_mjolnir4t; // TRUE if the hammer hits something or gets thrown.
 	}
 };
 void() player_mjolnir4 = [ 41.000, player_mjolnir5 ] {
-	if (!frame_pause()) {
-		playham_frame(41,4);
-		W_FireMjolnir();
-	}
+	if (frame_pause()) return;
+
+	playham_frame(41,4);
+	W_FireMjolnir();
 }; // [FUNCTION]
 void() player_mjolnir5 = [ 42.000, player_mjolnir6 ] { playham_frame(42,4); }; // [FUNCTION]
 void() player_mjolnir6 = [ 43.000, player_run ] { playham_frame(43,0); }; // [FUNCTION]
+
+void () player_hammer1original = [ 32.000, player_hammer2 ] { self.weaponframe = 1; };
+void () player_hammer2original = [ 33.000, player_hammer3 ] { self.weaponframe = 2; };
+void () player_hammer3original = [ 34.000, player_hammer4 ] { self.weaponframe = 3; };
+void () player_hammer4original = [ 35.000, player_hammer5 ] { self.weaponframe = 4; W_FireMjolnirOriginal(); };
+void () player_hammer5original = [ 36.000, player_hammer6 ] { self.weaponframe = 4; };
+void () player_hammer6original = [ 37.000, player_run ] { self.weaponframe = 4; };
+
+void () player_mjolnir1original = [ 38.000, player_mjolnir2 ] { self.weaponframe = 1; };
+void () player_mjolnir2original = [ 39.000, player_mjolnir3 ] { self.weaponframe = 2; };
+void () player_mjolnir3original = [ 40.000, player_mjolnir4 ] { self.weaponframe = 3; };
+void () player_mjolnir4original = [ 41.000, player_mjolnir5 ] { self.weaponframe = 4; W_FireMjolnirOriginal(); };
+void () player_mjolnir5original = [ 42.000, player_mjolnir6 ] { self.weaponframe = 4; };
+void () player_mjolnir6original = [ 43.000, player_run ] { self.weaponframe = 4; };
 
 void() player_laser1 = [ 103.000, player_laser3 ] { // [FUNCTION]
 	if (frame_pause()) return;

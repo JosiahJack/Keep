@@ -165,7 +165,7 @@ void(entity entToDrown) liquid_drown = { // [FUNCTION]
 	if (!(entToDrown.flags & FL_CLIENT || entToDrown.flags & FL_MONSTER)) return;
 	if (entToDrown.takedamage == DAMAGE_NO) return;
 	if (entToDrown.health < 0) return;
-	if (entToDrown.bodyonflr == MON_ONFLR) return;
+	if (entToDrown.bodyonflr == MON_ONFLR) return; // Don't drown corpses.
 	
 	dprint("Drowning: "); dprint(entToDrown.classname); dprint("\n");
 	if (entToDrown.drowntime < time && entToDrown.spawnflags & CAN_DROWN) {

@@ -694,6 +694,7 @@ void() AkArrow_Explode = { // [FUNCTION]
 
 void() RyuPlasma_Explode = { // [FUNCTION]
     local float dmg1, dmg2;
+    local vector pak;
 
     if (!self.dmg) self.dmg = 100;
     if (!self.distance) self.distance = 320;
@@ -711,7 +712,10 @@ void() RyuPlasma_Explode = { // [FUNCTION]
     sound(self,CHAN_AUTO,"rogue/plasma/explode.wav",1,ATTN_NORM);
     setorigin(self, self.origin - 8*normalize(self.velocity)); // PM:  Do it right.
     Tent_Explosion2 (self.origin, 244, 3);
-    RyuPlasma_Discharge();
+    pak_x = self.style; // nofriendlyfire
+    pak_y = self.distance; // radius
+    pak_z = self.count; // maxhits
+    BurstLit_Chain(self,self.owner,self.dmg * 0.5,self.enemy,self.origin,pak,TRUE);
     BecomeAnyExplosion (138, 6, "progs/drake/s_fancy.spr");
 };
 
@@ -876,6 +880,7 @@ void() Thor_Remove = { // [FUNCTION]
     thor = self.master;
     if (thor) {
         thor.hammer_finished = 0;
+        thor.hammer = world;
         if (thor.items2 & IT2_MJOLNIR) { // Confirm ownership of hammer.
             sound(thor,CHAN_ITEM,"weapons/lock4.wav",1,ATTN_NORM);
             if (thor.flags & FL_CLIENT) { // So far, only clients use ammo.
@@ -1394,7 +1399,7 @@ void(vector spot, float base, float add, string text, float toponly) ShockWave =
 	// NOTE:  Don't use world in the 4th (ignore) parm or else the traceline
 	// will pass through any non-world bsp entites, such as shootable
 	// trap doors.  Use self instead, which should be an inflictor entity.
-    traceline (spot, spot - '0 0 64', TRUE, self);
+    traceline(spot, spot - '0 0 64', TRUE, self);
     if (trace_fraction >= 1.0) return; // Too far from ground.
     if (!toponly && (trace_plane_normal * '0 0 1') < 0.5) return; // Ground slopes too much.  Was 0.7071.
 
@@ -1404,7 +1409,6 @@ void(vector spot, float base, float add, string text, float toponly) ShockWave =
     wav1 = spawn(); // Top side.
     wav1.angles = ang;
     setorigin(wav1, spot);
-	
 	if (!toponly) { // Bottom side.
 		ang_x = anglemod(ang_x + 180);
 		wav2 = spawn();
@@ -1414,8 +1418,8 @@ void(vector spot, float base, float add, string text, float toponly) ShockWave =
 	
     ts = self; // Thinking
     self = wav1;
-    BecomeAnyExplosion (base, add, text);
-	if (!toponly) { self = wav2; BecomeAnyExplosion (base, add, text); }
+    BecomeAnyExplosion(base, add, text);
+	if (!toponly) { self = wav2; BecomeAnyExplosion(base, add, text); }
     self = ts;
 };
 

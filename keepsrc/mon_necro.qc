@@ -1146,7 +1146,6 @@ void() setup_necro = { // [FUNCTION]
 	}
     self.th_pain    = necro_pain;
     self.th_die     = necro_die;
-    self.th_spawn   = setup_necro;
     self.waitmax    = 0;    // Teleport delay, similar to nemesant.
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (!self.classtype) self.classtype = CT_MONACOLYTE;

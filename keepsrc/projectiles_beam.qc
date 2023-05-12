@@ -42,7 +42,7 @@ void(float lo, float hi) Thor_Slam;
 void(vector pos, vector dir, float rubicon) make_spark;
 void() lightning_orb_think;
 void() Plasma_Fx;
-void() Thor_Discharge;
+void(float strikes) Thor_Discharge;
 void(vector spot, float base, float add, string text, float toponly) ShockWave;
 void() FlameWave;
 
@@ -330,23 +330,8 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [F
 	}
 };
 
-void(entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNCTION]
-   local entity light;
-
-   light = spawn();
-   light.delay = (time + 0.800);
-   light.state = FALSE;
-   light.lastvictim = prev;
-   light.distance = dst;
-   light.owner = own;
-   light.v_angle = self.angles;
-   light.v_angle_x = FALSE;
-   light.v_angle_z = FALSE;
-   light.origin = own.origin;
-   light.nextthink = time;
-};
-
 void() HIP_SpawnMjolnirBase = { // [FUNCTION]
+	local float strikes;
 	local entity light, stemp;
 
 	if (self.tome_finished) { Thor_Slam(30,80); return; }
@@ -369,12 +354,14 @@ void() HIP_SpawnMjolnirBase = { // [FUNCTION]
 	light.speed = THOR_SPEED;
 	stemp = self;
 	self = light;
-	Thor_Discharge();
-	Thor_Discharge();
-	Thor_Discharge();
-	Thor_Discharge();
+	strikes = 2;
+	if (self.master.tome_finished || self.owner.tome_finished) strikes = 3;
+	Thor_Discharge(strikes);
+	Thor_Discharge(strikes);
+	Thor_Discharge(strikes);
+	Thor_Discharge(strikes);
 	self = stemp;
-	ShockWave(trace_endpos + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
+	ShockWave(light.origin + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
 };
 
 void() HIP_FireMjolnirLightning = { // [FUNCTION]
@@ -384,7 +371,7 @@ void() HIP_FireMjolnirLightning = { // [FUNCTION]
       cells = self.ammo_cells;
       self.ammo_cells = FALSE;
       discharged = TRUE;
-      T_RadiusDamage(self,self,(35.000 * cells),world, DAMAGEALL);
+      T_RadiusDamage(self,self,(35.000 * cells),self,DAMAGEALL);
       discharged = FALSE;
       W_SetCurrentAmmo(self,FALSE);
       return;
@@ -395,15 +382,15 @@ void() HIP_FireMjolnirLightning = { // [FUNCTION]
 
 void(entity current, float life) SpawnLightningTrace = { // [FUNCTION]
 	float dmg;
-	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST,current);
-	WriteCoord (MSG_BROADCAST,current.origin_x);
-	WriteCoord (MSG_BROADCAST,current.origin_y);
-	WriteCoord (MSG_BROADCAST,current.origin_z);
-	WriteCoord (MSG_BROADCAST,self.origin_x);
-	WriteCoord (MSG_BROADCAST,self.origin_y);
-	WriteCoord (MSG_BROADCAST,self.origin_z);
+	WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST,TE_LIGHTNING2);
+	WriteEntity(MSG_BROADCAST,current);
+	WriteCoord(MSG_BROADCAST,current.origin_x);
+	WriteCoord(MSG_BROADCAST,current.origin_y);
+	WriteCoord(MSG_BROADCAST,current.origin_z);
+	WriteCoord(MSG_BROADCAST,self.origin_x);
+	WriteCoord(MSG_BROADCAST,self.origin_y);
+	WriteCoord(MSG_BROADCAST,self.origin_z);
 	sound(self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
 	if (current.classgroup == CG_ZOMBIE) dmg = current.max_health; // poor zombies die in so many ways
 	else dmg = 30;
@@ -629,6 +616,11 @@ vector(entity attacker, entity targ, vector start, vector end) ChainLit_Point = 
 };
 
 void(entity targ, entity inflictor, entity attacker, vector org, float damage) BoltDamage = { // [FUNCTION]
+	if (targ.bodyonflr == MON_ONFLR) {
+		monster_flrbody_gib(targ, damage * 2);
+		return;
+	}
+
 	if (ai_immunebreakable(attacker, targ)) { // This is resist lightning function without pain sound
 		if (inflictor.lightning_timer < time) {
 			inflictor.lightning_timer = time + 0.3; // Don't spawn smoke constantly (let the sprite finish)
@@ -642,39 +634,11 @@ void(entity targ, entity inflictor, entity attacker, vector org, float damage) B
     T_Damage(targ, inflictor, attacker, damage, DAMARMOR);
 };
 
-// Called within 'BurstLit_Chain' below.
-float(entity targ, entity inflictor, entity attacker, float damage, vector spot, float bang) BurstLit_Trace = { // [FUNCTION]
-    local vector end;
-
-    if (targ.flags & FL_CLIENT) end = targ.origin; // Use origin because of TE beam code for clients.
-    else end = Midpoint(targ);
-
-    // Update:  Traceline must hit intended target! Targets can take damage from one bolt once because they can neither stack nor pierce.
-    // Ghost touch code must be called before calling this function if ghosts are to be hit.
-    traceline (spot, end, FALSE, inflictor); // 3rd was TRUE.
-    if (trace_ent == targ) {
-        // Draw from source point to target point, except for players.  For
-        // players, draw from target point to source point because engine
-        // always draws from origin in case of player.
-        if (targ.flags & FL_CLIENT) Tent_Beam(TE_LIGHTNING2, targ, end, spot);
-        else Tent_Beam(TE_LIGHTNING2, targ, spot, end);
-
-        if (bang == 2) sound(inflictor,CHAN_VOICE, "weapons/lstart.wav",1,ATTN_NORM);
-        else if (bang) sound(inflictor,CHAN_VOICE, "weapons/lhit.wav",1,ATTN_NORM);
-
-        end = trace_endpos; // Use where bolt hit for blood spot.
-        if (targ.bodyonflr == MON_ONFLR) {
-			monster_flrbody_gib(targ, damage * 2);
-		} else BoltDamage(targ,inflictor,attacker,end,damage);
-        return TRUE;
-    }
-    return FALSE;
-};
-
 // Shoots multiple lightning bolts at nearby targets from a common point.  Used by burst lightning gun.  Also used by plasma discharge.
 void(entity inflictor, entity attacker, float damage, entity ignore, vector spot, vector pak, float bang) BurstLit_Chain = { // [FUNCTION]
+    local float hits, nofriendlyfire, radius, maxhits, loopiter, check;
+	local vector end;
     local entity head, saved;
-    local float hits, nofriendlyfire, radius, maxhits, loopiter;
 
     nofriendlyfire = pak_x;
     radius = pak_y;
@@ -690,10 +654,32 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
 			&& (head != attacker&& head != ignore && head.resist_cells < 1
             && !(nofriendlyfire && Ally_Check(head,attacker))
             && Align_Opposing(head,attacker)))
-			|| head.bodyonflr == MON_ONFLR) {
+			|| (head.bodyonflr == MON_ONFLR && head.alignment != NEUTRAL)) {
 			// Go to the trouble of zapping live, highly vulnerable targets
             // first instead of dead or resistant targets.
-			if (BurstLit_Trace(head,inflictor,attacker,damage,spot,bang)) {
+			check = FALSE;
+			if (head.flags & FL_CLIENT) end = head.origin; // Use origin because of TE beam code for clients.
+			else end = Midpoint(head);
+
+			// Update:  Traceline must hit intended target! Targets can take damage from one bolt once because they can neither stack nor pierce.
+			// Ghost touch code must be called before calling this function if ghosts are to be hit.
+			traceline(spot,end,FALSE,inflictor); // 3rd was TRUE.
+			if (trace_ent == head) {
+				// Draw from source point to target point, except for players.  For
+				// players, draw from target point to source point because engine
+				// always draws from origin in case of player.
+				if (head.flags & FL_CLIENT) Tent_Beam(TE_LIGHTNING2,head,end,spot);
+				else Tent_Beam(TE_LIGHTNING2,head,spot,end);
+
+				if (bang == 2) sound(inflictor,CHAN_VOICE,"weapons/lstart.wav",1,ATTN_NORM);
+				else if (bang) sound(inflictor,CHAN_VOICE,"weapons/lhit.wav",1,ATTN_NORM);
+
+				end = trace_endpos; // Use where bolt hit for blood spot.
+				BoltDamage(head,inflictor,attacker,end,damage);
+				check = TRUE;
+			}
+
+			if (check) { // We hit and hurt something.
 				hits = hits + 1;
 				if (hits >= maxhits) {
 					if (attacker.flags & FL_CLIENT) {
@@ -794,24 +780,6 @@ void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_
             }
         }
     }
-};
-
-//void(entity inflictor, entity attacker,
-//	float damage, entity ignore,
-//	vector spot, vector pak,
-//	float bang) 
-void(entity attacker) BurstLit_Discharge = { // [FUNCTION]
-    local vector pak;
-
-    pak_x = self.style; // nofriendlyfire
-    pak_y = self.distance; // radius
-    pak_z = self.count; // maxhits
-    BurstLit_Chain(self,attacker,self.dmg * 0.5,self.enemy,self.origin,pak,TRUE);
-};
-
-// Called by exploding plasma balls.  Also by Mjolnir.
-void() RyuPlasma_Discharge = { // [FUNCTION]
-	BurstLit_Discharge(self.owner);
 };
 
 // "Storm" Lightning Strike  (a.k.a. Airstrike).  This creates a blank entity that will zap targets in the water within a radius for damage.
@@ -1002,21 +970,22 @@ void(vector start, vector dir, float damage, float radius, float ang) DeathRay =
 void() Thor_Pulse = { // [FUNCTION]
 	local vector pak;
 
-    if (self.count < 1) { remove (self);  return; }
+    if (self.count < 1) { remove(self); return; }
 
     self.nextthink = time + 0.2;
     self.count = self.count - 1;
-	BurstLit_Discharge(self.master);
+    pak_x = self.style; // nofriendlyfire
+    pak_y = self.distance; // radius
+    pak_z = self.count; // maxhits
+    BurstLit_Chain(self,self.master,self.dmg * 0.5,self.enemy,self.origin,pak,TRUE);
 	self.think = Thor_Pulse;
 };
 
 // Spawns a special discharge entity for Mjolnir impacts.
 // Cannot use BecomeExplosion derivates because hammer remains after impact, so we need to create the explosion effects.
-void() Thor_Discharge = { // [FUNCTION]
+void(float strikes) Thor_Discharge = { // [FUNCTION]
     newmis = spawn();
-    if (self.master.tome_finished) newmis.count = 3;
-    else newmis.count = 2;
-
+    newmis.count    = strikes;
     newmis.master   = self.master;  // The attacker.
     newmis.enemy    = self.enemy;   // Who to ignore.
     newmis.dmg      = self.dmg;

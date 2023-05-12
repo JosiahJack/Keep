@@ -400,14 +400,14 @@ void() funcbreakable_use = { // [FUNCTION]
 		while (content_loop > 0) {
 			// Setup broken object inside area (min/max) of parent breakable object
 			if (self.classtype == CT_FUNCBREAK) {
-				rorg_x = self.oldorigin_x + random()*self.size_x;
-				rorg_y = self.oldorigin_y + random()*self.size_y;
-				rorg_z = self.oldorigin_z + random()*self.size_z;
+				rorg = NewVector(self.oldorigin_x + random()*self.size_x,
+				                 self.oldorigin_y + random()*self.size_y,
+				                 self.oldorigin_z + random()*self.size_z);
 			} else {
 				// trigger version is a single origin point with slight wobble
-				rorg_x = self.origin_x + crandom()*self.brkvol_x;
-				rorg_y = self.origin_y + crandom()*self.brkvol_y;
-				rorg_z = self.origin_z + crandom()*self.brkvol_z;
+				rorg = NewVector(self.origin_x + crandom()*self.brkvol_x,
+				                 self.origin_y + crandom()*self.brkvol_y,
+				                 self.origin_z + crandom()*self.brkvol_z);
 			}
 			// Check point content and keep checking (limited loop cycles)
 			content_flag = pointcontents(rorg);

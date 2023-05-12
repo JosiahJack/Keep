@@ -148,22 +148,20 @@ void() skullw_walk = { // [FUNCTION]
 	else skullw_walk1();
 };
 
-
-void()	skullw_run1	= [	$stand1,		skullw_run2	] { ai_face();
-	monster_idle_sound(); ai_run(0); };
-void()	skullw_run2	= [	$stand18,		skullw_run3	] { ai_face(); ai_run(0); };
-void()	skullw_run3	= [	$stand16,		skullw_run4	] { ai_run(0); };
-void()	skullw_run4	= [	$stand14,		skullw_run5	] { ai_run(0); };
-void()	skullw_run5	= [	$stand12,		skullw_run6	] { ai_face(); ai_run(0); };
-void()	skullw_run6	= [	$stand3,		skullw_run7	] { ai_face(); ai_run(0); };
-void()	skullw_run7	= [	$stand5,		skullw_run8	] { ai_run(0); };
-void()	skullw_run8	= [	$stand7,		skullw_run9	] { ai_run(0); };
-void()	skullw_run9	= [	$stand9,		skullw_run10] { ai_face(); ai_run(0); };
-void()	skullw_run10= [	$stand11,		skullw_run11] { ai_face(); ai_run(0); };
-void()	skullw_run11= [	$stand13,		skullw_run12] { ai_run(0); };
-void()	skullw_run12= [	$stand15,		skullw_run13] { ai_run(0); };
-void()	skullw_run13= [	$stand17,		skullw_run14] { ai_run(0); };
-void()	skullw_run14= [	$stand19,		skullw_run1	] { ai_run(0); };
+void()	skullw_run1	= [	$stand1, skullw_run2] { ai_face(); monster_idle_sound(); ai_run(0); };
+void()	skullw_run2	= [	$stand18,skullw_run3] { ai_face(); ai_run(0); };
+void()	skullw_run3	= [	$stand16,skullw_run4] { ai_run(0); };
+void()	skullw_run4	= [	$stand14,skullw_run5] { ai_run(0); };
+void()	skullw_run5	= [	$stand12,skullw_run6] { ai_face(); ai_run(0); };
+void()	skullw_run6	= [	$stand3, skullw_run7] { ai_face(); ai_run(0); };
+void()	skullw_run7	= [	$stand5, skullw_run8] { ai_run(0); };
+void()	skullw_run8	= [	$stand7, skullw_run9] { ai_run(0); };
+void()	skullw_run9	= [	$stand9, skullw_run10] { ai_face(); ai_run(0); };
+void()	skullw_run10= [	$stand11,skullw_run11] { ai_face(); ai_run(0); };
+void()	skullw_run11= [	$stand13,skullw_run12] { ai_run(0); };
+void()	skullw_run12= [	$stand15,skullw_run13] { ai_run(0); };
+void()	skullw_run13= [	$stand17,skullw_run14] { ai_run(0); };
+void()	skullw_run14= [	$stand19,skullw_run1] { ai_run(0); };
 
 // MELEE - Teleportation
 void() skullw_tfin1 = [$tele9, skullw_tfin2 ] { // [FUNCTION]
@@ -179,125 +177,6 @@ void() skullw_tfin4 = [$tele3, skullw_tfin5 ] { ai_face(); };
 void() skullw_tfin5 = [$tele1, skullw_run1 ] { ai_face();
 	self.bodyphased = MONAI_SKULLWSOLID;
 	self.takedamage = DAMAGE_AIM;
-};
-
-// Find new teleport location
-void() skullw_blink = { // [FUNCTION]
-	local float dist, edist, blinkfinished, blinkcount;
-	local vector org, org_ofs, angle_vec;
-
-	blinkfinished = TRUE; blinkcount = 0;
-	org = angle_vec = org_ofs = '0 0 0'; 
-	org_ofs_z = self.height;
-	self.oldorigin = self.origin;
-	
-	// Trace upwards to find ceiling or maximum teleport height
-	traceline(self.origin, self.origin+org_ofs, TRUE, self);
-	org_ofs = trace_endpos;
-	
-	// Loop around for possible locations
-	while(blinkfinished) {
-		blinkcount = blinkcount + 1;		// next loop
-		angle_vec_y = random() * 360;		// Random direction
-		makevectors(angle_vec);				// make vector
-		
-		// Generate random angle and trace teleport direction
-		dist = self.distmin + (random() * self.distmax);
-		org = org_ofs + (v_forward * dist);
-		traceline(org_ofs, org, TRUE, self);
-		
-		// Check distance is far enough away from enemy
-		// Move away from any walls (traceline is surface contact)
-		dist = vlen(trace_endpos - org_ofs) - 32;
-		org = org_ofs + (v_forward * dist);
-		edist = vlen(self.enemy.origin - org);
-
-		// Is the enemy far enough away?
-		if (edist > MONAI_MELEESKULLW) {
-			// Trace down to floor below new point
-			traceline(org, org - '0 0 512', TRUE, self);
-			org = trace_endpos + self.view_ofs;
-			
-			// The teleport fuction is working with a radius command
-			// and this will ignore walls and just find any position
-			// in all directions. This can lead to the skull wizard
-			// teleporting behind walls or other parts of the map!
-			// This can be prevent in two ways:
-			// 1) linesight between skull wizard and player
-			// - can leads to less interesting locations (always insight)
-			// 2) linesight between new location and old
-			// - This allows skull wizard to teleport around corner
-			//   and still be within the same area!
-			//
-			// Trace through monsters and check trace fraction
-			traceline(org, self.origin, TRUE, self);
-			if (trace_fraction == 1) blinkfinished = FALSE;
-		}
-
-		// Been looping too long, back to original location
-		if (blinkcount > 10) {
-			blinkfinished = FALSE;
-			org = self.origin;
-		}
-	}
-	
-	// Move to new location
-	self.solid = SOLID_SLIDEBOX;				// Standard monster movement
-	setmodel(self, self.mdl);					// Setup model
-	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	setorigin(self, org);						// move to new location
-	
-	// Test if new location is solid?
-	if (!walkmove (0, 0)) {
-		self.solid = SOLID_NOT;					// No world interaction yet
-		setmodel(self,"");						// Turn off model
-		setorigin(self, self.oldorigin);		// restore original location
-		self.nextthink = time + 1;				// Keep checking
-		self.think = skullw_blink;
-	}
-	else skullw_tfin1();
-};
-
-// Cycle around teleport chain lists instead
-void() skullw_waitforlink = { // [FUNCTION]
-	self.nextthink = time + 0.5 + random();
-	self.think = skullw_waitforlink;
-	setorigin(self, self.movelast.origin);	// move to new location
-	self.enemydist = range_distance(self.enemy, FALSE);
-
-	// Is the enemy too close or dead?
-	if (self.enemydist > self.movelast.distance || self.enemy.health < 1) {
-		// Move to new location
-		self.solid = SOLID_SLIDEBOX;				// Standard monster movement
-		setmodel(self, self.mdl);					// Setup model
-		setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	
-		// Test if new location is solid?
-		if (!walkmove (0, 0)) {
-			self.solid = SOLID_NOT;					// No world interaction yet
-			setmodel(self,"");						// Turn off model
-		}
-		else skullw_tfin1();
-	}
-};
-
-void() skullw_checkblinklist = { // [FUNCTION]
-		// Does the blink list exist already?
-	if (self.movelast.classtype != CT_SKULLTELEPORT) {
-		self.movelast = find(world,targetname,self.target2);
-		// Does the entity chain exist?
-		if (self.movelast.classtype == CT_SKULLTELEPORT)
-			skullw_waitforlink();
-		else {
-			// target2 is not valid, do regular teleport
-			self.target2 = "";
-			skullw_blink();
-		}
-	} else {
-		// Move forward in chain and try next spawn location
-		self.movelast = self.movelast.enemy;
-		skullw_waitforlink();
-	}
 };
 
 // touch book and phase out
@@ -324,8 +203,8 @@ void() skullw_tele12= [$tele9,	skullw_tele13 ] {}; // [FUNCTION]
 void() skullw_tele13 = { // [FUNCTION]
 	setmodel(self,"");
 	// Check if a chain list has been defined
-	if (self.target2 != "") skullw_checkblinklist();
-	else skullw_blink();
+	if (self.target2 != "") SUB_CheckSpawnLinkList();
+	else SUB_FindRandomSpawnSpot();
 };
 
 // Rocket Skull Attack (Regular)
@@ -568,24 +447,10 @@ void() skullw_wakeup = { // [FUNCTION]
 	self.th_missile = skullw_magic;
 	self.th_melee = skullw_tele1;
 	self.th_updmissile = skullw_guardian;
-
-	// Temporarily restore model/bound box
-	self.solid = SOLID_SLIDEBOX;
+	self.th_spawn = skullw_tfin1;
 	self.movetype = MOVETYPE_STEP;
-	setmodel(self, self.mdl);
-	setsize (self, self.bbmins, self.bbmaxs);
-		
-	// Can the skull wizard move?
-	if (!walkmove (0, 0)) {
-		// Something blocking, teleport elsewhere
-		self.solid = SOLID_NOT;
-		setmodel(self,"");
-		self.nextthink = time + 0.1;
-		self.think = skullw_blink;
-	}
-	else skullw_tfin1();
+	SUB_FindRandomSpawnSpotFinish(self.origin);
 };
-
 
 // Short body recoil (6 frames)
 void()	skullw_painA1	= [	$painA2,	skullw_painA2	] {};
@@ -643,7 +508,6 @@ void() skullw_fadeaway = { // [FUNCTION]
 };
 
 void() skullw_explode = { // [FUNCTION]
-	self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
 	//particle_explode(self.origin, 100, 3, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
 	particle_explode(self.origin, 100, 3, PARTICLE_BURST_RED, PARTICLE_BURST_SKULLUP);	//ijed: made them all die red which just seemed to fit better than white tbh																																							
 	self.gib2skin = self.exactskin;		// Update book skin
@@ -678,8 +542,6 @@ void() skullw_die = { // [FUNCTION]
 	if (self.health < -40) {
 		Tent_Explosion(self.origin); // Typical Grenade explosion
 		SpawnExplosion(EXPLODE_MED, self.origin, SOUND_REXP3);
-		self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
-		self.gib2skin = self.exactskin;		// Update book skin
 		ThrowGib(11,1); // Throw head and book
 		ThrowGib(12,1);	
 		entity_hide(self);
@@ -745,6 +607,7 @@ void() monster_skullwiz = {
 	if (self.health < 1) self.health = 120;
 	self.gibhealth = MON_NEVERGIB;	// Cannot be gibbed by weapons
 	self.gibbed = FALSE;			// Still in one piece
+	self.gftype = MON_NOGIBVELOCITY; // Low gib directional modifier
 	self.pain_flinch = 50;			// Armour strength robes!
 	self.steptype = FS_TYPEMEDIUM;	// Humanoid footsteps
 	self.pain_longanim = FALSE;		// No long pain animation
@@ -754,6 +617,7 @@ void() monster_skullwiz = {
 	if (self.height == 0) self.height = SKULLW_HEIGHT;
 	if (self.distmin == 0) self.distmin = SKULLW_DISTMIN;
 	if (self.distmax == 0) self.distmax = SKULLW_DISTMAX;
+	if (self.meleerange == 0) self.meleerange = MONAI_MELEESKULLW;
 	if (!self.bodyphased) self.bodyphased = MONAI_SKULLWSOLID;
 	else self.bodyphased = MONAI_SKULLWINVIS;
 
@@ -778,7 +642,7 @@ void() monster_skullwiz = {
 		self.th_melee = skullw_tele1;
 		self.th_updmissile = skullw_guardian;
 	}
-	
+	self.th_spawn = skullw_tfin1;
 	self.classtype = CT_MONSKULLW;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEWALK;
@@ -795,7 +659,7 @@ void() monster_skullwiz = {
 		self.poisonous = TRUE;						// Explosive Poison
 		if (self.deathstring == "") self.deathstring = " was evaporated by a Guardian Skull Wizard\n";
 	}
-
+	self.gib2skin = self.exactskin;	// Update book skin
 	if (self.deathstring == "") self.deathstring = " was blown apart by a Skull Wizard\n";
 	
 	// Make sure the particles match the skin
@@ -809,16 +673,12 @@ void() monster_skullwiz = {
 };
 
 // Guardian variant redirect for drake
-void() monster_skull_wizard_lord = { self.classname = "monster_skullwiz"; self.spawnflags = self.spawnflags | MON_SKULLWIZ_GUARDIAN; monster_skullwiz(); };
+void() monster_skull_wizard_lord = { // [ENTITY]
+	self.classname = "monster_skullwiz";
+	self.spawnflags = self.spawnflags | MON_SKULLWIZ_GUARDIAN;
+	monster_skullwiz();
+};
 
-// QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
-// Teleport destination for skull wizard ONLY
-// -------- KEYS --------
-// targetname : part of a chain group (required)
-// target   : next destination in the chain
-// distance : Minimum distance enemy needs to be before spawning
-// -------- NOTES --------
-// Teleport destination for skull wizard ONLY
 void() info_skullwiz_link = { // [FUNCTION]
 	local entity currlink, master;
 	local float loopcondition;
@@ -830,11 +690,13 @@ void() info_skullwiz_link = { // [FUNCTION]
 		return;
 	}
 	
-	master = self; // The master entity is the start of the chain the currlink is a link in the chain
+	// The master entity is the start of the chain the currlink is a link in
+	// the chain
+	master = self;
 	loopcondition = TRUE;
 	while (loopcondition) {
 		self.enemy = master; // Setup next link to master and find next link
-		currlink = find(world, targetname, self.target);
+		currlink = find(world,targetname,self.target);
 		if (!currlink || currlink == master) // reached end of list?
 			loopcondition = FALSE;
 		else {
@@ -844,8 +706,18 @@ void() info_skullwiz_link = { // [FUNCTION]
 	}
 };
 
+// QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
+// Teleport destination for skull wizard ONLY
+// -------- KEYS --------
+// targetname : part of a chain group (required)
+// target   : next destination in the chain
+// distance : Minimum distance enemy needs to be before spawning
+// -------- NOTES --------
+// Teleport destination for skull wizard ONLY
 void() info_skullwiz_destination = { // [ENTITY]
-	// All teleportation points need to be part of a chain otherwise the skull Wizard would have to use findradius which is expensive if lots of entities are around
+	// All teleportation points need to be part of a chain otherwise the skull
+	// Wizard would have to use findradius which is expensive if lots of
+	// entities are around.
 	if (SUB_HideIfNoTargetname()) return;
 	if (SUB_HideIfNoTarget()) return;
 	

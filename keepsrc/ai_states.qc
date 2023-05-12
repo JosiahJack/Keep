@@ -140,9 +140,9 @@ void(float dist) ai_walk = {
 				self.origin_z = self.origin_z + self.move_elev;
 			else self.origin_z = self.origin_z - self.move_elev;
 
-			vertdiff = '0 0 0';
-			vertdiff_x = fabs(self.goalentity.origin_x - self.origin_x);
-			vertdiff_y = fabs(self.goalentity.origin_y - self.origin_y);
+			vertdiff = NewVector(fabs(self.goalentity.origin_x - self.origin_x),
+			                     fabs(self.goalentity.origin_y - self.origin_y),
+								 0);
 			// Are the path corners stacked on top of each other?
 			if (vertdiff_x < MON_ZTOL && vertdiff_y < MON_ZTOL) dist = 0;
 		}

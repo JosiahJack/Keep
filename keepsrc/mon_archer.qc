@@ -540,7 +540,6 @@ void() monster_archer = { // [ENTITY]
     self.th_checkattack = ArcherCheckAttack;
     self.meleerange = 160;
     self.meleerangez = 80;
-    self.th_spawn   = monster_archer;
     self.attack_state   = AS_FLANKING;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
     if (!self.classtype) self.classtype = CT_MONARCHER;

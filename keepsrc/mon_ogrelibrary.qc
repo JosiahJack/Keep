@@ -74,6 +74,7 @@ void() monster_library = {
   self.movetype = MOVETYPE_NONE;		// Static item, no movement
   if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
   self.gibbed = FALSE;
+  self.gibhealth = -40;
   self.pain_flinch = 40;
   if (self.health <= 0) self.health = 666;
   self.cnt = 0;
@@ -82,15 +83,15 @@ void() monster_library = {
   self.th_run = library_2mad;
   self.th_pain = library_pain;
   self.th_die = library_pain;
-  self.th_wins = library_hmm;
+  self.th_win = library_hmm;
   self.th_greet = library_shush;
   self.th_special = library_watch;
 	if (self.deathstring == "")  self.deathstring = " was turned over by a librarian\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONLIBRARIAN;
-	self.classgroup = CG_HARMLESS;
+	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEWALK;
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
   monster_start();
 };
 
@@ -106,7 +107,7 @@ void() library_2archg = {
   self.th_missile = archg_control;
   self.th_pain = archg_pain;
   self.th_die = archg_die;
-  self.th_wins = archg_bow1;
+  self.th_win = archg_bow1;
   self.th_greet = archg_bow1;
   self.classtype = CT_MONARCHG;
 }
@@ -611,7 +612,7 @@ void() monster_oglib = { // [ENTITY] Ogre pushing a library cart with books on i
 	self.idmaxs = VEC_HULL2_MAX;
   self.button0 = 90;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
-	self.gibhealth = -80;
+	self.gibhealth = -60;
 	self.gibbed = FALSE;
 	self.pain_flinch = 30;				// Low pain flinch
 	self.pain_longanim = TRUE;			// Can be chopped with shadow axe

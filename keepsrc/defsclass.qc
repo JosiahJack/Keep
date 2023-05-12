@@ -361,7 +361,7 @@ float CT_PROJ_SG = 410;			// SG projectile
 float CT_PROJ_MCOR1 = 411;		// Manticore yellow large spit spike
 float CT_PROJ_SSG = 412;		// SSG projectile
 float CT_HEALBEER = 413;		// New Q Brew for Ravenkeep
-float CT_SPIRITTELEPORT = 414;	// info_skullwiz_destination
+
 float CT_PROJ_NG = 415;			// NG projectile
 float CT_PROJ_SNG = 416;		// SNG projectile
 float CT_PROJ_MONNG = 417;		// Lava nailgun monster projectile (glowing red)

@@ -524,7 +524,6 @@ void() monster_wraith_lord = {
     self.th_melee   = overlord_attack;
     self.th_pain    = dreadlord_pain;
     self.th_die     = dreadlord_die;
-    self.th_spawn   = monster_wraith_lord;
     self.pain_finished  = 0;
     self.bloodtype      = BLOOD_DARK;
 	self.classtype		= CT_MONDREADWRAITH;

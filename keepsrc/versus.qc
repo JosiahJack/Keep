@@ -83,6 +83,7 @@ void(entity targ) set_teamsurvivor = { // [FUNCTION]
 void(entity targ) set_teamgamemaster = { // [FUNCTION]
 	if (targ.versustype < 1) {
 		targ.versustype = VT_GAMEMASTER;
+		targ.xfl = targ.xfl & XFL_GHOUL; // Can eat bones
 		targ.alignment = EVIL;
 	} else {
 		if (developer > 0) {
