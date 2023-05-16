@@ -145,14 +145,14 @@ void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
 		d1_y = 0;
 		d1_z = 1;
         end = Aim_Scatter(dir, d1);
-		launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); //18*35=630.
+		newmis = launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); //18*35=630.
         newmis.dmg = damage;
         newmis.touch = WandSpark_Touch;
 		newmis.classtype = CT_WANDSPARK;
         if (shots > 1) {
             d1_x = 0 - d1_x;
             end = Aim_Scatter(dir, d1);
-			launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); // Death Knight spike
+			newmis = launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); // Death Knight spike
             newmis.dmg = damage;
             newmis.touch = WandSpark_Touch;
             newmis.classtype = CT_WANDSPARK;
@@ -596,7 +596,7 @@ void() W_FireSidewinder = { // [FUNCTION]
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;
-	launch_projectile(start,dir,NO_SPIN,CT_PROJ_SIDEWINDER,450);
+	newmis = launch_projectile(start,dir,NO_SPIN,CT_PROJ_SIDEWINDER,450);
 };
 
 void() W_FireAirFist = { launch_horn(); }; // Redirect for consistent and clear naming. -Qmaster
@@ -881,12 +881,12 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			StackDamage_Clear();
 		} else { // Normal Super Nailgun Fire
 			if (world.copperoptions & COPPER_TWOSHOT_PERFORATOR) { // Copper variant fires more nails instead of one super one
-				launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(940 + random()*30));
+				newmis = launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(940 + random()*30));
 				if (self.super_damage_finished > time) {
 					newmis.dmg = DAMAGE_SNGSPIKE; // So zombies still gib at 72 with quad.  Yes Copper did this.
 					spike1 = newmis;
 				}
-				launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(1020 + random()*30));
+				newmis = launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(1020 + random()*30));
 				if (self.super_damage_finished > time) {
 					newmis.dmg = DAMAGE_SNGSPIKE; 
 					spike2 = newmis;
@@ -894,7 +894,7 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 					spike2.buddy = spike1; // Race ya!
 					dprint("Buddy nails setup!\n");
 				}
-			} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
+			} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
 		}
 	} else { // NG setup, sound and ammo change
 		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
@@ -918,7 +918,7 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			else Echo_Shot(0.05,W_EchoSpike_Up,self);
 
 			StackDamage_Clear();
-		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
+		} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
@@ -1010,7 +1010,7 @@ void() W_FireGrenade = { // [FUNCTION]
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-        launch_projectile(self.origin,dir,avel,CT_PROJ_GLSUPER,1);
+        newmis = launch_projectile(self.origin,dir,avel,CT_PROJ_GLSUPER,1);
     } else {
 		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
 			dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
@@ -1020,7 +1020,7 @@ void() W_FireGrenade = { // [FUNCTION]
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-		launch_projectile(self.origin, dir, avel, CT_PROJ_GL,1);
+		newmis = launch_projectile(self.origin, dir, avel, CT_PROJ_GL,1);
 	}
 };
 
@@ -1045,8 +1045,8 @@ void() W_FireRocket = { // [FUNCTION]
 	// Straight line forward where crosshair is pointing
 	else dir = normalize(v_forward * SPEED_RLPLAYER);
 	
-    if (self.tome_finished) launch_projectile(org, dir,NO_SPIN,CT_PROJ_ROCKETSUPER,500); //SuperRocket_Launch (org, dir);
-    else launch_projectile(org,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
+    if (self.tome_finished) newmis = launch_projectile(org, dir,NO_SPIN,CT_PROJ_ROCKETSUPER,500); //SuperRocket_Launch (org, dir);
+    else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
 };
 
 void() W_Fire_Crossbow = { // [FUNCTION]
@@ -1063,7 +1063,7 @@ void() W_Fire_Crossbow = { // [FUNCTION]
 	if (self.tome_finished) W_Reload(0.13);
 	else W_Reload(0.9);
 	org = self.origin + '0 0 16';
-	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT1,1100);
+	newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT1,1100);
 };
 
 void() W_Fire_Crossbow_Poison = { // [FUNCTION]
@@ -1081,7 +1081,7 @@ void() W_Fire_Crossbow_Poison = { // [FUNCTION]
 	else W_Reload(0.9);
 	org = self.origin + '0 0 16';
 	self.poisonous = 1;
-	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT2,1100);
+	newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT2,1100);
 };
 
 void() W_FireIceCrossbow = { // [FUNCTION]
@@ -1146,7 +1146,7 @@ void() W_FirePlasma = { // [FUNCTION]
 	sound(self,CHAN_WEAPON,"ad171/weapons/plasma_fire.wav",1,ATTN_NORM);
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 	org = self.origin + v_forward*8 + '0 0 16';
-	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLAYPLASMA);
+	newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLAYPLASMA);
 };
 
 void() W_FireLightning = { // [FUNCTION]
@@ -1360,6 +1360,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 	missile.think = PlasmaGroundOut;
 	missile.nextthink = (time + MOVETYPE_FLY);
 	W_Reload(0.8);
+	newmis = missile;
 };
 
 // Called when player launches a MIRV.
@@ -1399,7 +1400,7 @@ void() W_FireHydra = { // [FUNCTION]
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;
-	launch_projectile(start,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
+	newmis = launch_projectile(start,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
     newmis.velocity = dir * 600;
     newmis.count    = cost;         // # of warheads after splitting.
     newmis.nextthink= time + 0.2;

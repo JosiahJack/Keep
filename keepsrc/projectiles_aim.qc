@@ -549,7 +549,7 @@ void(vector st) M_FireSmart = { // [FUNCTION]
     }
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound(self,CHAN_AUTO,"zerstorer/trog/frblfly.wav", 0.6,ATTN_NORM);
-    launch_projectile(p1,dir,NO_SPIN,CT_PROJ_SMARTBALL,600);
+    newmis = launch_projectile(p1,dir,NO_SPIN,CT_PROJ_SMARTBALL,600);
     newmis.velocity = newmis.velocity + up;
 };
 
@@ -564,7 +564,7 @@ void(vector eggofs) Create_Egg = {
 	org = self.origin + attack_vector(eggofs);
 	egg_speed = self.minion_throwspeed + (random() * self.minion_throwextra);
 	dir = v_forward * egg_speed + (v_right * (crandom()*self.minion_throwside));
-	launch_projectile(org,dir,NO_SPIN,CT_PROJ_MEGG,1);
+	newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_MEGG,1);
 	SUB_AttackFinished (2 + random());
 };
 
@@ -622,7 +622,7 @@ void() OgreFireADNails = {
 	while (loopvar < self.attack_count) { // Loop through the nail burst (all at once)
 		vec = (crandom()*20)*v_right + (crandom()*20)*v_up; // Random circle spread pattern
 		dir = normalize((self.enemy.origin + vec) - org);
-		launch_projectile(org,dir,NO_SPIN,CT_PROJ_MONNG,self.attack_speed); // Generate a red hot nail projectile
+		newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_MONNG,self.attack_speed); // Generate a red hot nail projectile
 		loopvar = loopvar + 1;
 	}
 };
@@ -706,7 +706,7 @@ void() M_FireOctopusInk = { // [FUNCTION]
 	while (loopvar < self.attack_count) { // Loop through the nail burst (all at once)
 		vec = (crandom()*20)*v_right + (crandom()*20)*v_up; // Random circle spread pattern
 		dir = normalize((self.enemy.origin + vec) - org);
-		launch_projectile(org,dir,NO_SPIN,CT_PROJ_INK,self.attack_speed); // Generate a red hot nail projectile
+		newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_INK,self.attack_speed); // Generate a red hot nail projectile
 		loopvar = loopvar + 1;
 	}
 };
@@ -732,7 +732,7 @@ void(vector st, float damage, string sfx) M_Shal_Ex = { // [FUNCTION]
     if (self.classtype != CT_MONSHAL) self.attack_speed = 400;
     else self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
 
-	if (self.classname == "monster_hkboss") launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHALHKBOSS,self.attack_speed);
-	else launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
+	if (self.classname == "monster_hkboss") newmis = launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHALHKBOSS,self.attack_speed);
+	else newmis = launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
     if (damage) newmis.dmg  = damage;
 };

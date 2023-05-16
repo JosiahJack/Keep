@@ -1811,7 +1811,7 @@ void(vector p, float sped) boss_meteor = { // [FUNCTION]
     if (skill >= 2) d = Aim_Lead (org, d, sped, self.enemy);
     vec = normalize (d - org);
 	avel = vecrand(100,200,FALSE);
-    launch_projectile(org,vec,avel,CT_PROJ_LAVA,self.attack_speed); // Classic chthonic lavaball.
+    newmis = launch_projectile(org,vec,avel,CT_PROJ_LAVA,self.attack_speed); // Classic chthonic lavaball.
     sound(self,CHAN_WEAPON,"boss1/throw.wav",1,ATTN_NORM);
 };
 
@@ -2078,8 +2078,8 @@ void(float ox) W_EchoSpike = { // [FUNCTION]
         dir = aim (self, 1000);
         if (self.weapon == IT_NAILGUN) {
 			ox = ox * 1.5;
-			launch_projectile(self.origin + '0 0 16' + v_right*ox, dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE);
-        } else launch_projectile(self.origin + '0 0 16' + v_up*ox, dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // '8 10 12+ox'
+			newmis = launch_projectile(self.origin + '0 0 16' + v_right*ox, dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE);
+        } else newmis = launch_projectile(self.origin + '0 0 16' + v_up*ox, dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // '8 10 12+ox'
         if (self.weapon == IT_SUPER_NAILGUN) newmis.classname = "spike2";    // For obituary.
     }
 };
@@ -2116,8 +2116,8 @@ void(float ox) W_EchoLavaSpike = { // [FUNCTION]
         dir = aim (self, 1000);
         if (self.weapon == IT_LAVA_NAILGUN) {
 			ox = ox * 1.5;
-			launch_projectile(self.origin + '0 0 16' + v_right*ox,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE);
-        } else launch_projectile(self.origin + '0 0 16' + v_up*ox,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // '8 10 12+ox'
+			newmis = launch_projectile(self.origin + '0 0 16' + v_right*ox,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE);
+        } else newmis = launch_projectile(self.origin + '0 0 16' + v_up*ox,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // '8 10 12+ox'
         if (self.weapon == IT_LAVA_SUPER_NAILGUN) newmis.classname = "spike2";    // For obituary.
     }
 };

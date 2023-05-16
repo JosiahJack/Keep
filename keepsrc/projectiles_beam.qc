@@ -323,7 +323,7 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [F
 	traceline(lstart, lfinish, FALSE, lsource); // Trace line in random direction
 	if (random() < 0.5) { // Random chance of a plasma/lightning bolt!
 		dir = normalize(trace_endpos - lstart);
-		launch_projectile(lstart,dir,NO_SPIN,CT_REFLECTLIGHT,SPEED_REFLECTION);
+		newmis = launch_projectile(lstart,dir,NO_SPIN,CT_REFLECTLIGHT,SPEED_REFLECTION);
 	} else {
 		Tent_Beam(TE_LIGHTNING2, lsource, lstart, trace_endpos); // Draw lighting beam (32 model unit chunks)
 		LightningDamage(lstart, trace_endpos, world, ldamage); // Check for damage with new lightning beam

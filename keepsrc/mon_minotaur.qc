@@ -405,12 +405,12 @@ void(vector orgofs, float angofs) minotaur_fire = {
 
 	// The spawning minotaur has poison spikes instead
 	if (self.spawnflags & MON_MINOTAUR_MINIONS)
-		if (self.poisonous) launch_projectile(org,dir,NO_SPIN,CT_PROJ_MPOISON,self.attack_speed);
-		else launch_projectile(org,dir,NO_SPIN,CT_PROJ_MBLOOD,self.attack_speed);
+		if (self.poisonous) newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_MPOISON,self.attack_speed);
+		else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_MBLOOD,self.attack_speed);
 	else {
 		// Projectile behaves like plasma (light/trail/impact effects)
 		// The correct projectile model is switched in launch function
-		launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
+		newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
 	}
 
 	if (self.spawnflags & 2) {

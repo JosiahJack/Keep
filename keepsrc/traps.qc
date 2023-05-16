@@ -89,17 +89,17 @@ void() trap_shooter_fire = { // [FUNCTION]
 
 	// Determine type of projectile shooter
 	if (self.classtype == CT_SPIKESHOOTER) {
-		launch_projectile(self.origin,self.movedir,self.avelocity,self.cnt,self.speed);
+		newmis = launch_projectile(self.origin,self.movedir,self.avelocity,self.cnt,self.speed);
 	} else if (self.classtype == CT_GRENADESHOOTER) {
 		self.finaldest = self.movedir;
 		self.finaldest_z = ELEV_ZAXIS;
 		self.finalangle = vecrand(100,200,FALSE);
-		launch_projectile(self.origin,self.finaldest,self.finalangle,self.cnt,self.speed);
+		newmis = launch_projectile(self.origin,self.finaldest,self.finalangle,self.cnt,self.speed);
 	} else if (self.classtype == CT_ROCKETSHOOTER) {
 		if (self.spawnflags == TRAP_LAVAROCKET) self.finalangle = vecrand(100,200,FALSE);
 		else self.finalangle = '0 0 0';
 
-		launch_projectile(self.origin, self.movedir,self.finalangle, self.cnt, self.speed);
+		newmis = launch_projectile(self.origin, self.movedir,self.finalangle, self.cnt, self.speed);
 	} else if (self.classtype == CT_LIGHTSHOOTER) {
 		if (VectorIsAllZeros(self.dest1)) return; // Double check a destination origin exists
 		

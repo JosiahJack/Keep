@@ -215,7 +215,7 @@ void(float ofs) nehwraith_shot = { // [FUNCTION]
     dir_z = 0 - dir_z + (random() - 0.5)*0.1;
     dir = Maim_Scatter(dir,'0 0 0'); // Added for invisibility.
     org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
-	launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN,600);
+	newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN,600);
     newmis.worldtype = TE_KNIGHTSPIKE;
     newmis.classname = "knightspike";
     if (self.alpha < 1) { // Wraith
