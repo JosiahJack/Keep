@@ -192,12 +192,10 @@ void(vector start_org) wraith_debuff_explode = { // [FUNCTION]
 		newmis.movetype = MOVETYPE_FLY;		// Fly, no gravity
 		newmis.solid = SOLID_TRIGGER;
 		setmodel(newmis, SBURST_FLAME);
-
 		org = start_org;
 		org_z = org_z + (crandom() * 24);
 		setorigin(newmis, org);
 		setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-
 		fire_angles_y = fire_loop;
 		makevectors(fire_angles);
 		dir = vecrand(0,50,FALSE);
@@ -212,7 +210,6 @@ void(vector start_org) wraith_debuff_explode = { // [FUNCTION]
 		newmis.think = wraith_fire_think;
 		newmis.touch = wraith_fire_touch;
 		newmis.nextthink = time + 0.1;
-		
 		fire_loop = fire_loop + rint(random()*15);
 	}
 };

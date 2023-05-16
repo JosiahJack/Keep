@@ -549,8 +549,8 @@ void() health_touch = { // [FUNCTION]
 	// Megahealth = rot down the player's super health
 	// Moved functionality to debuff (rotting) system
 	// Rotting_Qty is set to zero (default) on item spawn
-	if (self.classtype == CT_HEALMEGA && !(self.perms & POW_REGEN
-		|| self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER)) {
+	if (self.classtype == CT_HEALMEGA && !((self.perms & POW_REGEN)
+		|| (self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGENLESSER))) {
 		RotDeBuff(other, self.rotting_qty);
 	}
 	if (self.progspawnlist) return; // Quick exit, no need for following stuff
@@ -612,7 +612,7 @@ void() item_health = { // [ENTITY]
 		self.part_active = PARTICLE_STYLE_MEGAH;
 		self.respawn_effect = TRUE;
 		self.respawn_ofs = '0 0 28';
-		self.rotting_qty = 0; // Use default rotting value
+		self.rotting_qty = 0; // Force default rotting value
 	} else {
 		if (self.skin_override == 2) {
 			self.mdl = MODEL_HEAL25; // New Medieval style red flask

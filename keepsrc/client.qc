@@ -1083,8 +1083,7 @@ void() PutClientInServer = {
 
 	// pOx extras_r4/extras_r5 func_water support
 	self.fwatershift = TRUE;// catch runaway cshifts (changlevel/respawn while in func_water)
-	self.oldgravity = 0;// use unmodified sv_gravity
-
+	self.oldgravity = 0;// use unmodified gravity
 	RunCommandSpawn();
 };
 

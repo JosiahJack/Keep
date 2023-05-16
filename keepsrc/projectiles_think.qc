@@ -39,7 +39,7 @@
 
 void() spark_spawn;
 void() beam_touch;
-void(vector org,vector dir,string emdl,float beginf,float endfrm,float anitm,float skn,vector vel) SpawnBFGBoom;
+entity(vector org,vector dir,string emdl,float beginf,float endfrm,float anitm,float skn,vector vel) SpawnBFGBoom;
 void(entity ent) Burn_Null;
 vector(entity ent) Burn_Point;
 float(entity ent) ImmuneToBurning;
@@ -49,6 +49,7 @@ vector(vector p1, vector p2, float sped, entity targ) Aim_Lead;
 vector(vector p1, vector p2, float sped, entity targ, float ex) Aim_LineEx;
 float(vector p1, vector p2, float sped) Aim_TossUp;
 vector(vector p1, vector p2, float sped, float up, entity targ, vector spread) Maim_SmartBall;
+entity() RainStorm_Ice;
 
 void() Think_Projectile = { // [FUNCTION]
 	if (self.attack_lifetime < time) { // Original projectile lifetime timer
@@ -565,38 +566,36 @@ void() beam_generate = { // [FUNCTION]
 };
 
 void() BFGBoomThink = { // [FUNCTION]
-        self.frame = self.frame + 1;
-        self.think = BFGBoomThink;
-        self.nextthink = time + self.pain_timeout;
+    self.frame = self.frame + 1;
+    self.think = BFGBoomThink;
+    self.nextthink = time + self.pain_timeout;
 
-        if (self.frame >= self.frame_override) {
-			self.frame = self.frame_override;
-			self.think = SUB_Remove;
-			self.nextthink = time + self.pain_timeout;
-        }
+    if (self.frame >= self.frame_override) {
+        self.frame = self.frame_override;
+        self.think = SUB_Remove;
+        self.nextthink = time + self.pain_timeout;
+    }
 };
 
 void() BFGTracerThink = { // [FUNCTION]
-        local vector org;
-        local float dis;
+    local vector org;
+    local float dis;
 
-        dis = vlen(self.view_ofs-self.oldorigin)/5;
-        org = self.origin + self.pos1*dis;
-        setorigin(self, org);
-
-        SpawnBFGBoom(self.origin, self.pos1, "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
-        newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
-        SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
-        newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
-
-        if (self.cnt == 5) {
-			self.think = SUB_Remove;
-			self.nextthink = time + 0.1;
-        } else {
-			self.think = BFGTracerThink;
-			self.nextthink = time + 0.1;
-			self.cnt = self.cnt + 1;
-        }
+    dis = vlen(self.view_ofs-self.oldorigin)/5;
+    org = self.origin + self.pos1*dis;
+    setorigin(self, org);
+    newmis = SpawnBFGBoom(self.origin, self.pos1, "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
+    newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
+    newmis = SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
+    newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
+    if (self.cnt == 5) {
+        self.think = SUB_Remove;
+        self.nextthink = time + 0.1;
+    } else {
+        self.think = BFGTracerThink;
+        self.nextthink = time + 0.1;
+        self.cnt = self.cnt + 1;
+    }
 };
 
 void() Echo_Think = { // [FUNCTION]
@@ -700,6 +699,10 @@ void() RainStorm_Think = { // [FUNCTION]
     else { remove(self); return; }
 
     self.nextthink = time + self.wait;
+};
+
+void() RainsStormThinkFinish = { // [FUNCTION]
+	RainStorm_Ice();
 };
 
 // Homing Rockets.  Returns a linked list of targets, with the best at the head of list.  Uses .chain2 to link targtes.
@@ -973,8 +976,7 @@ void() Thor_Think = [ 0, Thor_Think ] { // [FUNCTION]
                                                         // enough.
         }
         targ = self.enemy;
-    } else
-        targ = self.master;     // Returning back to attacker.
+    } else targ = self.master;     // Returning back to attacker.
 
     Thor_Fly(targ);
 };

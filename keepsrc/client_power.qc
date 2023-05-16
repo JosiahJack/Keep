@@ -526,8 +526,13 @@ void(entity targ, entity giver) GivePowerOptimizer = { // [FUNCTION]
 };
 
 void(entity targ, entity giver) GivePowerRegeneration = { // [FUNCTION]
-	targ.health = targ.max_health;
-	targ.perms = targ.perms | giver.perms;
+	if (!targ || targ == world) return;
+
+	ResetDebuffBurning(targ);
+	ResetDebuffPoisoned(targ);
+	if (targ.health < targ.max_health) targ.health = targ.max_health;
+	if (!giver || giver == world) targ.perms = targ.perms | POW_REGENLESSER;
+	else targ.perms = targ.perms | giver.perms;
 };
 
 void() GivePowerSigilBane = { // [FUNCTION]
@@ -541,8 +546,14 @@ void() GivePowerSigilBane = { // [FUNCTION]
 };
 
 void(entity targ, entity giver) GivePowerVitality = { // [FUNCTION]
-	targ.max_health = targ.max_health + giver.max_health;
-	targ.health = targ.max_health; 
+	if (!targ || targ == world) return;
+
+	ResetDebuffBurning(targ);
+	ResetDebuffPoisoned(targ);
+	if (!giver || giver == world) targ.max_health = targ.max_health + 25;
+	else targ.max_health = targ.max_health + giver.max_health;
+
+	if (targ.health < targ.max_health) targ.health = targ.max_health; 
 };
 
 void(entity targ) ResetPowerThorsBlessing = { // [FUNCTION]

@@ -126,16 +126,16 @@ void() Wiz_FastFire = {
 		self.attack_speed = SPEED_WIZSPIKE + (skill * SPEED_WIZSKILL);
 		if (self.owner.classtype == CT_MONWIZBOSS) {
 			sound(self,CHAN_WEAPON,"anevil/wizboss/wattack.wav",1,ATTN_NORM);
-			launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZBOSS,self.attack_speed);
-			newmis.classname = "knightspike"; // Firey impact for lava ball spit.
+			newmis = launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZBOSS,self.attack_speed);
+			if (newmis) newmis.classname = "knightspike"; // Firey impact for lava ball spit.
 		} else {
 			sound(self,CHAN_WEAPON,"wizard/wattack.wav",1,ATTN_NORM);
-			launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZ,self.attack_speed);
+			newmis = launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZ,self.attack_speed);
 		}
-		newmis.owner = self.owner;
+		if (newmis) newmis.owner = self.owner;
 	}
 
-	remove (self);
+	remove(self);
 };
 
 // Create two spit missiles ready for firing later (delay 0.6, 1.0)

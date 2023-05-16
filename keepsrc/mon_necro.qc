@@ -61,7 +61,7 @@ void() acolyte_fire = { // [FUNCTION]
     makevectors(self.angles);
     org = self.origin + v_forward*14 - v_right*8 + v_up*12;     // '14 -2 19'
     dir = normalize (self.enemy.origin - self.origin);
-    NecroSnake_Launch (org, dir, 600);
+    newmis = NecroSnake_Launch (org, dir, 600);
 };
 
 // 'hits' is number of bounces the shot begins with.  Used to change the
@@ -98,7 +98,7 @@ void(vector st) warlock_fire = { // [FUNCTION]
     }
     MakeFancy (org, X32_STAR_RED, 2);
     dir = Maim_LineEx(org,vec,600,targ,'0 0 0',1);
-    NecroBolt_Launch(org,dir);
+    newmis = NecroBolt_Launch(org,dir);
 // Update:  Secondary bolts from necro boss can spawn monsters.
     if (self.classtype == CT_MONNECRO)
         if (self.frame == $Hatak8 )
@@ -287,9 +287,9 @@ float(entity targ, vector spot, float drop) necro_teleport = { // [FUNCTION]
         if (bomb) {
 			// Make sure necro and friends are a safe distance away before
             // dropping a explosive rune as a time bomb.
-            if (vlen(org - self.origin) > 120)
-                if (necro_clear (org))
-                    NecroBomb (org);
+            if (vlen(org - self.origin) > 120) {
+                if (necro_clear (org)) newmis = NecroBomb(org);
+            }
         }
         spawn_tfog (org);
         spawn_tfog (self.origin);

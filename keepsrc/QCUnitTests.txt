@@ -1,0 +1,72 @@
+QC Unit Test Framework
+Tests all entities automatically if unittest is 1
+on engine commandline.  Engine runs the tests.
+
+Monster test
+Classname pattern match: "monster_*"
+Spawn 10 (A...J) as though new map
+Wait 1sec to allow spool-up
+Assert killtotal increased by 9, 1 is nomonstercount
+Assert all entered self.th_stand, except delay spawn
+Assert mdl fields set
+Assert sound fields set
+Assert mdl and sounds precached
+Assert deathstring != ""
+Assert has health >= 1
+Assert max_health equals health
+Assert has self.th_'s set
+Assert has monster flag set
+A: Hurt with 1 damage.
+	Assert health is max_health - 1
+B: Hurt with painflinch damage
+	Assert self.th_pain entered
+C: targetname={classname}+_+C
+	Hurt with 1 damage
+	Assert health is max_health - 1
+D: Hurt with health
+	Assert dead
+	Assert killtotal incremented
+E: Hurt with health + -gibhealth - 1
+	Assert not gibbed
+	Assert dead
+F: Skip if gibhealth = MON_NEVERGIB
+	Hurt with health + -gibhealth
+	Assert dead
+	Assert gibbed
+	Assert headgib present
+	Assert headgib classname equals self
+G: targetname={classname}+_+G
+	Spawn with spawnflag 64, delay spawn
+	Assert no thinking or sight
+	Target with given classname
+	Assert monster count incremented
+	Assert monster thinking
+H: targetname={classname}+_+H
+	Spawn with spawnflag 64, delay spawn
+	Set nomonstercount
+	Assert monster count not incremented
+	Target monster with given classname
+	Assert monster count incremented
+	Assert monster thinking
+I: Skip if movetype none
+	Spawn with target of a path_corner
+	Spawn path_corner
+	Assert monster goalentity is path_corner
+	Assert monster self.th_walk active
+J: Spawn with target of a door
+	Hurt with health
+	Assert dead
+	Assert door opened
+	
+AssertVar(entity obj, .field fld, var val, 
+	string fname) {
+	
+	if (obj.fld == val) return;
+	
+	dprint("Error: ");
+	dprint(fname);
+	dprint(" not ");
+	dprint(vtos(val));
+	dprint(" on ");
+	dprint(obj.classname);
+};

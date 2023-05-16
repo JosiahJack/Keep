@@ -63,6 +63,8 @@ void() ImpulseCommands = {
 	else if (self.impulse == 59) TogglePowerShield(); // Uses cells to absorb damage when hit
 	// Only these MOD options can be changed via the console
 	else if (self.impulse == 100) toggleautoaim();		// Toggle auto aim
+	//else if (self.impulse == 101) BotConnect();
+	//else if (self.impulse == 102) KickABot();
 	else if (self.impulse == 105) toggleprojsize();		// Toggle player proj size
 	else if (self.impulse == 110) togglezaware();		// Toggle Z aware monsters
 	else if (self.impulse == 115) togglepixels();		// Toggle texture modes

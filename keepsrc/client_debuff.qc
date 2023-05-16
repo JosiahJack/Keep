@@ -235,8 +235,10 @@ void() ClientDeBuff = {
 				self.bleeding_qty = self.bleeding_qty - self.debuff_qty;
 				
 				// Directly add health back to player
-				self.health = self.health + self.debuff_qty;
-				if (self.health > self.max_health) self.health = self.max_health;
+				if (self.health < self.max_health) {
+					self.health = self.health + self.debuff_qty;
+					if (self.health > self.max_health) self.health = self.max_health;
+				}
 			}
 		}
 		// Check if player is over max health or run out of healing
@@ -246,7 +248,7 @@ void() ClientDeBuff = {
 	}
 
 	// Check for rotting debuff (DoT)
-	if (self.rotting) {
+	if (self.rotting && !((self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER))) {
 		if (self.aura_finished < time && self.aura_type != 4) {
 			// Is it time for a debuff update
 			if (self.rotting_time < time && self.rotting_time != 0) {
@@ -271,19 +273,22 @@ void() ClientDeBuff = {
 
 	// Check for regeneration powerups (HoT).  Berserker and amulet of regeneration do not stack, only 1 healing amount
 	if (self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER) {
-		ResetDebuffRotting(self);
-
 		// Is it time for a debuff update
 		if (self.regen_time < time) {
+			ResetDebuffRotting(self);
+			ResetDebuffBurning(self);
+			ResetDebuffPoisoned(self);
 			if (self.health < self.max_health) {
+				dprint("regenerating health\n");
 				if (self.perms & POW_REGENLESSER && !(self.perms & POW_REGEN) || (self.perms & POW_ARMORBERSERKER))
 					self.regen_time = time + 3;
 				else
 					self.regen_time = time + 1;
 
 				if (self.rotting_qty < 1) self.rotting_qty = 1; // Guarantee at least 1 health increase
-				self.health = self.health + self.rotting_qty;
-				if (self.health > self.max_health) self.health = self.max_health;
+				//self.health = self.health + self.rotting_qty;
+				T_Heal(self,self.rotting_qty,1);
+				//if (self.health > self.max_health) self.health = self.max_health;
 			}
 		}
 	}

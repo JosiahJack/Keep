@@ -204,7 +204,7 @@ void() Shade_Meat = {
     while (loop > 0) {
         vec = dir + (vy * spread);
         vec = normalize(vec) * mx;
-        Meat_Launch (org, vec); // Shoot some meat.  Change some properties to allow some freaky magic.
+        newmis = Meat_Launch (org, vec); // Shoot some meat.  Change some properties to allow some freaky magic.
         newmis.movetype     = MOVETYPE_TOSS;
         newmis.owner       = self;
         newmis.velocity     = vec * sped;

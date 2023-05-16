@@ -41,12 +41,12 @@ void() MultiGrenadeTouch;
 void() MultiGrenadeExplode;
 void() SuperGrenade_Think;
 void() SuperRocket_Think;
-void(vector org, vector vec, float light) HIP_LaunchLaser;
+entity(vector org, vector vec, float light) HIP_LaunchLaser;
 void() spark_spawn;
 void() Mirv_Payload;
 void() Mirv_Reset;
 void(vector startpos, float radius, float life) SpawnOrbLightning;
-void(float offsetAngle) MiniGrenadeLaunch;
+entity(float offsetAngle) MiniGrenadeLaunch;
 void(entity inflictor, float damage) Hammer_Block;
 void() Ember_Think;
 void() Smokey_Think;
@@ -612,23 +612,23 @@ void() MiniGrenadeExplode = { // [FUNCTION]
 };
 
 void() MultiGrenadeExplode = { // [FUNCTION]
-	MiniGrenadeLaunch(FALSE);
+	newmis = MiniGrenadeLaunch(FALSE);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	MiniGrenadeLaunch(72.000);
+	newmis = MiniGrenadeLaunch(72.000);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	MiniGrenadeLaunch(144.000);
+	newmis = MiniGrenadeLaunch(144.000);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	MiniGrenadeLaunch(216.000);
+	newmis = MiniGrenadeLaunch(216.000);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	MiniGrenadeLaunch(288.000);
+	newmis = MiniGrenadeLaunch(288.000);
 	if (self.lefty) newmis.nextthink = time + 0.15;
 
     if (self.tome_finished || self.owner.tome_finished) {
-        MiniGrenadeLaunch(36.000);
+        newmis = MiniGrenadeLaunch(36.000);
         if (self.lefty) newmis.nextthink = time + 0.15;
-        MiniGrenadeLaunch(98.000);
+        newmis = MiniGrenadeLaunch(98.000);
         if (self.lefty) newmis.nextthink = time + 0.15;
-        MiniGrenadeLaunch(252.000);
+        newmis = MiniGrenadeLaunch(252.000);
         if (self.lefty) newmis.nextthink = time + 0.15;
     }
 	remove(self);

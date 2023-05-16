@@ -314,13 +314,12 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = { 
 //  p2 = Endpoint 1, generally where the target is when attack is launched.
 //  p3 = Endpoint 2, where the target is predicted to be after some time.
 //  p4 = Endpoint 3, a point chosen somewhere between p2 and p3.  Aim here!
-void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype)  Ryu_Multishot = { // [FUNCTION]
+void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype) Ryu_Multishot = { // [FUNCTION]
     local float bomb, sped2, frac, loop;
     local vector dir, err, p3, p4;
 
     bomb = atype & RYU_BOMB; // Extra stuff for more multishot types.
     atype = atype & RYU_ELEMENTS;
-	newmis.classgroup = CG_PROJALL;
 
     // Begin old multishot stuff.
     err = '6 4.5 0'; // For ice dragon, 5x the spread as fire spray.
@@ -351,19 +350,19 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
         if (atype & RYU_ELEMENTS == RYU_USE_ICE) {
             // Ice spray.
             if (bomb) { // Explosive iceballs.
-                Iceball_Toss(p1, dir, sped2, self.height);
+                newmis = Iceball_Toss(p1, dir, sped2, self.height);
                 newmis.velocity_z = newmis.velocity_z + 200;
             } else { // Ice shards.  Default damage is 9, so raise it if too weak.
-                Ice_Launch(p1, dir, sped2);    // Use 'sped' for same speed.
+                newmis = Ice_Launch(p1, dir, sped2);    // Use 'sped' for same speed.
                 newmis.delay = time + 0.7;  // Total duration.  Was 0.8.
             }
             if (newmis.dmg < damage)
                 newmis.dmg = damage;
         } else if (bomb) {
             if (atype == RYU_USE_FIRE) Ryu_Fire(p1,dir,sped2,200,self.height);
-            else if (atype == RYU_USE_LITE) RyuPlasma_Launch(p1,dir,sped2,self.height);
+            else if (atype == RYU_USE_LITE) newmis = RyuPlasma_Launch(p1,dir,sped2,self.height);
             else if (atype == RYU_USE_ACID) {
-                Acidball_Launch(p1,dir,sped2,self.height);
+                newmis = Acidball_Launch(p1,dir,sped2,self.height);
                 newmis.velocity_z = newmis.velocity_z + 200;
             }
         }
@@ -423,7 +422,7 @@ void() Ryu_Shot_Fire = { // [FUNCTION]
     } else if (self.worldtype == RYU_USE_ACID) {
         dir = Aim_Ballistic(start,end,sped,200,targ,frac,SHOT_TIME_TOSS,MOVETYPE_TOSS);
         dir = Maim_Scatter(dir,'0 0 0');
-        Acid_Toss (start, dir, sped);
+        newmis = Acid_Toss (start, dir, sped);
         if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
     } else if (self.worldtype == RYU_USE_LITE) {
         // Check for discharge, just like Thunderbolt-wielding player.
@@ -459,7 +458,7 @@ void() Ryu_Shot_Fire = { // [FUNCTION]
         else return;     // Invalid attack type.
 
         self.shots_left = 0;   // Launch all shots in one burst.
-        Ryu_Multishot (start, end, sped, self.height, targ, self.shots_max, self.worldtype);
+        Ryu_Multishot(start, end, sped, self.height, targ, self.shots_max, self.worldtype);
     }
 };
 

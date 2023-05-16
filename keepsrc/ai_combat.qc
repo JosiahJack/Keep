@@ -208,14 +208,21 @@ void(entity targ, entity attacker) Killed = {
 			self.deadflag = DEAD_DYING; // Object is dying, stop re-triggering
 			self.enemy = attacker;	// Enemy dealing final blow
 			if (self.enemy.classtype == CT_WORLD) self.enemy = self;	
-			if ((self.flags & FL_MONSTER) && !self.nomonstercount) AddToKills(self,attacker); // bump the monster counter
 			ClientObituary(self, attacker);
 			self.touch = SUB_Null;
-			if (self.flags & FL_MONSTER) monster_death_use();
+			if (self.flags & FL_MONSTER) {
+				if (!self.nomonstercount) AddToKills(self,attacker); // bump the monster counter
+				monster_death_use();
+				if (self.enemytarget && self.enemytarget != world) {
+					self.enemytarget.think = SUB_Remove; // OWNER DIED - Safely remove this entity
+					self.enemytarget.nextthink = time + 0.1;
+				}
+			}
+
 			if (self.frozen) {
 				if (self.flags & FL_CLIENT) {
 					self.frozen = FALSE;
-					self.th_die();
+					self.th_die(); // Not freezing players for now. TODO
 				} else T_Freeze(self,attacker);
 			}
 			else self.th_die();

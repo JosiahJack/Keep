@@ -68,7 +68,7 @@ void(float offset) dlord_shot = { // [FUNCTION]
 	org = self.origin + '0 0 24' + v_forward * 20;
 	vec = normalize(v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5) * 0.2;
-	hknight_shot(offset);
+	newmis = hknight_shot(offset);
 	newmis.classname = "knightspike";
 	setmodel(newmis, "progs/quoth/dspike.mdl");
 	newmis.enemy = self.enemy;

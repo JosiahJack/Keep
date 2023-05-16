@@ -241,7 +241,7 @@ void() nemes_track = { // [FUNCTION]
 
 // Spawns each magic missile launched by the nemesant.
 void(float ofs, float up, vector vec) nemes_shot = { // [FUNCTION]
-    hknight_shot(ofs);
+    newmis = hknight_shot(ofs);
     setorigin(newmis, vec);
     newmis.velocity  = normalize(newmis.velocity) * 600;
     if (self.enemy) { // Setup for homing sidewinders.

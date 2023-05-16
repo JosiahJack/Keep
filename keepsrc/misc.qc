@@ -909,7 +909,7 @@ void() misc_spark_switchoff = { // [FUNCTION]
 	}
 };
 
-void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
+entity(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
 	local entity spark;
 
 	spark = spawn();
@@ -949,13 +949,11 @@ void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
 	if (self.spawnflags & MISC_SPARKBLUE) spark.skin = spark.skin + 3; // Alternative colours (blue, pale yellow & red)
 	else if (self.spawnflags & MISC_SPARKPALE) spark.skin = spark.skin + 6;
 	else if (self.spawnflags & MISC_SPARKRED) spark.skin = spark.skin + 9;
-
-	newmis = spark;
+	return spark;
 };
 
 void() misc_spark_spawn = { // [FUNCTION]
 	local float loopvar;
-	local entity spark;
 
 	if (self.estate & ESTATE_BLOCK) return; // Is the entity OFF or BLOCKED?
 

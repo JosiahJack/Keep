@@ -103,7 +103,6 @@ void() ProximityBomb;
 void() ProximityGrenadeExplode;
 void() SuperGrenade_Think;
 void() SuperRocket_Think;
-void(vector org, vector vec, float light) HIP_LaunchLaser;
 void() W_FireRocket;
 void(vector pos) placebullethole;
 void(float damage, vector dir, float addedtime) TraceExploAttack;
@@ -221,7 +220,7 @@ void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
 	ApplyMultiDamage();
 };
 
-void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet = { // [FUNCTION]
+entity(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet = { // [FUNCTION]
 	newmis = spawn();
 	newmis.owner = self;
 	newmis.classname = "proj_bullet";	// obj name, not really used anymore
@@ -261,6 +260,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet = 
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);	// Zero size
 	setorigin(newmis, org);					// Move to starting position
 	newmis.avelocity = vecrand(100,200,FALSE);
+	return newmis;
 };
 
 vector(vector org, vector targofs) SetNewmisCommonHomingRocketParameters = {
@@ -329,11 +329,11 @@ void() SetNewmisCommonPlasmaParameters = {
 	}
 };
 
-void(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile = { // [FUNCTION]
+entity(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile = { // [FUNCTION]
 	local vector vec;
 	local entity targ;
 	
-	if (!InOpenOrLiquid(org)) return; // Check if there is space to spawn entity
+	if (!InOpenOrLiquid(org)) return world; // Check if there is space to spawn entity
 
 	newmis = spawn();
 	newmis.owner = newmis.master = newmis.oldenemy = self;
@@ -960,6 +960,7 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) lau
 		Default_ParticleTrail(newmis); // Setup particle defaults for hazard emitter
 		SUB_Think(newmis,Custom_ParticleTrail,0.02);
 	}
+	return newmis;
 };
 
 void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells = { // [FUNCTION]
@@ -992,7 +993,7 @@ void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells 
 };
 
 // Fire grenade at enemy origin
-void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = { // [FUNCTION]
+entity(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = { // [FUNCTION]
 	local vector ang, dir, avel;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -1017,11 +1018,12 @@ void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = { // [FUN
 
 	avel = vecrand(100,200,FALSE);
 	if (self.spawnflags & OGRE_MULTI || self.weapon == IT_MULTI_GRENADE) {
-		launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONMULTI,1);
+		newmis = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONMULTI,1);
 	} else {
 		if (self.weapon == IT2_PROXIMITY_GUN) launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONPROX,1);
-		else launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMON,1);
+		else newmis = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMON,1);
 	}
+	return newmis;
 };
 
 void(float shell_qty) Launch_ShellCasing = { // [FUNCTION]
@@ -1036,14 +1038,14 @@ void(float shell_qty) Launch_ShellCasing = { // [FUNCTION]
 	while (shell_qty > 0) {
 		dir = -v_right*75 + v_forward*(random()*50) + v_up*(100 + random()*100);
 		avel = vecrand(0,300,TRUE);
-		if (self.in_a_vehicle) launch_projectile(org,dir,avel,CT_PROJ_NAILC,1);
-		else launch_projectile(org,dir,avel,CT_PROJ_SHELLC,1);
+		if (self.in_a_vehicle) newmis = launch_projectile(org,dir,avel,CT_PROJ_NAILC,1);
+		else newmis = launch_projectile(org,dir,avel,CT_PROJ_SHELLC,1);
 
 		shell_qty = shell_qty - 1;
 	}
 };
 
-void(vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
+entity(vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
 	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) sound(self,CHAN_WEAPON,"enforcer/enfire.wav",TRUE,ATTN_NORM);
 	else sound(self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
 
@@ -1076,6 +1078,7 @@ void(vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
 	newmis.think = HIP_LaserThink;
 	newmis.touch = HIP_LaserTouch;
 	newmis.count = FALSE;
+	return newmis;
 };
 
 // This launches all the warheads in a MIRV's payload, each seeking a different
@@ -1173,14 +1176,14 @@ void() Mirv_Payload = { // [FUNCTION]
 		self.oldenemy = t2;
 		pc = self.t_length;
 		self.t_length = theta;
-		launch_projectile(self.origin,dir,NO_SPIN,CT_PROJ_WARHEAD,self.speed);
+		newmis = launch_projectile(self.origin,dir,NO_SPIN,CT_PROJ_WARHEAD,self.speed);
         loop = loop - 1;
     }
 	self.t_length = pc; // Restore just in case I use this somewhere else.
 };
 
 // This spawns and launches a MIRV.
-void(vector start, vector dir) Mirv_Launch = { // [FUNCTION]
+entity(vector start, vector dir) Mirv_Launch = { // [FUNCTION]
     newmis = spawn();
     setmodel(newmis, "progs/drake/rocket1.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
@@ -1226,9 +1229,10 @@ void(vector start, vector dir) Mirv_Launch = { // [FUNCTION]
 	newmis.weaponismoditems = self.weaponismoditems;
     newmis.think1     = BecomeBigBang;    // Use alternate explosion code.
     newmis.th_win     = Mirv_Split;
+	return newmis;
 };
 
-void(entity attacker, vector start, vector dir, float damage,entity targ1, entity targ2) DrunkRocket_Launch = { // [FUNCTION]
+entity(entity attacker, vector start, vector dir, float damage,entity targ1, entity targ2) DrunkRocket_Launch = { // [FUNCTION]
     newmis = spawn();
     newmis.master       = newmis.owner      = attacker;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
@@ -1252,6 +1256,7 @@ void(entity attacker, vector start, vector dir, float damage,entity targ1, entit
     newmis.think        = DrunkRocket_Think;
     newmis.think1       = SmallExplosion;
     setall(newmis, "progs/drake/memissil.mdl", '0 0 0', '0 0 0', start);
+	return newmis;
 };
 
 // Splits the missile and launches all payload missiles.
@@ -1274,30 +1279,13 @@ void() Hydra_Split = { // [FUNCTION]
         loop = loop - 1;
         trig = CoSine((cost - loop * 2) * 10);     // 20 degrees of separation.
         dir = (vx*trig_x) + (vy*trig_y);
-        DrunkRocket_Launch(self.master, start, dir, 90, t1, t2);
+        newmis = DrunkRocket_Launch(self.master, start, dir, 90, t1, t2);
         t1 = t2;
     }
     remove(self);
 };
 
-void(vector org, vector dir) launch_lava_spike = { // [FUNCTION]
-	newmis = spawn();
-	newmis.classgroup = CG_PROJNAILS;
-	newmis.owner = self;
-	newmis.movetype = MOVETYPE_FLYMISSILE;
-	newmis.solid = SOLID_BBOX;
-	newmis.angles = vectoangles (dir);
-	newmis.touch = lavaspike_touch;
-	newmis.classtype = CT_PROJ_LAVASPIK;
-	newmis.think = SUB_Remove;
-	newmis.nextthink = (time + MOVETYPE_TOSS);
-	setmodel(newmis,"progs/lspike.mdl");
-	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
-	setorigin(newmis,org);
-	newmis.velocity = (dir * 1000.000);
-};
-
-void(float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
+entity(float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
 	local vector dir,avel;
 	local float tempRand;
 
@@ -1312,77 +1300,77 @@ void(float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
 	tempRand = ((crandom() * 60.000) - 30);
 	dir = (dir + (tempRand * v_up));
 	avel = '300 300 300';
-	launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTIMINI,1);
+	return launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTIMINI,1);
 };
 
-void(float offset, float frameNum) MultiRocketLaunch = { // [FUNCTION]
-   local vector aimangle;
+entity(float offset, float frameNum) MultiRocketLaunch = { // [FUNCTION]
+	local vector aimangle;
 
-   newmis = spawn();
-   newmis.owner = self;
-   newmis.alignment = self.alignment;
-   newmis.classgroup = CG_PROJROCKETS;
-   newmis.movetype = MOVETYPE_FLYMISSILE;
-   newmis.solid = SOLID_BBOX;
-   newmis.classname = "MultiRocket";
-   newmis.delay = (time + MOVETYPE_STEP);
-   newmis.frame = frameNum;
-   newmis.touch = MultiRocketTouch;
-   if (deathmatch || coop) {
-      setmodel(newmis,"progs/rockup_d.mdl");
-   } else {
-      setmodel(newmis,"progs/rockup.mdl");
-   }
-   setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin(newmis,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
-   if (deathmatch || coop) {
-      aimangle = self.v_angle;
-      aimangle_y = (aimangle_y + (offset * 0.660));
-      makevectors(aimangle);
-      newmis.velocity = aim(self,1000.000);
-      newmis.velocity = (newmis.velocity * 1000.000);
-      newmis.angles = vectoangles(newmis.velocity);
-      newmis.think = MultiRocketExplode;
-      newmis.nextthink = time + 4;
-   } else {
-      makevectors(self.v_angle);
-      newmis.velocity = ((v_forward * 1000.000) - ((v_right * offset) * FL_CLIENT));
-      newmis.angles = vectoangles(newmis.velocity);
-      newmis.v_angle = self.v_angle;
-      aimangle = (newmis.origin + newmis.velocity);
-      traceline (newmis.origin,aimangle,FALSE,self);
-      if (trace_fraction < TRUE) {
-         if ((trace_ent.flags & FLx_CREATURE) && Align_Opposing(self,trace_ent)) {
-            newmis.enemy = trace_ent;
-            newmis.think = HomingMissileThink;
-            return ;
-         }
-      }
-      newmis.think = HomingMissileAcquire;
-      newmis.nextthink = time + 0.1;
-   }
+	newmis = spawn();
+	newmis.owner = self;
+	newmis.alignment = self.alignment;
+	newmis.classgroup = CG_PROJROCKETS;
+	newmis.movetype = MOVETYPE_FLYMISSILE;
+	newmis.solid = SOLID_BBOX;
+	newmis.classname = "MultiRocket";
+	newmis.delay = (time + MOVETYPE_STEP);
+	newmis.frame = frameNum;
+	newmis.touch = MultiRocketTouch;
+	if (deathmatch || coop) setmodel(newmis,"progs/rockup_d.mdl");
+	else setmodel(newmis,"progs/rockup.mdl");
+
+	setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin(newmis,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
+	if (deathmatch || coop) {
+		aimangle = self.v_angle;
+		aimangle_y = (aimangle_y + (offset * 0.660));
+		makevectors(aimangle);
+		newmis.velocity = aim(self,1000.000);
+		newmis.velocity = (newmis.velocity * 1000.000);
+		newmis.angles = vectoangles(newmis.velocity);
+		newmis.think = MultiRocketExplode;
+		newmis.nextthink = time + 4;
+	} else {
+		makevectors(self.v_angle);
+		newmis.velocity = ((v_forward * 1000.000) - ((v_right * offset) * FL_CLIENT));
+		newmis.angles = vectoangles(newmis.velocity);
+		newmis.v_angle = self.v_angle;
+		aimangle = (newmis.origin + newmis.velocity);
+		traceline (newmis.origin,aimangle,FALSE,self);
+		if (trace_fraction < TRUE) {
+			if ((trace_ent.flags & FLx_CREATURE) && Align_Opposing(self,trace_ent)) {
+				newmis.enemy = trace_ent;
+				newmis.think = HomingMissileThink;
+				return newmis;
+			}
+		}
+		newmis.think = HomingMissileAcquire;
+		newmis.nextthink = time + 0.1;
+	}
+	return newmis;
 };
 
 // SpawnBFGBoom - Spawns an explosion sprite atorg.
-void(vector org, vector dir, string emdl, float beginf, float endfrm,float anitm, float skn, vector vel) SpawnBFGBoom = { // [FUNCTION]
-        newmis = spawn();
-        newmis.solid = SOLID_NOT;
-        newmis.movetype = MOVETYPE_FLY; // DRS: todo - change so it can move
-        newmis.owner = world;
-        newmis.angles = vectoangles(dir);
-        newmis.velocity = vel;
-        setmodel(newmis, emdl);
-        setsize(newmis, '0 0 0', '0 0 0');
-        setorigin(newmis, org);
-        newmis.skin = skn;
-        newmis.frame = beginf;
-        newmis.pain_timeout = anitm;
-        newmis.frame_override = endfrm;
-        newmis.think = BFGBoomThink;
-        newmis.nextthink = time + anitm;
+entity(vector org, vector dir, string emdl, float beginf, float endfrm,float anitm, float skn, vector vel) SpawnBFGBoom = { // [FUNCTION]
+	newmis = spawn();
+	newmis.solid = SOLID_NOT;
+	newmis.movetype = MOVETYPE_FLY; // DRS: todo - change so it can move
+	newmis.owner = world;
+	newmis.angles = vectoangles(dir);
+	newmis.velocity = vel;
+	setmodel(newmis, emdl);
+	setsize(newmis, '0 0 0', '0 0 0');
+	setorigin(newmis, org);
+	newmis.skin = skn;
+	newmis.frame = beginf;
+	newmis.pain_timeout = anitm;
+	newmis.frame_override = endfrm;
+	newmis.think = BFGBoomThink;
+	newmis.nextthink = time + anitm;
+	return newmis;
 };
 
-void(vector org, vector dir) WeldFire = { // [FUNCTION]
+entity(vector org, vector dir) WeldFire = { // [FUNCTION]
 	local entity weld, head;
 
 	newmis = spawn();
@@ -1420,9 +1408,10 @@ void(vector org, vector dir) WeldFire = { // [FUNCTION]
 	setorigin(newmis, org - '0 0 6' + dir * FL_CLIENT);
 	sound(newmis.owner,CHAN_WEAPON,"weapons/spike2.wav", 0.6,ATTN_NORM);
 	sound(newmis,CHAN_BODY,"hknight/idle.wav",1,ATTN_NORM);
+	return newmis;
 };
 
-void() nehahra_spitfire = { // [FUNCTION]
+entity() nehahra_spitfire = { // [FUNCTION]
 	local vector spot, org, vec;
 
 	makevectors(self.angles);
@@ -1432,10 +1421,10 @@ void() nehahra_spitfire = { // [FUNCTION]
 	else vec = self.enemy.origin - spot;
 
 	vec = normalize(vec);
-	WeldFire(org, vec);
+	return WeldFire(org, vec);
 };
 
-void(float offset) max_shootfire = { // [FUNCTION]
+entity(float offset) max_shootfire = { // [FUNCTION]
 	local vector org, vec, spot;
 
 	makevectors(self.angles);
@@ -1445,7 +1434,7 @@ void(float offset) max_shootfire = { // [FUNCTION]
 	else vec = self.enemy.origin - spot;
 
 	vec = normalize(vec);
-	WeldFire(org, vec);
+	return WeldFire(org, vec);
 };
 
 // ECHO SHOTS
@@ -1453,18 +1442,19 @@ void(float offset) max_shootfire = { // [FUNCTION]
 // than 10 frames per second.  Only clients should use this because of
 // intermission and fire button checks, which do not apply to monsters.
 // Spawns a dummy entity that will fire a shot for its owner.
-void(float pause, void() thinkst) Echo_Shot = { // [FUNCTION]
+entity(float pause, void() thinkst, entity attacker) Echo_Shot = { // [FUNCTION]
     newmis = spawn();
-    newmis.owner         = self;
+    newmis.owner         = attacker;
     newmis.nextthink     = time + pause;
     newmis.think         = Echo_Think;
     newmis.think1        = thinkst;
-    newmis.tome_finished = self.tome_finished;
+    newmis.tome_finished = attacker.tome_finished;
+	return newmis;
 };
 
 //  Archer Knight Arrows
 // Update 11/24/09:  Constants moved to defs.
-void(vector start, vector dir, float type) AkArrow_Launch = { // [FUNCTION]
+entity(vector start, vector dir, float type) AkArrow_Launch = { // [FUNCTION]
     newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
     newmis.master = newmis.owner = self;
@@ -1506,9 +1496,10 @@ void(vector start, vector dir, float type) AkArrow_Launch = { // [FUNCTION]
     if (!newmis.cnt) newmis.touch = AkArrow_Wood_Touch; // ijed regular arrows now have a continual think to produce a subtle particle trail, not one of the more magical built in mdl variants
     if (self.classtype == CT_MONREBEL) newmis.frame = 1; // Crossbow bandit hack.
     setall(newmis,"progs/drake/arrow.mdl",'0 0 0','0 0 0',start);
+	return newmis;
 };
 
-void(vector start, vector dir, float sped, float damage) RyuPlasma_Launch = { // [FUNCTION]
+entity(vector start, vector dir, float sped, float damage) RyuPlasma_Launch = { // [FUNCTION]
     newmis = spawn();
 	newmis.classgroup   = CG_PROJPLASMAROGUE;
     newmis.owner        = self;
@@ -1534,10 +1525,11 @@ void(vector start, vector dir, float sped, float damage) RyuPlasma_Launch = { //
     setmodel(newmis, "progs/plasma.mdl");  // Big plasma balls from DoE.
     setsize (newmis, '0 0 0', '0 0 0');
     setorigin(newmis, start);
+	return newmis;
 };
 
 //  Acid Bomb -- Used by green dragon.
-void(vector start, vector dir, float sped, float damage) Acidball_Launch = { // [FUNCTION]
+entity(vector start, vector dir, float sped, float damage) Acidball_Launch = { // [FUNCTION]
     newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
     newmis.owner        = self;
@@ -1556,10 +1548,11 @@ void(vector start, vector dir, float sped, float damage) Acidball_Launch = { // 
     setmodel(newmis, "progs/drake/acidbal1.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
     setorigin(newmis, start);
+	return newmis;
 };
 
-void(vector start, vector dir, float sped) Acid_Toss = { // [FUNCTION]
-    launch_projectile(start,dir,NO_SPIN,CT_PROJ_WIZ,sped);
+entity(vector start, vector dir, float sped) Acid_Toss = { // [FUNCTION]
+    newmis = launch_projectile(start,dir,NO_SPIN,CT_PROJ_WIZ,sped);
     newmis.movetype  = MOVETYPE_TOSS;
     newmis.speed     = sped;
     newmis.velocity  = (dir * sped) + '0 0 200';
@@ -1567,9 +1560,10 @@ void(vector start, vector dir, float sped) Acid_Toss = { // [FUNCTION]
     newmis.delay     = newmis.nextthink;
     newmis.nextthink = time + 0.1;
     newmis.think     = Acid_Think;
+	return newmis;
 };
 
-void(vector start, vector dir) Meat_Launch = { // [FUNCTION]
+entity(vector start, vector dir) Meat_Launch = { // [FUNCTION]
     newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
     newmis.master       = newmis.owner      = self;
@@ -1584,9 +1578,10 @@ void(vector start, vector dir) Meat_Launch = { // [FUNCTION]
     newmis.nextthink    = time + 2.5;
     newmis.think        = SUB_Remove;
     setall(newmis,"progs/zom_gib.mdl",'0 0 0','0 0 0',start);
+	return newmis;
 };
 
-void(vector start, vector dir, float sped) Ice_Launch = { // [FUNCTION]
+entity(vector start, vector dir, float sped) Ice_Launch = { // [FUNCTION]
     newmis = spawn();
     newmis.master = newmis.owner = self;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
@@ -1605,67 +1600,72 @@ void(vector start, vector dir, float sped) Ice_Launch = { // [FUNCTION]
     newmis.nextthink    = 0.01;
     newmis.think        = Ice_Think;
     setall(newmis,"progs/drake/ice.mdl",'0 0 0','0 0 0',start);
+	return newmis;
 };
 
 // Launch an explosive icy spikeball.
-void(vector start, vector dir, float sped) Iceball_Launch = { // [FUNCTION]
-    Ice_Launch (start, dir, sped);
+entity(vector start, vector dir, float sped) Iceball_Launch = { // [FUNCTION]
+    newmis = Ice_Launch (start, dir, sped);
     setmodel(newmis, "progs/drake/iceball.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
     newmis.avelocity = '300 300 300';
+	newmis.classgroup = CG_PROJICE;
     newmis.dmg      = 60;
     newmis.alpha    = ALPHA_ICEBALL;
     newmis.touch    = Touch_Missile;
     newmis.think    = Iceball_Think;
     newmis.think1   = Iceball_Explode;
+	return newmis;
 };
 
-void(vector start, vector dir, float sped, float damage) Iceball_Toss = { // [FUNCTION]
-    Ice_Launch (start, dir, sped);
+entity(vector start, vector dir, float sped, float damage) Iceball_Toss = { // [FUNCTION]
+    newmis = Ice_Launch (start, dir, sped);
     setmodel(newmis, "progs/drake/iceball.mdl");
     setsize (newmis, '0 0 0', '0 0 0');
     newmis.movetype = MOVETYPE_TOSS;
+	newmis.classgroup = CG_PROJICE;
     newmis.avelocity = '300 300 300';
     newmis.dmg      = damage;
     newmis.alpha    = ALPHA_ICEBALL;
     newmis.touch    = Touch_Missile;
     newmis.think    = Iceball_Think;
     newmis.think1   = Iceball_Explode;
+	return newmis;
 };
 
 //  Ice Mines
-void(vector start) IceMine_Spawn = { // [FUNCTION]
-    local entity swap;
+entity(vector start) IceMine_Spawn = { // [FUNCTION]
+    local entity swap, mine;
 
 	// Spawn the ice mine.
-    newmis = spawn();
-    newmis.owner        = world;
-    newmis.master       = self;
-    newmis.movetype     = MOVETYPE_TOSS;
-    newmis.solid        = SOLID_BBOX;
-	newmis.classgroup = CG_PROJICE;
-    newmis.classname    = "ice";
-    newmis.velocity     = '0 0 0'; // set missile speed
-    newmis.avelocity    = '0 0 0';
-    newmis.angles       = '0 0 0';
-    newmis.dmg          = 90; // set missile damage
-    newmis.health       = 25;   // Barrels use 20 hp.
-    newmis.takedamage   = DAMAGE_YES;
-    newmis.bloodtype    = CHUNKS_ICE;
-    newmis.hittype = HIT_STONE;
-    newmis.th_die       = IceMine_Die;
-    newmis.resist_cold  = 1;    // Immune to cold.
-    newmis.resist_fire  = 0;   // Fire melts ice!
-    newmis.touch        = IceMine_Touch;
-    newmis.think1       = Iceball_Explode;
-    newmis.frame        = 0;
-    newmis.alpha        = ALPHA_ICEBALL;
-    newmis.think        = mine1;
-    newmis.nextthink    = time + 0.1; // set missile duration
-    newmis.delay        = time + 30;
-    setall(newmis,"progs/drake/iceball.mdl",VEC_ITEM_MIN,'16 16 16',start);
+    mine = spawn();
+    mine.owner        = world;
+    mine.master       = self;
+    mine.movetype     = MOVETYPE_TOSS;
+    mine.solid        = SOLID_BBOX;
+	mine.classgroup = CG_PROJICE;
+    mine.classname    = "ice";
+    mine.velocity     = '0 0 0'; // set missile speed
+    mine.avelocity    = '0 0 0';
+    mine.angles       = '0 0 0';
+    mine.dmg          = 90; // set missile damage
+    mine.health       = 25;   // Barrels use 20 hp.
+    mine.takedamage   = DAMAGE_YES;
+    mine.bloodtype    = CHUNKS_ICE;
+    mine.hittype = HIT_STONE;
+    mine.th_die       = IceMine_Die;
+    mine.resist_cold  = 1;    // Immune to cold.
+    mine.resist_fire  = 0;   // Fire melts ice!
+    mine.touch        = IceMine_Touch;
+    mine.think1       = Iceball_Explode;
+    mine.frame        = 0;
+    mine.alpha        = ALPHA_ICEBALL;
+    mine.think        = mine1;
+    mine.nextthink    = time + 0.1; // set missile duration
+    mine.delay        = time + 30;
+    setall(mine,"progs/drake/iceball.mdl",VEC_ITEM_MIN,'16 16 16',start);
 	swap = self;
-	self = newmis;
+	self = mine;
 	droptofloor();
 	self = swap;
 
@@ -1675,46 +1675,50 @@ void(vector start) IceMine_Spawn = { // [FUNCTION]
 	// field over the iceball so anytime a monster tries to walk on the ice,
 	// the iceball will explode as expected.
     swap = spawn();
-    swap.master = swap.owner = newmis;
+    swap.master = swap.owner = mine;
     swap.movetype   = MOVETYPE_NONE;
     swap.solid      = SOLID_TRIGGER;
     swap.nextthink  = time + 0.1;
     swap.think      = IceMineTrigger_Think;
     swap.touch      = IceMineTrigger_Touch;
     setall(swap,"",VEC_ITEM_MIN,VEC_HULL_MAX,start);
-    newmis.trigger_field  = swap;      // Link touch field to the iceball.
-    sound(newmis,CHAN_AUTO,"drake/weapons/freeze.wav",1,ATTN_NORM);
-    ShockWave(newmis.origin + '0 0 4', RING_ICE, 3, "progs/drake/s_wave.spr",FALSE); // Spawning effects.
+    mine.trigger_field  = swap;      // Link touch field to the iceball.
+    sound(mine,CHAN_AUTO,"drake/weapons/freeze.wav",1,ATTN_NORM);
+    ShockWave(mine.origin + '0 0 4', RING_ICE, 3, "progs/drake/s_wave.spr",FALSE); // Spawning effects.
+	return mine; // Can't use newmis because ShockWave made some newmisses.
 };
 
 //  Rain Storm -- Used by the elemental boss barons.  Various missile functions for the rainstorm.
-void() RainStorm_Ice = { // [FUNCTION]
-    Ice_Launch(trace_endpos,'0 0 -1',1000); // Use flymissile instead of toss for the missile clip bonus.  Then set speed to a reasonably fast value to use for terminal velocity.
+entity() RainStorm_Ice = { // [FUNCTION]
+    newmis = Ice_Launch(trace_endpos,'0 0 -1',1000); // Use flymissile instead of toss for the missile clip bonus.  Then set speed to a reasonably fast value to use for terminal velocity.
     newmis.master = newmis.owner = self.owner;
     newmis.delay = time + 2.5;
     newmis.dmg = self.dmg;
+	return newmis;
 };
 
 // Spawns a missile spawner that drops shots on a target from the ceiling.
 void() RainStorm = { // [FUNCTION]
+	local entity storm;
+
     if (super_active) return;
 
     super_active = 1; // This chews through a lot of edicts.
-    newmis = spawn();
-    setorigin(newmis, '0 0 0');
-    newmis.owner    = self;
-    newmis.enemy    = self.enemy;
-    newmis.delay    = time + 5;
-    newmis.think    = RainStorm_Think;
-    newmis.think1   = RainStorm_Ice;
-    newmis.dmg      = 18;
-    newmis.wait     = 1 / 20;
-    newmis.distance = 64;
-    newmis.nextthink= 0.01;
+    storm = spawn();
+    setorigin(storm, '0 0 0');
+    storm.owner    = self;
+    storm.enemy    = self.enemy;
+    storm.delay    = time + 5;
+    storm.think    = RainStorm_Think;
+    storm.think1   = RainsStormThinkFinish;
+    storm.dmg      = 18;
+    storm.wait     = 1 / 20;
+    storm.distance = 64;
+    storm.nextthink= 0.01;
 };
 
 // Launches a sidewinding poison shot.  Used by acolytes.
-void(vector start, vector dir, float sped) NecroSnake_Launch = { // [FUNCTION]
+entity(vector start, vector dir, float sped) NecroSnake_Launch = { // [FUNCTION]
     newmis = spawn();
 	newmis.classgroup   = CG_PROJALL;
     newmis.master       = newmis.owner        = self;
@@ -1735,12 +1739,13 @@ void(vector start, vector dir, float sped) NecroSnake_Launch = { // [FUNCTION]
     newmis.nextthink    = time + 0.1;
     newmis.think        = Sidewinder_Think;
     setall(newmis, "progs/w_spike.mdl", '0 0 0', '0 0 0', start);
+	return newmis;
 };
 
 //  Explosive Runes -- Used by Ebon Sorcerer.  Deposits an explosive rune where the necro is standing.
-void(vector org) NecroBomb = { // [FUNCTION]
+entity(vector org) NecroBomb = { // [FUNCTION]
     newmis = spawn();
-	newmis.classgroup = CG_PROJROCKETS;
+	newmis.classgroup   = CG_PROJROCKETS;
     newmis.master       = newmis.owner        = self;
     newmis.movetype     = MOVETYPE_FLY;
     newmis.solid        = SOLID_TRIGGER;
@@ -1754,6 +1759,7 @@ void(vector org) NecroBomb = { // [FUNCTION]
     newmis.nextthink    = time + 1;     //(1 + random()) * 0.5
     newmis.think        = Touch_Missile;
     setall(newmis,"progs/drake/nec_rune.mdl",VEC_HULL_MIN,VEC_HULL_MAX,org);
+	return newmis;
 };
 
 //  Necrobolt -- Used by Ebon Warlock and Dark Lord
@@ -1761,9 +1767,9 @@ void(vector org) NecroBomb = { // [FUNCTION]
 // redirects like shal-rath homing bombs, except update frequency is longer (slower).
 // It resembles more like the Amazon's Guided Arrows from Diablo 2.
 // Launches a crimson energy seeker bolt.  Used by warlocks.
-void(vector start, vector dir) NecroBolt_Launch = { // [FUNCTION]
+entity(vector start, vector dir) NecroBolt_Launch = { // [FUNCTION]
     newmis = spawn();
-	newmis.classgroup = CG_PROJROCKETS;
+	newmis.classgroup   = CG_PROJROCKETS;
     newmis.master       = newmis.owner        = self;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
     newmis.solid        = SOLID_BBOX;
@@ -1780,6 +1786,7 @@ void(vector start, vector dir) NecroBolt_Launch = { // [FUNCTION]
     newmis.nextthink    = time + 0.1;
     newmis.think        = NecroBolt_Think;
     setall(newmis,"progs/drake/r_bolt.mdl",'0 0 0','0 0 0',start);
+	return newmis;
 };
 
 // SoE:  Split off from boss_missile so Hell Lord can use as well.
@@ -2131,7 +2138,7 @@ void(vector org, vector dir, entity targ, vector err) M_FireChaingun = { // [FUN
 };
 
 // Fireball used by hell knight and baron.
-void(vector start, vector dir) KnightBall_Launch = { // [FUNCTION]
+entity(vector start, vector dir) KnightBall_Launch = { // [FUNCTION]
     newmis = spawn();
 	newmis.classgroup = CG_PROJROCKETS;
     newmis.master      = newmis.owner     = self;
@@ -2151,9 +2158,10 @@ void(vector start, vector dir) KnightBall_Launch = { // [FUNCTION]
     newmis.think       = Orange_Explosion;
     newmis.frame       = 2;
     setall(newmis,"progs/drake/k_ball.mdl",'0 0 0','0 0 0',start);
+	return newmis;
 };
 
-void(vector st, float lo) M_FireKnight = { // [FUNCTION]
+entity(vector st, float lo) M_FireKnight = { // [FUNCTION]
     local vector p1, p2, dir;
 
     makevectors(self.angles);
@@ -2163,7 +2171,8 @@ void(vector st, float lo) M_FireKnight = { // [FUNCTION]
 	dir = normalize(p2 - p1);
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound(self,CHAN_WEAPON,"drake/baron/fireball.wav",1,ATTN_NORM);
-    KnightBall_Launch (p1, dir);
+    newmis = KnightBall_Launch (p1, dir);
+	return newmis;
 };
 
 //  This extinguishes the fire burning on a player (or other entity).  This function should be called whenever the fire burning on an entity must be removed immediately.
@@ -3274,21 +3283,21 @@ void(float AttackNumber) lavaman_missile = {
 };
 
 void(vector vel, vector org) Launch_VermisSpore = {
-		newmis = spawn();
-		newmis.classgroup = CG_PROJALL;
-		newmis.owner = self;
-		newmis.movetype = MOVETYPE_FLYMISSILE;
-		newmis.solid = SOLID_BBOX;
-		newmis.velocity = vel;
-		newmis.avelocity = '297 324 333';
-		newmis.angles = vectoangles(newmis.velocity);
-		newmis.touch = vermis_spore_touch;
-		newmis.nextthink = time + 0.1;
-		newmis.think = vermis_spore_think;
-		newmis.ltime = time + 2;
-		setmodel(newmis,"progs/quoth/spore.mdl");
-		setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
-		setorigin(newmis,org);
+	newmis = spawn();
+	newmis.classgroup = CG_PROJALL;
+	newmis.owner = self;
+	newmis.movetype = MOVETYPE_FLYMISSILE;
+	newmis.solid = SOLID_BBOX;
+	newmis.velocity = vel;
+	newmis.avelocity = '297 324 333';
+	newmis.angles = vectoangles(newmis.velocity);
+	newmis.touch = vermis_spore_touch;
+	newmis.nextthink = time + 0.1;
+	newmis.think = vermis_spore_think;
+	newmis.ltime = time + 2;
+	setmodel(newmis,"progs/quoth/spore.mdl");
+	setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin(newmis,org);
 };
 
 // This launches a throwing axe.

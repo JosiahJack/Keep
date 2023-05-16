@@ -254,12 +254,12 @@ void() hknight_melee = { // [FUNCTION]
 	}
 };
 
-void(float offset) hknight_shot = {
+entity(float offset) hknight_shot = {
 	local	vector	offang;
 	local	vector	org, dir;
 	
-	if (!self.enemy) return;
-	if (self.health < 1) return;
+	if (!self.enemy) return world;
+	if (self.health < 1) return world;
 
 	sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
 	self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
@@ -270,16 +270,18 @@ void(float offset) hknight_shot = {
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
     if (self.classname == "monster_bane") {
-        KnightBall_Launch(org, dir);
+        newmis = KnightBall_Launch(org, dir);
         newmis.dmg = 60;
         newmis.velocity = dir*600;
         if ((self.frame == $magicb6 ) || (self.frame == $magicc6 )) sound(self,CHAN_WEAPON,"drake/weapons/mirv1.wav",1,ATTN_NORM);
     } else if (self.classname == "monster_dark_lord") {
-        NecroBolt_Launch(org,dir);
+        newmis = NecroBolt_Launch(org,dir);
     } else {
 		if (self.classtype == self.classtype == CT_MONSABERENFORCER) launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN_BLUE,self.attack_speed);
-		else launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
+		else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
 	}
+
+	return newmis;
 };
 
 void() lord_magica7;

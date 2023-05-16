@@ -827,7 +827,6 @@ void() monster_ThrowGib = { // [FUNCTION]
 		last.yaw_speed = self.yaw_speed;
 		last.liquidbase = self.liquidbase;
 		last.liquidcheck = self.liquidcheck;
-		last.max_health = self.max_health * 0.5;
 		last.bbmins = self.bbmins;
 		last.bbmaxs = self.bbmaxs;
 		last.pos1 = self.origin; // Respawn point

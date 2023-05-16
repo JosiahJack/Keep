@@ -502,7 +502,9 @@ void() clone_die = { // [FUNCTION]
 void() clone_spawn = { // [FUNCTION]
     local entity kage;       // Watching too much Naruto, eh?
 
-	if (!checkbuiltin(checkbuiltin) && !checkbuiltin(copyentity)) return;
+	if (ext_active) {
+        if (checkbuiltin(copyentity)) return;
+    }
 
     kage = spawn();
     copyentity (self, kage);

@@ -73,7 +73,7 @@ void(float no) Vomit_Meat = {
 	dir = dir + err;
 
     up = random();
-    Meat_Launch (org, dir);
+    newmis = Meat_Launch (org, dir);
     if (up < 0.2) setmodel(newmis, "progs/gib1.mdl");
     else { // Bigger gibs...
         newmis.dmg = random() * 15 + 15;

@@ -473,7 +473,7 @@ void() ogle_die = { // [FUNCTION]
 
 void() monster_ogle_precache =  { // [FUNCTION]
 	precache_model("progs/heretic2/mon_ogle.mdl");
-	precache_model("progs/h_ogle.mdl");
+	precache_model("progs/madfox/h_ogle.mdl");
 	precache_sound("ogle/cheer1.wav");
 	precache_sound("ogle/cheer2.wav");
 	precache_sound("ogle/cheer3.wav");

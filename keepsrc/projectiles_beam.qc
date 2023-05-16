@@ -37,9 +37,9 @@
 //=============================================================================
 
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
-void(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile;
+entity(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile;
 void(float lo, float hi) Thor_Slam;
-void(vector pos, vector dir, float rubicon) make_spark;
+entity(vector pos, vector dir, float rubicon) make_spark;
 void() lightning_orb_think;
 void() Plasma_Fx;
 void(float strikes) Thor_Discharge;
@@ -200,7 +200,7 @@ void(vector spot, float count, float gopop, vector norm) LightningSparks = {
 
 	iter = 0;
 	while (iter < count) {
-		make_spark(spot, dir, FALSE); // False to use direction.
+		newmis = make_spark(spot, dir, FALSE); // False to use direction.
 		if (gopop && iter < 15) newmis.velocity_z = 200;
 		else if (gopop) newmis.velocity_z = -200;
 		else newmis.velocity_z = zadd + crandom() * 300;
@@ -747,7 +747,7 @@ void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_
 					iter = 0;
 					while (iter < 8) {
 						dir = safe_client_forward();
-						make_spark(targ.origin, dir, FALSE); // False to use direction.
+						newmis = make_spark(targ.origin, dir, FALSE); // False to use direction.
 						newmis.velocity_z = 200 + crandom() * 300;
 						newmis.velocity_y = crandom() * 300;
 						newmis.velocity_x = crandom() * 300;
@@ -764,7 +764,7 @@ void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_
 					sound(self,CHAN_AUTO,"rrp/misc/spark.wav",1,ATTN_STATIC);
 					while (iter < 30) {
 						dir = safe_client_forward();
-						make_spark(targ.origin, dir, FALSE); // False to use direction.
+						newmis = make_spark(targ.origin, dir, FALSE); // False to use direction.
 						if (iter < 15) newmis.velocity_z = 200;
 						else newmis.velocity_z = -200;
 						newmis.velocity_y = crandom() * 100;

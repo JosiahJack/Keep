@@ -99,7 +99,7 @@ void() deathguard_shot = { // [FUNCTION]
 	traceline(spot1,spot2, 0, self);
 	if (trace_ent != targ) { self.think = self.th_run; return; }
 
-	hknight_shot(0);
+	newmis = hknight_shot(0);
 	newmis.mdl = "progs/quoth/fireball.mdl";
 	org = self.origin + '0 0 24';
 	setmodel(newmis, "progs/quoth/fireball.mdl");

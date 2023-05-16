@@ -205,7 +205,7 @@ void() W_FireGrapple = { // [FUNCTION]
     self.punchangle_x = -2; // bump him
     sound(self,CHAN_WEAPON,"drake/weapons/chain1.wav",1,ATTN_NORM); // chain out sound(loops)
     makevectors(self.v_angle);
-    Grapple_Launch (self, self.origin + v_forward * 16 + '0 0 16', v_forward);
+    Grapple_Launch(self, self.origin + v_forward * 16 + '0 0 16', v_forward);
 };
 
 entity(entity attacker) Grapple_Pull_Who = { // [FUNCTION]

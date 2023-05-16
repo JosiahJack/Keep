@@ -351,10 +351,11 @@ void() baron_melee = { // [FUNCTION]
 // Returns TRUE if baron can summon an earth elemental.  This only checks if summoning is allowed; nothing gets spawned here.
 float() BaronGolem_Check = { return (self.minion_count < ceil(skill / 2) + 1); };
 
-void(vector start, vector dir, float sped) Baron_Ice_Launch = { // [FUNCTION]
-    Ice_Launch (start, dir, sped);
+entity(vector start, vector dir, float sped) Baron_Ice_Launch = { // [FUNCTION]
+    newmis = Ice_Launch(start, dir, sped);
     newmis.delay = time + 5;
     newmis.dmg = 18;    //random() * 5 + 15;
+    return newmis;
 };
 
 void() Baron_Ice = { // [FUNCTION]
@@ -570,7 +571,7 @@ void(vector st) M_FireBaronPlasma = { // [FUNCTION]
     p2 = Aimpoint (self.enemy);
     dir = Maim_LineEx(p1,p2,1000,targ,'0 0 0',1);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    RyuPlasma_Launch(p1,dir,1000,60);
+    newmis = RyuPlasma_Launch(p1,dir,1000,60);
 };
 
 void() baron_slam = { // [FUNCTION]
@@ -594,7 +595,7 @@ void() baron_slam = { // [FUNCTION]
         } else {
             self.waitmax = time + 5;    // Don't spam.
             if (self.level == BARON_WATER)
-                IceMine_Spawn (self.dest);
+                newmis = IceMine_Spawn (self.dest);
             else if (self.level == BARON_AIR)
                 Tornado_Spawn (self.dest);
             else {
@@ -656,14 +657,10 @@ void() baron_point3  = [$point3,  baron_point4  ] { ai_face(); };
 void() baron_point4  = [$point4,  baron_point5  ] { ai_face(); };
 void() baron_point5  = [$point5,  baron_point6  ] { ai_face(); if (self.level == BARON_AIR) sound(self,CHAN_WEAPON,"rogue/plasma/fire.wav",1,ATTN_NORM); };
 void() baron_point6  = [$point6,  baron_point7  ] { ai_face();
-    if (self.level == BARON_EARTH)
-        Baron_Earth();  //'16 2 20');
-    else if (self.level == BARON_AIR)
-        M_FireBaronPlasma ('16 2 20');
-    else if (self.level == BARON_WATER)
-        Baron_Ice();    //'16 2 20');
-    else
-        M_FireKnight('16 2 20', FALSE);
+    if (self.level == BARON_EARTH) Baron_Earth();  //'16 2 20');
+    else if (self.level == BARON_AIR) M_FireBaronPlasma ('16 2 20');
+    else if (self.level == BARON_WATER) Baron_Ice();    //'16 2 20');
+    else M_FireKnight('16 2 20', FALSE);
     self.dest = self.enemy.origin;
     self.shots_left = self.shots_left - 1;
     if (self.shots_left > 0)
@@ -681,8 +678,6 @@ void() baron_point10 = [$point10, baron_point11 ] { ai_face(); };
 void() baron_point11 = [$point11, baron_run     ] { ai_face(); };
 
 //- - - - - - - - -
-//void(float offset) hknight_shot;
-
 // SoE/Rapture:  Don't use hknight_shot like in Drake because of the
 // various changes required for Tronyn's modified knights.
 // The basic shot code is otherwise the same as the hell knights'.
@@ -699,17 +694,17 @@ void(float offset) baron_shot = { // [FUNCTION]
 
 	// PM:  No need to check classnames like Bane, hell knight, hell lord, etc.
     if (self.level == BARON_EARTH) {
-        launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
+        newmis = launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
         // Old damage was 15, but use superspike's 18.
         sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
     } else if (self.level == BARON_WATER) {
-        Baron_Ice_Launch(org,vec,600);
+        newmis = Baron_Ice_Launch(org,vec,600);
         sound(self,CHAN_WEAPON,"drake/baron/icefire.wav",1,ATTN_NORM);
     } else { // Use offset as speed.
         if (self.level == BARON_FIRE) offset = 500;
         else offset = 300;
         self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
-        launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
+        newmis = launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
         if (self.level == BARON_FIRE) newmis.dmg  = 20;
         sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
     }

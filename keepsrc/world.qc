@@ -498,9 +498,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		ext_frikfile = checkextension("FRIK_FILE"); // Frik file system, advanced strings and C code sprintf
 		ext_ftestrings = checkextension("FTE_STRINGS");
 		ext_sprintf = checkextension("DP_QC_SPRINTF");
-
 		if (!checkbuiltin(particleeffectnum)) ext_dppart = ext_ftepart = FALSE;
-		
 		if (ext_dppart || ext_ftepart) {
 			particleeffectnum("TE_EXPLOSION");
 			particleeffectnum(DPP_TRLASER);
@@ -523,42 +521,40 @@ void() worldspawn = { // [ENTITY]...well it IS.
 			// FTE/QSS use clientstat, DP use addstat (same function)
 			// The addstat is defined in dpextensions.qc
 			// Example: void(float index, float type, ...) addstat = #232;
-			if (checkbuiltin(checkbuiltin)) {
-				if (checkbuiltin(addstat)) {
-					addstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
-					addstat(CLIENT_ITEMS2, EV_FLOAT, items2);
-					addstat(CLIENT_PERMS, EV_FLOAT, perms);
-					addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
-					addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
-					addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
-					addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
-					addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
-					addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
-					addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
-					addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
-					addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-					addstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
-					addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-				} else if (checkbuiltin(clientstat)) {
-					clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
-					clientstat(CLIENT_ITEMS2, EV_FLOAT, items2);
-					clientstat(CLIENT_PERMS, EV_FLOAT, perms);
-					clientstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
-					clientstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
-					clientstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
-					clientstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
-					clientstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
-					clientstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
-					clientstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
-					clientstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
-					clientstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-					clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
-					clientstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-				}
-				if (checkbuiltin(globalstat)) {
-					globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
-					globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
-				}
+			if (checkbuiltin(addstat)) {
+				addstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
+				addstat(CLIENT_ITEMS2, EV_FLOAT, items2);
+				addstat(CLIENT_PERMS, EV_FLOAT, perms);
+				addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
+				addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
+				addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
+				addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
+				addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
+				addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
+				addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
+				addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+				addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+				addstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
+				addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+			} else if (checkbuiltin(clientstat)) {
+				clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
+				clientstat(CLIENT_ITEMS2, EV_FLOAT, items2);
+				clientstat(CLIENT_PERMS, EV_FLOAT, perms);
+				clientstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
+				clientstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
+				clientstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
+				clientstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
+				clientstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
+				clientstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
+				clientstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
+				clientstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+				clientstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+				clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
+				clientstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+			}
+			if (checkbuiltin(globalstat)) {
+				globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
+				globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
 			}
 		}
 	}

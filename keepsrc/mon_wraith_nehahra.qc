@@ -267,7 +267,7 @@ void() nehwraith_orb7  = [ 84,  nehwraith_orb8  ] { // [FUNCTION]
 		sound(self,CHAN_WEAPON,"drake/hkboss/iceball.wav",1,ATTN_NORM);
 		self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
 		makevectors(self.angles);
-		launch_projectile(self.origin + attack_vector('18 0 10'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
+		newmis = launch_projectile(self.origin + attack_vector('18 0 10'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
 		newmis.dmg = 30;
     } else WrathMissile(2);
 };

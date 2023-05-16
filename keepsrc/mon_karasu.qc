@@ -556,9 +556,9 @@ void() karasu_rocks = { // [FUNCTION]
 
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_KARASUROCKS + (skill * SPEED_KARASUSKILL) + random()*10;
-		launch_projectile(org,dir,NO_SPIN,CT_PROJ_ZRING,self.attack_speed);
+		newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_ZRING,self.attack_speed);
 		newmis.think = zring_particle;
-    		newmis.nextthink = time + 0.1;
+    	newmis.nextthink = time + 0.1;
 		shotcount = shotcount - 1;
 	}
 };

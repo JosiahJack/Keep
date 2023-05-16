@@ -87,7 +87,7 @@ void() player_failedairgun1;
 void() player_xbow1;
 void() W_FireSparks;
 void(entity ent) ReflectSound;
-void(float pause, void() thinkst) Echo_Shot;
+entity(float pause, void() thinkst, entity attacker) Echo_Shot;
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
 void() player_lava_nail1;
 void() player_lava_snail1;
@@ -284,18 +284,18 @@ void(float stat) HIP_FireLaser = { // [FUNCTION]
 		self.currentammo = (self.currentammo - TRUE);
 		org = (org + (aofs * v_right));
 		org = (org - (aofs * v_up));
-		HIP_LaunchLaser (org,dir,FALSE);
+		newmis = HIP_LaunchLaser(org,dir,FALSE);
 		org = (org - ((FL_SWIM * aofs) * v_right));
-		HIP_LaunchLaser (org,dir,FALSE);
+		newmis = HIP_LaunchLaser(org,dir,FALSE);
 	} else if (stat == TRUE) {
 		self.ammo_cells = (self.ammo_cells - TRUE);
 		self.currentammo = (self.currentammo - TRUE);
 		org = (org + (ofs * v_up));
 		if ( (random () < 0.100) ) {
-			HIP_LaunchLaser (org,dir,TRUE);
+			newmis = HIP_LaunchLaser(org,dir,TRUE);
 			newmis.dmg = 25.000;
 		} else {
-			HIP_LaunchLaser (org,dir,FALSE);
+			newmis = HIP_LaunchLaser(org,dir,FALSE);
 		}
 	} else { // Using the modified shotgun-turned-blaster model...
 		org = self.origin + '0 0 12';
@@ -305,7 +305,7 @@ void(float stat) HIP_FireLaser = { // [FUNCTION]
 		}
 		self.ammo_shells = (self.ammo_shells - TRUE);  // blaster uses shells??  well, I guess that's fine whatevs
 		self.currentammo = (self.currentammo - TRUE);
-		HIP_LaunchLaser (org, dir, glow);
+		newmis = HIP_LaunchLaser(org,dir,glow);
 		newmis.volume = 0; // No random chance of removal on impact.  Spread gun looks bad unless v_model is wider.
 	}
 	self.punchangle_x = CONTENT_EMPTY;
@@ -875,9 +875,9 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 		if (self.tome_finished) {
 			// Update 2/14/10:  Minigun mode -- fire three shots per 0.1 sec.
 			org = self.origin + '0 0 16' + v_up*fabs(ox);
-			Piercer_Trace (org, org + dir, self, SPIKEY_DAMAGE, self, TE_GUNSHOT);
-			Echo_Shot(1/30, W_EchoSpike_Down);
-			Echo_Shot(2/30, W_EchoSpike_Up);
+			Piercer_Trace(org, org + dir,self,SPIKEY_DAMAGE,self,TE_GUNSHOT);
+			Echo_Shot(1/30,W_EchoSpike_Down,self);
+			Echo_Shot(2/30,W_EchoSpike_Up,self);
 			StackDamage_Clear();
 		} else { // Normal Super Nailgun Fire
 			if (world.copperoptions & COPPER_TWOSHOT_PERFORATOR) { // Copper variant fires more nails instead of one super one
@@ -913,9 +913,9 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 		if (self.tome_finished) { // ToP makes nailguns fire armor-piercing, hitscan bullets.
 			ox = ox * 2;    // Hitscan with no bonus, so extend offset.
 			dir = aim (self, 100000) * SPIKEY_RANGE;
-			Piercer_Trace (org, org + dir, self, SPIKEY_DAMAGE, self, TE_GUNSHOT); // ToP also doubles nailgun's rate of fire.
-			if (ox < 0) Echo_Shot(0.05,W_EchoSpike_Down); // Fire a second nail from the same barrel a moment later.
-			else Echo_Shot(0.05,W_EchoSpike_Up);
+			Piercer_Trace (org,org + dir,self,SPIKEY_DAMAGE,self,TE_GUNSHOT); // ToP also doubles nailgun's rate of fire.
+			if (ox < 0) Echo_Shot(0.05,W_EchoSpike_Down,self); // Fire a second nail from the same barrel a moment later.
+			else Echo_Shot(0.05,W_EchoSpike_Up,self);
 
 			StackDamage_Clear();
 		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
@@ -952,11 +952,11 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 		org = self.origin + '0 0 16' + v_right*ox;
 		if (self.tome_finished) {
 			org = self.origin + '0 0 16' + v_up*fabs(ox); // Update 2/14/10:  Minigun mode -- fire three shots per 0.1 sec.
-			Piercer_Trace (org, org + dir, self, SPIKEY_DAMAGE, self, TE_GUNSHOT);
-			Echo_Shot(1/30, W_EchoLavaSpike_Down);
-			Echo_Shot(2/30, W_EchoLavaSpike_Up);
+			Piercer_Trace (org,org + dir,self,SPIKEY_DAMAGE,self,TE_GUNSHOT);
+			Echo_Shot(1/30, W_EchoLavaSpike_Down,self);
+			Echo_Shot(2/30, W_EchoLavaSpike_Up,self);
 			StackDamage_Clear();
-		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
+		} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
 	} else { // Lava NG setup, sound and ammo change
 		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
@@ -975,11 +975,11 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 			dir = aim (self, 100000) * SPIKEY_RANGE;
 			Piercer_Trace(org,org + dir,self,SPIKEY_DAMAGE,self,TE_GUNSHOT); // ToP also doubles nailgun's rate of fire.
 			
-			if (ox < 0) Echo_Shot(0.05,W_EchoLavaSpike_Down); // Fire a second nail from the same barrel a moment later.
-			else Echo_Shot(0.05,W_EchoLavaSpike_Up);
+			if (ox < 0) Echo_Shot(0.05,W_EchoLavaSpike_Down,self); // Fire a second nail from the same barrel a moment later.
+			else Echo_Shot(0.05,W_EchoLavaSpike_Up,self);
 
 			StackDamage_Clear();
-		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
+		} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
@@ -1165,7 +1165,7 @@ void() W_FireLightning = { // [FUNCTION]
 			// Make some extra tome of power spark effects off the player
 			iter = 0;
 			while (iter < 30) {
-				make_spark(self.origin, VEC_ORIGIN, TRUE); // TRUE for random using Rubicon method.
+				newmis = make_spark(self.origin, VEC_ORIGIN, TRUE); // TRUE for random using Rubicon method.
 				newmis.velocity_z = crandom() * 300;
 				newmis.velocity_y = crandom() * 300;
 				newmis.velocity_x = crandom() * 300;
@@ -1288,7 +1288,7 @@ void() W_FireMultiGrenade = { // [FUNCTION]
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-        launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTI,1);
+        newmis = launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTI,1);
 		newmis.tome_finished = 1;
     } else {
 		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
@@ -1299,7 +1299,7 @@ void() W_FireMultiGrenade = { // [FUNCTION]
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-		launch_projectile(self.origin, dir, avel, CT_PROJ_GLMULTI,1);
+		newmis = launch_projectile(self.origin, dir, avel, CT_PROJ_GLMULTI,1);
 	}
 };
 
@@ -1309,10 +1309,10 @@ void() W_FireMultiRocket = { // [FUNCTION]
 	self.currentammo = (self.currentammo - TRUE);
 	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",TRUE,ATTN_NORM);
 	self.punchangle_x = CONTENT_SOLID;
-	MultiRocketLaunch (-10.000,FL_SWIM);
-	MultiRocketLaunch (-5,MOVETYPE_WALK);
-	MultiRocketLaunch (MOVETYPE_FLY,FALSE);
-	MultiRocketLaunch (MOVETYPE_BOUNCE,TRUE);
+	MultiRocketLaunch(-10.000,FL_SWIM);
+	MultiRocketLaunch(-5,MOVETYPE_WALK);
+	MultiRocketLaunch(MOVETYPE_FLY,FALSE);
+	MultiRocketLaunch(MOVETYPE_BOUNCE,TRUE);
 	W_Reload(0.9);
 };
 
@@ -1374,8 +1374,7 @@ void() W_FireStinger = { // [FUNCTION]
     makevectors(self.v_angle);
     self.velocity = self.velocity - (v_forward * 100);  // Recoil!
     start = self.origin + self.view_ofs + (v_forward*8) + (v_right*8);
-    Mirv_Launch(start,v_forward);
-    self.mirv1 = newmis;
+    self.mirv1 = Mirv_Launch(start,v_forward);
 };
 
 // Launches a small MIRV that splits into mini-rockets a few frames

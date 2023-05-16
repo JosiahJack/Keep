@@ -1080,7 +1080,9 @@ void() monster_reiver = {
 	reiver_shield.lefty = 1;
 	reiver_shield.think = reiver_shield_think;
 	reiver_shield.nextthink = time;
-	if (checkbuiltin(checkbuiltin) && checkbuiltin(setattachment)) setattachment(reiver_shield, self, "test");
+	if (ext_active) {
+		if (checkbuiltin(setattachment)) setattachment(reiver_shield, self, "test");
+	}
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "")  self.deathstring = " was terrified by a Reiver\n\n";
 	self.classtype = CT_MONREIVER;

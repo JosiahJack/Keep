@@ -711,11 +711,11 @@ void() HIP_LaserTouch = { // [FUNCTION]
 		dir = (oldvel + (2 * trace_plane_normal));
 		dir = normalize (dir);
 		dir = (self.speed * dir);
-		HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
+		newmis = HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
 		newmis.owner = other;
 		newmis.master = self.master;
 		newmis.tome_finished = FALSE; // Prevent infinite spawning loop
-		HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
+		newmis = HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
 		newmis.owner = other;
 		newmis.master = self.master;
 		newmis.tome_finished = FALSE; // Prevent infinite spawning loop
