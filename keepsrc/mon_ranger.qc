@@ -890,7 +890,6 @@ void() ranger_stats = { // [FUNCTION]
 // --> QUAKED monster_ranger (1 0 0) (-16 -16 -24) (16 16 40) Ambush x Axe
 void() monster_ranger = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     // Changed from 'player.mdl' because ranger has decap scenes.
     self.mdl = "progs/drake/ranger.mdl";

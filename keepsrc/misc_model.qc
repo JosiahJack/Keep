@@ -421,6 +421,52 @@ float(float minrange, float maxrange, float checker) misc_model_CheckRange = { /
 // -------- NOTES --------
 // MDL files that can be setup with specific frame/skin and animate groups
 void() misc_model = { // [ENTITY]
+
+	// Silly map fixes for specific models.  Please start at 0.  Please end at
+	// 1 less than what QME says it is if QME started at 1 instead of 0.
+	if (self.mdl == "progs/hrimfaxi/warhorseA1.mdl") self.mdl = "progs/hrimfaxi/warhorsea1.mdl";
+	if (self.mdl == "Progs/hrimfaxi/runic.mdl") self.mdl = "progs/hrimfaxi/runic.mdl";
+	if (self.mdl == "progs/Hrimfaxi/barrel.mdl") self.mdl = "progs/hrimfaxi/barrel.mdl";
+	if (self.mdl == "progs/madfox/Q1_adonis.MDL") self.mdl = "progs/madfox/adonis.mdl";
+	if (self.mdl == "progs/madfox/albion03.MDL") self.mdl = "progs/madfox/albion03.mdl";
+	if (self.mdl == "progs/madfox/fountain_waterA.mdl") self.mdl = "progs/madfox/fountain_watera.mdl";
+	if (self.mdl == "progs/madfox/warbannerA.mdl") self.mdl = "progs/madfox/warbannera.mdl";
+	if (self.mdl == "progs/madfox/torch.MDL") self.mdl = "progs/madfox/torch.mdl";
+	if (self.mdl == "progs/madfox/trance10.MDL") self.mdl = "progs/madfox/trance10.mdl";
+	if (self.mdl == "progs/madfox/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
+	if (self.mdl == "progs/madfox/grass1A.mdl") self.mdl = "progs/madfox/grass1a.mdl";
+
+	if ((self.mdl == "progs/hrimfaxi/pinetree.mdl"
+		|| self.mdl == "progs/hrimfaxi/pinetreem.mdl")) {
+		if (self.pos1_x >= 1) self.pos1_x = 0; // Just start at the beginning.
+		if (self.pos1_y >= 20) self.pos1_y = 19; // Just stop at the end mkay.
+	}
+
+	if (self.mdl == "progs/hrimfaxi/pine3.mdl") {
+		if (self.pos1_x >= 1) self.pos1_x = 0; // Just start at the beginning.
+		if (self.pos1_y >= 16) self.pos1_y = 15; // Just stop at the end aight.
+	}
+
+	if (self.mdl == "progs/hrimfaxi/tavern_sign.mdl") {
+		if (self.pos1_x >= 1) self.pos1_x = 0; // Got your name all over it lol.
+		if (self.pos1_y >= 80) self.pos1_y = 79; // Just stop at the end pls.
+	}
+
+	if (self.mdl == "progs/hrimfaxi/warhorsea1.mdl") {
+		if (self.pos1_x >= 1) self.pos1_x = 0; // Zero based indexing is fun.
+	}
+
+	if (self.mdl == "progs/tronyn/banner_avatar.mdl") {
+		if (self.pos1_x >= 1) self.pos1_x = 0; // Zero based indexing is fun.
+	}
+
+	if (self.mdl == "progs/madfox/orqules.mdl") {
+		// The stand sequence is 0 to 152.
+		if (self.pos1_x == 1) self.pos1_x = 0;
+		if (self.pos1_y == 153) self.pos1_y = 152;
+	}
+	// End silliness...everywhere.  Ugh, told myself I wouldn't do this.
+
 	if (!self.mdl) { dprint("\b[MISCMDL]\b Missing model to load. Making it a Shambler! ;) \n"); self.mdl = "progs/ad171/mon_shambler.mdl"; } // Is the model defined using the mdl key?
 	if (self.sounds == 0) self.sounds = 5; // TRIGGER sound setup + volume (def=custom sound)
 	trigger_bmodel_sounds();

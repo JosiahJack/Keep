@@ -1,0 +1,56 @@
+=================================================================================
+Title                  : Q1_Reskinned models.mdl
+Filename               : Q1_Reskinned models.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 weapons
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Models              : new Quake1 weapons.
+New Sounds              : /
+qC                      : no
+
+=================================================================================
+
+* Construction *  
+
+Base              : Reskinned quake weapons.
+
+.                 : mf_v_shot.mdl
+.                 : mf_v_shot2.mdl
+.                 : mf_v_sang.mdl
+.                 : mf_v_rock.mdl
+.                 : mf_v_rock2.mdl
+.                 : mf_v_nail.mdl
+.                 : mf_v_nail2.mdl
+.                 : mf_v_light.mdl
+
+Build Time        : Construckted from unskinned models. 
+Editor(s) Used    : AnimationMaster  Quark4.07 QMLE CorelDraw5.  
+Known Bugs        : Bland skinfile.
+Specific          : I reconstruckted all models for sake of a clean skin file.
+Thanks            : Id1 for creating Quake.
+To be Done        : Creating a better skin file that aims to all new poses.
+                
+
+Any command would be welcome, as every help would be welcome.
+You may use this model anyway you want, but at least give some credit recalling myname.
+Live long and propsper! Make the Quake1 Universe get bigger and bigger!
+
+================================================================================= 
+
+Madfox 19 aug 2022.
+
+=================================================================================
+
+

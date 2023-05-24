@@ -124,7 +124,6 @@ void() trap_lightning_triggered = { // [ENTITY]
    self.use = trap_lightning_use;
    if (self.spawnflags & LIGHTNING_BOOM) self.noise = "weapons/lstart.wav";
    item_setupnoise("weapons/lhit.wav");
-   if (self.mdl != "") precache_model(self.mdl);
    self.huntingcharmer = self.nextthink;
    self.think = lightning_firstthink;
    self.nextthink = (time + 0.250 + random());
@@ -137,6 +136,8 @@ void() trap_lightning_triggered = { // [ENTITY]
       }
    }
    if (self.mdl == "" && self.style <= 0) self.style = TE_LIGHTNING2;
+   if (self.mdl != "") precache_model(self.mdl);
+
 };
 
 void() trap_lightning = { // [ENTITY]

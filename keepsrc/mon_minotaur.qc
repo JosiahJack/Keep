@@ -689,7 +689,6 @@ void() monster_minotaur_precache = { // [FUNCTION]
 // QUAKED monster_minotaur (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_minotaur = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_minotaur.mdl";
 	self.headmdl = "progs/ad171/h_minotaur.mdl";		// Large head

@@ -311,8 +311,6 @@ void() monster_virtus_precache = { // [FUNCTION]
 };
 
 void() monster_newboss = { // [ENTITY], Redirect
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/virtus/newboss.mdl";
 	if (self.health < 1) self.health = 1800;
 	self.th_run = SUB_Null;

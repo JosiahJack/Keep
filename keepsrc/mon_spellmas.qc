@@ -208,8 +208,6 @@ void() monster_spellmaster_precache = { // [FUNCTION]
 };
 
 void() monster_spellmaster = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/madfox/mon_spellmas.mdl";
 	self.th_stand = spell_stand;
 	self.th_walk = spell_walk;

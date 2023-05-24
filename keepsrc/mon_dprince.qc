@@ -500,8 +500,6 @@ void() monster_dprince_precache = { // [FUNCTION]
 
 // QUAKED monster_dprince (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dprince = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/ad181/mon_dprince.mdl";			// New Hell Knight
 	self.headmdl = "progs/ad181/h_dprince.mdl";
 	self.gib1mdl = "progs/ad181/w_dprincesword.mdl";	// Unique sword

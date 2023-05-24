@@ -523,7 +523,6 @@ void() monster_nightshade_precache = { // [FUNCTION]
 // --> QUAKED monster_nightshade (1 0 0) (-32 -32 -24) (32 32 32) Ambush x Souls
 void() monster_nightshade = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     self.sight_sound = "drake/shade/sing.wav";
     self.mdl = "progs/drake/shade.mdl";

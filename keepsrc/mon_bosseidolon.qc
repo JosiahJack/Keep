@@ -599,7 +599,6 @@ void() monster_eidolon_precache = { // [FUNCTION]
 // QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
 void() monster_eidolon = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups	
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_bosseidolon.mdl";
 	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock

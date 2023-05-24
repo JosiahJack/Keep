@@ -887,8 +887,6 @@ void() monster_bane_precache = { // [FUNCTION]
 
 // The Bane  (SoE Big Bad Evil Guy, Hell Knight boss variant)
 void() monster_bane = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/qmaster/mon_hknight.mdl";			// Original ID Knight + extra skins
 	self.headmdl = "progs/h_hellkn.mdl";
 	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
@@ -1212,7 +1210,6 @@ void() monster_dark_lord = {
     local float hp;
 
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     if (self.spawnflags & 4) {
         hp = 4000 + (500 * skill);

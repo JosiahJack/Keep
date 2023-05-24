@@ -1605,9 +1605,7 @@ void() monster_judicator_precache = { // [FUNCTION]
 };
 
 // QUAKED monster_judicator (1 0 0) (-32 -32 -24) (32 32 80) Ambush
-void() monster_judicator = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-	
+void() monster_judicator = { // [ENTITY]	
 	self.mdl = "progs/ad181/mon_judge.mdl";			// Judicator Knight
 	self.headmdl = "progs/ad181/h_judge.mdl";			// Bloody head
 	self.gib1mdl = "progs/ad181/w_judgesword.mdl";	// Broken sword
@@ -1790,8 +1788,6 @@ void() monster_justice_precache = {
 
 // QUAKED monster_justice (1 0 0) (-16 -16 -24) (16 16 56) Ambush
 void() monster_justice = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/ad181/mon_justice.mdl";				// Justice Knight
 	self.headmdl = "progs/ad181/h_justice.mdl";			// Bloody head
 	self.gib1mdl = "progs/ad181/w_justicesword.mdl";		// Broken sword

@@ -703,7 +703,6 @@ void() monster_zombiep;
 // If crucified, stick the bounding box 12 pixels back into a wall to look right.
 void() monster_zombie = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.poisonous) self.classname = "monster_zombiep"; // Ensure precaches.
 	self.mdl = "progs/ad171/mon_zombie.mdl";

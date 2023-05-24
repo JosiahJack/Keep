@@ -626,7 +626,6 @@ void() monster_dknight_precache = { // [FUNCTION]
 // QUAKED monster_dknight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dknight = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad181/mon_dknight.mdl";			// New Hell Knight
 	self.headmdl = "progs/ad181/h_dknight.mdl";

@@ -296,8 +296,6 @@ void() monster_steelclaw_precache = {
 };
 
 void() monster_steelclaw = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/ad181/mon_steelclaw.mdl";
 	self.headmdl = "progs/ad181/h_steelclaw.mdl";		// Front Jaws
 	self.gib1mdl = "progs/ad181/gib_steelleg.mdl";	// Single Leg

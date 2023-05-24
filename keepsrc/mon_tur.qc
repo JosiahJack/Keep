@@ -236,8 +236,6 @@ void() monster_tur = {
 	local entity trigent;
 	local vector v1;
 
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	if (!deathmatch) AddToTotals(self);	
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";\
 	self.mdl = "progs/oum/aagba.mdl";

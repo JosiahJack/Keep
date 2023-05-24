@@ -320,7 +320,6 @@ void() monster_raven_precache = {
 // QUAKED monster_raven (1 0 0) (-16 -16 -24) (16 16 16) Ambush
 void() monster_raven = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/redfield/mon_raven.mdl";
 	self.headmdl = "progs/redfield/h_raven.mdl";

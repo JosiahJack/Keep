@@ -440,7 +440,6 @@ void() monster_super_grunt_precache = {
 
 void() monster_super_grunt = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/kinn/sgrunt.mdl";
 	self.headmdl = "progs/kinn/head2.mdl";

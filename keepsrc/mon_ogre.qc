@@ -549,7 +549,6 @@ void() monster_ogre_precache = {
 // QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_ogre = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_ogre.mdl";		// Rogue Ogre
 	self.headmdl = "progs/h_ogre.mdl";
@@ -638,8 +637,6 @@ void() monster_ogre_marksman = {
 };
 
 void() monster_ogre_fishing = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.weaponglow = "progs/ad171/mon_ogrefish.mdl"; // Extra fishing ogre precache stuff
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

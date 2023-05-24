@@ -273,7 +273,6 @@ void() setup_wizard;
 // QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_wizard = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_wizard.mdl";
 	self.headmdl = "progs/h_wizard.mdl";
@@ -290,7 +289,6 @@ void() monster_wizard = { // [ENTITY]
 
 void() monster_wizboss = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/anevil/wizboss.mdl";
 	self.headmdl = "progs/anevil/h_wboss.mdl";
@@ -306,7 +304,6 @@ void() monster_wizboss = { // [ENTITY]
 
 void() monster_drake = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/drake/wizard.mdl";
 	self.headmdl = "progs/h_wizard.mdl";

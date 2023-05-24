@@ -318,8 +318,6 @@ void() monster_turret_precache = {
 void() monster_turret = { // [ENTITY], Redirect
 	local vector endorg;
 
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/custents/turret.mdl";
 	self.headmdl = "progs/custents/h_turret.mdl";
 	self.gib1mdl = "progs/custents/turetgib.mdl";

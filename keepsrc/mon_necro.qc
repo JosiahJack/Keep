@@ -1049,7 +1049,6 @@ void() monster_necromancer = {
     local float nec;
 
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     if (self.classname == "monster_acolyte") {
 		nec = NECRO_ACOLYTE;

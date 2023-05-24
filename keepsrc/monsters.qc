@@ -191,10 +191,12 @@ void() monster_idle_sound = { // [FUNCTION]
 void() monster_sightsound = { // [FUNCTION]
 	local float	rsnd;
 
-	dprint(self.classname);
-	dprint(" aggroed, alignment:");
-	dprint(ftos(self.alignment));
-	dprint("\n");
+	if (developer > 1) {
+		dprint(self.classname);
+		dprint(" aggroed, alignment:");
+		dprint(ftos(self.alignment));
+		dprint("\n");
+	}
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
 
@@ -1211,7 +1213,11 @@ void() monster_start = { // [FUNCTION]
 
 	// Allow monster armor maphack.  Qmaster is evil again :)
 
+	setmodel(self, self.mdl); // restore model/bbox to get world collision
+	setsize (self, self.bbmins, self.bbmaxs);
     self.mindex2 = self.modelindex;      // Remember original modelindex.
+	setmodel(self, "");
+	self.solid = SOLID_NOT;	
 	if (self.spawnflags & MON_SPAWN_DELAY || self.brain & 32) {
 		setmodel(self, "");
 		self.solid = SOLID_NOT;				// No world interaction

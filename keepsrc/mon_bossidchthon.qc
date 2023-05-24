@@ -345,7 +345,6 @@ void() boss_death10 = [$death9, SUB_Null] { // No plans to support map hacks any
 // QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
 void() monster_boss = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
 	self.pain_sound = "ad171/chthon/pain1.wav";

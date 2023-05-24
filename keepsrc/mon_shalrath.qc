@@ -308,7 +308,6 @@ void() monster_shalrath_precache = { // [FUNCTION]
 // QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush
 void() monster_shalrath = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.minion_name == "") {
 		self.minion_name = "monster_voreling";

@@ -463,7 +463,6 @@ void enforcer_spawnshieldfx();
 
 void() monster_enforcer = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	if (!self.classtype) self.classtype = CT_MONENFORCER;
 	if (self.spawnflags & ULTRA_ENF) {
@@ -503,7 +502,6 @@ void() monster_enforcer = {
 
 void() monster_defender = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONDEFENDER;
 	if (self.health < 1) self.health = 100;
@@ -556,7 +554,6 @@ void() gunner_gun2 = [$attack4, gunner_gun1] {
 // QUAKED monster_gunner (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_gunner = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.classtype = CT_MONENF_GUNNER;
 	if (self.health < 1) self.health = 70; // PM:  Chaingunners had 70 health in Doom2.
@@ -582,7 +579,6 @@ void() monster_gunner = {
 // The Quoth Eliminator
 void() monster_eliminator = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	 
 	self.classtype = CT_MONELIMATOR;
 	if (self.health < 1) self.health = 120;
@@ -602,7 +598,6 @@ void() monster_eliminator = {
 // Drake's implementation of the Quoth Eliminator
 void() monster_commando = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.health < 1) self.health = 160; // More health yikes!
 	self.exactskin = 15;
@@ -664,7 +659,6 @@ void()	lth_fdie11	= [	49,	lth_fdie11	] { monster_deadbody_check(); };
 // Lieutant Enforcer from back2forwards by the Lieutenant
 void() monster_super_enforcer = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.classtype = CT_MONSUPERENFORCER;
 	// We drop the super nailgun on death :)

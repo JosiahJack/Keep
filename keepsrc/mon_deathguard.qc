@@ -251,7 +251,6 @@ void() monster_deathguard_precache = {
 
 void() monster_deathguard = { // [ENTITY], Redirect
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/dguard.mdl";
 	self.headmdl = "progs/quoth/h_dguard.mdl";

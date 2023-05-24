@@ -441,8 +441,6 @@ void() monster_morph_precache = {
 // monster_morph (1 0 0) (-16 -16 -24) (16 16 32) Ambush Aztec Egyptian Greek  The morphing monster.
 // Select the look of the monster (Aztec,Greek,Egyptian).
 void() monster_morph = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	if (self.minion_name == "") {
 		self.minion_name = "monster_morph";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;

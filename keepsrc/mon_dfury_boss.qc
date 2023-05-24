@@ -694,8 +694,6 @@ void() monster_dfury_boss_precache = { // [FUNCTION]
 
 //QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dfury_boss = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/q15/dfury_boss.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;

@@ -1,0 +1,47 @@
+===================================================================
+Title                  : Gremlin_bossv2
+Filename               : gremlin_bossv2.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : new gremlin from scratch.
+
+Additional Credits to  : ID Software
+
+===================================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Model               : gremlin entity
+New Sounds              : /
+New Weapon              : /
+qC                      : yes
+
+===================================================================
+
+* Construction *
+
+Base              : make a change to the Gremlin, by giving it a
+                  : mouth and a catapult.
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2005
+Known Bugs        : lots of screwed verices, bad skinfile
+                  : catch up in every engine.
+Install           : To make it run compile gremlin.qc and add
+                  : an add it to the grremlin_boss. 
+                  : it takes a hussle because the weapon thing.
+To do             : changed the face surface.    
+
+====================================================================
+
+You may distribute and modify this file not for commercial purpose, 
+as long as you give me a little credit, but most of all ID Software'
+Quake! 
+
+====================================================================  
+
+Madfox 21 nov 2022

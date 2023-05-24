@@ -342,7 +342,6 @@ void() monster_chthon_precache = {
 // QUAKED monster_chthon (1 0 0) (-128 -128 -24) (128 128 256)
 void() monster_chthon = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
 	self.gib1mdl = MODEL_PROJ_CHTHON1; // Final explosion (10 distorted balls of lava/slime)

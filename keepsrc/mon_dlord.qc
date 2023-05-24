@@ -379,7 +379,6 @@ void() monster_death_lord_precache = {
 
 void() monster_death_lord = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/qmaster/mon_hknight.mdl";
 	self.headmdl = "progs/h_hellkn.mdl";

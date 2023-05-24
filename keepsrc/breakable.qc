@@ -1343,6 +1343,11 @@ void() func_breakable_ceramic_model = { // [FUNCTION]
 void() misc_breakable_vase1 = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/ad181/brk_vase1.mdl"; // Default model/skin
 	precache_model(self.mdl);
+	precache_model("progs/ad181/brk_vase1.mdl");
+	precache_model("progs/ad181/brk_vase1part1.mdl");
+	precache_model("progs/ad181/brk_vase1part2.mdl");
+	precache_model("progs/ad181/brk_vase1part3.mdl");
+	precache_model("progs/ad181/brk_vase1part4.mdl");
 	if (self.brkobj1 == "") self.brkobj1 = "progs/ad181/brk_vase1part1.mdl";
 	if (self.brkobj2 == "") self.brkobj2 = "progs/ad181/brk_vase1part2.mdl";
 	if (self.brkobj3 == "") self.brkobj3 = "progs/ad181/brk_vase1part3.mdl";
@@ -1384,8 +1389,31 @@ void() misc_breakable_pot_setup = { // [FUNCTION]
 		else if (self.brkmdltype == 24) self.mdl = "progs/ad181/brk_pot2d.mdl";
 		else if (self.brkmdltype == 25) self.mdl = "progs/ad181/brk_pot2aflr.mdl";
 	}
-	precache_model(self.mdl);
 
+	// Silly shenanigans
+	if (self.mdl == "progs/ad181/brk_pot1a.mdl") {
+		if (self.exactskin > 1) self.exactskin = 1;
+	}
+	// End silliness
+
+	precache_model("progs/ad181/brk_pot1a.mdl");
+	precache_model("progs/ad181/brk_pot1b.mdl");
+	precache_model("progs/ad181/brk_pot1c.mdl");
+	precache_model("progs/ad181/brk_pot1d.mdl");
+	precache_model("progs/ad181/brk_pot1aflr.mdl");
+	precache_model("progs/ad181/brk_pot2a.mdl");
+	precache_model("progs/ad181/brk_pot2b.mdl");
+	precache_model("progs/ad181/brk_pot2c.mdl");
+	precache_model("progs/ad181/brk_pot2d.mdl");
+	precache_model("progs/ad181/brk_pot2aflr.mdl");
+	precache_model("progs/ad181/brk_pot1part1.mdl");
+	precache_model("progs/ad181/brk_pot1part2.mdl");
+	precache_model("progs/ad181/brk_pot1part3.mdl");
+	precache_model("progs/ad181/brk_pot1part4.mdl");
+	precache_model("progs/ad181/brk_pot2part1.mdl");
+	precache_model("progs/ad181/brk_pot2part2.mdl");
+	precache_model("progs/ad181/brk_pot2part3.mdl");
+	precache_model("progs/ad181/brk_pot2part4.mdl");
 	if (self.brkmdltype == 11 || self.brkmdltype == 21) { // Pot 1a and 2a
 		if (VectorIsAllZeros(self.bbmins)) self.bbmins = '-16 -16 -16';
 		if (VectorIsAllZeros(self.bbmaxs)) self.bbmaxs = '16 16 32';
@@ -1533,6 +1561,11 @@ void() misc_breakable_pot1 = { // [ENTITY]
 	self.brkobj2 = "progs/ne_ruins/potshard2.mdl";
 	self.brkobj3 = "progs/ne_ruins/potshard3.mdl";
 	self.brkobj4 = "progs/ne_ruins/potshard4.mdl";
+	precache_model("progs/ne_ruins/pot1.mdl");
+	precache_model("progs/ne_ruins/potshard1.mdl");
+	precache_model("progs/ne_ruins/potshard2.mdl");
+	precache_model("progs/ne_ruins/potshard3.mdl");
+	precache_model("progs/ne_ruins/potshard4.mdl");
 	if (VectorIsAllZeros(self.pos1)) self.pos1 = '16 8 1';	// Brown
 	self.wait = -1;			// Only break once
 	self.pos2 = self.angles; // Save any custom angles, otherwise random Y rotation

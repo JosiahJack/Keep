@@ -714,8 +714,6 @@ void() monster_wraith_precache = {
 
 // QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 void() monster_wraith = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/ad171/mon_wraith.mdl";
 	self.weaponglow = "progs/ad171/mon_wraith_glow.mdl";
 	self.gib1mdl = "progs/rogue/wrthgib1.mdl"; // Forearm

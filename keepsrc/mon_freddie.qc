@@ -428,7 +428,6 @@ void() monster_freddie_precache = {
 // QUAKED monster_freddie (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_freddie = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/edie.mdl";
 	self.headmdl = "progs/h_ogre.mdl"; // ID ogre

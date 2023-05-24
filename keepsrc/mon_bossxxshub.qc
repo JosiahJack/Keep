@@ -335,8 +335,6 @@ void() monster_shub_precache = { // [FUNCTION]
 
 // QUAKED monster_shub (1 0 0) (-128 -128 -24) (128 128 512)
 void() monster_shub = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return;
-
 	self.mdl = "progs/oldone.mdl";
 	self.gib1mdl = MODEL_PROJ_SHUB2; // Final explosionm and grenades for attack 2
 	self.gib1frame = 9;

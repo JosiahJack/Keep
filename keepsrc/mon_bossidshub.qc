@@ -247,8 +247,6 @@ void(entity inflictor, entity attacker, float damage) idshub_nopain = { self.hea
 
 // QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
 void() monster_oldone = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/oldone.mdl";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

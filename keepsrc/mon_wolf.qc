@@ -362,7 +362,6 @@ void() monster_wolf_precache = {
 // QUAKED monster_wolf (1 0 0) (-128 -128 -24) (128 128 128) Ambush
 void() monster_wolf = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/redfield/mon_wolf.mdl";
 	self.idle_sound = "redfield/wolf/snarl.wav";

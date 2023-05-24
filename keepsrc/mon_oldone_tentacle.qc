@@ -163,7 +163,6 @@ void() monster_oldone_tentacle_precache = {
 
 void() monster_oldone_tentacle = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/q15/oldone_tent.mdl";
 	self.pain_sound = "boss1/pain.wav";

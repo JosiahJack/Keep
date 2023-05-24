@@ -405,7 +405,6 @@ void() monster_drole_precache = {
 // QUAKED monster_drole (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_drole = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/drole.mdl";
 	self.headmdl = "progs/ad171/h_drole.mdl";

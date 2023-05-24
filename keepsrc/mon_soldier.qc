@@ -508,7 +508,6 @@ void() monster_army_precache = {
 // QUAKED monster_army (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_army = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.classtype == CT_MONARMYCYBORG) self.mdl = "progs/drake/soldier.mdl";
 	else self.mdl = "progs/ad171/mon_soldier.mdl";
@@ -559,7 +558,6 @@ void() monster_army = {
 
 void() monster_army_rocket = {	
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYROCKET;
 	if (self.health < 1) self.health = 45;
@@ -575,7 +573,6 @@ void() monster_army_rocket = {
 
 void() monster_army_grenade = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYGRENADE;
 	if (self.health < 1) self.health = 60;
@@ -591,7 +588,6 @@ void() monster_army_grenade = {
 
 void() monster_army_plasma = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYPLASMA;
 	if (self.health < 1) self.health = 75;
@@ -605,7 +601,6 @@ void() monster_army_plasma = {
 
 void() monster_army_spike = {	
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYSPIKE;
 	if (self.health < 1) self.health = 50;
@@ -627,7 +622,6 @@ void() monster_soldier = {
 // Made up a classname for this monster that wasn't fully implemented from Drake. -Qmaster
 void() monster_soldier_elite = {	
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYDBSHOTGUN;
 	if (self.health < 1) self.health = 100;
@@ -641,7 +635,6 @@ void() monster_soldier_elite = {
 
 void() monster_army_cyborg = {	
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/drake/soldier.mdl";
 	self.classtype = CT_MONARMYCYBORG;

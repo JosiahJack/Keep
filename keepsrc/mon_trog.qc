@@ -667,7 +667,6 @@ void() monster_nemesant_precache = {
 // --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
 void() monster_nemesant = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
   
     self.mdl = "progs/drake/nemesant.mdl";
     self.headmdl = "progs/drake/h_nemes.mdl";

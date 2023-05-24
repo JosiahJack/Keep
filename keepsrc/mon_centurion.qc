@@ -249,7 +249,6 @@ void() monster_centurion_precache = {
 // QUAKED monster_centurion (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_centurion = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_centurion.mdl";
 	self.headmdl = "progs/ad171/h_centurion.mdl";

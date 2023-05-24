@@ -105,7 +105,6 @@ void() monster_rebel_precache = { // [FUNCTION]
 
 void() monster_rebel = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     self.mdl = "progs/drake/rebel.mdl";
     self.headmdl   = "progs/drake/h_rebel.mdl";

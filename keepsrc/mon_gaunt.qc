@@ -573,7 +573,6 @@ void() monster_gaunt_precache = {
 // QUAKED monster_gaunt (1 0.2 0) (-16 -16 -24) (16 16 24)
 void() monster_gaunt = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/gaunt.mdl";
 	self.headmdl = "progs/ad171/h_gaunt.mdl";

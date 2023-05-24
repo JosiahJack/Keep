@@ -258,7 +258,6 @@ void() monster_eel_precache = { // [FUNCTION]
 
 void() monster_eel = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_eel.mdl";
 	self.headmdl = "progs/ad171/h_eel.mdl";

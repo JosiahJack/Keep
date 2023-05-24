@@ -1256,7 +1256,6 @@ void() gremlin_setup = {
 
 void() monster_gremlin = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
    self.mdl = "progs/hipnotic/grem.mdl";
    self.headmdl = "progs/hipnotic/h_grem.mdl";

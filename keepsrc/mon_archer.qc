@@ -496,7 +496,6 @@ void() monster_archer_precache = { // [FUNCTION]
 // QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_archer = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     self.mdl = "progs/drake/archer.mdl";
     self.headmdl   = "progs/drake/h_archer.mdl";

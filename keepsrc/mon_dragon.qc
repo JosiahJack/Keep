@@ -550,8 +550,6 @@ void() monster_dragon_precache = { // [FUNCTION]
 };
 
 void() monster_dragon = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/drake/dragon.mdl";
 	self.gib1mdl = "progs/drake/drggib01.mdl";
 	self.gib2mdl = "progs/drake/drggib02.mdl";

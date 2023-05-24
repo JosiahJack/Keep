@@ -358,7 +358,6 @@ void() monster_mummy_precache = {
 
 void() monster_mummy = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/rogue/mon_mummy.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";

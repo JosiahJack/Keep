@@ -972,8 +972,6 @@ void() monster_icegolem_precache = { // [FUNCTION]
 
 // QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)
 void() monster_icegolem = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	if (self.mdl == "") self.mdl = "progs/ad171/mon_bossicegolem.mdl";
 	if (self.gib1mdl == "") self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
 	if (self.gib2mdl == "") self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock

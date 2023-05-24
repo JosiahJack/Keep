@@ -739,7 +739,6 @@ void() monster_gargoyle_precache = {
 
 void() monster_gargoyle = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_gargoyle.mdl";
 	self.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing

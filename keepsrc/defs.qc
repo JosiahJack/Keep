@@ -413,10 +413,18 @@ float		ext_sprintf;		// Sprintf C code function (exposed to QC)
 
 float(float yaw, float dist) noclip_move;
 
+void(string s) dprint;
+string(float f) ftos;
+void(string e) objerror;
+
 // builtin functions
 void(vector ang)	makevectors		= #1;	// sets v_forward, etc globals
 void(entity e, vector o) setorigin	= #2;
-void(entity e, string m) setmodel	= #3;	// set movetype and solid first
+void(entity e, string m) setmodel_builtin = #3;	// set movetype and solid first
+void(entity e, string m) setmodel	= { // set movetype and solid first
+	setmodel_builtin(e,m);
+};
+
 void(entity e, vector min, vector max) setsize = #4;
 void() break						= #6;
 float() random						= #7;	// returns 0 - 1
@@ -433,8 +441,18 @@ entity() spawn_builtin				= #14;
 void(vector v1, vector v2, float nomonsters, entity forent) traceline = #16; // sets trace_* globals.  nomonsters can be true to ignore blocking monsters.  An entity will also be ignored for testing if forent == test, a forent of world is ignored
 entity() checkclient				= #17;	// returns a client to look for
 entity(entity start, .string fld, string match) find = #18;
+
+
 string(string s) precache_sound		= #19;
-string(string s) precache_model		= #20;
+string(string s) precache_model_builtin	= #20;
+string(string s) precache_model	= {
+	if (developer > 2) {
+		dprint("Precaching model:: ");
+		dprint(s);
+		dprint("\n");
+	}
+	return precache_model_builtin(s);
+};
 void(entity client, string s)stuffcmd = #21;
 entity(vector org, float rad) findradius = #22;
 void(string s) dprint				= #25;

@@ -462,7 +462,6 @@ void() monster_polyp_precache = { // [FUNCTION]
 
 void() monster_polyp = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/polyp.mdl";
 	self.solid = SOLID_NOT;				// No interaction with world

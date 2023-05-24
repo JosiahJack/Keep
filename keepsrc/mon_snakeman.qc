@@ -271,7 +271,6 @@ void() monster_snakeman_precache = {
 
 void() monster_snakeman = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/snakeman.mdl";
 	self.headmdl = "progs/uzi.mdl";

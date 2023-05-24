@@ -374,7 +374,6 @@ void() monster_scorpion_precache = { // [FUNCTION]
 // QUAKED monster_scorpion (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_scorpion = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_scorpion.mdl";
 	self.headmdl = "progs/ad171/h_scorpion.mdl";		// Front Jaws

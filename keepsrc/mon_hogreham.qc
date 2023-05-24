@@ -368,7 +368,6 @@ void() monster_hogreham_precache = {
 // METAL : Full plate metal armour and +100HP
 void() monster_hogreham = {
 	if (monster_checkrandomizer() == TRUE) return; 	// Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return;		// Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_hogreham.mdl";		// New Ogre Model
 	self.headmdl = "progs/ad171/h_hogreham.mdl";	// Large head

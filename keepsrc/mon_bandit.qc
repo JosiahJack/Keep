@@ -228,7 +228,7 @@ void() monster_bandit = {
 	if (self.deathstring == "")  self.deathstring = " was shot by a Bandit\n";
 	if (self.classname == "monster_goblin") {
 		self.classtype = CT_MONDRAKEGOBLIN;
-		if (self.deathstring == "")  self.deathstring = " was shot by a Goblin\n";
+		if (self.deathstring == "")  self.deathstring = " was shot by a Goblin\n";}
 		self.idle_sound = "drake/goblin/idle1.wav";
 		self.idle_sound2 = "drake/goblin/idle2.wav";
 		self.pain_sound = "drake/goblin/pain1.wav";
@@ -240,15 +240,15 @@ void() monster_bandit = {
 		self.sight_sound4 = "drake/goblin/sight4.wav";
 		self.death_sound = "drake/goblin/death1.wav";
 		self.death_sound2 = "drake/goblin/death2.wav";
-	} else {
+	//} else {
 		self.classtype = CT_MONBANDIT;
-		self.idle_sound = "soldier/idle.wav";
-		self.pain_sound = "soldier/pain1.wav";
-		self.pain_sound2 = "soldier/pain2.wav";
-		self.hello_sound = "soldier/idle.wav";
-		self.sight_sound = "soldier/sight1.wav";
-		self.death_sound = "soldier/death1.wav";
-	}
+	//	self.idle_sound = "soldier/idle.wav";
+	//	self.pain_sound = "soldier/pain1.wav";
+	//	self.pain_sound2 = "soldier/pain2.wav";
+	//	self.hello_sound = "soldier/idle.wav";
+	//	self.sight_sound = "soldier/sight1.wav";
+	//	self.death_sound = "soldier/death1.wav";
+	//}
 
 	self.ammo_nails = rint(random()*3);
     self.solid = SOLID_NOT;				// No interaction with world

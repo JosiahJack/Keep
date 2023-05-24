@@ -273,8 +273,6 @@ void() ftop_wakeup = { // [FUNCTION]
 
 // QUAKED monster_firetopboss (1 0.25 0.25) (-128 -128 -24) (128 128 256)
 void() monster_firetopboss = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
 	self.pain_sound = "ad171/chthon/pain1.wav";
 	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash

@@ -357,10 +357,7 @@ void() monster_hogremac_precache = {
 // -------- SPAWNFLAGS --------
 // METAL : Chain mail metal armour and +100HP
 void() monster_hogremac = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
 	self.mdl = "progs/ad171/mon_hogremac.mdl";		// New Ogre Model
 	self.headmdl = "progs/ad171/h_hogre.mdl";			// Large Head

@@ -216,7 +216,6 @@ void() monster_pyro_precache = {
 // QUAKED monster_pyro (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_pyro = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_pyro.mdl";
 	self.headmdl = "progs/ad171/h_pyro.mdl";
@@ -281,7 +280,6 @@ void() monster_fumigator_precache = {
 // QUAKED monster_fumigator (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_fumigator = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_fumigator.mdl";
 	self.headmdl = "progs/ad171/h_pyro.mdl";

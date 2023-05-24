@@ -329,7 +329,6 @@ void() monster_super_wrath_precache = { // [FUNCTION]
 
 void() monster_super_wrath = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/rogue/s_wrath.mdl";
 	self.gib1mdl = "progs/rogue/wrthgib1.mdl";

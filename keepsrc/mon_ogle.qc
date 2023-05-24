@@ -495,10 +495,7 @@ void() monster_ogle_precache =  { // [FUNCTION]
 };
 
 void() monster_ogle =  {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
 	self.mdl = "progs/heretic2/mon_ogle.mdl";
 	self.headmdl = "progs/madfox/h_ogle.mdl";

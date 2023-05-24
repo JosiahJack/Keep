@@ -494,7 +494,6 @@ void() setup_lostsoul;
 // QUAKED monster_lostsoul (1 0.2 0) (-16 -16 -24) (16 16 24)
 void() monster_lostsoul = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_lostsoul.mdl";
 	self.idle_sound = "ad171/lostsoul/idle1.wav";

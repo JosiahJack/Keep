@@ -1055,7 +1055,6 @@ void() monster_reiver = {
 	local entity reiver_shield;
 	
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/q15/reiver.mdl";
 	self.solid = SOLID_NOT;					// No interaction with world

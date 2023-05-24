@@ -421,9 +421,6 @@ void() setup_spider;
 
 // QUAKED monster_spider (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_spider = {
-
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	if (self.spawnflags & MON_SPIDER_LARGE) {
 		self.mdl = "progs/ad171/mon_spiderg.mdl";
 		self.headmdl = "progs/ad171/h_spiderg.mdl";		// Front Jaws

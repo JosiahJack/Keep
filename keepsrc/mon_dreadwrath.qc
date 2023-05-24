@@ -496,7 +496,6 @@ void() monster_wraith_lord_precache = {
 // a.k.a. Dread Lord or Dread Wraith.
 void() monster_wraith_lord = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (!self.mdl) self.mdl = "progs/drake/s_wrath.mdl";
 	if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";

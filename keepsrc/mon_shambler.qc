@@ -547,7 +547,6 @@ void() monster_shambler_precache = {
 // QUAKED monster_shambler (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_shambler = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.spawnflags & 2) { // Shamvile cannot be poisonous. Special black shambler from Drake with archvile powers.
 		self.classname = "monster_shamvile";

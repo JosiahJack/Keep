@@ -464,7 +464,6 @@ void() monster_carnivean_precache = { // [FUNCTION]
 
 void() monster_carnivean = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/q15/carnivean.mdl";
 	self.headmdl = "progs/q15/h_carnivean.mdl";

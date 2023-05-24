@@ -501,7 +501,6 @@ void() setup_voreling;
 // QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_voreling = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.spawnflags & MON_VORELING_LARGE) {
 		if (self.mdl == "") self.mdl = "progs/ad171/mon_vorelingp.mdl";

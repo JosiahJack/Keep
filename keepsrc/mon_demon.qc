@@ -249,7 +249,6 @@ QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_demon1 = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/mon_demon.mdl";
 	self.headmdl = "progs/h_demon.mdl";

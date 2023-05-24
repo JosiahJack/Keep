@@ -264,7 +264,6 @@ void() monster_tarbaby = {
 	local float myRand;
 
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (detected_mod == MOD_ROGUE) {
 		if (self.spawnflags & 8) { // Strong mitosis

@@ -555,7 +555,6 @@ void() monster_dcrossbow_precache = {
 // QUAKED monster_dcrossbow (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dcrossbow = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad181/mon_dcrossbow.mdl";			// crossbow guy
 	self.headmdl = "progs/ad181/h_dcrossbow.mdl";

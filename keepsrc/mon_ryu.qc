@@ -1034,7 +1034,6 @@ void() monster_ryu = {
     local float powlevel, element, evade;
 
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     self.gib1mdl = "progs/drake/dr1_lw.mdl";
     self.gib2mdl = "progs/drake/dr1_rw.mdl";

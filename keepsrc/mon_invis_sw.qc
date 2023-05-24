@@ -248,7 +248,6 @@ void() monster_sword_precache = { // [FUNCTION]
 
 void() monster_sword = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.sight_sound = "knight/ksight.wav";
 	self.solid = SOLID_NOT;

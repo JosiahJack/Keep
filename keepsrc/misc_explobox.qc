@@ -43,7 +43,9 @@ void(string gibname, float dm) throwpolypgib;
 void()	misc_ebox_0 = [0, misc_ebox_0] { // [FUNCTION]
 	if (self.attack_finished < time) {
 		self.lefty = 1 - self.lefty;
-		self.skin = self.lefty + (self.skin_override * 2);  
+		if (self.mdl != "progs/madfox/objects_barrel_damage.mdl") {
+			self.skin = self.lefty + (self.skin_override * 2);
+		}
 		self.nextthink = time + 0.3; // Animate model skin slowly.
 	}
 };
@@ -155,11 +157,19 @@ void() misc_explobox_setup = { // [FUNCTION]
 		// Cannot use global vars because they don't exist at this point
 		// Move the new centered exploding models to match old box origin
 		// The default is to move all boxes to suit original id maps
-		if (!query_configflag(SVR_ITEMOFFSET) && self.classname != "misc_biobox_l" && self.classname != "misc_biobox_s" && self.classname != "misc_plasmabox_l" && self.classname != "misc_plasmabox_s") {
+		if (!query_configflag(SVR_ITEMOFFSET)
+			&& self.classname != "misc_biobox_l"
+			&& self.classname != "misc_biobox_s"
+			&& self.classname != "misc_plasmabox_l"
+			&& self.classname != "misc_plasmabox_s") {
+			// Correct the origin for quoth exploding objects.
 			self.oldorigin = self.origin + '16 16 0';
 			setorigin(self, self.oldorigin);
 		}
-		if (self.classname == "misc_barrel") {
+
+		if (self.classname == "misc_barrel"
+			&& self.mdl == "maps/nsoe2/b_barrel.bsp") {
+			// Correct the origin for the old-style bsp model from Soul of Evil.
 			self.oldorigin = self.origin + '0 0 12';
 			setorigin(self, self.oldorigin);
 		}
@@ -243,11 +253,16 @@ void() misc_explobox2 = { // [ENTITY]
 };
 
 void() misc_barrel = { // [ENTITY]
-	if (self.mdl == "") self.mdl = "maps/nsoe2/b_barrel.bsp";
-	precache_model (self.mdl);
+	// Leaving old one commented out for reference and posterity.
+	//if (self.mdl == "") self.mdl = "maps/nsoe2/b_barrel.bsp";
+	if (self.mdl == "") self.mdl = "progs/madfox/objects_barrel_damage.mdl";
+	precache_model(self.mdl);
 	self.bbmins = '-16 -16 -20';
 	self.bbmaxs = '16 16 16';
 	misc_explobox_setup();
+	if (self.skin > 0 && self.mdl == "progs/madfox/objects_barrel_damage.mdl") {
+		self.skin = 0; // There's only one skin.
+	}
 };
 
 // QUAKED func_explobox (0 0.5 0.8) ? x x x x x x STARTOFF x

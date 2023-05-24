@@ -506,8 +506,6 @@ void() monster_spirit_precache = { // [FUNCTION]
 
 // QUAKED monster_spirit (0.5 0 1) (-16 -16 -24) (16 16 40)
 void() monster_spirit = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/redfield/mon_spirit.mdl";			// Vengeful spirit model with multiple skins
 	self.gib1mdl = "progs/redfield/sword_spirit.mdl";		// Sword for gib death
 	self.gib1sound = GIB_IMPACT_METALA;	

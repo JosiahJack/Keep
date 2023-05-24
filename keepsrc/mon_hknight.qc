@@ -735,7 +735,6 @@ void() monster_hell_knight_enforcer_precache = { // [FUNCTION]
 // QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_hell_knight = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (!self.mdl) self.mdl = "progs/qmaster/mon_hknight.mdl";			// Original ID Knight + extra skins
 	if (!self.headmdl) self.headmdl = "progs/h_hellkn.mdl";

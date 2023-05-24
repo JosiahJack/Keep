@@ -181,7 +181,6 @@ void() monster_fish_precache = { // [FUNCTION]
 // QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_fish = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_fish.mdl";	// Using new model
 	self.idle_sound = "fish/idle.wav";

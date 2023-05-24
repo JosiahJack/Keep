@@ -558,8 +558,6 @@ void() monster_nehahra_precache = {
 };
 
 void() monster_nehahra = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/nehahra/nehah.mdl";
 	self.sight_sound = "nehahra/boss3/neh3.wav";
 	self.idle_sound = "nehahra/boss3/neh1.wav";

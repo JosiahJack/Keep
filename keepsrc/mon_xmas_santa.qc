@@ -324,9 +324,7 @@ void() monster_xmas_santa_precache = { // [FUNCTION]
 };
 
 // QUAKED monster_santa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_xmas_santa = { // [ENTITY]
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-	
+void() monster_xmas_santa = { // [ENTITY]	
 	self.mdl = "progs/xmas/mon_santa.mdl";		// Big Sack Man!
 	self.headmdl = "progs/xmas/h_santa.mdl";	// Pointy Face
 	self.gib1mdl = "progs/xmas/gib_santagun.mdl";

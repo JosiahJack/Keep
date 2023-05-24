@@ -185,7 +185,6 @@ void() monster_xmas_snowman_precache = {
 // QUAKED monster_snowman (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 void() monster_xmas_snowman = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/xmas/mon_snowman.mdl";		// Top Hat Snow
 	self.headmdl = "progs/xmas/h_snowman.mdl";		// Top Hat

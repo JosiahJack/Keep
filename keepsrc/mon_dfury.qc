@@ -680,10 +680,7 @@ void() monster_dfury_precache = { // [FUNCTION]
 
 // QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dfury = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
 	self.mdl = "progs/ad171/mon_dfury.mdl";
 	self.headmdl = "progs/ad171/h_dfury.mdl";

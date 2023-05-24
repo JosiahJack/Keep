@@ -623,7 +623,6 @@ void() monster_fallen_angel_precache = {
 
 void() monster_fallen_angel =  {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.monster_stage = FANGEL_STAGE_WAIT;
 	self.mdl = "progs/hexen2/fangel.mdl";

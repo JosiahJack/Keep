@@ -388,7 +388,6 @@ void() monster_hogre_precache = { // [FUNCTION]
 // METAL : Chain mail metal armour and +100HP
 void() monster_hogre = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_hogre.mdl"; // New Ogre Model
 	self.headmdl = "progs/ad171/h_hogre.mdl";

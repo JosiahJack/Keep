@@ -64,7 +64,6 @@ void() oglib_walk;
 
 void() monster_library = {
   if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-  if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
   self.mdl = "progs/nehahra/library.mdl";
   self.headmdl = "progs/nehahra/h_archg.mdl";
@@ -594,7 +593,6 @@ void() monster_oglib_precache = { // [FUNCTION]
 
 void() monster_oglib = { // [ENTITY] Ogre pushing a library cart with books on it.  Tosses cart when hurt or killed.
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
   self.mdl = "progs/nehahra/libogre.mdl";
   self.headmdl = "progs/h_ogre.mdl";

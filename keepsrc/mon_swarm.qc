@@ -202,7 +202,6 @@ void() monster_beez_precache = {
 
 void() monster_beez = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/madfox/mon_swarm.mdl";
 	self.solid = SOLID_NOT;				// No interaction with world

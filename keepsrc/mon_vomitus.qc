@@ -365,7 +365,6 @@ void() monster_vomit_precache = { // [FUNCTION]
 // Note to self:  Quoth's gug is even fatter, yet it uses shambler bbox.
 void() monster_vomit = { // [ENTITY] Redirect
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.gib1mdl = "progs/drake/tar_gib.mdl";
 	self.mdl = "progs/drake/vomitus.mdl";

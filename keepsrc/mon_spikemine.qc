@@ -117,8 +117,6 @@ void() monster_spikemine_precache = {
 };
 
 void() monster_spikemine = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/hipnotic/mon_spikmine.mdl";
 	precache_monster(self.classname);
 	setmodel(self,"progs/hipnotic/mon_spikmine.mdl");

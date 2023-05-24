@@ -783,7 +783,6 @@ void() monster_gug_precache = {
 
 void() monster_gug = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/gug.mdl";
 	self.idle_sound = "quoth/gug/idle.wav";

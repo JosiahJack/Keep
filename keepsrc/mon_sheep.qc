@@ -620,7 +620,6 @@ void() monster_sheep_precache =  {
 
 void() monster_sheep =  {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/hexen2/mon_sheep.mdl";
 	self.headmdl = "progs/madfox/h_sheep.mdl";

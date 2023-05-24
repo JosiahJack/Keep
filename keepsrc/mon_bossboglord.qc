@@ -407,11 +407,7 @@ void() monster_boglord_precache = {
 
 // QUAKED monster_boglord (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_boglord = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	// One model, two different skins
-	self.mdl = "progs/ad171/mon_bossboglord.mdl";
+	self.mdl = "progs/ad171/mon_bossboglord.mdl"; // One model, two skins.
 	// Detect version types
 	if (self.spawnflags & MON_BOGL_STRONG) {
 		// Unique models for blood trail on model flag

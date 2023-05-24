@@ -512,9 +512,6 @@ void() monster_inquisitor_precache = {
 
 // QUAKED monster_inquisitor (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_inquisitor = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
 	self.mdl = "progs/inquisitor.mdl";
 	self.idle_sound = "ad171/skullwiz/idle1.wav";
 	self.pain_sound = "ad171/skullwiz/pain2.wav";

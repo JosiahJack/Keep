@@ -193,7 +193,6 @@ void() monster_ogre_spikeshooter_precache = {
 
 void() monster_ogre_spikeshooter = { // [ENTITY], Redirect.  monster_ogre_flak is the normal fgd name.
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 		
 	self.mdl = "progs/ad171/mon_ogre.mdl";		// Rogue Ogre
 	self.headmdl = "progs/h_ogre.mdl";

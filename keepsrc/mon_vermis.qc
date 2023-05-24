@@ -423,8 +423,6 @@ void() monster_vermis_precache = {
 };
 
 void() monster_vermis = {
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
-
 	self.mdl = "progs/quoth/vermis.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_NOCLIP;

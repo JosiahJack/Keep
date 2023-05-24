@@ -1088,7 +1088,6 @@ void() monster_baron_precache = { // Baron files are derived from the Rapture pa
 // --> QUAKED monster_baron (1 0 0) (-16 -16 -24) (16 16 40) Ambush x Nojump
 void() monster_baron = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.minion_name == "") {
         self.minion_name = "monster_golem";

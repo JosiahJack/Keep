@@ -282,7 +282,6 @@ void() monster_boil_precache = { // [FUNCTION]
 // QUAKED monster_boil (1 0 0) (-16 -16 -24) (16 16 32)
 void() monster_boil = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_boil.mdl";
 	self.idle_sound = "ad171/zombie/boil_idle1.wav";

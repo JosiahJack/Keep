@@ -386,7 +386,6 @@ void() monster_floyd_precache = { // [FUNCTION]
 // QUAKED monster_floyd (1 0 0) (-24 -24 -24) (24 24 64) Ambush
 void() monster_floyd = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad181/mon_floyd.mdl";			// Dusty the bin
 	self.headmdl = "progs/ad181/h_floyd.mdl";		// Top part

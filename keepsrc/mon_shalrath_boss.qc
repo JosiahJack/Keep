@@ -429,7 +429,6 @@ void() monster_shalrath_boss_precache = { // [FUNCTION]
 //QUAKED monster_shalrath_boss (1 0 0) (-32 -32 -24) (32 32 48) Ambush
 void() monster_shalrath_boss = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check for any random monster setups
 
 	self.mdl = "progs/q15/shalrath_boss.mdl";	// Extra skin
 	self.headmdl = "progs/q15/h_shalboss.mdl";

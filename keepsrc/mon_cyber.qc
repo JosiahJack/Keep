@@ -215,10 +215,7 @@ void() monster_cyberdemon_precache = {
 
 // QUAKED monster_cyberdemon (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_cyberdemon = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	
 	self.mdl = "progs/drake/cyber.mdl";
 	self.headmdl = "progs/drake/h_cyber.mdl";

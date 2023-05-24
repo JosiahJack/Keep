@@ -176,7 +176,6 @@ void() monster_sentinel_precache = {
 
 void() monster_sentinel = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 		
 	self.mdl = "progs/quoth/sentinel.mdl";
 	self.gib1mdl = "progs/quoth/gib.mdl";

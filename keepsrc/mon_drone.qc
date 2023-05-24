@@ -375,7 +375,6 @@ void() monster_drone_precache =  {
 
 void() monster_drone =  {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/drake/drone1.mdl";
 	self.headmdl = "progs/drake/drngib1.mdl";

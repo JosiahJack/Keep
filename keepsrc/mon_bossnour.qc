@@ -823,12 +823,12 @@ void() monster_nour_precache = {
 	precache_sound("ad171/wraith/attack3.wav"); // Attack B - Large explosive ball
 	precache_sound("ad171/nour/explode2.wav");
 	precache_sound("ad171/wraith/bounce.wav");
+	if (ext_dppart) particleeffectnum(DPP_TEBPOISON);
 };
 
 // QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)
 void() monster_nour = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_bossnour.mdl";
 	self.headmdl = "progs/h_wizard.mdl";
