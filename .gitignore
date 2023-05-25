@@ -56,3 +56,5 @@ ironwail.cfg
 *.db
 music/*.ogg
 music/*.mp3
+music/*.wav
+*.xlsx#
