@@ -227,6 +227,7 @@ void() trigger_multiple = { // [ENTITY]
 	if (check_bmodel_notouch()) return;	// NO touch + NO targetname!
 	if (check_bmodel_modver()) return;	// Check mod version correct
 
+	if (self.noise == "ARMO1_15.WAV") self.noise = "armo1_15.wav"; // HACK!!
 	trigger_bmodel_sounds();			// Precache any sounds
 	self.classtype = CT_TRIGMULTI;
 	self.classgroup = CG_TRIGGERS;

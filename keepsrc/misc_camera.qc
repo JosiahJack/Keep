@@ -585,7 +585,7 @@ void() camera_player_animate = { // [FUNCTION]
 void() camera_controller_setup = { // [FUNCTION]
 	if (!cam_control) { // Does controller exist?
 		cam_active = CINECAM_OFF; // Default state is off
-		dprint("camera_controller_setup: cam_control");
+		if (developer > 1) dprint("camera_controller_setup: cam_control\n");
 		cam_control = spawn();					// Create an entity
 		cam_control.owner = self;				// Link back to client
 		cam_control.classtype = CT_CONTROL;
@@ -606,7 +606,7 @@ void() camera_controller_setup = { // [FUNCTION]
 		cam_player.view_ofs = '0 0 0';
 		cam_player.th_altstand = camera_player_animate;
 
-		dprint("camera_controller_setup: cam_track");
+		if (developer > 1) dprint("camera_controller_setup: cam_track\n");
 		cam_track = spawn(); // Setup Camera Tracking entity.  To prevent the player moving the camera while the cinematic is active, a simple entity does the camera movement and the player entity mirrors this origin instead
 		cam_track.owner = cam_control;
 		cam_track.classtype = CT_CONTROL;
@@ -740,6 +740,23 @@ void() misc_camera = { // [ENTITY]
 	if (self.controltarget != "" && !self.nodebuginfo) { // Check for bezier debug mode (display curves).  Can block debug info (start/control/end/arrows).
 		self.think = misc_camera_bezier_debug;
 		self.nextthink = time + 0.2;
+	}
+
+	if (world.model == "maps/mj4m4.bsp") { // HACK!!
+		if (self.targetname == "camera_start") {
+			self.use();
+		}
+	}
+
+	if (world.model == "maps/mj3m1.bsp"
+		|| world.model == "maps/mj3m3.bsp"
+		|| world.model == "maps/mj3m4.bsp"
+		|| world.model == "maps/mj3m5.bsp"
+		|| world.model == "maps/mj3m6.bsp"
+		|| world.model == "maps/mj3m7.bsp"
+		|| world.model == "maps/mj3m2.bsp") { // HACK!!
+
+		self.spawnflags = self.spawnflags | CINECAM_FUNC_SKIPABLE;
 	}
 };
 

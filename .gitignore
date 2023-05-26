@@ -10,6 +10,7 @@ progs.lno
 a1.sav
 a2.sav
 quick.sav
+maps/autosave/*.map
 maps/*.bsp
 maps/*.lit
 maps/*.map

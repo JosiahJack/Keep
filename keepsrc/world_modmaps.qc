@@ -97,7 +97,7 @@ float () DetectedMod = {
     if (world.model == "maps/hipdm1.bsp") retval = MOD_HIPNOTIC;
     if (world.model == "maps/hipend.bsp") retval = MOD_HIPNOTIC;
 	if (retval != 0) dprint(" was made originally for ");
-    else dprint(", could not detect a specific mod, using ");
+    else dprint(", could not detect a map requiring nondefault changes, using standard ");
 	dprint(DetectedModName(retval));
 	if (retval != 0) dprint("...\n             ...reconciling Keep-specific changes to accomodate as needed");
 	dprint("\n");

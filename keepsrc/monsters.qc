@@ -1185,7 +1185,7 @@ void() monster_start = { // [FUNCTION]
 	// Allow mappers to spawn monsters that don't affect monster count.  I know this can be a dangerous if used incorrectly, but good for statues.
 	if (self.nomonstercount > 0 || self.delaymonstercount > 0) { // delaymonstercount = update count on spawn instead of death
 		// Some maps have way too many no monster counts
-		if (world.no_moncountdevmsg <= 0) {
+		if (world.no_moncountdevmsg <= 0 && self.targetname != "") {
 			dprint("\b[MONSTER]\b ("); dprint(self.targetname);
 			dprint(") - no monster count\n");
 		}

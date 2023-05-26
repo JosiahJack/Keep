@@ -736,7 +736,7 @@ void() WizardCheckAttack = {
 		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT; // keep moving forward to enemy target
 	} else {
 		if (self.attack_state != AS_SLIDING) {
-			dprint("Wizard is sliding\n");
+			//dprint("Wizard is sliding\n");
 			self.attack_state = AS_SLIDING;
 			if (self.th_slide) self.th_slide();
 			else self.attack_state = AS_STRAIGHT;

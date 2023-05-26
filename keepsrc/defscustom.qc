@@ -331,6 +331,9 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		brkimpsound;		// Impact sound type
 .float		brkimpqty;			// Total impact sounds setup
 .float		brkobjects;			// Breakable sub object type
+.float ritem; // Quoth's choices for object type.  Included to suppress warnings.
+.float rsize; // Quoth's minimum rubble frame.  Included to suppress warnings.
+.float preset; // Quoth's preset breakable types.  Included to suppress warnings.
 .string		brkobj1;			// Breakable object 1 (bsp/mdl)
 .string		brkobj2;			// Breakable object 2 (bsp/mdl)
 .string		brkobj3;			// Breakable object 3 (bsp/mdl)
@@ -1735,3 +1738,9 @@ float GIBTYPE_METAL = 4;		// Metal scraps
 float GIBTYPE_CERAMIC = 5;		// Ceramic pot shards
 float GIBTYPE_POISON = 10;		// Poisoned flesh
 float GIBTYPE_ICE = 16;
+
+// Common typos because let's just go ahead and waste more mb muahaha!
+.vector		mangels;			// mangle, but misspelled. angle at start
+.vector		mangel;			    // mangle, but misspelled. angle at start
+.float respawncount;            // respawn_count, but misspelled.  Number of times item should respawn.
+.float respawndelay;            // respawn_time, but misspelled.  Time before item respawns.

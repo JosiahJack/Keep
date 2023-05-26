@@ -421,9 +421,14 @@ float(float minrange, float maxrange, float checker) misc_model_CheckRange = { /
 // -------- NOTES --------
 // MDL files that can be setup with specific frame/skin and animate groups
 void() misc_model = { // [ENTITY]
+	// Silly typo fixes
+	if (!VectorIsAllZeros(self.mangels) && VectorIsAllZeros(self.mangle)) {
+		self.mangle = self.mangels;
+	} else if (!VectorIsAllZeros(self.mangel) && VectorIsAllZeros(self.mangle)) {
+		self.mangle = self.mangel;
+	}
 
-	// Silly map fixes for specific models.  Please start at 0.  Please end at
-	// 1 less than what QME says it is if QME started at 1 instead of 0.
+	// Silly capitalization fixes and moved stuff.
 	if (self.mdl == "progs/hrimfaxi/warhorseA1.mdl") self.mdl = "progs/hrimfaxi/warhorsea1.mdl";
 	if (self.mdl == "Progs/hrimfaxi/runic.mdl") self.mdl = "progs/hrimfaxi/runic.mdl";
 	if (self.mdl == "progs/Hrimfaxi/barrel.mdl") self.mdl = "progs/hrimfaxi/barrel.mdl";
@@ -434,8 +439,40 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/madfox/torch.MDL") self.mdl = "progs/madfox/torch.mdl";
 	if (self.mdl == "progs/madfox/trance10.MDL") self.mdl = "progs/madfox/trance10.mdl";
 	if (self.mdl == "progs/madfox/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
+	if (self.mdl == "progs/tonyn/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
+	if (self.mdl == "progs/tonyn/cupid3.mdl") self.mdl = "progs/madfox/cupid3.mdl";
 	if (self.mdl == "progs/madfox/grass1A.mdl") self.mdl = "progs/madfox/grass1a.mdl";
+	if (self.mdl == "progs/tronyn/Equipment7.mdl") self.mdl = "progs/tronyn/equipment7.mdl";
+	if (self.mdl == "progs/tronyn/Equipment8.mdl") self.mdl = "progs/tronyn/equipment8.mdl";
+	if (self.mdl == "progs/tronyn/Equipment9.mdl") self.mdl = "progs/tronyn/equipment9.mdl";
+	if (self.mdl == "progs/tronyn/Equipment10.mdl") self.mdl = "progs/tronyn/equipment10.mdl";
+	if (self.mdl == "progs/its_demo_v1_1/statue_dcomm1.mdl") self.mdl = "progs/its/statue_dcomm1.mdl";
+	if (self.mdl == "progs/its_demo_v1_1/s_sigil2.spr") self.mdl = "progs/its/s_sigil2.mdl";
+	if (self.mdl == "progs/its_demo_v1_1/s_torch1.spr") self.mdl = "progs/its/s_torch1.mdl";
+	if (self.mdl == "progs/its_demo_v1_1/stealth_eyeb.spr") self.mdl = "progs/its/stealth_eyeb.mdl";
+	if (self.mdl == "progs/its_demo_v1_1/stealth_eyew.spr") self.mdl = "progs/its/stealth_eyew.mdl";
+	if (self.mdl == "progs/its_demo/s_sigil2.spr") self.mdl = "progs/its/s_sigil2.mdl";
+	if (self.mdl == "progs/its_demo/s_torch1.spr") self.mdl = "progs/its/s_torch1.mdl";
+	if (self.mdl == "progs/its_demo/statue_dcomm1.mdl") self.mdl = "progs/its/statue_dcomm1.mdl";
+	if (self.mdl == "progs/its_demo/stealth_eyeb.spr") self.mdl = "progs/its/stealth_eyeb.mdl";
+	if (self.mdl == "progs/its_demo/stealth_eyew.spr") self.mdl = "progs/its/stealth_eyew.mdl";
 
+	// Hack for limits
+	if (self.mdl == "progs/slayertest/props/stalag1.mdl") self.mdl = "progs/slayertest/props/stalag2.mdl";
+	if (self.mdl == "progs/slayertest/props/stalag4.mdl") { dprint("stalag4 removed by HACK!!!  Let Qmaster know when its verts are below 2000\n"); precache_model(self.mdl); remove(self); return; }
+	if (self.mdl == "progs/slayertest/props/stalag5.mdl") { dprint("stalag5 removed by HACK!!!  Let Qmaster know when its verts are below 2000\n"); precache_model(self.mdl); remove(self); return; }
+
+	// Hack for missing
+	if (self.mdl == "progs/slayertest/props/treeBig.mdl") { dprint("progs/slayertest/props/treeBig.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
+	if (self.mdl == "progs/slayertest/props/tree.mdl") { dprint("progs/slayertest/props/tree.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
+	if (self.mdl == "progs/slayertest/props/pinetree.mdl") { dprint("progs/slayertest/props/pinetree.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
+	if (self.mdl == "models/fx/waterfall_med.mdl") { dprint("models/fx/waterfall_med.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
+	if (self.mdl == "models/pickups/berserk.mdl") { dprint("models/pickups/berserk.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
+	if (self.mdl == "models/props/hell_pedestal.mdl") { dprint("models/props/hell_pedestal.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
+
+
+	// Silly map fixes for specific models.  Please start at 0.  Please end at
+	// 1 less than what QME says it is if QME started at 1 instead of 0.
 	if ((self.mdl == "progs/hrimfaxi/pinetree.mdl"
 		|| self.mdl == "progs/hrimfaxi/pinetreem.mdl")) {
 		if (self.pos1_x >= 1) self.pos1_x = 0; // Just start at the beginning.
@@ -464,6 +501,25 @@ void() misc_model = { // [ENTITY]
 		// The stand sequence is 0 to 152.
 		if (self.pos1_x == 1) self.pos1_x = 0;
 		if (self.pos1_y == 153) self.pos1_y = 152;
+	}
+
+	if (self.mdl == "progs/madfox/shiva.mdl") {
+		if (self.pos1_x >= 1) self.pos1_x = 0; // Just start at the beginning.
+		if (self.pos1_y >= 32) self.pos1_y = 31; // Just stop at the end aight.
+	}
+
+	if (self.mdl == "progs/redfield/candelabra.mdl") {
+		self.pos1 = '0 0 0';
+	}
+
+	if (self.mdl == "progs/tronyn/statue19.mdl") {
+		self.pos1 = '0 0 0';
+		self.frame = 0;
+	}
+
+	if (self.mdl == "progs/tronyn/statue8.mdl") {
+		self.pos1 = '0 0 0';
+		self.frame = 0;
 	}
 	// End silliness...everywhere.  Ugh, told myself I wouldn't do this.
 

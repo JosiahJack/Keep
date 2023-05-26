@@ -57,7 +57,15 @@ void() info_skyroom = { remove(self); };
 // -------- NOTES --------
 // DEFAULT starting point for a player
 // Doesn't actually do anything, just searched for by name inside client.qc elsewhere
-void() info_player_start = { 
+void() info_player_start = {
+	if (world.model == "maps/mj3m1.bsp") { // HACK!!
+		self.angles = '0 270 0';
+	}
+
+	if (world.model == "maps/mj4m6.bsp") { // HACK!!
+		self.angles = '0 0 0';
+	}
+
 	self.classtype = CT_SPAWNSP;
 	self.estate = ESTATE_ON;
 }; 

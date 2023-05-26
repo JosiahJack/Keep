@@ -353,7 +353,7 @@ void() item_delay = { // [FUNCTION]
 		// to fall through the floor and just keep going
 		//if (pointcontents(self.origin) == CONTENT_SOLID) {
 		if (!droptofloor()) {
-			dprint("\n\b[Item]\b "); dprint (self.classname);
+			dprint("\b[Item]\b "); dprint (self.classname);
 			dprint(" didn't droptofloor at ("); dprint(vtos(self.origin)); 
 			// The item is stuck, might still be useful to the player
 			// Originally the item was removed which is not super useful
@@ -458,6 +458,14 @@ void() item_start = { // [FUNCTION]
 			remove(self);
 			return;
 		}
+	}
+
+	if (self.respawncount && !self.respawn_count) {
+		self.respawn_count = self.respawncount;
+	}
+
+	if (self.respawndelay && !self.respawn_time) {
+		self.respawn_time = self.respawndelay;
 	}
 
 	if (self.respawn_time < 0) self.respawn_trig = TRUE; // If respawn timer negative then wait for a trigger
