@@ -532,9 +532,6 @@ void() weapon_grapple = {
 
 void() weapon_chainsaw = {
 	item_setupmodel(g_chainsawmodel,0);
-	precache_sound("zerstorer/weapons/sawidle.wav");
-    precache_sound("zerstorer/weapons/sawatck.wav");
-    precache_sound("zerstorer/weapons/sawridle.wav");
 	self.classtype = CT_CHAINSAW;
 	if (self.netname == "") self.netname = "Chainsaw";
 	weapon_start();
@@ -579,10 +576,6 @@ void() weapon_crossbow = {
 
 void() weapon_buriza = {
 	item_setupmodel("progs/drake/g_xbow.mdl",0);
-	precache_sound("drake/weapons/xbowdraw.wav");
-	precache_sound("drake/weapons/icehit.wav");
-	precache_sound("drake/weapons/shatter.wav");
-	precache_sound("drake/weapons/freeze.wav");
 	self.weapon = IT_FROSTBOW;
 	self.classtype = CT_FROSTBOW;
 	if (self.netname == "") self.netname = "Asgard Arbalest (Skadi's Breath)";

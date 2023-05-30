@@ -627,6 +627,8 @@ void()	reiver_melee = { // [FUNCTION]
 void(vector ofs, float scal) reiver_hand1 = { // [FUNCTION]
 	local vector org;
 
+	if (self.owner == world) return;
+
 	makevectors(self.angles);
 	org = self.origin + v_forward * ofs_x + v_right * ofs_y + v_up * ofs_z;
 	setorigin(self.owner, org);
@@ -635,6 +637,8 @@ void(vector ofs, float scal) reiver_hand1 = { // [FUNCTION]
 
 void(vector ofs, float scal) reiver_hand2 = { // [FUNCTION]
 	local vector org;
+
+	if (self.owner2 == world) return;
 
 	makevectors(self.angles);
 	org = self.origin + v_forward * ofs_x + v_right * ofs_y + v_up * ofs_z;
@@ -646,6 +650,8 @@ void(vector ofs, float scal) reiver_hand2 = { // [FUNCTION]
 void()	life_drain = { // [FUNCTION]
 	local vector spot1, spot2;	
 	
+	if (self.enemy == world) return;
+
 	spot1 = self.origin + '0 0 12';
 	spot2 = self.enemy.origin + self.enemy.view_ofs;
 

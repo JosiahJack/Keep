@@ -126,7 +126,7 @@ void() SetNewParms = {
 		parm1 = parm1 | IT_AXE;
 		parm10 = parm10 | IT_UPGRADE_AXE;
 		parm8 = IT_AXE; // Start with shadow axe in Evil Mode
-	} else if (world.no_axestart == TRUE) { // If a map wants NO axe start, then its likely been designed for it!  World entity is readable at this point.
+	} else if (world.no_axestart == TRUE || world.noaxestart) { // If a map wants NO axe start, then its likely been designed for it!  World entity is readable at this point.
 		parm1 = parm8 = parm11 = parm10 = 0; // The No Axe start is also NO WEAPONS at all (including any from previous map).
 	}
 
@@ -173,7 +173,8 @@ void() SetChangeParms = {
 	self.items2 = self.items2 - (self.items2 & IT2_ITEMRESET);
 	self.items3 = self.items3 - (self.items3 & IT3_ITEMRESET);
 	parm11 = self.items2; // save the good stuff!  multi-weapons and such
-	Client_CheckMaxHP(self, TRUE, had_regen); // Make sure player HP is within Max range and not less 50%
+	//Client_CheckMaxHP(self, TRUE, had_regen); // Make sure player HP is within Max range and not less 50%
+	if (self.health < 50) self.health = 50;
 	parm2 = encode(self.health, self.armortype, self.armorvalue);
 	parm3 = encode(self.ammo_shells,self.ammo_nails,self.ammo_rockets);
 	parm4 = encode(self.ammo_cells,self.ammo_bolts,self.ammo_poison);
@@ -211,8 +212,8 @@ void() DecodeWorldParms = {
 	dprint("\b[CLIENT]\b Decode Worldspawn Inv Parms:\n");
 
 	// Take first, then give.  That way mappers can give clean slate + gives.
-	if (world.take_weapons > 0 || world.no_axestart) {
-		if (world.take_weapons >= 9999999 || world.no_axestart) {
+	if (world.take_weapons > 0 || world.no_axestart || world.noaxestart) {
+		if (world.take_weapons >= 9999999 || world.no_axestart || world.noaxestart) {
 			parm_items = parm_items - (parm_items & ALL_WEAPONS); // Take all, clean slate.
 			parm13 = parm13 - (parm13 & ALL_WEAPONSPERMS);
 			parm13 = parm13 - (parm13 & ALL_WEAPONSPERMS_HACKBANK);
@@ -637,7 +638,7 @@ void() DecodeLevelParms = {
     if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN)) had_regen = TRUE;
     else															   had_regen = FALSE;
 
-	Client_CheckMaxHP(self,FALSE,had_regen); // Always make sure the HP read from parm is within range!  Parm is re-used when map restart command is issued
+	//Client_CheckMaxHP(self,FALSE,had_regen); // Always make sure the HP read from parm is within range!  Parm is re-used when map restart command is issued
 	Client_CheckEvilInv(self); // The AD inventory is reset with parm10 (could lose Shadow axe).  Check for evil skill and add shadow axe + make current weapon!
 	dprint("\b[CLIENT]\b self.weapon == ");
 	dprint(ftos(self.weapon));
@@ -1213,6 +1214,11 @@ void() PlayerPreThink = {
 		// Check for trigger CD track/Skybox change.  Load/Quickload does not keep track of these changes, use a new global variable instead.
 		if (trig_cdtrack > 0) trigger_cdtrack_change();
 		if (trig_skybox != "") trigger_skybox_change(self);
+		cam_hudsize = cvar("viewsize"); // Save the current HUD settings for later
+		if (cam_hudsize > 100) {
+			cvar_set("viewsize", ftos(100));
+			cam_hudsize = cvar("viewsize"); // Save the current HUD settings for later
+		}
 	}
 
 	if (intermission_running > 0) { CycleIntermissionCamera(); return; } // If Intermission system active check for button0-2 keys
@@ -1246,7 +1252,7 @@ void() PlayerPreThink = {
 		// Both func_water and func_ladder require zero G to work properly.  Lucky for us, the Mission Pack 1 gave us a gravity modifier we can exploit.
 		if (self.zerogtime < time) self.gravity = self.oldgravity;// reset normal gravity
 		else self.gravity = 0.0001;// zero G (0 OR 1 is normal), pOx - END  - func_water & func_ladder support
-		if (self.gravity != prevgrav) {
+		if (self.gravity != prevgrav && developer > 1) {
 			dprint("1. Gravity change for ");
 			dprint(self.classname);
 			dprint(", from: ");
@@ -1326,7 +1332,7 @@ void() PlayerPreThink = {
 			self.velocity = '0 0 0'; // Reset velocity upwards and all sideways movement so that the player stays on the ladder and climbs straight up with very little sidways movement.
 			self.velocity_z = self.entladder.speed;
 			self.gravity = 0.0000001;
-			if (self.gravity != prevgrav) {
+			if (self.gravity != prevgrav && developer > 1) {
 				dprint("2. Gravity change for ");
 				dprint(self.classname);
 				dprint(", from: ");
@@ -1355,7 +1361,7 @@ void() PlayerPreThink = {
 	} else {
 		if (self.oldgravity > 0 && self.antigrav_finished < time) self.gravity = self.oldgravity; // Reset any ladder gravity settings
 		else if (self.antigrav_finished < time) self.gravity = 0;
-		if (self.gravity != prevgrav) {
+		if (self.gravity != prevgrav && developer > 1) {
 			dprint("3. Gravity change for ");
 			dprint(self.classname);
 			dprint(", from: ");
@@ -1419,6 +1425,14 @@ enumflags {
 // Called every frame after physics are run
 void() PlayerPostThink = {
 	local entity goodjumptouch;
+
+	if (self.sdenizens_total != total_denizens) {
+		self.sdenizens_total = total_denizens;
+	}
+
+	if (self.sdenizens_killed != killed_denizens) { // Perform a send.
+		self.sdenizens_killed = killed_denizens;
+	}
 
 	if (prethink == TRUE && postthink == FALSE) {
 		if (self.flags & FL_CLIENT) { // Check for the player?  First couple of frames the player is not setup correctly.
@@ -1654,14 +1668,21 @@ void() PlayerJump = {
             self.wing_sound = time + 1;
         }
 		// Gravity reversal was the simplest method to implement.  Using fancy math to get reverse standard gravity can cause problems if the player gets hit with other effects that change gravity field.
-		dprint("4. Gravity change for ");
-		dprint(self.classname);
-		dprint(", from: ");
-		dprint(ftos(self.gravity));
+		if (developer > 1) {
+			dprint("4. Gravity change for ");
+			dprint(self.classname);
+			dprint(", from: ");
+			dprint(ftos(self.gravity));
+		}
+
+		if (self.gravity == 0) self.gravity = 1;
         self.gravity = 0 - fabs(self.gravity);
-		dprint(", to: ");
-		dprint(ftos(self.gravity));
-		dprint("\n");
+
+		if (developer > 1) {
+			dprint(", to: ");
+			dprint(ftos(self.gravity));
+			dprint("\n");
+		}
         return;
     }
 

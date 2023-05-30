@@ -1,7 +1,7 @@
 //=============================================================================
 // ENTITIES FGD file
 // MOD    : Keep
-// VERSION: v0.96
+// VERSION: v1.00.0
 // Editor : Trenchbroom 
 //=============================================================================
 
@@ -259,6 +259,10 @@
 	]
 	doomoptions(Flags) = [
 		1 : "Shotguns always have knockback" : 0
+	]
+
+	mjolniroptions(Flags) = [
+		1 : "Grant Thor's Blessing At Level End if No Denizens Killed"
 	]
 
 	// Drake music system

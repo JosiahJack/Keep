@@ -213,11 +213,12 @@ void(vector spot, float count, float gopop, vector norm) LightningSparks = {
 	}
 };
 
-void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
+float(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
 	local entity e1, e2, litmaker;
 	local vector f;
-	local float lighthit, iter, dmg;
+	local float lighthit, iter, dmg, oldhealth, retval;
 	
+	retval = 0; // Assume no damage at first.
 	f = normalize(p2 - p1);
 	f_x = 0 - f_y;
 	f_y = f_x;
@@ -302,10 +303,14 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FU
 			SpawnProjectileSmoke(trace_endpos, 200, 50, 150);
 		} else if (trace_ent.resist_cells > 0) { // Check for any cell/lightning resistance
 			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
+			oldhealth = trace_ent.health;
 			T_Damage(trace_ent,litmaker,litmaker.owner,damage,DAMARMOR);
+			if (trace_ent.health < oldhealth) retval = 1; // Hit!
 		} else {
 			SpawnBlood(trace_ent, trace_endpos,'0 0 100',damage*4,225);
+			oldhealth = trace_ent.health;
 			T_Damage(trace_ent,litmaker,litmaker.owner,damage,DAMARMOR);
+			if (trace_ent.health < oldhealth) retval = 1; // Hit!
 		}
 		if (trace_ent.reflectlightning) LightningReflection(trace_endpos, trace_ent, damage*0.5); // Check for any lightning reflection abilitites.  Source = Lightning originally came from player
 	} else {
@@ -313,6 +318,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FU
 			LightningSparks(litmaker.origin,6,FALSE,trace_plane_normal);
 		}
 	}
+	return retval;
 };
 
 // New ability to spawn lighting strikes in random directions

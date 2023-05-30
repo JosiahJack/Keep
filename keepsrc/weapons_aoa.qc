@@ -1,5 +1,5 @@
 void() player_run;
-void(vector p1, vector p2, entity from, float damage) LightningDamage;
+float(vector p1, vector p2, entity from, float damage) LightningDamage;
 void(float reload) W_Reload;
 
 //   SPHERE #techdebt to remove it when no longer necessary
@@ -599,7 +599,14 @@ void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] { self.frame =
 void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] { self.frame = 12; };
 void() ChainLightningAnimation13 = [0, player_run] { self.frame = 13; };
 
-void() IceAttack1 =	[107, IceAttack2] { if (time < self.attack_finished) return; self.weaponframe = 1;IceProjectiles();W_Reload(0.8); };
+void() IceAttack1 =	[107, IceAttack2] {
+	if (time < self.attack_finished) return;
+
+	self.weaponframe = 1;
+	IceProjectiles();
+	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1;
+	W_Reload(0.8);
+};
 void() IceAttack2 =	[108, IceAttack3] { self.weaponframe = 1; };
 void() IceAttack3 =	[109, IceAttack4] { self.weaponframe = 2; };
 void() IceAttack4 =	[110, IceAttack5] { self.weaponframe = 3; };
@@ -607,7 +614,7 @@ void() IceAttack5 =	[111, IceAttack6] { self.weaponframe = 4; };
 void() IceAttack6 =	[112, IceAttack7]
 {
 	self.weaponframe = 3;
-	if (!self.button0) //if player isn't holding mouse, don't do second (lightning) attack. will need ammo check here later
+	if (!self.button0 || (self.ammo_elemental < 1 && !self.tome_finished)) // If player isn't holding mouse, don't do second (lightning) attack.
 	{
 		player_run();
 		return;
@@ -616,7 +623,11 @@ void() IceAttack6 =	[112, IceAttack7]
 };
 
 void() IceAttack7 =	[113, IceAttack8] { self.weaponframe = 2; };
-void() IceAttack8 =	[114, IceAttack9] { self.weaponframe = 1;W_FireChainLightning(); };
+void() IceAttack8 =	[114, IceAttack9] {
+	self.weaponframe = 1;
+	W_FireChainLightning();
+	W_Reload(0.7);	
+};
 void() IceAttack9 =	[115, IceAttack10] { self.weaponframe = 2; };
 void() IceAttack10 =	[116, IceAttack11] { self.weaponframe = 3; };
 void() IceAttack11 =	[117, IceAttack12]
@@ -695,15 +706,23 @@ void() LaunchBoulder = {
 
 void() ChainedLightning = {
 	local float damage;
-	
+
+	if (self.owner.ammo_elemental < 1) { remove(self); return; }
+
 	sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
 	traceline(self.origin, self.enemy.origin, FALSE, self);
 	Tent_Beam(TE_LIGHTNING1,self,self.origin,trace_endpos);
-	damage = 30;
+	if (self.owner.tome_finished) damage = 60; // Poor zombies
+	else damage = 35;
+
 	if (self.enemy.classname == "player") damage = damage * 0.5;
 	if (self.enemy.bodyonflr == MON_ONFLR) {
 		monster_flrbody_gib(self.enemy, damage * 2);
-	} else LightningDamage(self.origin, trace_endpos, self.owner, damage);
+	} else {
+		if (LightningDamage(self.origin, trace_endpos, self.owner, damage)) {
+			self.owner.currentammo = self.owner.ammo_elemental = self.owner.ammo_elemental - 1;
+		}
+	}
 	remove(self);
 };
 
@@ -728,7 +747,7 @@ void() StormFindTargets = {
 			cloud.enemy = nearbyTargets;
 			cloud.owner = self.owner;
 			cloud.nextthink = time;
-			cloud.think = ChainedLightning;	
+			cloud.think = ChainedLightning;
 			setorigin(cloud, self.origin);
 			targets = targets - 1;
 		}
@@ -742,13 +761,12 @@ void() W_FireChainLightning = { //direct hitscan damage, then lightning chains f
 	local vector org, terminus, stormOrigin;
 	local entity storm;
 
-	W_Reload(0.7);	
 	makevectors(self.v_angle);
 	org = self.origin + '0 0 8' + v_forward*12 + v_right*10;
 	traceline(org, org+v_forward*640, TRUE, self);
 	terminus = trace_endpos;
 	Tent_Beam(TE_LIGHTNING1,self,org,terminus);
-	LightningDamage(org,terminus,self,40);
+	LightningDamage(org,terminus,self,45);
 	SpawnBlood(trace_ent,terminus,vecrand(5,50,TRUE),20,225);
 	stormOrigin = terminus + '0 0 20';
 	storm = spawn();
@@ -770,7 +788,7 @@ void() IceSpikeTouch = {
 	if (other != self.owner && other.takedamage)
 	{
 		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);//2 dmg per ice spike, 3 with Tome of Power
-		SpawnBlood(self, self.origin, self.velocity, 4,0);
+		SpawnBlood(self, self.origin, self.velocity,4,0);
 	}	
 
 	sound(self,CHAN_AUTO,"hknight/hit.wav", 0.5,ATTN_NORM);
@@ -811,7 +829,6 @@ void(float offset) IceSpread = {
 
 void() W_FireIce = {
 	IceAttack1(); //trigger animation
-	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1; 	//consume ammo
 	//trigger sound sound(self,CHAN_WEAPON,"aoa/iceattack.wav", 0.7,ATTN_NORM);
 };
 
@@ -824,9 +841,6 @@ void() IceProjectiles = {
 	IceSpread(24);
 	IceSpread(16);
 	IceSpread(8);
-
-	
-
 };
 
 //==========================================END OF ICE STORM===================================================

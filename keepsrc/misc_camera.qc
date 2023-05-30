@@ -754,6 +754,7 @@ void() misc_camera = { // [ENTITY]
 		|| world.model == "maps/mj3m5.bsp"
 		|| world.model == "maps/mj3m6.bsp"
 		|| world.model == "maps/mj3m7.bsp"
+		|| world.model == "maps/mj4m4.bsp"
 		|| world.model == "maps/mj3m2.bsp") { // HACK!!
 
 		self.spawnflags = self.spawnflags | CINECAM_FUNC_SKIPABLE;

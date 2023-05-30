@@ -1,3 +1,18 @@
+version 1.00:
+	Add tons of HACKS for Mjolnir 1.0
+	Add HUD face for Thor's Blessing
+	Add automatic granting of Thor's Blessing
+	Fix gems not removing buffs
+	Fix missing precaches for monster_bandit
+	Fix monster_reiver crashes in some instances
+	Fix some missing model issues
+	Fix monster_dcrossbow getting stuck and never shooting, only strafing
+	Fix ice Ran's Staff ammo consumption and boost damage slightly
+	Fixed certain pots having skin issues
+	Fixed overheal vial health carrying across levels
+	Fixed monster_rebel not attacking and running away
+Yes we skipped some versions in our mad dash to get Mjolnir 1.0 released or at
+least a beta version of Mjolnir 1.0 released.
 version 0.97:
 	Added more [FUNCTION] tags to mark as non-entities for Nifty
 	Fixed bad references found by Nifty

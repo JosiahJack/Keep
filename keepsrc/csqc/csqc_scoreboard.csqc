@@ -101,6 +101,7 @@ static void(vector pos, string num) Hud_DrawIntermissionNumber = {
 			drawpic(pos, "gfx/num_slash", [24,24],[1,1,1],1,0);
 		else if (c == ':' || c == '.')
 			drawpic(pos, "gfx/num_colon", [24,24],[1,1,1],1,0);
+
 		else if (c == '-')
 			drawpic(pos, "gfx/num_minus", [24,24],[1,1,1],1,0);
 		else if (c >= '0' && c <= '9')
@@ -109,13 +110,17 @@ static void(vector pos, string num) Hud_DrawIntermissionNumber = {
 };
 
 void(vector virtmin, vector virtsize) Hud_Intermission = {
-	vector pos = virtmin + (virtsize-[320,200])/2;
+	vector pos = virtmin + (virtsize-[320,640])/2;
 	Hud_CentrePic("gfx/complete.lmp", 320, pos+'0 24', 24);
 	drawpic(pos+[0,56], "gfx/inter.lmp", [160,184],[1,1,1],1,0);
 	Hud_DrawIntermissionNumber(pos+[144, 64], sprintf("%3.0f:%02.0f", intermission_time/60, intermission_time%60));
 	Hud_DrawIntermissionNumber(pos+[144, 96], sprintf("%3.0f/%.0f", getstatf(STAT_FOUNDSECRETS), getstatf(STAT_TOTALSECRETS)));
 	Hud_DrawIntermissionNumber(pos+[144, 160], sprintf("%3.0f/%.0f", getstatf(STAT_KILLEDMONSTERS), getstatf(STAT_TOTALMONSTERS)));
 	Hud_DrawIntermissionNumber(pos+[144, 192], sprintf("%3.0f/%.0f", getstatf(63), getstatf(62)));
+
+	if (getstatf(64) & 4) {
+		drawstring(pos+[24,216],"Thor Blesses Your Honorable Ways!", [10,10], [1,1,1],1,0);
+	}
 };
 
 //called unless there's a menu/finale visible. also called during intermissions.

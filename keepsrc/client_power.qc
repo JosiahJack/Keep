@@ -200,14 +200,20 @@ void(entity targ, float powtimer) GivePowerPiercer = { // [FUNCTION]
 void(entity targ) ResetPowerLevitation = { // [FUNCTION]
 	targ.wing_finished = 0;
 	targ.wing_time = 0;
-	dprint("5. Gravity change for ");
-	dprint(targ.classname);
-	dprint(", from: ");
-	dprint(ftos(targ.gravity));
+	if (developer > 1) {
+		dprint("5. Gravity change for ");
+		dprint(targ.classname);
+		dprint(", from: ");
+		dprint(ftos(targ.gravity));
+	}
+
 	targ.gravity = fabs(targ.gravity);
-	dprint(", to: ");
-	dprint(ftos(targ.gravity));
-	dprint("\n");
+
+	if (developer > 1) {
+		dprint(", to: ");
+		dprint(ftos(targ.gravity));
+		dprint("\n");
+	}
 };
 
 void(entity targ, float powtimer) GivePowerLevitation = { // [FUNCTION]
@@ -260,15 +266,21 @@ void(entity targ, float powtimer) ResetPowerAntigrav = { // [FUNCTION]
 	targ.antigrav_finished = 0;
 	if (targ.zerogtime < time  // Reset if not swimming in a func liquid.
 		&& targ.timeladder < time) {  // Reset if not on a ladder.
-		dprint("6. Gravity change for ");
-		dprint(targ.classname);
-		dprint(", from: ");
-		dprint(ftos(targ.gravity));
+		if (developer > 1) {
+			dprint("6. Gravity change for ");
+			dprint(targ.classname);
+			dprint(", from: ");
+			dprint(ftos(targ.gravity));
+		}
+
 		if (targ.oldgravity > 0) targ.gravity = targ.oldgravity;
 		else targ.gravity = 0;
-		dprint(", to: ");
-		dprint(ftos(targ.gravity));
-		dprint("\n");
+
+		if (developer > 1) {
+			dprint(", to: ");
+			dprint(ftos(targ.gravity));
+			dprint("\n");
+		}
 	}
 };
 
@@ -276,14 +288,19 @@ void(entity targ, float powtimer) GivePowerAntigrav = { // [FUNCTION]
 	targ.antigrav_time = 1;
 	targ.antigrav_finished = PowerupTime(powtimer,targ.antigrav_finished);
 	targ.oldgravity = targ.gravity;
-	dprint("7. Gravity change for ");
-	dprint(targ.classname);
-	dprint(", from: ");
-	dprint(ftos(targ.gravity));
+	if (developer > 1) {
+		dprint("7. Gravity change for ");
+		dprint(targ.classname);
+		dprint(", from: ");
+		dprint(ftos(targ.gravity));
+	}
 	targ.gravity = 0.25; // This is where the magic happens! See client_power.qc for how it goes back to 1.
-	dprint(", to: ");
-	dprint(ftos(targ.gravity));
-	dprint("\n");
+
+	if (developer > 1) {
+		dprint(", to: ");
+		dprint(ftos(targ.gravity));
+		dprint("\n");
+	}
 };
 
 void(entity targ, float powtimer) ResetPowerEmpathy = { // [FUNCTION]
@@ -604,6 +621,7 @@ void(entity targ) GivePowerThorsBlessing = { // [FUNCTION]
 	if (teamplay) { dprint("Not giving Thor's Blessing in teamplay games\n"); return; }
 
 	targ.items3 = targ.items3 | IT3_THORSBLESSING; // Thor's Blessing lifesaver!
+	//sound(targ,CHAN_ITEM,"tronyn/pickup_mjolnir.wav",1,ATTN_NORM);
 };
 
 void(entity targ) PlayLavaShieldSound = { // [FUNCTION]

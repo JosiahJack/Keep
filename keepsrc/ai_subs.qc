@@ -73,7 +73,7 @@ float() FacingIdeal = { // [FUNCTION]
 };
 
 void(void() thinkst) ai_facingideal_action = { // [FUNCTION] 
-	ai_face();
+	ai_face();	
 	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
 		if (thinkst) thinkst();
 		self.attack_state = AS_STRAIGHT;
@@ -174,9 +174,20 @@ void(float dist) ai_run_slide = {
 	// It is better to re-calcuate this than wait for ai_run to update
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);	
 	ChangeYaw(); // Code function
-	if (ai_run_side(dist)) return;
+	//if (ai_run_side(dist)) return;
 
 	walkmove(self.ideal_yaw - 180, dist); // Try moving backwards if both sides are blocked
+
+	if (self.lefty > 0) ofs = 90;
+	else ofs = -90;
+
+	// Tests if monsters can strafe or not by moving the monster
+	if (walkmove (self.ideal_yaw + ofs, dist)) return;
+
+	self.lefty = rint(1 - self.lefty); // Switch strafe sides for later use
+	if (walkmove (self.ideal_yaw - ofs, dist)) return;
+
+	walkmove (self.ideal_yaw - 180, dist); // Try moving backwards if both sides are blocked
 };
 
 // Turn 90 degrees and move to the side
@@ -213,9 +224,12 @@ void(float dist) ai_run_backward = {
 	self.attack_state = AS_SIDESTEP; // Cannot walk backwards, move sideways instead
 };
 
+
 // Specialized behavior for soldier rebel NPCs.
 // Modifies move distances and possibly attack state.
-float(float d) ai_run_rebel = {
+// TODO Have this only be used to make friendly monsters back away from the
+// player to get out of their way.
+float(float d) ai_run_rebel = {return d;/*
     local float dist;
 
     if (!self.enemy) return d * 2;  // Speed up rebels so they can keep up with
@@ -232,7 +246,7 @@ float(float d) ai_run_rebel = {
 		}
 	}
 
-	return d;
+	return d;*/
 };
 
 

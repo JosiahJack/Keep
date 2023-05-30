@@ -702,7 +702,8 @@ void() trigger_teleport = { // [ENTITY]
 	}
 
 	self.think = trigger_teleport_setup; // Make sure teleport target(s) exist
-	self.nextthink = time + 0.1;
+	if (world.model == "maps/mj4m4.bsp" && self.target == "playerstart") self.nextthink = time + 1;
+	else self.nextthink = time + 0.1;
 };
 void() trigger_changelevel_finish = { // [FUNCTION]
 	intermission_running = 1;
@@ -716,6 +717,22 @@ void() trigger_changelevel_finish = { // [FUNCTION]
 	WriteByte(MSG_ALL,SVC_UPDATESTAT);	// Update twice?
 	StartIntermissionCamera();				// Setup intermission camera(s)
 	WriteByte(MSG_ALL,SVC_INTERMISSION);	// Start intermission (lock movement)
+};
+
+void() thorblessing_intermission_think = {
+    sound(self,CHAN_AUTO,"tronyn/thunder4.wav",1,ATTN_NONE);
+	self.think = SUB_Remove;
+	self.nextthink = time + 6; 
+};
+
+// Thor's Blessing Intermission sound effect
+void() thorblessing_intermission = {
+    local entity e;
+
+    e = spawn();
+    setorigin(e, self.bmodel_act.origin);
+	e.think = thorblessing_intermission_think;
+	e.nextthink = time + 0.3;
 };
 
 void() trigger_changelevel_fire = { // [FUNCTION]
@@ -755,6 +772,16 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 	update_configflag(SVR_SPAWN_BIT3, floor( (self.startspawn2 & 4) / 4) );
 	if (self.map) nextmap = self.map; // *change* if map key not defined, reload current map again
 	SUB_UseTargets();
+
+	// Grant Thor's Blessing automatically if the map calls for it.
+	if (world.mjolniroptions & MJOLNIR_THORSBLESSING) {
+		if (killed_denizens == 0 && total_denizens > 0) { // Denizens are alive when exiting the map.
+			GivePowerThorsBlessing(self.bmodel_act);
+			thorblessing_intermission();
+			centerprint(self.bmodel_act,"Thor Blesses Your Honorable Ways!");
+		}
+	}
+
 	if ( (self.spawnflags & TRIG_CMAPNOPAUSE) && (deathmatch == 0) ) { GotoNextMap(); return; } // If no intermission, go straight to next map
 
 	self.think = trigger_changelevel_finish; // We can't move people right now, because touch functions are called in the middle of C movement code, so set a think time to do it.
@@ -782,6 +809,10 @@ void() changelevel_touch = { trigger_changelevel_fire(); }; // [FUNCTION], Re-di
 void() trigger_changelevel = { // [ENTITY]
 	if (check_bmodel_keys()) return; // Check for bmodel errors
 
+	if (self.map == "H1M2") self.map = "h1m2";
+	if (self.map == "START") self.map = "start";
+	if (world.model == "maps/h1m7.bsp" && self.map == "start") self.map = "start2";
+	if (world.model == "maps/h2m5.bsp" && self.map == "start") self.map = "start2";
 	self.classtype = CT_TRIGLEVEL;
 	self.classgroup = CG_TRIGGERS;
 	InitTrigger();

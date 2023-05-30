@@ -1183,10 +1183,11 @@ void() dcrossbow_checkattack = {
 	if (self.enemy.health < 1) {
 		dcrossbow_stop1();
 	} else {
-		if (enemy_vis) {
+		if (visible(SUB_entEnemyTarget())) {
 			self.weaponswitch = time + 1;
 			// Is the enemy blocked by another enemy?
 			if (!visblocked_wide(self.enemy, self.attack_offset, '0 0 0')) {
+
 				// Is the enemy within melee range?
 				if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
 					self.th_melee();

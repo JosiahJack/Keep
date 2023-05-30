@@ -92,6 +92,8 @@ const float CLIENT_USINGHACKBANK = 60;  // self.weaponismoditems
 const float CLIENT_RUNEFLAG = 61;		// self.serverflagstemp
 const float CLIENT_DENIZENS = 62;		// world denizens total
 const float CLIENT_DENIZENSKILLED = 63;	// world denizens killed
+const float CLIENT_ITEMS3 = 64;			// self.items2
+
 
 // Duplicate of IT_ references in defs.qc
 const float CSQC_SHOTGUN = 1<<0;			// 1

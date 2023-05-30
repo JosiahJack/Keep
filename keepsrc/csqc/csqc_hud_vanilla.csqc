@@ -183,14 +183,27 @@ static string weaponnames[] = {
 };
 
 static string facetab[] = {
-	"gfx/face5", "gfx/face4", "gfx/face3", "gfx/face2", "gfx/face1",
-	"gfx/face_p5", "gfx/face_p4", "gfx/face_p3", "gfx/face_p2", "gfx/face_p1",
-	"gfx/face_inv2", "gfx/face_quad", "gfx/face_invis", "gfx/face_invul2"
+	"gfx/face5",
+	"gfx/face4",
+	"gfx/face3",
+	"gfx/face2",
+	"gfx/face1",
+	"gfx/face_p5",
+	"gfx/face_p4",
+	"gfx/face_p3",
+	"gfx/face_p2",
+	"gfx/face_p1",
+	"gfx/face_inv2",
+	"gfx/face_quad",
+	"gfx/face_invis",
+	"gfx/face_invul2",
+	"gfx/thorface"
 };
 
 //copies of stats, for easier access
 static float sitems;		//copy of .items
 static float sitems2;		//copy of .items2
+static float sitems3;		//copy of .items2
 static float smoditems;     //copy of .moditems
 static float sperms; //haha	//copy of .perms
 static float sweapon;		//copy of .weapon
@@ -250,6 +263,8 @@ static void() Hud_Init {
 		precache_pic(strcat("gfx/inva5_", weaponnames[i]), TRUE);
 	}
 	for (i = 0; i < facetab.length; i++) precache_pic(facetab[i], TRUE);
+	precache_pic("gfx/thorface", TRUE);
+	precache_pic("gfx/thorface", TRUE);
 };
 
 static void(vector pos, float value, float threshhold) Hud_DrawLargeValue = {
@@ -303,6 +318,29 @@ static void(float type, vector pos, float drawback) Hud_DrawAmmoCount = {
 	}
 };
 
+static void(float value, vector pos, float drawback) Hud_DrawModAmmoCount = {
+	string s;
+	float len;
+	float c;
+	if (value < 0) value = 0;
+	if (value>999) value = 999;
+
+	//if (drawback) {
+	//	drawsubpic(pos, '42 11', "gfx/ibar", [(3.0/320)+type*(48.0/320), 0], [42.0/320, 11.0/24], '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
+	//	pos_x += 8;
+	//}
+	drawpic(pos,"gfx/backtile",'48 10 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
+
+	s = ftos(floor(value));
+	len = strlen(s);
+	pos_x += 8 * (3-len);
+	while(len>0) {
+		len--;
+		c = str2chr(s, len);
+		drawcharacter(pos+len * '8 0 0', (18-'0') + c, '8 8 0', '1 1 1', 1, 0);
+	}
+};
+
 static void(float num, vector pos) Hud_DrawWeapon = {
 	string prefix;
 
@@ -340,22 +378,35 @@ static string(float f, float chars, string lead) FormatFloat = {
 	return s;
 };
 
+string(string s, float start, float length) substring = #116;
+
 static void(vector pos) Hud_CoopScores_SBar = {
 	string s;
 	float nsecs;
-	float nmins;
+	float nmins, wmdl_len;
 
-	vector sbar = pos;
-	drawpic(sbar, "gfx/scorebar", '320 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
-	s = strcat("Monsters:", FormatFloat(getstatf(STAT_KILLEDMONSTERS), 3, " "), "/", FormatFloat(getstatf(STAT_TOTALMONSTERS), 3, " "));
-	drawstring(sbar + '8 4', s, '8 8 0', '1 1 1', 1, 0);
-	s = strcat("Secrets :", FormatFloat(getstatf(STAT_FOUNDSECRETS), 3, " "), "/", FormatFloat(getstatf(STAT_TOTALSECRETS), 3, " "));
-	drawstring(sbar + '8 12', s, '8 8 0', '1 1 1', 1, 0);
+	vector sbar = pos - '80 0 0';
+	drawpic(sbar, "gfx/scorebar", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
+	s = strcat("Monsters:", FormatFloat(getstatf(STAT_KILLEDMONSTERS), 4, " "), "/", FormatFloat(getstatf(STAT_TOTALMONSTERS), 4, " "));
+	drawstring(sbar + '8 2', s, '8 8 0', '1 1 1', 1, 0);
+	s = strcat("Denizens:", FormatFloat(skilled_denizens, 4, " "), "/", FormatFloat(stotal_denizens, 4, " "));
+	drawstring(sbar + '8 9', s, '8 8 0', '1 1 1', 1, 0);
+	s = strcat("Secrets :", FormatFloat(getstatf(STAT_FOUNDSECRETS), 4, " "), "/", FormatFloat(getstatf(STAT_TOTALSECRETS), 4, " "));
+	drawstring(sbar + '8 16', s, '8 8 0', '1 1 1', 1, 0);
 	nmins = floor(time/60);
 	nsecs = floor(time - nmins*60);
 	s = strcat("Time :", FormatFloat(nmins, 3, " "), ":", FormatFloat(nsecs, 2, "0"));
-	drawstring(sbar + '184 4', s, '8 8 0', '1 1 1', 1, 0);
-	drawstring(sbar + '232 12' - strlen(world.message)*'4 0', world.message, '8 8 0', '1 1 1', 1, 0);
+	drawstring(sbar + '152 2', s, '8 8 0', '1 1 1', 1, 0);
+	wmdl_len = strlen(world.model);
+	if (wmdl_len > 9) {
+		string wmdl = substring(world.model,5,wmdl_len - 9);
+		drawstring(sbar + '280 2', wmdl, '8 8 0', '1 1 1', 1, 0);
+	}
+	string wm1 = substring(world.message,0,40);
+	string wm2 = substring(world.message,40,80);
+	drawstring(sbar + '152 9', wm1, '8 8 0', '1 1 1', 1, 0);
+	drawstring(sbar + '152 16', wm2, '8 8 0', '1 1 1', 1, 0);
+	//drawstring(sbar + '296 10' - strlen(world.message)*'4 0', world.message, '8 8 0', '1 1 1', 1, 0);
 };
 
 static void Hud_PicOrModel(vector topleft, string pic, string showmodel, float showskin, float speed) {
@@ -413,7 +464,9 @@ static void Hud_DrawFace(vector pos) {
 		if (painfinishtime > time) frame += 5;	//pain.
 		face = facetab[frame];
 	}
-	
+
+	if (sitems3 & 4) face = "gfx/thorface"; // Thor's Blessing indication.
+
 	if (shealth > 100)		Hud_PicOrModel(pos, face, "maps/b_bh100.bsp", 0, -90);
 	else if (shealth > 50)	Hud_PicOrModel(pos, face, "maps/b_bh25.bsp", 0, -90);
 	else					Hud_PicOrModel(pos, face, "maps/b_bh10.bsp", 0, -90);
@@ -533,6 +586,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(1, pos2 + '0 -33', TRUE);
 		Hud_DrawAmmoCount(2, pos2 + '0 -22', TRUE);
 		Hud_DrawAmmoCount(3, pos2 + '0 -11', TRUE);
+		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 1', TRUE);
 		if (sitems & IT_SHOTGUN)			Hud_DrawWeapon(0, pos3+[0,16*0]);
 		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos3+[0,16*1]);
 		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos3+[0,16*2]);
@@ -553,6 +607,13 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(1, pos + '58 0 0', FALSE);
 		Hud_DrawAmmoCount(2, pos + '106 0 0', FALSE);
 		Hud_DrawAmmoCount(3, pos + '154 0 0', FALSE);
+		//Hud_DrawModAmmoCount(getstatf(65),pos + '202 0 0',FALSE);
+		//Hud_DrawModAmmoCount(getstatf(66),pos + '250 0 0',FALSE);
+		//Hud_DrawModAmmoCount(getstatf(70),pos + '298 0 0',FALSE);
+		//if (getstatf(59) > 0) Hud_DrawModAmmoCount(getstatf(59),pos + '298 -11 0',FALSE);
+		//Hud_DrawModAmmoCount(getstatf(69),pos + '346 0 0',FALSE);
+		//Hud_DrawModAmmoCount(getstatf(68),pos + '394 0 0',FALSE);
+		//Hud_DrawModAmmoCount(getstatf(67),pos + '442 0 0',FALSE);
 	}
 
 	if (sitems & IT_KEY1) drawpic(pos+'192 8 0', "gfx/sb_key1", '16 16 0', '1 1 1', 1, 0);
@@ -604,8 +665,12 @@ static void Hud_Draw(vector virtsize, float scoreboard) {
 	sammo_poison = getstatf(59);
 	shackbank = getstatf(60);
 	serverflags = getstatbits(61,0,23);
-	stotal_denizens = getstatbits(62,0,23);
-	skilled_denizens= getstatbits(63,0,23);
+	//stotal_denizens = getstatbits(62,0,23);
+	//skilled_denizens= getstatbits(63,0,23);
+	stotal_denizens = getstatf(62);
+	skilled_denizens= getstatf(63);
+	sitems3 = getstatf(64);
+
 	
 	//note that ssqc can provide custom stats, eg: clientstat(STAT_USER+n, EV_FLOAT, items3); can then be read by us with float items3 = getstatf(STAT_USER+n);
 	if (shealth <= 0) scoreboard = TRUE;

@@ -388,6 +388,8 @@ void(float dist) ai_run = {
 		self.th_checkattack();
 	}
 
+
+
 	if (self.attack_state == AS_SLIDING) {
 		// Check if dragon is in strafe mode.
 		if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
@@ -411,7 +413,7 @@ void(float dist) ai_run = {
 		ai_run_backward(dist); return;
 	} else if (self.attack_state == AS_VERTICAL) {
         if (self.lefty) dist = 0 - dist;
-		ai_up (dist); 
+		ai_up (dist);
 		return;
 	} else if (self.attack_state == AS_FLANKING) {
 		if (enemy_vis) {

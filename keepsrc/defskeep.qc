@@ -49,11 +49,16 @@
 // -ijed
 //=============================================================================
 
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, v0.97.0\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, v1.00.0\n";
 .float mapversion;
 .string target3, target4;
-float total_denizens; // Used to track total harmless denizens
-float killed_denizens; // Used to track harmless creature kills
+float total_denizens; // Used to track total harmless denizens.
+float killed_denizens; // Used to track harmless creature kills.
+.float sdenizens_total; // Hack for engines that don't have globalstat.
+.float sdenizens_killed; // Hack for engines that don't have globalstat.
+.float hack_armor; // Flag to send something to CSQC
+.float hack_weapon; // Key of what to send.
+.float hack_ammo; // Value of sent item.
 
 // float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
 //=======================================SELF.ITEMS1======================================================
@@ -512,6 +517,9 @@ float DOOM_MONSTERS_NM_RESPAWN		= 4;		// TODO: When skill is Nightmare (>=3), th
 .float hipnoticoptions;
 float HIPNOTIC_OLDMJOLNIR			= 1;		// Default is off = Drake throwable Mjolnir if held down.  On is just lightning ground smack and whack damage similar to Quoth simple hammer whack + aDaya mod jam version for Tome.
 float HIPNOTIC_BULLETHOLES			= 2;		// Shotguns place bullet hole sprites on world walls.  Default is off.
+
+.float mjolniroptions;
+float MJOLNIR_THORSBLESSING = 1; // Grant Thor's Blessing automatically at the end of this map.
 
 .float spirit_blessed;
 .float air_blessed;

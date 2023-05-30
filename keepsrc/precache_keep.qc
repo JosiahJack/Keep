@@ -362,4 +362,13 @@ void() PrecacheAll = { // [FUNCTION]
 		particleeffectnum("TE_POISONBIG");
 		particleeffectnum("voreball_explosion");
 	}
+	precache_sound("tronyn/thunder4.wav");
+	precache_sound("tronyn/pickup_mjolnir.wav");
+	precache_sound("zerstorer/weapons/sawidle.wav");
+    precache_sound("zerstorer/weapons/sawatck.wav");
+    precache_sound("zerstorer/weapons/sawridle.wav");
+	precache_sound("drake/weapons/xbowdraw.wav");
+	precache_sound("drake/weapons/icehit.wav");
+	precache_sound("drake/weapons/shatter.wav");
+	precache_sound("drake/weapons/freeze.wav");
 };

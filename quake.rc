@@ -158,6 +158,11 @@ alias upgaxe "impulse 200"
 alias upgssg "impulse 205"
 alias upglg "impulse 210"
 
+bind "0" "impulse 77"
+bind "9" "impulse 90"
+viewsize "100"
+gl_farclip "163840"
+
 //-----------------------------------------------------------
 // All of the MOD features can be changed before loading
 // Add the values below together and update temp1

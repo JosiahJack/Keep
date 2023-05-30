@@ -114,6 +114,7 @@ float		mod_beta;			// Beta version of mod
 .float		give_weapons;		// Which weapons the player always starts with
 .float		take_weapons;		// Which weapons the player never starts with
 .float		no_axestart;		// Removes axe and all weapons on start of map!
+.float		noaxestart;		    // Typo redirect
 .float		reset_health;		// Reset health to this value upon spawning
 .float		jump_height;		// The default player jump height (def=270)
 .float		fall_speedlow;		// Fall Speed for any checks (def=-300)

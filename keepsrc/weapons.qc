@@ -722,7 +722,7 @@ void() W_FireSaw = { // [FUNCTION]
 				save = ignore = 0;
 				if (trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH) {
 						save = 0.5;      // Assume life drain attack.
-						ignore = TRUE;          // Exceed normal health limit.
+						ignore = TRUE;   // Exceed normal health limit.
 				} else save = 0.1;
 
 				if (self.dmg > trace_ent.health)
@@ -1802,8 +1802,10 @@ void() W_Attack = { // [FUNCTION]
 					else if (self.meleeattack == 1) player_axeb1();
 					else if (self.meleeattack == 2) player_axeoldc1();
 					else player_axeoldd1();
-				}	
-				W_Reload(0.5);
+				}
+
+				if (self.tome_finished) W_Reload(0.25);
+				else W_Reload(0.5);
 			}
 		} else if (self.weapon == IT_SHOTGUN) {
 			if (self.perms & IT_BLASTER) {

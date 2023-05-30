@@ -456,20 +456,12 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/its_demo/statue_dcomm1.mdl") self.mdl = "progs/its/statue_dcomm1.mdl";
 	if (self.mdl == "progs/its_demo/stealth_eyeb.spr") self.mdl = "progs/its/stealth_eyeb.mdl";
 	if (self.mdl == "progs/its_demo/stealth_eyew.spr") self.mdl = "progs/its/stealth_eyew.mdl";
+	if (self.mdl == "progs/slayertest/props/treeBig.mdl") self.mdl = "progs/slayertest/props/treebig.mdl";
 
 	// Hack for limits
 	if (self.mdl == "progs/slayertest/props/stalag1.mdl") self.mdl = "progs/slayertest/props/stalag2.mdl";
 	if (self.mdl == "progs/slayertest/props/stalag4.mdl") { dprint("stalag4 removed by HACK!!!  Let Qmaster know when its verts are below 2000\n"); precache_model(self.mdl); remove(self); return; }
 	if (self.mdl == "progs/slayertest/props/stalag5.mdl") { dprint("stalag5 removed by HACK!!!  Let Qmaster know when its verts are below 2000\n"); precache_model(self.mdl); remove(self); return; }
-
-	// Hack for missing
-	if (self.mdl == "progs/slayertest/props/treeBig.mdl") { dprint("progs/slayertest/props/treeBig.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
-	if (self.mdl == "progs/slayertest/props/tree.mdl") { dprint("progs/slayertest/props/tree.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
-	if (self.mdl == "progs/slayertest/props/pinetree.mdl") { dprint("progs/slayertest/props/pinetree.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
-	if (self.mdl == "models/fx/waterfall_med.mdl") { dprint("models/fx/waterfall_med.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
-	if (self.mdl == "models/pickups/berserk.mdl") { dprint("models/pickups/berserk.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
-	if (self.mdl == "models/props/hell_pedestal.mdl") { dprint("models/props/hell_pedestal.mdl removed by HACK!!! Provide to Qmaster\n"); remove(self); return; }
-
 
 	// Silly map fixes for specific models.  Please start at 0.  Please end at
 	// 1 less than what QME says it is if QME started at 1 instead of 0.
@@ -518,6 +510,11 @@ void() misc_model = { // [ENTITY]
 	}
 
 	if (self.mdl == "progs/tronyn/statue8.mdl") {
+		self.pos1 = '0 0 0';
+		self.frame = 0;
+	}
+
+	if (self.mdl == "progs/tronyn/light4.mdl") {
 		self.pos1 = '0 0 0';
 		self.frame = 0;
 	}

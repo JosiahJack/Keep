@@ -85,10 +85,13 @@ void() treasure_touch = { // [FUNCTION]
     Safe_stuffcmd(other, "bf\n");
     sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
     if (!self.healamount) self.healamount = 5;
-    if (self.healtype)
+    if (self.healtype) {
         T_Heal(other, self.healamount, TRUE); // Reward with max hp increase -- not in SoE!
-    else
+        ResetDebuffBurning(other); // Healing the player negates some debuffs
+        ResetDebuffPoisoned(other);
+    } else {
         T_Repair(other, self.healamount, TRUE); // SoE: Increase armor, ignoring max, like in classic Doom.
+    }
 
 	activator = other;
 	SUB_UseTargets();

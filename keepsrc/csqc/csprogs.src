@@ -54,7 +54,9 @@
 ../../csprogs.dat
 qsextensions.csqc	        // Builtins & lots of extensions available in FTE &
                             // QSS.
+                            
 defs.csqc
+csqc_defs.csqc
 math.csqc
 env_sound.csqc              // OpenAL preset reverb zone structs.
 csqc_hud_vanilla.csqc       // HUD code. self-contained, except for qc
@@ -64,3 +66,4 @@ csqc_scoreboard.csqc        // Code for the deathmatch scoreboard overlay.
 csqc_legacycompat.csqc      // And because non-simple csqc isn't simple, this
                             // file needed for getting old versions of FTE, or
                             // DP to behave as well as legacy engines.
+//csqc_hudkeep.csqc			// AD multiple style huds, not using at the moment

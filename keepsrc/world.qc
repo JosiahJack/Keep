@@ -518,44 +518,31 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		if (cvar("scratch1") < 0) cvar_set("cl_nocsqc", "1"); // Read scratch1 in quake.rc (-1=off, 0=on, 1+=diff layouts)
 		if (!cvar("cl_nocsqc")) {//ext_ftepart) {
 			// Setup variables for CSQC HUD (cannot directly query variables)
-			// FTE/QSS use clientstat, DP use addstat (same function)
-			// The addstat is defined in dpextensions.qc
-			// Example: void(float index, float type, ...) addstat = #232;
-			if (checkbuiltin(addstat)) {
-				addstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
-				addstat(CLIENT_ITEMS2, EV_FLOAT, items2);
-				addstat(CLIENT_PERMS, EV_FLOAT, perms);
-				addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
-				addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
-				addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
-				addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
-				addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
-				addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
-				addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
-				addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
-				addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-				addstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
-				addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-			} else if (checkbuiltin(clientstat)) {
-				clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
-				clientstat(CLIENT_ITEMS2, EV_FLOAT, items2);
-				clientstat(CLIENT_PERMS, EV_FLOAT, perms);
-				clientstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
-				clientstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
-				clientstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
-				clientstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
-				clientstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
-				clientstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
-				clientstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
-				clientstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
-				clientstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-				clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
-				clientstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-			}
-			if (checkbuiltin(globalstat)) {
-				globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
-				globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
-			}
+			// FTE/QSS use clientstat, DP use addstat (same function 232 so can
+			// just use clientstat which is 232)
+			clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
+			clientstat(CLIENT_ITEMS2, EV_FLOAT, items2);
+			clientstat(CLIENT_PERMS, EV_FLOAT, perms);
+			clientstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
+			clientstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
+			clientstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
+			clientstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
+			clientstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
+			clientstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
+			clientstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
+			clientstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+			clientstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+			clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, weaponismoditems);
+			clientstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+			clientstat(CLIENT_DENIZENS, EV_FLOAT, sdenizens_total);
+			clientstat(CLIENT_DENIZENSKILLED, EV_FLOAT, sdenizens_killed);
+			clientstat(CLIENT_ITEMS3, EV_FLOAT, items3);
+			clientstat(65, EV_FLOAT, ammo_lava_nails);
+			clientstat(66, EV_FLOAT, ammo_multi_rockets);
+			clientstat(67, EV_FLOAT, ammo_plasma);
+			clientstat(68, EV_FLOAT, ammo_bloodcrystals);
+			clientstat(69, EV_FLOAT, ammo_elemental);
+			clientstat(70, EV_FLOAT, ammo_bolts);
 		}
 	}
 	dprint("\b[ENGINE]\b ");
@@ -691,6 +678,36 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	if (query_configflag(SVR_DRAKEMUSIC) == SVR_DRAKEMUSIC) {
 		if (!InitMusic()) dprint("\b[WORLD]\b Drake music system active but no music specified\n        in worldspawn's noise, noise1, noise2, or noise3\n"); // Setup Drake secondary music system that plays music from two speaker entities in the map corners.
 	} else dprint("\b[WORLD]\b Drake music system inactive\n");
+
+	if (world.model == "maps/start2.bsp"
+		|| world.model == "maps/h1m1.bsp"
+		|| world.model == "maps/h1m2.bsp"
+		|| world.model == "maps/h1m3.bsp"
+		|| world.model == "maps/h1m4.bsp"
+		|| world.model == "maps/h1m5.bsp"
+		|| world.model == "maps/h1m6.bsp"
+		|| world.model == "maps/h1m7.bsp"
+		|| world.model == "maps/h2m1.bsp"
+		|| world.model == "maps/h2m2.bsp"
+		|| world.model == "maps/h2m3.bsp"
+		|| world.model == "maps/h2m4.bsp"
+		|| world.model == "maps/h2m5.bsp"
+		|| world.model == "maps/mj3m1.bsp"
+		|| world.model == "maps/mj3m2.bsp"
+		|| world.model == "maps/mj3m3.bsp"
+		|| world.model == "maps/mj3m4.bsp"
+		|| world.model == "maps/mj3m5.bsp"
+		|| world.model == "maps/mj3m6.bsp"
+		|| world.model == "maps/mj3m7.bsp"
+		|| world.model == "maps/mj4m1.bsp"
+		|| world.model == "maps/mj4m2.bsp"
+		|| world.model == "maps/mj4m3.bsp"
+		|| world.model == "maps/mj4m4.bsp"
+		|| world.model == "maps/mj4m5.bsp"
+		|| world.model == "maps/mj4m6.bsp"
+		|| world.model == "maps/end.bsp") {
+		world.mjolniroptions = world.mjolniroptions | MJOLNIR_THORSBLESSING;
+	}
 	// Kitchen sink?
 };
 

@@ -1,7 +1,7 @@
 //======================================================================
 // ENTITIES FGD file
 // MOD    : Keep
-// VERSION: v0.90
+// VERSION: v1.00.0
 // Editor : Worldcraft, Jackhammer 
 //======================================================================
 @baseclass = Appearflags [
@@ -262,6 +262,9 @@
 	doomoptions(Flags) = [
 		1 : "Shotguns always have knockback" : 0
 	]	
+	mjolniroptions(Flags) = [
+		1 : "Grant Thor's Blessing At Level End if No Denizens Killed"
+	]
 	noise(string) : "Start music for Secondary Drake Music System" : : "Example music/shadows.wav"
 	noise2(string) : "Intermission music for Secondary Drake Music System" : : "Example music/soultrap.wav"
 	noise3(string) : "Episode end music for Secondary Drake Music System" : : "Example music/halo.wav"

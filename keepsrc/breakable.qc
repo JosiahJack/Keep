@@ -1394,6 +1394,10 @@ void() misc_breakable_pot_setup = { // [FUNCTION]
 	if (self.mdl == "progs/ad181/brk_pot1a.mdl") {
 		if (self.exactskin > 1) self.exactskin = 1;
 	}
+
+	if (self.mdl == "progs/ad181/brk_pot1b.mdl") {
+		if (self.exactskin > 1) self.exactskin = 1;
+	}
 	// End silliness
 
 	precache_model("progs/ad181/brk_pot1a.mdl");

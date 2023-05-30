@@ -60,6 +60,7 @@ $frame paind17 paind18 paind19
 void() rebel_fire = { // [FUNCTION]
     local   vector  org, dir;
 
+    dprint("rebel fire\n");
     if (self.shots_left > 0) self.shots_left = self.shots_left - 1;
     makevectors(self.angles);
     dir = (v_forward*12) + (v_right*8.5) + (v_up*16);
@@ -67,7 +68,7 @@ void() rebel_fire = { // [FUNCTION]
     dir = self.enemy.origin + dir;
     dir = Maim_LineEx(org,dir,AKARROW_SPEED_FLY,self.enemy,'0 0 0',1);
     sound(self,CHAN_WEAPON,"drake/archer/arrowr.wav",1,ATTN_NORM);
-    AkArrow_Launch (org, dir, 0);
+    AkArrow_Launch(org, dir, 0);
 };
 
 void() rebel_atk1  = [$attack1,  rebel_atk2  ] { ai_face(); self.shots_left = 2; }; // [FUNCTION]
