@@ -221,7 +221,8 @@ static float painfinishtime;//tracks when we took damage, for flinching.
 static void() Hud_Init {
 	float i;
 
-	precache_pic("gfx/sbar", TRUE);
+	precache_pic("gfx/sbarkeep", TRUE);
+	precache_pic("gfx/ibarkeep", TRUE);
 	precache_pic("gfx/ibar", TRUE);
 	for (i = 0; i < 10; i++) {
 		precache_pic(number[i], TRUE);
@@ -299,6 +300,7 @@ static void(float type, vector pos, float drawback) Hud_DrawAmmoCount = {
 	float value;
 	float len;
 	float c;
+
 	value = getstatf(STAT_SHELLS+type);
 	if (value < 0) value = 0;	//hrm
 	if (value>999) value = 999;
@@ -318,26 +320,20 @@ static void(float type, vector pos, float drawback) Hud_DrawAmmoCount = {
 	}
 };
 
-static void(float value, vector pos, float drawback) Hud_DrawModAmmoCount = {
+static void(float value, vector pos, float drawback, vector color) Hud_DrawModAmmoCount = {
 	string s;
 	float len;
 	float c;
+
 	if (value < 0) value = 0;
 	if (value>999) value = 999;
-
-	//if (drawback) {
-	//	drawsubpic(pos, '42 11', "gfx/ibar", [(3.0/320)+type*(48.0/320), 0], [42.0/320, 11.0/24], '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
-	//	pos_x += 8;
-	//}
-	drawpic(pos,"gfx/backtile",'48 10 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
-
 	s = ftos(floor(value));
 	len = strlen(s);
 	pos_x += 8 * (3-len);
 	while(len>0) {
 		len--;
 		c = str2chr(s, len);
-		drawcharacter(pos+len * '8 0 0', (18-'0') + c, '8 8 0', '1 1 1', 1, 0);
+		drawcharacter(pos+len * '8 0 0', (18-'0') + c, '8 8 0',color, 1, 0);
 	}
 };
 
@@ -385,7 +381,7 @@ static void(vector pos) Hud_CoopScores_SBar = {
 	float nsecs;
 	float nmins, wmdl_len;
 
-	vector sbar = pos - '80 0 0';
+	vector sbar = pos;// - '80 0 0';
 	drawpic(sbar, "gfx/scorebar", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
 	s = strcat("Monsters:", FormatFloat(getstatf(STAT_KILLEDMONSTERS), 4, " "), "/", FormatFloat(getstatf(STAT_TOTALMONSTERS), 4, " "));
 	drawstring(sbar + '8 2', s, '8 8 0', '1 1 1', 1, 0);
@@ -521,47 +517,47 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 	}
 	//---------------------------------------------------------------------------------------------------------------------
 	
-	if (autocvar(cl_sbar, 1)) drawpic(pos, "gfx/sbar", '320 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
+	if (autocvar(cl_sbar, 1)) drawpic(pos, "gfx/sbarkeep", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
 
 	if (sitems & IT_INVULNERABILITY) {
-		drawpic(pos, "gfx/disc", '24 24 0', '1 1 1', 1, 0);
-		Hud_DrawLargeValue(pos+'24 0 0', 999, 25);
+		drawpic(pos, "gfx/disc", '92 24 0', '1 1 1', 1, 0);
+		Hud_DrawLargeValue(pos+'92 0 0', 999, 25);
 	} else {
-		Hud_DrawLargeValue(pos+'24 0 0', getstatf(STAT_ARMOR), 25);
-		if (sitems2 & IT2_ARMOR3) 		drawpic(pos, "gfx/sb_armor3", '24 24 0', '1 1 1', 1, 0);
-		else if (sitems2 & IT2_ARMOR2)	drawpic(pos, "gfx/sb_armor2", '24 24 0', '1 1 1', 1, 0);
-		else if (sitems2 & IT2_ARMOR1)	drawpic(pos, "gfx/sb_armor1", '24 24 0', '1 1 1', 1, 0);
+		Hud_DrawLargeValue(pos+'92 0 0', getstatf(STAT_ARMOR), 25);
+		if (sitems2 & IT2_ARMOR3) 		drawpic(pos + '68 0', "gfx/sb_armor3", '24 24 0', '1 1 1', 1, 0);
+		else if (sitems2 & IT2_ARMOR2)	drawpic(pos + '68 0', "gfx/sb_armor2", '24 24 0', '1 1 1', 1, 0);
+		else if (sitems2 & IT2_ARMOR1)	drawpic(pos + '68 0', "gfx/sb_armor1", '24 24 0', '1 1 1', 1, 0);
 	}
 
-	Hud_DrawFace(pos+'112 0 0');
-	Hud_DrawLargeValue(pos+'136 0 0', shealth, 25);
+	Hud_DrawFace(pos+'180 0 0');
+	Hud_DrawLargeValue(pos+'204 0 0', shealth, 25);
 
 	if (shackbank) {
-		if (sweapon == IT_ICE) drawpic(pos+'224 0 0', "gfx/r_ammoelemental", '24 24 0', '1 1 1', 1, 0);
+		if (sweapon == IT_ICE) drawpic(pos+'292 0 0', "gfx/r_ammoelemental", '24 24 0', '1 1 1', 1, 0);
 		// else if (sweapon == IT_MACE)
-		else if (sweapon == IT_VOID_STAFF) drawpic(pos+'224 0 0', "gfx/r_ammovoid", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_FLAK) drawpic(pos+'224 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_GUNGNIR) drawpic(pos+'224 0 0', "gfx/r_ammovoid", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_VOID_STAFF) drawpic(pos+'292 0 0', "gfx/r_ammovoid", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_FLAK) drawpic(pos+'292 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_GUNGNIR) drawpic(pos+'292 0 0', "gfx/r_ammovoid", '24 24 0', '1 1 1', 1, 0);
 	} else {
-		if (sweapon == IT_SHOTGUN || sweapon == IT_SUPER_SHOTGUN) drawpic(pos+'224 0 0', "gfx/sb_shells", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_NAILGUN || sweapon == IT_SUPER_NAILGUN) drawpic(pos+'224 0 0', "gfx/sb_nails", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_GRENADE_LAUNCHER || sweapon == IT_ROCKET_LAUNCHER) drawpic(pos+'224 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT2_PROXIMITY_GUN) drawpic(pos+'224 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_LIGHTNING || sweapon == IT_LIGHTNING) drawpic(pos+'224 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_LAVA_NAILGUN || sweapon == IT_LAVA_SUPER_NAILGUN) drawpic(pos+'224 0 0', "gfx/r_ammolava", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_MULTI_GRENADE || sweapon == IT_MULTI_ROCKET) drawpic(pos+'224 0 0', "gfx/r_ammoplasma", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_PLASMA_GUN) drawpic(pos+'224 0 0', "gfx/r_ammomulti", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT2_MJOLNIR) drawpic(pos+'224 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT2_LASER_CANNON) drawpic(pos+'224 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', 1, 0);
+		if (sweapon == IT_SHOTGUN || sweapon == IT_SUPER_SHOTGUN) drawpic(pos+'292 0 0', "gfx/sb_shells", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_NAILGUN || sweapon == IT_SUPER_NAILGUN) drawpic(pos+'292 0 0', "gfx/sb_nails", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_GRENADE_LAUNCHER || sweapon == IT_ROCKET_LAUNCHER) drawpic(pos+'292 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT2_PROXIMITY_GUN) drawpic(pos+'292 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_LIGHTNING || sweapon == IT_LIGHTNING) drawpic(pos+'292 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_LAVA_NAILGUN || sweapon == IT_LAVA_SUPER_NAILGUN) drawpic(pos+'292 0 0', "gfx/r_ammolava", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_MULTI_GRENADE || sweapon == IT_MULTI_ROCKET) drawpic(pos+'292 0 0', "gfx/r_ammoplasma", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_PLASMA_GUN) drawpic(pos+'292 0 0', "gfx/r_ammomulti", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT2_MJOLNIR) drawpic(pos+'292 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT2_LASER_CANNON) drawpic(pos+'292 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', 1, 0);
 		else if (sweapon == IT_EXTRA_WEAPON) {
-			if  (sammo_poison > 1) drawpic(pos+'224 0 0', "gfx/r_ammopoison", '24 24 0', '1 1 1', 1, 0);
-			else drawpic(pos+'224 0 0', "gfx/r_ammobolts", '24 24 0', '1 1 1', 1, 0);
+			if  (sammo_poison > 1) drawpic(pos+'292 0 0', "gfx/r_ammopoison", '24 24 0', '1 1 1', 1, 0);
+			else drawpic(pos+'292 0 0', "gfx/r_ammobolts", '24 24 0', '1 1 1', 1, 0);
 		}
-		else if (sweapon == IT_SANGUINATORS) drawpic(pos+'224 0 0', "gfx/r_ammoblood", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_RAPIER) drawpic(pos+'224 0 0', "gfx/r_ammoblood", '24 24 0', '1 1 1', 1, 0);
-		else if (sweapon == IT_SCIMITAR) drawpic(pos+'224 0 0', "gfx/r_ammoelemental", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_SANGUINATORS) drawpic(pos+'292 0 0', "gfx/r_ammoblood", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_RAPIER) drawpic(pos+'292 0 0', "gfx/r_ammoblood", '24 24 0', '1 1 1', 1, 0);
+		else if (sweapon == IT_SCIMITAR) drawpic(pos+'292 0 0', "gfx/r_ammoelemental", '24 24 0', '1 1 1', 1, 0);
 	}
-	Hud_DrawLargeValue(pos+'248 0 0', getstatf(STAT_AMMO), 10);
+	Hud_DrawLargeValue(pos+'316 0 0', getstatf(STAT_AMMO), 10);
 };
 
 static void Hud_DrawIBar(vector pos, vector br) {
@@ -586,7 +582,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(1, pos2 + '0 -33', TRUE);
 		Hud_DrawAmmoCount(2, pos2 + '0 -22', TRUE);
 		Hud_DrawAmmoCount(3, pos2 + '0 -11', TRUE);
-		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 1', TRUE);
+		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 1', TRUE,'1 1 1');
 		if (sitems & IT_SHOTGUN)			Hud_DrawWeapon(0, pos3+[0,16*0]);
 		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos3+[0,16*1]);
 		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos3+[0,16*2]);
@@ -595,25 +591,25 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos3+[0,16*5]);
 		if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos3+[0,16*6], 24, LIGHTNING_WIDTH);
 	} else { //standard nq sbar
-		drawpic(pos, "gfx/ibar", '320 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
-		if (sitems & IT_SHOTGUN)			Hud_DrawWeapon(0, pos+[24*0,8]);
-		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos+[24*1,8]);
-		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos+[24*2,8]);
-		if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos+[24*3,8]);
-		if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos+[24*4,8]);
-		if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos+[24*5,8]);
-		if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos+[24*6,8], LIGHTNING_WIDTH, LIGHTNING_WIDTH);
-		Hud_DrawAmmoCount(0, pos + '10 0 0', FALSE);
-		Hud_DrawAmmoCount(1, pos + '58 0 0', FALSE);
-		Hud_DrawAmmoCount(2, pos + '106 0 0', FALSE);
-		Hud_DrawAmmoCount(3, pos + '154 0 0', FALSE);
-		//Hud_DrawModAmmoCount(getstatf(65),pos + '202 0 0',FALSE);
-		//Hud_DrawModAmmoCount(getstatf(66),pos + '250 0 0',FALSE);
-		//Hud_DrawModAmmoCount(getstatf(70),pos + '298 0 0',FALSE);
-		//if (getstatf(59) > 0) Hud_DrawModAmmoCount(getstatf(59),pos + '298 -11 0',FALSE);
-		//Hud_DrawModAmmoCount(getstatf(69),pos + '346 0 0',FALSE);
-		//Hud_DrawModAmmoCount(getstatf(68),pos + '394 0 0',FALSE);
-		//Hud_DrawModAmmoCount(getstatf(67),pos + '442 0 0',FALSE);
+		drawpic(pos, "gfx/ibarkeep", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
+		if (sitems & IT_SHOTGUN)			Hud_DrawWeapon(0, pos+[24*1,8]);
+		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos+[24*2,8]);
+		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos+[24*3,8]);
+		if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos+[24*4,8]);
+		if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos+[24*5,8]);
+		if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos+[24*6,8]);
+		if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos+[24*7,8], LIGHTNING_WIDTH, LIGHTNING_WIDTH);
+		Hud_DrawAmmoCount(0, pos + '11 0 0', FALSE);
+		Hud_DrawAmmoCount(1, pos + '59 0 0', FALSE);
+		Hud_DrawAmmoCount(2, pos + '107 0 0', FALSE);
+		Hud_DrawAmmoCount(3, pos + '153 0 0', FALSE);
+		Hud_DrawModAmmoCount(getstatf(65),pos + '199 0 0',FALSE,'1 1 1'); // ammo_lava_nails
+		Hud_DrawModAmmoCount(getstatf(66),pos + '241 0 0',FALSE,'1 1 1'); // ammo_multi_rockets
+		Hud_DrawModAmmoCount(getstatf(70),pos + '285 0 0',FALSE,'1 1 1'); // ammo_bolts
+		if (getstatf(59) > 0) Hud_DrawModAmmoCount(getstatf(59),pos + '285 -9 0',FALSE,'0.5 1 0.5'); // ammo_poison
+		Hud_DrawModAmmoCount(getstatf(69),pos + '327 0 0',FALSE,'1 1 1'); // ammo_elemental
+		Hud_DrawModAmmoCount(getstatf(68),pos + '368 0 0',FALSE,'1 1 1'); // ammo_bloodcrystals
+		Hud_DrawModAmmoCount(getstatf(67),pos + '412 0 0',FALSE,'1 1 1'); // ammo_plasma
 	}
 
 	if (sitems & IT_KEY1) drawpic(pos+'192 8 0', "gfx/sb_key1", '16 16 0', '1 1 1', 1, 0);
@@ -654,7 +650,7 @@ static void Hud_Draw(vector virtsize, float scoreboard) {
 	float oitems2 = sitems2;
 	float ohealth = shealth;
 
-	pos_x = (virtsize_x-320)/2;
+	pos_x = (virtsize_x-480)/2;
 	pos_y = virtsize_y;
 	sitems = getstatbits(STAT_ITEMS, 0, 23);	//note that we could use getstati to read the items stat, but it'd degrade when then cast to a float, and QSS+DP don't support ints, so we have to use two floats. 
 	sitems2 = getstatbits(42, 0, 23);

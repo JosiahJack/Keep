@@ -599,7 +599,7 @@ void() monster_eidolon_precache = { // [FUNCTION]
 // QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
 void() monster_eidolon = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups	
-	
+
 	self.mdl = "progs/ad171/mon_bosseidolon.mdl";
 	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
 	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
@@ -641,9 +641,25 @@ void() monster_eidolon = { // [ENTITY]
 	self.classtype = CT_MONEIDOLON;
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
+	self.th_checkattack = EidolonCheckAttack; // default = No think functions
+	self.use = monster_use; // we are normal now
+	self.th_stand = eidolon_stand1; // Restore all think functions
+	self.th_walk = eidolon_walk1;
+	self.th_run = eidolon_run1;
+	self.th_melee = eidolon_attackC1;
+	self.th_missile = eidolon_attackA1;
+	self.th_summon = eidolon_attackE1;
+	self.th_pain = eidolon_pain;
+	self.th_die = eidolon_die;
+	self.pain_finished = time + 3;		// Make pain go away
+	self.attack_finished = time + 2;	// Reset attack system
 	monster_start();
+		
+	if (world.model == "maps/h2m5.bsp") self.style = EIDOLON_PHASE2; // HACK!
+
 	if (self.targetname == "") { // No targetname = no trigger!
 		dprint("\b[EIDO_BOSS]\b Missing trigger name! Starting now.\n");
+		self.style = EIDOLON_PHASE2;
 		eidolon_start();
 	}
 };
