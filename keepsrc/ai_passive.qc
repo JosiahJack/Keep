@@ -59,7 +59,6 @@ float(entity targ) check_passivestate_exception = {
 	if (targ.spawnflags & MON_SPAWN_ANGRY) return TRUE;
 	if (targ.passive_state == MON_PASSIVESTATE_NEVER) return TRUE;
 	if (IsInsane(targ)) return TRUE;
-	if (targ.ryuflags & RYU_FORCED) return TRUE; // Player made me shoot
 	if (targ.alignment == GOOD) return TRUE; // already good, don't get lukewarm about it
 	return FALSE;
 };

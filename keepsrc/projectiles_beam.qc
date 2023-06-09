@@ -900,7 +900,7 @@ void() Divine_Check = { // [FUNCTION]
 // 'dur' = How long the darkness lasts.
 float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
     local   entity  head;
-    local   float   hits;
+    local   float   hits, safety;
     local   vector  vx, dir;
 
     if (!self) return FALSE;
@@ -912,7 +912,9 @@ float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
     vx = v_forward;
     hits = 0;
     head = nextent (world);
+	safety = 0;
     while (head) {
+		safety = safety + 1;
         if (Divine_Trace(head, self)) {
             dir = normalize (head.origin - self.origin);
             if (dir * vx > 0.7071) { // Must be within fov 90.
@@ -924,6 +926,7 @@ float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
             }
         }
         head = nextent (head);
+		if (safety >= 100) head = world;
     }
     if (hits) {
         if (!shots) shots = 255; // Set maximum hits an attacker may score.

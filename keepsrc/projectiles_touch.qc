@@ -1336,10 +1336,16 @@ void() Buriza_Touch = { // [FUNCTION]
         if (other == self.fallen) return; // Do not hit this target.
         if (other == self.oldenemy) return; // Do not retouch the same target twice in a row.
 
-		T_Damage(other, self, self.master, 100, DAMARMOR); // Hit for 100 damage like in Heretic (ToP firemace vs. bosses).
+		if (self.poisonous) {
+			SpawnBlood(other,self.origin,'0 0 100',150,52);
+			PoisonDeBuff(other); // Poisonous projectiles
+			T_Damage(other, self, self.master, 150, DAMARMOR); // Hit for 100 damage like in Heretic (ToP firemace vs. bosses).
+		} else T_Damage(other, self, self.master, 100, DAMARMOR); // Hit for 100 damage like in Heretic (ToP firemace vs. bosses).
+
 		T_Slow (other, self.master, 5); // Knock off some hp, and slow for 5 seconds.
 		particle (self.origin, crandom() * 100 * '1 1 1', 41 + rint(random()*7), 20);
 		particle (self.origin, crandom() * 100 * '1 1 1', 9 + rint(random()*7), 20);
+		spawn_touchblood(self,other,100);
         if (other.solid != SOLID_BSP) { self.oldenemy = other;  return; }   // Pierce the target.
 
         self.owner = world; // Arrow will shatter, so set owner to the world so that targets hiding behind 'other' aren't hit by T_RadiusDamage.
@@ -1347,7 +1353,10 @@ void() Buriza_Touch = { // [FUNCTION]
 
 	// Explode on impact on a solid surface.
     self.touch = SUB_Null; // Stack overflow prevention.
-    T_RadiusDamage(self, self.master, 60, world, DAMAGEALL);
+	self.dmg = 60;
+	if (self.poisonous) T_RadiusDamage(self, self.master, 90, world, DAMAGEALL);
+    else T_RadiusDamage(self, self.master, 60, world, DAMAGEALL);
+
     self.origin = self.origin - 8*normalize(self.velocity);
     sound(self,CHAN_AUTO,"drake/weapons/icewall.wav",1,ATTN_NORM); // Don't spawn shockwaves like the dragons' iceballs.
     Particle_Explosion(self.origin, '9 33 4', '15 41 3'); // Formerly 'Tent_Explosion2(self.origin, 32, 16);'.

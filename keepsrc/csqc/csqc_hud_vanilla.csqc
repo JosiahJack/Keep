@@ -337,19 +337,30 @@ static void(float value, vector pos, float drawback, vector color) Hud_DrawModAm
 	}
 };
 
-static void(float num, vector pos) Hud_DrawWeapon = {
-	string prefix;
+static void(float wep, float ishackbank, vector pos) Hud_DrawWeapon = {
+	//string prefix;
 
-	float flash = (time - flashtime[num])*10;
-	if (flash >= 10) {
-		if (sweapon == (1<<num))prefix = "gfx/inv2_";
-		else					prefix = "gfx/inv_";
-	} else {
-		static string tab[] = {"gfx/inva1_","gfx/inva2_","gfx/inva3_","gfx/inva4_","gfx/inva5_"};
-		if (flash >= 5) flash -= 5;
-		prefix = tab[flash];
-	}
-	drawpic(pos, strcat(prefix, weaponnames[num]), '24 16 0', '1 1 1', 1, 0);
+	//float flash = (time - flashtime[num])*10;
+	//if (flash >= 10) {
+	//	if (sweapon == (1<<num))prefix = "gfx/inv2_";
+	//	else					prefix = "gfx/inv_";
+	//} else {
+	//	static string tab[] = {"gfx/inva1_","gfx/inva2_","gfx/inva3_","gfx/inva4_","gfx/inva5_"};
+	//	if (flash >= 5) flash -= 5;
+	//	prefix = tab[flash];
+	//}
+
+	//"shotgun",
+	//"sshotgun",
+	//"nailgun",
+	//"snailgun",
+	//"rlaunch",
+	//"srlaunch",
+	//"lightng",
+
+	if (wep == 1) {
+		if (
+	drawpic(pos, "gfx/inv_shotgun", '24 16 0', '1 1 1', 1, 0);
 };
 
 static void(float num, float lflashtime, float iscurrent, vector pos, float drawwidth, float imgwidth) Hud_DrawWeaponEx = {
@@ -520,7 +531,7 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 	if (autocvar(cl_sbar, 1)) drawpic(pos, "gfx/sbarkeep", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
 
 	if (sitems & IT_INVULNERABILITY) {
-		drawpic(pos, "gfx/disc", '92 24 0', '1 1 1', 1, 0);
+		drawpic(pos + '68 0 0', "gfx/disc", '24 24 0', '1 1 1', 1, 0);
 		Hud_DrawLargeValue(pos+'92 0 0', 999, 25);
 	} else {
 		Hud_DrawLargeValue(pos+'92 0 0', getstatf(STAT_ARMOR), 25);
@@ -560,6 +571,8 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 	Hud_DrawLargeValue(pos+'316 0 0', getstatf(STAT_AMMO), 10);
 };
 
+string slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8, slot9, slot0;
+
 static void Hud_DrawIBar(vector pos, vector br) {
 	if (!autocvar(cl_sbar, 1) || autocvar(cl_sbar, 1) >= 2) { //qw puts its ammo+weapons on the side. mimic that.
 		vector pos2, pos3;
@@ -582,23 +595,55 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(1, pos2 + '0 -33', TRUE);
 		Hud_DrawAmmoCount(2, pos2 + '0 -22', TRUE);
 		Hud_DrawAmmoCount(3, pos2 + '0 -11', TRUE);
-		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 1', TRUE,'1 1 1');
-		if (sitems & IT_SHOTGUN)			Hud_DrawWeapon(0, pos3+[0,16*0]);
-		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos3+[0,16*1]);
-		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos3+[0,16*2]);
-		if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos3+[0,16*3]);
-		if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos3+[0,16*4]);
-		if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos3+[0,16*5]);
-		if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos3+[0,16*6], 24, LIGHTNING_WIDTH);
+		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 -1', TRUE,'1 1 1');
+		//if (sitems & IT_SHOTGUN)            Hud_DrawWeapon(0, pos3+[0,16*0]);
+		//if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos3+[0,16*1]);
+		//if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos3+[0,16*2]);
+		//if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos3+[0,16*3]);
+		//if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos3+[0,16*4]);
+		//if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos3+[0,16*5]);
+		//if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos3+[0,16*6], 24, LIGHTNING_WIDTH);
 	} else { //standard nq sbar
-		drawpic(pos, "gfx/ibarkeep", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
-		if (sitems & IT_SHOTGUN)			Hud_DrawWeapon(0, pos+[24*1,8]);
+		// ACTUAL HUD
+		// ====================================================================
+
+		// Inventory background (top half of HUD)
+		drawpic(pos,"gfx/ibarkeep",'480 24 0','1 1 1',autocvar(scr_sbaralpha,0.75),0);
+
+		// slot1
+		if (sitems & IT_SHOTGUN || smoditems & IT_ICE || sperms & IT_BLASTER) {
+			if (sweapon == IT_SHOTGUN) {
+				if (sperms & IT_BLASTER) slot1 = "gfx/inv2_blaster";
+				else slot1 = "gfx/inv2_shotgun";
+			} else if (sweapon == IT_ICE && shackbank) slot1 = "gfx/inv2_ice";
+			else if (sitems & IT_SHOTGUN) {
+				if (sperms & IT_BLASTER) slot1 = "gfx/inv_blaster";
+				else slot1 = "gfx/inv_shotgun";
+			} else if (smoditems & IT_ICE) slot1 = "gfx/inv_shotgun";
+
+			//drawcharacter(pos+[28,16],143, '8 8 0','1 1 1', 1, 0);
+			//drawcharacter(pos+[34,16], 15, '8 8 0','1 1 1', 1, 0);
+			//drawcharacter(pos+[40,16], 15, '8 8 0','1 1 1', 1, 0);
+		}
+
 		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos+[24*2,8]);
 		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos+[24*3,8]);
 		if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos+[24*4,8]);
 		if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos+[24*5,8]);
 		if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos+[24*6,8]);
 		if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos+[24*7,8], LIGHTNING_WIDTH, LIGHTNING_WIDTH);
+
+		drawpic(pos+[24*1,8],slot1,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*2,8],slot2,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*3,8],slot3,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*4,8],slot4,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*5,8],slot5,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*6,8],slot6,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*7,8],slot7,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*8,8],slot8,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[24*9,8],slot9,'24 16 0','1 1 1',1,0);
+		drawpic(pos+[   0,8],slot0,'24 16 0','1 1 1',1,0);
+
 		Hud_DrawAmmoCount(0, pos + '11 0 0', FALSE);
 		Hud_DrawAmmoCount(1, pos + '59 0 0', FALSE);
 		Hud_DrawAmmoCount(2, pos + '107 0 0', FALSE);
@@ -610,18 +655,20 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawModAmmoCount(getstatf(69),pos + '327 0 0',FALSE,'1 1 1'); // ammo_elemental
 		Hud_DrawModAmmoCount(getstatf(68),pos + '368 0 0',FALSE,'1 1 1'); // ammo_bloodcrystals
 		Hud_DrawModAmmoCount(getstatf(67),pos + '412 0 0',FALSE,'1 1 1'); // ammo_plasma
+
+		// ====================================================================
 	}
 
-	if (sitems & IT_KEY1) drawpic(pos+'192 8 0', "gfx/sb_key1", '16 16 0', '1 1 1', 1, 0);
-	if (sitems & IT_KEY2) drawpic(pos+'208 8 0', "gfx/sb_key2", '16 16 0', '1 1 1', 1, 0);
-	if (sitems & IT_INVISIBILITY) drawpic(pos+'224 8 0', "gfx/sb_invis", '16 16 0', '1 1 1', 1, 0);
-	if (sitems & IT_INVULNERABILITY) drawpic(pos+'240 8 0', "gfx/sb_invuln", '16 16 0', '1 1 1', 1, 0);
-	if (sitems & IT_SUIT) drawpic(pos+'256 8 0', "gfx/sb_suit", '16 16 0', '1 1 1', 1, 0);
-	if (sitems & IT_QUAD) drawpic(pos+'272 8 0', "gfx/sb_quad", '16 16 0', '1 1 1', 1, 0);
-	if (serverflags & SVR_RUNE_KEY1) drawpic(pos+'288 8 0', "gfx/sb_sigil1", '8 16 0', '1 1 1', 1, 0);
-	if (serverflags & SVR_RUNE_KEY2) drawpic(pos+'296 8 0', "gfx/sb_sigil2", '8 16 0', '1 1 1', 1, 0);
-	if (serverflags & SVR_RUNE_KEY3) drawpic(pos+'304 8 0', "gfx/sb_sigil3", '8 16 0', '1 1 1', 1, 0);
-	if (serverflags & SVR_RUNE_KEY4) drawpic(pos+'312 8 0', "gfx/sb_sigil4", '8 16 0', '1 1 1', 1, 0);
+	if (sitems & IT_KEY1) drawpic(pos+'264 8 0', "gfx/sb_key1", '16 16 0', '1 1 1', 1, 0);
+	if (sitems & IT_KEY2) drawpic(pos+'280 8 0', "gfx/sb_key2", '16 16 0', '1 1 1', 1, 0);
+	//if (sitems & IT_INVISIBILITY) drawpic(pos+'360 8 0', "gfx/sb_invis", '16 16 0', '1 1 1', 1, 0);
+	//if (sitems & IT_INVULNERABILITY) drawpic(pos+'376 8 0', "gfx/sb_invuln", '16 16 0', '1 1 1', 1, 0);
+	//if (sitems & IT_SUIT) drawpic(pos+'392 8 0', "gfx/sb_suit", '16 16 0', '1 1 1', 1, 0);
+	//if (sitems & IT_QUAD) drawpic(pos+'408 8 0', "gfx/sb_quad", '16 16 0', '1 1 1', 1, 0);
+	if (serverflags & SVR_RUNE_KEY1) drawpic(pos+'448 8 0', "gfx/sb_sigil1", '8 16 0', '1 1 1', 1, 0);
+	if (serverflags & SVR_RUNE_KEY2) drawpic(pos+'456 8 0', "gfx/sb_sigil2", '8 16 0', '1 1 1', 1, 0);
+	if (serverflags & SVR_RUNE_KEY3) drawpic(pos+'464 8 0', "gfx/sb_sigil3", '8 16 0', '1 1 1', 1, 0);
+	if (serverflags & SVR_RUNE_KEY4) drawpic(pos+'472 8 0', "gfx/sb_sigil4", '8 16 0', '1 1 1', 1, 0);
 
 	if (deathmatch) { //should probably show team scores, but this mimics vanilla
 		pos_x += 194;

@@ -1017,10 +1017,8 @@ void() monster_spawndelay = { // [FUNCTION]
 
 // Setup bounding box for monster (based on types)
 void() monster_bbox =  { // [FUNCTION]
-	if (self.bboxtype == BBOX_CUSTOM && VectorIsAllZeros(self.bbmins)
-        && VectorIsAllZeros(self.bbmaxs)) return; // We already set self.bbmins
-												  // and self.bbmaxs, unless we
-												  // didn't lol.
+	if (self.bboxtype == BBOX_CUSTOM) return; // We already set self.bbmins and
+											  // self.bbmaxs, unless we didn't!
 	if (self.bboxtype == BBOX_TINY)
 		// Lost Soul, Scorpion, Spider, Voreling
 		{ self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 16'; }

@@ -55,6 +55,8 @@ void(float offset) dlord_shot = { // [FUNCTION]
 	local vector org;
 	local vector vec;
 
+	if (!self.enemy) return;
+
 	if (visible(self.enemy))
 		self.oldorigin = self.enemy.origin;
 

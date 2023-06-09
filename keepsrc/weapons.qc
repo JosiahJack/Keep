@@ -1082,25 +1082,28 @@ void() W_Fire_Crossbow_Poison = { // [FUNCTION]
 	org = self.origin + '0 0 16';
 	self.poisonous = 1;
 	newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT2,1100);
+	self.poisonous = 0;
 };
 
 void() W_FireIceCrossbow = { // [FUNCTION]
     local vector start, dir, vx, vy;
 
-    if (self.ammo_bolts < 1) return;
+    if (self.ammo_bolts < 1 && self.ammo_poison < 1) return;
 
-    self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
+	if (self.ammo_poison > 0) self.currentammo = self.ammo_poison = self.ammo_poison - 1;
+    else self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
+
     self.punchangle_x = -2;
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;    // No auto-aim please.
     vx = v_forward * 0.9848;    // cos(10)
     vy = v_right * 0.1736;      // sin(10)
-    Buriza_Launch (start, dir);
-    if (self.tome_finished) { // ToP: Shoot two more to the sides for free.
-        Buriza_Launch (start, vx + vy);
-        Buriza_Launch (start, vx - vy);
-    }
+	if (self.ammo_poison > 0) self.poisonous = 1;
+    Buriza_Launch(start, dir);
+	self.poisonous = 0;
+	if (self.tome_finished) W_Reload(0.13);
+	else W_Reload(0.9);
 };
 
 void() W_FirePlasma = { // [FUNCTION]
@@ -1573,7 +1576,12 @@ void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 			targ.weaponmodel = "progs/hipnotic/v_laserg.mdl";
 		} else if (targ.weapon == IT_EXTRA_WEAPON) {
 			if (targ.perms & IT_FROSTBOW) {
-				targ.currentammo = targ.ammo_bolts;
+				if (targ.ammo_poison > 0) {
+					targ.currentammo = targ.ammo_poison;
+				} else {
+					targ.currentammo = targ.ammo_bolts;
+				}
+
 				targ.weaponmodel = "progs/drake/v_xbow.mdl";
 			} else {
 				if (targ.ammo_poison > 0) {
@@ -1667,7 +1675,7 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 	if (targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) ) return IT_SUPER_NAILGUN;
 	if (targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) ) return IT_LAVA_NAILGUN;
 	if (targ.ammo_elemental > 0 && (targ.items & IT_SCIMITAR) ) return IT_SCIMITAR;
-	if (targ.ammo_bolts > 1 && (targ.items & IT_EXTRA_WEAPON) ) return IT_EXTRA_WEAPON;
+	if ((targ.ammo_bolts > 1 || targ.ammo_poison > 1) && (targ.items & IT_EXTRA_WEAPON) ) return IT_EXTRA_WEAPON;
 	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
 	if (targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) ) return IT_SUPER_SHOTGUN; // greater than 2 in case of upgraded triple shotgun Widowmaker
 	if (targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) ) return IT_NAILGUN;

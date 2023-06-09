@@ -1954,6 +1954,7 @@ void(vector start, vector dir) Buriza_Launch = { // [FUNCTION]
     newmis.touch        = Buriza_Touch;
     newmis.delay        = time + 10;    // Give it long range.
     newmis.nextthink    = 0.01;
+	newmis.poisonous    = newmis.owner.poisonous;
     newmis.think        = Buriza_Think;
     setall(newmis, "progs/drake/arrow.mdl", '0 0 0', '0 0 0', start);
 };

@@ -193,7 +193,7 @@ float() Wraith_FindSoul = { // [FUNCTION]
     local float dist, d;
     local entity head, targ;
 
-	if (self.enemy) return FALSE;
+	if (self.enemy || self.gorging) return FALSE;
 
 	// Find the nearest lost soul in case a friend wraith was attacked.
     dist = 1001;

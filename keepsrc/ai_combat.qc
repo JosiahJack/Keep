@@ -900,7 +900,8 @@ void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
 	if (targ.flags & FL_CLIENT) return;
 
 	sound(targ,CHAN_ITEM,"drake/weapons/freeze.wav",1,ATTN_NORM);
-	Particle_Cube(self, 1, 41);
+	Particle_Cube(targ, 1, 41);
+	SpawnBlood(attacker,targ.origin,'0 0 100',300,73);
     targ.oldenemy = attacker;
     targ.enemy = world;
 	SUB_Think(targ,FreezeFinish,0.05);

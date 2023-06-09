@@ -643,15 +643,27 @@ void() display_configflag = { // [FUNCTION]
 
 // Give the player various sigils (serverflag)
 void(float sigil_bit) givesigil = { // [FUNCTION]
-	if (impulse_activecameras()) return;	// Are cameras active
-	if (impulse_playeronly()) return;		// Player only
-
 	dprint("\b[SIGIL]\b Server updated ("); 
 	dprint(ftos(sigil_bit)); dprint(")\n");
-	if (sigil_bit & SVR_RUNE_KEY1) update_configflag(SVR_RUNE_KEY1,TRUE);
-	if (sigil_bit & SVR_RUNE_KEY2) update_configflag(SVR_RUNE_KEY2,TRUE);
-	if (sigil_bit & SVR_RUNE_KEY3) update_configflag(SVR_RUNE_KEY3,TRUE);
-	if (sigil_bit & SVR_RUNE_KEY4) update_configflag(SVR_RUNE_KEY4,TRUE);
+	if (sigil_bit & SVR_RUNE_KEY1) {
+		update_configflag(SVR_RUNE_KEY1,TRUE);
+		self.serverflagstemp = self.serverflagstemp | SVR_RUNE_KEY1;
+	}
+
+	if (sigil_bit & SVR_RUNE_KEY2) {
+		update_configflag(SVR_RUNE_KEY2,TRUE);
+		self.serverflagstemp = self.serverflagstemp | SVR_RUNE_KEY2;
+	}
+
+	if (sigil_bit & SVR_RUNE_KEY3) {
+		update_configflag(SVR_RUNE_KEY3,TRUE);
+		self.serverflagstemp = self.serverflagstemp | SVR_RUNE_KEY3;
+	}
+
+	if (sigil_bit & SVR_RUNE_KEY4) {
+		update_configflag(SVR_RUNE_KEY4,TRUE);
+		self.serverflagstemp = self.serverflagstemp | SVR_RUNE_KEY4;
+	}
 };
 
 // Give the player silver/gold keys

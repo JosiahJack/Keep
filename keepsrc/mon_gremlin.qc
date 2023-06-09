@@ -317,20 +317,21 @@ void(float dist) gremlin_run = {
    local vector d, ang, end;
 
    movedist = dist;
-   if (self.stoleweapon )
-      self.frame = ((self.frame + 164.000) - 29.000);
+   if (self.stoleweapon) self.frame = ((self.frame + 164.000) - 29.000);
 
-   if (self.gorging ) {
+   if (self.gorging && self.enemy) {
       traceline (self.origin,self.enemy.origin,TRUE,self);
       if ( (trace_fraction != TRUE) ) {
          self.gorging = FALSE;
          return ;
       }
-      if ( !visible (self.enemy) ) {
+
+      if (!visible (self.enemy) ) {
          self.gorging = FALSE;
          return ;
       }
-      r = vlen ((self.enemy.origin - self.origin));
+
+      r = vlen((self.enemy.origin - self.origin));
       if ( (r < 130.000) ) {
          ai_face();
          if ( (r < 45.000) ) {
@@ -350,7 +351,7 @@ void(float dist) gremlin_run = {
       if ( (random () > 0.970) ) {
          if (GremlinFindTarget()) return;
       }
-      if (self.stoleweapon ) {
+      if (self.stoleweapon && self.enemy) {
          if ( ((self.enemy.health < FALSE) && (self.enemy.classname == "player")) ) {
             gremlin_glook1();
             return ;

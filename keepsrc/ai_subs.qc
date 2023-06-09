@@ -272,6 +272,8 @@ float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable = {
 float() ai_tracebreakable = {
 	local vector spot1, spot2;
 	local float mon_height;
+
+	if (!self) return FALSE;
 	
 	// Take current facing angle of monster
 	makevectors(self.angles);

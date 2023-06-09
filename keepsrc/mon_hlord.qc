@@ -801,6 +801,7 @@ void() monster_hell_lord_precache = { // [FUNCTION]
     precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
+    precache_model(MODEL_PROJ_LAVA);
     precache_sound("hknight/attack1.wav");
     precache_sound("hknight/hit.wav");    // used by C code, so don't sound2
     precache_sound("hknight/slash1.wav");
