@@ -3611,7 +3611,7 @@ color(128 0 128) = TrigBasic [
 ]
 
 //_____Misc MODEL_____
-@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({"path": mdl, "skin": __show_skin, "frame": __show_frame}) = misc_model : "Misc Models - Load custom models(.MDL files), as props, that are not predefined in the base game/mod. They can be setup with specific frame/skin and animation groups. Note - Having knowledge of at least opening/viewing '.mdl' files(ex QME) is recommended if customizing the settings." [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({"path": mdl, "skin": __show_skin, "frame": __show_frame, "scale":scale, "path": mdl}) = misc_model : "Misc Models - Load custom models(.MDL files), as props, that are not predefined in the base game/mod. They can be setup with specific frame/skin and animation groups. Note - Having knowledge of at least opening/viewing '.mdl' files(ex QME) is recommended if customizing the settings." [
 	spawnflags(Flags) = [
 		 2 : "Collison" : 0 : "Model bbox collision enabled"
 		 4 : "Moveable" : 0 : "Model can be moved around like an item"
