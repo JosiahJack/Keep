@@ -465,7 +465,7 @@ float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 		if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) return theta;
 		else return ELEV_DEFAULT; //check if the destination is too far to reach
 	}
-	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) {
+	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES && self.flags & FL_MONSTER) {
 		y = 0; // Reset loop counter
 		// newton raphson to within 1 degree, no more than 4x
 		while (fabs(oldtheta - theta) > 1 && y < 4) {

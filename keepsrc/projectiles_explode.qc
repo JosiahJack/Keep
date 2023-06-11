@@ -600,35 +600,49 @@ void() lightning_orb_death = { // [FUNCTION]
 };
 
 void() MiniGrenadeExplode = { // [FUNCTION]
-	if ( (self.owner.classname == "player") ) T_RadiusDamage(self,self.owner,90.000,world,DAMAGEALL);
-	else T_RadiusDamage(self,self.owner,60.000,world,DAMAGEALL);
+	if ( (self.owner.classname == "player") ) {
+        if (self.owner.tome_finished) {
+            T_RadiusDamage(self,self.owner,110,world,DAMAGEALL);
+        } else T_RadiusDamage(self,self.owner,90,world,DAMAGEALL);
+    } else T_RadiusDamage(self,self.owner,60,world,DAMAGEALL);
 
 	WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
 	WriteByte(MSG_BROADCAST,TE_EXPLOSION);
 	WriteCoord(MSG_BROADCAST,self.origin_x);
 	WriteCoord(MSG_BROADCAST,self.origin_y);
 	WriteCoord(MSG_BROADCAST,self.origin_z);
-	BecomeExplosion();
+    if (self.enemy) {
+        if (self.enemy.monsterflags & MF_QMASTER_TARGETTED) {
+            self.enemy.monsterflags = self.enemy.monsterflags - MF_QMASTER_TARGETTED;
+        }
+    }
+
+    if (self.owner.tome_finished) {
+        Ember_Shower(2);
+        BecomeTheBigFire();
+    } else {
+        BecomeExplosion();
+    }
 };
 
 void() MultiGrenadeExplode = { // [FUNCTION]
-	newmis = MiniGrenadeLaunch(FALSE);
+	newmis = MiniGrenadeLaunch(0);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	newmis = MiniGrenadeLaunch(72.000);
+	newmis = MiniGrenadeLaunch(72);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	newmis = MiniGrenadeLaunch(144.000);
+	newmis = MiniGrenadeLaunch(144);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	newmis = MiniGrenadeLaunch(216.000);
+	newmis = MiniGrenadeLaunch(216);
 	if (self.lefty) newmis.nextthink = time + 0.15;
-	newmis = MiniGrenadeLaunch(288.000);
+	newmis = MiniGrenadeLaunch(288);
 	if (self.lefty) newmis.nextthink = time + 0.15;
 
     if (self.tome_finished || self.owner.tome_finished) {
-        newmis = MiniGrenadeLaunch(36.000);
+        newmis = MiniGrenadeLaunch(36);
         if (self.lefty) newmis.nextthink = time + 0.15;
-        newmis = MiniGrenadeLaunch(98.000);
+        newmis = MiniGrenadeLaunch(98);
         if (self.lefty) newmis.nextthink = time + 0.15;
-        newmis = MiniGrenadeLaunch(252.000);
+        newmis = MiniGrenadeLaunch(252);
         if (self.lefty) newmis.nextthink = time + 0.15;
     }
 	remove(self);
@@ -648,7 +662,18 @@ void() MultiRocketExplode = { // [FUNCTION]
    WriteCoord (MSG_BROADCAST,self.origin_x);
    WriteCoord (MSG_BROADCAST,self.origin_y);
    WriteCoord (MSG_BROADCAST,self.origin_z);
-   BecomeExplosion();
+    if (self.enemy) {
+        if (self.enemy.monsterflags & MF_QMASTER_TARGETTED) {
+            self.enemy.monsterflags = self.enemy.monsterflags - MF_QMASTER_TARGETTED;
+        }
+    }
+
+    if (self.owner.tome_finished) {
+        Ember_Shower(3);
+        BecomeTheBigFire();
+    } else {
+        BecomeExplosion();
+    }
 };
 
 void(float burstcharge) beam_water_burst = { // [FUNCTION]

@@ -1280,30 +1280,18 @@ void() W_FireMultiGrenade = { // [FUNCTION]
 	makevectors(self.v_angle);
 	dir = v_forward;
 	spd = SPEED_PLAYGRENADE;
+	if (self.tome_finished) spd = 800; // Faster
 	if (autoaim_cvar < 1) spd = SPEED_PLAYAIM;
-	if (self.tome_finished) {
-		spd = 800; // Faster
-		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
-			dir = dir + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
-		} else {
-			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,SPEED_PLAYAIM); // Check for auto aim state
-			dir = dir * spd;
-			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
-		}
-		avel = vecrand(100,200,FALSE);
-        newmis = launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTI,1);
-		newmis.tome_finished = 1;
-    } else {
-		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
-			dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
-		} else {
-			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,spd); // Check for auto aim state
-			dir = dir * spd;
-			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
-		}
-		avel = vecrand(100,200,FALSE);
-		newmis = launch_projectile(self.origin, dir, avel, CT_PROJ_GLMULTI,1);
+	if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
+		dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
+	} else {
+		if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,spd); // Check for auto aim state
+		dir = dir * spd;
+		dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 	}
+	avel = vecrand(100,200,FALSE);
+	newmis = launch_projectile(self.origin, dir, avel, CT_PROJ_GLMULTI,1);
+	newmis.tome_finished = self.tome_finished;
 };
 
 void() W_FireMultiRocket = { // [FUNCTION]

@@ -669,6 +669,9 @@ void() func_door = { // [ENTITY]
 		return;
 	}
 	
+	if (world.model == "maps/mj4m5.bsp" && self.customkey == 4) {
+		self.height = 54;
+	}
 	if (self.height > 0) self.pos2 = self.pos1 + (self.movedir*self.height); // Check if height is defined? (used by func_plat).  Much easier system to setup, instead of voodoo lip magic!
 	else self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip); // Default movement system = move direction * (size - lip)
 

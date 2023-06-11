@@ -437,7 +437,7 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/madfox/fountain_waterA.mdl") self.mdl = "progs/madfox/fountain_watera.mdl";
 	if (self.mdl == "progs/madfox/warbannerA.mdl") self.mdl = "progs/madfox/warbannera.mdl";
 	if (self.mdl == "progs/madfox/torch.MDL") self.mdl = "progs/madfox/torch.mdl";
-	if (self.mdl == "progs/madfox/trance10.MDL") self.mdl = "progs/madfox/trance10.mdl";
+	//if (self.mdl == "progs/madfox/trance10.MDL") self.mdl = "progs/madfox/trance10.mdl";
 	if (self.mdl == "progs/madfox/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
 	if (self.mdl == "progs/tonyn/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
 	if (self.mdl == "progs/tonyn/cupid3.mdl") self.mdl = "progs/madfox/cupid3.mdl";

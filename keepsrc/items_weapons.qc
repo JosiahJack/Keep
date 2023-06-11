@@ -557,7 +557,7 @@ void() weapon_mjolnir = {
 };
 
 void() weapon_wand = {
-	item_setupmodel(MODEL_GWEAP_WAND,0);
+	item_setupmodel("progs/drake/g_wand.mdl",0);
 	self.weapon = IT2_CROSS;
 	self.classtype = CT_WAND;
 	if (self.netname == "") self.netname = "Freyr's Wand (Light Bringer)";

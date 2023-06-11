@@ -492,7 +492,7 @@ void() lightning_orb_think = { // [FUNCTION]
 void() HomingMissileThink = { // [FUNCTION]
    local vector dir;
 
-   if (self.enemy.health < TRUE) { remove (self); return; }
+   if (self.enemy.health < TRUE) { MultiRocketExplode(); return; }
 
    dir = normalize ((self.enemy.origin - self.origin));
    self.velocity = (dir * 1000.000);
@@ -501,28 +501,57 @@ void() HomingMissileThink = { // [FUNCTION]
 };
 
 void() HomingMissileAcquire = { // [FUNCTION]
-   local vector oldVelocity, aimangle;
+    local vector oldVelocity, aimangle;
+    local float rad, loopiter;
+    local entity head;
 
-   if (self.delay < time) { MultiRocketExplode(); return ; }
+    if (self.delay < time) { MultiRocketExplode(); return ; }
 
-   oldVelocity = self.velocity;
-   makevectors(self.v_angle);
-   self.velocity = aim (self,1000.000);
-   self.velocity = (self.velocity * 1000.000);
-   aimangle = (self.origin + self.velocity);
-   traceline(self.origin,aimangle,FALSE,self);
-   if ( (trace_fraction < TRUE) ) {
-      if ((trace_ent.flags & FLx_CREATURE) && Align_Opposing(self,trace_ent)) {
-         self.enemy = trace_ent;
-         HomingMissileThink();
-         return;
-      }
-   }
-   self.velocity = oldVelocity;
-   self.v_angle = vectoangles(self.velocity);
-   self.angles = self.v_angle;
-   self.think = HomingMissileAcquire;
-   self.nextthink = (time + 0.200);
+    oldVelocity = self.velocity;
+    makevectors(self.v_angle);
+    self.velocity = aim (self,1000.000);
+    self.velocity = (self.velocity * 1000.000);
+    aimangle = (self.origin + self.velocity);
+    traceline(self.origin,aimangle,FALSE,self);
+    if ( (trace_fraction < TRUE) ) {
+        if ((trace_ent.flags & FLx_CREATURE) && Align_Opposing(self,trace_ent)) {
+            self.enemy = trace_ent;
+            self.enemy.monsterflags = self.enemy.monsterflags | MF_QMASTER_TARGETTED;
+            HomingMissileThink();
+            return;
+        }
+    }
+
+    if (self.tome_finished) {
+        loopiter = 0;
+        head = findradius(self.origin, 256);
+        while (head) {
+            loopiter = loopiter + 1;
+            if (head != self && vlen(head.origin - self.owner.origin) > 192) {
+                traceline(self.origin,head.origin,FALSE,self);
+                if (trace_fraction < TRUE ) {
+                    if ((trace_ent.flags & FLx_CREATURE)
+                        && (!(trace_ent.monsterflags & MF_QMASTER_TARGETTED)
+                            || random() < 0.2)
+                        && Align_Opposing(self,trace_ent)) {
+
+                        self.enemy = trace_ent;
+                        self.enemy.monsterflags = self.enemy.monsterflags | MF_QMASTER_TARGETTED;
+                        HomingMissileThink();
+                        return;
+                    }
+                }
+            }
+            head = head.chain;
+            if (loopiter >= 100) break;
+        }
+    }
+
+    self.velocity = oldVelocity;
+    self.v_angle = vectoangles(self.velocity);
+    self.angles = self.v_angle;
+    self.think = HomingMissileAcquire;
+    self.nextthink = (time + 0.200);
 };
 
 void() beam_generate = { // [FUNCTION]
@@ -601,7 +630,7 @@ void() BFGTracerThink = { // [FUNCTION]
 void() Echo_Think = { // [FUNCTION]
     if (frame_pause()) { remove(self); return; }
 
-    if (((self.owner.button0 || self.tome_finished || self.owner.perms & POW_DOUBLE)) && (self.owner.health > 0)) {
+    if (((self.owner.button0 || self.owner.tome_finished || self.owner.perms & POW_DOUBLE)) && (self.owner.health > 0)) {
         SUB_ThinkImmediate(self.owner, self.think1);
     }
     remove(self);

@@ -1632,6 +1632,7 @@ void() PlayerPostThink = {
 		self.touchedsound = "";
 	}
 	if (!(self.flags & FL_ONGROUND)) self.jump_flag = self.velocity_z; // If flying through the air, store player Z velocity in jump flag
+	else self.macejump = FALSE;
 	ClientPowerups();
 	ClientDeBuff();
     CheckMjolnir(); // SoE:  Modified throwing hammer.

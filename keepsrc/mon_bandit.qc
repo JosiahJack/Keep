@@ -219,6 +219,7 @@ void() monster_bandit_precache = {
     precache_sound("drake/goblin/sight1.wav");
     precache_sound("drake/goblin/sight2.wav");
     precache_sound("drake/goblin/sight3.wav");
+    precache_sound("drake/goblin/sight4.wav");
 };
 
 // QUAKED monster_bandit (1 0 0) (-16 -16 -24) (16 16 40) Ambush

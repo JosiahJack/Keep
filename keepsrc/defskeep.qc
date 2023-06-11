@@ -343,7 +343,6 @@ string MODEL_GWEAP_LNG = "progs/g_lava.mdl";
 string MODEL_GWEAP_LSNG = "progs/g_lava2.mdl";
 string MODEL_GWEAP_PROX = "progs/hipnotic/g_prox.mdl";
 string MODEL_GWEAP_LASER = "progs/hipnotic/g_laserg.mdl";
-string MODEL_GWEAP_WAND= "progs/drake/g_wand.mdl";
 string MODEL_VWEAP_LAVANG = "progs/v_lava.mdl";			// Lava nailgun
 string MODEL_VWEAP_LAVASNG = "progs/v_lava2.mdl";		// Lava Super Nailgun
 string MODEL_VWEAP_MULTG = "progs/v_multi.mdl";			// Multi-Grenade Launcher
@@ -551,6 +550,7 @@ float MF_SHUFFLER_MINION= 512;	//spawned by a shuffler
 float MF_GANG_SPAWNED	= 1024;	//spawned by a gangspawner
 float MF_SMOOTH_FLIGHT	= 2048;	//flymonsters/swimmonsters move using entirely velocity changes
 float MF_TFRAG_PRIORITY = 4096;	//give monsters priority when telefragging
+float MF_QMASTER_TARGETTED = 8192; // Already targetted by a homing missile.
 float M_AMBUSH			= 1;
 float M_GROUP			= 2;	//collect 6 of these into a single edict (replaces M_NOJUMP)
 float M_SPAWNED			= 4;	//spawn into the level even if not grouped (replaces M_NOSIGHT)
@@ -684,3 +684,4 @@ entity fliquid_head; // Borrowed schema from Gyro physics to handle checking all
 float gibbed_this_frame;
 float total_goodmonsters;
 .entity hammer; // The thrown mjolnir!
+.float macejump; // Indicate that we have already lunged with the mace.

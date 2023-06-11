@@ -554,6 +554,7 @@ entity(vector org, vector dir, vector avel, float proj_type, float proj_speed) l
 	} else if (proj_type == CT_PROJ_GLMULTI) {
 		SetNewmisCommonGrenadeParameters(); 
 		newmis.mdl = "progs/rogue/mervup.mdl";
+		newmis.tome_finished = self.tome_finished;
 		newmis.touch = MultiGrenadeTouch;
 		newmis.think = MultiGrenadeExplode;
 		newmis.lefty = FALSE;
@@ -568,6 +569,7 @@ entity(vector org, vector dir, vector avel, float proj_type, float proj_speed) l
 		newmis.th_die = MiniGrenadeExplode;
 		newmis.lefty = TRUE;
 		newmis.master = newmis.owner.owner;
+		newmis.tome_finished = newmis.master.tome_finished;
 		newmis.owner = newmis.master;
 		newmis.nextthink = ((time + TRUE) + (crandom () * 0.500));
 		newmis.classname = "MiniGrenade";
@@ -725,11 +727,13 @@ entity(vector org, vector dir, vector avel, float proj_type, float proj_speed) l
 		newmis.velocity  = dir * newmis.speed;
 		newmis.height    = 50; // speed increase facter per think (every 0.1s) up to 1500 max speed
 		newmis.volume    = 0.7071; // Tracking fov (63.639 degrees)
-		newmis.enemy     = SuperRocket_Target (newmis.owner, org, dir, 2000, newmis.volume);
+		newmis.enemy     = SuperRocket_Target(self,org, dir,2000,newmis.volume);
 		newmis.yaw_speed = 10;
 		newmis.cnt       = 2;   // Increase yaw_speed by this after each think.
 		newmis.state     = 0;   // Aim directly at enemy.  Use 1 to intercept.
 		newmis.delay     = newmis.nextthink;
+		newmis.touch       = Explode_Grenade;
+		newmis.think1      = BecomeBigBang;
 		SUB_Think(newmis,SuperRocket_Think,0.2);
 	} else if (proj_type == CT_PROJ_GARG) {
 		SetNewmisCommonRocketParameters();
@@ -1286,21 +1290,56 @@ void() Hydra_Split = { // [FUNCTION]
 };
 
 entity(float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
-	local vector dir,avel;
-	local float tempRand;
+	local vector dir, avel, ang;
+	local float tempRand, loopiter, elev;
+	local entity head, boom;
 
-	dir = self.v_angle;
-	dir_y = dir_y + offsetAngle;
-	makevectors(dir);
-	dir = ((v_forward * 100.000) + (v_up * 400));
-	tempRand = ((crandom() * 60.000) - 30);
-	dir = (dir + (tempRand * v_forward));
-	tempRand = ((crandom() * 40) - 20.000);
-	dir = (dir + (tempRand * v_right));
-	tempRand = ((crandom() * 60.000) - 30);
-	dir = (dir + (tempRand * v_up));
+	head = world;
+	if (self.tome_finished) {
+        loopiter = 0;
+        head = findradius(self.origin, 256);
+        while (head) {
+            loopiter = loopiter + 1;
+            if (head != self && head != self.owner) {
+                traceline(self.origin,head.origin,FALSE,self);
+                if (trace_fraction < TRUE) {
+                    if ((trace_ent.flags & FLx_CREATURE)
+						&& (!(trace_ent.monsterflags & MF_QMASTER_TARGETTED)
+							|| random() < 0.2)
+						&& Align_Opposing(self.owner,trace_ent)) {
+						trace_ent.monsterflags = trace_ent.monsterflags | MF_QMASTER_TARGETTED;
+                        break;
+                    }
+                }
+            }
+            head = head.chain;
+            if (loopiter >= 100) break;
+        }
+	}
+
+	if (head && self.tome_finished) {
+		elev = SUB_Elevation(self.attack_elev,self.origin,head.origin,650);
+		ang = vectoangles(head.origin - self.origin);
+		ang_x = -elev;
+		makevectors(ang);
+ 		dir = v_forward * elev;
+	} else {
+		dir = self.v_angle;
+		dir_y = dir_y + offsetAngle;
+		makevectors(dir);
+		dir = ((v_forward * 100.000) + (v_up * 400));
+		tempRand = ((crandom() * 60.000) - 30);
+		dir = (dir + (tempRand * v_forward));
+		tempRand = ((crandom() * 40) - 20.000);
+		dir = (dir + (tempRand * v_right));
+		tempRand = ((crandom() * 60.000) - 30);
+		dir = (dir + (tempRand * v_up));
+	}
+
 	avel = '300 300 300';
-	return launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTIMINI,1);
+	boom = launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTIMINI,1);
+	if (head) boom.enemy = head;
+	return boom;
 };
 
 entity(float offset, float frameNum) MultiRocketLaunch = { // [FUNCTION]
@@ -1316,6 +1355,7 @@ entity(float offset, float frameNum) MultiRocketLaunch = { // [FUNCTION]
 	newmis.delay = (time + MOVETYPE_STEP);
 	newmis.frame = frameNum;
 	newmis.touch = MultiRocketTouch;
+	newmis.tome_finished = self.tome_finished;
 	if (deathmatch || coop) setmodel(newmis,"progs/rockup_d.mdl");
 	else setmodel(newmis,"progs/rockup.mdl");
 
@@ -2088,6 +2128,7 @@ void() W_EchoSpike_Up = { W_EchoSpike(2); }; // [FUNCTION]
 void() W_EchoSpike_Down = { W_EchoSpike(-2); }; // [FUNCTION]
 
 void(float ox) W_EchoLavaSpike = { // [FUNCTION]
+	local entity stemp;
     local vector org, dir;
     local float cost;
 
@@ -2098,23 +2139,28 @@ void(float ox) W_EchoLavaSpike = { // [FUNCTION]
             if (!self.tome_finished || (ox < 0)) cost = 0; // Assume super nailgun.
         }
     }
-    if (self.ammo_nails < cost) return;
+    if (self.ammo_lava_nails < cost) return;
 
     makevectors(self.v_angle);
     if (self.weapon == IT_LAVA_NAILGUN) sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
     else sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM); // Assume super nailgun.
 
     self.attack_finished = time + 0.2;
-    self.currentammo = self.ammo_nails = self.ammo_nails - cost;
-    if (self.tome_finished) {
-        if (self.weapon == IT_LAVA_NAILGUN) org = self.origin + '0 0 16' + v_right*(ox*3);
-        else org = self.origin + '0 0 16' + v_right*(ox*2);
+    self.currentammo = self.ammo_lava_nails =
+		self.ammo_lava_nails - cost;
 
-        dir = aim (self, 100000);
-        Piercer_Trace (org, org + dir*SPIKEY_RANGE, self, DAMAGE_LAVANGSPIKE, self, TE_GUNSHOT);
+    if (self.tome_finished) {
+        if (self.weapon == IT_LAVA_NAILGUN) {
+			org = self.origin + '0 0 16' + v_right*(ox*3);
+		} else org = self.origin + '0 0 16' + v_right*(ox*2);
+
+        dir = aim(self, 100000);
+        Piercer_Trace(org,org + dir*SPIKEY_RANGE,self,DAMAGE_LAVANGSPIKE,
+					  self, TE_GUNSHOT);
+
         StackDamage_Clear();
     } else {
-        dir = aim (self, 1000);
+        dir = aim(self,1000);
         if (self.weapon == IT_LAVA_NAILGUN) {
 			ox = ox * 1.5;
 			newmis = launch_projectile(self.origin + '0 0 16' + v_right*ox,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE);

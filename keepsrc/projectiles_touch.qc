@@ -564,7 +564,7 @@ void() Touch_Missile = { // [FUNCTION]
 		} else {
 			// Setup rocket damage (vector = base + random and splash)
 			if (self.classtype == CT_PROJ_ROCKET) self.pos1 = DAMAGE_RLPLAYER;
-			else if (self.classtype == CT_PROJ_ROCKETSUPER) self.pos1 = DAMAGE_RLPLAYER;
+			else if (self.classtype == CT_PROJ_ROCKETSUPER) self.pos1 = '120 40 160';
 			else if (self.classtype == CT_PROJ_FURY1) self.pos1 = DAMAGE_RLFURY;
 			else if (self.classtype == CT_PROJ_LAVA) { self.pos1 = DAMAGE_RLPLAYER; lavadmg = TRUE; }
 			else if (self.classtype == CT_PROJ_FIRETOP) { self.pos1 = DAMAGE_RLFIRETOP; lavadmg = TRUE; }
@@ -622,24 +622,56 @@ void() Touch_Missile = { // [FUNCTION]
 
 			// BLAST BELT:  Resistance = 100% for splashdamage, 50% for direct.
 			if (other.flags & FL_CLIENT && other.moditems & IT_ARTBLASTBELT) {
-				PlayBlastBeltSound(other);	// Play impact sound
+				PlayBlastBeltSound(other); // Play impact sound
 				if (other.health > 0) {
-					if (self.dmg <= 0 && self.pos1_z > 0) T_Damage(other, self, self.owner, self.pos1_z*ART_BLASTBELT_DD, DAMARMOR); // Need some damage otherwise projectile does nothing!
-					else if (self.dmg > 0) T_Damage(other, self, self.owner, self.dmg*ART_BLASTBELT_DD, DAMARMOR); // Any direct damage is reduced
+					if (self.dmg <= 0 && self.pos1_z > 0) {
+						// Need some damage otherwise projectile does nothing!
+						T_Damage(other,self,self.owner,
+								 self.pos1_z*ART_BLASTBELT_DD, DAMARMOR);
+					} else if (self.dmg > 0) {
+						// Any direct damage is reduced
+						T_Damage(other, self, self.owner,
+								 self.dmg*ART_BLASTBELT_DD, DAMARMOR);
+					}
 				}
-				if (self.pos1_z > 0) T_RadiusDamage(self, self.owner, self.pos1_z, other, DAMAGEALL);
+
+				if (self.pos1_z > 0) {
+					T_RadiusDamage(self,self.owner,self.pos1_z,other,DAMAGEALL);
+				}
 			} else {
-				if (self.dmg > 0 && other.health > 0) T_Damage(other, self, self.owner, self.dmg, DAMARMOR); // DEFAULT Only call T_ functions if there is damage to do!
-				if (self.pos1_z > 0) T_RadiusDamage(self, self.owner, self.pos1_z, other, DAMAGEALL);
+				if (self.dmg > 0 && other.health > 0) {
+					// DEFAULT Only call T_ functions if there is damage to do!
+					T_Damage(other,self,self.owner,self.dmg,DAMARMOR);
+				}
+
+				if (self.pos1_z > 0) {
+					T_RadiusDamage(self,self.owner,self.pos1_z,other,DAMAGEALL);
+				}
 			}
 		}
 
-		if (other.resist_rockets > 0 || (other.resist_multi_rockets && self.classgroup == CG_PROJMULTIROCKETS)) {
-			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET); // Rocket resistance is shown with puffs of smoke
+		if (other.resist_rockets > 0
+			|| (other.resist_multi_rockets
+				&& self.classgroup == CG_PROJMULTIROCKETS)) {
+
+			// Rocket resistance is shown with puffs of smoke
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,
+						   other.pain_sound,SOUND_RESIST_ROCKET);
 		} else {
-			if (self.poisonous == TRUE) { self.height = EXPLODE_POISON_MED; PoisonDeBuff(other); } // Check for poison debuff (using poisonous flag).  Use new poison explosion.
+			if (self.poisonous == TRUE) {
+				// Check for poison debuff (using poisonous flag).  Use new
+				// poison explosion.
+				self.height = EXPLODE_POISON_MED;
+				PoisonDeBuff(other);
+			}
+			
 			self.origin = self.origin - 8*normalize(self.velocity); // Move the explosion effect higher up from point of contact
-			if (self.classtype == CT_PROJ_ROCKETSUPER || self.classtype == CT_PROJ_SIDEWINDER) self.height = EXPLODE_SMALL; // Because it's used for the think function to adjsut velocity over time.
+			if (self.classtype == CT_PROJ_SIDEWINDER) {
+				// Because it's used for the think function to adjsut velocity
+				//over time.
+				self.height = EXPLODE_SMALL;
+			}
+
 			if (self.height < EXPLODE_PLASMA_SMALL) Tent_Explosion(self.origin); // Default ID particle explosion for fire explosions
 			if (self.noise == "") self.noise = SOUND_REXP3; // Play original explosion sound or replacement
 			SpawnExplosion(self.height, self.origin, self.noise);

@@ -511,6 +511,8 @@ float(entity hpplayer, entity hpitem) health_pickupcondition = { // [FUNCTION]
 // returns FALSE if cannot heal entity by healamount
 // returns TRUE if healamount applied
 float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
+	local float oldh;
+
 	if (!targ) return FALSE;
 	if (targ == world) return FALSE;
 
@@ -522,10 +524,16 @@ float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
 	if (targ.health <= 0) return FALSE;
 	if ((!ignore) && (targ.health >= targ.max_health)) return FALSE;
 	
+	oldh = targ.health;
 	t_healamount = ceil(t_healamount);
 	targ.health = targ.health + t_healamount;
 	if (!ignore && targ.health > targ.max_health) targ.health = targ.max_health;
 	if (targ.health > targ.mega_health) targ.health = targ.mega_health;
+	dprint("T_Heal succesfully healed from ");
+	dprint(ftos(oldh));
+	dprint(", to ");
+	dprint(ftos(targ.health));
+	dprint("\n");
 	return TRUE;
 };
 

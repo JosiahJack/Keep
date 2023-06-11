@@ -122,11 +122,6 @@ void(entity inflictor, entity attacker, float damage) cyber_pain = {
     }
 };
 
-// DEATH
-// Modified SpawnExplosion to use Drake's Tent functions.
-// Also, use Rogue's TE_EXPLOSION2 effect for fewer particles per explosion.
-//void(vector p) SpawnExplosion = { Rocket_Explosion2 (p, 96, 16); };
-
 void() cyber_die1  = [$walk1,  cyber_die2  ] { 	
     // In Doom, the cyderdemon death cry was heard everywhere at full volume.
     sound(self, 7, "drake/cyber/cybdie.wav",1,ATTN_NONE);

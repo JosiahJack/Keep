@@ -37,69 +37,78 @@
 // all that Keep has to offer // TODO: someday, need to add all the weapons
 //=============================================================================
 
+// float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
 //=======================================SELF.ITEMS1======================================================
-float IT_SHOTGUN    		= 1.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_SUPER_SHOTGUN   	= 2.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_NAILGUN    		= 4.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_SUPER_NAILGUN    	= 8.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_GRENADE_LAUNCHER   = 16.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_ROCKET_LAUNCHER    = 32.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_LIGHTNING    		= 64.000;		//Correct for standard HUD & HIP & DOE			W
-// float IT_SHELLS    			= 128.000;		//Correct for DOE HUD					I
-// float IT_NAILS    			= 256.000;		//Correct for DOE HUD					I
-// float IT_ROCKETS    		= 512.000;		//Correct for DOE HUD					I
-// float IT_CELLS    			= 1024.000;		//Correct for DOE HUD					I
-float IT_AXE    			= 2048.000;		//Correct for DOE HUD					W
-float IT_LAVA_NAILGUN    	= 4096.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_LAVA_SUPER_NAILGUN = 8192.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_MULTI_GRENADE    	= 16384.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_MULTI_ROCKET    	= 32768.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_PLASMA_GUN   	 	= 65536.000;		//Correct for DOE HUD					W
-float IT_KEY1    			= 131072.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_KEY2    			= 262144.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_INVISIBILITY    	= 524288.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_INVULNERABILITY    = 1048576.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_SUIT    			= 2097152.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_QUAD    			= 4194304.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_EXTRA_WEAPON  		= 8388608.000;		//Correct for DOE HUD					W
+float IT_SHOTGUN    		= 1.000;		//0  Correct for standard HUD & HIP & DOE			W
+float IT_SUPER_SHOTGUN   	= 2.000;		//1  Correct for standard HUD & HIP & DOE			W
+float IT_NAILGUN    		= 4.000;		//2  Correct for standard HUD & HIP & DOE			W
+float IT_SUPER_NAILGUN    	= 8.000;		//3  Correct for standard HUD & HIP & DOE			W
+float IT_GRENADE_LAUNCHER   = 16.000;		//4  Correct for standard HUD & HIP & DOE			W
+float IT_ROCKET_LAUNCHER    = 32.000;		//5  Correct for standard HUD & HIP & DOE			W
+float IT_LIGHTNING    		= 64.000;		//6  Correct for standard HUD & HIP & DOE			W
+// float IT_SHELLS    			= 128.000;		//7  Correct for DOE HUD					I
+// float IT_NAILS    			= 256.000;		//8  Correct for DOE HUD					I
+// float IT_ROCKETS    		= 512.000;		//9 Correct for DOE HUD					I
+// float IT_CELLS    			= 1024.000;		//10 Correct for DOE HUD					I
+float IT_AXE    			= 2048.000;		//11 Correct for DOE HUD					W
+float IT_LAVA_NAILGUN    	= 4096.000;		//12 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_LAVA_SUPER_NAILGUN = 8192.000;		//13 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_MULTI_GRENADE    	= 16384.000;	//14 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_MULTI_ROCKET    	= 32768.000;	//15 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_PLASMA_GUN   	 	= 65536.000;	//16 Correct for DOE HUD					W
+float IT_KEY1    			= 131072.000;	//17 Correct for standard HUD & HIP & DOE			I
+float IT_KEY2    			= 262144.000;	//18 Correct for standard HUD & HIP & DOE			I
+float IT_INVISIBILITY    	= 524288.000;	//19 Correct for standard HUD & HIP & DOE			I
+float IT_INVULNERABILITY    = 1048576.000;	//20 Correct for standard HUD & HIP & DOE			I
+float IT_SUIT    			= 2097152.000;	//21 Correct for standard HUD & HIP & DOE			I
+float IT_QUAD    			= 4194304.000;	//22 Correct for standard HUD & HIP & DOE			I
+float IT_EXTRA_WEAPON  		= 8388608.000;	//23 Correct for DOE HUD					W
+
+// IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD
+// 524288 + 1048576 + 2097152 + 4194304
+float ALL_ITEMSARTIFACTS = IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD; // All cshift items
 //=======================================SELF.ITEMS2======================================================
-float IT2_ARMOR1    		= 1.000;		//Correct for DOE HUD					I
-float IT2_ARMOR2    		= 2.000;		//Correct for DOE HUD					I
-float IT2_ARMOR3    		= 4.000;		//Correct for DOE HUD					I
-// float IT2_LAVA_NAILS    	= 8.000;		//Correct for DOE HUD					I
-// float IT2_PLASMA_AMMO   	= 16.000;		//Correct for DOE HUD					I
-// float IT2_MULTI_ROCKETS    	= 32.000;		//Correct for DOE HUD					I
-float IT2_SHIELD    		= 64.000;		//Correct for DOE HUD					I
-float IT2_CHAINLIGHTNING	= 128.000;		//Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
-float IT2_SUPERHEALTH    	= 256.000;		//Correct for DOE HUD					I(available for a new weapon)
-float IT2_EARTHQUAKE    	= 512.000;		//Correct for DOE HUD					I(available for a new weapon)
-float IT2_V_SPHERE    		= 1024.000;		//Correct for DOE HUD					I(available for a new weapon)
-// float IT2_BOLTS		    	= 2048.000;		//Keep specific						I
-// float IT2_POISON    		= 4096.000;		//EMTPY SLOT						I
-float HIP_IT2_WETSUIT    	= 8192.000;		//Keep specific (modified from HIP)			I
-float HIP_IT2_EMPATHY_SHIELDS= 16384.000;		//Keep specific (modified from HIP)			I
-float HIP_IT2_HORN_OF_CONJURING= 32768.000;		//Keep specific (modified from HIP)			I
-//= 65536.000;		EMPTY SLOT (skipped...same as IT_PLASMA_GUN)		I
-float IT2_PROXIMITY_GUN    	= 131072.000;		//Keep specific.Unique number for self.weapon calls 	W
-float IT2_MJOLNIR 			= 262144.000;		//Keep specific	""					W
-float IT2_LASER_CANNON    	= 524288.000;		//Keep specific	""					W
-float IT2_GRAPPLE			= 1048576.000;		//Keep specific "" W Rogue grapple
-float IT2_TRINITY			= 2097152.000;		//Quoth
-float IT2_CROSS				= 4194304.000;		//Quoth							(available for a new weapon)
+float IT2_ARMOR1    		= 1.000;		//0  Correct for DOE HUD					I
+float IT2_ARMOR2    		= 2.000;		//1  Correct for DOE HUD					I
+float IT2_ARMOR3    		= 4.000;		//2  Correct for DOE HUD					I
+// float IT2_LAVA_NAILS    	= 8.000;		//3  Correct for DOE HUD					I
+// float IT2_PLASMA_AMMO   	= 16.000;		//4  Correct for DOE HUD					I
+// float IT2_MULTI_ROCKETS    	= 32.000;		//5  Correct for DOE HUD					I
+float IT2_SHIELD    		= 64.000;		//6  Correct for DOE HUD					I
+float IT2_CHAINLIGHTNING	= 128.000;		//7  Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
+float IT2_SUPERHEALTH    	= 256.000;		//8  Correct for DOE HUD					I
+float IT2_EARTHQUAKE    	= 512.000;		//9  Correct for DOE HUD					I
+float IT2_V_SPHERE    		= 1024.000;		//10 Correct for DOE HUD					I
+// float IT2_BOLTS		    	= 2048.000;		//11 Keep specific						I
+// float IT2_POISON    		= 4096.000;		//12 Keep specific						I
+float HIP_IT2_WETSUIT    	= 8192.000;		//13 Keep specific (modified from HIP)			I
+float HIP_IT2_EMPATHY_SHIELDS= 16384.000;	//14 Keep specific (modified from HIP)			I
+float HIP_IT2_HORN_OF_CONJURING= 32768.000;	//15 Keep specific (modified from HIP)			I
+float IT2_KEY_SKELETON		= 65536.000;	//16 Keep's Skeleton Key
+float IT2_PROXIMITY_GUN    	= 131072.000;	//17 Keep specific.Unique number for self.weapon calls 	W
+float IT2_MJOLNIR 			= 262144.000;	//18 Keep specific	""					W
+float IT2_LASER_CANNON    	= 524288.000;	//19 Keep specific	""					W
+float IT2_GRAPPLE			= 1048576.000;	//20 Keep specific "" W Rogue grapple
+float IT2_TRINITY			= 2097152.000;	//20 Quoth
+float IT2_CROSS				= 4194304.000;	//21 Drake magic wand, Quoth							I && W2 (used by Wand)
+float IT2_WAND				= 8388608.000; 	//22 Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
+
+float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
+float ALL_ITEMS2ARTIFACTS = 6291456; // All items that affect screen overlay cshift
 //=======================================SELF.MODITEMS======================================================
-//float UNUSED   			= 1;			//0  I
+float WEAPON_HACKBANK1		= 1;			//0  Used to store self.weaponismoditems during level transitions/saves
 float IT_UPGRADE_SSG		= 2;			//1  AoA		W\
-	float IT_ICE    		= 4;			//2  AoA		W2  HACKBANK!
-	float IT_MACE   		= 8;			//3  AoA		W2  HACKBANK!
-	float IT_VOID_STAFF		= 16;			//4  AoA		W2  HACKBANK!
-	float IT_FLAK   		= 32;			//5  AoA		W2  HACKBANK!
+	float IT_ICE    			= 4;			//2  AoA		W3  HACKBANK!
+	float IT_MACE   			= 8;			//3  AoA		W3  HACKBANK!
+	float IT_VOID_STAFF			= 16;			//4  AoA		W3  HACKBANK!
+	float IT_FLAK   			= 32;			//5  AoA		W3  HACKBANK!
 float IT_UPGRADE_LG			= 64;			//6  Plasma Gun, direct + splashdamage
-	float IT_GUNGNIR   		= 128;			//7  AoA		W2  HACKBANK!
+	float IT_GUNGNIR   			= 128;			//7  AoA		W3  HACKBANK!
 float IT_SANGUINATORS		= 256;			//8  AoA		W
 float IT_SCIMITAR			= 512;			//9  AoA		W
 float IT_RAPIER 			= 1024;			//10 AoA		W
 float IT_UPGRADE_AXE   		= 2048;			//11 Shadow Axe, +75% dmg, +gib bodies
-//float UNUSED				= 4096;			//12
+float IT_MIRV				= 4096;			//12	W\
 float IT_CKEY1				= 8192;			//13 Custom Key 1
 float IT_CKEY2				= 16384;		//14 Custom Key 2
 float IT_CKEY3				= 32768;		//15 Custom Key 3
@@ -111,6 +120,116 @@ float IT_ARTJUMPBOOTS		= 1048576;		//20 JCR Jump Boots (1-4 power levels)
 float IT_ARTSHARP			= 2097152;		//21 Reduce SG/SSG/RG spread pattern
 float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
 float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
+float ALL_MODITEMSARTIFACTS = 16646144; // All items that affect screen overlay cshift
+.float serverflagstemp;
+.float weaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
+float IT_CKEYALL			= 122880;	//17 All Custom keys
+//==========================================================================================================
+// More powerups -----------------------------------------------------------
+// Bits 00-07 (values 1-128) are reserved for health.
+// Bits 08-11 (values 256-2048) are reserved for armor.
+// float   POW_ARMOR1      	= 256;      	// Divide this into perms for suit value.
+// float   POW_POWER_ARMOR 	= 4096;     	// Power shield toggle.
+//==========================================SELF.PERMS======================================================
+float 	POW_ARMORCOURAGE	= 1;			//0
+float 	POW_ARMORDRAGON		= 2;			//1
+float	POW_ARMORONYX		= 4;			//2
+float	POW_ARMORONYXPOWER	= 8;			//3
+float 	POW_ARMORBERSERKER	= 16;			//4
+float 	POW_ARMORSPIRIT		= 32;			//5
+float 	POW_ARMORCHAOS		= 64;			//6
+float 	POW_ARMORNINJA		= 128;			//7
+float 	POW_REGEN			= 256;			//8
+float	POW_REGENLESSER		= 512;			//9
+	float IT_AIRGUN				= 1024;			//10 			W3 HACKBANK!
+float	POW_HASTE			= 2048;			//11	I Twice as fast firing
+float	IT_FROSTBOW			= 4096;			//12	W\
+float   POW_RESIST      	= 8192;     	//13 Half damage.
+float   POW_VITALITY       	= 16384;    	//14 Regeneration.
+float 	IT_SIDEWINDER		= 32768;		//15	W\
+float   POW_DOUBLE      	= 65536;    	//16 Twin shot -- nailgun buff.
+float   POW_SHOTTYMAN		= 131072;   	//17 Shotgun buff.
+float   POW_VAMPIRE     	= 262144;   	//18 Melee buff.
+//float UNUSED        		= 524288;   	//19 Extra ammo capacity.
+float	IT_BLASTER 			= 1048576; 		//20 Drake laser blaster 					W  stored in self.perms.  was POW_20 in Drake, unused
+float	IT_CHAINSAW 		= 2097152;		//21 Drake chainsaw						W stored in self.pems.  was POW_21 in Drake, unused.  Chainsaw is modified version of Zerstorer
+//float UNUSED         		= 4194304;		//22 
+//float UNUSED        		= 8388608;		//23 
+//==========================================SELF.ITEMS3================================================
+.float items3;
+float IT3_FLASHLIGHT		= 1;			//0  Flashlight from Quoth
+float IT3_SECRETHUNTER		= 2;			//1  Secret Hunter (Loki's Cat) 
+float IT3_THORSBLESSING 	= 4;			//2  Free life granted upon would-be death.
+float IT3_FLASHLIGHT_ON   	= 8;			//3  Bit to save flashlight status between saves.
+float IT3_POWERSHIELD_ON	= 16;			//4  Bit to save powershield status between saves.
+//float UNUSED   			= 32;			//5  
+//float UNUSED				= 64;			//6  
+//float UNUSED   			= 128;			//7  
+//float UNUSED				= 256;			//8  
+//float UNUSED				= 512;			//9  
+//float UNUSED 				= 1024;			//10 
+//float UNUSED   			= 2048;			//11 
+//float UNUSED				= 4096;			//12 
+//float UNUSED				= 8192;			//13
+//float UNUSED				= 16384;		//14 
+//float UNUSED				= 32768;		//15 
+//float UNUSED				= 65536;		//16 
+//float UNUSED 				= 131072;		//17 
+//float UNUSED				= 262144;		//18 
+//float UNUSED				= 524288;		//19 
+//float UNUSED				= 1048576;		//20 
+//float UNUSED				= 2097152;		//21 
+//float UNUSED				= 4194304;		//22 
+//float UNUSED				= 8388608;		//23 
+
+// ===WEAPON ORDERING==================================================================================
+/*
+WEAPON KEYBOARD ORDER
+1 - Axe + Shadow Axe + Chainsaw, Grapple, Mace (3)
+2 - Shotgun + Laser Blaster, Blizzard Sphere (2)
+3 - Doublebarrel Shotgun + Widowmaker + Shotcycler + Quad Shotgun, Scimitar (2)
+4 - Nailgun, Lava Nailgun, Rapier (3)
+5 - Perforator, Lava Super Nailgun, Void Staff (3)
+6 - Grenade Launcher, Proximity Grenade Launcher, Multi-Grenade Launcher (3)
+7 - Rocket Launcher, Multi-Rocket Launcher, Sanguinators(3)
+8 - Thunderbolt + Plasmagun(AD), Plasmagun(rogue), Flak Cannon (3)
+9 - Crossbow, Laser Cannon, Chain Lightning Gun (3)
+0 - Wand, Mjolnir, Gungnir (3)
+
+WEAPON ID's											NORMAL e.g.
+														HACKBANK e.g. (indented)
+UniqueID Wepname
+1  Grapple											IT2_GRAPPLE
+2  Axe/Shadowaxe/Chainsaw							IT_AXE
+3  Mace													IT_MACE
+4  Shotgun/Blaster									IT_SHOTGUN
+5  Ice Tome												IT_ICE
+6  Airfist												IT_AIRGUN
+7  DB Shotgun/Riot Controller/Widowmaker/QuadShotgun IT_SUPER_SHOTGUN
+8  Scimitar											IT_SCIMITAR
+9  Nailgun											IT_NAILGUN
+10 Lava Nailgun										IT_LAVA_NAILGUN
+11 Rapier											IT_RAPIER
+12 Perforator										IT_SUPER_NAILGUN
+13 Lava Super Nailgun								IT_LAVA_SUPER_NAILGUN
+14 Void Staff											IT_VOID_STAFF
+15 Grenade Launcher									IT_GRENADE_LAUNCHER
+16 Proximity Grenade Launcher/Sidewinder			IT2_PROXIMITY_GUN
+17 Multi-Grenade Launcher							IT_MULTI_GRENADE
+18 Rocket Launcher/MIRV								IT_ROCKET_LAUNCHER
+19 Multi-Rocket Launcher							IT_MULTI_ROCKET
+20 Sanguinators										IT_SANGUINATORS
+21 Thunderbolt/Plasmagun							IT_LIGHTNING
+22 Plasma Gun(rogue)								IT_PLASMA_GUN
+23 Flak Cannon											IT_FLAK
+24 Crossbow/Frostbow								IT_EXTRA_WEAPON
+25 Laser Cannon										IT2_LASER_CANNON
+26 Chain Lightning Gun								IT2_CHAINLIGHTNING
+27 Wand												IT2_CROSS
+28 Mjolnir											IT2_MJOLNIR
+29 Gungir												IT_GUNGNIR
+*/
+
 //=======================================SERVERFLAGS======================================================
 float SVR_RUNE_ALL		= 15;		// Runes 1-4 (together)
 float SVR_RUNEFLAG		= 255;		// Bits  1- 7 - Runes and Keys
@@ -207,6 +326,7 @@ static float sitems3;		//copy of .items2
 static float smoditems;     //copy of .moditems
 static float sperms; //haha	//copy of .perms
 static float sweapon;		//copy of .weapon
+static float sweaponlast;
 static float shealth;		//copy of .health
 static float sammo_poison;  //copy of .ammo_posion
 static float shackbank;     //copy of .weaponismoditems
@@ -263,6 +383,28 @@ static void() Hud_Init {
 		precache_pic(strcat("gfx/inva4_", weaponnames[i]), TRUE);
 		precache_pic(strcat("gfx/inva5_", weaponnames[i]), TRUE);
 	}
+	precache_pic("gfx/adw_widowm",TRUE);
+	precache_pic("gfx/adws_widowm",TRUE);
+	precache_pic("gfx/inv_mjolnir",TRUE);
+	precache_pic("gfx/inv2_mjolnir",TRUE);
+	precache_pic("gfx/inv_crossbow",TRUE);
+	precache_pic("gfx/inv2_crossbow",TRUE);
+	precache_pic("gfx/inv_crossbow2",TRUE);
+	precache_pic("gfx/inv2_crossbow2",TRUE);
+	precache_pic("gfx/inv_multigren",TRUE);
+	precache_pic("gfx/inv2_multigren",TRUE);
+	precache_pic("gfx/inv_prox",TRUE);
+	precache_pic("gfx/inv2_prox",TRUE);
+	precache_pic("gfx/inv_multirock",TRUE);
+	precache_pic("gfx/inv2_multirock",TRUE);
+	precache_pic("gfx/inv_sanguin",TRUE);
+	precache_pic("gfx/inv2_sanguin",TRUE);
+	precache_pic("gfx/inv_wand",TRUE);
+	precache_pic("gfx/inv2_wand",TRUE);
+	precache_pic("gfx/inv_gungnir",TRUE);
+	precache_pic("gfx/inv2_gungnir",TRUE);
+
+
 	for (i = 0; i < facetab.length; i++) precache_pic(facetab[i], TRUE);
 	precache_pic("gfx/thorface", TRUE);
 	precache_pic("gfx/thorface", TRUE);
@@ -335,32 +477,6 @@ static void(float value, vector pos, float drawback, vector color) Hud_DrawModAm
 		c = str2chr(s, len);
 		drawcharacter(pos+len * '8 0 0', (18-'0') + c, '8 8 0',color, 1, 0);
 	}
-};
-
-static void(float wep, float ishackbank, vector pos) Hud_DrawWeapon = {
-	//string prefix;
-
-	//float flash = (time - flashtime[num])*10;
-	//if (flash >= 10) {
-	//	if (sweapon == (1<<num))prefix = "gfx/inv2_";
-	//	else					prefix = "gfx/inv_";
-	//} else {
-	//	static string tab[] = {"gfx/inva1_","gfx/inva2_","gfx/inva3_","gfx/inva4_","gfx/inva5_"};
-	//	if (flash >= 5) flash -= 5;
-	//	prefix = tab[flash];
-	//}
-
-	//"shotgun",
-	//"sshotgun",
-	//"nailgun",
-	//"snailgun",
-	//"rlaunch",
-	//"srlaunch",
-	//"lightng",
-
-	if (wep == 1) {
-		if (
-	drawpic(pos, "gfx/inv_shotgun", '24 16 0', '1 1 1', 1, 0);
 };
 
 static void(float num, float lflashtime, float iscurrent, vector pos, float drawwidth, float imgwidth) Hud_DrawWeaponEx = {
@@ -571,6 +687,26 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 	Hud_DrawLargeValue(pos+'316 0 0', getstatf(STAT_AMMO), 10);
 };
 
+static void DrawSlotDots(vector pos, float which) {
+	if (which == 0) {
+		drawcharacter(pos+[28,16], 15, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[34,16], 15, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[40,16], 15, '8 8 0','1 1 1', 1, 0);
+	} else if (which == 1) {
+		drawcharacter(pos+[28,16],143, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[34,16], 15, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[40,16], 15, '8 8 0','1 1 1', 1, 0);
+	} else if (which == 2) {
+		drawcharacter(pos+[28,16], 15, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[34,16],143, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[40,16], 15, '8 8 0','1 1 1', 1, 0);
+	} else if (which == 3) {
+		drawcharacter(pos+[28,16], 15, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[34,16], 15, '8 8 0','1 1 1', 1, 0);
+		drawcharacter(pos+[40,16],143, '8 8 0','1 1 1', 1, 0);
+	}
+}
+
 string slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8, slot9, slot0;
 
 static void Hud_DrawIBar(vector pos, vector br) {
@@ -596,13 +732,6 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(2, pos2 + '0 -22', TRUE);
 		Hud_DrawAmmoCount(3, pos2 + '0 -11', TRUE);
 		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 -1', TRUE,'1 1 1');
-		//if (sitems & IT_SHOTGUN)            Hud_DrawWeapon(0, pos3+[0,16*0]);
-		//if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos3+[0,16*1]);
-		//if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos3+[0,16*2]);
-		//if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos3+[0,16*3]);
-		//if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos3+[0,16*4]);
-		//if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos3+[0,16*5]);
-		//if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos3+[0,16*6], 24, LIGHTNING_WIDTH);
 	} else { //standard nq sbar
 		// ACTUAL HUD
 		// ====================================================================
@@ -611,39 +740,226 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		drawpic(pos,"gfx/ibarkeep",'480 24 0','1 1 1',autocvar(scr_sbaralpha,0.75),0);
 
 		// slot1
-		if (sitems & IT_SHOTGUN || smoditems & IT_ICE || sperms & IT_BLASTER) {
-			if (sweapon == IT_SHOTGUN) {
-				if (sperms & IT_BLASTER) slot1 = "gfx/inv2_blaster";
-				else slot1 = "gfx/inv2_shotgun";
-			} else if (sweapon == IT_ICE && shackbank) slot1 = "gfx/inv2_ice";
-			else if (sitems & IT_SHOTGUN) {
-				if (sperms & IT_BLASTER) slot1 = "gfx/inv_blaster";
-				else slot1 = "gfx/inv_shotgun";
-			} else if (smoditems & IT_ICE) slot1 = "gfx/inv_shotgun";
+		if (sitems & IT_AXE || sitems2 & IT2_GRAPPLE || smoditems & IT_MACE) {
+			if (sweapon == IT_AXE && !shackbank) {
+				if (smoditems & IT_UPGRADE_AXE) slot1 = "gfx/inv2_axe"; // TODO inv2_shadaxe
+				slot1 = "gfx/inv2_axe";
+			} else if (sweapon == IT_MACE && shackbank) {
+				slot1 = "gfx/inv2_axe"; // TODO inv2_mace
+			} else if (sweapon == IT2_GRAPPLE && !shackbank) {
+				slot1 = "gfx/inv2_axe"; // TODO inv2_grapple
 
-			//drawcharacter(pos+[28,16],143, '8 8 0','1 1 1', 1, 0);
-			//drawcharacter(pos+[34,16], 15, '8 8 0','1 1 1', 1, 0);
-			//drawcharacter(pos+[40,16], 15, '8 8 0','1 1 1', 1, 0);
-		}
+			// Plain inventory icons.
+			} else if (sitems & IT_AXE) {
+				slot1 = "gfx/inv_axe";
+			} else if (sitems2 & IT2_GRAPPLE) {
+				slot1 = "gfx/inv_axe"; // TODO inv_grapple
+			} else if (smoditems & IT_MACE) {
+				slot1 = "gfx/inv_axe"; // TODO inv_mace
+			}
+		} else slot1 = "";
 
-		if (sitems & IT_SUPER_SHOTGUN)		Hud_DrawWeapon(1, pos+[24*2,8]);
-		if (sitems & IT_NAILGUN)			Hud_DrawWeapon(2, pos+[24*3,8]);
-		if (sitems & IT_SUPER_NAILGUN)		Hud_DrawWeapon(3, pos+[24*4,8]);
-		if (sitems & IT_GRENADE_LAUNCHER)	Hud_DrawWeapon(4, pos+[24*5,8]);
-		if (sitems & IT_ROCKET_LAUNCHER)	Hud_DrawWeapon(5, pos+[24*6,8]);
-		if (sitems & IT_LIGHTNING)			Hud_DrawWeaponEx(6, flashtime[6], sweapon==IT_LIGHTNING, pos+[24*7,8], LIGHTNING_WIDTH, LIGHTNING_WIDTH);
+		// slot2
+		if (sitems & IT_SHOTGUN || smoditems & IT_ICE || sperms & IT_BLASTER || sperms & IT_AIRGUN) {
+			if (sweapon == IT_SHOTGUN && !shackbank) {
+				if (sperms & IT_BLASTER) slot2 = "gfx/inv2_shotgun"; // TODO inv2_blaster
+				else slot2 = "gfx/inv2_shotgun";
+			} else if (sweapon == IT_ICE && shackbank) {
+				slot2 = "gfx/inv2_shotgun"; // TODO inv2_ice
+			} else if (sweapon == IT_AIRGUN && shackbank) {
+				slot2 = "gfx/inv2_shotgun"; // TODO inv2_airgun
 
-		drawpic(pos+[24*1,8],slot1,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*2,8],slot2,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*3,8],slot3,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*4,8],slot4,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*5,8],slot5,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*6,8],slot6,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*7,8],slot7,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*8,8],slot8,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[24*9,8],slot9,'24 16 0','1 1 1',1,0);
-		drawpic(pos+[   0,8],slot0,'24 16 0','1 1 1',1,0);
+			// Plain inventory icons.
+			} else if (sitems & IT_SHOTGUN) {
+				if (sperms & IT_BLASTER) slot2 = "gfx/inv_shotgun"; // TODO inv_blaster
+				else slot2 = "gfx/inv_shotgun";
+			} else if (smoditems & IT_ICE) {
+				slot2 = "gfx/inv_shotgun"; // TODO inv_shotgun
+			} else if (sperms & IT_AIRGUN) {
+				slot2 = "gfx/inv_shotgun"; // TODO inv_airgun
+			}
+		} else slot2 = "";
 
+		// slot3
+		if (sitems & IT_SUPER_SHOTGUN || smoditems & IT_UPGRADE_SSG || smoditems & IT_SCIMITAR) {
+			if (sweapon == IT_SUPER_SHOTGUN && !shackbank) {
+				if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adws_widowm";
+				else slot3 = "gfx/inv2_sshotgun";
+			} else if (sweapon == IT_SCIMITAR && !shackbank) {
+				slot3 = "gfx/inv2_sshotgun"; // TODO inv2_scimitar
+
+			// Plain inventory items.
+			} else if (smoditems & IT_UPGRADE_SSG) {
+				if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adw_widowm";
+				else slot3 = "gfx/inv_sshotgun";
+			} else if (sitems & IT_SUPER_SHOTGUN) {
+				slot3 = "gfx/inv_sshotgun";
+			} else if (smoditems & IT_SCIMITAR) {
+				slot3 = "gfx/inv_sshotgun"; // TODO inv_scimitar
+			}
+		} else slot3 = "";
+
+		// slot4
+		if (sitems & IT_NAILGUN || sitems & IT_LAVA_NAILGUN || smoditems & IT_RAPIER) {
+			if (sweapon == IT_NAILGUN && !shackbank) {
+				slot4 = "gfx/inv2_nailgun";
+			} else if (sweapon == IT_LAVA_NAILGUN && !shackbank) {
+				slot4 = "gfx/inv2_nailgun"; // TODO inv2_lavanailgun
+			} else if (sweapon == IT_RAPIER && !shackbank) {
+				slot4 = "gfx/inv2_nailgun"; // TODO inv2_rapier
+
+			// Plain inventory items.
+			} else if (sitems & IT_NAILGUN) {
+				slot4 = "gfx/inv_nailgun";
+			} else if (sitems & IT_LAVA_NAILGUN) {
+				slot4 = "gfx/inv_nailgun"; // TODO inv_lavanailgun
+			} else if (smoditems & IT_RAPIER) {
+				slot4 = "gfx/inv_nailgun"; // TODO inv_rapier
+			}
+		} else slot4 = "";
+
+		// slot5
+		if (sitems & IT_SUPER_NAILGUN || sitems & IT_LAVA_SUPER_NAILGUN || smoditems & IT_VOID_STAFF) {
+			if (sweapon == IT_SUPER_NAILGUN && !shackbank) {
+				slot5 = "gfx/inv2_snailgun";
+			} else if (sweapon == IT_LAVA_SUPER_NAILGUN && !shackbank) {
+				slot5 = "gfx/inv2_snailgun"; // TODO inv2_lavasnailgun
+			} else if (sweapon == IT_VOID_STAFF && shackbank) {
+				slot5 = "gfx/inv2_snailgun"; // TODO inv2_voidstaff
+
+			// Plain inventory items.
+			} else if (sitems & IT_SUPER_NAILGUN) {
+				slot5 = "gfx/inv_snailgun";
+			} else if (sitems & IT_LAVA_SUPER_NAILGUN) {
+				slot5 = "gfx/inv_snailgun"; // TODO inv_lavasnailgun
+			} else if (smoditems & IT_VOID_STAFF) {
+				slot5 = "gfx/inv_snailgun"; // TODO inv_voidstaff
+			}
+		} else slot5 = "";
+
+		// slot6
+		if (sitems & IT_GRENADE_LAUNCHER || sitems2 & IT2_PROXIMITY_GUN
+			|| sitems & IT_MULTI_GRENADE) {
+
+			if (sweapon == IT_GRENADE_LAUNCHER && !shackbank) {
+				slot6 = "gfx/inv2_rlaunch";
+			} else if (sweapon == IT2_PROXIMITY_GUN && !shackbank) {
+				slot6 = "gfx/inv2_prox";
+			} else if (sweapon == IT_MULTI_GRENADE && !shackbank) {
+				slot6 = "gfx/inv2_multigren";
+
+			// Plain inventory items.
+			} else if (sitems & IT_GRENADE_LAUNCHER) {
+				slot6 = "gfx/inv_rlaunch";
+			} else if (sitems2 & IT2_PROXIMITY_GUN) {
+				slot6 = "gfx/inv_prox";
+			} else if (smoditems & IT_MULTI_GRENADE) {
+				slot6 = "gfx/inv_multigren";
+			}
+		} else slot6 = "";
+
+		// slot7
+		if (sitems & IT_ROCKET_LAUNCHER || sitems & IT_MULTI_ROCKET
+			|| smoditems & IT_SANGUINATORS) {
+
+			if (sweapon == IT_ROCKET_LAUNCHER && !shackbank) {
+				slot7 = "gfx/inv2_srlaunch";
+			} else if (sweapon == IT_MULTI_ROCKET && !shackbank) {
+				slot7 = "gfx/inv2_multirock";
+			} else if (sweapon == IT_SANGUINATORS && !shackbank) {
+				slot7 = "gfx/inv2_sanguin";
+
+			// Plain inventory items.
+			} else if (sitems & IT_ROCKET_LAUNCHER) {
+				slot7 = "gfx/inv_srlaunch";
+			} else if (sitems2 & IT_MULTI_ROCKET) {
+				slot7 = "gfx/inv_multirock";
+			} else if (smoditems & IT_SANGUINATORS) {
+				slot7 = "gfx/inv_sanguin";
+			}
+		} else slot7 = "";
+
+		// slot8
+		if (sitems & IT_LIGHTNING || smoditems & IT_UPGRADE_LG || sitems & IT_PLASMA_GUN || smoditems & IT_FLAK) {
+			if (sweapon == IT_LIGHTNING && !shackbank) {
+				if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv2_lightng"; // TODO inv2_adplasma
+				else slot8 = "gfx/inv2_lightng";
+			} else if (sweapon == IT_PLASMA_GUN && !shackbank) {
+				slot8 = "gfx/inv2_lightng"; // TODO inv2_plasmarogue
+			} else if (sweapon == IT_FLAK && shackbank) {
+				slot8 = "gfx/inv2_lightng"; // TODO inv2_flak
+
+			// Plain inventory items.
+			} else if (sitems & IT_LIGHTNING) {
+				if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv_lightng"; // TODO inv_adplasma
+				else slot8 = "gfx/inv_lightng";
+			} else if (sitems2 & IT_PLASMA_GUN) {
+				slot8 = "gfx/inv_lightng"; // TODO inv_plasmarogue
+			} else if (smoditems & IT_FLAK) {
+				slot8 = "gfx/inv_lightng"; // TODO inv_flak
+			}
+		} else slot8 = "";
+
+		// slot9
+		if (sitems & IT_EXTRA_WEAPON || sperms & IT_FROSTBOW || sitems2 & IT2_LASER_CANNON || sitems2 & IT2_CHAINLIGHTNING) {
+			if (sweapon == IT_EXTRA_WEAPON && !shackbank) {
+				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv2_crossbow"; // TODO inv2_frostbow
+				else {
+					if (sammo_poison > 0) slot9 = "gfx/inv2_crossbow2";
+					else slot9 = "gfx/inv2_crossbow";
+				}
+			} else if (sweapon == IT2_LASER_CANNON && !shackbank) {
+				slot9 = "gfx/inv2_crossbow"; // TODO inv2_laser
+			} else if (sweapon == IT2_CHAINLIGHTNING && !shackbank) {
+				slot9 = "gfx/inv2_crossbow"; // TODO inv2_chainlg
+
+			// Plain inventory items.
+			} else if (sitems & IT_EXTRA_WEAPON) {
+				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv_lightng"; // TODO inv_frostbow
+				else {
+					if (sammo_poison > 0) slot9 = "gfx/inv_crossbow2";
+					else slot9 = "gfx/inv_crossbow";
+				}
+			} else if (sitems2 & IT2_LASER_CANNON) {
+				slot9 = "gfx/inv_crossbow"; // TODO inv_laser
+			} else if (sitems2 & IT2_CHAINLIGHTNING) {
+				slot9 = "gfx/inv_crossbow"; // TODO inv_chainlg
+			}
+		} else slot9 = "";
+
+		// slot0
+		if (sitems2 & IT2_CROSS || sitems2 & IT2_MJOLNIR
+			|| smoditems & IT_GUNGNIR) {
+
+			if (sweapon == IT2_CROSS && !shackbank) {
+				slot0 = "gfx/inv2_wand";
+			} else if (sweapon == IT2_MJOLNIR && !shackbank) {
+				slot0 = "gfx/inv2_mjolnir";
+			} else if (sweapon == IT_GUNGNIR && shackbank) {
+				slot0 = "gfx/inv2_gungnir";
+
+			// Plain inventory items.
+			} else if (sitems2 & IT2_CROSS) {
+				slot0 = "gfx/inv_wand";
+			} else if (sitems2 & IT2_MJOLNIR) {
+				slot0 = "gfx/inv_mjolnir";
+			} else if (smoditems & IT_GUNGNIR) {
+				slot0 = "gfx/inv_gungnir";
+			}
+		} else slot0 = "";
+
+		if (slot1 != "") drawpic(pos+[24*0,8],slot1,'24 16 0','1 1 1',1,0);
+		if (slot2 != "") drawpic(pos+[24*1,8],slot2,'24 16 0','1 1 1',1,0);
+		if (slot3 != "") drawpic(pos+[24*2,8],slot3,'24 16 0','1 1 1',1,0);
+		if (slot4 != "") drawpic(pos+[24*3,8],slot4,'24 16 0','1 1 1',1,0);
+		if (slot5 != "") drawpic(pos+[24*4,8],slot5,'24 16 0','1 1 1',1,0);
+		if (slot6 != "") drawpic(pos+[24*5,8],slot6,'24 16 0','1 1 1',1,0);
+		if (slot7 != "") drawpic(pos+[24*6,8],slot7,'24 16 0','1 1 1',1,0);
+		if (slot8 != "") drawpic(pos+[24*7,8],slot8,'24 16 0','1 1 1',1,0);
+		if (slot9 != "") drawpic(pos+[24*8,8],slot9,'24 16 0','1 1 1',1,0);
+		if (slot0 != "") drawpic(pos+[24*9,8],slot0,'24 16 0','1 1 1',1,0);
+
+		sweaponlast = sweapon;
 		Hud_DrawAmmoCount(0, pos + '11 0 0', FALSE);
 		Hud_DrawAmmoCount(1, pos + '59 0 0', FALSE);
 		Hud_DrawAmmoCount(2, pos + '107 0 0', FALSE);

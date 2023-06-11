@@ -83,8 +83,6 @@ void(entity targ) ResetDebuffBurning = { targ.burning = targ.burning_qty = 0; };
 void(entity targ) ResetDebuffRotting = {
 	targ.rotting = 0;
 	targ.rotting_time = 0;
-	// Force reset health and remove MH inventory item
-	if (targ.health > targ.max_health) targ.health = targ.max_health;
 	targ.items2 = targ.items2 - (targ.items2 & IT2_SUPERHEALTH);
 };
 
@@ -271,8 +269,10 @@ void() ClientDeBuff = {
 		}
 	}
 
-	// Check for regeneration powerups (HoT).  Berserker and amulet of regeneration do not stack, only 1 healing amount
-	if (self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER) {
+	// Check for regeneration powerups (HoT).  Berserker and amulet of
+	// regeneration do not stack, only 1 healing amount.
+	if (self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER
+		|| self.perms & POW_REGENLESSER) {
 		// Is it time for a debuff update
 		if (self.regen_time < time) {
 			ResetDebuffRotting(self);

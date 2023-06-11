@@ -1458,6 +1458,7 @@ void() W_FireMace = {
 	local vector lunge;
 	MaceSwing1(); 	//trigger animation
 	if ((self.flags & FL_ONGROUND)) return;
+	if (self.macejump) return;
 
 	makevectors(self.v_angle);
 	lunge = '0 0 300';
@@ -1469,6 +1470,7 @@ void() W_FireMace = {
 	}
 	self.touch = MaceLungeTouch;
 	self.velocity = lunge;
+	self.macejump = TRUE;
 };
 
 void(vector org, entity victim) MaceSwingHits = {
