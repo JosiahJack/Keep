@@ -93,7 +93,13 @@ const float CLIENT_RUNEFLAG = 61;		// self.serverflagstemp
 const float CLIENT_DENIZENS = 62;		// world denizens total
 const float CLIENT_DENIZENSKILLED = 63;	// world denizens killed
 const float CLIENT_ITEMS3 = 64;			// self.items2
-
+const float CLIENT_LAVANAILS = 65;
+const float CLIENT_MULTIROCKETS = 66;
+const float CLIENT_PLASMA = 67;
+const float CLIENT_BLOODCRYSTALS = 68;
+const float CLIENT_ELEMENTAL = 69;
+const float CLIENT_BOLTS = 70;
+const float CLIENT_VOIDSHARDS = 71;
 
 // Duplicate of IT_ references in defs.qc
 const float CSQC_SHOTGUN = 1<<0;			// 1

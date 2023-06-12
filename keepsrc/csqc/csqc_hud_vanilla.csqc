@@ -403,7 +403,14 @@ static void() Hud_Init {
 	precache_pic("gfx/inv2_wand",TRUE);
 	precache_pic("gfx/inv_gungnir",TRUE);
 	precache_pic("gfx/inv2_gungnir",TRUE);
-
+	precache_pic("gfx/inv_axe",TRUE);
+	precache_pic("gfx/inv2_axe",TRUE);
+	precache_pic("gfx/inv_chainlg",TRUE);
+	precache_pic("gfx/inv2_chainlg",TRUE);
+	precache_pic("gfx/inv_laser",TRUE);
+	precache_pic("gfx/inv2_laser",TRUE);
+	precache_pic("gfx/inv_frostbow",TRUE);
+	precache_pic("gfx/inv2_frostbow",TRUE);
 
 	for (i = 0; i < facetab.length; i++) precache_pic(facetab[i], TRUE);
 	precache_pic("gfx/thorface", TRUE);
@@ -443,7 +450,12 @@ static void(float type, vector pos, float drawback) Hud_DrawAmmoCount = {
 	float len;
 	float c;
 
-	value = getstatf(STAT_SHELLS+type);
+	if (type == 0) value = getstatf(CLIENT_SHELLS);
+	else if (type == 1) value = getstatf(CLIENT_NAILS);
+	else if (type == 2) value = getstatf(CLIENT_ROCKETS);
+	else if (type == 3) value = getstatf(CLIENT_CELLS);
+	else value = 0;
+
 	if (value < 0) value = 0;	//hrm
 	if (value>999) value = 999;
 		
@@ -521,7 +533,7 @@ static void(vector pos) Hud_CoopScores_SBar = {
 	s = strcat("Time :", FormatFloat(nmins, 3, " "), ":", FormatFloat(nsecs, 2, "0"));
 	drawstring(sbar + '152 2', s, '8 8 0', '1 1 1', 1, 0);
 	wmdl_len = strlen(world.model);
-	if (wmdl_len > 9) {
+	if (wmdl_len > 9) { // 9 = "maps/" + ".bsp" for 9 characters total
 		string wmdl = substring(world.model,5,wmdl_len - 9);
 		drawstring(sbar + '280 2', wmdl, '8 8 0', '1 1 1', 1, 0);
 	}
@@ -711,18 +723,25 @@ string slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8, slot9, slot0;
 
 static void Hud_DrawIBar(vector pos, vector br) {
 	if (!autocvar(cl_sbar, 1) || autocvar(cl_sbar, 1) >= 2) { //qw puts its ammo+weapons on the side. mimic that.
+
+		//
+		// DUD HUD, __NOT__ used
+		//
+
 		vector pos2, pos3;
 		const float hheight = (WEAPONICONS*16)+(11*4);
 		pos2 = [0, br_y-48, 0];
 		if (pos2_y < hheight) pos2_y = hheight;
-		if (autocvar(cl_hudswap, 0)) pos3 = pos2 + [0,-44];	//hudswap puts it on the left
+		if (autocvar(cl_hudswap, 0)) pos3 = pos2 + [0,-44];	// hudswap puts it
+															// on the left.
 		else { //otherwise align to the right edge
 			pos2_x += br_x-42;
 			pos3 = pos2 + [42-24,-44];
 		}
 		if (autocvar(cl_sbar, 1) >= 2) {
 			pos3_y = 0;	//n64-style hud puts them at the top, apparently.
-			pos_x = br_x-320;	//align any keys+powerups as though the hud was aligned to the right.
+			pos_x = br_x-320; // Align any keys+powerups as though the hud was
+							  // aligned to the right.
 			if (pos2_y < hheight)
 				pos2_y = hheight;
 		}
@@ -731,9 +750,10 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(1, pos2 + '0 -33', TRUE);
 		Hud_DrawAmmoCount(2, pos2 + '0 -22', TRUE);
 		Hud_DrawAmmoCount(3, pos2 + '0 -11', TRUE);
-		Hud_DrawModAmmoCount(getstatf(65), pos2 + '0 -1', TRUE,'1 1 1');
 	} else { //standard nq sbar
+		//
 		// ACTUAL HUD
+		//
 		// ====================================================================
 
 		// Inventory background (top half of HUD)
@@ -903,27 +923,29 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		// slot9
 		if (sitems & IT_EXTRA_WEAPON || sperms & IT_FROSTBOW || sitems2 & IT2_LASER_CANNON || sitems2 & IT2_CHAINLIGHTNING) {
 			if (sweapon == IT_EXTRA_WEAPON && !shackbank) {
-				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv2_crossbow"; // TODO inv2_frostbow
+				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv2_frostbow";
 				else {
 					if (sammo_poison > 0) slot9 = "gfx/inv2_crossbow2";
 					else slot9 = "gfx/inv2_crossbow";
 				}
 			} else if (sweapon == IT2_LASER_CANNON && !shackbank) {
-				slot9 = "gfx/inv2_crossbow"; // TODO inv2_laser
+				slot9 = "gfx/inv2_laser";
 			} else if (sweapon == IT2_CHAINLIGHTNING && !shackbank) {
-				slot9 = "gfx/inv2_crossbow"; // TODO inv2_chainlg
+				slot9 = "gfx/inv2_chainlg";
 
 			// Plain inventory items.
 			} else if (sitems & IT_EXTRA_WEAPON) {
-				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv_lightng"; // TODO inv_frostbow
+				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv_frostbow";
 				else {
 					if (sammo_poison > 0) slot9 = "gfx/inv_crossbow2";
 					else slot9 = "gfx/inv_crossbow";
 				}
+			} else if (sperms & IT_FROSTBOW) {
+				slot9 = "gfx/inv_frostbow";
 			} else if (sitems2 & IT2_LASER_CANNON) {
-				slot9 = "gfx/inv_crossbow"; // TODO inv_laser
+				slot9 = "gfx/inv_laser";
 			} else if (sitems2 & IT2_CHAINLIGHTNING) {
-				slot9 = "gfx/inv_crossbow"; // TODO inv_chainlg
+				slot9 = "gfx/inv_chainlg";
 			}
 		} else slot9 = "";
 
@@ -964,13 +986,14 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		Hud_DrawAmmoCount(1, pos + '59 0 0', FALSE);
 		Hud_DrawAmmoCount(2, pos + '107 0 0', FALSE);
 		Hud_DrawAmmoCount(3, pos + '153 0 0', FALSE);
-		Hud_DrawModAmmoCount(getstatf(65),pos + '199 0 0',FALSE,'1 1 1'); // ammo_lava_nails
-		Hud_DrawModAmmoCount(getstatf(66),pos + '241 0 0',FALSE,'1 1 1'); // ammo_multi_rockets
-		Hud_DrawModAmmoCount(getstatf(70),pos + '285 0 0',FALSE,'1 1 1'); // ammo_bolts
-		if (getstatf(59) > 0) Hud_DrawModAmmoCount(getstatf(59),pos + '285 -9 0',FALSE,'0.5 1 0.5'); // ammo_poison
-		Hud_DrawModAmmoCount(getstatf(69),pos + '327 0 0',FALSE,'1 1 1'); // ammo_elemental
-		Hud_DrawModAmmoCount(getstatf(68),pos + '368 0 0',FALSE,'1 1 1'); // ammo_bloodcrystals
-		Hud_DrawModAmmoCount(getstatf(67),pos + '412 0 0',FALSE,'1 1 1'); // ammo_plasma
+		Hud_DrawModAmmoCount(getstatf(CLIENT_LAVANAILS),pos + '199 0 0',FALSE,'1 1 1'); // ammo_lava_nails
+		Hud_DrawModAmmoCount(getstatf(CLIENT_MULTIROCKETS),pos + '241 0 0',FALSE,'1 1 1'); // ammo_multi_rockets
+		Hud_DrawModAmmoCount(getstatf(CLIENT_BOLTS),pos + '285 0 0',FALSE,'1 1 1'); // ammo_bolts
+		if (getstatf(CLIENT_AMMOPOISON) > 0) Hud_DrawModAmmoCount(getstatf(CLIENT_AMMOPOISON),pos + '285 -9 0',FALSE,'0.5 1 0.5'); // ammo_poison
+		Hud_DrawModAmmoCount(getstatf(CLIENT_ELEMENTAL),pos + '327 0 0',FALSE,'1 1 1'); // ammo_elemental
+		Hud_DrawModAmmoCount(getstatf(CLIENT_BLOODCRYSTALS),pos + '368 0 0',FALSE,'1 1 1'); // ammo_bloodcrystals
+		Hud_DrawModAmmoCount(getstatf(CLIENT_PLASMA),pos + '412 0 0',FALSE,'1 1 1'); // ammo_plasma
+		Hud_DrawModAmmoCount(getstatf(CLIENT_VOIDSHARDS),pos + '450 0 0',FALSE,'1 1 1'); // ammo_voidshards
 
 		// ====================================================================
 	}
@@ -1016,22 +1039,18 @@ static void Hud_Draw(vector virtsize, float scoreboard) {
 	pos_x = (virtsize_x-480)/2;
 	pos_y = virtsize_y;
 	sitems = getstatbits(STAT_ITEMS, 0, 23);	//note that we could use getstati to read the items stat, but it'd degrade when then cast to a float, and QSS+DP don't support ints, so we have to use two floats. 
-	sitems2 = getstatbits(42, 0, 23);
-	smoditems = getstatbits(40, 0, 23);
-	sperms = getstatbits(44, 0, 23);
+	sitems2 = getstatbits(CLIENT_ITEMS2, 0, 23);
+	smoditems = getstatbits(CLIENT_MODITEMS, 0, 23);
+	sperms = getstatbits(CLIENT_PERMS, 0, 23);
 	sweapon = getstatf(STAT_ACTIVEWEAPON);
 	shealth = getstatf(STAT_HEALTH);
-	sammo_poison = getstatf(59);
-	shackbank = getstatf(60);
-	serverflags = getstatbits(61,0,23);
-	//stotal_denizens = getstatbits(62,0,23);
-	//skilled_denizens= getstatbits(63,0,23);
-	stotal_denizens = getstatf(62);
-	skilled_denizens= getstatf(63);
-	sitems3 = getstatf(64);
+	sammo_poison = getstatf(CLIENT_AMMOPOISON);
+	shackbank = getstatf(CLIENT_USINGHACKBANK);
+	serverflags = getstatbits(CLIENT_RUNEFLAG,0,23);
+	stotal_denizens = getstatf(CLIENT_DENIZENS);
+	skilled_denizens= getstatf(CLIENT_DENIZENSKILLED);
+	sitems3 = getstatf(CLIENT_ITEMS3);
 
-	
-	//note that ssqc can provide custom stats, eg: clientstat(STAT_USER+n, EV_FLOAT, items3); can then be read by us with float items3 = getstatf(STAT_USER+n);
 	if (shealth <= 0) scoreboard = TRUE;
 	if (numclientseats <= 1) { //note that we only track one player's stats. with splitscreen we need to stop looking for changes otherwise we'd see them all the time.
 		if (ohealth && sitems != oitems) {

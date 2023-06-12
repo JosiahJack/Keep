@@ -537,12 +537,13 @@ void() worldspawn = { // [ENTITY]...well it IS.
 			clientstat(CLIENT_DENIZENS, EV_FLOAT, sdenizens_total);
 			clientstat(CLIENT_DENIZENSKILLED, EV_FLOAT, sdenizens_killed);
 			clientstat(CLIENT_ITEMS3, EV_FLOAT, items3);
-			clientstat(65, EV_FLOAT, ammo_lava_nails);
-			clientstat(66, EV_FLOAT, ammo_multi_rockets);
-			clientstat(67, EV_FLOAT, ammo_plasma);
-			clientstat(68, EV_FLOAT, ammo_bloodcrystals);
-			clientstat(69, EV_FLOAT, ammo_elemental);
-			clientstat(70, EV_FLOAT, ammo_bolts);
+			clientstat(CLIENT_LAVANAILS, EV_FLOAT, ammo_lava_nails);
+			clientstat(CLIENT_MULTIROCKETS, EV_FLOAT, ammo_multi_rockets);
+			clientstat(CLIENT_PLASMA, EV_FLOAT, ammo_plasma);
+			clientstat(CLIENT_BLOODCRYSTALS, EV_FLOAT, ammo_bloodcrystals);
+			clientstat(CLIENT_ELEMENTAL, EV_FLOAT, ammo_elemental);
+			clientstat(CLIENT_BOLTS, EV_FLOAT, ammo_bolts);
+			clientstat(CLIENT_VOIDSHARDS, EV_FLOAT, ammo_voidshards);
 		}
 	}
 	dprint("\b[ENGINE]\b ");
