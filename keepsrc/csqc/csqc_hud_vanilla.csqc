@@ -411,6 +411,8 @@ static void() Hud_Init {
 	precache_pic("gfx/inv2_laser",TRUE);
 	precache_pic("gfx/inv_frostbow",TRUE);
 	precache_pic("gfx/inv2_frostbow",TRUE);
+	precache_pic("gfx/inv_plasmarog",TRUE);
+	precache_pic("gfx/inv2_plasmarog",TRUE);
 
 	for (i = 0; i < facetab.length; i++) precache_pic(facetab[i], TRUE);
 	precache_pic("gfx/thorface", TRUE);
@@ -905,7 +907,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 				if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv2_lightng"; // TODO inv2_adplasma
 				else slot8 = "gfx/inv2_lightng";
 			} else if (sweapon == IT_PLASMA_GUN && !shackbank) {
-				slot8 = "gfx/inv2_lightng"; // TODO inv2_plasmarogue
+				slot8 = "gfx/inv2_plasmarog";
 			} else if (sweapon == IT_FLAK && shackbank) {
 				slot8 = "gfx/inv2_lightng"; // TODO inv2_flak
 
@@ -914,7 +916,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 				if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv_lightng"; // TODO inv_adplasma
 				else slot8 = "gfx/inv_lightng";
 			} else if (sitems2 & IT_PLASMA_GUN) {
-				slot8 = "gfx/inv_lightng"; // TODO inv_plasmarogue
+				slot8 = "gfx/inv_plasmarog";
 			} else if (smoditems & IT_FLAK) {
 				slot8 = "gfx/inv_lightng"; // TODO inv_flak
 			}
@@ -961,10 +963,10 @@ static void Hud_DrawIBar(vector pos, vector br) {
 				slot0 = "gfx/inv2_gungnir";
 
 			// Plain inventory items.
-			} else if (sitems2 & IT2_CROSS) {
-				slot0 = "gfx/inv_wand";
 			} else if (sitems2 & IT2_MJOLNIR) {
 				slot0 = "gfx/inv_mjolnir";
+			} else if (sitems2 & IT2_CROSS) {
+				slot0 = "gfx/inv_wand";
 			} else if (smoditems & IT_GUNGNIR) {
 				slot0 = "gfx/inv_gungnir";
 			}
