@@ -315,7 +315,7 @@ float () GremlinCheckNoAmmo = { // [FUNCTION]
 void(float dist) gremlin_run = {
    local float r, done, c;
    local vector d, ang, end;
-
+   return;
    movedist = dist;
    if (self.stoleweapon) self.frame = ((self.frame + 164.000) - 29.000);
 
