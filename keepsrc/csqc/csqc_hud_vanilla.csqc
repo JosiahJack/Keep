@@ -549,7 +549,7 @@ static void(vector pos) Hud_CoopScores_SBar = {
 static void Hud_PicOrModel(vector topleft, string pic, string showmodel, float showskin, float speed) {
 	vector sz = '24 24';
 	#ifdef DP_QC_RENDER_SCENE	//requires fteextensions.qc instead of qsextensions.qc
-		if (autocvar(cl_sbar, 1) >= 3)
+		if (FALSE /*autocvar(cl_sbar, 1) >= 3*/)
 		if (checkextension("DP_QC_RENDER_SCENE")) {
 			clearscene(); //reset view props and wipe entity lists
 
@@ -610,7 +610,7 @@ static void Hud_DrawFace(vector pos) {
 };
 
 static void Hud_DrawSBar(vector pos, vector virtsize) {
-	if (autocvar(cl_sbar, 1) >= 2) { //n64-style
+	if (FALSE /*autocvar(cl_sbar, 1) >= 2*/) { //n64-style
 		pos = [0, virtsize_y-24];
 		Hud_DrawFace(pos+[3*24,0]);
 		Hud_DrawLargeValue(pos, shealth, 25);
@@ -658,7 +658,7 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 	}
 	//---------------------------------------------------------------------------------------------------------------------
 	
-	if (autocvar(cl_sbar, 1)) drawpic(pos, "gfx/sbarkeep", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
+	drawpic(pos, "gfx/sbarkeep", '480 24 0', '1 1 1', autocvar(scr_sbaralpha, 0.75), 0);
 
 	if (sitems & IT_INVULNERABILITY) {
 		drawpic(pos + '68 0 0', "gfx/disc", '24 24 0', '1 1 1', 1, 0);
@@ -724,281 +724,244 @@ static void DrawSlotDots(vector pos, float which) {
 string slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8, slot9, slot0;
 
 static void Hud_DrawIBar(vector pos, vector br) {
-	if (!autocvar(cl_sbar, 1) || autocvar(cl_sbar, 1) >= 2) { //qw puts its ammo+weapons on the side. mimic that.
+	// Inventory background (top half of HUD)
+	drawpic(pos,"gfx/ibarkeep",'480 24 0','1 1 1',autocvar(scr_sbaralpha,0.75),0);
 
-		//
-		// DUD HUD, __NOT__ used
-		//
+	// slot1
+	if (sitems & IT_AXE || sitems2 & IT2_GRAPPLE || smoditems & IT_MACE) {
+		if (sweapon == IT_AXE && !shackbank) {
+			if (smoditems & IT_UPGRADE_AXE) slot1 = "gfx/inv2_axe"; // TODO inv2_shadaxe
+			slot1 = "gfx/inv2_axe";
+		} else if (sweapon == IT_MACE && shackbank) {
+			slot1 = "gfx/inv2_axe"; // TODO inv2_mace
+		} else if (sweapon == IT2_GRAPPLE && !shackbank) {
+			slot1 = "gfx/inv2_axe"; // TODO inv2_grapple
 
-		vector pos2, pos3;
-		const float hheight = (WEAPONICONS*16)+(11*4);
-		pos2 = [0, br_y-48, 0];
-		if (pos2_y < hheight) pos2_y = hheight;
-		if (autocvar(cl_hudswap, 0)) pos3 = pos2 + [0,-44];	// hudswap puts it
-															// on the left.
-		else { //otherwise align to the right edge
-			pos2_x += br_x-42;
-			pos3 = pos2 + [42-24,-44];
+		// Plain inventory icons.
+		} else if (sitems & IT_AXE) {
+			slot1 = "gfx/inv_axe";
+		} else if (sitems2 & IT2_GRAPPLE) {
+			slot1 = "gfx/inv_axe"; // TODO inv_grapple
+		} else if (smoditems & IT_MACE) {
+			slot1 = "gfx/inv_axe"; // TODO inv_mace
 		}
-		if (autocvar(cl_sbar, 1) >= 2) {
-			pos3_y = 0;	//n64-style hud puts them at the top, apparently.
-			pos_x = br_x-320; // Align any keys+powerups as though the hud was
-							  // aligned to the right.
-			if (pos2_y < hheight)
-				pos2_y = hheight;
+	} else slot1 = "";
+
+	// slot2
+	if (sitems & IT_SHOTGUN || smoditems & IT_ICE || sperms & IT_BLASTER || sperms & IT_AIRGUN) {
+		if (sweapon == IT_SHOTGUN && !shackbank) {
+			if (sperms & IT_BLASTER) slot2 = "gfx/inv2_shotgun"; // TODO inv2_blaster
+			else slot2 = "gfx/inv2_shotgun";
+		} else if (sweapon == IT_ICE && shackbank) {
+			slot2 = "gfx/inv2_shotgun"; // TODO inv2_ice
+		} else if (sweapon == IT_AIRGUN && shackbank) {
+			slot2 = "gfx/inv2_shotgun"; // TODO inv2_airgun
+
+		// Plain inventory icons.
+		} else if (sitems & IT_SHOTGUN) {
+			if (sperms & IT_BLASTER) slot2 = "gfx/inv_shotgun"; // TODO inv_blaster
+			else slot2 = "gfx/inv_shotgun";
+		} else if (smoditems & IT_ICE) {
+			slot2 = "gfx/inv_shotgun"; // TODO inv_shotgun
+		} else if (sperms & IT_AIRGUN) {
+			slot2 = "gfx/inv_shotgun"; // TODO inv_airgun
 		}
-		else pos3_y -= WEAPONICONS*16;
-		Hud_DrawAmmoCount(0, pos2 + '0 -44', TRUE);
-		Hud_DrawAmmoCount(1, pos2 + '0 -33', TRUE);
-		Hud_DrawAmmoCount(2, pos2 + '0 -22', TRUE);
-		Hud_DrawAmmoCount(3, pos2 + '0 -11', TRUE);
-	} else { //standard nq sbar
-		//
-		// ACTUAL HUD
-		//
-		// ====================================================================
+	} else slot2 = "";
 
-		// Inventory background (top half of HUD)
-		drawpic(pos,"gfx/ibarkeep",'480 24 0','1 1 1',autocvar(scr_sbaralpha,0.75),0);
+	// slot3
+	if (sitems & IT_SUPER_SHOTGUN || smoditems & IT_UPGRADE_SSG || smoditems & IT_SCIMITAR) {
+		if (sweapon == IT_SUPER_SHOTGUN && !shackbank) {
+			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adws_widowm";
+			else slot3 = "gfx/inv2_sshotgun";
+		} else if (sweapon == IT_SCIMITAR && !shackbank) {
+			slot3 = "gfx/inv2_sshotgun"; // TODO inv2_scimitar
 
-		// slot1
-		if (sitems & IT_AXE || sitems2 & IT2_GRAPPLE || smoditems & IT_MACE) {
-			if (sweapon == IT_AXE && !shackbank) {
-				if (smoditems & IT_UPGRADE_AXE) slot1 = "gfx/inv2_axe"; // TODO inv2_shadaxe
-				slot1 = "gfx/inv2_axe";
-			} else if (sweapon == IT_MACE && shackbank) {
-				slot1 = "gfx/inv2_axe"; // TODO inv2_mace
-			} else if (sweapon == IT2_GRAPPLE && !shackbank) {
-				slot1 = "gfx/inv2_axe"; // TODO inv2_grapple
+		// Plain inventory items.
+		} else if (smoditems & IT_UPGRADE_SSG) {
+			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adw_widowm";
+			else slot3 = "gfx/inv_sshotgun";
+		} else if (sitems & IT_SUPER_SHOTGUN) {
+			slot3 = "gfx/inv_sshotgun";
+		} else if (smoditems & IT_SCIMITAR) {
+			slot3 = "gfx/inv_sshotgun"; // TODO inv_scimitar
+		}
+	} else slot3 = "";
 
-			// Plain inventory icons.
-			} else if (sitems & IT_AXE) {
-				slot1 = "gfx/inv_axe";
-			} else if (sitems2 & IT2_GRAPPLE) {
-				slot1 = "gfx/inv_axe"; // TODO inv_grapple
-			} else if (smoditems & IT_MACE) {
-				slot1 = "gfx/inv_axe"; // TODO inv_mace
+	// slot4
+	if (sitems & IT_NAILGUN || sitems & IT_LAVA_NAILGUN || smoditems & IT_RAPIER) {
+		if (sweapon == IT_NAILGUN && !shackbank) {
+			slot4 = "gfx/inv2_nailgun";
+		} else if (sweapon == IT_LAVA_NAILGUN && !shackbank) {
+			slot4 = "gfx/inv2_nailgun"; // TODO inv2_lavanailgun
+		} else if (sweapon == IT_RAPIER && !shackbank) {
+			slot4 = "gfx/inv2_nailgun"; // TODO inv2_rapier
+
+		// Plain inventory items.
+		} else if (sitems & IT_NAILGUN) {
+			slot4 = "gfx/inv_nailgun";
+		} else if (sitems & IT_LAVA_NAILGUN) {
+			slot4 = "gfx/inv_nailgun"; // TODO inv_lavanailgun
+		} else if (smoditems & IT_RAPIER) {
+			slot4 = "gfx/inv_nailgun"; // TODO inv_rapier
+		}
+	} else slot4 = "";
+
+	// slot5
+	if (sitems & IT_SUPER_NAILGUN || sitems & IT_LAVA_SUPER_NAILGUN || smoditems & IT_VOID_STAFF) {
+		if (sweapon == IT_SUPER_NAILGUN && !shackbank) {
+			slot5 = "gfx/inv2_snailgun";
+		} else if (sweapon == IT_LAVA_SUPER_NAILGUN && !shackbank) {
+			slot5 = "gfx/inv2_snailgun"; // TODO inv2_lavasnailgun
+		} else if (sweapon == IT_VOID_STAFF && shackbank) {
+			slot5 = "gfx/inv2_snailgun"; // TODO inv2_voidstaff
+
+		// Plain inventory items.
+		} else if (sitems & IT_SUPER_NAILGUN) {
+			slot5 = "gfx/inv_snailgun";
+		} else if (sitems & IT_LAVA_SUPER_NAILGUN) {
+			slot5 = "gfx/inv_snailgun"; // TODO inv_lavasnailgun
+		} else if (smoditems & IT_VOID_STAFF) {
+			slot5 = "gfx/inv_snailgun"; // TODO inv_voidstaff
+		}
+	} else slot5 = "";
+
+	// slot6
+	if (sitems & IT_GRENADE_LAUNCHER || sitems2 & IT2_PROXIMITY_GUN
+		|| sitems & IT_MULTI_GRENADE) {
+
+		if (sweapon == IT_GRENADE_LAUNCHER && !shackbank) {
+			slot6 = "gfx/inv2_rlaunch";
+		} else if (sweapon == IT2_PROXIMITY_GUN && !shackbank) {
+			slot6 = "gfx/inv2_prox";
+		} else if (sweapon == IT_MULTI_GRENADE && !shackbank) {
+			slot6 = "gfx/inv2_multigren";
+
+		// Plain inventory items.
+		} else if (sitems & IT_GRENADE_LAUNCHER) {
+			slot6 = "gfx/inv_rlaunch";
+		} else if (sitems2 & IT2_PROXIMITY_GUN) {
+			slot6 = "gfx/inv_prox";
+		} else if (smoditems & IT_MULTI_GRENADE) {
+			slot6 = "gfx/inv_multigren";
+		}
+	} else slot6 = "";
+
+	// slot7
+	if (sitems & IT_ROCKET_LAUNCHER || sitems & IT_MULTI_ROCKET
+		|| smoditems & IT_SANGUINATORS) {
+
+		if (sweapon == IT_ROCKET_LAUNCHER && !shackbank) {
+			slot7 = "gfx/inv2_srlaunch";
+		} else if (sweapon == IT_MULTI_ROCKET && !shackbank) {
+			slot7 = "gfx/inv2_multirock";
+		} else if (sweapon == IT_SANGUINATORS && !shackbank) {
+			slot7 = "gfx/inv2_sanguin";
+
+		// Plain inventory items.
+		} else if (sitems & IT_ROCKET_LAUNCHER) {
+			slot7 = "gfx/inv_srlaunch";
+		} else if (sitems2 & IT_MULTI_ROCKET) {
+			slot7 = "gfx/inv_multirock";
+		} else if (smoditems & IT_SANGUINATORS) {
+			slot7 = "gfx/inv_sanguin";
+		}
+	} else slot7 = "";
+
+	// slot8
+	if (sitems & IT_LIGHTNING || smoditems & IT_UPGRADE_LG || sitems & IT_PLASMA_GUN || smoditems & IT_FLAK) {
+		if (sweapon == IT_LIGHTNING && !shackbank) {
+			if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv2_lightng"; // TODO inv2_adplasma
+			else slot8 = "gfx/inv2_lightng";
+		} else if (sweapon == IT_PLASMA_GUN && !shackbank) {
+			slot8 = "gfx/inv2_plasmarog";
+		} else if (sweapon == IT_FLAK && shackbank) {
+			slot8 = "gfx/inv2_lightng"; // TODO inv2_flak
+
+		// Plain inventory items.
+		} else if (sitems & IT_LIGHTNING) {
+			if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv_lightng"; // TODO inv_adplasma
+			else slot8 = "gfx/inv_lightng";
+		} else if (sitems2 & IT_PLASMA_GUN) {
+			slot8 = "gfx/inv_plasmarog";
+		} else if (smoditems & IT_FLAK) {
+			slot8 = "gfx/inv_lightng"; // TODO inv_flak
+		}
+	} else slot8 = "";
+
+	// slot9
+	if (sitems & IT_EXTRA_WEAPON || sperms & IT_FROSTBOW || sitems2 & IT2_LASER_CANNON || sitems2 & IT2_CHAINLIGHTNING) {
+		if (sweapon == IT_EXTRA_WEAPON && !shackbank) {
+			if (sperms & IT_FROSTBOW) slot9 = "gfx/inv2_frostbow";
+			else {
+				if (sammo_poison > 0) slot9 = "gfx/inv2_crossbow2";
+				else slot9 = "gfx/inv2_crossbow";
 			}
-		} else slot1 = "";
+		} else if (sweapon == IT2_LASER_CANNON && !shackbank) {
+			slot9 = "gfx/inv2_laser";
+		} else if (sweapon == IT2_CHAINLIGHTNING && !shackbank) {
+			slot9 = "gfx/inv2_chainlg";
 
-		// slot2
-		if (sitems & IT_SHOTGUN || smoditems & IT_ICE || sperms & IT_BLASTER || sperms & IT_AIRGUN) {
-			if (sweapon == IT_SHOTGUN && !shackbank) {
-				if (sperms & IT_BLASTER) slot2 = "gfx/inv2_shotgun"; // TODO inv2_blaster
-				else slot2 = "gfx/inv2_shotgun";
-			} else if (sweapon == IT_ICE && shackbank) {
-				slot2 = "gfx/inv2_shotgun"; // TODO inv2_ice
-			} else if (sweapon == IT_AIRGUN && shackbank) {
-				slot2 = "gfx/inv2_shotgun"; // TODO inv2_airgun
-
-			// Plain inventory icons.
-			} else if (sitems & IT_SHOTGUN) {
-				if (sperms & IT_BLASTER) slot2 = "gfx/inv_shotgun"; // TODO inv_blaster
-				else slot2 = "gfx/inv_shotgun";
-			} else if (smoditems & IT_ICE) {
-				slot2 = "gfx/inv_shotgun"; // TODO inv_shotgun
-			} else if (sperms & IT_AIRGUN) {
-				slot2 = "gfx/inv_shotgun"; // TODO inv_airgun
+		// Plain inventory items.
+		} else if (sitems & IT_EXTRA_WEAPON) {
+			if (sperms & IT_FROSTBOW) slot9 = "gfx/inv_frostbow";
+			else {
+				if (sammo_poison > 0) slot9 = "gfx/inv_crossbow2";
+				else slot9 = "gfx/inv_crossbow";
 			}
-		} else slot2 = "";
+		} else if (sperms & IT_FROSTBOW) {
+			slot9 = "gfx/inv_frostbow";
+		} else if (sitems2 & IT2_LASER_CANNON) {
+			slot9 = "gfx/inv_laser";
+		} else if (sitems2 & IT2_CHAINLIGHTNING) {
+			slot9 = "gfx/inv_chainlg";
+		}
+	} else slot9 = "";
 
-		// slot3
-		if (sitems & IT_SUPER_SHOTGUN || smoditems & IT_UPGRADE_SSG || smoditems & IT_SCIMITAR) {
-			if (sweapon == IT_SUPER_SHOTGUN && !shackbank) {
-				if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adws_widowm";
-				else slot3 = "gfx/inv2_sshotgun";
-			} else if (sweapon == IT_SCIMITAR && !shackbank) {
-				slot3 = "gfx/inv2_sshotgun"; // TODO inv2_scimitar
+	// slot0
+	if (sitems2 & IT2_CROSS || sitems2 & IT2_MJOLNIR
+		|| smoditems & IT_GUNGNIR) {
 
-			// Plain inventory items.
-			} else if (smoditems & IT_UPGRADE_SSG) {
-				if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adw_widowm";
-				else slot3 = "gfx/inv_sshotgun";
-			} else if (sitems & IT_SUPER_SHOTGUN) {
-				slot3 = "gfx/inv_sshotgun";
-			} else if (smoditems & IT_SCIMITAR) {
-				slot3 = "gfx/inv_sshotgun"; // TODO inv_scimitar
-			}
-		} else slot3 = "";
+		if (sweapon == IT2_CROSS && !shackbank) {
+			slot0 = "gfx/inv2_wand";
+		} else if (sweapon == IT2_MJOLNIR && !shackbank) {
+			slot0 = "gfx/inv2_mjolnir";
+		} else if (sweapon == IT_GUNGNIR && shackbank) {
+			slot0 = "gfx/inv2_gungnir";
 
-		// slot4
-		if (sitems & IT_NAILGUN || sitems & IT_LAVA_NAILGUN || smoditems & IT_RAPIER) {
-			if (sweapon == IT_NAILGUN && !shackbank) {
-				slot4 = "gfx/inv2_nailgun";
-			} else if (sweapon == IT_LAVA_NAILGUN && !shackbank) {
-				slot4 = "gfx/inv2_nailgun"; // TODO inv2_lavanailgun
-			} else if (sweapon == IT_RAPIER && !shackbank) {
-				slot4 = "gfx/inv2_nailgun"; // TODO inv2_rapier
+		// Plain inventory items.
+		} else if (sitems2 & IT2_MJOLNIR) {
+			slot0 = "gfx/inv_mjolnir";
+		} else if (sitems2 & IT2_CROSS) {
+			slot0 = "gfx/inv_wand";
+		} else if (smoditems & IT_GUNGNIR) {
+			slot0 = "gfx/inv_gungnir";
+		}
+	} else slot0 = "";
 
-			// Plain inventory items.
-			} else if (sitems & IT_NAILGUN) {
-				slot4 = "gfx/inv_nailgun";
-			} else if (sitems & IT_LAVA_NAILGUN) {
-				slot4 = "gfx/inv_nailgun"; // TODO inv_lavanailgun
-			} else if (smoditems & IT_RAPIER) {
-				slot4 = "gfx/inv_nailgun"; // TODO inv_rapier
-			}
-		} else slot4 = "";
+	if (slot1 != "") drawpic(pos+[24*0,8],slot1,'24 16 0','1 1 1',1,0);
+	if (slot2 != "") drawpic(pos+[24*1,8],slot2,'24 16 0','1 1 1',1,0);
+	if (slot3 != "") drawpic(pos+[24*2,8],slot3,'24 16 0','1 1 1',1,0);
+	if (slot4 != "") drawpic(pos+[24*3,8],slot4,'24 16 0','1 1 1',1,0);
+	if (slot5 != "") drawpic(pos+[24*4,8],slot5,'24 16 0','1 1 1',1,0);
+	if (slot6 != "") drawpic(pos+[24*5,8],slot6,'24 16 0','1 1 1',1,0);
+	if (slot7 != "") drawpic(pos+[24*6,8],slot7,'24 16 0','1 1 1',1,0);
+	if (slot8 != "") drawpic(pos+[24*7,8],slot8,'24 16 0','1 1 1',1,0);
+	if (slot9 != "") drawpic(pos+[24*8,8],slot9,'24 16 0','1 1 1',1,0);
+	if (slot0 != "") drawpic(pos+[24*9,8],slot0,'24 16 0','1 1 1',1,0);
 
-		// slot5
-		if (sitems & IT_SUPER_NAILGUN || sitems & IT_LAVA_SUPER_NAILGUN || smoditems & IT_VOID_STAFF) {
-			if (sweapon == IT_SUPER_NAILGUN && !shackbank) {
-				slot5 = "gfx/inv2_snailgun";
-			} else if (sweapon == IT_LAVA_SUPER_NAILGUN && !shackbank) {
-				slot5 = "gfx/inv2_snailgun"; // TODO inv2_lavasnailgun
-			} else if (sweapon == IT_VOID_STAFF && shackbank) {
-				slot5 = "gfx/inv2_snailgun"; // TODO inv2_voidstaff
-
-			// Plain inventory items.
-			} else if (sitems & IT_SUPER_NAILGUN) {
-				slot5 = "gfx/inv_snailgun";
-			} else if (sitems & IT_LAVA_SUPER_NAILGUN) {
-				slot5 = "gfx/inv_snailgun"; // TODO inv_lavasnailgun
-			} else if (smoditems & IT_VOID_STAFF) {
-				slot5 = "gfx/inv_snailgun"; // TODO inv_voidstaff
-			}
-		} else slot5 = "";
-
-		// slot6
-		if (sitems & IT_GRENADE_LAUNCHER || sitems2 & IT2_PROXIMITY_GUN
-			|| sitems & IT_MULTI_GRENADE) {
-
-			if (sweapon == IT_GRENADE_LAUNCHER && !shackbank) {
-				slot6 = "gfx/inv2_rlaunch";
-			} else if (sweapon == IT2_PROXIMITY_GUN && !shackbank) {
-				slot6 = "gfx/inv2_prox";
-			} else if (sweapon == IT_MULTI_GRENADE && !shackbank) {
-				slot6 = "gfx/inv2_multigren";
-
-			// Plain inventory items.
-			} else if (sitems & IT_GRENADE_LAUNCHER) {
-				slot6 = "gfx/inv_rlaunch";
-			} else if (sitems2 & IT2_PROXIMITY_GUN) {
-				slot6 = "gfx/inv_prox";
-			} else if (smoditems & IT_MULTI_GRENADE) {
-				slot6 = "gfx/inv_multigren";
-			}
-		} else slot6 = "";
-
-		// slot7
-		if (sitems & IT_ROCKET_LAUNCHER || sitems & IT_MULTI_ROCKET
-			|| smoditems & IT_SANGUINATORS) {
-
-			if (sweapon == IT_ROCKET_LAUNCHER && !shackbank) {
-				slot7 = "gfx/inv2_srlaunch";
-			} else if (sweapon == IT_MULTI_ROCKET && !shackbank) {
-				slot7 = "gfx/inv2_multirock";
-			} else if (sweapon == IT_SANGUINATORS && !shackbank) {
-				slot7 = "gfx/inv2_sanguin";
-
-			// Plain inventory items.
-			} else if (sitems & IT_ROCKET_LAUNCHER) {
-				slot7 = "gfx/inv_srlaunch";
-			} else if (sitems2 & IT_MULTI_ROCKET) {
-				slot7 = "gfx/inv_multirock";
-			} else if (smoditems & IT_SANGUINATORS) {
-				slot7 = "gfx/inv_sanguin";
-			}
-		} else slot7 = "";
-
-		// slot8
-		if (sitems & IT_LIGHTNING || smoditems & IT_UPGRADE_LG || sitems & IT_PLASMA_GUN || smoditems & IT_FLAK) {
-			if (sweapon == IT_LIGHTNING && !shackbank) {
-				if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv2_lightng"; // TODO inv2_adplasma
-				else slot8 = "gfx/inv2_lightng";
-			} else if (sweapon == IT_PLASMA_GUN && !shackbank) {
-				slot8 = "gfx/inv2_plasmarog";
-			} else if (sweapon == IT_FLAK && shackbank) {
-				slot8 = "gfx/inv2_lightng"; // TODO inv2_flak
-
-			// Plain inventory items.
-			} else if (sitems & IT_LIGHTNING) {
-				if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv_lightng"; // TODO inv_adplasma
-				else slot8 = "gfx/inv_lightng";
-			} else if (sitems2 & IT_PLASMA_GUN) {
-				slot8 = "gfx/inv_plasmarog";
-			} else if (smoditems & IT_FLAK) {
-				slot8 = "gfx/inv_lightng"; // TODO inv_flak
-			}
-		} else slot8 = "";
-
-		// slot9
-		if (sitems & IT_EXTRA_WEAPON || sperms & IT_FROSTBOW || sitems2 & IT2_LASER_CANNON || sitems2 & IT2_CHAINLIGHTNING) {
-			if (sweapon == IT_EXTRA_WEAPON && !shackbank) {
-				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv2_frostbow";
-				else {
-					if (sammo_poison > 0) slot9 = "gfx/inv2_crossbow2";
-					else slot9 = "gfx/inv2_crossbow";
-				}
-			} else if (sweapon == IT2_LASER_CANNON && !shackbank) {
-				slot9 = "gfx/inv2_laser";
-			} else if (sweapon == IT2_CHAINLIGHTNING && !shackbank) {
-				slot9 = "gfx/inv2_chainlg";
-
-			// Plain inventory items.
-			} else if (sitems & IT_EXTRA_WEAPON) {
-				if (sperms & IT_FROSTBOW) slot9 = "gfx/inv_frostbow";
-				else {
-					if (sammo_poison > 0) slot9 = "gfx/inv_crossbow2";
-					else slot9 = "gfx/inv_crossbow";
-				}
-			} else if (sperms & IT_FROSTBOW) {
-				slot9 = "gfx/inv_frostbow";
-			} else if (sitems2 & IT2_LASER_CANNON) {
-				slot9 = "gfx/inv_laser";
-			} else if (sitems2 & IT2_CHAINLIGHTNING) {
-				slot9 = "gfx/inv_chainlg";
-			}
-		} else slot9 = "";
-
-		// slot0
-		if (sitems2 & IT2_CROSS || sitems2 & IT2_MJOLNIR
-			|| smoditems & IT_GUNGNIR) {
-
-			if (sweapon == IT2_CROSS && !shackbank) {
-				slot0 = "gfx/inv2_wand";
-			} else if (sweapon == IT2_MJOLNIR && !shackbank) {
-				slot0 = "gfx/inv2_mjolnir";
-			} else if (sweapon == IT_GUNGNIR && shackbank) {
-				slot0 = "gfx/inv2_gungnir";
-
-			// Plain inventory items.
-			} else if (sitems2 & IT2_MJOLNIR) {
-				slot0 = "gfx/inv_mjolnir";
-			} else if (sitems2 & IT2_CROSS) {
-				slot0 = "gfx/inv_wand";
-			} else if (smoditems & IT_GUNGNIR) {
-				slot0 = "gfx/inv_gungnir";
-			}
-		} else slot0 = "";
-
-		if (slot1 != "") drawpic(pos+[24*0,8],slot1,'24 16 0','1 1 1',1,0);
-		if (slot2 != "") drawpic(pos+[24*1,8],slot2,'24 16 0','1 1 1',1,0);
-		if (slot3 != "") drawpic(pos+[24*2,8],slot3,'24 16 0','1 1 1',1,0);
-		if (slot4 != "") drawpic(pos+[24*3,8],slot4,'24 16 0','1 1 1',1,0);
-		if (slot5 != "") drawpic(pos+[24*4,8],slot5,'24 16 0','1 1 1',1,0);
-		if (slot6 != "") drawpic(pos+[24*5,8],slot6,'24 16 0','1 1 1',1,0);
-		if (slot7 != "") drawpic(pos+[24*6,8],slot7,'24 16 0','1 1 1',1,0);
-		if (slot8 != "") drawpic(pos+[24*7,8],slot8,'24 16 0','1 1 1',1,0);
-		if (slot9 != "") drawpic(pos+[24*8,8],slot9,'24 16 0','1 1 1',1,0);
-		if (slot0 != "") drawpic(pos+[24*9,8],slot0,'24 16 0','1 1 1',1,0);
-
-		sweaponlast = sweapon;
-		Hud_DrawAmmoCount(0, pos + '11 0 0', FALSE);
-		Hud_DrawAmmoCount(1, pos + '59 0 0', FALSE);
-		Hud_DrawAmmoCount(2, pos + '107 0 0', FALSE);
-		Hud_DrawAmmoCount(3, pos + '153 0 0', FALSE);
-		Hud_DrawModAmmoCount(getstatf(CLIENT_LAVANAILS),pos + '199 0 0',FALSE,'1 1 1'); // ammo_lava_nails
-		Hud_DrawModAmmoCount(getstatf(CLIENT_MULTIROCKETS),pos + '241 0 0',FALSE,'1 1 1'); // ammo_multi_rockets
-		Hud_DrawModAmmoCount(getstatf(CLIENT_BOLTS),pos + '285 0 0',FALSE,'1 1 1'); // ammo_bolts
-		if (getstatf(CLIENT_AMMOPOISON) > 0) Hud_DrawModAmmoCount(getstatf(CLIENT_AMMOPOISON),pos + '285 -9 0',FALSE,'0.5 1 0.5'); // ammo_poison
-		Hud_DrawModAmmoCount(getstatf(CLIENT_ELEMENTAL),pos + '327 0 0',FALSE,'1 1 1'); // ammo_elemental
-		Hud_DrawModAmmoCount(getstatf(CLIENT_BLOODCRYSTALS),pos + '368 0 0',FALSE,'1 1 1'); // ammo_bloodcrystals
-		Hud_DrawModAmmoCount(getstatf(CLIENT_PLASMA),pos + '412 0 0',FALSE,'1 1 1'); // ammo_plasma
-		Hud_DrawModAmmoCount(getstatf(CLIENT_VOIDSHARDS),pos + '450 0 0',FALSE,'1 1 1'); // ammo_voidshards
-
-		// ====================================================================
-	}
+	sweaponlast = sweapon;
+	Hud_DrawAmmoCount(0, pos + '11 0 0', FALSE);
+	Hud_DrawAmmoCount(1, pos + '59 0 0', FALSE);
+	Hud_DrawAmmoCount(2, pos + '107 0 0', FALSE);
+	Hud_DrawAmmoCount(3, pos + '153 0 0', FALSE);
+	Hud_DrawModAmmoCount(getstatf(CLIENT_LAVANAILS),pos + '199 0 0',FALSE,'1 1 1'); // ammo_lava_nails
+	Hud_DrawModAmmoCount(getstatf(CLIENT_MULTIROCKETS),pos + '241 0 0',FALSE,'1 1 1'); // ammo_multi_rockets
+	Hud_DrawModAmmoCount(getstatf(CLIENT_BOLTS),pos + '285 0 0',FALSE,'1 1 1'); // ammo_bolts
+	if (getstatf(CLIENT_AMMOPOISON) > 0) Hud_DrawModAmmoCount(getstatf(CLIENT_AMMOPOISON),pos + '285 -9 0',FALSE,'0.5 1 0.5'); // ammo_poison
+	Hud_DrawModAmmoCount(getstatf(CLIENT_ELEMENTAL),pos + '327 0 0',FALSE,'1 1 1'); // ammo_elemental
+	Hud_DrawModAmmoCount(getstatf(CLIENT_BLOODCRYSTALS),pos + '368 0 0',FALSE,'1 1 1'); // ammo_bloodcrystals
+	Hud_DrawModAmmoCount(getstatf(CLIENT_PLASMA),pos + '412 0 0',FALSE,'1 1 1'); // ammo_plasma
+	Hud_DrawModAmmoCount(getstatf(CLIENT_VOIDSHARDS),pos + '450 0 0',FALSE,'1 1 1'); // ammo_voidshards
 
 	if (sitems & IT_KEY1) drawpic(pos+'264 8 0', "gfx/sb_key1", '16 16 0', '1 1 1', 1, 0);
 	if (sitems & IT_KEY2) drawpic(pos+'280 8 0', "gfx/sb_key2", '16 16 0', '1 1 1', 1, 0);

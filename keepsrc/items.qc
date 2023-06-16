@@ -522,6 +522,7 @@ float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
 	//	return FALSE;
 	//}
 	if (targ.health <= 0) return FALSE;
+	if (targ.health >= HEAL_MEGAMAX) return FALSE;
 	if ((!ignore) && (targ.health >= targ.max_health)) return FALSE;
 	
 	oldh = targ.health;
@@ -540,11 +541,7 @@ float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
 void() health_touch = { // [FUNCTION]
 	// Megahealth?  Ignore max_health...
 	if (self.classtype == CT_HEALMEGA || self.classtype == CT_HEALVIAL) {
-		if (self.classtype == CT_HEALVIAL) {
-			self.rotting = 0;
-			self.rotting_time = 0;
-			self.items2 = self.items2 - (self.items2 & IT2_SUPERHEALTH);
-		}
+
 		if (!T_Heal(other, self.healamount, 1)) return;
 	} else {
 		if (!T_Heal(other, self.healamount, 0)) return;
@@ -569,6 +566,13 @@ void() health_touch = { // [FUNCTION]
 		|| (self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGENLESSER))) {
 		RotDeBuff(other, self.rotting_qty);
 	}
+
+	if (self.classtype == CT_HEALVIAL) {
+		self.rotting = 0;
+		self.rotting_time = 0;
+		self.items2 = self.items2 - (self.items2 & IT2_SUPERHEALTH);
+	}
+
 	if (self.progspawnlist) return; // Quick exit, no need for following stuff
 	
 	item_finished();
