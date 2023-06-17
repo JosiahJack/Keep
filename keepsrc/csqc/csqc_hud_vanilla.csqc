@@ -332,6 +332,7 @@ static float sammo_poison;  //copy of .ammo_posion
 static float shackbank;     //copy of .weaponismoditems
 static float stotal_denizens;//copyof total_denizens
 static float skilled_denizens;//copyofkilled_denizens
+static float suseold_axe;
 
 //Note: these are not tracked for splitscreen, which limits them to one player. We're lazy and just don't update them.
 static float flashtime[WEAPONICONS];	//tracks the time that various items were obtained, so we can flash stuff accordingly.
@@ -405,6 +406,8 @@ static void() Hud_Init {
 	precache_pic("gfx/inv2_gungnir",TRUE);
 	precache_pic("gfx/inv_axe",TRUE);
 	precache_pic("gfx/inv2_axe",TRUE);
+	precache_pic("gfx/inv_shadaxpl",TRUE);
+	precache_pic("gfx/inv2_shadaxpl",TRUE);
 	precache_pic("gfx/inv_chainlg",TRUE);
 	precache_pic("gfx/inv2_chainlg",TRUE);
 	precache_pic("gfx/inv_laser",TRUE);
@@ -413,6 +416,28 @@ static void() Hud_Init {
 	precache_pic("gfx/inv2_frostbow",TRUE);
 	precache_pic("gfx/inv_plasmarog",TRUE);
 	precache_pic("gfx/inv2_plasmarog",TRUE);
+	precache_pic("gfx/inv_airfist",TRUE);
+	precache_pic("gfx/inv2_airfist",TRUE);
+	precache_pic("gfx/inv_ranstaff",TRUE);
+	precache_pic("gfx/inv2_ranstaff",TRUE);
+	precache_pic("gfx/inv_chainsaw",TRUE);
+	precache_pic("gfx/inv2_chainsaw",TRUE);
+	precache_pic("gfx/inv_shadax",TRUE);
+	precache_pic("gfx/inv2_shadax",TRUE);
+	precache_pic("gfx/inv_mace",TRUE);
+	precache_pic("gfx/inv2_mace",TRUE);
+	precache_pic("gfx/inv_grapple",TRUE);
+	precache_pic("gfx/inv2_grapple",TRUE);
+	precache_pic("gfx/inv_widowm",TRUE);
+	precache_pic("gfx/inv2_widowm",TRUE);
+	precache_pic("gfx/inv_lavang",TRUE);
+	precache_pic("gfx/inv2_lavang",TRUE);
+	precache_pic("gfx/inv_lavasng",TRUE);
+	precache_pic("gfx/inv2_lavasng",TRUE);
+	precache_pic("gfx/inv_flak",TRUE);
+	precache_pic("gfx/inv2_flak",TRUE);
+	precache_pic("gfx/inv_plasmaad",TRUE);
+	precache_pic("gfx/inv2_plasmaad",TRUE);
 
 	for (i = 0; i < facetab.length; i++) precache_pic(facetab[i], TRUE);
 	precache_pic("gfx/thorface", TRUE);
@@ -730,20 +755,37 @@ static void Hud_DrawIBar(vector pos, vector br) {
 	// slot1
 	if (sitems & IT_AXE || sitems2 & IT2_GRAPPLE || smoditems & IT_MACE) {
 		if (sweapon == IT_AXE && !shackbank) {
-			if (smoditems & IT_UPGRADE_AXE) slot1 = "gfx/inv2_axe"; // TODO inv2_shadaxe
-			slot1 = "gfx/inv2_axe";
+			if (sperms & IT_CHAINSAW) {
+				slot1 = "gfx/inv2_chainsaw";
+			} else {
+				if (smoditems & IT_UPGRADE_AXE) {
+					slot1 = "gfx/inv2_shadax";
+				} else {
+					if (suseold_axe == 1) slot1 = "gfx/inv2_shadaxpl";
+					else slot1 = "gfx/inv2_axe";
+				}
+			}
 		} else if (sweapon == IT_MACE && shackbank) {
-			slot1 = "gfx/inv2_axe"; // TODO inv2_mace
+			slot1 = "gfx/inv2_mace";
 		} else if (sweapon == IT2_GRAPPLE && !shackbank) {
-			slot1 = "gfx/inv2_axe"; // TODO inv2_grapple
+			slot1 = "gfx/inv2_grapple";
 
 		// Plain inventory icons.
 		} else if (sitems & IT_AXE) {
-			slot1 = "gfx/inv_axe";
+			if (sperms & IT_CHAINSAW) {
+				slot1 = "gfx/inv_chainsaw";
+			} else {
+				if (smoditems & IT_UPGRADE_AXE) {
+					slot1 = "gfx/inv_shadax";
+				} else {
+					if (suseold_axe == 1) slot1 = "gfx/inv_shadaxpl";
+					else slot1 = "gfx/inv_axe";
+				}
+			}
 		} else if (sitems2 & IT2_GRAPPLE) {
-			slot1 = "gfx/inv_axe"; // TODO inv_grapple
+			slot1 = "gfx/inv_grapple";
 		} else if (smoditems & IT_MACE) {
-			slot1 = "gfx/inv_axe"; // TODO inv_mace
+			slot1 = "gfx/inv_mace";
 		}
 	} else slot1 = "";
 
@@ -753,32 +795,32 @@ static void Hud_DrawIBar(vector pos, vector br) {
 			if (sperms & IT_BLASTER) slot2 = "gfx/inv2_shotgun"; // TODO inv2_blaster
 			else slot2 = "gfx/inv2_shotgun";
 		} else if (sweapon == IT_ICE && shackbank) {
-			slot2 = "gfx/inv2_shotgun"; // TODO inv2_ice
+			slot2 = "gfx/inv2_ranstaff";
 		} else if (sweapon == IT_AIRGUN && shackbank) {
-			slot2 = "gfx/inv2_shotgun"; // TODO inv2_airgun
+			slot2 = "gfx/inv2_airfist";
 
 		// Plain inventory icons.
 		} else if (sitems & IT_SHOTGUN) {
 			if (sperms & IT_BLASTER) slot2 = "gfx/inv_shotgun"; // TODO inv_blaster
 			else slot2 = "gfx/inv_shotgun";
 		} else if (smoditems & IT_ICE) {
-			slot2 = "gfx/inv_shotgun"; // TODO inv_shotgun
+			slot2 = "gfx/inv_ranstaff";
 		} else if (sperms & IT_AIRGUN) {
-			slot2 = "gfx/inv_shotgun"; // TODO inv_airgun
+			slot2 = "gfx/inv_airfist";
 		}
 	} else slot2 = "";
 
 	// slot3
 	if (sitems & IT_SUPER_SHOTGUN || smoditems & IT_UPGRADE_SSG || smoditems & IT_SCIMITAR) {
 		if (sweapon == IT_SUPER_SHOTGUN && !shackbank) {
-			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adws_widowm";
+			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/inv2_widowm";
 			else slot3 = "gfx/inv2_sshotgun";
 		} else if (sweapon == IT_SCIMITAR && !shackbank) {
 			slot3 = "gfx/inv2_sshotgun"; // TODO inv2_scimitar
 
 		// Plain inventory items.
 		} else if (smoditems & IT_UPGRADE_SSG) {
-			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/adw_widowm";
+			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/inv_widowm";
 			else slot3 = "gfx/inv_sshotgun";
 		} else if (sitems & IT_SUPER_SHOTGUN) {
 			slot3 = "gfx/inv_sshotgun";
@@ -792,7 +834,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		if (sweapon == IT_NAILGUN && !shackbank) {
 			slot4 = "gfx/inv2_nailgun";
 		} else if (sweapon == IT_LAVA_NAILGUN && !shackbank) {
-			slot4 = "gfx/inv2_nailgun"; // TODO inv2_lavanailgun
+			slot4 = "gfx/inv2_lavang";
 		} else if (sweapon == IT_RAPIER && !shackbank) {
 			slot4 = "gfx/inv2_nailgun"; // TODO inv2_rapier
 
@@ -800,7 +842,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		} else if (sitems & IT_NAILGUN) {
 			slot4 = "gfx/inv_nailgun";
 		} else if (sitems & IT_LAVA_NAILGUN) {
-			slot4 = "gfx/inv_nailgun"; // TODO inv_lavanailgun
+			slot4 = "gfx/inv_lavang";
 		} else if (smoditems & IT_RAPIER) {
 			slot4 = "gfx/inv_nailgun"; // TODO inv_rapier
 		}
@@ -811,7 +853,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		if (sweapon == IT_SUPER_NAILGUN && !shackbank) {
 			slot5 = "gfx/inv2_snailgun";
 		} else if (sweapon == IT_LAVA_SUPER_NAILGUN && !shackbank) {
-			slot5 = "gfx/inv2_snailgun"; // TODO inv2_lavasnailgun
+			slot5 = "gfx/inv2_lavasng";
 		} else if (sweapon == IT_VOID_STAFF && shackbank) {
 			slot5 = "gfx/inv2_snailgun"; // TODO inv2_voidstaff
 
@@ -819,7 +861,7 @@ static void Hud_DrawIBar(vector pos, vector br) {
 		} else if (sitems & IT_SUPER_NAILGUN) {
 			slot5 = "gfx/inv_snailgun";
 		} else if (sitems & IT_LAVA_SUPER_NAILGUN) {
-			slot5 = "gfx/inv_snailgun"; // TODO inv_lavasnailgun
+			slot5 = "gfx/inv_lavasng";
 		} else if (smoditems & IT_VOID_STAFF) {
 			slot5 = "gfx/inv_snailgun"; // TODO inv_voidstaff
 		}
@@ -869,22 +911,22 @@ static void Hud_DrawIBar(vector pos, vector br) {
 
 	// slot8
 	if (sitems & IT_LIGHTNING || smoditems & IT_UPGRADE_LG || sitems & IT_PLASMA_GUN || smoditems & IT_FLAK) {
-		if (sweapon == IT_LIGHTNING && !shackbank) {
-			if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv2_lightng"; // TODO inv2_adplasma
+		if (sweapon == IT_FLAK && shackbank) {
+			slot8 = "gfx/inv2_flak";
+		} else if (sweapon == IT_LIGHTNING && !shackbank) {
+			if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv2_plasmaad";
 			else slot8 = "gfx/inv2_lightng";
 		} else if (sweapon == IT_PLASMA_GUN && !shackbank) {
 			slot8 = "gfx/inv2_plasmarog";
-		} else if (sweapon == IT_FLAK && shackbank) {
-			slot8 = "gfx/inv2_lightng"; // TODO inv2_flak
 
 		// Plain inventory items.
 		} else if (sitems & IT_LIGHTNING) {
-			if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv_lightng"; // TODO inv_adplasma
+			if (smoditems & IT_UPGRADE_LG) slot8 = "gfx/inv_plasmaad";
 			else slot8 = "gfx/inv_lightng";
 		} else if (sitems2 & IT_PLASMA_GUN) {
 			slot8 = "gfx/inv_plasmarog";
 		} else if (smoditems & IT_FLAK) {
-			slot8 = "gfx/inv_lightng"; // TODO inv_flak
+			slot8 = "gfx/inv_flak";
 		}
 	} else slot8 = "";
 
@@ -1015,6 +1057,7 @@ static void Hud_Draw(vector virtsize, float scoreboard) {
 	stotal_denizens = getstatf(CLIENT_DENIZENS);
 	skilled_denizens= getstatf(CLIENT_DENIZENSKILLED);
 	sitems3 = getstatf(CLIENT_ITEMS3);
+	suseold_axe = getstatf(CLIENT_USEOLDAXE);
 
 	if (shealth <= 0) scoreboard = TRUE;
 	if (numclientseats <= 1) { //note that we only track one player's stats. with splitscreen we need to stop looking for changes otherwise we'd see them all the time.

@@ -332,9 +332,6 @@ void(entity e, float resforce, float mod_air, float mod_water, float mod_slime, 
 	
 	//----- Set Motion Resistance for All Environments --------------------
 	if (mod_air > 0) e.gyro_object_resistance_air = 1.0 / (((resforce * mod_air * 10.0) / e.gyro_object_mass) + 1.0);
-	dprint("SetResistanceMod made it to here\n");
-	dprint("air restistance was "); dprint(ftos(resforce)); dprint(", "); dprint(ftos(mod_air));
-	dprint("\n");
 	if (mod_water > 0) e.gyro_object_resistance_water = 1.0 / (((resforce * mod_water * 10.0) / e.gyro_object_mass) + 1.0);
 	if (mod_slime > 0) e.gyro_object_resistance_slime = 1.0 / (((resforce * mod_slime * 10.0) / e.gyro_object_mass) + 1.0);
 	if (mod_lava > 0) e.gyro_object_resistance_lava = 1.0 / (((resforce * mod_lava * 10.0) / e.gyro_object_mass) + 1.0);

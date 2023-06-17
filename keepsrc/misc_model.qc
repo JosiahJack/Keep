@@ -437,7 +437,6 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/madfox/fountain_waterA.mdl") self.mdl = "progs/madfox/fountain_watera.mdl";
 	if (self.mdl == "progs/madfox/warbannerA.mdl") self.mdl = "progs/madfox/warbannera.mdl";
 	if (self.mdl == "progs/madfox/torch.MDL") self.mdl = "progs/madfox/torch.mdl";
-	//if (self.mdl == "progs/madfox/trance10.MDL") self.mdl = "progs/madfox/trance10.mdl";
 	if (self.mdl == "progs/madfox/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
 	if (self.mdl == "progs/tonyn/cupid3.MDL") self.mdl = "progs/madfox/cupid3.mdl";
 	if (self.mdl == "progs/tonyn/cupid3.mdl") self.mdl = "progs/madfox/cupid3.mdl";
@@ -458,11 +457,6 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/its_demo/stealth_eyeb.spr") self.mdl = "progs/its/stealth_eyeb.mdl";
 	if (self.mdl == "progs/its_demo/stealth_eyew.spr") self.mdl = "progs/its/stealth_eyew.mdl";
 	if (self.mdl == "progs/slayertest/props/treeBig.mdl") self.mdl = "progs/slayertest/props/treebig.mdl";
-
-	// Hack for limits
-	if (self.mdl == "progs/slayertest/props/stalag1.mdl") self.mdl = "progs/slayertest/props/stalag2.mdl";
-	if (self.mdl == "progs/slayertest/props/stalag4.mdl") { dprint("stalag4 removed by HACK!!!  Let Qmaster know when its verts are below 2000\n"); precache_model(self.mdl); remove(self); return; }
-	if (self.mdl == "progs/slayertest/props/stalag5.mdl") { dprint("stalag5 removed by HACK!!!  Let Qmaster know when its verts are below 2000\n"); precache_model(self.mdl); remove(self); return; }
 
 	// Silly map fixes for specific models.  Please start at 0.  Please end at
 	// 1 less than what QME says it is if QME started at 1 instead of 0.

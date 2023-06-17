@@ -259,6 +259,7 @@ void() misc_barrel = { // [ENTITY]
 	precache_model(self.mdl);
 	self.bbmins = '-16 -16 -20';
 	self.bbmaxs = '16 16 16';
+	if (self.dmg == 0) self.dmg = 80;
 	misc_explobox_setup();
 	if (self.skin > 0 && self.mdl == "progs/madfox/objects_barrel_damage.mdl") {
 		self.skin = 0; // There's only one skin.

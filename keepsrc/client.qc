@@ -1434,6 +1434,10 @@ void() PlayerPostThink = {
 		self.sdenizens_killed = killed_denizens;
 	}
 
+	if (self.useold_axe != world.useold_axe) {
+		self.useold_axe = world.useold_axe;
+	}
+
 	if (prethink == TRUE && postthink == FALSE) {
 		if (self.flags & FL_CLIENT) { // Check for the player?  First couple of frames the player is not setup correctly.
 			postthink = TRUE;			// postthink flag complete

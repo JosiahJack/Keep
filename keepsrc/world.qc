@@ -544,6 +544,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 			clientstat(CLIENT_ELEMENTAL, EV_FLOAT, ammo_elemental);
 			clientstat(CLIENT_BOLTS, EV_FLOAT, ammo_bolts);
 			clientstat(CLIENT_VOIDSHARDS, EV_FLOAT, ammo_voidshards);
+			clientstat(CLIENT_USEOLDAXE, EV_FLOAT, useold_axe);
 		}
 	}
 	dprint("\b[ENGINE]\b ");

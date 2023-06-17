@@ -357,6 +357,8 @@ void() setup_wizard = { // [FUNCTION]
 		self.th_missile = self.th_slide = wiz_wakeup;
 		if (self.deathstring == "") self.deathstring = " was wrecked by a Scrag\n";
 	} else if (self.classtype == CT_MONWIZBOSS) {
+		if (self.exactskin > 0) self.exactskin = 0;
+		if (self.skin > 0) self.skin = 0;
 		if (self.health < 1) self.health = 300;
 		if (self.gibhealth == 0) self.gibhealth = -40;
 		self.bloodtype = BLOOD_FIRE;

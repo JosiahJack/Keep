@@ -321,7 +321,6 @@ float(vector source, float axedmg) GibFloorBody = {
 	while (onflr) {
 		src_dist = vlen(source - onflr.origin);
 		if (src_dist < RANGE_PLAYAXE) { // Is the body close to the player?
-			dprint("GibFloorBody check made it past src_dist\n");
 			org = onflr.origin - '0 0 16';		// move origin close to floor
 			makevectors(self.v_angle);			// Calculate viewing angle
 			vec = normalize (org - self.origin);
@@ -329,7 +328,6 @@ float(vector source, float axedmg) GibFloorBody = {
 			// Is the body infront of the player or touching thrown mjolnir?
 			if (dotprod > 0.6 || self.classname == "Mjolnir") {
 				onflr.origin = org;				// Move gib closer to floor
-				dprint("GibFloorBody check made it past dotprod\n");
 				W_ShowHostile(); // Wake monsters up, we hit stuff.
 				if ((self.weapon == IT2_MJOLNIR && !self.weaponismoditems)
 					|| self.classname == "Mjolnir") {

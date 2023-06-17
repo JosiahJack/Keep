@@ -60,7 +60,6 @@ $frame paind17 paind18 paind19
 void() rebel_fire = { // [FUNCTION]
     local   vector  org, dir;
 
-    dprint("rebel fire\n");
     if (self.shots_left > 0) self.shots_left = self.shots_left - 1;
     makevectors(self.angles);
     dir = (v_forward*12) + (v_right*8.5) + (v_up*16);

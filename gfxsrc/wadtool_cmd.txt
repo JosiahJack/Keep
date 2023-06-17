@@ -1,0 +1,6 @@
+cd to this directory
+wad -t QPIC ./gfx.wad ./*grapple.pcx
+
+If wad is not recognized, ensure that qcli (Joshua Skelly's
+Quake-CLI tools) is installed and on the path, e.g.:
+export PATH=/home/qmaster/.local/bin:$PATH

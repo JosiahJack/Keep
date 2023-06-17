@@ -241,6 +241,13 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/drake/gr_gib.mdl"); 		// BLOOD_GREEN
 	precache_model("progs/drake/pur_gib.mdl"); 	// BLOOD_PURPLE
 	precache_model("progs/drake/ember.mdl"); 		// BLOOD_FIRE
+	precache_model("progs/rrp/g_axe.mdl"); // Always precache both since we
+	precache_model("progs/v_axe.mdl"); // don't know if next level will change 
+	precache_model("progs/ad171/g_shadaxeplain.mdl"); // useold_axe or ...
+	precache_model("progs/ad171/v_shadaxe0.mdl"); // ...
+	precache_model("progs/drake/g_saw.mdl"); // ...useold_chainsaw or not.
+	precache_model("progs/drake/v_saw.mdl");
+
 	precache_model(MODEL_HEAL5);
 	precache_model(MODEL_HEAL15);
 	precache_model(MODEL_HEAL25);
