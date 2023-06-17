@@ -1536,7 +1536,8 @@ void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 			targ.weaponmodel = MODEL_VWEAP_GL;
 		} else if (targ.weapon == IT2_PROXIMITY_GUN) {
 			targ.currentammo = targ.ammo_rockets;
-			targ.weaponmodel = MODEL_VWEAP_PROX;
+			if (self.perms & IT_SIDEWINDER) targ.weaponmodel = "progs/madfox/mf_v_rock.mdl";
+			else targ.weaponmodel = "progs/hipnotic/v_prox.mdl";
 		} else if (targ.weapon == IT_MULTI_ROCKET) {
 			targ.currentammo = targ.ammo_multi_rockets;
 			targ.weaponmodel = MODEL_VWEAP_MULTR;

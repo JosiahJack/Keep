@@ -324,7 +324,7 @@ void() enf_die = {
 		monster_deathsound();
 		if (self.classtype == CT_MONSUPERENFORCER) {
 			if (self.spawnflags & ENFORCER_LAVANG) {
-				DropWeapon(MODEL_GWEAP_LSNG,IT_LAVA_SUPER_NAILGUN,CT_LAVASNG);
+				DropWeapon("progs/g_lava2.mdl",IT_LAVA_SUPER_NAILGUN,CT_LAVASNG);
 			} else {
 				DropWeapon(MODEL_GWEAP_SNG,IT_SUPER_NAILGUN,CT_SUPER_NAILGUN);
 			}
@@ -353,7 +353,7 @@ void() monster_enforcer_precache = { // [FUNCTION]
 	precache_model(MODEL_PROJ_PLASMA);
 	precache_model("progs/s_spike.mdl");
 	precache_model(MODEL_GWEAP_SNG);
-	precache_model(MODEL_GWEAP_LSNG);
+	precache_model("progs/g_lava2.mdl");
 	precache_model("progs/ad171/g_nail2.mdl");
 	precache_model("progs/lieutenant/enforce2.mdl");
 	precache_model("progs/h_mega.mdl");

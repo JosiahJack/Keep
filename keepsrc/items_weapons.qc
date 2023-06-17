@@ -585,7 +585,7 @@ void() weapon_buriza = {
 };
 
 void() weapon_lava_nailgun = {
-	item_setupmodel(MODEL_GWEAP_LNG,0);
+	item_setupmodel("progs/g_lava.mdl",0);
 	self.weapon = IT_LAVA_NAILGUN;
 	self.classtype = CT_LAVANG;
 	if (self.netname == "") self.netname = "Lava Nailgun";
@@ -595,7 +595,7 @@ void() weapon_lava_nailgun = {
 };
 
 void() weapon_lava_super_nailgun = {
-	item_setupmodel(MODEL_GWEAP_LSNG,0);
+	item_setupmodel("progs/g_lava2.mdl",0);
 	self.weapon = IT_LAVA_SUPER_NAILGUN;
 	self.classtype = CT_LAVASNG;
 	if (self.netname == "") self.netname = "Lava Super Nailgun";
@@ -605,7 +605,7 @@ void() weapon_lava_super_nailgun = {
 };
 
 void() weapon_sidewinder = {
-	item_setupmodel("progs/drake/g_rocks.mdl",0);
+	item_setupmodel("progs/madfox/mf_g_rock.mdl",0);
 	self.weapon = IT_SIDEWINDER;
 	self.classtype = CT_SIDEWINDER;
 	if (self.netname == "") self.netname = "Sidewinder";
@@ -615,7 +615,7 @@ void() weapon_sidewinder = {
 };
 
 void() weapon_proximity_gun = {
-	item_setupmodel(MODEL_GWEAP_PROX,0);
+	item_setupmodel("progs/hipnotic/g_prox.mdl",0);
 	self.weapon = IT2_PROXIMITY_GUN;
 	self.classtype = CT_PROXIMITY_GUN;
 	if (self.netname == "") self.netname = "Proximity Grenade Launcher";

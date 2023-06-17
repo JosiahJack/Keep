@@ -339,17 +339,12 @@ float AMMO_MANA_SML = 20;
 float AMMO_MANA_LGR = 40;
 float GREMLIN_AMMO_TAKE = 30;
 float OGRE_MULTI = 2;
-string MODEL_GWEAP_LNG = "progs/g_lava.mdl";
-string MODEL_GWEAP_LSNG = "progs/g_lava2.mdl";
-string MODEL_GWEAP_PROX = "progs/hipnotic/g_prox.mdl";
 string MODEL_GWEAP_LASER = "progs/hipnotic/g_laserg.mdl";
 string MODEL_VWEAP_LAVANG = "progs/v_lava.mdl";			// Lava nailgun
 string MODEL_VWEAP_LAVASNG = "progs/v_lava2.mdl";		// Lava Super Nailgun
 string MODEL_VWEAP_MULTG = "progs/v_multi.mdl";			// Multi-Grenade Launcher
 string MODEL_VWEAP_MULTR = "progs/v_multi2.mdl";		// Multi-Rocket Launcher
 string MODEL_VWEAP_PLASM = "progs/v_plasma2.mdl";		// Plasma Gun
-string MODEL_VWEAP_PROX = "progs/hipnotic/v_prox.mdl";			// Proximity Gun
-string MODEL_VWEAP_LCAN = "progs/hipnotic/v_laserg.mdl";			// Laser Cannon
 string MODEL_PROJ_GRENADEMULTI = "progs/rogue/mervup.mdl";			// Multi-Grenade for Monsters
 string SOUND_ARTEMPATH2 = "hipnotic/items/empathy2.wav";		// Active
 

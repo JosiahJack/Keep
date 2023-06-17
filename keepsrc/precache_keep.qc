@@ -170,6 +170,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/drake/v_xbow.mdl");
 	precache_model("progs/drake/arrow.mdl");
 	precache_model("progs/hipnotic/v_prox.mdl");
+	precache_model("progs/madfox/mf_v_rock.mdl");
 	precache_model("progs/v_plasma2.mdl");
 	precache_model("progs/v_lava.mdl");
 	precache_model("progs/v_lava2.mdl");
