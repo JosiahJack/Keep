@@ -312,6 +312,7 @@ void() nehwraith_stand1 = [self.walkframe, nehwraith_stand1] { // [FUNCTION]
 		}
 		self.walkframe = self.walkframe + self.cnt;
 	}
+	self.frame = self.walkframe;
 	ai_stand();
 	if (Wraith_FindSoul()) { self.th_walk(); return; }
 };

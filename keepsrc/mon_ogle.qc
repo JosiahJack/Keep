@@ -281,6 +281,8 @@ void() ogle_wipebrowlow8 = [170, ogle_wipebrowlow9	] { ai_stand(); };
 void() ogle_wipebrowlow9 = [171, ogle_wipebrowlow10	] { ai_stand(); self.state = OGLE_MINING; };
 void() ogle_wipebrowlow10= [172, ogle_hammerlowa1	] { ai_stand();if (random() < 0.2) ogle_mine(); };
 
+void() ogle_leaning_wipebrow1;
+
 void() ogle_walk1;
 
 void() ogle_pushcart1 = [173, ogle_pushcart2	] { ai_walk(4); monster_footstep(FALSE); self.state = OGLE_PUSHING;if (!self.entattachment) ogle_walk1(); };
@@ -299,7 +301,15 @@ void() ogle_leaning4 = [184, ogle_leaning5] { ai_stand(); };
 void() ogle_leaning5 = [185, ogle_leaning6] { ai_stand(); };
 void() ogle_leaning6 = [186, ogle_leaning7] { ai_stand(); };
 void() ogle_leaning7 = [187, ogle_leaning8] { ai_stand(); };
-void() ogle_leaning8 = [188, ogle_leaning1] { ai_stand(); };
+void() ogle_leaning8 = [188, ogle_leaning1] { ai_stand();
+	local float rand;
+
+	rand = random();
+	if (rand > 0.8) ogle_leaning_wipebrow1();
+
+	if (random() < 0.4) ogle_relax_to_standa1();
+	else if (random() < 0.4) ogle_relax_to_standb1();
+};
 
 void() ogle_painb1 = [189, ogle_painb2] {};
 void() ogle_painb2 = [190, ogle_painb3] {};
@@ -324,8 +334,10 @@ void() ogle_leaning_idle6 = [202, ogle_leaning_idle1] {
 	rand = random();
 	if (rand > 0.8) ogle_leaning_wipebrow1();
 
-	if (rand < 0.1) ogle_relax_to_standa1();
-	else if (rand < 0.05) ogle_relax_to_standb1();
+	dprint("Ogle leaning\n");
+
+	if (random() < 0.4) ogle_relax_to_standa1();
+	else if (random() < 0.4) ogle_relax_to_standb1();
 };
 
 void() ogle_leaning_wipebrow1 = [203, ogle_leaning_wipebrow2] {};
@@ -351,11 +363,26 @@ void() ogle_idle_to_lean4 = [214, ogle_idle_to_lean5] {};
 void() ogle_idle_to_lean5 = [215, ogle_idle_to_lean6] {};
 void() ogle_idle_to_lean6 = [216, ogle_leaning_idle1] {};
 
-void() ogle_mine = { // [FUNCTION]
+void() ogle_choosemineframes = {
 	local float r;
-	local vector spot1, spot2;
 
 	r = random();
+	if (r < 0.25) {
+		ogle_hammera1();
+	} else if (r < 0.5) {
+		ogle_hammerb1();
+	} else if (r < 0.75) {
+		ogle_hammerlowa1();
+	} else {
+		ogle_hammerlowb1();
+	}
+};
+
+void() ogle_mine = { // [FUNCTION]
+	local vector spot1, spot2;
+	local float loopiter;
+	local entity head;
+
 	if (self.entattachment) {
 		ogle_pushcart1();
 		return;
@@ -366,22 +393,30 @@ void() ogle_mine = { // [FUNCTION]
 	spot2 = spot1 + (v_forward * 48); // Trace directly infront of entity using angles
 	traceline(spot1,spot2, TRUE, self);
 	if (trace_fraction != 1) {
-		if (r < 0.25) {
-			ogle_hammera1();
-		} else if (r < 0.5) {
-			ogle_hammerb1();
-		} else if (r < 0.75) {
-			ogle_hammerlowa1();
-		} else {
-			ogle_hammerlowb1();
-		}
-	} else {
-		if (r < 0.5) {
-			ogle_leaning1();
-		} else {
-			ogle_stand1();
+		ogle_choosemineframes();
+		return;
+	}
+
+	head = findradius(self.origin,128);
+	loopiter = 0;
+	while (head) {
+		loopiter = loopiter + 1;
+		if (loopiter >= 100) break;
+
+		if (head.classtype == CT_MISCMODEL) {
+			if (infront(head)) {
+				ogle_choosemineframes();
+				return;
+			}
 		}
 	}
+
+	if (random() < 0.5) {
+		ogle_leaning1();
+	} else {
+		ogle_stand1();
+	}
+
 };
 
 void(entity inflictor, entity attacker, float damage) ogle_pain = { // [FUNCTION]
