@@ -606,7 +606,8 @@ void() weapon_lava_super_nailgun = {
 
 void() weapon_sidewinder = {
 	item_setupmodel("progs/madfox/mf_g_rock.mdl",0);
-	self.weapon = IT_SIDEWINDER;
+	self.weapon = IT2_PROXIMITY_GUN;
+	self.perms = IT_SIDEWINDER;
 	self.classtype = CT_SIDEWINDER;
 	if (self.netname == "") self.netname = "Sidewinder";
 	item_ammo_set(AMMO_ROCKETS_WPN);

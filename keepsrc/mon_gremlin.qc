@@ -241,6 +241,7 @@ float() GremlinFindTarget = {
    local entity head, gorge;
    local float dist, result;
 
+   //FindTarget(); return; // FIX 2? 777
    if (self.enemy && self.enemy.gorging) return TRUE;
 
    if ( ((self.stoleweapon == FALSE) && (time > self.wait)) ) {
@@ -313,12 +314,13 @@ float () GremlinCheckNoAmmo = { // [FUNCTION]
 };
 
 void(float dist) gremlin_run = {
-   local float r, done, c;
+   local float r, done, c, loopiter;
    local vector d, ang, end;
-   
+
    if (self.health < 1) return;
    
    movedist = dist;
+   movetogoal(dist);// return; FIX 1? 777
    if (self.stoleweapon) self.frame = ((self.frame + 164.000) - 29.000);
 
    if (self.gorging && self.enemy) {
@@ -384,8 +386,11 @@ void(float dist) gremlin_run = {
                if ( (r < 160.000) ) {
                   ang = vectoangles (d);
                   done = FALSE;
-                  c = FALSE;
-                  while ( (done == FALSE) ) {
+                  c = 0;
+                  loopiter = 0;
+                  while (done == FALSE) {
+                     loopiter = loopiter + 1;
+                     if (loopiter >= 100) break;
                      makevectors(ang);
                      end = (self.enemy.origin + (v_forward * 350.000));
                      traceline (self.enemy.origin,end,FALSE,self);
@@ -395,9 +400,8 @@ void(float dist) gremlin_run = {
                            done = TRUE;
                      }
                      ang_y = anglemod ((ang_y + 36.000));
-                     c = (c + TRUE);
-                     if ( (c == MOVETYPE_BOUNCE) )
-                        done = TRUE;
+                     c = (c + 1);
+                     if ((c == 10)) done = TRUE;
                   }
                   setorigin(self.trigger_field,end);
                }
@@ -410,8 +414,150 @@ void(float dist) gremlin_run = {
             }
          }
       }
-      ai_run(dist);
-      self.nextthink = (time + 0.100);
+
+
+
+      // Inline ai_run() to fix infinite loop.
+      local entity e, client;
+
+      MonsterDeBuff();			// Check and apply poison
+      if (self.ryuflags & RYU_REBEL) dist = ai_run_rebel (dist);
+      if (self.slow_finished > time) dist = dist * 0.5;
+
+      if (self.enemy) {
+         if ((self.enemy.flags & FLx_CREATURE)) {
+            if (visible(self.enemy)) {
+               self.carry_time = 0;
+
+               // Set yaw in case we need to face the fallen during the dance.
+               self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
+            } else {
+               self.carry_time = self.carry_time + 0.1;	
+            }
+         }
+      }
+
+      if (self.hasobject == "true") take_monster_object(self); // drop our stuff
+
+      // Is the enemy dead or no longer taking damage?
+      if (self.enemy.health < 1 || self.enemy.takedamage == DAMAGE_NO
+          || self.enemyexit) {
+
+         self.enemyexit = FALSE; // Reset any exit conditions
+         self.enemy = self.goalentity = self.movetarget = world; // Reset enemy and target system
+
+         // Is the old enemy still alive and can it be damaged?
+         if (self.oldenemy.health > 0 && self.oldenemy.takedamage > 0) {
+            self.enemy = self.oldenemy;
+            HuntTarget();
+         } else {
+            if (self.passive_mode == TRUE) { // Was this a passive monster before combat?
+               // Return to passive monster state (reset)
+               self.passive_state = MON_PASSIVESTATE_RESET;
+               check_passivestate_system(self);
+               if (self.charmer) HuntCharmer(); // Go follow our leader again
+            } else {
+               if (self.charmer) {
+                  HuntCharmer(); // Go follow our leader again
+                  return; // Exit run function
+               }
+
+               // Go back on the beat
+               if (self.target != "") self.movetarget = find(world, targetname, self.target); // Monster busy with something else?
+               
+               if (self.movetarget.classtype == CT_PATHCORNER) { // Check for path corners (patrols) and return to stand/walk
+                  self.goalentity = self.movetarget;
+                  self.think = self.th_walk;
+               } else self.think = self.th_stand;
+            }
+
+            if (self.movetarget || self.charmer) self.th_walk();
+            else self.th_stand();
+            return; // Exit run function
+         }
+      }
+      
+      W_ShowHostile(); // Wake up other monsters.
+      enemy_vis = visible(self.enemy); // check visibility of enemy
+      if (enemy_vis) {
+         self.search_time = time + 5;
+         self.calm_memory_finished = time + 2;
+         self.enemylastseen = time; // The last time the enemy was in sight
+      } else {
+         if (IsLoyal(self)) {
+            if (!self.charmer) { // already have a leader to follow
+               client = SeeFriendly(); // hey buddy!
+               if (client) {
+                  if ((IsLeader(client))) { FollowTheLeader(client); return; }
+               }
+            }
+         }
+         if (self.temperament == TEMPRA_COWARDLY) self.search_time = time - 1; // forget it, too SCARY!
+      }
+
+      // look for other coop players or go back to leader
+      if ((coop || self.charmer) && self.search_time < time) {
+         if (self.charmer) {  // already have a leader to follow
+            // dprint("Ok boss, let's get out of here\n");
+            self.enemy = self.oldenemy = world;
+            HuntCharmer();	
+            FindTarget();
+            return;
+         } else {
+            if (IsLoyal(self) && self.calm_memory_finished < time) { // Find a leader
+               client = SeeFriendly(); // hey buddy!
+               if (client) {
+                  if ((IsLeader(client))) { FollowTheLeader(client); return; }
+               }
+            }
+         }
+         if (FindTarget()) return;
+      }
+
+      if (self.enemy == world) return;
+
+      // Calculate if goal/enemy is infront, the range and direction
+      enemy_infront = infront(self.enemy);
+      enemy_range = range(self.enemy);
+      enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
+      self.enemydist = range_distance(self.enemy,FALSE);
+
+      // Check for temporary turret mode via trigger_monsterturret
+      if (self.turretactive.classtype == CT_TRIGMONTURRET && enemy_vis && self.th_missile) {
+         if (self.turrettimer < time) {
+            // Is there a chance to pause?
+            if (random() < self.turretactive.count)  self.turrettimer = time + 1 + random()*2;
+            self.attack_state = AS_TURRET;
+            ai_facingideal_action(self.th_missile);
+            return;
+         }
+      }
+      
+      // Check if tether system is active
+      if (check_tethersystem() && self.health > 0) {
+         self.tetherlock = TRUE;
+         if (self.th_tether) self.think = self.th_tether;
+         return;
+      }
+
+      if (check_passivestate_system(self)) return; // Check for the passive state system (reset/timer etc)
+
+      CheckBlockedBreakable(); // Check if blocked by breakables
+      if (self.attack_state == AS_MISSILE) {
+         // Turn in place until within an angle to launch a missile attack
+         ai_facingideal_action(self.th_missile);
+         return;
+      } else if (self.attack_state == AS_MELEE) {
+         // Turn and close until within an angle to launch a melee attack
+         ai_facingideal_action(self.th_melee);
+         return;
+      }
+
+      if (self.enemymaxdist || self.attack_sniper || self.enemydist < MON_MAX_RANGE) {
+         GremlinCheckAttack();
+      }
+
+      movetogoal(dist);
    }
 };
 
@@ -456,20 +602,20 @@ void() gremlin_run1 = [ 29.000, gremlin_run2 ] {
    monster_footstep(FALSE);
    gremlin_run(0);
 };
-void() gremlin_run2 = [ 30.000, gremlin_run3 ] { gremlin_run (8); };
-void() gremlin_run3 = [ 31.000, gremlin_run4 ] { gremlin_run (12); };
-void() gremlin_run4 = [ 32.000, gremlin_run5 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void() gremlin_run5 = [ 33.000, gremlin_run6 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void() gremlin_run6 = [ 34.000, gremlin_run7 ] { gremlin_run (12); };
-void() gremlin_run7 = [ 35.000, gremlin_run8 ] { gremlin_run (8); };
-void() gremlin_run8 = [ 36.000, gremlin_run9 ] { gremlin_run (0); };
-void() gremlin_run9 = [ 37.000, gremlin_run10 ] { gremlin_run (8); monster_footstep(FALSE); };
-void() gremlin_run10 = [ 38.000, gremlin_run11 ] { gremlin_run (12); };
-void() gremlin_run11 = [ 39.000, gremlin_run12 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void() gremlin_run12 = [ 40.000, gremlin_run13 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void() gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run (12); };
-void() gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run (8); };
-void() gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run (2); monster_footstep(FALSE); }; // Was 0, -Qmaster
+void() gremlin_run2 = [ 30.000, gremlin_run3 ] { gremlin_run(8); };
+void() gremlin_run3 = [ 31.000, gremlin_run4 ] { gremlin_run(12); };
+void() gremlin_run4 = [ 32.000, gremlin_run5 ] { gremlin_run(24); }; // Was 16, -Qmaster
+void() gremlin_run5 = [ 33.000, gremlin_run6 ] { gremlin_run(24); }; // Was 16, -Qmaster
+void() gremlin_run6 = [ 34.000, gremlin_run7 ] { gremlin_run(12); };
+void() gremlin_run7 = [ 35.000, gremlin_run8 ] { gremlin_run(8); };
+void() gremlin_run8 = [ 36.000, gremlin_run9 ] { gremlin_run(0); };
+void() gremlin_run9 = [ 37.000, gremlin_run10 ] { gremlin_run(8); monster_footstep(FALSE); };
+void() gremlin_run10 = [ 38.000, gremlin_run11 ] { gremlin_run(12); };
+void() gremlin_run11 = [ 39.000, gremlin_run12 ] { gremlin_run(24); }; // Was 16, -Qmaster
+void() gremlin_run12 = [ 40.000, gremlin_run13 ] { gremlin_run(24); }; // Was 16, -Qmaster
+void() gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run(12); };
+void() gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run(8); };
+void() gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run(2); monster_footstep(FALSE); }; // Was 0, -Qmaster
 
 void() Gremlin_JumpTouch = { // [FUNCTION]
    if ( (self.health <= FALSE) ) return ;

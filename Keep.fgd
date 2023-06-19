@@ -1661,7 +1661,7 @@
 	]
 	mdl(string) : "Use a model"
 	speed(integer) : "Speed (def=100)"
-	dmg(integer) : "block damage (def=2)"
+	dmg(integer) : "block damage (def=2, -1=No Damage)"
 	sounds(choices) : "Sound" = [
 		0 : "Silent"
 		1 : "Ratchet Metal"
@@ -2391,7 +2391,7 @@ color(128 0 128) = TrigBasic [
 		16 : "Projectiles" : 0 : "Allow projectiles to use regular/instant teleporters"
 		32 : "No Tele FX" : 0 : "No player sound + FX when teleporting entities"
 		64 : "Start OFF" : 0 : "Starts off, waits for trigger" 
-	   128 : "All Physicals" : 1 : "Affect all physical objects"
+	   128 : "All Physicals" : 0 : "Affect all physical objects"
 	]
 	wait(choices) : "Wait before reset" = [
 		-1 : "Trigger Once"
@@ -3224,7 +3224,7 @@ color(128 0 128) = TrigBasic [
 	angles(string) : "Pitch, yaw, roll"
 ]
 
-@PointClass base(Appearflags,Targetname) size(-64 -64 -80, 64 64 88) color(0 128 192) studio("progs/drake/bellring.mdl") = misc_bell : "Bell, Shootable" []
+@PointClass base(Appearflags,Targetname) size(-64 -64 -96, 64 64 16) color(0 128 192) studio("progs/drake/bellring.mdl") = misc_bell : "Bell, Shootable" []
 @PointClass base(Appearflags, Target, Targetname) size (-16 -16 0, 16 16 32) studio("progs/redfield/tower_bell.mdl") = misc_bellredfield : "Shootable Bell" [
 	spawnflags(flags) = [ 
 		64 : "Start Off" : 0

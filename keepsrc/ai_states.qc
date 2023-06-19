@@ -214,7 +214,10 @@ void(float dist) ai_run = {
 	if (self.hasobject == "true") take_monster_object(self); // drop our stuff
 
 	// Is the enemy dead or no longer taking damage?
-	if (SUB_healthEnemyTarget() < 1 || SUB_takedEnemyTarget() == DAMAGE_NO || self.enemyexit) {
+	if ((SUB_healthEnemyTarget() < 1 && !self.gorging) // FIX 3? 777
+		|| SUB_takedEnemyTarget() == DAMAGE_NO
+		|| self.enemyexit) {
+
 		self.enemyexit = FALSE; // Reset any exit conditions
 		SUB_switchEnemyTarget(); // Remove any enemy target entity tracking
 		self.enemy = self.goalentity = self.movetarget = world; // Reset enemy and target system

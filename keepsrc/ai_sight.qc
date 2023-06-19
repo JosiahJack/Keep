@@ -533,7 +533,7 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 };
 
 entity() SeeOpposing = { // [FUNCTION]
-	if (random() < 0.5 && ((total_monsters - killed_monsters) > 200)) return world;
+	if (random() < 0.2) return world;
 
 	// Check and only look for players if no opposing monsters.  Faster.
 	if (self.alignment == GOOD) {
@@ -545,7 +545,7 @@ entity() SeeOpposing = { // [FUNCTION]
 };
 entity() SeeFriendly = { // [FUNCTION]
 	if (self.horn_active && self.charmer) return world; // Already have a leader
-	if (random() < 0.9 && ((total_monsters - killed_monsters) > 100)) return world;
+	if (random() < 0.8) return world;
 
 	// Check and only look for players if no friendly monsters.  Faster.
 	if (self.alignment == GOOD) {

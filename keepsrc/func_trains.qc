@@ -323,7 +323,7 @@ void() func_train_blocked = { // [FUNCTION]
 	if (time < self.attack_finished) return; // This is constant crushing or instant death collision
 
 	self.attack_finished = time + 0.5;
-	T_Damage(other, self, self, self.dmg, DAMARMOR);
+	if (self.dmg > 0) T_Damage(other, self, self, self.dmg, DAMARMOR);
 };
 
 void() func_train_setup = { // [FUNCTION]
@@ -397,6 +397,7 @@ void() func_train = { // [ENTITY]
 	self.angles = '0 0 0';
 	if (self.speed < 1) self.speed = 100;
 	if (!self.dmg) self.dmg = 2;
+	else if (self.dmg < 0) self.dmg = 0;
 	if (self.spawnflags & TRAIN_NONSOLID && self.spawnflags & TRAIN_MODEL) { // Cannot have nonsolid and nodraw together, they are different entity types nonsolid = bmodel with no collision, nodraw = point entity with empty model
 		dprint("\b[FUNC_TRAIN]\b Cannot be bmodel AND model!\n");
 		self.spawnflags = self.spawnflags - TRAIN_MODEL;

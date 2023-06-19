@@ -156,13 +156,13 @@ void(entity inflictor, entity attacker, float damage) bell_hit = { // [FUNCTION]
 // In Hexen2, bell has a hull from '-100 -100 -210' to '100 100 8'.
 void() misc_bell = { // [ENTITY]
     precache_model("progs/drake/bellring.mdl");
-	setmodel(self,"progs/drake/bellring.mdl");
-    precache_sound("drake/misc/bellring.wav");
-    setsize (self, '-64 -64 -80', '64 64 88');
     self.movetype   = MOVETYPE_NONE;
     self.velocity   = '0 0 0';
     self.touch      = SUB_Null;
     self.solid      = SOLID_BBOX;
+	setmodel(self,"progs/drake/bellring.mdl");
+    precache_sound("drake/misc/bellring.wav");
+    setsize (self, '-64 -64 -96', '64 64 16');
     self.use        = bell_use;
     self.th_pain    = bell_hit;
     self.th_die     = bell_bighit;
