@@ -256,6 +256,7 @@ void() CycleIntermissionCamera = {
 				if (self.enemy) {
 					if (self.enemy.message != "") {
 						self.waitmin = time + 2;
+						self.sintermission_running = 3;
 						WriteByte(MSG_ALL,SVC_FINALE);
 						WriteString(MSG_ALL,self.enemy.message);
 						if (self.enemy.message2 != "") {
