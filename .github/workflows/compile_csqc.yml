@@ -17,7 +17,7 @@ jobs:
         run: |
           chmod +x ./keepsrc/fteqcc64
           cd ./keepsrc
-          ./fteqcc64 -v -Fkce -Fifvector -Fvectorlogic -src ./csqc -srcfile ./csqc/csprogs.src
+          ./fteqcc64 -v -Fkce -Fifvector -Fvectorlogic -src ./csqc -srcfile ./csprogs.src
       - name: Upload csprogs.dat
         uses: actions/upload-artifact@v3
         with:
