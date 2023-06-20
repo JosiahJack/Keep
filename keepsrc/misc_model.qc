@@ -442,6 +442,7 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/tonyn/cupid3.mdl") self.mdl = "progs/madfox/cupid3.mdl";
 	if (self.mdl == "progs/tonyn/loky4.MDL") self.mdl = "progs/tonyn/loky4.mdl";
 	if (self.mdl == "progs/madfox/grass1A.mdl") self.mdl = "progs/madfox/grass1a.mdl";
+	if (self.mdl == "progs/tronyn/Bust4.mdl") self.mdl = "progs/tronyn/bust4.mdl";
 	if (self.mdl == "progs/tronyn/Equipment7.mdl") self.mdl = "progs/tronyn/equipment7.mdl";
 	if (self.mdl == "progs/tronyn/Equipment8.mdl") self.mdl = "progs/tronyn/equipment8.mdl";
 	if (self.mdl == "progs/tronyn/Equipment9.mdl") self.mdl = "progs/tronyn/equipment9.mdl";
