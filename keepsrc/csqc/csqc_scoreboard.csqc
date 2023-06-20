@@ -110,6 +110,8 @@ static void(vector pos, string num) Hud_DrawIntermissionNumber = {
 };
 
 void(vector virtmin, vector virtsize) Hud_Intermission = {
+	if (getstatf(CLIENT_INTERMISSION) > 2) return; 
+
 	vector pos = virtmin + (virtsize-[320,200])/2;
 	Hud_CentrePic("gfx/complete.lmp", 320, pos+'0 24', 24);
 	drawpic(pos+[0,56], "gfx/inter.lmp", [160,184],[1,1,1],1,0);
