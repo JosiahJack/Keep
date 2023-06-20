@@ -101,6 +101,7 @@ const float CLIENT_ELEMENTAL = 69;
 const float CLIENT_BOLTS = 70;
 const float CLIENT_VOIDSHARDS = 71;
 const float CLIENT_USEOLDAXE = 72;
+const float CLIENT_INTERMISSION = 73;
 
 // Duplicate of IT_ references in defs.qc
 const float CSQC_SHOTGUN = 1<<0;			// 1
