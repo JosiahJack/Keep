@@ -777,8 +777,7 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 	if (world.mjolniroptions & MJOLNIR_THORSBLESSING) {
 		if (killed_denizens == 0 && total_denizens > 0) { // Denizens are alive when exiting the map.
 			GivePowerThorsBlessing(self.bmodel_act);
-			thorblessing_intermission();
-			centerprint(self.bmodel_act,"Thor Blesses Your Honorable Ways!");
+			thorblessing_intermission(); // Thor Blesses Your Honorable Ways!
 		}
 	}
 
