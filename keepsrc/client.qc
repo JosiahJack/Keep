@@ -1438,6 +1438,10 @@ void() PlayerPostThink = {
 		self.useold_axe = world.useold_axe;
 	}
 
+	if (self.sintermission_running != intermission_running) {
+		self.sintermission_running = intermission_running;
+	}
+
 	if (prethink == TRUE && postthink == FALSE) {
 		if (self.flags & FL_CLIENT) { // Check for the player?  First couple of frames the player is not setup correctly.
 			postthink = TRUE;			// postthink flag complete
