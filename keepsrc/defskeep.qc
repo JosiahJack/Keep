@@ -680,3 +680,5 @@ float gibbed_this_frame;
 float total_goodmonsters;
 .entity hammer; // The thrown mjolnir!
 .float macejump; // Indicate that we have already lunged with the mace.
+
+.float sintermission_running;
