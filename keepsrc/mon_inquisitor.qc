@@ -516,6 +516,7 @@ void() monster_inquisitor = {
 	self.idle_sound = "ad171/skullwiz/idle1.wav";
 	self.pain_sound = "ad171/skullwiz/pain2.wav";
 	self.death_sound = "ad171/skullwiz/fadeaway.wav";
+	self.sight_sound = "drake/archer/sight2.wav";
 	self.solid = SOLID_NOT;				// No interaction with world until spawned
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement until spawned
 	if (self.bboxtype < 1) {

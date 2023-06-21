@@ -199,14 +199,6 @@ void() monster_sightsound = { // [FUNCTION]
 	}
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
-
-	if (self.classtype == CT_MONINQUISITOR && self.enemy && (self.sight_timeout < time)) {
-		if (self.enemy.flags & FL_CLIENT) {
-			sound(self,CHAN_BODY,"drake/archer/sight2.wav",1,0.5);
-		}
-		self.sight_timeout = time + MON_SIGHTSOUND;
-		return;
-	}
 	if (!(self.sight_sound)) return;
 
 	self.monster_awake = TRUE;
