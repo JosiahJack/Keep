@@ -135,8 +135,7 @@ void() ghost_follower_think = { // [FUNCTION]
 		remove (self);
 	}
 
-	if (self.origin == self.oldorigin)				// when it got stuck somewhere. You never know...
-	{
+	if (self.origin == self.oldorigin) { // when it got stuck somewhere. You never know...
 		sound(self,CHAN_WEAPON,"q15/reiver/ghost_follower_death.wav",1,ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
@@ -144,6 +143,7 @@ void() ghost_follower_think = { // [FUNCTION]
 		T_RadiusDamage(self, self.owner, 7 + 15, self.owner, DAMAGEALL);	
 		remove (self);
 	}
+
 	self.oldorigin = self.origin;
 	self.attack_offset_x = crandom()*60;
 	self.attack_offset_y = crandom()*60;
@@ -207,14 +207,12 @@ void(vector spawn_pos, vector spawn_vel) launch_ghost_follower = { // [FUNCTION]
 	newmis.glow_size = 666;
 	
 	newmis.frame = 0;
-	if (random() < 0.5)
-		newmis.alpha = 0.95;
-	else
-		newmis.alpha = 0.8;
-	if (random() < 0.5)
-		newmis.scale = 0.4;
-	else 
-		newmis.scale = 0.51;
+	if (random() < 0.5) newmis.alpha = 0.95;
+	else newmis.alpha = 0.8;
+
+	if (random() < 0.5) newmis.scale = 0.4;
+	else newmis.scale = 0.51;
+
 	newmis.classname = "ghost_follower";
 	newmis.think = ghost_follower_think;	
 	newmis.nextthink = time + 0.2;	
@@ -246,14 +244,14 @@ void()	ghost_followers = { // [FUNCTION]
 	org = self.origin + v_forward*20 + v_up*2;
 	vec = normalize (v_forward); // set homing-missile speed
 	vec_z = vec_z * -1;
-	launch_ghost_follower (org, vec); 
+	launch_ghost_follower(org, vec); 
 };
 
 // homing fireball (shootable or not)
 void() reiver_fireball_death = { // [FUNCTION]
 	if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
-	R_Exp3 (self.origin);
-	remove (self);
+	R_Exp3(self.origin);
+	remove(self);
 };
 
 void() reiver_fireball_touch = { // [FUNCTION]
@@ -264,7 +262,7 @@ void() reiver_fireball_touch = { // [FUNCTION]
 		spawn_touchblood (self, other,20);
 		T_Damage(other, self, self.owner, 20, DAMARMOR);	// default 20
 		if (ext_dppart) pointparticles(particleeffectnum("torment_hellrod_explosion"), self.origin, '0 0 0', 1);
-	 	R_Exp3 (self.origin);
+	 	R_Exp3(self.origin);
 		// checks if fireball inflame the player
 		if (random() <= 0.3) {
 			ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
@@ -275,17 +273,16 @@ void() reiver_fireball_touch = { // [FUNCTION]
 		// wall
 		T_RadiusDamage(self, self.owner, 20 + 10, other, DAMAGEALL); // don't do radius damage to the other, because all the damage was done in the impact
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
-	 	R_Exp3 (self.origin);
+	 	R_Exp3(self.origin);
 	}
-	remove (self);
+	remove(self);
 };
 
 void() reiver_fireball_homing = { // [FUNCTION]
 	local vector dir, vtemp;
+
 	vtemp = self.enemy.origin + '0 0 10';
-	
 	self.movetype = MOVETYPE_FLYMISSILE;
-	
 	if (self.enemy.health < 1) {
 		remove(self);
 		return;
@@ -299,13 +296,13 @@ void() reiver_fireball_homing = { // [FUNCTION]
 		remove (self);
 		return;
 	}
+
 	self.oldorigin = self.origin;
 
 	dir = normalize(vtemp - self.origin);
-	if (skill == 3)
-		self.velocity = dir * 450;
-	else
-		self.velocity = dir * 350;
+	if (skill == 3) self.velocity = dir * 450;
+	else self.velocity = dir * 350;
+
 	self.nextthink = time + 0.2;
 	self.think = reiver_fireball_homing;	
 };
@@ -1085,7 +1082,7 @@ void() monster_reiver = {
 	reiver_shield.lefty = 1;
 	reiver_shield.think = reiver_shield_think;
 	reiver_shield.nextthink = time;
-	if (ext_active) {
+	if (ext_dppart) {
 		if (checkbuiltin(setattachment)) setattachment(reiver_shield, self, "test");
 	}
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent

@@ -742,7 +742,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			// If accumulated pain is higher, use that instead
 			// Added classgroup exception otherwise damage qty is wrong
 			if (inflictor.classgroup == CG_PROJSHELLS && take < self.dmgcombined) self.th_pain (inflictor, attacker, self.dmgcombined);
-			else self.th_pain (inflictor, attacker, take);
+			else self.th_pain(inflictor,attacker,take);
 	
 			// nightmare mode monsters don't go into pain frames often
 			if (skill == SKILL_NIGHTMARE && targ.classgroup != CG_ZOMBIE) self.pain_finished = time + 5;
