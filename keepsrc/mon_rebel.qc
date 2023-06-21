@@ -120,7 +120,7 @@ void() monster_rebel = { // [ENTITY]
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-    if (self.health < 1) self.health = 200;
+    if (self.health < 1) self.health = 80;
     self.gibhealth = -40;
 	self.ryuflags = RYU_ALERT | RYU_REBEL;   
     self.gibbed = FALSE;
@@ -137,7 +137,10 @@ void() monster_rebel = { // [ENTITY]
     self.th_missile = rebel_atk1;
     self.th_checkattack = SoldierCheckAttack;   // For Rebel AI.
 	self.gib1skin = 0;
-	if (self.deathstring == "")  self.deathstring = " was skewered by a Crossbow Rebel\n";
+	if (self.deathstring == "")  {
+		if (self.exactskin == 1 || self.skin == 1) self.deathstring = " was skewered by a Crossbow Goblin\n";
+		else self.deathstring = " was skewered by a Crossbow Rebel\n";
+	}
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     self.classtype = CT_MONREBEL;
 	self.classgroup = CG_KNIGHT;
