@@ -324,7 +324,7 @@ void() item_bloodcrystals = {
 	}
 	self.ammo_bloodcrystals = self.aflag;
 	self.classtype = CT_AMMOBLOODCRYSTALS;
-	if (self.netname == "") self.netname = "quantity of blood crystals";
+	if (self.netname == "") self.netname = "cluster of blood crystals";
 	self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_RING;
 	self.respawn_ofs = '0 0 24';
 	self.respawn_effect = TRUE;

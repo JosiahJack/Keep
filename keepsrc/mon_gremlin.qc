@@ -241,7 +241,9 @@ float() GremlinFindTarget = {
    local entity head, gorge;
    local float dist, result;
 
-   FindTarget(); return; // FIX 2? 777
+   return FindTarget();
+
+   /* TODO Fix gremlin gorging on enemy corpses some day.
    if (self.enemy && self.enemy.gorging) return TRUE;
 
    if ( ((self.stoleweapon == FALSE) && (time > self.wait)) ) {
@@ -287,6 +289,7 @@ float() GremlinFindTarget = {
    result = FindTarget();
    self.search_time = (time + 2);
    return result;
+   */
 };
 
 void(float dist) gremlin_walk = { // [FUNCTION]
@@ -320,7 +323,7 @@ void(float dist) gremlin_run = {
    if (self.health < 1) return;
    
    movedist = dist;
-   movetogoal(dist);// return; FIX 1? 777
+   movetogoal(dist);
    if (self.stoleweapon) self.frame = ((self.frame + 164.000) - 29.000);
 
    if (self.gorging && self.enemy) {
