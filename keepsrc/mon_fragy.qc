@@ -269,7 +269,7 @@ void()	frag_pain8	= [	$pain8, 	frag_run1	] {};
 void(entity inflictor, entity attacker, float damage) frag_pain = {
 	if (self.pain_finished > time) return;
 	
-	sound(self,CHAN_VOICE, "knight/khurt.wav",1,ATTN_NORM);
+	sound(self,CHAN_VOICE,"madfox/frog/frog_04.wav",1,ATTN_NORM);
 	frag_pain1();
 	self.pain_finished = time + 1;
 };
@@ -305,7 +305,7 @@ void() frag_die = {
 	// regular death
 	if (!self.gibbed) {
 		if (pointcontents(self.origin) <= CONTENT_WATER) sound(self,CHAN_VOICE, "fish/death.wav",1,ATTN_NORM);
-		else sound(self,CHAN_VOICE, "quoth/voreling/death.wav",1,ATTN_NORM);
+		else sound(self,CHAN_VOICE,"madfox/frog/frog_05.wav",1,ATTN_NORM);
 		frag_die1();
 	}
 };
@@ -337,6 +337,11 @@ void() monster_fragy_precache = {
 	precache_sound("quoth/voreling/land.wav");
 	precache_sound("ad171/gibs/gibhit1.wav");
 	precache_sound("ad171/gibs/gibhit3.wav");
+	precache_sound("madfox/frog/frog_01.wav");
+	precache_sound("madfox/frog/frog_02.wav");
+	precache_sound("madfox/frog/frog_03.wav");
+	precache_sound("madfox/frog/frog_04.wav");
+	precache_sound("madfox/frog/frog_05.wav");
 };
 
 //QUAKED monster_fragy (1 0 0) (-16 -16 -24) (16 16 24) Ambush
@@ -345,7 +350,9 @@ void() monster_fragy = { // [ENTITY] Redirect
 
 	self.mdl = "progs/madfox/mon_fragy.mdl";
 	self.headmdl = "progs/madfox/h_fragy.mdl";
-	self.idle_sound = "fish/idle.wav";
+	self.idle_sound = "madfox/frog/frog_01.wav";
+	self.idle_sound2 = "madfox/frog/frog_02.wav";
+	self.sight_sound = "madfox/frog/frog_03.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
