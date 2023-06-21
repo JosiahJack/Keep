@@ -241,7 +241,7 @@ float() GremlinFindTarget = {
    local entity head, gorge;
    local float dist, result;
 
-   //FindTarget(); return; // FIX 2? 777
+   FindTarget(); return; // FIX 2? 777
    if (self.enemy && self.enemy.gorging) return TRUE;
 
    if ( ((self.stoleweapon == FALSE) && (time > self.wait)) ) {

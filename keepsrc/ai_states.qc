@@ -205,7 +205,7 @@ void(float dist) ai_run = {
 				self.carry_time = self.carry_time + 0.1;	
 			}
 		}
-		if (self.enemy.classtype == CT_SOUL) {
+		if (self.enemy.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA) {
 			self.gorging = TRUE;
 			if (self.classtype == CT_MONWRAITHNEHAHRA) { SUB_SelfThink(nehwraith_souls1,0.1); return; }
 		}
@@ -214,7 +214,7 @@ void(float dist) ai_run = {
 	if (self.hasobject == "true") take_monster_object(self); // drop our stuff
 
 	// Is the enemy dead or no longer taking damage?
-	if ((SUB_healthEnemyTarget() < 1 && !self.gorging) // FIX 3? 777
+	if ((SUB_healthEnemyTarget() < 1 && !self.gorging)
 		|| SUB_takedEnemyTarget() == DAMAGE_NO
 		|| self.enemyexit) {
 

@@ -1592,7 +1592,12 @@ entity(vector start, vector dir, float sped, float damage) Acidball_Launch = { /
 };
 
 entity(vector start, vector dir, float sped) Acid_Toss = { // [FUNCTION]
-    newmis = launch_projectile(start,dir,NO_SPIN,CT_PROJ_WIZ,sped);
+	local entity aball;
+
+    aball = launch_projectile(start,dir,NO_SPIN,CT_PROJ_WIZ,sped);
+
+	if (!aball) return world;
+
     newmis.movetype  = MOVETYPE_TOSS;
     newmis.speed     = sped;
     newmis.velocity  = (dir * sped) + '0 0 200';

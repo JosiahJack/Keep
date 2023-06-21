@@ -371,7 +371,7 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
 
 //  This spawns a missile at the dragon's mouth then launches said missile at the target.  The missile cast varies by type.
 void() Ryu_Shot_Fire = { // [FUNCTION]
-    local   entity  targ;   // Use shot leading if targ != world;
+    local   entity  targ, shot;   // Use shot leading if targ != world;
     local   vector  dir;    // Vector from 'start' to 'end'.
     local   vector  start;  // Location of dragon's mouth.
     local   vector  end;    // Place where projectile will strike.
@@ -382,8 +382,8 @@ void() Ryu_Shot_Fire = { // [FUNCTION]
 	// As with players, pay ammo cost first then attack.
     if (self.shots_left < 1) return;     // Out of ammo.
 
-	newmis = spawn();
-	newmis.classgroup = CG_PROJALL;
+	shot = spawn();
+	shot.classgroup = CG_PROJALL;
     // Calculate lead coefficient.  The value begins at or close to zero at
     // the start of the salvo, then the value increases with each successive
     // shot until it reaches one at the final shot.
@@ -417,13 +417,13 @@ void() Ryu_Shot_Fire = { // [FUNCTION]
         sped = sped * 1.25;     // Fire spray shots are 25% faster.
         dir = Maim_LineEx (start, end, sped, targ, '1.2 0.9 0', frac);
         Ryu_Fire (start, dir, sped, 200, 0);
-        if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
-        if (!self.shots_left || (self.shots_left == (self.shots_max - 1))) newmis.effects = newmis.effects | EF_DIMLIGHT;
+        if (self.height > 9) shot.dmg = self.height;   // Extra damage.
+        if (!self.shots_left || (self.shots_left == (self.shots_max - 1))) shot.effects = shot.effects | EF_DIMLIGHT;
     } else if (self.worldtype == RYU_USE_ACID) {
         dir = Aim_Ballistic(start,end,sped,200,targ,frac,SHOT_TIME_TOSS,MOVETYPE_TOSS);
         dir = Maim_Scatter(dir,'0 0 0');
-        newmis = Acid_Toss (start, dir, sped);
-        if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
+        shot = Acid_Toss (start, dir, sped);
+        if (self.height > 9 && shot) shot.dmg = self.height;   // Extra damage.
     } else if (self.worldtype == RYU_USE_LITE) {
         // Check for discharge, just like Thunderbolt-wielding player.
         self.effects = self.effects | EF_MUZZLEFLASH;
