@@ -3229,6 +3229,8 @@ void(vector org, vector dir) pyroflame_spawn = {
 				setmodel(newmis, SBURST_FLAMEDP);
 			} else setmodel(newmis, SBURST_FLAME);
 		}
+	} else if (self.classtype == CT_MONOCTA) {
+		setmodel(newmis,"progs/madfox/wink.spr");
 	} else {
 		if (ext_dppart) {
 			// Use special DP flames and empty sprite for collision
