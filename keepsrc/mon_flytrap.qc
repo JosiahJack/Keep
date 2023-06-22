@@ -333,7 +333,7 @@ void() monster_flytrap_ground = {
 		self.bboxtype = BBOX_CUSTOM;
 	}
 
-	self.alignment = GOOD;
+	self.alignment = NEUTRAL;
 	self.vulnerability = VULN_NORMAL;
 	self.use = test1;
   	if (self.deathstring == "") self.deathstring = " was ingested by a Mechanized Venus Fly Trap\n";
@@ -553,7 +553,7 @@ void() monster_flytrap = {
 		self.bboxtype = BBOX_CUSTOM;
 	}
 
-	self.alignment = GOOD;
+	self.alignment = NEUTRAL;
 	self.vulnerability = VULN_NORMAL;
 	if (self.deathstring == "") self.deathstring = " was ingested by a Venus Fly Trap\n";
 	self.classmove = MON_MOVESTATIC;
