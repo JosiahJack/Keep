@@ -355,8 +355,9 @@ void() item_elemental = {
 		item_setupmodel("progs/redfield/g_light.mdl",0);
 		item_ammo_set(AMMO_MANA_LGR);
 	} else {
-		item_setupmodel("progs/redfield/crystal_ball_ammo.mdl",0);
+		item_setupmodel("progs/redfield/crystal_ball_ammo.mdl",1);
 		item_ammo_set(AMMO_MANA_SML);
+		if (!self.skin_override) self.skin_override = 2;
 	}
 	self.ammo_elemental = self.aflag;
 	self.classtype = CT_AMMOELEMENTAL;
