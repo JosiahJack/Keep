@@ -856,7 +856,7 @@ void() light_candle_setup = { // [FUNCTION]
 	setmodel(self, self.mdl); // Setup model and no world interaction
 	setsize(self,VEC_ORIGIN,VEC_ORIGIN);
 	if (engine == ENG_DPEXT && !(self.spawnflags & LIGHT_CANDLESHADOW)) self.effects = self.effects + EF_NOSHADOW; // If DP engine active remove candle model shadow
-	if (self.angles_y <= 0) self.angles_y = rint(random()*359); // Setting the angle key in the editor to UP/DOWN = random rotation.
+	if (self.angles_y <= 0 && self.angles_x == 0 && self.angles_z == 0) self.angles_y = rint(random()*359); // Setting the angle key in the editor to UP/DOWN = random rotation.
 	if (self.spawnflags & ENT_SPNSTATIC) makestatic(self); // Check for static option (default is now static if no target)
 	else {
 		self.estate_on = light_candle_on; // Custom estate on/off functions
