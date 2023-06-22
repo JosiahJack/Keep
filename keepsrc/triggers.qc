@@ -774,10 +774,16 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 	SUB_UseTargets();
 
 	// Grant Thor's Blessing automatically if the map calls for it.
-	if (world.mjolniroptions & MJOLNIR_THORSBLESSING) {
-		if (killed_denizens == 0 && total_denizens > 0) { // Denizens are alive when exiting the map.
-			GivePowerThorsBlessing(self.bmodel_act);
-			thorblessing_intermission(); // Thor Blesses Your Honorable Ways!
+	if (world.mjolniroptions & MJOLNIR_THORSBLESSING) { 
+		if (self.bmodel_act.items3 & IT3_THORSBLESSING){ // And don't already have it.
+			if (killed_denizens > 0) { // Lose it!
+				self.bmodel_act.items3 = self.bmodel_act.items3 - IT3_THORSBLESSING;
+			}
+		} else {
+			if (killed_denizens == 0 && total_denizens > 0) { // Denizens are alive when exiting the map.
+				GivePowerThorsBlessing(self.bmodel_act);
+				thorblessing_intermission(); // Thor Blesses Your Honorable Ways!
+			}
 		}
 	}
 

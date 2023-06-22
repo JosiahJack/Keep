@@ -68,6 +68,11 @@ $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
 //BDW 31/08/00 - evil, nasty red-hot nail cluster-bomb attack...
 void() FlakDoDamage = {
+	if (!self.oldenemy || self.oldenemy.health < 1) {
+		remove(self);
+		return;
+	}
+
 	self.origin = self.oldenemy.origin + self.oldorigin;	//get correct gib direction
 	T_Damage(self.oldenemy, self, self.owner, self.oldenemy.spikecount,DAMARMOR);
 	self.oldenemy.spikecount = 0;

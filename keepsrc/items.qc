@@ -725,6 +725,7 @@ void() key_touchbindmsg = { // [FUNCTION]
 // Check if player has the key already
 float(entity keyplayer, entity keyitem) key_pickupcondition = { // [FUNCTION]
 	if (keyitem.classtype == CT_CUSTOMKEY) return (keyplayer.moditems & keyitem.moditems);
+	else if (keyitem.classtype == CT_SKELETONKEY) return (keyplayer.items2 & IT2_KEY_SKELETON);
 	return (keyplayer.items & keyitem.items);
 };
 
