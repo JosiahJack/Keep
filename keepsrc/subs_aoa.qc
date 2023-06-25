@@ -51,18 +51,6 @@ void(string playerModel) setPlayerModel = { //sets the player model to the strin
 	self.view_ofs = '0 0 22';
 };
 
-//healing utility called by health-draining melee weapons like the Mace
-void(entity target, float hlth, float maxHealth) TriggerHeal = {
-	
-	if (target.health > maxHealth)
-		return;
-	else if (target.health + hlth < maxHealth)
-		target.health = target.health + hlth;
-	else
-		target.health = maxHealth;
-	sound(target,CHAN_AUTO,"aoa/heal.wav", 0.6,ATTN_NORM);
-};
-
 /*
 =====================================================================
 Mirror Player Model (for testing player animations)	#mirror

@@ -1333,8 +1333,7 @@ void() MaceSwing1 =	[	119,	MaceSwing2	] { self.weaponframe=1;sound(self,CHAN_WEA
 void() MaceSwing2 =	[	120,	MaceSwing3	] { self.weaponframe=2; };
 void() MaceSwing3 =	[	121,	MaceSwing4	] { self.weaponframe=3; MaceSwing(); };
 void() MaceSwing4 =	[	122,	MaceSwing5	] { self.weaponframe=4; };
-void() MaceSwing5 =	[	123,	MaceBackhand1	]
-{
+void() MaceSwing5 =	[	123,	MaceBackhand1	] {
 	self.weaponframe=5;
 	if (!self.button0) //if player isn't holding mouse, don't do second attack. will need ammo check here later
 	{
@@ -1415,10 +1414,10 @@ void(vector location) DrainHealthEffect = {
 	
 };
 
-void(entity victim, entity attacker) DrainHealth 
-{
+void(entity victim, entity attacker) DrainHealth {
 	T_Damage(victim, attacker, attacker, 35, DAMARMOR);
-	TriggerHeal(self, 10, 110);
+	T_Heal(attacker,10,FALSE);
+	sound(attacker,CHAN_AUTO,"aoa/heal.wav",0.6,ATTN_NORM);
 	SpawnBlood(victim, victim.origin + '0 0 45', '0 0 100' + spread('100 100 100'), 20,0);
 };
 
@@ -1445,9 +1444,20 @@ void() CastDrainHealth = {
 
 
 void() MaceLungeTouch = {
-	if (other.takedamage && !(self.flags & FL_ONGROUND))
-	{
-		T_Damage(other, self, self, 25, DAMARMOR);
+	if (other.takedamage && !(self.flags & FL_ONGROUND)) {
+		if ((self.ammo_bloodcrystals > 0 || self.tome_finished)
+			&& self.health < self.max_health) {
+
+			if (!self.tome_finished) {
+				self.ammo_bloodcrystals = self.ammo_bloodcrystals - 1;
+				self.currentammo = self.ammo_bloodcrystals;
+			}
+
+			T_Heal(self,5,FALSE);
+			sound(self,CHAN_AUTO,"aoa/heal.wav", 0.6,ATTN_NORM);
+		}
+
+		T_Damage(other, self, self,25,DAMARMOR);
 		sound(self,CHAN_VOICE, "ad171/weapons/axe_wood.wav", 1.0,ATTN_NORM);
 		SpawnBlood(other, (self.origin - other.origin)/2 + '0 0 20', self.velocity, 20,0);
 	}
@@ -1481,10 +1491,20 @@ void(vector org, entity victim) MaceSwingHits = {
 	particle(trace_endpos, '0 0 2', 73, 10);
 	SpawnBlood(victim, org, '0 0 1', 10,0);
 	sound(self,CHAN_AUTO,"aoa/melee_meat.wav",1,ATTN_NORM);
-	if (victim.classgroup == CG_ZOMBIE) damage = 100; //bonus damage to zombies, but cannot drain health from zombies
-	else TriggerHeal(self,5,100);// entity target, float hlth, float maxHealth. Heals self 5, capped at 100
-	
 	damage = 45;//regular attack
+	if (victim.classgroup == CG_ZOMBIE) damage = 100; //bonus damage to zombies, but cannot drain health from zombies
+	if ((self.ammo_bloodcrystals > 0 || self.tome_finished)
+		&& self.health < self.max_health) {
+
+		if (!self.tome_finished) {
+			self.ammo_bloodcrystals = self.ammo_bloodcrystals - 1;
+			self.currentammo = self.ammo_bloodcrystals;
+		}
+
+		T_Heal(self,5,FALSE);
+		sound(self,CHAN_AUTO,"aoa/heal.wav", 0.6,ATTN_NORM);
+	}
+	
 	if (self.tome_finished) damage = 90; //double damage during Tome of Power
 	T_Damage(victim,self,self,damage,DAMARMOR);
 
@@ -2084,40 +2104,39 @@ void() TurnIntoArmor = {
 	remove(self);	
 };
 
-void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide health if possible.
-{
+void() GauntletBloodOrbit = {//make the blood orbs orbit the player, and provide health if possible.
 	local float distance, contents;
 	local vector toOwner;
 	
-	
-	if (self.owner.tome_finished) //
-	{
+	if (self.owner.tome_finished) {
 		self.nextthink = time;
 		self.think = BloodTornadoSeek;
 		return;
 	}
 	
-	if (self.frame == 9)//loop through frames
-		self.frame = 0;
-	else
-		self.frame = self.frame + 1;
+	if (self.frame == 9) self.frame = 0; //loop through frames
+	else self.frame = self.frame + 1;
 		
-	if (self.owner.health < 0) //this is set by GauntletDrainSpell as attack_finished (time+20seconds), and determines the lifspan of the Gauntlet Blood bits
-	{
+	if (self.owner.health < 0) { //this is set by GauntletDrainSpell as attack_finished (time+20seconds), and determines the lifspan of the Gauntlet Blood bits
 		remove(self);
 		return;
 	}
+
 	if (time > self.attack_finished) { //at expiry, turn into armor
 		TurnIntoArmor();
 		return;
 	}
 
-	if (self.owner.health <100 && self.owner.health >0 && vlen(self.owner.origin - self.origin) < 64 && self.enemy != self.owner) //heal owner for self.dmg
-	{
-		TriggerHeal(self.owner, self.dmg, 100);
+	if (self.owner.health <100 && self.owner.health >0
+		&& vlen(self.owner.origin - self.origin) < 64
+		&& self.enemy != self.owner) { // Heal owner for self.dmg
+
+		T_Heal(self,self.dmg,FALSE);
+		sound(self,CHAN_AUTO,"aoa/heal.wav", 0.6,ATTN_NORM);
 		remove(self);
 		return;
 	}
+
 	contents = pointcontents(self.origin);
 	if (contents == -3 || contents == -4 || contents == -5) {
 		remove(self);

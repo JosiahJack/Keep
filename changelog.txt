@@ -1,4 +1,7 @@
 version 1.00.1:
+	Fix mace to use bloodcrystals ammo when siphoning health from hit enemies.
+	Fix mace to siphon health from lunges.  Was previously only if on ground.
+	Fix Thor's Blessing to not have player get stuck in the ground.
 	Fix conback.lmp to use the actual Keep conback.
 	Fix skeleton key netname so it doesn't say "You got the _a_ skeleton key".
 	Fix tome of power to notify with sprint text that it is fading.

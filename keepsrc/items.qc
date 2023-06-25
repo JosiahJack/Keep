@@ -1333,13 +1333,14 @@ void() BackpackTouch = { // [FUNCTION]
 			other.nailpiercer_sound = self.nailpiercer_sound;
 		}		
 	}
+
 	sprint(other, " from a backpack\n");
 	if (self.perms & IT_CHAINSAW) sound(other,CHAN_ITEM,"zerstorer/weapons/sawidle.wav",1,ATTN_NORM);
 	else sound(other,CHAN_ITEM,"weapons/lock4.wav",1,ATTN_NORM);
-	Safe_stuffcmd (other, "bf\n");
+	Safe_stuffcmd(other, "bf\n");
 
 	// Check ammo limts, change to best weapon and set ammo type
-	bound_other_ammo (other);
+	bound_other_ammo(other);
 	if (deathmatch) other.weapon = W_BestWeapon(other);
 	W_SetCurrentAmmo(other,gaveweapon);
 	

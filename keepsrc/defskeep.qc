@@ -49,7 +49,7 @@
 // -ijed
 //=============================================================================
 
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, v1.00.0\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, v1.00.1\n";
 .float mapversion;
 .string target3, target4;
 float total_denizens; // Used to track total harmless denizens.
