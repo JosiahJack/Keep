@@ -1086,8 +1086,11 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor, floa
 void(float offset) gaunt_lightning = {
 	local vector org, vec, dir, hadjvec, oldorg, reqvel;
 	local float damage, hadj, ofs;
+	local entity enem;
 
-	if (!self.enemy) return;
+	enem = SUB_entEnemyTarget();
+
+	if (!enem) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
@@ -1099,7 +1102,7 @@ void(float offset) gaunt_lightning = {
 	oldorg = self.origin;
 	walkmove(self.ideal_yaw - ofs, 8 * self.multiplier);
 	hadj = self.origin_z - self.origin2_z;
-	if (visible(self.enemy)) hadj = hadj * self.vsightmultiplier;
+	if (visible(enem)) hadj = hadj * self.vsightmultiplier;
 	else hadj = hadj * self.vmultiplier;
 
 	hadjvec_z = hadj;
@@ -1111,26 +1114,26 @@ void(float offset) gaunt_lightning = {
 		self.velocity = reqvel;
 	}
 	if (self.lip == TRUE) self.lip = FALSE;
-	if (self.enemy.classname == "player") vec = self.enemy.origin - self.enemy.velocity * 0.085;
-	else vec = self.enemy.origin - self.enemy.velocity * 0;
+	if (enem.classname == "player") vec = enem.origin - enem.velocity * 0.085;
+	else vec = enem.origin - enem.velocity * 0;
 
 	vec = normalize(vec - self.origin);
-	if (vlen(self.enemy.origin - self.origin) > 1200) vec = self.origin + vec * 1100;
-	else vec = self.origin + vec * (vlen(self.enemy.origin - self.origin) + 20);
+	if (vlen(enem.origin - self.origin) > 1200) vec = self.origin + vec * 1100;
+	else vec = self.origin + vec * (vlen(enem.origin - self.origin) + 20);
 
 	org = self.origin;
 	traceline(org, vec, 1, self);
 	Tent_Beam(TE_LIGHTNING2,self,org,trace_endpos);
-	damage = (50 / (vlen(self.enemy.origin - trace_endpos) * 0.25) + 1) * 0.75;
-	if (self.enemy.carrymode == TRUE) damage = damage * 0.5;
+	damage = (50 / (vlen(enem.origin - trace_endpos) * 0.25) + 1) * 0.75;
+	if (enem.carrymode == TRUE) damage = damage * 0.5;
 	if (trace_ent) {
 		if (trace_ent.flags & FL_MONSTER) damage = 25; // Consistent for monsters.
 	}
 	LightningDamage(self.origin, trace_endpos, self, damage);
-	if (self.enemy.health < 1 && vlen(self.enemy.origin - self.origin) <= 600) {
-		self.enemy.velocity = self.enemy.velocity + '0 0 10';
-		dir = self.enemy.origin - (self.absmin + self.absmax) * 0.5;
+	if (enem.health < 1 && vlen(enem.origin - self.origin) <= 600) {
+		enem.velocity = enem.velocity + '0 0 10';
+		dir = enem.origin - (self.absmin + self.absmax) * 0.5;
 		dir = normalize(dir);
-		self.enemy.velocity = self.enemy.velocity + dir * 50;
+		enem.velocity = enem.velocity + dir * 50;
 	}
 };
