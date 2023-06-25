@@ -846,13 +846,13 @@ void() item_key_skeleton = { // [ENTITY]
 	if (!self.worldtype) self.worldtype = world.worldtype; // Check for any self worldtype override
 	if (self.worldtype == 1) {
 		item_setupmodel("progs/qmaster/w_sk_key.mdl",0);
-		if (self.netname == "") self.netname = "a skeleton key";
+		if (self.netname == "") self.netname = "skeleton key";
 	} else if (self.worldtype == 2) {
 		item_setupmodel("progs/qmaster/key_base.mdl",0);
-		if (self.netname == "") self.netname = "a skeleton keycard";
+		if (self.netname == "") self.netname = "skeleton keycard";
 	} else {
 		item_setupmodel("progs/qmaster/w_sk_key.mdl",0);
-		if (self.netname == "") self.netname = "a skeleton key";
+		if (self.netname == "") self.netname = "skeleton key";
 	}
 	self.items2 = IT2_KEY_SKELETON;
 	self.classtype = CT_SKELETONKEY;
