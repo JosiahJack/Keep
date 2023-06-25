@@ -2,6 +2,7 @@ version 1.00.1:
 	Fix conback.lmp to use the actual Keep conback.
 	Fix skeleton key netname so it doesn't say "You got the _a_ skeleton key".
 	Fix tome of power to notify with sprint text that it is fading.
+	Fix trigger_changelevel to not centerprint congrats text on level exit.
 	Fix cheats to use sprint since they can be called when developer is 0.
 version 1.00:
 	Add tons of HACKS for Mjolnir 1.0

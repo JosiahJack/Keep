@@ -382,7 +382,10 @@ void() SUB_UseTargets = { // [FUNCTION]
 	// Check if previous delay has been disabled.  Unfortunately start off = OFF state and not easy to check for because some entities use that spawnflag bit for other things!
 	if (self.classtype == CT_TRIGRELAYDELAY && (self.owner.estate & ESTATE_DISABLE)) return;
 
-	Mass_Centerprint(self.message,self.noise,activator); // print any messages	
+	if (self.classtype != CT_TRIGLEVEL) { // Print message.  Changelevel uses
+										  // this for the Congrats text.
+		Mass_Centerprint(self.message,self.noise,activator);
+	}
 	if (self.killtarget != "") SUB_KillTarget(self.killtarget);
 	if (self.killtarget2 != "") SUB_KillTarget(self.killtarget2);
 	if (self.target != "") SUB_Target(self.target);
