@@ -127,7 +127,8 @@ float () GremlinAttemptWeaponSteal = {
        || wepID == ID_THUNDERBOLT_AD_PLASMAGUN || wepID == ID_PLASMAGUN_ROGUE
        || wepID == ID_FLAK || wepID == ID_CHAINLIGHTNING
        || wepID == ID_WANDCROSS2 || wepID ==ID_MJOLNIR
-       || wepID == ID_GUNGNIR || wepID == ID_AIRGUN) {
+       || wepID == ID_GUNGNIR || wepID == ID_AIRGUN
+       || wepID == ID_PROXIMITY_GRENADE) { // Temporary until I can fix hackbank gremlin stealing.
       return FALSE;
    }
 
@@ -830,9 +831,11 @@ void() GremlinFireRocket = {
 	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
+	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
 	self.ammo_rockets = self.ammo_rockets - 1;
+   self.th_updmissile = army_rocket_think;
 	launch_projectile((self.origin + '0 0 16'),dir,NO_SPIN,CT_PROJ_ARMY,SPEED_RLPLAYER);
 };
 
@@ -1364,6 +1367,7 @@ void() monster_gremlin_precache = {
    precache_sound("hipnotic/grem/pain3.wav");
    precache_sound("hipnotic/grem/idle.wav");
    precache_sound("hipnotic/grem/sight1.wav");
+   precache_sound("quoth/dguard/hit.wav");
    precache_sound(SOUND_LASER_HIT);
 };
 

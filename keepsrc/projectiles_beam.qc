@@ -1087,6 +1087,8 @@ void(float offset) gaunt_lightning = {
 	local vector org, vec, dir, hadjvec, oldorg, reqvel;
 	local float damage, hadj, ofs;
 
+	if (!self.enemy) return;
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 	ChangeYaw();
