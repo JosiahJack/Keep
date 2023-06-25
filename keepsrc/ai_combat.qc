@@ -193,11 +193,6 @@ void(entity targ, entity attacker) Killed = {
 		return;
 	}
 
-	// Teleport to last spot we were on ground, telefragging what's there, jump
-	// up with large force, play lightning blast and beltup sounds, give
-	// invincibility and flight boot power for 15 seconds.
-	if (self.items3 & IT3_THORSBLESSING && !teamplay) { UseThorsBlessing(self); return; } // Lifesaver!
-
 	// doors, triggers, etc
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE || self.classtype == CT_FUNCPUSHABLE) {	
 		self.th_die();
@@ -557,9 +552,27 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}	
 	}
 
-	if (!TeamHealthDam(targ, inflictor, attacker, damage)) return; // same team --ZOID
+	if (!TeamHealthDam(targ, inflictor, attacker, damage)) {
+		return; // same team --ZOID
+	}
 
-	if (deathmatch) take = RuneApplyEarth(take, targ); // rune power up (Earth Magic)
+	if (deathmatch) {
+		take = RuneApplyEarth(take, targ); // rune power up (Earth Magic)
+	}
+
+	if ((targ.health - take) < 1) {
+		// Save player before actually reducing health to <= 0 to prevent them
+		// becoming a point sized head.
+
+		// Teleport to last spot we were on ground, telefragging what's there,
+		// jump up with large force, play lightning blast and beltup sounds,
+		// give invincibility and flight boot power for 15 seconds.
+		if (targ.items3 & IT3_THORSBLESSING && !teamplay) {
+			UseThorsBlessing(targ); // Lifesaver!
+			return;
+		}
+
+	}
 
     	//
 	    //------------------------------------------------------\\__
