@@ -643,8 +643,8 @@ void() display_configflag = { // [FUNCTION]
 
 // Give the player various sigils (serverflag)
 void(float sigil_bit) givesigil = { // [FUNCTION]
-	dprint("\b[SIGIL]\b Server updated ("); 
-	dprint(ftos(sigil_bit)); dprint(")\n");
+	sprint(self,"\b[SIGIL]\b Server updated ("); 
+	sprint(self,ftos(sigil_bit)); sprint(self,")\n");
 	if (sigil_bit & SVR_RUNE_KEY1) {
 		update_configflag(SVR_RUNE_KEY1,TRUE);
 		self.serverflagstemp = self.serverflagstemp | SVR_RUNE_KEY1;
@@ -671,8 +671,8 @@ void(float key_bit) givekey = { // [FUNCTION]
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
-	dprint("\b[KEYS]\b Inventory updated ("); 
-	dprint(ftos(key_bit)); dprint(")\n");
+	sprint(self,"\b[KEYS]\b Inventory updated ("); 
+	sprint(self,ftos(key_bit)); sprint(self,")\n");
 	if (key_bit & IT_KEY1) self.items = self.items | IT_KEY1;
 	if (key_bit & IT_KEY2) self.items = self.items | IT_KEY2;
 };
@@ -687,9 +687,9 @@ void() toggleautoaim = { // [FUNCTION]
 	else autoaim_cvar = 1;
 	cvar_set("sv_aim", ftos(autoaim_cvar));
 	
-	sprint(self, "\b[Impulse]\b Auto aim state ("); 
+	sprint(self,"\b[Impulse]\b Auto aim state ("); 
 	if (autoaim_cvar < 1) sprint(self, "ON)\n");
-	else sprint(self, "OFF)\n");
+	else sprint(self,"OFF)\n");
 };
 
 void() toggleprojsize = { // [FUNCTION]
@@ -701,9 +701,9 @@ void() toggleprojsize = { // [FUNCTION]
 	if (playerprojsize == 1) playerprojsize = 0;
 	else playerprojsize = 1;
 	
-	sprint(self, "\b[Impulse]\b Player proj size ("); 
+	sprint(self,"\b[Impulse]\b Player proj size ("); 
 	if (playerprojsize == 1) sprint(self, "SMALL)\n");
-	else sprint(self, "LARGE)\n");
+	else sprint(self,"LARGE)\n");
 };
 
 void() togglezaware = { // [FUNCTION]
@@ -715,9 +715,9 @@ void() togglezaware = { // [FUNCTION]
 	if (query_configflag(SVR_ZAWARE)) update_configflag(SVR_ZAWARE, FALSE);
 	else update_configflag(SVR_ZAWARE, TRUE);
 
-	sprint(self, "\b[Impulse]\b Z Aware Monsters ("); 
+	sprint(self,"\b[Impulse]\b Z Aware Monsters ("); 
 	if (query_configflag(SVR_ZAWARE)) sprint(self, "Disabled)\n");
-	else sprint(self, "Enabled)\n");
+	else sprint(self,"Enabled)\n");
 };
 
 void() togglepixels = { // [FUNCTION]
@@ -725,15 +725,15 @@ void() togglepixels = { // [FUNCTION]
 	if (impulse_playeronly()) return;		// Player only
 	
 	self.impulse = 0;	
-	sprint(self, "\b[SETTINGS]\b texture filtering ("); 
+	sprint(self,"\b[SETTINGS]\b texture filtering ("); 
 	if (pixelmode == TRUE) {
 		pixelmode = FALSE; // WHAT AM I DOIN!!!!  OOOOOOH!.....fine grumble grumble
-		Safe_stuffcmd(self, "\ngl_texturemode GL_LINEAR_MIPMAP_LINEAR\n");
-		sprint(self, "blurry)\n");
+		Safe_stuffcmd(self,"\ngl_texturemode GL_LINEAR_MIPMAP_LINEAR\n");
+		sprint(self,"blurry)\n");
 	} else {
 		pixelmode = TRUE;
-		Safe_stuffcmd(self, "\ngl_texturemode GL_NEAREST_MIPMAP_LINEAR\n");
-		sprint(self, "crispy)\n");
+		Safe_stuffcmd(self,"\ngl_texturemode GL_NEAREST_MIPMAP_LINEAR\n");
+		sprint(self,"crispy)\n");
 	}
 };
 
@@ -746,7 +746,7 @@ void() togglefootstep = { // [FUNCTION]
 	if (query_configflag(SVR_FOOTSTEP)) update_configflag(SVR_FOOTSTEP, FALSE);
 	else update_configflag(SVR_FOOTSTEP, TRUE);
 	
-	sprint(self, "\b[Impulse]\b footsteps ("); 
+	sprint(self,"\b[Impulse]\b footsteps ("); 
 	if (query_configflag(SVR_FOOTSTEP)) sprint(self, "OFF)\n");
 	else sprint(self, "ON)\n");
 };
@@ -760,7 +760,7 @@ void() toggleliquiddmg = { // [FUNCTION]
 	if (query_configflag(SVR_LIQDAM)) update_configflag(SVR_LIQDAM, FALSE);
 	else update_configflag(SVR_LIQDAM, TRUE);
 	
-	sprint(self, "\b[Impulse]\b Monster Liquid Damage ("); 
+	sprint(self,"\b[Impulse]\b Monster Liquid Damage ("); 
 	if (query_configflag(SVR_LIQDAM)) sprint(self, "OFF)\n");
 	else sprint(self, "ON)\n");
 };
@@ -775,10 +775,10 @@ void() toggleaipath = { // [FUNCTION]
 	if (query_configflag(SVR_AIPATH)) update_configflag(SVR_AIPATH, FALSE);
 	else update_configflag(SVR_AIPATH, TRUE);
 	
-	sprint(self, "\b[Impulse]\b Path Corner Arrows ("); 
+	sprint(self,"\b[Impulse]\b Path Corner Arrows ("); 
 	if (query_configflag(SVR_AIPATH)) sprint(self, "OFF)\n");
 	else sprint(self, "ON)\n");
-	sprint(self, "Reload / Quickload map to see changes!\n");
+	sprint(self,"Reload / Quickload map to see changes!\n");
 };
 
 void() toggleshotgunproj = { // [FUNCTION]
@@ -790,7 +790,7 @@ void() toggleshotgunproj = { // [FUNCTION]
 	if (query_configflag(SVR_SHOTGPROJ)) update_configflag(SVR_SHOTGPROJ, FALSE);
 	else update_configflag(SVR_SHOTGPROJ, TRUE);
 	
-	sprint(self, "\b[Impulse]\b Shotgun Projectiles ("); 
+	sprint(self,"\b[Impulse]\b Shotgun Projectiles ("); 
 	if (query_configflag(SVR_SHOTGPROJ)) sprint(self, "OFF)\n");
 	else sprint(self, "ON)\n");
 };
@@ -804,7 +804,7 @@ void() toggleshotguncase = { // [FUNCTION]
 	if (query_configflag(SVR_SHOTGCASE)) update_configflag(SVR_SHOTGCASE, FALSE);
 	else update_configflag(SVR_SHOTGCASE, TRUE);
 	
-	sprint(self, "\b[Impulse]\b Shotgun Casing ("); 
+	sprint(self,"\b[Impulse]\b Shotgun Casing ("); 
 	if (query_configflag(SVR_SHOTGCASE)) sprint(self, "OFF)\n");
 	else sprint(self, "ON)\n");
 };
@@ -818,7 +818,7 @@ void() toggletrackmissile = { // [FUNCTION]
 	if (map_notrackondeath == TRUE) map_notrackondeath = FALSE;
 	else map_notrackondeath = TRUE;
 	
-	sprint(self, "\b[Impulse]\b Tracking Missiles ("); 
+	sprint(self,"\b[Impulse]\b Tracking Missiles ("); 
 	if (map_notrackondeath == FALSE) sprint(self, "OFF)\n");
 	else sprint(self, "ON)\n");
 };
@@ -829,13 +829,13 @@ void() togglecoopartifacts = { // [FUNCTION]
 	if (impulse_cooponlymode()) return;		// Coop only
 	
 	self.impulse = 0;
-	sprint(self, "\b[SETTINGS]\b COOP Drop Artifacts ("); 
+	sprint(self,"\b[SETTINGS]\b COOP Drop Artifacts ("); 
 	if (coop_artifacts == TRUE) {
 		coop_artifacts = FALSE;
-		sprint(self, "OFF)\n");
+		sprint(self,"OFF)\n");
 	} else {
 		coop_artifacts = TRUE;
-		sprint(self, "ON)\n");
+		sprint(self,"ON)\n");
 	}
 };
 
@@ -845,13 +845,13 @@ void() togglecoopweapons = { // [FUNCTION]
 	if (impulse_cooponlymode()) return;		// Coop only
 	
 	self.impulse = 0;
-	sprint(self, "\b[SETTINGS]\b COOP Weapons Respawn ("); 
+	sprint(self,"\b[SETTINGS]\b COOP Weapons Respawn ("); 
 	if (coop_weapons == TRUE) {
 		coop_weapons = FALSE;
-		sprint(self, "ON)\n");
+		sprint(self,"ON)\n");
 	} else {
 		coop_weapons = TRUE;
-		sprint(self, "OFF)\n");
+		sprint(self,"OFF)\n");
 	}
 };
 
@@ -861,7 +861,7 @@ void() togglecoopammoboxes = { // [FUNCTION]
 	if (impulse_cooponlymode()) return;		// Coop only
 	
 	self.impulse = 0;
-	sprint(self, "\b[SETTINGS]\b COOP Ammo Boxes Respawn ("); 
+	sprint(self,"\b[SETTINGS]\b COOP Ammo Boxes Respawn ("); 
 	if (coop_ammoboxes == TRUE) {
 		coop_ammoboxes = FALSE;
 		sprint(self, "OFF)\n");
@@ -877,7 +877,7 @@ void() togglecoophealth = { // [FUNCTION]
 	if (impulse_cooponlymode()) return;		// Coop only
 	
 	self.impulse = 0;
-	sprint(self, "\b[SETTINGS]\b COOP Health Packs Respawn ("); 
+	sprint(self,"\b[SETTINGS]\b COOP Health Packs Respawn ("); 
 	if (coop_health == TRUE) {
 		coop_health = FALSE;
 		sprint(self, "OFF)\n");
@@ -893,7 +893,7 @@ void() togglecooppowerups = { // [FUNCTION]
 	if (impulse_cooponlymode()) return;		// Coop only
 	
 	self.impulse = 0;
-	sprint(self, "\b[SETTINGS]\b COOP Powerups Respawn ("); 
+	sprint(self,"\b[SETTINGS]\b COOP Powerups Respawn ("); 
 	if (coop_powerups == TRUE) {
 		coop_powerups = FALSE;
 		sprint(self, "OFF)\n");
@@ -1201,11 +1201,11 @@ void() toggleupgradeaxe = { // [FUNCTION]
 	
 	self.impulse = 0;
 	if (self.moditems & IT_UPGRADE_AXE) {
-		dprint("\b[Impulse]\b Shadow Axe Removed\n"); 
+		sprint(self,"\b[Impulse]\b Shadow Axe Removed\n"); 
 		self.moditems = self.moditems - IT_UPGRADE_AXE;
 		update_configflag(SVR_UPDAXE, FALSE);
 	} else {
-		dprint("\b[Impulse]\b Shadow Axe Added\n"); 
+		sprint(self,"\b[Impulse]\b Shadow Axe Added\n"); 
 		self.moditems = self.moditems | IT_UPGRADE_AXE;
 		update_configflag(SVR_UPDAXE, TRUE);
 		self.weapon = IT_AXE; // Switch to new weapon
@@ -1220,11 +1220,11 @@ void() toggleupgradessg = { // [FUNCTION]
 	
 	self.impulse = 0;
 	if (self.moditems & IT_UPGRADE_SSG) {
-		dprint("\b[Impulse]\b Widowmaker Shotgun Removed\n"); 
+		sprint(self,"\b[Impulse]\b Widowmaker Shotgun Removed\n"); 
 		self.moditems = self.moditems - IT_UPGRADE_SSG;
 	}
 	else {
-		dprint("\b[Impulse]\b Widowmaker Shotgun Added\n"); 
+		sprint(self,"\b[Impulse]\b Widowmaker Shotgun Added\n"); 
 		self.moditems = self.moditems | IT_UPGRADE_SSG;
 		// Switch to new weapon
 		self.weapon = IT_SUPER_SHOTGUN;
@@ -1241,10 +1241,10 @@ void() toggleupgradelg = { // [FUNCTION]
 	
 	self.impulse = 0;
 	if (self.moditems & IT_UPGRADE_LG) {
-		dprint("\b[Impulse]\b Plasma Gun Removed\n"); 
+		sprint(self,"\b[Impulse]\b Plasma Gun Removed\n"); 
 		self.moditems = self.moditems - IT_UPGRADE_LG;
 	} else {
-		dprint("\b[Impulse]\b Plasma Gun Added\n"); 
+		sprint(self,"\b[Impulse]\b Plasma Gun Added\n"); 
 		self.moditems = self.moditems | IT_UPGRADE_LG;
 		// Switch to new weapon
 		self.weapon = IT_LIGHTNING;
@@ -1289,8 +1289,8 @@ void() CheatCommand = { // [FUNCTION]
 	if (impulse_skill03only()) return;		// skill 0-3 only
 	
 	// Should be a dev only command, but everyone knows about it!	
-	dprint("\b[Impulse 249]\b Weapon Cheat Command\n");
-	dprint("- Use Impulse 245 to get silver/gold keys!\n");
+	sprint(self,"\b[Impulse 249]\b Weapon Cheat Command\n");
+	sprint(self,"- Use Impulse 245 to get silver/gold keys!\n");
 	self.impulse = 0;
 	self.ammo_rockets = self.maxrockets;
 	self.ammo_nails = self.maxnails;
@@ -1386,7 +1386,7 @@ void() LavaShieldCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTLSHIELD1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 246]\b Lava Shield Cheat\n");
+	sprint(self,"\b[Impulse 246]\b Lava Shield Cheat\n");
 	self.lavashield_time = 1;
 	self.lavashield_finished = POWERUP_VANIA;	// Infinite
 	self.moditems = self.moditems | IT_ARTLAVASHIELD;
@@ -1400,7 +1400,7 @@ void() BlastBeltCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTBLASTBELT1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 248]\b Blast Belt Cheat\n");
+	sprint(self,"\b[Impulse 248]\b Blast Belt Cheat\n");
 	self.blastbelt_time = 1;
 	self.blastbelt_finished = POWERUP_VANIA;	// Infinite
 	self.moditems = self.moditems | IT_ARTBLASTBELT;
@@ -1414,7 +1414,7 @@ void() JumpBootsCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTJUMPBOOTS1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 249]\b Endless Jump Boots Cheat\n");
+	sprint(self,"\b[Impulse 249]\b Endless Jump Boots Cheat\n");
 	self.jumpboots_time = 1;
 	self.jumpboots_airmax = -1;			// Endless jumping
 	self.jumpboots_height = ART_JUMPHEIGHT;
@@ -1431,7 +1431,7 @@ void() SharpshooterCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTSHARP1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 250]\b Sharp Shooter Cheat\n");
+	sprint(self,"\b[Impulse 250]\b Sharp Shooter Cheat\n");
 	self.sharpshoot_time = 1;
 	self.sharpshoot_finished = time + POWERUP_TIMER;
 	self.items = self.items | IT_QUAD;
@@ -1446,7 +1446,7 @@ void() NailPiercerCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTNAILP1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 251]\b Nail Piercer Cheat\n");
+	sprint(self,"\b[Impulse 251]\b Nail Piercer Cheat\n");
 	self.nailpiercer_time = 1;
 	self.nailpiercer_finished = time + POWERUP_TIMER;
 	self.items = self.items | IT_QUAD;
@@ -1461,7 +1461,7 @@ void() EnvSuitCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTSUIT1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 252]\b Environmental Suit Cheat\n");
+	sprint(self,"\b[Impulse 252]\b Environmental Suit Cheat\n");
 	self.rad_time = 1;
 	self.radsuit_finished = time + POWERUP_TIMER;
 	self.items = self.items | IT_SUIT;
@@ -1475,7 +1475,7 @@ void() PentagramCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTPENT1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 253]\b Pentagram of Protection Cheat\n");
+	sprint(self,"\b[Impulse 253]\b Pentagram of Protection Cheat\n");
 	self.invincible_time = 1;
 	self.invincible_finished = time + POWERUP_TIMER;
 	self.items = self.items | IT_INVULNERABILITY;
@@ -1489,7 +1489,7 @@ void() InvisibleCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,SOUND_ARTINV1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 254]\b Ring of Shadows Cheat\n");
+	sprint(self,"\b[Impulse 254]\b Ring of Shadows Cheat\n");
 	self.invisible_time = 1;
 	self.invisible_finished = time + POWERUP_TIMER;
 	self.items = self.items | IT_INVISIBILITY;
@@ -1503,7 +1503,7 @@ void() QuadDamageCheat = { // [FUNCTION]
 	
 	sound(self,CHAN_ITEM,SOUND_ARTQUAD1,1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 255]\b Quad Damage Cheat\n");
+	sprint(self,"\b[Impulse 255]\b Quad Damage Cheat\n");
 	self.super_time = 1;
 	self.super_damage_finished = time + POWERUP_TIMER;
 	self.items = self.items | IT_QUAD;
@@ -1517,7 +1517,8 @@ void() TomeOfPowerCheat = { // [FUNCTION]
 
 	sound(self,CHAN_ITEM,"drake/items/tomepow.wav",1,ATTN_NORM);
 	self.impulse = 0;
-	dprint("\b[Impulse 248]\b Tome of Power Cheat!\n");
+	sprint(self,"\b[Impulse 248]\b Tome of Power Cheat!\n");
+	self.tome_time = 1;
 	self.tome_finished = time + POWERUP_TIMER;
 	self.moditems = self.moditems | IT_ARTTOME;
 	W_SetCurrentAmmo(self,FALSE);
@@ -1534,12 +1535,12 @@ void() ToggleFlashlight = { // [FUNCTION]
 void() KillGun = { // [FUNCTION]
 	if (cheatflags == CHEAT_GIBGUN) {
 		cheatflags = 0;
-		dprint("KillRay deactivated.\n");
+		sprint(self,"KillRay deactivated.\n");
 	} else if (cheatflags == CHEAT_KILLGUN) {
 		cheatflags = CHEAT_GIBGUN;
-		dprint("KillRay activated! Instagib mode!\n");
+		sprint(self,"KillRay activated! Instagib mode!\n");
 	} else {
 		cheatflags = CHEAT_KILLGUN;
-		dprint("KillRay activated! Instakill mode!\n");
+		sprint(self,"KillRay activated! Instakill mode!\n");
 	}
 };

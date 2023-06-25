@@ -1,3 +1,8 @@
+version 1.00.1:
+	Fix conback.lmp to use the actual Keep conback.
+	Fix skeleton key netname so it doesn't say "You got the _a_ skeleton key".
+	Fix tome of power to notify with sprint text that it is fading.
+	Fix cheats to use sprint since they can be called when developer is 0.
 version 1.00:
 	Add tons of HACKS for Mjolnir 1.0
 	Add HUD face for Thor's Blessing
@@ -12,7 +17,8 @@ version 1.00:
 	Fixed overheal vial health carrying across levels
 	Fixed monster_rebel not attacking and running away
 Yes we skipped some versions in our mad dash to get Mjolnir 1.0 released or at
-least a beta version of Mjolnir 1.0 released.
+least a beta version of Mjolnir 1.0 released.  Apparently this mad dash was
+2yrs long?!?  How did that happen??
 version 0.97:
 	Added more [FUNCTION] tags to mark as non-entities for Nifty
 	Fixed bad references found by Nifty

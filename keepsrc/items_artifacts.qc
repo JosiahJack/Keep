@@ -317,6 +317,7 @@ void() tomeofpower_touch = { // [FUNCTION]
 	sprint(other,"\n");
 	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
+	other.tome_time = 1;
 	other.tome_finished = time + self.cnt;
 	activator = other;
 	SUB_UseTargets();
