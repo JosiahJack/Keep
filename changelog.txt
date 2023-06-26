@@ -1,4 +1,6 @@
 version 1.00.1:
+    Fix crash to console when touching live bees.
+    Fix crash to console that could occur if gaunt lightning enemy was removed.
 	Fix gremlin stolen rocket launcher fire causing crash to console.
 	Fix mace to use bloodcrystals ammo when siphoning health from hit enemies.
 	Fix mace to siphon health from lunges.  Was previously only if on ground.
