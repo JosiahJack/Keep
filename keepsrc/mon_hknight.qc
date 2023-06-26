@@ -277,7 +277,7 @@ entity(float offset) hknight_shot = {
     } else if (self.classname == "monster_dark_lord") {
         newmis = NecroBolt_Launch(org,dir);
     } else {
-		if (self.classtype == self.classtype == CT_MONSABERENFORCER) newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN_BLUE,self.attack_speed);
+		if (self.classtype == CT_MONSABERENFORCER) newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN_BLUE,self.attack_speed);
 		else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
 	}
 
