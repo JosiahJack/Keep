@@ -54,11 +54,12 @@ void(float offset) dlord_shot = { // [FUNCTION]
 	local vector offang;
 	local vector org;
 	local vector vec;
+	local entity mshot;
 
 	if (!self.enemy) return;
+	if (self.health < 1) return;
 
-	if (visible(self.enemy))
-		self.oldorigin = self.enemy.origin;
+	if (visible(self.enemy)) self.oldorigin = self.enemy.origin;
 
 	if (visible(self.enemy)) {
 		offang = vectoangles(self.enemy.origin - self.origin);
@@ -70,19 +71,21 @@ void(float offset) dlord_shot = { // [FUNCTION]
 	org = self.origin + '0 0 24' + v_forward * 20;
 	vec = normalize(v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5) * 0.2;
-	newmis = hknight_shot(offset);
-	newmis.classname = "knightspike";
-	setmodel(newmis, "progs/quoth/dspike.mdl");
-	newmis.enemy = self.enemy;
+	mshot = hknight_shot(offset);
+	if (!mshot) return;
+
+	mshot.classname = "knightspike";
+	setmodel(mshot, "progs/quoth/dspike.mdl");
+	mshot.enemy = self.enemy;
 	if (visible(self.enemy)) {
-		newmis.think = dlord_shot_think;
+		mshot.think = dlord_shot_think;
 	} else {
-		newmis.think = SUB_Null;
+		mshot.think = SUB_Null;
 	}
-	newmis.nextthink = time + 0.1;
-	newmis.avelocity = '500 500 500';
-	setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.velocity = vec * 750;
+	mshot.nextthink = time + 0.1;
+	mshot.avelocity = '500 500 500';
+	setsize(mshot, VEC_ORIGIN, VEC_ORIGIN);
+	mshot.velocity = vec * 750;
 };
 
 void() shieldon = { // [FUNCTION]
