@@ -161,7 +161,7 @@ alias upglg "impulse 210"
 bind "0" "impulse 77"
 bind "9" "impulse 90"
 viewsize "100"
-gl_farclip "163840"
+gl_farclip "500000"
 
 //-----------------------------------------------------------
 // All of the MOD features can be changed before loading
