@@ -51,6 +51,7 @@ mapsrc/autosave/*
 !mapsrc/template*
 !mapsrc/statuegarden.map
 !mapsrc/statuegarden.jmf
+!gfx/env/egyptoagula*
 screenshots/*.png
 config.cfg
 fte.cfg

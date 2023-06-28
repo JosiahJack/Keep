@@ -459,6 +459,9 @@ void() misc_model = { // [ENTITY]
 	if (self.mdl == "progs/its_demo/stealth_eyew.spr") self.mdl = "progs/its/stealth_eyew.mdl";
 	if (self.mdl == "progs/slayertest/props/treeBig.mdl") self.mdl = "progs/slayertest/props/treebig.mdl";
 
+	// OK I did this one to myself.  Fix for egyptoagula.
+	if (self.mdl == "progs/back2forwards/plants.mdl") self.mdl = "progs/lieutenant/plants.mdl";
+
 	// Silly map fixes for specific models.  Please start at 0.  Please end at
 	// 1 less than what QME says it is if QME started at 1 instead of 0.
 	if ((self.mdl == "progs/hrimfaxi/pinetree.mdl"
