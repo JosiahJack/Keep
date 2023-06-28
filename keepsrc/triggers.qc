@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 29
-// Function count: 57
+// Entity count: 30
+// Function count: 58
 //
 // Implements: Triggers
 //
@@ -406,6 +406,47 @@ float() trigger_teleportable = { // [FUNCTION]
 	if ((other.health < 1 || other.solid != SOLID_SLIDEBOX) && !(self.spawnflags & TRIG_TELEPROJECTILE) && !(self.spawnflags & 128)) return FALSE; // Only teleport living creatures and monsters (mostly) but let projectiles work with teleporters.
 	if ((self.spawnflags & 128) && AffectedByPhysics(other)) return TRUE;  // Qmaster added spawnflag to affect all physical objects such as particles, rockets, etc.
 	return TRUE; // Normal
+};
+
+void() teleport_destchange = { // [FUNCTION]
+	local entity trig;
+
+	trig = find(world,targetname,self.target);
+	if (!trig || trig.classname != "trigger_teleport") {
+		dprint("\b[TELEPORT_DESTCHANGE]\b Cannot find trigger_teleport\n");
+		return;
+	}
+
+	trig.goalentity = find (world, targetname, self.message);
+	if (!trig.goalentity) {
+		dprint("\b[TELEPORT_DESTCHANGE]\b Cannot find teleport destination\n");
+		return;
+	}
+
+	makevectors (trig.goalentity.mangle);
+	trig.goalentity.movedir = v_forward;
+	trig.goalentity.pos1 = trig.goalentity.origin + 32 * trig.goalentity.movedir;
+};
+
+// target = teleport to change
+// message = new info_teleport_destination's targetname to switch to
+// targetname = name of this entity so we can use it
+void() info_teleport_changedest = { // [ENTITY]
+	self.use = teleport_destchange;
+	if (self.targetname == "") {
+		dprint("\b[ERROR]\b info_teleport_changedest with no targetname");
+		remove(self);
+	}
+
+	if (self.target == "") {
+		dprint("\b[ERROR]\b info_teleport_changedest with no target");
+		remove(self);
+	}
+
+	if (self.message == "") {
+		dprint("\b[ERROR]\b info_teleport_changedest with no message set for new destination");
+		remove(self);
+	}
 };
 
 void() trigger_teleport_touch = { // [FUNCTION]

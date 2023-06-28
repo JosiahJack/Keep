@@ -184,6 +184,11 @@ void() trigger_relay = { // [ENTITY]
 	if (check_nightmare() == TRUE) return; // Check for firing conditions (nightmare, coop)
 	if (check_coop() == TRUE) return;
 
+	// Hack for Egyptoagula
+	if (self.noise == "its_demo_v1_1/weapons/lg_explode2.wav") {
+		self.noise = "its/weapons/lg_explode2.wav";
+	}
+
 	if (self.targetname == "" && !(self.spawnflags & TRIG_REPEATTARGET)) { // Special case, can't use SUB_CheckTargetname
 		dprint("\b[TRIG_RELAY]\b targetname missing!\n");
 		spawn_marker(self.origin,'0 0 0',0,SPNMARK_YELLOW);
