@@ -1076,7 +1076,7 @@ void() ClientPowerups = { // [FUNCTION]
 		self.effects = self.effects | EF_DIMLIGHT;
 	} else self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 
-	if (self.items2 & IT2_CROSS && self.weapon == IT2_CROSS && !self.weaponismoditems) self.currentammo = Zapper_Level(self);
+	if (self.items2 & IT2_WAND && self.weapon == IT2_WAND && !self.weaponismoditems) self.currentammo = Zapper_Level(self);
 };
 
 // If a thrown hammer was removed without resetting the hammer time,

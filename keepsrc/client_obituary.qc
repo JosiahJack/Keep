@@ -258,7 +258,7 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 						clientstring2 = "'s plasma\n";
 					}
 				}
-				if (rnum == IT_EXTRA_WEAPON) {
+				if (rnum == IT_CROSSBOW) {
 					if (attacker.perms & IT_FROSTBOW) {
 						clientstring = " was frozen by ";
 						clientstring2 = "'s frost bolt\n";

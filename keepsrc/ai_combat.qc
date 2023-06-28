@@ -279,8 +279,8 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// resist_fire is the odd one out here. There were too many edge cases not handled by classgroups so they exist in individual locations
 	// except if we have the ice arbalest out or Blizzard Sphere
 	if (( (targ.moditems & IT_ICE && targ.weapon == IT_ICE && targ.weaponismoditems) // Have ice out
-           || (targ.items & IT_EXTRA_WEAPON && targ.perms & IT_FROSTBOW // Have frostbow out
-               && targ.weapon == IT_EXTRA_WEAPON && !targ.weaponismoditems) )
+           || (targ.items & IT_CROSSBOW && targ.perms & IT_FROSTBOW // Have frostbow out
+               && targ.weapon == IT_CROSSBOW && !targ.weaponismoditems) )
         && (inflictor.classgroup == CG_PROJLAVANAILS || attacker.resist_fire == 1)) {
 		damage = damage * 0.5; // 50% fire protection while holding ice weapon
 	}
@@ -517,7 +517,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		targ.velocity = targ.velocity + dir;
 
 		// Wand knockback
-		if ((attacker.weapon == IT2_CROSS && !attacker.weaponismoditems)
+		if ((attacker.weapon == IT2_WAND && !attacker.weaponismoditems)
 			|| (attacker.weapon == IT_MACE && attacker.weaponismoditems)
 			|| (attacker.weapon == IT2_MJOLNIR && !attacker.weaponismoditems)
 			|| attacker.tome_finished) {

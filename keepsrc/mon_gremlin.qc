@@ -126,7 +126,7 @@ float () GremlinAttemptWeaponSteal = {
        || wepID == ID_VOIDSTAFF || wepID == ID_SANGUINATORS
        || wepID == ID_THUNDERBOLT_AD_PLASMAGUN || wepID == ID_PLASMAGUN_ROGUE
        || wepID == ID_FLAK || wepID == ID_CHAINLIGHTNING
-       || wepID == ID_WANDCROSS2 || wepID ==ID_MJOLNIR
+       || wepID == ID_WAND || wepID ==ID_MJOLNIR
        || wepID == ID_GUNGNIR || wepID == ID_AIRGUN
        || wepID == ID_PROXIMITY_GRENADE) { // Temporary until I can fix hackbank gremlin stealing.
       return FALSE;
@@ -205,7 +205,7 @@ float () GremlinAttemptWeaponSteal = {
       gremlin_steal_plasma();
       sprint(self.enemy,"Gremlin stole your Plasma Lightning Gun\n");
    }
-   if (wep == IT_EXTRA_WEAPON) {
+   if (wep == IT_CROSSBOW) {
       if (self.enemy.ammo_poison > FALSE) {
          gremlin_steal_poison();
       } else {
@@ -1309,7 +1309,7 @@ float () GremlinWeaponAttack = {
    } else if (self.weapon == IT2_LASER_CANNON) {
       gremlin_laser1();
       SUB_AttackFinished (TRUE);
-   } else if (self.weapon == IT_EXTRA_WEAPON) {
+   } else if (self.weapon == IT_CROSSBOW) {
       gremlin_crossbow1();
       SUB_AttackFinished (TRUE);
    }

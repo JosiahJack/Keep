@@ -52,9 +52,9 @@ float ALL_WEAPONS = IT_SHOTGUN + IT_SUPER_SHOTGUN + IT_NAILGUN + IT_SUPER_NAILGU
                     + IT_GRENADE_LAUNCHER + IT_ROCKET_LAUNCHER + IT_LIGHTNING
                     + IT_AXE + IT_LAVA_NAILGUN + IT_LAVA_SUPER_NAILGUN
                     + IT_MULTI_GRENADE + IT_MULTI_ROCKET + IT_PLASMA_GUN
-                    + IT_EXTRA_WEAPON;
+                    + IT_CROSSBOW;
 float ALL_WEAPONS2 = IT2_CHAINLIGHTNING + IT2_PROXIMITY_GUN + IT2_MJOLNIR
-                     + IT2_LASER_CANNON + IT2_GRAPPLE + IT2_CROSS; // IT2_CROSS is the wand!  Don't add twice adding IT2_WAND and make garbage.
+                     + IT2_LASER_CANNON + IT2_GRAPPLE + IT2_WAND;
 float ALL_WEAPONSMODITEMS = IT_UPGRADE_SSG + IT_UPGRADE_LG + IT_SANGUINATORS
                             + IT_SCIMITAR + IT_RAPIER + IT_UPGRADE_AXE;
 float ALL_WEAPONSMODITEMS_HACKBANK = IT_ICE + IT_MACE + IT_VOID_STAFF + IT_FLAK
@@ -220,7 +220,6 @@ void() DecodeWorldParms = {
 			parm10 = parm10 - (parm10 & ALL_WEAPONSMODITEMS) - (parm10 & ALL_WEAPONSMODITEMS_HACKBANK);
 			parm8 = 0;
 			parm11 = parm11 - (parm11 & ALL_WEAPONS2);
-			parm11 = parm11 - (parm11 & IT2_WAND);
 			dprint("ALL WEAPONS REMOVED");
 			if (Client_QueryEvilmode()) {
 				dprint(", Evil Mode detected: Shadowaxe given");

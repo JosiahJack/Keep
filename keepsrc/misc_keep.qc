@@ -234,7 +234,7 @@ void() W_Bomb = { // [FUNCTION]
 	}
 
 	if (self.cross_finished) {
-		//self.items2 = self.items2 - IT2_CROSS;
+		//self.items2 = self.items2 - IT2_WAND;
 		self.cross_finished = 0;
 		self.cross_time = 0;
 		self.cross_start = 2;

@@ -223,7 +223,7 @@ void() W_FireSparks = { // [FUNCTION]
     local vector dir, org, err;
     local float charge;
 
-    if (self.weapon == IT2_CROSS && !self.weaponismoditems) charge = self.currentammo;
+    if (self.weapon == IT2_WAND && !self.weaponismoditems) charge = self.currentammo;
     else charge = 0; // This shouldn't happen, but if so...
 	
     if (charge > WAND_FULL + 1) charge = WAND_FULL + 1;
@@ -1561,7 +1561,7 @@ void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 		} else if (targ.weapon == IT2_LASER_CANNON) {
 			targ.currentammo = targ.ammo_cells;
 			targ.weaponmodel = "progs/hipnotic/v_laserg.mdl";
-		} else if (targ.weapon == IT_EXTRA_WEAPON) {
+		} else if (targ.weapon == IT_CROSSBOW) {
 			if (targ.perms & IT_FROSTBOW) {
 				if (targ.ammo_poison > 0) {
 					targ.currentammo = targ.ammo_poison;
@@ -1588,7 +1588,7 @@ void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 				if (targ.tome_finished) targ.weaponmodel = "progs/violentrumble/v_hammerpw.mdl";
 				else targ.weaponmodel = "progs/violentrumble/v_hammer.mdl";
 			}
-		} else if (targ.weapon == IT2_CROSS) {
+		} else if (targ.weapon == IT2_WAND) {
 			targ.weaponmodel =  "progs/drake/v_wand.mdl";
 		} else if (targ.weapon == IT2_GRAPPLE) {
 			targ.currentammo = 0;
@@ -1662,14 +1662,14 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 	if (targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) ) return IT_SUPER_NAILGUN;
 	if (targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) ) return IT_LAVA_NAILGUN;
 	if (targ.ammo_elemental > 0 && (targ.items & IT_SCIMITAR) ) return IT_SCIMITAR;
-	if ((targ.ammo_bolts > 1 || targ.ammo_poison > 1) && (targ.items & IT_EXTRA_WEAPON) ) return IT_EXTRA_WEAPON;
+	if ((targ.ammo_bolts > 1 || targ.ammo_poison > 1) && (targ.items & IT_CROSSBOW) ) return IT_CROSSBOW;
 	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
 	if (targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) ) return IT_SUPER_SHOTGUN; // greater than 2 in case of upgraded triple shotgun Widowmaker
 	if (targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) ) return IT_NAILGUN;
 	if (targ.ammo_shells > 0 && ((targ.items & IT_SHOTGUN) || (targ.perms & IT_BLASTER))) return IT_SHOTGUN;
 	if (targ.waterlevel > 0 && targ.ammo_cells < 1 && (targ.items & IT2_MJOLNIR) ) return IT2_MJOLNIR;
 	if (targ.items & IT_AXE) return IT_AXE;
-	if (targ.items2 & IT2_CROSS) return IT2_CROSS; // WAND
+	if (targ.items2 & IT2_WAND) return IT2_WAND; // WAND
 	return FALSE;
 };
 
@@ -1725,7 +1725,7 @@ float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 			|| targ.weapon == IT_AIRGUN) return TRUE;
 	} else {
 		if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR
-		    || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE
+		    || targ.weapon == IT2_WAND || targ.weapon == IT2_GRAPPLE
 		    || targ.weapon == IT_RAPIER || targ.weapon == IT_SCIMITAR) {
 			return TRUE;
 		}
@@ -1745,8 +1745,8 @@ void() W_Attack = { // [FUNCTION]
 	if (!W_CheckNoAmmo(self)) return;	// Out of ammo?
 
 	makevectors(self.v_angle);		// calculate forward angle for velocity
-	if (((self.weapon != IT_EXTRA_WEAPON && !self.weaponismoditems)
-		|| (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON
+	if (((self.weapon != IT_CROSSBOW && !self.weaponismoditems)
+		|| (self.perms & IT_FROSTBOW && self.weapon == IT_CROSSBOW
 		&& !self.weaponismoditems)) && self.weapon != IT_AXE
 		&& !self.weaponismoditems) {
 		W_ShowHostile();
@@ -1836,7 +1836,7 @@ void() W_Attack = { // [FUNCTION]
 				player_light1(); 
 				sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM); 
 			}
-		} else if (self.weapon == IT_EXTRA_WEAPON) {
+		} else if (self.weapon == IT_CROSSBOW) {
 			if (self.perms & IT_FROSTBOW) {
 				player_xbow1();
 				W_Reload(0.8);
@@ -1887,7 +1887,7 @@ void() W_Attack = { // [FUNCTION]
 			player_chainlight1();
 			W_Reload(0.1);
 			sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
-		} else if (self.weapon == IT2_CROSS) {
+		} else if (self.weapon == IT2_WAND) {
 			player_wand1();
 			W_FireSparks();
 		} else if (self.weapon == IT_SANGUINATORS) W_FireSanguinators();
@@ -2234,11 +2234,11 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	} else if (targ.impulse == 90) {
 		fl = targ.weapon;
 		while (am) {
-			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_EXTRA_WEAPON, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, 0, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2, 0);
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_CROSSBOW, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, 0, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2, 0);
 			fl = checkvec_x;
 			gotgun = checkvec_y;
 			inhackbank = checkvec_z;
-			if (fl == IT_EXTRA_WEAPON && gotgun) {
+			if (fl == IT_CROSSBOW && gotgun) {
 				if (targ.ammo_bolts < 1) am = TRUE; // no ammo
 				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_LASER_CANNON && gotgun) {
@@ -2284,7 +2284,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	} else if (targ.impulse == 77) {
 		fl = targ.weapon;
 		while (am) {
-			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT2_MJOLNIR, IT2_CROSS, IT_GUNGNIR, 0, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK, 0);
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT2_MJOLNIR, IT2_WAND, IT_GUNGNIR, 0, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK, 0);
 			fl = checkvec_x;
 			gotgun = checkvec_y;
 			inhackbank = checkvec_z;
@@ -2293,7 +2293,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_MJOLNIR && gotgun) {
 				if (fl != targ.weapon) am = FALSE;
-			} else if (fl == IT2_CROSS && gotgun) {
+			} else if (fl == IT2_WAND && gotgun) {
 				if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
@@ -2303,10 +2303,10 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 78) {
-		fl = IT_EXTRA_WEAPON;
+		fl = IT_CROSSBOW;
 		gotgun = InItems(targ, fl);
 	} else if (targ.impulse == 79) {
-		fl = IT2_CROSS;
+		fl = IT2_WAND;
 		gotgun = InItems2(targ, fl);
 	} else if (targ.impulse == 80 || targ.impulse == 22) { // Rogue used 22.
 		fl = IT2_GRAPPLE;
@@ -2418,7 +2418,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 									 if ( (fl == IT2_LASER_CANNON) ) {
 										sprint(targ,"Laser Cannon!\n");
 									 }  else {
-										if ( (fl == IT2_CROSS) ) {
+										if ( (fl == IT2_WAND) ) {
 											sprint(targ,"Magic Wand!\n");
 										}  else {
 											if ( (fl == IT2_MJOLNIR) ) {
@@ -2481,10 +2481,10 @@ float GetWepIDIndex (float wep, float inhackbank) = { // [FUNCTION]
 		if (wep == IT_SANGUINATORS)			retval = ID_SANGUINATORS;
 		if (wep == IT_LIGHTNING)			retval = ID_THUNDERBOLT_AD_PLASMAGUN;
 		if (wep == IT_PLASMA_GUN)			retval = ID_PLASMAGUN_ROGUE;
-		if (wep == IT_EXTRA_WEAPON)			retval = ID_CROSSBOW;
+		if (wep == IT_CROSSBOW)			retval = ID_CROSSBOW;
 		if (wep == IT2_LASER_CANNON)		retval = ID_LASER_CANNON;
 		if (wep == IT2_CHAINLIGHTNING)		retval = ID_CHAINLIGHTNING;
-		if (wep == IT2_CROSS)				retval = ID_WANDCROSS2;
+		if (wep == IT2_WAND)				retval = ID_WAND;
 		if (wep == IT2_MJOLNIR)				retval = ID_MJOLNIR;
 	}
 	return retval;
@@ -2518,10 +2518,10 @@ vector GetWepIT_FromID(float id) = { // [FUNCTION]
 	if (id == ID_SANGUINATORS )			{ retval_x = IT_SANGUINATORS; retval_y = FALSE; }
 	if (id == ID_THUNDERBOLT_AD_PLASMAGUN) { retval_x = IT_LIGHTNING; retval_y = FALSE; }
 	if (id == ID_PLASMAGUN_ROGUE )		{ retval_x = IT_PLASMA_GUN; retval_y = FALSE; }
-	if (id == ID_CROSSBOW )				{ retval_x = IT_EXTRA_WEAPON; retval_y = FALSE; }
+	if (id == ID_CROSSBOW )				{ retval_x = IT_CROSSBOW; retval_y = FALSE; }
 	if (id == ID_LASER_CANNON )			{ retval_x = IT2_LASER_CANNON; retval_y = FALSE; }
 	if (id == ID_CHAINLIGHTNING )		{ retval_x = IT2_CHAINLIGHTNING; retval_y = FALSE; }
-	if (id == ID_WANDCROSS2 )			{ retval_x = IT2_CROSS; retval_y = FALSE; }
+	if (id == ID_WAND )					{ retval_x = IT2_WAND; retval_y = FALSE; }
 	if (id == ID_MJOLNIR )				{ retval_x = IT2_MJOLNIR; retval_y = FALSE; }
 	return retval;
 };
@@ -2548,7 +2548,7 @@ float(float wepID, vector idconversion, float am) SetCycledWeapon = {
 		} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
 			if ((self.moditems & self.weapon) && !am) oktoset = TRUE;
 		} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR
-			|| wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2
+			|| wepID == ID_PROXIMITY_GRENADE || wepID == ID_WAND
 			|| wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
 			if ((self.items2 & self.weapon) && !am) oktoset = TRUE;
 		} else {
@@ -2651,8 +2651,8 @@ void() CycleWeaponCommand = { // [FUNCTION]
 		} else if (wepID == ID_CHAINLIGHTNING) {
 			wepID = ID_MJOLNIR;
 		} else if (wepID == ID_MJOLNIR) {
-			wepID = ID_WANDCROSS2;
-		} else if (wepID == ID_WANDCROSS2) {
+			wepID = ID_WAND;
+		} else if (wepID == ID_WAND) {
 			wepID = ID_GUNGNIR;
 			if (self.ammo_voidshards < 1) am = 1;
 		} else if (wepID == ID_GUNGNIR) {
@@ -2685,8 +2685,8 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 		cyclecheck = cyclecheck + 1;
 		if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
 		if (wepID == ID_GUNGNIR) {
-			wepID = ID_WANDCROSS2;
-		} else if (wepID == ID_WANDCROSS2) {
+			wepID = ID_WAND;
+		} else if (wepID == ID_WAND) {
 			wepID = ID_MJOLNIR;
 		} else if (wepID == ID_MJOLNIR) {
 			wepID = ID_CHAINLIGHTNING;

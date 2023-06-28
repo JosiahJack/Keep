@@ -85,7 +85,7 @@ float IT_INVISIBILITY    	= 524288.000;	//19 Correct for standard HUD & HIP & DO
 float IT_INVULNERABILITY    = 1048576.000;	//20 Correct for standard HUD & HIP & DOE			I
 float IT_SUIT    			= 2097152.000;	//21 Correct for standard HUD & HIP & DOE			I
 float IT_QUAD    			= 4194304.000;	//22 Correct for standard HUD & HIP & DOE			I
-float IT_EXTRA_WEAPON  		= 8388608.000;	//23 Correct for DOE HUD					W
+float IT_CROSSBOW  		= 8388608.000;	//23 Correct for DOE HUD					W
 
 // IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD
 // 524288 + 1048576 + 2097152 + 4194304
@@ -113,8 +113,8 @@ float IT2_MJOLNIR 			= 262144.000;	//18 Keep specific	""					W
 float IT2_LASER_CANNON    	= 524288.000;	//19 Keep specific	""					W
 float IT2_GRAPPLE			= 1048576.000;	//20 Keep specific "" W Rogue grapple
 float IT2_TRINITY			= 2097152.000;	//20 Quoth
-float IT2_CROSS				= 4194304.000;	//21 Drake magic wand, Quoth							I && W2 (used by Wand)
-float IT2_WAND				= 8388608.000; 	//22 Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
+float IT2_WAND				= 4194304.000;	//21 Drake magic wand, Quoth							I && W2 (used by Wand)
+// float 					= 8388608.000; 	//22 unused
 
 float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
 float ALL_ITEMS2ARTIFACTS = 6291456; // All items that affect screen overlay cshift
@@ -245,10 +245,10 @@ UniqueID Wepname
 21 Thunderbolt/Plasmagun							IT_LIGHTNING
 22 Plasma Gun(rogue)								IT_PLASMA_GUN
 23 Flak Cannon											IT_FLAK
-24 Crossbow/Frostbow								IT_EXTRA_WEAPON
+24 Crossbow/Frostbow								IT_CROSSBOW
 25 Laser Cannon										IT2_LASER_CANNON
 26 Chain Lightning Gun								IT2_CHAINLIGHTNING
-27 Wand												IT2_CROSS
+27 Wand												IT2_WAND
 28 Mjolnir											IT2_MJOLNIR
 29 Gungir												IT_GUNGNIR
 */
@@ -278,7 +278,7 @@ float ID_FLAK = 22;
 float ID_CROSSBOW = 23;
 float ID_LASER_CANNON = 24;
 float ID_CHAINLIGHTNING = 25;
-float ID_WANDCROSS2 = 26;
+float ID_WAND = 26;
 float ID_MJOLNIR = 27;
 float ID_GUNGNIR = 28;
 float ID_AIRGUN = 29;

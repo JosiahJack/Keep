@@ -1097,8 +1097,8 @@ void() BackpackTouch = { // [FUNCTION]
 			acount = BackpackText(other, "MJOL", "", acount); gaveweapon = TRUE;
 		}
 
-		if (self.items & IT_EXTRA_WEAPON && !(other.items & IT_EXTRA_WEAPON)) {
-			pickupweapon = IT_EXTRA_WEAPON;
+		if (self.items & IT_CROSSBOW && !(other.items & IT_CROSSBOW)) {
+			pickupweapon = IT_CROSSBOW;
 			other.items = other.items | pickupweapon;
 			acount = BackpackText(other, "XBOW", "", acount); gaveweapon = TRUE;
 		}

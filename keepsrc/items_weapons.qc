@@ -215,11 +215,11 @@ void() weapon_touch = { // [FUNCTION]
 		other.items = other.items | IT_PLASMA_GUN;
 		other.weapon = IT_PLASMA_GUN;
 	} else if (self.classtype == CT_EXTRA_WEAPON) {
-		if (leave && (other.items & IT_EXTRA_WEAPON) ) return;
+		if (leave && (other.items & IT_CROSSBOW) ) return;
 		other.ammo_bolts = other.ammo_bolts + self.aflag;
-		new = IT_EXTRA_WEAPON;
-		other.items = other.items | IT_EXTRA_WEAPON;
-		other.weapon = IT_EXTRA_WEAPON;
+		new = IT_CROSSBOW;
+		other.items = other.items | IT_CROSSBOW;
+		other.weapon = IT_CROSSBOW;
 	}
 	//
 	//=======================================SELF.ITEMS2======================================================
@@ -253,10 +253,10 @@ void() weapon_touch = { // [FUNCTION]
 		other.items2 = other.items2 | IT2_GRAPPLE;
 		other.weapon = IT2_GRAPPLE;
 	} else if (self.classtype == CT_WAND) {
-		if (leave && (other.items2 & IT2_CROSS) ) return;
-		new = IT2_CROSS;
-		other.items2 = other.items2 | IT2_CROSS;
-		other.weapon = IT2_CROSS; // I shouldn't really need this should I?
+		if (leave && (other.items2 & IT2_WAND) ) return;
+		new = IT2_WAND;
+		other.items2 = other.items2 | IT2_WAND;
+		other.weapon = IT2_WAND; // I shouldn't really need this should I?
 	}
 	//
 	//=======================================SELF.MODITEMS======================================================
@@ -356,9 +356,9 @@ void() weapon_touch = { // [FUNCTION]
 		if (leave && (other.perms & IT_FROSTBOW)) return;
 		new = IT_FROSTBOW;
 		other.ammo_bolts = other.ammo_bolts + self.aflag;
-		other.items = other.items | IT_EXTRA_WEAPON;
+		other.items = other.items | IT_CROSSBOW;
 		other.perms = other.perms | IT_FROSTBOW;
-		other.weapon = IT_EXTRA_WEAPON;
+		other.weapon = IT_CROSSBOW;
 	} else if (self.classtype == CT_SIDEWINDER) {				// OVERRIDE
 		if (leave && (other.perms & IT_SIDEWINDER) ) return;
 		new = IT_SIDEWINDER;
@@ -558,7 +558,7 @@ void() weapon_mjolnir = {
 
 void() weapon_wand = {
 	item_setupmodel("progs/drake/g_wand.mdl",0);
-	self.weapon = IT2_CROSS;
+	self.weapon = IT2_WAND;
 	self.classtype = CT_WAND;
 	if (self.netname == "") self.netname = "Freyr's Wand (Light Bringer)";
 	weapon_start();
@@ -566,7 +566,7 @@ void() weapon_wand = {
 
 void() weapon_crossbow = {
 	item_setupmodel("progs/g_crossbow.mdl",0);
-	self.weapon = IT_EXTRA_WEAPON;
+	self.weapon = IT_CROSSBOW;
 	self.classtype = CT_EXTRA_WEAPON; 
 	if (self.netname == "") self.netname = "Hodr's Crossbow (Fatal)";
 	item_ammo_set(AMMO_BOLTS_WPN);
