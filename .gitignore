@@ -13,6 +13,7 @@ a2.sav
 quick.sav
 maps/autosave/*.map
 maps/*.bsp
+maps/*.ent
 maps/*.lit
 maps/*.map
 maps/*.pts
