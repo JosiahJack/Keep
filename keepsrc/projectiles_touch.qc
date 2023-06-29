@@ -727,6 +727,7 @@ void() Touch_ShellCasing = { // [FUNCTION]
 };
 
 void() HIP_LaserTouch = { // [FUNCTION]
+	local entity laze;
 	local vector org, spot1, spot2, oldvel, dir, dir2;
 
 	self.owner = world;
@@ -743,14 +744,16 @@ void() HIP_LaserTouch = { // [FUNCTION]
 		dir = (oldvel + (2 * trace_plane_normal));
 		dir = normalize (dir);
 		dir = (self.speed * dir);
-		newmis = HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
-		newmis.owner = other;
-		newmis.master = self.master;
-		newmis.tome_finished = FALSE; // Prevent infinite spawning loop
-		newmis = HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
-		newmis.owner = other;
-		newmis.master = self.master;
-		newmis.tome_finished = FALSE; // Prevent infinite spawning loop
+		laze = HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
+		laze.owner = other;
+		laze.master = self.master;
+		laze.tome_finished = FALSE; // Prevent infinite spawning loop
+		laze.angles = self.angles;
+		laze = HIP_LaunchLaser (self.origin, dir * (crandom() * 20), TRUE);
+		laze.owner = other;
+		laze.master = self.master;
+		laze.angles = self.angles;
+		laze.tome_finished = FALSE; // Prevent infinite spawning loop
 	}
 
 	if (other.health > 0 && other.takedamage) {

@@ -99,20 +99,26 @@ void(entity source, entity targ) ProjectileType = { // [FUNCTION]
 };
 
 // Mainly used to show resistance to an ammo type.  Also used by boils for their idle gibs
-void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnProjectileMeat = { // [FUNCTION]
-	newmis = spawn();
-	newmis.classtype = CT_TEMPGIB;
-	newmis.classgroup = CG_TEMPENT;
-	newmis.movetype = MOVETYPE_BOUNCE;
-	newmis.solid = SOLID_NOT;
-	ProjectileType(source, newmis); // Projectile types (Poison/Robot/Stone/Blood)
-	setorigin(newmis, org);
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
-	newmis.velocity = vecrand(0,velrnd,TRUE);
-	newmis.velocity_z = upbase, random()*uprnd;
-	newmis.avelocity = vecrand(100,velrnd,FALSE);
-	newmis.nextthink = time + 1 + random()*3;
-	newmis.think = SUB_Remove;
+entity(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnProjectileMeat = { // [FUNCTION]
+	local entity chunk;
+
+	chunk = spawn();
+	if (!chunk) return world;
+
+	chunk.classtype = CT_TEMPGIB;
+	chunk.classgroup = CG_TEMPENT;
+	chunk.movetype = MOVETYPE_BOUNCE;
+	chunk.solid = SOLID_NOT;
+	chunk.owner = chunk.master = source;
+	ProjectileType(source, chunk); // Projectile types (Poison/Robot/Stone/Blood)
+	setorigin(chunk, org);
+	setsize(chunk, VEC_ORIGIN, VEC_ORIGIN);		
+	chunk.velocity = vecrand(0,velrnd,TRUE);
+	chunk.velocity_z = upbase, random()*uprnd;
+	chunk.avelocity = vecrand(100,velrnd,FALSE);
+	chunk.nextthink = time + 1 + random()*3;
+	chunk.think = SUB_Remove;
+	return chunk;
 };
 
 // SpawnBlood
@@ -186,7 +192,8 @@ void() MeatSprayThink = { // [FUNCTION]
 // Changed to remove dependance on 'self' for missile origin
 // Changed parameters to add source and destination of attack
 // Changed velocity to side so it is calculated correctly from angles
-void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
+entity(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
+	local entity meat;
 	local float btype;
 	local vector org;
     local string text;
@@ -201,38 +208,43 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 	makevectors(source.angles);
 	if (VectorIsAllZeros(source.meleeoffset)) org = v_forward * 16; // Check for a melee offset? - Special vector offset
 	else org = attack_vector(source.meleeoffset);
-	org = org + source.origin; // Create starting point to spawn
 
+	org = org + source.origin; // Create starting point to spawn
+	meat = world;
 	if (targ.bloodtype) {
 		SpawnBlood(targ, org, v_up*2, 100,0);
 	} else {
-		newmis = spawn();
-		newmis.classtype = CT_TEMPGIB;
-		newmis.classgroup = CG_TEMPENT;
-		newmis.owner = source;
-		newmis.movetype = MOVETYPE_BOUNCE;
-		newmis.solid = SOLID_NOT;
-		ProjectileType(targ, newmis);
-		setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
-		setorigin(newmis, org);
-		newmis.velocity = ((crandom()*16) * v_forward) + (side * v_right); // Use side velocity to determine which direction to throw
-		newmis.velocity_z = newmis.velocity_z + 150 + 50*random();
-		newmis.avelocity = vecrand(100,200,FALSE);
+		meat = spawn();
+		if (!meat) return world;
+
+		meat.classtype = CT_TEMPGIB;
+		meat.classgroup = CG_TEMPENT;
+		meat.owner = source;
+		meat.movetype = MOVETYPE_BOUNCE;
+		meat.solid = SOLID_NOT;
+		ProjectileType(targ, meat);
+		setsize (meat, VEC_ORIGIN, VEC_ORIGIN);		
+		setorigin(meat, org);
+		meat.velocity = ((crandom()*16) * v_forward) + (side * v_right); // Use side velocity to determine which direction to throw
+		meat.velocity_z = meat.velocity_z + 150 + 50*random();
+		meat.avelocity = vecrand(100,200,FALSE);
 		if (btype) {
-			newmis.velocity_z = newmis.velocity_z + 100; // Drake used 250 instead of 150
-			newmis.avelocity   = '3000 1000 2000';
+			meat.velocity_z = meat.velocity_z + 100; // Drake used 250 instead of 150
+			meat.avelocity   = '3000 1000 2000';
 		}
 
 		if (text != "")
-			setmodel(newmis, text); // Oh hey we actually have substance!
+			setmodel(meat, text); // Oh hey we actually have substance!
 		else
-			newmis.modelindex  = 0; // Invisible blood dripper
+			meat.modelindex  = 0; // Invisible blood dripper
 
-		newmis.bloodtype   = btype;
-		newmis.delay       = time + 1 + random()*3;
-		newmis.nextthink   = 0.01;
-		newmis.think       = MeatSprayThink; // All spray should do this for specialty blood colors
+		meat.bloodtype   = btype;
+		meat.delay       = time + 1 + random()*3;
+		meat.nextthink   = 0.01;
+		meat.think       = MeatSprayThink; // All spray should do this for specialty blood colors
 	}
+
+	return meat;
 };
 
 // Drake Temporary Entities.  PM: These are common within the qc progs.

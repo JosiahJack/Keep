@@ -359,7 +359,7 @@ void(entity e, float resforce) Gyro_Object_SetResistance = {
 void(entity e, float resforce) Gyro_Object_SetLiquidResistance = {
 	if (!e) return;
 
-	Gyro_Object_SetResistanceMod(newmis,resforce,0, // No air resistance.
+	Gyro_Object_SetResistanceMod(e,resforce,0, // No air resistance. e was newmis here, yikes!  -Qmaster
 								 GYRO_RESISTANCEMOD_WATER,
 								 GYRO_RESISTANCEMOD_SLIME,
 								 GYRO_RESISTANCEMOD_LAVA); 

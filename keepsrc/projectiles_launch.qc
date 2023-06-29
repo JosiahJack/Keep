@@ -998,6 +998,7 @@ void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells 
 
 // Fire grenade at enemy origin
 entity(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = { // [FUNCTION]
+	local entity gren;
 	local vector ang, dir, avel;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -1021,13 +1022,17 @@ entity(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = { // [F
 	}
 
 	avel = vecrand(100,200,FALSE);
+	gren = world;
 	if (self.spawnflags & OGRE_MULTI || self.weapon == IT_MULTI_GRENADE) {
-		newmis = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONMULTI,1);
+		gren = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONMULTI,1);
 	} else {
-		if (self.weapon == IT2_PROXIMITY_GUN) launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONPROX,1);
-		else newmis = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMON,1);
+		if (self.weapon == IT2_PROXIMITY_GUN) {
+			gren = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMONPROX,1);
+		} else {
+			gren = launch_projectile(grenade_org,dir,avel,CT_PROJ_GLMON,1);
+		}
 	}
-	return newmis;
+	return gren;
 };
 
 void(float shell_qty) Launch_ShellCasing = { // [FUNCTION]
@@ -1042,47 +1047,49 @@ void(float shell_qty) Launch_ShellCasing = { // [FUNCTION]
 	while (shell_qty > 0) {
 		dir = -v_right*75 + v_forward*(random()*50) + v_up*(100 + random()*100);
 		avel = vecrand(0,300,TRUE);
-		if (self.in_a_vehicle) newmis = launch_projectile(org,dir,avel,CT_PROJ_NAILC,1);
-		else newmis = launch_projectile(org,dir,avel,CT_PROJ_SHELLC,1);
+		if (self.in_a_vehicle) launch_projectile(org,dir,avel,CT_PROJ_NAILC,1);
+		else launch_projectile(org,dir,avel,CT_PROJ_SHELLC,1);
 
 		shell_qty = shell_qty - 1;
 	}
 };
 
 entity(vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
+	local entity laze;
+
 	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) sound(self,CHAN_WEAPON,"enforcer/enfire.wav",TRUE,ATTN_NORM);
 	else sound(self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
 
 	vec = normalize (vec);
-	newmis = spawn();
-	newmis.classgroup = CG_PROJALL;
-	newmis.owner = newmis.master = self;
-	newmis.alignment = self.alignment;
-	if (newmis.master.tome_finished) newmis.tome_finished = TRUE;
-	newmis.classname = "hiplaser";
-	newmis.lastvictim = self;
-	newmis.movetype = MOVETYPE_FLYMISSILE;
-	newmis.solid = SOLID_BBOX;
-	if (light || self.owner.tome_finished) newmis.effects = EF_DIMLIGHT;
-	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) setmodel(newmis,"progs/ad171/proj_laz.mdl");
-	else setmodel(newmis,"progs/hipnotic/lasrspik.mdl");
+	laze = spawn();
+	laze.classgroup = CG_PROJALL;
+	laze.owner = laze.master = self;
+	laze.alignment = self.alignment;
+	if (laze.master.tome_finished) laze.tome_finished = TRUE;
+	laze.classname = "hiplaser";
+	laze.lastvictim = self;
+	laze.movetype = MOVETYPE_FLYMISSILE;
+	laze.solid = SOLID_BBOX;
+	if (light || self.owner.tome_finished) laze.effects = EF_DIMLIGHT;
+	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) setmodel(laze,"progs/ad171/proj_laz.mdl");
+	else setmodel(laze,"progs/hipnotic/lasrspik.mdl");
 
-	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
-	setorigin(newmis,org);
-	newmis.speed = 1000.000;
-	newmis.dmg = 18.000;
-	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) newmis.dmg = 24; // slight boost for blaster to at least match AD shotgun boost
-	if (self.owner.tome_finished) newmis.dmg = newmis.dmg * 2;
-	newmis.velocity = (vec * newmis.speed);
-	newmis.old_velocity = newmis.velocity;
-	newmis.angles = vectoangles (newmis.velocity);
-	newmis.avelocity = '0 0 400';
-	newmis.nextthink = time;
-	newmis.attack_finished = (time + MOVETYPE_FLY);
-	newmis.think = HIP_LaserThink;
-	newmis.touch = HIP_LaserTouch;
-	newmis.count = FALSE;
-	return newmis;
+	setsize (laze,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin(laze,org);
+	laze.speed = 1000.000;
+	laze.dmg = 18.000;
+	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) laze.dmg = 24; // slight boost for blaster to at least match AD shotgun boost
+	if (self.owner.tome_finished) laze.dmg = laze.dmg * 2;
+	laze.velocity = (vec * laze.speed);
+	laze.old_velocity = laze.velocity;
+	laze.angles = vectoangles (laze.velocity);
+	laze.avelocity = '0 0 400';
+	laze.nextthink = time;
+	laze.attack_finished = (time + MOVETYPE_FLY);
+	laze.think = HIP_LaserThink;
+	laze.touch = HIP_LaserTouch;
+	laze.count = FALSE;
+	return laze;
 };
 
 // This launches all the warheads in a MIRV's payload, each seeking a different
@@ -1180,7 +1187,7 @@ void() Mirv_Payload = { // [FUNCTION]
 		self.oldenemy = t2;
 		pc = self.t_length;
 		self.t_length = theta;
-		newmis = launch_projectile(self.origin,dir,NO_SPIN,CT_PROJ_WARHEAD,self.speed);
+		launch_projectile(self.origin,dir,NO_SPIN,CT_PROJ_WARHEAD,self.speed);
         loop = loop - 1;
     }
 	self.t_length = pc; // Restore just in case I use this somewhere else.

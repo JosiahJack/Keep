@@ -257,6 +257,7 @@ void() W_FireSparks = { // [FUNCTION]
 
 // Hipnotic Laser Cannon
 void(float stat) HIP_FireLaser = { // [FUNCTION]
+	local entity laze;
 	local vector org, dir, out;
 	local float ofs, aofs, glow;
 
@@ -288,18 +289,18 @@ void(float stat) HIP_FireLaser = { // [FUNCTION]
 		self.currentammo = (self.currentammo - TRUE);
 		org = (org + (aofs * v_right));
 		org = (org - (aofs * v_up));
-		newmis = HIP_LaunchLaser(org,dir,FALSE);
+		HIP_LaunchLaser(org,dir,FALSE);
 		org = (org - ((FL_SWIM * aofs) * v_right));
-		newmis = HIP_LaunchLaser(org,dir,FALSE);
+		HIP_LaunchLaser(org,dir,FALSE);
 	} else if (stat == TRUE) {
 		self.ammo_cells = (self.ammo_cells - TRUE);
 		self.currentammo = (self.currentammo - TRUE);
 		org = (org + (ofs * v_up));
 		if ( (random () < 0.100) ) {
-			newmis = HIP_LaunchLaser(org,dir,TRUE);
-			newmis.dmg = 25.000;
+			laze = HIP_LaunchLaser(org,dir,TRUE);
+			laze.dmg = 25.000;
 		} else {
-			newmis = HIP_LaunchLaser(org,dir,FALSE);
+			HIP_LaunchLaser(org,dir,FALSE);
 		}
 	} else { // Using the modified shotgun-turned-blaster model...
 		org = self.origin + '0 0 12';
@@ -309,8 +310,8 @@ void(float stat) HIP_FireLaser = { // [FUNCTION]
 		}
 		self.ammo_shells = (self.ammo_shells - TRUE);  // blaster uses shells??  well, I guess that's fine whatevs
 		self.currentammo = (self.currentammo - TRUE);
-		newmis = HIP_LaunchLaser(org,dir,glow);
-		newmis.volume = 0; // No random chance of removal on impact.  Spread gun looks bad unless v_model is wider.
+		laze = HIP_LaunchLaser(org,dir,glow);
+		laze.volume = 0; // No random chance of removal on impact.  Spread gun looks bad unless v_model is wider.
 	}
 	self.punchangle_x = CONTENT_EMPTY;
 };
@@ -617,6 +618,7 @@ void(float dmg, vector spraydir, float mechanical) MeleeImpactEffects = {
 				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
 			}
 		}
+		if (self.weaponframe & 1) SpawnMeatSpray(self,self,(crandom() * 300));
 		SpawnBlood (trace_ent,org,spraydir,dmg,0); // Spamn blood always up so player can see it
 		if (trace_ent.flags & FL_MONSTER) { // Monster impact sounds (fleshy stuff)
 			if (mechanical) { // E.g. Chainsaw, Grapple
@@ -708,7 +710,11 @@ void() W_FireSaw = { // [FUNCTION]
 
 	makevectors(self.v_angle); // Calculate viewing angle
 	source = self.origin + '0 0 16'; // Move source point up body
-	if (GibFloorBody(source, 200)) return;
+	if (GibFloorBody(source, 200)) {
+		SpawnMeatSpray(self,self,(crandom() * 300));
+		SpawnMeatSpray(self,self,(crandom() * 300));
+		return;
+	}
 
     spot = self.origin + '0 0 16';      // 'source'
     traceline(spot, spot + v_forward*64, FALSE, self);
@@ -718,6 +724,7 @@ void() W_FireSaw = { // [FUNCTION]
 	if (trace_ent && trace_ent != world) {
 		if (trace_ent.takedamage) {
 			damage = 40;
+			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
 
 			// Suck life like Heretic's necro gauntlets.
 			if (self.tome_finished && trace_ent.flags & FLx_CREATURE) {
@@ -736,7 +743,6 @@ void() W_FireSaw = { // [FUNCTION]
 				if (save > 0) T_Heal (self, save, ignore);
 			}
 
-			if (self.weaponframe & 1) SpawnMeatSpray(self,trace_ent,(crandom() * 300));
 			T_Damage(trace_ent, self, self, damage, DAMARMOR);
 		}
 	}
