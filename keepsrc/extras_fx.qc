@@ -71,21 +71,25 @@ void() spark_pause = { // [FUNCTION]
 };
 
 void() spark_spawn = { // [FUNCTION]
-	newmis = spawn();
-	setorigin(newmis, self.origin);
-	newmis.solid = SOLID_NOT;
-	newmis.movetype = MOVETYPE_BOUNCE;
-	newmis.classname = "spark";
-	newmis.think1 = SUB_Remove;// So triggers can kill it
-	newmis.velocity_x = (random() * 200) - 25; // set the spark velocity
-	newmis.velocity_y = (random() * 200) - 25;
-	newmis.velocity_z = 0;
-	newmis.touch = spark_touch;
-	newmis.attack_finished = time + random()*3; // random lifespan for sparks that aren't removed on touch
-	newmis.think = spark_think;
-	newmis.nextthink = time + 0.1;
-	setmodel(newmis, "progs/spark.spr");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	local entity spark;
+
+	spark = spawn();
+	if (!spark) return;
+
+	setorigin(spark, self.origin);
+	spark.solid = SOLID_NOT;
+	spark.movetype = MOVETYPE_BOUNCE;
+	spark.classname = "spark";
+	spark.think1 = SUB_Remove;// So triggers can kill it
+	spark.velocity_x = (random() * 200) - 25; // set the spark velocity
+	spark.velocity_y = (random() * 200) - 25;
+	spark.velocity_z = 0;
+	spark.touch = spark_touch;
+	spark.attack_finished = time + random()*3; // random lifespan for sparks that aren't removed on touch
+	spark.think = spark_think;
+	spark.nextthink = time + 0.1;
+	setmodel(spark, "progs/spark.spr");
+	setsize (spark, VEC_ORIGIN, VEC_ORIGIN);
 	self.nextthink = time + random() + self.wait;
 };
 

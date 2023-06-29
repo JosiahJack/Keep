@@ -344,6 +344,7 @@ void() funcbreakable_delayexplode = { // [FUNCTION]
 void() funcbreakable_use = { // [FUNCTION]
 	local vector dirvec, rorg, gvel, dirorg;
 	local float content_loop, content_flag;
+	local entity rubble;
 
 	if (self.waitmin == TRUE) return;	// Trigger once block
 
@@ -418,55 +419,57 @@ void() funcbreakable_use = { // [FUNCTION]
 		// Was there any space to spawn rubble?
 		if (content_loop < 0) {
 			// Create new piece of rubble
-			newmis = spawn();
-			newmis.classname = "rubble";
-			newmis.classtype = CT_FUNCBREAKOBJ;
-			newmis.classgroup = CG_TEMPENT;
-			newmis.owner = self;
+			rubble = spawn();
+			if (!rubble) continue; // Out of edicts?
+
+			rubble.classname = "rubble";
+			rubble.classtype = CT_FUNCBREAKOBJ;
+			rubble.classgroup = CG_TEMPENT;
+			rubble.owner = self;
 			self.lip = random()*self.brkobjqty; // Setup broken model/bsp (random selection if possible)
-			if (self.lip < 1) setmodel(newmis, self.brkobj1);
-			else if (self.lip < 2) setmodel(newmis, self.brkobj2);
-			else if (self.lip < 3) setmodel(newmis, self.brkobj3);
-			else setmodel(newmis, self.brkobj4);
+			if (self.lip < 1) setmodel(rubble, self.brkobj1);
+			else if (self.lip < 2) setmodel(rubble, self.brkobj2);
+			else if (self.lip < 3) setmodel(rubble, self.brkobj3);
+			else setmodel(rubble, self.brkobj4);
 	
-			setorigin(newmis, rorg); // Setup origin based on previous content checks	
-			setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-			newmis.movetype = MOVETYPE_BOUNCE; // Setup movement and spin parameters
-			newmis.solid = SOLID_BBOX;
-			if (!(self.spawnflags & BREAK_NOROTATE)) newmis.angles_y = random() * 360;
-			newmis.avelocity = vecrand(0,self.brkavel,TRUE);
+			setorigin(rubble, rorg); // Setup origin based on previous content checks	
+			setsize(rubble, VEC_ORIGIN, VEC_ORIGIN);
+			rubble.movetype = MOVETYPE_BOUNCE; // Setup movement and spin parameters
+			rubble.solid = SOLID_BBOX;
+			if (!(self.spawnflags & BREAK_NOROTATE)) rubble.angles_y = random() * 360;
+			rubble.avelocity = vecrand(0,self.brkavel,TRUE);
 			
 			if (self.spawnflags & BREAK_MOVEDIR && self.movedir_y < 0) {
 				// Up/down direction with slight X/Y wobble
-				newmis.velocity_x = crandom() * (self.brkveladd_x/2);
-				newmis.velocity_y = crandom() * (self.brkveladd_y/2);
-				if (self.movedir_y == -2) newmis.velocity_z = 0 - random()*50;
-				else newmis.velocity_z = self.brkvelbase_z + (random()*self.brkveladd_z);
+				rubble.velocity_x = crandom() * (self.brkveladd_x/2);
+				rubble.velocity_y = crandom() * (self.brkveladd_y/2);
+				if (self.movedir_y == -2) rubble.velocity_z = 0 - random()*50;
+				else rubble.velocity_z = self.brkvelbase_z + (random()*self.brkveladd_z);
 			} else {
 				// Directional velocity based on angle_y or activator entity
 				makevectors(dirvec);
 				gvel = v_forward * (self.brkvelbase_x + random() * self.brkveladd_x);
 				gvel = gvel + v_right * (crandom() * self.brkveladd_y);
 				gvel = gvel + v_up * (self.brkvelbase_z + random() * self.brkveladd_z);
-				newmis.velocity = gvel;
+				rubble.velocity = gvel;
 			}
 			
 			// How many bounce sounds - randomly pick 1-2
-			if (random() < 0.2) newmis.count = 2;
-			else newmis.count = 1;
+			if (random() < 0.2) rubble.count = 2;
+			else rubble.count = 1;
 		
 			// Touch and eventual fade functions		
-			newmis.touch = breakable_touch;
-			newmis.pain_finished = time + self.brkfade + random()*self.brkfade;
-			newmis.nextthink = time + 0.01;
-			newmis.think = breakable_particle;
+			rubble.touch = breakable_touch;
+			rubble.pain_finished = time + self.brkfade + random()*self.brkfade;
+			rubble.nextthink = time + 0.01;
+			rubble.think = breakable_particle;
 	
 			// Setup particle colour and particle dirction (forward)
-			newmis.pos1 = self.pos1;
-			gvel = vectoangles(newmis.velocity);
+			rubble.pos1 = self.pos1;
+			gvel = vectoangles(rubble.velocity);
 			makevectors(gvel);
-			newmis.oldorigin = v_forward;
-			if (self.brkgravity) newmis.gravity = self.brkgravity;			
+			rubble.oldorigin = v_forward;
+			if (self.brkgravity) rubble.gravity = self.brkgravity;			
 		}
 		
 		// Keep on spawning rubble!

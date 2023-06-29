@@ -727,12 +727,15 @@ void(vector st, string axe) M_FireAxe = { // [FUNCTION]
 
 // Shalmissile attack.  Used by shal-rath and others.
 void(vector st, float damage, string sfx) M_Shal_Ex = { // [FUNCTION]
+    local entity shalbal;
+
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, sfx, 1, ATTN_NORM);
+    if (sfx != "") sound (self, CHAN_WEAPON, sfx, 1, ATTN_NORM);
     if (self.classtype != CT_MONSHAL) self.attack_speed = 400;
     else self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
 
-	if (self.classname == "monster_hkboss") newmis = launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHALHKBOSS,self.attack_speed);
-	else newmis = launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
-    if (damage) newmis.dmg  = damage;
+	if (self.classname == "monster_hkboss") shalbal = launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHALHKBOSS,self.attack_speed);
+	else shalbal = launch_projectile(self.origin + attack_vector(st),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
+
+    if (damage) shalbal.dmg  = damage; // Apply override damage.
 };

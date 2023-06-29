@@ -53,34 +53,35 @@ void trigger_particles();
 void stop_smoke();
 void() BecomeExplosion;
 
-void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke = { // [FUNCTION]
-	newmis = spawn();
-	newmis.classtype = CT_TEMPPHYS;
-	newmis.classgroup = CG_TEMPENT;
-	newmis.movetype = MOVETYPE_TOSS;
-	newmis.solid = SOLID_NOT;
-	setmodel(newmis, MODEL_PROJ_SMOKE);
-	setorigin(newmis, org);
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-	if (velrnd > 0) newmis.velocity = vecrand(0,velrnd,TRUE);
-	else newmis.velocity = '0 0 0';
-	newmis.velocity_z = upbase + random()*uprnd;
-	newmis.nextthink = time + 1 + random()*3;
-	newmis.think = SUB_Remove;
+entity(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke = { // [FUNCTION]
+	local entity smokechunk;
+
+	smokechunk = spawn();
+	if (!smokechunk) return world;
+
+	smokechunk.classtype = CT_TEMPPHYS;
+	smokechunk.classgroup = CG_TEMPENT;
+	smokechunk.movetype = MOVETYPE_TOSS;
+	smokechunk.solid = SOLID_NOT;
+	setmodel(smokechunk, MODEL_PROJ_SMOKE);
+	setorigin(smokechunk, org);
+	setsize (smokechunk, VEC_ORIGIN, VEC_ORIGIN);
+	if (velrnd > 0) smokechunk.velocity = vecrand(0,velrnd,TRUE);
+	else smokechunk.velocity = '0 0 0';
+	smokechunk.velocity_z = upbase + random()*uprnd;
+	smokechunk.nextthink = time + 1 + random()*3;
+	smokechunk.think = SUB_Remove;
+	return smokechunk;
 };
 
-void(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke = { // [FUNCTION]
-	newmis = spawn();
-	newmis.classtype = CT_TEMPPHYS;
-	newmis.classgroup = CG_TEMPENT;
-	newmis.movetype = MOVETYPE_TOSS;
-	newmis.solid = SOLID_NOT;
-	setmodel(newmis, MODEL_PROJ_SMOKE);
-	setorigin(newmis, org);
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.velocity = veldir * (velbase + (random()*velrnd));
-	newmis.nextthink = time + 1 + random()*3;
-	newmis.think = SUB_Remove;
+entity(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke = { // [FUNCTION]
+	local entity smokechunk;
+
+	smokechunk = SpawnProjectileSmoke(org,0,0,0);
+	if (!smokechunk) return world;
+
+	smokechunk.velocity = veldir * (velbase + (random()*velrnd));
+	return smokechunk;
 };
 
 void(entity source, entity targ) ProjectileType = { // [FUNCTION]

@@ -132,7 +132,7 @@ void() glitter_think = { // [FUNCTION]
 
 // Show some fireworks.
 void() make_glitter = { // [FUNCTION]
-	local entity targ;
+	local entity targ, glit;
     local vector spot, vel;
     local float rgb;
 
@@ -153,25 +153,27 @@ void() make_glitter = { // [FUNCTION]
         else if (rgb > 243) rgb = 80;
         else rgb = floor(rgb / 16) * 5;
 
-        newmis = spawn();
-        setmodel(newmis, "progs/drake/s_spark.spr");
-        setorigin(newmis, spot);
-        newmis.movetype     = MOVETYPE_FLY;
-        newmis.solid        = SOLID_TRIGGER;
-        newmis.velocity     = vel;
-        newmis.delay        = 0.1;
-        newmis.nextthink    = time + newmis.delay;
-        newmis.think        = glitter_think;
-        newmis.touch        = SUB_Remove;
-        newmis.classname    = "glitter";
-        newmis.frame        = rgb;
-        newmis.cnt          = 0;
-        setsize(newmis,'-1 -1 -1','1 1 1');
-        newmis.movedir      = self.movedir;
-        newmis.speed        = self.speed;
-        newmis.waitmin      = newmis.frame;
-        newmis.waitmax      = newmis.frame + 4;
-        newmis.height       = self.height;
+        glit = spawn();
+        if (!glit) return;
+
+        setmodel(glit, "progs/drake/s_spark.spr");
+        setorigin(glit, spot);
+        glit.movetype     = MOVETYPE_FLY;
+        glit.solid        = SOLID_TRIGGER;
+        glit.velocity     = vel;
+        glit.delay        = 0.1;
+        glit.nextthink    = time + glit.delay;
+        glit.think        = glitter_think;
+        glit.touch        = SUB_Remove;
+        glit.classname    = "glitter";
+        glit.frame        = rgb;
+        glit.cnt          = 0;
+        setsize(glit,'-1 -1 -1','1 1 1');
+        glit.movedir      = self.movedir;
+        glit.speed        = self.speed;
+        glit.waitmin      = glit.frame;
+        glit.waitmax      = glit.frame + 4;
+        glit.height       = self.height;
     }
     self.lefty = !self.lefty;   // Alternate between particles and sprites.
     self.nextthink      = time + self.wait;

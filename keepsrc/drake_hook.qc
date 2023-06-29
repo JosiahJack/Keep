@@ -172,31 +172,36 @@ void() Grapple_Think = { // [FUNCTION]
     } else self.nextthink  = time + 0.1;
 };
 
-void(entity attacker, vector start, vector dir) Grapple_Launch = { // [FUNCTION]
-    newmis = spawn();
-	newmis.classgroup = CG_PROJALL;
-    newmis.movetype = MOVETYPE_FLYMISSILE;
-    newmis.solid    = SOLID_BBOX;
-    newmis.master   = newmis.owner  = attacker;
-    newmis.classname= "hook";
-    newmis.count    = FALSE;    // Cable is uncut.
-    newmis.state    = FALSE;    // Hook is out flying.
-    newmis.movedir  = dir;
-    newmis.speed    = 800;
-	if (attacker.tome_finished) newmis.speed = 1600;
-    newmis.dmg      = 10;
-    newmis.cnt      = 2;    // Grind damage.  Was 1.
-    newmis.velocity = dir * newmis.speed;
-    newmis.avelocity= '0 0 -500';       // PM:  Enabled spin.
-    newmis.angles   = vectoangles(dir);
-    newmis.touch    = GrappleAnchor;
-    newmis.think    = Grapple_Think;
-    newmis.delay    = time + 1.5; // Was 2.0, grapple only lives for X seconds, this gives max range on it
-    newmis.nextthink= 0.01;
-    newmis.distance = 1500; // Maximum cable range.
-    newmis.frame    = 1;    // hook spread
-    setall(newmis,"progs/drake/hook.mdl",'0 0 0','0 0 0',start);
-    if (attacker) attacker.hook = newmis;
+entity(entity attacker, vector start, vector dir) Grapple_Launch = { // [FUNCTION]
+    local entity ghook;
+
+    ghook = spawn();
+    if (!ghook) return world;
+
+	ghook.classgroup = CG_PROJALL;
+    ghook.movetype = MOVETYPE_FLYMISSILE;
+    ghook.solid    = SOLID_BBOX;
+    ghook.master   = ghook.owner = attacker;
+    ghook.classname= "hook";
+    ghook.count    = FALSE;    // Cable is uncut.
+    ghook.state    = FALSE;    // Hook is out flying.
+    ghook.movedir  = dir;
+    ghook.speed    = 800;
+	if (attacker.tome_finished) ghook.speed = 1600;
+    ghook.dmg      = 10;
+    ghook.cnt      = 2;    // Grind damage.  Was 1.
+    ghook.velocity = dir * ghook.speed;
+    ghook.avelocity= '0 0 -500';       // PM:  Enabled spin.
+    ghook.angles   = vectoangles(dir);
+    ghook.touch    = GrappleAnchor;
+    ghook.think    = Grapple_Think;
+    ghook.delay    = time + 1.5; // Was 2.0, grapple only lives for X seconds, this gives max range on it
+    ghook.nextthink= 0.01;
+    ghook.distance = 1500; // Maximum cable range.
+    ghook.frame    = 1;    // Hook spread
+    setall(ghook,"progs/drake/hook.mdl",'0 0 0','0 0 0',start);
+    if (attacker) attacker.hook = ghook;
+    return ghook;
 };
 
 void() W_FireGrapple = { // [FUNCTION]
