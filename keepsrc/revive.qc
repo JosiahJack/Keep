@@ -112,7 +112,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	}
 
 	if (InSky(ent.origin)) { entity_remove(ent, 0.1); return FALSE; }
-    if (!(ent.flags & FL_MONSTER) || ent.health > 0 || ent.gorging
+    if (!(ent.flags & FL_MONSTER) || ent.health > 0 || (ent.gorging && !ent.gibbed)
 		|| ent.touchedvoid
 		|| (god == ent)) { // No self-ressurecting; only Jesus can do that 
 						   // because he is God.

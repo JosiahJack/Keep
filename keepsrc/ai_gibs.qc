@@ -647,8 +647,6 @@ entity(float gib_no, float gib_qty) ThrowGib = { // [FUNCTION]
 
 // Explode monster into a shower of gibs (throw head as well)
 void() monster_ThrowGib = { // [FUNCTION]
-	local entity last;
-
 	// New gib sounds.  Zombies have special gib sound because they always go that way!  Stone enemies are just a pile of rubble and dust!
 	if (self.classgroup == CG_ZOMBIE)
 		sound(self,CHAN_VOICE, "zombie/z_gib.wav",1,ATTN_NORM);
@@ -808,32 +806,71 @@ void() monster_ThrowGib = { // [FUNCTION]
 	}				
 
 	// Throw head last because all previous gibs rely on the origin
-	if (self.headmdl != "") last = ThrowGib(25, 1); // Throw a head gib instead of switch to one
-	else last = ThrowGib(4, 1); // Throw at least 1 gib to be a "head".
-
-	if (last && last != world) {
-		if (self.alignment == NEUTRAL || self.classgroup == CG_HARMLESS) last.bodyonflr = MON_ONFLR; // Set the last thrown gib to be the respawn source.  This is usually the head.
-		last.classname = self.classname;
-		last.health = 0;
-		if (self.alignment == NEUTRAL || self.classgroup == CG_HARMLESS) last.think = SUB_Null;
-		last.flags = FL_MONSTER;
-		last.deadflag = DEAD_DEAD; // Needed for ai_medic
-		last.gibbed = TRUE;
-		last.alignment = self.alignment;
-		last.bouncegrenade = self.bouncegrenade;
-		last.classgroup = self.classgroup;
-		last.classmove = self.classmove;
-		last.classtype = self.classtype;
-		last.yaw_speed = self.yaw_speed;
-		last.liquidbase = self.liquidbase;
-		last.liquidcheck = self.liquidcheck;
-		last.bbmins = self.bbmins;
-		last.bbmaxs = self.bbmaxs;
-		last.pos1 = self.origin; // Respawn point
-		last.gib1dmg = 0; // Make sure head can't dissappear!
+	// Become a head now like in ye olden days.
+	if (self.headmdl == "") self.headmdl = "progs/ad171/gib_4.mdl";
+	self.mdl = self.headmdl;
+	if (self.alignment == NEUTRAL || self.classgroup == CG_HARMLESS) {
+		self.bodyonflr = MON_ONFLR; // Set the last thrown gib to be the
 	}
+
+	self.frame = 0;
+	self.physicsflags = self.physicsflags | PHYS_GYRO_BOUYANT | PHYS_GYRO_MOTIONRESIST;
+
+	// Make sure stone, metal, and glass don't float
+	if (self.gibtype == GIBTYPE_STONE || self.gibtype == GIBTYPE_METAL
+		|| self.gibtype == GIBTYPE_GLASS || self.gibtype == GIBTYPE_CERAMIC) {
+
+		self.physicsflags = 0;
+	}
+
+	// Check for any animations on impact
+	if (self.gibAnimfinal > 0) {
+		self.walkframe = 0;
+		self.gibAnimTimer = time + self.gibAnimTimer + random()*(self.gibAnimTimer*2);
+	}
+
+	// Bounce like a grenade have trigger/touch impact
+	self.movetype = MOVETYPE_BOUNCE;
+	self.solid = SOLID_TRIGGER;
+	setmodel(self, self.mdl);
+	// Allow for custom bounding box for gib models
+	if (!(VectorIsAllZeros(self.gibmins))) setsize (self, self.gibmins, self.gibmaxs);
+	else setsize (self, VEC_ORIGIN, VEC_ORIGIN);
+
+	self.oldorigin = self.origin;
+	setorigin(self, self.oldorigin);
+
+	// Flag to be eatable by vomitus.
+	if (self.alignment != NEUTRAL) self.headmdl = "TRUE";
+
+	// Check for water content, adjust for water friction
+	if (InLiquid(self.oldorigin)) {
+		self.gravity = 0.35;
+		self.velocity_z = 0;
+	}
+
+	if (!self.healamount) self.healamount = 3 + (random() * 7);
+	self.touch = TouchGib;
+	self.nextthink = time + GIB_FADETIME + random() * GIB_FADETIME;
+	self.pain_finished = gibitem.nextthink;
+	self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	if (self.physicsflags) {
+		Gyro_Object_Activate(self,MASS_GIB);
+		if (self.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(self,BOUY_GIB);
+	}
+
+	self.think = SUB_Null;
+	self.pos1 = self.origin; // Respawn point
+	self.gib1dmg = 0; // Make sure head can't dissappear!
 	self.gibbed = TRUE; // Monster has offically gone to pieces ;)
-	entity_hide(self); // Finally hide monster
+	self.velocity_x = 50 * crandom();
+	self.velocity_y = 50 * crandom();
+	self.velocity_z = 200 + (100 * random());
+	self.gorging = TRUE; // Prevent gremlins eating heads.
+	self.avelocity = NewVector(0,200 + (random() * 200),0);
+	self.angles_y = self.ideal_yaw = random() * 360;
+	SUB_RemoveFlags(self,FL_ONGROUND);
 };
 
 // Check health for gib condition, and gib if so

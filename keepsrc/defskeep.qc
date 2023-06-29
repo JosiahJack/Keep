@@ -653,7 +653,7 @@ float FILTER_ONLYABOVE = 5;
 .float filterstyle;
 .string filtername;
 .float arcing; // Used by trigger_push to arc guide the player safely to a point.
-.float secrethunt_finished;
+.float hunt_finished;
 
 // Air Fist
 .float AIRG_Flags; // Used to flag states for entity's for the AirFist mod. At the moment the AIRG_Flags variable is used only for the exclusion routine but this may change.

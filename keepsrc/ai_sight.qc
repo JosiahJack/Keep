@@ -480,15 +480,8 @@ void(float wakeupothers) FoundHuntTarget = {
 };
 
 entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
-	local float dist, remaining;
+	local float dist;
 	local entity head;
-
-	remaining = (total_monsters - killed_monsters);
-	if (remaining > 1000) {
-		if (random() < 0.99) return world;
-	} else if (remaining > 500) {
-		if (random() < 0.5) return world;
-	}
 
 	if (self.alignment == NEUTRAL) {
 		if(!IsInsane(self)) return FALSE; // I careth not.
@@ -533,7 +526,9 @@ entity(float findopposing, float playersonly) SeeTarget = { // [FUNCTION]
 };
 
 entity() SeeOpposing = { // [FUNCTION]
-	if (random() < 0.2) return world;
+	if (random() < 0.2 && self.hunt_finished > time) return world;
+
+	self.hunt_finished = time + 0.2f; // Max time before we guarantee to do this.
 
 	// Check and only look for players if no opposing monsters.  Faster.
 	if (self.alignment == GOOD) {
@@ -545,7 +540,9 @@ entity() SeeOpposing = { // [FUNCTION]
 };
 entity() SeeFriendly = { // [FUNCTION]
 	if (self.horn_active && self.charmer) return world; // Already have a leader
-	if (random() < 0.8) return world;
+	if (random() < 0.8 && self.hunt_finished > time) return world;
+
+	self.hunt_finished = time + 0.4f; // Max time before we guarantee to do this.
 
 	// Check and only look for players if no friendly monsters.  Faster.
 	if (self.alignment == GOOD) {

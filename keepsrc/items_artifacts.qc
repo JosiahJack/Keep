@@ -929,7 +929,7 @@ void() item_secrethunter_touch = {
 	sound(other,CHAN_VOICE,self.noise,TRUE,ATTN_NONE);
 	Safe_stuffcmd(other,"bf\n");
 	other.items3 = other.items3 | IT3_SECRETHUNTER;
-	other.secrethunt_finished = time + 2;
+	other.hunt_finished = time + 2;
 };
 
 void() item_secrethunter = {

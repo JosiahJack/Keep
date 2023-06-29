@@ -1094,7 +1094,7 @@ void() SecretHunt = {
 	local entity head;
 	local float dist, pingt, lerp;
 
-	if (self.secrethunt_finished >= time) return;
+	if (self.hunt_finished >= time) return;
 
 	head = find(world,classname,"trigger_secret");
 	dist = fabs(vlen(self.origin - head.oldorigin));
@@ -1105,7 +1105,7 @@ void() SecretHunt = {
 			if (dist <= 384) {
 				lerp = dist / 384;
 				pingt = SUB_ClampFloat(lerp * 4,0.6,4);
-				self.secrethunt_finished = time + pingt;
+				self.hunt_finished = time + pingt;
 				sound(self,CHAN_AUTO,"redfield/misc/catsmeow.wav",
 					  SUB_ClampFloat(1 - lerp,0.3,1),ATTN_NORM); // PING!
 				return;
@@ -1113,5 +1113,5 @@ void() SecretHunt = {
 		}
 		head = find(head,classname,"trigger_secret");
 	}
-	self.secrethunt_finished = time + pingt;
+	self.hunt_finished = time + pingt;
 };
