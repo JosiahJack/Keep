@@ -98,12 +98,12 @@ static void(vector pos, string num) Hud_DrawIntermissionNumber = {
 		if (c == ' ')
 			continue;
 		if (c == '/')
-			drawpic(pos, "gfx/num_slash", [24,24],[1,1,1],1,0);
+			drawpic(pos, "gfx/num_slash", [16,24],[1,1,1],1,0);
 		else if (c == ':' || c == '.')
-			drawpic(pos, "gfx/num_colon", [24,24],[1,1,1],1,0);
+			drawpic(pos, "gfx/num_colon", [16,24],[1,1,1],1,0);
 
 		else if (c == '-')
-			drawpic(pos, "gfx/num_minus", [24,24],[1,1,1],1,0);
+			drawpic(pos, "gfx/num_minus", [16,24],[1,1,1],1,0);
 		else if (c >= '0' && c <= '9')
 			drawpic(pos, sprintf("gfx/num_%c", c), [24,24],[1,1,1],1,0);
 	}
@@ -113,15 +113,33 @@ void(vector virtmin, vector virtsize) Hud_Intermission = {
 	if (getstatf(CLIENT_INTERMISSION) > 2) return; 
 
 	vector pos = virtmin + (virtsize-[320,200])/2;
-	Hud_CentrePic("gfx/complete.lmp", 320, pos+'0 24', 24);
-	drawpic(pos+[0,56], "gfx/inter.lmp", [160,184],[1,1,1],1,0);
-	Hud_DrawIntermissionNumber(pos+[144, 64], sprintf("%3.0f:%02.0f", intermission_time/60, intermission_time%60));
-	Hud_DrawIntermissionNumber(pos+[144, 96], sprintf("%3.0f/%.0f", getstatf(STAT_FOUNDSECRETS), getstatf(STAT_TOTALSECRETS)));
-	Hud_DrawIntermissionNumber(pos+[144, 160], sprintf("%3.0f/%.0f", getstatf(STAT_KILLEDMONSTERS), getstatf(STAT_TOTALMONSTERS)));
-	Hud_DrawIntermissionNumber(pos+[144, 192], sprintf("%3.0f/%.0f", getstatf(CLIENT_DENIZENSKILLED), getstatf(CLIENT_DENIZENS)));
-
-	if (getstatf(64) & 4) {
-		drawstring(pos+[24,216],"Thor Blesses Your Honorable Ways!", [10,10], [1,1,1],1,0);
+	if (getstatf(CLIENT_DENIZENS) > 0) {
+		Hud_CentrePic("gfx/complete.lmp", 320, pos+'0 24', 24);
+		if (getstatf(STAT_TOTALMONSTERS) > 999) {
+			drawpic(pos+[-16,56], "gfx/inter_denizens.lmp", [160,184],[1,1,1],1,0);
+		} else {
+			drawpic(pos+[0,56], "gfx/inter_denizens.lmp", [160,184],[1,1,1],1,0);
+		}
+		Hud_DrawIntermissionNumber(pos+[160, 64], sprintf("%3.0f:", intermission_time/60));
+		Hud_DrawIntermissionNumber(pos+[248, 64], sprintf("%02.0f", intermission_time%60));
+		Hud_DrawIntermissionNumber(pos+[160, 96], sprintf("%3.0f/", getstatf(STAT_FOUNDSECRETS)));
+		Hud_DrawIntermissionNumber(pos+[248, 96], sprintf("%.0f",   getstatf(STAT_TOTALSECRETS)));
+		Hud_DrawIntermissionNumber(pos+[160,160], sprintf("%3.0f/",getstatf(STAT_KILLEDMONSTERS)));
+		Hud_DrawIntermissionNumber(pos+[248,160], sprintf("%.0f",  getstatf(STAT_TOTALMONSTERS)));
+		Hud_DrawIntermissionNumber(pos+[160,192], sprintf("%3.0f/",getstatf(CLIENT_DENIZENSKILLED)));
+		Hud_DrawIntermissionNumber(pos+[248,192], sprintf("%.0f",  getstatf(CLIENT_DENIZENS)));
+		if (getstatf(64) & 4) {
+			drawstring(pos+[24,216],"Thor Blesses Your Honorable Ways!", [10,10], [1,1,1],1,0);
+		}
+	} else {
+		Hud_CentrePic("gfx/complete.lmp", 320, pos+'0 24', 24);
+		drawpic(pos+[24,56], "gfx/inter.lmp", [160,144],[1,1,1],1,0);
+		Hud_DrawIntermissionNumber(pos+[160, 64],sprintf("%3.0f:",intermission_time/60));
+		Hud_DrawIntermissionNumber(pos+[248, 64],sprintf("%02.0f",intermission_time%60));
+		Hud_DrawIntermissionNumber(pos+[160,104],sprintf("%3.0f/",getstatf(STAT_FOUNDSECRETS)));
+		Hud_DrawIntermissionNumber(pos+[248,104],sprintf("%.0f",  getstatf(STAT_TOTALSECRETS)));
+		Hud_DrawIntermissionNumber(pos+[160,144],sprintf("%3.0f/",getstatf(STAT_KILLEDMONSTERS)));
+		Hud_DrawIntermissionNumber(pos+[248,144],sprintf("%.0f",  getstatf(STAT_TOTALMONSTERS)));
 	}
 };
 
