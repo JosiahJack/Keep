@@ -607,16 +607,18 @@ void() BFGBoomThink = { // [FUNCTION]
 };
 
 void() BFGTracerThink = { // [FUNCTION]
+    local entity tracer;
     local vector org;
     local float dis;
 
     dis = vlen(self.view_ofs-self.oldorigin)/5;
     org = self.origin + self.pos1*dis;
     setorigin(self, org);
-    newmis = SpawnBFGBoom(self.origin, self.pos1, "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
-    newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
-    newmis = SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
-    newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
+    tracer = SpawnBFGBoom(self.origin, self.pos1, "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
+    tracer.angles_x = tracer.angles_x - tracer.angles_x*2;
+
+    tracer = SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
+    tracer.angles_x = tracer.angles_x - tracer.angles_x*2;
     if (self.cnt == 5) {
         self.think = SUB_Remove;
         self.nextthink = time + 0.1;

@@ -234,14 +234,13 @@ void() turret_beam4 = [$tilt0, turret_beam5] { // [FUNCTION]
 		beam_water_burst(20);
 		return;
 	}
-	newmis = spawn();
-	newmis.solid = SOLID_NOT;
-	newmis.movetype = MOVETYPE_FLY;
-	newmis.currentammo = 10;
-	setorigin(newmis, self.origin);
-	newmis.owner = self;
-	newmis.think = beam_generate;
-	newmis.nextthink = time + 0.05;
+
+	self.currentammo = self.ammo_cells;
+	if (self.ammo_cells > 0) {
+		W_FireBeam();
+		// Like the damage, the ammo used is according to how much you've got.
+		self.currentammo = self.ammo_cells = floor(self.ammo_cells * 0.75);
+	}
 };
 void() turret_beam5 = [$tilt0, turret_beam6] { turret_face(); }; // [FUNCTION]
 void() turret_beam6 = [$tilt0, turret_beam7] { turret_face(); }; // [FUNCTION]

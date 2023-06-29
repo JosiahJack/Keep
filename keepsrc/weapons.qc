@@ -123,7 +123,7 @@ void(float wait_time) forceweaponswitch = { // [FUNCTION]
 void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
     local float damage, dist, mid, fr, sparx;
     local vector end, end2, d1, glitter;
-    local entity targ, attacker;
+    local entity targ, attacker, hkproj;
 
     attacker = self;
     damage = WAND_DAMAGE;
@@ -145,18 +145,22 @@ void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
 		d1_y = 0;
 		d1_z = 1;
         end = Aim_Scatter(dir, d1);
-		newmis = launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); //18*35=630.
-        newmis.dmg = damage;
-        newmis.touch = WandSpark_Touch;
-		newmis.classtype = CT_WANDSPARK;
-        if (shots > 1) {
-            d1_x = 0 - d1_x;
-            end = Aim_Scatter(dir, d1);
-			newmis = launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); // Death Knight spike
-            newmis.dmg = damage;
-            newmis.touch = WandSpark_Touch;
-            newmis.classtype = CT_WANDSPARK;
-        }
+		hkproj = launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); //18*35=630.
+		if (hkproj) {
+			hkproj.dmg = damage;
+			hkproj.touch = WandSpark_Touch;
+			hkproj.classtype = CT_WANDSPARK;
+			if (shots > 1) {
+				d1_x = 0 - d1_x;
+				end = Aim_Scatter(dir, d1);
+				hkproj = launch_projectile(start,end,NO_SPIN,CT_PROJ_HKN,630); // Death Knight spike
+				if (hkproj) {
+					hkproj.dmg = damage;
+					hkproj.touch = WandSpark_Touch;
+					hkproj.classtype = CT_WANDSPARK;
+				}
+			}
+		}
     }
 
 	// Start multi-trace attack.  Uses MultiDamage_* functions.
@@ -1305,11 +1309,11 @@ void() W_FireMultiRocket = { // [FUNCTION]
 	W_Reload(0.9);
 };
 
-void() W_FirePlasmaGun = { // [FUNCTION]
-   local entity missile;
+entity() W_FirePlasmaGun = { // [FUNCTION]
+	local entity missile;
 	local float cells;
 
-	if (self.attack_finished > time) return; // Do nothing if weapon is under water
+	if (self.attack_finished > time) return world; // Do nothing if weapon is under water
 	
 	if (self.waterlevel > 1) {
 		if (self.moditems & IT_ARTWETSUIT) { // Air tank vania item wil explode weapon instead
@@ -1323,7 +1327,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 			W_Reload(0.2);
 			sound(self,CHAN_WEAPON,SOUND_MISFIRE,1,ATTN_NORM);
 		}
-		return;
+		return world;
 	}
 
 	self.ammo_plasma = (self.ammo_plasma - TRUE);
@@ -1349,7 +1353,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 	missile.think = PlasmaGroundOut;
 	missile.nextthink = (time + MOVETYPE_FLY);
 	W_Reload(0.8);
-	newmis = missile;
+	return missile;
 };
 
 // Called when player launches a MIRV.
@@ -1375,11 +1379,12 @@ void() W_FireStinger = { // [FUNCTION]
 // instead of pellets, but backlash from multiple rockets at point-blank
 // causes too much damage and knockback.  Instead, a MIRV is launched.
 // See above for details.
-void() W_FireHydra = { // [FUNCTION]
+entity() W_FireHydra = { // [FUNCTION]
     local vector start, dir;
     local float cost;
+	local entity hydra;
 
-    if (self.ammo_rockets < 1) return;
+    if (self.ammo_rockets < 1) return world;
 
     cost = 3;
     if (self.ammo_rockets < cost) cost = self.ammo_rockets;
@@ -1389,93 +1394,95 @@ void() W_FireHydra = { // [FUNCTION]
     makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;
-	newmis = launch_projectile(start,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
-    newmis.velocity = dir * 600;
-    newmis.count    = cost;         // # of warheads after splitting.
-    newmis.nextthink= time + 0.2;
-    newmis.think    = Hydra_Split;
+	hydra = launch_projectile(start,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
+    hydra.velocity = dir * 600;
+    hydra.count    = cost;         // # of warheads after splitting.
+    hydra.nextthink= time + 0.2;
+    hydra.think    = Hydra_Split;
     if (cost >= 2) { // Make bigger explosion if payload includes multiple rockets.
-        newmis.dmg      = cost * 30 + 60;
-        newmis.think1   = BecomeBigBang;
+        hydra.dmg      = cost * 30 + 60;
+        hydra.think1   = BecomeBigBang;
     }
+	return hydra;
 };
 
-void() W_FireBeam = { // [FUNCTION]
+entity() W_FireBeam = { // [FUNCTION]
+	local entity beam;
+
 	// explode if under water
 	if (self.waterlevel > 1) {
 		beam_water_burst(self.ammo_cells*2);
 		self.currentammo = self.ammo_cells = 0;
-		return;
+		return world;
 	}
 
-	newmis = spawn();
-	newmis.solid = SOLID_NOT;
-	newmis.movetype = MOVETYPE_FLY;
+	beam = spawn();
+	beam.solid = SOLID_NOT;
+	beam.movetype = MOVETYPE_FLY;
 	// amount of damage done is based on how much cell ammo you've got
-	newmis.currentammo = self.currentammo;
-	setorigin(newmis, self.origin);
-	newmis.owner = self;
-	newmis.think = beam_generate;
-	newmis.nextthink = time + 0.05;
-
-	// like the damage, the ammo used is according to how much you've got
-	self.currentammo = self.ammo_cells = floor(self.ammo_cells * 0.75);
+	beam.currentammo = self.currentammo;
+	setorigin(beam, self.origin);
+	beam.owner = self;
+	beam.think = beam_generate;
+	beam.nextthink = time + 0.05;
+	return beam;
 };
 
 // Madfox's BFG implementation
 //void(float damage) W_FireRail = {
-void(float damage) W_FireBFG = { // [FUNCTION]
-        local entity tempen;
-        local vector orgen, orgo, dir, tdir, dorg;
-        local float donerail, loopiter;
+entity(float damage) W_FireBFG = { // [FUNCTION]
+	local entity tempen, railtrail;
+	local vector orgen, orgo, dir, tdir, dorg;
+	local float donerail, loopiter;
 
-        makevectors(self.v_angle);
-        sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
-        self.ammo_cells = self.ammo_cells - 5;
-        self.currentammo = floor(self.ammo_cells / 5);
-        orgo = self.origin + self.view_ofs + v_forward*8;
-        dir = v_forward;
-        traceline (orgo, orgo + v_forward*2048, FALSE, self);
-		loopiter = 20;
-        while(!donerail) {
-			loopiter = loopiter - 1;
-			if (trace_ent && trace_ent != world) {
-				if (trace_ent.takedamage) {
-					orgen = trace_endpos + dir*4;
-					dorg = trace_endpos - dir*4;
-					SpawnBlood(trace_ent, dorg, '0 0 0', damage,0);
-					T_Damage(trace_ent, self, self, damage,DAMARMOR);
-					if (trace_ent.movetype != MOVETYPE_PUSH && trace_ent.classname != "monster_oldone" && trace_ent.classname != "monster_boss") {
-						tdir = trace_endpos - orgo;
-						tdir = normalize(tdir);
-						trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
-						trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
+	makevectors(self.v_angle);
+	sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NORM);
+	self.ammo_cells = self.ammo_cells - 5;
+	self.currentammo = floor(self.ammo_cells / 5);
+	orgo = self.origin + self.view_ofs + v_forward*8;
+	dir = v_forward;
+	traceline (orgo, orgo + v_forward*2048, FALSE, self);
+	loopiter = 20;
+	while(!donerail) {
+		loopiter = loopiter - 1;
+		if (trace_ent && trace_ent != world) {
+			if (trace_ent.takedamage) {
+				orgen = trace_endpos + dir*4;
+				dorg = trace_endpos - dir*4;
+				SpawnBlood(trace_ent, dorg, '0 0 0', damage,0);
+				T_Damage(trace_ent, self, self, damage,DAMARMOR);
+				if (trace_ent.movetype != MOVETYPE_PUSH && trace_ent.classname != "monster_oldone" && trace_ent.classname != "monster_boss") {
+					tdir = trace_endpos - orgo;
+					tdir = normalize(tdir);
+					trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
+					trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
 
-						if (trace_ent.velocity_z < 270)
-						trace_ent.velocity_z = trace_ent.velocity_z + 270;
-					}
-				} else {
-					dorg = trace_endpos - dir*4;
-					donerail = TRUE;
+					if (trace_ent.velocity_z < 270)
+					trace_ent.velocity_z = trace_ent.velocity_z + 270;
 				}
-				tempen = self;
-				self = trace_ent;
-				traceline(orgen, orgen + dir*2048, FALSE, self);
-				self = tempen;
+			} else {
+				dorg = trace_endpos - dir*4;
+				donerail = TRUE;
 			}
-			if (loopiter < 1) donerail = TRUE; // Kill while loop.
-        }
-        newmis = spawn();
-        newmis.solid = SOLID_NOT;
-        setsize(newmis, '-1 -1 -1', '1 1 1');
-        setorigin(newmis, orgo);
-        newmis.classname = "railtrail";
-        newmis.nextthink = time + 0.1;
-        newmis.think = BFGTracerThink;
-        newmis.oldorigin = dorg;
-        newmis.view_ofs = orgo;
-        newmis.pos1 = dir; // store old velocity
-        newmis.owner = self;
+			tempen = self;
+			self = trace_ent;
+			traceline(orgen, orgen + dir*2048, FALSE, self);
+			self = tempen;
+		}
+		if (loopiter < 1) donerail = TRUE; // Kill while loop.
+	}
+	railtrail = spawn();
+	railtrail.solid = SOLID_NOT;
+	setsize(railtrail, '-1 -1 -1', '1 1 1');
+	setorigin(railtrail, orgo);
+	railtrail.classname = "railtrail";
+	railtrail.nextthink = time + 0.1;
+	railtrail.think = BFGTracerThink;
+	railtrail.oldorigin = dorg;
+	railtrail.view_ofs = orgo;
+	railtrail.pos1 = dir; // store old velocity
+	railtrail.owner = self;
+	return railtrail;
 };
 
 void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
