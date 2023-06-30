@@ -889,20 +889,23 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			StackDamage_Clear();
 		} else { // Normal Super Nailgun Fire
 			if (world.copperoptions & COPPER_TWOSHOT_PERFORATOR) { // Copper variant fires more nails instead of one super one
-				newmis = launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(940 + random()*30));
-				if (self.super_damage_finished > time) {
-					newmis.dmg = DAMAGE_SNGSPIKE; // So zombies still gib at 72 with quad.  Yes Copper did this.
-					spike1 = newmis;
+				spike1 = launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(940 + random()*30));
+				if (spike1) {
+					if (self.super_damage_finished > time) {
+						spike1.dmg = DAMAGE_SNGSPIKE; // So zombies still gib at 72 with quad.  Yes Copper did this.
+					}
+
+					spike2 = launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(1020 + random()*30));
+					if (spike2) {
+						if (self.super_damage_finished > time) {
+							spike2.dmg = DAMAGE_SNGSPIKE; 
+							spike1.buddy = spike2; // First one to hit nerfs its buddy
+							spike2.buddy = spike1; // Race ya!
+							if (developer > 1) dprint("Buddy nails setup!\n");
+						}
+					}
 				}
-				newmis = launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(1020 + random()*30));
-				if (self.super_damage_finished > time) {
-					newmis.dmg = DAMAGE_SNGSPIKE; 
-					spike2 = newmis;
-					spike1.buddy = spike2; // First one to hit nerfs its buddy
-					spike2.buddy = spike1; // Race ya!
-					dprint("Buddy nails setup!\n");
-				}
-			} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
+			} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
 		}
 	} else { // NG setup, sound and ammo change
 		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
@@ -926,7 +929,7 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			else Echo_Shot(0.05,W_EchoSpike_Up,self);
 
 			StackDamage_Clear();
-		} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
+		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
@@ -964,7 +967,7 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 			Echo_Shot(1/30, W_EchoLavaSpike_Down,self);
 			Echo_Shot(2/30, W_EchoLavaSpike_Up,self);
 			StackDamage_Clear();
-		} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
+		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
 	} else { // Lava NG setup, sound and ammo change
 		sound(self,CHAN_WEAPON,"weapons/rocket1i.wav",1,ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
@@ -987,7 +990,7 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 			else Echo_Shot(0.05,W_EchoLavaSpike_Up,self);
 
 			StackDamage_Clear();
-		} else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
+		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
@@ -1018,7 +1021,7 @@ void() W_FireGrenade = { // [FUNCTION]
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-        newmis = launch_projectile(self.origin,dir,avel,CT_PROJ_GLSUPER,1);
+        launch_projectile(self.origin,dir,avel,CT_PROJ_GLSUPER,1);
     } else {
 		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
 			dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
@@ -1028,7 +1031,7 @@ void() W_FireGrenade = { // [FUNCTION]
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-		newmis = launch_projectile(self.origin, dir, avel, CT_PROJ_GL,1);
+		launch_projectile(self.origin, dir, avel, CT_PROJ_GL,1);
 	}
 };
 
@@ -1053,8 +1056,8 @@ void() W_FireRocket = { // [FUNCTION]
 	// Straight line forward where crosshair is pointing
 	else dir = normalize(v_forward * SPEED_RLPLAYER);
 	
-    if (self.tome_finished) newmis = launch_projectile(org, dir,NO_SPIN,CT_PROJ_ROCKETSUPER,500); //SuperRocket_Launch (org, dir);
-    else newmis = launch_projectile(org,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
+    if (self.tome_finished) launch_projectile(org, dir,NO_SPIN,CT_PROJ_ROCKETSUPER,500); //SuperRocket_Launch (org, dir);
+    else launch_projectile(org,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
 };
 
 void() W_Fire_Crossbow = { // [FUNCTION]

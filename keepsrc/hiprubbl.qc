@@ -46,28 +46,33 @@ void() hipRubbleTouch = { // [FUNCTION]
 	}
 };
 
-void(string rubblename) hipThrowRubble = { // [FUNCTION]
-	newmis = spawn();
-	newmis.classtype = CT_TEMPPHYS;
-	newmis.origin = self.origin;
-	setmodel(newmis,rubblename);
-	setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
-	setorigin(newmis,newmis.origin);
-	newmis.velocity_x = ((self.mangle_x) + 70.000 * crandom ());
-	newmis.velocity_y = ((self.mangle_y) + 70.000 * crandom ());
-	newmis.velocity_z = ((self.mangle_z) + 140.000 + (70.000 * random ()));
-	newmis.movetype = MOVETYPE_BOUNCE;
-	newmis.solid = SOLID_BBOX;
-	newmis.avelocity_x = (random () * 600.000);
-	newmis.avelocity_y = (random () * 600.000);
-	newmis.avelocity_z = (random () * 600.000);
-	newmis.think = SUB_Remove;
-	newmis.touch = hipRubbleTouch;
-	newmis.ltime = time;
-	newmis.nextthink = ((time + 13.000) + (random () * MOVETYPE_BOUNCE));
+entity(string rubblename) hipThrowRubble = { // [FUNCTION]
+	local entity rubl;
+
+	rubl = spawn();
+	if (!rubl) return world;
+
+	rubl.classtype = CT_TEMPPHYS;
+	rubl.origin = self.origin;
+	setmodel(rubl,rubblename);
+	setsize(rubl,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin(rubl,rubl.origin);
+	rubl.velocity_x = ((self.mangle_x) + 70.000 * crandom ());
+	rubl.velocity_y = ((self.mangle_y) + 70.000 * crandom ());
+	rubl.velocity_z = ((self.mangle_z) + 140.000 + (70.000 * random ()));
+	rubl.movetype = MOVETYPE_BOUNCE;
+	rubl.solid = SOLID_BBOX;
+	rubl.avelocity_x = (random () * 600.000);
+	rubl.avelocity_y = (random () * 600.000);
+	rubl.avelocity_z = (random () * 600.000);
+	rubl.think = SUB_Remove;
+	rubl.touch = hipRubbleTouch;
+	rubl.ltime = time;
+	rubl.nextthink = ((time + 13.000) + (random () * MOVETYPE_BOUNCE));
 	self.pausetime = time;
-	newmis.frame = FALSE;
-	newmis.flags = FALSE;
+	rubl.frame = FALSE;
+	rubl.flags = FALSE;
+	return rubl;
 };
 
 void() hip_rubble_use = { // [FUNCTION]
@@ -77,9 +82,9 @@ void() hip_rubble_use = { // [FUNCTION]
 	while (index < self.count) {
 	which = self.cnt;
 		if (!self.cnt) which = floor(3 * random ());
-		if (which == 1) hipThrowRubble ("progs/hipnotic/rubble1.mdl");
-		if (which == 2) hipThrowRubble ("progs/hipnotic/rubble3.mdl");
-		if (which == 3) hipThrowRubble ("progs/hipnotic/rubble2.mdl");
+		if (which == 1) hipThrowRubble("progs/hipnotic/rubble1.mdl");
+		if (which == 2) hipThrowRubble("progs/hipnotic/rubble3.mdl");
+		if (which == 3) hipThrowRubble("progs/hipnotic/rubble2.mdl");
 		index = (index + TRUE);
 	}
 };

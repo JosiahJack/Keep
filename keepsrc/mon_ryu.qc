@@ -317,6 +317,7 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = { 
 void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype) Ryu_Multishot = { // [FUNCTION]
     local float bomb, sped2, frac, loop;
     local vector dir, err, p3, p4;
+    local entity proj;
 
     bomb = atype & RYU_BOMB; // Extra stuff for more multishot types.
     atype = atype & RYU_ELEMENTS;
@@ -350,20 +351,20 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
         if (atype & RYU_ELEMENTS == RYU_USE_ICE) {
             // Ice spray.
             if (bomb) { // Explosive iceballs.
-                newmis = Iceball_Toss(p1, dir, sped2, self.height);
-                newmis.velocity_z = newmis.velocity_z + 200;
+                proj = Iceball_Toss(p1, dir, sped2, self.height);
+                proj.velocity_z = proj.velocity_z + 200;
             } else { // Ice shards.  Default damage is 9, so raise it if too weak.
-                newmis = Ice_Launch(p1, dir, sped2);    // Use 'sped' for same speed.
-                newmis.delay = time + 0.7;  // Total duration.  Was 0.8.
+                proj = Ice_Launch(p1, dir, sped2);    // Use 'sped' for same speed.
+                proj.delay = time + 0.7;  // Total duration.  Was 0.8.
             }
-            if (newmis.dmg < damage)
-                newmis.dmg = damage;
+
+            if (proj.dmg < damage) proj.dmg = damage;
         } else if (bomb) {
             if (atype == RYU_USE_FIRE) Ryu_Fire(p1,dir,sped2,200,self.height);
-            else if (atype == RYU_USE_LITE) newmis = RyuPlasma_Launch(p1,dir,sped2,self.height);
+            else if (atype == RYU_USE_LITE) RyuPlasma_Launch(p1,dir,sped2,self.height);
             else if (atype == RYU_USE_ACID) {
-                newmis = Acidball_Launch(p1,dir,sped2,self.height);
-                newmis.velocity_z = newmis.velocity_z + 200;
+                proj = Acidball_Launch(p1,dir,sped2,self.height);
+                proj.velocity_z = proj.velocity_z + 200;
             }
         }
     }

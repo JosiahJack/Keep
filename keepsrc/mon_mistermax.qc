@@ -1539,7 +1539,7 @@ void() max_rapidfire5 = {
   #77 max_rapidfire6;
   self.cnt = self.cnt + 1;
   ai_face();
-  max_shootfire();
+  nehahra_spitfire(20,0.8);
   max_backorcharge();
   ai_threats();
 }
@@ -1556,7 +1556,7 @@ void() max_rapidfire6 = {
     #78 max_rapidfire5;
     ai_face();
     self.effects = self.effects | EF_MUZZLEFLASH;
-    max_shootfire();
+    nehahra_spitfire(20,0.8);
     Max_Survival();
     ai_threats();
     }

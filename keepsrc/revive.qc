@@ -42,7 +42,7 @@
 void(entity targ, entity charmmaster) ApplyHornCharm;
 void(entity ent) monster_reset_movement_type;
 void(entity ent) monster_reset_runtime_attributes;
-void(string mname) BeMonsterFromString;
+entity(string mname) BeMonsterFromString;
 void() BeMonsterFromClassname;
 
 // To be called after revive animation is completed to restore takedamage.

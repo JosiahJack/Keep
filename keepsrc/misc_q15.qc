@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 4
-// Function count: 9
+// Function count: 10
 //
 // Implements: Miscellaneous Decorations
 //
@@ -241,30 +241,39 @@ void() actor_anim = { // [FUNCTION]
 	} else if (ext_dppart && self.spawnflags & FLAG_REMOVE_PARTICLES) self.traileffectnum = particleeffectnum("");
 }
 
-void() actor_throw = { // [FUNCTION]
-	newmis = spawn();
-	setmodel(newmis, self.mdl);
-	setsize (newmis, '-16 -16 -24', '16 16 40');
-	setorigin(newmis, self.oldorigin + self.view_ofs);
+entity() actor_throwtrail = { // [FUNCTION]
+	local entity particletrail;
+
+	particletrail = spawn();
+	if (!particletrail) return world;
+
+	setmodel(particletrail, self.mdl);
+	setsize (particletrail, '-16 -16 -24', '16 16 40');
+	setorigin(particletrail, self.oldorigin + self.view_ofs);
 	setmodel(self, "progs/null.spr");
-	if (self.noise) sound(newmis,CHAN_AUTO,self.noise,1,ATTN_NORM);
-	if (ext_dppart && self.partname) newmis.traileffectnum = particleeffectnum(self.partname);
-	newmis.angles = self.angles;
-	newmis.movetype = MOVETYPE_TOSS;
-	newmis.velocity = self.velocity;
-	newmis.frame = self.frame;
-	newmis.height = self.height;
-	newmis.speed = self.speed;
-	newmis.spawnflags = self.spawnflags;
+	if (self.noise) sound(particletrail,CHAN_AUTO,self.noise,1,ATTN_NORM);
+	if (ext_dppart && self.partname) particletrail.traileffectnum = particleeffectnum(self.partname);
+	particletrail.angles = self.angles;
+	particletrail.movetype = MOVETYPE_TOSS;
+	particletrail.velocity = self.velocity;
+	particletrail.frame = self.frame;
+	particletrail.height = self.height;
+	particletrail.speed = self.speed;
+	particletrail.spawnflags = self.spawnflags;
 	if (self.spawnflags & FLAG_REMOVE_ACTOR) {
-		newmis.solid = SOLID_TRIGGER;
-		newmis.touch = SUB_Remove;
+		particletrail.solid = SOLID_TRIGGER;
+		particletrail.touch = SUB_Remove;
 	}
 	
 	if (self.height) {
-		newmis.think = actor_anim;
-		newmis.nextthink = time;
+		particletrail.think = actor_anim;
+		particletrail.nextthink = time;
 	}
+	return particletrail;
+};
+
+void() actor_throw = { // [FUNCTION]
+	actor_throwtrail();
 };
 
 void() misc_actor = { // [ENTITY]

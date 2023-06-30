@@ -352,10 +352,14 @@ void() baron_melee = { // [FUNCTION]
 float() BaronGolem_Check = { return (self.minion_count < ceil(skill / 2) + 1); };
 
 entity(vector start, vector dir, float sped) Baron_Ice_Launch = { // [FUNCTION]
-    newmis = Ice_Launch(start, dir, sped);
-    newmis.delay = time + 5;
-    newmis.dmg = 18;    //random() * 5 + 15;
-    return newmis;
+    local entity ice;
+
+    ice = Ice_Launch(start, dir, sped);
+    if (!ice) return world;
+
+    ice.delay = time + 5;
+    ice.dmg = 18;    //random() * 5 + 15;
+    return ice;
 };
 
 void() Baron_Ice = { // [FUNCTION]
@@ -575,7 +579,8 @@ void(vector st) M_FireBaronPlasma = { // [FUNCTION]
 };
 
 void() baron_slam = { // [FUNCTION]
-    local   vector  org, org2, dir;
+    local vector org, org2, dir;
+    local entity fwall;
 
     makevectors(self.angles);
     org = self.origin + (v_forward*32) + (v_right*12);
@@ -590,12 +595,12 @@ void() baron_slam = { // [FUNCTION]
             org2 = self.origin + self.view_ofs;
             dir = self.enemy.origin + self.enemy.view_ofs;
             dir = Maim_LineEx(org2,dir,SPEED_FIREWALL,world,'0 0 0',1);
-            Firewall_Spawn(org,dir,self.enemy,FALSE);
-            newmis.dmg = 120;
+            fwall = Firewall_Spawn(org,dir,self.enemy,FALSE);
+            fwall.dmg = 120;
         } else {
             self.waitmax = time + 5;    // Don't spam.
             if (self.level == BARON_WATER)
-                newmis = IceMine_Spawn (self.dest);
+                IceMine_Spawn (self.dest);
             else if (self.level == BARON_AIR)
                 Tornado_Spawn (self.dest);
             else {
@@ -694,17 +699,17 @@ void(float offset) baron_shot = { // [FUNCTION]
 
 	// PM:  No need to check classnames like Bane, hell knight, hell lord, etc.
     if (self.level == BARON_EARTH) {
-        newmis = launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
+        launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
         // Old damage was 15, but use superspike's 18.
         sound(self,CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
     } else if (self.level == BARON_WATER) {
-        newmis = Baron_Ice_Launch(org,vec,600);
+        Baron_Ice_Launch(org,vec,600);
         sound(self,CHAN_WEAPON,"drake/baron/icefire.wav",1,ATTN_NORM);
     } else { // Use offset as speed.
         if (self.level == BARON_FIRE) offset = 500;
         else offset = 300;
         self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
-        newmis = launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
+        launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
         if (self.level == BARON_FIRE) newmis.dmg  = 20;
         sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
     }

@@ -197,7 +197,7 @@ void() actor_run = [$rockrun1, actor_run ] { // [FUNCTION]
 // Update 8/1/09:  Remove redundancy.
 void() Actor_fire = { // [FUNCTION]
 	local vector dir, org;
-	local entity en;
+	local entity en, rocket;
 
     ai_face();
     en = self.enemy; // fire somewhat behind the player, so a dodging player is harder to hit 
@@ -212,13 +212,16 @@ void() Actor_fire = { // [FUNCTION]
         org = self.origin + v_forward*8 + '0 0 16';
         sound(self,CHAN_WEAPON,"weapons/sgun1.wav",1,ATTN_NONE);
 		self.finalangle = vecrand(100,200,FALSE);
-		newmis = launch_projectile(self.origin,self.movedir,self.finalangle,CT_PROJ_ROCKET,self.speed);
-        newmis.velocity = dir * 800;
-        newmis.touch = SUB_Remove;      // The Zerstorer cannot be harmed.
+		rocket = launch_projectile(self.origin,self.movedir,self.finalangle,CT_PROJ_ROCKET,self.speed);
+        if (rocket) {
+            rocket.velocity = dir * 800;
+            rocket.touch = SUB_Remove;      // The Zerstorer cannot be harmed.
+        }
     } else {
         sound(self,CHAN_WEAPON,"weapons/guncock.wav",1,ATTN_NORM);    
         FireBullets (8, '0.1 0.1 0');
     }
+
 	W_Reload(1);
 };
 

@@ -184,8 +184,9 @@ void() Shade_MeatTouch = {
 
 // The nightshade shoots a bloody gib at its target.
 void() Shade_Meat = {
-    local   vector  org, dir, vec, vy; // org = location of dragon's mouth.  dir = vector from 'org' to gib target.
-    local   float   mx, sped, up, loop, spread, arc; // mx = length of dir, which is 0 <= x <= 1.
+    local vector org, dir, vec, vy; // org = location of dragon's mouth.  dir = vector from 'org' to gib target.
+    local float mx, sped, up, loop, spread, arc; // mx = length of dir, which is 0 <= x <= 1.
+    local entity meat;
 
     up = 200;
     sped = 800;     // Dragons use 'height * 200 + 800'.
@@ -204,14 +205,16 @@ void() Shade_Meat = {
     while (loop > 0) {
         vec = dir + (vy * spread);
         vec = normalize(vec) * mx;
-        newmis = Meat_Launch (org, vec); // Shoot some meat.  Change some properties to allow some freaky magic.
-        newmis.movetype     = MOVETYPE_TOSS;
-        newmis.owner       = self;
-        newmis.velocity     = vec * sped;
-        newmis.velocity_z   = newmis.velocity_z + up;
-        newmis.touch        = Shade_MeatTouch;
-        newmis.nextthink    = time + 6;     // Same as spikes.
-        newmis.cnt          = loop & 1;     // Spawn monster (0=no, 1=yes)
+        meat = Meat_Launch (org, vec); // Shoot some meat.  Change some properties to allow some freaky magic.
+        if (meat) {
+            meat.movetype     = MOVETYPE_TOSS;
+            meat.owner       = self;
+            meat.velocity     = vec * sped;
+            meat.velocity_z   = meat.velocity_z + up;
+            meat.touch        = Shade_MeatTouch;
+            meat.nextthink    = time + 6;     // Same as spikes.
+            meat.cnt          = loop & 1;     // Spawn monster (0=no, 1=yes)
+        }
         spread = spread - arc - arc;
         loop = loop - 1;
     }

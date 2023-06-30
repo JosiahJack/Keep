@@ -267,7 +267,7 @@ void() nehahra_bspspit = [25, nehahra_bspspit] { // [FUNCTION]
 	self.walkframe = self.walkframe + 1;
 	if (self.enemy.classname == "player") {
 		ai_face();
-		nehahra_spitfire();
+		nehahra_spitfire(235,0.6);
 	} else {
 		face_bsp(self.enemy);
 		if (self.walkframe > 3 && self.walkframe < 10) {
@@ -286,7 +286,7 @@ void() nehahra_spitting = [14, nehahra_spitting] { // [FUNCTION]
 	self.frame = 14 + self.walkframe;
 	self.walkframe = self.walkframe + 1;
 	ai_face();
-	if (self.walkframe > 3 && self.walkframe < 10) nehahra_spitfire();
+	if (self.walkframe > 3 && self.walkframe < 10) nehahra_spitfire(235,0.6);
 };
 
 void() nehahra_missile =  { // [FUNCTION]

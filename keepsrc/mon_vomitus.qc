@@ -56,8 +56,9 @@ $frame death10 death11 death12 death13 death14 death15
 
 // Vomits chunks of meat at the enemy.
 void(float no) Vomit_Meat = {
-    local   vector  org, dir, err;
-    local   float   side, up;
+    local vector org, dir, err;
+    local float side, up;
+    local entity meat;
 
     err = VEC_ORIGIN;
     if (no > 0) {
@@ -73,36 +74,44 @@ void(float no) Vomit_Meat = {
 	dir = dir + err;
 
     up = random();
-    newmis = Meat_Launch (org, dir);
-    if (up < 0.2) setmodel(newmis, "progs/gib1.mdl");
+    meat = Meat_Launch(org, dir);
+    if (!meat) return;
+
+    if (up < 0.2) setmodel(meat,"progs/gib1.mdl");
     else { // Bigger gibs...
-        newmis.dmg = random() * 15 + 15;
-        if (up < 0.4) setmodel(newmis, "progs/ad181/h_zombie.mdl");
-        else if (up < 0.7) setmodel(newmis, "progs/gib2.mdl");
-        else setmodel(newmis, "progs/gib3.mdl");
+        meat.dmg = random() * 15 + 15;
+        if (up < 0.4) setmodel(meat, "progs/ad181/h_zombie.mdl");
+        else if (up < 0.7) setmodel(meat, "progs/gib2.mdl");
+        else setmodel(meat, "progs/gib3.mdl");
     }
-    setsize(newmis,VEC_ORIGIN, VEC_ORIGIN);
+
+    setsize(meat,VEC_ORIGIN, VEC_ORIGIN);
 };
 
 // Spews forth a tarbaby.
-void() Vomit_Spawn = {
+entity() Vomit_Spawn = {
+    local entity mitos;
+
     // 100% chance of vomiting meat when we've spit up all our minion spawns.
-	if (self.minion_count >= self.minion_maxcount) { Vomit_Meat(0); return; }
+	if (self.minion_count >= self.minion_maxcount) { Vomit_Meat(0); return world; }
 
-	sound(newmis,CHAN_VOICE,"rogue/blob/mytosis.wav",1,ATTN_NORM);
-	SpawnMinion(self.minion_name,self.origin,self.enemy);
-	if (self.skin == 1) newmis.skin = newmis.exactskin = 4;
-	else newmis.skin = newmis.exactskin = 0;
+	sound(self,CHAN_VOICE,"rogue/blob/mytosis.wav",1,ATTN_NORM);
+	mitos = SpawnMinion(self.minion_name,self.origin,self.enemy);
+    if (!mitos) return world;
 
-	newmis.lastorigin = newmis.origin;           
-    newmis.angles_x   = 0;
-    newmis.angles_y   = self.angles_y;
-    newmis.angles_z   = 0;
-    newmis.fixangle   = TRUE;
-	setorigin(newmis, self.origin);
-	newmis.th_run = tbaby_jump5;
-	newmis.th_stand = tbaby_jump5;
-	newmis.nextthink = time + 0.1;
+	if (self.skin == 1) mitos.skin = mitos.exactskin = 4;
+	else mitos.skin = mitos.exactskin = 0;
+
+	mitos.lastorigin = mitos.origin;           
+    mitos.angles_x   = 0;
+    mitos.angles_y   = self.angles_y;
+    mitos.angles_z   = 0;
+    mitos.fixangle   = TRUE;
+	setorigin(mitos, self.origin);
+	mitos.th_run = tbaby_jump5;
+	mitos.th_stand = tbaby_jump5;
+	mitos.nextthink = time + 0.1;
+    return mitos;
 };
 
 // Vomitus chews on the target.
@@ -245,18 +254,20 @@ void() vom_attack7  = [$attack7,  vom_attack8  ] { ai_face(); };
 void() vom_attack8  = [$attack8,  vom_attack9  ] { ai_face(); };
 void() vom_attack9  = [$attack9,  vom_attack10 ] { ai_face(); };
 void() vom_attack10 = [$attack10, vom_attack11 ] {
-	local entity enem;
+	local entity enem, tosis;
 
 	ai_face();
     if (random() < 0.5) sound(self,CHAN_WEAPON,"drake/vomitus/flesh1.wav",1,ATTN_NORM);
     else sound(self,CHAN_WEAPON,"drake/vomitus/flesh2.wav",1,ATTN_NORM);
 
 	enem = self.enemy;
-	Vomit_Spawn();
+	tosis = Vomit_Spawn();
 	self.enemy = enem;
-	newmis.enemy = self.enemy;
-	newmis.attack_instant = TRUE;
-	newmis.frame = 54;
+    if (tosis) {
+        tosis.enemy = self.enemy;
+        tosis.attack_instant = TRUE;
+        tosis.frame = 54;
+    }
 	self.think = vom_end1;
 };
 void() vom_attack11 = [$attack11, vom_attack12 ] { ai_face(); Vomit_Meat(0.5); };

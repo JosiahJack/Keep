@@ -81,6 +81,7 @@ void() PlayerBallistaThink { // [FUNCTION]
 void() trigger_control_touch = { // [FUNCTION]
     local vector org, dir;
     local float fire_range;
+    local entity aiment;
 
     if (!(other.flags & FL_CLIENT)) return;
     if (other.in_a_vehicle) return;
@@ -97,10 +98,12 @@ void() trigger_control_touch = { // [FUNCTION]
     W_SetCurrentAmmo(other,TRUE);
     self.enemy = other;
     traceline(other.origin, (org + (dir * 10000)), FALSE, self.enemy);
-    newmis = spawn();
-    newmis.classname = "ballista_aiment";
-    setorigin(newmis,trace_endpos);
-    self.goalentity.enemy = newmis;
+    aiment = spawn();
+    if (aiment) {
+        aiment.classname = "ballista_aiment";
+        setorigin(aiment,trace_endpos);
+        self.goalentity.enemy = aiment;
+    }
     self.goalentity.oldenemy = other;
     self.goalentity.tetherfocus = self;
     self.goalentity.tethered = TRUE;
@@ -173,13 +176,15 @@ void() BalBoltTouch =  { // [FUNCTION]
     }
 };
 
-void() FireBalBolt =  { // [FUNCTION]
+entity() FireBalBolt =  { // [FUNCTION]
     local vector launchPoint, targetPoint;
+    local entity balbolt;
 
+    balbolt = spawn();
+    if (!balbolt) return world;
 
-    newmis = spawn();
-    newmis.owner = self;
-    if (self.goalentity.oldenemy.flags & FL_CLIENT) newmis.owner = self.goalentity.oldenemy;
+    balbolt.owner = self;
+    if (self.goalentity.oldenemy.flags & FL_CLIENT) balbolt.owner = self.goalentity.oldenemy;
     makevectors(self.angles);
     launchPoint = ((self.origin + self.view_ofs) + (v_forward * 10));
     if ((self.spawnflags & SPAWNFLAG_BALLISTA_TRACK) && (self.enemy.flags & FLx_CREATURE)) {
@@ -189,31 +194,32 @@ void() FireBalBolt =  { // [FUNCTION]
             targetPoint = self.enemy.origin;
         } else {
             targetPoint = self.view_ofs;
-            traceline(launchPoint,(launchPoint + newmis.velocity), FALSE,self);
+            traceline(launchPoint,(launchPoint + balbolt.velocity), FALSE,self);
             if (trace_ent != self.goalentity && self.goalentity.health > 0) {
                 targetPoint = (self.goalentity.absmin + self.goalentity.absmax) * 0.5;
             }
         }
     }
-    newmis.velocity = normalize(targetPoint - launchPoint) * 1000;
-    newmis.movedir = normalize ( newmis.velocity);
-    newmis.movetype = MOVETYPE_FLYMISSILE;
-    newmis.solid = SOLID_BBOX;
-    newmis.classgroup = CG_PROJALL;
-    newmis.classtype = CT_PROJ_BALSHAFT;
-    newmis.touch = BalBoltTouch;
-    newmis.angles = vectoangles(newmis.velocity);
-    newmis.avelocity_z = 500;
-    newmis.dmg = self.dmg;
-    newmis.goalentity = newmis;
-    newmis.gib1mdl = MODEL_BRK_WOOD2A;
-    newmis.gib2mdl = MODEL_BRK_WOOD2B;
-    newmis.th_die = chunk_death;
-    newmis.health = 10;
-    newmis.death_sound = "hexen2/fx/woodbrk.wav";
-    setmodel(newmis, "progs/hexen2/balbolt.mdl");
-    setsize(newmis,'-4 -4 -4','4 4 4');
-    setorigin(newmis,launchPoint);
+    balbolt.velocity = normalize(targetPoint - launchPoint) * 1000;
+    balbolt.movedir = normalize ( balbolt.velocity);
+    balbolt.movetype = MOVETYPE_FLYMISSILE;
+    balbolt.solid = SOLID_BBOX;
+    balbolt.classgroup = CG_PROJALL;
+    balbolt.classtype = CT_PROJ_BALSHAFT;
+    balbolt.touch = BalBoltTouch;
+    balbolt.angles = vectoangles(balbolt.velocity);
+    balbolt.avelocity_z = 500;
+    balbolt.dmg = self.dmg;
+    balbolt.goalentity = balbolt;
+    balbolt.gib1mdl = MODEL_BRK_WOOD2A;
+    balbolt.gib2mdl = MODEL_BRK_WOOD2B;
+    balbolt.th_die = chunk_death;
+    balbolt.health = 10;
+    balbolt.death_sound = "hexen2/fx/woodbrk.wav";
+    setmodel(balbolt, "progs/hexen2/balbolt.mdl");
+    setsize(balbolt,'-4 -4 -4','4 4 4');
+    setorigin(balbolt,launchPoint);
+    return balbolt;
 };
 
 void() ballista_fire = { // [FUNCTION]

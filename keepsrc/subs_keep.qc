@@ -311,12 +311,16 @@ void() SUB_CheckRandomizedAngles = { // [FUNCTION]
 };
 
 entity(string attmodel, float attalpha) SUB_CreateAttachment = { // [FUNCTION]
-	newmis = spawn();
-	newmis.owner = self;
-	newmis.classtype = CT_ATTACHMENT;
-	newmis.mdl = attmodel;
-	newmis.alpha = attalpha;
-	return newmis;
+	local entity att;
+
+	att = spawn();
+	if (!att) return world;
+
+	att.owner = self;
+	att.classtype = CT_ATTACHMENT;
+	att.mdl = attmodel;
+	att.alpha = attalpha;
+	return att;
 };
 
 void(string attmodel, float attalpha) SUB_CreateSelfAttachment = { // [FUNCTION]
@@ -607,12 +611,14 @@ entity() SUB_FindTeleportDestinationEntity = { // [FUNCTION]
 	result = SUB_FindByClassnameAwayFrom(targtype,enem);
 	if (result) return result;
 
-	newmis = spawn(); // Generate random point to spawn at.
-	setorigin(newmis,vecrand(SUB_ReverseClampFloat(crandom() * 192,-128,128),128,TRUE));
-	traceline(newmis.origin,self.enemy.origin,FALSE,self);
-	newmis.think = SUB_Remove;
-	newmis.nextthink = time + 0.05; // Ensure this tempent is removed!
-	if (trace_ent == self.enemy) return newmis;
+	result = spawn(); // Generate random point to spawn at.
+	if (!result) return world;
+
+	setorigin(result,vecrand(SUB_ReverseClampFloat(crandom() * 192,-128,128),128,TRUE));
+	traceline(result.origin,self.enemy.origin,FALSE,self);
+	result.think = SUB_Remove;
+	result.nextthink = time + 0.05; // Ensure this tempent is removed!
+	if (trace_ent == self.enemy) return result;
 	return world;
 };
 

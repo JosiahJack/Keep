@@ -709,7 +709,7 @@ string(string old, float type) GetRandomMonsterName = {
 	return retval; // Goodness to mergatroid what did I do!
 };
 
-void(string mname) BeMonsterFromString = {
+entity(string mname) BeMonsterFromString = {
 	local entity spawner, newspawn, last;
 
 	if (!self.enemy) last = self;
@@ -718,6 +718,8 @@ void(string mname) BeMonsterFromString = {
 	spawner = self;
 
 	newspawn = spawn();
+	if (!newspawn) return world;
+
 	self = newspawn;
 	setorigin(self,spawner.origin);
 
@@ -951,6 +953,7 @@ void(string mname) BeMonsterFromString = {
 			// self.think1 = FoundTarget;
 		}
 	}
+
 	if (developer > 1) {
 		dprint("BeMonsterFromString is now a ");
 		dprint(self.classname);
@@ -959,8 +962,9 @@ void(string mname) BeMonsterFromString = {
 		if (self.enemy) dprint(", and has an enemy\n");
 		else dprint("\n");
 	}
-	newmis = self;
+
 	self = spawner;
+	return newspawn;
 };
 
 // Used to allow a monster to think itself into existence.  I think therefore...
@@ -969,20 +973,25 @@ void() BeMonsterFromClassname = {
 };
 
 // A code way to spawn minions
-void(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
-	if (!InOpenOrLiquid(minion_org)) return; // Check if there is space to spawn entity
+entity(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
+	local entity minion;
+
+	if (!InOpenOrLiquid(minion_org)) return world; // Check if there is space to spawn entity
 	
 	update_minioncount(self,1);				// Update spawn counters.  Self = minotaur, there is no egg
-	BeMonsterFromString(monstername);		// Temporarily use self to be "monster_something" then reassign to newmis and restore self.
-	setorigin(newmis, minion_org);			// Move to new location
-	newmis.owner = self;					// Spawner Parent Link
-	newmis.enemy = minion_targ;				// Target to attack
-	newmis.infightextra = self.infightextra;
-	newmis.alignment = self.alignment;
-	newmis.temperament = self.temperament;
-	newmis.vulnerability = self.vulnerability;
-	newmis.minion_active = TRUE;			// Minion flag
-	newmis.bodyfadeaway = TRUE;				// Get rid of body
+	minion = BeMonsterFromString(monstername);		// Temporarily use self to be "monster_something" then reassign to newmis and restore self.
+	if (!minion) return world;
+
+	setorigin(minion, minion_org);			// Move to new location
+	minion.owner = self;					// Spawner Parent Link
+	minion.enemy = minion_targ;				// Target to attack
+	minion.infightextra = self.infightextra;
+	minion.alignment = self.alignment;
+	minion.temperament = self.temperament;
+	minion.vulnerability = self.vulnerability;
+	minion.minion_active = TRUE;			// Minion flag
+	minion.bodyfadeaway = TRUE;				// Get rid of body
+	return minion;
 };
  
 float(vector spot) SpawnMinionInRadius = {

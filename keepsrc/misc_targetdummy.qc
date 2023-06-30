@@ -99,6 +99,8 @@ void() misc_targetdummy_stand = { // [FUNCTION]
 };
 
 void(entity inflictor, entity attacker, float damage) misc_targetdummy_pain = { // [FUNCTION]
+	local entity marker;
+
 	self.pain_finished = 0; // want all damage to go through pain function, reset timer
 	if (self.pain_check < time) { // Play a pain sound every second
 		sound(self,CHAN_VOICE, self.pain_sound,1,ATTN_NORM);
@@ -120,16 +122,18 @@ void(entity inflictor, entity attacker, float damage) misc_targetdummy_pain = { 
 	self.attack_finished = time + 0.5; // reset timer for accumulating damage over time
 	
 	// Spawn a marker to show impact location. Will remove self after certain amount of time.
-	newmis = spawn();
-	newmis.classtype = CT_DEVMARKER;
-	newmis.movetype = MOVETYPE_NONE;
-	newmis.solid = SOLID_NOT;
-	setmodel(newmis, MODEL_IMPACT);
-	newmis.skin = rint(random()*7); // Randomize between 8 yellow skins
-	setorigin(newmis, inflictor.origin); // Take projectile impact location
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.think = SUB_Remove;
-	newmis.nextthink = time + self.wait;
+	marker = spawn();
+	if (!marker) return;
+
+	marker.classtype = CT_DEVMARKER;
+	marker.movetype = MOVETYPE_NONE;
+	marker.solid = SOLID_NOT;
+	setmodel(marker, MODEL_IMPACT);
+	marker.skin = rint(random()*7); // Randomize between 8 yellow skins
+	setorigin(marker, inflictor.origin); // Take projectile impact location
+	setsize (marker, VEC_ORIGIN, VEC_ORIGIN);
+	marker.think = SUB_Remove;
+	marker.nextthink = time + self.wait;
 };
 
 // QUAKED misc_targetdummy (0 .5 .5) (-32 -32 -24) (32 32 64) KNIGHT WIZARD OGRE HELL_KNIGHT ZOMBIE DEMON SHALRATH SHAMBLER

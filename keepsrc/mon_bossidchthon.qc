@@ -115,7 +115,7 @@ void(vector orgofs) idchthon_missile = { // [FUNCTION]
 	local float projlen;
 
 	// No enemy, player dead or intermission/cinematic?
-	if (!self.enemy || self.enemy.health < 1 || frame_pause()) {
+	if (!self.enemy || self.enemy.health < 1 || cinematic_running > 0 || cutscene > 0) {
 		self.th_stand();
 		return;
 	}
@@ -153,7 +153,7 @@ void() idchthon_face = { // [FUNCTION]
 	
 	// Check for any no combat conditions
 	if (Invisible(self.enemy)) self.enemy = world;
-	else if (frame_pause()) self.enemy = world;
+	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
 	if (self.enemy) ai_face();
 };

@@ -170,6 +170,7 @@ void() Puke_Touch = {
 
 void(vector p) anac_missile = {
 	local vector offang,org,vec,d;
+	local entity miss;
 
 	if (self.passive_state) return;
 
@@ -178,21 +179,23 @@ void(vector p) anac_missile = {
 	org = self.origin + p_x * v_forward + p_y * v_right + p_z * '0 0 1';
 	d = self.enemy.origin;
 	vec = normalize(d - org);
-	newmis = spawn();
-	newmis.classgroup = CG_PROJALL;
-	newmis.owner = self;
-	newmis.movetype = MOVETYPE_FLYMISSILE;
-	newmis.solid = SOLID_BBOX;
-	newmis.angles = vectoangles(vec);
-	newmis.classname = "spike";
-	newmis.think = SUB_Remove;
-	newmis.nextthink = time + 6;
-	setorigin(newmis, org);
-	setmodel(newmis, "progs/drake/s_explod.spr");
-	newmis.avelocity = '200 100 300';
-	setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.velocity = vec * 800;
-	newmis.touch = Puke_Touch;
+	miss = spawn();
+	if (!miss) return;
+
+	miss.classgroup = CG_PROJALL;
+	miss.owner = self;
+	miss.movetype = MOVETYPE_FLYMISSILE;
+	miss.solid = SOLID_BBOX;
+	miss.angles = vectoangles(vec);
+	miss.classname = "spike";
+	miss.think = SUB_Remove;
+	miss.nextthink = time + 6;
+	setorigin(miss, org);
+	setmodel(miss, "progs/drake/s_explod.spr");
+	miss.avelocity = '200 100 300';
+	setsize(miss, VEC_ORIGIN, VEC_ORIGIN);
+	miss.velocity = vec * 800;
+	miss.touch = Puke_Touch;
 };
 
 void() Bite_Touch = {
@@ -215,32 +218,35 @@ void() Bite_Touch = {
 };
 
 void(float offset) AnacMissile = {
-	local vector offang;
-	local vector org;
-	local vector vec;
+	local vector offang,org,vec;
+	local entity miss;
+
 	offang = vectoangles(self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * MOVETYPE_TOSS;
 	makevectors(offang);
 	org = self.origin - SVC_INTERMISSION * normalize(self.velocity);
 	vec = normalize(v_forward);
 	vec_z = MSG_BROADCAST - vec_z + (random() - 0.5) * 0.1;
-	newmis = spawn();
-	newmis.owner = self;
-	newmis.movetype = MOVETYPE_FLYMISSILE;
-	newmis.classgroup = CG_PROJALL;
-	newmis.solid = SOLID_BBOX;
-	newmis.angles = vectoangles(vec);
-	newmis.classname = "spike";
-	setorigin(newmis, org);
-	newmis.classname = "LaunchSpike";
-	setmodel(newmis, "progs/spike2.mdl");
-	setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.avelocity = '200 100 300';
-	newmis.velocity = vec * 1000;
+
+	miss = spawn();
+	if (!miss) return;
+
+	miss.owner = self;
+	miss.movetype = MOVETYPE_FLYMISSILE;
+	miss.classgroup = CG_PROJALL;
+	miss.solid = SOLID_BBOX;
+	miss.angles = vectoangles(vec);
+	miss.classname = "spike";
+	setorigin(miss, org);
+	miss.classname = "LaunchSpike";
+	setmodel(miss, "progs/spike2.mdl");
+	setsize(miss, VEC_ORIGIN, VEC_ORIGIN);
+	miss.avelocity = '200 100 300';
+	miss.velocity = vec * 1000;
 	sound(self,CHAN_WEAPON,"doors/airdoor2.wav",CHAN_WEAPON,ATTN_NORM);
-	newmis.touch = Bite_Touch;
-	newmis.nextthink = time + 0.2;
-	newmis.think = SUB_Remove;
+	miss.touch = Bite_Touch;
+	miss.nextthink = time + 0.2;
+	miss.think = SUB_Remove;
 };
 
 void() anac_stand1 = [79, anac_stand1] { ai_stand(); };

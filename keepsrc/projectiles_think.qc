@@ -380,7 +380,7 @@ void() Warhead_Think = { // [FUNCTION]
 float() Mirv_Off = { // [FUNCTION]
     if (self.master.mirv1 != self) return TRUE; // Previously went offline.
     if (self.weapon != self.master.weapon && self.weaponismoditems != self.master.weaponismoditems) return TRUE; // Not holding the launching weapon.
-    if (frame_pause()) return TRUE; // In a cutscene or intermission
+    if (cinematic_running > 0 || cutscene > 0) return TRUE; // In a cutscene or intermission
     return FALSE;
 };
 
@@ -615,10 +615,11 @@ void() BFGTracerThink = { // [FUNCTION]
     org = self.origin + self.pos1*dis;
     setorigin(self, org);
     tracer = SpawnBFGBoom(self.origin, self.pos1, "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
-    tracer.angles_x = tracer.angles_x - tracer.angles_x*2;
+    if (tracer) tracer.angles_x = tracer.angles_x - tracer.angles_x*2;
 
     tracer = SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
-    tracer.angles_x = tracer.angles_x - tracer.angles_x*2;
+    if (tracer) tracer.angles_x = tracer.angles_x - tracer.angles_x*2;
+
     if (self.cnt == 5) {
         self.think = SUB_Remove;
         self.nextthink = time + 0.1;
