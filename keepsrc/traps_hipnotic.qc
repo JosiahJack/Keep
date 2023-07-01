@@ -53,7 +53,7 @@ void() SpawnLightningThink = { // [FUNCTION]
 void() trap_lightning_use = { // [FUNCTION]
    local vector p1, p2, dir;
    local float dst, remainder;
-   local entity targ;
+   local entity targ, lightng;
 
    if ( (time >= self.pausetime) ) {
       sound(self,CHAN_AUTO,self.noise,TRUE,ATTN_NORM);
@@ -69,18 +69,20 @@ void() trap_lightning_use = { // [FUNCTION]
       p2 = (self.origin + (v_forward * 8192));
    }
    traceline(p1,p2,TRUE,self);
-   newmis = spawn();
-   setorigin(newmis,self.origin);
-   newmis.oldorigin = trace_endpos;
-   newmis.owner = self;
-   newmis.dmg = self.dmg;
-   newmis.style = self.style;
-   newmis.mdl = self.mdl;
-   newmis.distance = self.distance;
-   newmis.skin = self.skin;
-   newmis.deathstring = self.deathstring;
-   newmis.duration = SUB_ClampFloat(time + self.duration,0.01,self.duration);
-   SUB_ThinkImmediate(newmis,SpawnLightningThink);
+   lightng = spawn();
+	if (!lightng) return;
+
+   setorigin(lightng,self.origin);
+   lightng.oldorigin = trace_endpos;
+   lightng.owner = self;
+   lightng.dmg = self.dmg;
+   lightng.style = self.style;
+   lightng.mdl = self.mdl;
+   lightng.distance = self.distance;
+   lightng.skin = self.skin;
+   lightng.deathstring = self.deathstring;
+   lightng.duration = SUB_ClampFloat(time + self.duration,0.01,self.duration);
+   SUB_ThinkImmediate(lightng,SpawnLightningThink);
 };
 
 void() lightning_think = { // [FUNCTION]
