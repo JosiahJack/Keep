@@ -125,28 +125,33 @@ void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
 
 // Spawns a fresh soul by ripping it out of 'ent'.
 // 'self' is the monster looking for souls to steal.
-void(entity ent) Soul_Spawn = { // [FUNCTION]
+entity(entity ent) Soul_Spawn = { // [FUNCTION]
+	local entity nsoul;
+
 	ent.gorging = TRUE;
-    newmis = spawn(); // Nehahra aborted this if soul would spawn at the origin.
-    newmis.origin     = ent.origin;
-    newmis.origin_z   = ent.absmin_z + 4;
-    newmis.oldenemy   = ent;
-    newmis.owner      = self;  // Cannot use 'master' because summon code thinks soul is a pet.
-    newmis.classname  = "soul";
-	newmis.classtype  = CT_SOUL;
-    newmis.solid      = SOLID_TRIGGER; // Don't make bodies glow.  Must NOT be SOLID_NOT or else
-                                       // findradius can't see it!
-    newmis.movetype   = MOVETYPE_NOCLIP;
-    newmis.cnt        = 1; // Begins hidden in corpse.
-    newmis.mangle     = '0 0 20';
-    if (self.classtype == CT_MONSHADE) newmis.mangle_x = 30;
-    newmis.wait       = 0;
-	newmis.alpha	  = 0.01;
-    newmis.nextthink  = time + 0.2;
-    newmis.think      = Soul_Think;
-    setorigin(newmis,newmis.origin);
-    setmodel(newmis,"progs/nehahra/soul.mdl"); // So it can glow while invisible.
-    setsize(newmis, '0 0 0', '0 0 0');
+    nsoul = spawn(); // Nehahra aborted this if soul would spawn at the origin.
+	if (!nsoul) return world;
+
+    nsoul.origin     = ent.origin;
+    nsoul.origin_z   = ent.absmin_z + 4;
+    nsoul.oldenemy   = ent;
+    nsoul.owner      = self;  // Cannot use 'master' because summon code thinks soul is a pet.
+    nsoul.classname  = "soul";
+	nsoul.classtype  = CT_SOUL;
+    nsoul.solid      = SOLID_TRIGGER; // Don't make bodies glow.  Must NOT be SOLID_NOT or else
+                                      // findradius can't see it!
+    nsoul.movetype   = MOVETYPE_NOCLIP;
+    nsoul.cnt        = 1; // Begins hidden in corpse.
+    nsoul.mangle     = '0 0 20';
+    if (self.classtype == CT_MONSHADE) nsoul.mangle_x = 30;
+    nsoul.wait       = 0;
+	nsoul.alpha	  = 0.01;
+    nsoul.nextthink  = time + 0.2;
+    nsoul.think      = Soul_Think;
+    setorigin(nsoul,nsoul.origin);
+    setmodel(nsoul,"progs/nehahra/soul.mdl"); // So it can glow while invisible.
+    setsize(nsoul, '0 0 0', '0 0 0');
+	return nsoul;
 };
 
 void(string sfx) ai_wraith = { // [FUNCTION]
@@ -227,8 +232,9 @@ float() Wraith_FindSoul = { // [FUNCTION]
 					sound(self,CHAN_ITEM,"nehahra/wraith/select.wav",1,ATTN_IDLE);
 					sound(head, 6, "nehahra/wraith/select.wav",1,ATTN_IDLE);
 				}
-				Soul_Spawn(head);
-				self.enemy = newmis;
+				self.enemy = Soul_Spawn(head);
+				if (!self.enemy) continue;
+
 				self.gorging = TRUE;
 				SUB_SelfThink(self.th_run,0.1);
 				return TRUE;
