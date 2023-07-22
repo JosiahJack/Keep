@@ -426,7 +426,7 @@ void() ai_repel;    // In 'nemesant.qc'.
 float() necro_encore = { // [FUNCTION]
     if (self.classtype == CT_MONNECRO) return TRUE;
     if (SUB_IgnorePain()) return TRUE;
-    if (skill >= 2 && random() < 0.25) return TRUE;
+    //if (skill >= 2 && random() < 0.25) return TRUE;
     return FALSE;
 };
 
