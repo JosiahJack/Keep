@@ -30,10 +30,13 @@ mapsrc/*.map
 mapsrc/*.bsp
 mapsrc/*.lit
 mapsrc/*.rmf
+mapsrc/*.rmx
 mapsrc/*.jmf
+mapsrc/*.jmx
 mapsrc/*.vmf
 mapsrc/*.prt
 mapsrc/*.texinfo
+mapsrc/*.log
 mapsrc/*.png
 mapsrc/*.jpg
 mapsrc/*.jpeg
