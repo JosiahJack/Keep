@@ -483,7 +483,7 @@ void() golem_wakefinished = { // [FUNCTION]
 		self.spawnflags = self.spawnflags - MON_STATUE;
 	self.spawnstatue = FALSE;		// No longer stationary
 
-	self.th_stand = golem_stand1;	// Idling on feet
+	self.th_stand = monster_stand;	// Idling on feet
 	self.th_walk = golem_walk1;		// Walking
 	self.th_run = golem_run1;		// Running
 	self.th_melee = golem_melee;	// Fist attack
@@ -616,6 +616,9 @@ void() monster_necrominiongolem = {
 };
 
 void() setup_golem = { // [FUNCTION]
+	self.framemax = 250;
+	self.idle1framestart = 0;
+	self.idle1frameend = 21;
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GOLEM;
@@ -661,9 +664,8 @@ void() setup_golem = { // [FUNCTION]
 		self.th_stand = golem_statue;	// Stone idle sound
 		self.think1 = golem_wakeup;		// Wakeup statue angry at player
 		self.skin = 1;					// Statue skin (+grey, no eyes)
-	}
-	else {
-		self.th_stand = golem_stand1;
+	} else {
+		self.th_stand = monster_stand;
 		self.th_walk = golem_walk1;
 		self.th_run = golem_run1;
 		self.th_melee = golem_melee;

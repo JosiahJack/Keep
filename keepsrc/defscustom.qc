@@ -508,6 +508,52 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		dangle;				// Spawn on ceiling flag for certain entities
 .float      reviveframestart;	// Initial frame for revive animation. (Showy death anim in reverse)
 .float      reviveframeend;		// End frame for revive animation.  Must be a lower number than reviveframestart.
+.float      idle1framestart;
+.float      idle1frameend;
+.float      walk1framestart;
+.float      walk1frameend;
+.float      melee1framestart;
+.float      melee1frameend;
+.float      melee2framestart;
+.float      melee2frameend;
+.float      melee3framestart;
+.float      melee3frameend;
+.float      melee4framestart;
+.float      melee4frameend;
+.float      proj1framestart;
+.float      proj1frameend;
+.float      proj2framestart;
+.float      proj2frameend;
+.float      proj3framestart;
+.float      proj3frameend;
+.float      proj4framestart;
+.float      proj4frameend;
+.float      pain1framestart;
+.float      pain1frameend;
+.float      pain2framestart;
+.float      pain2frameend;
+.float      pain3framestart;
+.float      pain3frameend;
+.float      pain4framestart;
+.float      pain4frameend;
+.float      death1framestart;
+.float      death1frameend;
+.float      death2framestart;
+.float      death2frameend;
+.float      death3framestart;
+.float      death3frameend;
+.float      death4framestart;
+.float      death4frameend;
+.float      special1framestart;
+.float      special1frameend;
+.float      special2framestart;
+.float      special2frameend;
+.float      special3framestart;
+.float      special3frameend;
+.float      special4framestart;
+.float      special4frameend;
+.float      framemax;
+// Note, pair with .frate for faster than 10fps anims.
 
 // Misc model animation (frame, skin and rotation loops)
 .float		framestart;			// FRAME Starting number for misc_model animations

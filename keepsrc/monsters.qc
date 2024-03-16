@@ -558,6 +558,28 @@ void(entity attacker, float damage) monster_pain_check = { // [FUNCTION]
 	else self.pain_check = 1;
 };
 
+// Generic monster thinks for standard use or for custom monsters.
+// ----------------------------------------------------------------------------
+void() monster_stand = {
+	if (self.walkframe == self.idle1framestart) monster_idle_sound();
+	self.walkframe = self.walkframe + 1;
+	if (self.walkframe > self.idle1frameend) {
+		self.walkframe = self.idle1framestart;
+	}
+
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_stand,self.frate);
+	ai_stand(); // Must be after the SUB_SelfThink or it won't actually move.
+};
+
+void() monster_idle = { monster_stand(); }; // Redirect in case of I forget.
+
+// End generic monster thinks.
+// ----------------------------------------------------------------------------
+
 void(entity targ, entity charmmaster) ApplyHornCharm = { // [FUNCTION]
 	targ.charmer = charmmaster;
 	targ.charmed = TRUE;
@@ -741,6 +763,9 @@ void() monster_spawn = { // [FUNCTION]
 	self.mindex2 = self.modelindex;
 	self.skin = self.skin_override;				// Restore any skins
 	self.frame = self.frame_override;			// Restore any frames
+	if (self.framemax <= 0) self.framemax = 4096; // Set to a high number.
+	if (self.frate <= 0) self.frate = 0.1;      // Default animation think rate.
+	if (!self.th_stand) self.th_stand = monster_stand;
 	setsize(self,self.bbmins,self.bbmaxs);		// Restore BB size
 
 	// Check for delay spawn monster count
@@ -1309,3 +1334,4 @@ void(entity e) sendmonsterdevdata { // [FUNCTION]
 
 	world.deventity.enemyhealth = world.deventity.enemyhealth + e.health;
 };
+
