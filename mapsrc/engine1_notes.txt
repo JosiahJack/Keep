@@ -1,0 +1,27 @@
+caves_south.bsp
+--------------------
+offset from origin 1024, -2048, 0
+
+
+
+THEMES:
+================
+medieval
+church
+cathedral
+graveyard
+crypt
+castle
+catacombs
+runic
+slime-met
+limbo
+gauntlet
+ziggurat
+egyptian
+mayan
+temple
+rome
+mystic
+techno
+

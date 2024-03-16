@@ -1,0 +1,22 @@
+My Quake maps in order from largest to smallest, with notes:
+
+kplibry		Amongst Tomes								4.8m
+kpkeep		That Keep of Old
+dreams1		dream collection with techy swampy
+kpbonus		FIX HEALTH PACKS
+kpdung		These Dingy Cells
+kpcrypt1		The Crypt
+kpstart		Welcome to the Keep
+tbg1		Thunderbolt Grounds 1
+ZZZcrypt	crypt bridge
+limbo2		limbo style with scorpion pit (coop only)				1.8m
+slmcas1		Mountaintop Castle (unfinished)
+gr1m1		brown boxy map shaped like a cross (RELEASED)
+rin1mx		NEED TO FILL WITH BADDIES
+THEMOR~1	The More Hateful Palace
+scot2		Scottish Castle
+SHRINE~1	Shrine of the Fiends
+MAINGR~1	
+kpcrypt2
+THELOS~1	The Lost Cathedral
+swmpcit1		Swamp City							.3m
