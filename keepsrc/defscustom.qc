@@ -510,8 +510,95 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float      reviveframeend;		// End frame for revive animation.  Must be a lower number than reviveframestart.
 .float      idle1framestart;
 .float      idle1frameend;
+.float      idlesoundframe1;    // The first frame in the stand cycle to play the idle sound.
+.float      idlesoundframe2;    // The second frame in the stand cycle to play the idle sound.
 .float      walk1framestart;
 .float      walk1frameend;
+.float      walkidlesoundframe1;// The first frame in the walk cycle to play the idle sound.
+.float      walkidlesoundframe2;// The second frame in the walk cycle to play the idle sound.
+.float      walkstepframe1;     // The first frame in the walk cycle to play footstep.
+.float      walkstepframe2;     // The second frame in the walk cycle to play footstep.
+.float      walkspeedframe1;
+.float      walkspeedframe2;
+.float      walkspeedframe3;
+.float      walkspeedframe4;
+.float      walkspeedframe5;
+.float      walkspeedframe6;
+.float      walkspeedframe7;
+.float      walkspeedframe8;
+.float      walkspeedframe9;
+.float      walkspeedframe10;
+.float      walkspeedframe11;
+.float      walkspeedframe12;
+.float      walkspeedframe13;
+.float      walkspeedframe14;
+.float      walkspeedframe15;
+.float      walkspeedframe16;
+.float      walkspeedframe17;
+.float      walkspeedframe18;
+.float      walkspeedframe19;
+.float      walkspeedframe20;
+.float      walkspeedframe21;
+.float      walkspeedframe22;
+.float      walkspeedframe23;
+.float      walkspeedframe24;
+.float      walkspeedframe25;
+.float      walkspeedframe26;
+.float      walkspeedframe27;
+.float      walkspeedframe28;
+.float      walkspeedframe29;
+.float      walkspeedframe30;
+.float      walkspeedframe31;
+.float      walkspeedframe32;
+.float      walkspeedframe33;
+.float      walkspeedframe34;
+.float      run1framestart;
+.float      run1frameend;
+.float      runidlesoundframe1;// The first frame in the run cycle to play the idle sound.
+.float      runidlesoundframe2;// The second frame in the run cycle to play the idle sound.
+.float      runstepframe1;
+.float      runstepframe2;
+.float      runspeedframe1;
+.float      runspeedframe2;
+.float      runspeedframe3;
+.float      runspeedframe4;
+.float      runspeedframe5;
+.float      runspeedframe6;
+.float      runspeedframe7;
+.float      runspeedframe8;
+.float      runspeedframe9;
+.float      runspeedframe10;
+.float      runspeedframe11;
+.float      runspeedframe12;
+.float      runspeedframe13;
+.float      runspeedframe14;
+.float      runspeedframe15;
+.float      runspeedframe16;
+.float      runspeedframe17;
+.float      runspeedframe18;
+.float      runspeedframe19;
+.float      runspeedframe20;
+.float      runspeedframe21;
+.float      runspeedframe22;
+.float      runspeedframe23;
+.float      runspeedframe24;
+.float      runspeedframe25;
+.float      runspeedframe26;
+.float      runspeedframe27;
+.float      runspeedframe28;
+.float      runspeedframe29;
+.float      runspeedframe30;
+.float      runspeedframe31;
+.float      runspeedframe32;
+.float      runspeedframe33;
+.float      runspeedframe34;
+.void()     th_melee1;
+.void()     th_melee2;
+.void()     th_melee3;
+.void()     th_melee4;
+.float      melee1chance;
+.float      melee2chance;
+.float      melee3chance;
 .float      melee1framestart;
 .float      melee1frameend;
 .float      melee2framestart;

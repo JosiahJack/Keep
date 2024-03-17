@@ -543,17 +543,26 @@ void(entity attacker, float damage) monster_pain_check = { // [FUNCTION]
 	
 	// already dying, don't go into pain frame
 	if (self.health < 1) self.pain_check = 0;
+
 	// The new axe forces monsters into long pain animations (if they exist)
 	else if (self.axhitme && self.pain_longanim) self.pain_check = 2;
+
 	// always go into pain frame if it has been a while (first hit = pain)
 	else if (time - self.pain_finstate > PAIN_ALWAY) self.pain_check = 1;
+
 	// Dangerous liquids should kill the monster and keeping them in
 	// constant pain animations which makes them look better than doing nothing!
-	else if (self.liquidbase == CONTENT_SLIME || self.liquidbase == CONTENT_LAVA) self.pain_check = 1;
+	else if (self.liquidbase == CONTENT_SLIME
+		     || self.liquidbase == CONTENT_LAVA) {
+
+		self.pain_check = 1;
+
 	// If being attacked by a world object (shooter,electricity,bmodel) in pain
-	else if (attacker == world) self.pain_check = 1;
+	} else if (attacker == world) self.pain_check = 1;
+
 	// Random chance to flinch and not ignore the pain (play sound only)
 	else if (random()* self.pain_flinch > damage ) self.pain_check = 3;
+
 	// DEFAULT  : pain animation + sound(last condition)
 	else self.pain_check = 1;
 };
@@ -561,10 +570,17 @@ void(entity attacker, float damage) monster_pain_check = { // [FUNCTION]
 // Generic monster thinks for standard use or for custom monsters.
 // ----------------------------------------------------------------------------
 void() monster_stand = {
-	if (self.walkframe == self.idle1framestart) monster_idle_sound();
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > self.idle1frameend) {
 		self.walkframe = self.idle1framestart;
+	}
+
+	// Check and play sound after increment as this is the first time entering
+	// this frame number so this aligns with the olden ways of [$frame, stand1]
+	if (self.walkframe == self.idlesoundframe1
+        || self.walkframe == self.idlesoundframe2) {
+
+		monster_idle_sound();
 	}
 
 	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
@@ -575,7 +591,288 @@ void() monster_stand = {
 	ai_stand(); // Must be after the SUB_SelfThink or it won't actually move.
 };
 
-void() monster_idle = { monster_stand(); }; // Redirect in case of I forget.
+void() monster_stand_start = {
+	self.walkframe = self.idle1framestart; // Initialize at correct frame.
+
+	// Check and play idle sound here so that very first entry can still play
+	// in same manner as ye olden ways of [$frame, stand1]
+	if (self.walkframe == self.idle1framestart) monster_idle_sound();
+
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_stand,self.frate);
+
+    // Must be after the SUB_SelfThink or it won't actually move.
+	ai_stand();
+};
+
+
+void() monster_idle = { monster_stand(); }; // Redirects in case I forget.
+void() monster_idle_start = { monster_stand_start(); };
+
+void() monster_walk = {
+	self.walkframe = self.walkframe + 1;
+	if (self.walkframe > self.walk1frameend) {
+		self.walkframe = self.walk1framestart;
+	}
+
+	if (self.walkframe == self.walkstepframe1
+        || self.walkframe == self.walkstepframe2) {
+
+		monster_footstep(FALSE);
+	}
+
+	if (self.walkframe == self.walkidlesoundframe1
+        || self.walkframe == self.walkidlesoundframe2) {
+
+		monster_idle_sound();
+	}
+
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_walk,self.frate);
+
+    // Must be after the SUB_SelfThink or it won't actually move.
+	if (self.walkframe == (self.walk1framestart)) {
+		ai_walk(self.walkspeedframe1);
+	} else if (self.walkframe == (self.walk1framestart + 1)) {
+		ai_walk(self.walkspeedframe2);
+	} else if (self.walkframe == (self.walk1framestart + 2)) {
+		ai_walk(self.walkspeedframe3);
+	} else if (self.walkframe == (self.walk1framestart + 3)) {
+		ai_walk(self.walkspeedframe4);
+	} else if (self.walkframe == (self.walk1framestart + 4)) {
+		ai_walk(self.walkspeedframe5);
+	} else if (self.walkframe == (self.walk1framestart + 5)) {
+		ai_walk(self.walkspeedframe6);
+	} else if (self.walkframe == (self.walk1framestart + 6)) {
+		ai_walk(self.walkspeedframe7);
+	} else if (self.walkframe == (self.walk1framestart + 7)) {
+		ai_walk(self.walkspeedframe8);
+	} else if (self.walkframe == (self.walk1framestart + 8)) {
+		ai_walk(self.walkspeedframe9);
+	} else if (self.walkframe == (self.walk1framestart + 9)) {
+		ai_walk(self.walkspeedframe10);
+	} else if (self.walkframe == (self.walk1framestart + 10)) {
+		ai_walk(self.walkspeedframe11);
+	} else if (self.walkframe == (self.walk1framestart + 11)) {
+		ai_walk(self.walkspeedframe12);
+	} else if (self.walkframe == (self.walk1framestart + 12)) {
+		ai_walk(self.walkspeedframe13);
+	} else if (self.walkframe == (self.walk1framestart + 13)) {
+		ai_walk(self.walkspeedframe14);
+	} else if (self.walkframe == (self.walk1framestart + 14)) {
+		ai_walk(self.walkspeedframe15);
+	} else if (self.walkframe == (self.walk1framestart + 15)) {
+		ai_walk(self.walkspeedframe16);
+	} else if (self.walkframe == (self.walk1framestart + 16)) {
+		ai_walk(self.walkspeedframe17);
+	} else if (self.walkframe == (self.walk1framestart + 17)) {
+		ai_walk(self.walkspeedframe18);
+	} else if (self.walkframe == (self.walk1framestart + 18)) {
+		ai_walk(self.walkspeedframe19);
+	} else if (self.walkframe == (self.walk1framestart + 19)) {
+		ai_walk(self.walkspeedframe20);
+	} else if (self.walkframe == (self.walk1framestart + 20)) {
+		ai_walk(self.walkspeedframe21);
+	} else if (self.walkframe == (self.walk1framestart + 21)) {
+		ai_walk(self.walkspeedframe22);
+	} else if (self.walkframe == (self.walk1framestart + 22)) {
+		ai_walk(self.walkspeedframe23);
+	} else if (self.walkframe == (self.walk1framestart + 23)) {
+		ai_walk(self.walkspeedframe24);
+	} else if (self.walkframe == (self.walk1framestart + 24)) {
+		ai_walk(self.walkspeedframe25);
+	} else if (self.walkframe == (self.walk1framestart + 25)) {
+		ai_walk(self.walkspeedframe26);
+	} else if (self.walkframe == (self.walk1framestart + 26)) {
+		ai_walk(self.walkspeedframe27);
+	} else if (self.walkframe == (self.walk1framestart + 27)) {
+		ai_walk(self.walkspeedframe28);
+	} else if (self.walkframe == (self.walk1framestart + 28)) {
+		ai_walk(self.walkspeedframe29);
+	} else if (self.walkframe == (self.walk1framestart + 29)) {
+		ai_walk(self.walkspeedframe30);
+	} else if (self.walkframe == (self.walk1framestart + 30)) {
+		ai_walk(self.walkspeedframe31);
+	} else if (self.walkframe == (self.walk1framestart + 31)) {
+		ai_walk(self.walkspeedframe32);
+	} else if (self.walkframe == (self.walk1framestart + 32)) {
+		ai_walk(self.walkspeedframe33);
+	} else if (self.walkframe == (self.walk1framestart + 33)) {
+		ai_walk(self.walkspeedframe34);
+	} else {
+		ai_walk(self.walkspeedframe1);
+	}
+};
+
+void() monster_walk_start = {
+	if (self.walkframe == self.walkstepframe1
+        || self.walkframe == self.walkstepframe2) {
+
+		monster_footstep(FALSE);
+	}
+
+	self.walkframe = self.walk1framestart; // Initialize at correct frame.
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_walk,self.frate);
+
+    // Must be after the SUB_SelfThink or it won't actually move.
+	ai_walk(self.walkspeedframe1);
+};
+
+void() monster_run = {
+	self.walkframe = self.walkframe + 1;
+	if (self.walkframe > self.run1frameend) {
+		self.walkframe = self.run1framestart;
+	}
+
+	if (self.walkframe == self.runstepframe1
+        || self.walkframe == self.runstepframe2) {
+
+		monster_footstep(FALSE);
+	}
+
+	if (self.walkframe == self.runidlesoundframe1
+        || self.walkframe == self.runidlesoundframe2) {
+
+		monster_idle_sound();
+	}
+
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_run,self.frate);
+
+    // Must be after the SUB_SelfThink or it won't actually move.
+	if (self.walkframe == (self.run1framestart)) {
+		ai_run(self.runspeedframe1);
+	} else if (self.walkframe == (self.run1framestart + 1)) {
+		ai_run(self.runspeedframe2);
+	} else if (self.walkframe == (self.run1framestart + 2)) {
+		ai_run(self.runspeedframe3);
+	} else if (self.walkframe == (self.run1framestart + 3)) {
+		ai_run(self.runspeedframe4);
+	} else if (self.walkframe == (self.run1framestart + 4)) {
+		ai_run(self.runspeedframe5);
+	} else if (self.walkframe == (self.run1framestart + 5)) {
+		ai_run(self.runspeedframe6);
+	} else if (self.walkframe == (self.run1framestart + 6)) {
+		ai_run(self.runspeedframe7);
+	} else if (self.walkframe == (self.run1framestart + 7)) {
+		ai_run(self.runspeedframe8);
+	} else if (self.walkframe == (self.run1framestart + 8)) {
+		ai_run(self.runspeedframe9);
+	} else if (self.walkframe == (self.run1framestart + 9)) {
+		ai_run(self.runspeedframe10);
+	} else if (self.walkframe == (self.run1framestart + 10)) {
+		ai_run(self.runspeedframe11);
+	} else if (self.walkframe == (self.run1framestart + 11)) {
+		ai_run(self.runspeedframe12);
+	} else if (self.walkframe == (self.run1framestart + 12)) {
+		ai_run(self.runspeedframe13);
+	} else if (self.walkframe == (self.run1framestart + 13)) {
+		ai_run(self.runspeedframe14);
+	} else if (self.walkframe == (self.run1framestart + 14)) {
+		ai_run(self.runspeedframe15);
+	} else if (self.walkframe == (self.run1framestart + 15)) {
+		ai_run(self.runspeedframe16);
+	} else if (self.walkframe == (self.run1framestart + 16)) {
+		ai_run(self.runspeedframe17);
+	} else if (self.walkframe == (self.run1framestart + 17)) {
+		ai_run(self.runspeedframe18);
+	} else if (self.walkframe == (self.run1framestart + 18)) {
+		ai_run(self.runspeedframe19);
+	} else if (self.walkframe == (self.run1framestart + 19)) {
+		ai_run(self.runspeedframe20);
+	} else if (self.walkframe == (self.run1framestart + 20)) {
+		ai_run(self.runspeedframe21);
+	} else if (self.walkframe == (self.run1framestart + 21)) {
+		ai_run(self.runspeedframe22);
+	} else if (self.walkframe == (self.run1framestart + 22)) {
+		ai_run(self.runspeedframe23);
+	} else if (self.walkframe == (self.run1framestart + 23)) {
+		ai_run(self.runspeedframe24);
+	} else if (self.walkframe == (self.run1framestart + 24)) {
+		ai_run(self.runspeedframe25);
+	} else if (self.walkframe == (self.run1framestart + 25)) {
+		ai_run(self.runspeedframe26);
+	} else if (self.walkframe == (self.run1framestart + 26)) {
+		ai_run(self.runspeedframe27);
+	} else if (self.walkframe == (self.run1framestart + 27)) {
+		ai_run(self.runspeedframe28);
+	} else if (self.walkframe == (self.run1framestart + 28)) {
+		ai_run(self.runspeedframe29);
+	} else if (self.walkframe == (self.run1framestart + 29)) {
+		ai_run(self.runspeedframe30);
+	} else if (self.walkframe == (self.run1framestart + 30)) {
+		ai_run(self.runspeedframe31);
+	} else if (self.walkframe == (self.run1framestart + 31)) {
+		ai_run(self.runspeedframe32);
+	} else if (self.walkframe == (self.run1framestart + 32)) {
+		ai_run(self.runspeedframe33);
+	} else if (self.walkframe == (self.run1framestart + 33)) {
+		ai_run(self.runspeedframe34);
+	} else {
+		ai_run(self.runspeedframe1);
+	}
+};
+
+void() monster_run_start = {
+	if (self.walkframe == self.runstepframe1
+        || self.walkframe == self.runstepframe2) {
+
+		monster_footstep(FALSE);
+	}
+
+	self.walkframe = self.run1framestart; // Initialize at correct frame.
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_run,self.frate);
+
+    // Must be after the SUB_SelfThink or it won't actually move.
+	ai_walk(self.runspeedframe1);
+};
+
+void() monster_melee = {
+	local float rand;
+
+	rand = random();
+	if (self.th_melee1 && self.th_melee2 && self.th_melee3 && self.th_melee4) {
+		if (rand < self.melee1chance) {
+			self.th_melee1();
+		} else if (rand < self.melee2chance) {
+			self.th_melee2();
+		} else if (rand < self.melee3chance) {
+			self.th_melee3();
+		} else {
+			self.th_melee4();
+		}
+	} else 	if (self.th_melee1 && self.th_melee2 && self.th_melee3) {
+		if (rand < self.melee1chance) {
+			self.th_melee1();
+		} else if (rand < self.melee2chance) {
+			self.th_melee2();
+		} else {
+			self.th_melee3();
+		}
+	} else 	if (self.th_melee1 && self.th_melee2) {
+		if (rand < self.melee1chance) self.th_melee1();
+		else self.th_melee2();
+	} else 	if (self.th_melee1) {
+		self.th_melee1();
+	}
+};
 
 // End generic monster thinks.
 // ----------------------------------------------------------------------------
@@ -765,7 +1062,8 @@ void() monster_spawn = { // [FUNCTION]
 	self.frame = self.frame_override;			// Restore any frames
 	if (self.framemax <= 0) self.framemax = 4096; // Set to a high number.
 	if (self.frate <= 0) self.frate = 0.1;      // Default animation think rate.
-	if (!self.th_stand) self.th_stand = monster_stand;
+	if (!self.th_stand) self.th_stand = monster_stand_start;
+	if (!self.th_walk) self.th_walk = monster_walk_start;
 	setsize(self,self.bbmins,self.bbmaxs);		// Restore BB size
 
 	// Check for delay spawn monster count

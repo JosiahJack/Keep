@@ -57,107 +57,6 @@ $frame knock1 knock2 knock3 knock4 knock5 knock6 knock7 knock8
 $frame knock9 knock10 knock11 knock12 knock13 knock14 knock15 knock16
 $frame knock17 knock18 knock19 knock20 knock21 knock22 knock23 knock24
 
-
-void() golem_stand1 = [$wait1, golem_stand2 ] { monster_idle_sound(); ai_stand(); };
-void() golem_stand2 = [$wait2, golem_stand3 ] { ai_stand(); };
-void() golem_stand3 = [$wait3, golem_stand4 ] { ai_stand(); };
-void() golem_stand4 = [$wait4, golem_stand5 ] { ai_stand(); };
-void() golem_stand5 = [$wait5, golem_stand6 ] { ai_stand(); };
-void() golem_stand6 = [$wait6, golem_stand7 ] { ai_stand(); };
-void() golem_stand7 = [$wait7, golem_stand8 ] { ai_stand(); };
-void() golem_stand8 = [$wait8, golem_stand9 ] { ai_stand(); };
-void() golem_stand9 = [$wait9, golem_stand10 ] { ai_stand(); };
-void() golem_stand10 = [$wait10, golem_stand11 ] { ai_stand(); };
-void() golem_stand11 = [$wait11, golem_stand12 ] { ai_stand(); };
-void() golem_stand12 = [$wait12, golem_stand13 ] { ai_stand(); };
-void() golem_stand13 = [$wait13, golem_stand14 ] { ai_stand(); };
-void() golem_stand14 = [$wait14, golem_stand15 ] { ai_stand(); };
-void() golem_stand15 = [$wait15, golem_stand16 ] { ai_stand(); };
-void() golem_stand16 = [$wait16, golem_stand17 ] { ai_stand(); };
-void() golem_stand17 = [$wait17, golem_stand18 ] { ai_stand(); };
-void() golem_stand18 = [$wait18, golem_stand19 ] { ai_stand(); };
-void() golem_stand19 = [$wait19, golem_stand20 ] { ai_stand(); };
-void() golem_stand20 = [$wait20, golem_stand21 ] { ai_stand(); };
-void() golem_stand21 = [$wait21, golem_stand1 ] { ai_stand(); };
-
-
-void() golem_ai_walk = {
-	if (self.frame == $walk1 || self.frame == $walk17)
-		{ ai_walk(0); monster_footstep(FALSE); }
-	else if (self.frame == $walk2 || self.frame == $walk18) ai_walk(1);
-	else ai_walk(2); 
-	self.nextthink = time + 0.05;
-	if (self.frame == $walk8 || self.frame == $walk25) monster_idle_sound();
-};
-
-void() golem_walk1 = [$walk1, golem_walk2 ] { golem_ai_walk(); };
-void() golem_walk2 = [$walk2, golem_walk3 ] { golem_ai_walk(); };
-void() golem_walk3 = [$walk3, golem_walk4 ] { golem_ai_walk(); };
-void() golem_walk4 = [$walk4, golem_walk5 ] { golem_ai_walk(); };
-void() golem_walk5 = [$walk5, golem_walk6 ] { golem_ai_walk(); };
-void() golem_walk6 = [$walk6, golem_walk7 ] { golem_ai_walk(); };
-void() golem_walk7 = [$walk7, golem_walk8 ] { golem_ai_walk(); };
-void() golem_walk8 = [$walk8, golem_walk9 ] { golem_ai_walk(); };
-void() golem_walk9 = [$walk9, golem_walk10 ] { golem_ai_walk(); };
-void() golem_walk10 = [$walk10, golem_walk11 ] { golem_ai_walk(); };
-void() golem_walk11 = [$walk11, golem_walk12 ] { golem_ai_walk(); };
-void() golem_walk12 = [$walk12, golem_walk13 ] { golem_ai_walk(); };
-void() golem_walk13 = [$walk13, golem_walk14 ] { golem_ai_walk(); };
-void() golem_walk14 = [$walk14, golem_walk15 ] { golem_ai_walk(); };
-void() golem_walk15 = [$walk15, golem_walk16 ] { golem_ai_walk(); };
-void() golem_walk16 = [$walk16, golem_walk17 ] { golem_ai_walk(); };
-void() golem_walk17 = [$walk17, golem_walk18 ] { golem_ai_walk(); };
-void() golem_walk18 = [$walk18, golem_walk19 ] { golem_ai_walk(); };
-void() golem_walk19 = [$walk19, golem_walk20 ] { golem_ai_walk(); };
-void() golem_walk20 = [$walk20, golem_walk21 ] { golem_ai_walk(); };
-void() golem_walk21 = [$walk21, golem_walk22 ] { golem_ai_walk(); };
-void() golem_walk22 = [$walk22, golem_walk23 ] { golem_ai_walk(); };
-void() golem_walk23 = [$walk23, golem_walk24 ] { golem_ai_walk(); };
-void() golem_walk24 = [$walk24, golem_walk25 ] { golem_ai_walk(); };
-void() golem_walk25 = [$walk25, golem_walk26 ] { golem_ai_walk(); };
-void() golem_walk26 = [$walk26, golem_walk27 ] { golem_ai_walk(); };
-void() golem_walk27 = [$walk27, golem_walk28 ] { golem_ai_walk(); };
-void() golem_walk28 = [$walk28, golem_walk29 ] { golem_ai_walk(); };
-void() golem_walk29 = [$walk29, golem_walk30 ] { golem_ai_walk(); };
-void() golem_walk30 = [$walk30, golem_walk31 ] { golem_ai_walk(); };
-void() golem_walk31 = [$walk31, golem_walk32 ] { golem_ai_walk(); };
-void() golem_walk32 = [$walk32, golem_walk33 ] { golem_ai_walk(); };
-void() golem_walk33 = [$walk33, golem_walk34 ] { golem_ai_walk(); };
-void() golem_walk34 = [$walk34, golem_walk1 ] { golem_ai_walk(); };
-
-void() golem_ai_run = {
-	if (self.frame == $run1 || self.frame == $run13)
-		{ ai_run(0); monster_footstep(FALSE); }
-	else if (self.frame == $run2 || self.frame == $run14) ai_run(3);
-	else ai_run(5); 
-	self.nextthink = time + 0.05;
-	if (self.frame == $run7 || self.frame == $run18) monster_idle_sound();
-};
-
-void() golem_run1 = [$run1, golem_run2 ] { golem_ai_run(); };
-void() golem_run2 = [$run2, golem_run3 ] { golem_ai_run(); };
-void() golem_run3 = [$run3, golem_run4 ] { golem_ai_run(); };
-void() golem_run4 = [$run4, golem_run5 ] { golem_ai_run(); };
-void() golem_run5 = [$run5, golem_run6 ] { golem_ai_run(); };
-void() golem_run6 = [$run6, golem_run7 ] { golem_ai_run(); };
-void() golem_run7 = [$run7, golem_run8 ] { golem_ai_run(); };
-void() golem_run8 = [$run8, golem_run9 ] { golem_ai_run(); };
-void() golem_run9 = [$run9, golem_run10 ] { golem_ai_run(); };
-void() golem_run10 = [$run10, golem_run11 ] { golem_ai_run(); };
-void() golem_run11 = [$run11, golem_run12 ] { golem_ai_run(); };
-void() golem_run12 = [$run12, golem_run13 ] { golem_ai_run(); };
-void() golem_run13 = [$run13, golem_run14 ] { golem_ai_run(); };
-void() golem_run14 = [$run14, golem_run15 ] { golem_ai_run(); };
-void() golem_run15 = [$run15, golem_run16 ] { golem_ai_run(); };
-void() golem_run16 = [$run16, golem_run17 ] { golem_ai_run(); };
-void() golem_run17 = [$run17, golem_run18 ] { golem_ai_run(); };
-void() golem_run18 = [$run18, golem_run19 ] { golem_ai_run(); };
-void() golem_run19 = [$run19, golem_run20 ] { golem_ai_run(); };
-void() golem_run20 = [$run20, golem_run21 ] { golem_ai_run(); };
-void() golem_run21 = [$run21, golem_run22 ] { golem_ai_run(); };
-void() golem_run22 = [$run22, golem_run23 ] { golem_ai_run(); };
-void() golem_run23 = [$run23, golem_run1 ] { golem_ai_run(); };
-
 // MELEE - Punch or Pound the ground with fist
 void(float dist) golem_mcharge = { ai_charge(dist); self.nextthink = time + 0.05; };
 
@@ -189,7 +88,7 @@ void() golem_punch20 = [$punch20, golem_punch21 ] { golem_mcharge(5); };
 void() golem_punch21 = [$punch21, golem_punch22 ] { golem_mcharge(5); };
 void() golem_punch22 = [$punch22, golem_punch23 ] { golem_mcharge(5); };
 void() golem_punch23 = [$punch23, golem_punch24 ] { golem_mcharge(5); };
-void() golem_punch24 = [$punch24, golem_run1 ] { golem_mcharge(5);monster_footstep(FALSE); };
+void() golem_punch24 = [$punch24, monster_run_start ] { golem_mcharge(5);monster_footstep(FALSE); };
 
 void() golem_pound1 = [$pound1, golem_pound2 ] { golem_mcharge(5); };
 void() golem_pound2 = [$pound2, golem_pound3 ] { golem_mcharge(5); };
@@ -219,7 +118,7 @@ void() golem_pound20 = [$pound20, golem_pound21 ] { golem_mcharge(5); };
 void() golem_pound21 = [$pound21, golem_pound22 ] { golem_mcharge(5); };
 void() golem_pound22 = [$pound22, golem_pound23 ] { golem_mcharge(5); };
 void() golem_pound23 = [$pound23, golem_pound24 ] { golem_mcharge(5); };
-void() golem_pound24 = [$pound24, golem_run1 ] { golem_mcharge(5);monster_footstep(FALSE); };
+void() golem_pound24 = [$pound24, monster_run_start ] { golem_mcharge(5);monster_footstep(FALSE); };
 
 void() golem_knock1 = [$knock1, golem_knock2 ] { golem_mcharge(5); };
 void() golem_knock2 = [$knock2, golem_knock3 ] { golem_mcharge(6); };
@@ -258,7 +157,7 @@ void() golem_knock20 = [$knock20, golem_knock21 ] { golem_mcharge(4); };
 void() golem_knock21 = [$knock21, golem_knock22 ] { golem_mcharge(5); };
 void() golem_knock22 = [$knock22, golem_knock23 ] { golem_mcharge(5); };
 void() golem_knock23 = [$knock23, golem_knock24 ] { golem_mcharge(5); };
-void() golem_knock24 = [$knock24, golem_run1 ] {
+void() golem_knock24 = [$knock24, monster_run_start ] {
 	golem_mcharge(5); 
 	// Double check enemy is still alive?
 	if (self.enemy.health > 1 && !(self.spawnflags & MON_GOLEM_MELEEONLY)) {
@@ -300,7 +199,7 @@ void() golem_stomp20 = [$stomp20, golem_stomp21 ] { golem_footstomp(); };
 void() golem_stomp21 = [$stomp21, golem_stomp22 ] { golem_footstomp(); };
 void() golem_stomp22 = [$stomp22, golem_stomp23 ] { golem_footstomp(); };
 void() golem_stomp23 = [$stomp23, golem_stomp24 ] { golem_footstomp(); };
-void() golem_stomp24 = [$stomp24, golem_run1 ] {
+void() golem_stomp24 = [$stomp24, monster_run_start ] {
 	golem_footstomp(); monster_footstep(FALSE);
 	// Double check enemy is still alive?
 	// Make sure golem can do range attacks (melee only ver exists)
@@ -315,12 +214,7 @@ void() golem_stomp24 = [$stomp24, golem_run1 ] {
 
 void() golem_melee = { // [FUNCTION]
 	if (self.enemy.flags & FL_MONSTER) golem_knock1();
-	else {
-		self.meleeattack = random();
-		if (self.meleeattack < 0.2) golem_knock1();
-		else if (self.meleeattack < 0.6) golem_punch1();
-		else golem_pound1();
-	}
+	else monster_melee();
 }
 
 // RANGE - ROCK STORM from Torso
@@ -391,14 +285,14 @@ void() golem_magic20 = [$magic20, golem_magic21 ] { golem_magtime(); };
 void() golem_magic21 = [$magic21, golem_magic22 ] { golem_magtime();golem_rockstorm(); };
 void() golem_magic22 = [$magic22, golem_magic23 ] { golem_magtime(); };
 void() golem_magic23 = [$magic23, golem_magic24 ] { golem_magtime(); };
-void() golem_magic24 = [$magic24, golem_run1 ] { golem_magtime(); };
+void() golem_magic24 = [$magic24, monster_run_start ] { golem_magtime(); };
 
 // Short & fast pain animation
 void() 	golem_painA1 = [$birth8, golem_painA2 ] {};
 void() 	golem_painA2 = [$birth10, golem_painA3 ] {};
 void() 	golem_painA3 = [$birth12, golem_painA4 ] {};
 void() 	golem_painA4 = [$birth14, golem_painA5 ] {};
-void() 	golem_painA5 = [$birth16, golem_run1 ] {};
+void() 	golem_painA5 = [$birth16, monster_run_start ] {};
 
 // Long slow pain animation
 void() 	golem_painB1 = [$birth8, golem_painB2 ] {};
@@ -409,7 +303,7 @@ void() 	golem_painB5 = [$birth12, golem_painB6 ] {};
 void() 	golem_painB6 = [$birth13, golem_painB7 ] {};
 void() 	golem_painB7 = [$birth14, golem_painB8 ] {};
 void() 	golem_painB8 = [$birth15, golem_painB9 ] {};
-void() 	golem_painB9 = [$birth16, golem_run1 ] {};
+void() 	golem_painB9 = [$birth16, monster_run_start ] {};
 
 void(entity inflictor, entity attacker, float damage) golem_pain = { // [FUNCTION]
 	// Check all pain conditions and set up what to do next
@@ -481,12 +375,12 @@ void() golem_wakefinished = { // [FUNCTION]
 	// No longer need statue spawnflag, remove it
 	if (self.spawnflags & MON_STATUE) 
 		self.spawnflags = self.spawnflags - MON_STATUE;
-	self.spawnstatue = FALSE;		// No longer stationary
+	self.spawnstatue = FALSE;		     // No longer stationary
 
-	self.th_stand = monster_stand;	// Idling on feet
-	self.th_walk = golem_walk1;		// Walking
-	self.th_run = golem_run1;		// Running
-	self.th_melee = golem_melee;	// Fist attack
+	self.th_stand = monster_stand_start; // Idling on feet
+	self.th_walk = monster_walk_start;	 // Walking
+	self.th_run = monster_run_start;     // Running
+	self.th_melee = golem_melee;         // Fist attack
 	// Check for melee + stomp attack only version
 	if (!(self.spawnflags & MON_GOLEM_MELEEONLY)) 
 		self.th_missile = golem_magic1;
@@ -527,7 +421,11 @@ void() golem_tranB9 = [$tranB9, golem_tranB10 ] { golem_birth(); ai_forward(5); 
 void() golem_tranB10 = [$tranB10, golem_tranB11 ] { golem_birth(); ai_forward(5); };
 void() golem_tranB11 = [$tranB11, golem_tranB12 ] { golem_birth(); ai_forward(5); };
 void() golem_tranB12 = [$tranB12, golem_tranB13 ] { golem_birth(); ai_forward(5); };
-void() golem_tranB13 = [$tranB13, golem_run14 ] { golem_wakefinished(); monster_footstep(FALSE); };
+void() golem_tranB13 = [$tranB13, monster_run ] {
+	golem_wakefinished();
+	monster_footstep(FALSE);
+	self.walkframe = 98; // 14th run frame going back into run.
+};
 
 void() golem_wakeup = { // [FUNCTION]
 	// Check for sudden death!
@@ -616,11 +514,99 @@ void() monster_necrominiongolem = {
 };
 
 void() setup_golem = { // [FUNCTION]
+	// Frame definitions
 	self.framemax = 250;
+	self.frate = 0.05;
 	self.idle1framestart = 0;
 	self.idle1frameend = 21;
+	self.idlesoundframe1 = 0;
+	self.walk1framestart = 51;
+	self.walk1frameend = 84;
+	self.walkidlesoundframe1 = 58;
+	self.walkidlesoundframe2 = 75;
+	self.walkstepframe1 = 51;
+	self.walkstepframe2 = 67;
+	self.walkspeedframe1 = 2;
+	self.walkspeedframe2 = 2;
+	self.walkspeedframe3 = 2.5; // Fix up the sliding foot AD had.
+	self.walkspeedframe4 = 2.5;
+	self.walkspeedframe5 = 2.5;
+	self.walkspeedframe6 = 2;
+	self.walkspeedframe7 = 2;
+	self.walkspeedframe8 = 2;
+	self.walkspeedframe9 = 2.5;
+	self.walkspeedframe10 = 2.5;
+	self.walkspeedframe11 = 2.5;
+	self.walkspeedframe12 = 2;
+	self.walkspeedframe13 = 2;
+	self.walkspeedframe14 = 2;
+	self.walkspeedframe15 = 2;
+	self.walkspeedframe16 = 2;
+	self.walkspeedframe17 = 2;
+	self.walkspeedframe18 = 2;
+	self.walkspeedframe19 = 2;
+	self.walkspeedframe20 = 2;
+	self.walkspeedframe21 = 2;
+	self.walkspeedframe22 = 2;
+	self.walkspeedframe23 = 2;
+	self.walkspeedframe24 = 2;
+	self.walkspeedframe25 = 2;
+	self.walkspeedframe26 = 2;
+	self.walkspeedframe27 = 2;
+	self.walkspeedframe28 = 2;
+	self.walkspeedframe29 = 2;
+	self.walkspeedframe30 = 2;
+	self.walkspeedframe31 = 2;
+	self.walkspeedframe32 = 2;
+	self.walkspeedframe33 = 2;
+	self.walkspeedframe34 = 2;
+	self.run1framestart = 85;
+	self.run1frameend = 108;
+	self.runidlesoundframe1 = 91;
+	self.runidlesoundframe2 = 102;
+	self.runstepframe1 = 85;
+	self.runstepframe2 = 97;
+	self.runspeedframe1 = 5;
+	self.runspeedframe2 = 3;
+	self.runspeedframe3 = 5;
+	self.runspeedframe4 = 5;
+	self.runspeedframe5 = 5;
+	self.runspeedframe6 = 5;
+	self.runspeedframe7 = 5;
+	self.runspeedframe8 = 5;
+	self.runspeedframe9 = 5;
+	self.runspeedframe10 = 5;
+	self.runspeedframe11 = 5;
+	self.runspeedframe12 = 5;
+	self.runspeedframe13 = 5;
+	self.runspeedframe14 = 3;
+	self.runspeedframe15 = 5;
+	self.runspeedframe16 = 5;
+	self.runspeedframe17 = 5;
+	self.runspeedframe18 = 5;
+	self.runspeedframe19 = 5;
+	self.runspeedframe20 = 5;
+	self.runspeedframe21 = 5;
+	self.runspeedframe22 = 5;
+	self.runspeedframe23 = 5;
+
+	self.melee1chance = 0.2;
+	self.melee2chance = 0.6; // 20% chance for th_melee3
+	self.th_melee1 = golem_knock1;
+	self.th_melee2 = golem_punch1;
+	self.th_melee3 = golem_pound1;
+	self.melee1framestart = 227;
+	self.melee1frameend = 250;
+	//self.melee2framestart = 0;
+	//self.melee2frameend = 0;
+	//self.melee3framestart = 0;
+	//self.melee3frameend = 0;
+
+	// Initialize non-solid for delay spawn spawnflag 64.
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
+
+	// Standard monster properties
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GOLEM;
 	if (self.health < 1) self.health = 500;
 	self.gibhealth = -60;			// Same as shambler
@@ -665,9 +651,9 @@ void() setup_golem = { // [FUNCTION]
 		self.think1 = golem_wakeup;		// Wakeup statue angry at player
 		self.skin = 1;					// Statue skin (+grey, no eyes)
 	} else {
-		self.th_stand = monster_stand;
-		self.th_walk = golem_walk1;
-		self.th_run = golem_run1;
+		self.th_stand = monster_stand_start;
+		self.th_walk = monster_walk_start;
+		self.th_run = monster_run_start;
 		self.th_melee = golem_melee;
 		// Check for melee + stomp attack only version
 		if (!(self.spawnflags & MON_GOLEM_MELEEONLY)) 

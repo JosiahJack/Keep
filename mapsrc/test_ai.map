@@ -2045,3 +2045,23 @@
 "origin" "-244 -116 40"
 "passive_state" "1"
 }
+// entity 128
+{
+"classname" "monster_golem"
+"origin" "192 304 40"
+"target" "path1wp1"
+}
+// entity 129
+{
+"classname" "path_corner"
+"origin" "248 312 40"
+"target" "path1wp2"
+"targetname" "path1wp1"
+}
+// entity 130
+{
+"classname" "path_corner"
+"origin" "552 312 40"
+"target" "path1wp1"
+"targetname" "path1wp2"
+}

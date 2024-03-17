@@ -96,6 +96,22 @@ void(vector org, vector vec) RogLaunchLaser = {
 er")
 		sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
 
+
+/*QUAKED monster_balrog (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
+
+void() monster_balrog = {	
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+	
+	precache_model ("progs/madfox/mon_balrog.mdl");
+	precache_model ("progs/h_guard.mdl");
+	precache_model ("progs/gib1.mdl");
+	precache_model ("progs/gib2.mdl");
+	precache_model ("progs/gib3.mdl");
+
+	if (self.spawnflags & 2) {
 	vec = normalize(vec);
 	
 	newmis = spawn();
@@ -104,6 +120,7 @@ er")
 	newmis.movetype = MOVETYPE_FLY;
 	newmis.solid = SOLID_BBOX;
 	newmis.effects = EF_DIMLIGHT;
+};
 
 	setmodel (newmis, "progs/lavaball.mdl");
 	setsize (newmis, '0 0 0', '0 0 0');		
@@ -224,6 +241,21 @@ void()	blrog_pain8	=[	$pain8, 	blrog_pain9	] {};
 void()	blrog_pain9	=[	$pain9, 	blrog_run1	] {};
 
 void()	blrog_paina1	=[	$paina1, 	blrog_paina2	] 
+{
+	if (random() < 0.2)
+		sound (self, CHAN_VOICE, "rog/pain2.wav", 1, ATTN_IDLE);
+	ai_walk(4);
+};
+void()	blrog_paina2	=[	$paina2, 	blrog_paina3	] {};
+void()	blrog_paina3	=[	$paina3, 	blrog_paina4	] {};
+void()	blrog_paina4	=[	$paina4, 	blrog_paina5	] {};
+void()	blrog_paina5	=[	$paina5, 	blrog_run1	] {};
+
+void(entity attacker, float damage)	blrog_pain =
+{
+	local float r;
+
+	if (self.pain_finished > time)
 {
 	if (random() < 0.2)
 		sound (self, CHAN_VOICE, "rog/pain2.wav", 1, ATTN_IDLE);
@@ -389,3 +421,18 @@ void() monster_balrog = {
     } 
 	monster_start ();
 };
+/*QUAKED monster_balrog (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
+
+void() monster_balrog = {	
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+	
+	precache_model ("progs/madfox/mon_balrog.mdl");
+	precache_model ("progs/h_guard.mdl");
+	precache_model ("progs/gib1.mdl");
+	precache_model ("progs/gib2.mdl");
+	precache_model ("progs/gib3.mdl");
+
+	if (self.spawnflags & 2) {
