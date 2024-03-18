@@ -519,7 +519,7 @@ void() setup_golem = { // [FUNCTION]
 	self.frate = 0.05;
 	self.idle1framestart = 0;
 	self.idle1frameend = 21;
-	self.idlesoundframe1 = 0;
+	self.idlesoundframe1 = self.idlesoundframe2 = 0;
 	self.walk1framestart = 51;
 	self.walk1frameend = 84;
 	self.walkidlesoundframe1 = 58;
@@ -590,17 +590,14 @@ void() setup_golem = { // [FUNCTION]
 	self.runspeedframe22 = 5;
 	self.runspeedframe23 = 5;
 
+	// 40% chance for th_melee2, 40% th_melee3 (1.0 - 0.4 - 0.2 = 0.4).
 	self.melee1chance = 0.2;
-	self.melee2chance = 0.6; // 20% chance for th_melee3
+	self.melee2chance = self.melee1chance + 0.4;
 	self.th_melee1 = golem_knock1;
 	self.th_melee2 = golem_punch1;
 	self.th_melee3 = golem_pound1;
-	self.melee1framestart = 227;
-	self.melee1frameend = 250;
-	//self.melee2framestart = 0;
-	//self.melee2frameend = 0;
-	//self.melee3framestart = 0;
-	//self.melee3frameend = 0;
+	//self.melee1framestart = 227;
+	//self.melee1frameend = 250;
 
 	// Initialize non-solid for delay spawn spawnflag 64.
 	self.solid = SOLID_NOT;			// No interaction with world

@@ -68,19 +68,6 @@ $frame axattb1 axattb2 axattb3 axattb4 axattb5 axattb6
 $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
 
-void()	axeg_stand1	= [	$axstnd1,	axeg_stand2	] { ai_stand(); };
-void()	axeg_stand2	= [	$axstnd2,	axeg_stand3	] { ai_stand(); };
-void()	axeg_stand3	= [	$axstnd3,	axeg_stand4	] { ai_stand(); };
-void()	axeg_stand4	= [	$axstnd4,	axeg_stand5	] { ai_stand(); };
-void()	axeg_stand5	= [	$axstnd5,	axeg_stand6	] { ai_stand(); };
-void()	axeg_stand6	= [	$axstnd6,	axeg_stand7	] { ai_stand(); };
-void()	axeg_stand7	= [	$axstnd7,	axeg_stand8	] { ai_stand(); };
-void()	axeg_stand8	= [	$axstnd8,	axeg_stand9	] { ai_stand(); };
-void()	axeg_stand9	= [	$axstnd9,	axeg_stand10] { ai_stand(); };
-void()	axeg_stand10= [  $axstnd10,  axeg_stand11] { ai_stand(); };
-void()	axeg_stand11= [	$axstnd11,	axeg_stand12] { ai_stand(); };
-void()	axeg_stand12= [	$axstnd12,	axeg_stand1	] { ai_stand(); };
-
 void()	axeg_run1	= [	$axrun1,		axeg_run2	] {
 	if (random() < 0.2) sound(self,CHAN_VOICE, "knight/idle.wav", 1,  ATTN_IDLE);
 	ai_run(25);
@@ -157,22 +144,6 @@ void()	axe_runatkd4	= [	$axattd4,		axe_runatkd5	] { axeg_chop('30 -75 100'); };
 void()	axe_runatkd5	= [	$axattd5,		axe_runatkd6	] { axeg_chop('60 -150 200'); };
 void()	axe_runatkd6	= [	$axattd6,		axeg_run1	] { ai_charge_side(); };
 
-void()	axeg_atk = { // [FUNCTION]
-	local float r;
-
-	if (self.pain_finished > time) return;
-
-	r = random();
-	if (r < 0.25)
-		axe_runatka1();
-	else if (r < 0.5)
-		axe_runatkb1();
-	else if (r < 0.75)
-		axe_runatkc1();
-	else
-		axe_runatkd1();
-};
-
 void()	axeg_pain1	= [	$axpain1,	axeg_pain2	] { ai_painforward(0); };
 void()	axeg_pain2	= [	$axpain2,	axeg_pain3	] { ai_painforward(-1); };
 void()	axeg_pain3	= [	$axpain3,	axeg_pain4	] { ai_painforward(-2); };
@@ -227,9 +198,19 @@ void() monster_axegrunt_precache = {
 
 // Lunaran and in Travail
 // QUAKED monster_axegrunt (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_axegrunt = {
+void() monster_axegrunt = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
+	self.idle1framestart = 17;
+	self.idle1frameend = 28;
+	self.idlesoundframe1 = self.idlesoundframe2 = 0;
+	self.th_melee1 = axe_runatka1;
+	self.th_melee2 = axe_runatkb1;
+	self.th_melee3 = axe_runatkc1;
+	self.th_melee4 = axe_runatkd1;
+	self.melee1chance = 0.25;
+	self.melee2chance = self.melee1chance + 0.25;
+	self.melee3chance = self.melee2chance + 0.25;
 	self.mdl = "progs/lunaran/axegrunt.mdl";
 	self.headmdl = "progs/drake/h_guard.mdl";
 	self.gib1mdl = "progs/gib1.mdl";
@@ -248,10 +229,10 @@ void() monster_axegrunt = {
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.steptype = FS_TYPEMEDIUM;		// Average feet
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
-	self.th_stand = axeg_stand1;
-	self.th_walk = axeg_stand1;
+	self.th_stand = monster_stand_start;
+	self.th_walk = monster_stand_start;
 	self.th_run = axeg_run1;
-	self.th_melee = axeg_atk;
+	self.th_melee = monster_melee;
 	self.th_pain = axeg_pain;
 	self.th_die = axeg_die;
 	self.classtype = CT_MONARMYAXE;

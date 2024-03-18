@@ -847,6 +847,8 @@ void() monster_run_start = {
 void() monster_melee = {
 	local float rand;
 
+	if (self.classtype == CT_MONARMYAXE && self.pain_finished > time) return;
+
 	rand = random();
 	if (self.th_melee1 && self.th_melee2 && self.th_melee3 && self.th_melee4) {
 		if (rand < self.melee1chance) {

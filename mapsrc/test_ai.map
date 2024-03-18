@@ -1812,7 +1812,7 @@
 }
 // entity 107
 {
-"classname" "monster_golem"
+"classname" "monster_axegrunt"
 "origin" "192 192 40"
 }
 // entity 108

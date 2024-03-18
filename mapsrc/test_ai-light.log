@@ -43,7 +43,7 @@ lightdatasize: 36356
 Writing test_ai.lit
 6 switchable light styles (32 max)
 Writing test_ai.bsp as Quake BSP2 bsp2
-0.987s seconds elapsed
+1.074s seconds elapsed
 
 stats:
 34.65396922699687 lights tested, 0.31671672898914977 hits per sample point
