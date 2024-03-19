@@ -300,8 +300,7 @@ float CT_MONMINOTAUR = 340;		// Large tank like bull (magic/charge)
 float CT_MONWRATH = 341;		// Rogue Wrath
 float CT_MONWRATHOVERLORD = 342;// Rogue Overlord
 float CT_MONDREADWRAITH = 343;	// Drake Dread Lord
-
-
+float CT_MONBALROG = 344;       // Balrog
 float CT_MONEIDOLON = 345;		// Large demon boss Eidolon
 float CT_MONFLYTRAPGROUND = 346;// Flytrap on the ground with button and tech base -madfox
 float CT_MONEIDOLONWAVE = 347;	// Wave targets for boss Eidolon

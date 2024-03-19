@@ -289,8 +289,8 @@ void(entity attacker, float damage)	blrog_pain =
 };
 
 void()	blrog_die1	=[	$die1,  	blrog_die2	] {};
-void()	blrog_die2	=[	$die2,  	blrog_die3	] {};
-void()	blrog_die3	=[	$die3,  	blrog_die4	] {self.solid = SOLID_NOT;};
+void()	blrog_die2	=[	$die2,  	blrog_die3	] {monster_check_gib(); };
+void()	blrog_die3	=[	$die3,  	blrog_die4	] {monster_check_gib(); self.solid = SOLID_NOT;};
 void()	blrog_die4	=[	$die4,  	blrog_die5	] {};
 void()	blrog_die5	=[	$die5,  	blrog_die6	] {};
 void()	blrog_die6	=[	$die6,  	blrog_die7	] {};
@@ -305,134 +305,61 @@ void()	blrog_die14	=[	$die14, 	blrog_die15	] {};
 void()	blrog_die15	=[	$die15, 	blrog_die16	] {};
 void()	blrog_die16	=[	$die16, 	blrog_die17	] {};
 void()	blrog_die17	=[	$die17, 	blrog_die18	] {};
-void()	blrog_die18	=[	$die18, 	blrog_die19	] {};
-void()	blrog_die19	=[	$die19, 	blrog_die19	] {};
+void()	blrog_die18	=[	$die18, 	blrog_die19	] { monster_death_postcheck(); };
+void()	blrog_die19	=[	$die19, 	blrog_die19	] { monster_deadbody_check(); };
 
 void() blrog_die = {
-	// regular death
-	sound (self, CHAN_VOICE, "rog/death1.wav", 1, ATTN_NORM);
+	monster_death_precheck();
+	sound(self, CHAN_VOICE,self.death_sound, 1, ATTN_NORM);
 	blrog_die1();
-	self.solid = SOLID_NOT;
 };
 
-void() blrog_pause = {
-	sound ( self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
-   
-	self.takedamage = DAMAGE_AIM;
-	self.th_stand = blrog_stand1;
-	self.th_walk = blrog_walk1;
-	self.th_run = blrog_run1;
-	self.th_melee = blrog_atk1;
-	self.th_pain = blrog_pain;
-	self.th_die = blrog_die;
-	self.use = SUB_Null;
-	self.think = blrog_run1;
-	self.enemy = activator;
-	self.nextthink = time + 0.1;
-	self.think = FoundTarget;
-	self.delay = 0;
-};
-
-void() blrog_pause1 = {
-	self.takedamage = DAMAGE_NO;
-	self.use = blrog_pause;
-	self.think = blrog_pause1;
-    self.nextthink = time + 0.1;
-};
-
-/*QUAKED monster_balrog (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
-
-void() monster_balrog = {	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-	
+void() monster_balrog_precache = {
 	precache_model ("progs/madfox/mon_balrog.mdl");
-	precache_model ("progs/h_guard.mdl");
 	precache_model ("progs/gib1.mdl");
 	precache_model ("progs/gib2.mdl");
 	precache_model ("progs/gib3.mdl");
-
-	if (self.spawnflags & 2) {
-		// statue
-		precache_model ( "progs/statgib1.mdl");
-		precache_model ( "progs/statgib2.mdl");
-		precache_model ( "progs/statgib3.mdl");
-		precache_sound ( "rogue/statue/see.wav");
-		precache_sound ( "ad171/statue/idle1.wav");
-		precache_sound ( "rogue/statue/pain.wav");
-		precache_sound ( "rogue/statue/death.wav");
-	} else {
-		precache_sound ("rog/death1.wav");
-		precache_sound ("rog/idle1.wav");
-		precache_sound ("rog/pain1.wav");
-		precache_sound ("rog/pain2.wav");
-		precache_sound ("rog/atck.wav");
-		precache_sound ("rog/bite.wav");
-    }
-
+	precache_sound ("boss/death.wav");
+	precache_sound ("rog/idle1.wav");
+	precache_sound ("boss1/pain.wav");
+	precache_sound ("rog/atck.wav");
+	precache_sound ("rog/bite.wav");
 	precache_sound ("player/udeath.wav");		// gib death
 	precache_sound (SOUND_LASER_HIT);
 	precache_sound (SOUND_LASER_FIRE);
+};
 
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-
-	setmodel (self, "progs/madfox/mon_balrog.mdl");
-
-	setsize (self, '-16 -16 -24', '16 16 32');
-	self.health = 200;
-//	self.max_health = 200;
-
-	if (self.spawnflags & 2) {
-		 // statue
-		if (self.frame == 0) self.frame = 44;
-		self.skin = 1;
-
-		if (!self.targetname) {
-			dprint ("statue not targeted\n");
-			dprint (self.classname);
-			dprint (" at ");
-			dprint (vtos(self.origin));
-			dprint ("\n");
-			return;
-		}
-					
-		self.use = blrog_pause;
-        self.th_stand = blrog_pause1;
-        self.th_walk = blrog_pause1;
-		self.th_run = blrog_pause1;
-/*
-        self.th_stand = blrog_pause1;
-        self.th_walk = blrog_pause;
-		self.th_run = blrog_pause;
-		self.th_melee = blrog_atk1;
-		self.th_pain = blrog_pause;
-		self.th_die = blrog_die;
-*/
-	} else {
-		self.th_stand = blrog_stand1;
-		self.th_walk = blrog_walk1;
-		self.th_run = blrog_run1;
-		self.th_missile =  blrog_atk1; 
-		self.th_pain = blrog_pain;
-		self.th_die = blrog_die;
-    } 
+/*QUAKED monster_balrog (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
+void() monster_balrog = {	
+	if (monster_checkrandomizer() == TRUE) return;
+	
+	self.mdl = "progs/madfox/mon_balrog.mdl";
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	self.pain_sound = "boss1/pain.wav";
+	self.pain_sound2 = "rog/pain2.wav";
+	self.sight_sound = "rog/pain1.wav";
+	self.death_sound = "boss/death.wav";
+	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
+	if (self.health < 1) self.health = 1800;
+	self.gibhealth = MON_NEVERGIB;
+	self.gibbed = FALSE;
+	self.pain_flinch = 400;
+	self.pain_longanim = FALSE;
+	self.steptype = FS_TYPEGIANT;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
+	self.resist_rockets = 0.5;       // Explosives and flame resistance.
+	self.resist_multi_rockets = 0.5;
+	self.resist_lava_nails = 0.5;
+	self.resist_fire = 0.5;
+	self.th_stand = blrog_stand1;
+	self.th_walk = blrog_walk1;
+	self.th_run = blrog_run1;
+	self.th_missile =  blrog_atk1; 
+	self.th_pain = blrog_pain;
+	self.th_die = blrog_die;
+	self.classtype = CT_MONBALROG;
+	self.classgroup = CG_BOSS;
+	self.classmove = MON_MOVEWALK;
 	monster_start ();
 };
-/*QUAKED monster_balrog (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
-
-void() monster_balrog = {	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-	
-	precache_model ("progs/madfox/mon_balrog.mdl");
-	precache_model ("progs/h_guard.mdl");
-	precache_model ("progs/gib1.mdl");
-	precache_model ("progs/gib2.mdl");
-	precache_model ("progs/gib3.mdl");
-
-	if (self.spawnflags & 2) {
