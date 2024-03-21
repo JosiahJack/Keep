@@ -437,7 +437,7 @@ mon_ogle.qc					// Ogle, Heretic2, DENIZEN, Qmaster's implementation with specia
 mon_octa.qc					// Octopus by madfox
 //mon_lampoon.qc			// Lampoon fish by madfox
 //mon_rhynch.qc =			// Jelly Fish by madfox
-//mon_balrog.qc				// Balrog by madfox
+mon_balrog.qc				// Balrog by madfox
 //mon_xogre.qc				// Elden Ogre by madfox derived from QTest
 mon_fragy.qc				// Frog by madfox
 //mon_orgulus.qc			// Dr. Mhorbo Orgulus by madfox

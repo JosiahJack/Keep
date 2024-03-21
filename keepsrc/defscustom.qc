@@ -615,6 +615,10 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float      proj3frameend;
 .float      proj4framestart;
 .float      proj4frameend;
+.void()     th_pain1;
+.void()     th_pain2;
+.void()     th_pain3;
+.void()     th_pain4;
 .float      pain1framestart;
 .float      pain1frameend;
 .float      pain2framestart;

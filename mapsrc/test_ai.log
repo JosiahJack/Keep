@@ -11,5 +11,5 @@ Processing hull 2...
 *** WARNING 16: Texture grass_floor1 not found
 Wrote test_ai.bsp
 
-0.073 seconds elapsed
-Peak memory usage: 7646572 (7.3M)
+0.071 seconds elapsed
+Peak memory usage: 7646620 (7.3M)

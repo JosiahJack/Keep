@@ -526,7 +526,7 @@ void() eidolon_start = { // [FUNCTION]
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.pain_longanim = FALSE;		// No axe advantage
 	self.takedamage = DAMAGE_NO;	// Immune to damage
-	self.gibhealth = -1000;			// Special death sequence
+	self.gibhealth = MON_NEVERGIB;	// Special death sequence
 	self.pain_finished = self.attack_finished = 0;
 	Resist_ChangeType(self,-1); // Setup Ammo Resistance
 	self.resist_nails = self.resist_rockets = 0.75;

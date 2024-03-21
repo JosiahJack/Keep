@@ -229,6 +229,7 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.89) retval = "monster_lavagolem";
 			else if (rand < 0.90) retval = "monster_imp_lord";
 			else if (rand < 0.91) retval = "monster_wizboss";
+			else if (rand < 0.92) retval = "monster_balrog";
 			// More slots!?!!?
 			//
 			//
@@ -493,6 +494,7 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.87) retval = "monster_manticore";
 		else if (rand < 0.91) retval = "monster_lichfiend";
 		else if (rand < 0.95) retval = "monster_nehahra";
+		else if (rand < 1.00) retval = "monster_balrog";
 		else retval = "monster_boglord";
 	} else if (self.style == 26) { // Fodder Flyers
 		if (rand < 0.15) retval = "monster_gargoyle";
@@ -704,6 +706,7 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.92) retval = "monster_ryu_wyrm";
 		else if (rand < 0.94) retval = "monster_trogboss";
 		else if (rand < 0.96) retval = "monster_dragon";
+		else if (rand < 0.98) retval = "monster_balrog";
 		else retval = "monster_nour";
 	}
 	return retval; // Goodness to mergatroid what did I do!
@@ -1122,6 +1125,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_army_spike")		monster_army_precache();
 	else if (mname == "monster_axegrunt")		monster_axegrunt_precache();
 	else if (mname == "monster_axeman")			monster_ax_precache();
+	else if (mname == "monster_balrog")			monster_balrog_precache();
 	else if (mname == "monster_bandit")			monster_bandit_precache();
 	else if (mname == "monster_bane")			monster_bane_precache();
 	else if (mname == "monster_baron")			monster_baron_precache();

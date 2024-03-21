@@ -569,7 +569,7 @@ void(entity attacker, float damage) monster_pain_check = { // [FUNCTION]
 
 // Generic monster thinks for standard use or for custom monsters.
 // ----------------------------------------------------------------------------
-void() monster_stand = {
+void() monster_stand = { // [FUNCTION]
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > self.idle1frameend) {
 		self.walkframe = self.idle1framestart;
@@ -591,7 +591,7 @@ void() monster_stand = {
 	ai_stand(); // Must be after the SUB_SelfThink or it won't actually move.
 };
 
-void() monster_stand_start = {
+void() monster_stand_start = { // [FUNCTION]
 	self.walkframe = self.idle1framestart; // Initialize at correct frame.
 
 	// Check and play idle sound here so that very first entry can still play
@@ -609,10 +609,10 @@ void() monster_stand_start = {
 };
 
 
-void() monster_idle = { monster_stand(); }; // Redirects in case I forget.
-void() monster_idle_start = { monster_stand_start(); };
+void() monster_idle = { monster_stand(); }; // [FUNCTION] Redirects in case I forget.
+void() monster_idle_start = { monster_stand_start(); }; // [FUNCTION]
 
-void() monster_walk = {
+void() monster_walk = { // [FUNCTION]
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > self.walk1frameend) {
 		self.walkframe = self.walk1framestart;
@@ -710,7 +710,7 @@ void() monster_walk = {
 	}
 };
 
-void() monster_walk_start = {
+void() monster_walk_start = { // [FUNCTION]
 	if (self.walkframe == self.walkstepframe1
         || self.walkframe == self.walkstepframe2) {
 
@@ -728,7 +728,7 @@ void() monster_walk_start = {
 	ai_walk(self.walkspeedframe1);
 };
 
-void() monster_run = {
+void() monster_run = { // [FUNCTION]
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > self.run1frameend) {
 		self.walkframe = self.run1framestart;
@@ -826,7 +826,7 @@ void() monster_run = {
 	}
 };
 
-void() monster_run_start = {
+void() monster_run_start = { // [FUNCTION]
 	if (self.walkframe == self.runstepframe1
         || self.walkframe == self.runstepframe2) {
 
@@ -844,7 +844,7 @@ void() monster_run_start = {
 	ai_walk(self.runspeedframe1);
 };
 
-void() monster_melee = {
+void() monster_melee = { // [FUNCTION]
 	local float rand;
 
 	if (self.classtype == CT_MONARMYAXE && self.pain_finished > time) return;
@@ -875,6 +875,99 @@ void() monster_melee = {
 		self.th_melee1();
 	}
 };
+
+void() monster_pain1 = { // [FUNCTION]
+	self.walkframe = self.walkframe + 1;
+	if (self.walkframe > self.pain1frameend) {
+		self.walkframe = self.pain1framestart;
+	}
+
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	if (self.frame == self.pain1frameend) {
+		SUB_SelfThink(self.th_run,self.frate);
+	} else {
+		SUB_SelfThink(monster_pain1,self.frate);
+	}
+};
+
+void() monster_pain1_start = { // [FUNCTION]
+	self.walkframe = self.pain1framestart; // Initialize at correct frame.
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_pain1,self.frate);
+};
+
+void() monster_pain2 = { // [FUNCTION]
+	self.walkframe = self.walkframe + 1;
+	if (self.walkframe > self.pain2frameend) {
+		self.walkframe = self.pain2framestart;
+	}
+
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	if (self.frame == self.pain2frameend) {
+		SUB_SelfThink(self.th_run,self.frate);
+	} else {
+		SUB_SelfThink(monster_pain2,self.frate);
+	}
+};
+
+void() monster_pain2_start = { // [FUNCTION]
+	self.walkframe = self.pain2framestart; // Initialize at correct frame.
+	if (self.walkframe >= 0 && self.walkframe <= self.framemax) {
+		self.frame = self.walkframe;
+	}
+
+	SUB_SelfThink(monster_pain2,self.frate);
+};
+
+void(entity inflictor, entity attacker, float damage) monster_pain = { // [FUNCTION]
+	local float rand;
+
+	monster_pain_check(attacker, damage);
+	if (self.pain_check > 0) {
+		rand = random();
+ 		if (self.pain_sound != "" && self.pain_sound2 != "") {
+			if (rand < 0.5) sound (self, CHAN_VOICE,self.pain_sound, 1, ATTN_IDLE);
+			else sound (self, CHAN_VOICE,self.pain_sound2, 1, ATTN_IDLE);
+		} else 	if (self.pain_sound != "") {
+			sound(self, CHAN_VOICE,self.pain_sound, 1, ATTN_IDLE);
+		}
+
+		if (self.th_pain1 && self.th_pain2 && self.th_pain3 && self.th_pain4) {
+			if (rand < self.melee1chance) {
+				self.th_pain1();
+			} else if (rand < self.melee2chance) {
+				self.th_pain2();
+			} else if (rand < self.melee3chance) {
+				self.th_pain3();
+			} else {
+				self.th_pain4();
+			}
+		} else 	if (self.th_pain1 && self.th_pain2 && self.th_pain3) {
+			if (rand < self.melee1chance) {
+				self.th_pain1();
+			} else if (rand < self.melee2chance) {
+				self.th_pain2();
+			} else {
+				self.th_pain3();
+			}
+		} else 	if (self.th_pain1 && self.th_pain2) {
+			if (rand < self.melee1chance) self.th_melee1();
+			else self.th_pain2();
+		} else 	if (self.th_pain1) {
+			self.th_pain1();
+		}
+	}
+};
+
 
 // End generic monster thinks.
 // ----------------------------------------------------------------------------

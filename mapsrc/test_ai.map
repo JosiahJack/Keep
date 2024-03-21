@@ -1812,8 +1812,8 @@
 }
 // entity 107
 {
-"classname" "monster_axegrunt"
-"origin" "192 192 40"
+"classname" "monster_balrog"
+"origin" "192 192 104"
 }
 // entity 108
 {
@@ -2047,8 +2047,8 @@
 }
 // entity 128
 {
-"classname" "monster_golem"
-"origin" "192 304 40"
+"classname" "monster_balrog"
+"origin" "192 304 104"
 "target" "path1wp1"
 }
 // entity 129
@@ -2064,4 +2064,9 @@
 "origin" "552 312 40"
 "target" "path1wp1"
 "targetname" "path1wp2"
+}
+// entity 131
+{
+"classname" "monster_shambler"
+"origin" "192 64 40"
 }

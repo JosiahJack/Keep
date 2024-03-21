@@ -152,7 +152,6 @@ void()	axeg_pain5	= [	$axpain5,	axeg_pain6	] {};
 void()	axeg_pain6	= [	$axpain6,	axeg_run1	] {};
 
 void(entity inflictor, entity attacker, float damage)	axeg_pain = {
-	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
 	if (self.pain_check > 0) {
@@ -177,10 +176,10 @@ void()	axeg_die8	= [	$axdeth8,	axeg_die9	] { monster_death_postcheck(); };
 void()	axeg_die9	= [	$axdeth9,	axeg_die9	] { monster_deadbody_check(); };
 
 void() axeg_die = {
-	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	monster_death_precheck();
 	if (!self.gibbed) { // regular death
-		sound(self,CHAN_VOICE, "knight/kdeath.wav",1,ATTN_NORM);
-		axeg_die1();									// Backward/side
+		sound(self,CHAN_VOICE,self.death_sound,1,ATTN_NORM);
+		axeg_die1(); // Backward/side
 	}
 };
 
@@ -201,6 +200,9 @@ void() monster_axegrunt_precache = {
 void() monster_axegrunt = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
+	// Frame definitions
+	self.framemax = 142;
+	self.frate = 0.10;
 	self.idle1framestart = 17;
 	self.idle1frameend = 28;
 	self.idlesoundframe1 = self.idlesoundframe2 = 0;
@@ -221,6 +223,7 @@ void() monster_axegrunt = { // [ENTITY]
 	self.movetype = MOVETYPE_NONE;
 	self.pain_sound = "knight/khurt.wav";
 	self.sight_sound = "knight/ksight.wav";
+	self.death_sound = "knight/kdeath.wav";
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
 	if (self.health < 1) self.health = 75;
 	self.gibhealth = -35;				// Easy to gib
