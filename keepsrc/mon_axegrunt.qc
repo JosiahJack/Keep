@@ -213,6 +213,7 @@ void() monster_axegrunt = { // [ENTITY]
 	self.melee1chance = 0.25;
 	self.melee2chance = self.melee1chance + 0.25;
 	self.melee3chance = self.melee2chance + 0.25;
+
 	self.mdl = "progs/lunaran/axegrunt.mdl";
 	self.headmdl = "progs/drake/h_guard.mdl";
 	self.gib1mdl = "progs/gib1.mdl";

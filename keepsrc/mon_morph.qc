@@ -58,12 +58,12 @@ void() morph_walk11 = [$mfwlk11, morph_walk12 ] { ai_walk(5); };
 void() morph_walk12 = [$mfwlk12, morph_walk13 ] { ai_walk(4); };
 void() morph_walk13 = [$mfwlk13, morph_walk1  ] { ai_walk(3); };
 
-void() morph_run1 = [$mfrun01, morph_run2 ] { ai_run( 7); };
+void() morph_run1 = [$mfrun01, morph_run2 ] { ai_run(7); };
 void() morph_run2 = [$mfrun02, morph_run3 ] { ai_run(11); };
 void() morph_run3 = [$mfrun03, morph_run4 ] { ai_run(16); };
 void() morph_run4 = [$mfrun04, morph_run5 ] { ai_run(16); };
 void() morph_run5 = [$mfrun05, morph_run6 ] { ai_run(11); };
-void() morph_run6 = [$mfrun06, morph_run7 ] { ai_run( 7); };
+void() morph_run6 = [$mfrun06, morph_run7 ] { ai_run(7); };
 
 void() morph_run7 = [$mfrun07, morph_run8 ] { ai_run(11); };
 void() morph_run8 = [$mfrun08, morph_run9 ] { ai_run(15); };

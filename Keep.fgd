@@ -5537,6 +5537,8 @@ color(128 0 128) = TrigBasic [
 	]
 ]
 
+@PointClass base(MonMassive) studio("progs/madfox/balrog.mdl") = monster_balrog : "Balrog" []
+
 @PointClass base(MonWide) studio("progs/q15/carnivean.mdl") = monster_carnivean : "Carnivean" []
 
 @PointClass base(MonTiny) studio("progs/ad171/mon_lostsoul.mdl") = monster_lostsoul : "Lost Soul" []

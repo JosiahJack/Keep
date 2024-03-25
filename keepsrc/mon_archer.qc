@@ -143,25 +143,6 @@ void(vector st, float up) M_FireAkArrow = { // [FUNCTION]
     AkArrow_Launch (org, dir, type);
 };
 
-void() archer_stand1  = [$waitA1,  archer_stand2  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand2  = [$waitA2,  archer_stand3  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand3  = [$waitA3,  archer_stand4  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand4  = [$waitA4,  archer_stand5  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand5  = [$waitA5,  archer_stand6  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand6  = [$waitA6,  archer_stand7  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand7  = [$waitA7,  archer_stand8  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand8  = [$waitA8,  archer_stand9  ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand9  = [$waitA9,  archer_stand10 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand10 = [$waitA10, archer_stand11 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand11 = [$waitA11, archer_stand12 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand12 = [$waitA12, archer_stand13 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand13 = [$waitA13, archer_stand14 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand14 = [$waitA14, archer_stand15 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand15 = [$waitA15, archer_stand16 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand16 = [$waitA16, archer_stand17 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand17 = [$waitA17, archer_stand18 ] { ai_stand(); }; // [FUNCTION]
-void() archer_stand18 = [$waitA18, archer_stand1  ] { ai_stand(); }; // [FUNCTION]
-
 // WALK
 void() archer_draw = { sound(self,CHAN_WEAPON,"drake/archer/draw.wav",1,ATTN_NORM); }; // [FUNCTION]
 
@@ -495,7 +476,13 @@ void() monster_archer_precache = { // [FUNCTION]
 
 // QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_archer = { // [ENTITY]
-	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+
+	self.framemax = 189;
+	self.frate = 0.1;
+	self.idle1framestart = 126;
+	self.idle1frameend = 143;
+	self.idlesoundframe1 = self.idlesoundframe2 = -1;
 
     self.mdl = "progs/drake/archer.mdl";
     self.headmdl   = "progs/drake/h_archer.mdl";
@@ -510,7 +497,7 @@ void() monster_archer = { // [ENTITY]
                               // use -40 hp instead.
 		self.ammo_nails = rint(random()*20);
 		if (random() < 0.1) self.ammo_bolts = rint(random()*2);
-		if (self.deathstring == "")  self.deathstring = " was stealthily skewered by an Assassin\n";
+		if (self.deathstring == "") self.deathstring = " was stealthily skewered by an Assassin\n";
     } else { // Grunt class.
 		self.hello_sound = "drake/archer/growl.wav";
 		self.sight_sound = "drake/archer/sight.wav";
@@ -530,7 +517,7 @@ void() monster_archer = { // [ENTITY]
     self.pain_longanim = TRUE;
     self.steptype = FS_TYPEMEDIUM;
     self.mass       = MASS_MEDIUM;
-    self.th_stand = archer_stand1;
+    self.th_stand = monster_stand_start;
     self.th_walk = archer_walk1;
     self.th_run = archer_run1;
     self.th_missile = archer_attack;

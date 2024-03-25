@@ -1158,7 +1158,214 @@ void() monster_spawn = { // [FUNCTION]
 	if (self.framemax <= 0) self.framemax = 4096; // Set to a high number.
 	if (self.frate <= 0) self.frate = 0.1;      // Default animation think rate.
 	if (!self.th_stand) self.th_stand = monster_stand_start;
+
 	if (!self.th_walk) self.th_walk = monster_walk_start;
+	if (self.walkspeedframe1 == 0)  self.walkspeedframe1 = 3;
+	else if (self.walkspeedframe1 == -1) self.walkspeedframe1 = 0;
+
+	if (self.walkspeedframe2 == 0)  self.walkspeedframe2  = self.walkspeedframe1;
+	else if (self.walkspeedframe2 == -1) self.walkspeedframe2 = 0;
+
+	if (self.walkspeedframe3 == 0)  self.walkspeedframe3  = self.walkspeedframe1;
+	else if (self.walkspeedframe3 == -1) self.walkspeedframe3 = 0;
+
+	if (self.walkspeedframe4 == 0)  self.walkspeedframe4  = self.walkspeedframe1;
+	else if (self.walkspeedframe4 == -1) self.walkspeedframe4 = 0;
+
+	if (self.walkspeedframe5 == 0)  self.walkspeedframe5  = self.walkspeedframe1;
+	else if (self.walkspeedframe5 == -1) self.walkspeedframe5 = 0;
+
+	if (self.walkspeedframe6 == 0)  self.walkspeedframe6  = self.walkspeedframe1;
+	else if (self.walkspeedframe6 == -1) self.walkspeedframe6 = 0;
+
+	if (self.walkspeedframe7 == 0)  self.walkspeedframe7  = self.walkspeedframe1;
+	else if (self.walkspeedframe7 == -1) self.walkspeedframe7 = 0;
+
+	if (self.walkspeedframe8 == 0)  self.walkspeedframe8  = self.walkspeedframe1;
+	else if (self.walkspeedframe8 == -1) self.walkspeedframe8 = 0;
+
+	if (self.walkspeedframe9 == 0)  self.walkspeedframe9  = self.walkspeedframe1;
+	else if (self.walkspeedframe9 == -1) self.walkspeedframe9 = 0;
+
+	if (self.walkspeedframe10 == 0) self.walkspeedframe10 = self.walkspeedframe1;
+	else if (self.walkspeedframe10 == -1) self.walkspeedframe10 = 0;
+
+	if (self.walkspeedframe11 == 0) self.walkspeedframe11 = self.walkspeedframe1;
+	else if (self.walkspeedframe11 == -1) self.walkspeedframe11 = 0;
+
+	if (self.walkspeedframe12 == 0) self.walkspeedframe12 = self.walkspeedframe1;
+	else if (self.walkspeedframe12 == -1) self.walkspeedframe12 = 0;
+
+	if (self.walkspeedframe13 == 0) self.walkspeedframe13 = self.walkspeedframe1;
+	else if (self.walkspeedframe13 == -1) self.walkspeedframe13 = 0;
+
+	if (self.walkspeedframe14 == 0) self.walkspeedframe14 = self.walkspeedframe1;
+	else if (self.walkspeedframe14 == -1) self.walkspeedframe14 = 0;
+
+	if (self.walkspeedframe15 == 0) self.walkspeedframe15 = self.walkspeedframe1;
+	else if (self.walkspeedframe15 == -1) self.walkspeedframe15 = 0;
+
+	if (self.walkspeedframe16 == 0) self.walkspeedframe16 = self.walkspeedframe1;
+	else if (self.walkspeedframe16 == -1) self.walkspeedframe16 = 0;
+
+	if (self.walkspeedframe17 == 0) self.walkspeedframe17 = self.walkspeedframe1;
+	else if (self.walkspeedframe17 == -1) self.walkspeedframe17 = 0;
+
+	if (self.walkspeedframe18 == 0) self.walkspeedframe18 = self.walkspeedframe1;
+	else if (self.walkspeedframe18 == -1) self.walkspeedframe18 = 0;
+
+	if (self.walkspeedframe19 == 0) self.walkspeedframe19 = self.walkspeedframe1;
+	else if (self.walkspeedframe19 == -1) self.walkspeedframe19 = 0;
+
+	if (self.walkspeedframe20 == 0) self.walkspeedframe20 = self.walkspeedframe1;
+	else if (self.walkspeedframe20 == -1) self.walkspeedframe20 = 0;
+
+	if (self.walkspeedframe21 == 0) self.walkspeedframe21 = self.walkspeedframe1;
+	else if (self.walkspeedframe21 == -1) self.walkspeedframe21 = 0;
+
+	if (self.walkspeedframe22 == 0) self.walkspeedframe22 = self.walkspeedframe1;
+	else if (self.walkspeedframe22 == -1) self.walkspeedframe22 = 0;
+
+	if (self.walkspeedframe23 == 0) self.walkspeedframe23 = self.walkspeedframe1;
+	else if (self.walkspeedframe23 == -1) self.walkspeedframe23 = 0;
+
+	if (self.walkspeedframe24 == 0) self.walkspeedframe24 = self.walkspeedframe1;
+	else if (self.walkspeedframe24 == -1) self.walkspeedframe24 = 0;
+
+	if (self.walkspeedframe25 == 0) self.walkspeedframe25 = self.walkspeedframe1;
+	else if (self.walkspeedframe25 == -1) self.walkspeedframe25 = 0;
+
+	if (self.walkspeedframe26 == 0) self.walkspeedframe26 = self.walkspeedframe1;
+	else if (self.walkspeedframe26 == -1) self.walkspeedframe26 = 0;
+
+	if (self.walkspeedframe27 == 0) self.walkspeedframe27 = self.walkspeedframe1;
+	else if (self.walkspeedframe27 == -1) self.walkspeedframe27 = 0;
+
+	if (self.walkspeedframe28 == 0) self.walkspeedframe28 = self.walkspeedframe1;
+	else if (self.walkspeedframe28 == -1) self.walkspeedframe28 = 0;
+
+	if (self.walkspeedframe29 == 0) self.walkspeedframe29 = self.walkspeedframe1;
+	else if (self.walkspeedframe29 == -1) self.walkspeedframe29 = 0;
+
+	if (self.walkspeedframe30 == 0) self.walkspeedframe30 = self.walkspeedframe1;
+	else if (self.walkspeedframe30 == -1) self.walkspeedframe30 = 0;
+
+	if (self.walkspeedframe31 == 0) self.walkspeedframe31 = self.walkspeedframe1;
+	else if (self.walkspeedframe31 == -1) self.walkspeedframe31 = 0;
+
+	if (self.walkspeedframe32 == 0) self.walkspeedframe32 = self.walkspeedframe1;
+	else if (self.walkspeedframe32 == -1) self.walkspeedframe32 = 0;
+
+	if (self.walkspeedframe33 == 0) self.walkspeedframe33 = self.walkspeedframe1;
+	else if (self.walkspeedframe33 == -1) self.walkspeedframe33 = 0;
+
+	if (self.walkspeedframe34 == 0) self.walkspeedframe34 = self.walkspeedframe1;
+	else if (self.walkspeedframe34 == -1) self.walkspeedframe34 = 0;
+
+
+	if (!self.th_run) self.th_run = monster_run_start;
+	if (self.runspeedframe1 == 0)  self.runspeedframe1  = 8;
+	else if (self.runspeedframe1 == -1) self.runspeedframe1 = 0;
+
+	if (self.runspeedframe2 == 0)  self.runspeedframe2  = self.runspeedframe1;
+	else if (self.runspeedframe2 == -1) self.runspeedframe2 = 0;
+
+	if (self.runspeedframe3 == 0)  self.runspeedframe3  = self.runspeedframe1;
+	else if (self.runspeedframe3 == -1) self.runspeedframe3 = 0;
+
+	if (self.runspeedframe4 == 0)  self.runspeedframe4  = self.runspeedframe1;
+	else if (self.runspeedframe4 == -1) self.runspeedframe4 = 0;
+
+	if (self.runspeedframe5 == 0)  self.runspeedframe5  = self.runspeedframe1;
+	else if (self.runspeedframe5 == -1) self.runspeedframe5 = 0;
+
+	if (self.runspeedframe6 == 0)  self.runspeedframe6  = self.runspeedframe1;
+	else if (self.runspeedframe6 == -1) self.runspeedframe6 = 0;
+
+	if (self.runspeedframe7 == 0)  self.runspeedframe7  = self.runspeedframe1;
+	else if (self.runspeedframe7 == -1) self.runspeedframe7 = 0;
+
+	if (self.runspeedframe8 == 0)  self.runspeedframe8  = self.runspeedframe1;
+	else if (self.runspeedframe8 == -1) self.runspeedframe8 = 0;
+
+	if (self.runspeedframe9 == 0)  self.runspeedframe9  = self.runspeedframe1;
+	else if (self.runspeedframe9 == -1) self.runspeedframe9 = 0;
+
+	if (self.runspeedframe10 == 0) self.runspeedframe10 = self.runspeedframe1;
+	else if (self.runspeedframe10 == -1) self.runspeedframe10 = 0;
+
+	if (self.runspeedframe11 == 0) self.runspeedframe11 = self.runspeedframe1;
+	else if (self.runspeedframe11 == -1) self.runspeedframe11 = 0;
+
+	if (self.runspeedframe12 == 0) self.runspeedframe12 = self.runspeedframe1;
+	else if (self.runspeedframe12 == -1) self.runspeedframe12 = 0;
+
+	if (self.runspeedframe13 == 0) self.runspeedframe13 = self.runspeedframe1;
+	else if (self.runspeedframe13 == -1) self.runspeedframe13 = 0;
+
+	if (self.runspeedframe14 == 0) self.runspeedframe14 = self.runspeedframe1;
+	else if (self.runspeedframe14 == -1) self.runspeedframe14 = 0;
+
+	if (self.runspeedframe15 == 0) self.runspeedframe15 = self.runspeedframe1;
+	else if (self.runspeedframe15 == -1) self.runspeedframe15 = 0;
+
+	if (self.runspeedframe16 == 0) self.runspeedframe16 = self.runspeedframe1;
+	else if (self.runspeedframe16 == -1) self.runspeedframe16 = 0;
+
+	if (self.runspeedframe17 == 0) self.runspeedframe17 = self.runspeedframe1;
+	else if (self.runspeedframe17 == -1) self.runspeedframe17 = 0;
+
+	if (self.runspeedframe18 == 0) self.runspeedframe18 = self.runspeedframe1;
+	else if (self.runspeedframe18 == -1) self.runspeedframe18 = 0;
+
+	if (self.runspeedframe19 == 0) self.runspeedframe19 = self.runspeedframe1;
+	else if (self.runspeedframe19 == -1) self.runspeedframe19 = 0;
+
+	if (self.runspeedframe20 == 0) self.runspeedframe20 = self.runspeedframe1;
+	else if (self.runspeedframe20 == -1) self.runspeedframe20 = 0;
+
+	if (self.runspeedframe21 == 0) self.runspeedframe21 = self.runspeedframe1;
+	else if (self.runspeedframe21 == -1) self.runspeedframe21 = 0;
+
+	if (self.runspeedframe22 == 0) self.runspeedframe22 = self.runspeedframe1;
+	else if (self.runspeedframe22 == -1) self.runspeedframe22 = 0;
+
+	if (self.runspeedframe23 == 0) self.runspeedframe23 = self.runspeedframe1;
+	else if (self.runspeedframe23 == -1) self.runspeedframe23 = 0;
+
+	if (self.runspeedframe24 == 0) self.runspeedframe24 = self.runspeedframe1;
+	else if (self.runspeedframe24 == -1) self.runspeedframe24 = 0;
+
+	if (self.runspeedframe25 == 0) self.runspeedframe25 = self.runspeedframe1;
+	else if (self.runspeedframe25 == -1) self.runspeedframe25 = 0;
+
+	if (self.runspeedframe26 == 0) self.runspeedframe26 = self.runspeedframe1;
+	else if (self.runspeedframe26 == -1) self.runspeedframe26 = 0;
+
+	if (self.runspeedframe27 == 0) self.runspeedframe27 = self.runspeedframe1;
+	else if (self.runspeedframe27 == -1) self.runspeedframe27 = 0;
+
+	if (self.runspeedframe28 == 0) self.runspeedframe28 = self.runspeedframe1;
+	else if (self.runspeedframe28 == -1) self.runspeedframe28 = 0;
+
+	if (self.runspeedframe29 == 0) self.runspeedframe29 = self.runspeedframe1;
+	else if (self.runspeedframe29 == -1) self.runspeedframe29 = 0;
+
+	if (self.runspeedframe30 == 0) self.runspeedframe30 = self.runspeedframe1;
+	else if (self.runspeedframe30 == -1) self.runspeedframe30 = 0;
+
+	if (self.runspeedframe31 == 0) self.runspeedframe31 = self.runspeedframe1;
+	else if (self.runspeedframe31 == -1) self.runspeedframe31 = 0;
+
+	if (self.runspeedframe32 == 0) self.runspeedframe32 = self.runspeedframe1;
+	else if (self.runspeedframe32 == -1) self.runspeedframe32 = 0;
+
+	if (self.runspeedframe33 == 0) self.runspeedframe33 = self.runspeedframe1;
+	else if (self.runspeedframe33 == -1) self.runspeedframe33 = 0;
+
+	if (self.runspeedframe34 == 0) self.runspeedframe34 = self.runspeedframe1;
+	else if (self.runspeedframe34 == -1) self.runspeedframe34 = 0;
+
 	setsize(self,self.bbmins,self.bbmaxs);		// Restore BB size
 
 	// Check for delay spawn monster count
