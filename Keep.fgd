@@ -1460,6 +1460,10 @@
 	     0 : "Do Nothing"
 	    -1 : "Disable Dirt Mapping"
 	]		
+	_mirrorinside(choices) : "Mirror all faces (e.g. foliage)" = [
+		0 : "Normal"
+		1 : "Draw back faces"
+	]
 ]
 
 @SolidClass base(FuncItems, FuncLighting) = func_button : "Button" [

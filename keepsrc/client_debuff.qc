@@ -128,10 +128,14 @@ void() ClientDeBuff = {
 			setsize(flashlightSpot,VEC_ORIGIN,VEC_ORIGIN);
 			self.attachment3 = flashlightSpot;
 		}
+		self.attachment3.effects = EF_BRIGHTLIGHT;
 		makevectors(self.v_angle);
 		spot = self.origin+self.view_ofs;
 		traceline(spot,spot + v_forward * 1024,FALSE,self);
 		setorigin(self.attachment3,trace_endpos);
+		dprint("flashlight spot is at ");
+		dprint(vtos(self.attachment3.origin));
+		dprint("\n");
 	} else {
 		if (self.attachment3) {
 			self.attachment3.effects = 0;

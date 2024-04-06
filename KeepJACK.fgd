@@ -1458,7 +1458,11 @@
 	_dirt(choices) : "Dirt Mapping (override)" :  : "-1 disables dirtmapping on the brush model. Useful if the BModel touches or sticks into the world, and you want to keep those areas from turning black. Default 0." = [
 	     0 : "Do Nothing"
 	    -1 : "Disable Dirt Mapping"
-	]		
+	]
+	_mirrorinside(choices) : "Mirror all faces (e.g. foliage)" = [
+		0 : "Normal"
+		1 : "Draw back faces"
+	]
 ]
 
 //----------------------------------------------------------------------
