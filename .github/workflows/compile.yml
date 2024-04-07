@@ -14,14 +14,14 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Compile using fteqcc
         run: |
           chmod +x ./keepsrc/fteqcc64
           cd ./keepsrc
           ./fteqcc64 -v -Fkce -Fifvector -Fvectorlogic
       - name: Upload progs.dat
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: progs.dat
           path: progs.dat
