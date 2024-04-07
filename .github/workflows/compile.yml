@@ -2,8 +2,7 @@ name: Compile progs.dat
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
+  pull_request:
 jobs:
   build:
     name: Compile progs.dat
