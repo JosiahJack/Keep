@@ -9,7 +9,11 @@ For the actual readme, please refer to the [Tome of Keep](https://josiahjack.git
 
 ![tag](https://img.shields.io/github/v/tag/JosiahJack/Keep?label=Latest%20Release)
 
-![Compile Status](https://github.com/JosiahJack/Keep/actions/workflows/compile.yml/badge.svg)
+![Compile Progs Status](https://github.com/JosiahJack/Keep/actions/workflows/compile.yml/badge.svg)
+
+![Compile CSQC Status](https://github.com/JosiahJack/Keep/actions/workflows/compile_csqc.yml/badge.svg)
+
+![Check Status](https://github.com/JosiahJack/Keep/actions/workflows/gitleaks.yml/badge.svg)
 
 ![Downloads](https://img.shields.io/github/downloads/JosiahJack/Keep/total?color=darkgree&label=Downloads&style=flat)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJosiahJack%2FKeep&count_bg=%239A7041&title_bg=%23668FFF&icon=&icon_color=%23E7E7E7&title=Page+Hits&edge_flat=false)](https://hits.seeyoufarm.com)
