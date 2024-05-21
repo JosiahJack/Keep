@@ -168,6 +168,9 @@ void() scourge_atk1 = [ 18.000, scourge_atk2 ] {
    scourge_think();
    self.effects = (self.effects | EF_MUZZLEFLASH);
    SCOURGE_FireSpikes (40.000);
+   if (self.spawnflags & MONCENTROID_LAVASPIK) {
+	   sound(self,CHAN_BODY,"rogue/weapons/snail.wav",1,ATTN_NORM); // Hiss!
+   }
 };
 void() scourge_atk2 = [ 19.000, scourge_atk3 ] {
    self.effects = (self.effects | EF_MUZZLEFLASH);
@@ -198,6 +201,9 @@ void() scourge_atk8 = [ 19.000, scourge_run1 ] {
    self.effects = (self.effects | EF_MUZZLEFLASH);
    SCOURGE_FireSpikes (56.000);
    SUB_AttackFinished ((MOVETYPE_STEP * random ()));
+   if (self.spawnflags & MONCENTROID_LAVASPIK) {
+      sound(self,CHAN_BODY,"rogue/weapons/snail.wav",1,ATTN_NORM); // Hiss!
+   }
 };
 
 void() scourge_melee1 = [ 20.000, scourge_melee2 ] {
@@ -312,6 +318,7 @@ void() monster_scourge = {
 	setsize (self,'-32.000 -32.000 -24.000','32.000 32.000 22.000');
 	if (self.health < 1) self.health = 300.000;
 	if (self.gibhealth < 1) self.gibhealth = -35;
+	if (self.skin < 1 && self.exactskin < 1 && (self.spawnflags & MONCENTROID_LAVASPIK)) self.skin = 1;
 	self.gibbed = FALSE;
 	self.pain_flinch = 50;
 	self.yaw_speed = 30;		// Very fast turning (def=20)

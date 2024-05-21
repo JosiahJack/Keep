@@ -1866,8 +1866,9 @@
 }
 // entity 107
 {
-"classname" "monster_archer"
+"classname" "monster_scourge"
 "origin" "192 192 104"
+"spawnflags" "8192"
 }
 // entity 108
 {
@@ -4116,7 +4117,7 @@
 }
 // entity 142
 {
-"classname" "monster_archer_lord"
+"classname" "monster_scourge"
 "origin" "192 117 104"
 }
 // entity 143

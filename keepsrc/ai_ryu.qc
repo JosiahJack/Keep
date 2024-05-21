@@ -360,8 +360,9 @@ float(float dist) Ryu_DetectDanger = {
     while (head) {
         if (head != self) {
             traceline (self.origin, head.origin, TRUE, self);
-            if (trace_fraction == 1)
+            if (trace_fraction == 1) {
                 if (Ryu_IsHostile (head)) break; // Got one!
+            }
         }
         head = head.chain;
     }
