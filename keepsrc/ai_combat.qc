@@ -257,6 +257,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	local entity oldself;
 
 	// Cannot hurt the world or enemy targets (fake flying markers)
+	if (targ == world || !targ) return;
 	if (targ.classtype == CT_WORLD) return;
 	if (targ.classtype == CT_ENEMYTARGET) return;
 
