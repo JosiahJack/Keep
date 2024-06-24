@@ -5573,7 +5573,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	]
 ]
 
-@PointClass base(MonMassive) studio("progs/madfox/balrog.mdl") = monster_balrog : "Balrog" []
+@PointClass base(MonMassive) studio("progs/madfox/mon_balrog.mdl") = monster_balrog : "Balrog" []
 
 @PointClass base(MonWide) studio("progs/q15/carnivean.mdl") = monster_carnivean : "Carnivean" []
 

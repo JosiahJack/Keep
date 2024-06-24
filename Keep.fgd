@@ -4521,6 +4521,7 @@ color(128 0 128) = TrigBasic [
 		4 : "No Static" : 0
 		128 : "No Particles" : 0
 	]
+	__show_frame(integer) : "Displayed framegroup (def=1)" : 1
 ]
 
 @PointClass base(LightFlame,LightOff) size(-8 -8 -16, 8 8 20) studio("progs/quoth/brazshrt.mdl") = light_flame_brazier_short : "Short Brazier" [
@@ -5541,7 +5542,7 @@ color(128 0 128) = TrigBasic [
 	]
 ]
 
-@PointClass base(MonMassive) studio("progs/madfox/balrog.mdl") = monster_balrog : "Balrog" []
+@PointClass base(MonMassive) studio("progs/madfox/mon_balrog.mdl") = monster_balrog : "Balrog" []
 
 @PointClass base(MonWide) studio("progs/q15/carnivean.mdl") = monster_carnivean : "Carnivean" []
 
