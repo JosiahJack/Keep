@@ -1,0 +1,288 @@
+UDP Initialized
+Exe: 19:39:49 May  5 2023 (Linux 64-bit)
+384.0 megabyte heap
+
+Video initialization
+Video mode: 1286x909x24 Z24 S8 60Hz
+GL_VENDOR: NVIDIA Corporation
+GL_RENDERER: NVIDIA GeForce GTX 970/PCIe/SSE2
+GL_VERSION: 4.3.0 NVIDIA 535.113.01
+FOUND: EXT_texture_filter_anisotropic
+FOUND: ARB_buffer_storage
+FOUND: ARB_multi_bind
+FOUND: ARB_bindless_texture
+FOUND: ARB_shader_draw_parameters
+FOUND: ARB_clip_control
+
+Sound Initialization
+SDL audio spec  : 44100 Hz, 1024 samples, 2 channels
+SDL audio driver: pulseaudio - Simultaneous output to Family 17h (Models 00h-0fh) HD Audio Control
+Audio: 16 bit, stereo, 44100 Hz
+CDAudio disabled at compile time
+
+Using add-on server "https://kexquake.s3.amazonaws.com"
+
+Language initialization
+Couldn't load 'localization/loc_english.txt'
+Couldn't load 'localization/loc_english.txt'
+
+========= Quake Initialized =========
+
+
+Add-on server status:
+ 26 add-ons available for download
+  0 add-ons already installed
+
+execing quake.rc
+execing default.cfg
+Unknown command "gl_overbright"
+Unknown command "gl_subdivide_size"
+Disabling renderer/network isolation.
+Unknown command "joy_deadzone"
+Unknown command "r_quadparticles"
+Unknown command "r_shadows"
+Unknown command "sys_throttle"
+Unknown command "vid_minsize"
+execing ironwail.cfg
+Unknown command "r_useportalculling"
+Unknown command "cl_beams_polygons"
+Unknown command "r_part_density"
+couldn't exec autoexec.cfg
+SpawnServer: twilight
+Clearing memory
+Programs occupy 4336K.
+Mod_LoadTexinfo: 15 texture(s) missing from BSP file
+Map has lit water
+Warning: 180240 visleafs exceeds standard limit of 8192.
+"telealpha" is not a field
+[WORLDSPAWN] function started ...
+[SETUP] Drake temporary movement goal is now setup
+[SETUP] Drake movebox is now setup for large monsters
+[SETUP] Drake lightning is now setup
+[ENGINE] Advanced Engine
+[MOD DETECT] maps/twilight.bsp, could not detect a map requiring nondefault changes, using
+standard Keep
+[WORLD] TEMP1 + Worldspawn (2294016)
+[WORLD] Setup Light style array
+[WORLD] Setup Pendulum vector array
+[WORLD] Setup Map Var bitflag array
+[WORLD] Setup Shadow lightstyle array
+[VERSUS] Versus is currently deactivated.
+         Intended to be played on specific maps with coop 3
+[WORLD] Drake music system active but no music specified
+        in worldspawn's noise, noise1, noise2, or noise3
+[BOSS] Wave (1 / 5) HP (2500) Trig (2000)
+[weapon_mjolnir] with Custom override mdl (progs/hipnotic/g_hammer.mdl)
+Warning: model progs/tronyn/statue15.mdl has a skin taller than 480[item_keyx] with Custom
+override mdl (progs/tronyn/keyrune_water.mdl)
+[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '-2712.0 -2440.0 -582.0'
+[item_keyx] with Custom override mdl (progs/tronyn/keyrune_fire.mdl)
+[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '-5960.0 2168.0 -1324.0'
+[item_keyx] with Custom override mdl (progs/tronyn/keyrune_air.mdl)
+[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '2432.0 -2144.0 376.0'
+[item_keyx] with Custom override mdl (progs/tronyn/keyrune_blood.mdl)
+[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '1724.0 -3104.0 -824.0'
+No spawn function for:
+
+EDICT 1354:
+origin         '-968.0 -2384.0 -1092.0'
+classname      weapon_riot_controller
+hitcontentsmaski bad type 8
+No spawn function for:
+
+EDICT 1354:
+origin         '-2700.0 1364.0 -1320.0'
+classname      weapon_riot_controller
+hitcontentsmaski bad type 8
+
+[DOOR] Light style (37)
+
+Warning: model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
+progs/tronyn/barrel1.mdl has a skin taller than 480"studio" is not a field
+Warning: model progs/tronyn/light2.mdl has a skin taller than 480
+[DOOR] Light style (40)
+
+Warning: model progs/tronyn/light4.mdl has a skin taller than 480
+[DOOR] Light style (37)
+
+[item_keyx] with Custom override mdl (progs/tronyn/keyrune_earth.mdl)
+[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '-6528.0 -62.0 400.0'
+[MONSTER] (friendly1) - no monster count
+[MONSTER] (friendly1) - no monster count
+[MONSTER] (friendly1) - no monster count
+[item_keyx] with Custom override mdl (progs/nehahra/bloodkey.mdl)
+1 entities inhibited
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '864.0 -3584.0 -1104.0', maxs: '896.0 -3424.0 -976.0'vs linked door mins: '864.0
+ -3584.0 -1104.0', maxs: '896.0 -3424.0 -976.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-2048.0 -309.0 -1470.0', maxs: '-1995.0 -299.0 -1424.0'vs linked door mins:
+'-2038.0 -309.0 -1470.0', maxs: '-1995.0 -299.0 -1459.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-2048.0 -309.0 -1616.0', maxs: '-1995.0 -299.0 -1424.0'vs linked door mins:
+'-2048.0 -309.0 -1616.0', maxs: '-2038.0 -299.0 -1459.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-2048.0 -309.0 -1616.0', maxs: '-1995.0 -299.0 -1424.0'vs linked door mins:
+'-2048.0 -309.0 -1616.0', maxs: '-2038.0 -299.0 -1459.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-1984.0 -309.0 -1430.0', maxs: '-1936.0 -299.0 -1408.0'vs linked door mins:
+'-1984.0 -309.0 -1429.0', maxs: '-1973.0 -299.0 -1408.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-1984.0 -309.0 -1430.0', maxs: '-1936.0 -299.0 -1408.0'vs linked door mins:
+'-1984.0 -309.0 -1429.0', maxs: '-1973.0 -299.0 -1408.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-1984.0 -309.0 -1430.0', maxs: '-1936.0 -299.0 -1408.0'vs linked door mins:
+'-1984.0 -309.0 -1429.0', maxs: '-1973.0 -299.0 -1408.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-1973.0 -309.0 -1470.0', maxs: '-1920.0 -299.0 -1424.0'vs linked door mins:
+'-1973.0 -309.0 -1470.0', maxs: '-1930.0 -299.0 -1459.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-1973.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1424.0'vs linked door mins:
+'-1930.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1459.0'
+[CROSSLINK] really bad situation, must fix! master classname:
+func_door--------!----------------!-----------!---------
+linkdoor enemy classname: func_door-!----------------!---!-------------------!----
+
+Master door mins: '-1973.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1424.0'vs linked door mins:
+'-1930.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1459.0'
+[TRIG_TELEPORT] Wrong Entity (info_teleport_destination)
+Warning: 100878 byte signon buffer exceeds QS limit of 63998.
+Server spawned.
+CL_EstablishConnection: connected to local
+3 demo(s) in loop
+Client LOCAL connected
+[CLIENT] SetNewParms
+[CLIENT] RESETTING Map Variables
+[SERVERFLAG] new game detected
+[SKILL4] EvilMode Disabled
+misc_tree could not fall to floor, staying put inside something else at '1186.0 824.0 -1607.0'
+
+[Model] progs/madfox/olmec1.mdl stuck at ('3484.0 246.0 -1557.0'), made non-solid.
+
+[Model] progs/madfox/olmec1.mdl stuck at ('3356.0 120.0 -1557.0'), made non-solid.
+misc_tree could not fall to floor, staying put inside something else at '-3464.0 1386.0 209.0'
+
+FITZQUAKE 0.85 SERVER (4986 CRC)
+Serverinfo packet received.
+
+
+
+Twilight of the Idols
+Using protocol 999
+Warning: 1748 models exceeds standard limit of 256 (max = 4096).
+Warning: 637 sounds exceeds standard limit of 256 (max = 2048).
+FindFile: can't find sound/tronyn/water_gate_opens
+Couldn't load sound/tronyn/water_gate_opens
+FindFile: can't find sound/tronyn/ambient_trickle.wav
+Couldn't load sound/tronyn/ambient_trickle.wav
+Lightmap size:   3584 x 3328 (172/182 blocks)
+Lightmap memory: 45.5 MB (128.8% efficiency)
+Warning: 688 lightmaps exceeds standard limit of 64.
+FindFile: can't find gfx/env/mak_nightsky2_wind.cfg
+Sky wind config not found 'gfx/env/mak_nightsky2_wind.cfg'.
+FindFile: can't find music/track01.ogg
+FindFile: can't find music/track01.mp3
+FindFile: can't find music/track01.wav
+Couldn't find a cdrip for track 1
+CL_SignonReply: 1
+Programs occupy 115K.
+enginename: [ Ironwail ]
+Warning: [CL] check "FRIK_FILE" before calling strcat (csqc_hud_vanilla.csqc: Hud_Init)
+[RND_SYNC] Chaos Mode Disabled
+[Item] item_artifact_lavasuit didn't droptofloor at ('-4076.0 -1212.0 -2154.0') but was in open
+space and thus left intact.
+[Item] item_treasure didn't droptofloor at ('-2863.0 -2496.0 -1657.0') but was in open space and
+thus left intact.
+FindFile: can't find sound/tronyn/ambient_trickle.wav
+Couldn't load sound/tronyn/ambient_trickle.wav
+Sound tronyn/mana_extraction.wav not looped
+Warning: 291 static entities exceeds standard limit of 128 (max = 4096).
+Warning: 1356 efrags exceeds standard limit of 640.
+CL_SignonReply: 2
+Warning: [SV] check "DP_QC_TOKENIZE_CONSOLE" before calling tokenize_console (csqc_hudkeep.qc:
+SV_ParseClientCommand)
+[CLIENT] PutClientInServer
+[SKILL4] EvilMode Disabled
+[COOP] Spawn locations found (8)
+[CAMERA] Intermissions missing!
+[CLIENT] Decode (Level) Parms
+[CLIENT] Decode Worldspawn Inv Parms:
+[SERVERFLAG] MAP LOAD reset/sync
+[Beyond 16 Parms] gamecfg was 0
+                  set player ammo_bloodcrystals to: 0
+                  set player ammo_voidshards to: 0
+                  set player ammo_elemental to: 0
+[CLIENT] self.weapon == 1
+[CLIENT] self.items == 2049
+[CLIENT] Reading Map Variables
+[Beyond 16 Parms] savedgamecfg was 0
+[CLIENT] Water Alpha (0.650)
+[CONFIG] MOD Settings (2294016) LIVE
+--------------------------------------
+- Particle System disabled
+- Weather System disabled
+- NO Axe upgrade detected
+- NO SSG upgrade detected
+- NO LG upgrade detected
+- Shotgun hitscan system
++ Shotgun casing enabled
++ Large Projectile Collision
++ All items use center origin
++ All items are randomly rotated
++ Player weapon autoaim disabled
++ Z Aware Monster combat enabled
++ footstep sounds enabled
++ monster liquid damage enabled
++ Dev helpers (mark/arrow) enabled
+- No fade away for monster bodies
+- No floor checks for monster bodies
++ Arcane Key Inventory Msg enabled
+- Missile tracking uses default
++ Gfog ( 0.018)(0.000 0.200 0.400)
+* Sky fog default not defined
++ Water Alpha has changed (0.650)
++ Lightstyle compiler lights at (0)
++ DP features ( )
+--------------------------------------
+CL_SignonReply: 3
+173.3 megabyte data cache
+[INFO] Keep Mod, v1.00.1
+Warning: 15812 byte packet exceeds standard limit of 1024 (max = 64000).
+CL_SignonReply: 4
+Warning: 2977 visedicts exceeds standard limit of 256 (max = 16384).
+Warning: [CL] check "FRIK_FILE" before calling strlen (csqc_hud_vanilla.csqc: Hud_DrawLargeValue)
+Warning: [CL] check "FTE_STRINGS" before calling str2chr (csqc_hud_vanilla.csqc:
+Hud_DrawLargeValue)
+Warning: 4415 edicts exceeds standard limit of 600 (max = 16384).
+[Item] item_artifact_envirosuit didn't droptofloor at ('-2848.0 -1856.0 -470.0') but was in open
+space and thus left intact.
+Gyro 2.1a (April 2007) by Matt is running...updated to 2.2a (April 2021) by Qmaster
+Tickrate (ms): 30
+]condump

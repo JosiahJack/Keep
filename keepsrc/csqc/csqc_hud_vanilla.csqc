@@ -162,7 +162,7 @@ float IT3_SECRETHUNTER		= 2;			//1  Secret Hunter (Loki's Cat)
 float IT3_THORSBLESSING 	= 4;			//2  Free life granted upon would-be death.
 float IT3_FLASHLIGHT_ON   	= 8;			//3  Bit to save flashlight status between saves.
 float IT3_POWERSHIELD_ON	= 16;			//4  Bit to save powershield status between saves.
-//float UNUSED   			= 32;			//5  
+float IT3_RIOTCONTROLLER  	= 32;			//5  Zerstorer Riot Controller
 //float UNUSED				= 64;			//6  
 //float UNUSED   			= 128;			//7  
 //float UNUSED				= 256;			//8  
@@ -429,7 +429,9 @@ static void() Hud_Init {
 	precache_pic("gfx/inv_grapple",TRUE);
 	precache_pic("gfx/inv2_grapple",TRUE);
 	precache_pic("gfx/inv_widowm",TRUE);
+	precache_pic("gfx/inv_riotcntrlr",TRUE);
 	precache_pic("gfx/inv2_widowm",TRUE);
+	precache_pic("gfx/inv2_riotcntrlr",TRUE);
 	precache_pic("gfx/inv_lavang",TRUE);
 	precache_pic("gfx/inv2_lavang",TRUE);
 	precache_pic("gfx/inv_lavasng",TRUE);
@@ -772,16 +774,18 @@ static void Hud_DrawIBar(vector pos, vector br) {
 	} else slot2 = "";
 
 	// slot3
-	if (sitems & IT_SUPER_SHOTGUN || smoditems & IT_UPGRADE_SSG || smoditems & IT_SCIMITAR) {
+	if (sitems & IT_SUPER_SHOTGUN || smoditems & IT_UPGRADE_SSG || sitems3 & IT3_RIOTCONTROLLER || smoditems & IT_SCIMITAR) {
 		if (sweapon == IT_SUPER_SHOTGUN && !shackbank) {
 			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/inv2_widowm";
+			else if (sitems3 & IT3_RIOTCONTROLLER) slot3 = "gfx/inv2_riotcntrlr";
 			else slot3 = "gfx/inv2_sshotgun";
 		} else if (sweapon == IT_SCIMITAR && !shackbank) {
 			slot3 = "gfx/inv2_sshotgun"; // TODO inv2_scimitar
 
 		// Plain inventory items.
-		} else if (smoditems & IT_UPGRADE_SSG) {
+		} else if (smoditems & IT_UPGRADE_SSG || sitems3 & IT3_RIOTCONTROLLER) {
 			if (smoditems & IT_UPGRADE_SSG) slot3 = "gfx/inv_widowm";
+			else if (sitems3 & IT3_RIOTCONTROLLER) slot3 = "gfx/inv_riotcntrlr";
 			else slot3 = "gfx/inv_sshotgun";
 		} else if (sitems & IT_SUPER_SHOTGUN) {
 			slot3 = "gfx/inv_sshotgun";

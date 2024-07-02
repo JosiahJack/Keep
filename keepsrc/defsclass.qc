@@ -514,7 +514,7 @@ float CT_PROJ_INK = 584;        // Octopus Ink
 float CT_ARTTHORSBLESSING = 585;// Thor's Blessing free life at would-be death.
 float CT_PROJ_DRAGON = 586;     // Rogue Dragon fireball
 float CT_PROJ_SHALHKBOSS = 587; // Drake's variant of the vore ball.
-
+float CT_RIOTCONTROLLER = 588;	// Zerstorer Riot Controller double shot shotgun
 float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power
 float CT_ARTPSHIELD = 591;		// Power Shield

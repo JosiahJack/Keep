@@ -1,0 +1,51 @@
+---- light_mj / ericw-tools v0.18.1-1983-gf14f327a ----
+LoadBSPFile: 'test_trigpush.bsp'
+BSP is version Quake BSP2 bsp2
+INFO: using built-in palette.
+---- load_textures ----
+---- LoadEntities ----
+13 entities read, 5 are lights.
+WARNING: -gate value greater than 1 may cause artifacts
+
+--- Options Summary ---
+    "threads" was set to "12" (from command line)
+    "verbose" was set to "1" (from command line)
+    "gate" was set to "1.500000" (from command line)
+
+running with 12 thread(s)
+low priority not compiled into this version
+DecompressAllVis: invalid visofs for leaf 0
+Embree_TraceInit: Embree version: 3.12.2
+Embree_TraceInit: 
+	16 sky faces
+	21 solid faces
+	0 filtered faces
+	0 shadow-casting skip faces
+SetupLights: 5 initial lights
+---- MakeSurfaceLights ----
+SetupLights: 5 after surface lights
+SetupLights: 5 after jittering
+---- EstimateLightVisibility ----
+Final count: 5 lights, 0 suns in use.
+Colored light entities/settings detected: .lit output enabled.
+---- LightWorld ----
+---- CalculateVertexNormals ----
+        0 faces for smoothing
+---- MakeFaceCache ----
+---- CreateLightmapSurfaces ----
+---- MakeRadiositySurfaceLights ----
+---- Direct Lighting ----
+---- SaveLightmapSurfaces ----
+Lighting Completed.
+
+lightdatasize: 9148
+Writing test_trigpush.lit
+0 switchable light styles (32 max)
+Writing test_trigpush.bsp as Quake BSP2 bsp2
+0.479s seconds elapsed
+
+stats:
+1.985509838998211 lights tested, 1.7871198568872988 hits per sample point
+0 surface lights tested, 0 hits per sample point
+0 bounce lights tested, 0 hits per sample point
+0 empty lightmaps

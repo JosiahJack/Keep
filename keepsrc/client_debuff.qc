@@ -100,10 +100,26 @@ void(entity targ) ResetDebuffSystem = {
 	ResetDebuffBleeding(targ);
 };
 
+// From Qmaster's ancient rings mod for cousin Ethan.
+void () flashlight_update = {
+	if ( (self.owner.health <= 0) ) {
+		self.think = SUB_Remove;
+		self.nextthink = time + 0.1;
+		self.owner.attachment3 = world;
+		return;
+	}
+
+	self.effects = EF_DIMLIGHT;
+	makevectors(self.owner.v_angle);
+	traceline(self.owner.origin,(self.owner.origin + (v_forward * 500)),FALSE,self);
+	setorigin(self,trace_endpos + (v_forward * -5));
+	self.nextthink = time + 0.020;
+};
+
 // Core debuff function, run every frame from client.qc
 void() ClientDeBuff = {
 	local vector spot;
-	local entity flashlightSpot;
+	local entity playerFlashlight;
 
 	// Check is self is a NOT player (client) FIRST!
 	// Bug fix from ericw on func msgboard
@@ -123,22 +139,25 @@ void() ClientDeBuff = {
 
 	if (self.items3 & IT3_FLASHLIGHT_ON) {
 		if (!self.attachment3) {
-			flashlightSpot = spawn();
-			flashlightSpot.effects = EF_BRIGHTLIGHT;
-			setsize(flashlightSpot,VEC_ORIGIN,VEC_ORIGIN);
-			self.attachment3 = flashlightSpot;
+			playerFlashlight = spawn();
+			playerFlashlight.think = flashlight_update;
+			playerFlashlight.movetype = MOVETYPE_NONE;
+			playerFlashlight.solid = SOLID_NOT;
+			setmodel(playerFlashlight,"progs/null.spr");
+			setsize(playerFlashlight,'-8.00 -8.00 -8.00','8.00 8.00 8.00');
+			playerFlashlight.classname = "flashlight";
+			makevectors (self.v_angle);
+			traceline(self.origin,(self.origin + (v_forward * 500)),FALSE,self);
+			setorigin(playerFlashlight,trace_endpos);
+			self.attachment3 = playerFlashlight;
 		}
-		self.attachment3.effects = EF_BRIGHTLIGHT;
+		self.attachment3.effects = EF_MUZZLEFLASH;
 		makevectors(self.v_angle);
 		spot = self.origin+self.view_ofs;
 		traceline(spot,spot + v_forward * 1024,FALSE,self);
 		setorigin(self.attachment3,trace_endpos);
-		dprint("flashlight spot is at ");
-		dprint(vtos(self.attachment3.origin));
-		dprint("\n");
 	} else {
 		if (self.attachment3) {
-			self.attachment3.effects = 0;
 			self.attachment3.think = SUB_Remove;
 			self.attachment3.nextthink = time + 0.1;
 			self.attachment3 = world;

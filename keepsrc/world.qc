@@ -299,6 +299,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	precache_sound("weapons/bounce.wav");		// grenade bounce
 	precache_sound("weapons/shotgn2.wav");		// Original SSG
 	precache_sound("ad171/weapons/ssg2.wav");		// Projectile shells or Shotgun upgrade
+	precache_sound("zerstorer/weapons/shotgn2.wav"); // Zerstorer Riot Controller double shot
 	precache_sound(SOUND_PLASMA_FIRE);			// Player PG (eliminator)
 	precache_sound(SOUND_PLASMA_HIT);			// New fire/impact sounds
 	precache_sound(SOUND_MISFIRE);		// Weapon jams/noammo/broken
@@ -523,6 +524,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 			clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
 			clientstat(CLIENT_ITEMS2, EV_FLOAT, items2);
 			clientstat(CLIENT_PERMS, EV_FLOAT, perms);
+			clientstat(CLIENT_ITEMS3, EV_FLOAT, items3);
 			clientstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
 			clientstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
 			clientstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);

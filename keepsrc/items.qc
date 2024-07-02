@@ -885,7 +885,9 @@ void() item_keyx = { // [ENTITY]
 		self.moditems = IT_CKEY1;
 		if (self.netname == "") self.netname = "Arcane Key 1";
 		self.ckeyskin1 = self.ckeyhudskin;
-		dprint("\b[CUSTOM KEY]\b Missing spawnflag key number.  Set to Arcane Key 1.\n");
+		dprint("\b[CUSTOM KEY]\b Missing spawnflag key number.  Set to Arcane Key 1 at ");
+		dprint(vtos(self.origin));
+		dprint("\n");
 	}
 	
 	self.classtype = CT_CUSTOMKEY;

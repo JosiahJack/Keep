@@ -1,0 +1,82 @@
+---- qbsp / ericw-tools v0.18.1-32-g6660c5f ----
+Input file: test_trigpush.map
+Output file: test_trigpush.bsp
+
+---- LoadMapFile ----
+           78 faces
+           13 brushes
+           13 entities
+            4 unique texnames
+           26 texinfo
+
+Opened WAD: /media/qmaster/WDMyPassport/Github/QuakeMappingCI/sog.wad
+Processing hull 0...
+---- Brush_LoadEntity ----
+           11 brushes
+           19 planes
+---- CSGFaces ----
+           66 brushfaces
+           49 csgfaces
+           44 mergedfaces
+---- SolidBSP ----
+           74 split nodes
+           15 solid leafs
+           52 empty leafs
+            8 water leafs
+            0 detail leafs
+            0 detail illusionary leafs
+            0 detail fence leafs
+            0 illusionary visblocker leafs
+          108 leaffaces
+          108 nodefaces
+---- Portalize ----
+           60 vis leafs
+           60 vis clusters
+          142 vis portals
+---- FillOutside ----
+           45 outleafs
+---- MergeAll ----
+           33 mergefaces
+---- SolidBSP ----
+           21 split nodes
+           11 solid leafs
+            6 empty leafs
+            5 water leafs
+            0 detail leafs
+            0 detail illusionary leafs
+            0 detail fence leafs
+            0 illusionary visblocker leafs
+           58 leaffaces
+           37 nodefaces
+---- Portalize ----
+           11 vis leafs
+           11 vis clusters
+           20 vis portals
+---- Tjunc ----
+           46 world edges
+          120 edge points
+           30 edges added by tjunctions
+            0 faces added by tjunctions
+---- MakeFaceEdges ----
+---- GrowRegions ----
+Processing hull 1...
+Processing hull 2...
+---- WriteBSPFile ----
+Wrote test_trigpush.bsp
+           59 planes             1180
+           64 vertexes            768
+           33 nodes              1452
+           22 texinfo             880
+           53 faces              1484
+           76 clipnodes           912
+           24 leafs              1056
+           74 marksurfaces        296
+          242 surfedges           968
+          122 edges               976
+            4 textures          76340
+              lightdata             0
+              visdata               0
+              entdata            1178
+
+0.520 seconds elapsed
+Peak memory usage: 734784 (0.7M)

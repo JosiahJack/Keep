@@ -1525,14 +1525,14 @@ void() TomeOfPowerCheat = { // [FUNCTION]
 };
 
 void() ToggleFlashlight = { // [FUNCTION]
-	if (!(self.items3 | IT3_FLASHLIGHT)) { sprint(self,"No flashlight\n"); return; }
+	if (!(self.items3 & IT3_FLASHLIGHT)) { sprint(self,"No flashlight\n"); return; }
 
 	if (self.items3 & IT3_FLASHLIGHT_ON) {
 		self.items3 = self.items3 - IT3_FLASHLIGHT_ON;
-		if (!(self.items3 & IT3_FLASHLIGHT_ON)) dprint("flashlight off\n");
+		if (!(self.items3 & IT3_FLASHLIGHT_ON)) sprint(self,"flashlight off\n");
 	} else {
 		self.items3 = self.items3 | IT3_FLASHLIGHT_ON;
-		if ((self.items3 & IT3_FLASHLIGHT_ON)) dprint("flashlight on\n");
+		if ((self.items3 & IT3_FLASHLIGHT_ON)) sprint(self,"flashlight on\n");
 	}
 
 	sound(self,CHAN_VOICE,"quoth/items/click.wav",TRUE,ATTN_NONE);

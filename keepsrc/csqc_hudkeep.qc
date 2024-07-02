@@ -48,6 +48,7 @@ float nocsqc;				// CSQC State (0=on, 1=off)
 float detectDP;				// Detect DP engine (using wrapper)
 float sitems;				// CSQC copy of .items
 float sitems2;				// CSQC copy of .items2
+float sitems3;				// CSQC copy of .items3
 float sweapon;				// CSQC copy of .weapon
 float shealth;				// CSQC copy of .health
 float smoditems;			// CSQC copy of .moditems
@@ -1836,6 +1837,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud = {
 	shealth = getstatf(CLIENT_HEALTH);
 	smoditems = getstatf(CLIENT_MODITEMS);
 	sperms = getstatf(CLIENT_PERMS);
+	sitems3 = getstatf(CLIENT_ITEMS3);
 
 	if (intermission || shealth <= 0) return; // Don't show HUD, intermission or dead
 

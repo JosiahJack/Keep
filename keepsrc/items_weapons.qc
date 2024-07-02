@@ -346,12 +346,12 @@ void() weapon_touch = { // [FUNCTION]
 	}
 	//
 	//==========================================SELF.PERMS======================================================
-			else if (self.classtype == CT_AIRGUN) {				// HACKBANK!
-				if (leave && (other.perms & IT_AIRGUN) ) return;
-				new = IT_AIRGUN;
-				other.weaponismoditems = TRUE;
-				other.perms = other.perms | IT_AIRGUN;
-				other.weapon = IT_AIRGUN;
+	else if (self.classtype == CT_AIRGUN) {				// HACKBANK!
+		if (leave && (other.perms & IT_AIRGUN) ) return;
+		new = IT_AIRGUN;
+		other.weaponismoditems = TRUE;
+		other.perms = other.perms | IT_AIRGUN;
+		other.weapon = IT_AIRGUN;
 	} else if (self.classtype == CT_FROSTBOW) {					// OVERRIDE
 		if (leave && (other.perms & IT_FROSTBOW)) return;
 		new = IT_FROSTBOW;
@@ -379,6 +379,15 @@ void() weapon_touch = { // [FUNCTION]
 		other.items = other.items | IT_AXE;
 		other.perms = other.perms | IT_CHAINSAW;
 		other.weapon = IT_AXE;
+	//
+	//==========================================SELF.PERMS======================================================
+	} else if (self.classtype == CT_RIOTCONTROLLER) {				// OVERRIDE
+		if (leave && (other.items3 & IT3_RIOTCONTROLLER) ) return;
+		new = IT3_RIOTCONTROLLER;
+		other.ammo_shells = other.ammo_shells + self.aflag;
+		other.items = other.items | IT_SUPER_SHOTGUN; // make sure we give super shotgun
+		other.items3 = other.items3 | IT3_RIOTCONTROLLER;
+		other.weapon = IT_SUPER_SHOTGUN;
 	} else return;
 
 	// Display weapon name
@@ -386,6 +395,8 @@ void() weapon_touch = { // [FUNCTION]
 		sprint(other, "You got another axe to grind");
 	else if (self.classtype == CT_SUPER_SHOTGUN && other.moditems & IT_UPGRADE_SSG)
 		sprint(other, "You got a handful of Shells");
+	else if (self.classtype == CT_RIOTCONTROLLER && other.items3 & IT3_RIOTCONTROLLER)
+		sprint(other, "You got a drum mag for your double barrel");
 	else if (self.classtype == CT_UPGRADE_SSG && other.moditems & IT_UPGRADE_SSG)
 		sprint(other, "You got triple barrel boomstick");
 	else if (self.classtype == CT_LIGHTNING && other.moditems & IT_UPGRADE_LG)
@@ -437,6 +448,17 @@ void() weapon_upgrade_ssg = {
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_shells = world.deventity.ammo_shells + self.aflag;
 	weapon_start();
 };
+
+void() weapon_riot_controller = {
+	item_setupmodel("progs/zerstorer/g_dshot.mdl",0);
+	self.weapon = IT_UPGRADE_SSG;
+	self.classtype = CT_RIOTCONTROLLER;
+	if (self.netname == "") self.netname = "Riot Controller";
+	self.items3 = IT3_RIOTCONTROLLER;
+	item_ammo_set(AMMO_SHELLS_WPN);
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_shells = world.deventity.ammo_shells + self.aflag;
+	weapon_start();
+}
 
 void() weapon_upgrade_lg = {
 	item_setupmodel(MODEL_GWEAP_UPLG,0);

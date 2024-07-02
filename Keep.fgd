@@ -1352,6 +1352,7 @@
 
 @PointClass base(Weapon) studio("progs/ad171/g_shadaxeplain.mdl") = weapon_axe : "Axe" []
 @PointClass base(Weapon) studio("progs/g_shot.mdl") = weapon_supershotgun : "Super shotgun" []
+@PointClass base(Weapon) studio("progs/zerstorer/g_dshot.mdl") = weapon_riot_controller : "Riot Controller" []
 @PointClass base(Weapon) studio("progs/ad171/g_nail.mdl") = weapon_nailgun : "Nailgun" []
 @PointClass base(Weapon) studio("progs/g_lava2.mdl") = weapon_lava_super_nailgun : "Lava Perforator" []
 @PointClass base(Weapon) studio("progs/g_lava.mdl") = weapon_lava_nailgun : "Lava Nailgun" []
@@ -1500,7 +1501,7 @@
 	]
 	speed(integer) : "Speed (def=100)"
 	yaw_speed(integer) : "Speed (returning)"
-	wait(integer) : "Delay before close (def=4)"
+	wait(integer) : "Delay before close (def=3)"
 	lip(integer) : "Lip (def=8)"
 	health(integer) : "Health (shootable)"
 	dmg(integer) : "Damage when blocked (def=2)"
@@ -4566,7 +4567,7 @@ color(128 0 128) = TrigBasic [
 //}}) = light_candle : "Church candle" [
 @PointClass base(Light,LightOff) size(-4 -4 -16, 4 4 16) color(0 255 0) studio("progs/ad171/misc_candle3.mdl") = light_candle : "Church candle" [
 	spawnflags(flags) = [
-		2 : "Flame Off" : 0
+		2 : "! Flame Off (MUST HAVE targetname!!)" : 0
 		8 : "DP Shadows" : 0
 	]
 	height(choices) : "Size" = [

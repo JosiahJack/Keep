@@ -6,7 +6,7 @@
 "classname" "worldspawn"
 "_tb_def" "external:../Keep.fgd"
 "_tb_mod" "keep"
-"wad" "../../Other/Compiling/quake.wad"
+"wad" "../../Other/Compiling/quake.wad;/media/qmaster/WDMyPassport/Github/QuakeMappingCI/sog.wad;/home/qmaster/QUAKE/Other/Compiling/ad.wad"
 "useold_axe" "1"
 "copperoptions" "8192"
 "take_weapons" "9999999"
@@ -325,7 +325,7 @@
 ( 160 -528 64 ) ( 160 -527 64 ) ( 160 -528 65 ) city1_4 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( 160 -528 64 ) ( 160 -528 65 ) ( 161 -528 64 ) city1_4 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( 160 -528 64 ) ( 161 -528 64 ) ( 160 -527 64 ) city1_4 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
-( 208 -480 80 ) ( 208 -479 80 ) ( 209 -480 80 ) +0mbutton [ 1 0 0 -16 ] [ 0 -1 0 0 ] 0 1 1
+( 208 -480 80 ) ( 208 -479 80 ) ( 209 -480 80 ) +0button [ 1 0 0 -16 ] [ 0 -1 0 0 ] 0 1 1
 ( 208 -480 80 ) ( 209 -480 80 ) ( 208 -480 81 ) city1_4 [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( 208 -480 80 ) ( 208 -480 81 ) ( 208 -479 80 ) city1_4 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 }
@@ -887,4 +887,22 @@
 "classname" "move_rope"
 "origin" "152 -136 392"
 "target" "rope1p2"
+}
+// entity 74
+{
+"classname" "weapon_riot_controller"
+"origin" "-16 -384 64"
+}
+// entity 75
+{
+"classname" "light"
+"origin" "-120 -104 296"
+"light" "100"
+"wait" ".2"
+"_color" "192 220 255"
+}
+// entity 76
+{
+"classname" "item_artifact_optimizer"
+"origin" "-32 -176 88"
 }

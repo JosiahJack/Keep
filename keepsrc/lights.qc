@@ -864,7 +864,12 @@ void() light_candle_setup = { // [FUNCTION]
 		light_customstyle_start(); // Check for any custom light styles
 	}
 
-	if (self.spawnflags & LIGHT_FLAMEOFF) light_candle_off(); // Setup light
+	if (self.spawnflags & LIGHT_FLAMEOFF) {
+		if (self.targetname == "" || !self.targetname) {
+			objerror("light_candle with Flame Off spawnflag 2 active and no targetname!  Make sure this candle has a targetname or the map will go black when it turns its lightstyle off as it is shared with the world.");
+		}
+		light_candle_off(); // Setup light
+	}
 };
 
 // QUAKED light_candle (0 1 0) (-4 -4 -16) (4 4 16) LIGHTOFF FLAMEOFF x SHADOWS x STATIC x x { model(":progs/ad171/misc_candle1.mdl"); }

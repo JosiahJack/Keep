@@ -248,6 +248,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/ad171/v_shadaxe0.mdl"); // ...
 	precache_model("progs/drake/g_saw.mdl"); // ...useold_chainsaw or not.
 	precache_model("progs/drake/v_saw.mdl");
+	precache_model("progs/zerstorer/v_dshot.mdl");
 
 	precache_model(MODEL_HEAL5);
 	precache_model(MODEL_HEAL15);

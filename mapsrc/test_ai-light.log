@@ -1,0 +1,62 @@
+---- light_mj / ericw-tools v0.18.1-1983-gf14f327a ----
+LoadBSPFile: 'test_ai.bsp'
+BSP is version Quake BSP2 bsp2
+INFO: using built-in palette.
+---- load_textures ----
+ConvertTextures: WARNING: invalid size data for 
+ConvertTextures: WARNING: Texture  duplicated
+---- LoadEntities ----
+135 entities read, 28 are lights.
+WARNING: -gate value greater than 1 may cause artifacts
+
+--- Options Summary ---
+    "threads" was set to "12" (from command line)
+    "verbose" was set to "1" (from command line)
+    "sunlight" was set to "220.000000" (from map)
+    "sunlight_color" was set to "255 225 166" (from map)
+    "sunlight2" was set to "150.000000" (from map)
+    "sunlight2_color" was set to "106 124 184" (from map)
+    "sunlight_mangle" was set to "-0.3535533905932739 -0.3535533905932738 -0.8660254037844386" (from map)
+    "gate" was set to "1.500000" (from command line)
+
+running with 12 thread(s)
+low priority not compiled into this version
+DecompressAllVis: invalid visofs for leaf 0
+Embree_TraceInit: Embree version: 3.12.2
+Embree_TraceInit: 
+	210 sky faces
+	3362 solid faces
+	0 filtered faces
+	0 shadow-casting skip faces
+SetupLights: 28 initial lights
+---- MakeSurfaceLights ----
+Creating surface lights for texture "win_gl_blu2" from template at (-520 280 24)
+SetupLights: 48 after surface lights
+SetupLights: 48 after jittering
+---- EstimateLightVisibility ----
+Final count: 48 lights, 66 suns in use.
+Colored light entities/settings detected: .lit output enabled.
+---- LightWorld ----
+---- CalculateVertexNormals ----
+        0 faces for smoothing
+---- MakeFaceCache ----
+---- CreateLightmapSurfaces ----
+---- MakeRadiositySurfaceLights ----
+---- Direct Lighting ----
+---- SaveLightmapSurfaces ----
+WARNING: a face has exceeded max light styles (4). Use -verbose to find which faces.
+WARNING: 6 light styles (max 4) on face near -208 -32 17; styles: 0 10 5 6 32 33 
+WARNING: 6 light styles (max 4) on face near -208 -320 17; styles: 0 6 34 33 35 32 
+Lighting Completed.
+
+lightdatasize: 70684
+Writing test_ai.lit
+6 switchable light styles (32 max)
+Writing test_ai.bsp as Quake BSP2 bsp2
+0.873s seconds elapsed
+
+stats:
+1.761481202025625 lights tested, 0.8058026321517188 hits per sample point
+0 surface lights tested, 0 hits per sample point
+0 bounce lights tested, 0 hits per sample point
+0 empty lightmaps

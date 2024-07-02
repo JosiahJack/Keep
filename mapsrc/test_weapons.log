@@ -1,0 +1,68 @@
+---- qbsp / ericw-tools v0.18.1-32-g6660c5f ----
+Input file: test_weapons.map
+Output file: test_weapons.bsp
+
+---- LoadMapFile ----
+*** WARNING 06: No info_player_deathmatch entities in level
+          258 faces
+           43 brushes
+           77 entities
+           17 unique texnames
+          144 texinfo
+
+Opened WAD: ../../Other/Compiling/quake.wad
+Opened WAD: /media/qmaster/WDMyPassport/Github/QuakeMappingCI/sog.wad
+Opened WAD: /home/qmaster/QUAKE/Other/Compiling/ad.wad
+Processing hull 0...
+---- Brush_LoadEntity ----
+           26 brushes
+           52 planes
+---- CSGFaces ----
+          156 brushfaces
+          140 csgfaces
+          109 mergedfaces
+---- SolidBSP ----
+          126 split nodes
+           40 solid leafs
+           87 empty leafs
+            0 water leafs
+            0 detail leafs
+            0 detail illusionary leafs
+            0 detail fence leafs
+            0 illusionary visblocker leafs
+          413 leaffaces
+          389 nodefaces
+---- Portalize ----
+           87 vis leafs
+           87 vis clusters
+          254 vis portals
+---- FillOutside ----
+*** WARNING 10: Reached occupant at (16 -896 96), no filling performed.
+Leak file written to test_weapons.pts
+---- MakeFaceEdges ----
+---- GrowRegions ----
+Processing hull 1...
+*** WARNING 10: Reached occupant at (16 -896 96), no filling performed.
+Processing hull 2...
+*** WARNING 10: Reached occupant at (16 -896 96), no filling performed.
+*** WARNING 16: Texture mjdembg1 not found
+*** WARNING 16: Texture bbrik16b not found
+---- WriteBSPFile ----
+Wrote test_weapons.bsp
+          182 planes             3640
+          618 vertexes           7416
+          228 nodes             10032
+          138 texinfo            5520
+          491 faces             13748
+          506 clipnodes          6072
+          190 leafs              8360
+          515 marksurfaces       2060
+         1964 surfedges          7856
+         1155 edges              9240
+           21 textures         968488
+              lightdata             0
+              visdata               0
+              entdata            6486
+
+0.074 seconds elapsed
+Peak memory usage: 2678809 (2.6M)

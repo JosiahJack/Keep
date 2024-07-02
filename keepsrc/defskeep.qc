@@ -176,7 +176,7 @@ float   POW_VAMPIRE     	= 262144;   	//18 Melee buff.
 //float UNUSED        		= 524288;   	//19 Extra ammo capacity.
 float	IT_BLASTER 			= 1048576; 		//20 Drake laser blaster 					W  stored in self.perms.  was POW_20 in Drake, unused
 float	IT_CHAINSAW 		= 2097152;		//21 Drake chainsaw						W stored in self.pems.  was POW_21 in Drake, unused.  Chainsaw is modified version of Zerstorer
-//float UNUSED         		= 4194304;		//22 
+//float UNUSED         		= 4194304;		//22
 //float UNUSED        		= 8388608;		//23 
 //==========================================SELF.ITEMS3================================================
 .float items3;
@@ -185,7 +185,7 @@ float IT3_SECRETHUNTER		= 2;			//1  Secret Hunter (Loki's Cat)
 float IT3_THORSBLESSING 	= 4;			//2  Free life granted upon would-be death.
 float IT3_FLASHLIGHT_ON   	= 8;			//3  Bit to save flashlight status between saves.
 float IT3_POWERSHIELD_ON	= 16;			//4  Bit to save powershield status between saves.
-//float UNUSED   			= 32;			//5  
+float IT3_RIOTCONTROLLER  	= 32;			//5  Zerstorer Riot Controller
 //float UNUSED				= 64;			//6  
 //float UNUSED   			= 128;			//7  
 //float UNUSED				= 256;			//8  

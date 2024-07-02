@@ -1810,10 +1810,12 @@ void() monster_start = { // [FUNCTION]
 		if (!((self.spawnflags & MON_STATUE) && self.targetname == "")) {
 			AddToTotals(self); // Default state - update monster total
 		} else {
-			dprint(self.classname);
-			dprint(" at ");
-			dprint(vtos(self.origin));
-			dprint(", set as statue has no targetname, assuming decorative and not adding to monster count\n");
+			if (developer > 1) {
+				dprint(self.classname);
+				dprint(" at ");
+				dprint(vtos(self.origin));
+				dprint(" statue with no targetname, not adding decoration to monster count\n");
+			}
 		}
 	}
 	

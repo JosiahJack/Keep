@@ -50,6 +50,7 @@ void() player_axeoldc1;			// Different Axe animations for original axe
 void() player_axeoldd1;
 void() player_sg1;				// Shotgun
 void() player_supersg1;			// Super Shotgun
+void() player_rc1;
 void() player_nail1;			// Nailgun
 void() player_snail1;			// Super Nailgun
 void() player_rocket1;			// Rocket Launcher
@@ -784,7 +785,7 @@ void() W_FireShotgun = { // [FUNCTION]
 void() W_FireSuperShotgun = { // [FUNCTION]
 	local float ssg_qty, shell_qty;
 	local vector spread_pat;
-	
+
 	// Ran out of ammo, switch to next best weapon
 	if (self.attack_finished > time) return;
 	if (self.ammo_shells < 2 && self.classtype != CT_MONGREMLIN) { forceweaponswitch(0.2); return; }
@@ -793,19 +794,21 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 
 	// if shot in the air - do Newton's 3rd law. (from zerstorer)
 	if (!(self.flags & FL_ONGROUND)) self.velocity = self.velocity - (v_forward * 35);
-	
-	// Change weapon sound if using Shotgun Upgrade or Projectile Pellets
-	// IMPORTANT - default for Projectile Pellets is ON = 0
-	if (self.moditems & IT_UPGRADE_SSG || !query_configflag(SVR_SHOTGPROJ)) sound(self ,CHAN_WEAPON,"ad171/weapons/ssg2.wav",1,ATTN_NORM);
+
+	if (self.moditems & IT_UPGRADE_SSG) sound(self,CHAN_WEAPON,"ad171/weapons/ssg2.wav",1,ATTN_NORM);
 	else sound(self ,CHAN_WEAPON,"weapons/shotgn2.wav",1,ATTN_NORM);
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (self.perms & POW_SHOTTYMAN) W_Reload(0.5);
-	else W_Reload(0.7);
+	if (self.perms & POW_SHOTTYMAN) {
+		if (self.moditems & IT_UPGRADE_SSG) W_Reload(0.3);
+		else W_Reload(0.5);
+	} else W_Reload(0.7);
 
 	self.punchangle_x = -4;
-	if (self.classtype != CT_MONGREMLIN)
-		player_ssgreset();			// reset weaponframe
+	if (self.classtype != CT_MONGREMLIN) {
+		player_ssgreset();	// reset weaponframe
+	}
+
 	shell_qty = 2;				// Standard shell casings quantity
 
 	// If the player has the Widowmaker, setup triple shot
@@ -830,10 +833,12 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 	if (self.moditems & IT_ARTSHARP) spread_pat = SPREAD_SSG2;
 	else spread_pat = SPREAD_SSG;
 
-	if (self.tome_finished) {
+	if (self.tome_finished) { // Tone down number of explosions by using less.
 		if (self.moditems & IT_UPGRADE_SSG) ssg_qty = 11; // Widowmaker (Triple-barreled)
 		else ssg_qty = 7; // Double-barreled Shotgun
 	}
+
+	if (deathmatch) ssg_qty = ssg_qty + 4; // From Zerstorer
 
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ)) {
@@ -841,6 +846,34 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 	} else {
 		Launch_Shells(ssg_qty, spread_pat, CT_PROJ_SSG);
 		Launch_ShellCasing(shell_qty);
+	}
+};
+
+void() W_FireRiotController = { // [FUNCTION]
+	local float ssg_qty, shell_qty;
+	local vector spread_pat;
+	
+	// Ran out of ammo, switch to next best weapon
+	makevectors(self.v_angle);		// Special view angle for the player
+
+	// if shot in the air - do Newton's 3rd law. (from zerstorer)
+	if (!(self.flags & FL_ONGROUND)) self.velocity = self.velocity - (v_forward * 35);
+
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	self.punchangle_x = -4;
+	self.ammo_shells = self.ammo_shells - 1;
+	ssg_qty = QUANTITY_SSG;
+	self.currentammo = self.ammo_shells;
+	if (self.moditems & IT_ARTSHARP) spread_pat = SPREAD_SSG2;
+	else spread_pat = SPREAD_SSG;
+
+	if (self.tome_finished) ssg_qty = 9; // Tone down number of explosions by using less.
+	if (deathmatch) ssg_qty = ssg_qty + 4; // From Zerstorer
+	if (query_configflag(SVR_SHOTGPROJ)) { // Choose between a projectile or hit-scan system
+		FireBullets (ssg_qty, spread_pat);	// Hit-scan
+	} else {
+		Launch_Shells(ssg_qty, spread_pat, CT_PROJ_SSG);
+		Launch_ShellCasing(1);
 	}
 };
 
@@ -1531,6 +1564,7 @@ void(entity targ, float resetweaponframe) W_SetCurrentAmmo = { // [FUNCTION]
 		} else if (targ.weapon == IT_SUPER_SHOTGUN) {
 			targ.currentammo = targ.ammo_shells;
 			if (targ.moditems & IT_UPGRADE_SSG) targ.weaponmodel = MODEL_VWEAP_UPSSG;
+			else if (targ.items3 & IT3_RIOTCONTROLLER) targ.weaponmodel = "progs/zerstorer/v_dshot.mdl";
 			else targ.weaponmodel = MODEL_VWEAP_SSG;
 		} else if (targ.weapon == IT_LAVA_NAILGUN) {
 			targ.currentammo = targ.ammo_lava_nails;
@@ -1824,8 +1858,15 @@ void() W_Attack = { // [FUNCTION]
 			} else {
 				player_sg1(); // use standard single barrel shotgun
 			}
-		} else if (self.weapon == IT_SUPER_SHOTGUN) { player_supersg1(); }
-		else if (self.weapon == IT_NAILGUN) { player_nail1(); }
+		} else if (self.weapon == IT_SUPER_SHOTGUN) {
+			if (self.moditems & IT_UPGRADE_SSG) player_supersg1();
+			else if (self.items3 & IT3_RIOTCONTROLLER) {
+				player_rc1();
+				if (self.perms & POW_SHOTTYMAN) W_Reload(0.45);
+
+				else W_Reload(0.9);
+			} else player_supersg1();
+		} else if (self.weapon == IT_NAILGUN) { player_nail1(); }
 		else if (self.weapon == IT_LAVA_NAILGUN) { player_lava_nail1(); self.lavaGunFired = TRUE; }
 		else if (self.weapon == IT_SUPER_NAILGUN) { player_snail1(); }
 		else if (self.weapon == IT_LAVA_SUPER_NAILGUN) { player_lava_snail1();  self.lavaGunFired = TRUE; }

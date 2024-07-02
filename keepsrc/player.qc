@@ -311,11 +311,62 @@ void()	player_supersg1 =	[113, player_supersg2	] { // [FUNCTION]
 	if (!self.button0) { player_run(); return; }
 	W_FireSuperShotgun();
 };
-void()	player_supersg2 =	[114, player_supersg3	] { if (!frame_pause())  self.weaponframe=2; }; // [FUNCTION]
-void()	player_supersg3 =	[115, player_supersg4	] { if (!frame_pause())  self.weaponframe=3; }; // [FUNCTION]
-void()	player_supersg4 =	[116, player_supersg5	] { if (!frame_pause())  self.weaponframe=4; }; // [FUNCTION]
-void()	player_supersg5 =	[117, player_supersg6	] { if (!frame_pause())  self.weaponframe=5; }; // [FUNCTION]
+void()	player_supersg2 =	[114, player_supersg3	] { if (!frame_pause()) self.weaponframe=2; }; // [FUNCTION]
+void()	player_supersg3 =	[115, player_supersg4	] { if (!frame_pause()) self.weaponframe=3; }; // [FUNCTION]
+void()	player_supersg4 =	[116, player_supersg5	] { if (!frame_pause()) self.weaponframe=4; }; // [FUNCTION]
+void()	player_supersg5 =	[117, player_supersg6	] { if (!frame_pause()) self.weaponframe=5; }; // [FUNCTION]
 void()	player_supersg6 =	[118, player_supersg1	] { // [FUNCTION]
+	if (frame_pause()) return;
+
+	self.weaponframe=6;
+	if (self.ammo_shells < 2) {
+		if (self.ammo_shells == 1) {
+			if ((self.items & IT_SHOTGUN) || (self.perms & IT_BLASTER)) {
+				self.weapon = IT_SHOTGUN;
+				W_SetCurrentAmmo(self,TRUE);
+				return;
+			}
+		}
+		forceweaponswitch(0.2);// If player has one shell left, switch to SG after SSG fire animation
+	}
+};
+
+void()	player_rc1 =	[113, player_rc2	] {
+	if (self.attack_finished > time) return;
+
+	self.weaponframe=1;
+	if (!self.button0) { player_run(); return; }
+	if (self.ammo_shells < 2 && self.classtype != CT_MONGREMLIN) { forceweaponswitch(0.2); return; }
+
+	sound(self,CHAN_WEAPON,"zerstorer/weapons/shotgn2.wav",1,ATTN_NORM);
+	W_FireRiotController();
+	if (self.perms & POW_SHOTTYMAN) self.nextthink = time + 0.05;
+};
+void()	player_rc2 =	[114, player_rc3	] {
+	if (frame_pause()) return;
+
+	self.weaponframe=2;
+	if (self.perms & POW_SHOTTYMAN) self.nextthink = time + 0.05;
+};
+void()	player_rc3 =	[115, player_rc4	] {
+	if (frame_pause()) return;
+
+	self.weaponframe=3;
+	if (self.perms & POW_SHOTTYMAN) self.nextthink = time + 0.05;
+};
+void()	player_rc4 =	[113, player_rc5	] {
+	if (frame_pause()) return;
+
+	self.weaponframe=4;
+	W_FireRiotController();
+	if (self.perms & POW_SHOTTYMAN) self.nextthink = time + 0.05;
+};
+void()	player_rc5 =	[114, player_rc6	] {
+	if (frame_pause()) return;
+	self.weaponframe=5;
+	if (self.perms & POW_SHOTTYMAN) self.nextthink = time + 0.05;
+};
+void()	player_rc6 =	[115, player_run	] {
 	if (frame_pause()) return;
 
 	self.weaponframe=6;

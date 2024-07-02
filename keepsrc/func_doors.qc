@@ -134,9 +134,49 @@ void() func_door_link = { // [FUNCTION]
 	linkdoor = self;
 	while (loopcondition)  {
 		self.owner = master; // Always point all doors in the list to the master door which is setup outside of the do/while loop
-		if (self.health) master.health = self.health; // Make sure all linked doors have the same health/targetname/message
-		if (self.targetname != "") master.targetname = self.targetname; // This is what causes all those woes of random doors opening for new mappers.  Sigh.
-		if (self.message != "") master.message = self.message;
+		if (self.health) {
+			if (master.health != 0 && master.health != self.health) {
+				dprint("\b[WARNING]\b linked doors have different health!  Master door mins: ");
+				dprint(vtos(cmins));
+				dprint(", maxs: ");
+				dprint(vtos(cmaxs));
+				dprint("vs linked door mins: ");
+				dprint(vtos(self.mins));
+				dprint(", maxs: ");
+				dprint(vtos(self.maxs));
+				dprint("\n");
+			}
+			master.health = self.health; // Make sure all linked doors have the same health/targetname/message
+		}
+		if (self.targetname != "") {
+			if (master.targetname != "" && master.targetname != self.targetname) {
+				dprint("\b[WARNING]\b linked doors have different targetname!  Master door mins: ");
+				dprint(vtos(cmins));
+				dprint(", maxs: ");
+				dprint(vtos(cmaxs));
+				dprint("vs linked door mins: ");
+				dprint(vtos(self.mins));
+				dprint(", maxs: ");
+				dprint(vtos(self.maxs));
+				dprint("\n");
+			}
+			master.targetname = self.targetname; // This is what causes all those woes of random doors opening for new mappers.  Sigh.
+		}
+
+		if (self.message != "") {
+			if (master.message != "" && master.message != self.message) {
+				dprint("\b[WARNING]\b linked doors have different messages!  Master door mins: ");
+				dprint(vtos(cmins));
+				dprint(", maxs: ");
+				dprint(vtos(cmaxs));
+				dprint("vs linked door mins: ");
+				dprint(vtos(self.mins));
+				dprint(", maxs: ");
+				dprint(vtos(self.maxs));
+				dprint("\n");
+			}
+			master.message = self.message;
+		}
 		linkdoor = find (linkdoor, classname, self.classname);
 		if (!linkdoor) { // reached end of list?
 			self.enemy = master;	// make the chain a loop
@@ -154,10 +194,20 @@ void() func_door_link = { // [FUNCTION]
 			if (EntitiesTouching(self,linkdoor)) {
 				if (linkdoor.enemy) { // The .enemy field should be empty, otherwise its linked already which is a bad situation because the chains will be corrupt
 					if ( !(linkdoor.spawnflags & DOOR_DONT_LINK)) {  // Exception: No link doors are setup to be linked to themselves!
-						dprint("\b[CROSSLINK]\b really bad situation, must fix!\n");
-						dprint("--------!----------------!-----------!---------\n");
+						dprint("\b[CROSSLINK]\b really bad situation, must fix! master classname: \n");
+						dprint(self.classname);
+						dprint("--------!----------------!-----------!---------\nlinkdoor enemy classname: ");
 						dprint(linkdoor.enemy.classname); 
 						dprint("-!----------------!---!-------------------!----\n\n");
+						dprint("Master door mins: ");
+						dprint(vtos(cmins));
+						dprint(", maxs: ");
+						dprint(vtos(cmaxs));
+						dprint("vs linked door mins: ");
+						dprint(vtos(self.mins));
+						dprint(", maxs: ");
+						dprint(vtos(self.maxs));
+						dprint("\n");
 					} // Cross link will break the lots of later functions on.  Solution - ignore the crosslink entity and carry on.
 				} else {
 					self.enemy = linkdoor; // Setup the next entity (linkdoor) in the list (self.enemy) and move self forward to the new entity (linkdoor)

@@ -4,3 +4,21 @@ wad -t QPIC ./gfx.wad ./*grapple.pcx
 If wad is not recognized, ensure that qcli (Joshua Skelly's
 Quake-CLI tools) is installed and on the path, e.g.:
 export PATH=/home/qmaster/.local/bin:$PATH
+
+Replace ./*grapple.pcx with file(s) of choice to add just the newly added/updated ones
+
+Make sure to copy and paste gfx.wad from keep/gfxsrc/gfx.wad (alongside this readme) into keep/gfx.wad
+
+
+Example session::
+=========================
+░▒▓    ~/Q/keep/gfxsrc    master *1 !101 ?31  wad -t QPIC ./gfx.wad ./*riotcntrlr.pcx
+zsh: command not found: wad
+❯ qcli --version
+zsh: command not found: qcli
+❯ export PATH=/home/qmaster/.local/bin:$PATH
+❯ wad -t QPIC ./gfx.wad ./*riotcntrlr.pcx
+Archive: gfx.wad
+  adding: ./inv2_riotcntrlr.pcx
+  adding: ./inv_riotcntrlr.pcx
+░▒▓    ~/Q/keep/gfxsrc    master *1 !102 ?32    

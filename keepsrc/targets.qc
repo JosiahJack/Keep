@@ -843,7 +843,7 @@ void() trigger_skybox = { // [ENTITY]
 	if (check_coop() == TRUE) return;
 	if (SUB_HideIfNoTargetname()) return;
 	
-	if (self.message == "") self.message = "Sky";
+	if (self.message == "") self.message = "egyptoagula"; // Use qmaster's as fallback, plus it's just pure blue other than the bottom.
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_use = trigger_skybox_use;
 	self.estate = ESTATE_ON;
