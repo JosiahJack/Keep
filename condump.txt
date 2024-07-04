@@ -50,10 +50,9 @@ Unknown command "r_part_density"
 couldn't exec autoexec.cfg
 SpawnServer: twilight
 Clearing memory
-Programs occupy 4336K.
-Mod_LoadTexinfo: 15 texture(s) missing from BSP file
+Programs occupy 4339K.
 Map has lit water
-Warning: 180240 visleafs exceeds standard limit of 8192.
+Warning: 179981 visleafs exceeds standard limit of 8192.
 "telealpha" is not a field
 [WORLDSPAWN] function started ...
 [SETUP] Drake temporary movement goal is now setup
@@ -82,18 +81,6 @@ override mdl (progs/tronyn/keyrune_water.mdl)
 [CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '2432.0 -2144.0 376.0'
 [item_keyx] with Custom override mdl (progs/tronyn/keyrune_blood.mdl)
 [CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '1724.0 -3104.0 -824.0'
-No spawn function for:
-
-EDICT 1354:
-origin         '-968.0 -2384.0 -1092.0'
-classname      weapon_riot_controller
-hitcontentsmaski bad type 8
-No spawn function for:
-
-EDICT 1354:
-origin         '-2700.0 1364.0 -1320.0'
-classname      weapon_riot_controller
-hitcontentsmaski bad type 8
 
 [DOOR] Light style (37)
 
@@ -112,68 +99,8 @@ Warning: model progs/tronyn/light4.mdl has a skin taller than 480
 [MONSTER] (friendly1) - no monster count
 [item_keyx] with Custom override mdl (progs/nehahra/bloodkey.mdl)
 1 entities inhibited
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '864.0 -3584.0 -1104.0', maxs: '896.0 -3424.0 -976.0'vs linked door mins: '864.0
- -3584.0 -1104.0', maxs: '896.0 -3424.0 -976.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-2048.0 -309.0 -1470.0', maxs: '-1995.0 -299.0 -1424.0'vs linked door mins:
-'-2038.0 -309.0 -1470.0', maxs: '-1995.0 -299.0 -1459.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-2048.0 -309.0 -1616.0', maxs: '-1995.0 -299.0 -1424.0'vs linked door mins:
-'-2048.0 -309.0 -1616.0', maxs: '-2038.0 -299.0 -1459.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-2048.0 -309.0 -1616.0', maxs: '-1995.0 -299.0 -1424.0'vs linked door mins:
-'-2048.0 -309.0 -1616.0', maxs: '-2038.0 -299.0 -1459.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-1984.0 -309.0 -1430.0', maxs: '-1936.0 -299.0 -1408.0'vs linked door mins:
-'-1984.0 -309.0 -1429.0', maxs: '-1973.0 -299.0 -1408.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-1984.0 -309.0 -1430.0', maxs: '-1936.0 -299.0 -1408.0'vs linked door mins:
-'-1984.0 -309.0 -1429.0', maxs: '-1973.0 -299.0 -1408.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-1984.0 -309.0 -1430.0', maxs: '-1936.0 -299.0 -1408.0'vs linked door mins:
-'-1984.0 -309.0 -1429.0', maxs: '-1973.0 -299.0 -1408.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-1973.0 -309.0 -1470.0', maxs: '-1920.0 -299.0 -1424.0'vs linked door mins:
-'-1973.0 -309.0 -1470.0', maxs: '-1930.0 -299.0 -1459.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-1973.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1424.0'vs linked door mins:
-'-1930.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1459.0'
-[CROSSLINK] really bad situation, must fix! master classname:
-func_door--------!----------------!-----------!---------
-linkdoor enemy classname: func_door-!----------------!---!-------------------!----
-
-Master door mins: '-1973.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1424.0'vs linked door mins:
-'-1930.0 -309.0 -1616.0', maxs: '-1920.0 -299.0 -1459.0'
 [TRIG_TELEPORT] Wrong Entity (info_teleport_destination)
-Warning: 100878 byte signon buffer exceeds QS limit of 63998.
+Warning: 100466 byte signon buffer exceeds QS limit of 63998.
 Server spawned.
 CL_EstablishConnection: connected to local
 3 demo(s) in loop
@@ -189,22 +116,20 @@ misc_tree could not fall to floor, staying put inside something else at '1186.0 
 [Model] progs/madfox/olmec1.mdl stuck at ('3356.0 120.0 -1557.0'), made non-solid.
 misc_tree could not fall to floor, staying put inside something else at '-3464.0 1386.0 209.0'
 
-FITZQUAKE 0.85 SERVER (4986 CRC)
+FITZQUAKE 0.85 SERVER (61466 CRC)
 Serverinfo packet received.
 
 
 
 Twilight of the Idols
 Using protocol 999
-Warning: 1748 models exceeds standard limit of 256 (max = 4096).
-Warning: 637 sounds exceeds standard limit of 256 (max = 2048).
-FindFile: can't find sound/tronyn/water_gate_opens
-Couldn't load sound/tronyn/water_gate_opens
+Warning: 1742 models exceeds standard limit of 256 (max = 4096).
+Warning: 639 sounds exceeds standard limit of 256 (max = 2048).
 FindFile: can't find sound/tronyn/ambient_trickle.wav
 Couldn't load sound/tronyn/ambient_trickle.wav
-Lightmap size:   3584 x 3328 (172/182 blocks)
-Lightmap memory: 45.5 MB (128.8% efficiency)
-Warning: 688 lightmaps exceeds standard limit of 64.
+Lightmap size:   3584 x 3328 (180/182 blocks)
+Lightmap memory: 45.5 MB (129.3% efficiency)
+Warning: 720 lightmaps exceeds standard limit of 64.
 FindFile: can't find gfx/env/mak_nightsky2_wind.cfg
 Sky wind config not found 'gfx/env/mak_nightsky2_wind.cfg'.
 FindFile: can't find music/track01.ogg
@@ -216,15 +141,11 @@ Programs occupy 115K.
 enginename: [ Ironwail ]
 Warning: [CL] check "FRIK_FILE" before calling strcat (csqc_hud_vanilla.csqc: Hud_Init)
 [RND_SYNC] Chaos Mode Disabled
-[Item] item_artifact_lavasuit didn't droptofloor at ('-4076.0 -1212.0 -2154.0') but was in open
-space and thus left intact.
-[Item] item_treasure didn't droptofloor at ('-2863.0 -2496.0 -1657.0') but was in open space and
-thus left intact.
 FindFile: can't find sound/tronyn/ambient_trickle.wav
 Couldn't load sound/tronyn/ambient_trickle.wav
 Sound tronyn/mana_extraction.wav not looped
-Warning: 291 static entities exceeds standard limit of 128 (max = 4096).
-Warning: 1356 efrags exceeds standard limit of 640.
+Warning: 289 static entities exceeds standard limit of 128 (max = 4096).
+Warning: 1345 efrags exceeds standard limit of 640.
 CL_SignonReply: 2
 Warning: [SV] check "DP_QC_TOKENIZE_CONSOLE" before calling tokenize_console (csqc_hudkeep.qc:
 SV_ParseClientCommand)
@@ -271,18 +192,33 @@ SV_ParseClientCommand)
 + Lightstyle compiler lights at (0)
 + DP features ( )
 --------------------------------------
+[Item] item_artifact_envirosuit didn't droptofloor at ('-2848.0 -1856.0 -470.0') but was in open
+space and thus left intact.
 CL_SignonReply: 3
-173.3 megabyte data cache
+172.0 megabyte data cache
 [INFO] Keep Mod, v1.00.1
-Warning: 15812 byte packet exceeds standard limit of 1024 (max = 64000).
+Warning: 15562 byte packet exceeds standard limit of 1024 (max = 64000).
 CL_SignonReply: 4
-Warning: 2977 visedicts exceeds standard limit of 256 (max = 16384).
+Warning: 2959 visedicts exceeds standard limit of 256 (max = 16384).
 Warning: [CL] check "FRIK_FILE" before calling strlen (csqc_hud_vanilla.csqc: Hud_DrawLargeValue)
 Warning: [CL] check "FTE_STRINGS" before calling str2chr (csqc_hud_vanilla.csqc:
 Hud_DrawLargeValue)
-Warning: 4415 edicts exceeds standard limit of 600 (max = 16384).
-[Item] item_artifact_envirosuit didn't droptofloor at ('-2848.0 -1856.0 -470.0') but was in open
-space and thus left intact.
+Warning: 4414 edicts exceeds standard limit of 600 (max = 16384).
 Gyro 2.1a (April 2007) by Matt is running...updated to 2.2a (April 2021) by Qmaster
 Tickrate (ms): 30
+Warning: [CL] check "FRIK_FILE" before calling substring (csqc_hud_vanilla.csqc:
+Hud_CoopScores_SBar)
+]impulse 9
+[Impulse 249] Weapon Cheat Command
+- Use Impulse 245 to get silver/gold keys!
+
+             Cheat Command!
+
+Warning: [CL] check "DP_QC_SINCOSSQRTPOW" before calling pow (csqc_hud_vanilla.csqc: Hud_Draw)
+Blizzard Sphere!
+Air Fist!
+Blizzard Sphere!
+Fire Scimitar!
+Vampiric Mace!
+Vampiric Mace!
 ]condump
