@@ -1333,6 +1333,7 @@
 		 1 : "Only spawn if got upgrade"
 	]
 	message(string) : "Message when picked up"
+	noise(string) : "Custom pickup Sound (def=weapons/pkup.wav)"
 	respawn_time(integer) : "Respawn time (=-1 instant)"
 	respawn_count(integer) : "Total times to respawn"
 	respawn_trig(choices) : "respawn trigger condition" = [
@@ -3455,6 +3456,10 @@
 @PointClass base(Targetname, Target) = misc_glitter : "Hexen2 Glitter Effect" [
 	speed(integer) : "Speed (def=100)"
 	height(integer) : "Height (def=50)"
+	cnt(choices) : "Active state (0 will start as on)" = [
+		-1 : "Start off"
+		1 : "On (def)"
+	]
 	count(choices) : "Palette color (0-255)(def=244)" = [
 		0 : "Light Gray"
 		1 : "Brown"

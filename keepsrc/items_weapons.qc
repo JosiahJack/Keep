@@ -118,6 +118,7 @@ void() weapon_start = { // [FUNCTION]
 	self.touch2 = weapon_touch;
 	self.bbmins = VEC_ITEM_MIN;
 	self.bbmaxs = VEC_ITEM_MAX;
+	if (self.noise == "") self.noise = "weapons/pkup.wav";
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_WEAPON;
 	if (self.netname == "") self.netname = "Weapon";
 	item_start();
@@ -407,12 +408,8 @@ void() weapon_touch = { // [FUNCTION]
 		sprint(other, "You got the ");
 		sprint(other, self.netname);
 	}
-	// weapon touch sound
-	if (self.classtype == CT_CHAINSAW) {
-		sound(other,CHAN_ITEM,"zerstorer/weapons/sawidle.wav",1,ATTN_NORM);
-	} else {
-		sound(other,CHAN_ITEM,"weapons/pkup.wav",1,ATTN_NORM);
-	}
+
+	sound(other,CHAN_ITEM,self.noise,1,ATTN_NORM);
 	sprint(other, "\n");
 	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	bound_other_ammo (other); // Make sure no ammo is over limits
@@ -555,6 +552,7 @@ void() weapon_grapple = {
 void() weapon_chainsaw = {
 	item_setupmodel(g_chainsawmodel,0);
 	self.classtype = CT_CHAINSAW;
+	self.noise = "zerstorer/weapons/sawidle.wav";
 	if (self.netname == "") self.netname = "Chainsaw";
 	weapon_start();
 };

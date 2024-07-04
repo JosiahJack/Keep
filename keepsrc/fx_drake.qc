@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 2
-// Function count: 35
+// Function count: 36
 //
 // Implements: Special Effects from the Drake Mod (lots of stuff!)
 //
@@ -180,6 +180,17 @@ void() make_glitter = { // [FUNCTION]
     self.think          = make_glitter;
 };
 
+void() glitter_toggle = { // [FUNCTION]
+    self.cnt = !self.cnt;
+    if (self.cnt) {
+        self.nextthink = time + self.wait;
+        self.think = make_glitter;
+    } else {
+        self.think = SUB_Null;
+        self.nextthink = 0;
+    }
+};
+
 //============
 // --> QUAKED misc_glitter (0 .5 .8) (-8 -8 -8) (8 8 8)
 // Heretic-style teleglitter generator.  Use on exit or teleport pads.
@@ -208,8 +219,15 @@ void() misc_glitter = { // [ENTITY]
     if (self.angles != '0 0 0')	SetMovedir();
     else self.movedir = '0 0 1'; // Straight up
 
-    self.nextthink  = time + 1;
-    self.think      = make_glitter;
+    if (self.cnt < 0) {
+        self.think = SUB_Null;
+        self.nextthink = 0;
+    } else {
+        self.cnt = TRUE; // Start on by default.
+        self.nextthink = time + random();
+        self.think = make_glitter;
+    }
+    self.use = glitter_toggle;
 };
 
 // Creates a glitter spawner.  Called by spawn functions of other entities
