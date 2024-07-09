@@ -219,7 +219,9 @@ void() misc_glitter = { // [ENTITY]
     if (self.angles != '0 0 0')	SetMovedir();
     else self.movedir = '0 0 1'; // Straight up
 
+    if (self.cnt < 0 && self.targetname == "") objerror("misc_glitter: Setup as start off, but no targetname!");
     if (self.cnt < 0) {
+        self.cnt = 0;
         self.think = SUB_Null;
         self.nextthink = 0;
     } else {

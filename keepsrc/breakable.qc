@@ -1095,7 +1095,9 @@ void() func_breakable = { // [ENTITY]
 	if (self.spawnflags & BREAK_STARTOFF) self.use = breakable_on;
 	else breakable_on();
 	if (self.targetname == "" && self.spawnflags & BREAK_NOSHOOT) {
-		dprint("\b[BRKMDL]\b Cannot be triggered or shoot, breaking now.\n");
+		dprint("\b[BRKMDL]\b Cannot be triggered or shot at ");
+		dprint(vtos(self.mins));
+		dprint(", breaking now.\n");
 		funcbreakable_use();
 	}
 };

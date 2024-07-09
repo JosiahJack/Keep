@@ -4734,7 +4734,7 @@
 		1 : "Toggle" : 0
 		2 : "Start ON" : 0
 	]
-	rotate(integer) : "Rotation Rate"
+	rotate(integer) : "Rotation Rate as speed on each axis (y z x)"
 	speed(integer) : "Spin up time"
 ]
 @PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) = path_rotate : "Rotating path corner" [

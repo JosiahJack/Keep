@@ -530,11 +530,13 @@ float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
 	targ.health = targ.health + t_healamount;
 	if (!ignore && targ.health > targ.max_health) targ.health = targ.max_health;
 	if (targ.health > targ.mega_health) targ.health = targ.mega_health;
-	dprint("T_Heal succesfully healed from ");
-	dprint(ftos(oldh));
-	dprint(", to ");
-	dprint(ftos(targ.health));
-	dprint("\n");
+	if (developer > 1) {
+		dprint("T_Heal succesfully healed from ");
+		dprint(ftos(oldh));
+		dprint(", to ");
+		dprint(ftos(targ.health));
+		dprint("\n");
+	}
 	return TRUE;
 };
 

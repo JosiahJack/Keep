@@ -904,5 +904,24 @@
 // entity 76
 {
 "classname" "item_artifact_optimizer"
-"origin" "-32 -176 88"
+"origin" "-176 -160 88"
+"target" "glitter1"
+}
+// entity 77
+{
+"classname" "misc_glitter"
+"origin" "-72 -160 72"
+}
+// entity 78
+{
+"classname" "misc_glitter"
+"origin" "16 -160 72"
+"cnt" "-1"
+"targetname" "glitter1"
+}
+// entity 79
+{
+"classname" "misc_glitter"
+"origin" "-176 -160 72"
+"targetname" "glitter1"
 }
