@@ -8,13 +8,11 @@ ConvertTextures: WARNING: Texture  duplicated
 ConvertTextures: WARNING: Texture  duplicated
 ConvertTextures: WARNING: Texture  duplicated
 ---- LoadEntities ----
-77 entities read, 9 are lights.
-WARNING: -gate value greater than 1 may cause artifacts
+80 entities read, 9 are lights.
 
 --- Options Summary ---
     "threads" was set to "12" (from command line)
     "verbose" was set to "1" (from command line)
-    "gate" was set to "1.500000" (from command line)
 
 running with 12 thread(s)
 low priority not compiled into this version
@@ -46,10 +44,10 @@ lightdatasize: 23932
 Writing test_weapons.lit
 0 switchable light styles (32 max)
 Writing test_weapons.bsp as Quake BSP2 bsp2
-0.266s seconds elapsed
+0.253s seconds elapsed
 
 stats:
-0.26350316063172835 lights tested, 0.2488508301218485 hits per sample point
+0.2798668090553923 lights tested, 0.2635694907834254 hits per sample point
 0 surface lights tested, 0 hits per sample point
 0 bounce lights tested, 0 hits per sample point
 0 empty lightmaps

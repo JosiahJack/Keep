@@ -6,7 +6,7 @@ Output file: test_weapons.bsp
 *** WARNING 06: No info_player_deathmatch entities in level
           258 faces
            43 brushes
-           77 entities
+           80 entities
            17 unique texnames
           144 texinfo
 
@@ -62,7 +62,7 @@ Wrote test_weapons.bsp
            21 textures         968488
               lightdata             0
               visdata               0
-              entdata            6486
+              entdata            6728
 
-0.074 seconds elapsed
-Peak memory usage: 2678809 (2.6M)
+0.031 seconds elapsed
+Peak memory usage: 2662715 (2.5M)
