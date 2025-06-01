@@ -1836,8 +1836,14 @@
 	spawnflags(Flags) = [
 		2 : "A Frame" : 0
 		16: "Mod Check" : 0
+		32: "Static" : 0
+		64: "Start Off" : 0
 	]
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
+	alphastart(integer) : "Alpha Fade bmodel (range 0.01-1.00) = Starting value"
+	waitmin(integer) : "Alpha Fade Time (def=1s) of bmodel (even if partial)"
+	lip(integer) : "Alpha Fade Direction -1=Down(1->0), 1=Up(0->1), Def=UP"
+	delay(integer) : "Alpha Fade delay to start of fading (def=0)"
 ]
 
 @SolidClass base(FuncItems) = func_nodraw : "Invisible Wall" [
@@ -1859,8 +1865,14 @@
 @SolidClass base(FuncItems, FuncLighting) = func_illusionary : "Wall Illusionary" [
 	spawnflags(Flags) = [
 		2 : "A Frame" : 0
+		32: "Static" : 0
+		64: "Start Off" : 0
 	]
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
+	alphastart(integer) : "Alpha Fade bmodel (range 0.01-1.00) = Starting value"
+	waitmin(integer) : "Alpha Fade Time (def=1s) of bmodel (even if partial)"
+	lip(integer) : "Alpha Fade Direction -1=Down(1->0), 1=Up(0->1), Def=UP"
+	delay(integer) : "Alpha Fade delay to start of fading (def=0)"
 ]
 @SolidClass base(FuncItems, FuncLighting) = func_episodegate : "Episode Gate" [
 	spawnflags(Flags) = [

@@ -135,8 +135,8 @@ void() item_treasure = { // [ENTITY]
 	self.classtype = CT_HEALROT;
 	self.respawn_effect = TRUE;
 	self.respawn_ofs = '0 0 16';
-	self.bbmins = VEC_ITEM_MIN;
-	self.bbmaxs = '16 16 56';
+	self.bbmins = VEC_HULL_MIN;
+	self.bbmaxs = VEC_HULL_MAX;
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_HEALTH;
 	item_setupnoise("drake/items/treasure.wav");
 

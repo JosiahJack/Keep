@@ -1,228 +1,1025 @@
-UDP Initialized
-Exe: 19:39:49 May  5 2023 (Linux 64-bit)
-384.0 megabyte heap
+model 1060: progs/ad171/gib_spidbodyg.mdl
+model 1061: progs/ad171/proj_spider.mdl
+model 1062: progs/ad171/mon_spiderb.mdl
+model 1063: progs/ad171/h_spiderb.mdl
+model 1064: progs/ad171/gib_spidlegb.mdl
+model 1065: progs/ad171/gib_spidbodyb.mdl
+model 1066: progs/tronyn/tree4.mdl
+model 1067: progs/hrimfaxi/flag.mdl
+model 1068: progs/tronyn/light4.mdl
+model 1069: progs/hrimfaxi/flagie.mdl
+model 1070: progs/hrimfaxi/flag1.mdl
+model 1071: progs/ad171/artifact_pent.mdl
+model 1072: progs/ad171/misc_tree.mdl
+model 1073: progs/suit2.mdl
+model 1074: progs/ad181/artifact_blastbelt.mdl
+model 1075: progs/aoa/ammo_bloodcrystals_big.mdl
+model 1076: progs/tronyn/equipment11.mdl
+model 1077: progs/madfox/plantrom.mdl
+model 1078: progs/ad171/mon_shambler.mdl
+model 1079: progs/ad171/h_shambler.mdl
+model 1080: progs/ad171/gib_blclaw1.mdl
+model 1081: progs/ad171/gib_blclaw2.mdl
+model 1082: progs/ad171/gib_blfoot1.mdl
+model 1083: progs/ad171/gib_blfoot2.mdl
+model 1084: progs/ad171/gib_shclaw1.mdl
+model 1085: progs/ad171/gib_shclaw2.mdl
+model 1086: progs/ad171/gib_shfoot1.mdl
+model 1087: progs/ad171/gib_shfoot2.mdl
+model 1088: progs/ad171/proj_shamlit.mdl
+model 1089: progs/s_light.mdl
+model 1090: progs/drake/shambler.mdl
+model 1091: progs/drake/h_shams.mdl
+model 1092: progs/madfox/mon_octa_extra.mdl
+model 1093: progs/madfox/wink.spr
+model 1094: progs/taov/bench.mdl
+model 1095: progs/tronyn/light2.mdl
+model 1096: progs/anevil/lion.mdl
+model 1097: progs/heretic2/mon_ogle.mdl
+model 1098: progs/madfox/h_ogle.mdl
+model 1099: progs/nehahra/candleth.mdl
+model 1100: progs/tronyn/bigflag_htic2.mdl
+model 1101: progs/ad171/misc_lantern.mdl
+model 1102: progs/ad171/g_nail2.mdl
+model 1103: progs/drake/g_mirv.mdl
+model 1104: progs/rogue/lantern.mdl
+model 1105: progs/extras_r5/hydra.mdl
+model 1106: progs/extras_r5/hydragib.mdl
+model 1107: progs/ad171/mon_fish.mdl
+model 1108: progs/ad171/mon_eel.mdl
+model 1109: progs/ad171/h_eel.mdl
+model 1110: progs/ad171/eelgib.mdl
+model 1111: progs/ad171/gib1.mdl
+model 1112: progs/ad171/proj_plasma.mdl
+model 1113: progs/ad171/proj_plasmagrn.mdl
+model 1114: progs/ad171/mon_minotaur.mdl
+model 1115: progs/ad171/h_minotaur.mdl
+model 1116: progs/ad171/proj_minoball.mdl
+model 1117: progs/ad171/proj_minoplasma.mdl
+model 1118: progs/ad171/proj_minopoison.mdl
+model 1119: progs/ad171/gib_minoclaw1.mdl
+model 1120: progs/ad171/gib_minoclaw2.mdl
+model 1121: progs/ad171/gib_minoleg1.mdl
+model 1122: progs/ad171/gib_minoleg2.mdl
+model 1123: progs/ad171/mon_shalrath.mdl
+model 1124: progs/ad171/h_shalrath.mdl
+model 1125: progs/ad171/proj_shal.mdl
+model 1126: progs/ad171/proj_shalhome.mdl
+model 1127: progs/ad171/proj_shalball.mdl
+model 1128: progs/ad171/proj_shalegg.mdl
+model 1129: progs/ad171/mon_vorelingp.mdl
+model 1130: progs/ad171/gib_vorelegp.mdl
+model 1131: progs/ad171/proj_voreling.mdl
+model 1132: progs/ad171/mon_voreling.mdl
+model 1133: progs/q15/gib_voreleg.mdl
+model 1134: progs/rogue/mon_morph_gr.mdl
+model 1135: progs/rogue/mon_morph_az.mdl
+model 1136: progs/rogue/mon_morph_eg.mdl
+model 1137: progs/laser.mdl
+model 1138: progs/mon_dog.mdl
+model 1139: progs/h_dog.mdl
+model 1140: progs/q15/gib_dogleg.mdl
+model 1141: progs/qmaster/mon_tarbaby.mdl
+model 1142: progs/ad171/mon_lostsoul.mdl
+model 1143: progs/anevil/caesar.mdl
+model 1144: progs/ad181/artifact_lavashield.mdl
+model 1145: progs/heretic2/objects_banner_onpole.mdl
+model 1146: progs/drake/necro.mdl
+model 1147: progs/drake/h_necro.mdl
+model 1148: progs/drake/r_bolt.mdl
+model 1149: progs/drake/nec_rune.mdl
+model 1150: progs/drake/nec_rod1.mdl
+model 1151: progs/drake/nec_rod2.mdl
+model 1152: progs/drake/nec_rod3.mdl
+model 1153: progs/drake/ice.mdl
+model 1154: progs/drake/k_ball.mdl
+model 1155: progs/drake/s_wave2.spr
+model 1156: progs/drake/akarrow.mdl
+model 1157: progs/drake/hk_golem.mdl
+model 1158: progs/drake/h_hkolem.mdl
+model 1159: progs/drake/st_gib1.mdl
+model 1160: progs/drake/st_gib2.mdl
+model 1161: progs/redfield/dh_statue.mdl
+model 1162: progs/madfox/shiva.mdl
+model 1163: progs/redfield/moonglobe.mdl
+model 1164: progs/redfield/bats.mdl
+model 1165: progs/tronyn/statue19.mdl
+model 1166: progs/tronyn/warbanner.mdl
+model 1167: progs/tronyn/statue8.mdl
+model 1168: progs/tronyn/statue10.mdl
+model 1169: progs/tronyn/equipment7.mdl
+model 1170: progs/madfox/pezombie.mdl
+model 1171: progs/tronyn/statue5.mdl
+model 1172: progs/rogue/wrath.mdl
+model 1173: progs/drake/w_ball.mdl
+model 1174: progs/rogue/wrthgib1.mdl
+model 1175: progs/rogue/wrthgib2.mdl
+model 1176: progs/rogue/wrthgib3.mdl
+model 1177: progs/tronyn/misc_sk-throne.mdl
+model 1178: progs/anevil/crown.mdl
+model 1179: progs/tronyn/barrel6.mdl
+model 1180: progs/tintin/mushroom16.mdl
+model 1181: progs/tintin/mushroom4.mdl
+model 1182: progs/tintin/mushroom11.mdl
+model 1183: progs/madfox/rope01.mdl
+model 1184: progs/tronyn/misc_throne.mdl
+model 1185: progs/drake/dr1_head.mdl
+model 1186: progs/drake/dr1_lw.mdl
+model 1187: progs/drake/dr1_rw.mdl
+model 1188: progs/drake/dr1_tail.mdl
+model 1189: progs/drake/dragon1.mdl
+model 1190: progs/drake/plasma.mdl
+model 1191: progs/drake/dr2_head.mdl
+model 1192: progs/drake/dr2_lw.mdl
+model 1193: progs/drake/dr2_rw.mdl
+model 1194: progs/drake/dr2_tail.mdl
+model 1195: progs/drake/dragon2.mdl
+model 1196: maps/ad_brk/glass01.bsp
+model 1197: maps/ad_brk/glass02.bsp
+model 1198: maps/ad_brk/glass03.bsp
+model 1199: maps/ad_brk/glass04.bsp
+model 1200: progs/tronyn/statue2alt.mdl
+model 1201: progs/madfox/hel_statue.mdl
+model 1202: progs/ad171/mon_skullwiz.mdl
+model 1203: progs/ad171/proj_skullwiz.mdl
+model 1204: progs/ad171/proj_skullwizp.mdl
+model 1205: progs/ad171/proj_skullball.mdl
+model 1206: progs/ad171/s_burst_poison.spr
+model 1207: progs/ad171/h_skullwiz.mdl
+model 1208: progs/ad171/w_skullbook.mdl
+model 1209: progs/heretic2/objects_barrel_normal.mdl
+model 1210: progs/madfox/chaosorb.mdl
+model 1211: progs/tronyn/light3.mdl
+model 1212: progs/gib2.mdl
+model 1213: progs/gib3.mdl
+model 1214: progs/tronyn/bust6.mdl
+model 1215: progs/ad171/s_dotmed_grn.spr
+model 1216: progs/ad171/s_dotmed_blue.spr
+model 1217: progs/ad171/s_dotmed_grey.spr
+model 1218: progs/ad171/s_dotmed_yell.spr
+model 1219: progs/ad171/s_dotmed_red.spr
+model 1220: progs/ad171/s_dotmed_purp.spr
+model 1221: maps/ad_brk/wood01.bsp
+model 1222: maps/ad_brk/wood02.bsp
+model 1223: maps/ad_brk/wood03.bsp
+model 1224: maps/ad_brk/wood04.bsp
+model 1225: progs/quoth/keyeye.mdl
+model 1226: progs/tronyn/short01.mdl
+model 1227: progs/madfox/statue.mdl
+model 1228: progs/quoth/edie.mdl
+model 1229: progs/quoth/wreckage.mdl
+model 1230: progs/ad171/gib_metal1.mdl
+model 1231: progs/ad171/gib_metal3.mdl
+model 1232: progs/drake/h_vomit.mdl
+model 1233: progs/drake/tar_gib.mdl
+model 1234: progs/drake/vomitus.mdl
+model 1235: progs/nehahra/wraith.mdl
+model 1236: progs/nehahra/wr_spike.mdl
+model 1237: progs/nehahra/soul.mdl
+model 1238: progs/drake/v_spike.mdl
+model 1239: progs/ad171/key_silver.mdl
+sound 1: weapons/r_exp3.wav
+sound 2: weapons/rocket1i.wav
+sound 3: weapons/sgun1.wav
+sound 4: weapons/guncock.wav
+sound 5: ad171/weapons/sg2.wav
+sound 6: weapons/ric1.wav
+sound 7: weapons/ric2.wav
+sound 8: weapons/ric3.wav
+sound 9: weapons/spike2.wav
+sound 10: weapons/tink1.wav
+sound 11: weapons/grenade.wav
+sound 12: ad171/weapons/gl_loadshort.wav
+sound 13: weapons/bounce.wav
+sound 14: weapons/shotgn2.wav
+sound 15: ad171/weapons/ssg2.wav
+sound 16: zerstorer/weapons/shotgn2.wav
+sound 17: ad171/weapons/plasma_fire.wav
+sound 18: quoth/weapons/plasexpl.wav
+sound 19: ad171/weapons/nofire.wav
+sound 20: ad171/weapons/resist_rocket.wav
+sound 21: demon/dland2.wav
+sound 22: misc/h2ohit1.wav
+sound 23: items/itembk2.wav
+sound 24: player/plyrjmp8.wav
+sound 25: player/land.wav
+sound 26: player/land2.wav
+sound 27: player/drown1.wav
+sound 28: player/drown2.wav
+sound 29: player/gasp1.wav
+sound 30: player/gasp2.wav
+sound 31: player/h2odeath.wav
+sound 32: misc/null.wav
+sound 33: misc/talk.wav
+sound 34: player/teledth1.wav
+sound 35: misc/r_tele1.wav
+sound 36: misc/r_tele2.wav
+sound 37: misc/r_tele3.wav
+sound 38: misc/r_tele4.wav
+sound 39: misc/r_tele5.wav
+sound 40: weapons/lock4.wav
+sound 41: weapons/pkup.wav
+sound 42: items/armor1.wav
+sound 43: weapons/lhit.wav
+sound 44: weapons/lstart.wav
+sound 45: ad171/weapons/shellc.wav
+sound 46: items/damage3.wav
+sound 47: ad171/items/nailp3.wav
+sound 48: items/protect3.wav
+sound 49: ad181/items/blastbelt3.wav
+sound 50: ad181/items/lavashield3.wav
+sound 51: misc/power.wav
+sound 52: player/gib.wav
+sound 53: player/udeath.wav
+sound 54: player/tornoff2.wav
+sound 55: player/pain1.wav
+sound 56: player/pain2.wav
+sound 57: player/pain3.wav
+sound 58: player/pain4.wav
+sound 59: player/pain5.wav
+sound 60: player/pain6.wav
+sound 61: player/death1.wav
+sound 62: player/death2.wav
+sound 63: player/death3.wav
+sound 64: player/death4.wav
+sound 65: player/death5.wav
+sound 66: ad171/weapons/axe_swoosh1.wav
+sound 67: ad171/weapons/axe_swoosh2.wav
+sound 68: player/axhit1.wav
+sound 69: player/axhit2.wav
+sound 70: ad171/weapons/axe_wood.wav
+sound 71: ad171/weapons/axe_glass.wav
+sound 72: ad171/weapons/axe_metal.wav
+sound 73: ne_ruins/physics/sgrenhit2.wav
+sound 74: ad171/gibs/gibheavy1.wav
+sound 75: ad171/gibs/gibheavy2.wav
+sound 76: player/h2ojump.wav
+sound 77: player/slimbrn2.wav
+sound 78: player/inh2o.wav
+sound 79: player/inlava.wav
+sound 80: misc/outwater.wav
+sound 81: player/lburn1.wav
+sound 82: player/lburn2.wav
+sound 83: misc/water1.wav
+sound 84: misc/water2.wav
+sound 85: ad171/player/heartbeat.wav
+sound 86: ad171/gibs/gib1.wav
+sound 87: ad171/gibs/gib3.wav
+sound 88: ad171/gibs/gib5.wav
+sound 89: ad171/gibs/gibhit1.wav
+sound 90: ad171/gibs/gibhit2.wav
+sound 91: ad171/gibs/gibhit3.wav
+sound 92: ad171/gibs/gibhit4.wav
+sound 93: ad171/gibs/gibhit5.wav
+sound 94: ad171/gibs/gibstone1.wav
+sound 95: ad171/gibs/gibstone3.wav
+sound 96: ad171/gibs/gibstone5.wav
+sound 97: quoth/impact/metal_i1.wav
+sound 98: quoth/impact/metal_i2.wav
+sound 99: quoth/impact/metal_i3.wav
+sound 100: ad171/gibs/gibmetala.wav
+sound 101: ad171/gibs/gibmetalb.wav
+sound 102: ad171/gibs/gibchain.wav
+sound 103: ad171/gibs/gibwood.wav
+sound 104: ad171/gibs/gibacid.wav
+sound 105: ad171/gibs/stonedeath.wav
+sound 106: ad171/steps/slow1.wav
+sound 107: ad171/steps/slow2.wav
+sound 108: ad171/steps/slow3.wav
+sound 109: ad171/steps/slow4.wav
+sound 110: ad171/steps/slow5.wav
+sound 111: ad171/steps/drag1.wav
+sound 112: ad171/steps/drag2.wav
+sound 113: ad171/steps/drag3.wav
+sound 114: ad171/steps/drag4.wav
+sound 115: ad171/steps/drag5.wav
+sound 116: ad171/steps/light1.wav
+sound 117: ad171/steps/light2.wav
+sound 118: ad171/steps/light3.wav
+sound 119: ad171/steps/light4.wav
+sound 120: ad171/steps/light5.wav
+sound 121: ad171/steps/medium1.wav
+sound 122: ad171/steps/medium2.wav
+sound 123: ad171/steps/medium3.wav
+sound 124: ad171/steps/medium4.wav
+sound 125: ad171/steps/medium5.wav
+sound 126: ad171/steps/heavy1.wav
+sound 127: ad171/steps/heavy2.wav
+sound 128: ad171/steps/heavy3.wav
+sound 129: ad171/steps/heavy4.wav
+sound 130: ad171/steps/heavy5.wav
+sound 131: ad171/steps/large1.wav
+sound 132: ad171/steps/large2.wav
+sound 133: ad171/steps/large3.wav
+sound 134: ad171/steps/large4.wav
+sound 135: ad171/steps/large5.wav
+sound 136: ad171/steps/giant1.wav
+sound 137: ad171/steps/giant2.wav
+sound 138: ad171/steps/giant3.wav
+sound 139: ad171/steps/giant4.wav
+sound 140: ad171/steps/giant5.wav
+sound 141: aoa/melee_meat.wav
+sound 142: aoa/axhit3.wav
+sound 143: aoa/acidhit.wav
+sound 144: aoa/radius.wav
+sound 145: aoa/rapier_meat.wav
+sound 146: aoa/rapier_meat2.wav
+sound 147: aoa/rapier_meat3.wav
+sound 148: ad171/seeker/explode_major.wav
+sound 149: aoa/staffshot.wav
+sound 150: aoa/swing2.wav
+sound 151: aoa/heartbeat.wav
+sound 152: aoa/heal.wav
+sound 153: aoa/drainhealth.wav
+sound 154: aoa/iceattack.wav
+sound 155: aoa/vortex.wav
+sound 156: aoa/sanguinator_atk1.wav
+sound 157: aoa/sanguinator_atk2.wav
+sound 158: aoa/sanguinator_atk3.wav
+sound 159: blob/hit1.wav
+sound 160: kurok/weapons/ax1.wav
+sound 161: hknight/hit.wav
+sound 162: shambler/sboom.wav
+sound 163: aoa/rockattack.wav
+sound 164: aoa/fastboulder.wav
+sound 165: aoa/slowboulder.wav
+sound 166: aoa/flakshot.wav
+sound 167: aoa/hhs.wav
+sound 168: aoa/mildarmor.wav
+sound 169: weapons/agfire.wav
+sound 170: weapons/agfail.wav
+sound 171: weapons/agwater.wav
+sound 172: weapons/agwfail.wav
+sound 173: hipnotic/items/empathy2.wav
+sound 174: hipnotic/items/wetsuit.wav
+sound 175: rogue/shield/hit.wav
+sound 176: rogue/shield/fadeout.wav
+sound 177: rogue/belt/use.wav
+sound 178: rogue/belt/fadeout.wav
+sound 179: ad171/weapons/crossbow_fire.wav
+sound 180: ad171/weapons/bolt_hit2.wav
+sound 181: ad171/weapons/bolt_hit3.wav
+sound 182: hipnotic/weapons/laserric.wav
+sound 183: hipnotic/weapons/laserg.wav
+sound 184: hipnotic/weapons/mjolslap.wav
+sound 185: hipnotic/weapons/mjolhit.wav
+sound 186: hipnotic/weapons/mjoltink.wav
+sound 187: hipnotic/weapons/proxwarn.wav
+sound 188: hipnotic/weapons/proxbomb.wav
+sound 189: hipnotic/misc/quake.wav
+sound 190: hipnotic/misc/quakeend.wav
+sound 191: enforcer/enfstop.wav
+sound 192: rogue/weapons/snail.wav
+sound 193: rogue/plasma/explode.wav
+sound 194: rogue/plasma/fire.wav
+sound 195: rogue/plasma/flight.wav
+sound 196: quoth/items2/trinend.wav
+sound 197: quoth/items2/crosend.wav
+sound 198: quoth/items2/crosuse.wav
+sound 199: items/inv3.wav
+sound 200: items/inv2.wav
+sound 201: items/suit2.wav
+sound 202: drake/weapons/nova.wav
+sound 203: drake/weapons/zap1.wav
+sound 204: drake/weapons/zap2.wav
+sound 205: drake/weapons/mirv2.wav
+sound 206: drake/items/tomepow.wav
+sound 207: drake/items/tomepow2.wav
+sound 208: hknight/attack1.wav
+sound 209: items/inv1.wav
+sound 210: items/damage.wav
+sound 211: items/protect.wav
+sound 212: items/suit.wav
+sound 213: ad171/items/sharp.wav
+sound 214: ad171/items/nailp.wav
+sound 215: ad181/items/lavashield1.wav
+sound 216: ad181/items/blastbelt1.wav
+sound 217: ad181/items/jumpboots1.wav
+sound 218: ad171/items/wetsuit3out.wav
+sound 219: hipnotic/items/wetoff.wav
+sound 220: items/damage2.wav
+sound 221: ad171/items/sharp2.wav
+sound 222: items/protect2.wav
+sound 223: ad171/items/nailp2.wav
+sound 224: ad171/items/sharp3.wav
+sound 225: ad171/nour/idle1.wav
+sound 226: drake/weapons/shatter.wav
+sound 227: zerstorer/cube/bc_gulp.wav
+sound 228: zerstorer/cube/bc_attck.wav
+sound 229: zerstorer/gibfnt/gf_plop.wav
+sound 230: boss1/out1.wav
+sound 231: zerstorer/trog/bigboom.wav
+sound 232: zerstorer/weapons/sawguts.wav
+sound 233: ambience/thunder1.wav
+sound 234: zerstorer/ambience/thunder2.wav
+sound 235: drake/weapons/axhit.wav
+sound 236: nehahra/player/flight.wav
+sound 237: zerstorer/ambience/wingend.wav
+sound 238: shambler/smack.wav
+sound 239: drake/weapons/chain1.wav
+sound 240: drake/items/reflect3.wav
+sound 241: zombie/z_hit.wav
+sound 242: zerstorer/weapons/stunfire.wav
+sound 243: drake/weapons/clang.wav
+sound 244: drake/weapons/axhitwal.wav
+sound 245: ad171/weapons/bolt_hit1.wav
+sound 246: ad171/weapons/bolt_hit4.wav
+sound 247: enforcer/enfire.wav
+sound 248: knight/sword1.wav
+sound 249: kinn/shuffler/expsmall.wav
+sound 250: ad171/weapons/sword1a.wav
+sound 251: ad171/weapons/sword1b.wav
+sound 252: ad171/weapons/sword2a.wav
+sound 253: ad171/weapons/sword2b.wav
+sound 254: weapons/axe_flesh.wav
+sound 255: ad181/items/blastbelt2.wav
+sound 256: ad181/items/lavashield2.wav
+sound 257: ad181/items/jumpboots3a.wav
+sound 258: ad181/items/jumpboots3b.wav
+sound 259: ad181/items/jumpboots3c.wav
+sound 260: drake/misc/dsslop.wav
+sound 261: rrp/misc/spark.wav
+sound 262: drake/weapons/icewall.wav
+sound 263: drake/necro/att_a.wav
+sound 264: drake/necro/att_a2.wav
+sound 265: rogue/sphere/sphere.wav
+sound 266: drake/bane/thunder.wav
+sound 267: tronyn/lightning_component_electrified.wav
+sound 268: tronyn/lightning_rod_electrified.wav
+sound 269: tronyn/lightning_strike.wav
+sound 270: tronyn/lightning_blast.wav
+sound 271: rogue/belt/pickup.wav
+sound 272: tronyn/thunder4.wav
+sound 273: tronyn/pickup_mjolnir.wav
+sound 274: zerstorer/weapons/sawidle.wav
+sound 275: zerstorer/weapons/sawatck.wav
+sound 276: zerstorer/weapons/sawridle.wav
+sound 277: drake/weapons/xbowdraw.wav
+sound 278: drake/weapons/icehit.wav
+sound 279: drake/weapons/freeze.wav
+sound 280: doors/stndr2.wav
+sound 281: doors/stndr1.wav
+sound 282: doors/runetry.wav
+sound 283: doors/runeuse.wav
+sound 284: items/r_item1.wav
+sound 285: ad171/statue/idle1.wav
+sound 286: ad171/statue/idle2.wav
+sound 287: rogue/statue/idle.wav
+sound 288: knight/idle.wav
+sound 289: rogue/statue/see.wav
+sound 290: rogue/statue/pain.wav
+sound 291: rogue/statue/death.wav
+sound 292: ad171/statue/sight.wav
+sound 293: knight/ksight.wav
+sound 294: knight/khurt.wav
+sound 295: knight/kdeath.wav
+sound 296: knight/sword2.wav
+sound 297: wizard/widle1.wav
+sound 298: wizard/widle2.wav
+sound 299: wizard/wdeath.wav
+sound 300: wizard/wpain.wav
+sound 301: wizard/hit.wav
+sound 302: wizard/wattack.wav
+sound 303: wizard/wsight.wav
+sound 304: anevil/wizboss/cwhit.wav
+sound 305: anevil/wizboss/wattack.wav
+sound 306: anevil/wizboss/wdeath.wav
+sound 307: anevil/wizboss/widle1.wav
+sound 308: anevil/wizboss/widle2.wav
+sound 309: anevil/wizboss/wpain.wav
+sound 310: anevil/wizboss/wsight.wav
+sound 311: doors/drclos4.wav
+sound 312: doors/doormv1.wav
+sound 313: ogre/ogidle.wav
+sound 314: ogre/ogidle2.wav
+sound 315: ogre/ogdth.wav
+sound 316: ogre/ogpain1.wav
+sound 317: ogre/ogdrag.wav
+sound 318: ogre/ogsawatk.wav
+sound 319: ogre/ogwake.wav
+sound 320: xmas/snowman/nail_fire.wav
+sound 321: ad171/ogre/ogrefish_out.wav
+sound 322: ad171/ogre/ogrefish_in.wav
+sound 323: ad171/ogre/ogrefish_idle.wav
+sound 324: ad171/ogre/ogrefish_flappy.wav
+sound 325: drake/archer/arrow1.wav
+sound 326: drake/archer/arrow2.wav
+sound 327: drake/archer/arrow3.wav
+sound 328: drake/archer/arrowbrk.wav
+sound 329: drake/archer/arrowg.wav
+sound 330: drake/archer/draw.wav
+sound 331: soldier/death1.wav
+sound 332: soldier/idle.wav
+sound 333: soldier/pain1.wav
+sound 334: soldier/pain2.wav
+sound 335: soldier/sight1.wav
+sound 336: drake/goblin/death1.wav
+sound 337: drake/goblin/death2.wav
+sound 338: drake/goblin/idle1.wav
+sound 339: drake/goblin/idle2.wav
+sound 340: drake/goblin/pain1.wav
+sound 341: drake/goblin/pain2.wav
+sound 342: drake/goblin/sight1.wav
+sound 343: drake/goblin/sight2.wav
+sound 344: drake/goblin/sight3.wav
+sound 345: drake/goblin/sight4.wav
+sound 346: items/r_item2.wav
+sound 347: hknight/idle.wav
+sound 348: hknight/pain1.wav
+sound 349: hknight/death1.wav
+sound 350: hknight/sight1.wav
+sound 351: hknight/slash1.wav
+sound 352: hknight/grunt.wav
+sound 353: drake/archer/arrowr.wav
+sound 354: drake/archer/death.wav
+sound 355: drake/archer/growl.wav
+sound 356: drake/archer/pain.wav
+sound 357: drake/archer/sight.wav
+sound 358: drake/archer/crash.wav
+sound 359: drake/archer/death2.wav
+sound 360: drake/archer/growl2.wav
+sound 361: drake/archer/growl3.wav
+sound 362: drake/archer/pain2.wav
+sound 363: drake/archer/sight2.wav
+sound 364: hexen2/weapons/explode.wav
+sound 365: quoth/dlord/death.wav
+sound 366: quoth/dlord/pain.wav
+sound 367: quoth/dlord/sight.wav
+sound 368: quoth/dlord/idle.wav
+sound 369: quoth/dguard/slhit.wav
+sound 370: quoth/dguard/slmiss1.wav
+sound 371: quoth/dguard/slmiss2.wav
+sound 372: q15/warlord/attack1.wav
+sound 373: q15/warlord/attack2.wav
+sound 374: q15/warlord/attack3.wav
+sound 375: q15/warlord/death1.wav
+sound 376: q15/warlord/pain1.wav
+sound 377: q15/warlord/pain2.wav
+sound 378: q15/warlord/slash1.wav
+sound 379: q15/warlord/growl.wav
+sound 380: q15/warlord/ram.wav
+sound 381: q15/warlord/throw.wav
+sound 382: q15/warlord/fall.wav
+sound 383: q15/warlord/homing.wav
+sound 384: q15/warlord/homing_shot.wav
+sound 385: q15/warlord/homing_pain.wav
+sound 386: q15/warlord/homing_touch.wav
+sound 387: drake/enforcer/e_idle.wav
+sound 388: drake/enforcer/e_sight1.wav
+sound 389: drake/enforcer/e_sight2.wav
+sound 390: drake/enforcer/e_sight3.wav
+sound 391: drake/enforcer/e_pain1.wav
+sound 392: drake/enforcer/e_death.wav
+sound 393: quoth/impact/glass_bk.wav
+sound 394: quoth/impact/glass_i1.wav
+sound 395: quoth/impact/glass_i2.wav
+sound 396: quoth/impact/glass_i3.wav
+sound 397: quoth/impact/glass_i4.wav
+sound 398: tronyn/ambient_haunt5.wav
+sound 399: boss1/sight1.wav
+sound 400: boss1/throw.wav
+sound 401: boss1/pain.wav
+sound 402: boss1/death.wav
+sound 403: doors/ddoor2.wav
+sound 404: doors/ddoor1.wav
+sound 405: drake/items/zerkhelm.wav
+sound 406: drake/items/life_up.wav
+sound 407: ambience/suck1.wav
+sound 408: misc/secret.wav
+sound 409: drake/misc/wallbrk.wav
+sound 410: ad171/items/backpack_ammo.wav
+sound 411: drake/misc/bellring.wav
+sound 412: tronyn/ambient_lavafall_windy2.wav
+sound 413: tronyn/ambient_lavafall_windy1.wav
+sound 414: tronyn/ambient_lava_flow.wav
+sound 415: tronyn/ambient_lava.wav
+sound 416: tronyn/ambient_lakeoffire.wav
+sound 417: tronyn/ambient_haunt6.wav
+sound 418: tronyn/ambient_sky_chapel_open.wav
+sound 419: zombie/z_idle.wav
+sound 420: zombie/z_idle1.wav
+sound 421: zombie/z_pain.wav
+sound 422: zombie/z_pain1.wav
+sound 423: zombie/z_fall.wav
+sound 424: zombie/z_gib.wav
+sound 425: ad171/zombie/zk_sight.wav
+sound 426: zombie/idle_w2.wav
+sound 427: zombie/z_shot1.wav
+sound 428: zombie/z_miss.wav
+sound 429: tronyn/treegust2.wav
+sound 430: tronyn/treegust1.wav
+sound 431: ad181/items/health0.wav
+sound 432: quoth/items2/crostake.wav
+sound 433: hipnotic/items/empathy.wav
+sound 434: drake/ambience/waterfal.wav
+sound 435: drake/misc/secret2.wav
+sound 436: items/health1.wav
+sound 437: tronyn/ambient_water_fall2.wav
+sound 438: tronyn/ambient_water_fall3.wav
+sound 439: tronyn/ambient_water_fall.wav
+sound 440: tronyn/ambient_haunt1.wav
+sound 441: tronyn/ambient_haunt2.wav
+sound 442: tronyn/ambient_haunt3.wav
+sound 443: tronyn/ambient_haunt4.wav
+sound 444: tronyn/ambient_haunt7.wav
+sound 445: tronyn/ambient_glacier1.wav
+sound 446: tronyn/ambient_glacier2.wav
+sound 447: tronyn/ambient_glacier3.wav
+sound 448: tronyn/ambient_glacier4.wav
+sound 449: drake/items/treasure.wav
+sound 450: demon/idle1.wav
+sound 451: demon/dpain1.wav
+sound 452: demon/ddeath.wav
+sound 453: demon/dhit2.wav
+sound 454: demon/djump.wav
+sound 455: demon/sight2.wav
+sound 456: plats/train2.wav
+sound 457: plats/train1.wav
+sound 458: ad171/zombie/boil_idle1.wav
+sound 459: ad171/zombie/boil_idle2.wav
+sound 460: ad171/zombie/boil_sight.wav
+sound 461: ad171/wraith/bounce.wav
+sound 462: ad171/zombie/boil_windup.wav
+sound 463: ad171/zombie/boil_explode.wav
+sound 464: ambience/fire1.wav
+sound 465: ambience/windfly.wav
+sound 466: tronyn/ambient_water_estuary.wav
+sound 467: tronyn/artpkup.wav
+sound 468: buttons/switch02.wav
+sound 469: tronyn/ambient_water_fountain1.wav
+sound 470: tronyn/ambient_void_lavalake.wav
+sound 471: tronyn/ambient_void_bottom.wav
+sound 472: tronyn/ambient_flag.wav
+sound 473: tronyn/ambient_void_wind1.wav
+sound 474: tronyn/ambient_void_wind2.wav
+sound 475: tronyn/ambient_sky_chapel.wav
+sound 476: tronyn/ambient_sky_chapel_roof.wav
+sound 477: ambience/drip1.wav
+sound 478: ambience/swamp1.wav
+sound 479: drake/ambience/swamp2.wav
+sound 480: nehahra/ambience/swamp3.wav
+sound 481: nehahra/ambience/rych1.wav
+sound 482: travail/ambience/hevifals.wav
+sound 483: ne_ruins/ambience/wat_fall.wav
+sound 484: quoth/necros/highwind.wav
+sound 485: travail/ambience/lavagurg.wav
+sound 486: ad171/traps/flame_loop.wav
+sound 487: ad171/traps/flame_off.wav
+sound 488: tronyn/firewall.wav
+sound 489: rrp/misc/drip1.wav
+sound 490: rrp/misc/drip2.wav
+sound 491: rrp/misc/drip3.wav
+sound 492: misc/trigger1.wav
+sound 493: ad171/traps/steam_loop.wav
+sound 494: ad171/traps/steam_off.wav
+sound 495: ad171/player/ladwood1.wav
+sound 496: ad171/player/ladwood2.wav
+sound 497: ad171/player/ladwood3.wav
+sound 498: ad171/player/ladwood4.wav
+sound 499: kinn/ogre/wnalfire.wav
+sound 500: qmaster/ogre/wnalfire_lava.wav
+sound 501: weapons/skotch.wav
+sound 502: hipnotic/grem/death.wav
+sound 503: hipnotic/grem/attack.wav
+sound 504: hipnotic/grem/pain1.wav
+sound 505: hipnotic/grem/pain2.wav
+sound 506: hipnotic/grem/pain3.wav
+sound 507: hipnotic/grem/idle.wav
+sound 508: hipnotic/grem/sight1.wav
+sound 509: quoth/dguard/hit.wav
+sound 510: zerstorer/ambience/wingget.wav
+sound 511: ad171/weapons/crossbow_swipe.wav
+sound 512: ad171/ogre/ham_hit.wav
+sound 513: ad171/ogre/ham_wave.wav
+sound 514: ad171/ogre/ogleap.wav
+sound 515: tronyn/bell2.wav
+sound 516: taov/player/fast.wav
+sound 517: taov/player/bighit.wav
+sound 518: ad171/gargoyle/idle1.wav
+sound 519: ad171/gargoyle/perch1.wav
+sound 520: ad171/gargoyle/perch2.wav
+sound 521: ad171/gargoyle/attack1.wav
+sound 522: ad171/gargoyle/swoop1.wav
+sound 523: ad171/gargoyle/swoop2.wav
+sound 524: ad171/gargoyle/swoop1hit.wav
+sound 525: ad171/gargoyle/wings1.wav
+sound 526: ad171/gargoyle/pain75.wav
+sound 527: ad171/gargoyle/pain100.wav
+sound 528: ad171/gargoyle/death1.wav
+sound 529: ad171/gargoyle/sight1.wav
+sound 530: tronyn/ambient_water_trickle.wav
+sound 531: tronyn/windchimes1.wav
+sound 532: tronyn/windchimes3.wav
+sound 533: tronyn/windchimes2.wav
+sound 534: quoth/gaunt/idle1.wav
+sound 535: quoth/gaunt/idle3.wav
+sound 536: quoth/gaunt/idle2.wav
+sound 537: ad171/gaunt/idle2.wav
+sound 538: ad171/gaunt/plasma_start.wav
+sound 539: ad171/gaunt/plasma_fire.wav
+sound 540: quoth/gaunt/pain.wav
+sound 541: quoth/gaunt/death.wav
+sound 542: quoth/gaunt/sight.wav
+sound 543: sheep/sheep1.wav
+sound 544: sheep/sheep2.wav
+sound 545: sheep/sheep3.wav
+sound 546: sheep/sheepfly.wav
+sound 547: sheep/bite.wav
+sound 548: hexen2/fangel/fly.wav
+sound 549: hexen2/fangel/deflect.wav
+sound 550: hexen2/fangel/hand.wav
+sound 551: hexen2/fangel/wing.wav
+sound 552: hexen2/weapons/expsmall.wav
+sound 553: hexen2/fangel/ambi1.wav
+sound 554: hexen2/fangel/ambi2.wav
+sound 555: hexen2/fangel/death.wav
+sound 556: hexen2/fangel/pain.wav
+sound 557: hexen2/fangel/death2.wav
+sound 558: hexen2/fangel/pain2.wav
+sound 559: fish/death.wav
+sound 560: fish/bite.wav
+sound 561: fish/idle.wav
+sound 562: quoth/voreling/death.wav
+sound 563: quoth/voreling/land.wav
+sound 564: madfox/frog/frog_01.wav
+sound 565: madfox/frog/frog_02.wav
+sound 566: madfox/frog/frog_03.wav
+sound 567: madfox/frog/frog_04.wav
+sound 568: madfox/frog/frog_05.wav
+sound 569: zerstorer/trog/frblatck.wav
+sound 570: zerstorer/trog/frblfly.wav
+sound 571: zerstorer/trog/charge.wav
+sound 572: zerstorer/trog/tdeath1.wav
+sound 573: zerstorer/trog/tdeath2.wav
+sound 574: zerstorer/trog/tidle1.wav
+sound 575: zerstorer/trog/tidle2.wav
+sound 576: zerstorer/trog/tpain.wav
+sound 577: zerstorer/trog/tsight1.wav
+sound 578: zerstorer/trog/tsight2.wav
+sound 579: drake/skullwiz/push.wav
+sound 580: drake/items/regen.wav
+sound 581: buttons/switch21.wav
+sound 582: ambience/hum1.wav
+sound 583: worldmapbells.wav
+sound 584: pageflip.wav
+sound 585: q15/shalrath/bossattack.wav
+sound 586: q15/shalrath/bossattack2.wav
+sound 587: shalrath/death.wav
+sound 588: shalrath/idle.wav
+sound 589: shalrath/pain.wav
+sound 590: q15/shalrath/bosssight.wav
+sound 591: q15/shalrath/firesum.wav
+sound 592: ad171/wraith/attack3.wav
+sound 593: q15/shalrath/voreexp.wav
+sound 594: q15/shalrath/voretick.wav
+sound 595: q15/shalrath/voreball.wav
+sound 596: q15/shalrath/voregren.wav
+sound 597: q15/shalrath/earthshake.wav
+sound 598: player/udeath2.wav
+sound 599: redfield/misc/catsmeow.wav
+sound 600: drake/axeman/adeath1.wav
+sound 601: drake/axeman/axe1.wav
+sound 602: drake/axeman/axe2.wav
+sound 603: quoth/dguard/idle.wav
+sound 604: quoth/dguard/pain1.wav
+sound 605: ad171/dknight/dfury_grunt4.wav
+sound 606: quoth/dguard/death2.wav
+sound 607: plats/medplat1.wav
+sound 608: plats/medplat2.wav
+sound 609: ad171/spider/idle1.wav
+sound 610: ad171/spider/hiss2.wav
+sound 611: ad171/spider/hiss3.wav
+sound 612: drake/spider/death.wav
+sound 613: ad171/spider/pain1.wav
+sound 614: ad171/spider/pain2.wav
+sound 615: ad171/spider/attackmunch.wav
+sound 616: ad171/spider/attacktear.wav
+sound 617: ad171/spider/jumpland.wav
+sound 618: ad171/spider/hiss1.wav
+sound 619: shambler/sidle.wav
+sound 620: shambler/sdeath.wav
+sound 621: shambler/shurt2.wav
+sound 622: shambler/sattck1.wav
+sound 623: shambler/melee1.wav
+sound 624: shambler/melee2.wav
+sound 625: shambler/ssight.wav
+sound 626: drake/shamvile/ssight2.wav
+sound 627: drake/shamvile/sidle2.wav
+sound 628: drake/shamvile/shurt2.wav
+sound 629: drake/shamvile/sdeath.wav
+sound 630: drake/shamvile/melee3.wav
+sound 631: drake/shamvile/melee4.wav
+sound 632: drake/shamvile/burn.wav
+sound 633: tronyn/mon_anglerfish_bite.wav
+sound 634: tronyn/mon_bigfish_bite.wav
+sound 635: tronyn/mon_bigfish_swim1.wav
+sound 636: tronyn/mon_bigfish_swim2.wav
+sound 637: tronyn/mon_seahorse_swim1.wav
+sound 638: tronyn/mon_seahorse_swim2.wav
+sound 639: tronyn/mon_bigfish_pain.wav
+sound 640: tronyn/mon_bigfish_death.wav
+sound 641: ogle/cheer1.wav
+sound 642: ogle/cheer2.wav
+sound 643: ogle/cheer3.wav
+sound 644: ogle/hammer1.wav
+sound 645: ogle/hammer2.wav
+sound 646: ogle/pick1.wav
+sound 647: ogle/pick2.wav
+sound 648: ogle/pickflesh.wav
+sound 649: ogle/spike1.wav
+sound 650: ogle/spike2.wav
+sound 651: ogle/hammerflesh.wav
+sound 652: ogle/wipebrow.wav
+sound 653: ogle/enrage1.wav
+sound 654: ogle/enrage2.wav
+sound 655: ogle/death.wav
+sound 656: ogle/oglemoan1.wav
+sound 657: ogle/oglemoan2.wav
+sound 658: drake/weapons/mirv1.wav
+sound 659: extras_r5/hydra/hydra_death.wav
+sound 660: extras_r5/hydra/spit_impact_player.wav
+sound 661: extras_r5/hydra/hydra_pain.wav
+sound 662: extras_r5/hydra/hydra_spit.wav
+sound 663: extras_r5/hydra/hydra_idle.wav
+sound 664: extras_r5/hydra/hydra_idle2.wav
+sound 665: extras_r5/hydra/hydra_tent.wav
+sound 666: rogue/eel/edie3r.wav
+sound 667: rogue/eel/epain3.wav
+sound 668: ad171/eel/idle1.wav
+sound 669: rogue/eel/eatt1.wav
+sound 670: rogue/eel/eelc5.wav
+sound 671: ad171/eel/impact1.wav
+sound 672: ad171/minotaur/idle1.wav
+sound 673: ad171/minotaur/idle2.wav
+sound 674: ad171/minotaur/idle1com.wav
+sound 675: ad171/minotaur/idle2com.wav
+sound 676: ad171/minotaur/swipe.wav
+sound 677: ad171/minotaur/strike1.wav
+sound 678: ad171/minotaur/strike2.wav
+sound 679: ad171/minotaur/attack1start.wav
+sound 680: ad171/minotaur/attack1end.wav
+sound 681: kinn/shuffler/big1.wav
+sound 682: kinn/shuffler/fireblt.wav
+sound 683: kinn/shuffler/death.wav
+sound 684: kinn/shuffler/pain.wav
+sound 685: kinn/shuffler/big3.wav
+sound 686: shalrath/attack.wav
+sound 687: shalrath/attack2.wav
+sound 688: shalrath/sight.wav
+sound 689: quoth/voreling/idle.wav
+sound 690: quoth/voreling/pain.wav
+sound 691: quoth/voreling/bitestrt.wav
+sound 692: quoth/voreling/bite.wav
+sound 693: ad171/voreling/attacktear.wav
+sound 694: quoth/voreling/sight.wav
+sound 695: rogue/guard/death.wav
+sound 696: rogue/guard/pain1.wav
+sound 697: rogue/guard/see1.wav
+sound 698: tronyn/ambient_bats.wav
+sound 699: dog/idle.wav
+sound 700: dog/dattack1.wav
+sound 701: dog/ddeath.wav
+sound 702: dog/dpain1.wav
+sound 703: drake/dragon/fire.wav
+sound 704: drake/dragon/firehit.wav
+sound 705: dog/dsight.wav
+sound 706: blob/sight1.wav
+sound 707: blob/death1.wav
+sound 708: blob/land1.wav
+sound 709: ad171/lostsoul/idle1.wav
+sound 710: ad171/lostsoul/idle2.wav
+sound 711: ad171/lostsoul/charge.wav
+sound 712: ad171/lostsoul/bite.wav
+sound 713: ad171/lostsoul/pain1.wav
+sound 714: ad171/lostsoul/death.wav
+sound 715: drake/curse/x_armor.wav
+sound 716: drake/necro/att_w.wav
+sound 717: drake/necro/death1.wav
+sound 718: drake/necro/death2.wav
+sound 719: drake/necro/idle1.wav
+sound 720: drake/necro/idle2.wav
+sound 721: drake/necro/pain1.wav
+sound 722: drake/necro/sight1.wav
+sound 723: drake/curse/x_damage.wav
+sound 724: drake/curse/x_muddle.wav
+sound 725: drake/curse/x_slow.wav
+sound 726: drake/curse/x_weaken.wav
+sound 727: kinn/misc/metalbrk.wav
+sound 728: drake/misc/woodbrk.wav
+sound 729: drake/necro/curse.wav
+sound 730: drake/necro/pop.wav
+sound 731: drake/necro/pop1.wav
+sound 732: drake/necro/pop2.wav
+sound 733: drake/necro/pop3.wav
+sound 734: drake/necro/pop4.wav
+sound 735: drake/necro/summon.wav
+sound 736: drake/dragon/icehit.wav
+sound 737: drake/imp/die.wav
+sound 738: drake/imp/fireball.wav
+sound 739: drake/imp/fly.wav
+sound 740: drake/imp/flywater.wav
+sound 741: drake/imp/shard.wav
+sound 742: drake/imp/swoop.wav
+sound 743: drake/imp/up.wav
+sound 744: drake/misc/pushston.wav
+sound 745: ne_ruins/h2golem/death.wav
+sound 746: drake/golem/sight.wav
+sound 747: drake/golem/step.wav
+sound 748: tronyn/creak.wav
+sound 749: ambient/dis/creak08.wav
+sound 750: ambient/dis/outside01.wav
+sound 751: rogue/wrath/wsee.wav
+sound 752: rogue/wrath/watt.wav
+sound 753: rogue/wrath/wpain.wav
+sound 754: rogue/wrath/wdthc.wav
+sound 755: ad171/wraith/idle1.wav
+sound 756: ad171/wraith/idle2.wav
+sound 757: ad171/wraith/idle3.wav
+sound 758: buttons/airbut1.wav
+sound 759: drake/dragon/acid.wav
+sound 760: drake/dragon/death1.wav
+sound 761: drake/dragon/fly.wav
+sound 762: drake/dragon/flywater.wav
+sound 763: drake/dragon/idle1.wav
+sound 764: drake/dragon/pain1.wav
+sound 765: drake/dragon/pain2.wav
+sound 766: drake/dragon/sight1.wav
+sound 767: quoth/impact/rockbrk.wav
+sound 768: quoth/impact/rock1.wav
+sound 769: quoth/impact/rock2.wav
+sound 770: quoth/impact/rock3.wav
+sound 771: quoth/impact/rock4.wav
+sound 772: ad171/skullwiz/idle1.wav
+sound 773: ad171/skullwiz/idle2.wav
+sound 774: ad171/skullwiz/death.wav
+sound 775: ad171/skullwiz/pain1.wav
+sound 776: ad171/skullwiz/pain2.wav
+sound 777: ad171/skullwiz/attack.wav
+sound 778: ad171/skullwiz/skull1.wav
+sound 779: ad171/skullwiz/skull2.wav
+sound 780: ad171/skullwiz/summon.wav
+sound 781: ad171/skullwiz/blinkspk1.wav
+sound 782: ad171/skullwiz/blinkspk2.wav
+sound 783: ad171/skullwiz/blinkout.wav
+sound 784: ad171/skullwiz/blinkin.wav
+sound 785: ad171/skullwiz/sight.wav
+sound 786: zerstorer/gibfnt/gf_sprt1.wav
+sound 787: zerstorer/gibfnt/gf_sprt2.wav
+sound 788: taov/spells/iceyair.wav
+sound 789: zerstorer/gibfnt/gf_sbig.wav
+sound 790: quoth/impact/wood_bk.wav
+sound 791: quoth/impact/wood_i1.wav
+sound 792: quoth/impact/wood_i2.wav
+sound 793: quoth/impact/wood_i3.wav
+sound 794: quoth/impact/wood_i4.wav
+sound 795: kinn/bdwsound/basss.wav
+sound 796: misc/runekey.wav
+sound 797: quoth/edie/idle1.wav
+sound 798: quoth/edie/sawstart.wav
+sound 799: quoth/edie/mangle.wav
+sound 800: quoth/edie/stfire.wav
+sound 801: ad171/seeker/range_laser.wav
+sound 802: quoth/edie/death.wav
+sound 803: quoth/edie/pain.wav
+sound 804: quoth/edie/painshrt.wav
+sound 805: quoth/edie/sight.wav
+sound 806: quoth/edie/step.wav
+sound 807: ad171/freddie/step2.wav
+sound 808: ad171/freddie/step3.wav
+sound 809: nehahra/vomit/groan.wav
+sound 810: drake/vomitus/death.wav
+sound 811: drake/vomitus/flesh1.wav
+sound 812: drake/vomitus/flesh2.wav
+sound 813: rogue/blob/mytosis.wav
+sound 814: nehahra/wraith/soul.wav
+sound 815: nehahra/wraith/idle.wav
+sound 816: nehahra/wraith/idle2.wav
+sound 817: nehahra/baron/throb.wav
+sound 818: nehahra/wraith/rych1.wav
+sound 819: nehahra/wraith/call.wav
+sound 820: nehahra/wraith/talk1.wav
+sound 821: nehahra/wraith/weird.wav
+sound 822: nehahra/wraith/speak.wav
+sound 823: nehahra/wraith/growl2.wav
+sound 824: nehahra/wraith/talk3.wav
+sound 825: nehahra/wraith/return.wav
+sound 826: nehahra/wraith/select.wav
+sound 827: drake/hkboss/iceball.wav
+sound 828: drake/wraith/drain.wav
+sound 829: tronyn/ambient_magicobjectplaced.wav
+part  1: TE_EXPLOSION
+part  2: TR_LASER
+part  3: TE_PLASMABIG
+part  4: TR_POISON
+part  5: TE_BSMOKE
+part  6: TR_PLASMA
+part  7: TR_BLOOD
+part  8: DPP_ITSPYROFLAME1
+part  9: DPP_ITSPYROFLAME2
+part  10: DPP_ITSPYROFLAME3
+part  11: effectinfo.txt
+part  12: fte_weather.cfg
+part  13: TE_VORESPIKE
+part  14: DPP_ITSWRAITHEXPLODE
+]condump
 
-Video initialization
-Video mode: 1286x909x24 Z24 S8 60Hz
-GL_VENDOR: NVIDIA Corporation
-GL_RENDERER: NVIDIA GeForce GTX 970/PCIe/SSE2
-GL_VERSION: 4.3.0 NVIDIA 535.113.01
-FOUND: EXT_texture_filter_anisotropic
-FOUND: ARB_buffer_storage
-FOUND: ARB_multi_bind
-FOUND: ARB_bindless_texture
-FOUND: ARB_shader_draw_parameters
-FOUND: ARB_clip_control
-
-Sound Initialization
-SDL audio spec  : 44100 Hz, 1024 samples, 2 channels
-SDL audio driver: pulseaudio - Simultaneous output to Family 17h (Models 00h-0fh) HD Audio Control
-Audio: 16 bit, stereo, 44100 Hz
-CDAudio disabled at compile time
-
-Using add-on server "https://kexquake.s3.amazonaws.com"
-
-Language initialization
-Couldn't load 'localization/loc_english.txt'
-Couldn't load 'localization/loc_english.txt'
-
-========= Quake Initialized =========
-
-
-Add-on server status:
- 26 add-ons available for download
-  0 add-ons already installed
-
-execing quake.rc
-execing default.cfg
-Unknown command "gl_overbright"
-Unknown command "gl_subdivide_size"
-Disabling renderer/network isolation.
-Unknown command "joy_deadzone"
-Unknown command "r_quadparticles"
-Unknown command "r_shadows"
-Unknown command "sys_throttle"
-Unknown command "vid_minsize"
-execing ironwail.cfg
-Unknown command "r_useportalculling"
-Unknown command "cl_beams_polygons"
-Unknown command "r_part_density"
-couldn't exec autoexec.cfg
-SpawnServer: twilight
-Clearing memory
-Programs occupy 4340K.
-Map has lit water
-Warning: 392904 visleafs exceeds standard limit of 8192.
-"telealpha" is not a field
-[WORLDSPAWN] function started ...
-[SETUP] Drake temporary movement goal is now setup
-[SETUP] Drake movebox is now setup for large monsters
-[SETUP] Drake lightning is now setup
-[ENGINE] Advanced Engine
-[MOD DETECT] maps/twilight.bsp, could not detect a map requiring nondefault changes, using
-standard Keep
-[WORLD] TEMP1 + Worldspawn (2294016)
-[WORLD] Setup Light style array
-[WORLD] Setup Pendulum vector array
-[WORLD] Setup Map Var bitflag array
-[WORLD] Setup Shadow lightstyle array
-[VERSUS] Versus is currently deactivated.
-         Intended to be played on specific maps with coop 3
-[WORLD] Drake music system active but no music specified
-        in worldspawn's noise, noise1, noise2, or noise3
-[BOSS] Wave (1 / 5) HP (2500) Trig (2000)
-Warning: model progs/tronyn/statue15.mdl has a skin taller than 480[item_keyx] with Custom
-override mdl (progs/tronyn/keyrune_water.mdl)
-[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '-2712.0 -2440.0 -582.0'
-[item_keyx] with Custom override mdl (progs/tronyn/keyrune_fire.mdl)
-[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '-5960.0 2168.0 -1324.0'
-[item_keyx] with Custom override mdl (progs/tronyn/keyrune_air.mdl)
-[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '2432.0 -2144.0 376.0'
-[item_keyx] with Custom override mdl (progs/tronyn/keyrune_blood.mdl)
-[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '1724.0 -3104.0 -824.0'
-
-[DOOR] Light style (37)
-
-Warning: model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/barrel1.mdl has a skin taller than 480"studio" is not a field
-Warning: model progs/tronyn/light2.mdl has a skin taller than 480
-[DOOR] Light style (40)
-
-Warning: model progs/tronyn/light4.mdl has a skin taller than 480
-[DOOR] Light style (37)
-
-[item_keyx] with Custom override mdl (progs/tronyn/keyrune_earth.mdl)
-[CUSTOM KEY] Missing spawnflag key number.  Set to Arcane Key 1 at '-6528.0 -62.0 400.0'
-[MONSTER] (friendly1) - no monster count
-[MONSTER] (friendly1) - no monster count
-[MONSTER] (friendly1) - no monster count
-[item_keyx] with Custom override mdl (progs/nehahra/bloodkey.mdl)
-[BRKMDL] Cannot be triggered or shot at '-584.0 696.0 -1348.0', breaking now.
-2 entities inhibited
-[TRIG_TELEPORT] Wrong Entity (info_teleport_destination)
-Warning: 103108 byte signon buffer exceeds QS limit of 63998.
-Server spawned.
-CL_EstablishConnection: connected to local
-3 demo(s) in loop
-Client LOCAL connected
-[CLIENT] SetNewParms
-[CLIENT] RESETTING Map Variables
-[SERVERFLAG] new game detected
-[SKILL4] EvilMode Disabled
-
-FITZQUAKE 0.85 SERVER (17074 CRC)
-Serverinfo packet received.
-
-
-
-Twilight of the Idols
-Using protocol 999
-Warning: 1826 models exceeds standard limit of 256 (max = 4096).
-Warning: 642 sounds exceeds standard limit of 256 (max = 2048).
-Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has
- a skin taller than 480Warning: model progs/tronyn/light2.mdl has a skin taller than 480Warning: 
-model progs/tronyn/light4.mdl has a skin taller than 480Lightmap size:   4096 x 3840 (228/240
-blocks)
-Lightmap memory: 60.0 MB (153.5% efficiency)
-Warning: 912 lightmaps exceeds standard limit of 64.
-FindFile: can't find gfx/env/mak_aurora1_wind.cfg
-Sky wind config not found 'gfx/env/mak_aurora1_wind.cfg'.
-FindFile: can't find music/track01.ogg
-FindFile: can't find music/track01.mp3
-FindFile: can't find music/track01.wav
-Couldn't find a cdrip for track 1
-CL_SignonReply: 1
-Programs occupy 115K.
-enginename: [ Ironwail ]
-Warning: [CL] check "FRIK_FILE" before calling strcat (csqc_hud_vanilla.csqc: Hud_Init)
-Sound tronyn/mana_extraction.wav not looped
-Warning: 292 static entities exceeds standard limit of 128 (max = 4096).
-Warning: 1577 efrags exceeds standard limit of 640.
-CL_SignonReply: 2
-Warning: [SV] check "DP_QC_TOKENIZE_CONSOLE" before calling tokenize_console (csqc_hudkeep.qc:
-SV_ParseClientCommand)
-[CLIENT] PutClientInServer
-[SKILL4] EvilMode Disabled
-[COOP] Spawn locations found (8)
-[CAMERA] Intermissions missing!
-[CLIENT] Decode (Level) Parms
-[CLIENT] Decode Worldspawn Inv Parms:
-[SERVERFLAG] MAP LOAD reset/sync
-[Beyond 16 Parms] gamecfg was 0
-                  set player ammo_bloodcrystals to: 0
-                  set player ammo_voidshards to: 0
-                  set player ammo_elemental to: 0
-[CLIENT] self.weapon == 1
-[CLIENT] self.items == 2049
-[CLIENT] Reading Map Variables
-[Beyond 16 Parms] savedgamecfg was 0
-CL_SignonReply: 3
-58.4 megabyte data cache
-Warning: 14307 byte packet exceeds standard limit of 1024 (max = 64000).
-CL_SignonReply: 4
-Warning: 2965 visedicts exceeds standard limit of 256 (max = 16384).
-Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: model
-progs/tronyn/statue15.mdl has a skin taller than 480Warning: model progs/tronyn/hangingmoss.mdl
-has a skin taller than 480Warning: model progs/tronyn/light4.mdl has a skin taller than 480
-Warning: model progs/tronyn/light2.mdl has a skin taller than 480Warning: [CL] check "FRIK_FILE"
-before calling strlen (csqc_hud_vanilla.csqc: Hud_DrawLargeValue)
-Warning: [CL] check "FTE_STRINGS" before calling str2chr (csqc_hud_vanilla.csqc:
-Hud_DrawLargeValue)
-Warning: 4479 edicts exceeds standard limit of 600 (max = 16384).
-Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/light2.mdl has
-a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: 
-model progs/tronyn/statue15.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/light2.mdl has
-a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: 
-model progs/tronyn/statue15.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/light2.mdl has
-a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: 
-model progs/tronyn/statue15.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/light4.mdl has
-a skin taller than 480Warning: model progs/tronyn/light2.mdl has a skin taller than 480Warning: 
-model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: model progs/tronyn/statue15.mdl
-has a skin taller than 480Warning: model progs/tronyn/hangingmoss.mdl has a skin taller than 480
-Warning: model progs/tronyn/light4.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light2.mdl has a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a
-skin taller than 480Warning: model progs/tronyn/statue15.mdl has a skin taller than 480Warning: 
-model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model
-progs/tronyn/light4.mdl has a skin taller than 480Warning: model progs/tronyn/light2.mdl has a
-skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: 
-model progs/tronyn/statue15.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/light2.mdl has
-a skin taller than 480Warning: model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: 
-model progs/tronyn/statue15.mdl has a skin taller than 480Warning: model
-progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning: model progs/tronyn/light4.mdl has
-a skin taller than 480Warning: model progs/tronyn/light2.mdl has a skin taller than 480Warning: 
-model progs/tronyn/barrel1.mdl has a skin taller than 480Warning: model progs/tronyn/statue15.mdl
-has a skin taller than 480Warning: model progs/tronyn/hangingmoss.mdl has a skin taller than 480
-Warning: model progs/tronyn/light2.mdl has a skin taller than 480Warning: model
-progs/tronyn/barrel1.mdl has a skin taller than 480Warning: model progs/tronyn/statue15.mdl has a
-skin taller than 480Warning: model progs/tronyn/hangingmoss.mdl has a skin taller than 480Warning:
- model progs/tronyn/light2.mdl has a skin taller than 480]condump
