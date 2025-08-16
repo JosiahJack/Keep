@@ -120,8 +120,8 @@ void(vector virtmin, vector virtsize) Hud_Intermission = {
 		} else {
 			drawpic(pos+[0,56], "gfx/inter_denizens.lmp", [160,184],[1,1,1],1,0);
 		}
-		Hud_DrawIntermissionNumber(pos+[160, 64], sprintf("%3.0f:", intermission_time/60));
-		Hud_DrawIntermissionNumber(pos+[248, 64], sprintf("%02.0f", intermission_time%60));
+		Hud_DrawIntermissionNumber(pos+[160, 64], sprintf("%3.0f:", floor(intermission_time/60)));
+		Hud_DrawIntermissionNumber(pos+[248, 64], sprintf("%02.0f", floor(intermission_time%60)));
 		Hud_DrawIntermissionNumber(pos+[160, 96], sprintf("%3.0f/", getstatf(STAT_FOUNDSECRETS)));
 		Hud_DrawIntermissionNumber(pos+[248, 96], sprintf("%.0f",   getstatf(STAT_TOTALSECRETS)));
 		Hud_DrawIntermissionNumber(pos+[160,160], sprintf("%3.0f/",getstatf(STAT_KILLEDMONSTERS)));
